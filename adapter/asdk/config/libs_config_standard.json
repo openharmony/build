@@ -1,0 +1,47 @@
+{
+  "support_arch": [
+    "arm64",
+    "arm"
+  ],
+  "global_headers": [],
+  "libs": [
+    {
+      "name": "liblog",
+      "shared_library": {
+        "src": [
+          {
+            "arch": "arm64",
+            "lib": "liblog.so"
+          },
+          {
+            "arch": "arm",
+            "lib": "liblog.so"
+          },
+          {
+            "arch": "x86_64",
+            "lib": "liblog.so"
+          }
+        ]
+      }
+    },
+    {
+      "name": "libcutils",
+      "shared_library": {
+        "src": [
+          {
+            "arch": "arm64",
+            "lib": "libcutils.so"
+          },
+          {
+            "arch": "arm",
+            "lib": "libcutils.so"
+          },
+          {
+            "arch": "x86_64",
+            "lib": "libcutils.so"
+          }
+        ]
+      }
+    }
+  ]
+}

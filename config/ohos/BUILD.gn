@@ -1,0 +1,143 @@
+# Copyright 2014 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/config/compiler/compiler.gni")
+import("//build/config/ohos/config.gni")
+
+import("//build/config/c++/c++.gni")
+import("//build/config/sanitizers/sanitizers.gni")
+
+assert(is_ohos)
+
+# This is included by reference in the //build/config/compiler config that
+# is applied to all targets. It is here to separate out the logic that is
+# ohos-only.
+config("compiler") {
+  cflags = [
+    "-ffunction-sections",
+    "-fno-short-enums",
+  ]
+  defines = [
+    "ANDROID",
+
+    # The NDK has these things, but doesn't define the constants to say that it
+    # does. Define them here instead.
+    "HAVE_SYS_UIO_H",
+  ]
+
+  ldflags = [
+    "-Wl,--no-undefined",
+    "-Wl,--exclude-libs=libunwind_llvm.a",
+    "-Wl,--exclude-libs=libc++_static.a",
+    # Don't allow visible symbols from libraries that contain
+    # assembly code with symbols that aren't hidden properly.
+    # http://crbug.com/448386
+    "-Wl,--exclude-libs=libvpx_assembly_arm.a",
+  ]
+
+  # $compile_api_level corresponds to the API level used for the sysroot path
+  # calculation in //build/config/ohos/config.gni
+  if (current_cpu == "arm") {
+    abi_target = "arm-linux-androideabi"
+    compile_api_level = arm32_ndk_api_level
+  } else if (current_cpu == "x86") {
+    abi_target = ""
+    compile_api_level = ""
+  } else if (current_cpu == "arm64") {
+    abi_target = ""
+    compile_api_level = ""
+  } else if (current_cpu == "x86_64") {
+    abi_target = ""
+    compile_api_level = ""
+  } else {
+    assert(false, "Architecture not supported")
+  }
+  cflags += [
+    "--target=$abi_target",
+    "-isystem" + rebase_path("$base_libs_root/sysroot/usr/include/$abi_target",
+                             root_build_dir),
+    "-D__ANDROID_API__=$compile_api_level",
+  ]
+  ldflags += [ "--target=$abi_target" ]
+
+  if (compile_api_level < 20) {
+    cflags += [ "-DHAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC=1" ]
+  }
+
+  # Assign any flags set for the C compiler to asmflags so that they are sent
+  # to the assembler.
+  asmflags = cflags
+}
+
+# This is included by reference in the //build/config/compiler:runtime_library
+# config that is applied to all targets. It is here to separate out the logic
+# that is ohos-only. Please see that target for advice on what should go in
+# :runtime_library vs. :compiler.
+config("runtime_library") {
+  cflags_cc = []
+
+  defines = [
+    "__GNU_SOURCE=1",  # Necessary for clone().
+    "CHROMIUM_CXX_TWEAK_INLINES",  # Saves binary size.
+  ]
+  ldflags = [ "-nostdlib" ]
+
+  libs = []
+  if (!use_custom_libcxx) {
+    # The libc++ runtime library (must come first).
+    # ASan needs to dynamically link to libc++ even in static builds so
+    # that it can interpose operator new.
+    if (is_component_build || is_asan) {
+      libs += [ "c++_shared" ]
+    } else {
+      libs += [ "c++_static" ]
+    }
+    libs += [ "c++abi" ]
+  }
+
+  # double framework, use prebuilt libc++.
+  if (is_double_framework) {
+    libs += [ "${asdk_libs_dir}/ndk/libcxx/${current_cpu}/libc++.so" ]
+  }
+
+  # arm builds of libc++ starting in NDK r12 depend on unwind.
+  if (current_cpu == "arm") {
+    libs += [ "unwind" ]
+  }
+
+  libs += ["unwind_llvm"]
+
+  # Manually link the libgcc.a that the cross compiler uses. This is
+  # absolute because the linker will look inside the sysroot if it's not.
+  libs += [
+    rebase_path(libclang_rt_file),
+    "c",
+  ]
+
+  if (current_cpu == "arm" && arm_version == 6) {
+    libs += [ "atomic" ]
+  }
+
+  ldflags += [ "-Wl,--warn-shared-textrel" ]
+}
+
+config("executable_config") {
+  cflags = [ "-fPIE" ]
+  asmflags = [ "-fPIE" ]
+  ldflags = [ "-pie" ]
+}
+
+config("lld_pack_relocations") {
+  ldflags = [ "-Wl,--pack-dyn-relocs=android" ]
+}
+
+# Used for instrumented build to generate the orderfile.
+config("default_orderfile_instrumentation") {
+  if (use_order_profiling) {
+    cflags = [ "-finstrument-function-entry-bare" ]
+    if (use_thin_lto) {
+      ldflags = [ "-Wl,-u,__cyg_profile_func_enter_bare" ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+userdata_size=1468006400
+ext_mkuserimg=mkuserimg_mke2fs
+fs_type=ext4
+extfs_sparse_flag=-s
+squashfs_sparse_flag=-s
+selinux_fc=prebuilts/aosp_prebuilt_libs/minisys/file_contexts.bin
+verity_disable=true
+system_root_image=true
+root_dir=out/ohos-arm-release/packages/phone/images/root
+skip_fsck=true
+mount_point=updater
+partition_size=20971520
+skip_fsck=true
+extfs_rsv_pct=0
+fs_type=ext4

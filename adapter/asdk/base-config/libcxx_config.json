@@ -1,0 +1,33 @@
+[
+  {
+    "name": "libcxxabi_include",
+    "type": "dir",
+    "src": "external/libcxxabi/include",
+    "dest": "libcxxabi"
+  },
+  {
+    "name": "libcxx_include",
+    "type": "dir",
+    "src": "external/libcxx/include",
+    "dest": "libcxx"
+  },
+  {
+    "name": "libcxx_x86_64",
+    "type": "file",
+    "src": "out/host/linux-x86/lib64/libc++.so",
+    "dest": "libcxx/linux_x86_64"
+  },
+  {
+    "name": "libcxx_x86",
+    "type": "file",
+    "src": "out/host/linux-x86/lib/libc++.so",
+    "dest": "libcxx/linux_x86"
+  },
+  {
+    "name": "libcxx_BUILD.gn",
+    "type": "file",
+    "src": "../../../build/adapter/asdk/base-config/libc++_BUILD.gn",
+    "dest": "libcxx",
+    "install_name": "BUILD.gn"
+  }
+]

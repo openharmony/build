@@ -1,0 +1,63 @@
+[
+  {
+    "type": "file",
+    "src": "out/soong/ndk/platforms/android-current/arch-arm64/usr/lib/libc.so",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "type": "file",
+    "src": "out/soong/ndk/platforms/android-current/arch-arm64/usr/lib/libm.so",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "type": "file",
+    "src": "out/soong/ndk/platforms/android-current/arch-arm64/usr/lib/libdl.so",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "type": "file",
+    "src": "out/target/product/{PRODUCT_DEVICE}/obj/STATIC_LIBRARIES/libc_intermediates/libc.a",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "type": "file",
+    "src": "out/target/product/{PRODUCT_DEVICE}/obj/STATIC_LIBRARIES/libm_intermediates/libm.a",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "type": "file",
+    "src": "out/target/product/{PRODUCT_DEVICE}/obj/STATIC_LIBRARIES/libdl_intermediates/libdl.a",
+    "dest": "platforms/current/arch-arm64/usr/lib/"
+  },
+  {
+    "name": "ndk_platforms_crtbegin_dynamic.o",
+    "type": "file",
+    "src": "out/soong/.intermediates/bionic/libc/crtbegin_dynamic/{TARGET_ARCH_VARIANT_1ST}/crtbegin_dynamic.o",
+    "dest": "platforms/current/arch-arm64/usr/lib"
+  },
+  {
+    "name": "ndk_platforms_crtbegin_so.o",
+    "type": "file",
+    "src": "out/soong/.intermediates/bionic/libc/crtbegin_so/{TARGET_ARCH_VARIANT_1ST}/crtbegin_so.o",
+    "dest": "platforms/current/arch-arm64/usr/lib"
+  },
+  {
+    "name": "ndk_platforms_crtbegin_static.o",
+    "type": "file",
+    "src": "out/soong/.intermediates/bionic/libc/crtbegin_static/{TARGET_ARCH_VARIANT_1ST}/crtbegin_static.o",
+    "dest": "platforms/current/arch-arm64/usr/lib"
+  },
+  {
+    "name": "ndk_platforms_crtbegin_dynamic.o",
+    "type": "file",
+    "src": "out/soong/.intermediates/bionic/libc/crtend_android/{TARGET_ARCH_VARIANT_1ST}/obj/bionic/libc/arch-common/bionic/crtend.o",
+    "dest": "platforms/current/arch-arm64/usr/lib",
+    "install_name": "crtend_android.o"
+  },
+  {
+    "name": "ndk_platforms_crtbegin_dynamic.o",
+    "type": "file",
+    "src": "out/soong/.intermediates/bionic/libc/crtend_so/{TARGET_ARCH_VARIANT_1ST}/obj/bionic/libc/arch-common/bionic/crtend_so.o",
+    "dest": "platforms/current/arch-arm64/usr/lib"
+  }
+]
