@@ -84,12 +84,12 @@ node_js_ver=v12.18.4
 node_js=node-${node_js_ver}-linux-x64.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
-if [ ! -f ${node_js} ]; then
+if [ ! -f "${node_js}" ]; then
     wget --no-check-certificate https://nodejs.org/download/release/${node_js_ver}/${node_js}
     tar zxf ${node_js}
 fi
 
-if [ ! -d ${code_dir}/third_party/jsframework ]; then
+if [ ! -d "${code_dir}/third_party/jsframework" ]; then
     echo "${code_dir}/third_party/jsframework not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/third_party/jsframework/
@@ -97,7 +97,7 @@ else
     npm install
 
     cd ${code_dir}
-    if [ -d ${code_dir}/prebuilts/build-tools/common/js-framework ]; then
+    if [ -d "${code_dir}/prebuilts/build-tools/common/js-framework" ]; then
         echo -e "\n"
         echo "${code_dir}/prebuilts/build-tools/common/js-framework already exist, it will be replaced with node-${node_js_ver}"
         /bin/rm -rf ${code_dir}/prebuilts/build-tools/common/js-framework
