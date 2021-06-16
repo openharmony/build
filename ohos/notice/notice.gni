@@ -34,7 +34,7 @@ declare_args() {
 # private template
 #
 template("collect_notice") {
-  assert(defined(invoker.module_source_dir), "module_source_dir in required.")
+  assert(defined(invoker.module_source_dir), "module_source_dir is required.")
   action_with_pydeps(target_name) {
     forward_variables_from(invoker,
                            [
@@ -79,6 +79,10 @@ template("collect_notice") {
       rebase_path(module_source_dir, root_build_dir),
       "--depfile",
       rebase_path(depfile, root_build_dir),
+
+      # use default Lisense for modules couldn't find lincese
+      "--default-license",
+      rebase_path("//build/ohos/notice/license", root_build_dir),
     ]
     foreach(o, outputs) {
       args += [
@@ -96,7 +100,7 @@ template("collect_notice") {
         inputs = [ license_file ]
       }
       args += [
-        "--notice-file",
+        "--license-file",
         rebase_path(license_file, root_build_dir),
       ]
     }

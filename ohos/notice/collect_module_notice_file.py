@@ -23,73 +23,65 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
 README_FILE_NAME = 'README.OpenSource'
+LICENSE_CANDIDATES = [
+    'LICENSE',
+    'License',
+    'NOTICE',
+    'Notice',
+    'COPYRIGHT',
+    'Copyright'
+]
 
 
-def is_top_dir(src_path):
-    return os.path.exists(os.path.join(src_path, '.gn'))
+def is_top_dir(current_dir):
+    return os.path.exists(os.path.join(current_dir, '.gn'))
 
 
-def find_readme_in_pardir(pardir):
-    if is_top_dir(pardir):
-        return None
-    for item in os.listdir(pardir):
-        if os.path.isfile(item) and item == README_FILE_NAME:
-            return os.path.join(pardir, item)
-    return find_readme_in_pardir(os.path.dirname(pardir))
+def find_license_recursively(current_dir, default_license):
+    if is_top_dir(current_dir):
+        return default_license
+    for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
+        candidate = os.path.join(current_dir, file)
+        if os.path.exists(os.path.join(current_dir, file)):
+            return os.path.join(candidate)
+    return find_license_recursively(os.path.dirname(current_dir),
+                                    default_license)
 
 
-def get_notice_file_name(readme_file_path):
-    contents = read_json_file(readme_file_path)
+def get_license_from_readme(readme_path):
+    contents = read_json_file(readme_path)
     if contents is None:
-        raise Exception("Error: failed to read {}.".format(readme_file_path))
+        raise Exception("Error: failed to read {}.".format(readme_path))
 
-    notice = contents[0].get('License File')
-    if notice is None:
-        raise Exception("Error: failed to get notice file from {}.".format(
-            readme_file_path))
+    notice_file = contents[0].get('License File').strip()
+    if notice_file is None:
+        raise Exception("Error: value of notice file is empty in {}.".format(
+            readme_path))
 
-    notice_path = os.path.join(os.path.dirname(readme_file_path), notice)
-
-    if not os.path.exists(notice_path):
-        print("Warning: notice file {} does not exist".format(notice_path))
-        return None
-
-    return notice_path
-
-
-def get_readme_opensource(module_source_dir):
-    expected = os.path.join(module_source_dir, README_FILE_NAME)
-    if os.path.exists(expected):
-        return expected
-    else:
-        return find_readme_in_pardir(os.path.dirname(module_source_dir))
-
-
-def get_notice_file_path(module_source_dir):
-    readme = os.path.join(module_source_dir, README_FILE_NAME)
-    if not os.path.exists(readme):
-        readme = None
-
-    notice_file = None
-    if readme:
-        notice_file = get_notice_file_name(readme)
-    return readme, notice_file
+    return os.path.join(os.path.dirname(readme_path), notice_file)
 
 
 def do_collect_notice_files(options, depfiles):
-    if options.notice_file is None:
-        readme, notice_file = get_notice_file_path(options.module_source_dir)
-        if readme:
-            depfiles.append(readme)
-    else:
-        notice_file = options.notice_file
+    notice_file = options.license_file
+    if notice_file is None:
+        readme_path = os.path.join(options.module_source_dir,
+                                   README_FILE_NAME)
+        if os.path.exists(readme_path):
+            depfiles.append(readme_path)
+            notice_file = get_license_from_readme(readme_path)
+
+    if notice_file is None:
+        notice_file = find_license_recursively(options.module_source_dir,
+                                               options.default_license)
+
     if notice_file:
         for output in options.output:
             os.makedirs(os.path.dirname(output), exist_ok=True)
-            shutil.copy(notice_file, output)
-    else:
-        for output in options.output:
-            build_utils.touch(output)
+            if os.path.exists(notice_file):
+                shutil.copy(notice_file, output)
+            else:
+                build_utils.touch(output)
+        depfiles.append(notice_file)
 
 
 def main(args):
@@ -98,7 +90,8 @@ def main(args):
     parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
 
-    parser.add_argument('--notice-file', help='', required=False)
+    parser.add_argument('--license-file', required=False)
+    parser.add_argument('--default-license', required=True)
     parser.add_argument('--output', action='append', required=False)
     parser.add_argument('--module-source-dir',
                         help='source directory of this module',
@@ -107,20 +100,10 @@ def main(args):
     options = parser.parse_args()
     depfiles = []
 
-    collect_notice_files(options, depfiles)
-    if options.notice_file:
-        depfiles.append(options.notice_file)
-    build_utils.write_depfile(options.depfile, options.output[0], depfiles)
-
-
-def collect_notice_files(options, depfiles):
-    if 'third_party/' not in options.module_source_dir:
-        if options.notice_file is None:
-            for output in options.output:
-                build_utils.touch(output)
-            return
-
     do_collect_notice_files(options, depfiles)
+    if options.license_file:
+        depfiles.append(options.license_file)
+    build_utils.write_depfile(options.depfile, options.output[0], depfiles)
 
 
 if __name__ == '__main__':
