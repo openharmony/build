@@ -105,7 +105,7 @@ esac
 PYTHON3=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.8.5/bin/python3
 
 if [[ ! -f "${PYTHON3}" ]]; then
-  echo -e "\033[33m Please execute the build/prebuilst.sh \033[0m"
+  echo -e "\033[33m Please execute the build/prebuilts_download.sh \033[0m"
   exit 1
 fi
 
