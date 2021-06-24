@@ -91,7 +91,6 @@ template("ohos_executable") {
                              "remove_configs",
                              "static_link",
                              "external_deps",
-                             "asdk_deps",
                              "install_images",
                              "module_install_dir",
                              "relative_install_dir",
@@ -181,26 +180,6 @@ template("ohos_executable") {
       }
       if (defined(external_deps_info.include_dirs)) {
         include_dirs += external_deps_info.include_dirs
-      }
-    }
-
-    if (defined(invoker.asdk_deps) && invoker.asdk_deps != []) {
-      asdk_deps_script =
-          rebase_path("//build/templates/common/asdk_deps_handler.py")
-      asdk_deps_temp_file = "$target_gen_dir/${target_name}_asdk_deps_temp.json"
-
-      arguments = []
-      arguments += [ "--asdk-deps" ]
-      arguments += invoker.asdk_deps
-      arguments += [
-        "--asdk-deps-temp-file",
-        rebase_path(asdk_deps_temp_file, root_build_dir),
-        "--target-cpu",
-        target_cpu,
-      ]
-      asdk_deps_info = exec_script(asdk_deps_script, arguments, "json")
-      foreach(asdk_dep, asdk_deps_info) {
-        deps += [ get_label_info(asdk_dep.label, "label_with_toolchain") ]
       }
     }
 
@@ -361,7 +340,6 @@ template("ohos_shared_library") {
                              "remove_configs",
                              "no_default_deps",
                              "external_deps",
-                             "asdk_deps",
                              "install_images",
                              "module_install_dir",
                              "relative_install_dir",
@@ -465,26 +443,6 @@ template("ohos_shared_library") {
       }
       if (defined(external_deps_info.include_dirs)) {
         include_dirs += external_deps_info.include_dirs
-      }
-    }
-
-    if (defined(invoker.asdk_deps) && invoker.asdk_deps != []) {
-      asdk_deps_script =
-          rebase_path("//build/templates/common/asdk_deps_handler.py")
-      asdk_deps_temp_file = "$target_gen_dir/${target_name}_asdk_deps_temp.json"
-
-      arguments = []
-      arguments += [ "--asdk-deps" ]
-      arguments += invoker.asdk_deps
-      arguments += [
-        "--asdk-deps-temp-file",
-        rebase_path(asdk_deps_temp_file, root_build_dir),
-        "--target-cpu",
-        target_cpu,
-      ]
-      asdk_deps_info = exec_script(asdk_deps_script, arguments, "json")
-      foreach(asdk_dep, asdk_deps_info) {
-        deps += [ get_label_info(asdk_dep.label, "label_with_toolchain") ]
       }
     }
 
@@ -622,7 +580,6 @@ template("ohos_static_library") {
                              "remove_configs",
                              "no_default_deps",
                              "external_deps",
-                             "asdk_deps",
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
@@ -701,25 +658,6 @@ template("ohos_static_library") {
         include_dirs += external_deps_info.include_dirs
       }
     }
-    if (defined(invoker.asdk_deps) && invoker.asdk_deps != []) {
-      asdk_deps_script =
-          rebase_path("//build/templates/common/asdk_deps_handler.py")
-      asdk_deps_temp_file = "$target_gen_dir/${target_name}_asdk_deps_temp.json"
-
-      arguments = []
-      arguments += [ "--asdk-deps" ]
-      arguments += invoker.asdk_deps
-      arguments += [
-        "--asdk-deps-temp-file",
-        rebase_path(asdk_deps_temp_file, root_build_dir),
-        "--target-cpu",
-        target_cpu,
-      ]
-      asdk_deps_info = exec_script(asdk_deps_script, arguments, "json")
-      foreach(asdk_dep, asdk_deps_info) {
-        deps += [ get_label_info(asdk_dep.label, "label_with_toolchain") ]
-      }
-    }
   }
 }
 
@@ -789,7 +727,6 @@ template("ohos_source_set") {
                              "remove_configs",
                              "no_default_deps",
                              "external_deps",
-                             "asdk_deps",
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
@@ -868,25 +805,6 @@ template("ohos_source_set") {
       }
       if (defined(external_deps_info.include_dirs)) {
         include_dirs += external_deps_info.include_dirs
-      }
-    }
-    if (defined(invoker.asdk_deps) && invoker.asdk_deps != []) {
-      asdk_deps_script =
-          rebase_path("//build/templates/common/asdk_deps_handler.py")
-      asdk_deps_temp_file = "$target_gen_dir/${target_name}_asdk_deps_temp.json"
-
-      arguments = []
-      arguments += [ "--asdk-deps" ]
-      arguments += invoker.asdk_deps
-      arguments += [
-        "--asdk-deps-temp-file",
-        rebase_path(asdk_deps_temp_file, root_build_dir),
-        "--target-cpu",
-        target_cpu,
-      ]
-      asdk_deps_info = exec_script(asdk_deps_script, arguments, "json")
-      foreach(asdk_dep, asdk_deps_info) {
-        deps += [ get_label_info(asdk_dep.label, "label_with_toolchain") ]
       }
     }
   }

@@ -67,12 +67,8 @@ def get_build_config_from_label(label, current_toolchain_dir):
 def add_dynamic_deps(output, build_config):
     external_deps = build_utils.expand_file_args(
         ['@FileArg({}:deps_info:external_deps)'.format(build_config)])
-    asdk_deps = build_utils.expand_file_args(
-        ['@FileArg({}:deps_info:asdk_deps)'.format(build_config)])
     if external_deps[0] != '[  ]':
         output += "external_deps = " + external_deps[0]
-    if asdk_deps[0] != '[  ]':
-        output += "asdk_deps = " + asdk_deps[0]
     output += "}"
     return output
 
