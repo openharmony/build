@@ -61,7 +61,7 @@ function build_vendro_image() {
 
 function _update_build_prop() {
     local system_build_prop_file=${ohos_build_out_dir}/images/system/build.prop
-    local ohos_build_prop_file=${OHOS_ROOT_PATH}/build/adapter/makefiles/ohos_system.prop
+    local ohos_build_prop_file=${OHOS_ROOT_PATH}/build/ohos_system.prop
     if [[ -f "${ohos_build_prop_file}" ]] && [[ -f "${system_build_prop_file}" ]]; then
         echo '' >> ${system_build_prop_file}
         cat ${ohos_build_prop_file} >> ${system_build_prop_file}
