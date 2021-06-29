@@ -68,6 +68,31 @@ function _update_build_prop() {
     fi
 }
 
+function build_system_images_for_musl() {
+    cp ${ohos_build_out_dir}/../../startup/init/init ${ohos_build_out_dir}/images/system/bin/init
+    cp ${ohos_build_out_dir}/../../startup/init/updaterueventd ${ohos_build_out_dir}/images/system/bin/updaterueventd
+
+    cp ${ohos_build_out_dir}/../../common/common/sh  ${ohos_build_out_dir}/images/system/bin/sh
+    cp ${ohos_build_out_dir}/../../common/common/toybox  ${ohos_build_out_dir}/images/system/bin/toybox
+    toybox_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_toybox.sh
+    ${toybox_creater} ${ohos_build_out_dir}/images/system/bin
+
+    cp ${OHOS_ROOT_PATH}/build/common/musl/ld-musl-arm.path  ${ohos_build_out_dir}/images/system/etc/ld-musl-arm.path
+    cp ${OHOS_ROOT_PATH}/prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl/ld-musl-arm.so.1  ${ohos_build_out_dir}/images/system/bin/ld-musl-arm.so.1
+    cp ${OHOS_ROOT_PATH}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/libc++.so  ${ohos_build_out_dir}/images/system/lib/libc++.so
+}
+
+function copy_init() {
+    cp ${ohos_build_out_dir}/system/etc/init.cfg ${ohos_build_out_dir}/images/root/init.cfg
+    # It will be deleted after the musl compilation is completely successful
+    if [[ $USE_OHOS_INIT != true ]]; then
+        cp ${OHOS_ROOT_PATH}/prebuilts/aosp_prebuilt_libs/minisys/system/bin/init ${ohos_build_out_dir}/images/system/bin/init
+        cp ${OHOS_ROOT_PATH}/prebuilts/aosp_prebuilt_libs/minisys/system/bin/reboot ${ohos_build_out_dir}/images/system/bin/reboot
+        cp ${OHOS_ROOT_PATH}/prebuilts/aosp_prebuilt_libs/minisys/system/bin/sh ${ohos_build_out_dir}/images/system/bin/sh
+        cp ${OHOS_ROOT_PATH}/prebuilts/aosp_prebuilt_libs/minisys/system/bin/toybox ${ohos_build_out_dir}/images/system/bin/toybox
+    fi
+}
+
 function build_system_image() {
     if [[ ! -d "${ohos_build_out_dir}/images" ]]; then
         mkdir ${ohos_build_out_dir}/images
@@ -76,6 +101,11 @@ function build_system_image() {
     cp -arf ${ohos_build_out_dir}/system/* ${ohos_build_out_dir}/images/system/
     # update build.prop
     _update_build_prop
+    # build for init
+    copy_init
+    if [[ $BUILD_WITH_MUSL == true ]]; then
+        build_system_images_for_musl
+    fi
     # remove img
     rm -rf ${ohos_build_out_dir}/images/system.img
     # build system image
@@ -90,7 +120,6 @@ function build_system_image() {
     fi
     echo -e "\033[32m  build system image successful.\033[0m"
 }
-
 
 function build_userdata_image() {
     if [[ -d "${ohos_build_out_dir}/images/data" ]]; then
