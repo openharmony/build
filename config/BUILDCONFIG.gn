@@ -153,6 +153,10 @@ declare_args() {
   is_double_framework = true
 }
 
+declare_args() {
+  use_musl = false
+}
+
 a_prebuilt_libs_path = "//prebuilts/aosp_prebuilt_libs"
 asdk_libs_dir = "${a_prebuilt_libs_path}/asdk_libs"
 
