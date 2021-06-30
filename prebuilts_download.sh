@@ -94,6 +94,7 @@ if [ ! -d "${code_dir}/third_party/jsframework" ]; then
 else
     cd ${code_dir}/third_party/jsframework/
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    npm config set registry http://registry.npm.taobao.org
     npm install
 
     cd ${code_dir}
