@@ -69,17 +69,11 @@ function _update_build_prop() {
 }
 
 function build_system_images_for_musl() {
-    cp ${ohos_build_out_dir}/../../startup/init/init ${ohos_build_out_dir}/images/system/bin/init
-    cp ${ohos_build_out_dir}/../../startup/init/updaterueventd ${ohos_build_out_dir}/images/system/bin/updaterueventd
-
     cp ${ohos_build_out_dir}/../../common/common/sh  ${ohos_build_out_dir}/images/system/bin/sh
     cp ${ohos_build_out_dir}/../../common/common/toybox  ${ohos_build_out_dir}/images/system/bin/toybox
     toybox_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_toybox.sh
     ${toybox_creater} ${ohos_build_out_dir}/images/system/bin
-
-    cp ${OHOS_ROOT_PATH}/build/common/musl/ld-musl-arm.path  ${ohos_build_out_dir}/images/system/etc/ld-musl-arm.path
     cp ${OHOS_ROOT_PATH}/prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl/ld-musl-arm.so.1  ${ohos_build_out_dir}/images/system/bin/ld-musl-arm.so.1
-    cp ${OHOS_ROOT_PATH}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/libc++.so  ${ohos_build_out_dir}/images/system/lib/libc++.so
 }
 
 function copy_init() {
