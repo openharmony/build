@@ -73,7 +73,6 @@ function build_system_images_for_musl() {
     cp ${ohos_build_out_dir}/../../common/common/toybox  ${ohos_build_out_dir}/images/system/bin/toybox
     toybox_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_toybox.sh
     ${toybox_creater} ${ohos_build_out_dir}/images/system/bin
-    cp ${OHOS_ROOT_PATH}/prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl/ld-musl-arm.so.1  ${ohos_build_out_dir}/images/system/bin/ld-musl-arm.so.1
 }
 
 function copy_init() {
