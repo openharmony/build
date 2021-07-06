@@ -76,6 +76,7 @@ function build_system_images_for_musl() {
 }
 
 function copy_init() {
+    cp ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.cfg ${ohos_build_out_dir}/images/root/init.Hi3516DV300.cfg
     cp ${ohos_build_out_dir}/system/etc/init.cfg ${ohos_build_out_dir}/images/root/init.cfg
     # It will be deleted after the musl compilation is completely successful
     if [[ $USE_OHOS_INIT != true ]]; then
