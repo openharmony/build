@@ -28,7 +28,8 @@ function prepare_updaterimage_dirs() {
 }
 
 function install_init_config() {
-  cp -f ${ohos_build_out_dir}/system/etc/init.cfg ${updater_target_out}/etc/init.cfg
+  cp -f ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.updater.cfg ${updater_target_out}/init.Hi3516DV300.updater.cfg
+  cp -f ${ohos_build_out_dir}/system/etc/updater_init.cfg ${updater_target_out}/etc/init.cfg
 }
 
 function install_fstab() {
@@ -67,7 +68,7 @@ function build_updater_image() {
   echo "ohos_build_out_dir = ${ohos_build_out_dir}"
 
   prepare_updaterimage_dirs
-  cp -f ${ohos_build_out_dir}/system/bin/init ${updater_target_out}/
+  cp -f ${ohos_build_out_dir}/system/bin/init ${updater_target_out}/updaterinit
   updater_targets=(updater updater_reboot updaterueventd)
   for updater_target in ${updater_targets[*]}; do
     cp -f ${ohos_build_out_dir}/system/bin/${updater_target} ${updater_target_out}/system/bin
