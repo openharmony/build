@@ -29,7 +29,7 @@ function prepare_updaterimage_dirs() {
 
 function install_init_config() {
   cp -f ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.updater.cfg ${updater_target_out}/init.Hi3516DV300.updater.cfg
-  cp -f ${ohos_build_out_dir}/system/etc/updater_init.cfg ${updater_target_out}/etc/init.cfg
+  cp -f ${ohos_build_out_dir}/system/etc/updater_init.cfg ${updater_target_out}/init.cfg
 }
 
 function install_fstab() {
