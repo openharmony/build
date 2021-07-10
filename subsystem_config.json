@@ -160,5 +160,11 @@
     "path": "test/xts",
     "name": "xts",
     "dir": "test"
+  },
+  "distributedhardware": {
+    "project": "hmf/distributedhardware",
+    "path": "foundation/distributedhardware",
+    "name": "distributedhardware",
+    "dir": "foundation"
   }
 }
