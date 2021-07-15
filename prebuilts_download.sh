@@ -85,7 +85,7 @@ node_js=node-${node_js_ver}-linux-x64.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
 if [ ! -f "${node_js}" ]; then
-    wget --no-check-certificate https://nodejs.org/download/release/${node_js_ver}/${node_js}
+    wget --no-check-certificate https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
     tar zxf ${node_js}
 fi
 
