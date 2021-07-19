@@ -60,6 +60,8 @@ def _get_device_info(device_name, device_config_path):
     device_config_file = os.path.join(device_config_path,
                                       '{}.json'.format(device_name))
     device_info = read_json_file(device_config_file)
+    if device_info.get('device_name') != device_name:
+        raise Exception("device name configuration incorrect in '{}'".format(device_config_file))
     return device_info
 
 
@@ -78,10 +80,14 @@ def _parse_config_v2(config_info, products_config_path, base_config_dir,
     current_product_parts = config_info.get("parts")
     all_parts.update(current_product_parts)
 
+    product_name = config_info.get('product_name')
+    product_company = config_info.get('product_company')
     product_device_name = config_info.get('product_device')
     device_info = _get_device_info(product_device_name, device_config_path)
     build_configs = {}
     build_configs['system_type'] = system_type
+    build_configs['product_name'] = product_name
+    build_configs['product_company'] = product_company
     build_configs['device_name'] = product_device_name
     build_configs.update(device_info)
     return all_parts, build_configs
@@ -100,6 +106,8 @@ def _parse_config(product_name, products_config_path, base_parts_config_path,
     if not config_version:
         config_version = "1.0"
     if config_version == "2.0":
+        if product_name != config_info.get('product_name'):
+            raise Exception("product name configuration incorrect in '{}'".format(curr_config_file))
         return _parse_config_v2(config_info, products_config_path,
                                 base_parts_config_path, device_config_path)
     else:
@@ -174,6 +182,8 @@ def _run(args):
     for k, v in build_configs.items():
         _build_info_list.append('{}={}'.format(k, v))
     write_file(build_info_file, '\n'.join(_build_info_list))
+    build_info_json_file = os.path.join(product_info_output_path, 'build_config.json')
+    write_json_file(build_info_json_file, build_configs)
 
 
 def main(argv):
