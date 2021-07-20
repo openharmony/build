@@ -16,7 +16,7 @@ set -e
 
 function do_make_ohos() {
   local build_cmd="build/build_scripts/build_ohos.sh"
-  build_cmd+=" device_type=${product_name} target_os=${target_os} target_cpu=${target_cpu}"
+  build_cmd+=" device_type=${product_name} product_name=${product_name} target_os=${target_os} target_cpu=${target_cpu}"
   build_cmd+=" gn_args=is_standard_system=true"
   if [[ "${build_target}x" != "x" ]]; then
     for target_name in ${build_target[@]}; do
