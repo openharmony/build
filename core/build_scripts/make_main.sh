@@ -38,6 +38,7 @@ do_make()
     if [ "${SKIP_GN_PARSE}"x = falsex ]; then
         ${BUILD_TOOLS_DIR}/gn gen ${TARGET_OUT_DIR} \
             --args="target_os=\"${TARGET_OS}\" target_cpu=\"${TARGET_ARCH}\" is_debug=false \
+            product_name=\"${PRODUCT_NAME}\" \
             device_type=\"${DEVICE_TYPE}\" is_component_build=true use_custom_libcxx=true \
             ${GN_ARGS} ${TEST_BUILD_PARA_STRING}  ${IS_ASAN} \
             release_test_suite=${RELEASE_TEST_SUITE}" 2>&1 | tee -a $log

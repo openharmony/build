@@ -27,6 +27,7 @@ parse_cmdline()
         case "$OPTIONS" in
         test_build_para)  TEST_BUILD_PARA_STRING="$PARAM" ;;
         device_type)      DEVICE_TYPE="$PARAM" ;;
+        product_name)     PRODUCT_NAME="$PARAM" ;;
         build_target)     BUILD_TARGET_NAME="$BUILD_TARGET_NAME $PARAM" ;;
         target_os)        TARGET_OS="$PARAM" ;;
         target_cpu)       TARGET_ARCH="$PARAM" ;;
