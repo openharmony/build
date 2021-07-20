@@ -71,8 +71,8 @@ function _update_build_prop() {
 function build_system_images_for_musl() {
     cp ${ohos_build_out_dir}/../../common/common/sh  ${ohos_build_out_dir}/images/system/bin/sh
     cp ${ohos_build_out_dir}/../../common/common/toybox  ${ohos_build_out_dir}/images/system/bin/toybox
-    toybox_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_toybox.sh
-    ${toybox_creater} ${ohos_build_out_dir}/images/system/bin
+    cmds_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_cmds.sh
+    ${cmds_creater} ${ohos_build_out_dir}/images/system/bin
 }
 
 function copy_init() {
