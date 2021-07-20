@@ -59,3 +59,47 @@ template("js_declaration") {
     }
   }
 }
+
+objcopy_arm = "//prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/arm-linux-gnueabi/bin/objcopy"
+template("gen_js_obj") {
+  name = target_name
+  action("gen_js_obj_" + name) {
+    visibility = [ ":*" ]
+
+    platform = "${current_os}_${current_cpu}"
+    if (platform == "mingw_x86_64") {
+      objcopy_tool = objcopy_mingw
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy_pc_mac.py"
+    } else if (platform == "mac_x64") {
+      objcopy_tool = objcopy_clang
+      script = "declarative_frontend/engine/tools/build_resource_to_bytecode.py"
+    } else if (target_cpu == "x86_64") {
+      objcopy_tool = objcopy_x86_64
+      script = "$flutter_root/engine/flutter/sky/tools/objcopy.py"
+    } else if (target_cpu == "arm") {
+      objcopy_tool = objcopy_arm
+      script = "//third_party/flutter/engine/flutter/sky/tools/objcopy.py"
+    }
+
+    args = [
+      "--objcopy",
+      rebase_path(objcopy_tool),
+      "--input",
+      rebase_path(invoker.input),
+      "--output",
+      rebase_path(invoker.output),
+      "--arch",
+      current_cpu,
+    ]
+
+    deps = []
+
+    inputs = [ invoker.input ]
+    outputs = [ invoker.output ]
+  }
+
+  source_set(name) {
+    sources = [ invoker.output ]
+    deps = [ ":gen_js_obj_" + name ]
+  }
+}
