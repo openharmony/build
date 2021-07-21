@@ -15,6 +15,8 @@
 
 set -e
 sha256_result=0
+check_sha256=
+local_sha256=
 function check_sha256(){
     success_color='\033[1;42mSuccess\033[0m'
     failed_color='\033[1;41mFailed\033[0m'
@@ -23,9 +25,9 @@ function check_sha256(){
     check_sha256=`curl -s -k ${check_url}.sha256`  # 当前使用华为云,URL固定,所以写死了,后续如果有变动,此处需要修改
     local_sha256=`sha256sum ${local_file} |awk '{print $1}'`
     if [ "X${check_sha256}" == "X${local_sha256}" ];then
-        echo -e "${success_color},Sha256 check OK."
+        echo -e "${success_color},${check_url} Sha256 check OK."
     else
-        echo -e "${failed_color},Sha256 check Failed."
+        echo -e "${failed_color},${check_url} Sha256 check Failed.Retry!"
         sha256_result=1
         #exit 1  # 默认退出,必须保证sha256一致,如有特殊需要,请自行注释
     fi
@@ -45,13 +47,20 @@ function hwcloud_download(){
                 rm -rf "${download_local_file:-/tmp/20210721_not_exit_file}"
             else
                 i=999
-                continue
+                return 0
             fi
         fi
         if [ ! -f "${download_local_file}" ];then
             wget -O  "${download_local_file}" "${download_source_url}"
         fi
     done
+    # 连续三次失败后报错退出
+    echo -e """Sha256 check failed!
+Download URL: ${download_source_url}
+Local file: ${download_local_file}
+Remote sha256: ${check_sha256}
+Local sha256: ${local_sha256}"""
+    exit 1
 }
 # 代码下载目录
 script_path=$(cd $(dirname $0);pwd)
