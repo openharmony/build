@@ -14,7 +14,45 @@
 
 
 set -e
-
+sha256_result=0
+function check_sha256(){
+    success_color='\033[1;42mSuccess\033[0m'
+    failed_color='\033[1;41mFailed\033[0m'
+    check_url=$1 #来源URL
+    local_file=$2  #本地文件绝对路径
+    check_sha256=`curl -s -k ${check_url}.sha256`  # 当前使用华为云,URL固定,所以写死了,后续如果有变动,此处需要修改
+    local_sha256=`sha256sum ${local_file} |awk '{print $1}'`
+    if [ "X${check_sha256}" == "X${local_sha256}" ];then
+        echo -e "${success_color},Sha256 check OK."
+    else
+        echo -e "${failed_color},Sha256 check Failed."
+        sha256_result=1
+        #exit 1  # 默认退出,必须保证sha256一致,如有特殊需要,请自行注释
+    fi
+}
+function hwcloud_download(){
+    # 代理不需要鉴权: wget -P ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
+    # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -P ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
+    # 不需要代理
+    download_local_file=$1
+    download_source_url=$2
+    for((i=1;i<=3;i++));
+    do
+        if [ -f "${download_local_file}" ];then
+            check_sha256 "${download_source_url}" "${download_local_file}"
+            if [ ${sha256_result} -gt 0 ];then
+                # 设置变量默认值,防止误删除
+                rm -rf "${download_local_file:-/tmp/20210721_not_exit_file}"
+            else
+                i=999
+                continue
+            fi
+        fi
+        if [ ! -f "${download_local_file}" ];then
+            wget -O  "${download_local_file}" "${download_source_url}"
+        fi
+    done
+}
 # 代码下载目录
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
@@ -53,12 +91,7 @@ do
     if [ ! -d "${code_dir}/${unzip_dir}" ];then
         mkdir -p "${code_dir}/${unzip_dir}"
     fi
-    if [ ! -f "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" ];then
-        # 代理不需要鉴权: wget -P ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
-        # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -P ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
-        # 不需要代理
-        wget -O ${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}  ${huaweicloud_url}
-    fi
+    hwcloud_download "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  "${huaweicloud_url}"
     if [ "X${bin_file_suffix:0-3}" = "Xzip" ];then
             unzip "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" -d "${code_dir}/${unzip_dir}/"
     elif [ "X${bin_file_suffix:0-6}" = "Xtar.gz" ];then
