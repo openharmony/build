@@ -38,7 +38,8 @@ template("ohos_clang_toolchain") {
     if (use_musl) {
       print(invoker.sysroot)
       print(invoker.lib_dir)
-      ohos_libc_dir = rebase_path("//prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl", root_build_dir)
+      # ohos_libc_dir = rebase_path("//prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl", root_build_dir)
+      ohos_libc_dir = rebase_path("${musl_sysroot}/usr/lib/arm-linux-ohosmusl", root_build_dir)
       libs_section_prefix = "$ohos_libc_dir/Scrt1.o"
       libs_section_prefix += " $ohos_libc_dir/crti.o"
       libs_section_postfix = "$ohos_libc_dir/crtn.o"
