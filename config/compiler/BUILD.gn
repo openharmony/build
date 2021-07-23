@@ -113,7 +113,7 @@ declare_args() {
   thin_lto_enable_optimizations = is_chromeos
 
   # By default only the binaries in official builds get build IDs.
-  force_local_build_id = false
+  force_local_build_id = true
 }
 
 declare_args() {
@@ -313,7 +313,7 @@ config("compiler") {
       # id, so explicitly enable it in official builds. It's not needed in
       # unofficial builds and computing it does slow down the link, so go with
       # faster links in unofficial builds.
-      ldflags += [ "-Wl,--build-id=sha1" ]
+      ldflags += [ "-Wl,--build-id=md5" ]
     }
 
     if (!is_ohos) {
