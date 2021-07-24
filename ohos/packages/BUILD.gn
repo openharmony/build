@@ -19,14 +19,12 @@ import("//build/ohos/build_var.gni")
 
 # import target_platform_list
 import("${build_configs_path}/platforms_list.gni")
-
-
 group("make_packages") {
   deps = []
   foreach(_platform, target_platform_list) {
     deps += [
-      ":${_platform}_parts_list",
       ":${_platform}_install_modules",
+      ":${_platform}_parts_list",
       ":gen_required_modules_${_platform}",
     ]
   }
@@ -104,15 +102,14 @@ foreach(_platform, target_platform_list) {
     ]
   }
 
-  _merged_notice_txt = "${current_platform_dir}/NOTICE_SYSTEM.txt"
-  _notice_module_info_file =
-      "${current_platform_dir}/NOTICE_SYSTEM_module_info.json"
+  _merged_notice_txt = "${current_platform_dir}/NOTICE.txt"
+  _notice_module_info_file = "${current_platform_dir}/NOTICE_module_info.json"
   action_with_pydeps("merge_system_notice_file_${current_platform}") {
     deps = [ ":collect_notice_files__${current_platform}" ]
     script = "//build/ohos/notice/merge_notice_files.py"
     depfile = "$target_gen_dir/$target_name.d"
 
-    _merged_notice_gz = "${current_platform_dir}/NOTICE_SYSTEM.xml.gz"
+    _merged_notice_gz = "${current_platform_dir}/NOTICE.xml.gz"
     inputs = [ _collected_notice_zipfile ]
     outputs = [
       _merged_notice_txt,
@@ -175,17 +172,6 @@ foreach(_platform, target_platform_list) {
   _build_properties += [ "build_version = $_ohos_build_version" ]
   write_file(_build_properties_file, _build_properties)
 
-  #  _build_prop_target_name = "build_prop__${current_platform}"
-  #  ohos_copy(_build_prop_target_name) {
-  #    sources = [ _build_properties_file ]
-  #    outputs = [ "${current_platform_dir}/buildz.copy.prop" ]
-  #    module_type = ""
-  #    module_install_name = "buildz.prop"
-  #  }
-  #  post_process_modules_list +=
-  #      [ get_label_info(":$_build_prop_target_name", "target_out_dir") +
-  #        "/${_build_prop_target_name}_module_info.json" ]
-  #
   system_install_modules = "${current_platform_dir}/system_install_modules.json"
   system_module_info_list = "${current_platform_dir}/system_module_info.json"
   system_modules_list = "${current_platform_dir}/system_modules_list.txt"
@@ -343,7 +329,6 @@ if (is_asan) {
     }
   }
 }
-
 
 foreach(_platform, target_platform_list) {
   current_platform_dir = "$product_output_dir/$_platform"
