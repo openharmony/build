@@ -91,6 +91,8 @@ template("generate_module_info") {
     ramdisk_base_dir,
     "--vendor-base-dir",
     vendor_base_dir,
+    "--updater-base-dir",
+    updater_base_dir,
     "--type",
     module_type,
     "--target-label",
