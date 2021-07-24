@@ -45,54 +45,22 @@ def get_type_dir(module_type):
     return module_type
 
 
-def gen_system_install_dest(system_base_dir, module_install_dir,
-                            relative_install_dir, module_type):
-    """Generate system module install dir by user config."""
+def _gen_install_dest(base_dir, module_install_dir, relative_install_dir,
+                      module_type):
+    """Generate module install dir by user config."""
     if module_install_dir != '':
-        system_base_dir = os.path.join(system_base_dir, module_install_dir)
+        _install_dir = os.path.join(base_dir, module_install_dir)
     elif relative_install_dir != '':
-        system_base_dir = os.path.join(system_base_dir,
-                                       get_type_dir(module_type),
-                                       relative_install_dir)
+        _install_dir = os.path.join(base_dir, get_type_dir(module_type),
+                                    relative_install_dir)
     else:
-        system_base_dir = os.path.join(system_base_dir,
-                                       get_type_dir(module_type))
-    return system_base_dir
-
-
-def gen_ramdisk_install_dest(ramdisk_base_dir, module_install_dir,
-                             relative_install_dir, module_type):
-    """Generate ramdisk module install dir by user config."""
-    if module_install_dir != '':
-        ramdisk_base_dir = os.path.join(ramdisk_base_dir, module_install_dir)
-    elif relative_install_dir != '':
-        ramdisk_base_dir = os.path.join(ramdisk_base_dir,
-                                        get_type_dir(module_type),
-                                        relative_install_dir)
-    else:
-        ramdisk_base_dir = os.path.join(ramdisk_base_dir,
-                                        get_type_dir(module_type))
-    return ramdisk_base_dir
-
-
-def gen_vendor_install_dest(vendor_base_dir, module_install_dir,
-                            relative_install_dir, module_type):
-    """Generate vendor module install dir by user config."""
-    if module_install_dir != '':
-        vendor_base_dir = os.path.join(vendor_base_dir, module_install_dir)
-    elif relative_install_dir != '':
-        vendor_base_dir = os.path.join(vendor_base_dir,
-                                       get_type_dir(module_type),
-                                       relative_install_dir)
-    else:
-        vendor_base_dir = os.path.join(vendor_base_dir,
-                                       get_type_dir(module_type))
-    return vendor_base_dir
+        _install_dir = os.path.join(base_dir, get_type_dir(module_type))
+    return _install_dir
 
 
 def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir,
-                      source_file_name, install_images, module_install_dir,
-                      relative_install_dir, module_type):
+                      updater_base_dir, source_file_name, install_images,
+                      module_install_dir, relative_install_dir, module_type):
     """Generate module install dir by user config."""
     dests = []
     if module_type == "none":
@@ -100,15 +68,17 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir,
     dest = ''
     for image in install_images:
         if image == 'system':
-            dest = gen_system_install_dest(system_base_dir, module_install_dir,
-                                           relative_install_dir, module_type)
+            dest = _gen_install_dest(system_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
         elif image == 'ramdisk':
-            dest = gen_ramdisk_install_dest(ramdisk_base_dir,
-                                            module_install_dir,
-                                            relative_install_dir, module_type)
+            dest = _gen_install_dest(ramdisk_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
         elif image == 'vendor':
-            dest = gen_vendor_install_dest(vendor_base_dir, module_install_dir,
-                                           relative_install_dir, module_type)
+            dest = _gen_install_dest(vendor_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
+        elif image == 'updater':
+            dest = _gen_install_dest(updater_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
         dests.append(os.path.join(dest, source_file_name))
     return dests
 
@@ -139,9 +109,10 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--system-base-dir', help='', required=True)
-    parser.add_argument('--ramdisk-base-dir', help='', required=True)
-    parser.add_argument('--vendor-base-dir', help='', required=True)
+    parser.add_argument('--system-base-dir', required=True)
+    parser.add_argument('--ramdisk-base-dir', required=True)
+    parser.add_argument('--vendor-base-dir', required=True)
+    parser.add_argument('--updater-base-dir', required=True)
     parser.add_argument('--label-name', help='module name', required=True)
     parser.add_argument('--target-label', help='target label', required=True)
     parser.add_argument('--type', help='module type', required=True)
@@ -193,14 +164,10 @@ def main():
 
     install_dests = []
     if args.install_images:
-        install_dests = gen_install_dests(args.system_base_dir,
-                                          args.ramdisk_base_dir,
-                                          args.vendor_base_dir,
-                                          source_file_name,
-                                          args.install_images,
-                                          args.module_install_dir,
-                                          args.relative_install_dir,
-                                          args.type)
+        install_dests = gen_install_dests(
+            args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir,
+            args.updater_base_dir, source_file_name, args.install_images,
+            args.module_install_dir, args.relative_install_dir, args.type)
 
     module_info_data = gen_module_info(args.type, args.target_label,
                                        args.label_name, args.source_dir,

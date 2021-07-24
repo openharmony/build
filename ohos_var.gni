@@ -50,6 +50,9 @@ declare_args() {
   # vendor package dir
   vendor_base_dir = "vendor"
 
+  # updater package dir
+  updater_base_dir = "updater"
+
   # check sdk interface
   sdk_interface_check = true
 
