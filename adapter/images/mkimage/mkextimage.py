@@ -100,7 +100,7 @@ def build_run_e2fsdroid(args):
         e2fsdroid_opts += " -S " + args.file_context
 
     e2fsdroid_cmd += ("e2fsdroid" + e2fsdroid_opts + " -f " +
-                      args.src_dir + " -a " + args.mount_point + " " + args.device)
+            args.src_dir + " -a " + args.mount_point + " " + args.device)
     res = run_cmd(e2fsdroid_cmd)
     if res[1] != 0:
         print("info: " + e2fsdroid_cmd)
