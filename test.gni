@@ -207,7 +207,7 @@ template("ohos_distributedtest") {
 
 template("ohos_fuzztest") {
   _ohos_test(target_name) {
-    forward_variables_from(invoker, "*")
+    forward_variables_from(invoker, "*", [ "deps", "cflags" ])
     test_type = "fuzztest"
     deps = []
     if (defined(invoker.deps)) {
