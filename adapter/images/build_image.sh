@@ -123,6 +123,7 @@ function build_userdata_image() {
         rm -rf ${ohos_build_out_dir}/images/data
     fi
     mkdir ${ohos_build_out_dir}/images/data
+    cp -r applications/standard/photos/demos ${ohos_build_out_dir}/images/data/media/
     # build userdat image
     PATH=prebuilts/aosp_prebuilt_libs/host_tools/bin:$PATH prebuilts/aosp_prebuilt_libs/host_tools/releasetools/build_image.py \
         ${ohos_build_out_dir}/images/data \
