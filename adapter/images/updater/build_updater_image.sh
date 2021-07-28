@@ -96,16 +96,27 @@ function build_updater_image() {
   fi
 
   # Build updater image
-  PATH=prebuilts/aosp_prebuilt_libs/host_tools/bin:$PATH prebuilts/aosp_prebuilt_libs/host_tools/releasetools/build_image.py \
-  ${updater_target_out} \
-  ${OHOS_ROOT_PATH}/build/adapter/images/updater/updater_image_info.txt \
-  ${ohos_build_out_dir}/images/updater.img \
-  ${ohos_build_out_dir}/images/system
-  if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
-    echo "\033[31m  build: build updater image error.\033[0m"
-    exit 1
+  if [[ $USE_OHOS_INIT == true ]] && [[ $BUILD_IMAGE == true ]]; then
+    PATH=${build_tools_path}:${build_image_scripts_path}:$PATH mkimages.py \
+        ${ohos_build_out_dir}/images/updater \
+        ${build_image_scripts_path}/updater_image_conf.txt \
+        ${ohos_build_out_dir}/images/updater.img \
+        ${image_type}
+    if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
+      echo "\033[31m  build: build updater image error.\033[0m"
+      exit 1
+    fi
+  else
+    PATH=prebuilts/aosp_prebuilt_libs/host_tools/bin:$PATH prebuilts/aosp_prebuilt_libs/host_tools/releasetools/build_image.py \
+        ${updater_target_out} \
+        ${OHOS_ROOT_PATH}/build/adapter/images/updater/updater_image_info.txt \
+        ${ohos_build_out_dir}/images/updater.img \
+        ${ohos_build_out_dir}/images/system
+    if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
+      echo "\033[31m  build: build updater image error.\033[0m"
+      exit 1
+    fi
   fi
-
   echo -e "\033[32m  build updater image successful.\033[0m"
 }
 

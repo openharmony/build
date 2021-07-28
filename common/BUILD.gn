@@ -23,4 +23,8 @@ group("common_packages") {
     "//third_party/sqlite:sqlite",
     "//third_party/zlib:libz",
   ]
+
+  if (use_musl) {
+    deps += [ "musl:musl_install" ]
+  }
 }

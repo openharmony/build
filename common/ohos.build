@@ -2,10 +2,6 @@
   "subsystem": "common",
   "parts": {
     "common": {
-      "variants": [
-        "phone",
-        "ivi"
-      ],
       "module_list": [
         "//build/common:common_packages"
       ]
