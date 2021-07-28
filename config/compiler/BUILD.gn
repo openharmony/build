@@ -916,6 +916,26 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
+    if (use_musl) {
+      cflags += [
+        "-Wno-error=c99-designator",
+        "-Wno-error=anon-enum-enum-conversion",
+        "-Wno-error=implicit-fallthrough",
+        "-Wno-error=sizeof-array-div",
+        "-Wno-error=reorder-init-list",
+        "-Wno-error=range-loop-construct",
+        "-Wno-error=deprecated-copy",
+        "-Wno-error=implicit-int-float-conversion",
+        "-Wno-error=inconsistent-dllimport",
+        "-Wno-error=unknown-warning-option",
+        "-Wno-error=abstract-final-class",
+        "-Wno-error=sign-compare",
+        "-Wno-error=int-in-bool-context",
+        "-Wno-error=xor-used-as-pow",
+        "-Wno-error=return-stack-address",
+        "-Wno-error=dangling-gsl",
+      ]
+    }
 
     # use_xcode_clang only refers to the iOS toolchain, host binaries use
     # chromium's clang always.

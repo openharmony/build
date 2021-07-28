@@ -3,7 +3,7 @@
 # found in the LICENSE file.
 
 
-if (is_ohos || is_chromeos) {
+if (is_ohos) {
   import("//build/config/clang/clang.gni")
   import("//build/misc/overrides/build.gni")
   import("abi.gni")
@@ -43,6 +43,9 @@ if (is_ohos || is_chromeos) {
     libclang_rt_file = ""
   } else if (current_cpu == "arm") {
     libclang_rt_file = "${clang_base_path}/lib64/clang/9.0.3/lib/linux/libclang_rt.builtins-arm-android.a"
+    if (use_musl) {
+      libclang_rt_file = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl/libclang_rt.builtins.a"
+    }
   } else if (current_cpu == "x86_64") {
     libclang_rt_file = ""
   } else if (current_cpu == "arm64") {

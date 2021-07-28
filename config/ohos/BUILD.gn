@@ -19,12 +19,22 @@ config("compiler") {
     "-fno-short-enums",
   ]
   defines = [
-    "ANDROID",
-
     # The NDK has these things, but doesn't define the constants to say that it
     # does. Define them here instead.
     "HAVE_SYS_UIO_H",
   ]
+
+  if (!use_musl) {
+    defines += [ "ANDROID" ]
+  }
+
+  if (use_musl) {
+    defines += [
+      "__MUSL__",
+      "_LIBCPP_HAS_MUSL_LIBC",
+      "__BUILD_LINUX_WITH_CLANG",
+    ]
+  }
 
   ldflags = [
     "-Wl,--no-undefined",
@@ -40,6 +50,9 @@ config("compiler") {
   # calculation in //build/config/ohos/config.gni
   if (current_cpu == "arm") {
     abi_target = "arm-linux-androideabi"
+    if (use_musl) {
+      abi_target = "arm-linux-ohosmusl"
+    }
     compile_api_level = arm32_ndk_api_level
   } else if (current_cpu == "x86") {
     abi_target = ""
@@ -53,12 +66,24 @@ config("compiler") {
   } else {
     assert(false, "Architecture not supported")
   }
-  cflags += [
-    "--target=$abi_target",
-    "-isystem" + rebase_path("$base_libs_root/sysroot/usr/include/$abi_target",
-                             root_build_dir),
-    "-D__ANDROID_API__=$compile_api_level",
-  ]
+
+  if (use_musl) {
+    cflags += [
+      "--target=$abi_target",
+    ]
+    include_dirs = [
+      "//prebuilts/lite/sysroot/usr/include/${abi_target}",
+      "//prebuilts/clang/ohos/linux-x86_64/llvm/include/c++/v1",
+    ]
+  } else {
+    cflags += [
+      "--target=$abi_target",
+      "-isystem" + rebase_path("$base_libs_root/sysroot/usr/include/$abi_target",
+                               root_build_dir),
+      "-D__ANDROID_API__=$compile_api_level",
+    ]
+  }
+
   ldflags += [ "--target=$abi_target" ]
 
   if (compile_api_level < 20) {
@@ -81,21 +106,17 @@ config("runtime_library") {
     "__GNU_SOURCE=1",  # Necessary for clone().
     "CHROMIUM_CXX_TWEAK_INLINES",  # Saves binary size.
   ]
+
+  if (use_musl) {
+    defines += [
+      "__MUSL__",
+      "_LIBCPP_HAS_MUSL_LIBC",
+      "__BUILD_LINUX_WITH_CLANG",
+    ]
+  }
   ldflags = [ "-nostdlib" ]
 
   libs = []
-  if (!use_custom_libcxx) {
-    # The libc++ runtime library (must come first).
-    # ASan needs to dynamically link to libc++ even in static builds so
-    # that it can interpose operator new.
-    if (is_component_build || is_asan) {
-      libs += [ "c++_shared" ]
-    } else {
-      libs += [ "c++_static" ]
-    }
-    libs += [ "c++abi" ]
-  }
-
   # double framework, use prebuilt libc++.
   if (is_double_framework) {
     libs += [ "${asdk_libs_dir}/ndk/libcxx/${current_cpu}/libc++.so" ]
@@ -106,14 +127,27 @@ config("runtime_library") {
     libs += [ "unwind" ]
   }
 
-  libs += ["unwind_llvm"]
+  if (use_musl) {
+    ldflags += [
+      "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/",
+      "-L../../prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl",
+      "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl",
+    ]
+    ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-arm.so.1" ]
 
-  # Manually link the libgcc.a that the cross compiler uses. This is
-  # absolute because the linker will look inside the sysroot if it's not.
-  libs += [
-    rebase_path(libclang_rt_file),
-    "c",
-  ]
+    libs += [
+      rebase_path(libclang_rt_file),
+      "c",
+      "c++",
+      "c++abi"
+    ]
+  } else {
+    libs += [
+      rebase_path(libclang_rt_file),
+      "c",
+    ]
+    libs += ["unwind_llvm"]
+  }
 
   if (current_cpu == "arm" && arm_version == 6) {
     libs += [ "atomic" ]

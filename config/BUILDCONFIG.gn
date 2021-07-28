@@ -450,9 +450,13 @@ default_compiler_configs = [
 if (is_ohos) {
   default_compiler_configs += [
     "//build/config/ohos:default_orderfile_instrumentation",
-    "//build/config/ohos:lld_pack_relocations",
     "//build/config/gcc:symbol_visibility_inline_hidden",
   ]
+  if (!use_musl) {
+    default_compiler_configs += [
+      "//build/config/ohos:lld_pack_relocations",
+    ]
+  }
 }
 
 if (is_clang) {

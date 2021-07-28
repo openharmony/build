@@ -24,6 +24,10 @@ if (current_os == target_os && current_cpu == target_cpu &&
 
   # ohos uses unified headers, and thus a single compile time sysroot
   sysroot = "$base_libs_root/sysroot"
+  if (use_musl) {
+    sysroot = "//prebuilts/lite/sysroot"
+  }
+
 } else if (is_linux && use_sysroot) {
   # By default build against a sysroot image downloaded from Cloud Storage during gclient runhooks.
   if (current_cpu == "x64") {
@@ -64,6 +68,9 @@ if (is_ohos) {
   link_sysroot = sysroot
   if (current_cpu == "arm") {
     link_sysroot = "$base_libs_root/$arm_sysroot_subdir"
+    if (use_musl) {
+      link_sysroot = "//prebuilts/lite/sysroot"
+    }
   } else if (current_cpu == "arm64") {
     link_sysroot = "$base_libs_root/$arm64_sysroot_subdir"
   } else if (current_cpu == "x86") {
