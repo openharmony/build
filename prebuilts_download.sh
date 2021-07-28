@@ -83,6 +83,7 @@ prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/com
 prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
 prebuilts/clang/host/linux-x86,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_clang_aosp_linux-x86_64/1.0/prebuilts_clang_aosp_linux-x86_64.tar.gz
 prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
+prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-62608/linux/llvm.tar.gz
 """
 if [ ! -d "${bin_dir}" ];then
     mkdir -p "${bin_dir}"
