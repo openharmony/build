@@ -88,7 +88,7 @@ function build_updater_image() {
   fi
 
   cp -f ${ohos_build_out_dir}/system/bin/init ${updater_target_out}/updaterinit
-  if [[ $BUILD_WITH_MUSL == true ]]; then
+  if [[ $USE_OHOS_INIT == true ]]; then
     build_updater_image_for_musl
   fi
   updater_targets=(updater updater_reboot updaterueventd)

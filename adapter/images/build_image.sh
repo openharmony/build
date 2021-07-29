@@ -144,10 +144,8 @@ function build_system_image() {
     _update_build_prop
     # build for init
     copy_init
-    if [[ $BUILD_WITH_MUSL == true ]]; then
+    if [[ $USE_OHOS_INIT == true ]]; then
         build_system_images_for_musl
-        # copy prop.default
-        cp prebuilts/aosp_prebuilt_libs/minisys/system/etc/prop.default ${ohos_build_out_dir}/images/system/etc/
     fi
     # remove img
     rm -rf ${ohos_build_out_dir}/images/system.img
