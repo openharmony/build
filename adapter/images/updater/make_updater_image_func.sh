@@ -14,6 +14,9 @@
 
 set -e
 
+updater_exe_path="${OHOS_ROOT_PATH}/out/ohos-arm-release/obj/third_party/e2fsprogs/prebuilt/target/bin"
+updater_lib_path="${OHOS_ROOT_PATH}/out/ohos-arm-release/obj/third_party/e2fsprogs/prebuilt/target/lib"
+updater_out_common="${OHOS_ROOT_PATH}/out/ohos-arm-release/common/common"
 updater_minisys="${OHOS_ROOT_PATH}/prebuilts/aosp_prebuilt_libs/minisys"
 
 function install_common_libraries() {
@@ -40,6 +43,18 @@ function install_common_libraries() {
     cp -f ${updater_minisys}/system/lib/libpcre2.so ${updater_target_out}/system/lib/libpcre2.so
     cp -f ${updater_minisys}/system/lib/libpackagelistparser.so ${updater_target_out}/system/lib/libpackagelistparser.so
     cp -f ${updater_minisys}/system/lib/libcgrouprc.so ${updater_target_out}/system/lib/libcgrouprc.so
+  else
+    # For file system tools
+    cp -f ${updater_lib_path}/libext2fs.z.so ${updater_target_out}/system/lib/libext2fs.z.so
+    cp -f ${updater_lib_path}/libext2_com_err.z.so ${updater_target_out}/system/lib/libext2_com_err.z.so
+    cp -f ${updater_lib_path}/libext2_uuid.z.so ${updater_target_out}/system/lib/libext2_uuid.z.so
+    cp -f ${updater_lib_path}/libext2_blkid.z.so ${updater_target_out}/system/lib/libext2_blkid.z.so
+    cp -f ${updater_lib_path}/libext2_misc.z.so ${updater_target_out}/system/lib/libext2_misc.z.so
+    cp -f ${updater_lib_path}/libext2_quota.z.so ${updater_target_out}/system/lib/libext2_quota.z.so
+    cp -f ${updater_lib_path}/libext2_e2p.z.so ${updater_target_out}/system/lib/libext2_e2p.z.so
+    cp -f ${updater_exe_path}/mke2fs_hos ${updater_target_out}/system/bin/mke2fs
+    # For toybox
+    cp -f ${updater_out_common}/toybox ${updater_target_out}/system/bin/toybox
   fi
   # For UI
   cp -f ${ohos_build_out_dir}/system/lib/libdrm.so ${updater_target_out}/system/lib/libdrm.so
@@ -63,6 +78,8 @@ function install_standard_libraries() {
     cp -f ${updater_minisys}/system/lib/libc++.so ${updater_target_out}/system/lib/libc++.so
     cp -f ${updater_minisys}/system/lib/ld-android.so ${updater_target_out}/system/lib/ld-android.so
     cp -f ${updater_minisys}/system/bin/sh ${updater_target_out}/system/bin/sh
+  else
+    cp -f ${updater_out_common}/sh ${updater_target_out}/system/bin/sh
   fi
 }
 
