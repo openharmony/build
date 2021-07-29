@@ -45,13 +45,13 @@ function install_common_libraries() {
     cp -f ${updater_minisys}/system/lib/libcgrouprc.so ${updater_target_out}/system/lib/libcgrouprc.so
   else
     # For file system tools
-    cp -f ${updater_lib_path}/libext2fs.z.so ${updater_target_out}/system/lib/libext2fs.z.so
-    cp -f ${updater_lib_path}/libext2_com_err.z.so ${updater_target_out}/system/lib/libext2_com_err.z.so
-    cp -f ${updater_lib_path}/libext2_uuid.z.so ${updater_target_out}/system/lib/libext2_uuid.z.so
-    cp -f ${updater_lib_path}/libext2_blkid.z.so ${updater_target_out}/system/lib/libext2_blkid.z.so
-    cp -f ${updater_lib_path}/libext2_misc.z.so ${updater_target_out}/system/lib/libext2_misc.z.so
-    cp -f ${updater_lib_path}/libext2_quota.z.so ${updater_target_out}/system/lib/libext2_quota.z.so
-    cp -f ${updater_lib_path}/libext2_e2p.z.so ${updater_target_out}/system/lib/libext2_e2p.z.so
+    cp -f ${updater_lib_path}/libext2fs.so ${updater_target_out}/system/lib/libext2fs.so
+    cp -f ${updater_lib_path}/libext2_com_err.so ${updater_target_out}/system/lib/libext2_com_err.so
+    cp -f ${updater_lib_path}/libext2_uuid.so ${updater_target_out}/system/lib/libext2_uuid.so
+    cp -f ${updater_lib_path}/libext2_blkid.so ${updater_target_out}/system/lib/libext2_blkid.so
+    cp -f ${updater_lib_path}/libext2_misc.so ${updater_target_out}/system/lib/libext2_misc.so
+    cp -f ${updater_lib_path}/libext2_quota.so ${updater_target_out}/system/lib/libext2_quota.so
+    cp -f ${updater_lib_path}/libext2_e2p.so ${updater_target_out}/system/lib/libext2_e2p.so
     cp -f ${updater_exe_path}/mke2fs ${updater_target_out}/system/bin/mke2fs
     # For toybox
     cp -f ${updater_out_common}/toybox ${updater_target_out}/system/bin/toybox
