@@ -18,6 +18,7 @@ set -e
 target_os=ohos
 target_cpu=arm64
 use_ccache=false
+sparse_image=false
 
 
 while test $# -gt 0
@@ -57,6 +58,9 @@ do
   --ccache)
     use_ccache=true
     ;;
+  --sparse-image)
+    sparse_image=true
+    ;;
   --jobs)
     shift
     jobs="$1"
@@ -86,11 +90,21 @@ if [[ "${use_ccache}" == true ]]; then
   set +e
   which ccache > /dev/null 2>&1
   if [ $? -ne 0 ]; then
-    echo "Error: the ccache is not available, please install ccache."
+    echo -e "\033[31mError: the ccache is not available, please install ccache.\033[0m"
     exit 1
   fi
   source ${OHOS_ROOT_PATH}/build/core/build_scripts/set_ccache.sh
   export CCACHE_EXEC=$(which ccache)
   set_ccache
+  set -e
+fi
+
+if [[ "${sparse_image}" == true ]]; then
+  set +e
+  which img2simg > /dev/null 2>&1
+  if [[ $? -ne 0 ]]; then
+    echo -e "\033[31mError: the img2simg is not available, please install img2simg.\033[0m"
+    exit 1
+  fi
   set -e
 fi

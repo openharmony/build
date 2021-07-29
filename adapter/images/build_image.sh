@@ -14,6 +14,10 @@
 
 set -e
 
+build_tools_path=third_party/e2fsprogs/prebuilt/host/bin
+build_image_scripts_path=build/adapter/images/mkimage
+image_type="raw"
+
 while test $# -gt 0; do
     case "$1" in
     --device-name)
@@ -23,6 +27,9 @@ while test $# -gt 0; do
     --ohos-build-out-dir)
         shift
         ohos_build_out_dir="$1"
+        ;;
+    --sparse-image)
+        image_type="sparse"
         ;;
     -* | *)
         echo "Unrecognized option: $1"
@@ -36,11 +43,6 @@ if [[ "${device_name}x" == "x" ]]; then
     echo "Error: the device_name cannot be empty."
     exit 1
 fi
-
-build_tools_path=third_party/e2fsprogs/prebuilt/host/bin
-build_image_scripts_path=build/adapter/images/mkimage
-image_type="raw"
-
 
 function build_vendor_image() {
     if [[ ! -d "${ohos_build_out_dir}/images" ]]; then
