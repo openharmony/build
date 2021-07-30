@@ -23,3 +23,4 @@ import("//build/templates/cxx/cxx.gni")
 
 # import prebuilt templates
 import("//build/templates/cxx/prebuilt.gni")
+import("//build/templates/common/ohos_templates.gni")
