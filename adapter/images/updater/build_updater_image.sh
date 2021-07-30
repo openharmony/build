@@ -82,6 +82,11 @@ function build_updater_image() {
   echo "ohos_build_out_dir = ${ohos_build_out_dir}"
 
   prepare_updaterimage_dirs
+
+  if [[ -d "${ohos_build_out_dir}/updater" ]]; then
+    cp -arf ${ohos_build_out_dir}/updater/* ${updater_target_out}/
+  fi
+
   cp -f ${ohos_build_out_dir}/system/bin/init ${updater_target_out}/updaterinit
   if [[ $BUILD_WITH_MUSL == true ]]; then
     build_updater_image_for_musl
