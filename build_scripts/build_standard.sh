@@ -48,7 +48,7 @@ function main() {
   fi
 
   # build images
-  build_image_args="--device-name ${device_name} --ohos-build-out-dir ${ohos_build_root_dir}/packages/phone"
+  build_image_args="--ohos-build-out-dir ${ohos_build_root_dir}/packages/phone"
   if [[ "${sparse_image}" == true ]]; then
     build_image_args+=" --sparse-image"
   fi
