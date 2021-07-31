@@ -23,7 +23,7 @@ done
 if [ "X${SKIP_SSL}" == "XYES" ];then
     wget_ssl_check='--no-check-certificate'
 else
-    wget_ssl_check
+    wget_ssl_check=
 fi
 sha256_result=0
 check_sha256=
