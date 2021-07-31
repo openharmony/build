@@ -11,9 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 set -e
+for i in "$@"; do 
+  case $i in 
+    -skip-ssl|--skip-ssl) # wget、npm跳过ssl检查,如使用此参数:
+    # 黑客等不法分子可以篡改或窃取客户端和服务器之间传输的信息和数据，从而影响用户的数据安全!
+    SKIP_SSL=YES
+    ;;
+  esac
+done
+if [ "X${SKIP_SSL}" == "XYES" ];then
+    wget_ssl_check='--no-check-certificate'
+else
+    wget_ssl_check
+fi
 sha256_result=0
 check_sha256=
 local_sha256=
@@ -33,8 +44,8 @@ function check_sha256(){
     fi
 }
 function hwcloud_download(){
-    # 代理不需要鉴权: wget -P ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
-    # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -P ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
+    # 代理不需要鉴权: wget -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
+    # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -O ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
     # 不需要代理
     download_local_file=$1
     download_source_url=$2
@@ -51,7 +62,7 @@ function hwcloud_download(){
             fi
         fi
         if [ ! -f "${download_local_file}" ];then
-            wget -O  "${download_local_file}" "${download_source_url}"
+            wget ${wget_ssl_check} -O  "${download_local_file}" "${download_source_url}"
         fi
     done
     # 连续三次失败后报错退出
@@ -128,7 +139,7 @@ node_js=node-${node_js_ver}-linux-x64.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
 if [ ! -f "${node_js}" ]; then
-    wget --no-check-certificate https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
+    wget ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
     tar zxf ${node_js}
 fi
 
@@ -138,6 +149,9 @@ else
     cd ${code_dir}/third_party/jsframework/
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
+    if [ "X${SKIP_SSL}" == "XYES" ];then
+        npm config set strict-ssl false
+    fi
     npm install
 
     cd ${code_dir}
