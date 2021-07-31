@@ -37,6 +37,7 @@ function check_sha256(){
     local_sha256=`sha256sum ${local_file} |awk '{print $1}'`
     if [ "X${check_sha256}" == "X${local_sha256}" ];then
         echo -e "${success_color},${check_url} Sha256 check OK."
+        sha256_result=0
     else
         echo -e "${failed_color},${check_url} Sha256 check Failed.Retry!"
         sha256_result=1
