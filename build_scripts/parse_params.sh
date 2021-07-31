@@ -46,9 +46,6 @@ do
     ;;
   --gn-args)
     shift
-    if [[ "$1" == "use_musl=true" ]];then
-        export BUILD_WITH_MUSL=true
-    fi
     gn_args="${gn_args} $1"
     ;;
   --ninja-args)

@@ -113,6 +113,8 @@ ${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
 
 export OHOS_ROOT_PATH="${source_root_dir}"
 export PYTHON3="${PYTHON3}"
+export USE_OHOS_INIT=true
+export BUILD_IMAGE=true
 
 cd ${source_root_dir}
 

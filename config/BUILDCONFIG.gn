@@ -150,11 +150,11 @@ declare_args() {
   is_test = false
 
   # Whether it is double framework.
-  is_double_framework = true
+  is_double_framework = false
 }
 
 declare_args() {
-  use_musl = false
+  use_musl = true
 }
 
 a_prebuilt_libs_path = "//prebuilts/aosp_prebuilt_libs"
