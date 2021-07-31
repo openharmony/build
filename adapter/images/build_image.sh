@@ -213,7 +213,7 @@ function prepare_root() {
     fi
     if [[ $USE_OHOS_INIT == true ]] && [[ $BUILD_IMAGE == true ]]; then
         mkdir -p ${ohos_build_out_dir}/images/root/
-        local dir_list=(dev proc sys)
+        local dir_list=(config dev proc sys)
         pushd ${ohos_build_out_dir}/images/root
             for _path in ${dir_list[@]}
             do
