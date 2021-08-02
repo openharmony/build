@@ -8,17 +8,7 @@ if (is_ohos) {
   import("//build/misc/overrides/build.gni")
   import("abi.gni")
 
-  declare_args() {
-    arm32_ndk_api_level = 29
-
-    arm64_ndk_api_level = 29
-  }
-
-  if (is_double_framework) {
-    default_base_libs_root = "${asdk_libs_dir}/ndk"
-  } else {
-    default_base_libs_root = ""
-  }
+  default_base_libs_root = ""
 
   declare_args() {
     base_libs_root = default_base_libs_root
@@ -42,10 +32,7 @@ if (is_ohos) {
   if (current_cpu == "x86") {
     libclang_rt_file = ""
   } else if (current_cpu == "arm") {
-    libclang_rt_file = "${clang_base_path}/lib64/clang/9.0.3/lib/linux/libclang_rt.builtins-arm-android.a"
-    if (use_musl) {
-      libclang_rt_file = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl/libclang_rt.builtins.a"
-    }
+    libclang_rt_file = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl/libclang_rt.builtins.a"
   } else if (current_cpu == "x86_64") {
     libclang_rt_file = ""
   } else if (current_cpu == "arm64") {
