@@ -1,9 +1,0 @@
-{
-  "platforms_libs": [
-    {
-      "name": "framework.aidl",
-      "src": "out/soong/framework.aidl",
-      "dest": ""
-    }
-  ]
-}
