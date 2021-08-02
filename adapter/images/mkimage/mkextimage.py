@@ -40,7 +40,7 @@ def args_parse(argv):
     parser.add_argument("--reserve_percent",
                         help="The reserve_percent for mke2fs.")
     parser.add_argument("--extend_opts", nargs='+',
-                        help="The extend opt for mke2fs.")
+                        help="The extend opt for mke2fs.(not support sparse)")
 
     args = parser.parse_known_args(argv)[0]
     return args
@@ -92,7 +92,7 @@ def build_run_e2fsdroid(args):
     e2fsdroid_opts = ""
     e2fsdroid_cmd = ""
 
-    if not args.extend_opts or not "android_sparse" in args.extend_opts:
+    if not args.extend_opts or not "sparse" in args.extend_opts:
         e2fsdroid_opts += " -e"
     if args.dac_config:
         e2fsdroid_opts += " -C " + args.dac_config
@@ -100,7 +100,8 @@ def build_run_e2fsdroid(args):
         e2fsdroid_opts += " -S " + args.file_context
 
     e2fsdroid_cmd += ("e2fsdroid" + e2fsdroid_opts + " -f " +
-            args.src_dir + " -a " + args.mount_point + " " + args.device)
+                      args.src_dir + " -a " + args.mount_point +
+                      " " + args.device)
     res = run_cmd(e2fsdroid_cmd)
     if res[1] != 0:
         print("info: " + e2fsdroid_cmd)
