@@ -68,6 +68,7 @@
       --build-target    # 可选  指定编译目标，可以指定多个
       --gn-args         # 可选  gn参数，支持指定多个
       --ccache          # 可选  编译使用ccache，需要本地安装ccache
+      --sparse-image    # 可选  生成sparse镜像，需要本地安装img2simg，默认镜像为raw
     ```
 
 3.  在已有部件中增加模块。
