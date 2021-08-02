@@ -159,19 +159,6 @@ foreach(_platform, target_platform_list) {
     ]
   }
 
-  # copy_resources
-  _build_properties_file = "${current_platform_dir}/buildz.prop"
-
-  # generate version file and copy to system root dir
-  # generate version file
-  _ohos_build_version = getenv("ohos_build_version")
-  if (_ohos_build_version == "") {
-    _ohos_build_version = hosp_version
-  }
-  _build_properties = []
-  _build_properties += [ "build_version = $_ohos_build_version" ]
-  write_file(_build_properties_file, _build_properties)
-
   system_install_modules = "${current_platform_dir}/system_install_modules.json"
   system_module_info_list = "${current_platform_dir}/system_module_info.json"
   system_modules_list = "${current_platform_dir}/system_modules_list.txt"
@@ -182,7 +169,6 @@ foreach(_platform, target_platform_list) {
     public_deps = [ ":${current_platform}_parts_list" ]
     depfile = "$target_gen_dir/$target_name.d"
     deps = [
-      #":$_build_prop_target_name",
       ":${current_platform}_sa_profile_install_info",
       ":merge_system_notice_file_${current_platform}",
       ":verify_notice_file_${current_platform}",
@@ -223,10 +209,7 @@ foreach(_platform, target_platform_list) {
       rebase_path(_system_image_zipfile, root_build_dir),
     ]
 
-    _additional_system_files = [ [
-          _build_properties_file,
-          "system/buildz.prop",
-        ] ]
+    _additional_system_files = []
     foreach(tuple, _additional_system_files) {
       args += [
         "--additional-system-files",
