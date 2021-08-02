@@ -24,17 +24,11 @@ config("compiler") {
     "HAVE_SYS_UIO_H",
   ]
 
-  if (!use_musl) {
-    defines += [ "ANDROID" ]
-  }
-
-  if (use_musl) {
-    defines += [
-      "__MUSL__",
-      "_LIBCPP_HAS_MUSL_LIBC",
-      "__BUILD_LINUX_WITH_CLANG",
-    ]
-  }
+  defines += [
+    "__MUSL__",
+    "_LIBCPP_HAS_MUSL_LIBC",
+    "__BUILD_LINUX_WITH_CLANG",
+  ]
 
   ldflags = [
     "-Wl,--no-undefined",
@@ -46,49 +40,27 @@ config("compiler") {
     "-Wl,--exclude-libs=libvpx_assembly_arm.a",
   ]
 
-  # $compile_api_level corresponds to the API level used for the sysroot path
-  # calculation in //build/config/ohos/config.gni
   if (current_cpu == "arm") {
-    abi_target = "arm-linux-androideabi"
-    if (use_musl) {
-      abi_target = "arm-linux-ohosmusl"
-    }
-    compile_api_level = arm32_ndk_api_level
+    abi_target = "arm-linux-ohosmusl"
   } else if (current_cpu == "x86") {
     abi_target = ""
-    compile_api_level = ""
   } else if (current_cpu == "arm64") {
     abi_target = ""
-    compile_api_level = ""
   } else if (current_cpu == "x86_64") {
     abi_target = ""
-    compile_api_level = ""
   } else {
     assert(false, "Architecture not supported")
   }
 
-  if (use_musl) {
-    cflags += [
-      "--target=$abi_target",
-    ]
-    include_dirs = [
-      "//prebuilts/lite/sysroot/usr/include/${abi_target}",
-      "//prebuilts/clang/ohos/linux-x86_64/llvm/include/c++/v1",
-    ]
-  } else {
-    cflags += [
-      "--target=$abi_target",
-      "-isystem" + rebase_path("$base_libs_root/sysroot/usr/include/$abi_target",
-                               root_build_dir),
-      "-D__ANDROID_API__=$compile_api_level",
-    ]
-  }
+  cflags += [
+    "--target=$abi_target",
+  ]
+  include_dirs = [
+    "//prebuilts/lite/sysroot/usr/include/${abi_target}",
+    "//prebuilts/clang/ohos/linux-x86_64/llvm/include/c++/v1",
+  ]
 
   ldflags += [ "--target=$abi_target" ]
-
-  if (compile_api_level < 20) {
-    cflags += [ "-DHAVE_PTHREAD_COND_TIMEDWAIT_MONOTONIC=1" ]
-  }
 
   # Assign any flags set for the C compiler to asmflags so that they are sent
   # to the assembler.
@@ -107,47 +79,33 @@ config("runtime_library") {
     "CHROMIUM_CXX_TWEAK_INLINES",  # Saves binary size.
   ]
 
-  if (use_musl) {
-    defines += [
-      "__MUSL__",
-      "_LIBCPP_HAS_MUSL_LIBC",
-      "__BUILD_LINUX_WITH_CLANG",
-    ]
-  }
+  defines += [
+    "__MUSL__",
+    "_LIBCPP_HAS_MUSL_LIBC",
+    "__BUILD_LINUX_WITH_CLANG",
+  ]
   ldflags = [ "-nostdlib" ]
 
   libs = []
-  # double framework, use prebuilt libc++.
-  if (is_double_framework) {
-    libs += [ "${asdk_libs_dir}/ndk/libcxx/${current_cpu}/libc++.so" ]
-  }
 
   # arm builds of libc++ starting in NDK r12 depend on unwind.
   if (current_cpu == "arm") {
     libs += [ "unwind" ]
   }
 
-  if (use_musl) {
-    ldflags += [
-      "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/",
-      "-L../../prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl",
-      "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl",
-    ]
-    ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-arm.so.1" ]
+  ldflags += [
+    "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/",
+    "-L../../prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl",
+    "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl",
+  ]
+  ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-arm.so.1" ]
 
-    libs += [
-      rebase_path(libclang_rt_file),
-      "c",
-      "c++",
-      "c++abi"
-    ]
-  } else {
-    libs += [
-      rebase_path(libclang_rt_file),
-      "c",
-    ]
-    libs += ["unwind_llvm"]
-  }
+  libs += [
+    rebase_path(libclang_rt_file),
+    "c",
+    "c++",
+    "c++abi"
+  ]
 
   if (current_cpu == "arm" && arm_version == 6) {
     libs += [ "atomic" ]
@@ -160,10 +118,6 @@ config("executable_config") {
   cflags = [ "-fPIE" ]
   asmflags = [ "-fPIE" ]
   ldflags = [ "-pie" ]
-}
-
-config("lld_pack_relocations") {
-  ldflags = [ "-Wl,--pack-dyn-relocs=android" ]
 }
 
 # Used for instrumented build to generate the orderfile.

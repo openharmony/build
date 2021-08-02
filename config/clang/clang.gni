@@ -4,16 +4,7 @@
 
 import("//build/toolchain/toolchain.gni")
 
-if (use_custom_clang) {
-  default_clang_base_path =
-      "//prebuilts/clang/ohos/${host_platform_dir}/clang-9.0.0"
-} else {
-  default_clang_base_path = "${a_prebuilt_tools_path}/clang/host/${host_platform_dir}/clang-r353983c"
-}
-
-if (use_musl) {
-  default_clang_base_path = "//prebuilts/clang/ohos/linux-x86_64/llvm"
-}
+default_clang_base_path = "//prebuilts/clang/ohos/linux-x86_64/llvm"
 
 declare_args() {
   # Indicates if the build should use the Chrome-specific plugins for enforcing
