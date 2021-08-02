@@ -27,8 +27,8 @@ def args_parse(args):
     parser.add_argument("mount_point", help="The filesystem mountpoint.")
     parser.add_argument("fs_size", help="The size of filesystem.")
     parser.add_argument("--fs_type", help="The filesystem type.")
-    parser.add_argument("--android_sparse", action='store_true',
-                        help="The android_sparse opt.")
+    parser.add_argument("--sparse", action='store_true',
+                        help="The sparse opt(not support).")
     parser.add_argument("--prjquota", action='store_true',
                         help="The prjquota opt for mkf2fs.")
     parser.add_argument("--casefold", action='store_true',
@@ -57,7 +57,7 @@ def build_run_mkf2fs(args):
     mkf2fs_opts = ""
     mkf2fs_cmd = ""
 
-    if args.android_sparse:
+    if args.sparse:
         mkf2fs_opts += " -S " + args.fs_size
     if args.label:
         mkf2fs_opts += " -l " + args.label
@@ -68,7 +68,9 @@ def build_run_mkf2fs(args):
     if args.casefold:
         mkf2fs_opts += " -O casefold -C utf8 "
 
-    mkf2fs_cmd += ("make_f2fs -g android " + mkf2fs_opts + " " + args.device)
+    mkf2fs_cmd += ("make_f2fs -d1 -f -O encrypt -O quota " +
+                   " -O verity -w 4096 -R 0:0 " + mkf2fs_opts +
+                   " " + args.device)
 
     res = run_cmd(mkf2fs_cmd)
     if res[1] != 0:
@@ -82,7 +84,7 @@ def build_run_sloadf2fs(args):
     sloadf2fs_opts = ""
     sloadf2fs_cmd = ""
 
-    if args.android_sparse:
+    if args.sparse:
         sloadf2fs_opts += " -S"
     if args.dac_config:
         sloadf2fs_opts += " -C " + args.dac_config
@@ -107,7 +109,7 @@ def build_run_sloadf2fs(args):
 def build(args):
     args = args_parse(args)
 
-    if not args.android_sparse:
+    if not args.sparse:
         trunc_cmd = "truncate -s " + args.fs_size + " " + args.device
         res = run_cmd(trunc_cmd)
         if res[1] != 0:
