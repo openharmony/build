@@ -17,6 +17,7 @@ import sys
 import argparse
 import os
 import shutil
+
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
@@ -119,7 +120,7 @@ def copy_modules(system_install_info, install_modules_info_file,
                 symlink_src_file = os.path.basename(dest)
                 for name in symlink_dest:
                     symlink_dest_dir = os.path.dirname(dest)
-                    symlink_dest_file = os.path.join(os.getcwd(),
+                    symlink_dest_file = os.path.join(platform_installed_path,
                                                      symlink_dest_dir, name)
                     if not os.path.exists(symlink_dest_file):
                         os.symlink(symlink_src_file, symlink_dest_file)
@@ -164,8 +165,8 @@ def main():
 
     depfiles = []
     build_utils.extract_all(args.merged_sa_profile,
-                           args.sa_profile_extract_dir,
-                           no_clobber=False)
+                            args.sa_profile_extract_dir,
+                            no_clobber=False)
     sa_files = build_utils.get_all_files(args.sa_profile_extract_dir)
 
     system_install_info = read_json_file(args.system_install_info_file)
@@ -185,6 +186,12 @@ def main():
         shutil.rmtree(vendor_install_base_dir)
         print('remove vendor dir...')
 
+    updater_install_base_dir = os.path.join(args.platform_installed_path,
+                                            'updater')
+    if os.path.exists(updater_install_base_dir):
+        shutil.rmtree(updater_install_base_dir)
+        print('remove updater dir...')
+
     print('copy modules...')
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
@@ -197,7 +204,7 @@ def main():
     build_utils.zip_dir(args.system_image_zipfile, args.system_dir)
     depfiles.extend([item for item in depfiles if item not in sa_files])
     build_utils.write_depfile(args.depfile, args.install_modules_info_file,
-                             depfiles)
+                              depfiles)
 
     return 0
 
