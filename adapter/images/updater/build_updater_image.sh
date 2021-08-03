@@ -27,40 +27,10 @@ function prepare_updaterimage_dirs() {
   mkdir -p ${updater_target_out}/etc
 }
 
-function install_init_config() {
-  cp -f ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.updater.cfg ${updater_target_out}/init.Hi3516DV300.updater.cfg
-  cp -f ${ohos_build_out_dir}/system/etc/updater_init.cfg ${updater_target_out}/init.cfg
-}
-
-function install_fstab() {
-  if [ ! -e "${updater_target_out}/etc/fstab.updater" ]; then
-    cp -f ${OHOS_ROOT_PATH}/device/hisilicon/hi3516dv300/build/vendor/etc/fstab.hi3516dv300.updater ${updater_target_out}/etc/fstab.updater
-  fi
-}
-
-function install_toybox() {
-  toybox_creater=${OHOS_ROOT_PATH}/build/adapter/images/updater/create_toybox.sh
-  ${toybox_creater} ${updater_target_out}/system/bin
-}
-
-function install_cert() {
-  mkdir -p ${updater_target_out}/certificate
-  cp -f ${OHOS_ROOT_PATH}/build/adapter/images/updater/update_cert/signing_cert.crt ${updater_target_out}/certificate/signing_cert.crt
-}
-
-function install_resources() {
-  cp -rf ${OHOS_ROOT_PATH}/base/update/updater/resources ${updater_target_out}/
-}
-
 function install_updaterimage_depends() {
   install_standard_libraries
   install_common_libraries
   install_kernel_modules
-  install_init_config
-  install_fstab
-  install_toybox
-  install_cert
-  install_resources
 }
 
 function build_updater_image_for_musl() {
@@ -87,14 +57,9 @@ function build_updater_image() {
     cp -arf ${ohos_build_out_dir}/updater/* ${updater_target_out}/
   fi
 
-  cp -f ${ohos_build_out_dir}/system/bin/init ${updater_target_out}/updaterinit
   if [[ $USE_OHOS_INIT == true ]]; then
     build_updater_image_for_musl
   fi
-  updater_targets=(updater updater_reboot updaterueventd)
-  for updater_target in ${updater_targets[*]}; do
-    cp -f ${ohos_build_out_dir}/system/bin/${updater_target} ${updater_target_out}/system/bin
-  done
   install_updaterimage_depends
   if [ -e "${ohos_build_out_dir}/images/updater.img" ]; then
     rm -rf ${ohos_build_out_dir}/images/updater.img

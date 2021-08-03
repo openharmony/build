@@ -56,17 +56,6 @@ function install_common_libraries() {
     # For toybox
     cp -f ${updater_out_common}/toybox ${updater_target_out}/system/bin/toybox
   fi
-  # For UI
-  cp -f ${ohos_build_out_dir}/system/lib/libdrm.so ${updater_target_out}/system/lib/libdrm.so
-  cp -f ${ohos_build_out_dir}/system/lib/libpng.z.so ${updater_target_out}/system/lib/libpng.z.so
-  # For input, copy from ohos
-  cp -f ${ohos_build_out_dir}/system/lib/libhdi_input.z.so ${updater_target_out}/system/lib/libhdi_input.z.so
-  cp -f ${ohos_build_out_dir}/system/lib/libutils.z.so ${updater_target_out}/system/lib/libutils.z.so
-  cp -f ${ohos_build_out_dir}/system/lib/libhilog.so ${updater_target_out}/system/lib/libhilog.so
-  cp -f ${ohos_build_out_dir}/system/lib/libhdf_utils.z.so ${updater_target_out}/system/lib/libhdf_utils.z.so
-  cp -f ${ohos_build_out_dir}/system/lib/libhilogutil.so ${updater_target_out}/system/lib/libhilogutil.so
-  cp -f ${ohos_build_out_dir}/system/lib/libutilsecurec_shared.z.so ${updater_target_out}/system/lib/libutilsecurec_shared.z.so
-  cp -f ${ohos_build_out_dir}/system/lib/libhilog_os_adapter.z.so ${updater_target_out}/system/lib/libhilog_os_adapter.z.so
 }
 
 function install_standard_libraries() {
@@ -78,19 +67,10 @@ function install_standard_libraries() {
     cp -f ${updater_minisys}/system/lib/libc++.so ${updater_target_out}/system/lib/libc++.so
     cp -f ${updater_minisys}/system/lib/ld-android.so ${updater_target_out}/system/lib/ld-android.so
     cp -f ${updater_minisys}/system/bin/sh ${updater_target_out}/system/bin/sh
-  else
-    cp -f ${updater_out_common}/sh ${updater_target_out}/system/bin/sh
   fi
 }
 
 function install_kernel_modules() {
-  cp -f ${ohos_build_out_dir}/vendor/modules/hi3516cv500_base.ko ${updater_target_out}/hi3516cv500_base.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/hi_osal.ko ${updater_target_out}/hi_osal.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/sys_config.ko ${updater_target_out}/sys_config.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/hi3516cv500_sys.ko ${updater_target_out}/hi3516cv500_sys.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/hi3516cv500_vo_dev.ko ${updater_target_out}/hi3516cv500_vo_dev.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/hi3516cv500_hdmi.ko ${updater_target_out}/hi3516cv500_hdmi.ko
-  cp -f ${ohos_build_out_dir}/vendor/modules/hifb.ko ${updater_target_out}/hifb.ko
   if [[ ${USE_OHOS_INIT} != true ]]; then
     cp -f ${updater_minisys}/system/bin/insmod ${updater_target_out}/system/bin/insmod
   fi
