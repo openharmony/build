@@ -47,6 +47,15 @@ function build_updater_image_for_musl() {
   cp ${ohos_build_out_dir}/system/etc/ld-musl-arm.path ${updater_target_out}/system/etc/ld-musl-arm.path
 }
 
+function updater_symlink() {
+  cd ${updater_target_out}
+  if [-L init ]
+    rm -rf init
+  fi
+  ln -s /bin/init init
+  cd -
+}
+
 function build_updater_image() {
 
   echo "ohos_build_out_dir = ${ohos_build_out_dir}"
@@ -64,9 +73,7 @@ function build_updater_image() {
   if [ -e "${ohos_build_out_dir}/images/updater.img" ]; then
     rm -rf ${ohos_build_out_dir}/images/updater.img
   fi
-  cd ${updater_target_out}
-  ln -s /bin/init init
-  cd -
+  updater_symlink
   # Build updater image
   PATH=${build_tools_path}:${build_image_scripts_path}:$PATH mkimages.py \
       ${ohos_build_out_dir}/images/updater \
