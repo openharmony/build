@@ -134,7 +134,7 @@ function prepare_root() {
             fi
         done
         ln -s /system/bin bin
-        ln -s /system/init init
+        ln -s /system/bin/init init
         ln -s /system/etc etc
     popd
 }

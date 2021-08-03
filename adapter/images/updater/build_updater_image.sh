@@ -64,7 +64,9 @@ function build_updater_image() {
   if [ -e "${ohos_build_out_dir}/images/updater.img" ]; then
     rm -rf ${ohos_build_out_dir}/images/updater.img
   fi
-
+  cd ${updater_target_out}
+  ln -s /bin/init init
+  cd -
   # Build updater image
   PATH=${build_tools_path}:${build_image_scripts_path}:$PATH mkimages.py \
       ${ohos_build_out_dir}/images/updater \
