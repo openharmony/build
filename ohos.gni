@@ -21,6 +21,10 @@ import("//build/toolchain/toolchain.gni")
 # import cxx base templates
 import("//build/templates/cxx/cxx.gni")
 
+import("//build/ohos/ace/ace.gni")
+import("//build/ohos/app/app.gni")
+
+import("//build/templates/common/ohos_templates.gni")
+
 # import prebuilt templates
 import("//build/templates/cxx/prebuilt.gni")
-import("//build/templates/common/ohos_templates.gni")

@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/python.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/ohos_var.gni")
 
@@ -182,5 +183,124 @@ template("generate_module_info") {
     data_keys = [ "install_modules" ]
     output_conversion = "json"
     deps = module_deps
+  }
+}
+
+template("write_meta_data") {
+  assert(defined(invoker.meta_data), "meta_data must be defined")
+  assert(defined(invoker.type), "type must be defined")
+  forward_variables_from(invoker, [ "testonly" ])
+
+  action_with_pydeps(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "meta_data",
+                             "type",
+                             "resources",
+                             "assets",
+                             "hap_path",
+                             "hap_profile",
+                             "package_name",
+                           ])
+    if (type != "js_assets" && type != "assets" && type != "resources" &&
+        type != "hap") {
+      assert(false, "type must be one of [js_assets, assets, resources, hap]")
+    }
+    if (type != "hap") {
+      _parent_invoker = invoker.invoker
+      _caller_target_name = get_label_info(":${_parent_invoker.target_name}",
+                                           "label_no_toolchain")
+      set_sources_assignment_filter(app_target_allowlist)
+      sources = [ _caller_target_name ]
+      if (sources != []) {
+        if (type == "js_assets" || type == "assets") {
+          assert(
+              false,
+              "Illegal target name: \"${_caller_target_name}\", target name of ohos_js_assets or ohos_assets must endswith assets or asset ")
+        } else if (type == "resources") {
+          assert(
+              false,
+              "Illegal target name: \"${_caller_target_name}\", target name of ohos_resources must endswith res or resources or resource")
+        }
+      }
+      set_sources_assignment_filter([])
+    }
+
+    script = "//build/templates/metadata/write_meta_data.py"
+    outputs = [ meta_data ]
+    depfile = "$target_gen_dir/$target_name.d"
+
+    args = [
+      "--output",
+      rebase_path(meta_data, root_build_dir),
+      "--type",
+      type,
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+    ]
+
+    if (!defined(deps)) {
+      deps = []
+    }
+
+    _possible_deps = []
+    if (defined(invoker.possible_deps)) {
+      _possible_deps = invoker.possible_deps
+    }
+
+    _deps_metadata = []
+    inputs = []
+    set_sources_assignment_filter(app_target_allowlist)
+    foreach(d, _possible_deps) {
+      sources = []
+      _target_label = get_label_info(d, "label_no_toolchain")
+      sources += [ _target_label ]
+      if (sources == []) {
+        _deps_metadata += [ get_label_info(d, "target_gen_dir") + "/" +
+                            get_label_info(d, "name") + ".metadata" ]
+        deps += [ "${_target_label}__metadata" ]
+      }
+    }
+    set_sources_assignment_filter([])
+    if (_deps_metadata != []) {
+      args += [ "--deps-metadata" ]
+      foreach(d, _deps_metadata) {
+        args += [ rebase_path(d, root_build_dir) ]
+      }
+      inputs += _deps_metadata
+    }
+    if (defined(resources)) {
+      args += [ "--resources" ]
+      foreach(res, resources) {
+        args += [ rebase_path(res, root_build_dir) ]
+      }
+      if (defined(package_name)) {
+        args += [
+          "--package-name",
+          package_name,
+        ]
+      }
+    }
+
+    if (defined(hap_profile)) {
+      args += [
+        "--hap-profile",
+        rebase_path(hap_profile, root_build_dir),
+      ]
+    }
+
+    if (defined(assets)) {
+      args += [ "--assets" ]
+      foreach(asset, assets) {
+        args += [ rebase_path(asset, root_build_dir) ]
+      }
+    }
+    if (defined(hap_path)) {
+      args += [
+        "--hap-path",
+        rebase_path(hap_path, root_build_dir),
+      ]
+    }
   }
 }
