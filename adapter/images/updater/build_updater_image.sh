@@ -49,7 +49,7 @@ function build_updater_image_for_musl() {
 
 function updater_symlink() {
   cd ${updater_target_out}
-  if [-L init ]
+  if [[ -L init ]]; then
     rm -rf init
   fi
   ln -s /bin/init init
