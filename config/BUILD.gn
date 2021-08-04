@@ -246,6 +246,10 @@ group("common_deps") {
   if (is_ohos && use_order_profiling) {
     public_deps += []
   }
+
+  if (use_musl && current_toolchain != host_toolchain) {
+    public_deps += [ "//third_party/musl:soft_shared_libs" ]
+  }
 }
 
 group("executable_deps") {
@@ -263,6 +267,18 @@ group("loadable_module_deps") {
 
 group("shared_library_deps") {
   public_deps = [ ":common_deps" ]
+}
+
+group("static_library_deps") {
+  if (use_musl && current_toolchain != host_toolchain) {
+    public_deps = [ "//third_party/musl:musl_headers" ]
+  }
+}
+
+group("source_set_deps") {
+  if (use_musl && current_toolchain != host_toolchain) {
+    public_deps = [ "//third_party/musl:musl_headers" ]
+  }
 }
 
 # Executable configs -----------------------------------------------------------

@@ -56,7 +56,7 @@ config("compiler") {
     "--target=$abi_target",
   ]
   include_dirs = [
-    "//prebuilts/lite/sysroot/usr/include/${abi_target}",
+    "${musl_sysroot}/usr/inclue/${abi_target}",
     "//prebuilts/clang/ohos/linux-x86_64/llvm/include/c++/v1",
   ]
 
@@ -95,7 +95,7 @@ config("runtime_library") {
 
   ldflags += [
     "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/",
-    "-L../../prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl",
+    "-L" + rebase_path("${musl_sysroot}/usr/lib/arm-linux-ohosmusl", root_build_dir),
     "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl",
   ]
   ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-arm.so.1" ]

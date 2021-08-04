@@ -12,14 +12,31 @@
 # limitations under the License
 
 import("//build/ohos.gni")
+import("//build/config/ohos/musl.gni")
 
 group("musl_install") {
-  deps = [
+  deps = [ 
     ":ld-musl-arm.so.1",
-    ":musl_ld_path_etc_cfg",
     ":musl-libc.so",
+    ":musl_ld_path_etc_cfg",
     ":musl-libcxx.so",
+    "//third_party/musl:musl_libs"
   ]
+}
+
+ohos_prebuilt_executable("ld-musl-arm.so.1") {
+  deps = [ "//third_party/musl:${musl_target_abi_name}_create_linker" ]
+  _muls_linker_so = "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}.so.1"
+  source = _muls_linker_so
+  install_enable = true
+  part_name = "common"
+}
+
+ohos_prebuilt_shared_library("musl-libc.so") {
+  deps = [ "//third_party/musl:${musl_target_abi_name}_libc_musl_shared" ]
+  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/libc.so"
+  relative_install_dir = "musl"
+  part_name = "common"
 }
 
 ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
@@ -29,27 +46,6 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
     source = "ld-musl-aarch64.path"
   }
   module_install_dir = "etc"
-  part_name = "common"
-}
-
-ohos_prebuilt_executable("ld-musl-arm.so.1") {
-  if (target_cpu == "arm") {
-    source =
-        "//prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl/ld-musl-arm.so.1"
-  } else {
-    source = ""
-  }
-  install_enable = true
-  part_name = "common"
-}
-
-ohos_prebuilt_shared_library("musl-libc.so") {
-  if (target_cpu == "arm") {
-    source = "//prebuilts/lite/sysroot/usr/lib/arm-linux-ohosmusl/libc.so"
-  } else {
-    source = ""
-  }
-  relative_install_dir = "musl"
   part_name = "common"
 }
 

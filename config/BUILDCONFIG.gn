@@ -507,6 +507,8 @@ target_type_list = [
   "executable",
   "loadable_module",
   "shared_library",
+  "static_library",
+  "source_set",
 ]
 
 foreach(_target_type, target_type_list) {

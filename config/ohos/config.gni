@@ -8,6 +8,8 @@ if (is_ohos) {
   import("//build/misc/overrides/build.gni")
   import("abi.gni")
 
+  import("//build/config/ohos/musl.gni")
+
   default_base_libs_root = ""
 
   declare_args() {
