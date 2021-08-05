@@ -676,18 +676,17 @@ template("config_plus_compiler_rt") {
   _clang_rt_dso_paths = []
   if ((host_os == "linux" || host_os == "mac") && target_os == "ohos" &&
       !is_mingw) {
-    _clang_rt_libs_dir =
-        "$clang_base_path/lib64/clang/$clang_version/lib/linux/"
+    _clang_rt_libs_dir = "$clang_base_path/lib64/clang/10.0.1/lib/"
 
     _dso_names = []
     foreach(dso_name, minimal_rt_lib_names) {
       # Add runtime library support
       if (target_cpu == "arm64") {
-        _dso_names += [ ]
+        _dso_names += [ "aarch64-linux-ohosmusl/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "arm") {
-        _dso_names += [ "libclang_rt.${dso_name}-arm-android.a" ]
+        _dso_names += [ "arm-linux-ohosmusl/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "x86_64") {
-        _dso_names += [ ]
+        _dso_names += []
       }
     }
 

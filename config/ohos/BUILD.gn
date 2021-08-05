@@ -34,30 +34,17 @@ config("compiler") {
     "-Wl,--no-undefined",
     "-Wl,--exclude-libs=libunwind_llvm.a",
     "-Wl,--exclude-libs=libc++_static.a",
+
     # Don't allow visible symbols from libraries that contain
     # assembly code with symbols that aren't hidden properly.
     # http://crbug.com/448386
     "-Wl,--exclude-libs=libvpx_assembly_arm.a",
   ]
 
-  if (current_cpu == "arm") {
-    abi_target = "arm-linux-ohosmusl"
-  } else if (current_cpu == "x86") {
-    abi_target = ""
-  } else if (current_cpu == "arm64") {
-    abi_target = ""
-  } else if (current_cpu == "x86_64") {
-    abi_target = ""
-  } else {
-    assert(false, "Architecture not supported")
-  }
-
-  cflags += [
-    "--target=$abi_target",
-  ]
+  cflags += [ "--target=$abi_target" ]
   include_dirs = [
     "${musl_sysroot}/usr/inclue/${abi_target}",
-    "//prebuilts/clang/ohos/linux-x86_64/llvm/include/c++/v1",
+    "${clang_base_path}/include/c++/v1",
   ]
 
   ldflags += [ "--target=$abi_target" ]
@@ -94,17 +81,19 @@ config("runtime_library") {
   }
 
   ldflags += [
-    "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/",
-    "-L" + rebase_path("${musl_sysroot}/usr/lib/arm-linux-ohosmusl", root_build_dir),
-    "-L../../prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl",
+    "-L" +
+        rebase_path("${clang_base_path}/lib/${abi_target}/c++", root_build_dir),
+    "-L" + rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir),
+    "-L" + rebase_path("${clang_base_path}/lib/clang/10.0.1/lib/${abi_target}",
+                       root_build_dir),
   ]
-  ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-arm.so.1" ]
+  ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-${musl_arch}.so.1" ]
 
   libs += [
     rebase_path(libclang_rt_file),
     "c",
     "c++",
-    "c++abi"
+    "c++abi",
   ]
 
   if (current_cpu == "arm" && arm_version == 6) {

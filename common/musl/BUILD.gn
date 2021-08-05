@@ -11,22 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-import("//build/ohos.gni")
+import("//build/config/clang/clang.gni")
 import("//build/config/ohos/musl.gni")
+import("//build/ohos.gni")
 
 group("musl_install") {
-  deps = [ 
+  deps = [
     ":ld-musl-arm.so.1",
     ":musl-libc.so",
-    ":musl_ld_path_etc_cfg",
     ":musl-libcxx.so",
-    "//third_party/musl:musl_libs"
+    ":musl_ld_path_etc_cfg",
+    "//third_party/musl:musl_libs",
   ]
 }
 
 ohos_prebuilt_executable("ld-musl-arm.so.1") {
   deps = [ "//third_party/musl:${musl_target_abi_name}_create_linker" ]
-  _muls_linker_so = "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}.so.1"
+  _muls_linker_so =
+      "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}.so.1"
   source = _muls_linker_so
   install_enable = true
   part_name = "common"
@@ -51,7 +53,9 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
 
 ohos_prebuilt_shared_library("musl-libcxx.so") {
   if (target_cpu == "arm") {
-    source = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/arm-linux-ohosmusl/c++/libc++.so"
+    source = "${clang_base_path}/lib/arm-linux-ohosmusl/c++/libc++.so"
+  } else if (target_cpu == "arm64") {
+    source = "${clang_base_path}/lib/aarch64-linux-ohosmusl/c++/libc++.so"
   } else {
     source = ""
   }

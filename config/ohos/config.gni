@@ -2,7 +2,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-
 if (is_ohos) {
   import("//build/config/clang/clang.gni")
   import("//build/misc/overrides/build.gni")
@@ -26,20 +25,17 @@ if (is_ohos) {
     assert(false, "Need toolchain support for your build OS.")
   }
 
-  arm_sysroot_subdir = "platforms/current/arch-arm"
-  arm64_sysroot_subdir = ""
-  x86_sysroot_subdir = ""
-  x86_64_sysroot_subdir = ""
-
-  if (current_cpu == "x86") {
-    libclang_rt_file = ""
-  } else if (current_cpu == "arm") {
-    libclang_rt_file = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohosmusl/libclang_rt.builtins.a"
-  } else if (current_cpu == "x86_64") {
-    libclang_rt_file = ""
+  if (current_cpu == "arm") {
+    abi_target = "arm-linux-ohosmusl"
+  } else if (current_cpu == "x86") {
+    abi_target = ""
   } else if (current_cpu == "arm64") {
-    libclang_rt_file = ""
+    abi_target = "aarch64-linux-ohosmusl"
+  } else if (current_cpu == "x86_64") {
+    abi_target = ""
   } else {
-    assert(false, "Need libgcc support for your target arch.")
+    assert(false, "Architecture not supported")
   }
+
+  libclang_rt_file = "${clang_base_path}/lib/clang/10.0.1/lib/${abi_target}/libclang_rt.builtins.a"
 }
