@@ -247,7 +247,7 @@ group("common_deps") {
     public_deps += []
   }
 
-  if (use_musl && current_toolchain != host_toolchain) {
+  if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps += [ "//third_party/musl:soft_shared_libs" ]
   }
 }
@@ -270,13 +270,13 @@ group("shared_library_deps") {
 }
 
 group("static_library_deps") {
-  if (use_musl && current_toolchain != host_toolchain) {
+  if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps = [ "//third_party/musl:musl_headers" ]
   }
 }
 
 group("source_set_deps") {
-  if (use_musl && current_toolchain != host_toolchain) {
+  if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps = [ "//third_party/musl:musl_headers" ]
   }
 }
