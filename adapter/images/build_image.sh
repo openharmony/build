@@ -64,13 +64,6 @@ function build_vendor_image() {
     echo -e "\033[32m  build vendor image successful.\033[0m"
 }
 
-function build_system_images_for_musl() {
-    cp ${ohos_build_out_dir}/../../common/common/sh  ${ohos_build_out_dir}/images/system/bin/sh
-    cp ${ohos_build_out_dir}/../../common/common/toybox  ${ohos_build_out_dir}/images/system/bin/toybox
-    cmds_creater=${OHOS_ROOT_PATH}/build/adapter/images/create_init_cmds.sh
-    ${cmds_creater} ${ohos_build_out_dir}/images/system/bin
-}
-
 function copy_init() {
     cp ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.cfg ${ohos_build_out_dir}/images/root/init.Hi3516DV300.cfg
     cp ${ohos_build_out_dir}/system/etc/init.cfg ${ohos_build_out_dir}/images/root/init.cfg
@@ -93,7 +86,6 @@ function build_system_image() {
 
     # build for init
     copy_init
-    build_system_images_for_musl
     # remove img
     rm -rf ${ohos_build_out_dir}/images/system.img
     # build system image

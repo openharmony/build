@@ -65,3 +65,5 @@ system/bin/*,               00755,      0,          2000,       0
 system/xbin/*,              00755,      0,          2000,       0
 vendor/bin/*,               00755,      0,          2000,       0
 vendor/xbin/*,              00755,      0,          2000,       0
+updater/bin/*,              00755,      0,          2000,       0
+updater/system/bin/*,       00755,      0,          2000,       0
