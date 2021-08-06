@@ -133,7 +133,7 @@ function prepare_root() {
         rm -rf ${ohos_build_out_dir}/images/root
     fi
     mkdir -p ${ohos_build_out_dir}/images/root/
-    local dir_list=(config dev proc sys)
+    local dir_list=(config dev proc sys updater system vendor data)
     pushd ${ohos_build_out_dir}/images/root
         for _path in ${dir_list[@]}
         do
