@@ -1,69 +1,25 @@
 # path, mode(oct), uid, gid, cap
-# 支持data, data/*, data/1.txt方式进行路径匹配，有限匹配显示路径，如果找不到会尝试匹配*
+# 支持data, data/*, data/1.txt方式进行路径匹配，优先匹配显示声明路径，如果找不到会尝试匹配*
 # cap 字符匹配能力仅支持L2
+# 目录未配置默认是 00755， 0， 0， 0
+# 文件未配置默认是 00644， 0， 0， 0
 
 # dir
 cache,                      00770,      1000,       2001,       0
 config,                     00555,      0,          0,          0
-data/app,                   00771,      1000,       1000,       0
-data/data,                  00771,      1000,       1000,       0
-data/local/tmp,             00771,      2000,       2000,       0
-data/local,                 00771,      2000,       2000,       0
-data/misc,                  01771,      1000,       9998,       0
-data/media,                 00775,      1023,       1023,       0
-data/preloads,              00775,      0,          0,          0
-data/hw_init,               00755,      0,          0,          0
 data,                       00771,      1000,       1000,       0
 mnt,                        00755,      0,          1000,       0
-product/bin,                00751,      0,          2000,       0
 sbin,                       00750,      0,          2000,       0
-sdcard,                     00777,      0,          0,          0
-storage,                    00751,      0,          1028,       0
 system/bin,                 00751,      0,          2000,       0
-system/vendor,              00755,      0,          2000,       0
-system/xbin,                00751,      0,          2000,       0
 vendor/bin,                 00751,      0,          2000,       0
 vendor,                     00755,      0,          2000,       0
 
 # file
-data/app/*,                 00644,      1000,       1000,       0
-data/data/*,                00644,      10000,      10000,      0
-data/media/*,               00644,      1023,       1023,       0
-default.prop,               00600,      0,          0,          0
-system/etc/prop.default,    00600,      0,          0,          0
-odm/etc/build.prop,         00600,      0,          0,          0
-product/build.prop,         00600,      0,          0,          0
-sbin/fs_mgr,                00750,      0,          2000,       0
-system/bin/crash_dump32,    00755,      0,          2000,       0
-system/bin/crash_dump64,    00755,      0,          2000,       0
-system/bin/debuggerd,       00755,      0,          2000,       0
-system/bin/install-recovery.sh, 00750,  0,          0,          0
-system/bin/logd,            00550,      1036,       1036,       0
-system/bin/secilc,          00700,      0,          0,          0
-system/bin/uncrypt,         00750,      0,          0,          0
-system/build.prop,          00600,      0,          0,          0
-system/etc/init.goldfish.rc,00440,      0,          2000,       0
-system/etc/init.goldfish.sh,00550,      0,          2000,       0
-system/etc/init.ril,        00550,      0,          2000,       0
-system/etc/ppp/*,           00555,      0,          0,          0
-system/etc/rc.*,            00555,      0,          0,          0
-vendor/build.prop,          00600,      0,          0,          0
-system/xbin/procmem,        06755,      0,          0,          0
-system/xbin/su,             04750,      0,          2000,       0
-system/bin/inputflinger,    00700,      1000,       2000,       CAP_BLOCK_SUSPEND
-system/bin/run-as,          00750,      0,          2000,       CAP_SETUID | CAP_SETGID
-system/bin/simpleperf_app_runner,   00750,  0,      2000,       CAP_SETUID | CAP_SETGID
-system/bin/surfaceflinger,  00755,      1000,       1003,       CAP_SYS_NICE
-system/bin/ITouchservice,   00755,      0,          0,          CAP_SYS_NICE
-system/bin/AGPService,      00755,      0,          0,          CAP_SYS_NICE
 bin/*,                      00755,      0,          0,          0
 fstab.*                     00640,      0,          2000,       0
 init*,                      00750,      0,          2000,       0
-product/bin/*,              00755,      0,          2000,       0
 sbin/*,                     00750,      0,          2000,       0
 system/bin/*,               00755,      0,          2000,       0
-system/xbin/*,              00755,      0,          2000,       0
 vendor/bin/*,               00755,      0,          2000,       0
-vendor/xbin/*,              00755,      0,          2000,       0
 updater/bin/*,              00755,      0,          2000,       0
 updater/system/bin/*,       00755,      0,          2000,       0
