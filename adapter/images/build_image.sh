@@ -106,6 +106,8 @@ function build_userdata_image() {
         rm -rf ${ohos_build_out_dir}/images/data
     fi
     mkdir ${ohos_build_out_dir}/images/data
+    mkdir ${ohos_build_out_dir}/images/data/media
+    cp -r applications/standard/photos/demos ${ohos_build_out_dir}/images/data/media/
     # build userdata image
     PATH=${build_tools_path}:${build_image_scripts_path}:$PATH mkimages.py \
         ${ohos_build_out_dir}/images/data \
