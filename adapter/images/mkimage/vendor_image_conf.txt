@@ -1,4 +1,0 @@
-/vendor
-268434944
---fs_type=ext4
---dac_config build/adapter/images/mkimage/dac.txt

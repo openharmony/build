@@ -23,7 +23,10 @@ function do_make_ohos() {
       echo $target_name
       build_cmd+=" build_target=$target_name"
     done
+  else
+    build_cmd+=" build_target=images"
   fi
+
   if [[ "${gn_args}x" != "x" ]]; then
     for _args in ${gn_args[@]}; do
       build_cmd+=" gn_args=$_args"
@@ -39,6 +42,9 @@ function do_make_ohos() {
   fi
   if [[ "${build_only_gn}" == true ]]; then
     build_cmd+=" build_only_gn=true"
+  fi
+  if [[ "${sparse_image}" == true ]]; then
+    build_cmd+=" gn_args=sparse_image=true"
   fi
   echo "build_ohos_cmd: $build_cmd"
   $build_cmd

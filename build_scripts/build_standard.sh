@@ -27,32 +27,6 @@ system_type="standard"
 
 source ${script_path}/build_common.sh
 
+# build ohos
+do_make_ohos
 
-function main() {
-  # build ohos
-  do_make_ohos
-
-  if [[ "${build_only_gn}" == true ]]; then
-    return
-  fi
-  build_target=$(echo ${build_target} | xargs)
-  echo "build_target='${build_target}'"
-  if [[ "${build_target}" == "build_ohos_sdk" ]]; then
-    echo -e "\033[32m  build ohos-sdk successful.\033[0m"
-    return
-  fi
-
-  ohos_build_root_dir="${OHOS_ROOT_PATH}/out/release"
-  if [[ "${target_cpu}" == "arm" ]]; then
-    ohos_build_root_dir="${OHOS_ROOT_PATH}/out/ohos-arm-release"
-  fi
-
-  # build images
-  build_image_args="--ohos-build-out-dir ${ohos_build_root_dir}/packages/phone"
-  if [[ "${sparse_image}" == true ]]; then
-    build_image_args+=" --sparse-image"
-  fi
-  build/adapter/images/build_image.sh ${build_image_args}
-}
-
-main

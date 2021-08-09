@@ -20,7 +20,6 @@ print("root_gen_dir=$root_gen_dir")
 print("current_toolchain=$current_toolchain")
 print("host_toolchain=$host_toolchain")
 
-
 # load build configs and write load result to out_build_dir/build_configs
 build_loader_script = rebase_path("//build/loader/load.py")
 
@@ -103,14 +102,18 @@ if (is_asan) {
   print("backup and remove symbol directory.")
 }
 
-
 # gn target defined
 
 group("make_all") {
   deps = [
+    ":images",
     ":make_inner_kits",
     ":packages",
   ]
+}
+
+group("images") {
+  deps = [ "//build/ohos/images:make_images" ]
 }
 
 group("packages") {
@@ -123,9 +126,7 @@ group("make_inner_kits") {
 
 if (build_ohos_sdk) {
   group("build_ohos_sdk") {
-    deps = [
-      "//build/ohos/sdk:ohos_sdk",
-    ]
+    deps = [ "//build/ohos/sdk:ohos_sdk" ]
   }
 }
 
