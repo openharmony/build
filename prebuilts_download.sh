@@ -94,9 +94,8 @@ prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/li
 prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
 prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
 prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-prebuilts/clang/host/linux-x86,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_clang_aosp_linux-x86_64/1.0/prebuilts_clang_aosp_linux-x86_64.tar.gz
 prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
-prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-62608/linux/llvm.tar.gz
+prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-69957/linux/clang-69957-linux-x86_64.tar.bz2
 prebuilts/build-tools/common,https://repo.huaweicloud.com/harmonyos/compiler/restool/1.023-c/restool.tar.gz
 """
 if [ ! -d "${bin_dir}" ];then
@@ -117,11 +116,11 @@ do
     fi
     hwcloud_download "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  "${huaweicloud_url}"
     if [ "X${bin_file_suffix:0-3}" = "Xzip" ];then
-            unzip "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" -d "${code_dir}/${unzip_dir}/"
+        unzip "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" -d "${code_dir}/${unzip_dir}/"
     elif [ "X${bin_file_suffix:0-6}" = "Xtar.gz" ];then
-            tar -xvzf "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  -C  "${code_dir}/${unzip_dir}"
+        tar -xvzf "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  -C  "${code_dir}/${unzip_dir}"
     else
-            tar -xvf "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  -C  "${code_dir}/${unzip_dir}"
+        tar -xvf "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  -C  "${code_dir}/${unzip_dir}"
     fi
     # 由于部分压缩包包含了目录,用于专门处理多余目录
     if [ -d "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi" ];then
@@ -129,10 +128,10 @@ do
         rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
         mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/host/linux-x86/prebuilts_clang_aosp_linux-x86_64" ];then
-        mv "${code_dir}/prebuilts/clang/host/linux-x86/prebuilts_clang_aosp_linux-x86_64" "${code_dir}/prebuilts/clang/host/linux-x862"
-        rm -rf "${code_dir}/prebuilts/clang/host/linux-x86"
-        mv "${code_dir}/prebuilts/clang/host/linux-x862" "${code_dir}/prebuilts/clang/host/linux-x86"
+    if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-69957" ];then
+        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-69957" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm2"
+        rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm2" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
     fi
 done
 
