@@ -64,14 +64,6 @@ function build_vendor_image() {
     echo -e "\033[32m  build vendor image successful.\033[0m"
 }
 
-function copy_init() {
-    cp ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.cfg ${ohos_build_out_dir}/images/root/init.Hi3516DV300.cfg
-    cp ${ohos_build_out_dir}/system/etc/init.cfg ${ohos_build_out_dir}/images/root/init.cfg
-    cp ${ohos_build_out_dir}/system/etc/init.usb.cfg ${ohos_build_out_dir}/images/root/init.usb.cfg
-    cp ${ohos_build_out_dir}/system/etc/init.usb.configfs.cfg ${ohos_build_out_dir}/images/root/init.usb.configfs.cfg
-    cp ${ohos_build_out_dir}/system/etc/init.Hi3516DV300.usb.cfg ${ohos_build_out_dir}/images/root/init.Hi3516DV300.usb.cfg
-}
-
 function build_system_image() {
     if [[ ! -d "${ohos_build_out_dir}/images" ]]; then
         mkdir ${ohos_build_out_dir}/images
@@ -84,8 +76,6 @@ function build_system_image() {
     mkdir -p ${ohos_build_out_dir}/images/system/
     cp -arf ${ohos_build_out_dir}/system/* ${ohos_build_out_dir}/images/system/
 
-    # build for init
-    copy_init
     # remove img
     rm -rf ${ohos_build_out_dir}/images/system.img
     # build system image
