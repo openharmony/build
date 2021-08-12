@@ -11,25 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/config/ohos/config.gni")
-import("//build/config/sanitizers/sanitizers.gni")
+import("//build/config/clang/clang.gni")
 import("//build/ohos.gni")
 
-group("common_packages") {
-  deps = []
-  deps += [
-    "//third_party/giflib:libgif",
-    "//third_party/libpng:libpng",
-    "//third_party/sqlite:sqlite",
-    "//third_party/zlib:libz",
-  ]
-
-  deps += [ "musl:musl_install" ]
-
-  if (is_asan) {
-    deps += [
-      "asan:asan.options",
-      "asan:libclang_rt.asan.so",
-    ]
+ohos_prebuilt_shared_library("libclang_rt.asan.so") {
+  if (target_cpu == "arm") {
+    source = "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohosmusl/libclang_rt.asan.so"
+  } else if (target_cpu == "arm64") {
+    source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohosmusl/libclang_rt.asan.so"
+  } else {
+    source = ""
   }
+  part_name = "common"
+}
+
+ohos_prebuilt_etc("asan.options") {
+  source = "asan.options"
+  part_name = "common"
 }

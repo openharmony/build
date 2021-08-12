@@ -24,7 +24,7 @@ group("deps") {
       # to add the ldflags here as well as in default_sanitizer_flags.
       ":default_sanitizer_ldflags",
     ]
-    if (!is_double_framework && use_musl) {
+    if (use_musl) {
       public_configs -= [ ":sanitizer_options_link_helper" ]
       public_configs -= [ ":default_sanitizer_ldflags" ]
     }
@@ -55,8 +55,8 @@ group("deps") {
   }
 }
 
-if ((is_mac || is_win || (is_ios && !use_xcode_clang) ||
-     (is_double_framework && !is_mingw)) && using_sanitizer) {
+if ((is_mac || is_win || (is_ios && !use_xcode_clang) || is_ohos) &&
+    using_sanitizer) {
   if (is_mac) {
     _clang_rt_dso_path = "darwin/libclang_rt.asan_osx_dynamic.dylib"
   } else if (is_ios) {
@@ -65,23 +65,18 @@ if ((is_mac || is_win || (is_ios && !use_xcode_clang) ||
     _clang_rt_dso_path = "windows/clang_rt.asan_dynamic-i386.dll"
   } else if (is_win && target_cpu == "x64") {
     _clang_rt_dso_path = "windows/clang_rt.asan_dynamic-x86_64.dll"
-  } else if (is_double_framework) {
+  } else if (is_ohos) {
     if (target_cpu == "arm64") {
-      _clang_rt_dso_path = ""
+      _clang_rt_dso_path = "aarch64-linux-ohosmusl/libclang_rt.asan.so"
     } else if (target_cpu == "arm") {
-      _clang_rt_dso_path = "linux/libclang_rt.asan-arm-android.so"
+      _clang_rt_dso_path = "arm-linux-ohosmusl/libclang_rt.asan.so"
     } else if (target_cpu == "x86_64") {
       _clang_rt_dso_path = ""
     }
   }
 
-  if (is_double_framework) {
-    _clang_rt_dso_full_path =
-        "$clang_base_path/lib64/clang/9.0.3/lib/$_clang_rt_dso_path"
-  } else {
-    _clang_rt_dso_full_path =
-        "$clang_base_path/lib/clang/$clang_version/lib/$_clang_rt_dso_path"
-  }
+  _clang_rt_dso_full_path =
+      "$clang_base_path/lib/clang/$clang_version/lib/$_clang_rt_dso_path"
 
   if (!is_ios) {
     copy("copy_asan_runtime") {
@@ -169,7 +164,7 @@ config("default_sanitizer_ldflags") {
   if (is_posix && !is_mingw) {
     ldflags = []
     if (is_asan) {
-      if (is_double_framework || !use_musl) {
+      if (!use_musl) {
         ldflags += [ "-fsanitize=address" ]
       }
       if (is_mac) {
@@ -308,15 +303,8 @@ config("link_executable") {
       assert(target_cpu == "x86", "WinASan unsupported architecture")
       ldflags = [ "-wholearchive:clang_rt.asan-i386.lib" ]
     }
-  } else if (is_asan && (is_double_framework && !is_mingw)) {
+  } else if (is_asan && is_ohos) {
     libs = [ "$_clang_rt_dso_full_path" ]
-    if (is_double_framework) {
-      if (current_cpu == "arm64") {
-        ldflags = [ "-Wl,--dynamic-linker,/system/bin/linker_asan64" ]
-      } else if (current_cpu == "arm") {
-        ldflags = [ "-Wl,--dynamic-linker,/system/bin/linker_asan" ]
-      }
-    }
   }
 }
 
@@ -328,7 +316,7 @@ config("link_shared_library") {
       assert(target_cpu == "x86", "WinASan unsupported architecture")
       libs = [ "clang_rt.asan_dll_thunk-i386.lib" ]
     }
-  } else if (is_asan && (is_double_framework && !is_mingw)) {
+  } else if (is_asan && is_ohos) {
     libs = [ "$_clang_rt_dso_full_path" ]
   }
 }
