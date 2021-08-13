@@ -81,6 +81,9 @@ declare_args() {
 
   # Whether to enable pycache or not.
   pycache_enable = true
+
+  # Whether to build js bundle to ark bytecode
+  build_ark = false
 }
 
 declare_args() {
@@ -155,7 +158,42 @@ dist_subsystem_info_output_file =
 
 ramdisk_dir_list = []
 
-product_build_config = read_file("//out/build_configs/${product_name}/preloader/build_config.json", "json")
+product_build_config =
+    read_file("//out/build_configs/${product_name}/preloader/build_config.json",
+              "json")
 product_company = product_build_config.product_company
 device_name = product_build_config.device_name
 device_company = product_build_config.device_company
+
+app_target_allowlist = [
+  "*:*_res",
+  "*:*_resources",
+  "*:*_resource",
+  "*:*_assets",
+  "*:*_asset",
+]
+app_target_types = [
+  "hap",
+  "resources",
+  "js_assets",
+  "assets",
+]
+
+restool = "//prebuilts/build-tools/common/restool/restool"
+hapsigner = "//prebuilts/signcenter/hapsigntool/hapsigntoolv2.jar"
+hap_unpacking_tool =
+    "//developtools/packing_tool/jar/hmos_app_unpacking_tool.jar"
+hap_packing_tool = "//developtools/packing_tool/jar/hmos_app_packing_tool.jar"
+ace_loader_home = "//prebuilts/sdk/js-loader/build-tools/ace-loader"
+nodejs_version = "v12.18.4"
+nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+ace_loader_home = "//prebuilts/sdk/js-loader/build-tools/ace-loader/"
+webpack_js = "${ace_loader_home}/node_modules/webpack/bin/webpack.js"
+webpack_config_js = "${ace_loader_home}/webpack.rich.config.js"
+default_hap_private_key_path = "OpenHarmony Application Release"
+default_signature_algorithm = "SHA256withECDSA"
+default_key_alias_password = "123456"
+default_keystore_password = "123456"
+default_keystore_path = "//prebuilts/signcenter/key/OpenHarmony.p12"
+default_hap_certificate_file =
+    "//prebuilts/signcenter/certificates/OpenHarmonyApplication.pem"
