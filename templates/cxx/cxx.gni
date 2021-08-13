@@ -237,11 +237,13 @@ template("ohos_executable") {
 
       if (is_double_framework) {
         install_enable = false
-        if (defined(invoker.install_enable)) {
-          install_enable = invoker.install_enable
-        }
+      } else {
+        install_enable = true
       }
-
+      if (defined(invoker.install_enable)) {
+        install_enable = invoker.install_enable
+      }
+      
       if (defined(invoker.module_install_dir)) {
         module_install_dir = invoker.module_install_dir
       }
