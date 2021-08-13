@@ -1,1 +1,1 @@
-/system/lib/musl:/system/lib:/lib:/usr/local/lib:/usr/lib
+/system/lib:/lib:/usr/local/lib:/usr/lib

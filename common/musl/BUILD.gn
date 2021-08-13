@@ -21,6 +21,7 @@ group("musl_install") {
     ":musl-libc.so",
     ":musl-libcxx.so",
     ":musl_ld_path_etc_cfg",
+    "updater:updater_ld-musl-arm.so.1",
     "//third_party/musl:musl_libs",
   ]
 }
@@ -37,7 +38,10 @@ ohos_prebuilt_executable("ld-musl-arm.so.1") {
 ohos_prebuilt_shared_library("musl-libc.so") {
   deps = [ "//third_party/musl:${musl_target_abi_name}_libc_musl_shared" ]
   source = "${musl_sysroot}/usr/lib/${musl_target_triple}/libc.so"
-  relative_install_dir = "musl"
+  install_images = [
+    "system",
+    "updater",
+  ]
   part_name = "common"
 }
 
@@ -47,7 +51,10 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
   } else {
     source = "ld-musl-aarch64.path"
   }
-  module_install_dir = "etc"
+  install_images = [
+    "system",
+    "updater",
+  ]
   part_name = "common"
 }
 
@@ -59,6 +66,9 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
   } else {
     source = ""
   }
-  relative_install_dir = "musl"
+  install_images = [
+    "system",
+    "updater",
+  ]
   part_name = "common"
 }

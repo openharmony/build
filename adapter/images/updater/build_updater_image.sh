@@ -33,20 +33,6 @@ function install_updaterimage_depends() {
   install_kernel_modules
 }
 
-function build_updater_image_for_musl() {
-  cp ${ohos_build_out_dir}/system/bin/ld-musl-arm.so.1 ${updater_target_out}/system/bin/ld-musl-arm.so.1
-
-  if [[ ! -d "${updater_target_out}/system/lib/musl" ]]; then
-    mkdir ${updater_target_out}/system/lib/musl
-  fi
-  cp ${ohos_build_out_dir}/system/lib/musl/libc++.so ${updater_target_out}/system/lib/musl/libc++.so
-
-  if [[ ! -d "${updater_target_out}/system/etc" ]]; then
-    mkdir ${updater_target_out}/system/etc
-  fi
-  cp ${ohos_build_out_dir}/system/etc/ld-musl-arm.path ${updater_target_out}/system/etc/ld-musl-arm.path
-}
-
 function updater_symlink() {
   cd ${updater_target_out}
   if [[ -L init ]]; then
@@ -66,9 +52,6 @@ function build_updater_image() {
     cp -arf ${ohos_build_out_dir}/updater/* ${updater_target_out}/
   fi
 
-  if [[ $USE_OHOS_INIT == true ]]; then
-    build_updater_image_for_musl
-  fi
   install_updaterimage_depends
   if [ -e "${ohos_build_out_dir}/images/updater.img" ]; then
     rm -rf ${ohos_build_out_dir}/images/updater.img
