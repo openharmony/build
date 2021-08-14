@@ -93,6 +93,8 @@ declare_args() {
   device_type = ""
 
   product_name = ""
+
+  sparse_image = false
 }
 
 declare_args() {

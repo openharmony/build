@@ -1,4 +1,0 @@
-/data
-1468006400
---fs_type=ext4
---dac_config build/adapter/images/mkimage/dac.txt
