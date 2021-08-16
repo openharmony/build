@@ -251,7 +251,7 @@ template("ohos_hap") {
                              "certificate_profile",
                              "keystore_path",
                              "keystore_password",
-                             "key_alias_password",
+                             "key_alias",
                              "certificate_file",
                            ])
     deps = [

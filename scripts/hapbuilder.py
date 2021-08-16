@@ -23,7 +23,7 @@ from util import build_utils  # noqa: E402
 
 
 def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
-             keystore_path, keystorepasswd, keyaliaspasswd, certificate_file,
+             keystore_path, keystorepasswd, keyalias, certificate_file,
              unsigned_hap_path, signed_hap_path):
     cmd = ['java', '-jar', hapsigner, 'sign']
     cmd.extend(['-mode', 'localjks'])
@@ -34,7 +34,7 @@ def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
     cmd.extend(['-profile', certificate_profile])
     cmd.extend(['-keystore', keystore_path])
     cmd.extend(['-keystorepasswd', keystorepasswd])
-    cmd.extend(['-keyaliaspasswd', keyaliaspasswd])
+    cmd.extend(['-keyaliaspasswd', keyalias])
     cmd.extend(['-certpath', certificate_file])
     cmd.extend(['-profileSigned', '1'])
     child = subprocess.Popen(cmd,
@@ -97,7 +97,7 @@ def create_hap(options, signed_hap):
         sign_hap(options.hapsigner, options.private_key_path,
                  options.sign_algo, options.certificate_profile,
                  options.keystore_path, options.keystorepasswd,
-                 options.keyaliaspasswd, options.certificate_file, output.name,
+                 options.keyalias, options.certificate_file, output.name,
                  signed_hap)
 
 
@@ -118,7 +118,7 @@ def parse_args(args):
     parser.add_option('--sign-algo', help='signature algorithm')
     parser.add_option('--certificate-profile',
                       help='path to certificate profile')
-    parser.add_option('--keyaliaspasswd', help='keyaliaspasswd')
+    parser.add_option('--keyalias', help='keyalias')
     parser.add_option('--keystore-path', help='path to keystore')
     parser.add_option('--keystorepasswd', help='password of keystore')
     parser.add_option('--certificate-file', help='path to certificate file')
@@ -153,7 +153,7 @@ def main(args):
         depfile_deps=depfiles,
         input_paths=inputs + depfiles,
         input_strings=[
-            options.keystorepasswd, options.keyaliaspasswd, options.sign_algo,
+            options.keystorepasswd, options.keyalias, options.sign_algo,
             options.private_key_path
         ],
         output_paths=([options.hap_path]),

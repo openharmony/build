@@ -94,7 +94,7 @@ template("package_app") {
                              "certificate_profile",
                              "keystore_path",
                              "keystore_password",
-                             "key_alias_password",
+                             "key_alias",
                              "certificate_file",
                              "install_module_info",
                            ])
@@ -137,9 +137,9 @@ template("package_app") {
     if (defined(signature_algorithm)) {
       _signature_algorithm = signature_algorithm
     }
-    _key_alias_password = default_key_alias_password
-    if (defined(key_alias_password)) {
-      _key_alias_password = key_alias_password
+    _key_alias = default_key_alias
+    if (defined(key_alias)) {
+      _key_alias = key_alias
     }
     _keystore_path = default_keystore_path
     if (defined(keystore_path)) {
@@ -167,8 +167,8 @@ template("package_app") {
       _signature_algorithm,
       "--certificate-profile",
       rebase_path(certificate_profile, root_build_dir),
-      "--keyaliaspasswd",
-      _key_alias_password,
+      "--keyalias",
+      _key_alias,
       "--keystore-path",
       rebase_path(_keystore_path, root_build_dir),
       "--keystorepasswd",
