@@ -132,6 +132,7 @@ do
         mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-69957" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm2"
         rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
         mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm2" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
     fi
 done
 
