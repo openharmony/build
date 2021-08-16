@@ -180,10 +180,9 @@ template("package_app") {
     if (defined(shared_libraries)) {
       foreach(lib, shared_libraries) {
         _module_info = get_label_info(lib, "target_out_dir") + "/" +
-                       get_label_info(lib, "name" + "_module_info.json")
+                       get_label_info(lib, "name") + "_module_info.json"
         _rebased_module_info = rebase_path(_module_info, root_build_dir)
         args += [ "--dso=@FileArg($_rebased_module_info:source)" ]
-        inputs += [ _module_info ]
       }
     }
 
