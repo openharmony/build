@@ -260,6 +260,9 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
+    if (defined(shared_libraries)) {
+      deps += shared_libraries
+    }
     if (_js2abc) {
       deps += [ ":$_ark_target" ]
       packaged_abc = _packaged_abc

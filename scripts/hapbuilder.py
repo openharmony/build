@@ -136,14 +136,16 @@ def parse_args(args):
 def main(args):
     options = parse_args(args)
 
-    inputs = ([
+    inputs = [
         options.hap_profile, options.packaged_js_assets,
         options.packaged_resources, options.certificate_file,
         options.keystore_path, options.certificate_profile
-    ])
+    ]
     depfiles = []
     for dire in options.assets:
         depfiles += (build_utils.get_all_files(dire))
+    if options.dso:
+        depfiles.extend(options.dso)
 
     build_utils.call_and_write_depfile_if_stale(
         lambda: create_hap(options, options.hap_path),
