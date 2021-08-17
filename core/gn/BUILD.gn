@@ -80,30 +80,7 @@ if (load_result != "") {
 
 print("build configs generation is complete.")
 
-# asan backup
-if (is_asan) {
-  asan_backup_script = "//build/scripts/asan_backup.py"
-  asan_args = [
-    "--backup-dir",
-    "packages",
-    "--backup-dest-dir",
-    "backup",
-  ]
-  if (build_asan_clean) {
-    asan_args += [
-      "--asan-clean",
-      "--platforms-toolchain-info-file",
-      rebase_path(
-          "${root_build_dir}/build_configs/platforms_info/toolchain_to_variant.json",
-          root_build_dir),
-    ]
-  }
-  exec_script(asan_backup_script, asan_args, "string")
-  print("backup and remove symbol directory.")
-}
-
 # gn target defined
-
 group("make_all") {
   deps = [
     ":images",

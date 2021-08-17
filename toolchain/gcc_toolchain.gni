@@ -488,19 +488,19 @@ template("gcc_toolchain") {
         start_group_flag = "-Wl,--start-group"
         end_group_flag = "-Wl,--end-group "
       }
-      _clang_rt_dso_path = ""
+      _clang_rt_dso_full_path = ""
       if (is_asan && invoker_toolchain_args.current_os == "ohos") {
         if (invoker_toolchain_args.current_cpu == "arm64") {
-          _clang_rt_dso_path = rebase_path(
-                  "$clang_base_path/lib64/clang/9.0.3/lib/linux/libclang_rt.asan-aarch64-android.so",
+          _clang_rt_dso_full_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohosmusl/libclang_rt.asan.so",
                   root_build_dir)
         } else {
-          _clang_rt_dso_path = rebase_path(
-                  "$clang_base_path/lib64/clang/9.0.3/lib/linux/libclang_rt.asan-arm-android.so",
+          _clang_rt_dso_full_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohosmusl/libclang_rt.asan.so",
                   root_build_dir)
         }
       }
-      link_command = "$ld {{ldflags}}${extra_ldflags} -o \"$unstripped_outfile\" $libs_section_prefix $start_group_flag $_clang_rt_dso_path @\"$rspfile\" {{solibs}} {{libs}} $end_group_flag $libs_section_postfix"
+      link_command = "$ld {{ldflags}}${extra_ldflags} -o \"$unstripped_outfile\" $libs_section_prefix $start_group_flag $_clang_rt_dso_full_path @\"$rspfile\" {{solibs}} {{libs}} $end_group_flag $libs_section_postfix"
 
       strip_switch = ""
 
@@ -509,7 +509,7 @@ template("gcc_toolchain") {
       }
       if (is_asan && invoker_toolchain_args.current_os == "ohos") {
         strip_switch =
-            "$strip_switch --clang_rt_dso_path=\"$_clang_rt_dso_path\""
+            "$strip_switch --clang_rt_dso_path=\"$_clang_rt_dso_full_path\""
       }
 
       link_wrapper =
