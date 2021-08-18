@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
 import("//build/templates/common/copy.gni")
 
@@ -60,24 +61,22 @@ template("js_declaration") {
   }
 }
 
-objcopy_arm = "//prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/arm-linux-gnueabi/bin/objcopy"
 template("gen_js_obj") {
   name = target_name
   action("gen_js_obj_" + name) {
     visibility = [ ":*" ]
 
+    objcopy_tool = "${clang_base_path}/bin/llvm-objcopy"
     platform = "${current_os}_${current_cpu}"
     if (platform == "mingw_x86_64") {
-      objcopy_tool = objcopy_mingw
-      script = "$flutter_root/engine/flutter/sky/tools/objcopy_pc_mac.py"
+      script =
+          "//third_party/flutter/engine/flutter/sky/tools/objcopy_pc_mac.py"
     } else if (platform == "mac_x64") {
-      objcopy_tool = objcopy_clang
-      script = "declarative_frontend/engine/tools/build_resource_to_bytecode.py"
+      script =
+          "//third_party/flutter/engine/flutter/sky/tools/objcopy_pc_mac.py"
     } else if (target_cpu == "x86_64") {
-      objcopy_tool = objcopy_x86_64
-      script = "$flutter_root/engine/flutter/sky/tools/objcopy.py"
-    } else if (target_cpu == "arm") {
-      objcopy_tool = objcopy_arm
+      script = "//third_party/flutter/engine/flutter/sky/tools/objcopy.py"
+    } else if (target_cpu == "arm" || target_cpu == "arm64") {
       script = "//third_party/flutter/engine/flutter/sky/tools/objcopy.py"
     }
 
