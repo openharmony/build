@@ -27,7 +27,7 @@ _platforms_config_file = "//out/build_configs/standard_system/platforms.build"
 
 build_platform = ""
 
-_subsystem_config_file = "//build/subsystem_config.json"
+_subsystem_config_file = "//out/build_configs/subsystem_config.json"
 arguments = [
   "--subsystem-config-file",
   rebase_path(_subsystem_config_file),

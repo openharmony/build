@@ -138,6 +138,36 @@ def _get_platform_template_file(source_root_dir):
     return platforms_template
 
 
+def _get_merge_subsystem_config(product_config_path, device_config_path, 
+                                subsystem_config_file, output_dir, 
+                                product_name):
+    product_config_file = os.path.join(product_config_path,
+                                      '{}.json'.format(product_name))
+    output_file = os.path.join(output_dir, 'subsystem_config.json')
+    subsystem_info = read_json_file(subsystem_config_file)
+
+    product_subsystem_info = {}
+    product_info = read_json_file(product_config_file)
+    product_build_path = product_info.get('product_build_path', 'no_path')
+    if product_build_path != 'no_path' and product_build_path != '':
+        product_subsystem_info['path'] = product_build_path
+        product_subsystem_name = "product_{}".format(product_name)
+        product_subsystem_info['name'] = product_subsystem_name
+        subsystem_info[product_subsystem_name] = product_subsystem_info
+
+    product_device_name = product_info.get('product_device')
+    device_info = _get_device_info(product_device_name, device_config_path)
+
+    device_subsystem_info = {}
+    device_build_path = device_info.get('device_build_path', 'no_path')
+    if device_build_path != 'no_path' and device_build_path != '':
+        device_subsystem_info['path'] = device_build_path
+        device_subsystem_name = "device_{}".format(product_device_name)
+        device_subsystem_info['name'] = device_subsystem_name
+        subsystem_info[device_subsystem_name] = device_subsystem_info
+    write_json_file(output_file, subsystem_info)
+
+
 def _run(args):
     products_config_path = os.path.join(args.source_root_dir,
                                         args.products_config_dir)
@@ -184,6 +214,15 @@ def _run(args):
     write_file(build_info_file, '\n'.join(_build_info_list))
     build_info_json_file = os.path.join(product_info_output_path, 'build_config.json')
     write_json_file(build_info_json_file, build_configs)
+
+    subsystem_config_file = os.path.join(args.source_root_dir,
+                                         'build',
+                                         'subsystem_config.json')
+    output_dir = os.path.join(args.source_root_dir,
+                              args.preloader_output_root_dir)
+    _get_merge_subsystem_config(products_config_path, device_config_path, 
+                                subsystem_config_file, output_dir, 
+                                args.product_name)
 
 
 def main(argv):

@@ -41,18 +41,6 @@
     "name": "utils",
     "dir": "utils"
   },
-  "hisilicon_products": {
-    "project": "hmf/hisilicon_products",
-    "path": "device/hisilicon/build",
-    "name": "hisilicon_products",
-    "dir": "device/hisilicon"
-  },
-  "hihope_products": {
-    "project": "hmf/hihope_products",
-    "path": "device/hihope/build",
-    "name": "hihope_products",
-    "dir": "device/hihope"
-  },
   "appexecfwk": {
     "project": "hmf/appexecfwk",
     "path": "foundation/appexecfwk",
