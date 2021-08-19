@@ -54,11 +54,16 @@ template("ohos_executable") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    module_ex_deps = []
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+      module_ex_deps = invoker.external_deps
+    }
     deps_data += [
       {
         part_name = part_name
         module_label = module_label
         deps = module_deps
+        external_deps = module_ex_deps
       },
     ]
     write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
@@ -177,7 +182,7 @@ template("ohos_executable") {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
-          "$target_gen_dir/${target_name}_external_deps_temp.json"
+          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       arguments = [ "--external-deps" ]
       arguments += invoker.external_deps
       arguments += [
@@ -335,11 +340,16 @@ template("ohos_shared_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    module_ex_deps = []
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+      module_ex_deps = invoker.external_deps
+    }
     deps_data += [
       {
         part_name = part_name
         module_label = module_label
         deps = module_deps
+        external_deps = module_ex_deps
       },
     ]
     write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
@@ -462,7 +472,7 @@ template("ohos_shared_library") {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
-          "$target_gen_dir/${target_name}_external_deps_temp.json"
+          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       arguments = [ "--external-deps" ]
       arguments += invoker.external_deps
       arguments += [
@@ -600,11 +610,16 @@ template("ohos_static_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    module_ex_deps = []
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+      module_ex_deps = invoker.external_deps
+    }
     deps_data += [
       {
         part_name = part_name
         module_label = module_label
         deps = module_deps
+        external_deps = module_ex_deps
       },
     ]
     write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
@@ -696,7 +711,7 @@ template("ohos_static_library") {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
-          "$target_gen_dir/${target_name}_external_deps_temp.json"
+          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       arguments = [ "--external-deps" ]
       arguments += invoker.external_deps
       arguments += [
@@ -767,11 +782,16 @@ template("ohos_source_set") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    module_ex_deps = []
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+      module_ex_deps = invoker.external_deps
+    }
     deps_data += [
       {
         part_name = part_name
         module_label = module_label
         deps = module_deps
+        external_deps = module_ex_deps
       },
     ]
     write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
@@ -866,7 +886,7 @@ template("ohos_source_set") {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
-          "$target_gen_dir/${target_name}_external_deps_temp.json"
+          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       arguments = [ "--external-deps" ]
       arguments += invoker.external_deps
       arguments += [
