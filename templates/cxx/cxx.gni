@@ -46,7 +46,8 @@ template("ohos_executable") {
   assert(part_name != "")
 
   if (check_deps) {
-    deps_data = []
+    deps_data = {
+    }
     module_label = get_label_info(":${target_name}", "label_with_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -58,15 +59,14 @@ template("ohos_executable") {
     if (defined(invoker.external_deps) && invoker.external_deps != []) {
       module_ex_deps = invoker.external_deps
     }
-    deps_data += [
-      {
-        part_name = part_name
-        module_label = module_label
-        deps = module_deps
-        external_deps = module_ex_deps
-      },
-    ]
-    write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
+    deps_data = {
+      part_name = part_name
+      module_label = module_label
+      deps = module_deps
+      external_deps = module_ex_deps
+    }
+
+    write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
                deps_data,
                "json")
   }
@@ -332,7 +332,8 @@ template("ohos_shared_library") {
   assert(part_name != "")
 
   if (check_deps) {
-    deps_data = []
+    deps_data = {
+    }
     module_label = get_label_info(":${target_name}", "label_with_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -344,15 +345,13 @@ template("ohos_shared_library") {
     if (defined(invoker.external_deps) && invoker.external_deps != []) {
       module_ex_deps = invoker.external_deps
     }
-    deps_data += [
-      {
-        part_name = part_name
-        module_label = module_label
-        deps = module_deps
-        external_deps = module_ex_deps
-      },
-    ]
-    write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
+    deps_data = {
+      part_name = part_name
+      module_label = module_label
+      deps = module_deps
+      external_deps = module_ex_deps
+    }
+    write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
                deps_data,
                "json")
   }
@@ -602,7 +601,8 @@ template("ohos_static_library") {
   assert(part_name != "")
 
   if (check_deps) {
-    deps_data = []
+    deps_data = {
+    }
     module_label = get_label_info(":${target_name}", "label_with_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -614,15 +614,14 @@ template("ohos_static_library") {
     if (defined(invoker.external_deps) && invoker.external_deps != []) {
       module_ex_deps = invoker.external_deps
     }
-    deps_data += [
-      {
-        part_name = part_name
-        module_label = module_label
-        deps = module_deps
-        external_deps = module_ex_deps
-      },
-    ]
-    write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
+    deps_data = {
+      part_name = part_name
+      module_label = module_label
+      deps = module_deps
+      external_deps = module_ex_deps
+    }
+
+    write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
                deps_data,
                "json")
   }
@@ -774,7 +773,8 @@ template("ohos_source_set") {
   assert(part_name != "")
 
   if (check_deps) {
-    deps_data = []
+    deps_data = {
+    }
     module_label = get_label_info(":${target_name}", "label_with_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -786,15 +786,13 @@ template("ohos_source_set") {
     if (defined(invoker.external_deps) && invoker.external_deps != []) {
       module_ex_deps = invoker.external_deps
     }
-    deps_data += [
-      {
-        part_name = part_name
-        module_label = module_label
-        deps = module_deps
-        external_deps = module_ex_deps
-      },
-    ]
-    write_file("${root_out_dir}/deps_files/${part_name}+${target_name}.json",
+    deps_data = {
+      part_name = part_name
+      module_label = module_label
+      deps = module_deps
+      external_deps = module_ex_deps
+    }
+    write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
                deps_data,
                "json")
   }
