@@ -160,5 +160,11 @@
     "path": "foundation/distributedhardware",
     "name": "distributedhardware",
     "dir": "foundation"
+  },
+  "ark": {
+    "project": "hmf/ark",
+    "path": "ark",
+    "name": "ark",
+    "dir": "ark"
   }
 }
