@@ -148,6 +148,10 @@ template("ohos_copy") {
         module_install_images += invoker.install_images
       }
 
+      if (defined(invoker.symlink_target_name)) {
+        symlink_target_name = invoker.symlink_target_name
+      }
+
       notice = "$target_out_dir/$_main_target_name.notice.txt"
     }
   }
