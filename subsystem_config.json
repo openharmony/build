@@ -166,5 +166,11 @@
     "path": "ark",
     "name": "ark",
     "dir": "ark"
+  },
+  "ccruntime": {
+    "project": "hmf/js_util_module",
+    "path": "base/compileruntime",
+    "name": "ccruntime",
+    "dir": "base"
   }
 }
