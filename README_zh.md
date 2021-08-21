@@ -153,6 +153,21 @@
 
     ohos.build中各个配置，都只是声明，具体的模块配置还是在对应的BUILD.gn中。
 
+5.  ohos-sdk编译。
+
+    **编译命令：**
+
+    ``` ./build.sh --product-name ohos-sdk --ccache ```
+
+    **结果输出：**
+
+    ``` out/ohos-arm64-release/packages/ohos-sdk/ ```
+
+    **ohos-sdk模块配置：**
+
+    ``` build/ohos/sdk/ohos_sdk_description_std.json ```
+
+
 
 ## 常见问题说明<a name="section131336181"></a>
 

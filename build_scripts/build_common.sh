@@ -23,6 +23,8 @@ function do_make_ohos() {
       echo $target_name
       build_cmd+=" build_target=$target_name"
     done
+  elif [[ "${product_name}" == "ohos-sdk" ]]; then
+    build_cmd+=" build_target=build_ohos_sdk"
   else
     build_cmd+=" build_target=images"
   fi
