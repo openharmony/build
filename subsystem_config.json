@@ -172,5 +172,11 @@
     "path": "base/compileruntime",
     "name": "ccruntime",
     "dir": "base"
+  },
+  "kernel": {
+    "project":"hmf/kernel",
+    "path": "kernel/linux/patches",
+    "name": "kernel",
+    "dir": "kernel/linux"
   }
 }
