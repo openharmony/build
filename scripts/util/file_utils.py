@@ -67,7 +67,7 @@ def write_json_file(output_file, content, check_changes=False):
         changed = True
     if changed is True:
         with open(output_file, 'w') as output_f:
-            json.dump(content, output_f)
+            json.dump(content, output_f, sort_keys=True, indent=2)
 
 
 def __check_changes(output_file, content):

@@ -52,7 +52,7 @@ def summary_subsystem_config_file(testcase_dir, summary_file):
     # write the summary file.json
     try:
         with open(summary_file, 'w') as out_file:
-            json.dump(context, out_file)
+            json.dump(context, out_file, sort_keys=True, indent=2)
     except OSError as err:
         raise err
 

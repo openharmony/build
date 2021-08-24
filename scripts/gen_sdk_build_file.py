@@ -81,7 +81,7 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
     if data is None:
         raise Exception(
             "sdk interface description info error, file [{}] does not exist.".
-                format(input_file))
+            format(input_file))
 
     build_file_content = 'import("//build/ohos.gni")\n'
     build_file_content += 'import("//build/config/ohos/rules.gni")\n'
@@ -186,7 +186,8 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
                 sdk_jar_path.append(
                     os.path.join(base_dir, os.path.basename(jar)))
             build_file_content += MAPLE_BUILD_TEMPLATE % (
-                module_name, json.dumps(sdk_mplts), sdk_jar_path[0])
+                module_name, json.dumps(sdk_mplts, sort_keys=True,
+                                        indent=2), sdk_jar_path[0])
             build_file_content = add_dynamic_deps(build_file_content, bc)
         else:
             raise Exception(
