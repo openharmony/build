@@ -81,46 +81,46 @@ if (load_result != "") {
 print("build configs generation is complete.")
 
 # gn target defined
-group("make_all") {
-  deps = [
-    ":images",
-    ":make_inner_kits",
-    ":packages",
-  ]
-}
-
-group("images") {
-  deps = [ "//build/ohos/images:make_images" ]
-}
-
-group("packages") {
-  deps = [ "//build/ohos/packages:make_packages" ]
-}
-
-group("make_inner_kits") {
-  deps = [ "$root_build_dir/build_configs:inner_kits" ]
-}
-
-if (build_ohos_sdk) {
+if (product_name == "ohos-sdk") {
   group("build_ohos_sdk") {
     deps = [ "//build/ohos/sdk:ohos_sdk" ]
   }
-}
+} else {
+  group("make_all") {
+    deps = [
+      ":images",
+      ":make_inner_kits",
+      ":packages",
+    ]
+  }
 
-group("build_all_test_pkg") {
-  testonly = true
-  deps = [
-    "$root_build_dir/build_configs:parts_test",
-    "//test/developertest:make_temp_test",
-  ]
-}
+  group("images") {
+    deps = [ "//build/ohos/images:make_images" ]
+  }
 
-group("make_test") {
-  testonly = true
-  deps = [ ":build_all_test_pkg" ]
-  deps += [ "//build/ohos/packages:package_testcase_mlf" ]
-  deps += [ "//build/ohos/packages:package_testcase" ]
-  if (archive_component) {
-    deps += [ "//build/ohos/testfwk:archive_testcase" ]
+  group("packages") {
+    deps = [ "//build/ohos/packages:make_packages" ]
+  }
+
+  group("make_inner_kits") {
+    deps = [ "$root_build_dir/build_configs:inner_kits" ]
+  }
+
+  group("build_all_test_pkg") {
+    testonly = true
+    deps = [
+      "$root_build_dir/build_configs:parts_test",
+      "//test/developertest:make_temp_test",
+    ]
+  }
+
+  group("make_test") {
+    testonly = true
+    deps = [ ":build_all_test_pkg" ]
+    deps += [ "//build/ohos/packages:package_testcase_mlf" ]
+    deps += [ "//build/ohos/packages:package_testcase" ]
+    if (archive_component) {
+      deps += [ "//build/ohos/testfwk:archive_testcase" ]
+    }
   }
 }
