@@ -156,5 +156,23 @@
         "target_os": [
             "darwin"
         ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//ark/runtime/assembler:ark_asm",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//ark/runtime/disassembler:ark_disasm",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
     }
 ]
