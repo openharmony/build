@@ -87,8 +87,8 @@
 
    脚本运行后会在 `--deps-files-path` 指定的deps_files的同级目录下，创建module_deps_info文件夹输出结果数据。
    ```
-   parts_deps_info/all_deps_data.json        # 生成的模块依赖信息
-   parts_deps_info/module_deps_info.json     # 生成的部件依赖
+   module_deps_info/all_deps_data.json        # 生成的模块依赖信息
+   module_deps_info/module_deps_info.json     # 生成的部件依赖
    ```
 
 **注意：**
