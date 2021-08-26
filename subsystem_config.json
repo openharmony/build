@@ -175,7 +175,7 @@
   },
   "kernel": {
     "project":"hmf/kernel",
-    "path": "kernel/linux/patches",
+    "path": "kernel/linux/build",
     "name": "kernel",
     "dir": "kernel/linux"
   }
