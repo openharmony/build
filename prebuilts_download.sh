@@ -169,5 +169,28 @@ else
     /bin/cp -rf ${code_dir}/third_party/jsframework/node_modules ${code_dir}/prebuilts/build-tools/common/js-framework/
 fi
 
+if [ ! -d "${code_dir}/ark/ts2abc" ]; then
+    echo "${code_dir}/ark/ts2abc not exist, it shouldn't happen, pls check..."
+else
+    cd ${code_dir}/ark/ts2abc/ts2panda
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    npm config set registry http://registry.npm.taobao.org
+    if [ "X${SKIP_SSL}" == "XYES" ];then
+        npm config set strict-ssl false
+    fi
+    npm install
+
+    cd ${code_dir}
+    if [ -d "${code_dir}/prebuilts/build-tools/common/ts2abc" ]; then
+        echo -e "\n"
+        echo "${code_dir}/prebuilts/build-tools/common/ts2abc already exist, it will be replaced with node-${node_js_ver}"
+        /bin/rm -rf ${code_dir}/prebuilts/build-tools/common/ts2abc
+        echo -e "\n"
+    fi
+
+    mkdir -p ${code_dir}/prebuilts/build-tools/common/ts2abc
+    /bin/cp -rf ${code_dir}/ark/ts2abc/ts2panda/node_modules ${code_dir}/prebuilts/build-tools/common/ts2abc/
+fi
+
 cd ${code_dir}
 echo -e "\n"
