@@ -89,9 +89,6 @@ declare_args() {
 declare_args() {
   build_platform = ""
 
-  # Deprecated, use device_name
-  device_type = ""
-
   product_name = ""
 
   sparse_image = false
