@@ -34,19 +34,16 @@
 
    如果需要生成部件依赖图，使用--graph参数指定；
 
-   本地机器需要安装依赖库：graphviz
+   本地机器需要安装依赖库：pyecharts
 
    ```
    # 使用pip安装python3的依赖库
-   pip3 install graphviz
+   pip3 install pyecharts
    
    # 如果pip3没有安装，请先安装pip3
    sudo apt install python3-pip
-   
-   # 安装graphviz
-   sudo apt install graphviz
    ```
-
+   
 5. 输出
 
    脚本运行后会在 `--deps-files-path` 指定的deps_files的同级目录下，创建parts_deps_info文件夹输出结果数据。
@@ -54,7 +51,7 @@
    ```
    parts_deps_info/all_deps_data.json       # 生成的模块依赖信息
    parts_deps_info/part_deps_info.json      # 生成的部件依赖
-   parts_deps_info/part-deps-grahp.gv.pdf   # 生成的部件依赖图，只有指定--graph参数时才生成
+   parts_deps_info/part-deps-grahp.html     # 生成的部件依赖图，只有指定--graph参数时才生成
    ```
 
    
