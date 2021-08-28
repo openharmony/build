@@ -206,6 +206,7 @@ template("compile_js_assets") {
                              "deps",
                              "meta_data",
                              "hap_profile",
+                             "build_mode",
                            ])
     script = "//build/scripts/build_js_assets.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -231,6 +232,8 @@ template("compile_js_assets") {
       rebase_path(webpack_js, root_build_dir),
       "--webpack-config-js",
       rebase_path(webpack_config_js, root_build_dir),
+      "--build-mode",
+      build_mode,
     ]
     if (defined(hap_profile)) {
       args += [

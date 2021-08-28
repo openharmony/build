@@ -162,6 +162,11 @@ template("ohos_hap") {
     _js2abc = invoker.js2abc
   }
 
+  _js_build_mode = "release"
+  if (defined(invoker.js_build_mode)) {
+    _js_build_mode = invoker.js_build_mode
+  }
+
   _main_target_name = target_name
 
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
@@ -208,6 +213,7 @@ template("ohos_hap") {
     packaged_js_assets = _packaged_js_assets
     meta_data = _meta_data
     deps = [ ":$_metadata_target" ] + _deps
+    build_mode = _js_build_mode
   }
 
   if (_js2abc) {
