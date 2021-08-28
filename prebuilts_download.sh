@@ -45,8 +45,8 @@ function check_sha256(){
     fi
 }
 function hwcloud_download(){
-    # 代理不需要鉴权: wget -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
-    # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -O ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
+    # 代理不需要鉴权: wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
+    # 代理需要鉴权(账号密码特殊字符均需要URL转义): wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
     # 不需要代理
     download_local_file=$1
     download_source_url=$2
@@ -63,7 +63,7 @@ function hwcloud_download(){
             fi
         fi
         if [ ! -f "${download_local_file}" ];then
-            wget ${wget_ssl_check} -O  "${download_local_file}" "${download_source_url}"
+            wget -t3 -T10 ${wget_ssl_check} -O  "${download_local_file}" "${download_source_url}"
         fi
     done
     # 连续三次失败后报错退出
@@ -142,7 +142,7 @@ node_js=node-${node_js_ver}-linux-x64.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
 if [ ! -f "${node_js}" ]; then
-    wget ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
+    wget -t3 -T10 ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
     tar zxf ${node_js}
 fi
 
