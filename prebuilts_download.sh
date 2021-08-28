@@ -155,6 +155,7 @@ else
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
+    npm cache clean -f
     npm install
 
     cd ${code_dir}
@@ -176,6 +177,7 @@ if [ -d "${code_dir}/ark/ts2abc" ]; then
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
+    npm cache clean -f
     npm install
 
     cd ${code_dir}
