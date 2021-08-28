@@ -131,7 +131,7 @@ template("ohos_resources") {
 # Variables:
 #   deps: dependencies of this target.
 #   hap_name: name of output hap file.
-#   hap_path: full path of output hap file, hap_path overwrites hap_name.
+#   final_hap_path: full path of output hap file, final_hap_path overwrites hap_name.
 #   js2abc:   whether to transform js bundle to ark bytecode, default value
 #             follows build_ark.
 #
@@ -153,8 +153,8 @@ template("ohos_hap") {
   }
 
   _hap_path = "$target_out_dir/$_hap_name.hap"
-  if (defined(invoker.hap_path)) {
-    _hap_path = invoker.hap_path
+  if (defined(invoker.final_hap_path)) {
+    _hap_path = invoker.final_hap_path
   }
 
   _js2abc = build_ark

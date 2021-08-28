@@ -58,7 +58,7 @@ L2上的hap包由资源，raw assets，js assets，native库，config.json等部
 
   4. hap_name: hap包的名字，可选，默认为目标名
 
-  5. hap_path: 用户可以制定生成的hap的位置，可选，hap_path中会覆盖hap_name
+  5. final_hap_path: 用户可以制定生成的hap的位置，可选，final_hap_path中会覆盖hap_name
 
   6. subsystem_name: hap包从属的子系统名，需要和ohos.build中的名字对应，否则将导致无法安装到system镜像中
 
