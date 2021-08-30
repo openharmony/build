@@ -34,23 +34,24 @@ def parse_args(args):
     parser.add_option('--webpack-js', help='path to webpack.js')
     parser.add_option('--webpack-config-js', help='path to webpack.config.js')
     parser.add_option('--hap-profile', help='path to hap profile')
+    parser.add_option('--build-mode', help='debug mode or release mode')
 
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
     return options
 
 
-def build_ace(cmd, source, output, profile):
+def build_ace(cmd, source, output, profile, mode):
     with build_utils.temp_dir() as build_dir:
-        source_dir = os.path.join(build_dir, 'source')
         gen_dir = os.path.join(build_dir, 'gen')
-        shutil.copytree(source, source_dir)
+        manifest = os.path.join(build_dir, 'manifest.json')
         my_env = {
-            "aceModuleRoot": source_dir,
+            "aceModuleRoot": source,
             "aceModuleBuild": gen_dir,
+            "aceManifestPath": manifest,
+            "buildMode": mode,
             "PATH": os.environ.get('PATH'),
         }
-        manifest = os.path.join(source_dir, 'manifest.json')
         if not os.path.exists(manifest) and profile:
             with open(profile) as fp:
                 build_utils.write_json(
@@ -76,19 +77,19 @@ def main(args):
 
     cmd = [
         options.nodejs_path, options.webpack_js, '--config',
-        options.webpack_config_js
+        options.webpack_config_js,
     ]
 
-    build_utils.call_and_write_depfile_if_stale(lambda: build_ace(
-        cmd, options.js_assets_dir[0], options.output, options.hap_profile),
-                                                options,
-                                                depfile_deps=depfiles,
-                                                input_paths=depfiles + inputs,
-                                                input_strings=cmd,
-                                                output_paths=([options.output
-                                                               ]),
-                                                force=False,
-                                                add_pydeps=False)
+    build_utils.call_and_write_depfile_if_stale(
+        lambda: build_ace(cmd, options.js_assets_dir[0], options.output,
+                          options.hap_profile, options.build_mode),
+        options,
+        depfile_deps=depfiles,
+        input_paths=depfiles + inputs,
+        input_strings=cmd + [options.build_mode],
+        output_paths=([options.output]),
+        force=False,
+        add_pydeps=False)
 
 
 if __name__ == '__main__':
