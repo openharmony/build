@@ -88,7 +88,8 @@ def read_build_file(ohos_build_file):
     return subsystem_config
 
 
-class PartObject:
+class PartObject(object):
+    """"part object info, description part variant."""
     def __init__(self, part_name, variant_name, part_config, toolchain,
                  subsystem_name, target_arch):
         self._origin_name = part_name
@@ -255,35 +256,43 @@ class PartObject:
 
         # system_capabilities is a list attribute of a part in ohos.build
         if part_config.get('system_capabilities'):
-            self._system_capabilities =  part_config.get('system_capabilities')
+            self._system_capabilities = part_config.get('system_capabilities')
 
     def part_name(self):
+        """part name."""
         return self._part_name
 
     def part_variant(self):
+        """part variant."""
         return self._variant_name
 
     def toolchain(self):
+        """current part variant toolchain."""
         return self._toolchain
 
     def part_inner_kits(self):
+        """part inner kits."""
         return self._inner_kits_info
 
     def part_kits(self):
+        """part kits."""
         return self._kits
 
     def write_build_gn(self, config_output_dir):
+        """output build gn."""
         part_gn_file = os.path.join(config_output_dir, self._part_name,
                                     'BUILD.gn')
         write_file(part_gn_file, '\n'.join(self._build_gn_content))
 
     def get_target_label(self, config_output_relpath):
+        """target label."""
         if config_output_relpath.startswith('/'):
             raise Exception("args config output relative path is incorrect.")
         return "//{0}/{1}:{1}({2})".format(config_output_relpath,
                                            self._part_name, self._toolchain)
 
     def part_group_targets(self, config_output_relpath):
+        """part group target."""
         if config_output_relpath.startswith('/'):
             raise Exception("args config output relative path is incorrect.")
         _labels = {}
@@ -299,6 +308,7 @@ class PartObject:
         return _labels
 
     def part_info(self):
+        """part info."""
         _info = {}
         _info['part_name'] = self._part_name
         _info['origin_part_name'] = self._origin_name
@@ -318,10 +328,11 @@ class PartObject:
         return _info
 
 
-class LoadBuildConfig:
-    def __init__(self, source_root_dir, subsystem_build_info, config_output_dir,
-                 variant_toolchains, subsystem_name, target_arch,
-                 ignored_subsystems):
+class LoadBuildConfig(object):
+    """load build config file and parse configuration info."""
+    def __init__(self, source_root_dir, subsystem_build_info,
+                 config_output_dir, variant_toolchains, subsystem_name,
+                 target_arch, ignored_subsystems):
         self._source_root_dir = source_root_dir
         self._build_info = subsystem_build_info
         self._config_output_relpath = config_output_dir
@@ -333,6 +344,9 @@ class LoadBuildConfig:
         self._subsystem_name = subsystem_name
         self._target_arch = target_arch
         self._ignored_subsystems = ignored_subsystems
+        self._parts_info_dict = {}
+        self._phony_targets = {}
+        self._parts_path_dict = {}
 
     def _parsing_config(self, parts_config):
         _parts_info_dict = {}
@@ -378,6 +392,7 @@ class LoadBuildConfig:
         _build_files = self._build_info.get('build_files')
         subsystem_name = None
         parts_info = {}
+        parts_path_dict = {}
         for _build_file in _build_files:
             _parts_config = read_build_file(_build_file)
             _subsystem_name = _parts_config.get('subsystem')
@@ -386,26 +401,33 @@ class LoadBuildConfig:
                     "subsystem name config incorrect in '{}'.".format(
                         _build_file))
             subsystem_name = _subsystem_name
-            parts_info.update(_parts_config.get('parts'))
+            _curr_parts_info = _parts_config.get('parts')
+            for _pname in _curr_parts_info.keys():
+                parts_path_dict[_pname] = os.path.relpath(
+                    os.path.dirname(_build_file), self._source_root_dir)
+            parts_info.update(_curr_parts_info)
         subsystem_config = {}
         subsystem_config['subsystem'] = subsystem_name
         subsystem_config['parts'] = parts_info
-        return subsystem_config
+        return subsystem_config, parts_path_dict
 
     def parse(self):
+        """parse part info from build config file."""
         if self._is_load:
             return
-        subsystem_config = self._merge_build_config()
+        subsystem_config, parts_path_dict = self._merge_build_config()
         parts_config = subsystem_config.get('parts')
-
         self._parsing_config(parts_config)
+        self._parts_path_dict = parts_path_dict
         self._is_load = True
 
     def parts_variants(self):
+        """parts varinats info."""
         self.parse()
         return self._parts_variants
 
     def parts_inner_kits_info(self):
+        """parts inner kits info."""
         self.parse()
         _parts_inner_kits = {}
         for part_obj in self._part_list.values():
@@ -414,27 +436,37 @@ class LoadBuildConfig:
         return _parts_inner_kits
 
     def parts_build_targets(self):
+        """parts build target label."""
         self.parse()
         return self._part_targets_label
 
     def parts_name_list(self):
+        """parts name list."""
         self.parse()
         return list(self._part_list.keys())
 
     def parts_info(self):
+        """parts info."""
         self.parse()
         return self._parts_info_dict
 
     def parts_phony_target(self):
+        """parts phony target info"""
         self.parse()
         return self._phony_targets
 
     def parts_kits_info(self):
+        """parts kits info."""
         self.parse()
         _parts_kits = {}
         for part_obj in self._part_list.values():
             _parts_kits[part_obj.part_name()] = part_obj.part_kits()
         return _parts_kits
+
+    def parts_path_info(self):
+        """parts to path info."""
+        self.parse()
+        return self._parts_path_dict
 
 
 def _output_parts_info(parts_config_dict, config_output_path):
@@ -490,6 +522,21 @@ def _output_parts_info(parts_config_dict, config_output_path):
                                               "phony_target.json")
         write_json_file(phony_target_info_file, phony_target)
 
+    # paths_path_info.json
+    if 'parts_path_info' in parts_config_dict:
+        parts_path_info = parts_config_dict.get('parts_path_info')
+        parts_path_info_file = os.path.join(parts_info_output_path,
+                                            'parts_path_info.json')
+        write_json_file(parts_path_info_file, parts_path_info)
+        path_to_parts = {}
+        for _key, _val in parts_path_info.items():
+            _p_list = path_to_parts.get(_val, [])
+            _p_list.append(_key)
+            path_to_parts[_val] = _p_list
+        path_to_parts_file = os.path.join(parts_info_output_path,
+                                          'path_to_parts.json')
+        write_json_file(path_to_parts_file, path_to_parts)
+
 
 def get_parts_info(source_root_dir,
                    config_output_relpath,
@@ -498,6 +545,9 @@ def get_parts_info(source_root_dir,
                    target_arch,
                    ignored_subsystems,
                    build_xts=False):
+    """parts info,
+    get info from build config file.
+    """
     parts_variants = {}
     parts_inner_kits_info = {}
     parts_kits_info = {}
@@ -505,6 +555,7 @@ def get_parts_info(source_root_dir,
     parts_info = {}
     subsystem_parts = {}
     _phony_target = {}
+    _parts_path_info = {}
     for subsystem_name, build_config_info in subsystem_info.items():
         if subsystem_name == 'xts' and build_xts is False:
             continue
@@ -522,6 +573,7 @@ def get_parts_info(source_root_dir,
         subsystem_parts[subsystem_name] = build_loader.parts_name_list()
         parts_info.update(build_loader.parts_info())
         _phony_target.update(build_loader.parts_phony_target())
+        _parts_path_info.update(build_loader.parts_path_info())
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts
@@ -530,6 +582,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['parts_kits_info'] = parts_kits_info
     parts_config_dict['parts_targets'] = parts_targets
     parts_config_dict['phony_target'] = _phony_target
+    parts_config_dict['parts_path_info'] = _parts_path_info
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
     return parts_config_dict

@@ -157,10 +157,7 @@ declare_args() {
   use_musl = true
 }
 
-a_prebuilt_libs_path = "//prebuilts/aosp_prebuilt_libs"
-asdk_libs_dir = "${a_prebuilt_libs_path}/asdk_libs"
-
-a_prebuilt_tools_path = "//prebuilts"
+asdk_libs_dir = "//prebuilts/asdk_libs"
 
 # Whether it is a phone product.
 is_phone_product = "${target_platform}" == "phone"
