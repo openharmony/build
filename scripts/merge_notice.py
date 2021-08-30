@@ -19,49 +19,43 @@ import argparse
 import shutil
 
 
-def _merge_txt_file(ohos_notice, aosp_notice, output_notice):
+def _merge_txt_file(ohos_notice, a_notice, output_notice):
     if not os.path.exists(ohos_notice):
         print("Warning, can not find the ohos notice file: {}.".format(
             ohos_notice))
         return
 
-    if not os.path.exists(aosp_notice):
-        print("Warning, can not find the aosp notice file: {}.".format(
-            aosp_notice))
-        shutil.move(ohos_notice, aosp_notice)
+    if not os.path.exists(a_notice):
+        print("Warning, can not find the notice file: {}.".format(a_notice))
+        shutil.move(ohos_notice, a_notice)
         return
 
-    with open(output_notice, 'a') as aosp_file:
+    with open(output_notice, 'a') as a_file:
         with open(ohos_notice, 'r', errors='ignore') as _file:
             data = _file.readlines()
             del data[0]
             for line in data:
-                aosp_file.write(line)
-        with open(aosp_notice, 'r', errors='ignore') as _file:
+                a_file.write(line)
+        with open(a_notice, 'r', errors='ignore') as _file:
             data = _file.readlines()
             del data[0]
             for line in data:
-                aosp_file.write(line)
+                a_file.write(line)
 
     if os.path.exists(ohos_notice):
         os.remove(ohos_notice)
 
 
 def main():
+    """notice file merge."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ohos-notice',
-                        help='ohos notice file',
-                        required=True)
-    parser.add_argument('--aosp-notice',
-                        help='aosp notice file',
-                        required=True)
-    parser.add_argument('--output-notice',
-                        help='final notice file',
-                        required=True)
+    parser.add_argument('--ohos-notice', required=True)
+    parser.add_argument('--a-notice', required=True)
+    parser.add_argument('--output-notice', required=True)
     args = parser.parse_args()
 
     # merge NOTICE.txt file
-    _merge_txt_file(args.ohos_notice, args.aosp_notice, args.output_notice)
+    _merge_txt_file(args.ohos_notice, args.a_notice, args.output_notice)
 
     return 0
 
