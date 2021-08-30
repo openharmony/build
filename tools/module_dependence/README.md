@@ -34,19 +34,16 @@
 
    如果需要生成部件依赖图，使用--graph参数指定；
 
-   本地机器需要安装依赖库：graphviz
+   本地机器需要安装依赖库：pyecharts
 
    ```
    # 使用pip安装python3的依赖库
-   pip3 install graphviz
+   pip3 install pyecharts
    
    # 如果pip3没有安装，请先安装pip3
    sudo apt install python3-pip
-   
-   # 安装graphviz
-   sudo apt install graphviz
    ```
-
+   
 5. 输出
 
    脚本运行后会在 `--deps-files-path` 指定的deps_files的同级目录下，创建parts_deps_info文件夹输出结果数据。
@@ -54,7 +51,7 @@
    ```
    parts_deps_info/all_deps_data.json       # 生成的模块依赖信息
    parts_deps_info/part_deps_info.json      # 生成的部件依赖
-   parts_deps_info/part-deps-grahp.gv.pdf   # 生成的部件依赖图，只有指定--graph参数时才生成
+   parts_deps_info/part-deps-grahp.html     # 生成的部件依赖图，只有指定--graph参数时才生成
    ```
 
    
@@ -88,8 +85,51 @@
    脚本运行后会在 `--deps-files-path` 指定的deps_files的同级目录下，创建module_deps_info文件夹输出结果数据。
    ```
    module_deps_info/all_deps_data.json        # 生成的模块依赖信息
-   module_deps_info/module_deps_info.json     # 生成的部件依赖
+   module_deps_info/module_deps_info.json     # 生成的模块依赖
    ```
+
+
+### 生成单个模块的模块依赖树
+
+
+
+生成步骤：
+
+1. 安装模块依赖
+
+   ```
+   pip install pyecharts
+   ```
+
+2. 运行模块依赖树生成脚本
+
+   ```
+   # 比如在源码根目录下执行
+   python build/tools/module_dependence/module_deps_tree.py --module-name 部件名:模块名 --module-deps-file out/ohos-arm-release/module_deps_info/module_deps_info.json
+   ```
+
+3. 脚本参数说明
+
+   ```
+   --module-name        # 必选 要生成模块的名称，结构为"部件名:模块名"
+   --module-deps-file   # 必选 模块依赖信息文件module_deps_info.json所在路径
+   ```
+
+4. 输出
+
+   脚本运行后会在module_deps_info.json的同级目录下输出模块依赖树图
+
+   ```
+   module_deps_info/部件名__模块名.html
+   ```
+
+   用浏览器打开这个文件，会展示模块依赖树，默认展开第一层依赖。
+
+   实心点表示一个模块还有未展开的其它模块依赖，点击实心点可以展开它的依赖。
+
+   一个模块第一次出现时显示为黑色，之后出现显示为红色。
+
+   
 
 **注意：**
 *工具能力在完善中，使用脚本和步骤会随时变化。*

@@ -57,34 +57,61 @@ def gen_part_dependence(deps_data):
 
 
 def _drawing_part_deps(part_deps_data, output_path):
-    from graphviz import Digraph
+    from pyecharts.charts import Graph
+    from pyecharts import options as opts
+    from pyecharts.globals import CurrentConfig
+
+    CurrentConfig.ONLINE_HOST = "https://cdn.jsdelivr.net/npm"\
+                                "/echarts@latest/dist/"
+
     part_allowlist = ['unittest', 'moduletest', 'systemtest']
-    dot = Digraph(comment='OpenHarmony part dependence',
-                  node_attr={
-                      'style': 'filled',
-                      'color': 'lightblue2'
-                  })
-    lines = []
-    tmp_lines = []
+    part_nodes = []
+    parts_links = []
+    nodes_sets = set()
     for _part_name, _dep_parts in part_deps_data.items():
         if _part_name in part_allowlist:
             continue
-        dot.node(_part_name, _part_name)
+        if _part_name not in nodes_sets:
+            nodes_sets.add(_part_name)
+            part_nodes.append(opts.GraphNode(
+                name=_part_name,
+                symbol='circle',
+                symbol_size=20,
+                label_opts=opts.LabelOpts(
+                    font_style='normal',
+                    font_family='Times New Roman',
+                    font_size=16
+                )
+            ))
         for _dep_part in _dep_parts:
-            line = {'start': _part_name, 'end': _dep_part}
-            lines.append(line)
-            tmp_lines.append('{}={}'.format(_part_name, _dep_part))
-    for line in lines:
-        start = line.get('start')
-        end = line.get('end')
-        reverse = '{}={}'.format(end, start)
-        if reverse in tmp_lines:
-            dot.edge(start, end, color='red')
-        else:
-            dot.edge(start, end)
-
-    _output_graph_file = os.path.join(output_path, 'part-deps-grahp.gv')
-    dot.render(_output_graph_file, view=False)
+            if _part_name in part_deps_data.get(_dep_part, []):
+                parts_links.append(opts.GraphLink(
+                    source=_part_name,
+                    target=_dep_part,
+                    linestyle_opts=opts.LineStyleOpts(
+                        color='#ff0000', width=0.5)
+                ))
+            else:
+                parts_links.append(opts.GraphLink(
+                    source=_part_name,
+                    target=_dep_part,
+                    linestyle_opts=opts.LineStyleOpts(
+                        color='#000000', width=0.5)
+                ))
+    _output_graph_file = os.path.join(output_path, 'part-deps-grahp.html')
+    graph = (
+        Graph(opts.InitOpts(width="1920px", height="1080px"))
+        .add(
+            "",
+            part_nodes,
+            parts_links,
+            repulsion=800,
+            edge_symbol=['', 'arrow'],
+            edge_symbol_size=6
+        )
+        .set_global_opts(title_opts=opts.TitleOpts(title="part-deps-grahp"))
+        .render(_output_graph_file)
+    )
 
 
 def run(deps_files_path, output_path, is_graph):
@@ -108,8 +135,8 @@ def main(argv):
 
     if not os.path.exists(args.deps_files_path):
         raise Exception("'{}' doesn't exist.".format(args.deps_files_path))
-    output_path = os.path.join(os.path.dirname(args.deps_files_path),
-                               'part_deps_info')
+    output_path = os.path.join(os.path.dirname(
+        args.deps_files_path), 'part_deps_info')
     print("------Generate part dependency info------")
     run(args.deps_files_path, output_path, args.graph)
     print('part deps data output to {}'.format(output_path))
