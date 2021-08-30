@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,18 +53,16 @@ class ModuleTree:
     def get_label_color(self, node_name):
         if self.module_count.get(node_name, 'no_module') == 'no_module':
             self.module_count[node_name] = 1
-            label_opt = opts.LabelOpts(
-                color='#000000',
-                font_style='normal',
-                font_family='Times New Roman',
-                font_size=16)
+            label_opt = opts.LabelOpts(color='#000000',
+                                       font_style='normal',
+                                       font_family='Times New Roman',
+                                       font_size=16)
         else:
             self.module_count[node_name] += 1
-            label_opt = opts.LabelOpts(
-                color='#ff0000',
-                font_style='normal',
-                font_family='Times New Roman',
-                font_size=16)
+            label_opt = opts.LabelOpts(color='#ff0000',
+                                       font_style='normal',
+                                       font_family='Times New Roman',
+                                       font_size=16)
         return label_opt
 
     def node_tree(self, node_name):
@@ -81,8 +79,7 @@ class ModuleTree:
                         "module '{}' doesn't exist.".format(old_node_name))
                 else:
                     print("Waring! module '{}' doesn't exist.".format(
-                        old_node_name
-                    ))
+                        old_node_name))
                     tree_data = {"name": node_name}
                     return tree_data
 
@@ -112,17 +109,14 @@ class ModuleTree:
     def graph_tree(self, tree_data):
         children = tree_data.get("children", "no_children")
         if children != "no_children":
-            for index,value in enumerate(children):
-                children[index] = self.graph_tree(
-                    children[index])
-            return opts.TreeItem(
-                name=tree_data["name"],
-                label_opts=tree_data["label_opt"],
-                children=children
-            )
+            for index, value in enumerate(children):
+                children[index] = self.graph_tree(children[index])
+            return opts.TreeItem(name=tree_data["name"],
+                                 label_opts=tree_data["label_opt"],
+                                 children=children)
         else:
-            return opts.TreeItem(
-                name=tree_data["name"], label_opts=tree_data["label_opt"])
+            return opts.TreeItem(name=tree_data["name"],
+                                 label_opts=tree_data["label_opt"])
 
     def get_node_tree(self, node_name):
         self.isroot = True
@@ -140,16 +134,15 @@ def main(argv):
     args = parser.parse_args(argv)
 
     node_name = args.module_name
-    inner_kits_adapter_file = os.path.join(os.path.dirname(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    inner_kits_adapter_file = os.path.join(
+        os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
         "ohos", "inner_kits_adapter.json")
     output_file = os.path.join(os.path.dirname(args.module_deps_file),
-                               "{}.html".format(
-                                   node_name.replace(":", "__")
-    ))
+                               "{}.html".format(node_name.replace(":", "__")))
     tree_title = "{} module dependency tree".format(node_name)
-    CurrentConfig.ONLINE_HOST = "https://cdn.jsdelivr.net/npm"\
-                                "/echarts@latest/dist/"
+    CurrentConfig.ONLINE_HOST = ("https://cdn.jsdelivr.net/npm/"
+                                 "echarts@latest/dist/")
 
     print("------Generate module dependency tree------")
     module_deps = read_json_file(args.module_deps_file)
@@ -158,19 +151,13 @@ def main(argv):
     module_tree_ = ModuleTree(module_deps, inner_kits_adapter)
     tree_data = module_tree_.get_node_tree(node_name)
 
-    tree = (
-        Tree(opts.InitOpts(width="1920px", height="1080px"))
-        .add(
-            "",
-            [tree_data],
-            orient="LR",
-            initial_tree_depth=1,
-            is_roam=True,
-            symbol_size=10
-        )
-        .set_global_opts(title_opts=opts.TitleOpts(title=tree_title))
-        .render(output_file)
-    )
+    tree = (Tree(opts.InitOpts(width="1920px", height="1080px")).add(
+        "", [tree_data],
+        orient="LR",
+        initial_tree_depth=1,
+        is_roam=True,
+        symbol_size=10).set_global_opts(title_opts=opts.TitleOpts(
+            title=tree_title)).render(output_file))
     print('module deps tree output to {}'.format(output_file))
     return 0
 
