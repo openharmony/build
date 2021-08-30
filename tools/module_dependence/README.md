@@ -88,48 +88,44 @@
    module_deps_info/module_deps_info.json     # 生成的模块依赖
    ```
 
+5. 生成单个模块的依赖树
 
-### 生成单个模块的模块依赖树
+   (1) 依赖pyecharts组件，需要安装:
+
+      ```
+      pip3 install pyecharts
+      ```
+
+   (2) 生成命令：
+
+      ```
+      # 比如在源码根目录下执行
+      build/tools/module_dependence/module_deps_tree.py --module-name 部件名:模块名 --module-deps-file out/ohos-arm-release/module_deps_info/module_deps_info.json
+      ```
+
+   (3) 参数说明：
+
+      ```
+      --module-name        # 必选 要生成模块的名称，结构为"部件名:模块名"
+      --module-deps-file   # 必选 模块依赖信息文件module_deps_info.json所在路径
+      ```
+
+   (4) 输出:
+
+      脚本运行后会在module_deps_info.json的同级目录下输出模块依赖树图
+
+      ```
+      module_deps_info/部件名__模块名.html
+      ```
+
+      用浏览器打开这个文件，会展示模块依赖树，默认展开第一层依赖。
+
+      实心点表示一个模块还有未展开的其它模块依赖，点击实心点可以展开它的依赖。
+
+      一个模块第一次出现时显示为黑色，之后出现显示为红色。
 
 
 
-生成步骤：
-
-1. 安装模块依赖
-
-   ```
-   pip install pyecharts
-   ```
-
-2. 运行模块依赖树生成脚本
-
-   ```
-   # 比如在源码根目录下执行
-   python build/tools/module_dependence/module_deps_tree.py --module-name 部件名:模块名 --module-deps-file out/ohos-arm-release/module_deps_info/module_deps_info.json
-   ```
-
-3. 脚本参数说明
-
-   ```
-   --module-name        # 必选 要生成模块的名称，结构为"部件名:模块名"
-   --module-deps-file   # 必选 模块依赖信息文件module_deps_info.json所在路径
-   ```
-
-4. 输出
-
-   脚本运行后会在module_deps_info.json的同级目录下输出模块依赖树图
-
-   ```
-   module_deps_info/部件名__模块名.html
-   ```
-
-   用浏览器打开这个文件，会展示模块依赖树，默认展开第一层依赖。
-
-   实心点表示一个模块还有未展开的其它模块依赖，点击实心点可以展开它的依赖。
-
-   一个模块第一次出现时显示为黑色，之后出现显示为红色。
-
-   
 
 **注意：**
 *工具能力在完善中，使用脚本和步骤会随时变化。*
