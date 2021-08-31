@@ -62,6 +62,24 @@
         ]
     },
     {
+        "install_dir": "js/api/phone",
+        "module_label": "//interface/sdk-js:ohos_declaration_phone",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/form",
+        "module_label": "//interface/sdk-js:form_declaration",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/",
         "module_label": "//prebuilts/sdk/js-loader:ace_loader",
         "target_os": [
@@ -91,6 +109,24 @@
     {
         "install_dir": "js/build-tools/ace-loader/bin/",
         "module_label": "//third_party/jerryscript:jerry-snapshot",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader",
+        "module_label": "//developtools/ace-js2bundle:ace_loader",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/lib/",
+        "module_label": "//developtools/ace-js2bundle:ace_loader_library",
         "target_os": [
             "windows",
             "linux",
@@ -169,6 +205,15 @@
     {
         "install_dir": "ets/api/common",
         "module_label": "//interface/sdk-js:common_api",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/api/common",
+        "module_label": "//interface/sdk-js:ohos_declaration_ets",
         "target_os": [
             "windows",
             "linux",
