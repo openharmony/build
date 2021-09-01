@@ -157,7 +157,7 @@ template("ohos_hap") {
     _hap_path = invoker.final_hap_path
   }
 
-  _js2abc = build_ark
+  _js2abc = false
   if (defined(invoker.js2abc)) {
     _js2abc = invoker.js2abc
   }
@@ -214,15 +214,7 @@ template("ohos_hap") {
     meta_data = _meta_data
     deps = [ ":$_metadata_target" ] + _deps
     build_mode = _js_build_mode
-  }
-
-  if (_js2abc) {
-    _ark_target = "${target_name}__ark"
-    _packaged_abc = "$target_out_dir/$target_name/abc.zip"
-    js2ark(_ark_target) {
-      deps = [ ":$_js_assets_target" ]
-      packaged_js_assets = _packaged_js_assets
-    }
+    js2abc = _js2abc
   }
 
   _resources_target = "${target_name}__compile_resources"
@@ -269,12 +261,7 @@ template("ohos_hap") {
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }
-    if (_js2abc) {
-      deps += [ ":$_ark_target" ]
-      packaged_abc = _packaged_abc
-    } else {
-      packaged_js_assets = _packaged_js_assets
-    }
+    packaged_js_assets = _packaged_js_assets
     packaged_resources = _packaged_resources
     hap_profile = _hap_profile
     meta_data = _meta_data

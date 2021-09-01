@@ -35,34 +35,38 @@ def parse_args(args):
     parser.add_option('--webpack-config-js', help='path to webpack.config.js')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--build-mode', help='debug mode or release mode')
+    parser.add_option('--js2abc',
+                      action='store_true',
+                      default=False,
+                      help='whether to transform js to ark bytecode')
 
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
     return options
 
 
-def build_ace(cmd, source, output, profile, mode):
+def build_ace(cmd, options):
     with build_utils.temp_dir() as build_dir:
         gen_dir = os.path.join(build_dir, 'gen')
         manifest = os.path.join(build_dir, 'manifest.json')
         my_env = {
-            "aceModuleRoot": source,
+            "aceModuleRoot": options.js_assets_dir[0],
             "aceModuleBuild": gen_dir,
             "aceManifestPath": manifest,
-            "buildMode": mode,
+            "buildMode": options.build_mode,
             "PATH": os.environ.get('PATH'),
         }
-        if not os.path.exists(manifest) and profile:
-            with open(profile) as fp:
+        if not os.path.exists(manifest) and options.hap_profile:
+            with open(options.hap_profile) as profile:
                 build_utils.write_json(
-                    json.load(fp)['module']['js'][0], manifest)
+                    json.load(profile)['module']['js'][0], manifest)
         build_utils.check_output(cmd, env=my_env)
         for root, _, files in os.walk(gen_dir):
             for file in files:
                 filename = os.path.join(root, file)
                 if filename.endswith('.js.map'):
                     os.unlink(filename)
-        build_utils.zip_dir(output,
+        build_utils.zip_dir(options.output,
                             gen_dir,
                             zip_prefix_path='assets/js/default/')
 
@@ -76,13 +80,16 @@ def main(args):
     depfiles = (build_utils.get_all_files(options.js_assets_dir[0]))
 
     cmd = [
-        options.nodejs_path, options.webpack_js, '--config',
+        options.nodejs_path,
+        options.webpack_js,
+        '--config',
         options.webpack_config_js,
     ]
+    if options.js2abc:
+        cmd.extend(['--compilerType', 'ark'])
 
     build_utils.call_and_write_depfile_if_stale(
-        lambda: build_ace(cmd, options.js_assets_dir[0], options.output,
-                          options.hap_profile, options.build_mode),
+        lambda: build_ace(cmd, options),
         options,
         depfile_deps=depfiles,
         input_paths=depfiles + inputs,

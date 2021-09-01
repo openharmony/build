@@ -207,6 +207,7 @@ template("compile_js_assets") {
                              "meta_data",
                              "hap_profile",
                              "build_mode",
+                             "js2abc",
                            ])
     script = "//build/scripts/build_js_assets.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -235,6 +236,9 @@ template("compile_js_assets") {
       "--build-mode",
       build_mode,
     ]
+    if (js2abc) {
+      args += [ "--js2abc" ]
+    }
     if (defined(hap_profile)) {
       args += [
         "--hap-profile",
