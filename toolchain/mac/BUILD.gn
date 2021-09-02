@@ -23,13 +23,13 @@ import("//build/toolchain/toolchain.gni")
 # regenerated. See https://crbug.com/619083 for details. A proper fix
 # would be to have inputs to tools (https://crbug.com/621119).
 tool_versions =
-  exec_script("get_tool_mtime.py",
-              rebase_path([
-                            "//build/toolchain/mac/filter_libtool.py",
-                            "//build/toolchain/mac/linker_driver.py",
-                          ],
-                          root_build_dir),
-              "trim scope")
+    exec_script("get_tool_mtime.py",
+                rebase_path([
+                              "//build/toolchain/mac/filter_libtool.py",
+                              "//build/toolchain/mac/linker_driver.py",
+                            ],
+                            root_build_dir),
+                "trim scope")
 
 # Shared toolchain definition. Invocations should set current_os to set the
 # build args in this definition.
@@ -114,7 +114,7 @@ template("mac_toolchain") {
     # Object files go in this directory. Use label_name instead of
     # target_output_name since labels will generally have no spaces and will be
     # unique in the directory.
-    object_subdir = "{{target_out_dir}}/{{label_name}}"
+    object_subdir = "{{source_out_dir}}/{{label_name}}"
 
     if (_save_unstripped_output) {
       _unstripped_output = "{{root_out_dir}}/{{target_output_name}}{{output_extension}}.unstripped"
@@ -126,9 +126,7 @@ template("mac_toolchain") {
       command = "$cc -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_c}} -c {{source}} -o {{output}}"
       depsformat = "gcc"
       description = "CC {{output}}"
-      outputs = [
-        "$object_subdir/{{source_name_part}}.o",
-      ]
+      outputs = [ "$object_subdir/{{source_name_part}}.o" ]
     }
 
     tool("cxx") {
@@ -137,9 +135,7 @@ template("mac_toolchain") {
       command = "$cxx -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_cc}} -c {{source}} -o {{output}}"
       depsformat = "gcc"
       description = "CXX {{output}}"
-      outputs = [
-        "$object_subdir/{{source_name_part}}.o",
-      ]
+      outputs = [ "$object_subdir/{{source_name_part}}.o" ]
     }
 
     tool("asm") {
@@ -148,9 +144,7 @@ template("mac_toolchain") {
       command = "$cc -MMD -MF $depfile {{defines}} {{include_dirs}} {{asmflags}} -c {{source}} -o {{output}}"
       depsformat = "gcc"
       description = "ASM {{output}}"
-      outputs = [
-        "$object_subdir/{{source_name_part}}.o",
-      ]
+      outputs = [ "$object_subdir/{{source_name_part}}.o" ]
     }
 
     tool("objc") {
@@ -159,9 +153,7 @@ template("mac_toolchain") {
       command = "$cc -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_objc}} -c {{source}} -o {{output}}"
       depsformat = "gcc"
       description = "OBJC {{output}}"
-      outputs = [
-        "$object_subdir/{{source_name_part}}.o",
-      ]
+      outputs = [ "$object_subdir/{{source_name_part}}.o" ]
     }
 
     tool("objcxx") {
@@ -170,9 +162,7 @@ template("mac_toolchain") {
       command = "$cxx -MMD -MF $depfile {{defines}} {{include_dirs}} {{cflags}} {{cflags_objcc}} -c {{source}} -o {{output}}"
       depsformat = "gcc"
       description = "OBJCXX {{output}}"
-      outputs = [
-        "$object_subdir/{{source_name_part}}.o",
-      ]
+      outputs = [ "$object_subdir/{{source_name_part}}.o" ]
     }
 
     tool("alink") {
@@ -191,16 +181,15 @@ template("mac_toolchain") {
       rspfile_content = "{{inputs_newline}}"
       command = "$env_wrapper rm -f {{output}} && TOOL_VERSION=${tool_versions.filter_libtool} python $script libtool -static {{arflags}} -o {{output}} -filelist $rspfile"
       description = "LIBTOOL-STATIC {{output}}"
-      outputs = [
-        "{{output_dir}}/{{target_output_name}}{{output_extension}}",
-      ]
+      outputs = [ "{{output_dir}}/{{target_output_name}}{{output_extension}}" ]
       default_output_dir = "{{target_out_dir}}"
       default_output_extension = ".a"
       output_prefix = "lib"
     }
 
     tool("solink") {
-      dylib = "{{output_dir}}/{{target_output_name}}{{output_extension}}"  # eg "./libfoo.dylib"
+      dylib = "{{output_dir}}/{{target_output_name}}{{output_extension}}"  # eg
+                                                                           # "./libfoo.dylib"
       rspfile = dylib + ".rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
@@ -260,7 +249,8 @@ template("mac_toolchain") {
     }
 
     tool("solink_module") {
-      sofile = "{{output_dir}}/{{target_output_name}}{{output_extension}}"  # eg "./libfoo.so"
+      sofile = "{{output_dir}}/{{target_output_name}}{{output_extension}}"  # eg
+                                                                            # "./libfoo.so"
       rspfile = sofile + ".rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
@@ -281,9 +271,7 @@ template("mac_toolchain") {
       default_output_dir = "{{root_out_dir}}"
       default_output_extension = ".so"
 
-      outputs = [
-        sofile,
-      ]
+      outputs = [ sofile ]
 
       if (_save_unstripped_output) {
         outputs += [ _unstripped_output ]
@@ -306,9 +294,7 @@ template("mac_toolchain") {
       command = "$env_wrapper $linker_driver $ld {{ldflags}} -o \"$outfile\" -Wl,-filelist,\"$rspfile\" {{solibs}} {{libs}}"
       description = "LINK $outfile"
       rspfile_content = "{{inputs_newline}}"
-      outputs = [
-        outfile,
-      ]
+      outputs = [ outfile ]
 
       if (_save_unstripped_output) {
         outputs += [ _unstripped_output ]
