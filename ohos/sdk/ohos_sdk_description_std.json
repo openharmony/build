@@ -258,7 +258,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//ark/runtime/assembler:ark_asm",
+        "module_label": "//ark/runtime_core/assembler:ark_asm",
         "target_os": [
             "windows",
             "linux",
@@ -267,7 +267,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//ark/runtime/disassembler:ark_disasm",
+        "module_label": "//ark/runtime_core/disassembler:ark_disasm",
         "target_os": [
             "windows",
             "linux",
