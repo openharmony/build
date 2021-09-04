@@ -196,7 +196,7 @@ else
     npm install
 fi
 
-if [ -d "${code_dir}/ark/ts2abc" ]; then
+if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     cd ${code_dir}/ark/ts2abc/ts2panda
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
