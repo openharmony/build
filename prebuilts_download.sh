@@ -218,5 +218,17 @@ if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     /bin/cp -rf ${code_dir}/ark/ts2abc/ts2panda/node_modules ${code_dir}/prebuilts/build-tools/common/ts2abc/
 fi
 
+#安装鸿蒙sdk中js组件的相关依赖
+if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
+    cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    npm config set registry http://registry.npm.taobao.org
+    if [ "X${SKIP_SSL}" == "XYES" ];then
+        npm config set strict-ssl false
+    fi
+    npm cache clean -f
+    npm install
+fi
+
 cd ${code_dir}
 echo -e "\n"
