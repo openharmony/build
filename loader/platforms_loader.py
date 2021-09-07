@@ -42,11 +42,13 @@ class PlatformsLoader:
         if config_info is None:
             raise Exception("read file '{}' failed.".format(
                 self._platforms_config_file))
+        config_version = config_info.get('version')
         platforms_info = config_info.get('platforms')
 
         platforms_config = {}
         for _name, _platform_infos in platforms_info.items():
-            for _info in _platform_infos:
+            if config_version >= 2:
+                _info = _platform_infos
                 target_os = _info.get('target_os')
                 target_cpu = _info.get('target_cpu')
                 if target_os is None or target_cpu is None:
@@ -60,6 +62,21 @@ class PlatformsLoader:
                     _infos = {}
                 _infos[_name] = _info
                 platforms_config[arch] = _infos
+            else:
+                for _info in _platform_infos:
+                    target_os = _info.get('target_os')
+                    target_cpu = _info.get('target_cpu')
+                    if target_os is None or target_cpu is None:
+                        error_info = "platform '{}' config incorrect,"\
+                            "target_os or target_cpu is None."
+                        raise Exception(error_info.format(_name))
+                    arch = "{}_{}".format(target_os, target_cpu)
+                    if arch in platforms_config:
+                        _infos = platforms_config.get(arch)
+                    else:
+                        _infos = {}
+                    _infos[_name] = _info
+                    platforms_config[arch] = _infos
         return platforms_config
 
     @staticmethod

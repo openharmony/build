@@ -120,14 +120,15 @@ export BUILD_IMAGE=true
 cd ${source_root_dir}
 
 # preloader
+_preloader_output_dir="out/preloader"
 ${PYTHON3} ${source_root_dir}/build/loader/preloader/preloader.py \
   --product-name ${product_name} \
   --source-root-dir ${source_root_dir} \
   --products-config-dir "productdefine/common/products" \
   --lite-products-config-dir "vendor" \
-  --preloader-output-root-dir "out/build_configs"
+  --preloader-output-root-dir ${_preloader_output_dir}
 
-source ${source_root_dir}/out/build_configs/${product_name}/preloader/build.prop
+source ${source_root_dir}/${_preloader_output_dir}/${product_name}/build.prop
 
 # call build
 ${source_root_dir}/build/build_scripts/build_${os_level}.sh \
@@ -135,6 +136,7 @@ ${source_root_dir}/build/build_scripts/build_${os_level}.sh \
   --device-name ${device_name} \
   --target-os ${target_os} \
   --target-cpu ${target_cpu} \
+  --build-gnargs-file "${source_root_dir}/${_preloader_output_dir}/${product_name}/build_gnargs.prop" \
   ${build_params}
 
 if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
