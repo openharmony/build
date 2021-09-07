@@ -273,5 +273,23 @@
             "linux",
             "darwin"
         ]
+    },
+	    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/packing_tool:hmos_app_packing_tool_java",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/packing_tool:hmos_app_unpacking_tool_java",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
     }
 ]
