@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import("//build/config/python.gni")
+import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/cxx/cxx.gni")
 
@@ -207,7 +208,12 @@ template("ohos_distributedtest") {
 
 template("ohos_fuzztest") {
   _ohos_test(target_name) {
-    forward_variables_from(invoker, "*", [ "deps", "cflags" ])
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "deps",
+                             "cflags",
+                           ])
     test_type = "fuzztest"
     deps = []
     if (defined(invoker.deps)) {
@@ -369,5 +375,58 @@ template("ohos_fuzztest_py") {
   _ohos_test_py(target_name) {
     forward_variables_from(invoker, "*")
     test_type = "fuzztest"
+  }
+}
+
+#js api test template
+template("ohos_js_test") {
+  assert(defined(invoker.test_type), "test_type must be defined.")
+  assert(defined(invoker.hap_profile), "hap_profile must be defined.")
+  assert(defined(invoker.module_out_path), "module_out_path must be defined.")
+
+  # generate module list file in gn stage
+  _gen_module_list_script = "//build/ohos/testfwk/gen_module_list_files.py"
+  _arguments = [
+    "--target",
+    target_name,
+    "--target_label",
+    get_label_info(":$target_name", "label_with_toolchain"),
+    "--source_dir",
+    rebase_path(get_label_info(":$target_name", "dir"), root_build_dir),
+    "--test_type",
+    invoker.test_type,
+  ]
+
+  _test_output_dir =
+      "$root_out_dir/tests/${invoker.test_type}/${invoker.module_out_path}"
+  _module_list_file = "$root_out_dir/module_list_files/${invoker.module_out_path}/$target_name.mlf"
+
+  _arguments += [
+    "--output_dir",
+    rebase_path(_test_output_dir, root_build_dir),
+    "--module_list_file",
+    rebase_path(_module_list_file, root_build_dir),
+  ]
+  exec_script(_gen_module_list_script, _arguments)
+
+  ohos_hap(target_name) {
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "test_type",
+                             "module_out_path",
+                             "visibility",
+                           ])
+    forward_variables_from(invoker, [ "visibility" ])
+
+    hap_path = "$_test_output_dir/$target_name.hap"
+    testonly = true
+  }
+}
+
+template("ohos_js_unittest") {
+  ohos_js_test(target_name) {
+    forward_variables_from(invoker, "*")
+    test_type = "unittest"
   }
 }
