@@ -142,20 +142,33 @@ do
 done
 
 
+case $(uname -s) in
+    Linux)
+        host_platform=linux
+        ;;
+    Darwin)
+        host_platform=darwin
+        ;;
+    *)
+        echo "Unsupported host platform: $(uname -s)"
+        exit 1
+esac
+
 node_js_ver=v12.18.4
-node_js=node-${node_js_ver}-linux-x64.tar.gz
+node_js_name=node-${node_js_ver}-${host_platform}-x64
+node_js_pkg=${node_js_name}.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
-if [ ! -f "${node_js}" ]; then
-    wget -t3 -T10 ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js}
-    tar zxf ${node_js}
+if [ ! -f "${node_js_pkg}" ]; then
+    wget -t3 -T10 ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js_pkg}
+    tar zxf ${node_js_pkg}
 fi
 
 if [ ! -d "${code_dir}/third_party/jsframework" ]; then
     echo "${code_dir}/third_party/jsframework not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/third_party/jsframework/
-    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
@@ -179,7 +192,7 @@ if [ ! -d "${code_dir}/developtools/ace-ets2bundle/compiler" ]; then
     echo "${code_dir}/developtools/ace-ets2bundle/compiler not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/developtools/ace-ets2bundle/compiler
-    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
@@ -192,7 +205,7 @@ if [ ! -d "${code_dir}/developtools/ace-js2bundle/ace-loader" ]; then
     echo "${code_dir}/developtools/ace-js2bundle/ace-loader not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader
-    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
@@ -203,7 +216,7 @@ fi
 
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     cd ${code_dir}/ark/ts2abc/ts2panda
-    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
@@ -226,7 +239,7 @@ fi
 #安装鸿蒙sdk中js组件的相关依赖
 if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
     cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader
-    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v12.18.4-linux-x64/bin:$PATH
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
