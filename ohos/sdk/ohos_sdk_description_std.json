@@ -273,5 +273,24 @@
             "linux",
             "darwin"
         ]
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/packing_tool:app_packing_tool",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/packing_tool:app_unpacking_tool",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
     }
+	
 ]
