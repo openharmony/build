@@ -419,7 +419,8 @@ template("ohos_js_test") {
                            ])
     forward_variables_from(invoker, [ "visibility" ])
 
-    hap_path = "$_test_output_dir/$target_name.hap"
+    final_hap_path = "$_test_output_dir/$target_name.hap"
+    js_build_mode = "debug"
     testonly = true
   }
 }
