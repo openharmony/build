@@ -4,7 +4,7 @@
 
 import("//build/toolchain/toolchain.gni")
 
-default_clang_base_path = "//prebuilts/clang/ohos/linux-x86_64/llvm"
+default_clang_base_path = "//prebuilts/clang/ohos/${host_platform_dir}/llvm"
 
 declare_args() {
   # Indicates if the build should use the Chrome-specific plugins for enforcing
