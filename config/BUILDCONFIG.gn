@@ -177,9 +177,9 @@ if (target_os == "ohos" && target_cpu == "x86_64") {
 
 # different host platform tools directory.
 if (host_os == "linux") {
-  host_platform_dir = "linux-x86"
+  host_platform_dir = "linux-x86_64"
 } else if (host_os == "mac") {
-  host_platform_dir = "darwin-x86"
+  host_platform_dir = "darwin-x86_64"
 } else {
   assert(false, "Unsupported host_os: $host_os")
 }
