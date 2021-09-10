@@ -159,7 +159,7 @@ def _get_merge_subsystem_config(product_config_path, device_config_path,
     product_info = read_json_file(product_config_file)
     product_build_path = 'no_path'
     if product_info:
-        product_build_path = product_info.get('product_build_path')
+        product_build_path = product_info.get('product_build_path', 'no_path')
     if product_build_path != 'no_path' and product_build_path != '':
         product_subsystem_info['path'] = product_build_path
         product_subsystem_name = "product_{}".format(product_name)
