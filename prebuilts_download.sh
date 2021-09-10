@@ -98,6 +98,8 @@ prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compi
 prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/linux/clang-73276-release-linux-x86_64.tar.bz2
 prebuilts/clang/ohos/darwin-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/darwin/clang-73276-release-darwin-x86_64.tar.bz2
 prebuilts/build-tools/common,https://repo.huaweicloud.com/harmonyos/compiler/restool/1.023-d/restool.tar.gz
+prebuilts/previewer/2.2.0.3/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/windows/previewer.tar.gz
+prebuilts/previewer/2.2.0.3/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/darwin/previewer.tar.gz
 """
 if [ ! -d "${bin_dir}" ];then
     mkdir -p "${bin_dir}"
