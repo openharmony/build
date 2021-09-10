@@ -312,6 +312,15 @@
             "windows",
             "darwin"
         ]
+    },
+    {
+        "install_dir": "previewer",
+        "module_label": "//developtools/ace-js2bundle:previewer_copy",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
     }
 	
 ]
