@@ -207,6 +207,7 @@ if [ ! -d "${code_dir}/developtools/ace-js2bundle/ace-loader" ]; then
     echo "${code_dir}/developtools/ace-js2bundle/ace-loader not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader
+    cp package-lock.json package-lock-tmp.json
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry http://registry.npm.taobao.org
     if [ "X${SKIP_SSL}" == "XYES" ];then
@@ -214,6 +215,8 @@ else
     fi
     npm cache clean -f
     npm install
+    rm package-lock.json
+    mv package-lock-tmp.json package-lock.json
 fi
 
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
