@@ -74,6 +74,19 @@ Remote sha256: ${check_sha256}
 Local sha256: ${local_sha256}"""
     exit 1
 }
+
+case $(uname -s) in
+    Linux)
+        host_platform=linux
+        ;;
+    Darwin)
+        host_platform=darwin
+        ;;
+    *)
+        echo "Unsupported host platform: $(uname -s)"
+        exit 1
+esac
+
 # 代码下载目录
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
@@ -82,25 +95,30 @@ code_dir=$(dirname ${script_path})
 bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
 
 # 二进制关系
-copy_config="""prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz
-prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz
-prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz
-prebuilts/build-tools/darwin-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/darwin/gn-darwin-x86-1717.tar.gz
-prebuilts/build-tools/linux-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/linux/gn-linux-x86-1717.tar.gz
-prebuilts/build-tools/darwin-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/darwin/ninja-darwin-x86-1.10.1.tar.gz
-prebuilts/build-tools/linux-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/linux/ninja-linux-x86-1.10.1.tar.gz
-prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/darwin/python-darwin-x86-3.8.5.tar.gz
-prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/linux/python-linux-x86-3.8.5.tar.gz
-prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
-prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
-prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+copy_config="""
 prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
-prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/linux/clang-73276-release-linux-x86_64.tar.bz2
-prebuilts/clang/ohos/darwin-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/darwin/clang-73276-release-darwin-x86_64.tar.bz2
 prebuilts/build-tools/common,https://repo.huaweicloud.com/harmonyos/compiler/restool/1.023-d/restool.tar.gz
-prebuilts/previewer/2.2.0.3/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/windows/previewer.tar.gz
-prebuilts/previewer/2.2.0.3/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/darwin/previewer.tar.gz
+prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
+prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
+prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
+prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
+prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/${host_platform}/clang-73276-release-${host_platform}-x86_64.tar.bz2
 """
+
+if [[ "${host_platform}" == "linux" ]]; then
+    copy_config+="""
+        prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz
+        prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
+        prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
+        prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+        prebuilts/previewer/2.2.0.3/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/windows/previewer.tar.gz
+        """
+elif [[ "${host_platform}" == "darwin" ]]; then
+    copy_config+="""
+        prebuilts/previewer/2.2.0.3/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/darwin/previewer.tar.gz
+        """
+fi
+
 if [ ! -d "${bin_dir}" ];then
     mkdir -p "${bin_dir}"
 fi
@@ -143,18 +161,6 @@ do
     fi
 done
 
-
-case $(uname -s) in
-    Linux)
-        host_platform=linux
-        ;;
-    Darwin)
-        host_platform=darwin
-        ;;
-    *)
-        echo "Unsupported host platform: $(uname -s)"
-        exit 1
-esac
 
 node_js_ver=v12.18.4
 node_js_name=node-${node_js_ver}-${host_platform}-x64
