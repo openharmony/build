@@ -314,44 +314,8 @@
         ]
     },
     {
-        "install_dir": "previewer/common/bin/",
-        "module_label": "//developtools/ace-js2bundle:common_bin",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/liteWearable/bin/",
-        "module_label": "//developtools/ace-js2bundle:liteWearable_bin",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/liteWearable/config/default/",
-        "module_label": "//developtools/ace-js2bundle:liteWearable_default",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/liteWearable/config/images/",
-        "module_label": "//developtools/ace-js2bundle:liteWearable_images",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/liteWearable/config/",
-        "module_label": "//developtools/ace-js2bundle:liteWearable_font",
+        "install_dir": "previewer",
+        "module_label": "//developtools/ace-js2bundle:previewer_copy",
         "target_os": [
             "windows",
             "linux",
