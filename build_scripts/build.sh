@@ -85,6 +85,7 @@ if [[ "${product_name}x" == "x" ]]; then
   exit 1
 fi
 
+product_name=$(echo ${product_name} | cut -d @ -f 1)
 
 case $(uname -s) in
     Darwin)
@@ -128,7 +129,7 @@ ${PYTHON3} ${source_root_dir}/build/loader/preloader/preloader.py \
 source ${source_root_dir}/out/build_configs/${product_name}/preloader/build.prop
 
 # call build
-${source_root_dir}/build/build_scripts/build_${system_type}.sh \
+${source_root_dir}/build/build_scripts/build_${os_level}.sh \
   --product-name ${product_name} \
   --device-name ${device_name} \
   --target-os ${target_os} \
