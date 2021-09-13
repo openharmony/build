@@ -53,6 +53,27 @@
         ]
     },
     {
+        "install_dir": "toolchains",
+        "module_label": "//prebuilts/build-tools/common/restool:restool_linux",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//prebuilts/build-tools/common/restool:restool_windows",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//prebuilts/build-tools/common/restool:restool_darwin",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/api",
         "module_label": "//interface/sdk-js:ace_platform",
         "target_os": [
