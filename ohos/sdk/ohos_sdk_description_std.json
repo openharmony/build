@@ -273,8 +273,8 @@
             "linux",
             "darwin"
         ]
-    }
-	    {
+    },
+    {
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool/jar:app_packing_tool",
         "target_os": [
