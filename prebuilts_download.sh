@@ -97,6 +97,8 @@ prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/
 prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
 prebuilts/clang/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-69957/linux/clang-69957-linux-x86_64.tar.bz2
 prebuilts/build-tools/common,https://repo.huaweicloud.com/harmonyos/compiler/restool/1.023-d/restool.tar.gz
+prebuilts/previewer/2.2.0.3/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/windows/previewer.tar.gz
+prebuilts/previewer/2.2.0.3/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/darwin/previewer.tar.gz
 """
 if [ ! -d "${bin_dir}" ];then
     mkdir -p "${bin_dir}"
