@@ -30,7 +30,7 @@ import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
 import("//build/ohos/sdk/sdk.gni")
 
-package_info_file = "$ndk_os_irrelevant_out_dir/uni-package.json"
+package_info_file = "$ndk_os_irrelevant_out_dir/oh-uni-package.json"
 
 package_info = {
   path = "native"

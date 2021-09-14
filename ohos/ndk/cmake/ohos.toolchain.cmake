@@ -28,7 +28,7 @@ get_filename_component(OHOS_SDK_NATIVE "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUT
 file(TO_CMAKE_PATH "${OHOS_SDK_NATIVE}" OHOS_SDK_NATIVE)
 
 # Sdk native version
-file(STRINGS "${OHOS_SDK_NATIVE}/uni-package.json" NATIVE_VER REGEX "\"version\":.*")
+file(STRINGS "${OHOS_SDK_NATIVE}/oh-uni-package.json" NATIVE_VER REGEX "\"version\":.*")
 string(REGEX REPLACE "\"version\":(.*)$" "\\1" SDK_NATIVE_VERSION "${NATIVE_VER}")
 string(STRIP "${SDK_NATIVE_VERSION}" SDK_NATIVE_VERSION)
 
