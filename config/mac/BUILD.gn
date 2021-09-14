@@ -31,6 +31,11 @@ config("compiler") {
   # when their commandline changes). Nothing should ever read this define.
   defines = [ "CR_XCODE_VERSION=$xcode_version" ]
 
+  defines += [
+    "_LIBCPP_CONFIG_SITE",
+    "_LIBCPP_HAS_MERGED_TYPEINFO_NAMES_DEFAULT=0",
+  ]
+
   asmflags = common_mac_flags
   cflags = common_mac_flags
 
@@ -72,12 +77,6 @@ config("runtime_library") {
   asmflags = common_flags
   cflags = common_flags
   ldflags = common_flags
-
-  if (is_double_framework) {
-    ldflags +=
-        [ rebase_path("${asdk_libs_dir}/assistant_tools/mac/lib/libc++.dylib",
-                      root_build_dir) ]
-  }
 
   # Prevent Mac OS X AssertMacros.h (included by system header) from defining
   # macros that collide with common names, like 'check', 'require', and
