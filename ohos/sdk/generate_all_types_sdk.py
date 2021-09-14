@@ -91,7 +91,7 @@ foreach(os, sdk_systems) {
         {% set _display_name = sdk_type.capitalize() %}
     {% endif %}
     package_info_file =
-        "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/uni-package.json"
+        "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/oh-uni-package.json"
     package_info = {}
     package_info = {
       path = "{{ sdk_type }}"
