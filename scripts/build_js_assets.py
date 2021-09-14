@@ -86,7 +86,7 @@ def main(args):
         options.webpack_config_js,
     ]
     if options.js2abc:
-        cmd.extend(['--compilerType', 'ark'])
+        cmd.extend(['--env', 'compilerType=ark'])
 
     build_utils.call_and_write_depfile_if_stale(
         lambda: build_ace(cmd, options),
