@@ -339,6 +339,24 @@
             "windows",
             "darwin"
         ]
+    },
+    {
+        "install_dir": "toolchains/configcheck",
+        "module_label": "//developtools/packing_tool/configcheck:configSchema_lite_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/configcheck",
+        "module_label": "//developtools/packing_tool/configcheck:configSchema_rich_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
     }
 	
 ]
