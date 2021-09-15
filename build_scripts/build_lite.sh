@@ -41,7 +41,7 @@ do
     ;;
   --ccache)
     ;;
-  --build-target | -t)
+  --build-target | -T | -t)
     shift
     build_target="${build_target} $1"
     ;;
@@ -64,4 +64,8 @@ done
 
 source out/build_configs/${product_name}/preloader/build.prop
 # build lite
-python3 build.py -p ${product_name}@${product_company} ${args}
+build_cmd="python3 build.py -p ${product_name}@${product_company} ${args}"
+if [ -z "${build_target}" ]; then
+    build_cmd+=" -T ${build_target}"
+fi
+${build_cmd}
