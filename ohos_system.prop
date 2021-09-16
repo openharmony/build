@@ -16,12 +16,12 @@
 hw_sc.build.os.enable=true
 
 # ohos API version number.
-hw_sc.build.os.apiversion=6
+hw_sc.build.os.apiversion=7
 
 # ohos system version.
-hw_sc.build.os.version=2.2.0
+hw_sc.build.os.version=3.0.0
 
 # ohos device type please use hw_sc.build.os.devicetype
 
 # ohos release type
-hw_sc.build.os.releasetype=Canary1
+hw_sc.build.os.releasetype=Release
