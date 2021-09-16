@@ -323,7 +323,7 @@
         ]
     },
     {
-        "install_dir": "toolchains/lib",
+        "install_dir": "js/build-tools/binary-tools",
         "module_label": "//developtools/packing_tool/jar:fastjson_utils_java",
         "target_os": [
             "linux",
@@ -332,7 +332,7 @@
         ]
     },
     {
-        "install_dir": "toolchains/lib",
+        "install_dir": "js/build-tools/binary-tools",
         "module_label": "//developtools/packing_tool/jar:haptobin_tool",
         "target_os": [
             "linux",
