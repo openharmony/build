@@ -103,7 +103,7 @@ prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harm
 prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/${host_platform}/clang-73276-release-${host_platform}-x86_64.tar.bz2
-prebuilts/,https://repo.huaweicloud.com/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20210917.tar.gz
+prebuilts/,https://repo.huaweicloud.com/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20210918.tar.gz
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
