@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 set -e
-for i in "$@"; do 
-  case $i in 
+for i in "$@"; do
+  case "$i" in
     -skip-ssl|--skip-ssl) # wget、npm跳过ssl检查,如使用此参数:
     # 黑客等不法分子可以篡改或窃取客户端和服务器之间传输的信息和数据，从而影响用户的数据安全!
     SKIP_SSL=YES
@@ -23,18 +23,18 @@ done
 if [ "X${SKIP_SSL}" == "XYES" ];then
     wget_ssl_check='--no-check-certificate'
 else
-    wget_ssl_check=
+    wget_ssl_check=''
 fi
 sha256_result=0
-check_sha256=
-local_sha256=
+check_sha256=''
+local_sha256=''
 function check_sha256(){
     success_color='\033[1;42mSuccess\033[0m'
     failed_color='\033[1;41mFailed\033[0m'
     check_url=$1 #来源URL
     local_file=$2  #本地文件绝对路径
-    check_sha256=`curl -s -k ${check_url}.sha256`  # 当前使用华为云,URL固定,所以写死了,后续如果有变动,此处需要修改
-    local_sha256=`sha256sum ${local_file} |awk '{print $1}'`
+    check_sha256=$(curl -s -k ${check_url}.sha256)  # 当前使用华为云,URL固定,所以写死了,后续如果有变动,此处需要修改
+    local_sha256=$(sha256sum ${local_file} |awk '{print $1}')
     if [ "X${check_sha256}" == "X${local_sha256}" ];then
         echo -e "${success_color},${check_url} Sha256 check OK."
         sha256_result=0

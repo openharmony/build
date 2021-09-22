@@ -3,7 +3,6 @@
 # Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Runs 'ld -shared' and generates a .TOC file that's untouched when unchanged.
 
 This script exists to avoid using complex shell commands in
@@ -24,7 +23,9 @@ def collect_soname(args):
     """Replaces: readelf -d $sofile | grep SONAME"""
     toc = ''
     readelf = subprocess.Popen(wrapper_utils.command_to_run(
-        [args.readelf, '-d', args.sofile]), stdout=subprocess.PIPE, bufsize=-1)
+        [args.readelf, '-d', args.sofile]),
+                               stdout=subprocess.PIPE,
+                               bufsize=-1)
     for line in readelf.stdout:
         if b'SONAME' in line:
             toc += line.decode()
@@ -41,9 +42,10 @@ def collect_dyn_sym(args):
         _command.extend(['--format=posix', '-g', '-D'])
     _command.append(args.sofile)
     nm = subprocess.Popen(wrapper_utils.command_to_run(_command),
-                          stdout=subprocess.PIPE, bufsize=-1)
+                          stdout=subprocess.PIPE,
+                          bufsize=-1)
     for line in nm.stdout:
-        toc += ' '.join(line.decode().split(' ', 2)[:2]) + '\n'
+        toc += '{}\n'.format(' '.join(line.decode().split(' ', 2)[:2]))
     return nm.wait(), toc
 
 
@@ -65,10 +67,11 @@ def update_toc(tocfile, toc):
         with open(tocfile, 'w') as fp:
             fp.write(toc)
 
+
 def reformat_rsp_file(rspfile):
     """ Move all implibs from --whole-archive section"""
     with open(rspfile, "r") as fi:
-       rspcontent = fi.read()
+        rspcontent = fi.read()
     result = []
     implibs = []
     naflag = False
@@ -117,11 +120,8 @@ def main():
                         required=True,
                         help='Final output shared object file',
                         metavar='FILE')
-    parser.add_argument('--libfile',
-                        required=False,
-                        metavar='FILE')
-    parser.add_argument('command', nargs='+',
-                        help='Linking command')
+    parser.add_argument('--libfile', required=False, metavar='FILE')
+    parser.add_argument('command', nargs='+', help='Linking command')
     args = parser.parse_args()
 
     if args.sofile.endswith(".dll"):
@@ -138,8 +138,8 @@ def main():
 
     # First, run the actual link.
     command = wrapper_utils.command_to_run(args.command)
-    result = wrapper_utils.run_link_with_optional_map_file(command, env=fast_env,
-                                                           map_file=args.map_file)
+    result = wrapper_utils.run_link_with_optional_map_file(
+        command, env=fast_env, map_file=args.map_file)
 
     if result != 0:
         return result
@@ -156,9 +156,9 @@ def main():
 
     # Finally, strip the linked shared object file (if desired).
     if args.strip:
-        result = subprocess.call(wrapper_utils.command_to_run([args.strip, '-o',
-                                                               args.output,
-                                                               args.sofile]))
+        result = subprocess.call(
+            wrapper_utils.command_to_run(
+                [args.strip, '-o', args.output, args.sofile]))
     if args.libfile:
         libfile_name = os.path.basename(args.libfile)
         sofile_output_dir = os.path.dirname(args.sofile)
