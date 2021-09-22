@@ -26,8 +26,7 @@ import optparse
 # Some clients do not add //build/scripts/util to PYTHONPATH.
 from . import md5_check  # pylint: disable=relative-import
 
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 import gn_helpers
 
 # Definition copied from pylib/constants/__init__.py to avoid adding
@@ -35,9 +34,8 @@ import gn_helpers
 DIR_SOURCE_ROOT = os.environ.get(
     'CHECKOUT_SOURCE_ROOT',
     os.path.abspath(
-        os.path.join(
-            os.path.dirname(__file__), os.pardir, os.pardir, os.pardir,
-            os.pardir)))
+        os.path.join(os.path.dirname(__file__), os.pardir, os.pardir,
+                     os.pardir, os.pardir)))
 
 HERMETIC_TIMESTAMP = (2001, 1, 1, 0, 0, 0)
 _HERMETIC_FILE_ATTR = (0o644 << 16)
@@ -128,7 +126,10 @@ def write_json(obj, path, only_if_changed=False):
         with open(path, 'r') as oldfile:
             old_dump = oldfile.read()
 
-    new_dump = json.dumps(obj, sort_keys=True, indent=2, separators=(',', ': '))
+    new_dump = json.dumps(obj,
+                          sort_keys=True,
+                          indent=2,
+                          separators=(',', ': '))
 
     if not only_if_changed or old_dump != new_dump:
         with open(path, 'w') as outfile:
@@ -154,9 +155,9 @@ def atomic_output(path, only_if_changed=True):
         subprocess.check_call(['prog', '--output', tmp_file.name])
     """
     # Create in same directory to ensure same filesystem when moving.
-    with tempfile.NamedTemporaryFile(
-            suffix=os.path.basename(path), dir=os.path.dirname(path),
-            delete=False) as f:
+    with tempfile.NamedTemporaryFile(suffix=os.path.basename(path),
+                                     dir=os.path.dirname(path),
+                                     delete=False) as f:
         try:
             # Change tempfile permission to 664
             os.fchmod(f.fileno(), 0o664)
@@ -164,8 +165,8 @@ def atomic_output(path, only_if_changed=True):
 
             # file should be closed before comparison/move.
             f.close()
-            if not (only_if_changed and os.path.exists(path) and
-                    filecmp.cmp(f.name, path)):
+            if not (only_if_changed and os.path.exists(path)
+                    and filecmp.cmp(f.name, path)):
                 shutil.move(f.name, path)
         finally:
             if os.path.exists(f.name):
@@ -175,7 +176,6 @@ def atomic_output(path, only_if_changed=True):
 class called_process_error(Exception):
     """This exception is raised when the process run by check_output
     exits with a non-zero exit code."""
-
     def __init__(self, cwd, args, output):
         super(called_process_error, self).__init__()
         self.cwd = cwd
@@ -205,26 +205,29 @@ def filter_lines(output, filter_string):
       The filtered output, as a single string.
     """
     re_filter = re.compile(filter_string)
-    return '\n'.join(
-        line for line in output.splitlines() if not re_filter.search(line))
+    return '\n'.join(line for line in output.splitlines()
+                     if not re_filter.search(line))
 
 
 # This can be used in most cases like subprocess.check_output(). The output,
 # particularly when the command fails, better highlights the command's failure.
 # If the command fails, raises a build_utils.called_process_error.
 def check_output(args,
-                cwd=None,
-                env=None,
-                print_stdout=False,
-                print_stderr=True,
-                stdout_filter=None,
-                stderr_filter=None,
-                fail_func=lambda returncode, stderr: returncode != 0):
+                 cwd=None,
+                 env=None,
+                 print_stdout=False,
+                 print_stderr=True,
+                 stdout_filter=None,
+                 stderr_filter=None,
+                 fail_func=lambda returncode, stderr: returncode != 0):
     if not cwd:
         cwd = os.getcwd()
 
-    child = subprocess.Popen(
-        args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd, env=env)
+    child = subprocess.Popen(args,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             cwd=cwd,
+                             env=env)
     stdout, stderr = child.communicate()
 
     if stdout_filter is not None:
@@ -286,10 +289,10 @@ def _is_symlink(zip_file, name):
 
 
 def extract_all(zip_path,
-               path=None,
-               no_clobber=True,
-               pattern=None,
-               predicate=None):
+                path=None,
+                no_clobber=True,
+                pattern=None,
+                predicate=None):
     if path is None:
         path = os.getcwd()
     elif not os.path.exists(path):
@@ -328,10 +331,10 @@ def extract_all(zip_path,
 
 
 def add_to_zip_hermetic(zip_file,
-                     zip_path,
-                     src_path=None,
-                     data=None,
-                     compress=None):
+                        zip_path,
+                        src_path=None,
+                        data=None,
+                        compress=None):
     """Adds a file to the given ZipFile with a hard-coded modified time.
 
     Args:
@@ -379,8 +382,11 @@ def add_to_zip_hermetic(zip_file,
     zip_file.writestr(zipinfo, data, compress_type)
 
 
-def do_zip(inputs, output, base_dir=None, compress_fn=None,
-          zip_prefix_path=None):
+def do_zip(inputs,
+           output,
+           base_dir=None,
+           compress_fn=None,
+           zip_prefix_path=None):
     """Creates a zip file from a list of files.
 
     Args:
@@ -404,8 +410,10 @@ def do_zip(inputs, output, base_dir=None, compress_fn=None,
             if zip_prefix_path:
                 zip_path = os.path.join(zip_prefix_path, zip_path)
             compress = compress_fn(zip_path) if compress_fn else None
-            add_to_zip_hermetic(outfile, zip_path, src_path=fs_path,
-                             compress=compress)
+            add_to_zip_hermetic(outfile,
+                                zip_path,
+                                src_path=fs_path,
+                                compress=compress)
 
 
 def zip_dir(output, base_dir, compress_fn=None, zip_prefix_path=None):
@@ -416,12 +424,11 @@ def zip_dir(output, base_dir, compress_fn=None, zip_prefix_path=None):
             inputs.append(os.path.join(root, f))
 
     with atomic_output(output) as f:
-        do_zip(
-            inputs,
-            f,
-            base_dir,
-            compress_fn=compress_fn,
-            zip_prefix_path=zip_prefix_path)
+        do_zip(inputs,
+               f,
+               base_dir,
+               compress_fn=compress_fn,
+               zip_prefix_path=zip_prefix_path)
 
 
 def matches_glob(path, filters):
@@ -454,10 +461,12 @@ def merge_zips(output, input_zips, path_transform=None, merge_args=None):
     options = None
     if merge_args:
         parser = optparse.OptionParser()
-        parser.add_option(
-            '--stripDir', action='append', help='strip specific directory')
-        parser.add_option(
-            '--stripFile', action='append', help='strip specific file.')
+        parser.add_option('--stripDir',
+                          action='append',
+                          help='strip specific directory')
+        parser.add_option('--stripFile',
+                          action='append',
+                          help='strip specific file.')
 
         args = expand_file_args(merge_args)
         options, _ = parser.parse_args(args)
@@ -534,10 +543,8 @@ def _compute_python_dependencies():
     src/. The paths will be relative to the current directory.
     """
     _force_lazy_modules_to_load()
-    module_paths = (
-        m.__file__
-        for m in sys.modules.values()
-        if m is not None and hasattr(m, '__file__') and m.__file__)
+    module_paths = (m.__file__ for m in sys.modules.values()
+                    if m is not None and hasattr(m, '__file__') and m.__file__)
     abs_module_paths = list(map(os.path.abspath, module_paths))
 
     assert os.path.isabs(DIR_SOURCE_ROOT)
@@ -550,7 +557,8 @@ def _compute_python_dependencies():
             return s[:-1]
         return s
 
-    non_system_module_paths = list(map(convert_pyc_to_py, non_system_module_paths))
+    non_system_module_paths = list(
+        map(convert_pyc_to_py, non_system_module_paths))
     non_system_module_paths = list(
         map(os.path.relpath, non_system_module_paths))
     return sorted(set(non_system_module_paths))
@@ -619,7 +627,8 @@ def expand_file_args(args):
             continue
 
         if match.end() != len(arg):
-            raise Exception('Unexpected characters after FileArg: ' + arg)
+            raise Exception(
+                'Unexpected characters after FileArg: {}'.format(arg))
 
         lookup_path = match.group(1).split(':')
         file_path = lookup_path[0]
@@ -634,7 +643,8 @@ def expand_file_args(args):
         # This should match parse_gn_list. The output is either a GN-formatted list
         # or a literal (with no quotes).
         if isinstance(expansion, list):
-            new_args[i] = arg[:match.start()] + gn_helpers.ToGNString(expansion)
+            new_args[i] = arg[:match.start()] + gn_helpers.ToGNString(
+                expansion)
         else:
             new_args[i] = arg[:match.start()] + str(expansion)
 
@@ -651,15 +661,15 @@ def read_sources_list(sources_list_file_name):
 
 
 def call_and_write_depfile_if_stale(function,
-                               options,
-                               record_path=None,
-                               input_paths=None,
-                               input_strings=None,
-                               output_paths=None,
-                               force=False,
-                               pass_changes=False,
-                               depfile_deps=None,
-                               add_pydeps=True):
+                                    options,
+                                    record_path=None,
+                                    input_paths=None,
+                                    input_strings=None,
+                                    output_paths=None,
+                                    force=False,
+                                    pass_changes=False,
+                                    depfile_deps=None,
+                                    add_pydeps=True):
     """Wraps md5_check.call_and_record_if_stale() and writes a depfile if applicable.
 
     Depfiles are automatically added to output_paths when present in the
@@ -685,24 +695,24 @@ def call_and_write_depfile_if_stale(function,
         output_paths += [options.depfile]
 
     def on_stale_md5(changes):
-        args = (changes,) if pass_changes else ()
+        args = (changes, ) if pass_changes else ()
         function(*args)
         if python_deps is not None:
             all_depfile_deps = list(python_deps) if add_pydeps else []
             if depfile_deps:
                 all_depfile_deps.extend(depfile_deps)
-            write_depfile(
-                options.depfile, output_paths[0], all_depfile_deps,
-                add_pydeps=False)
+            write_depfile(options.depfile,
+                          output_paths[0],
+                          all_depfile_deps,
+                          add_pydeps=False)
 
-    md5_check.call_and_record_if_stale(
-        on_stale_md5,
-        record_path=record_path,
-        input_paths=input_paths,
-        input_strings=input_strings,
-        output_paths=output_paths,
-        force=force,
-        pass_changes=True)
+    md5_check.call_and_record_if_stale(on_stale_md5,
+                                       record_path=record_path,
+                                       input_paths=input_paths,
+                                       input_strings=input_strings,
+                                       output_paths=output_paths,
+                                       force=force,
+                                       pass_changes=True)
 
 
 def get_all_files(base, follow_symlinks=False):

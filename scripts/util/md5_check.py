@@ -4,7 +4,6 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-
 import difflib
 import hashlib
 import itertools
@@ -53,13 +52,14 @@ def print_explanations(record_path, changes):
         print('=' * 80)
 
 
-def call_and_record_if_stale(function,  # pylint: disable=invalid-name
-                             record_path=None,
-                             input_paths=None,
-                             input_strings=None,
-                             output_paths=None,
-                             force=False,
-                             pass_changes=False):
+def call_and_record_if_stale(
+        function,  # pylint: disable=invalid-name
+        record_path=None,
+        input_paths=None,
+        input_strings=None,
+        output_paths=None,
+        force=False,
+        pass_changes=False):
     """Calls function if outputs are stale.
 
     Outputs are considered stale if:
@@ -95,10 +95,9 @@ def call_and_record_if_stale(function,  # pylint: disable=invalid-name
     if pycache_enabled:
         # Input strings, input files and outputs names together compose
         # cache manifest, which is the only identifier of a python action.
-        manifest = '-'.join([
-            new_metadata.strings_md5(),
-            new_metadata.files_md5()
-        ] + sorted(output_paths))
+        manifest = '-'.join(
+            [new_metadata.strings_md5(),
+             new_metadata.files_md5()] + sorted(output_paths))
         record_path = pycache.get_manifest_path('{}.manifest'.format(manifest))
         old_metadata = get_old_metadata(record_path)
     else:
@@ -118,7 +117,7 @@ def call_and_record_if_stale(function,  # pylint: disable=invalid-name
 
     print_explanations(record_path, changes)
 
-    args = (changes,) if pass_changes else ()
+    args = (changes, ) if pass_changes else ()
     function(*args)
     if pycache_enabled:
         try:
@@ -133,7 +132,6 @@ def call_and_record_if_stale(function,  # pylint: disable=invalid-name
 
 class Changes(object):
     """Provides and API for querying what changed between runs."""
-
     def __init__(self, old_metadata, new_metadata, force, missing_outputs):
         self.old_metadata = old_metadata
         self.new_metadata = new_metadata
@@ -145,10 +143,10 @@ class Changes(object):
 
     def has_changes(self):
         """Returns whether any changes exist."""
-        return (self.force or
-                not self.old_metadata or
-                self.old_metadata.strings_md5() != self.new_metadata.strings_md5() or
-                self.old_metadata.files_md5() != self.new_metadata.files_md5())
+        return (
+            self.force or not self.old_metadata or
+            self.old_metadata.strings_md5() != self.new_metadata.strings_md5()
+            or self.old_metadata.files_md5() != self.new_metadata.files_md5())
 
     def added_or_modified_only(self):
         """Returns whether the only changes were from added or modified (sub)files.
@@ -245,29 +243,29 @@ class Changes(object):
             return "There's no difference."
 
         lines = []
-        lines.extend('Added: ' + p for p in self.iter_added_paths())
-        lines.extend('Removed: ' + p for p in self.iter_removed_paths())
+        lines.extend('Added: {}'.format(p for p in self.iter_added_paths()))
+        lines.extend('Removed: {}'.format(p
+                                          for p in self.iter_removed_paths()))
         for path in self.iter_modified_paths():
-            lines.append('Modified: ' + path)
-            lines.extend('  -> Subpath added: ' + p
-                         for p in self.iter_added_subpaths(path))
-            lines.extend('  -> Subpath removed: ' + p
-                         for p in self.iter_removed_subpaths(path))
-            lines.extend('  -> Subpath modified: ' + p
-                         for p in self.iter_modified_subpaths(path))
+            lines.append('Modified: {}'.format(path))
+            lines.extend('  -> Subpath added: {}'.format(
+                p for p in self.iter_added_subpaths(path)))
+            lines.extend('  -> Subpath removed: {}'.format(
+                p for p in self.iter_removed_subpaths(path)))
+            lines.extend('  -> Subpath modified: {}'.format(
+                p for p in self.iter_modified_subpaths(path)))
         if lines:
-            return 'Input files changed:\n  ' + '\n  '.join(lines)
+            return 'Input files changed:\n  {}'.format('\n  '.join(lines))
 
         if self.missing_outputs:
-            return 'Outputs do not exist:\n  {}'.format(
-                '\n  '.join(self.missing_outputs))
+            return 'Outputs do not exist:\n  {}'.format('\n  '.join(
+                self.missing_outputs))
 
         return 'I have no idea what changed (there is a bug).'
 
 
 class _Metadata(object):
     """Data model for tracking change metadata."""
-
     def __init__(self):
         self._files_md5 = None
         self._strings_md5 = None
@@ -327,12 +325,17 @@ class _Metadata(object):
           entries: List of (subpath, tag) tuples for entries within the zip.
         """
         self._assert_not_queried()
-        tag = _compute_inline_md5(itertools.chain((e[0] for e in entries),
-                                                  (e[1] for e in entries)))
+        tag = _compute_inline_md5(
+            itertools.chain((e[0] for e in entries), (e[1] for e in entries)))
         self._files.append({
-            'path': path,
-            'tag': tag,
-            'entries': [{"path": e[0], "tag": e[1]} for e in entries],
+            'path':
+            path,
+            'tag':
+            tag,
+            'entries': [{
+                "path": e[0],
+                "tag": e[1]
+            } for e in entries],
         })
 
     def get_strings(self):
@@ -360,8 +363,8 @@ class _Metadata(object):
             for entry in self._files:
                 self._file_map[(entry['path'], None)] = entry
                 for subentry in entry.get('entries', ()):
-                    self._file_map[(
-                        entry['path'], subentry['path'])] = subentry
+                    self._file_map[(entry['path'],
+                                    subentry['path'])] = subentry
         return self._file_map.get((path, subpath))
 
     def get_tag(self, path, subpath=None):
@@ -386,7 +389,7 @@ class _Metadata(object):
         return (entry['path'] for entry in subentries)
 
 
-def _update_md5_for_file(md5, path, block_size=2 ** 16):
+def _update_md5_for_file(md5, path, block_size=2**16):
     # record md5 of linkto for dead link.
     if os.path.islink(path):
         linkto = os.readlink(path)
