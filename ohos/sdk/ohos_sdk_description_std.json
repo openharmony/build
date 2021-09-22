@@ -318,7 +318,6 @@
         "module_label": "//developtools/ace-js2bundle:previewer_copy",
         "target_os": [
             "windows",
-            "linux",
             "darwin"
         ]
     },
