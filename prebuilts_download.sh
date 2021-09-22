@@ -112,11 +112,11 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
         prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
         prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-        prebuilts/previewer/2.2.0.3/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/windows/previewer.tar.gz
+        prebuilts/previewer/2.2.0.63/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.63/windows/previewer.tar.gz
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
-        prebuilts/previewer/2.2.0.3/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.3/darwin/previewer.tar.gz
+        prebuilts/previewer/2.2.0.63/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/2.2.0.63/darwin/previewer.tar.gz
         """
 fi
 
