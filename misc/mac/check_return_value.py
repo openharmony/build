@@ -11,8 +11,8 @@ import os
 import subprocess
 import sys
 
-devnull = open(os.devnull, 'wb')
-if not subprocess.call(sys.argv[1:], stdout=devnull, stderr=devnull):
-  print(1)
-else:
-  print(0)
+with open(os.devnull, 'wb') as devnull:
+    if not subprocess.call(sys.argv[1:], stdout=devnull, stderr=devnull):
+        print(1)
+    else:
+        print(0)
