@@ -124,6 +124,7 @@ ${PYTHON3} ${source_root_dir}/build/loader/preloader/preloader.py \
   --product-name ${product_name} \
   --source-root-dir ${source_root_dir} \
   --products-config-dir "productdefine/common/products" \
+  --lite-products-config-dir "vendor" \
   --preloader-output-root-dir "out/build_configs"
 
 source ${source_root_dir}/out/build_configs/${product_name}/preloader/build.prop

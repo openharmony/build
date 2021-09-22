@@ -1,182 +1,134 @@
 {
   "ace": {
-    "project": "hmf/ace",
     "path": "foundation/ace",
-    "name": "ace",
-    "dir": "foundation"
+    "name": "ace"
+  },
+  "ai": {
+    "path": "foundation/ai",
+    "name": "ai"
   },
   "account": {
-    "project": "hmf/account",
     "path": "base/account",
-    "name": "account",
-    "dir": "base"
+    "name": "account"
   },
   "distributeddatamgr": {
-    "project": "hmf/distributeddatamgr",
     "path": "foundation/distributeddatamgr",
-    "name": "distributeddatamgr",
-    "dir": "foundation"
+    "name": "distributeddatamgr"
   },
   "security": {
-    "project": "hmf/security",
     "path": "base/security",
-    "name": "security",
-    "dir": "base"
+    "name": "security"
   },
   "startup": {
-    "project": "hmf/startup",
     "path": "base/startup",
-    "name": "startup",
-    "dir": "base"
+    "name": "startup"
   },
   "hiviewdfx": {
-    "project": "hmf/hiviewdfx",
     "path": "base/hiviewdfx",
-    "name": "hiviewdfx",
-    "dir": "base"
+    "name": "hiviewdfx"
   },
   "utils": {
-    "project": "hmf/utils",
     "path": "utils",
-    "name": "utils",
-    "dir": "utils"
+    "name": "utils"
   },
   "appexecfwk": {
-    "project": "hmf/appexecfwk",
     "path": "foundation/appexecfwk",
-    "name": "appexecfwk",
-    "dir": "foundation"
+    "name": "appexecfwk"
   },
   "aafwk": {
-    "project": "hmf/aafwk",
     "path": "foundation/aafwk",
-    "name": "aafwk",
-    "dir": "foundation"
+    "name": "aafwk"
   },
   "notification": {
-    "project": "hmf/notification",
     "path": "base/notification",
-    "name": "notification",
-    "dir": "base"
+    "name": "notification"
   },
   "communication": {
-    "project": "hmf/communication",
     "path": "foundation/communication",
-    "name": "communication",
-    "dir": "foundation"
+    "name": "communication"
   },
   "distributedschedule": {
-    "project": "hmf/distributedschedule",
     "path": "foundation/distributedschedule",
-    "name": "distributedschedule",
-    "dir": "foundation"
+    "name": "distributedschedule"
   },
   "hdf": {
-    "project": "hmf/drivers/adapter_uhdf2",
-    "path": "drivers/adapter/uhdf2",
-    "name": "hdf",
-    "dir": "uhdf2"
+    "path": "drivers",
+    "name": "hdf"
   },
   "updater": {
-    "project": "hmf/updater",
     "path": "base/update/updater",
-    "name": "updater",
-    "dir": "base/update"
+    "name": "updater"
   },
   "developtools": {
-    "project": "hmf/developtools",
     "path": "developtools",
-    "name": "developtools",
-    "dir": "developtools"
+    "name": "developtools"
   },
   "sensors": {
-    "project": "hmf/sensors",
     "path": "base/sensors",
-    "name": "sensors",
-    "dir": "base"
+    "name": "sensors"
   },
   "graphic": {
-    "project": "hmf/graphic",
     "path": "foundation/graphic",
-    "name": "graphic",
-    "dir": "foundation"
+    "name": "graphic"
   },
   "miscservices": {
-    "project": "hmf/miscservices",
     "path": "base/miscservices",
-    "name": "miscservices",
-    "dir": "base"
+    "name": "miscservices"
   },
   "multimedia": {
-    "project": "hmf/multimedia",
     "path": "foundation/multimedia",
-    "name": "multimedia",
-    "dir": "foundation"
+    "name": "multimedia"
   },
   "multimodalinput": {
-    "project": "hmf/multimodalinput",
     "path": "foundation/multimodalinput",
-    "name": "multimodalinput",
-    "dir": "foundation"
+    "name": "multimodalinput"
   },
   "telephony": {
-    "project": "hmf/telephony",
     "path": "base/telephony",
-    "name": "telephony",
-    "dir": "base"
+    "name": "telephony"
   },
   "global": {
-    "project": "hmf/global",
     "path": "base/global",
-    "name": "global",
-    "dir": "base"
+    "name": "global"
   },
   "powermgr": {
-    "project": "hmf/powermgr",
     "path": "base/powermgr",
-    "name": "powermgr",
-    "dir": "base"
+    "name": "powermgr"
   },
-  "applications":{
-    "project": "hmf/applications/standard/hap",
+  "applications": {
     "path": "applications/standard",
-    "name": "applications",
-    "dir": "applications"
+    "name": "applications"
   },
   "wpa_supplicant-2.9": {
-    "project": "hmf/wpa_supplicant-2.9",
     "path": "third_party/wpa_supplicant/wpa_supplicant-2.9_standard",
-    "name": "wpa_supplicant-2.9",
-    "dir": "wpa_supplicant-2.9"
+    "name": "wpa_supplicant-2.9"
   },
   "xts": {
-    "project": "hmf/xts",
     "path": "test/xts",
-    "name": "xts",
-    "dir": "test"
+    "name": "xts"
   },
   "distributedhardware": {
-    "project": "hmf/distributedhardware",
     "path": "foundation/distributedhardware",
-    "name": "distributedhardware",
-    "dir": "foundation"
+    "name": "distributedhardware"
   },
   "ark": {
-    "project": "hmf/ark",
     "path": "ark",
-    "name": "ark",
-    "dir": "ark"
+    "name": "ark"
   },
   "ccruntime": {
-    "project": "hmf/js_util_module",
     "path": "base/compileruntime",
-    "name": "ccruntime",
-    "dir": "base"
+    "name": "ccruntime"
+  },
+  "iot": {
+    "path": "domains/iot",
+    "name": "domains"
+  },
+  "iot_hardware": {
+    "path": "base/iot_hardware",
+    "name": "iot_hardware"
   },
   "kernel": {
-    "project":"hmf/kernel",
     "path": "kernel/linux/build",
-    "name": "kernel",
-    "dir": "kernel/linux"
+    "name": "kernel"
   }
 }

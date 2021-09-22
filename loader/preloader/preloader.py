@@ -21,6 +21,7 @@ sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
+from parse_lite_config import get_lite_parts_list  # noqa: E402
 
 
 def _get_product_config(config_dir, product_name):
@@ -66,8 +67,8 @@ def _get_device_info(device_name, device_config_path):
     return device_info
 
 
-def _parse_config_v2(config_info, products_config_path, base_config_dir,
-                     device_config_path):
+def _parse_config_v2(config_info, products_config_path, lite_config_path,
+                     base_config_dir, device_config_path):
     os_level = config_info.get("type")
     base_parts = _get_base_parts(base_config_dir, os_level)
     all_parts = base_parts
@@ -85,6 +86,10 @@ def _parse_config_v2(config_info, products_config_path, base_config_dir,
 
     product_name = config_info.get('product_name')
     product_company = config_info.get('product_company')
+    if os_level == "lite":
+        all_parts.update(
+            get_lite_parts_list(lite_config_path, product_name,
+                                product_company))
     product_device_name = config_info.get('product_device')
     build_configs = {}
     if product_device_name:
@@ -103,8 +108,8 @@ def _parse_config_v1(config_info):
     return {}, build_configs
 
 
-def _parse_config(product_name, products_config_path, base_parts_config_path,
-                  device_config_path):
+def _parse_config(product_name, products_config_path, lite_config_path,
+                  base_parts_config_path, device_config_path):
     curr_config_file = _get_product_config(products_config_path, product_name)
     config_info = read_json_file(curr_config_file)
     config_version = None
@@ -118,7 +123,8 @@ def _parse_config(product_name, products_config_path, base_parts_config_path,
                 "product name configuration incorrect in '{}'".format(
                     curr_config_file))
         return _parse_config_v2(config_info, products_config_path,
-                                base_parts_config_path, device_config_path)
+                                lite_config_path, base_parts_config_path,
+                                device_config_path)
     else:
         return _parse_config_v1(config_info)
 
@@ -190,6 +196,8 @@ def _run(args):
     products_config_path = os.path.join(args.source_root_dir,
                                         args.products_config_dir)
     product_config_root_path = os.path.dirname(products_config_path)
+    lite_config_path = os.path.join(args.source_root_dir,
+                                    args.lite_products_config_dir)
     if args.base_parts_config_dir:
         base_parts_config_path = os.path.join(args.source_root_dir,
                                               args.base_parts_config_dir)
@@ -203,6 +211,7 @@ def _run(args):
 
     all_parts, build_configs = _parse_config(args.product_name,
                                              products_config_path,
+                                             lite_config_path,
                                              base_parts_config_path,
                                              device_config_path)
 
@@ -248,6 +257,7 @@ def main(argv):
     parser.add_argument('--product-name', required=True)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--products-config-dir', required=True)
+    parser.add_argument('--lite-products-config-dir', required=True)
     parser.add_argument('--base-parts-config-dir')
     parser.add_argument('--device-config-dir')
     parser.add_argument('--preloader-output-root-dir', required=True)
