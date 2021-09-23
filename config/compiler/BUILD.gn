@@ -200,8 +200,6 @@ config("compiler") {
     configs += [ "//build/config/nacl:compiler" ]
   } else if (is_mac) {
     configs += [ "//build/config/mac:compiler" ]
-  } else if (is_ios) {
-    configs += [ "//build/config/ios:compiler" ]
   } else if (current_os == "aix") {
     configs += [ "//build/config/aix:compiler" ]
   } else if (is_mingw) {
@@ -246,7 +244,7 @@ config("compiler") {
 
     # Linker warnings.
     if (fatal_linker_warnings && !(is_chromeos && current_cpu == "arm") &&
-        !(is_ohos && use_order_profiling) && !is_mac && !is_ios &&
+        !(is_ohos && use_order_profiling) && !is_mac &&
         current_os != "aix" && !is_mingw) {
       ldflags += [ "-Wl,--fatal-warnings" ]
     }
@@ -292,7 +290,7 @@ config("compiler") {
     ]
   }
 
-  if (is_posix && !(is_mac || is_ios)) {
+  if (is_posix && !(is_mac)) {
     if (enable_profiling) {
       if (!is_debug) {
         cflags += [ "-g" ]
@@ -450,7 +448,7 @@ config("compiler") {
 
   # Makes builds independent of absolute file path.
   # Currently disabled for nacl since its toolchain lacks this flag (too old).
-  if (symbol_level != 0 && is_clang && !is_nacl && !is_mac && !is_ios &&
+  if (symbol_level != 0 && is_clang && !is_nacl && !is_mac &&
       strip_absolute_paths_from_debug_symbols) {
     # If debug option is given, clang includes $cwd in debug info by default.
     # For such build, this flag generates reproducible obj files even we use
@@ -682,7 +680,7 @@ config("compiler_cpu_abi") {
   ldflags = []
   defines = []
 
-  if (is_posix && !(is_mac || is_ios)) {
+  if (is_posix && !(is_mac)) {
     # CPU architecture. We may or may not be doing a cross compile now, so for
     # simplicity we always explicitly set the architecture.
     if (current_cpu == "x64") {
@@ -738,7 +736,7 @@ config("compiler_codegen") {
 
   if (is_nacl) {
     configs += [ "//build/config/nacl:compiler_codegen" ]
-  } else if (is_posix && !is_mac && !is_ios) {
+  } else if (is_posix && !is_mac) {
     if (current_cpu == "x86") {
       if (is_clang) {
         cflags += [ "-momit-leaf-frame-pointer" ]
@@ -758,7 +756,7 @@ config("compiler_codegen") {
 }
 
 config("compiler_arm_fpu") {
-  if (current_cpu == "arm" && !is_ios && !is_nacl) {
+  if (current_cpu == "arm" && !is_nacl) {
     cflags = [ "-mfpu=$arm_fpu" ]
     asmflags = cflags
   }
@@ -766,7 +764,7 @@ config("compiler_arm_fpu") {
 
 config("compiler_arm_thumb") {
   if (current_cpu == "arm" && arm_use_thumb && is_posix &&
-      !(is_mac || is_ios || is_nacl)) {
+      !(is_mac || is_nacl)) {
     cflags = [ "-mthumb" ]
     if (is_ohos && !is_clang) {
       # Clang doesn't support this option.
@@ -810,8 +808,6 @@ config("runtime_library") {
     configs += [ "//build/config/win:runtime_library" ]
   } else if (is_linux) {
     configs += [ "//build/config/linux:runtime_library" ]
-  } else if (is_ios) {
-    configs += [ "//build/config/ios:runtime_library" ]
   } else if (is_mac) {
     configs += [ "//build/config/mac:runtime_library" ]
   } else if (is_ohos) {
@@ -833,16 +829,10 @@ config("default_warnings") {
   cflags_cc = []
   ldflags = []
 
-  if ((is_mac || is_ios) && !is_nacl) {
+  if ((is_mac) && !is_nacl) {
     # When compiling Objective-C, warns if a method is used whose
     # availability is newer than the deployment target.
     cflags += [ "-Wunguarded-availability" ]
-  }
-
-  if (is_ios) {
-    # When compiling Objective-C, warns if a selector named via @selector has
-    # not been defined in any visible interface.
-    cflags += [ "-Wundeclared-selector" ]
   }
 
   # Suppress warnings about ABI changes on ARM (Clang doesn't give this
@@ -1137,7 +1127,7 @@ config("thin_archive") {
   # Mac and iOS use the mac-specific "libtool" command, not ar, which doesn't
   # have a "thin archive" mode (it does accept -T, but it means truncating
   # archive names to 16 characters, which is not what we want).
-  if (is_posix && !is_nacl && !is_mac && !is_ios) {
+  if (is_posix && !is_nacl && !is_mac) {
     arflags = [ "-T" ]
   }
 }
@@ -1309,7 +1299,7 @@ if (is_win) {
     ]
   }
 
-  if (is_mac || is_ios) {
+  if (is_mac) {
     if (symbol_level == 2) {
       # Mac dead code stripping requires symbols.
       common_optimize_on_ldflags += [ "-Wl,-dead_strip" ]
@@ -1635,7 +1625,7 @@ config("symbols") {
       }
     }
   } else {
-    if (is_mac || is_ios) {
+    if (is_mac) {
       cflags = [ "-gdwarf-2" ]
       if (is_mac && enable_dsyms) {
         # If generating dSYMs, specify -fno-standalone-debug. This was
@@ -1668,7 +1658,7 @@ config("symbols") {
     asmflags = cflags
     ldflags = []
 
-    if (!is_mac && !is_ios && !is_nacl && current_cpu != "x86" &&
+    if (!is_mac && !is_nacl && current_cpu != "x86" &&
         (use_gold || use_lld)) {
       if (is_clang) {
         # This flag enables the GNU-format pubnames and pubtypes sections,
@@ -1755,7 +1745,7 @@ config("strip_debug") {
   ldflags += [ "-Wl,--strip-debug" ]
 }
 
-if (is_ios || is_mac) {
+if (is_mac) {
   # On Mac and iOS, this enables support for ARC (automatic ref-counting).
   # See http://clang.llvm.org/docs/AutomaticReferenceCounting.html.
   config("enable_arc") {
