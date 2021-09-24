@@ -71,7 +71,7 @@ def copy_static_library_notices(options, depfiles):
             else:
                 continue
         elif options.image_name == "sdk":
-            install_dir = "java/build-tools/lib"
+            install_dir = "toolchains/lib"
         elif options.image_name == "ndk":
             install_dir = "sysroot/usr/lib"
         else:
