@@ -8,7 +8,6 @@ gn 目标：
 
 L2上的hap包由资源，raw assets，js assets，native库，config.json等部分构成。
 
-具体见：https://developer.harmonyos.com/cn/docs/documentation/doc-guides/basic-fundamentals-0000000000041611
 
 ## 编译系统提供的模板
 
@@ -70,7 +69,7 @@ L2上的hap包由资源，raw assets，js assets，native库，config.json等部
 
   9. certificate_profile: hap对应的授权文件，用于签名
 
-  10. certificate_file: 证书文件，证书文件和授权文件，应用开发者需要去harmonyos官网申请
+  10. certificate_file: 证书文件，证书文件和授权文件，应用开发者需要去openharmony官网申请
 
   11. keystore_path: keystore文件，用于签名
 
