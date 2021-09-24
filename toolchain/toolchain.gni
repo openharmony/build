@@ -19,7 +19,7 @@ declare_args() {
   # Compile with Xcode version of clang instead of hermetic version shipped
   # with the build. Used on iOS to ship official builds (as they are built
   # with the version of clang shipped with Xcode).
-  use_xcode_clang = is_ios && is_official_build
+  use_xcode_clang = false
 
   # Used for binary size analysis.
   # Currently disabled on LLD because of a bug (fixed upstream).
@@ -59,7 +59,7 @@ assert(!use_xcode_clang || target_os == "ios",
 
 # Extension for shared library files (including leading dot).
 executable_extension = ""
-if (is_mac || is_ios) {
+if (is_mac) {
   shlib_extension = ".dylib"
 } else if (is_ohos && is_component_build) {
   # By appending .z, we prevent name collisions with libraries already loaded by the ohos.

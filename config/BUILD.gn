@@ -144,10 +144,6 @@ config("release") {
       defines += [ "DYNAMIC_ANNOTATIONS_ENABLED=0" ]
     }
   }
-
-  if (is_ios) {
-    defines += [ "NS_BLOCK_ASSERTIONS=1" ]
-  }
 }
 
 # Default libraries ------------------------------------------------------------
@@ -205,15 +201,6 @@ config("default_libs") {
     # Targets should choose to explicitly link frameworks they require. Since
     # linking can have run-time side effects, nothing should be listed here.
     libs = []
-  } else if (is_ios) {
-    # The libraries listed here will be specified for both the target and the
-    # host. Only the common ones should be listed here.
-    libs = [
-      "CoreFoundation.framework",
-      "CoreGraphics.framework",
-      "CoreText.framework",
-      "Foundation.framework",
-    ]
   } else if (is_linux) {
     libs = [
       "dl",
@@ -302,11 +289,6 @@ config("executable_config") {
     configs += [ "//build/config/win:cfi_linker" ]
   } else if (is_mac) {
     configs += [ "//build/config/mac:mac_dynamic_flags" ]
-  } else if (is_ios) {
-    configs += [
-      "//build/config/ios:ios_dynamic_flags",
-      "//build/config/ios:ios_executable_flags",
-    ]
   } else if (is_linux || is_ohos || current_os == "aix") {
     configs += [ "//build/config/gcc:executable_ldconfig" ]
     if (is_ohos) {
@@ -337,8 +319,6 @@ config("shared_library_config") {
     configs += _windows_linker_configs
   } else if (is_mac) {
     configs += [ "//build/config/mac:mac_dynamic_flags" ]
-  } else if (is_ios) {
-    configs += [ "//build/config/ios:ios_dynamic_flags" ]
   }
 
   # If we're using the prebuilt instrumented libraries with the sanitizers, we

@@ -5,8 +5,8 @@
 import("//build/config/sanitizers/sanitizers.gni")
 
 # Temporarily disable tcmalloc on arm64 linux to get rid of compilation errors.
-if (is_ohos || is_mac || is_ios || is_asan || is_lsan || is_tsan || is_msan ||
-    is_win || (is_linux && target_cpu == "arm64")) {
+if (is_ohos || is_mac || is_asan || is_lsan || is_tsan || is_msan || is_win ||
+    (is_linux && target_cpu == "arm64")) {
   _default_allocator = "none"
 } else {
   _default_allocator = "tcmalloc"
@@ -31,7 +31,7 @@ declare_args() {
   use_allocator_shim = _default_use_allocator_shim
 
   # Partition alloc is included by default except iOS.
-  use_partition_alloc = !is_ios
+  use_partition_alloc = true
 
   # Use the new tcmalloc. It's relevant only when use_allocator == "tcmalloc".
   use_new_tcmalloc = false

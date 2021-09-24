@@ -74,7 +74,7 @@ assert(!is_cfi || use_thin_lto, "CFI requires ThinLTO")
 
 # If true, optimize for size. Does not affect windows builds.
 # Linux & Mac favor speed over size.
-optimize_for_size = is_ohos || is_ios
+optimize_for_size = is_ohos
 
 declare_args() {
   # Whether we should consider the profile we're using to be accurate. Accurate
@@ -86,7 +86,7 @@ declare_args() {
 
 # Determine whether to enable or disable frame pointers, based on the platform
 # and build arguments.
-if (is_mac || is_ios || is_linux) {
+if (is_mac || is_linux) {
   enable_frame_pointers = true
 } else if (is_win) {
   # 64-bit Windows ABI doesn't support frame pointers.

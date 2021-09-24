@@ -276,8 +276,8 @@ if (custom_toolchain != "") {
 # We set these various is_FOO booleans for convenience in writing OS-based
 # conditions.
 #
-# - is_ohos, is_chromeos, is_ios, and is_win should be obvious.
-# - is_mac is set only for desktop Mac. It is not set on iOS.
+# - is_ohos, is_chromeos, and is_win should be obvious.
+# - is_mac is set only for desktop Mac.
 # - is_posix is true for mac and any Unix-like system (basically everything
 #   except Windows).
 # - is_linux is true for desktop Linux and ChromeOS.
@@ -290,7 +290,6 @@ if (current_os == "win" || current_os == "winuwp") {
   is_aix = false
   is_ohos = false
   is_chromeos = false
-  is_ios = false
   is_linux = false
   is_mac = false
   is_nacl = false
@@ -301,7 +300,6 @@ if (current_os == "win" || current_os == "winuwp") {
   is_aix = false
   is_ohos = false
   is_chromeos = false
-  is_ios = false
   is_linux = false
   is_mac = true
   is_nacl = false
@@ -312,7 +310,6 @@ if (current_os == "win" || current_os == "winuwp") {
   is_aix = false
   is_ohos = true
   is_chromeos = false
-  is_ios = false
   is_linux = false
   is_mac = false
   is_nacl = false
@@ -323,7 +320,6 @@ if (current_os == "win" || current_os == "winuwp") {
   is_aix = false
   is_ohos = false
   is_chromeos = false
-  is_ios = false
   is_linux = true
   is_mac = false
   is_nacl = false
@@ -334,7 +330,6 @@ if (current_os == "win" || current_os == "winuwp") {
   is_aix = false
   is_ohos = false
   is_chromeos = false
-  is_ios = false
   is_linux = false
   is_mac = false
   is_nacl = false
