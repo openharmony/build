@@ -63,6 +63,11 @@ Note:If the text contains special characters, please escape them according to th
 			</policy>
 		</policylist>
 		<filefilterlist>
+			<filefilter name="defaultFilter" desc="Files not to check">
+				<filteritem type="filepath" name="common/musl/ld-musl-aarch64.path" desc="configuration file, this format doesn't support adding license header"/>
+				<filteritem type="filepath" name="common/musl/ld-musl-arm.path" desc="configuration file, this format doesn't support adding license header"/>
+				<filteritem type="filepath" name="common/asan/asan.options" desc="configuration file, this format doesn't support adding license header"/>
+			</filefilter>
 			<filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies" >
 				<filteritem type="filepath" name="gn_helpers.py" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="print_python_deps.py" desc="keep the chromium src copyright"/>
@@ -135,9 +140,6 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="toolchain/mac/get_tool_mtime.py" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="toolchain/mac/linker_driver.py" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="toolchain/ohos/BUILD.gn" desc="keep the chromium src copyright"/>
-				<filteritem type="filepath" name="common/musl/ld-musl-aarch64.path" desc="configuration file, this format doesn't support adding license header"/>
-				<filteritem type="filepath" name="common/musl/ld-musl-arm.path" desc="configuration file, this format doesn't support adding license header"/>
-				<filteritem type="filepath" name="common/asan/asan.options" desc="configuration file, this format doesn't support adding license header"/>
 			</filefilter>
 		</filefilterlist>
 	
