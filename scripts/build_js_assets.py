@@ -58,8 +58,16 @@ def build_ace(cmd, options):
         }
         if not os.path.exists(manifest) and options.hap_profile:
             with open(options.hap_profile) as profile:
-                build_utils.write_json(
-                    json.load(profile)['module']['js'][0], manifest)
+                config = json.load(profile)
+                data = dict()
+                data['appID'] = config['app']['bundleName']
+                data['appName'] = config['module']['abilities'][0]['label']
+                data['versionName'] = config['app']['version']['name']
+                data['versionCode'] = config['app']['version']['code']
+                data['pages'] = config['module']['js'][0]['pages']
+                data['deviceType'] = config['module']['deviceType']
+                data['window'] = config['module']['js'][0]['window']
+                build_utils.write_json(data, manifest)
         build_utils.check_output(cmd, env=my_env)
         for root, _, files in os.walk(gen_dir):
             for file in files:
