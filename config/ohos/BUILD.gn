@@ -43,7 +43,7 @@ config("compiler") {
 
   cflags += [ "--target=$abi_target" ]
   include_dirs = [
-    "${musl_sysroot}/usr/inclue/${abi_target}",
+    "${musl_sysroot}/usr/include/${abi_target}",
     "${clang_base_path}/include/c++/v1",
   ]
 
