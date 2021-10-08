@@ -92,7 +92,7 @@ script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 # 二进制所在目录,用于临时存放二进制,需要约7G空间
 # 下载的压缩包会自动解压到代码目录，压缩包会一直保留在该目录下
-bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
+bin_dir=${code_dir}/../OpenHarmony_prebuilts_pkgs
 
 # 二进制关系
 copy_config="""
