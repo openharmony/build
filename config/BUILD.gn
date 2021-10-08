@@ -123,7 +123,7 @@ config("debug") {
   } else if (is_linux && current_cpu == "x64" && enable_iterator_debugging) {
     # Enable libstdc++ debugging facilities to help catch problems early, see
     # http://crbug.com/65151 .
-    defines += [ "_GLIBCXX_DEBUG=1" ]
+    # defines += [ "_GLIBCXX_DEBUG=1" ]
   }
 }
 
