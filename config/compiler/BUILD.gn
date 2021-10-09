@@ -1324,8 +1324,10 @@ if (is_win) {
       # See http://lwn.net/Articles/192624/ .
       # -O2 enables string tail merge optimization in gold and lld.
       "-Wl,-O2",
-      "-Wl,--gc-sections",
     ]
+    if (!is_mingw) {
+      common_optimize_on_ldflags += [ "-Wl,--gc-sections" ]
+    }
   }
 }
 
