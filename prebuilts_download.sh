@@ -25,6 +25,21 @@ if [ "X${SKIP_SSL}" == "XYES" ];then
 else
     wget_ssl_check=''
 fi
+
+if [ -z "$TOOL_REPO" ];then	
+	tool_repo='https://repo.huaweicloud.com'
+else
+	tool_repo=$TOOL_REPO
+fi
+echo "tool_repo=$tool_repo"
+
+if [ -z "$NPM_REGISTRY" ];then
+	npm_registry='http://registry.npm.taobao.org'
+else
+	npm_registry=$NPM_REGISTRY
+fi
+echo "npm_registry=$npm_registry"
+
 sha256_result=0
 check_sha256=''
 local_sha256=''
@@ -96,27 +111,27 @@ bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
 
 # 二进制关系
 copy_config="""
-prebuilts/sdk/js-loader/build-tools,https://repo.huaweicloud.com/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
-prebuilts/build-tools/common,https://repo.huaweicloud.com/harmonyos/compiler/restool/1.023-d/restool.tar.gz
-prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
-prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
-prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
-prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/${host_platform}/clang-73276-release-${host_platform}-x86_64.tar.bz2
-prebuilts/,https://repo.huaweicloud.com/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20210918.tar.gz
+prebuilts/sdk/js-loader/build-tools,${tool_repo}/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
+prebuilts/build-tools/common,${tool_repo}/harmonyos/compiler/restool/1.023-d/restool.tar.gz
+prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
+prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
+prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
+prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-73276/${host_platform}/clang-73276-release-${host_platform}-x86_64.tar.bz2
+prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20210918.tar.gz
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
     copy_config+="""
-        prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz
-        prebuilts/mingw-w64/ohos/linux-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
-        prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
-        prebuilts/gcc/linux-x86/aarch64,https://repo.huaweicloud.com/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-        prebuilts/previewer/windows,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/3.0.0.0/windows/previewer.tar.gz
+        prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz
+        prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
+        prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
+        prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
+        prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.0/windows/previewer.tar.gz
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
-        prebuilts/previewer/darwin,https://repo.huaweicloud.com/harmonyos/develop_tools/previewer/3.0.0.0/darwin/previewer.tar.gz
+        prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.0/darwin/previewer.tar.gz
         """
 fi
 
@@ -169,7 +184,7 @@ node_js_pkg=${node_js_name}.tar.gz
 mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
 cd ${code_dir}/prebuilts/build-tools/common/nodejs
 if [ ! -f "${node_js_pkg}" ]; then
-    wget -t3 -T10 ${wget_ssl_check} https://repo.huaweicloud.com/nodejs/${node_js_ver}/${node_js_pkg}
+    wget -t3 -T10 ${wget_ssl_check} ${tool_repo}/nodejs/${node_js_ver}/${node_js_pkg}
     tar zxf ${node_js_pkg}
 fi
 
@@ -178,7 +193,7 @@ if [ ! -d "${code_dir}/third_party/jsframework" ]; then
 else
     cd ${code_dir}/third_party/jsframework/
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -202,7 +217,7 @@ if [ ! -d "${code_dir}/developtools/ace-ets2bundle/compiler" ]; then
 else
     cd ${code_dir}/developtools/ace-ets2bundle/compiler
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -215,7 +230,7 @@ if [ ! -d "${code_dir}/developtools/ace-js2bundle/ace-loader" ]; then
 else
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -226,7 +241,7 @@ fi
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     cd ${code_dir}/ark/ts2abc/ts2panda
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -249,7 +264,7 @@ fi
 if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
     cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
