@@ -26,14 +26,14 @@ else
     wget_ssl_check=''
 fi
 
-if [ -z $TOOL_REPO ];then	
+if [ -z "$TOOL_REPO" ];then	
 	tool_repo='https://repo.huaweicloud.com'
 else
 	tool_repo=$TOOL_REPO
 fi
 echo "tool_repo=$tool_repo"
 
-if [ -z $NPM_REGISTRY ];then
+if [ -z "$NPM_REGISTRY" ];then
 	npm_registry='http://registry.npm.taobao.org'
 else
 	npm_registry=$NPM_REGISTRY
