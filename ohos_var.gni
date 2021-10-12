@@ -136,6 +136,10 @@ declare_args() {
   check_deps = false
 }
 
+declare_args() {
+  build_selinux = false
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
