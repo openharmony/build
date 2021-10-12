@@ -68,7 +68,7 @@ arguments += [
   "--ignore-api-check",
   "xts",
   "common",
-  "subsystem_examples",
+  "developertest",
 ]
 
 load_result = exec_script(build_loader_script, arguments, "string")
