@@ -95,6 +95,7 @@ clang_toolchain("clang_x64") {
     current_cpu = "x64"
     current_os = "linux"
   }
+  shlib_extension = ".so"
 }
 
 gcc_toolchain("x64") {
