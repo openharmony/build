@@ -208,6 +208,7 @@ template("compile_js_assets") {
                              "hap_profile",
                              "build_mode",
                              "js2abc",
+                             "main_target_name",
                            ])
     script = "//build/scripts/build_js_assets.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -236,6 +237,14 @@ template("compile_js_assets") {
       "--build-mode",
       build_mode,
     ]
+    if (defined(testonly) && testonly == true) {
+      _js_sources_file = target_gen_dir + "/$main_target_name.sources"
+      args += [
+        "--js-sources-file",
+        rebase_path(_js_sources_file, root_build_dir),
+      ]
+      outputs += [ _js_sources_file ]
+    }
     if (js2abc) {
       args += [ "--js2abc" ]
     }

@@ -215,6 +215,9 @@ template("ohos_hap") {
     deps = [ ":$_metadata_target" ] + _deps
     build_mode = _js_build_mode
     js2abc = _js2abc
+    if (defined(testonly) && testonly == true) {
+      main_target_name = _main_target_name
+    }
   }
 
   _resources_target = "${target_name}__compile_resources"
