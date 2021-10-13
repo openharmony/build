@@ -31,7 +31,7 @@ def _prepare_userdata(userdata_path):
     os.makedirs(userdata_path)
 
 
-def _prepare_root(system_path):
+def _prepare_root(system_path, target_cpu):
     root_dir = os.path.join(os.path.dirname(system_path), 'root')
     if os.path.exists(root_dir):
         shutil.rmtree(root_dir)
@@ -44,6 +44,10 @@ def _prepare_root(system_path):
     os.symlink('/system/bin', os.path.join(root_dir, 'bin'))
     os.symlink('/system/bin/init', os.path.join(root_dir, 'init'))
     os.symlink('/system/etc', os.path.join(root_dir, 'etc'))
+    if target_cpu == 'arm64':
+        os.symlink('/system/lib64', os.path.join(root_dir, 'lib'))
+    else:
+        os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
 
 
 def _prepare_updater(updater_path):
@@ -58,7 +62,7 @@ def _prepare_updater(updater_path):
 
 def _make_image(args):
     if args.image_name == 'system':
-        _prepare_root(args.input_path)
+        _prepare_root(args.input_path, args.target_cpu)
     elif args.image_name == 'updater':
         _prepare_updater(args.input_path)
     image_type = "raw"
@@ -87,6 +91,7 @@ def main(argv):
                         action='store_true')
     parser.set_defaults(sparse_image=False)
     parser.add_argument('--build-image-tools-path', required=False)
+    parser.add_argument('--target-cpu', required=False)
     args = parser.parse_args(argv)
 
     if os.path.exists(args.output_image_path):

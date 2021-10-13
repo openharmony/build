@@ -87,7 +87,6 @@ config("runtime_library") {
     "-L" + rebase_path("${clang_base_path}/lib/clang/10.0.1/lib/${abi_target}",
                        root_build_dir),
   ]
-  ldflags += [ "-Wl,--dynamic-linker,/system/bin/ld-musl-${musl_arch}.so.1" ]
 
   libs += [
     rebase_path(libclang_rt_file),

@@ -26,7 +26,7 @@ group("musl_install") {
   ]
 }
 
-ohos_prebuilt_executable("ld-musl-arm.so.1") {
+ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
   deps = [ "//third_party/musl:${musl_target_abi_name}_create_linker" ]
   _muls_linker_so =
       "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}.so.1"
