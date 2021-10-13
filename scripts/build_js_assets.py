@@ -35,6 +35,7 @@ def parse_args(args):
     parser.add_option('--webpack-config-js', help='path to webpack.config.js')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--build-mode', help='debug mode or release mode')
+    parser.add_option('--js-sources-file', help='path to js sources file')
     parser.add_option('--js2abc',
                       action='store_true',
                       default=False,
@@ -46,6 +47,10 @@ def parse_args(args):
 
 
 def build_ace(cmd, options):
+    if options.js_sources_file:
+        with open(options.js_sources_file, 'wb') as js_sources_file:
+            sources = get_all_js_sources(options.js_assets_dir[0])
+            js_sources_file.write('\n'.join(sources).encode())
     with build_utils.temp_dir() as build_dir:
         gen_dir = os.path.join(build_dir, 'gen')
         manifest = os.path.join(build_dir, 'manifest.json')
@@ -77,6 +82,16 @@ def build_ace(cmd, options):
         build_utils.zip_dir(options.output,
                             gen_dir,
                             zip_prefix_path='assets/js/default/')
+
+
+def get_all_js_sources(base):
+    sources = []
+    for root, _, files in os.walk(base):
+        for file in files:
+            print(file)
+            if file[-3:] in ('.js', '.ts'):
+                sources.append(os.path.join(root, file))
+    return sources
 
 
 def main(args):
