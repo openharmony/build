@@ -178,8 +178,11 @@
 -   部件要加到对应产品的部件列表中；
 
 [关于deps和external_deps的使用](docs/关于deps及external_deps的使用.md)
+
 [标准系统如何添加一个模板并参与编译](docs/标准系统如何添加一个模块.md)
+
 [如何跟随系统使用gn编译hap](how-to-build-a-hap.md)
+
 
 ## 相关仓<a name="section1371113476307"></a>
 
