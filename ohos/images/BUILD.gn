@@ -78,6 +78,8 @@ foreach(_platform, target_platform_list) {
         rebase_path(output_image_file, root_build_dir),
         "--build-image-tools-path",
         rebase_path(build_image_tools_path, root_build_dir),
+        "--target-cpu",
+        target_cpu,
       ]
       if (sparse_image) {
         args += [ "--sparse-image" ]
