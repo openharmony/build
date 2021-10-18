@@ -54,7 +54,6 @@ def transform(config):
         config.pop('subsystems')
         parts = from_ss_to_parts(subsystems)
         config['parts'] = parts
-        print(parts)
     return config
 
 
