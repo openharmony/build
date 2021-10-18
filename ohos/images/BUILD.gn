@@ -26,6 +26,9 @@ group("make_images") {
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
     ]
+    if (product_name == "Hi3516DV300") {
+      deps += [ ":${_platform}_ramdisk_image" ]
+    }
   }
 }
 
@@ -44,6 +47,9 @@ foreach(_platform, target_platform_list) {
     "userdata",
     "updater",
   ]
+  if (product_name == "Hi3516DV300") {
+    image_list += [ "ramdisk" ]
+  }
   foreach(_image_name, image_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
       script = "//build/ohos/images/build_image.py"
