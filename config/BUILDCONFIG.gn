@@ -157,6 +157,9 @@ declare_args() {
   use_musl = true
 }
 
+declare_args() {
+  disable_init_two_stages = false
+}
 asdk_libs_dir = "//prebuilts/asdk_libs"
 
 # Whether it is a phone product.

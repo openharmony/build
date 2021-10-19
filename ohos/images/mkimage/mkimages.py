@@ -31,7 +31,7 @@ def run_cmd(cmd):
 def build_rootdir(src_dir):
     tmp_dir = tempfile.mkdtemp(prefix="tmp")
     index = src_dir.rfind('/')
-    root_dir = src_dir[:index + 1] + "root"
+    root_dir = "%sroot" % src_dir[:index + 1]
 
     if root_dir:
         shutil.rmtree(tmp_dir)
@@ -43,26 +43,27 @@ def build_rootdir(src_dir):
 
 
 def load_config(config_file):
-    mkfs_tools = ""
-    fs_type = ""
-    mk_configs = ""
-
+    mk_configs = []
     with open(config_file, "r") as file:
         for line in file:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
-            mk_configs += line + " "
+            mk_configs.append(line)
+    mk_configs = " ".join(mk_configs)
     if "ext4" in mk_configs:
         fs_type = "ext4"
         mkfs_tools = "mkextimage.py"
     elif "f2fs" in mk_configs:
         mkfs_tools = "mkf2fsimage.py"
         fs_type = "f2fs"
+    elif "cpio" in mk_configs:
+        mkfs_tools = "mkcpioimage.py"
+        fs_type = "cpio"
     else:
         print("not support filesystem type!!")
         sys.exit(1)
-    return mkfs_tools, mk_configs
+    return mkfs_tools, mk_configs, fs_type
 
 
 def mk_images(args):
@@ -77,19 +78,21 @@ def mk_images(args):
 
     if "system.img" in device:
         src_dir = build_rootdir(src_dir)
-    mkfs_tools, mk_configs = load_config(config_file)
-    mk_configs = src_dir + " " + device + " " + mk_configs
-
-    res = run_cmd(mkfs_tools + " " + mk_configs)
+    mkfs_tools, mk_configs, _ = load_config(config_file)
+    if "ramdisk.img" in device:
+        mk_configs = " ".join([src_dir, device])
+    else:
+        mk_configs = " ".join([src_dir, device, mk_configs])
+    res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     if res[1]:
-        print("pid " + str(res[0]) + " ret " + str(res[1]) + "\n" +
-              res[2].decode() + res[3].decode())
-        print("MkImages failed errno: " + str(res[1]))
+        print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
+                        res[2].decode(), res[3].decode()]))
+        print("MkImages failed errno: %s" % str(res[1]))
         sys.exit(2)
     # we dont support sparse in mktools.
     if "sparse" in is_sparse:
-        tmp_device = device + ".tmp"
-        res = run_cmd("img2simg " + device + " " + tmp_device)
+        tmp_device = "%s.tmp" % device
+        run_cmd(" ".join(["img2simg ", device, " ", tmp_device]))
         os.rename(tmp_device, device)
 
 

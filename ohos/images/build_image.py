@@ -25,6 +25,64 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 
 
+def _prepare_ramdisk(ramdisk_path):
+    root_dir = os.path.join(os.path.dirname(ramdisk_path), 'ramdisk')
+    if os.path.exists(root_dir):
+        shutil.rmtree(root_dir)
+    os.makedirs(root_dir, exist_ok=True)
+    _dir_list = [
+        'bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr'
+    ]
+    for _dir_name in _dir_list:
+        os.makedirs(os.path.join(root_dir, _dir_name), exist_ok=True)
+
+    init_path = os.path.join(os.path.dirname(ramdisk_path), 'system/bin/init')
+    if os.path.exists(init_path):
+        shutil.copy(init_path, os.path.join(root_dir, 'init'))
+        shutil.copy(init_path, os.path.join(root_dir, 'bin', 'init'))
+    else:
+        print("Error: file does not exist, path: %s" % init_path)
+        sys.exit(1)
+
+    ueventd_path = \
+        os.path.join(os.path.dirname(ramdisk_path), 'system/bin/ueventd')
+    if os.path.exists(ueventd_path):
+        shutil.copy(ueventd_path, os.path.join(root_dir, 'bin', 'ueventd'))
+    else:
+        print("Error: file does not exist, path: %s" % ueventd_path)
+        sys.exit(1)
+
+    fstab_path = \
+        os.path.join(os.getcwd(), '../../device/hisilicon/hi3516dv300/'
+                                  'build/vendor/etc/fstab.Hi3516DV300')
+    if os.path.exists(fstab_path):
+        shutil.copy(fstab_path,
+                    os.path.join(root_dir, 'etc', 'fstab.required'))
+    else:
+        print("Error: file does not exist, path: %s" % fstab_path)
+        sys.exit(1)
+
+    libc_path = \
+        os.path.join(os.path.dirname(ramdisk_path), 'system/lib/libc.so')
+    if os.path.exists(libc_path):
+        shutil.copy(libc_path, os.path.join(root_dir, 'lib/libc.so'))
+    else:
+        print("Error: file does not exist, path: %s" % libc_path)
+        sys.exit(1)
+
+    ld_musl_path = \
+        os.path.join(os.path.dirname(ramdisk_path),
+                     'system/lib/ld-musl-arm.so.1')
+    if os.path.exists(ld_musl_path):
+        system_bin = os.path.join(root_dir, 'lib')
+        os.makedirs(system_bin, exist_ok=True)
+        shutil.copy(ld_musl_path,
+                    os.path.join(system_bin, 'ld-musl-arm.so.1'))
+    else:
+        print("Error: file does not exist, path: %s" % ld_musl_path)
+        sys.exit(1)
+
+
 def _prepare_userdata(userdata_path):
     if os.path.exists(userdata_path):
         shutil.rmtree(userdata_path)
@@ -98,6 +156,8 @@ def main(argv):
         os.remove(args.output_image_path)
     if args.image_name == 'userdata':
         _prepare_userdata(args.input_path)
+    elif args.image_name == 'ramdisk':
+        _prepare_ramdisk(args.input_path)
     if os.path.isdir(args.input_path):
         _make_image(args)
         _dep_files = []
