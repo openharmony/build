@@ -278,6 +278,15 @@
         ]
     },
     {
+        "install_dir": "ets/build-tools/ets-loader/components",
+        "module_label": "//developtools/ace-ets2bundle:components",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/build-tools/ets-loader/declarations",
         "module_label": "//developtools/ace-ets2bundle:ets_loader_declaration",
         "target_os": [
