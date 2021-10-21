@@ -70,6 +70,16 @@ def _prepare_ramdisk(ramdisk_path):
         print("Error: file does not exist, path: %s" % libc_path)
         sys.exit(1)
 
+    # build_selinux
+    for lib in ("sepol", "selinux", "load_policy", "restorecon", "pcre2"):
+        lib_file = "lib%s.z.so" % (lib)
+        lib_path = os.path.join(os.path.dirname(ramdisk_path),
+                                "system/lib/%s" % (lib_file))
+
+        if os.path.exists(lib_path):
+            shutil.copy(lib_path,
+                        os.path.join(root_dir, 'lib/%s' % (lib_file)))
+
     ld_musl_path = \
         os.path.join(os.path.dirname(ramdisk_path),
                      'system/lib/ld-musl-arm.so.1')
