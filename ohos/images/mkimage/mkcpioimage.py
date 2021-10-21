@@ -67,11 +67,17 @@ def build_run_fitimage(args):
         print("error there is no kernel image")
         return -1
 
-    dtc_src_path = \
+    dtc_419_src_path = \
         "../../out/KERNEL_OBJ/kernel/src_tmp/linux-4.19/scripts/dtc/dtc"
+    dtc_510_src_path = \
+        "../../out/KERNEL_OBJ/kernel/OBJ/linux-5.10/scripts/dtc/dtc"
     dtc_dst_path = "../../third_party/e2fsprogs/prebuilt/host/bin/dtc"
-    if os.path.exists(dtc_src_path):
-        shutil.copy(dtc_src_path, dtc_dst_path)
+    if os.path.exists(dtc_510_src_path):
+        shutil.copy(dtc_510_src_path, dtc_dst_path)
+    elif os.path.exists(dtc_419_src_path):
+        shutil.copy(dtc_419_src_path, dtc_dst_path)
+    else:
+        print("error device tree compiler not found")
 
     mkimage_path = "../../device/hisilicon/hispark_taurus/prebuilts/mkimage"
     fit_cmd = \
@@ -105,8 +111,8 @@ def build_run_cpio(args):
 
 def build_run_chmod(args):
     src_dir = args.src_dir
-    index = src_dir.rfind('/')
-    root_dir = src_dir[:index]
+    src_index = src_dir.rfind('/')
+    root_dir = src_dir[:src_index]
 
     chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
     res = run_cmd(chmod_cmd)
@@ -115,7 +121,7 @@ def build_run_chmod(args):
                         res[2].decode(), res[3].decode()]))
     return res[1]
 
-def build(args):
+def main(args):
     args = args_parse(args)
     print("Make cpio image!")
 
@@ -133,4 +139,4 @@ def build(args):
         sys.exit(3)
 
 if __name__ == '__main__':
-    build(sys.argv[1:])
+    main(sys.argv[1:])
