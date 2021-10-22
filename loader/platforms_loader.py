@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import sys
 import os
 import merge_platform_build
@@ -66,8 +65,8 @@ class PlatformsLoader:
     @staticmethod
     def _load_platform_config(platform_config_file):
         if not os.path.exists(platform_config_file):
-            raise Exception("config file '{}' doesn't exist.".format(
-                platform_config_file))
+            raise Exception(
+                "config file '{}' doesn't exist.".format(platform_config_file))
         _platform_config = read_json_file(platform_config_file)
         if _platform_config is None:
             raise Exception(
@@ -103,8 +102,8 @@ class PlatformsLoader:
                     config_base_dir, _info.get('base_parts_config'))
                 optional_build_file = os.path.join(
                     config_base_dir, _info.get('optional_parts_config'))
-                stub_build_file = os.path.join(
-                    config_base_dir, _info.get('stub_parts_config'))
+                stub_build_file = os.path.join(config_base_dir,
+                                               _info.get('stub_parts_config'))
                 _platform_config_file = '{}.build'.format(_platform_name)
 
                 merge_platform_build.do_merge(required_build_file,
