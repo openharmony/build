@@ -111,7 +111,11 @@ template("ohos_resources") {
                            ])
     meta_data = _metadata
     generated_header_dir = _generated_header_dir
-    deps = _deps
+    if (defined(deps)) {
+      deps += _deps
+    } else {
+      deps = _deps
+    }
   }
 
   _resources_config = "${target_name}__resources_headers"

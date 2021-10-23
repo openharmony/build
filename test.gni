@@ -409,6 +409,35 @@ template("ohos_js_test") {
   ]
   exec_script(_gen_module_list_script, _arguments)
 
+  _suite_path = get_label_info(":$target_name", "dir")
+  _template_path = "//test/developertest/libs/js_template"
+  _target_path = "${_template_path}/$target_name"
+  _target_js_copy = "${target_name}__js_copy"
+  action_with_pydeps(_target_js_copy) {
+    script = "//build/ohos/testfwk/test_js_file_copy.py"
+    outputs = [ "$target_out_dir/$target_name.out" ]
+    args = [
+      "--suite_path",
+      rebase_path(_suite_path, root_build_dir),
+      "--template_path",
+      rebase_path(_template_path, root_build_dir),
+      "--target_path",
+      rebase_path(_target_path, root_build_dir),
+    ]
+  }
+
+  _target_js_assets = "${target_name}__intl_js_assets"
+  ohos_js_assets(_target_js_assets) {
+    source_dir = "${_target_path}/src/main/js/default"
+    deps = [ ":$_target_js_copy" ]
+  }
+  _target_resources = "${target_name}__resources"
+  ohos_resources(_target_resources) {
+    sources = [ "${_target_path}/src/main/resources" ]
+    deps = [ ":$_target_js_copy" ]
+    hap_profile = invoker.hap_profile
+  }
+
   ohos_hap(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -419,6 +448,10 @@ template("ohos_js_test") {
                            ])
     forward_variables_from(invoker, [ "visibility" ])
 
+    deps = [
+      ":$_target_js_assets",
+      ":$_target_resources",
+    ]
     final_hap_path = "$_test_output_dir/$target_name.hap"
     js_build_mode = "debug"
     testonly = true
