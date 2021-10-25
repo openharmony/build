@@ -1,0 +1,18 @@
+{
+  "platforms": {
+    "phone": [
+      {
+        "target_os": "ohos",
+        "target_cpu": "arm64",
+        "toolchain": "",
+        "parts_config": "./parts.json"
+      },
+      {
+        "target_os": "ohos",
+        "target_cpu": "arm",
+        "toolchain": "",
+        "parts_config": "./parts.json"
+      }
+    ]
+  }
+}

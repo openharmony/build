@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import os
 import sys
 import argparse
@@ -109,7 +108,7 @@ def _get_platforms_all_stubs(source_root_dir, target_os, target_cpu, all_stubs,
                     stub_sources = os.path.join(
                         source_root_dir,
                         "component_dist/{}-{}/api_stubs/{}/stubs_sources_list.txt"  # noqa: E501
-                            .format(target_os, target_cpu, real_name))
+                        .format(target_os, target_cpu, real_name))
                     stub_parts_from_dist.append('"{}"'.format(stub_sources))
             else:
                 stub_parts_from_src.append(real_name)
@@ -164,9 +163,8 @@ def _get_parts_by_platform(target_platform_parts):
 
 
 def _check_parts_config_info(parts_config_info):
-    if not ('parts_info' in parts_config_info
-            and 'subsystem_parts' in parts_config_info
-            and 'parts_variants' in parts_config_info
+    if not ('parts_info' in parts_config_info and 'subsystem_parts'
+            in parts_config_info and 'parts_variants' in parts_config_info
             and 'parts_kits_info' in parts_config_info
             and 'parts_inner_kits_info' in parts_config_info
             and 'parts_targets' in parts_config_info):
@@ -223,14 +221,15 @@ def _check_args(args, source_root_dir):
             raise Exception("args gn_root_out_dir is incorrect.")
 
 
-def load(source_root_dir, args):
+def load(args):
+    source_root_dir = args.source_root_dir
     _check_args(args, source_root_dir)
     config_output_relpath = os.path.join(args.gn_root_out_dir, 'build_configs')
 
     # loading subsystem info, scan src dir and get subsystem ohos.build
     _subsystem_info = subsystem_info.get_subsystem_info(
         args.subsystem_config_file, args.example_subsystem_file,
-        source_root_dir, config_output_relpath)
+        source_root_dir, config_output_relpath, args.os_level)
 
     target_arch = '{}_{}'.format(args.target_os, args.target_cpu)
     # loading platforms config
@@ -255,8 +254,7 @@ def load(source_root_dir, args):
     # loading ohos.build and gen part variant info
     parts_config_info = load_ohos_build.get_parts_info(
         source_root_dir, config_output_relpath, _subsystem_info,
-        variant_toolchains, target_arch, args.ignore_api_check,
-        args.build_xts)
+        variant_toolchains, target_arch, args.ignore_api_check, args.build_xts)
     # check parts_config_info
     _check_parts_config_info(parts_config_info)
     parts_variants = parts_config_info.get('parts_variants')
@@ -266,9 +264,8 @@ def load(source_root_dir, args):
     config_output_dir = os.path.join(source_root_dir, config_output_relpath)
 
     # target_platforms_parts.json
-    target_platform_parts = _get_platforms_all_parts(source_root_dir,
-                                                     args.target_os,
-                                                     args.target_cpu,
+    target_platform_parts = _get_platforms_all_parts(
+        source_root_dir, args.target_os, args.target_cpu,
         _platforms_info.get('all_parts'), build_platforms, parts_variants)
     target_platform_parts_file = os.path.join(config_output_dir,
                                               "target_platforms_parts.json")
@@ -410,15 +407,6 @@ def _output_infos_for_testfwk(parts_config_info, target_platform_parts,
     write_json_file(infos_for_testfwk_file, _output_infos, check_changes=True)
 
 
-def find_root_dir():
-    source_dir = os.getcwd()
-    while not os.path.exists(os.path.join(source_dir, '.gn')):
-        source_dir = os.path.dirname(source_dir)
-        if source_dir == '/':
-            raise Exception("Cannot find source root directory.")
-    return source_dir
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--platforms-config-file', required=True)
@@ -431,20 +419,14 @@ def main():
     parser.set_defaults(build_xts=False)
     parser.add_argument('--target-os', default='ohos')
     parser.add_argument('--target-cpu', default='arm64')
+    parser.add_argument('--os-level', default='standard')
     parser.add_argument('--ignore-api-check', nargs='*', default=[])
 
     parser.add_argument('--scalable-build', action='store_true')
     parser.set_defaults(scalable_build=False)
     args = parser.parse_args()
-    if args.source_root_dir:
-        dot_gn_file = os.path.join(args.source_root_dir, '.gn')
-        if not os.path.exists(dot_gn_file):
-            raise Exception("source root dir is incorrect.")
-        source_root_dir = args.source_root_dir
-    else:
-        source_root_dir = find_root_dir()
 
-    load(source_root_dir, args)
+    load(args)
     return 0
 
 

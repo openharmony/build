@@ -288,8 +288,13 @@ class PartObject(object):
         """target label."""
         if config_output_relpath.startswith('/'):
             raise Exception("args config output relative path is incorrect.")
-        return "//{0}/{1}:{1}({2})".format(config_output_relpath,
-                                           self._part_name, self._toolchain)
+        if self._toolchain == '':
+            return "//{0}/{1}:{1}".format(config_output_relpath,
+                                          self._part_name)
+        else:
+            return "//{0}/{1}:{1}({2})".format(config_output_relpath,
+                                               self._part_name,
+                                               self._toolchain)
 
     def part_group_targets(self, config_output_relpath):
         """part group target."""
@@ -302,9 +307,13 @@ class PartObject(object):
                 _labels[group_label] = "//{0}/{1}:{1}_{2}".format(
                     config_output_relpath, self._part_name, group_label)
                 continue
-            _labels[group_label] = "//{0}/{1}:{1}_{2}({3})".format(
-                config_output_relpath, self._part_name, group_label,
-                self._toolchain)
+            if self._toolchain == '':
+                _labels[group_label] = "//{0}/{1}:{1}_{2}".format(
+                    config_output_relpath, self._part_name, group_label)
+            else:
+                _labels[group_label] = "//{0}/{1}:{1}_{2}({3})".format(
+                    config_output_relpath, self._part_name, group_label,
+                    self._toolchain)
         return _labels
 
     def part_info(self):

@@ -146,10 +146,13 @@ def _copy_platforms_config(platforms_template, parts_info_file,
     write_json_file(output_file, data)
 
 
-def _get_platform_template_file(source_root_dir):
+def _get_platform_template_file(source_root_dir, os_level):
+    if os_level == 'lite':
+        template_file = 'platforms-lite.template'
+    else:
+        template_file = 'platforms.template'
     platforms_template = os.path.join(source_root_dir,
-                                      'build/loader/preloader',
-                                      'platforms.template')
+                                      'build/loader/preloader', template_file)
     return platforms_template
 
 
@@ -230,7 +233,8 @@ def _run(args):
     parts_config_info = {"parts": list(all_parts.keys())}
     write_json_file(parts_info_file, parts_config_info)
 
-    platforms_template_file = _get_platform_template_file(args.source_root_dir)
+    platforms_template_file = _get_platform_template_file(
+        args.source_root_dir, os_level)
     _copy_platforms_config(platforms_template_file, parts_info_file,
                            platform_config_output_path)
 

@@ -23,7 +23,8 @@ print("host_toolchain=$host_toolchain")
 # load build configs and write load result to out_build_dir/build_configs
 build_loader_script = rebase_path("//build/loader/load.py")
 
-_platforms_config_file = "//out/build_configs/standard_system/platforms.build"
+_platforms_config_file =
+    "//out/build_configs/${os_level}_system/platforms.build"
 
 build_platform = ""
 
@@ -41,6 +42,11 @@ arguments = [
   target_os,
   "--target-cpu",
   target_cpu,
+]
+
+arguments += [
+  "--os-level",
+  os_level,
 ]
 
 if (build_platform != "") {
