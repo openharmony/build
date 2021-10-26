@@ -80,7 +80,9 @@ def mk_images(args):
         src_dir = build_rootdir(src_dir)
     mkfs_tools, mk_configs, _ = load_config(config_file)
     if "ramdisk.img" in device:
-        mk_configs = " ".join([src_dir, device])
+        mk_configs = \
+            " ".join([src_dir, device, "../../build/ohos/images/mkimage/"
+                                       "ramdisk_resource_config.ini"])
     else:
         mk_configs = " ".join([src_dir, device, mk_configs])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))

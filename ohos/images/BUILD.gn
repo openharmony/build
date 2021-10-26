@@ -26,7 +26,7 @@ group("make_images") {
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
     ]
-    if (product_name == "Hi3516DV300") {
+    if (enable_ramdisk) {
       deps += [ ":${_platform}_ramdisk_image" ]
     }
   }
@@ -47,7 +47,7 @@ foreach(_platform, target_platform_list) {
     "userdata",
     "updater",
   ]
-  if (product_name == "Hi3516DV300") {
+  if (enable_ramdisk) {
     image_list += [ "ramdisk" ]
   }
   foreach(_image_name, image_list) {
@@ -58,8 +58,11 @@ foreach(_platform, target_platform_list) {
 
       image_config_file =
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
-      output_image_file = "$current_platform_dir/images/${_image_name}.img"
-
+      if (_image_name == "ramdisk") {
+        output_image_file = "$root_build_dir/${_image_name}.img"
+      } else {
+        output_image_file = "$current_platform_dir/images/${_image_name}.img"
+      }
       image_input_path = "$current_platform_dir/${_image_name}"
       if (_image_name == "userdata") {
         image_input_path = "$current_platform_dir/data"
