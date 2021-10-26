@@ -77,8 +77,8 @@ template("compile_resources") {
 template("package_app") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.hap_profile),
-         "hap_profile must be defined for package_app")
-  assert(defined(invoker.hap_path), "hap_path must be defined for package_app")
+         "hap_profile must be defined for $target_name")
+  assert(defined(invoker.hap_path), "hap_path must be defined for $target_name")
   action_with_pydeps(target_name) {
     forward_variables_from(invoker,
                            [
@@ -255,13 +255,5 @@ template("compile_js_assets") {
       ]
       inputs += [ hap_profile ]
     }
-  }
-}
-
-# Placeholder
-template("js2ark") {
-  group(target_name) {
-    not_needed(invoker, "*", [ "deps" ])
-    forward_variables_from(invoker, [ "deps" ])
   }
 }

@@ -17,9 +17,9 @@ import optparse
 import os
 import sys
 import shutil
-import tempfile
 import json
 
+from zipfile import ZipFile  # noqa: E402
 from util import build_utils  # noqa: E402
 
 
@@ -82,6 +82,9 @@ def compile_resources(options):
 def main(args):
     options = parse_args(args)
 
+    if options.resources_dir == []:
+        with ZipFile(options.output_resources_zipfile, 'w') as file:
+            return
     inputs = ([options.restool_path, options.hap_profile])
     depfiles = []
     for directory in options.resources_dir:
