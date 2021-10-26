@@ -16,10 +16,9 @@
 import optparse
 import os
 import sys
-import tempfile
 import json
-import shutil
 
+from zipfile import ZipFile  # noqa: E402
 from util import build_utils  # noqa: E402
 
 
@@ -97,10 +96,15 @@ def get_all_js_sources(base):
 def main(args):
     options = parse_args(args)
 
-    inputs = ([
+    inputs = [
         options.nodejs_path, options.webpack_js, options.webpack_config_js
-    ])
-    depfiles = (build_utils.get_all_files(options.js_assets_dir[0]))
+    ]
+    depfiles = []
+    if options.js_assets_dir:
+        depfiles.extend(build_utils.get_all_files(options.js_assets_dir[0]))
+    else:
+        with ZipFile(options.output, 'w') as file:
+            return
 
     cmd = [
         options.nodejs_path,

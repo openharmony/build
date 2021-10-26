@@ -46,6 +46,35 @@ def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
         raise Exception("Failed to sign hap")
 
 
+def add_resources(packaged_resources, package_dir, packing_cmd):
+    if packaged_resources:
+        build_utils.extract_all(packaged_resources,
+                                package_dir,
+                                no_clobber=False)
+        index_file_path = os.path.join(package_dir, 'resources.index')
+        if os.path.exists(index_file_path):
+            packing_cmd.extend(['--index-path', index_file_path])
+            packing_cmd.extend(
+                ['--res-path',
+                 os.path.join(package_dir, 'resources')])
+
+
+def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
+    assets_dir = os.path.join(package_dir, 'assets')
+    if packaged_js_assets:
+        build_utils.extract_all(packaged_js_assets,
+                                package_dir,
+                                no_clobber=False)
+    if assets:
+        if not os.path.exists(assets_dir):
+            os.mkdir(assets_dir)
+        for dire in assets:
+            shutil.copytree(dire,
+                            os.path.join(assets_dir, os.path.basename(dire)))
+    if os.path.exists(assets_dir) and len(os.listdir(assets_dir)) != 0:
+        packing_cmd.extend(['--assets-path', assets_dir])
+
+
 def create_hap(options, signed_hap):
     with build_utils.temp_dir() as package_dir, tempfile.NamedTemporaryFile(
             suffix='.hap') as output:
@@ -57,40 +86,15 @@ def create_hap(options, signed_hap):
                                         os.path.basename(options.hap_profile))
         shutil.copy(options.hap_profile, hap_profile_path)
         packing_cmd.extend(['--json-path', hap_profile_path])
+        add_assets(options.packaged_js_assets, options.assets, package_dir,
+                   packing_cmd)
 
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
             os.mkdir(lib_path)
-            for dso in options.dso:
+            for dso in sorted(options.dso):
                 shutil.copy(dso, lib_path)
             packing_cmd.extend(['--lib-path', lib_path])
-
-        if options.packaged_resources:
-            build_utils.extract_all(options.packaged_resources,
-                                    package_dir,
-                                    no_clobber=False)
-            packing_cmd.extend(
-                ['--index-path',
-                 os.path.join(package_dir, 'resources.index')])
-            packing_cmd.extend(
-                ['--res-path',
-                 os.path.join(package_dir, 'resources')])
-
-        assets_dir = os.path.join(package_dir, 'assets')
-        if options.packaged_js_assets or options.assets:
-            packing_cmd.extend(['--assets-path', assets_dir])
-
-        if options.packaged_js_assets:
-            build_utils.extract_all(options.packaged_js_assets,
-                                    package_dir,
-                                    no_clobber=False)
-        if options.assets:
-            if not os.path.exists(assets_dir):
-                os.mkdir(assets_dir)
-            for dire in options.assets:
-                shutil.copytree(
-                    dire,
-                    os.path.join(assets_dir, os.path.basename(dire)))
 
         build_utils.check_output(packing_cmd)
 
