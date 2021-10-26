@@ -59,7 +59,7 @@
     ./build.sh --product-name {product_name}
     ```
 
-    编译结果镜像输出在 out/ohos-arm-relese/packages/phone/images/目录下。
+    编译结果镜像输出在 out/${device_name}/packages/phone/images/目录下。
 
 2.  编译命令支持选项：
 
@@ -161,7 +161,7 @@
 
     **结果输出：**
 
-    ``` out/ohos-arm64-release/packages/ohos-sdk/ ```
+    ``` out/sdk/packages/ohos-sdk/ ```
 
     **ohos-sdk模块配置：**
 
