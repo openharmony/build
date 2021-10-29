@@ -86,7 +86,7 @@ def _parse_config_v2(config_info, products_config_path, lite_config_path,
 
     product_name = config_info.get('product_name')
     product_company = config_info.get('product_company')
-    if os_level == "lite":
+    if os_level == 'mini' or os_level == 'small':
         all_parts.update(
             get_lite_parts_list(lite_config_path, product_name,
                                 product_company))
@@ -147,7 +147,7 @@ def _copy_platforms_config(platforms_template, parts_info_file,
 
 
 def _get_platform_template_file(source_root_dir, os_level):
-    if os_level == 'lite':
+    if os_level == 'mini' or os_level == 'small':
         template_file = 'platforms-lite.template'
     else:
         template_file = 'platforms.template'
@@ -219,7 +219,7 @@ def _run(args):
                                              device_config_path)
 
     os_level = build_configs.get('os_level')
-    if os_level not in ['standard', 'large', 'lite']:
+    if os_level not in ['standard', 'large', 'mini', 'small']:
         raise Exception("product config incorrect.")
 
     product_info_output_path = os.path.join(args.source_root_dir,

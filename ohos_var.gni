@@ -25,10 +25,11 @@ declare_args() {
   is_standard_system = false
 }
 
-is_lite_system = is_mini_system || is_small_system
-
-if (is_lite_system) {
-  os_level = "lite"
+if (is_mini_system) {
+  os_level = "mini"
+}
+if (is_small_system) {
+  os_level = "small"
 }
 if (is_standard_system) {
   os_level = "standard"
