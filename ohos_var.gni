@@ -24,6 +24,7 @@ declare_args() {
   is_small_system = false
   is_standard_system = false
 }
+
 is_lite_system = is_mini_system || is_small_system
 
 if (is_lite_system) {
@@ -53,7 +54,7 @@ declare_args() {
   system_base_dir = "system"
 
   # ramdisk package dir
-  ramdisk_base_dir = "root"
+  ramdisk_base_dir = "ramdisk"
 
   # vendor package dir
   vendor_base_dir = "vendor"
@@ -179,6 +180,11 @@ product_build_config =
 product_company = product_build_config.product_company
 device_name = product_build_config.device_name
 device_company = product_build_config.device_company
+if (defined(product_build_config.enable_ramdisk)) {
+  enable_ramdisk = product_build_config.enable_ramdisk
+} else {
+  enable_ramdisk = false
+}
 
 app_target_allowlist = [
   "*:*_res",

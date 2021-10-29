@@ -192,6 +192,12 @@ def main():
         shutil.rmtree(updater_install_base_dir)
         print('remove updater dir...')
 
+    ramdisk_install_base_dir = os.path.join(args.platform_installed_path,
+                                            'ramdisk')
+    if os.path.exists(ramdisk_install_base_dir):
+        shutil.rmtree(ramdisk_install_base_dir)
+        print('remove ramdisk dir...')
+
     print('copy modules...')
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
