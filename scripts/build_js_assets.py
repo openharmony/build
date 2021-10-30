@@ -87,7 +87,6 @@ def get_all_js_sources(base):
     sources = []
     for root, _, files in os.walk(base):
         for file in files:
-            print(file)
             if file[-3:] in ('.js', '.ts'):
                 sources.append(os.path.join(root, file))
     return sources
