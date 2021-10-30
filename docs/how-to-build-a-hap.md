@@ -6,7 +6,7 @@ gn 目标：
 
 ## hap包的构成
 
-L2上的hap包由资源，raw assets，js assets，native库，config.json等部分构成。
+OpenHamony上的hap包由资源，raw assets，js assets，native库，config.json等部分构成。
 
 
 ## 编译系统提供的模板
