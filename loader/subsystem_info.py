@@ -54,7 +54,7 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
         subsystem_configs = subsystem_scan.scan(subsystem_config_file,
                                                 example_subsystem_file,
                                                 source_root_dir)
-    if os_level == 'lite':
+    if os_level == 'mini' or os_level == 'small':
         lite_components_dir = os.path.join(source_root_dir,
                                            'build/lite/components')
         ohos_build_files_dir = os.path.join(config_output_path, 'lite_parts')
