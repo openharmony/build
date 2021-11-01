@@ -68,9 +68,13 @@ def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
     if assets:
         if not os.path.exists(assets_dir):
             os.mkdir(assets_dir)
-        for dire in assets:
-            shutil.copytree(dire,
-                            os.path.join(assets_dir, os.path.basename(dire)))
+        for item in assets:
+            if os.path.isfile(item):
+                shutil.copyfile(
+                    item, os.path.join(assets_dir, os.path.basename(item)))
+            elif os.path.isdir(item):
+                shutil.copytree(
+                    item, os.path.join(assets_dir, os.path.basename(item)))
     if os.path.exists(assets_dir) and len(os.listdir(assets_dir)) != 0:
         packing_cmd.extend(['--assets-path', assets_dir])
 
@@ -89,6 +93,7 @@ def create_hap(options, signed_hap):
         add_assets(options.packaged_js_assets, options.assets, package_dir,
                    packing_cmd)
 
+        add_resources(options.packaged_resources, package_dir, packing_cmd)
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
             os.mkdir(lib_path)
