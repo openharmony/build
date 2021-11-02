@@ -50,6 +50,7 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
         subsystem_config_file = 'build/subsystem_config.json'
 
     subsystem_configs = {}
+    output_dir_realpath = os.path.join(source_root_dir, config_output_path)
     if os_level == 'standard':
         subsystem_configs = subsystem_scan.scan(subsystem_config_file,
                                                 example_subsystem_file,
@@ -57,11 +58,10 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
     if os_level == 'mini' or os_level == 'small':
         lite_components_dir = os.path.join(source_root_dir,
                                            'build/lite/components')
-        ohos_build_files_dir = os.path.join(config_output_path, 'lite_parts')
+        lite_build_files_dir = os.path.join(output_dir_realpath, 'lite_parts')
         subsystem_configs = parse_lite_subsystems.parse(
-            source_root_dir, lite_components_dir, ohos_build_files_dir,
+            source_root_dir, lite_components_dir, lite_build_files_dir,
             subsystem_config_file)
 
-    output_dir_realpath = os.path.join(source_root_dir, config_output_path)
     _output_subsystem_configs(output_dir_realpath, subsystem_configs)
     return subsystem_configs.get('subsystem')
