@@ -71,16 +71,20 @@ done
 source out/preloader/${product_name}/build.prop
 # build lite
 build_cmd="python3 build.py -p ${product_name}@${product_company} ${args}"
-if [ -z "${build_target}" ]; then
+if [ ! -z "${build_target}" ]; then
     build_cmd+=" -T ${build_target}"
 fi
 
+build_cmd+=" --compact-mode"
+
 if [[ -f "${build_gnargs_file}" ]]; then
-  build_cmd+="--gn-args=\""
+  build_cmd+=" --gn-args=\""
   for _line in $(cat "${build_gnargs_file}"); do
     build_cmd+="${_line} "
   done
-  build_cmd+="is_small_system=true\""
+  build_cmd+=" is_small_system=true\""
+else
+  build_cmd+=" --gn-args=is_small_system=true"
 fi
 
 eval ${build_cmd}

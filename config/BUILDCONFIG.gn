@@ -70,7 +70,7 @@ if (defined(product_build_config.enable_ramdisk)) {
 }
 
 if (target_os == "") {
-  target_os = host_os
+  target_os = "ohos"
 }
 
 if (target_cpu == "") {
@@ -87,6 +87,28 @@ if (current_cpu == "") {
 if (current_os == "") {
   current_os = target_os
 }
+
+declare_args() {
+  is_mini_system = false
+  is_small_system = false
+  is_standard_system = false
+}
+
+if (is_mini_system) {
+  os_level = "mini"
+}
+if (is_small_system) {
+  os_level = "small"
+}
+if (is_standard_system) {
+  os_level = "standard"
+}
+
+declare_args() {
+  is_large_system = !(is_standard_system || is_small_system || is_mini_system)
+}
+
+is_lite_system = is_mini_system || is_small_system
 
 # =============================================================================
 # BUILD FLAGS
@@ -268,28 +290,30 @@ if (host_toolchain == "") {
   }
 }
 
-_default_toolchain = ""
+if (is_standard_system) {
+  _default_toolchain = ""
 
-if (target_os == "ohos") {
-  assert(host_os == "linux" || host_os == "mac",
-         "ohos builds are only supported on Linux and Mac hosts.")
-  _default_toolchain = product_toolchain
-} else if (target_os == "linux") {
-  if (is_clang) {
-    _default_toolchain = "//build/toolchain/linux:clang_$target_cpu"
+  if (target_os == "ohos") {
+    assert(host_os == "linux" || host_os == "mac",
+           "ohos builds are only supported on Linux and Mac hosts.")
+    _default_toolchain = product_toolchain
+  } else if (target_os == "linux") {
+    if (is_clang) {
+      _default_toolchain = "//build/toolchain/linux:clang_$target_cpu"
+    } else {
+      _default_toolchain = "//build/toolchain/linux:$target_cpu"
+    }
   } else {
-    _default_toolchain = "//build/toolchain/linux:$target_cpu"
+    assert(false, "Unsupported target_os: $target_os")
   }
-} else {
-  assert(false, "Unsupported target_os: $target_os")
-}
 
-# If a custom toolchain has been set in the args, set it as default. Otherwise,
-# set the default toolchain for the platform (if any).
-if (custom_toolchain != "") {
-  set_default_toolchain(custom_toolchain)
-} else if (_default_toolchain != "") {
-  set_default_toolchain(_default_toolchain)
+  # If a custom toolchain has been set in the args, set it as default. Otherwise,
+  # set the default toolchain for the platform (if any).
+  if (custom_toolchain != "") {
+    set_default_toolchain(custom_toolchain)
+  } else if (_default_toolchain != "") {
+    set_default_toolchain(_default_toolchain)
+  }
 }
 
 # =============================================================================
@@ -420,97 +444,246 @@ if (!is_ohos) {
 }
 
 set_sources_assignment_filter(sources_assignment_filter)
+if (is_standard_system) {
+  # =============================================================================
+  # TARGET DEFAULTS
+  # =============================================================================
+  #
+  # Set up the default configuration for every build target of the given type.
+  # The values configured here will be automatically set on the scope of the
+  # corresponding target. Target definitions can add or remove to the settings
+  # here as needed.
+  #
+  # WHAT GOES HERE?
+  #
+  # Other than the main compiler and linker configs, the only reason for a config
+  # to be in this list is if some targets need to explicitly override that config
+  # by removing it. This is how targets opt-out of flags. If you don't have that
+  # requirement and just need to add a config everywhere, reference it as a
+  # sub-config of an existing one, most commonly the main "compiler" one.
 
-# =============================================================================
-# TARGET DEFAULTS
-# =============================================================================
-#
-# Set up the default configuration for every build target of the given type.
-# The values configured here will be automatically set on the scope of the
-# corresponding target. Target definitions can add or remove to the settings
-# here as needed.
-#
-# WHAT GOES HERE?
-#
-# Other than the main compiler and linker configs, the only reason for a config
-# to be in this list is if some targets need to explicitly override that config
-# by removing it. This is how targets opt-out of flags. If you don't have that
-# requirement and just need to add a config everywhere, reference it as a
-# sub-config of an existing one, most commonly the main "compiler" one.
-
-# Holds all configs used for running the compiler.
-default_compiler_configs = [
-  "//build/config:feature_flags",
-  "//build/config/compiler:afdo",
-  "//build/config/compiler:afdo_optimize_size",
-  "//build/config/compiler:compiler",
-  "//build/config/compiler:compiler_arm_fpu",
-  "//build/config/compiler:compiler_arm_thumb",
-  "//build/config/compiler:chromium_code",
-  "//build/config/compiler:default_include_dirs",
-  "//build/config/compiler:default_optimization",
-  "//build/config/compiler:default_stack_frames",
-  "//build/config/compiler:default_symbols",
-  "//build/config/compiler:export_dynamic",
-  "//build/config/compiler:no_exceptions",
-  "//build/config/compiler:no_rtti",
-  "//build/config/compiler:runtime_library",
-  "//build/config/compiler:thin_archive",
-  "//build/config/compiler:no_common",
-  "//build/config/coverage:default_coverage",
-  "//build/config/sanitizers:default_sanitizer_flags",
-]
-
-if (is_ohos) {
-  default_compiler_configs += [
-    "//build/config/ohos:default_orderfile_instrumentation",
-    "//build/config/gcc:symbol_visibility_inline_hidden",
+  # Holds all configs used for running the compiler.
+  default_compiler_configs = [
+    "//build/config:feature_flags",
+    "//build/config/compiler:afdo",
+    "//build/config/compiler:afdo_optimize_size",
+    "//build/config/compiler:compiler",
+    "//build/config/compiler:compiler_arm_fpu",
+    "//build/config/compiler:compiler_arm_thumb",
+    "//build/config/compiler:chromium_code",
+    "//build/config/compiler:default_include_dirs",
+    "//build/config/compiler:default_optimization",
+    "//build/config/compiler:default_stack_frames",
+    "//build/config/compiler:default_symbols",
+    "//build/config/compiler:export_dynamic",
+    "//build/config/compiler:no_exceptions",
+    "//build/config/compiler:no_rtti",
+    "//build/config/compiler:runtime_library",
+    "//build/config/compiler:thin_archive",
+    "//build/config/compiler:no_common",
+    "//build/config/coverage:default_coverage",
+    "//build/config/sanitizers:default_sanitizer_flags",
   ]
+
+  if (is_ohos) {
+    default_compiler_configs += [
+      "//build/config/ohos:default_orderfile_instrumentation",
+      "//build/config/gcc:symbol_visibility_inline_hidden",
+    ]
+  }
+
+  if (is_clang) {
+    default_compiler_configs += [
+      "//build/config/clang:find_bad_constructs",
+      "//build/config/clang:extra_warnings",
+    ]
+  }
+
+  # Debug/release-related defines.
+  if (is_debug) {
+    default_compiler_configs += [ "//build/config:debug" ]
+  } else {
+    default_compiler_configs += [ "//build/config:release" ]
+  }
+
+  # Static libraries and source sets use only the compiler ones.
+  default_static_library_configs = default_compiler_configs
+  default_source_set_configs = default_compiler_configs
+
+  # Executable defaults.
+  default_executable_configs = default_compiler_configs + [
+                                 "//build/config:default_libs",
+                                 "//build/config:executable_config",
+                               ]
+
+  # Shared library and loadable module defaults (also for components in component
+  # mode).
+  default_shared_library_configs = default_compiler_configs + [
+                                     "//build/config:default_libs",
+                                     "//build/config:shared_library_config",
+                                   ]
 }
 
-if (is_clang) {
+# Lite OS use different buildconfig.gn
+if (is_lite_system) {
+  import("//build/lite/ohos_var.gni")
+  import("${device_path}/config.gni")
+  target_arch_cflags = board_cflags
+  if (board_arch != "") {
+    target_arch_cflags += [ "-march=$board_arch" ]
+  }
+  if (board_cpu != "") {
+    target_arch_cflags += [ "-mcpu=$board_cpu" ]
+  }
+
+  arch = "arm"
+  if (ohos_kernel_type == "liteos_a") {
+    target_triple = "$arch-liteos"
+  } else if (ohos_kernel_type == "linux") {
+    target_triple = "$arch-linux-ohosmusl"
+  }
+
+  if (defined(board_configed_sysroot) && board_configed_sysroot != "") {
+    ohos_current_sysroot = board_configed_sysroot
+  }
+
+  # Only gcc available for liteos_m.
+  if (ohos_kernel_type == "liteos_m" || ohos_kernel_type == "linux") {
+    use_board_toolchain = true
+  }
+
+  toolchain_cmd_suffix = ""
+  if (host_os == "win") {
+    toolchain_cmd_suffix = ".exe"
+  }
+
+  # enable ccache if ccache installed.
+  if (ohos_build_enable_ccache) {
+    compile_prefix = "ccache "
+  } else {
+    compile_prefix = ""
+  }
+
+  # Load board adapter dir from board config.
+  if (board_adapter_dir != "") {
+    ohos_board_adapter_dir = board_adapter_dir
+    ohos_vendor_adapter_dir = board_adapter_dir
+  }
+
+  default_compiler_configs = []
+
+  # Set current toolchain with to board configuration.
+  if (board_toolchain != "" && use_board_toolchain) {
+    ohos_build_compiler = board_toolchain_type
+    if (board_toolchain_path != "") {
+      compile_prefix += "${board_toolchain_path}/${board_toolchain_prefix}"
+    } else {
+      compile_prefix += "${board_toolchain_prefix}"
+    }
+    set_default_toolchain("//build/lite/toolchain:${board_toolchain}")
+    if (board_toolchain_type == "gcc") {
+      ohos_current_cc_command = "${compile_prefix}gcc$toolchain_cmd_suffix"
+      ohos_current_cxx_command = "${compile_prefix}g++$toolchain_cmd_suffix"
+      ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
+      ohos_current_ld_command = ohos_current_cc_command
+      ohos_current_strip_command =
+          "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
+      default_compiler_configs += [ "//build/lite/config:gcc_opt" ]
+    } else if (board_toolchain_type == "clang") {
+      ohos_current_cc_command = "${compile_prefix}clang$toolchain_cmd_suffix"
+      ohos_current_cxx_command = "${compile_prefix}clang++$toolchain_cmd_suffix"
+      compile_prefix += "llvm-"
+      ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
+      ohos_current_ld_command = ohos_current_cc_command
+      ohos_current_strip_command =
+          "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
+      default_compiler_configs += [ "//build/lite/config:clang_opt" ]
+    }
+
+    # Overwrite ld cmd by customed cmd.
+    if (defined(board_customed_ld_cmd) && board_customed_ld_cmd != "") {
+      ohos_current_ld_command = board_customed_ld_cmd
+    }
+  } else {
+    # OHOS default toolchain
+    ohos_build_compiler = "clang"
+    ohos_clang_toolchain_dir = rebase_path("${ohos_build_compiler_dir}/bin")
+    compile_prefix += "$ohos_clang_toolchain_dir/"
+    ohos_current_cc_command = "${compile_prefix}clang$toolchain_cmd_suffix"
+    ohos_current_cxx_command = "${compile_prefix}clang++$toolchain_cmd_suffix"
+    compile_prefix += "llvm-"
+    ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
+    ohos_current_ld_command = ohos_current_cxx_command
+    ohos_current_strip_command =
+        "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
+    set_default_toolchain("//build/lite/toolchain:linux_x86_64_ohos_clang")
+    default_compiler_configs += [
+      "//build/lite/config:ohos_clang",
+      "//build/lite/config:clang_opt",
+    ]
+  }
+
   default_compiler_configs += [
-    "//build/config/clang:find_bad_constructs",
-    "//build/config/clang:extra_warnings",
+    "//build/lite/config:board_config",
+    "//build/lite/config:cpu_arch",
+    "//build/lite/config:common",
+    "//build/lite/config:default_link_path",
   ]
+
+  if (ohos_build_type == "debug") {
+    default_compiler_configs += [ "//build/lite/config:debug" ]
+  } else if (ohos_build_type == "release") {
+    default_compiler_configs += [ "//build/lite/config:release" ]
+  }
+
+  if (ohos_kernel_type == "liteos_a") {
+    default_compiler_configs +=
+        [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
+  }
+
+  if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "linux") {
+    default_compiler_configs += [
+      "//build/lite/config:security",
+      "//build/lite/config:exceptions",
+    ]
+  } else if (ohos_kernel_type == "liteos_m") {
+    default_compiler_configs += [ "//build/lite/config:stack_protector" ]
+  }
+
+  default_compiler_configs += [
+    "//build/lite/config:language_c",
+    "//build/lite/config:language_cpp",
+    "//build/lite/config:kernel_macros",
+  ]
+
+  default_shared_library_configs =
+      default_compiler_configs + [ "//build/lite/config:shared_library_config" ]
+  default_static_library_configs = default_compiler_configs
+  default_executable_configs = default_compiler_configs
+  if (ohos_kernel_type != "liteos_m") {
+    default_static_library_configs +=
+        [ "//build/lite/config:static_pie_config" ]
+    default_executable_configs += [ "//build/lite/config:static_pie_config" ]
+    default_executable_configs +=
+        [ "//build/lite/config:pie_executable_config" ]
+  }
+  default_executable_configs += [ "//build/lite/config:board_exe_ld_flags" ]
 }
 
-# Debug/release-related defines.
-if (is_debug) {
-  default_compiler_configs += [ "//build/config:debug" ]
-} else {
-  default_compiler_configs += [ "//build/config:release" ]
-}
-
-# Static libraries and source sets use only the compiler ones.
-set_defaults("static_library") {
-  configs = default_compiler_configs
-}
-set_defaults("source_set") {
-  configs = default_compiler_configs
-}
-
-# Executable defaults.
-default_executable_configs = default_compiler_configs + [
-                               "//build/config:default_libs",
-                               "//build/config:executable_config",
-                             ]
 set_defaults("executable") {
   configs = default_executable_configs
 }
 
-# Shared library and loadable module defaults (also for components in component
-# mode).
-default_shared_library_configs = default_compiler_configs + [
-                                   "//build/config:default_libs",
-                                   "//build/config:shared_library_config",
-                                 ]
+set_defaults("static_library") {
+  configs = default_static_library_configs
+}
 
 set_defaults("shared_library") {
   configs = default_shared_library_configs
 }
-set_defaults("loadable_module") {
-  configs = default_shared_library_configs
+
+set_defaults("source_set") {
+  configs = default_compiler_configs
 }
 
 # Sets default dependencies for executable and shared_library targets.
@@ -533,7 +706,32 @@ foreach(_target_type, target_type_list) {
         deps = []
       }
       if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
-        deps += [ "//build/config:${_target_type}_deps" ]
+        if (is_lite_system) {
+          deps += [ "//build/lite:prebuilts" ]
+        } else {
+          deps += [ "//build/config:${_target_type}_deps" ]
+        }
+      }
+    }
+  }
+}
+
+if (is_lite_system) {
+  _target_type_list = [
+    "action",
+    "action_foreach",
+  ]
+
+  foreach(_target_type, _target_type_list) {
+    template(_target_type) {
+      target(_target_type, target_name) {
+        forward_variables_from(invoker, "*", [ "no_default_deps" ])
+        if (!defined(deps)) {
+          deps = []
+        }
+        if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
+          deps += [ "//build/lite:prebuilts" ]
+        }
       }
     }
   }
