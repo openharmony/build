@@ -182,13 +182,13 @@ template("ohos_hap") {
         "$root_build_dir/build_configs/parts_info/part_subsystem.json"
     _arguments = [
       "--part-name",
-      part_name,
+      _part_name,
       "--part-subsystem-info-file",
       rebase_path(_part_subsystem_info_file, root_build_dir),
     ]
     _get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     _subsystem_name =
-        exec_script(get_subsystem_script, _arguments, "trim string")
+        exec_script(_get_subsystem_script, _arguments, "trim string")
   } else if (defined(invoker.subsystem_name)) {
     _subsystem_name = invoker.subsystem_name
     _part_name = _subsystem_name
