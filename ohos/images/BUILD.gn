@@ -32,7 +32,10 @@ group("make_images") {
   }
 }
 
-build_image_tools_path = "//third_party/e2fsprogs/prebuilt/host/bin"
+build_image_tools_path = [
+  "//third_party/e2fsprogs/prebuilt/host/bin",
+  "//build/ohos/images/mkimage",
+]
 
 foreach(_platform, target_platform_list) {
   current_platform = _platform
@@ -85,11 +88,11 @@ foreach(_platform, target_platform_list) {
         rebase_path(image_config_file, root_build_dir),
         "--output-image",
         rebase_path(output_image_file, root_build_dir),
-        "--build-image-tools-path",
-        rebase_path(build_image_tools_path, root_build_dir),
         "--target-cpu",
         target_cpu,
+        "--build-image-tools-path",
       ]
+      args += rebase_path(build_image_tools_path, root_build_dir)
       if (sparse_image) {
         args += [ "--sparse-image" ]
       }
