@@ -84,10 +84,9 @@ def _make_image(args):
         args.input_path, args.image_config_file, args.output_image_path,
         image_type
     ]
-    env_path = "../../build/ohos/images/mkimage"
     if args.build_image_tools_path:
-        env_path = '{}:{}'.format(env_path, args.build_image_tools_path)
-    os.environ['PATH'] = '{}:{}'.format(env_path, os.environ.get('PATH'))
+        env_path = ':'.join(args.build_image_tools_path)
+        os.environ['PATH'] = '{}:{}'.format(env_path, os.environ.get('PATH'))
     mkimages.mk_images(mk_image_args)
 
 
@@ -102,7 +101,7 @@ def main(argv):
                         dest="sparse_image",
                         action='store_true')
     parser.set_defaults(sparse_image=False)
-    parser.add_argument('--build-image-tools-path', required=False)
+    parser.add_argument('--build-image-tools-path', nargs='*', required=False)
     parser.add_argument('--target-cpu', required=False)
     args = parser.parse_args(argv)
 
