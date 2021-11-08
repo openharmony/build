@@ -55,6 +55,12 @@ do
     PARAM2=$(echo "$1" | sed 's/.*://')
     export $PARAM1=$PARAM2
     ;;
+  --build-gnargs-file)
+    shift
+    build_gnargs_file="$1"
+    ;;
+  --build-only-gn)
+    build_only_gn=true;;
   -* | *)
     args+=" $1"
     ;;
@@ -62,10 +68,19 @@ do
   shift
 done
 
-source out/build_configs/${product_name}/preloader/build.prop
+source out/preloader/${product_name}/build.prop
 # build lite
 build_cmd="python3 build.py -p ${product_name}@${product_company} ${args}"
 if [ -z "${build_target}" ]; then
     build_cmd+=" -T ${build_target}"
 fi
-${build_cmd}
+
+if [[ -f "${build_gnargs_file}" ]]; then
+  build_cmd+="--gn-args=\""
+  for _line in $(cat "${build_gnargs_file}"); do
+    build_cmd+="${_line} "
+  done
+  build_cmd+="is_small_system=true\""
+fi
+
+eval ${build_cmd}
