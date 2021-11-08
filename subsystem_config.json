@@ -138,5 +138,9 @@
   "musl": {
     "path": "third_party/musl",
     "name": "musl"
+  },
+  "msdp": {
+    "path": "base/msdp",
+    "name": "msdp"
   }
 }
