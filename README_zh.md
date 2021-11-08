@@ -181,7 +181,7 @@
 
 [标准系统如何添加一个模板并参与编译](docs/标准系统如何添加一个模块.md)
 
-[如何跟随系统使用gn编译hap](how-to-build-a-hap.md)
+[如何跟随系统使用gn编译hap](docs/how-to-build-a-hap.md)
 
 
 ## 相关仓<a name="section1371113476307"></a>
