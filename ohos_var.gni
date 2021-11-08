@@ -99,8 +99,6 @@ declare_args() {
 declare_args() {
   build_platform = ""
 
-  product_name = ""
-
   sparse_image = false
 }
 
@@ -174,18 +172,6 @@ dist_subsystem_info_output_file =
     "${dist_build_install_packages_dir}/${dist_subsystem_info_filename}"
 
 ramdisk_dir_list = []
-
-product_build_config =
-    read_file("//out/build_configs/${product_name}/preloader/build_config.json",
-              "json")
-product_company = product_build_config.product_company
-device_name = product_build_config.device_name
-device_company = product_build_config.device_company
-if (defined(product_build_config.enable_ramdisk)) {
-  enable_ramdisk = product_build_config.enable_ramdisk
-} else {
-  enable_ramdisk = false
-}
 
 app_target_allowlist = [
   "*:*_res",

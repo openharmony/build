@@ -16,7 +16,7 @@ set -e
 
 function do_make_ohos() {
   local build_cmd="build/build_scripts/build_ohos.sh"
-  build_cmd+=" product_name=${product_name} target_os=${target_os} target_cpu=${target_cpu}"
+  build_cmd+=" product_name=${product_name} device_name=${device_name} target_os=${target_os} target_cpu=${target_cpu}"
   build_cmd+=" gn_args=is_standard_system=true"
   if [[ "${build_target}x" != "x" ]]; then
     for target_name in ${build_target[@]}; do
@@ -47,6 +47,11 @@ function do_make_ohos() {
   fi
   if [[ "${sparse_image}" == true ]]; then
     build_cmd+=" gn_args=sparse_image=true"
+  fi
+  if [[ -f "${build_gnargs_file}" ]]; then
+    for _line in $(cat "${build_gnargs_file}"); do
+      build_cmd+=" gn_args=${_line}"
+    done
   fi
   echo "build_ohos_cmd: $build_cmd"
   $build_cmd

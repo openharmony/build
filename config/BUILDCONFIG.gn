@@ -46,6 +46,29 @@
 # When writing build files, to do something only for the host:
 #   if (current_toolchain == host_toolchain) { ...
 
+declare_args() {
+  product_name = ""
+  device_name = ""
+  preloader_output_dir = "//out/preloader"
+}
+
+product_build_config =
+    read_file("${preloader_output_dir}/${product_name}/build_config.json",
+              "json")
+product_company = product_build_config.product_company
+device_company = product_build_config.device_company
+target_os = product_build_config.target_os
+target_cpu = product_build_config.target_cpu
+product_toolchain = product_build_config.product_toolchain_label
+if (product_toolchain == "") {
+  product_toolchain = "//build/toolchain/ohos:ohos_clang_$target_cpu"
+}
+if (defined(product_build_config.enable_ramdisk)) {
+  enable_ramdisk = product_build_config.enable_ramdisk
+} else {
+  enable_ramdisk = false
+}
+
 if (target_os == "") {
   target_os = host_os
 }
@@ -250,7 +273,7 @@ _default_toolchain = ""
 if (target_os == "ohos") {
   assert(host_os == "linux" || host_os == "mac",
          "ohos builds are only supported on Linux and Mac hosts.")
-  _default_toolchain = "//build/toolchain/ohos:ohos_clang_$target_cpu"
+  _default_toolchain = product_toolchain
 } else if (target_os == "linux") {
   if (is_clang) {
     _default_toolchain = "//build/toolchain/linux:clang_$target_cpu"

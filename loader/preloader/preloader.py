@@ -129,31 +129,20 @@ def _parse_config(product_name, products_config_path, lite_config_path,
         return _parse_config_v1(config_info)
 
 
-def _copy_platforms_config(platforms_template, parts_info_file,
-                           platform_config_output_path):
-    if not os.path.exists(platforms_template):
-        raise Exception(
-            "template file '{}' doesn't exist.".format(platforms_template))
-    data = read_json_file(platforms_template)
-    if data is None:
-        raise Exception("read file '{}' failed.".format(platforms_template))
+def _copy_platforms_config(product_name, target_os, target_cpu,
+                           parts_info_file, platform_config_output_path,
+                           toolchain_label):
+    _config_info = {
+        'target_os': target_os,
+        "target_cpu": target_cpu,
+        "toolchain": toolchain_label
+    }
     _parts_config_file = os.path.relpath(parts_info_file,
                                          platform_config_output_path)
-    for _, _config in data.get('platforms').items():
-        for _info in _config:
-            _info['parts_config'] = _parts_config_file
+    _config_info['parts_config'] = _parts_config_file
+    platform_config_info = {'version': 2, 'platforms': {'phone': _config_info}}
     output_file = os.path.join(platform_config_output_path, 'platforms.build')
-    write_json_file(output_file, data)
-
-
-def _get_platform_template_file(source_root_dir, os_level):
-    if os_level == 'mini' or os_level == 'small':
-        template_file = 'platforms-lite.template'
-    else:
-        template_file = 'platforms.template'
-    platforms_template = os.path.join(source_root_dir,
-                                      'build/loader/preloader', template_file)
-    return platforms_template
+    write_json_file(output_file, platform_config_info)
 
 
 def _get_merge_subsystem_config(product_config_path, device_config_path,
@@ -195,6 +184,37 @@ def _get_merge_subsystem_config(product_config_path, device_config_path,
     write_json_file(output_file, subsystem_info)
 
 
+def _output_parts_features(parts_feature_info_file, all_parts):
+    all_features = {}
+    part_feature_map = {}
+    for _part_name, _features in all_parts.items():
+        all_features.update(_features)
+        if _features:
+            part_feature_map[_part_name.split(':')[1]] = list(_features.keys())
+    parts_feature_info = {
+        "features": all_features,
+        "part_to_feature": part_feature_map
+    }
+    write_json_file(parts_feature_info_file, parts_feature_info)
+    return all_features
+
+
+def _part_features_to_list(all_part_features):
+    attr_list = []
+    for key, val in all_part_features.items():
+        _item = ''
+        if isinstance(val, bool):
+            _item = f'{key}={str(val).lower()}'
+        elif isinstance(val, int):
+            _item = f'{key}={val}'
+        elif isinstance(val, str):
+            _item = f'{key}="{val}"'
+        else:
+            raise Exception("part feature '{key}:{val}' type not support.")
+        attr_list.append(_item)
+    return attr_list
+
+
 def _run(args):
     products_config_path = os.path.join(args.source_root_dir,
                                         args.products_config_dir)
@@ -224,20 +244,41 @@ def _run(args):
 
     product_info_output_path = os.path.join(args.source_root_dir,
                                             args.preloader_output_root_dir,
-                                            args.product_name, 'preloader')
-    platform_config_output_path = os.path.join(args.source_root_dir,
-                                               args.preloader_output_root_dir,
-                                               '{}_system'.format(os_level))
+                                            args.product_name)
 
     parts_info_file = os.path.join(product_info_output_path, 'parts.json')
     parts_config_info = {"parts": list(all_parts.keys())}
     write_json_file(parts_info_file, parts_config_info)
+    # output features
+    parts_feature_info_file = os.path.join(product_info_output_path,
+                                           'features.json')
+    all_part_features = _output_parts_features(parts_feature_info_file,
+                                               all_parts)
+    # write build_gnargs.prop
+    part_featrues_prop_file = os.path.join(product_info_output_path,
+                                           'build_gnargs.prop')
+    all_features_list = _part_features_to_list(all_part_features)
+    write_file(part_featrues_prop_file, '\n'.join(all_features_list))
 
-    platforms_template_file = _get_platform_template_file(
-        args.source_root_dir, os_level)
-    _copy_platforms_config(platforms_template_file, parts_info_file,
-                           platform_config_output_path)
+    # generate toolchain
+    # deps features info and build config info
+    target_os = build_configs.get('target_os')
+    target_cpu = build_configs.get('target_cpu')
+    if os_level == 'mini' or os_level == 'small':
+        toolchain_label = ""
+    else:
+        toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
+            target_os, target_cpu)
 
+    # add toolchain label
+    build_configs['product_toolchain_label'] = toolchain_label
+
+    # output platform config
+    _copy_platforms_config(args.product_name, target_os, target_cpu,
+                           parts_info_file, product_info_output_path,
+                           toolchain_label)
+
+    # output build info to file
     _build_info_list = []
     build_info_file = os.path.join(product_info_output_path, 'build.prop')
     for k, v in build_configs.items():
@@ -247,13 +288,12 @@ def _run(args):
                                         'build_config.json')
     write_json_file(build_info_json_file, build_configs)
 
+    # output subsystem info to file
     subsystem_config_file = os.path.join(args.source_root_dir, 'build',
                                          'subsystem_config.json')
-    output_dir = os.path.join(args.source_root_dir,
-                              args.preloader_output_root_dir)
     _get_merge_subsystem_config(products_config_path, device_config_path,
-                                subsystem_config_file, output_dir,
-                                args.product_name)
+                                subsystem_config_file,
+                                product_info_output_path, args.product_name)
 
 
 def main(argv):

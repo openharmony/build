@@ -68,6 +68,10 @@ do
     PARAM2=$(echo "$1" | sed 's/.*://')
     export $PARAM1=$PARAM2
     ;;
+  --build-gnargs-file)
+    shift
+    build_gnargs_file="$1"
+    ;;
   --build-only-gn)
     build_only_gn=true;;
   -* | *)
