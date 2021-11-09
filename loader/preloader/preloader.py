@@ -16,12 +16,14 @@
 import os
 import sys
 import argparse
+from dataclasses import dataclass
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
-from parse_lite_config import get_lite_parts_list  # noqa: E402
+from loader.preloader.parse_lite_product_config import get_lite_parts_list  # noqa: E402, E501
+from loader.preloader.parse_lite_subsystems_config import parse_lite_subsystem_config  # noqa: E402, E501
 
 
 def _get_product_config(config_dir, product_name):
@@ -45,16 +47,18 @@ def _get_base_parts(base_config_dir, os_level):
     return data
 
 
-def _get_inherit_parts(inherit_config, current_path):
-    _parts = {}
-    for _config in inherit_config:
-        _file = os.path.join(current_path, _config)
-        _info = read_json_file(_file)
-        if _info is None:
-            raise Exception("read file '{}' failed.".format(_file))
-        if _info.get('parts'):
-            _parts.update(_info.get('parts'))
-    return _parts
+def _get_inherit_parts(config_info, product_config_dir):
+    inherit_config = config_info.get('inherit')
+    inherit_parts = {}
+    if inherit_config:
+        for _config in inherit_config:
+            _file = os.path.join(product_config_dir, _config)
+            _info = read_json_file(_file)
+            if _info is None:
+                raise Exception("read file '{}' failed.".format(_file))
+            if _info.get('parts'):
+                inherit_parts.update(_info.get('parts'))
+    return inherit_parts
 
 
 def _get_device_info(device_name, device_config_path):
@@ -67,124 +71,47 @@ def _get_device_info(device_name, device_config_path):
     return device_info
 
 
-def _parse_config_v2(config_info, products_config_path, lite_config_path,
-                     base_config_dir, device_config_path):
-    os_level = config_info.get("type")
-    base_parts = _get_base_parts(base_config_dir, os_level)
-    all_parts = base_parts
-
-    inherit_config = config_info.get('inherit')
-    if inherit_config:
-        inherit_parts = _get_inherit_parts(inherit_config,
-                                           products_config_path)
-        if inherit_parts:
-            all_parts.update(inherit_parts)
-
-    current_product_parts = config_info.get("parts")
-    if current_product_parts:
-        all_parts.update(current_product_parts)
-
-    product_name = config_info.get('product_name')
-    product_company = config_info.get('product_company')
-    if os_level == 'mini' or os_level == 'small':
-        all_parts.update(
-            get_lite_parts_list(lite_config_path, product_name,
-                                product_company))
-    product_device_name = config_info.get('product_device')
-    build_configs = {}
-    if product_device_name:
-        device_info = _get_device_info(product_device_name, device_config_path)
-        if device_info:
-            build_configs.update(device_info)
-    build_configs['os_level'] = os_level
-    build_configs['product_name'] = product_name
-    build_configs['product_company'] = product_company
-    build_configs['device_name'] = product_device_name
-    return all_parts, build_configs
-
-
-def _parse_config_v1(config_info):
-    build_configs = {"os_level": 'large'}
-    return {}, build_configs
-
-
-def _parse_config(product_name, products_config_path, lite_config_path,
-                  base_parts_config_path, device_config_path):
-    curr_config_file = _get_product_config(products_config_path, product_name)
-    config_info = read_json_file(curr_config_file)
-    config_version = None
-    if config_info:
-        config_version = config_info.get('version')
-    if not config_version:
-        config_version = "1.0"
-    if config_version == "2.0":
-        if config_info and product_name != config_info.get('product_name'):
-            raise Exception(
-                "product name configuration incorrect in '{}'".format(
-                    curr_config_file))
-        return _parse_config_v2(config_info, products_config_path,
-                                lite_config_path, base_parts_config_path,
-                                device_config_path)
-    else:
-        return _parse_config_v1(config_info)
-
-
-def _copy_platforms_config(product_name, target_os, target_cpu,
-                           parts_info_file, platform_config_output_path,
-                           toolchain_label):
-    _config_info = {
+def _output_platforms_config(target_os, target_cpu, toolchain_label,
+                             parts_config_file, output_file):
+    config = {
         'target_os': target_os,
         "target_cpu": target_cpu,
-        "toolchain": toolchain_label
+        "toolchain": toolchain_label,
+        "parts_config": parts_config_file
     }
-    _parts_config_file = os.path.relpath(parts_info_file,
-                                         platform_config_output_path)
-    _config_info['parts_config'] = _parts_config_file
-    platform_config_info = {'version': 2, 'platforms': {'phone': _config_info}}
-    output_file = os.path.join(platform_config_output_path, 'platforms.build')
+
+    platform_config_info = {'version': 2, 'platforms': {'phone': config}}
     write_json_file(output_file, platform_config_info)
 
 
-def _get_merge_subsystem_config(product_config_path, device_config_path,
-                                subsystem_config_file, output_dir,
-                                product_name):
-    product_config_file = os.path.join(product_config_path,
-                                       '{}.json'.format(product_name))
-    output_file = os.path.join(output_dir, 'subsystem_config.json')
-    subsystem_info = read_json_file(subsystem_config_file)
+def _output_gnargs_prop(all_features, output_file):
+    features_list = _part_features_to_list(all_features)
+    write_file(output_file, '\n'.join(features_list))
 
-    product_subsystem_info = {}
-    product_info = read_json_file(product_config_file)
-    product_build_path = 'no_path'
-    if product_info:
-        product_build_path = product_info.get('product_build_path', 'no_path')
-    if product_build_path != 'no_path' and product_build_path != '':
-        product_subsystem_info['path'] = product_build_path
-        product_subsystem_name = "product_{}".format(product_name)
-        product_subsystem_info['name'] = product_subsystem_name
-        if subsystem_info:
-            subsystem_info[product_subsystem_name] = product_subsystem_info
 
-    product_device_name = None
-    device_build_path = 'no_path'
-    if product_info:
-        product_device_name = product_info.get('product_device')
-    if product_device_name:
-        device_info = _get_device_info(product_device_name, device_config_path)
-        if device_info:
-            device_build_path = device_info.get('device_build_path', 'no_path')
+def _get_org_subsytem_info(subsystem_config_file, os_level, configs):
+    subsystem_info = {}
+    if os_level == "standard":
+        subsystem_info = read_json_file(subsystem_config_file)
+    elif os_level == "mini" or os_level == "small":
+        ohos_build_output_dir = os.path.join(configs.preloader_output_dir,
+                                             '{}_system'.format(os_level))
+        subsystem_info = parse_lite_subsystem_config(
+            configs.lite_components_dir, ohos_build_output_dir,
+            configs.source_root_dir)
+    return subsystem_info
 
-    device_subsystem_info = {}
-    if device_build_path != 'no_path' and device_build_path != '':
-        device_subsystem_info['path'] = device_build_path
-        device_subsystem_name = "device_{}".format(product_device_name)
-        device_subsystem_info['name'] = device_subsystem_name
-        if subsystem_info:
-            subsystem_info[device_subsystem_name] = device_subsystem_info
+
+def _merge_subsystem_config(product, device, configs, os_level, output_file):
+    subsystem_info = _get_org_subsytem_info(configs.subsystem_config_json,
+                                            os_level, configs)
+    if subsystem_info:
+        subsystem_info.update(product.get_product_specific_subsystem())
+        subsystem_info.update(device.get_device_specific_subsystem())
     write_json_file(output_file, subsystem_info)
 
 
-def _output_parts_features(parts_feature_info_file, all_parts):
+def _output_parts_features(all_parts, output_file):
     all_features = {}
     part_feature_map = {}
     for _part_name, vals in all_parts.items():
@@ -197,7 +124,7 @@ def _output_parts_features(parts_feature_info_file, all_parts):
         "features": all_features,
         "part_to_feature": part_feature_map
     }
-    write_json_file(parts_feature_info_file, parts_feature_info)
+    write_json_file(output_file, parts_feature_info)
     return all_features
 
 
@@ -217,98 +144,284 @@ def _part_features_to_list(all_part_features):
     return attr_list
 
 
-def _run(args):
-    products_config_path = os.path.join(args.source_root_dir,
-                                        args.products_config_dir)
-    product_config_root_path = os.path.dirname(products_config_path)
-    lite_config_path = os.path.join(args.source_root_dir,
-                                    args.lite_products_config_dir)
-    if args.base_parts_config_dir:
-        base_parts_config_path = os.path.join(args.source_root_dir,
-                                              args.base_parts_config_dir)
-    else:
-        base_parts_config_path = os.path.join(product_config_root_path, 'base')
-    if args.device_config_dir:
-        device_config_path = os.path.join(args.source_root_dir,
-                                          args.device_config_dir)
-    else:
-        device_config_path = os.path.join(product_config_root_path, 'device')
+def _output_build_vars(build_vars, build_prop, build_config_json):
+    build_vars_list = []
+    for k, v in build_vars.items():
+        build_vars_list.append('{}={}'.format(k, v))
+    write_file(build_prop, '\n'.join(build_vars_list))
+    write_json_file(build_config_json, build_vars)
 
-    all_parts, build_configs = _parse_config(args.product_name,
-                                             products_config_path,
-                                             lite_config_path,
-                                             base_parts_config_path,
-                                             device_config_path)
 
-    os_level = build_configs.get('os_level')
-    if os_level not in ['standard', 'large', 'mini', 'small']:
-        raise Exception("product config incorrect.")
+def _output_parts_json(all_parts, output_file):
+    parts_info = {"parts": sorted(list(all_parts.keys()))}
+    write_json_file(output_file, parts_info)
 
-    product_info_output_path = os.path.join(args.source_root_dir,
-                                            args.preloader_output_root_dir,
-                                            args.product_name)
 
-    parts_info_file = os.path.join(product_info_output_path, 'parts.json')
-    parts_config_info = {"parts": list(all_parts.keys())}
-    write_json_file(parts_info_file, parts_config_info)
-    # output features
-    parts_feature_info_file = os.path.join(product_info_output_path,
-                                           'features.json')
-    all_part_features = _output_parts_features(parts_feature_info_file,
-                                               all_parts)
-    # write build_gnargs.prop
-    part_featrues_prop_file = os.path.join(product_info_output_path,
-                                           'build_gnargs.prop')
-    all_features_list = _part_features_to_list(all_part_features)
-    write_file(part_featrues_prop_file, '\n'.join(all_features_list))
+class Product():
+    def __init__(self, product_name, configs):
+        self._name = product_name
+        self._configs = configs
+        self._config_file = _get_product_config(
+            self._configs.product_config_dir, product_name)
+        self._config_info = read_json_file(self._config_file)
 
-    # generate toolchain
-    # deps features info and build config info
-    target_os = build_configs.get('target_os')
-    target_cpu = build_configs.get('target_cpu')
-    if os_level == 'mini' or os_level == 'small':
-        toolchain_label = ""
-    else:
-        toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
-            target_os, target_cpu)
+        if self._config_info:
+            device_name = self._config_info.get('product_device')
+            self._device = Device(device_name, configs)
+        else:
+            self._device = None
 
-    # add toolchain label
-    build_configs['product_toolchain_label'] = toolchain_label
+        self._device_info = _get_device_info(self._name,
+                                             self._configs.device_config_dir)
 
-    # output platform config
-    _copy_platforms_config(args.product_name, target_os, target_cpu,
-                           parts_info_file, product_info_output_path,
-                           toolchain_label)
+    def get_product_name(self):
+        return self._name
 
-    # output build info to file
-    _build_info_list = []
-    build_info_file = os.path.join(product_info_output_path, 'build.prop')
-    for k, v in build_configs.items():
-        _build_info_list.append('{}={}'.format(k, v))
-    write_file(build_info_file, '\n'.join(_build_info_list))
-    build_info_json_file = os.path.join(product_info_output_path,
-                                        'build_config.json')
-    write_json_file(build_info_json_file, build_configs)
+    def get_product_build_path(self):
+        if self._config_info:
+            return self._config_info.get('product_build_path')
+        else:
+            return None
 
-    # output subsystem info to file
-    subsystem_config_file = os.path.join(args.source_root_dir, 'build',
-                                         'subsystem_config.json')
-    _get_merge_subsystem_config(products_config_path, device_config_path,
-                                subsystem_config_file,
-                                product_info_output_path, args.product_name)
+    def get_device(self):
+        return self._device
+
+    def _get_product_specific_parts(self):
+        part_name = 'product_{}'.format(self._name)
+        subsystem_name = part_name
+        info = {}
+        info['{}:{}'.format(subsystem_name, part_name)] = {}
+        return info
+
+    def get_product_specific_subsystem(self):
+        info = {}
+        subsystem_name = 'product_{}'.format(self._name)
+        if self.get_product_build_path():
+            info[subsystem_name] = {
+                'name': subsystem_name,
+                'path': self.get_product_build_path()
+            }
+        return info
+
+    def _parse_config_v2(self, config_info):
+        os_level = config_info.get("type")
+        if os_level not in ['standard', 'large', 'mini', 'small']:
+            raise Exception("product config incorrect.")
+
+        # 1. inherit parts infomation from base config
+        all_parts = _get_base_parts(self._configs.base_parts_config_dir,
+                                    os_level)
+        # 2. inherit parts information from inherit config
+        all_parts.update(
+            _get_inherit_parts(config_info, self._configs.product_config_dir))
+
+        product_name = config_info.get('product_name')
+        product_company = config_info.get('product_company')
+
+        # 3. get parts information from product config
+        if os_level == 'mini' or os_level == 'small':
+            all_parts.update(
+                get_lite_parts_list(self._configs.lite_config_dir,
+                                    product_name, product_company))
+            all_parts.update(self._get_product_specific_parts())
+            if self._device:
+                all_parts.update(self._device.get_device_specific_parts())
+
+        else:
+            current_product_parts = config_info.get("parts")
+            if current_product_parts:
+                all_parts.update(current_product_parts)
+
+        build_vars = {}
+        build_vars['os_level'] = os_level
+        build_vars['product_name'] = product_name
+        build_vars['product_company'] = product_company
+        if self._config_info:
+            build_vars['device_name'] = self._config_info.get('product_device')
+        return all_parts, build_vars
+
+    def _parse_config_v1(self):
+        build_vars = {"os_level": 'large'}
+        return {}, build_vars
+
+    def parse_config(self):
+        config_version = None
+        if self._config_info:
+            config_version = self._config_info.get('version')
+        if not config_version:
+            config_version = "1.0"
+        if config_version == "2.0":
+            if self._config_info and self._name != self._config_info.get(
+                    'product_name'):
+                raise Exception(
+                    "product name configuration incorrect in '{}'".format(
+                        self._config_file))
+            return self._parse_config_v2(self._config_info)
+        else:
+            return self._parse_config_v1()
+
+
+class Device():
+    def __init__(self, device_name, configs):
+        self._name = device_name
+        self._configs = configs
+        self._device_info = _get_device_info(self._name,
+                                             self._configs.device_config_dir)
+
+    def get_device_info(self):
+        return self._device_info
+
+    def get_device_build_path(self):
+        if self._device_info:
+            return self._device_info.get('device_build_path')
+        else:
+            return None
+
+    def get_device_name(self):
+        return self._name
+
+    def get_device_specific_parts(self):
+        info = {}
+        if self._device_info:
+            device_build_path = self._device_info.get('device_build_path')
+            if device_build_path:
+                subsystem_name = 'device_{}'.format(self._name)
+                part_name = subsystem_name
+                info['{}:{}'.format(subsystem_name, part_name)] = {}
+        return info
+
+    def get_device_specific_subsystem(self):
+        info = {}
+        subsystem_name = 'device_{}'.format(self._name)
+        if self.get_device_build_path():
+            info[subsystem_name] = {
+                'name': subsystem_name,
+                'path': self.get_device_build_path()
+            }
+        return info
+
+
+@dataclass
+class Configs:
+    def __init__(self, args):
+        self.__post_init__(args)
+
+    def __post_init__(self, args):
+        self.source_root_dir = args.source_root_dir
+        self.product_config_dir = args.product_config_dir
+        self.preloader_output_dir = args.preloader_output_dir
+        self.lite_config_dir = args.lite_product_config_dir
+        self.lite_components_dir = args.lite_components_dir
+        self.productdefine_dir = args.productdefine_dir
+        self.subsystem_config_json = args.subsystem_config_file
+        if args.device_config_dir:
+            self.device_config_dir = args.device_config_dir
+        else:
+            self.device_config_dir = os.path.join(self.productdefine_dir,
+                                                  'device')
+        if args.base_parts_config_dir:
+            self.base_parts_configs = args.base_parts_config_dir
+        else:
+            self.base_parts_config_dir = os.path.join(self.productdefine_dir,
+                                                      'base')
+
+
+@dataclass
+class Outputs:
+    def __init__(self, args):
+        self.__post_init__(args)
+
+    def __post_init__(self, args):
+        self.build_prop = os.path.join(args.preloader_output_dir,
+                                            'build.prop')
+        self.build_config_json = os.path.join(args.preloader_output_dir,
+                                            'build_config.json')
+        self.parts_json = os.path.join(args.preloader_output_dir, 'parts.json')
+        self.build_gnargs_prop = os.path.join(args.preloader_output_dir,
+                                              'build_gnargs.prop')
+        self.features_json = os.path.join(args.preloader_output_dir,
+                                          'features.json')
+        self.subsystem_config_json = os.path.join(args.preloader_output_dir,
+                                                  'subsystem_config.json')
+        self.platforms_build = os.path.join(args.preloader_output_dir,
+                                            'platforms.build')
+
+
+class Preloader():
+    def __init__(self, args):
+        # All kinds of directories and subsystem_config_json
+        self._configs = Configs(args)
+
+        # Product & Device
+        self._product = Product(args.product_name, self._configs)
+        self._device = self._product.get_device()
+
+        # All kinds of output files
+        self._outputs = Outputs(args)
+
+    def run(self):
+        all_parts, build_vars = self._product.parse_config()
+        if self._device:
+            device_info = self._device.get_device_info()
+            if device_info:
+                build_vars.update(device_info)
+
+        # save parts to parts_json
+        _output_parts_json(all_parts, self._outputs.parts_json)
+
+        # save features to features_json
+        all_features = _output_parts_features(all_parts,
+                                              self._outputs.features_json)
+
+        # Save gn args to build_gnargs_prop
+        _output_gnargs_prop(all_features, self._outputs.build_gnargs_prop)
+
+        # generate toolchain
+        os_level = build_vars.get('os_level')
+        target_os = build_vars.get('target_os')
+        target_cpu = build_vars.get('target_cpu')
+        if os_level == 'mini' or os_level == 'small':
+            toolchain_label = ""
+        else:
+            toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
+                target_os, target_cpu)
+
+        # add toolchain label
+        build_vars['product_toolchain_label'] = toolchain_label
+
+        # output platform config
+        parts_config_file = os.path.relpath(self._outputs.parts_json,
+                                            self._configs.preloader_output_dir)
+        _output_platforms_config(target_os, target_cpu, toolchain_label,
+                                 parts_config_file,
+                                 self._outputs.platforms_build)
+
+        # output build info to file
+        _output_build_vars(build_vars, self._outputs.build_prop,
+                           self._outputs.build_config_json)
+
+        # output subsystem info to file
+        _merge_subsystem_config(self._product, self._device, self._configs,
+                                os_level, self._outputs.subsystem_config_json)
 
 
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--product-name', required=True)
     parser.add_argument('--source-root-dir', required=True)
-    parser.add_argument('--products-config-dir', required=True)
-    parser.add_argument('--lite-products-config-dir', required=True)
+    parser.add_argument('--product-config-dir', required=True)
+    parser.add_argument('--lite-product-config-dir', required=True)
+    parser.add_argument('--lite-components-dir', required=True)
+    parser.add_argument('--preloader-output-dir', required=True)
+    parser.add_argument('--subsystem-config-file', required=True)
+
+    parser.add_argument('--productdefine-dir')
     parser.add_argument('--base-parts-config-dir')
     parser.add_argument('--device-config-dir')
-    parser.add_argument('--preloader-output-root-dir', required=True)
+
     args = parser.parse_args(argv)
-    _run(args)
+    preloader = Preloader(args)
+    preloader.run()
     return 0
 
 
