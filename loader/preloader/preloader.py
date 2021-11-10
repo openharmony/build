@@ -187,8 +187,10 @@ def _get_merge_subsystem_config(product_config_path, device_config_path,
 def _output_parts_features(parts_feature_info_file, all_parts):
     all_features = {}
     part_feature_map = {}
-    for _part_name, _features in all_parts.items():
-        all_features.update(_features)
+    for _part_name, vals in all_parts.items():
+        _features = vals.get('features')
+        if _features:
+            all_features.update(_features)
         if _features:
             part_feature_map[_part_name.split(':')[1]] = list(_features.keys())
     parts_feature_info = {

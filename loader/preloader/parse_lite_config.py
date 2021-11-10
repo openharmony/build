@@ -25,7 +25,15 @@ def get_features(features):
     for feat in features:
         match = re.match(r'(\w*?)(\s*=\s*)(["\w]*?)$', feat)
         if match:
-            feats[match.group(1)] = match.group(3).replace('\"', '"')
+            key = match.group(1)
+            val = match.group(3)
+            if val == 'true':
+                feats[key] = True
+            elif val == 'false':
+                feats[key] = False
+            else:
+                feats[key] = val.replace('\"', '"')
+
     pairs = dict()
     pairs['features'] = feats
     return pairs
