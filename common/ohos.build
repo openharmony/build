@@ -4,6 +4,9 @@
     "common": {
       "module_list": [
         "//build/common:common_packages"
+      ],
+      "feature_list": [
+        "common_feature_verify"
       ]
     }
   }
