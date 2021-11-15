@@ -19,27 +19,6 @@ declare_args() {
 }
 
 declare_args() {
-  # build system type
-  is_mini_system = false
-  is_small_system = false
-  is_standard_system = false
-}
-
-if (is_mini_system) {
-  os_level = "mini"
-}
-if (is_small_system) {
-  os_level = "small"
-}
-if (is_standard_system) {
-  os_level = "standard"
-}
-
-declare_args() {
-  is_large_system = !(is_standard_system || is_small_system || is_mini_system)
-}
-
-declare_args() {
   enable_java = is_large_system
 }
 

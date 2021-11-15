@@ -22,8 +22,14 @@ import("${build_configs_path}/platforms_list.gni")
 group("make_packages") {
   deps = []
   foreach(_platform, target_platform_list) {
+    if (is_standard_system) {
+      # Lite system uses different packaging scheme, which is called in hb.
+      # So skip install_modules for lite system since it's the packaging
+      # action of standard system.
+
+      deps += [ ":${_platform}_install_modules" ]
+    }
     deps += [
-      ":${_platform}_install_modules",
       ":${_platform}_parts_list",
       ":gen_required_modules_${_platform}",
     ]

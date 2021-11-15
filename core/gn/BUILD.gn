@@ -96,10 +96,15 @@ if (product_name == "ohos-sdk") {
 } else {
   group("make_all") {
     deps = [
-      ":images",
       ":make_inner_kits",
       ":packages",
     ]
+    if (is_standard_system) {
+      # Lite system uses different packaging scheme, which is called in hb.
+      # So skip images for lite system since it's the mkimage
+      # action for standard system.
+      deps += [ ":images" ]
+    }
   }
 
   group("images") {
