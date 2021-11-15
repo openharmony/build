@@ -19,7 +19,7 @@ import json
 import os
 
 
-def parse_lite_components(file):
+def _read_lite_component_configs(file):
     subsytem_name = os.path.basename(file)[:-5]
     configs = {}
     configs['subsystem_name'] = subsytem_name
@@ -47,51 +47,44 @@ def parse_lite_components(file):
     return configs
 
 
-def save_as_ohos_build(config, ohos_build):
+def _save_as_ohos_build(config, ohos_build):
     new_config = json.dumps(config, indent=2, sort_keys=True)
     with open(ohos_build, 'w') as fout:
         fout.write(new_config)
 
 
-def parse(source_root_dir, lite_components_dir, build_configs_dir,
-          subsystem_config_file):
-    os.makedirs(build_configs_dir, exist_ok=True)
-
-    subsystem_config = {}
-    with open(subsystem_config_file, 'r') as fin:
-        subsystem_config = json.load(fin)
-
+def parse_lite_subsystem_config(lite_components_dir, output_dir,
+                                source_root_dir):
     subsystem_infos = {}
     for root, _, files in os.walk(lite_components_dir):
         for file in files:
-            if file == 'vendor.json':
-                continue
             if file[-5:] == '.json':
-                configs = parse_lite_components(os.path.join(root, file))
+                configs = _read_lite_component_configs(os.path.join(
+                    root, file))
                 subsystem_name = configs.get('subsystem_name')
-                ohos_build = os.path.join(build_configs_dir,
-                                          '{}.build'.format(subsystem_name))
-                save_as_ohos_build(configs, ohos_build)
-                info = {}
-                info['build_files'] = [ohos_build]
-                info['path'] = subsystem_config.get(subsystem_name).get('path')
-                subsystem_infos[subsystem_name] = info
-    return {
-        'source_path': source_root_dir,
-        'subsystem': subsystem_infos,
-        'no_src_subsystem': {}
-    }
+                ohos_build = os.path.join(
+                    output_dir, '{}/ohos.build'.format(subsystem_name))
+                os.makedirs(os.path.dirname(ohos_build), exist_ok=True)
+                _save_as_ohos_build(configs, ohos_build)
+                subsystem_infos[subsystem_name] = {
+                    'name':
+                    subsystem_name,
+                    "path":
+                    os.path.relpath(os.path.dirname(ohos_build),
+                                    source_root_dir),
+                }
+    return subsystem_infos
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--build-configs-dir', required=True)
+    parser.add_argument('--output-dir', required=True)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--subsystem-config-file', required=True)
     parser.add_argument('--lite-components-dir', required=True)
     options = parser.parse_args()
-    parse(options.source_root_dir, options.lite_components_dir,
-          options.build_configs_dir, options.subsystem_config_file)
+    parse_lite_subsystem_config(options.lite_components_dir,
+                                options.output_dir, options.source_root_dir)
 
 
 if __name__ == '__main__':
