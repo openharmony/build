@@ -65,7 +65,7 @@ OpenHamony上的hap包由资源，raw assets，js assets，native库，config.js
 
   8. js2abc: 是否需要将该hap包转换为ARK的字节码
 
-     签名篇见：https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/%E9%85%8D%E7%BD%AEOpenHarmony%E5%BA%94%E7%94%A8%E7%AD%BE%E5%90%8D%E4%BF%A1%E6%81%AF.md
+     签名篇见：https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md
 
   9. certificate_profile: hap对应的授权文件，用于签名
 
