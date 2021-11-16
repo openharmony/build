@@ -47,12 +47,12 @@ def _get_base_parts(base_config_dir, os_level):
     return data
 
 
-def _get_inherit_parts(config_info, product_config_dir):
+def _get_inherit_parts(config_info, source_root_dir):
     inherit_config = config_info.get('inherit')
     inherit_parts = {}
     if inherit_config:
         for _config in inherit_config:
-            _file = os.path.join(product_config_dir, _config)
+            _file = os.path.join(source_root_dir, _config)
             _info = read_json_file(_file)
             if _info is None:
                 raise Exception("read file '{}' failed.".format(_file))
@@ -213,7 +213,7 @@ class Product():
                                     os_level)
         # 2. inherit parts information from inherit config
         all_parts.update(
-            _get_inherit_parts(config_info, self._configs.product_config_dir))
+            _get_inherit_parts(config_info, self._configs.source_root_dir))
 
         product_name = config_info.get('product_name')
         product_company = config_info.get('product_company')
@@ -332,10 +332,9 @@ class Outputs:
         self.__post_init__(args)
 
     def __post_init__(self, args):
-        self.build_prop = os.path.join(args.preloader_output_dir,
-                                            'build.prop')
+        self.build_prop = os.path.join(args.preloader_output_dir, 'build.prop')
         self.build_config_json = os.path.join(args.preloader_output_dir,
-                                            'build_config.json')
+                                              'build_config.json')
         self.parts_json = os.path.join(args.preloader_output_dir, 'parts.json')
         self.build_gnargs_prop = os.path.join(args.preloader_output_dir,
                                               'build_gnargs.prop')
