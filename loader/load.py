@@ -203,6 +203,24 @@ def _get_parts_src_list(required_parts_targets, parts_info):
     return list(_src_set)
 
 
+def _check_product_part_feature(parts_info, product_preloader_dir):
+    _preloader_feature_file = os.path.join(product_preloader_dir,
+                                           'features.json')
+    _preloader_feature_info = read_json_file(_preloader_feature_file)
+    part_to_feature = _preloader_feature_info.get('part_to_feature')
+    for key, vals in part_to_feature.items():
+        _p_info = parts_info.get(key)[0]
+        def_feature_list = _p_info.get('feature_list')
+        if not def_feature_list:
+            continue
+        for _f_name in vals:
+            if _f_name not in def_feature_list:
+                raise Exception(
+                    "The product use a feature that is not supported"
+                    " by this part, part_name='{}', feature='{}'".format(
+                        key, _f_name))
+
+
 def _check_args(args, source_root_dir):
     print('args:', args)
     if 'gn_root_out_dir' not in args:
@@ -366,6 +384,10 @@ def load(args):
                                           "infos_for_testfwk.json")
     _output_infos_for_testfwk(parts_config_info, target_platform_parts,
                               infos_for_testfwk_file)
+
+    # check part feature
+    _check_product_part_feature(parts_info,
+                                os.path.dirname(args.platforms_config_file))
 
 
 def _output_infos_by_platform(part_name_infos, parts_info_dict):

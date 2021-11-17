@@ -100,7 +100,7 @@ class PartObject(object):
         self._part_name = _real_name
         self._variant_name = variant_name
         self._subsystem_name = subsystem_name
-        self._feature_name = None
+        self._feature_list = []
         self._toolchain = toolchain
         self._inner_kits_info = {}
         self._kits = []
@@ -251,8 +251,16 @@ class PartObject(object):
             build_gn_content.append(test_def)
         self._build_gn_content = build_gn_content
         # feature
-        if part_config.get('feature_name'):
-            self._feature_name = part_config.get('feature_name')
+        if part_config.get('feature_list'):
+            self._feature_list = part_config.get('feature_list')
+            # check feature
+            for _feature_name in self._feature_list:
+                if not _feature_name.startswith('{}_'.format(
+                        self._origin_name)):
+                    raise Exception(
+                        "part feature list config incorrect,"
+                        " part_name='{}', feature_name='{}'".format(
+                            self._origin_name, _feature_name))
 
         # system_capabilities is a list attribute of a part in ohos.build
         if part_config.get('system_capabilities'):
@@ -326,8 +334,8 @@ class PartObject(object):
         _info['subsystem_name'] = self._subsystem_name
         _info['system_capabilities'] = self._system_capabilities
 
-        if self._feature_name:
-            _info['feature_name'] = self._feature_name
+        if self._feature_list:
+            _info['feature_list'] = self._feature_list
         if self._variant_name != 'phone':
             toolchain_name = self._toolchain.split(':')[1]
             _build_out_dir = toolchain_name
