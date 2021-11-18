@@ -124,10 +124,9 @@ _preloader_output_dir="${source_root_dir}/out/preloader"
 ${PYTHON3} ${source_root_dir}/build/loader/preloader/preloader.py \
   --product-name ${product_name} \
   --source-root-dir ${source_root_dir} \
-  --product-config-dir "${source_root_dir}/productdefine/common/products" \
-  --lite-product-config-dir "${source_root_dir}/vendor" \
+  --vendor-dir "${source_root_dir}/vendor" \
+  --device-dir "${source_root_dir}/device" \
   --lite-components-dir "${source_root_dir}/build/lite/components" \
-  --productdefine-dir "${source_root_dir}/productdefine/common" \
   --subsystem-config-file "${source_root_dir}/build/subsystem_config.json" \
   --preloader-output-dir ${_preloader_output_dir}/${product_name}
 
