@@ -16,17 +16,16 @@ set -e
 
 do_make()
 {
-    TARGET_OUT_DIR=${BASE_HOME}/${OUT_DIR}/${TARGET_OS}-${TARGET_ARCH}-${BUILD_VARIANT}
+    TARGET_OUT_DIR=${BASE_HOME}/${OUT_DIR}/${DEVICE_NAME}
     if [[ ! -d "${TARGET_OUT_DIR}" ]];then
         mkdir -p ${TARGET_OUT_DIR}
     fi
-    if [[ "${TARGET_OS}" == "ohos" && "${TARGET_ARCH}" == "arm64" ]];then
-        TARGET_OUT_DIR_LINK=${BASE_HOME}/${OUT_DIR}/${BUILD_VARIANT}
-        if [[ -d "${TARGET_OUT_DIR_LINK}" ]] || [[ -L "${TARGET_OUT_DIR_LINK}" ]];then
+
+    TARGET_OUT_DIR_LINK=${BASE_HOME}/${OUT_DIR}/${TARGET_OS}-${TARGET_ARCH}-${BUILD_VARIANT}
+    if [[ -d "${TARGET_OUT_DIR_LINK}" ]] || [[ -L "${TARGET_OUT_DIR_LINK}" ]];then
             rm -r ${TARGET_OUT_DIR_LINK}
-        fi
-        ln -s ${TARGET_OS}-${TARGET_ARCH}-${BUILD_VARIANT} ${TARGET_OUT_DIR_LINK}
     fi
+    ln -s ${DEVICE_NAME} ${TARGET_OUT_DIR_LINK}
 
     # prepare to save build log
     LOG_FILE=${TARGET_OUT_DIR}/build.log
