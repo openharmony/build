@@ -88,8 +88,7 @@ def get_product_config(config_dir, product_name, company):
     raise Exception(f'Error: failed to get product config for {product_name}')
 
 
-def get_lite_parts_list(config_dir, product_name, company):
-    config = get_product_config(config_dir, product_name, company)
+def get_vendor_parts_list(config):
     return transform(config).get('parts')
 
 
@@ -99,8 +98,9 @@ def main():
     parser.add_argument('--company', required=True)
     parser.add_argument('--config-dir', required=True)
     options = parser.parse_args()
-    get_lite_parts_list(options.config_dir, options.product_name,
-                        options.company)
+    config = get_product_config(options.config_dir, options.product_name,
+                                options.company)
+    get_vendor_parts_list(config)
 
 
 if __name__ == '__main__':
