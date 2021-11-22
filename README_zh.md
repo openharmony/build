@@ -183,7 +183,7 @@
 
 [如何跟随系统使用gn编译hap](docs/how-to-build-a-hap.md)
 
-[开源软件Notice收集策略说明](开源软件Notice收集策略说明.md)
+[开源软件Notice收集策略说明](docs/开源软件Notice收集策略说明.md)
 
 
 ## 相关仓<a name="section1371113476307"></a>
