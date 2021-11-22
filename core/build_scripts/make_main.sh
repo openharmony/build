@@ -21,12 +21,6 @@ do_make()
         mkdir -p ${TARGET_OUT_DIR}
     fi
 
-    TARGET_OUT_DIR_LINK=${BASE_HOME}/${OUT_DIR}/${TARGET_OS}-${TARGET_ARCH}-${BUILD_VARIANT}
-    if [[ -d "${TARGET_OUT_DIR_LINK}" ]] || [[ -L "${TARGET_OUT_DIR_LINK}" ]];then
-            rm -r ${TARGET_OUT_DIR_LINK}
-    fi
-    ln -s ${DEVICE_NAME} ${TARGET_OUT_DIR_LINK}
-
     # prepare to save build log
     LOG_FILE=${TARGET_OUT_DIR}/build.log
     log_prepare $LOG_FILE
