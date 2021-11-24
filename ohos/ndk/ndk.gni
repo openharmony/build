@@ -63,6 +63,11 @@ template("ohos_ndk_library") {
 
   _ndk_description_file = invoker.ndk_description_file
 
+  _system_capability = ""
+  if (defined(invoker.system_capability)) {
+    _system_capability = invoker.system_capability
+  }
+
   _deps = []
   if (defined(invoker.deps)) {
     _deps += invoker.deps
@@ -94,6 +99,7 @@ template("ohos_ndk_library") {
   _ndk_stub_target = "${target_name}__ndk_stub"
   _generated_ndk_stub_file = target_gen_dir + "/${target_name}.ndk/" +
                              get_path_info(_ndk_description_file, "name") + ".c"
+  _current_label = get_label_info(":${target_name}", "label_with_toolchain")
   action_with_pydeps(_ndk_stub_target) {
     deps = _deps
     script = "//build/ohos/ndk/generate_ndk_stub_file.py"
@@ -108,6 +114,15 @@ template("ohos_ndk_library") {
     ]
     inputs = [ _ndk_description_file ]
     outputs = [ _generated_ndk_stub_file ]
+
+    _ndk_config_info = {
+      label = _current_label
+      lib_name = _output_name
+      system_capability = _system_capability
+    }
+    metadata = {
+      ndk_config = [ _ndk_config_info ]
+    }
   }
 
   _ndk_config_target = "${target_name}__ndk_config"
