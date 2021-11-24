@@ -287,9 +287,16 @@ class Product():
         if config.get('device_build_path'):
             device_info['device_build_path'] = config.get('device_build_path')
         else:
-            device_info['device_build_path'] = os.path.join(
-                self._dirs.device_dir, config['device_company'],
-                config['board'])
+            device_build_path = os.path.join(self._dirs.device_dir,
+                                             config['device_company'],
+                                             config['board'])
+            if not os.path.exists(device_build_path):
+                device_build_path = os.path.join(self._dirs.device_dir,
+                                                 'board',
+                                                 config['device_company'],
+                                                 config['board'])
+            device_info['device_build_path'] = device_build_path
+
         return device_info
 
     def _parse_config_v3(self, config):
@@ -312,7 +319,6 @@ class Product():
         elif not self._is_built_in_product(self._config_file):
             relpath = os.path.relpath(self._config_file, self._dirs.vendor_dir)
             build_vars['product_company'] = relpath.split('/')[0]
-
         else:
             build_vars['product_company'] = config.get('device_company')
 
