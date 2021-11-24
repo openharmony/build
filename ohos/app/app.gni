@@ -265,6 +265,7 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
+    js2abc = _js2abc
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }

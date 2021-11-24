@@ -97,6 +97,7 @@ template("package_app") {
                              "key_alias",
                              "certificate_file",
                              "install_module_info",
+                             "js2abc",
                            ])
     script = "//build/scripts/hapbuilder.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -190,6 +191,19 @@ template("package_app") {
       metadata = {
         install_modules = [ install_module_info ]
       }
+    }
+    if (defined(js2abc) && js2abc) {
+      args += [
+        "--nodejs-path",
+        rebase_path(nodejs, root_build_dir),
+        "--js2abc-js",
+        rebase_path(js2abc_js, root_build_dir),
+        "--js2abc",
+      ]
+      inputs += [
+        nodejs,
+        js2abc_js,
+      ]
     }
   }
 }

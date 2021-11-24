@@ -19,6 +19,7 @@ import sys
 import shutil
 import os
 import tempfile
+import json
 from util import build_utils  # noqa: E402
 
 
@@ -79,6 +80,23 @@ def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
         packing_cmd.extend(['--assets-path', assets_dir])
 
 
+def get_ark_toolchain_version(options):
+    cmd = [options.nodejs_path, options.ts2abc_js, '--bc-version']
+    return build_utils.check_output(cmd).strip('\n')
+
+
+def tweak_hap_profile(options, package_dir):
+    hap_profile = os.path.join(package_dir, 'config.json')
+    if not os.path.exists(hap_profile):
+        raise Exception('Error: config.json of hap file not exists')
+    config = {}
+    with open(hap_profile, 'r') as fileobj:
+        config = json.load(fileobj)
+        config['module']['distro']['virtualMachine'] = 'ark{}'.format(
+            get_ark_toolchain_version(options))
+    build_utils.write_json(config, hap_profile)
+
+
 def create_hap(options, signed_hap):
     with build_utils.temp_dir() as package_dir, tempfile.NamedTemporaryFile(
             suffix='.hap') as output:
@@ -94,6 +112,8 @@ def create_hap(options, signed_hap):
                    packing_cmd)
 
         add_resources(options.packaged_resources, package_dir, packing_cmd)
+        if options.js2abc:
+            tweak_hap_profile(options, package_dir)
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
             os.mkdir(lib_path)
@@ -122,6 +142,12 @@ def parse_args(args):
                       action="append",
                       help='path to dynamic shared objects')
     parser.add_option('--hap-profile', help='path to hap profile')
+    parser.add_option('--nodejs-path', help='path to node')
+    parser.add_option('--js2abc-js', help='path to ts2abc.js')
+    parser.add_option('--js2abc',
+                      action='store_true',
+                      default=False,
+                      help='whether to transform js to ark bytecode')
     parser.add_option('--hap-packing-tool', help='path to hap packing tool')
     parser.add_option('--private-key-path', help='path to private key')
     parser.add_option('--sign-algo', help='signature algorithm')
