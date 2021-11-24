@@ -184,3 +184,4 @@ default_keystore_password = "123456"
 default_keystore_path = "//prebuilts/signcenter/key/OpenHarmony.p12"
 default_hap_certificate_file =
     "//prebuilts/signcenter/certificates/OpenHarmonyApplication.pem"
+js2abc_js = "//prebuilts/ace-toolkit/ace-loader/bin/ark/ts2abc.js"
