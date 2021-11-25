@@ -91,7 +91,10 @@ print("build configs generation is complete.")
 # gn target defined
 if (product_name == "ohos-sdk") {
   group("build_ohos_sdk") {
-    deps = [ "//build/ohos/sdk:ohos_sdk" ]
+    deps = [
+      "//build/ohos/ndk:ohos_ndk",
+      "//build/ohos/sdk:ohos_sdk",
+    ]
   }
 } else {
   group("make_all") {

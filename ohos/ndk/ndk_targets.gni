@@ -1,0 +1,42 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# ndk library, ndk header configuration
+_ndk_library_targets = [
+  "//third_party/zlib:libz_ndk",
+  "//third_party/zlib:zlib_header",
+]
+
+_ndk_base_libs = []
+
+_ndk_sysroot_uapi = []
+
+_ndk_cmake = [
+  "//prebuilts/cmake/darwin-x86:darwin_cmake_copy",
+  "//prebuilts/cmake/linux-x86:linux_cmake_copy",
+  "//prebuilts/cmake/windows-x86:windows_cmake_copy",
+  "//build/ohos/ndk:ndk_cmake_files",
+]
+
+_ndk_targets_list =
+    _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake
+
+_parse_script = "//build/ohos/ndk/parse_ndk_targets.py"
+_parse_args = [
+  "--source-root-dir",
+  rebase_path("//", root_build_dir),
+  "--ndk-lib-target-list",
+]
+_parse_args += _ndk_targets_list
+
+all_ndk_targets_list = exec_script(_parse_script, _parse_args, "list lines")

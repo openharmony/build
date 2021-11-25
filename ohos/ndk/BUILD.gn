@@ -11,23 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ndk_build_home = "//build/ohos/ndk"
-generate_ndk_build_script = "${ndk_build_home}/scan_ndk_targets.py"
-generated_ndk_build_home = get_path_info(ndk_build_home, "gen_dir") + "/ndk"
-generated_ndk_build = "${generated_ndk_build_home}/BUILD.gn"
-
-generate_ndk_build_args = [
-  "--output",
-  rebase_path(generated_ndk_build, root_build_dir),
-  "--root-dir",
-  rebase_path("//", root_build_dir),
-]
-
-# Scan all ndk_library and ndk_header targets.
-exec_script(generate_ndk_build_script, generate_ndk_build_args)
-
 import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
+import("//build/ohos/ndk/ndk_targets.gni")
 import("//build/ohos/sdk/sdk.gni")
 
 package_info_file = "$ndk_os_irrelevant_out_dir/oh-uni-package.json"
@@ -48,33 +34,59 @@ package_info = {
 }
 write_file(package_info_file, package_info, "json")
 
+action_with_pydeps("_collect_ndk_syscap") {
+  deps = all_ndk_targets_list
+  script = "//build/ohos/ndk/collect_ndk_syscap.py"
+  depfile = "$target_gen_dir/$target_name.d"
+  _ndk_syscap_desc_file =
+      "${ndk_os_irrelevant_out_dir}/ndk_system_capability.json"
+  outputs = [ _ndk_syscap_desc_file ]
+  args = [
+    "--depfile",
+    rebase_path(depfile, root_build_dir),
+    "--system-capability-file",
+    rebase_path(_ndk_syscap_desc_file, root_build_dir),
+    "--targets-build-config",
+  ]
+  foreach(_ndk_target, all_ndk_targets_list) {
+    _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
+                      get_label_info(_ndk_target, "name") + ".build_config"
+    args += [ rebase_path(_target_bc_file, root_build_dir) ]
+  }
+}
+
+group("all_ndk_targets") {
+  deps = [ ":_collect_ndk_syscap" ]
+}
+
 ndk_targets = [
   ":ndk_doxygen",
   ":ndk_cmake_files",
-  "${generated_ndk_build_home}:all_ndk_targets",
+  ":all_ndk_targets",
   ":merge_ndk_notice",
   ":verify_ndk_notice_file",
 ]
-if (ndk_system == "win") {
-  ndk_targets +=
-      [ "//prebuilts/clang/ohos/windows-x86_64:windows_x86_64_toolchains" ]
-} else if (ndk_system == "mac") {
-  ndk_targets +=
-      [ "//prebuilts/clang/ohos/darwin-x86_64:darwin_x86_64_toolchains" ]
-} else if (ndk_system == "linux") {
-  ndk_targets +=
-      [ "//prebuilts/clang/ohos/linux-x86_64:linux_x86_64_toolchains" ]
-} else if (ndk_system == "default") {
-  if (host_os == "mac") {
-    ndk_targets +=
-        [ "//prebuilts/clang/ohos/darwin-x86_64:darwin_x86_64_toolchains" ]
-  } else {
-    ndk_targets += [
-      "//prebuilts/clang/ohos/windows-x86_64:windows_x86_64_toolchains",
-      "//prebuilts/clang/ohos/linux-x86_64:linux_x86_64_toolchains",
-    ]
-  }
-}
+
+# if (ndk_system == "win") {
+#   ndk_targets +=
+#       [ "//prebuilts/clang/ohos/windows-x86_64:windows_x86_64_toolchains" ]
+# } else if (ndk_system == "mac") {
+#   ndk_targets +=
+#       [ "//prebuilts/clang/ohos/darwin-x86_64:darwin_x86_64_toolchains" ]
+# } else if (ndk_system == "linux") {
+#   ndk_targets +=
+#       [ "//prebuilts/clang/ohos/linux-x86_64:linux_x86_64_toolchains" ]
+# } else if (ndk_system == "default") {
+#   if (host_os == "mac") {
+#     ndk_targets +=
+#         [ "//prebuilts/clang/ohos/darwin-x86_64:darwin_x86_64_toolchains" ]
+#   } else {
+#     ndk_targets += [
+#       "//prebuilts/clang/ohos/windows-x86_64:windows_x86_64_toolchains",
+#       "//prebuilts/clang/ohos/linux-x86_64:linux_x86_64_toolchains",
+#     ]
+#   }
+# }
 group("ohos_ndk") {
   deps = ndk_targets
   if (archive_ndk) {
@@ -94,7 +106,7 @@ ndk_doxygen_output = "$ndk_docs_out_dir/html"
 ndk_docs_portal = "$ndk_docs_out_dir/index.html"
 
 action_with_pydeps("generate_ndk_docs") {
-  deps = [ "${generated_ndk_build_home}:all_ndk_targets" ]
+  deps = [ ":all_ndk_targets" ]
   script = "//build/ohos/ndk/generate_ndk_docs.py"
   depfile = "$target_gen_dir/$target_name.d"
 
@@ -149,7 +161,7 @@ ohos_ndk_copy("ndk_cmake_files") {
 }
 
 action_with_pydeps("merge_ndk_notice") {
-  deps = [ "${generated_ndk_build_home}:all_ndk_targets" ]
+  deps = [ ":all_ndk_targets" ]
   script = "//build/ohos/notice/merge_notice_files.py"
   depfile = "$target_gen_dir/$target_name.d"
 
