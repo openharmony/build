@@ -81,7 +81,7 @@ def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
 
 
 def get_ark_toolchain_version(options):
-    cmd = [options.nodejs_path, options.ts2abc_js, '--bc-version']
+    cmd = [options.nodejs_path, options.js2abc_js, '--bc-version']
     return build_utils.check_output(cmd).strip('\n')
 
 
