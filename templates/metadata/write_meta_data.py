@@ -72,8 +72,10 @@ def write_meta_data(options, direct_deps):
         }
     }
     root = meta_data['root']
-    if options.type == 'js_assets' or options.type == 'assets':
-        root[options.type] = options.assets
+    if options.type == 'js_assets':
+        root[options.type] = options.js_assets
+    if options.type == 'assets':
+        root[options.type] = options.raw_assets
     if options.type == 'resources':
         root[options.type] = options.resources
         package_name = options.package_name
@@ -83,8 +85,18 @@ def write_meta_data(options, direct_deps):
         root['hap_path'] = options.hap_path
         for target_type in ['js_assets', 'assets', 'resources']:
             root[target_type] = []
-            for d in deps.All(target_type):
-                root[target_type].extend(d[target_type])
+        if options.js_assets:
+            root['js_assets'] = options.js_assets
+        if options.raw_assets:
+            root['assets'] = options.raw_assets
+        if options.resources:
+            root['resources'] = options.resources
+        for target_type in ['js_assets', 'assets', 'resources']:
+            for dep in deps.All(target_type):
+                if root.get(target_type):
+                    root.get(target_type).extend(dep[target_type])
+                else:
+                    root[target_type] = dep[target_type]
     if options.type == 'hap' or options.type == 'resources':
         hap_profile = options.hap_profile
         root['hap_profile'] = hap_profile if hap_profile else ""
@@ -98,7 +110,8 @@ def main():
                         help='output meta data file',
                         required=True)
     parser.add_argument('--type', help='type of module', required=True)
-    parser.add_argument('--assets', nargs='+', help='assets directory')
+    parser.add_argument('--raw-assets', nargs='+', help='raw assets directory')
+    parser.add_argument('--js-assets', nargs='+', help='js assets directory')
     parser.add_argument('--resources', nargs='+', help='resources directory')
     parser.add_argument('--hap-path', help='path to output hap')
     parser.add_argument('--depfile', help='path to .d file')
@@ -110,8 +123,8 @@ def main():
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
     possible_input_strings = [
-        options.type, options.assets, options.resources, options.hap_path,
-        options.hap_profile, options.package_name
+        options.type, options.raw_assets, options.js_assets, options.resources,
+        options.hap_path, options.hap_profile, options.package_name
     ]
     input_strings = [x for x in possible_input_strings if x]
 

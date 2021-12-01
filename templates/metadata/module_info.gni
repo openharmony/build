@@ -198,10 +198,11 @@ template("write_meta_data") {
                              "meta_data",
                              "type",
                              "resources",
-                             "assets",
                              "hap_path",
                              "hap_profile",
                              "package_name",
+                             "raw_assets",
+                             "js_assets",
                            ])
     if (type != "js_assets" && type != "assets" && type != "resources" &&
         type != "hap") {
@@ -263,6 +264,7 @@ template("write_meta_data") {
       }
     }
     set_sources_assignment_filter([])
+
     if (_deps_metadata != []) {
       args += [ "--deps-metadata" ]
       foreach(d, _deps_metadata) {
@@ -270,6 +272,7 @@ template("write_meta_data") {
       }
       inputs += _deps_metadata
     }
+
     if (defined(resources)) {
       args += [ "--resources" ]
       foreach(res, resources) {
@@ -290,12 +293,20 @@ template("write_meta_data") {
       ]
     }
 
-    if (defined(assets)) {
-      args += [ "--assets" ]
-      foreach(asset, assets) {
+    if (defined(raw_assets)) {
+      args += [ "--raw-assets" ]
+      foreach(asset, raw_assets) {
         args += [ rebase_path(asset, root_build_dir) ]
       }
     }
+
+    if (defined(js_assets)) {
+      args += [ "--js-assets" ]
+      foreach(asset, js_assets) {
+        args += [ rebase_path(asset, root_build_dir) ]
+      }
+    }
+
     if (defined(hap_path)) {
       args += [
         "--hap-path",

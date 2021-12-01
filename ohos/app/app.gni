@@ -33,7 +33,7 @@ template("ohos_assets") {
     forward_variables_from(invoker, [ "deps" ])
     type = "assets"
     meta_data = _metadata
-    assets = invoker.sources
+    raw_assets = invoker.sources
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
@@ -61,7 +61,7 @@ template("ohos_js_assets") {
                            ])
     type = "js_assets"
     meta_data = _metadata
-    assets = [ source_dir ]
+    js_assets = [ source_dir ]
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
@@ -204,6 +204,12 @@ template("ohos_hap") {
   _metadata_target = "${target_name}__metadata"
   _meta_data = "$target_gen_dir/$target_name.metadata"
   write_meta_data(_metadata_target) {
+    forward_variables_from(invoker,
+                           [
+                             "raw_assets",
+                             "resources",
+                             "js_assets",
+                           ])
     meta_data = _meta_data
     possible_deps = _deps
     type = "hap"

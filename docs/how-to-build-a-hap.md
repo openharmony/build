@@ -11,37 +11,9 @@ OpenHamony上的hap包由资源，raw assets，js assets，native库，config.js
 
 ## 编译系统提供的模板
 
-编译系统提供了4个模板，用来编译hap包。
+编译系统提供了ohos_hap模板，用来编译hap包。
 
 模板集成在ohos.gni中，使用之前需要引用build/ohos.gni
-
-### ohos_resources
-
-- 声明一个资源目标。资源目标被restool编译之后会生成index文件，hap中会打包资源源文件和index文件。
-- 该目标会同时生成资源编译后的ResourceTable.h，直接依赖该目标就可以引用该头文件
-
-- 资源目标的目标名必须以"resources"或"resource"或"res"结尾，否则编译检查时会报错
-- 支持的变量:
-  1. sources: 资源的路径，变量类型是list，可以写多个路径
-  2. hap_profile: 编译资源时需要提供对应hap包的config.json
-  3. deps: 当前目标的依赖，可选
-
-### ohos_assets
-
-- 声明一个资产目标
-- 注意拼写：assets不是assert
-- assets目标的目标名必须以"assets"或"asset"结尾
-- 支持的变量：
-  1. sources：raw assets所在路径，变量类型是list，可以写多个路径
-  2. deps： 当前目标的依赖，可选
-
-## ohos_js_assets
-
-- 声明一个JS 资源目标，JS资源是L2 hap包的可执行部分
-- JS assets目标的目标名必须以"assets"或"asset"结尾
-- 支持的变量：
-  1. source_dir: JS 资源的路径，变量类型是string，只能写一个
-  2. deps: 当前目标的依赖，可选
 
 ### ohos_hap
 
@@ -51,35 +23,41 @@ OpenHamony上的hap包由资源，raw assets，js assets，native库，config.js
 
   1.  hap_profile: hap包的config.json
 
-  2. deps: 当前目标的依赖
+  2. raw_assets: 原始assets，这些assets会直接拷贝到hap包的assets目录下
 
-  3. shared_libraries: 当前目标依赖的native库
+  3. resources: 资源文件，编译后放置在assets/entry/resources目录下
 
-  4. hap_name: hap包的名字，可选，默认为目标名
+  4. js_assets: js资源，ace编译后放置在assets/js/default目录下
 
-  5. final_hap_path: 用户可以制定生成的hap的位置，可选，final_hap_path中会覆盖hap_name
+  5. deps: 当前目标的依赖
 
-  6. subsystem_name: hap包从属的子系统名，需要和ohos.build中的名字对应，否则将导致无法安装到system镜像中
+  6. shared_libraries: 当前目标依赖的native库
 
-  7. part_name: hap包从属的部件名，同subsystem_name
+  7. hap_name: hap包的名字，可选，默认为目标名
 
-  8. js2abc: 是否需要将该hap包转换为ARK的字节码
+  8. final_hap_path: 用户可以制定生成的hap的位置，可选，final_hap_path中会覆盖hap_name
 
-     签名篇见：https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md
+  9. subsystem_name: hap包从属的子系统名，需要和ohos.build中的名字对应，否则将导致无法安装到system镜像中
 
-  9. certificate_profile: hap对应的授权文件，用于签名
+  10. part_name: hap包从属的部件名，同subsystem_name
 
-  10. certificate_file: 证书文件，证书文件和授权文件，应用开发者需要去openharmony官网申请
+  11. js2abc: 是否需要将该hap包转换为ARK的字节码
 
-  11. keystore_path: keystore文件，用于签名
+      签名篇见：https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md
 
-  12. keystore_password: keystore的密码，用于签名
+  12. certificate_profile: hap对应的授权文件，用于签名
 
-  13. key_alias: key的别名 
+  13. certificate_file: 证书文件，证书文件和授权文件，应用开发者需要去openharmony官网申请
 
-  14. module_install_name:安装时的hap包名称
+  14. keystore_path: keystore文件，用于签名
 
-  15. module_install_dir: 安装到system中的位置，默认安装在system/app目录下
+  15. keystore_password: keystore的密码，用于签名
+  
+  16. key_alias: key的别名 
+  
+  17. module_install_name:安装时的hap包名称
+  
+  18. module_install_dir: 安装到system中的位置，默认安装在system/app目录下
 
 ## 一个例子
 
@@ -88,10 +66,9 @@ import("//build/ohos.gni") # 引用ohos.gni
 
 ohos_hap("clock") {
   hap_profile = "./src/main/config.json" # config.json
-  deps = [
-    ":clock_js_assets", # JS assets
-    ":clock_resources", # 资源
-  ]
+  js_assets = ["./src/main/js/default"]
+  raw_assets = ["./raw_assets"]
+  resources = ["./src/main/resources"]
   shared_libraries = [
     "//third_party/libpng:libpng", # native库
   ]
@@ -100,12 +77,27 @@ ohos_hap("clock") {
   part_name = "prebuilt_hap"
   subsystem_name = "applications"
 }
-ohos_js_assets("clock_js_assets") {
-  source_dir = "./src/main/js/default"
-}
-ohos_resources("clock_resources") {
-  sources = [ "./src/main/resources" ]
-  hap_profile = "./src/main/config.json"
-}
+```
+
+### hap解压视图
+
+```
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     1439  2009-01-01 00:00   assets/raw_assets                                 -----> raw_assets
+      354  2009-01-01 00:00   assets/entry/resources.index                      ------> resources
+        1  2009-01-01 00:00   assets/entry/resources/base/media/attributes.key  ------> resources
+        1  2009-01-01 00:00   assets/entry/resources/base/media/constants.key   ------> resources
+        1  2009-01-01 00:00   assets/entry/resources/base/media/contents.key    ------> resources
+     6790  2009-01-01 00:00   assets/entry/resources/base/media/icon.png        ------> resources
+        1  2009-01-01 00:00   assets/entry/resources/base/media/nodes.key       ------> resources
+    11170  2009-01-01 00:00   assets/js/default/app.js                          ------> js_assets
+       48  2009-01-01 00:00   assets/js/default/i18n/en-US.json                 ------> js_assets
+       50  2009-01-01 00:00   assets/js/default/i18n/zh-CN.json                 ------> js_assets
+      224  2009-01-01 00:00   assets/js/default/manifest.json                   ------> js_assets
+    41481  2009-01-01 00:00   assets/js/default/pages/index/index.js            ------> js_assets
+      909  2009-01-01 00:00   config.json                                       ------> hap_profile
+   266248  2009-01-01 00:00   libs/libpng.z.so                                  ------> shared_libraries
+
 ```
 
