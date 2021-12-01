@@ -111,6 +111,7 @@ endif()
 
 set(CMAKE_C_COMPILER_TARGET   ${OHOS_LLVM})
 set(CMAKE_CXX_COMPILER_TARGET ${OHOS_LLVM})
+set(CMAKE_ASM_COMPILER_TARGET ${OHOS_LLVM})
 
 # Export configurable variables for the try_compile() command.
 set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
