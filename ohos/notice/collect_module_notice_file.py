@@ -42,7 +42,7 @@ def find_license_recursively(current_dir, default_license):
         return default_license
     for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
         candidate = os.path.join(current_dir, file)
-        if os.path.exists(os.path.join(current_dir, file)):
+        if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)
     return find_license_recursively(os.path.dirname(current_dir),
                                     default_license)
