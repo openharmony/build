@@ -95,6 +95,10 @@
     "path": "base/powermgr",
     "name": "powermgr"
   },
+  "usb": {
+    "path": "base/usb",
+    "name": "usb"
+  },
   "applications": {
     "path": "applications/standard",
     "name": "applications"
