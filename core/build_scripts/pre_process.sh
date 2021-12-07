@@ -32,7 +32,7 @@ pre_process()
             exit $RET
     esac
 
-    export PATH=${BASE_HOME}/prebuilts/python/${HOST_DIR}/3.8.5/bin:${BASE_HOME}/prebuilts/build-tools/${HOST_DIR}/bin:$PATH
+    export PATH=${BASE_HOME}/prebuilts/python/${HOST_DIR}/3.8.5/bin:$PATH
     python --version
 
     source ${BUILD_SCRIPT_DIR}/init_parameters.sh
