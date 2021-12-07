@@ -102,6 +102,7 @@ case $(uname -s) in
         exit $RET
 esac
 
+export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:$PATH
 # set python3
 PYTHON3=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.8.5/bin/python3
 
