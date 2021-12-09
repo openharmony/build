@@ -13,7 +13,6 @@
 # limitations under the License.
 
 set -e
-set +e
 
 echo "++++++++++++++++++++++++++++++++++++++++"
 date +%F' '%H:%M:%S
@@ -39,8 +38,10 @@ function help() {
   exit 1
 }
 
-export source_root_dir=$(cd $(dirname $0);pwd)
 
+script_path=$(cd $(dirname $0);pwd)
+
+source_root_dir="${script_path}"
 while [[ ! -f "${source_root_dir}/.gn" ]]; do
     source_root_dir="$(dirname "${source_root_dir}")"
     if [[ "${source_root_dir}" == "/" ]]; then
@@ -49,10 +50,42 @@ while [[ ! -f "${source_root_dir}/.gn" ]]; do
     fi
 done
 
+build_params=""
+
+while test $# -gt 0
+do
+  case "$1" in
+  --product-name)
+    shift
+    product_name="$1"
+    ;;
+  --help | -h)
+    help
+    exit 0
+    ;;
+  *)
+    build_params+=" $1"
+    ;;
+  esac
+  shift
+done
+
+
 if [[ "${source_root_dir}x" == "x" ]]; then
   echo "Error: source_root_dir cannot be empty."
   exit 1
 fi
+if [[ ! -d "${source_root_dir}" ]]; then
+  echo "Error: source_root_dir is incorrect."
+  exit 1
+fi
+if [[ "${product_name}x" == "x" ]]; then
+  echo -e "\033[31mError: the product name should be specified!\033[0m"
+  help
+  exit 1
+fi
+
+product_name=$(echo ${product_name} | cut -d @ -f 1)
 
 case $(uname -s) in
     Darwin)
@@ -72,6 +105,7 @@ esac
 export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:$PATH
 # set python3
 PYTHON3=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.8.5/bin/python3
+
 if [[ ! -f "${PYTHON3}" ]]; then
   echo -e "\033[33m Please execute the build/prebuilts_download.sh \033[0m"
   exit 1
@@ -79,13 +113,40 @@ fi
 
 ${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
 
-${PYTHON3} ${source_root_dir}/build/scripts/entry.py --source-root-dir ${source_root_dir} $@
+export OHOS_ROOT_PATH="${source_root_dir}"
+export PYTHON3="${PYTHON3}"
+export USE_OHOS_INIT=true
+export BUILD_IMAGE=true
 
-if [[ "$?" -ne 0 ]]; then
-    echo -e "\033[31m=====build ${product_name} error=====\033[0m"
+cd ${source_root_dir}
+
+# preloader
+_preloader_output_dir="${source_root_dir}/out/preloader"
+${PYTHON3} ${source_root_dir}/build/loader/preloader/preloader.py \
+  --product-name ${product_name} \
+  --source-root-dir ${source_root_dir} \
+  --vendor-dir "${source_root_dir}/vendor" \
+  --device-dir "${source_root_dir}/device" \
+  --lite-components-dir "${source_root_dir}/build/lite/components" \
+  --subsystem-config-file "${source_root_dir}/build/subsystem_config.json" \
+  --preloader-output-dir ${_preloader_output_dir}/${product_name}
+
+source ${_preloader_output_dir}/${product_name}/build.prop
+
+# call build
+${source_root_dir}/build/build_scripts/build_${os_level}.sh \
+  --product-name ${product_name} \
+  --device-name ${device_name} \
+  --target-os ${target_os} \
+  --target-cpu ${target_cpu} \
+  --build-gnargs-file "${_preloader_output_dir}/${product_name}/build_gnargs.prop" \
+  ${build_params}
+
+if [[ "${PIPESTATUS[0]}" -ne 0 ]]; then
+    echo -e "\033[31m=====build ${product_name} error.\033[0m"
     exit 1
 fi
-echo -e "\033[32m=====build ${product_name} successful=====\033[0m"
+echo -e "\033[32m=====build ${product_name} successful.\033[0m"
 
 date +%F' '%H:%M:%S
 echo "++++++++++++++++++++++++++++++++++++++++"
