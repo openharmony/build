@@ -15,12 +15,11 @@
 
 import os
 import sys
-import shutil
-import filecmp
+import load_bundle_file
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501  pylint: disable=C0413, E0611
-from scripts.util import build_utils  # noqa: E402  pylint: disable=C0413
+
 
 import_list = """
 # import("//build/ohos.gni")
@@ -411,7 +410,11 @@ class LoadBuildConfig(object):
         parts_info = {}
         parts_path_dict = {}
         for _build_file in _build_files:
-            _parts_config = read_build_file(_build_file)
+            if _build_file.endswith('bundle.json'):
+                bundle_part_obj = load_bundle_file.BundlePartObj(_build_file)
+                _parts_config = bundle_part_obj.to_ohos_build()
+            else:
+                _parts_config = read_build_file(_build_file)
             _subsystem_name = _parts_config.get('subsystem')
             if subsystem_name and _subsystem_name != subsystem_name:
                 raise Exception(

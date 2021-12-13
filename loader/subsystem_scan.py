@@ -19,7 +19,7 @@ import argparse
 import glob
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
+from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
 
 _default_subsystem = {"common": "build/common"}
 
@@ -50,6 +50,13 @@ def _scan_build_file(subsystem_path):
     build_config_file_name = "ohos.build"
     search_str = "{}/**/{}".format(subsystem_path, build_config_file_name)
     _files = glob.glob(search_str, recursive=True)
+    # campatibility bundle.json and ohos.build
+    bundle_file_name = 'bundle.json'
+    _bundle_files = glob.glob("{}/**/{}".format(subsystem_path,
+                                                bundle_file_name),
+                              recursive=True)
+    if _bundle_files:
+        _files.extend(_bundle_files)
     return _files
 
 
