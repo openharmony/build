@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 # Copyright (c) 2021 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import os
-import string
 import sys
 import subprocess
 
@@ -43,7 +42,8 @@ def summary_ccache_new(ccache_log):
                              stdout=subprocess.PIPE).communicate()[0])
     sum_ccache = hit_dir_num + hit_pre_num + mis_num
     if sum_ccache != 0:
-        hit_rate = (float(hit_dir_num) + float(hit_pre_num)) / float(sum_ccache)
+        hit_rate = (float(hit_dir_num) +
+                    float(hit_pre_num)) / float(sum_ccache)
         mis_rate = float(mis_num) / float(sum_ccache)
     return hit_rate, mis_rate, hit_dir_num, hit_pre_num, mis_num
 

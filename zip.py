@@ -9,11 +9,8 @@ Archives a set of files.
 
 import ast
 import optparse
-import os
 import sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), 'scripts'))
-from util import build_utils
+from scripts.util import build_utils
 
 
 def main():
