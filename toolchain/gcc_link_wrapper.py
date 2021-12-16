@@ -3,7 +3,6 @@
 # Copyright 2015 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
 """Runs a linking command and optionally a strip command.
 
 This script exists to avoid using complex shell commands in
@@ -17,7 +16,6 @@ import subprocess
 import sys
 
 import wrapper_utils
-
 
 # When running on a Windows host and using a toolchain whose tools are
 # actually wrapper scripts (i.e. .bat files on Windows) rather than binary
@@ -75,10 +73,8 @@ def main():
                         help='Final output executable file',
                         metavar='FILE')
     parser.add_argument('--clang_rt_dso_path',
-                        help=('Clang asan runtime shared library')
-                        )
-    parser.add_argument('command', nargs='+',
-                        help='Linking command')
+                        help=('Clang asan runtime shared library'))
+    parser.add_argument('command', nargs='+', help='Linking command')
     args = parser.parse_args()
 
     # Work-around for gold being slow-by-default. http://crbug.com/632230
@@ -90,15 +86,16 @@ def main():
             return 0
     else:
         command = args.command
-    result = wrapper_utils.run_link_with_optional_map_file(command, env=fast_env,
-                                                           map_file=args.map_file)
+    result = wrapper_utils.run_link_with_optional_map_file(
+        command, env=fast_env, map_file=args.map_file)
     if result != 0:
         return result
 
     # Finally, strip the linked executable (if desired).
     if args.strip:
-        result = subprocess.call(command_to_run([args.strip, '-o', args.output,
-                                                 args.unstripped_file]))
+        result = subprocess.call(
+            command_to_run(
+                [args.strip, '-o', args.output, args.unstripped_file]))
 
     return result
 

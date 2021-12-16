@@ -44,7 +44,7 @@ def _get_total_memory_in_bytes():
                     match = memtotal_re.match(line)
                     if not match:
                         continue
-                    return float(match.group(1)) * 2 ** 10
+                    return float(match.group(1)) * 2**10
     elif sys.platform == 'darwin':
         try:
             return int(subprocess.check_output(['sysctl', '-n', 'hw.memsize']))
@@ -55,13 +55,14 @@ def _get_total_memory_in_bytes():
 
 def _get_default_concurrent_links(mem_per_link_gb, reserve_mem_gb):
     mem_total_bytes = _get_total_memory_in_bytes()
-    mem_total_bytes = max(0, mem_total_bytes - reserve_mem_gb * 2 ** 30)
-    num_concurrent_links = int(max(1, mem_total_bytes / mem_per_link_gb / 2 ** 30))
-    hard_cap = max(1, int(os.getenv('GYP_LINK_CONCURRENCY_MAX', 2 ** 32)))
+    mem_total_bytes = max(0, mem_total_bytes - reserve_mem_gb * 2**30)
+    num_concurrent_links = int(
+        max(1, mem_total_bytes / mem_per_link_gb / 2**30))
+    hard_cap = max(1, int(os.getenv('GYP_LINK_CONCURRENCY_MAX', 2**32)))
 
     try:
         cpu_cap = multiprocessing.cpu_count()
-    except:
+    except: # noqa E722
         cpu_cap = 1
 
     return min(num_concurrent_links, hard_cap, cpu_cap)
@@ -69,13 +70,20 @@ def _get_default_concurrent_links(mem_per_link_gb, reserve_mem_gb):
 
 def main():
     parser = optparse.OptionParser()
-    parser.add_option('--mem_per_link_gb', action="store", type="int", default=8)
-    parser.add_option('--reserve_mem_gb', action="store", type="int", default=0)
+    parser.add_option('--mem_per_link_gb',
+                      action="store",
+                      type="int",
+                      default=8)
+    parser.add_option('--reserve_mem_gb',
+                      action="store",
+                      type="int",
+                      default=0)
     parser.disable_interspersed_args()
     options, _ = parser.parse_args()
 
-    print(_get_default_concurrent_links(options.mem_per_link_gb,
-                                        options.reserve_mem_gb))
+    print(
+        _get_default_concurrent_links(options.mem_per_link_gb,
+                                      options.reserve_mem_gb))
     return 0
 
 

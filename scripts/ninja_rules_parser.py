@@ -18,7 +18,7 @@ import os
 import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.util.file_utils import read_json_file, read_file, write_file
+from scripts.util.file_utils import read_json_file, read_file, write_file  # noqa: E402 E501
 
 
 def _read_subninja_build(build_dir, subninja_build_file):
@@ -155,7 +155,7 @@ def _update_build_ninja(build_dir, include_files):
                     continue
                 _file.write('{}\n'.format(include_info))
             _file.flush()
-    except:
+    except: # noqa E722
         raise
 
 

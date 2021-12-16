@@ -21,8 +21,8 @@ import json
 from interface_mgr import InterfaceMgr
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.util.file_utils import read_json_file, write_file, write_json_file
-from scripts.util import build_utils
+from scripts.util.file_utils import read_json_file, write_file, write_json_file  # noqa: E402 E501
+from scripts.util import build_utils  # noqa: E402
 
 SHARED_LIBRARY_BUILD_TEMPLATE = '''
 config("%s_config") {

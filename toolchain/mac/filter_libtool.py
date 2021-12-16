@@ -33,8 +33,8 @@ def is_blocklisted_line(line):
 
 def main(cmd_list):
     env = os.environ.copy()
-    # The problem with this flag is that it resets the file mtime on the file to
-    # epoch=0, e.g. 1970-1-1 or 1969-12-31 depending on timezone.
+    # The problem with this flag is that it resets the file mtime on the file
+    # to epoch=0, e.g. 1970-1-1 or 1969-12-31 depending on timezone.
     env['ZERO_AR_DATE'] = '1'
     libtoolout = subprocess.Popen(cmd_list, stderr=subprocess.PIPE, env=env)
     _, err = libtoolout.communicate()
