@@ -31,6 +31,8 @@ def get_features(features):
                 feats[key] = True
             elif val == 'false':
                 feats[key] = False
+            elif re.match(r'[0-9]+', val):
+                feats[key] = int(val)
             else:
                 feats[key] = val.replace('\"', '"')
 
