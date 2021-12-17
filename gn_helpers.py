@@ -96,8 +96,8 @@ def FromGNString(input_string):
     Will yield the command line:
       asdf --value=asdf
     The unquoted asdf string will not be valid input to this function, which
-    accepts only quoted strings like GN scripts. In such cases, you can just use
-    the Python string literal directly.
+    accepts only quoted strings like GN scripts. In such cases, you can just
+    use the Python string literal directly.
 
     The main use cases for this is for other types, in particular lists. When
     using string interpolation on a list (as in the top example) the embedded
@@ -346,10 +346,10 @@ class GNValueParser(object):
         raise GNException("Unterminated list:\n  " + self.input)
 
     def _ConstantFollows(self, constant):
-        """Returns true if the given constant follows immediately at the current
-        location in the input. If it does, the text is consumed and the function
-        returns true. Otherwise, returns false and the current position is
-        unchanged."""
+        """Returns true if the given constant follows immediately at the
+        current location in the input. If it does, the text is consumed and
+        the function returns true. Otherwise, returns false and the current
+        position is unchanged."""
         end = self.cur + len(constant)
         if end > len(self.input):
             return False  # Not enough room.

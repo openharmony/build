@@ -17,10 +17,11 @@ import sys
 import os
 import shutil
 import argparse
+
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
-from scripts.util.file_utils import write_json_file, read_json_file  # noqa: E402
+from scripts.util.file_utils import write_json_file, read_json_file  # noqa: E402 E501
 from scripts.util import build_utils  # noqa: E402
 
 
@@ -89,7 +90,8 @@ def main():
 
     _file_archive(all_sa_info_files_dict, args.sa_archive_output_dir,
                   args.sa_archive_info_file, depfiles)
-    build_utils.write_depfile(args.depfile, args.sa_archive_info_file, depfiles)
+    build_utils.write_depfile(args.depfile, args.sa_archive_info_file,
+                              depfiles)
     return 0
 
 

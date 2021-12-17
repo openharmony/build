@@ -18,7 +18,7 @@ import os
 import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.util.file_utils import write_file
+from scripts.util.file_utils import write_file  # noqa E402
 
 
 def main():

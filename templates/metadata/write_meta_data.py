@@ -22,7 +22,7 @@ import copy
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
-from scripts.util import build_utils
+from scripts.util import build_utils  # noqa E402
 
 deps_metadta_cache = {}
 
