@@ -114,8 +114,9 @@
     
       output_name = "" # 可选，模块输出名
       output_extension = "" # 可选，模块名后缀
-      module_install_dir = "" #可选，缺省在/system/lib64或/system/lib下， 模块安装路径，模块安装路径，从system/，vendor/后开始指定
-      relative_install_dir = "" #可选，模块安装相对路径，相对于/system/lib64或/system/lib；如果有module_install_dir配置时，该配置不生效
+      module_install_dir = "" # 可选，缺省在/system/lib64或/system/lib下， 模块安装路径，模块安装路径，从system/，vendor/后开始指定
+      relative_install_dir = "" # 可选，模块安装相对路径，相对于/system/lib64或/system/lib；如果有module_install_dir配置时，该配置不生效
+      install_images = [] # 可选，缺省值system，指定模块安装到那个分区镜像中，可以指定多个
     
       part_name = "" # 必选，所属部件名称
     }
@@ -136,6 +137,7 @@
       deps = []  # 部件内模块依赖
       module_install_dir = "" #可选，模块安装路径，从system/，vendor/后开始指定
       relative_install_dir = "" #可选，模块安装相对路径，相对于system/etc；如果有module_install_dir配置时，该配置不生效
+      install_images = [] # 可选，缺省值system，指定模块安装到那个分区镜像中，可以指定多个
       part_name = "" # 必选，所属部件名称
     }
     ```
@@ -177,6 +179,8 @@
 -   部件的模块，要在部件配置的module\_list中，或者可以被module\_list中的模块依赖到；
 -   部件要加到对应产品的部件列表中；
 
+[FAQ](docs/FAQ.mc)
+
 [关于deps和external_deps的使用](docs/关于deps及external_deps的使用.md)
 
 [标准系统如何添加一个模板并参与编译](docs/标准系统如何添加一个模块.md)
@@ -184,6 +188,10 @@
 [如何跟随系统使用gn编译hap](docs/how-to-build-a-hap.md)
 
 [开源软件Notice收集策略说明](docs/开源软件Notice收集策略说明.md)
+
+[关于生成开源软件包](docs/生成开源软件包.md)
+
+[构建系统编码规范与最佳实践](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/subsystems/subsys-build-gn-coding-style-and-best-practice.md)
 
 
 ## 相关仓<a name="section1371113476307"></a>
