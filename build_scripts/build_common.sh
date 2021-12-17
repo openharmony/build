@@ -53,6 +53,9 @@ function do_make_ohos() {
       build_cmd+=" gn_args=${_line}"
     done
   fi
+  if [[ "${OPEN_SOURCE}" == true ]]; then
+    build_cmd+=" open_source=true"
+  fi
   echo "build_ohos_cmd: $build_cmd"
   $build_cmd
 }
