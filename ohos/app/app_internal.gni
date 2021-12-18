@@ -193,16 +193,28 @@ template("package_app") {
       }
     }
     if (defined(js2abc) && js2abc) {
+      _ark_dpes = [
+        "//ark/ts2abc/ts2panda:ts2abc_js_file($host_toolchain)",
+        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+      ]
+      if (defined(deps)) {
+        deps += _ark_dpes
+      } else {
+        deps = _ark_dpes
+      }
+      _js2abc_js = get_label_info(
+                       "//ark/ts2abc/ts2panda:ts2abc_js_file($host_toolchain)",
+                       "target_out_dir") + "/ts2abc.js"
       args += [
         "--nodejs-path",
         rebase_path(nodejs, root_build_dir),
         "--js2abc-js",
-        rebase_path(js2abc_js, root_build_dir),
+        rebase_path(_js2abc_js, root_build_dir),
         "--js2abc",
       ]
       inputs += [
         nodejs,
-        js2abc_js,
+        _js2abc_js,
       ]
     }
   }
@@ -222,6 +234,7 @@ template("compile_js_assets") {
                              "hap_profile",
                              "build_mode",
                              "js2abc",
+                             "ets2abc",
                              "main_target_name",
                            ])
     script = "//build/scripts/build_js_assets.py"
@@ -230,12 +243,45 @@ template("compile_js_assets") {
 
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
 
+    _ace_loader_home = "//prebuilts/sdk/js-loader/build-tools/ace-loader/"
+    _webpack_config_js = "${_ace_loader_home}/webpack.rich.config.js"
+
+    if (js2abc) {
+      if (!defined(deps)) {
+        deps = [ "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)" ]
+      }
+      deps += [
+        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+        "//developtools/ace-js2bundle:ace_loader_node_modules",
+      ]
+      _ace_loader_home =
+          get_label_info("//developtools/ace-js2bundle:ace_loader_node_modules",
+                         "target_out_dir") + "/ace_loader_ark"
+      _webpack_config_js = "${_ace_loader_home}/webpack.rich.config.js"
+    }
+
+    if (ets2abc) {
+      if (!defined(deps)) {
+        deps = [ "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)" ]
+      }
+      deps += [
+        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+        "//developtools/ace-ets2bundle:ets_loader_node_modules",
+      ]
+      _ace_loader_home =
+          get_label_info(
+              "//developtools/ace-ets2bundle:ets_loader_node_modules",
+              "target_out_dir") + "/ets_loader_ark"
+      _webpack_config_js = "${_ace_loader_home}/webpack.config.js"
+    }
+
+    _webpack_js = "${_ace_loader_home}/node_modules/webpack/bin/webpack.js"
+
     inputs = [
       meta_data,
       nodejs,
-      webpack_js,
-      webpack_config_js,
     ]
+
     args = [
       "--js-assets-dir=@FileArg($_rebased_metadata:root:js_assets)",
       "--output",
@@ -245,11 +291,13 @@ template("compile_js_assets") {
       "--nodejs-path",
       rebase_path(nodejs, root_build_dir),
       "--webpack-js",
-      rebase_path(webpack_js, root_build_dir),
+      rebase_path(_webpack_js, root_build_dir),
       "--webpack-config-js",
-      rebase_path(webpack_config_js, root_build_dir),
+      rebase_path(_webpack_config_js, root_build_dir),
       "--build-mode",
       build_mode,
+      "--ace-loader-home",
+      rebase_path(_ace_loader_home, root_build_dir),
     ]
     if (defined(testonly) && testonly == true) {
       _js_sources_file = target_gen_dir + "/$main_target_name.sources"
@@ -259,8 +307,21 @@ template("compile_js_assets") {
       ]
       outputs += [ _js_sources_file ]
     }
-    if (js2abc) {
-      args += [ "--js2abc" ]
+
+    if (js2abc || ets2abc) {
+      _ark_dir = get_label_info(
+              "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+              "target_out_dir")
+      if (ets2abc) {
+        args += [ "--ets2abc" ]
+      } else {
+        args += [ "--js2abc" ]
+      }
+
+      args += [
+        "--ark-frontend-dir",
+        rebase_path(_ark_dir, root_build_dir),
+      ]
     }
     if (defined(hap_profile)) {
       args += [
