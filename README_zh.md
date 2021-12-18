@@ -179,7 +179,7 @@
 -   部件的模块，要在部件配置的module\_list中，或者可以被module\_list中的模块依赖到；
 -   部件要加到对应产品的部件列表中；
 
-[FAQ](docs/FAQ.mc)
+[FAQ](docs/FAQ.md)
 
 [关于deps和external_deps的使用](docs/关于deps及external_deps的使用.md)
 
