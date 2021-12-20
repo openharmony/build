@@ -19,7 +19,7 @@ import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util import build_utils  # noqa: E402
-from scripts.interface_mgr import InterfaceMgr
+from scripts.interface_mgr import InterfaceMgr  # noqa: E402
 
 
 def parse_args(args):
@@ -61,7 +61,8 @@ def header_signature(output, headers, root_build_dir, saved, generated, check):
 
     if check and mgr.get_file_sha256(generated) != mgr.get_file_sha256(saved):
         raise Exception(
-            "Error: ndk header signature changed. generated signature {} has different signature with saved signature {}"
+            "Error: ndk header signature changed. generated signature {} has "
+            "different signature with saved signature {}"
             .format(generated, saved))
 
     build_utils.touch(output)
@@ -77,13 +78,14 @@ def main(args):
     build_utils.call_and_write_depfile_if_stale(lambda: header_signature(
         options.output, options.headers, options.root_build_dir, options.
         saved_signature, options.generated_signature, options.check_signature),
-                                           options,
-                                           depfile_deps=depfile_deps,
-                                           input_paths=depfile_deps,
-                                           output_paths=([options.output]),
-                                           input_strings=args,
-                                           force=False,
-                                           add_pydeps=False)
+                                                options,
+                                                depfile_deps=depfile_deps,
+                                                input_paths=depfile_deps,
+                                                output_paths=([options.output
+                                                               ]),
+                                                input_strings=args,
+                                                force=False,
+                                                add_pydeps=False)
 
 
 if __name__ == '__main__':

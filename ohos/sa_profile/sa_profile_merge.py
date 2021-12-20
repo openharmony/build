@@ -82,7 +82,7 @@ def _generate_install_info(sa_result_file_list, sa_info_install_dest_dir,
             'type': 'sa_info',
             'source': _sa_file,
             'install_enable': True,
-            'dest': [ _install_dest ]
+            'dest': [_install_dest]
         }
         module_install_info_list.append(module_install_info)
     write_json_file(sa_install_info_file, module_install_info_list)
@@ -112,8 +112,8 @@ def main():
                                          args.target_cpu)
     _generate_install_info(result_file_list, args.sa_info_install_dest_dir,
                            args.sa_install_info_file)
-    build_utils.write_depfile(
-        args.depfile, args.sa_install_info_file, depfiles)
+    build_utils.write_depfile(args.depfile, args.sa_install_info_file,
+                              depfiles)
     return 0
 
 

@@ -22,8 +22,8 @@ import logging
 import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from sort_sa_by_bootphase import SARearrangement
-from sa_info_config_errors import *
+from sort_sa_by_bootphase import SARearrangement  # noqa E402
+import sa_info_config_errors as sa_err  # noqa E402
 
 
 class SAInfoMerger(object):
@@ -64,8 +64,9 @@ class SAInfoMerger(object):
             # add declaration and root open tag
             xml_lines = [DECLARATION, ROOT_OPEN_TAG]
             # add process
-            process_line = SAInfoMerger.INDENT_SPACES + '<process>{}</process>\n'
-            xml_lines.append(process_line.format(self.process_name))
+            process_line = '{}<process>{}</process>\n'.format(
+                SAInfoMerger.INDENT_SPACES, self.process_name)
+            xml_lines.append(process_line)
             # add libpath
             xml_lines.append(SAInfoMerger.INDENT_SPACES + '<loadlibs>\n')
             xml_lines += list(self.loadlibs)
@@ -76,7 +77,8 @@ class SAInfoMerger(object):
             xml_lines.append(ROOT_ClOSE_TAG)
 
             # write file to temporary directory
-            with open(self.output_filename, 'w', encoding='utf-8') as xml_files:
+            with open(self.output_filename, 'w',
+                      encoding='utf-8') as xml_files:
                 for line in xml_lines:
                     xml_files.write(line)
 
@@ -84,9 +86,12 @@ class SAInfoMerger(object):
         self.process_sas_dict = {}
         self.output_filelist = []
         self.is_64bit_arch = is_64bit_arch
+        self.output_dir = None
+        self.temp_dir = None
+        self.sa_nodes_count = None
 
-    def __add_to_output_filelist(self, file):
-        self.output_filelist.append(os.path.join(self.output_dir, file))
+    def __add_to_output_filelist(self, infile):
+        self.output_filelist.append(os.path.join(self.output_dir, infile))
 
     def __parse_xml_file(self, source_file):
         parser = ET.XMLParser()
@@ -95,9 +100,10 @@ class SAInfoMerger(object):
 
         # check root tag
         if root.tag == 'profile':
-            FORMAT = 'bad root <{}> tag, new format <info> is expected'
+            _format = 'bad root <{}> tag, new format <info> is expected'
             # the <profile> is old format, and should not be used anymore
-            raise BadFormatXMLError(FORMAT.format(root.tag), source_file)
+            raise sa_err.BadFormatXMLError(_format.format(root.tag),
+                                           source_file)
         elif root.tag != 'info':
             # other profile files whose tag name don't equal to 'info' should
             # just left intact, e.g. <schedStrategies></schedStrategies>
@@ -107,28 +113,29 @@ class SAInfoMerger(object):
             self.__add_to_output_filelist(basename)
 
             # emit a warning to let user know it if there exists a typo
-            FORMAT = '"{}" is not merged, for it\'s root tag is "{}"'
-            logging.warning(FORMAT.format(source_file, root.tag))
+            _logstr = '"{}" is not merged, for it\'s root tag is "{}"'.format(
+                source_file, root.tag)
+            logging.warning(_logstr)
             return
 
-        FORMAT = 'one and only one {} tag is expected, actually {} is found'
+        _format = 'one and only one {} tag is expected, actually {} is found'
         # check process tag
         process_nodes = root.findall('process')
         process_nodes_count = len(process_nodes)
         if process_nodes_count != 1:
-            raise BadFormatXMLError(FORMAT.format('<process>',
-                                    process_nodes_count), source_file)
+            raise sa_err.BadFormatXMLError(
+                _format.format('<process>', process_nodes_count), source_file)
         else:
             # ensure that the value of <process> is valid
             process_name = process_nodes[0].text
             if process_name is None or process_name.strip() == '':
-                raise BadFormatXMLError('provide a valid value for <process>',
-                                        source_file)
+                raise sa_err.BadFormatXMLError(
+                    'provide a valid value for <process>', source_file)
             process_name = process_name.strip()
             if self.process_sas_dict.get(process_name) is None:
                 # create a new collector if a new process tag is found
-                sa_info_collector = self.SAInfoCollector(process_name,
-                                                         self.temp_dir)
+                sa_info_collector = self.SAInfoCollector(
+                    process_name, self.temp_dir)
                 self.process_sas_dict[process_name] = sa_info_collector
                 self.__add_to_output_filelist(process_name + '.xml')
             else:
@@ -138,8 +145,8 @@ class SAInfoMerger(object):
         libpath_nodes = root.findall('systemability/libpath')
         libpath_nodes_count = len(libpath_nodes)
         if libpath_nodes_count != 1:
-            raise BadFormatXMLError(FORMAT.format('<libpath>',
-                                    libpath_nodes_count), source_file)
+            raise sa_err.BadFormatXMLError(
+                _format.format('<libpath>', libpath_nodes_count), source_file)
         else:
             libpath = libpath_nodes[0].text.strip()
             libname = ntpath.basename(libpath)
@@ -158,8 +165,8 @@ class SAInfoMerger(object):
         sa_nodes_count = len(systemability_nodes)
         self.sa_nodes_count = sa_nodes_count
         if sa_nodes_count != 1:
-            raise BadFormatXMLError(FORMAT.format('<systemability>',
-                                    sa_nodes_count), source_file)
+            raise sa_err.BadFormatXMLError(
+                _format.format('<systemability>', sa_nodes_count), source_file)
         else:
             byte_repr = ET.tostring(systemability_nodes[0], encoding='utf-8')
             # fix weird indent problem after converting the node to string
@@ -190,7 +197,8 @@ class SAInfoMerger(object):
             merged_file = collector.output_filename
             dest_file = os.path.join(output_dir, ntpath.basename(merged_file))
             rearragement.sort(merged_file, dest_file)
-            # get deps info for later detecting globally circular dependency use
+            # get deps info for later detecting globally circular
+            # dependency use
             deps_info = rearragement.get_deps_info()
             global_ordered_systemability_names += deps_info[0]
             global_systemability_deps_dict.update(deps_info[1])
@@ -200,13 +208,13 @@ class SAInfoMerger(object):
             SARearrangement.detect_invalid_dependency_globally(
                 global_ordered_systemability_names,
                 global_systemability_deps_dict)
-        except CircularDependencyError as e:
-            for file in self.output_filelist:
+        except sa_err.CircularDependencyError as e:
+            for _file in self.output_filelist:
                 try:
-                    os.remove(file)
+                    os.remove(_file)
                 except OSError:
                     pass
-            raise CrossProcessCircularDependencyError(e)
+            raise sa_err.CrossProcessCircularDependencyError(e)
 
         # finally return an output filelist
         return self.output_filelist

@@ -32,7 +32,7 @@ def read_json_file(input_file):
     except json.decoder.JSONDecodeError:
         print("The file '{}' format is incorrect.".format(input_file))
         raise
-    except:
+    except:  # noqa E722
         print("read file '{}' failed.".format(input_file))
         raise
     return data
@@ -49,7 +49,7 @@ def read_file(input_file):
         with open(input_file, 'r') as file_obj:
             for line in file_obj.readlines():
                 data.append(line.rstrip('\n'))
-    except:
+    except:  # noqa E722
         print("read file '{}' failed".format(input_file))
         raise
     return data
@@ -94,7 +94,7 @@ def write_file(output_file, content):
     with open(output_file, 'w') as output_f:
         output_f.write(content)
     if output_file.endswith('.gni') or output_file.endswith('.gn'):
-      # Call gn format to make the output gn file prettier.
-      cmd = ['gn', 'format']
-      cmd.append(output_file)
-      subprocess.check_output(cmd)
+        # Call gn format to make the output gn file prettier.
+        cmd = ['gn', 'format']
+        cmd.append(output_file)
+        subprocess.check_output(cmd)

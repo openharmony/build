@@ -26,7 +26,7 @@ _SOURCE_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(_SOURCE_ROOT, 'third_party'))
-from jinja2 import Template  # pylint: disable=F0401
+from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 
 def read_display_name(type2displayname):
@@ -125,7 +125,7 @@ group("generated_ohos_sdk") {
     }
   {% endfor %}
   public_deps += {{ ohos_sdk_modules }}.extras
-}""",
+}""",  # noqa E501
                         trim_blocks=True,
                         lstrip_blocks=True)
 

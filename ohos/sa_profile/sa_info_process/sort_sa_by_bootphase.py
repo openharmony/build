@@ -19,7 +19,7 @@ import sys
 import copy
 from enum import Enum
 
-from sa_info_config_errors import *
+import sa_info_config_errors as sa_err
 
 
 class RearrangementPolicy(object):
@@ -27,11 +27,8 @@ class RearrangementPolicy(object):
     CORE_START_PHASE = "CoreStartPhase"
     DEFAULT_START_PHASE = "OthersStartPhase"
 
-    rearrange_category_order = (
-        BOOT_START_PHASE,
-        CORE_START_PHASE,
-        DEFAULT_START_PHASE
-    )
+    rearrange_category_order = (BOOT_START_PHASE, CORE_START_PHASE,
+                                DEFAULT_START_PHASE)
 
     bootphase_priority_table = {
         BOOT_START_PHASE: 3,
@@ -63,6 +60,8 @@ class SARearrangement(object):
         self.sa_nodes_count = 0
         self.first_sanode_start_lineno = 0
         self.last_sanode_end_lineno = 0
+        self.file_in_process = None
+        self.root = None
 
     def __read_xml_file_into_lines(self, source_file):
         """
@@ -117,9 +116,10 @@ class SARearrangement(object):
             else:
                 pass  # ignore other tags
         if self.sa_nodes_count != sa_nodes_count:
-            FORMAT = "The <systemability> tag and it's child tags should start "
-            FORMAT += "at a newline, And should not have stuffs before!\n"
-            raise BadFormatXMLError(FORMAT, source_file)
+            _format = (
+                "The <systemability> tag and it's child tags should "
+                "start at a newline, And should not have stuffs before!\n")
+            raise sa_err.BadFormatXMLError(_format, source_file)
 
     def __parse_xml_file(self, source_file):
         parser = ET.XMLParser()
@@ -164,7 +164,8 @@ class SARearrangement(object):
             for name in self.rearranged_systemabilities:
                 ranges = self.xml_lines_range[name]
                 rearranged_lines += self.xml_lines[ranges[0]:ranges[1] + 1]
-            rearranged_lines += self.xml_lines[self.last_sanode_end_lineno + 1:]
+            rearranged_lines += self.xml_lines[self.last_sanode_end_lineno +
+                                               1:]
         else:
             rearranged_lines = self.xml_lines
 
@@ -189,20 +190,21 @@ class SARearrangement(object):
                         # if the dependency is behind, then exchange the order
                         if idx_self < idx_dep:
                             tmp = systemabilities[idx_dep]
-                            systemabilities[idx_dep] = systemabilities[idx_self]
+                            systemabilities[idx_dep] = systemabilities[
+                                idx_self]
                             systemabilities[idx_self] = tmp
                     except ValueError:
                         pass  # ignore different category of dependencies
 
         # put the systemability nodes into different categories
         for systemability_name in self.ordered_systemability_names:
-            bootphase = self.bootphase_dict[systemability_name]
-            salist = self.policy.bootphase_categories[bootphase]
+            bootphase = self.bootphase_dict.get(systemability_name)
+            salist = self.policy.bootphase_categories.get(bootphase)
             salist.append(systemability_name)
 
         # sort the systemability nodes according to RearrangementPolicy
         for category in RearrangementPolicy.rearrange_category_order:
-            salist = self.policy.bootphase_categories[category]
+            salist = self.policy.bootphase_categories.get(category)
             inner_category_sort(salist)
             self.rearranged_systemabilities += salist
 
@@ -213,18 +215,20 @@ class SARearrangement(object):
         BootStartPhase priority depends on a systemability named 'sa2' with
         CoreStartPhase
         """
-        FORMAT = ("Bad dependency found: the {} with high priority " +
-                  "depends on a {} with low one")
-        self_idx = self.bootphase_dict[systemability]
+        _format = ("Bad dependency found: the {} with high priority "
+                   "depends on a {} with low one")
+        self_idx = self.bootphase_dict.get(systemability)
         # The depend may be in other process
         dep_idx = self.bootphase_dict.get(depend)
         if dep_idx is None:
             return
-        self_priority = RearrangementPolicy.bootphase_priority_table[self_idx]
-        depend_priority = RearrangementPolicy.bootphase_priority_table[dep_idx]
+        self_priority = RearrangementPolicy.bootphase_priority_table.get(
+            self_idx)
+        depend_priority = RearrangementPolicy.bootphase_priority_table.get(
+            dep_idx)
         if self_priority > depend_priority:
-            raise InvertDependencyError(
-                FORMAT.format(systemability, depend))
+            raise sa_err.InvertDependencyError(
+                _format.format(systemability, depend))
 
     def __detect_creation_dependency(self, systemability, depend):
         """
@@ -232,16 +236,17 @@ class SARearrangement(object):
         if a sa with <run-on-create> set to 'true' depending on a sa
         with 'false', then a RunOnCreateDependencyError will be thrown
         """
-        FORMAT = ("Bad dependency found: the {} with run-on-create " +
-                  "depends on a {} with run-on-demand")
+        _format = ("Bad dependency found: the {} with run-on-create "
+                   "depends on a {} with run-on-demand")
         self_creation = self.creation_dict.get(systemability)
         dep_creation = self.creation_dict.get(depend)
         if self_creation == "true" and dep_creation == "false":
-            raise RunOnCreateDependencyError(FORMAT.format(systemability, depend))
+            raise sa_err.RunOnCreateDependencyError(
+                _format.format(systemability, depend))
 
     @classmethod
-    def __detect_invalid_dependency(cls, dependency_checkers,
-                                    ordered_sa_names, sa_deps_dict):
+    def __detect_invalid_dependency(cls, dependency_checkers, ordered_sa_names,
+                                    sa_deps_dict):
         """
         Iterate over the dependency tree, to detect whether there
         exists circular dependency and other kinds bad dependency
@@ -267,8 +272,8 @@ class SARearrangement(object):
             depend_path.append(systemability)
             while len(depend_path) != 0:
                 cur_systemability = depend_path[-1]
-                # the cur_systemability may be in a different process, thus can't
-                # find it's dependency info
+                # the cur_systemability may be in a different process,
+                # thus can't find it's dependency info
                 dependencies = systemability_deps_dict.get(cur_systemability)
                 if dependencies is None:
                     dependencies = []
@@ -284,9 +289,10 @@ class SARearrangement(object):
                         try:
                             depend_path.index(cur_dependency)
                             depend_path.append(cur_dependency)
-                            FORMAT = "A circular dependency found: {}"
+                            _format = "A circular dependency found: {}"
                             route = "->".join(map(str, depend_path))
-                            raise CircularDependencyError(FORMAT.format(route))
+                            raise sa_err.CircularDependencyError(
+                                _format.format(route))
                         except ValueError:
                             depend_path.append(cur_dependency)
                             deps_visit_cnt[cur_systemability] += 1
@@ -300,58 +306,64 @@ class SARearrangement(object):
         Extract info like dependencies and bootphase from a systemability node
         """
         def validate_bootphase(bootphase, nodename):
-            FORMAT = ("In systemability: {}, The bootphase '{}' is not supported " +
-                      "please check yourself")
+            _format = (
+                "In systemability: {}, The bootphase '{}' is not supported "
+                "please check yourself")
             if self.policy.bootphase_categories.get(bootphase) is None:
-                raise NotSupportedBootphaseError(FORMAT.format(nodename, bootphase))
+                raise sa_err.NotSupportedBootphaseError(
+                    _format.format(nodename, bootphase))
 
-        def validate_creation(creation, nodename):
-            FORMAT = ("In tag <{}> only a boolean value is expected, " +
-                      "but actually is '{}'")
+        def validate_creation(creation):
+            _format = ("In tag <{}> only a boolean value is expected, "
+                       "but actually is '{}'")
             if creation not in ["true", "false"]:
-                raise BadFormatXMLError(FORMAT.format("run-on-create", creation),
-                                        self.file_in_process)
+                raise sa_err.BadFormatXMLError(
+                    _format.format("run-on-create", creation),
+                    self.file_in_process)
 
         def validate_systemability_name(nodename):
             if not nodename.isdigit() or nodename.startswith("0"):
-                FORMAT = ("<name>'s value should be non-zeros leading " +
-                          "digits, but actually is {}")
-                raise BadFormatXMLError(FORMAT.format(nodename),
-                                        self.file_in_process)
+                _format = ("<name>'s value should be non-zeros leading "
+                           "digits, but actually is {}")
+                raise sa_err.BadFormatXMLError(_format.format(nodename),
+                                               self.file_in_process)
 
         def check_nodes_constraints(systemability_node, tag, ranges):
             """
             The number of a given node should be in a valid range
             """
-            FORMAT = "The tag <{}> should be in range {}, but actually {} is found"
+            _format = ("The tag <{}> should be in range {},"
+                       " but actually {} is found")
             tags_nodes = systemability_node.findall(tag)
             node_cnt = len(tags_nodes)
             if node_cnt < ranges[0] or node_cnt > ranges[1]:
-                raise BadFormatXMLError(FORMAT.format(tag, ranges, node_cnt),
-                                        self.file_in_process)
+                raise sa_err.BadFormatXMLError(
+                    _format.format(tag, ranges, node_cnt),
+                    self.file_in_process)
             return tags_nodes
 
         def strip_node_value(tag, name):
             """
             Check empty or None tag value
             """
-            FORMAT = "The tag <{}>'s value cannot be empty, but actually is {}"
+            _format = ("The tag <{}>'s value cannot be empty, "
+                       "but actually is {}")
             if tag.text is None or tag.text.strip() == '':
-                raise BadFormatXMLError(FORMAT.format(name, tag.text),
-                                        self.file_in_process)
+                raise sa_err.BadFormatXMLError(_format.format(name, tag.text),
+                                               self.file_in_process)
             return tag.text.strip()
 
         default_bootphase = RearrangementPolicy.DEFAULT_START_PHASE
         for systemability_node in self.systemability_nodes:
             # Required <name> one and only one is expected
-            name_node = check_nodes_constraints(systemability_node,
-                            "name", (1, 1))[0]
+            name_node = check_nodes_constraints(systemability_node, "name",
+                                                (1, 1))[0]
             nodename = strip_node_value(name_node, "name")
             validate_systemability_name(nodename)
 
             try:
                 self.ordered_systemability_names.index(nodename)
-                raise SystemAbilityNameConflictError(nodename)
+                raise sa_err.SystemAbilityNameConflictError(nodename)
             except ValueError:
                 self.ordered_systemability_names.append(nodename)
             self.name_node_dict[nodename] = copy.deepcopy(systemability_node)
@@ -360,7 +372,7 @@ class SARearrangement(object):
 
             # Optional <bootphase> zero or one are both accepted
             bootphase_nodes = check_nodes_constraints(systemability_node,
-                                  "bootphase", (0, 1))
+                                                      "bootphase", (0, 1))
             if len(bootphase_nodes) == 1:
                 bootphase_value = strip_node_value(bootphase_nodes[0],
                                                    "bootphase")
@@ -369,15 +381,16 @@ class SARearrangement(object):
 
             # Required <run-on-create> one and only one is expected
             runoncreate_node = check_nodes_constraints(systemability_node,
-                                   "run-on-create", (1, 1))[0]
+                                                       "run-on-create",
+                                                       (1, 1))[0]
             runoncreate_value = strip_node_value(runoncreate_node,
                                                  "run-on-create")
-            validate_creation(runoncreate_value, nodename)
+            validate_creation(runoncreate_value)
             self.creation_dict[nodename] = runoncreate_value
 
             # Optional <depend>
             depend_nodes = check_nodes_constraints(systemability_node,
-                               "depend", (0, sys.maxsize))
+                                                   "depend", (0, sys.maxsize))
             for depend_node in depend_nodes:
                 depend_value = strip_node_value(depend_node, "depend")
                 deps = self.systemability_deps_dict[nodename]
@@ -404,8 +417,8 @@ class SARearrangement(object):
                                            global_systemability_deps_dict):
         dependency_checkers = []
         cls.__detect_invalid_dependency(dependency_checkers,
-                                          global_ordered_systemability_names,
-                                          global_systemability_deps_dict)
+                                        global_ordered_systemability_names,
+                                        global_systemability_deps_dict)
 
     def get_deps_info(self):
         """

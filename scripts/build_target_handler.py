@@ -19,7 +19,7 @@ import argparse
 import ninja_rules_parser
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from scripts.util.file_utils import read_json_file, read_file
+from scripts.util.file_utils import read_json_file  # noqa E402
 
 
 def _read_parts_variants(build_configs_dir):
