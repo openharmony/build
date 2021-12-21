@@ -61,6 +61,10 @@ do
     ;;
   --build-only-gn)
     build_only_gn=true;;
+  --gn-args)
+    shift
+    gn_args="${gn_args} $1"
+    ;;
   -* | *)
     args+=" $1"
     ;;
@@ -71,20 +75,24 @@ done
 source out/preloader/${product_name}/build.prop
 # build lite
 build_cmd="python3 build.py -p ${product_name}@${product_company} ${args}"
+
 if [ ! -z "${build_target}" ]; then
     build_cmd+=" -T ${build_target}"
 fi
 
 build_cmd+=" --compact-mode"
 
-if [[ -f "${build_gnargs_file}" ]]; then
-  build_cmd+=" --gn-args=\""
-  for _line in $(cat "${build_gnargs_file}"); do
-    build_cmd+="${_line} "
-  done
-  build_cmd+=" is_small_system=true\""
-else
-  build_cmd+=" --gn-args=is_small_system=true"
+build_cmd+=" --gn-args \"is_small_system=true"
+
+if [[ ! -z $gn_args ]]; then
+  build_cmd+=" ${gn_args}"
 fi
+
+if [[ -f "${build_gnargs_file}" ]]; then
+  for _line in $(cat "${build_gnargs_file}"); do
+    build_cmd+=" ${_line}"
+  done
+fi
+build_cmd+="\""
 
 eval ${build_cmd}
