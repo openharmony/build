@@ -61,6 +61,10 @@ do
     ;;
   --build-only-gn)
     build_only_gn=true;;
+  --gn-args)
+    shift
+    gn_args="${gn_args} $1"
+    ;;
   -* | *)
     args+=" $1"
     ;;
@@ -78,14 +82,17 @@ fi
 
 build_cmd+=" --compact-mode"
 
-if [[ -f "${build_gnargs_file}" ]]; then
-  build_cmd+=" --gn-args=\""
-  for _line in $(cat "${build_gnargs_file}"); do
-    build_cmd+="${_line} "
-  done
-  build_cmd+="is_mini_system=true\""
-else
-  build_cmd+=" --gn-args=\"is_mini_system=true\""
+build_cmd+=" --gn-args \"is_mini_system=true"
+
+if [[ ! -z $gn_args ]]; then
+  build_cmd+=" ${gn_args}"
 fi
+
+if [[ -f "${build_gnargs_file}" ]]; then
+  for _line in $(cat "${build_gnargs_file}"); do
+    build_cmd+=" ${_line}"
+  done
+fi
+build_cmd+="\""
 
 eval ${build_cmd}
