@@ -142,5 +142,9 @@
   "msdp": {
     "path": "base/msdp",
     "name": "msdp"
+  },
+  "deviceprofile": {
+    "path": "foundation/deviceprofile",
+    "name": "deviceprofile"
   }
 }
