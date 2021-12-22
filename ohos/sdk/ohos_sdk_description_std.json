@@ -305,6 +305,15 @@
         ]
     },
     {
+        "install_dir": "ets/build-tools/ets-loader/declarations",
+        "module_label": "//interface/sdk-js:bundle_api",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//ark/runtime_core/assembler:ark_asm",
         "target_os": [
