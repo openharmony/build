@@ -117,9 +117,18 @@ prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cm
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64.tar.bz2
 prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20211029.tar.gz
 """
+
+if [[ "${host_platform}" == "linux" ]]; then
+    copy_config+="""
+        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64-strip.tar.bz2
+        """
+else
+    copy_config+="""
+        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64.tar.bz2
+        """
+fi
 
 if [[ "${host_platform}" == "linux" ]]; then
     copy_config+="""
