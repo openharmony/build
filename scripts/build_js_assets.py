@@ -39,6 +39,12 @@ def parse_args(args):
                       action='store_true',
                       default=False,
                       help='whether to transform js to ark bytecode')
+    parser.add_option('--ets2abc',
+                      action='store_true',
+                      default=False,
+                      help='whether to transform ets to ark bytecode')
+    parser.add_option('--ark-frontend-dir', help='path to ark frontend dir')
+    parser.add_option('--ace-loader-home', help='path to ace-loader dir.')
 
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
@@ -46,20 +52,27 @@ def parse_args(args):
 
 
 def build_ace(cmd, options):
+    js_assets_dir = os.path.relpath(
+        options.js_assets_dir[0], options.ace_loader_home)
     if options.js_sources_file:
         with open(options.js_sources_file, 'wb') as js_sources_file:
-            sources = get_all_js_sources(options.js_assets_dir[0])
+            sources = get_all_js_sources(js_assets_dir)
             js_sources_file.write('\n'.join(sources).encode())
+
     with build_utils.temp_dir() as build_dir:
         gen_dir = os.path.join(build_dir, 'gen')
         manifest = os.path.join(build_dir, 'manifest.json')
         my_env = {
-            "aceModuleRoot": options.js_assets_dir[0],
+            "aceModuleRoot": js_assets_dir,
             "aceModuleBuild": gen_dir,
             "aceManifestPath": manifest,
             "buildMode": options.build_mode,
             "PATH": os.environ.get('PATH'),
         }
+        if options.js2abc:
+            my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
+
+        src_path = 'default'
         if not os.path.exists(manifest) and options.hap_profile:
             with open(options.hap_profile) as profile:
                 config = json.load(profile)
@@ -71,16 +84,22 @@ def build_ace(cmd, options):
                 data['pages'] = config['module']['js'][0]['pages']
                 data['deviceType'] = config['module']['deviceType']
                 data['window'] = config['module']['js'][0]['window']
+                if options.ets2abc:
+                    data['mode'] = config['module']['js'][0]['mode']
+                    if 'srcPath' in config['module']['abilities'][0]:
+                        src_path = config['module']['abilities'][0]['srcPath']
                 build_utils.write_json(data, manifest)
-        build_utils.check_output(cmd, env=my_env)
+        build_utils.check_output(
+            cmd, cwd=options.ace_loader_home, env=my_env)
         for root, _, files in os.walk(gen_dir):
             for file in files:
                 filename = os.path.join(root, file)
                 if filename.endswith('.js.map'):
                     os.unlink(filename)
+
         build_utils.zip_dir(options.output,
                             gen_dir,
-                            zip_prefix_path='assets/js/default/')
+                            zip_prefix_path='assets/js/{}/'.format(src_path))
 
 
 def get_all_js_sources(base):
@@ -89,6 +108,7 @@ def get_all_js_sources(base):
         for file in files:
             if file[-3:] in ('.js', '.ts'):
                 sources.append(os.path.join(root, file))
+
     return sources
 
 
@@ -105,14 +125,27 @@ def main(args):
         with ZipFile(options.output, 'w') as file:
             return
 
+    if options.ark_frontend_dir:
+        depfiles.extend(build_utils.get_all_files(options.ark_frontend_dir))
+
+    depfiles.append(options.webpack_js)
+    depfiles.append(options.webpack_config_js)
+    depfiles.extend(build_utils.get_all_files(options.ace_loader_home))
+
+    node_js = os.path.relpath(options.nodejs_path, options.ace_loader_home)
     cmd = [
-        options.nodejs_path,
-        options.webpack_js,
+        node_js,
+        os.path.relpath(
+            options.webpack_js, options.ace_loader_home),
         '--config',
-        options.webpack_config_js,
+        os.path.relpath(
+            options.webpack_config_js, options.ace_loader_home)
     ]
-    if options.js2abc:
-        cmd.extend(['--env', 'compilerType=ark'])
+    if options.js2abc or options.ets2abc:
+        ark_frontend_dir = os.path.relpath(
+            options.ark_frontend_dir, options.ace_loader_home)
+        cmd.extend(['--env', 'compilerType=ark',
+                    'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
 
     build_utils.call_and_write_depfile_if_stale(
         lambda: build_ace(cmd, options),

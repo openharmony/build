@@ -138,6 +138,7 @@ template("ohos_resources") {
 #   final_hap_path: full path of output hap file, final_hap_path overwrites hap_name.
 #   js2abc:   whether to transform js bundle to ark bytecode, default value
 #             follows build_ark.
+#   ets2abc:   whether to transform js bundle to ark bytecode, default value false
 #
 #
 template("ohos_hap") {
@@ -161,9 +162,14 @@ template("ohos_hap") {
     _hap_path = invoker.final_hap_path
   }
 
-  _js2abc = false
+  _js2abc = build_ark
   if (defined(invoker.js2abc)) {
     _js2abc = invoker.js2abc
+  }
+
+  _ets2abc = false
+  if (defined(invoker.ets2abc)) {
+    _ets2abc = invoker.ets2abc
   }
 
   _js_build_mode = "release"
@@ -225,6 +231,7 @@ template("ohos_hap") {
     deps = [ ":$_metadata_target" ] + _deps
     build_mode = _js_build_mode
     js2abc = _js2abc
+    ets2abc = _ets2abc
     if (defined(testonly) && testonly == true) {
       main_target_name = _main_target_name
     }
@@ -271,7 +278,7 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
-    js2abc = _js2abc
+    js2abc = _js2abc || _ets2abc
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }
