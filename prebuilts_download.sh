@@ -112,7 +112,7 @@ bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
 # 二进制关系
 copy_config="""
 prebuilts/sdk/js-loader/build-tools,${tool_repo}/harmonyos/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
-prebuilts/build-tools/common,${tool_repo}/harmonyos/compiler/restool/1.023-d/restool.tar.gz
+prebuilts/build-tools/common,${tool_repo}/harmonyos/compiler/restool/2.001/restool-2.001.tar.gz
 prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
