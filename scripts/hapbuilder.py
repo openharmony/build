@@ -55,9 +55,9 @@ def add_resources(packaged_resources, package_dir, packing_cmd):
         index_file_path = os.path.join(package_dir, 'resources.index')
         if os.path.exists(index_file_path):
             packing_cmd.extend(['--index-path', index_file_path])
-            packing_cmd.extend(
-                ['--res-path',
-                 os.path.join(package_dir, 'resources')])
+            resources_path = os.path.join(package_dir, 'resources')
+            if os.path.exists(resources_path):
+                packing_cmd.extend(['--res-path', resources_path])
 
 
 def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
