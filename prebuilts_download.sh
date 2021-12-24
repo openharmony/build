@@ -115,7 +115,7 @@ prebuilts/sdk/js-loader/build-tools,${tool_repo}/harmonyos/compiler/ace-loader/1
 prebuilts/build-tools/common,${tool_repo}/harmonyos/compiler/restool/1.023-d/restool.tar.gz
 prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
-prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
+iprebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
 prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20211029.tar.gz
 """
@@ -136,11 +136,11 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
         prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
         prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-        prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.0/windows/previewer.tar.gz
+        prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.90/windows/previewer.tar.gz
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
-        prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.0/darwin/previewer.tar.gz
+        prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.0.0.90/darwin/previewer.tar.gz
         """
 fi
 
