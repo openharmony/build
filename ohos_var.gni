@@ -72,7 +72,7 @@ declare_args() {
   pycache_enable = true
 
   # Whether to build js bundle to ark bytecode
-  build_ark = false
+  build_ark = true
 }
 
 declare_args() {
