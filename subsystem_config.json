@@ -100,8 +100,12 @@
     "name": "usb"
   },
   "applications": {
-    "path": "applications/standard",
+    "path": "applications/standard/hap",
     "name": "applications"
+  },
+  "settingsdata": {
+    "path": "applications/standard/settings",
+    "name": "settingsdata"
   },
   "wpa_supplicant-2.9": {
     "path": "third_party/wpa_supplicant/wpa_supplicant-2.9_standard",
