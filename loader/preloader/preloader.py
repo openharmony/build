@@ -253,6 +253,8 @@ class Product():
         else:
             build_vars['device_name'] = ''
         build_vars['product_company'] = config.get('product_company')
+        if 'support_jsapi' in config:
+            build_vars['support_jsapi'] = config.get('support_jsapi')
 
         self._build_vars = build_vars
         self._parts.update(all_parts)
@@ -319,6 +321,8 @@ class Product():
             build_vars['product_company'] = relpath.split('/')[0]
         else:
             build_vars['product_company'] = config.get('device_company')
+        if 'support_jsapi' in config:
+            build_vars['support_jsapi'] = config.get('support_jsapi')
 
         self._build_vars = build_vars
         self._parts.update(all_parts)
