@@ -166,13 +166,22 @@ app_target_types = [
   "assets",
 ]
 
-restool = "//prebuilts/build-tools/common/restool/restool"
+if (host_os == "mac") {
+  restool = "//prebuilts/build-tools/common/restool/darwin-x86/restool"
+} else {
+  restool = "//prebuilts/build-tools/common/restool/restool"
+}
+
 hapsigner = "//prebuilts/signcenter/hapsigntool/hapsigntoolv2.jar"
 hap_unpacking_tool =
     "//developtools/packing_tool/jar/hmos_app_unpacking_tool.jar"
 hap_packing_tool = "//developtools/packing_tool/jar/hmos_app_packing_tool.jar"
 nodejs_version = "v12.18.4"
-nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+if (host_os == "mac") {
+  nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
+} else {
+  nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+}
 default_hap_private_key_path = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
 default_key_alias = "123456"

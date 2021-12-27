@@ -367,6 +367,46 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/build:copy_napi_shared_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/build:copy_media_query_shared_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/build:copy_preview_shared_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/osal:copy_resource_dynamic_library_standard",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/osal:copy_system_resource_standard",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/binary-tools",
         "module_label": "//developtools/packing_tool/jar:fastjson_utils_java",
         "target_os": [

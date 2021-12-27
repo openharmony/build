@@ -218,7 +218,7 @@ else
     fi
 
     mkdir -p ${code_dir}/prebuilts/build-tools/common/js-framework
-    /bin/cp -rf ${code_dir}/third_party/jsframework/node_modules ${code_dir}/prebuilts/build-tools/common/js-framework/
+    /bin/cp -R ${code_dir}/third_party/jsframework/node_modules ${code_dir}/prebuilts/build-tools/common/js-framework/
 fi
 
 if [ ! -d "${code_dir}/developtools/ace-ets2bundle/compiler" ]; then
