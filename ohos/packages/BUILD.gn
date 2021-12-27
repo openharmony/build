@@ -34,6 +34,9 @@ group("make_packages") {
       ":gen_required_modules_${_platform}",
     ]
   }
+  if (make_osp) {
+    deps += [ ":open_source_package" ]
+  }
 }
 
 all_parts_info_file = "${root_build_dir}/all_parts_info.json"
@@ -469,6 +472,21 @@ foreach(_platform, target_platform_list) {
     ]
     args += rebase_path(required_files, root_build_dir)
   }
+}
+
+action_with_pydeps("open_source_package") {
+  script = "//build/scripts/code_release.py"
+  depfile = "$target_gen_dir/$target_name.d"
+  _output = "$root_build_dir/packages/code_opensource/CodeOpensource.tar.gz"
+  outputs = [ _output ]
+  args = [
+    "--depfile",
+    rebase_path(depfile, root_build_dir),
+    "--output",
+    rebase_path(_output, root_build_dir),
+    "--root-dir",
+    rebase_path("//", root_build_dir),
+  ]
 }
 
 group("package_testcase") {

@@ -73,6 +73,9 @@ declare_args() {
 
   # Whether to build js bundle to ark bytecode
   build_ark = true
+
+  # Whether to make Code_OpenSource.tar.gz
+  make_osp = false
 }
 
 declare_args() {
