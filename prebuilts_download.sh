@@ -237,7 +237,7 @@ else
     npm install
 fi
 
-if [-d "cd ${code_dir}/developtools/ace-ets2bundle/compiler/node_modules"]; then
+if [ -d "${code_dir}/developtools/ace-ets2bundle/compiler/node_modules" ]; then
     cd ${code_dir}/developtools/ace-ets2bundle/compiler/node_modules
     mv @ohos/jsunit/ deccjsunit/
 fi
@@ -258,7 +258,7 @@ else
     npm install
 fi
 
-if [-d "cd ${code_dir}/developtools/ace-js2bundle/ace-loader/node_modules"]; then
+if [ -d "${code_dir}/developtools/ace-js2bundle/ace-loader/node_modules" ]; then
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader/node_modules
     mv @ohos/jsunit/ deccjsunit/
 fi
@@ -300,7 +300,7 @@ if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
     npm install
 fi
 
-if [-d "cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader/node_modules"]; then
+if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader/node_modules" ]; then
     cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader/node_modules
     mv @ohos/jsunit/ deccjsunit/
 fi
