@@ -17,6 +17,8 @@ import sys
 import os
 import shutil
 import tarfile
+import optparse
+from util import build_utils
 
 sys.path.append(
     os.path.abspath(os.path.dirname(os.path.abspath(
@@ -27,27 +29,11 @@ RELEASE_FILENAME = 'README.OpenSource'
 scan_dir_list = ['third_party', 'kernel', 'device', 'drivers']
 
 
-def _get_source_top_dir():
-    top_dir = os.path.abspath(
-        os.path.dirname(
-            os.path.abspath(
-                os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-    return top_dir
-
-
-def _get_package_dir():
-    top_dir = _get_source_top_dir()
-    package_dir = os.path.join(top_dir, 'out', 'Code_Opensource')
-    return package_dir
-
-
-def _copy_opensource_file(opensource_config_file):
+def _copy_opensource_file(opensource_config_file, top_dir, package_dir):
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
 
-    top_dir = _get_source_top_dir()
-    package_dir = _get_package_dir()
     src_dir = os.path.dirname(opensource_config_file)
     dst_dir = os.path.join(package_dir, os.path.relpath(src_dir, top_dir))
 
@@ -79,65 +65,58 @@ def _parse_opensource_file(opensource_config_file):
     for info in opensource_config:
         _license = info.get('License')
         if _license.count('GPL') > 0 or _license.count('LGPL') > 0:
-            result = _copy_opensource_file(opensource_config_file)
+            result = True
     return result
 
 
-def _scan_and_package_code_release(scan_dir):
+def _scan_and_package_code_release(scan_dir, top_dir, package_dir):
     file_dir_names = os.listdir(scan_dir)
     for file_dir_name in file_dir_names:
         file_dir_path = os.path.join(scan_dir, file_dir_name)
         if os.path.isdir(file_dir_path):
-            _scan_and_package_code_release(file_dir_path)
+            _scan_and_package_code_release(file_dir_path, top_dir, package_dir)
         elif file_dir_path == os.path.join(scan_dir, RELEASE_FILENAME):
-            _parse_opensource_file(file_dir_path)
+            if _parse_opensource_file(file_dir_path):
+                _copy_opensource_file(file_dir_path, top_dir, package_dir)
 
 
-def _scan_opensource_dir_list(scan_list):
-    for scan_dir in scan_list:
-        _scan_and_package_code_release(scan_dir)
-
-
-def _tar_opensource_package_file():
-    package_dir = _get_package_dir()
-    top_dir = _get_source_top_dir()
+def _tar_opensource_package_file(options, package_dir):
     result = -1
     if os.path.exists(package_dir):
-        package_filename = os.path.join(top_dir, 'out',
-                                        'Code_Opensource.tar.gz')
         try:
-            with tarfile.open(package_filename, "w:gz") as tar:
-                tar.add(package_dir, arcname=os.path.basename(package_dir))
+            with tarfile.open(options.output, "w:gz") as tar:
+                tar.add(package_dir, arcname=".")
                 result = 0
         except IOError as err:
             raise err
     return result
 
 
-def main():
+def main(args):
     """generate open source packages to release."""
+    parser = optparse.OptionParser()
+    build_utils.add_depfile_option(parser)
+    parser.add_option('--output', help='output')
+    parser.add_option('--root-dir', help='source root directory')
+    options, _ = parser.parse_args(args)
+
     # get the source top directory to be scan
-    top_dir = _get_source_top_dir()
+    top_dir = options.root_dir
 
-    # generate base_dir/out/Code_Opensource dir
-    package_dir = _get_package_dir()
-    if os.path.exists(package_dir):
-        shutil.rmtree(package_dir)
-    os.makedirs(package_dir)
+    with build_utils.temp_dir() as package_dir:
+        # scan the target dir and copy release code to out/opensource dir
+        dir_list = [os.path.join(top_dir, _dir) for _dir in scan_dir_list]
+        for scan_dir in dir_list:
+            _scan_and_package_code_release(scan_dir, top_dir, package_dir)
 
-    # scan the target dir and copy release code to out/opensource dir
-    dir_list = [os.path.join(top_dir, _dir) for _dir in scan_dir_list]
-    print(dir_list)
-    _scan_opensource_dir_list(dir_list)
-
-    # package the opensource to Code_Opensource.tar.gz
-    if _tar_opensource_package_file() == 0:
-        print('Generate the opensource package successfully.')
-    else:
-        print('Generate the opensource package failed.')
+        # package the opensource to Code_Opensource.tar.gz
+        if _tar_opensource_package_file(options, package_dir) == 0:
+            print('Generate the opensource package successfully.')
+        else:
+            print('Generate the opensource package failed.')
 
     return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))
