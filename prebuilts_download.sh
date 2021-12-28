@@ -225,8 +225,11 @@ if [ ! -d "${code_dir}/developtools/ace-ets2bundle/compiler" ]; then
     echo "${code_dir}/developtools/ace-ets2bundle/compiler not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/developtools/ace-ets2bundle/compiler
+    sed -i "s:deccjsunit:@ohos/jsunit:g" package.json
+    sed -i "s:1.0.4:1.0.2:g" package.json
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry ${npm_registry}
+	npm config set @ohos:registry=https://repo.harmonyos.com/npm/
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -234,17 +237,30 @@ else
     npm install
 fi
 
+if [-d "cd ${code_dir}/developtools/ace-ets2bundle/compiler/node_modules"]; then
+    cd ${code_dir}/developtools/ace-ets2bundle/compiler/node_modules
+    mv @ohos/jsunit/ deccjsunit/
+fi
+
 if [ ! -d "${code_dir}/developtools/ace-js2bundle/ace-loader" ]; then
     echo "${code_dir}/developtools/ace-js2bundle/ace-loader not exist, it shouldn't happen, pls check..."
 else
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader
+    sed -i "s:deccjsunit:@ohos/jsunit:g" package.json
+    sed -i "s:1.0.4:1.0.2:g" package.json
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry ${npm_registry}
+    npm config set @ohos:registry=https://repo.harmonyos.com/npm/
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
     npm cache clean -f
     npm install
+fi
+
+if [-d "cd ${code_dir}/developtools/ace-js2bundle/ace-loader/node_modules"]; then
+    cd ${code_dir}/developtools/ace-js2bundle/ace-loader/node_modules
+    mv @ohos/jsunit/ deccjsunit/
 fi
 
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
@@ -272,13 +288,21 @@ fi
 #安装鸿蒙sdk中js组件的相关依赖
 if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
     cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader
+    sed -i "s:deccjsunit:@ohos/jsunit:g" package.json
+    sed -i "s:1.0.4:1.0.2:g" package.json
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
     npm config set registry ${npm_registry}
+    npm config set @ohos:registry=https://repo.harmonyos.com/npm/
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
     npm cache clean -f
     npm install
+fi
+
+if [-d "cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader/node_modules"]; then
+    cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader/node_modules
+    mv @ohos/jsunit/ deccjsunit/
 fi
 
 cd ${code_dir}
