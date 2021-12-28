@@ -114,7 +114,7 @@ def _get_org_subsytem_info(subsystem_config_file, os_level, config_dirs):
                                              '{}_system'.format(os_level))
         subsystem_info = parse_lite_subsystem_config(
             config_dirs.lite_components_dir, ohos_build_output_dir,
-            config_dirs.source_root_dir)
+            config_dirs.source_root_dir, subsystem_config_file)
     return subsystem_info
 
 

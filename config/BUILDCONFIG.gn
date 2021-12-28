@@ -713,7 +713,7 @@ foreach(_target_type, target_type_list) {
       }
       if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
         if (is_lite_system) {
-          deps += [ "//build/lite:prebuilts" ]
+          deps += [ "//prebuilts/lite/sysroot" ]
         } else {
           deps += [ "//build/config:${_target_type}_deps" ]
         }
@@ -736,7 +736,7 @@ if (is_lite_system) {
           deps = []
         }
         if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
-          deps += [ "//build/lite:prebuilts" ]
+          deps += [ "//prebuilts/lite/sysroot" ]
         }
       }
     }
