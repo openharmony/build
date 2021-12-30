@@ -41,7 +41,6 @@ def do_build(args):
     cmd = [
         'python3',
         build_py,
-        '--compact-mode',
         '-p',
         args.product_name,
     ]
