@@ -61,6 +61,8 @@ foreach(_platform, target_platform_list) {
 
       image_config_file =
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
+      device_image_config_file =
+          "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
       if (_image_name == "ramdisk") {
         output_image_file = "$root_build_dir/${_image_name}.img"
       } else {
@@ -86,6 +88,8 @@ foreach(_platform, target_platform_list) {
         rebase_path(image_input_path, root_build_dir),
         "--image-config-file",
         rebase_path(image_config_file, root_build_dir),
+        "--device-image-config-file",
+        rebase_path(device_image_config_file, root_build_dir),
         "--output-image",
         rebase_path(output_image_file, root_build_dir),
         "--target-cpu",
