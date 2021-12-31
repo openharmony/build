@@ -37,7 +37,8 @@ def _prepare_root(system_path, target_cpu):
         shutil.rmtree(root_dir)
     os.makedirs(root_dir, exist_ok=True)
     _dir_list = [
-        'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data'
+        'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data',
+        'chipset', 'storage', 'mnt', 'tmp', 'sys-prod', 'chip-prod'
     ]
     for _dir_name in _dir_list:
         os.makedirs(os.path.join(root_dir, _dir_name), exist_ok=True)
@@ -61,7 +62,7 @@ def _prepare_updater(updater_path):
 
 
 def _prepare_ramdisk(ramdisk_path):
-    _dir_list = ['bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr']
+    _dir_list = ['bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr', 'mnt']
     for _dir_name in _dir_list:
         _path = os.path.join(ramdisk_path, _dir_name)
         if os.path.exists(_path):
@@ -80,8 +81,11 @@ def _make_image(args):
     image_type = "raw"
     if args.sparse_image:
         image_type = "sparse"
+    config_file = args.image_config_file
+    if (os.path.exists(args.device_image_config_file)):
+        config_file = args.device_image_config_file
     mk_image_args = [
-        args.input_path, args.image_config_file, args.output_image_path,
+        args.input_path, config_file, args.output_image_path,
         image_type
     ]
     if args.build_image_tools_path:
@@ -95,6 +99,7 @@ def main(argv):
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--image-name', required=True)
     parser.add_argument('--image-config-file', required=True)
+    parser.add_argument('--device-image-config-file', required=True)
     parser.add_argument('--input-path', required=True)
     parser.add_argument('--output-image-path', required=True)
     parser.add_argument('--sparse-image',
@@ -115,6 +120,8 @@ def main(argv):
         for _root, _, _files in os.walk(args.input_path):
             for _file in _files:
                 _dep_files.append(os.path.join(_root, _file))
+        if (os.path.exists(args.device_image_config_file)):
+            _dep_files.append(args.device_image_config_file)
         build_utils.write_depfile(args.depfile,
                                   args.output_image_path,
                                   _dep_files,
