@@ -102,7 +102,7 @@ prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/${h
 prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64.tar.bz2
+prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64.tar.bz2
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
