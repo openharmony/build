@@ -71,6 +71,10 @@
     "path": "foundation/graphic",
     "name": "graphic"
   },
+  "window": {
+    "path": "foundation/windowmanager",
+    "name": "window"
+  },
   "miscservices": {
     "path": "base/miscservices",
     "name": "miscservices"
