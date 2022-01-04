@@ -117,7 +117,7 @@ prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cm
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20211029.tar.gz
+prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20211231.tar.gz
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
