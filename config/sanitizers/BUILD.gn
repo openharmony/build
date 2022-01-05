@@ -77,7 +77,7 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     outputs = [ "$root_out_dir/{{source_file_part}}" ]
   }
 
-  if (is_mac) {
+  if (is_mac || !use_xcode_clang) {
     bundle_data("asan_runtime_bundle_data") {
       sources = get_target_outputs(":copy_asan_runtime")
       outputs = [ "{{bundle_executable_dir}}/{{source_file_part}}" ]
