@@ -34,6 +34,7 @@ group("make_images") {
 
 build_image_tools_path = [
   "//third_party/e2fsprogs/prebuilt/host/bin",
+  "//out/${device_name}/clang_x64/distributeddatamgr/e2fsprogs",
   "//build/ohos/images/mkimage",
 ]
 

@@ -34,11 +34,11 @@ def args_parse(args):
     parser.add_argument("--casefold", action='store_true',
                         help="The casefold opt for mkf2fs.")
     parser.add_argument("--dac_config",
-                        help="The path of fs config to sload_f2fs.")
+                        help="The path of fs config to sload.f2fs.")
     parser.add_argument("--timestamp", help="The timestamp for filesystem.")
     parser.add_argument("--label", help="The lable for filesystem.")
     parser.add_argument("--file_context",
-                        help="The path of file_context to sload_f2fs.")
+                        help="The path of file_context to sload.f2fs.")
     parser.add_argument("--root_dir", help="The root dir for root image.")
 
     args = parser.parse_known_args(args)[0]
@@ -68,7 +68,7 @@ def build_run_mkf2fs(args):
     if args.casefold:
         mkf2fs_opts += " -O casefold -C utf8 "
 
-    mkf2fs_cmd += ("make_f2fs -d1 -f -O encrypt -O quota " +
+    mkf2fs_cmd += ("mkfs.f2fs -d1 -f -O encrypt -O quota " +
                    " -O verity -w 4096 -R 0:0 " + mkf2fs_opts +
                    " " + args.device)
 
@@ -97,7 +97,7 @@ def build_run_sloadf2fs(args):
     if args.timestamp:
         sloadf2fs_opts += " -T " + args.timestamp
 
-    sloadf2fs_cmd += ("sload_f2fs " + sloadf2fs_opts + " " + args.device)
+    sloadf2fs_cmd += ("sload.f2fs " + sloadf2fs_opts + " " + args.device)
     res = run_cmd(sloadf2fs_cmd)
     if res[1] != 0:
         print("info " + sloadf2fs_cmd)
@@ -119,8 +119,8 @@ def build(args):
         print("error run mkf2fs errno: " + str(res))
         sys.exit(2)
     res = build_run_sloadf2fs(args)
-    if res != 0:
-        print("error run sload_f2fs errno: " + str(res))
+    if res != 0 and res != 1:
+        print("error run sload.f2fs errno: " + str(res))
         os.remove(args.device)
         sys.exit(3)
 
