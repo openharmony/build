@@ -60,9 +60,9 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     _clang_rt_dso_path = "windows/clang_rt.asan_dynamic-x86_64.dll"
   } else if (is_ohos) {
     if (target_cpu == "arm64") {
-      _clang_rt_dso_path = "aarch64-linux-ohosmusl/libclang_rt.asan.so"
+      _clang_rt_dso_path = "aarch64-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "arm") {
-      _clang_rt_dso_path = "arm-linux-ohosmusl/libclang_rt.asan.so"
+      _clang_rt_dso_path = "arm-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "x86_64") {
       _clang_rt_dso_path = ""
     }
@@ -647,9 +647,9 @@ template("config_plus_compiler_rt") {
     foreach(dso_name, minimal_rt_lib_names) {
       # Add runtime library support
       if (target_cpu == "arm64") {
-        _dso_names += [ "aarch64-linux-ohosmusl/libclang_rt.${dso_name}.a" ]
+        _dso_names += [ "aarch64-linux-ohos/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "arm") {
-        _dso_names += [ "arm-linux-ohosmusl/libclang_rt.${dso_name}.a" ]
+        _dso_names += [ "arm-linux-ohos/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "x86_64") {
         _dso_names += []
       }

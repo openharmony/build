@@ -26,11 +26,11 @@ if (is_ohos) {
   }
 
   if (current_cpu == "arm") {
-    abi_target = "arm-linux-ohosmusl"
+    abi_target = "arm-linux-ohos"
   } else if (current_cpu == "x86") {
     abi_target = ""
   } else if (current_cpu == "arm64") {
-    abi_target = "aarch64-linux-ohosmusl"
+    abi_target = "aarch64-linux-ohos"
   } else if (current_cpu == "x86_64") {
     abi_target = ""
   } else {

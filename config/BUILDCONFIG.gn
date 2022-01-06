@@ -544,9 +544,9 @@ if (is_lite_system) {
 
   arch = "arm"
   if (ohos_kernel_type == "liteos_a") {
-    target_triple = "$arch-liteos"
+    target_triple = "$arch-liteos-ohos"
   } else if (ohos_kernel_type == "linux") {
-    target_triple = "$arch-linux-ohosmusl"
+    target_triple = "$arch-linux-ohos"
   }
 
   if (defined(board_configed_sysroot) && board_configed_sysroot != "") {
