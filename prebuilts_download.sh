@@ -102,7 +102,7 @@ prebuilts/cmake,https://repo.huaweicloud.com/harmonyos/compiler/cmake/3.16.5/${h
 prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,https://repo.huaweicloud.com/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,https://repo.huaweicloud.com/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-73276/${host_platform}/clang-73276-release-${host_platform}-x86_64.tar.bz2
+prebuilts/clang/ohos/${host_platform}-x86_64,https://repo.huaweicloud.com/harmonyos/compiler/clang/10.0.1-82840/${host_platform}/clang-82840-${host_platform}-x86_64.tar.bz2
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
@@ -149,14 +149,14 @@ do
         rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
         mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-73276-release" ];then
+    if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-82840" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-73276-release" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-82840" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
 	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-73276-release" ];then
+    if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-82840" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-        mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-73276-release" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-82840" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
 	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
     fi
 done
