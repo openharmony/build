@@ -128,6 +128,7 @@ declare_args() {
 
 declare_args() {
   build_selinux = false
+  enforce_selinux = false
 }
 
 # build target type
