@@ -41,6 +41,7 @@ def args_parse(argv):
                         help="The reserve_percent for mke2fs.")
     parser.add_argument("--extend_opts", nargs='+',
                         help="The extend opt for mke2fs.(not support sparse)")
+    parser.add_argument("--encrypt", help="The fscrypt support.")
 
     args = parser.parse_known_args(argv)[0]
     return args
@@ -75,6 +76,8 @@ def build_run_mke2fs(args):
         mke2fs_opts += " -m " + args.reserve_percent
     elif not is_data:
         mke2fs_opts += " -m 0"
+    if is_data:
+        mke2fs_opts += " -O encrypt"
     mke2fs_opts += " -L " + args.mount_point + " -M " + args.mount_point
 
     blocks = int(int(args.fs_size) / BLOCKSIZE)
