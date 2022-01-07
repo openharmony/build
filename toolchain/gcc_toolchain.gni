@@ -492,11 +492,11 @@ template("gcc_toolchain") {
       if (is_asan && invoker_toolchain_args.current_os == "ohos") {
         if (invoker_toolchain_args.current_cpu == "arm64") {
           _clang_rt_dso_full_path = rebase_path(
-                  "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohosmusl/libclang_rt.asan.so",
+                  "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.asan.so",
                   root_build_dir)
         } else {
           _clang_rt_dso_full_path = rebase_path(
-                  "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohosmusl/libclang_rt.asan.so",
+                  "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so",
                   root_build_dir)
         }
       }
