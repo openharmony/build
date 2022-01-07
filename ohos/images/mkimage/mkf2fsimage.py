@@ -40,6 +40,7 @@ def args_parse(args):
     parser.add_argument("--file_context",
                         help="The path of file_context to sload_f2fs.")
     parser.add_argument("--root_dir", help="The root dir for root image.")
+    parser.add_argument("--encrypt", help="The fscrypt support.")
 
     args = parser.parse_known_args(args)[0]
     return args
