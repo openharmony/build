@@ -81,6 +81,9 @@ def build_run_mkf2fs(args):
 
 
 def build_run_sloadf2fs(args):
+    libselinux_path = os.path.realpath("./clang_x64/security/selinux/")
+    os.environ['LD_LIBRARY_PATH'] = libselinux_path
+
     sloadf2fs_opts = ""
     sloadf2fs_cmd = ""
 
