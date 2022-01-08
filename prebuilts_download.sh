@@ -18,6 +18,9 @@ for i in "$@"; do
     # 黑客等不法分子可以篡改或窃取客户端和服务器之间传输的信息和数据，从而影响用户的数据安全!
     SKIP_SSL=YES
     ;;
+    -ndk|--ndk)
+    NDK_PLATFORM=YES
+    ;;
   esac
 done
 if [ "X${SKIP_SSL}" == "XYES" ];then
@@ -129,6 +132,12 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
         prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.1.0.0/windows/previewer-3.1.0.0.win.tar.gz
         """
+    if [[ "X${NDK_PLATFORM}" == "XYES"  ]];then
+        copy_config+="""
+            prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/clang-447847-windows-x86_64.tar.bz2
+            """
+            # prebuilts/clang/ohos/${host_platform}-x86_64/libcxx-ndk,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/libcxx-ndk_86_64.tar.bz2
+    fi
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
         prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.1.0.0/darwin/previewer-3.1.0.0.mac.tar.gz
@@ -164,6 +173,18 @@ do
         mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/"
         rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
         mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
+    fi
+    if [ "X${NDK_PLATFORM}" == "XYES" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-447847" ];then
+            rm -rf "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
+            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
+        ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
+        fi
+
+        # if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk-447847" ];then
+        #     rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk"
+        #     mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk-447847" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk"
+        # fi
     fi
     if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-447847" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"

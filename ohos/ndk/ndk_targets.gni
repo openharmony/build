@@ -21,9 +21,13 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
 ]
 
-_ndk_base_libs = []
-
-_ndk_sysroot_uapi = []
+_ndk_base_libs = [
+  "//third_party/musl/ndk_script/adapter:libc_ndk",
+  "//third_party/musl/ndk_script:musl_ndk_libs_arm32",
+  "//third_party/musl/ndk_script:musl_ndk_libs_aarch64",
+  "//third_party/musl/ndk_script:ndk_toolchain",
+]
+_ndk_sysroot_uapi = [ "//third_party/musl/ndk_script:musl_sysroot" ]
 
 _ndk_cmake = [
   "//prebuilts/cmake/darwin-x86:darwin_cmake_copy",
