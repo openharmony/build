@@ -103,7 +103,8 @@ def build_run_e2fsdroid(args):
     if args.dac_config:
         e2fsdroid_opts += " -C " + args.dac_config
     if args.file_context:
-        e2fsdroid_opts += " -S " + args.file_context
+        if(os.path.exists(args.file_context)):
+            e2fsdroid_opts += " -S " + args.file_context
 
     e2fsdroid_cmd += ("e2fsdroid" + e2fsdroid_opts + " -f " +
                       args.src_dir + " -a " + args.mount_point +
