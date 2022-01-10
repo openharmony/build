@@ -19,6 +19,10 @@
     "path": "base/security",
     "name": "security"
   },
+  "useriam": {
+    "path": "base/user_iam",
+    "name": "useriam"
+  },
   "startup": {
     "path": "base/startup",
     "name": "startup"
