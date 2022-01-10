@@ -132,16 +132,22 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
         prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.1.0.0/windows/previewer-3.1.0.0.win.tar.gz
         """
-    if [[ "X${NDK_PLATFORM}" == "XYES"  ]];then
+     if [[ "X${NDK_PLATFORM}" == "XYES"  ]];then
         copy_config+="""
             prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/clang-447847-windows-x86_64.tar.bz2
+            prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/libcxx-ndk-447847-windows-x86-64.tar.bz2
+            prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/libcxx-ndk-447847-${host_platform}-x86-64.tar.bz2
             """
-            # prebuilts/clang/ohos/${host_platform}-x86_64/libcxx-ndk,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/libcxx-ndk_86_64.tar.bz2
     fi
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
         prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.1.0.0/darwin/previewer-3.1.0.0.mac.tar.gz
         """
+    if [[ "X${NDK_PLATFORM}" == "XYES"  ]];then
+        copy_config+="""
+            prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/libcxx-ndk-447847-${host_platform}-x86-64.tar.bz2
+            """
+    fi
 fi
 
 if [ ! -d "${bin_dir}" ];then
@@ -180,11 +186,6 @@ do
             mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
         ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
         fi
-
-        # if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk-447847" ];then
-        #     rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk"
-        #     mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk-447847" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk"
-        # fi
     fi
     if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-447847" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
