@@ -14,7 +14,7 @@
 # HOSP version
 declare_args() {
   hosp_version = "2.0"
-  sdk_version = "3.1.0.0"
+  sdk_version = "3.1.3.2"
   api_version = "8"
 
   # Release type, optional values: Betax, RCx...
