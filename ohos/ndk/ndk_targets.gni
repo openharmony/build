@@ -13,8 +13,8 @@
 
 # ndk library, ndk header configuration
 _ndk_library_targets = [
-  # "//third_party/zlib:libz_ndk",
-  # "//third_party/zlib:zlib_header",
+  "//third_party/zlib:libz_ndk",
+  "//third_party/zlib:zlib_header",
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_header",
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
   "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
