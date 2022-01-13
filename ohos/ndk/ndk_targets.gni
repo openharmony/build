@@ -19,6 +19,10 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
   "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
+  "//foundation/ace/napi:libnapi_ndk",
+  "//foundation/ace/napi:napi_header",
+  "//third_party/libuv:libuv_ndk",
+  "//third_party/libuv:libuv_header",
 ]
 
 _ndk_base_libs = [
