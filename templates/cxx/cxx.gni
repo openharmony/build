@@ -682,7 +682,9 @@ template("ohos_static_library") {
     if (defined(invoker.remove_configs)) {
       configs -= invoker.remove_configs
     }
-    configs -= [ "//build/config/compiler:thin_archive" ]
+    if (is_standard_system) {
+      configs -= [ "//build/config/compiler:thin_archive" ]
+    }
     configs += [ ":$_sanitize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
