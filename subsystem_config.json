@@ -159,8 +159,8 @@
     "path": "foundation/deviceprofile",
     "name": "deviceprofile"
   },
-  "filemanagement": {
-    "path": "foundation/filemanagement",
-    "name": "filemanagement"
+  "storage_manager": {
+    "path": "foundation/storage_manager",
+    "name": "storage_manager"
   }
 }
