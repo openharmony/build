@@ -39,6 +39,9 @@ declare_args() {
   # vendor package dir
   vendor_base_dir = "vendor"
 
+  # chipset package dir
+  chipset_base_dir = "system"
+
   # updater package dir
   updater_base_dir = "updater"
 
