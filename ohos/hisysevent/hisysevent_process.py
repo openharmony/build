@@ -24,7 +24,7 @@ sys.path.append(
             os.path.dirname(
                 os.path.abspath(__file__)))))
 
-form scripts.utils.file_utils import read_json_file, \
+from scripts.utils.file_utils import read_json_file, \
     write_json_file
 from maple.java.util import build_utils
 

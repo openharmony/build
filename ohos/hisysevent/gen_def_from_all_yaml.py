@@ -62,7 +62,7 @@ def domain_name_check(content, length_min, length_max):
     if not check_char(content):
         if check_char_base(content):
             print("warning: %s: %s " % (DOMAIN_NAME, content),
-                "is not all in A - Z, or not start with A - Z",
+                "is not all in A-Z, or not start with A-Z",
                 file=WARNING_TXT)
         else:
             sys.exit(1)
