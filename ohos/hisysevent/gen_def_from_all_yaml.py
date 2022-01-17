@@ -82,7 +82,6 @@ def tag_check(tag_list):
 
 def check_domain_duplicate(domain, domain_value):
     if domain in DOMAIN_DICT:
-        print("error: %s already in" % domain, DOMAIN_DICT[domain])
         sys.exit(1)
     else:
         DOMAIN_DICT[domain] = domain_value
