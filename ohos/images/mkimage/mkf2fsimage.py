@@ -88,6 +88,11 @@ def build_run_sloadf2fs(args):
     libuuid_path = os.path.realpath("./clang_x64/distributeddatamgr/e2fsprogs/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libuuid_path
 
+    oldcwd = os.getcwd();
+    os.chdir("./clang_x64/filemanagement/storage_standard")
+    run_cmd("ln -s fsck.f2fs sload.f2fs")
+    os.chdir(oldcwd);
+
     sloadf2fs_opts = ""
     sloadf2fs_cmd = ""
 
