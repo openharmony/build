@@ -20,21 +20,21 @@ template("ohos_hisysevent_install_info") {
   assert(defined(invoker.hisysevent_install_info_file))
 
   forward_variables_from(invoker,
-    [
-      "system_install_info_file",
-      "hisysevent_install_info_file",
-    ])
+                         [
+                           "system_install_info_file",
+                           "hisysevent_install_info_file",
+                         ])
 
   _deps = []
   if (defined(invoker.deps)) {
-     _deps += invoker.deps
+    _deps += invoker.deps
   }
 
   action_with_pydeps(target_name) {
     deps = _deps
     script = "//build/ohos/hisysevent/hisysevent_process.py"
-    hisysevent_config_file = 
-      "${build_configs_path}/parts_info/hisysevent_configs.json"
+    hisysevent_config_file =
+        "${build_configs_path}/parts_info/hisysevent_configs.json"
     sources = [ system_install_info_file ]
     outputs = [ hisysevent_install_info_file ]
     depfile = "$target_gen_dir/$target_name.d"
@@ -55,5 +55,4 @@ template("ohos_hisysevent_install_info") {
       rebase_path(root_build_dir),
     ]
   }
-
 }
