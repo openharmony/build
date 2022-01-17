@@ -78,13 +78,13 @@ def _get_install_info(hisysevnet_config_files, output_path,
 
 def main(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument（'--parts-config-file', required = True)
-    parser.add_argument（'--system-install-info-file', required = True)
-    parser.add_argument（'--config-install-dest-dir', required = True)
-    parser.add_argument（'--hisysevent-install-info-file', required = True)
-    parser.add_argument（'--depfile', required = True)
-    parser.add_argument（'--source-root-dir', required = True)
-    parser.add_argument（'--gn-root-build-dir', required = True)
+    parser.add_argument('--parts-config-file', required = True)
+    parser.add_argument('--system-install-info-file', required = True)
+    parser.add_argument('--config-install-dest-dir', required = True)
+    parser.add_argument('--hisysevent-install-info-file', required = True)
+    parser.add_argument('--depfile', required = True)
+    parser.add_argument('--source-root-dir', required = True)
+    parser.add_argument('--gn-root-build-dir', required = True)
     args = parser.parse_args(argv)
 
     depfiles = [args.parts_config_file]
