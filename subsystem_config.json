@@ -162,5 +162,9 @@
   "filemanagement": {
     "path": "foundation/filemanagement",
     "name": "filemanagement"
+  },
+  "resourceschedule": {
+    "path": "foundation/resourceschedule",
+    "name": "resourceschedule"
   }
 }
