@@ -60,7 +60,7 @@ def _get_all_config_files(hisysevent_config_info, src_part_list,
             hisysevent_config_files.append(_relpath)
     return hisysevent_config_files
 
-def _get_install_info(hisysevnet_config_files, output_path,
+def _get_install_info(hisysevent_config_files, output_path,
     config_install_dest_dir):
     install_info_list = []
     if hisysevent_config_files:
