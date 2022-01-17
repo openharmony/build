@@ -16,7 +16,7 @@
 import sys
 import os
 import argparse
-from gen_def_from_all_yaml import merge_hisysevent_config #noqa: E402
+from gen_def_from_all_yaml import merge_hisysevent_config  # noqa: E402
 
 sys.path.append(
     os.path.dirname(
@@ -25,8 +25,8 @@ sys.path.append(
                 os.path.abspath(__file__)))))
 
 from scripts.utils.file_utils import read_json_file, \
-    write_json_file #noqa: E402
-from maple.java.util import build_utils #noqa: E402
+    write_json_file  # noqa: E402
+from maple.java.util import build_utils  # noqa: E402
 
 def _get_src_parts(system_install_info_file):
     parts_list = read_json_file(system_install_info_file)
