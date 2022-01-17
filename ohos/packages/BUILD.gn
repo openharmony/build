@@ -94,7 +94,7 @@ foreach(_platform, target_platform_list) {
 
   hisysevent_install_info_file = 
       "${current_platform_dir}/hisysevent/hisysevent_install_info.json"
-  hisysevent_install_info("${current_platform}_hisysevent_install_info") {
+  ohos_hisysevent_install_info("${current_platform}_hisysevent_install_info") {
     deps = [ ":${current_platform}_parts_list" ]
     _outputs = get_target_outputs(":${current_platform}_parts_list")
     system_install_info_file = _outputs[0]
