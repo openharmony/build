@@ -131,9 +131,9 @@
     "path": "ark",
     "name": "ark"
   },
-  "ccruntime": {
+  "compileruntime": {
     "path": "base/compileruntime",
-    "name": "ccruntime"
+    "name": "compileruntime"
   },
   "iot": {
     "path": "domains/iot",
