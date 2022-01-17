@@ -21,6 +21,12 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
   "//foundation/ace/napi:libnapi_ndk",
   "//foundation/ace/napi:napi_header",
+  "//foundation/graphic/standard/interfaces/kits/ndk/EGL:libEGL_ndk",
+  "//foundation/graphic/standard/interfaces/kits/ndk/EGL:EGL_header",
+  "//foundation/graphic/standard/interfaces/kits/ndk/GLES:libGLES_ndk",
+  "//foundation/graphic/standard/interfaces/kits/ndk/GLES:GLES_header",
+  "//foundation/graphic/standard/interfaces/kits/ndk/native_window:libnative_window_ndk",
+  "//foundation/graphic/standard/interfaces/kits/ndk/native_window:native_window_header",
   "//third_party/libuv:libuv_ndk",
   "//third_party/libuv:libuv_header",
 ]
