@@ -434,25 +434,9 @@ class LoadBuildConfig(object):
                 parts_path_dict[_pname] = os.path.relpath(
                     os.path.dirname(_build_file), self._source_root_dir)
             parts_info.update(_curr_parts_info)
-            if 'aosp_cxx_api_allowlist' in _parts_config:
-                aosp_cxx_api_allowlist = _parts_config.get(
-                    'aosp_cxx_api_allowlist')
-            else:
-                aosp_cxx_api_allowlist = _parts_config.get(
-                    'android_cxx_api_whitelist')
-            if 'aosp_java_api_allowlist' in _parts_config:
-                aosp_cxx_api_allowlist = _parts_config.get(
-                    'aosp_java_api_allowlist')
-            else:
-                aosp_cxx_api_allowlist = _parts_config.get(
-                    'android_java_api_whitelist')
         subsystem_config = {}
         subsystem_config['subsystem'] = subsystem_name
         subsystem_config['parts'] = parts_info
-        if aosp_cxx_api_allowlist:
-            subsystem_config['aosp_cxx_api_allowlist'] = aosp_cxx_api_allowlist
-        if aosp_java_api_allowlist:
-            subsystem_config['aosp_java_api_allowlist'] = aosp_java_api_allowlist
         return subsystem_config, parts_path_dict
 
     def parse(self):
