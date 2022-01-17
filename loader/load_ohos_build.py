@@ -363,6 +363,7 @@ class LoadBuildConfig(object):
         self._parts_info_dict = {}
         self._phony_targets = {}
         self._parts_path_dict = {}
+        self._part_hisysevent_config = {}
 
     def _parsing_config(self, parts_config):
         _parts_info_dict = {}
@@ -400,6 +401,13 @@ class LoadBuildConfig(object):
                     _variant_phony_targets[real_part_name] = _target_label
             self._part_targets_label.update(_targets_label)
             self._parts_variants[part_name] = _build_target
+            if 'hisysevent_config' in value:
+                _config_files = value.get('hisysevent_config')
+                for _config_file in _config_files:
+                    if not _config_file.startswith('//'):
+                        raise Exception("part '{}' hisysevent config incorrest.".format(
+                            part_name))
+                self._part_hisysevent_config[part_name] = _config_files
             _parts_info_dict[part_name] = _parts_info
         self._parts_info_dict = _parts_info_dict
         self._phony_targets = _variant_phony_targets
@@ -426,9 +434,25 @@ class LoadBuildConfig(object):
                 parts_path_dict[_pname] = os.path.relpath(
                     os.path.dirname(_build_file), self._source_root_dir)
             parts_info.update(_curr_parts_info)
+            if 'aosp_cxx_api_allowlist' in _parts_config:
+                aosp_cxx_api_allowlist = _parts_config.get(
+                    'aosp_cxx_api_allowlist')
+            else:
+                aosp_cxx_api_allowlist = _parts_config.get(
+                    'android_cxx_api_whitelist')
+            if 'aosp_java_api_allowlist' in _parts_config:
+                aosp_cxx_api_allowlist = _parts_config.get(
+                    'aosp_java_api_allowlist')
+            else:
+                aosp_cxx_api_allowlist = _parts_config.get(
+                    'android_java_api_whitelist')
         subsystem_config = {}
         subsystem_config['subsystem'] = subsystem_name
         subsystem_config['parts'] = parts_info
+        if aosp_cxx_api_allowlist:
+            subsystem_config['aosp_cxx_api_allowlist'] = aosp_cxx_api_allowlist
+        if aosp_java_api_allowlist:
+            subsystem_config['aosp_java_api_allowlist'] = aosp_java_api_allowlist
         return subsystem_config, parts_path_dict
 
     def parse(self):
@@ -488,6 +512,9 @@ class LoadBuildConfig(object):
         self.parse()
         return self._parts_path_dict
 
+    def parts_hisysevent_config(self):
+        self.parse()
+        return self._part_hisysevent_config
 
 def _output_parts_info(parts_config_dict, config_output_path):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
@@ -557,6 +584,12 @@ def _output_parts_info(parts_config_dict, config_output_path):
                                           'path_to_parts.json')
         write_json_file(path_to_parts_file, path_to_parts)
 
+    # hisysevent_config
+    if 'hisysevent_config' in parts_config_dict:
+        hisysevent_config = parts_config_dict.get('hisysevent_config')
+        hisysevent_info_file = os.path.join(parts_info_output_path,
+            'hisysevent_configs.json')
+        write_json_file(hisysevent_info_file, hisysevent_config)
 
 def get_parts_info(source_root_dir,
                    config_output_relpath,
@@ -576,6 +609,7 @@ def get_parts_info(source_root_dir,
     subsystem_parts = {}
     _phony_target = {}
     _parts_path_info = {}
+    _parts_hisysevent_config = {}
     for subsystem_name, build_config_info in subsystem_info.items():
         if subsystem_name == 'xts' and build_xts is False:
             continue
@@ -594,6 +628,7 @@ def get_parts_info(source_root_dir,
         parts_info.update(build_loader.parts_info())
         _phony_target.update(build_loader.parts_phony_target())
         _parts_path_info.update(build_loader.parts_path_info())
+        _parts_hisysevent_config.update(build_loader.parts_hisysevent_config())
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts
@@ -603,6 +638,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['parts_targets'] = parts_targets
     parts_config_dict['phony_target'] = _phony_target
     parts_config_dict['parts_path_info'] = _parts_path_info
+    parts_config_dict['hisysevent_config'] = _parts_hisysevent_config
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
     return parts_config_dict
