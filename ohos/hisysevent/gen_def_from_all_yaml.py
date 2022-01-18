@@ -31,7 +31,7 @@ def format_validation(pattern, content):
     regex = re.compile(pattern)
     matched = regex.match(content)
     if not matched:
-        print("error: %s mach %s  " % (content, pattern), "failed")
+        print("error: %s match %s " % (content, pattern), "failed")
     return matched
 
 
@@ -40,8 +40,8 @@ def length_check(content, length_min, length_max):
     length_valid = [False, True][(length >= length_min)
                                  and (length <= length_max)]
     if not length_valid:
-        print("error: length of %s is incorrect, " % (content),
-              " must be in range of [%d, %d]" % (length_min, length_max))
+        print("error: length of %s is incorrect," % (content),
+              "must be in range of [%d, %d]" % (length_min, length_max))
     return length_valid
 
 
@@ -66,7 +66,7 @@ def domain_name_check(content, length_min, length_max):
         sys.exit(1)
     if not check_char(content):
         if check_char_base(content):
-            print("warning: %s: %s " % (DOMAIN_NAME, content),
+            print("warning: %s: %s" % (DOMAIN_NAME, content),
                   "is not all in A-Z, or not start with A-Z",
                   file=WARNING_TXT)
         else:
