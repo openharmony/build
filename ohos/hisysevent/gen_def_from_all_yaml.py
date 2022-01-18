@@ -144,7 +144,7 @@ def merge_hisysevent_config(yaml_list, output_path):
     if (len(yaml_list) == 0):
         print("error: there is no yaml imput")
         sys.exit(1)
-    if not os.path.exits(output_path):
+    if not os.path.exists(output_path):
         os.makedirs(output_path, exist_ok=True)
     base_type = ["FAULT", "STATISTIC", "SECURITY", "BEHAVIOR"]
     base_level = ["CRITICAL", "MINOR"]
