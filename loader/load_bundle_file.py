@@ -74,5 +74,7 @@ class BundlePartObj(object):
             _part_info['feature_list'] = _component_info.get('features')
         if 'syscap' in _component_info:
             _part_info['system_capabilities'] = _component_info.get('syscap')
+        if 'hisysevent_config' in _component_info:
+            _part_info['hisysevent_config'] = _component_info.get('hisysevent_config')
         _ohos_build_info['parts'] = {_part_name: _part_info}
         return _ohos_build_info
