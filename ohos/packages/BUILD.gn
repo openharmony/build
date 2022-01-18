@@ -92,7 +92,7 @@ foreach(_platform, target_platform_list) {
   # all post process moudles info
   post_process_modules_list += [ sa_install_modules_info_file ]
 
-  hisysevent_install_info_file = 
+  hisysevent_install_info_file =
       "${current_platform_dir}/hisysevent/hisysevent_install_info.json"
   ohos_hisysevent_install_info("${current_platform}_hisysevent_install_info") {
     deps = [ ":${current_platform}_parts_list" ]
