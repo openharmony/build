@@ -58,7 +58,7 @@ def check_char_desc(content):
 
 
 def check_char_tag(content):
-    return format_validation('[A-Za-z0-9]', content)
+    return format_validation('[A-Za-z0-9]*$', content)
 
 
 def domain_name_check(content, length_min, length_max):
