@@ -94,7 +94,7 @@ def build_run_mke2fs(args):
 def build_run_e2fsdroid(args):
     libselinux_path = os.path.realpath("./clang_x64/security/selinux/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path
-    
+
     e2fsdroid_opts = ""
     e2fsdroid_cmd = ""
 
