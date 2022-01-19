@@ -147,10 +147,6 @@
     "path": "kernel/linux/build",
     "name": "kernel"
   },
-  "distributedfile": {
-    "path": "foundation/storage",
-    "name": "distributedfile"
-  },
   "msdp": {
     "path": "base/msdp",
     "name": "msdp"
