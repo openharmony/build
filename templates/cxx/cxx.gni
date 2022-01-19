@@ -76,7 +76,11 @@ template("ohos_executable") {
     output_dir = invoker.test_output_dir
     _ohos_test = true
   } else {
-    output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+    if (is_standard_system) {
+      output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+    } else {
+      output_dir = "${root_out_dir}"
+    }
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -356,7 +360,11 @@ template("ohos_shared_library") {
                "json")
   }
 
-  output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+  if (is_standard_system) {
+    output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
+  } else {
+    output_dir = "${root_out_dir}"
+  }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
