@@ -17,6 +17,8 @@ import("//build/ohos/sa_profile/sa_profile.gni")
 import("//build/ohos.gni")
 import("//build/ohos/build_var.gni")
 
+import("//build/ohos/hisysevent/hisysevent.gni")
+
 # import target_platform_list
 import("${build_configs_path}/platforms_list.gni")
 group("make_packages") {
@@ -89,6 +91,15 @@ foreach(_platform, target_platform_list) {
 
   # all post process moudles info
   post_process_modules_list += [ sa_install_modules_info_file ]
+
+  hisysevent_install_info_file =
+      "${current_platform_dir}/hisysevent/hisysevent_install_info.json"
+  ohos_hisysevent_install_info("${current_platform}_hisysevent_install_info") {
+    deps = [ ":${current_platform}_parts_list" ]
+    _outputs = get_target_outputs(":${current_platform}_parts_list")
+    system_install_info_file = _outputs[0]
+  }
+  post_process_modules_list += [ hisysevent_install_info_file ]
 
   _notice_root_dir = "${current_platform_dir}/NOTICE_FILES"
   _collected_notice_zipfile = "${current_platform_dir}/system_notice_files.zip"
@@ -178,6 +189,7 @@ foreach(_platform, target_platform_list) {
     public_deps = [ ":${current_platform}_parts_list" ]
     depfile = "$target_gen_dir/$target_name.d"
     deps = [
+      ":${current_platform}_hisysevent_install_info",
       ":${current_platform}_sa_profile_install_info",
       ":merge_system_notice_file_${current_platform}",
       ":verify_notice_file_${current_platform}",
