@@ -29,3 +29,9 @@ ohos_prebuilt_etc("asan.options") {
   source = "asan.options"
   part_name = "common"
 }
+
+ohos_prebuilt_etc("asan.cfg") {
+  source = "asan.cfg"
+  module_install_dir = "etc/init/"
+  part_name = "common"
+}
