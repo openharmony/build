@@ -247,6 +247,10 @@ declare_args() {
 }
 
 declare_args() {
+  build_xts = false
+}
+
+declare_args() {
   # Component build. Setting to true compiles targets declared as "components"
   # as shared libraries loaded dynamically. This speeds up development time.
   # When false, components will be linked statically.

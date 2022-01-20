@@ -20,7 +20,6 @@ import load_bundle_file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501  pylint: disable=C0413, E0611
 
-
 import_list = """
 # import("//build/ohos.gni")
 # import("//build/ohos_var.gni")
@@ -89,6 +88,7 @@ def read_build_file(ohos_build_file):
 
 class PartObject(object):
     """"part object info, description part variant."""
+
     def __init__(self, part_name, variant_name, part_config, toolchain,
                  subsystem_name, target_arch):
         self._origin_name = part_name
@@ -346,6 +346,7 @@ class PartObject(object):
 
 class LoadBuildConfig(object):
     """load build config file and parse configuration info."""
+
     def __init__(self, source_root_dir, subsystem_build_info,
                  config_output_dir, variant_toolchains, subsystem_name,
                  target_arch, ignored_subsystems):
@@ -364,6 +365,7 @@ class LoadBuildConfig(object):
         self._phony_targets = {}
         self._parts_path_dict = {}
         self._part_hisysevent_config = {}
+        self._parts_module_list = {}
 
     def _parsing_config(self, parts_config):
         _parts_info_dict = {}
@@ -405,8 +407,9 @@ class LoadBuildConfig(object):
                 _config_files = value.get('hisysevent_config')
                 for _config_file in _config_files:
                     if not _config_file.startswith('//'):
-                        raise Exception("part '{}' hisysevent config incorrest.".format(
-                            part_name))
+                        raise Exception(
+                            "part '{}' hisysevent config incorrest.".format(
+                                part_name))
                 self._part_hisysevent_config[part_name] = _config_files
             _parts_info_dict[part_name] = _parts_info
         self._parts_info_dict = _parts_info_dict
@@ -445,6 +448,7 @@ class LoadBuildConfig(object):
             return
         subsystem_config, parts_path_dict = self._merge_build_config()
         parts_config = subsystem_config.get('parts')
+        self._parts_module_list.update(parts_config)
         self._parsing_config(parts_config)
         self._parts_path_dict = parts_path_dict
         self._is_load = True
@@ -500,6 +504,11 @@ class LoadBuildConfig(object):
         self.parse()
         return self._part_hisysevent_config
 
+    def parts_modules_info(self):
+        self.parse()
+        return self._parts_module_list
+
+
 def _output_parts_info(parts_config_dict, config_output_path):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
     # parts_info.json
@@ -524,6 +533,14 @@ def _output_parts_info(parts_config_dict, config_output_path):
         subsystem_parts_file = os.path.join(parts_info_output_path,
                                             "subsystem_parts.json")
         write_json_file(subsystem_parts_file, subsystem_parts)
+        # adapter mini system
+        for _sub_name, _p_list in subsystem_parts.items():
+            _output_info = {}
+            _output_info['parts'] = _p_list
+            _sub_info_output_file = os.path.join(config_output_path,
+                                                 'mini_adapter',
+                                                 '{}.json'.format(_sub_name))
+            write_json_file(_sub_info_output_file, _output_info)
 
     # parts_variants.json
     if 'parts_variants' in parts_config_dict:
@@ -572,8 +589,25 @@ def _output_parts_info(parts_config_dict, config_output_path):
     if 'hisysevent_config' in parts_config_dict:
         hisysevent_config = parts_config_dict.get('hisysevent_config')
         hisysevent_info_file = os.path.join(parts_info_output_path,
-            'hisysevent_configs.json')
+                                            'hisysevent_configs.json')
         write_json_file(hisysevent_info_file, hisysevent_config)
+
+    # _parts_modules_info
+    if 'parts_modules_info' in parts_config_dict:
+        parts_modules_info = parts_config_dict.get('parts_modules_info')
+        _output_info = {}
+        _all_p_info = []
+        for key, value in parts_modules_info.items():
+            _p_info = {}
+            _p_info['part_name'] = key
+            _module_list = value.get('module_list')
+            _p_info['module_list'] = _module_list
+            _all_p_info.append(_p_info)
+        _output_info['parts'] = _all_p_info
+        parts_modules_info_file = os.path.join(parts_info_output_path,
+                                               'parts_modules_info.json')
+        write_json_file(parts_modules_info_file, _output_info)
+
 
 def get_parts_info(source_root_dir,
                    config_output_relpath,
@@ -594,6 +628,7 @@ def get_parts_info(source_root_dir,
     _phony_target = {}
     _parts_path_info = {}
     _parts_hisysevent_config = {}
+    _parts_modules_info = {}
     for subsystem_name, build_config_info in subsystem_info.items():
         if subsystem_name == 'xts' and build_xts is False:
             continue
@@ -613,6 +648,7 @@ def get_parts_info(source_root_dir,
         _phony_target.update(build_loader.parts_phony_target())
         _parts_path_info.update(build_loader.parts_path_info())
         _parts_hisysevent_config.update(build_loader.parts_hisysevent_config())
+        _parts_modules_info.update(build_loader.parts_modules_info())
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts
@@ -623,6 +659,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['phony_target'] = _phony_target
     parts_config_dict['parts_path_info'] = _parts_path_info
     parts_config_dict['hisysevent_config'] = _parts_hisysevent_config
+    parts_config_dict['parts_modules_info'] = _parts_modules_info
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
     return parts_config_dict
