@@ -187,6 +187,10 @@ set(CMAKE_C_STANDARD_LIBRARIES_INIT "-lm")
 set(CMAKE_CXX_STANDARD_LIBRARIES_INIT "-lm")
 set(CMAKE_POSITION_INDEPENDENT_CODE TRUE)
 
+# set musl flags
+set(CMAKE_MUSL_FLAGS "" CACHE STRING "Flags for all build types.")
+
+
 # set the cmake global cflags
 set(CMAKE_C_FLAGS "" CACHE STRING "Flags for all build types.")
 set(CMAKE_C_FLAGS "${OHOS_C_COMPILER_FLAGS} ${CMAKE_C_FLAGS}")
