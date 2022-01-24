@@ -425,6 +425,13 @@
         ]
     },
     {
+        "install_dir": "previewer/resources",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/binary-tools",
         "module_label": "//developtools/packing_tool/jar:fastjson_utils_java",
         "target_os": [
