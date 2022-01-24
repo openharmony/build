@@ -144,7 +144,7 @@
     "name": "iot_hardware"
   },
   "kernel": {
-    "path": "kernel/linux/build",
+    "path": "kernel",
     "name": "kernel"
   },
   "msdp": {
