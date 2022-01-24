@@ -131,6 +131,8 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/clang-447847-windows-x86_64.tar.bz2
         prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/libcxx-ndk-447847-windows-x86-64.tar.bz2
         prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/libcxx-ndk-447847-${host_platform}-x86-64.tar.bz2
+        prebuilts/gcc/linux-x86/esp,${tool_repo}/harmonyos/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip
+        prebuilts/gcc/linux-x86/csky,${tool_repo}/harmonyos/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
@@ -157,7 +159,7 @@ do
     fi
     hwcloud_download "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  "${huaweicloud_url}"
     if [ "X${bin_file_suffix:0-3}" = "Xzip" ];then
-        unzip "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" -d "${code_dir}/${unzip_dir}/"
+        unzip -o "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}" -d "${code_dir}/${unzip_dir}/"
     elif [ "X${bin_file_suffix:0-6}" = "Xtar.gz" ];then
         tar -xvzf "${bin_dir}/${md5_huaweicloud_url}.${bin_file_suffix}"  -C  "${code_dir}/${unzip_dir}"
     else
@@ -183,6 +185,9 @@ do
         rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
         mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
 	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
+    fi
+    if [ -d "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf" ];then
+        chmod 755 "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0" -R
     fi
 done
 
