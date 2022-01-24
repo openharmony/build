@@ -394,7 +394,7 @@
     },
     {
         "install_dir": "previewer/common/bin/module",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_media_query_shared_library",
+        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
         "target_os": [
             "windows",
             "darwin"
