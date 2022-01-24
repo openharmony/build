@@ -34,6 +34,7 @@ group("common_packages") {
 
   if (is_asan) {
     deps += [
+      "asan:asan.cfg",
       "asan:asan.options",
       "asan:libclang_rt.asan.so",
     ]
