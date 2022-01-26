@@ -60,7 +60,7 @@
     "name": "hdf"
   },
   "updater": {
-    "path": "base/update/updater",
+    "path": "base/update",
     "name": "updater"
   },
   "developtools": {
