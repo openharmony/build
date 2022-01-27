@@ -241,6 +241,50 @@ def _check_args(args, source_root_dir):
         if not _real_out_dir.startswith(source_root_dir):
             raise Exception("args gn_root_out_dir is incorrect.")
 
+def syscap_sort(syscap):
+    return syscap['component']
+
+def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path):
+    target_parts_list = _get_required_build_parts_list(target_platform_parts)
+    syscap_info_list = parts_config_info.get('syscap_info')
+    target_syscap_with_part_name_list = []
+    target_syscap_list = []
+    target_syscap_for_init_list = []
+    for syscap in syscap_info_list:
+        if syscap['component'] not in target_parts_list:
+            continue
+        if 'syscap' not in syscap or syscap['syscap'] == None or len(syscap['syscap']) == 0 or syscap['syscap'] == [""]:
+            continue
+        for syscap_string in syscap['syscap']:
+            if syscap_string.startswith("SystemCapability.") == True:
+                target_syscap_for_init_list.append("const." + syscap_string + "=true\n")
+            else:
+                raise Exception("""In bundle.json of part [{}], The syscap string [{}] is incorrect,
+                 need start with \"SystemCapability.\"""".format(syscap['component'], syscap_string))
+        syscap['syscap'].sort()
+        target_syscap_with_part_name_list.append(syscap)
+        target_syscap_list.extend(syscap['syscap'])
+
+    # Generate SystemCapability.json & syscap.json & syscap.para
+    target_syscap_list.sort()
+    syscap_info_dict = read_json_file(pre_syscap_info_path)
+    syscap_info_dict.update({'syscap':{'os':target_syscap_list}})
+    system_etc_path = os.path.join(system_path, "etc/")
+    if not os.path.exists(system_path):
+        os.mkdir(system_path)
+    if not os.path.exists(system_etc_path):
+        os.mkdir(system_etc_path)
+    syscap_info_json = os.path.join(system_etc_path, "SystemCapability.json")
+    write_json_file(syscap_info_json, syscap_info_dict)
+    target_syscap_with_part_name_list.sort(key = syscap_sort)
+    syscap_info_with_part_name_file = os.path.join(system_etc_path, "syscap.json")
+    write_json_file(syscap_info_with_part_name_file, {'components': target_syscap_with_part_name_list})
+    if not os.path.exists(os.path.join(system_etc_path, "para/")):
+        os.mkdir(os.path.join(system_etc_path, "para/"))
+    target_syscap_for_init_file = os.path.join(system_etc_path, "para/syscap.para")
+    f = open(target_syscap_for_init_file, "w")
+    f.writelines(target_syscap_for_init_list)
+    f.close()
 
 def load(args):
     source_root_dir = args.source_root_dir
@@ -391,7 +435,9 @@ def load(args):
     # check part feature
     _check_product_part_feature(parts_info,
                                 os.path.dirname(args.platforms_config_file))
-
+    pre_syscap_info_path = os.path.join(os.path.dirname(args.platforms_config_file), "SystemCapability.json")
+    system_path = os.path.join(source_root_dir, os.path.join(args.gn_root_out_dir, "system/"))
+    generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
 
 def _output_infos_by_platform(part_name_infos, parts_info_dict):
     required_parts = {}
@@ -414,7 +460,6 @@ def _output_infos_by_platform(part_name_infos, parts_info_dict):
     result['subsystem_infos'] = subsystem_infos
     result['part_infos'] = required_parts
     return result
-
 
 def _output_infos_for_testfwk(parts_config_info, target_platform_parts,
                               infos_for_testfwk_file):

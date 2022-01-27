@@ -75,6 +75,16 @@ def _normalize(label, path):
         label = '//{}/{}'.format(path, label)
     return label
 
+def get_syscap_from_bundle(bundle_file):
+    if not os.path.exists(bundle_file):
+        raise Exception(
+            "config file '{}' doesn't exist.".format(bundle_file))
+    bundle_config = read_json_file(bundle_file)
+    if bundle_config is None:
+        raise Exception("read file '{}' failed.".format(bundle_file))
+    part_name = bundle_config.get('component').get('name')
+    part_syscap = bundle_config.get('component').get('syscap')
+    return part_name, part_syscap
 
 def read_build_file(ohos_build_file):
     if not os.path.exists(ohos_build_file):
@@ -442,6 +452,15 @@ class LoadBuildConfig(object):
         subsystem_config['parts'] = parts_info
         return subsystem_config, parts_path_dict
 
+    def parse_syscap_info(self):
+        _build_files = self._build_info.get('build_files')
+        subsystem_syscap = []
+        for _build_file in _build_files:
+            if _build_file.endswith('bundle.json'):
+                part_name, part_syscap = get_syscap_from_bundle(_build_file)
+                subsystem_syscap.append({'component': part_name, 'syscap': part_syscap})
+        return subsystem_syscap
+
     def parse(self):
         """parse part info from build config file."""
         if self._is_load:
@@ -629,6 +648,7 @@ def get_parts_info(source_root_dir,
     _parts_path_info = {}
     _parts_hisysevent_config = {}
     _parts_modules_info = {}
+    system_syscap = []
     for subsystem_name, build_config_info in subsystem_info.items():
         if subsystem_name == 'xts' and build_xts is False:
             continue
@@ -649,6 +669,7 @@ def get_parts_info(source_root_dir,
         _parts_path_info.update(build_loader.parts_path_info())
         _parts_hisysevent_config.update(build_loader.parts_hisysevent_config())
         _parts_modules_info.update(build_loader.parts_modules_info())
+        system_syscap.extend(build_loader.parse_syscap_info())
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts
@@ -662,4 +683,5 @@ def get_parts_info(source_root_dir,
     parts_config_dict['parts_modules_info'] = _parts_modules_info
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
+    parts_config_dict['syscap_info'] = system_syscap
     return parts_config_dict
