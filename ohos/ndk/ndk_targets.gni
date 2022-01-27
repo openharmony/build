@@ -25,6 +25,7 @@ _ndk_library_targets = [
   "//foundation/ace/ace_engine/interfaces/native:libace_ndk",
   "//foundation/ace/napi:libnapi_ndk",
   "//foundation/ace/napi:napi_header",
+  "//third_party/node:node_header",
   "//foundation/graphic/standard/interfaces/kits/ndk/EGL:libEGL_ndk",
   "//foundation/graphic/standard/interfaces/kits/ndk/EGL:EGL_header",
   "//foundation/graphic/standard/interfaces/kits/ndk/GLES:libGLES_ndk",
@@ -33,6 +34,7 @@ _ndk_library_targets = [
   "//foundation/graphic/standard/interfaces/kits/ndk/native_window:native_window_header",
   "//third_party/libuv:libuv_ndk",
   "//third_party/libuv:libuv_header",
+  "//third_party/libuv:libuv_uv_header",
 ]
 
 _ndk_base_libs = [
