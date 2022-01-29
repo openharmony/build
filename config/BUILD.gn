@@ -62,13 +62,13 @@ config("feature_flags") {
   if (use_allocator != "tcmalloc") {
     defines += [ "NO_TCMALLOC" ]
   }
-  if (is_asan || is_lsan || is_tsan || is_msan) {
+  if ((is_asan || is_lsan || is_tsan || is_msan) && using_sanitizer) {
     defines += [
       "MEMORY_TOOL_REPLACES_ALLOCATOR",
       "MEMORY_SANITIZER_INITIAL_SIZE",
     ]
   }
-  if (is_asan) {
+  if (is_asan && using_sanitizer) {
     defines += [ "ADDRESS_SANITIZER" ]
   }
   if (is_lsan) {
