@@ -162,7 +162,7 @@ using_sanitizer =
     is_asan || is_lsan || is_tsan || is_msan || is_ubsan || is_ubsan_null ||
     is_ubsan_vptr || is_ubsan_security || use_sanitizer_coverage || use_cfi_diag
 
-if (!is_ohos && !is_win && !is_mac) {
+if (!is_ohos) {
   using_sanitizer = false
 }
 
