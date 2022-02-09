@@ -26,7 +26,7 @@ else
     wget_ssl_check=''
 fi
 
-if [ -z "$TOOL_REPO" ];then	
+if [ -z "$TOOL_REPO" ];then
 	tool_repo='https://repo.huaweicloud.com'
 else
 	tool_repo=$TOOL_REPO
@@ -118,7 +118,7 @@ prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/g
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/clang-447847-${host_platform}-x86_64.tar.bz2
-prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220125.tar.gz
+prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220209.tar.gz
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
