@@ -89,7 +89,7 @@ def build_run_sloadf2fs(args):
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libuuid_path
 
     oldcwd = os.getcwd();
-    os.chdir("./clang_x64/filemanagement/storage_standard")
+    os.chdir("./clang_x64/filemanagement/storage_service")
     run_cmd("ln -s fsck.f2fs sload.f2fs")
     os.chdir(oldcwd);
 
