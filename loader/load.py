@@ -279,9 +279,9 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
     target_syscap_with_part_name_list.sort(key = syscap_sort)
     syscap_info_with_part_name_file = os.path.join(system_etc_path, "syscap.json")
     write_json_file(syscap_info_with_part_name_file, {'components': target_syscap_with_part_name_list})
-    if not os.path.exists(os.path.join(system_etc_path, "para/")):
-        os.mkdir(os.path.join(system_etc_path, "para/"))
-    target_syscap_for_init_file = os.path.join(system_etc_path, "para/syscap.para")
+    if not os.path.exists(os.path.join(system_etc_path, "param/")):
+        os.mkdir(os.path.join(system_etc_path, "param/"))
+    target_syscap_for_init_file = os.path.join(system_etc_path, "param/syscap.para")
     f = open(target_syscap_for_init_file, "w")
     f.writelines(target_syscap_for_init_list)
     f.close()
@@ -436,7 +436,7 @@ def load(args):
     _check_product_part_feature(parts_info,
                                 os.path.dirname(args.platforms_config_file))
     pre_syscap_info_path = os.path.join(os.path.dirname(args.platforms_config_file), "SystemCapability.json")
-    system_path = os.path.join(source_root_dir, os.path.join(args.gn_root_out_dir, "system/"))
+    system_path = os.path.join(source_root_dir, os.path.join(os.path.dirname(args.platforms_config_file), "system/"))
     generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
 
 def _output_infos_by_platform(part_name_infos, parts_info_dict):
