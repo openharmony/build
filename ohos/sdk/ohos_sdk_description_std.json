@@ -84,16 +84,7 @@
     },
     {
         "install_dir": "js/api",
-        "module_label": "//interface/sdk-js:ace_platform",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "js/api/phone",
-        "module_label": "//interface/sdk-js:ohos_declaration_phone",
+        "module_label": "//interface/sdk-js:ohos_declaration_common",
         "target_os": [
             "windows",
             "linux",
@@ -224,7 +215,7 @@
         ]
     },
     {
-        "install_dir": "ets/api/common/@internal",
+        "install_dir": "ets/api/@internal",
 	    "module_label": "//interface/sdk-js:ets_internal_api",
 	    "target_os": [
             "windows",
@@ -233,7 +224,7 @@
         ]
     },
     {
-        "install_dir": "ets/api/common",
+        "install_dir": "ets/api",
         "module_label": "//interface/sdk-js:common_api",
         "target_os": [
             "windows",
@@ -242,11 +233,47 @@
         ]
     },
     {
-        "install_dir": "ets/api/common",
+        "install_dir": "ets/api",
         "module_label": "//interface/sdk-js:ohos_declaration_ets",
         "target_os": [
             "windows",
             "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/api/@internal/full",
+        "module_label": "//interface/sdk-js:internal_full",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/api/@internal/lite",
+        "module_label": "//interface/sdk-js:internal_lite",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/api",
+        "module_label": "//interface/sdk-js:system_api",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/syscapcheck",
+        "module_label": "//interface/sdk-js:syscap_check",
+        "target_os": [
+            "linux",
+            "windows",
             "darwin"
         ]
     },
