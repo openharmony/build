@@ -92,6 +92,15 @@
         ]
     },
     {
+        "install_dir": "js/api/config",
+        "module_label": "//interface/sdk-js:config",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/form",
         "module_label": "//interface/sdk-js:form_declaration",
         "target_os": [
@@ -265,6 +274,15 @@
         "target_os": [
             "windows",
             "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/device-define",
+        "module_label": "//interface/sdk-js:device_define",
+        "target_os": [
+            "linux",
+            "windows",
             "darwin"
         ]
     },
