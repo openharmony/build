@@ -67,16 +67,21 @@ def build_run_fitimage(args):
     index = src_dir.rfind('/')
     root_dir = src_dir[:index]
 
-    if not os.path.exists("./ohos.its"):
-        print("error there is no configuration file")
-        return -1
-    if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
-        print("error there is no kernel image")
-        return -1
+    if product_name == "rk3568":
+        fit_cmd = \
+            [os.path.join(root_dir, "make-boot.sh"),
+             os.path.join(root_dir, "../../..")]
+    else:
+        if not os.path.exists("./ohos.its"):
+            print("error there is no configuration file")
+            return -1
+        if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
+            print("error there is no kernel image")
+            return -1
 
-    fit_cmd = \
-        ["mkimage", '-f', "./ohos.its",
-         os.path.join(root_dir, "images", "boot.img")]
+        fit_cmd = \
+            ["mkimage", '-f', "./ohos.its",
+             os.path.join(root_dir, "images", "boot.img")]
 
     res = run_cmd(fit_cmd)
     if res[1] != 0:
@@ -107,6 +112,9 @@ def build_run_chmod(args):
     src_index = src_dir.rfind('/')
     root_dir = src_dir[:src_index]
 
+    if product_name == "rk3568":
+        return 0
+
     chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
     res = run_cmd(chmod_cmd)
     if res[1] != 0:
@@ -123,6 +131,8 @@ def parse_resource_config(resource_config_file_path):
     """
     dtc_419_source_path = ""
     dtc_510_source_path = ""
+    global product_name
+    product_name = ""
     need_clear_section_target_path_list = []
     if os.path.exists(resource_config_file_path):
         ramdisk_config = configparser.ConfigParser()
@@ -140,6 +150,8 @@ def parse_resource_config(resource_config_file_path):
                     need_clear_section_target_path_list.append(target_path)
             if each_section[0] == DTC_419:
                 dtc_419_source_path = source_path
+            if each_section[0] == "product":
+                product_name = section_options.get("product_name", None)
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
             if os.path.exists(source_path):
