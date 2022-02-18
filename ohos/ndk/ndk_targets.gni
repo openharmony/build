@@ -33,9 +33,12 @@ _ndk_library_targets = [
   "//foundation/graphic/standard/interfaces/kits/ndk/KHR:KHR_header",
   "//foundation/graphic/standard/interfaces/kits/ndk/native_window:libnative_window_ndk",
   "//foundation/graphic/standard/interfaces/kits/ndk/native_window:native_window_header",
+  "//foundation/graphic/standard/interfaces/kits/ndk/native_drawing:libnative_drawing_ndk",
+  "//foundation/graphic/standard/interfaces/kits/ndk/native_drawing:native_drawing_header",
   "//third_party/libuv:libuv_ndk",
   "//third_party/libuv:libuv_header",
   "//third_party/libuv:libuv_uv_header",
+  "//foundation/multimedia/image_standard/interfaces/kits/native:libpixelmap_ndk",
   "//third_party/openSLES::sles_header",
   "//third_party/openSLES::libOpenSLES_ndk",
 ]
