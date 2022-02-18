@@ -68,6 +68,9 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="common/musl/ld-musl-arm.path" desc="configuration file, this format doesn't support adding license header"/>
 				<filteritem type="filepath" name="common/asan/asan.options" desc="configuration file, this format doesn't support adding license header"/>
 			</filefilter>
+			<filefilter name="binaryFileTypePolicyFilter" desc="Filters for binary file policies">
+				<filteritem type="filepath" name="common/asan/libclang_rt.asan.so" desc="clang toolchain file"/>
+			</filefilter>
 			<filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies" >
 				<filteritem type="filepath" name="gn_helpers.py" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="print_python_deps.py" desc="keep the chromium src copyright"/>
