@@ -195,6 +195,8 @@
 
 [构建系统编码规范与最佳实践](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/subsystems/subsys-build-gn-coding-style-and-best-practice.md)
 
+[部件化编译最佳实践](docs/部件化编译最佳实践.md)
+
 
 ## 相关仓<a name="section1371113476307"></a>
 
