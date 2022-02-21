@@ -39,6 +39,8 @@ _ndk_library_targets = [
   "//third_party/libuv:libuv_header",
   "//third_party/libuv:libuv_uv_header",
   "//foundation/multimedia/image_standard/interfaces/kits/native:libpixelmap_ndk",
+  "//third_party/openSLES:sles_header",
+  "//third_party/openSLES:libOpenSLES_ndk",
 ]
 
 _ndk_base_libs = [
