@@ -227,7 +227,7 @@ template("ohos_fuzztest") {
       "-fno-sanitize-coverage=trace-pc-guard,edge,trace-cmp,indirect-calls,8bit-counters",
       "-fsanitize=fuzzer",
     ]
-    deps += [ "//test/developertest/libs/fuzzlib:libfuzzer" ]
+    libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
   }
 }
 
