@@ -174,7 +174,7 @@ if (host_os == "mac") {
   restool = "//prebuilts/build-tools/common/restool/restool"
 }
 
-hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
+hapsigner = "//prebuilts/signcenter/hapsigntool/hapsigntoolv2.jar"
 hap_unpacking_tool =
     "//developtools/packing_tool/jar/hmos_app_unpacking_tool.jar"
 hap_packing_tool = "//developtools/packing_tool/jar/hmos_app_packing_tool.jar"
@@ -188,6 +188,6 @@ default_hap_private_key_path = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
 default_key_alias = "123456"
 default_keystore_password = "123456"
-default_keystore_path = "//developtools/hapsigner/dist/OpenHarmony.p12"
+default_keystore_path = "//prebuilts/signcenter/key/OpenHarmony.p12"
 default_hap_certificate_file =
-    "//developtools/hapsigner/dist/OpenHarmonyApplication.pem"
+    "//prebuilts/signcenter/certificates/OpenHarmonyApplication.pem"
