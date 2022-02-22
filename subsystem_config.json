@@ -162,5 +162,9 @@
   "resourceschedule": {
     "path": "foundation/resourceschedule",
     "name": "resourceschedule"
+  },
+  "barrierfree": {
+    "path": "base/accessibility",
+    "name": "accessibility"
   }
 }
