@@ -115,6 +115,10 @@
     "path": "applications/standard/settings",
     "name": "settingsdata"
   },
+  "contactsdata": {
+    "path": "applications/standard/contactsdata",
+    "name": "contactsdata"
+  }
   "wpa_supplicant-2.9": {
     "path": "third_party/wpa_supplicant/wpa_supplicant-2.9_standard",
     "name": "wpa_supplicant-2.9"
