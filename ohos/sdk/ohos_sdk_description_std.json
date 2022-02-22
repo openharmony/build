@@ -45,7 +45,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//prebuilts/signcenter:lib",
+        "module_label": "//developtools/hapsigner:lib",
         "target_os": [
             "linux",
             "windows",
