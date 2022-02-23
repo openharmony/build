@@ -170,5 +170,9 @@
   "barrierfree": {
     "path": "base/accessibility",
     "name": "accessibility"
+  },
+  "securec": {
+    "path": "third_party/bounds_checking_function",
+    "name": "securec"
   }
 }
