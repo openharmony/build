@@ -21,6 +21,8 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
   "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
+  "//base/startup/init_lite/interfaces/kits:libdeviceinfo_ndk",
+  "//base/startup/init_lite/interfaces/kits:deviceinfo_header",
   "//foundation/ace/ace_engine/interfaces/native:ace_header",
   "//foundation/ace/ace_engine/interfaces/native:libace_ndk",
   "//foundation/ace/napi:libnapi_ndk",
