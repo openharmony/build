@@ -67,7 +67,7 @@ def build_run_fitimage(args):
     index = src_dir.rfind('/')
     root_dir = src_dir[:index]
 
-    if BOARD_NAME == "rk3568":
+    if BOOT_TYPE == "two_stages":
         fit_cmd = \
             [os.path.join(root_dir, "make-boot.sh"),
              os.path.join(root_dir, "../../..")]
@@ -112,7 +112,7 @@ def build_run_chmod(args):
     src_index = src_dir.rfind('/')
     root_dir = src_dir[:src_index]
 
-    if BOARD_NAME == "rk3568":
+    if BOOT_TYPE == "two_stages":
         return 0
 
     chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
@@ -131,8 +131,8 @@ def parse_resource_config(resource_config_file_path):
     """
     dtc_419_source_path = ""
     dtc_510_source_path = ""
-    global BOARD_NAME
-    BOARD_NAME = ""
+    global BOOT_TYPE
+    BOOT_TYPE = ""
     need_clear_section_target_path_list = []
     if os.path.exists(resource_config_file_path):
         ramdisk_config = configparser.ConfigParser()
@@ -150,8 +150,8 @@ def parse_resource_config(resource_config_file_path):
                     need_clear_section_target_path_list.append(target_path)
             if each_section[0] == DTC_419:
                 dtc_419_source_path = source_path
-            if each_section[0] == "product":
-                BOARD_NAME = section_options.get("product_name", None)
+            if each_section[0] == "board":
+                BOOT_TYPE = section_options.get("boot_type", None)
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
             if os.path.exists(source_path):
