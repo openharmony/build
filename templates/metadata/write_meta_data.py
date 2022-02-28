@@ -72,14 +72,26 @@ def write_meta_data(options, direct_deps):
         }
     }
     root = meta_data['root']
+    if options.type == 'app_profile':
+        root[options.type] = options.app_profile
+        root['resources'] = options.resources
     if options.type == 'js_assets':
         root[options.type] = options.js_assets
     if options.type == 'assets':
         root[options.type] = options.raw_assets
     if options.type == 'resources':
+        deps = Deps(direct_deps)
         root[options.type] = options.resources
         package_name = options.package_name
         root['package_name'] = package_name if package_name else ""
+        for target_type in ['app_profile']:
+            for dep in deps.All(target_type):
+                if root.get(target_type):
+                    root.get(target_type).extend(dep[target_type])
+                    root.get('resources').extend(dep['resources'])
+                else:
+                    root[target_type] = dep[target_type]
+                    root['resources'] += dep['resources']
     if options.type == 'hap':
         deps = Deps(direct_deps)
         root['hap_path'] = options.hap_path
@@ -91,7 +103,7 @@ def write_meta_data(options, direct_deps):
             root['assets'] = options.raw_assets
         if options.resources:
             root['resources'] = options.resources
-        for target_type in ['js_assets', 'assets', 'resources']:
+        for target_type in ['js_assets', 'assets', 'resources', 'app_profile']:
             for dep in deps.All(target_type):
                 if root.get(target_type):
                     root.get(target_type).extend(dep[target_type])
@@ -119,12 +131,13 @@ def main():
     parser.add_argument('--package-name',
                         help='package name for hap resources')
     parser.add_argument('--hap-profile', help='path to hap profile')
+    parser.add_argument('--app-profile', help='path to app profile')
     options = parser.parse_args()
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
     possible_input_strings = [
         options.type, options.raw_assets, options.js_assets, options.resources,
-        options.hap_path, options.hap_profile, options.package_name
+        options.hap_path, options.hap_profile, options.package_name, options.app_profile
     ]
     input_strings = [x for x in possible_input_strings if x]
 

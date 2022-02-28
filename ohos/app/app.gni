@@ -17,6 +17,39 @@ import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
 
+
+# Declare an OHOS AppScope target
+#
+# Variables:
+#   deps: dependencies of this target.
+#   app_profile: common config of hap.
+#   sources: list of asset files to be included in hap.
+#
+template("ohos_app_scope") {
+  forward_variables_from(invoker, [ "testonly" ])
+  assert(defined(invoker.app_profile), "app_profile must be defined for ohos_app_scope")
+  assert(defined(invoker.sources),"sources must be defined for ohos_app_scope")
+  print(target_name, invoker.app_profile)
+  print(target_name, invoker.sources)
+
+  _metadata = "$target_gen_dir/$target_name.metadata"
+  _metadata_target = "${target_name}__metadata"
+  write_meta_data(_metadata_target) {
+    forward_variables_from(invoker,
+                           [
+                             #"sources",
+                             "app_profile",
+                           ])
+    type = "app_profile"
+    meta_data = _metadata
+    resources = invoker.sources
+    app_profile = invoker.app_profile
+  }
+  group(target_name) {
+    public_deps = [ ":$_metadata_target" ]
+  }
+}
+
 # Declare an OHOS assets target
 #
 # Variables:
@@ -95,9 +128,30 @@ template("ohos_resources") {
     meta_data = _metadata
     resources = invoker.sources
     deps = _deps
+    possible_deps = _deps
   }
 
   _deps += [ ":$_metadata_target" ]
+
+  # compile_resources target here only used for concat app.json to module.json
+  _compile_profile_target = "${target_name}__compile_profile"
+  _generated_profile = "$target_gen_dir/$target_name.profile"
+  merge_profile(_compile_profile_target) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "hap_profile",
+                           ])
+    meta_data = _metadata
+    generated_profile = _generated_profile
+    if (defined(deps)) {
+      deps += _deps
+    } else {
+      deps = _deps
+    }
+  }
+
+  _deps += [ ":$_compile_profile_target" ]
 
   # compile_resources target here only used for resources.h generation
   _compile_resources_target = "${target_name}__compile_resources"
@@ -125,7 +179,10 @@ template("ohos_resources") {
 
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
-    deps = [ ":$_compile_resources_target" ]
+    deps = [
+      ":$_compile_resources_target",
+      ":$_compile_profile_target",
+    ]
     public_configs = [ ":$_resources_config" ]
   }
 }

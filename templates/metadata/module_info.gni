@@ -199,13 +199,14 @@ template("write_meta_data") {
                              "type",
                              "resources",
                              "hap_path",
+                             "app_profile",
                              "hap_profile",
                              "package_name",
                              "raw_assets",
                              "js_assets",
                            ])
     if (type != "js_assets" && type != "assets" && type != "resources" &&
-        type != "hap") {
+        type != "hap" && type != "app_profile") {
       assert(false, "type must be one of [js_assets, assets, resources, hap]")
     }
     if (type != "hap") {
@@ -284,6 +285,13 @@ template("write_meta_data") {
           package_name,
         ]
       }
+    }
+
+    if (defined(app_profile)) {
+      args += [
+        "--app-profile",
+        rebase_path(app_profile, root_build_dir),
+      ]
     }
 
     if (defined(hap_profile)) {

@@ -7,6 +7,7 @@
 
 import collections
 import contextlib
+from distutils import extension
 import filecmp
 import fnmatch
 import json
@@ -637,9 +638,14 @@ def expand_file_args(args):
                 file_jsons[file_path] = json.load(f)
 
         expansion = file_jsons[file_path]
-        for k in lookup_path[1:]:
-            expansion = expansion[k]
 
+        for k in lookup_path[1:]:
+            if k in expansion:
+                expansion = expansion[k]
+            else:
+                expansion = ""
+                print("WARNNING", lookup_path[1:], "is not in metadata file, set default ''")
+                break
         # This should match parse_gn_list. The output is either a GN-formatted list
         # or a literal (with no quotes).
         if isinstance(expansion, list):

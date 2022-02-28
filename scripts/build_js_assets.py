@@ -45,11 +45,52 @@ def parse_args(args):
                       help='whether to transform ets to ark bytecode')
     parser.add_option('--ark-frontend-dir', help='path to ark frontend dir')
     parser.add_option('--ace-loader-home', help='path to ace-loader dir.')
+    parser.add_option('--app-profile', default=False, help='path to app-profile.')
 
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
     return options
 
+def make_my_env(build_dir, options):
+    # gen_dir = '/root/code/openharmony2/out/hi3516dv300/obj/applications/standard/actmoduletest/temp'
+    gen_dir = os.path.join(os.path.dirname(options.output), "temp")
+    my_env = {
+        "aceModuleBuild": gen_dir,
+        "buildMode": options.build_mode,
+        "PATH": os.environ.get('PATH')
+     }
+    if options.app_profile:
+        app_resource = os.path.join(os.path.dirname(options.output), "temp_resources/gen/ResourceTable.txt")
+        my_env["aceProfilePath"] = os.path.join(os.path.dirname(options.hap_profile), "resources/base/profile")
+
+        my_env["appResource"] = app_resource
+        my_env["aceModuleJsonPath"] = os.path.join(os.path.dirname(options.hap_profile), "module.json")
+        my_env["aceModuleJsonPath"] = os.path.abspath(my_env["aceModuleJsonPath"])
+
+    else:
+        manifest = os.path.join(build_dir, 'manifest.json')
+        my_env["aceManifestPath"] = manifest
+    return my_env
+
+def make_manifest_data(config, options):
+    data = dict()
+    data['appID'] = config['app']['bundleName']
+    data['appName'] = config['module']['abilities'][0]['label']
+    if options.app_profile:
+        data['versionName'] = config['app']['versionName']
+        data['versionCode'] = config['app']['versionCode']
+        data['pages'] = config['module']['pages']
+        data['deviceType'] = config['module']['deviceTypes']
+    else:
+        data['versionName'] = config['app']['version']['name']
+        data['versionCode'] = config['app']['version']['code']
+        data['pages'] = config['module']['js'][0]['pages']
+        data['deviceType'] = config['module']['deviceType']
+        data['window'] = config['module']['js'][0]['window']
+    if options.ets2abc:
+        if not options.app_profile:
+            data['mode'] = config['module']['js'][0]['mode']
+    return data
 
 def build_ace(cmd, options):
     js_assets_dir = os.path.relpath(
@@ -58,48 +99,34 @@ def build_ace(cmd, options):
         with open(options.js_sources_file, 'wb') as js_sources_file:
             sources = get_all_js_sources(js_assets_dir)
             js_sources_file.write('\n'.join(sources).encode())
-
     with build_utils.temp_dir() as build_dir:
-        gen_dir = os.path.join(build_dir, 'gen')
-        manifest = os.path.join(build_dir, 'manifest.json')
-        my_env = {
-            "aceModuleRoot": js_assets_dir,
-            "aceModuleBuild": gen_dir,
-            "aceManifestPath": manifest,
-            "buildMode": options.build_mode,
-            "PATH": os.environ.get('PATH'),
-        }
+        my_env = make_my_env(build_dir, options)
+        my_env["aceModuleRoot"] = js_assets_dir
         if options.js2abc:
             my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
-
-        src_path = 'default'
+        src_path = 'ets'
+        manifest = os.path.join(build_dir, 'manifest.json')
         if not os.path.exists(manifest) and options.hap_profile:
             with open(options.hap_profile) as profile:
                 config = json.load(profile)
-                data = dict()
-                data['appID'] = config['app']['bundleName']
-                data['appName'] = config['module']['abilities'][0]['label']
-                data['versionName'] = config['app']['version']['name']
-                data['versionCode'] = config['app']['version']['code']
-                data['pages'] = config['module']['js'][0]['pages']
-                data['deviceType'] = config['module']['deviceType']
-                data['window'] = config['module']['js'][0]['window']
+                data = make_manifest_data(config, options)
                 if options.ets2abc:
-                    data['mode'] = config['module']['js'][0]['mode']
                     if 'srcPath' in config['module']['abilities'][0]:
                         src_path = config['module']['abilities'][0]['srcPath']
                 build_utils.write_json(data, manifest)
         build_utils.check_output(
             cmd, cwd=options.ace_loader_home, env=my_env)
+        gen_dir = my_env.get("aceModuleBuild")
         for root, _, files in os.walk(gen_dir):
             for file in files:
                 filename = os.path.join(root, file)
-                if filename.endswith('.js.map'):
-                    os.unlink(filename)
+                #if filename.endswith('.js.map'):
+                #    os.unlink(filename)
 
+        #zip_prefix_path='{}/'.format(src_path)
         build_utils.zip_dir(options.output,
                             gen_dir,
-                            zip_prefix_path='assets/js/{}/'.format(src_path))
+                            zip_prefix_path=src_path)
 
 
 def get_all_js_sources(base):
@@ -144,9 +171,8 @@ def main(args):
     if options.js2abc or options.ets2abc:
         ark_frontend_dir = os.path.relpath(
             options.ark_frontend_dir, options.ace_loader_home)
-        cmd.extend(['--env', 'compilerType=ark',
+        cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
                     'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
-
     build_utils.call_and_write_depfile_if_stale(
         lambda: build_ace(cmd, options),
         options,

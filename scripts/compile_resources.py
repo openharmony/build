@@ -36,35 +36,45 @@ def parse_args(args):
     parser.add_option('--restool-path', help='path to restool')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--package-name', help='package name of resource file')
+    parser.add_option('--app-profile', default = False, help='path to app profile')
 
     options, _ = parser.parse_args(args)
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
     return options
 
 
-def get_package_name_from_profile(profile):
-    with open(profile) as fp:
-        return json.load(fp)['module']['package']
+def get_package_name_from_profile(options):
+    with open(options.hap_profile) as fp:
+        if not options.app_profile:
+            return json.load(fp)['module']['package']
+        else:
+            return json.load(fp)['app']['bundleName']
 
 
 def compile_resources(options):
     with build_utils.temp_dir() as build:
-        res_dir = os.path.join(build, 'resources')
-        gen_dir = os.path.join(build, 'gen')
+        res_dir = os.path.join(build, 'resources/temp')
+        #gen_dir = os.path.join(build, 'gen')
+        gen_dir = "/root/code/openharmony2/out/hi3516dv300/obj/applications/standard/actmoduletest/temp_resources/gen"
         header_dir = os.path.join(build, 'header')
         os.makedirs(res_dir)
+        if os.path.exists(gen_dir):
+            shutil.rmtree(gen_dir)
         os.makedirs(gen_dir)
         os.makedirs(header_dir)
 
+        cmd = [options.restool_path]
         for directory in options.resources_dir:
-            shutil.copytree(directory,
-                            os.path.join(res_dir, os.path.basename(directory)))
-        cmd = [options.restool_path, '-i', res_dir]
-        shutil.copy(options.hap_profile, os.path.join(res_dir, 'config.json'))
+            dest_res_dir = os.path.join(res_dir, os.path.dirname(directory))
+            shutil.copytree(os.path.dirname(directory), dest_res_dir)
+            cmd.extend(['-i', dest_res_dir])
+        module_config = os.path.join(res_dir, 'module.json')
+        shutil.copy(options.hap_profile, module_config)
+        cmd.extend(['-j', module_config])
         if options.package_name != "" and options.package_name is not None:
             package_name = options.package_name
         else:
-            package_name = get_package_name_from_profile(options.hap_profile)
+            package_name = get_package_name_from_profile(options)
         generated_header_file = os.path.join(
             header_dir, os.path.basename(options.output_header_file))
         cmd.extend(
