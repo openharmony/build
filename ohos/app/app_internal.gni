@@ -46,7 +46,7 @@ template("merge_profile") {
       "--generated-profile",
       rebase_path(generated_profile, root_build_dir),
     ]
-    outputs = [generated_profile]
+    outputs = [ generated_profile ]
   }
 }
 
@@ -88,10 +88,8 @@ template("compile_resources") {
       rebase_path(depfile, root_build_dir),
       "--restool-path",
       rebase_path(restool, root_build_dir),
-      "--hap-profile",
-      rebase_path(hap_profile, root_build_dir),
-      "--app-profile=@FileArg($_rebased_metadata:root:resources)",
-
+      "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
+      "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
     ]
     outputs = []
     if (_generate_resource) {
@@ -143,8 +141,7 @@ template("package_app") {
     args = [
       "--depfile",
       rebase_path(depfile, root_build_dir),
-      "--hap-profile",
-      rebase_path(hap_profile, root_build_dir),
+      "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
       "--hapsigner",
       rebase_path(hapsigner, root_build_dir),
       "--hap-packing-tool",
@@ -336,7 +333,8 @@ template("compile_js_assets") {
       build_mode,
       "--ace-loader-home",
       rebase_path(_ace_loader_home, root_build_dir),
-      "--app-profile=@FileArg($_rebased_metadata:root:app_profile)"
+      "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
+      "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
     ]
     if (defined(testonly) && testonly == true) {
       _js_sources_file = target_gen_dir + "/$main_target_name.sources"
@@ -363,10 +361,6 @@ template("compile_js_assets") {
       ]
     }
     if (defined(hap_profile)) {
-      args += [
-        "--hap-profile",
-        rebase_path(hap_profile, root_build_dir),
-      ]
       inputs += [ hap_profile ]
     }
   }

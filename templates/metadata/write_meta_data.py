@@ -92,6 +92,9 @@ def write_meta_data(options, direct_deps):
                 else:
                     root[target_type] = dep[target_type]
                     root['resources'] += dep['resources']
+    if options.type == 'hap' or options.type == 'resources':
+        hap_profile = options.hap_profile
+        root['hap_profile'] = hap_profile if hap_profile else ""
     if options.type == 'hap':
         deps = Deps(direct_deps)
         root['hap_path'] = options.hap_path
@@ -107,11 +110,11 @@ def write_meta_data(options, direct_deps):
             for dep in deps.All(target_type):
                 if root.get(target_type):
                     root.get(target_type).extend(dep[target_type])
+                    root.get('hap_profile').extend(dep['hap_profile'])
                 else:
                     root[target_type] = dep[target_type]
-    if options.type == 'hap' or options.type == 'resources':
-        hap_profile = options.hap_profile
-        root['hap_profile'] = hap_profile if hap_profile else ""
+                    if dep.get('hap_profile'):
+                        root['hap_profile'] = dep['hap_profile']
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
 

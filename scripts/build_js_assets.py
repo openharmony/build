@@ -52,20 +52,18 @@ def parse_args(args):
     return options
 
 def make_my_env(build_dir, options):
-    gen_dir = os.path.join(os.path.dirname(options.output), "temp")
-    gen_dir = os.path.abspath(gen_dir)
+    out_dir = os.path.abspath(os.path.dirname(options.output))
+    assets_dir = os.path.join(out_dir, "assets")
+    gen_dir = os.path.join(out_dir, "gen")
     my_env = {
-        "aceModuleBuild": gen_dir,
+        "aceModuleBuild": assets_dir,
         "buildMode": options.build_mode,
         "PATH": os.environ.get('PATH')
      }
     if options.app_profile:
-        app_resource = os.path.join(os.path.dirname(options.output), "temp_resources/gen/ResourceTable.txt")
-        my_env["aceProfilePath"] = os.path.join(os.path.dirname(options.hap_profile), "resources/base/profile")
-        my_env["aceProfilePath"] = os.path.abspath(my_env["aceProfilePath"])
-        my_env["appResource"] = os.path.abspath(app_resource)
-        my_env["aceModuleJsonPath"] = os.path.join(os.path.dirname(options.hap_profile), "module.json")
-        my_env["aceModuleJsonPath"] = os.path.abspath(my_env["aceModuleJsonPath"])
+        my_env["aceProfilePath"] = os.path.join(gen_dir, "resources/base/profile")
+        my_env["appResource"] = os.path.join(gen_dir, "ResourceTable.txt")
+        my_env["aceModuleJsonPath"] = os.path.abspath(options.hap_profile)
     else:
         manifest = os.path.join(build_dir, 'manifest.json')
         my_env["aceManifestPath"] = manifest

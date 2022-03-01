@@ -53,8 +53,8 @@ def get_package_name_from_profile(options):
 
 def compile_resources(options):
     with build_utils.temp_dir() as build:
-        res_dir = os.path.join(build, 'resources/temp')
-        gen_dir = os.path.join(os.path.dirname(options.output_header_file), "temp_resources/gen")
+        res_dir = os.path.join(build, 'gen/resources')
+        gen_dir = os.path.join(os.path.dirname(options.output_header_file), "gen")
         gen_dir = os.path.abspath(gen_dir)
         header_dir = os.path.join(build, 'header')
         os.makedirs(res_dir)
@@ -68,9 +68,7 @@ def compile_resources(options):
             dest_res_dir = os.path.join(res_dir, os.path.dirname(directory))
             shutil.copytree(os.path.dirname(directory), dest_res_dir)
             cmd.extend(['-i', dest_res_dir])
-        module_config = os.path.join(res_dir, 'module.json')
-        shutil.copy(options.hap_profile, module_config)
-        cmd.extend(['-j', module_config])
+        cmd.extend(['-j', options.hap_profile])
         if options.package_name != "" and options.package_name is not None:
             package_name = options.package_name
         else:

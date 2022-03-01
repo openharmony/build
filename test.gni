@@ -434,7 +434,6 @@ template("ohos_js_test") {
   _target_resources = "${target_name}__resources"
   ohos_resources(_target_resources) {
     sources = [ "${_target_path}/src/main/resources" ]
-    deps = [ ":$_target_js_copy" ]
     hap_profile = invoker.hap_profile
   }
 

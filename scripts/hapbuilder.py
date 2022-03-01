@@ -104,10 +104,10 @@ def tweak_hap_profile(options, package_dir):
     with open(hap_profile, 'r') as fileobj:
         config = json.load(fileobj)
         if options.app_profile:
-            config['module']['virtualMachine'] = 'ark{}'.format(
+            config.get('module')['virtualMachine'] = 'ark{}'.format(
                 get_ark_toolchain_version(options))
         else:
-            config['module']['distro']['virtualMachine'] = 'ark{}'.format(
+            config.get('module').get('distro')['virtualMachine'] = 'ark{}'.format(
                 get_ark_toolchain_version(options))
     build_utils.write_json(config, hap_profile)
 

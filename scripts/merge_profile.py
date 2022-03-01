@@ -32,44 +32,39 @@ def parse_args(args):
     parser.add_option('--app-profile', default=False, help='path to app profile')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--generated-profile', help='path to generated profile')
-    
     options, _ = parser.parse_args(args)
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
     return options
 
 def merge_profile(options):
-    f3 = open(options.generated_profile, "w")
-    with open(options.hap_profile) as f0:
-        module_data = json.load(f0)["module"]
-        with open(options.app_profile) as f1:
-            app_data = json.load(f1)["app"]
-            all_data = {}
-            all_data["app"] = app_data
-            all_data["module"] = module_data
-            #json.dump(all_data, f0)
-            f1.close()
-        f0.close()
-    json.dump(all_data, f3, indent=4, ensure_ascii=False)
-    f3.close()
-    shutil.copyfile(options.generated_profile, options.hap_profile)
+    if len(options.app_profile) == 0:
+        shutil.copyfile(options.hap_profile, options.generated_profile)
+    else:
+        all_data = {}
+        with open(options.hap_profile) as f0:
+            module_data = json.load(f0)["module"]
+            with open(options.app_profile) as f1:
+                app_data = json.load(f1)["app"]
+                all_data["app"] = app_data
+                all_data["module"] = module_data
+                f1.close()
+            f0.close()
+        f3 = open(options.generated_profile, "w")
+        json.dump(all_data, f3, indent=4, ensure_ascii=False)
+        f3.close()
 
 
 def main(args):
     options = parse_args(args)
+    inputs = [options.hap_profile]
     if not options.app_profile:
-        return
-    #raise Exception("chenmudan merge error")
-    #if not os.path.exists(options.app_profile):
-    #    return
-
-    inputs = ([options.app_profile, options.hap_profile])
+        inputs += options.app_profile
     depfiles = []
     for directory in options.resources_dir:
         depfiles += (build_utils.get_all_files(directory))
 
-    input_strings = [] #[options.package_name] if options.package_name else []
+    input_strings = []
     outputs = [options.generated_profile]
-#    merge_profile(options)
     build_utils.call_and_write_depfile_if_stale(
         lambda: merge_profile(options),
         options,

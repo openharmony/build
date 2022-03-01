@@ -645,7 +645,6 @@ def expand_file_args(args):
             else:
                 expansion = ""
                 print("WARNNING", lookup_path[1:], "is not in metadata file, set default ''")
-                break
         # This should match parse_gn_list. The output is either a GN-formatted list
         # or a literal (with no quotes).
         if isinstance(expansion, list):
