@@ -20,7 +20,6 @@ template("merge_profile") {
   assert(defined(invoker.hap_profile),
          "hap_profile must be defined for compile_resources")
   action(target_name) {
-  #action_with_pydeps(target_name) {
     forward_variables_from(invoker,
                            [
                              "meta_data",
@@ -92,7 +91,6 @@ template("compile_resources") {
       "--hap-profile",
       rebase_path(hap_profile, root_build_dir),
       "--app-profile=@FileArg($_rebased_metadata:root:resources)",
-      # "--app-profile=1",
 
     ]
     outputs = []

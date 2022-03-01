@@ -29,15 +29,12 @@ template("ohos_app_scope") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.app_profile), "app_profile must be defined for ohos_app_scope")
   assert(defined(invoker.sources),"sources must be defined for ohos_app_scope")
-  print(target_name, invoker.app_profile)
-  print(target_name, invoker.sources)
 
   _metadata = "$target_gen_dir/$target_name.metadata"
   _metadata_target = "${target_name}__metadata"
   write_meta_data(_metadata_target) {
     forward_variables_from(invoker,
                            [
-                             #"sources",
                              "app_profile",
                            ])
     type = "app_profile"

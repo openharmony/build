@@ -54,8 +54,8 @@ def get_package_name_from_profile(options):
 def compile_resources(options):
     with build_utils.temp_dir() as build:
         res_dir = os.path.join(build, 'resources/temp')
-        #gen_dir = os.path.join(build, 'gen')
-        gen_dir = "/root/code/openharmony2/out/hi3516dv300/obj/applications/standard/actmoduletest/temp_resources/gen"
+        gen_dir = os.path.join(os.path.dirname(options.output_header_file), "temp_resources/gen")
+        gen_dir = os.path.abspath(gen_dir)
         header_dir = os.path.join(build, 'header')
         os.makedirs(res_dir)
         if os.path.exists(gen_dir):

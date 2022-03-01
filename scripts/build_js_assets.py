@@ -52,8 +52,8 @@ def parse_args(args):
     return options
 
 def make_my_env(build_dir, options):
-    # gen_dir = '/root/code/openharmony2/out/hi3516dv300/obj/applications/standard/actmoduletest/temp'
     gen_dir = os.path.join(os.path.dirname(options.output), "temp")
+    gen_dir = os.path.abspath(gen_dir)
     my_env = {
         "aceModuleBuild": gen_dir,
         "buildMode": options.build_mode,
@@ -62,11 +62,10 @@ def make_my_env(build_dir, options):
     if options.app_profile:
         app_resource = os.path.join(os.path.dirname(options.output), "temp_resources/gen/ResourceTable.txt")
         my_env["aceProfilePath"] = os.path.join(os.path.dirname(options.hap_profile), "resources/base/profile")
-
-        my_env["appResource"] = app_resource
+        my_env["aceProfilePath"] = os.path.abspath(my_env["aceProfilePath"])
+        my_env["appResource"] = os.path.abspath(app_resource)
         my_env["aceModuleJsonPath"] = os.path.join(os.path.dirname(options.hap_profile), "module.json")
         my_env["aceModuleJsonPath"] = os.path.abspath(my_env["aceModuleJsonPath"])
-
     else:
         manifest = os.path.join(build_dir, 'manifest.json')
         my_env["aceManifestPath"] = manifest
@@ -105,6 +104,8 @@ def build_ace(cmd, options):
         if options.js2abc:
             my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
         src_path = 'ets'
+        if not options.app_profile:
+            src_path = 'default'
         manifest = os.path.join(build_dir, 'manifest.json')
         if not os.path.exists(manifest) and options.hap_profile:
             with open(options.hap_profile) as profile:
@@ -120,13 +121,17 @@ def build_ace(cmd, options):
         for root, _, files in os.walk(gen_dir):
             for file in files:
                 filename = os.path.join(root, file)
-                #if filename.endswith('.js.map'):
-                #    os.unlink(filename)
+                if filename.endswith('.js.map'):
+                    os.unlink(filename)
+        if options.app_profile:
+            build_utils.zip_dir(options.output,
+                                gen_dir,
+                                zip_prefix_path=src_path)
+        else:
+            build_utils.zip_dir(options.output,
+                                gen_dir,
+                                zip_prefix_path='assets/js/{}/'.format(src_path))
 
-        #zip_prefix_path='{}/'.format(src_path)
-        build_utils.zip_dir(options.output,
-                            gen_dir,
-                            zip_prefix_path=src_path)
 
 
 def get_all_js_sources(base):
@@ -171,8 +176,12 @@ def main(args):
     if options.js2abc or options.ets2abc:
         ark_frontend_dir = os.path.relpath(
             options.ark_frontend_dir, options.ace_loader_home)
-        cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
-                    'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+        if options.app_profile:
+            cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
+                        'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+        else:
+            cmd.extend(['--env', 'compilerType=ark',
+                        'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
     build_utils.call_and_write_depfile_if_stale(
         lambda: build_ace(cmd, options),
         options,
