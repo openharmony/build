@@ -97,6 +97,7 @@ foreach(os, sdk_systems) {
       path = "{{ sdk_type }}"
       displayName = "{{ _display_name }}"
       version = current_sdk_version
+      apiVersion = "{{ api_version }}"
 
       {% if release_type != "" %}
       releaseType = "{{ release_type }}"
@@ -106,10 +107,6 @@ foreach(os, sdk_systems) {
       meta = {
         metaVersion = "{{ meta_version }}"
       }
-      {% endif %}
-
-      {% if sdk_type != "toolchains" %}
-      apiVersion = "{{ api_version }}"
       {% endif %}
     }
     write_file(package_info_file, package_info, "json")
