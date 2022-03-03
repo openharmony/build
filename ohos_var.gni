@@ -160,12 +160,14 @@ app_target_allowlist = [
   "*:*_resource",
   "*:*_assets",
   "*:*_asset",
+  "*:*_profile",
 ]
 app_target_types = [
   "hap",
   "resources",
   "js_assets",
   "assets",
+  "app_profile",
 ]
 
 if (host_os == "mac") {

@@ -57,11 +57,16 @@ def add_resources(packaged_resources, package_dir, packing_cmd):
             packing_cmd.extend(['--index-path', index_file_path])
             resources_path = os.path.join(package_dir, 'resources')
             if os.path.exists(resources_path):
-                packing_cmd.extend(['--res-path', resources_path])
+                packing_cmd.extend(['--resources-path', resources_path])
 
 
-def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
-    assets_dir = os.path.join(package_dir, 'assets')
+def add_assets(options, package_dir, packing_cmd):
+    packaged_js_assets, assets = options.packaged_js_assets, options.assets
+    if options.app_profile:
+        assets_dir = os.path.join(package_dir, 'ets')
+    else:
+        assets_dir = os.path.join(package_dir, 'assets')
+
     if packaged_js_assets:
         build_utils.extract_all(packaged_js_assets,
                                 package_dir,
@@ -77,7 +82,10 @@ def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
                 shutil.copytree(
                     item, os.path.join(assets_dir, os.path.basename(item)))
     if os.path.exists(assets_dir) and len(os.listdir(assets_dir)) != 0:
-        packing_cmd.extend(['--assets-path', assets_dir])
+        if options.app_profile:
+            packing_cmd.extend(['--ets-path', assets_dir])
+        else:
+            packing_cmd.extend(['--assets-path', assets_dir])
 
 
 def get_ark_toolchain_version(options):
@@ -86,14 +94,21 @@ def get_ark_toolchain_version(options):
 
 
 def tweak_hap_profile(options, package_dir):
-    hap_profile = os.path.join(package_dir, 'config.json')
+    config_name = 'config.json'
+    if options.app_profile:
+        config_name = 'module.json'
+    hap_profile = os.path.join(package_dir, config_name)
     if not os.path.exists(hap_profile):
-        raise Exception('Error: config.json of hap file not exists')
+        raise Exception('Error: {} of hap file not exists'.format(config_name))
     config = {}
     with open(hap_profile, 'r') as fileobj:
         config = json.load(fileobj)
-        config['module']['distro']['virtualMachine'] = 'ark{}'.format(
-            get_ark_toolchain_version(options))
+        if options.app_profile:
+            config.get('module')['virtualMachine'] = 'ark{}'.format(
+                get_ark_toolchain_version(options))
+        else:
+            config.get('module').get('distro')['virtualMachine'] = 'ark{}'.format(
+                get_ark_toolchain_version(options))
     build_utils.write_json(config, hap_profile)
 
 
@@ -108,8 +123,7 @@ def create_hap(options, signed_hap):
                                         os.path.basename(options.hap_profile))
         shutil.copy(options.hap_profile, hap_profile_path)
         packing_cmd.extend(['--json-path', hap_profile_path])
-        add_assets(options.packaged_js_assets, options.assets, package_dir,
-                   packing_cmd)
+        add_assets(options, package_dir, packing_cmd)
 
         add_resources(options.packaged_resources, package_dir, packing_cmd)
         if options.js2abc:
@@ -160,6 +174,8 @@ def parse_args(args):
     parser.add_option('--packaged-resources',
                       help='path to packaged resources')
     parser.add_option('--packaged-js-assets',
+                      help='path to packaged js assets')
+    parser.add_option('--app-profile', default=False,
                       help='path to packaged js assets')
 
     options, _ = parser.parse_args(args)
