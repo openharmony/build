@@ -62,7 +62,7 @@ def _prepare_updater(updater_path):
 
 
 def _prepare_ramdisk(ramdisk_path):
-    _dir_list = ['bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr', 'mnt']
+    _dir_list = ['bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr', 'mnt', 'storage']
     for _dir_name in _dir_list:
         _path = os.path.join(ramdisk_path, _dir_name)
         if os.path.exists(_path):
