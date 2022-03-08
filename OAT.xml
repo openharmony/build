@@ -66,6 +66,8 @@ Note:If the text contains special characters, please escape them according to th
 			<filefilter name="defaultFilter" desc="Files not to check">
 				<filteritem type="filepath" name="common/musl/ld-musl-aarch64.path" desc="configuration file, this format doesn't support adding license header"/>
 				<filteritem type="filepath" name="common/musl/ld-musl-arm.path" desc="configuration file, this format doesn't support adding license header"/>
+				<filteritem type="filepath" name="common/musl/ld-musl-aarch64-asan.path" desc="configuration file, this format doesn't support adding license header"/>
+				<filteritem type="filepath" name="common/musl/ld-musl-arm-asan.path" desc="configuration file, this format doesn't support adding license header"/>
 				<filteritem type="filepath" name="common/asan/asan.options" desc="configuration file, this format doesn't support adding license header"/>
 			</filefilter>
 			<filefilter name="binaryFileTypePolicyFilter" desc="Filters for binary file policies">
