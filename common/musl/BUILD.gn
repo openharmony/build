@@ -28,8 +28,22 @@ group("musl_install") {
 
 ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
   deps = [ "//third_party/musl:${musl_target_abi_name}_create_linker" ]
-  _muls_linker_so =
-      "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}.so.1"
+  if (is_asan) {
+    asan = "-asan"
+  } else {
+    asan = ""
+  }
+  if (musl_target_abi_name == "soft") {
+    _libs_path_prefix = "."
+  } else {
+    _libs_path_prefix = "${musl_target_abi_name}"
+  }
+  if (musl_target_abi_name == "a7_hard_neon-vfpv4") {
+    musl_subarch = "hf"
+  } else {
+    musl_subarch = ""
+  }
+  _muls_linker_so = "${root_out_dir}/common/common/libc/${_libs_path_prefix}/ld-musl-${musl_arch}${musl_subarch}${asan}.so.1"
   source = _muls_linker_so
   install_enable = true
   install_images = [
@@ -55,6 +69,9 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
     source = "ld-musl-arm.path"
   } else {
     source = "ld-musl-aarch64.path"
+  }
+  if (is_asan) {
+    source = string_replace(source, ".path", "-asan.path")
   }
   install_images = [
     "system",
