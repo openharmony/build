@@ -1,6 +1,15 @@
 [
     {
         "install_dir": "toolchains",
+        "module_label": "//developtools/syscap_codec:syscap_tool_bin",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//developtools/hdc_standard:hdc_std",
         "target_os": [
             "linux",
