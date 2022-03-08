@@ -284,6 +284,11 @@ config("link_executable") {
     }
   } else if (is_asan && is_ohos) {
     libs = [ "$_clang_rt_dso_full_path" ]
+    if (target_cpu == "arm") {
+      ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-arm-asan.so.1" ]
+    } else if (target_cpu == "arm64") {
+      ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-aarch64-asan.so.1" ]
+    }
   }
 }
 
