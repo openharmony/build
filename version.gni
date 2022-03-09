@@ -14,12 +14,12 @@
 # HOSP version
 declare_args() {
   hosp_version = "2.0"
-  sdk_version = "3.1.5.3"
-  api_version = "8"
+  sdk_version = "5.0.1.0"
+  api_version = "9"
 
   # Release type, optional values: Betax, RCx...
   release_type = "Beta1"
-  meta_version = "3.0.0"
+  meta_version = "5.0.0"
 }
 
 # ohos SDK version
