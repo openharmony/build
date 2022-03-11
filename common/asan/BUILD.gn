@@ -14,17 +14,6 @@
 import("//build/config/clang/clang.gni")
 import("//build/ohos.gni")
 
-if (is_asan) {
-  exec_script(
-      "/bin/cp",
-      [
-        "-f",
-        rebase_path("libclang_rt.asan.so"),
-        rebase_path(
-            "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so"),
-      ])
-}
-
 ohos_prebuilt_shared_library("libclang_rt.asan.so") {
   if (target_cpu == "arm") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so"
