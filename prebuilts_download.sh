@@ -117,7 +117,7 @@ prebuilts/cmake,${tool_repo}/harmonyos/compiler/cmake/3.16.5/${host_platform}/cm
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/harmonyos/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/python,${tool_repo}/harmonyos/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/clang-447847-${host_platform}-x86_64.tar.bz2
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/${host_platform}/clang-480513-${host_platform}-x86_64.tar.bz2
 prebuilts/,${tool_repo}/harmonyos/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220301.tar.gz
 """
 
@@ -128,16 +128,16 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
         prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
         prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.3/previewer-3.1.5.3.win.tar.gz
-        prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/clang-447847-windows-x86_64.tar.bz2
-        prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/windows/libcxx-ndk-447847-windows-x86-64_patch1.tar.bz2
-        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/libcxx-ndk-447847-${host_platform}-x86-64_patch1.tar.bz2
+        prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/windows/clang-480513-windows-x86_64.tar.bz2
+        prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/windows/libcxx-ndk-480513-windows-x86_64.tar.bz2
+        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
         prebuilts/gcc/linux-x86/esp,${tool_repo}/harmonyos/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip
         prebuilts/gcc/linux-x86/csky,${tool_repo}/harmonyos/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
         prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.3/previewer-3.1.5.3.mac.tar.gz
-        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-447847/${host_platform}/libcxx-ndk-447847-${host_platform}-x86-64_patch1.tar.bz2
+        prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
         """
 fi
 
@@ -171,19 +171,19 @@ do
         rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
         mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-447847" ];then
+    if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-480513" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-        mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
     ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-447847" ];then
+    if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-480513" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
 	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
     fi
-    if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-447847" ];then
+    if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-480513" ];then
         rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-        mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-447847" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+        mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
 	ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
     fi
     if [ -d "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf" ];then
