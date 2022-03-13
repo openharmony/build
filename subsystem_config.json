@@ -174,5 +174,9 @@
   "securec": {
     "path": "third_party/bounds_checking_function",
     "name": "securec"
+  },
+  "web": {
+    "path": "base/web",
+    "name": "web"
   }
 }
