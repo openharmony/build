@@ -178,5 +178,9 @@
   "customization": {
     "path": "base/customization",
     "name": "customization"
+  },
+    "web": {
+    "path": "base/web",
+    "name": "web"
   }
 }
