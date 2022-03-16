@@ -24,7 +24,7 @@ sys.path.append(
         os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from third_party.pyyaml.lib import yaml  # noqa: E402
+from third_party.pyyaml.lib3 import yaml  # noqa: E402
 
 
 def format_validation(pattern, content):
