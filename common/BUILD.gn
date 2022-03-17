@@ -39,4 +39,13 @@ group("common_packages") {
       "asan:libclang_rt.asan.so",
     ]
   }
+
+  # global subsystem's configuration
+  deps += [
+    "//third_party/icu/icu4c:ohos_icudat",
+    "//third_party/icu/icu4c:shared_icui18n",
+    "//third_party/icu/icu4c:shared_icuuc",
+    "//third_party/libphonenumber/cpp:phonenumber_standard",
+    "//third_party/protobuf/src:protobuf_standard",
+  ]
 }
