@@ -177,8 +177,7 @@ if (host_os == "mac") {
 }
 
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
-hap_unpacking_tool =
-    "//developtools/packing_tool/jar/app_unpacking_tool.jar"
+hap_unpacking_tool = "//developtools/packing_tool/jar/app_unpacking_tool.jar"
 hap_packing_tool = "//developtools/packing_tool/jar/app_packing_tool.jar"
 nodejs_version = "v12.18.4"
 if (host_os == "mac") {
