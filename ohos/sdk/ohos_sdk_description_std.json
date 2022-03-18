@@ -414,25 +414,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:ohos_app_packing_tool",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool/jar:app_unpacking_tool",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:ohos_app_unpacking_tool",
         "target_os": [
             "linux",
             "windows",
@@ -506,15 +488,6 @@
     {
         "install_dir": "js/build-tools/binary-tools",
         "module_label": "//developtools/packing_tool/jar:haptobin_tool",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool/jar:ohos_haptobin_tool",
         "target_os": [
             "linux",
             "windows",
