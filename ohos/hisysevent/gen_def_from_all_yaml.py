@@ -142,7 +142,7 @@ def merge_hisysevent_config(yaml_list, output_path):
         present_path = os.path.dirname(os.path.abspath(__file__))
         output_path = present_path
     if (len(yaml_list) == 0):
-        print("error: there is no yaml imput")
+        print("error: there is no yaml input")
         sys.exit(1)
     if not os.path.exists(output_path):
         os.makedirs(output_path, exist_ok=True)

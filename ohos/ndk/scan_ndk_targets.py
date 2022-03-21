@@ -70,7 +70,7 @@ def do_gn_format(gn_file, org_file):
     child.communicate()
     if child.returncode:
         print(
-            'Error: Something is wrong with {}, pleae check file encoding or format'
+            'Error: Something is wrong with {}, please check file encoding or format'
             .format(org_file))
 
 

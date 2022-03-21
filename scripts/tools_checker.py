@@ -33,7 +33,7 @@ def package_installed(pkg_name):
     return r
 
 
-def check_build_repuried_packages():
+def check_build_requried_packages():
     _build_package_list = [
         'binutils', 'flex', 'bison', 'git', 'build-essential', 'zip', 'curl',
         'unzip', 'm4', 'wget', 'perl', 'bc'
@@ -67,7 +67,7 @@ def check_os_version():
     if not version_available:
         print("\033[33m OS version {} is not supported for ohos build.\033[0m".
               format(host_version))
-        print("\033[33m Avaliable OS version are {}.\033[0m".format(
+        print("\033[33m Available OS version are {}.\033[0m".format(
             ', '.join(available_releases)))
         return -1
     return 0
@@ -78,7 +78,7 @@ def main():
     if check_result != 0:
         return
 
-    check_build_repuried_packages()
+    check_build_requried_packages()
     return 0
 
 

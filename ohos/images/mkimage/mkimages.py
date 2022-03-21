@@ -91,7 +91,7 @@ def mk_images(args):
                         res[2].decode(), res[3].decode()]))
         print("MkImages failed errno: %s" % str(res[1]))
         sys.exit(2)
-    # we dont support sparse in mktools.
+    # we don't support sparse in mktools.
     if "sparse" in is_sparse:
         tmp_device = "%s.tmp" % device
         run_cmd(" ".join(["img2simg ", device, " ", tmp_device]))
