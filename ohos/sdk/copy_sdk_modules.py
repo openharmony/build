@@ -71,6 +71,7 @@ def do_copy_and_stamp(copy_infos, options, depfile_deps):
             notice_tuples.append((notice_dest, notice))
     build_utils.zip_dir(options.sdk_output_archive,
                         options.archive_dir,
+                        compress_fn=lambda _: zipfile.ZIP_DEFLATED,
                         zip_prefix_path=options.zip_prefix_path)
     with zipfile.ZipFile(options.notice_output_archive, 'w') as outfile:
         for zip_path, fs_path in notice_tuples:
