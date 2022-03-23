@@ -51,7 +51,7 @@
     "path": "foundation/communication",
     "name": "communication"
   },
-  "base_location": {
+  "location": {
     "path": "base/location",
     "name": "location"
   },
