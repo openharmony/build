@@ -53,7 +53,7 @@
   },
   "base_location": {
     "path": "base/location",
-    "name": "base_location"
+    "name": "location"
   },
   "distributedschedule": {
     "path": "foundation/distributedschedule",
