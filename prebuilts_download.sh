@@ -127,7 +127,7 @@ if [[ "${host_platform}" == "linux" ]]; then
         prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/harmonyos/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
         prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
         prebuilts/gcc/linux-x86/aarch64,${tool_repo}/harmonyos/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-        prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.3/previewer-3.1.5.3.win.tar.gz
+        prebuilts/previewer/windows,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.4/previewer-3.1.5.4.win.tar.gz
         prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/windows/clang-480513-windows-x86_64.tar.bz2
         prebuilts/clang/ohos/windows-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/windows/libcxx-ndk-480513-windows-x86_64.tar.bz2
         prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
@@ -136,7 +136,7 @@ if [[ "${host_platform}" == "linux" ]]; then
         """
 elif [[ "${host_platform}" == "darwin" ]]; then
     copy_config+="""
-        prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.3/previewer-3.1.5.3.mac.tar.gz
+        prebuilts/previewer/darwin,${tool_repo}/harmonyos/develop_tools/previewer/3.1.5.4/previewer-3.1.5.4.mac.tar.gz
         prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/harmonyos/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
         """
 fi
