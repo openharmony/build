@@ -131,6 +131,14 @@
     "path": "test/xts",
     "name": "xts"
   },
+  "wukong": {
+    "path": "test/wukong",
+    "name": "wukong"
+  },
+  "arkXtest": {
+    "path": "test/arkXtest",
+    "name": "arkXtest"
+  },
   "distributedhardware": {
     "path": "foundation/distributedhardware",
     "name": "distributedhardware"
