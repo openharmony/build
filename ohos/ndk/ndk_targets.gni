@@ -25,6 +25,8 @@ _ndk_library_targets = [
   "//foundation/ace/ace_engine/interfaces/native:libace_ndk",
   "//foundation/ace/napi:libnapi_ndk",
   "//foundation/ace/napi:napi_header",
+  "//foundation/appexecfwk/standard/kits/appkit/native/bundle:bundle_header",
+  "//foundation/appexecfwk/standard/kits/appkit/native/bundle:libbundle_ndk",
   "//third_party/node:node_header",
   "//foundation/graphic/standard/interfaces/kits/ndk/EGL:libEGL_ndk",
   "//foundation/graphic/standard/interfaces/kits/ndk/EGL:EGL_header",
