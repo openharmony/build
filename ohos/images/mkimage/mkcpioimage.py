@@ -72,18 +72,20 @@ def build_run_fitimage(args):
             [os.path.join(root_dir, "make-boot.sh"),
              os.path.join(root_dir, "../../..")]
     else:
-        if not os.path.exists("./ohos.its"):
-            print("error there is no configuration file")
-            return -1
-        if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
-            print("error there is no kernel image")
-            return -1
-
         if "updater.img" in args.device:
+            if not os.path.exists("./ohos_updater.its"):
+                print("error there is no configuration file")
+                return -1
             fit_cmd = \
                 ["mkimage", '-f', "./ohos_updater.its",
                  os.path.join(root_dir, "images", "updater.img")]
         else:
+            if not os.path.exists("./ohos.its"):
+                print("error there is no configuration file")
+                return -1
+            if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
+                print("error there is no kernel image")
+                return -1
             fit_cmd = \
                 ["mkimage", '-f', "./ohos.its",
                  os.path.join(root_dir, "images", "boot.img")]
