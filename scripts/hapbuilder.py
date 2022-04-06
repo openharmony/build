@@ -26,18 +26,19 @@ from util import build_utils  # noqa: E402
 def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
              keystore_path, keystorepasswd, keyalias, certificate_file,
              unsigned_hap_path, signed_hap_path):
-    cmd = ['java', '-jar', hapsigner, 'sign']
-    cmd.extend(['-mode', 'localjks'])
+    cmd = ['java', '-jar', hapsigner, 'sign-app']
+    cmd.extend(['-mode', 'localsign'])
     cmd.extend(['-signAlg', sign_algo])
-    cmd.extend(['-privatekey', private_key_path])
-    cmd.extend(['-inputFile', unsigned_hap_path])
-    cmd.extend(['-outputFile', signed_hap_path])
-    cmd.extend(['-profile', certificate_profile])
-    cmd.extend(['-keystore', keystore_path])
-    cmd.extend(['-keystorepasswd', keystorepasswd])
-    cmd.extend(['-keyaliaspasswd', keyalias])
-    cmd.extend(['-certpath', certificate_file])
+    cmd.extend(['-keyAlias', private_key_path])
+    cmd.extend(['-inFile', unsigned_hap_path])
+    cmd.extend(['-outFile', signed_hap_path])
+    cmd.extend(['-profileFile', certificate_profile])
+    cmd.extend(['-keystoreFile', keystore_path])
+    cmd.extend(['-keystorePwd', keystorepasswd])
+    cmd.extend(['-keyPwd', keyalias])
+    cmd.extend(['-appCertFile', certificate_file])
     cmd.extend(['-profileSigned', '1'])
+    cmd.extend(['-inForm','zip'])
     child = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
