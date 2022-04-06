@@ -68,9 +68,14 @@ def build_run_fitimage(args):
     root_dir = src_dir[:index]
 
     if BOOT_TYPE == "two_stages":
-        fit_cmd = \
-            [os.path.join(root_dir, "make-boot.sh"),
-             os.path.join(root_dir, "../../..")]
+        if "updater.img" in args.device:
+            fit_cmd = \
+                ["genext2fs", '-b', '32768', '-d', "./updater",
+                 os.path.join(root_dir, "images", "updater.img")]
+        else:
+            fit_cmd = \
+                [os.path.join(root_dir, "make-boot.sh"),
+                 os.path.join(root_dir, "../../..")]
     else:
         if "updater.img" in args.device:
             if not os.path.exists("./ohos_updater.its"):
