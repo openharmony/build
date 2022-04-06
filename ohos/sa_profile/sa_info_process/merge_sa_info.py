@@ -149,10 +149,13 @@ class SAInfoMerger(object):
                 _format.format('<libpath>', libpath_nodes_count), source_file)
         else:
             libpath = libpath_nodes[0].text.strip()
-            libname = ntpath.basename(libpath)
+            if libpath.startswith("/system/lib") or libpath.startswith("system/lib"):
+                libname = ntpath.basename(libpath)
+            else:
+                libname = libpath
             # [Temporary scheme] no additional process for 64-bit arch and
             # a libpath without prefixed directory
-            if not self.is_64bit_arch and libname != libpath:
+            if not self.is_64bit_arch and "/" in libpath:
                 libpath = os.path.join("/system/lib", libname)
                 libpath_nodes[0].text = libpath
             reconstructed_str = '<libpath>{}</libpath>\n'.format(libpath)
