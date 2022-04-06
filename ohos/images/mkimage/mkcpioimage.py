@@ -81,7 +81,7 @@ def build_run_fitimage(args):
 
         if "updater.img" in args.device:
             fit_cmd = \
-                ["mkimage", '-f', "./ohos.its",
+                ["mkimage", '-f', "./ohos_updater.its",
                  os.path.join(root_dir, "images", "updater.img")]
         else:
             fit_cmd = \
