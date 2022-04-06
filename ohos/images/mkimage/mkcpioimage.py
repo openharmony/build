@@ -79,9 +79,14 @@ def build_run_fitimage(args):
             print("error there is no kernel image")
             return -1
 
-        fit_cmd = \
-            ["mkimage", '-f', "./ohos.its",
-             os.path.join(root_dir, "images", "boot.img")]
+        if "updater.img" in args.device:
+            fit_cmd = \
+                ["mkimage", '-f', "./ohos.its",
+                 os.path.join(root_dir, "images", "updater.img")]
+        else:
+            fit_cmd = \
+                ["mkimage", '-f', "./ohos.its",
+                 os.path.join(root_dir, "images", "boot.img")]
 
     res = run_cmd(fit_cmd)
     if res[1] != 0:
@@ -95,7 +100,10 @@ def build_run_cpio(args):
     work_dir = os.getcwd()
     os.chdir(args.src_dir)
 
-    output_path = os.path.join(work_dir, args.device)
+    if "updater.img" in args.device:
+        output_path = os.path.join(work_dir, "updater_ramdisk.img")
+    else:
+        output_path = os.path.join(work_dir, args.device)
     ramdisk_cmd = ['cpio', '-o', '-H', 'newc', '-O', output_path]
     dir_list = []
     get_dir_list("./", dir_list)
