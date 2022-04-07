@@ -83,7 +83,7 @@ def mk_images(args):
         mk_configs = \
             " ".join([src_dir, device, "../../build/ohos/images/mkimage/"
                                        "ramdisk_resource_config.ini"])
-    elif "updater.img" == device:
+    elif "updater_ramdisk.img" == device:
         mk_configs = \
             " ".join([src_dir, device, "../../build/ohos/images/mkimage/"
                                        "updater_ramdisk_resource_config.ini"])
