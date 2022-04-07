@@ -24,7 +24,6 @@ sys.path.append(
 def copy_file(fuzz_config_file_path, fuzz_config_file_output_path):
     if not os.path.exists(fuzz_config_file_path):
         raise Exception("fuzz_config_file_path '{}' doesn't exist.".format(fuzz_config_file_path))
-    fuzz_config_file_path = os.path.dirname(fuzz_config_file_path)
     target_file_path = os.path.join(fuzz_config_file_output_path, os.path.basename(fuzz_config_file_path))
     if os.path.exists(target_file_path):
         shutil.rmtree(target_file_path)
