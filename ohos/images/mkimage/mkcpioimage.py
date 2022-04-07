@@ -107,10 +107,7 @@ def build_run_cpio(args):
     work_dir = os.getcwd()
     os.chdir(args.src_dir)
 
-    if "updater.img" in args.device:
-        output_path = os.path.join(work_dir, "updater_ramdisk.img")
-    else:
-        output_path = os.path.join(work_dir, args.device)
+    output_path = os.path.join(work_dir, args.device)
     ramdisk_cmd = ['cpio', '-o', '-H', 'newc', '-O', output_path]
     dir_list = []
     get_dir_list("./", dir_list)

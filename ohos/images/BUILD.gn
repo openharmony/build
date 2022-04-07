@@ -27,11 +27,11 @@ group("make_images") {
     ]
     if (enable_ramdisk) {
       deps += [ ":${_platform}_ramdisk_image" ]
-	  if (!is_asan) {
+      if (!is_asan) {
         deps += [ ":${_platform}_updater_ramdisk_image" ]
       }
     } else {
-	  if (!is_asan) {
+      if (!is_asan) {
         deps += [ ":${_platform}_updater_image" ]
       }
     }
