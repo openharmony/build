@@ -127,7 +127,10 @@ def build_run_chmod(args):
     if BOOT_TYPE == "two_stages":
         return 0
 
-    chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
+    if "updater_ramdisk.img" in args.device:
+        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "updater.img")]
+    else:
+        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
     res = run_cmd(chmod_cmd)
     if res[1] != 0:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
