@@ -106,6 +106,20 @@ template("_ohos_test") {
     testonly = true
   }
 
+  # copy fuzz config file
+  if (defined(invoker.fuzz_config_file)) {
+    fuzz_config_file = invoker.fuzz_config_file
+    script = "//build/ohos/testfwk/fuzz_config_file_copy.py"
+    _arguments = []
+    _arguments += [
+        "--fuzz-config-file-path",
+        rebase_path(fuzz_config_file, root_build_dir),
+        "--fuzz-config-file-output-path",
+        rebase_path(root_out_dir + "/tests/res", root_build_dir),     
+    ]
+    exec_script(script, _arguments)
+  }
+
   _has_sources = defined(invoker.sources) && invoker.sources != []
   if (_has_sources) {
     _c_sources_file = "$target_gen_dir/$target_name.sources"
