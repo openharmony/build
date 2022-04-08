@@ -70,7 +70,7 @@ def build_run_fitimage(args):
     if BOOT_TYPE == "two_stages":
         if "updater_ramdisk.img" in args.device:
             fit_cmd = \
-                ["genext2fs", '-b', '32768', '-d', "./updater",
+                ["cp", '-f', "./updater_ramdisk.img",
                  os.path.join(root_dir, "images", "updater.img")]
         else:
             fit_cmd = \
