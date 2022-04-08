@@ -68,6 +68,11 @@ template("ohos_ndk_library") {
     _system_capability = invoker.system_capability
   }
 
+  _system_capability_headers = ""
+  if (defined(invoker.system_capability_headers)) {
+    _system_capability_headers = invoker.system_capability_headers
+  }
+
   _deps = []
   if (defined(invoker.deps)) {
     _deps += invoker.deps
@@ -119,6 +124,7 @@ template("ohos_ndk_library") {
       label = _current_label
       lib_name = _output_name
       system_capability = _system_capability
+      system_capability_headers = _system_capability_headers
     }
     metadata = {
       ndk_config = [ _ndk_config_info ]
