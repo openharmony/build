@@ -112,10 +112,10 @@ template("_ohos_test") {
     script = "//build/ohos/testfwk/fuzz_config_file_copy.py"
     _arguments = []
     _arguments += [
-        "--fuzz-config-file-path",
-        rebase_path(fuzz_config_file, root_build_dir),
-        "--fuzz-config-file-output-path",
-        rebase_path(root_out_dir + "/tests/res", root_build_dir),     
+      "--fuzz-config-file-path",
+      rebase_path(fuzz_config_file, root_build_dir),
+      "--fuzz-config-file-output-path",
+      rebase_path(root_out_dir + "/tests/res", root_build_dir),
     ]
     exec_script(script, _arguments)
   }
