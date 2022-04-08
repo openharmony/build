@@ -40,12 +40,16 @@ action_with_pydeps("_collect_ndk_syscap") {
   depfile = "$target_gen_dir/$target_name.d"
   _ndk_syscap_desc_file =
       "${ndk_os_irrelevant_out_dir}/ndk_system_capability.json"
+  _native_syscap_config_file =
+      "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
   outputs = [ _ndk_syscap_desc_file ]
   args = [
     "--depfile",
     rebase_path(depfile, root_build_dir),
     "--system-capability-file",
     rebase_path(_ndk_syscap_desc_file, root_build_dir),
+    "--system-capability-header-config",
+    rebase_path(_native_syscap_config_file, root_build_dir),
     "--targets-build-config",
   ]
   foreach(_ndk_target, all_ndk_targets_list) {
