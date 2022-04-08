@@ -23,7 +23,7 @@ def args_parse(args):
     parser = argparse.ArgumentParser(description='mkf2fsimage.py')
 
     parser.add_argument("src_dir", help="The source file for sload.")
-    parser.add_argument("device", help="The deivce for mkfs.")
+    parser.add_argument("device", help="The device for mkfs.")
     parser.add_argument("mount_point", help="The filesystem mountpoint.")
     parser.add_argument("fs_size", help="The size of filesystem.")
     parser.add_argument("--fs_type", help="The filesystem type.")

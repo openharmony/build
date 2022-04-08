@@ -50,7 +50,6 @@ def _scan_build_file(subsystem_path):
     build_config_file_name = "ohos.build"
     search_str = "{}/**/{}".format(subsystem_path, build_config_file_name)
     _files = glob.glob(search_str, recursive=True)
-    # campatibility bundle.json and ohos.build
     bundle_file_name = 'bundle.json'
     _bundle_files = glob.glob("{}/**/{}".format(subsystem_path,
                                                 bundle_file_name),

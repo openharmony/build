@@ -78,7 +78,7 @@ class ModuleTree:
                     raise Exception(
                         "module '{}' doesn't exist.".format(old_node_name))
                 else:
-                    print("Waring! module '{}' doesn't exist.".format(
+                    print("Warning! module '{}' doesn't exist.".format(
                         old_node_name))
                     tree_data = {"name": node_name}
                     return tree_data
