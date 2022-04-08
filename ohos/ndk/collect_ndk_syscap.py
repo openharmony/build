@@ -27,6 +27,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 
 def _get_system_capability(targets_build_config):
     _syscap_info = {}
+    _syscap_config = {}
     for _bc_file in targets_build_config:
         if not os.path.exists(_bc_file):
             continue
@@ -40,12 +41,16 @@ def _get_system_capability(targets_build_config):
             continue
         _lib_name = _ndk_config_info.get('lib_name')
         _syscap_info[_lib_name] = _bc_syscap
-    return _syscap_info
+        _bc_syscap_headers = _ndk_config_info.get("system_capability_headers")
+        if _bc_syscap_headers:
+            _syscap_config[_bc_syscap] = _bc_syscap_headers
+    return _syscap_info, _syscap_config
 
 
 def run(args):
-    _syscap_info = _get_system_capability(args.targets_build_config)
+    _syscap_info, _syscap_config = _get_system_capability(args.targets_build_config)
     write_json_file(args.system_capability_file, _syscap_info)
+    write_json_file(args.system_capability_header_config, _syscap_config)
 
     if args.depfile:
         _dep_files = []
@@ -63,6 +68,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--targets-build-config', nargs='+', required=True)
     parser.add_argument('--system-capability-file', required=True)
+    parser.add_argument('--system-capability-header-config', required=True)
     parser.add_argument('--depfile', required=False)
     args = parser.parse_args(argv)
     return run(args)
