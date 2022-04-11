@@ -52,7 +52,7 @@ def run_cmd(cmd, dir_list=None):
 
 
 def get_dir_list(input_path, dir_list):
-    if os.path.isdir(input_path):
+    if os.path.isdir(input_path) and not os.path.islink(input_path):
         dir_list.append(input_path)
         tem_list = os.listdir(input_path)
         for each in tem_list:

@@ -52,13 +52,14 @@ def _prepare_root(system_path, target_cpu):
 
 
 def _prepare_updater(updater_path):
-    _dir_list = ['dev', 'proc', 'sys']
+    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('/bin/init', os.path.join(updater_path, 'init'))
+    os.symlink('bin/init', os.path.join(updater_path, 'init'))
+    os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
 
 
 def _prepare_ramdisk(ramdisk_path):
