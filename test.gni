@@ -221,6 +221,7 @@ template("ohos_distributedtest") {
 }
 
 template("ohos_fuzztest") {
+  if (use_musl) {
   _ohos_test(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -242,6 +243,11 @@ template("ohos_fuzztest") {
       "-fsanitize=fuzzer",
     ]
     libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
+    }
+  } else {
+    group(target_name) {
+      not_needed(invoker, "*")
+    }
   }
 }
 
