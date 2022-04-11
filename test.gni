@@ -222,27 +222,27 @@ template("ohos_distributedtest") {
 
 template("ohos_fuzztest") {
   if (use_musl) {
-  _ohos_test(target_name) {
-    forward_variables_from(invoker,
-                           "*",
-                           [
-                             "deps",
-                             "cflags",
-                           ])
-    test_type = "fuzztest"
-    deps = []
-    if (defined(invoker.deps)) {
-      deps += invoker.deps
-    }
-    cflags = []
-    if (defined(invoker.cflags)) {
-      cflags += invoker.cflags
-    }
-    cflags += [
-      "-fno-sanitize-coverage=trace-pc-guard,edge,trace-cmp,indirect-calls,8bit-counters",
-      "-fsanitize=fuzzer",
-    ]
-    libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
+    _ohos_test(target_name) {
+      forward_variables_from(invoker,
+                             "*",
+                             [
+                               "deps",
+                               "cflags",
+                             ])
+      test_type = "fuzztest"
+      deps = []
+      if (defined(invoker.deps)) {
+        deps += invoker.deps
+      }
+      cflags = []
+      if (defined(invoker.cflags)) {
+        cflags += invoker.cflags
+      }
+      cflags += [
+        "-fno-sanitize-coverage=trace-pc-guard,edge,trace-cmp,indirect-calls,8bit-counters",
+        "-fsanitize=fuzzer",
+      ]
+      libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
     }
   } else {
     group(target_name) {
