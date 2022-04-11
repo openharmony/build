@@ -221,6 +221,8 @@ template("ohos_distributedtest") {
 }
 
 template("ohos_fuzztest") {
+  # Judge the compliation library.
+  # Do the FUZZ compliation if the compliation library is the musl.
   if (use_musl) {
     _ohos_test(target_name) {
       forward_variables_from(invoker,
