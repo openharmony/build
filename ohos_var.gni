@@ -166,6 +166,7 @@ app_target_types = [
   "hap",
   "resources",
   "js_assets",
+  "ets_assets",
   "assets",
   "app_profile",
 ]

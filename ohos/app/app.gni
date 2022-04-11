@@ -70,12 +70,25 @@ template("ohos_assets") {
 #
 # Variables:
 #   source_dir: js assets directory, only one directory supported, string not list.
+#   js2abc: whether to transform js bundle to ark bytecode, default value
+#             follows build_ark.
+#   ets2abc: whether to transform ets bundle to ark bytecode, default value false
 #   deps: dependencies of this target.
 #
 template("ohos_js_assets") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.source_dir),
          "source_dir must be defined for ohos_js_assets")
+
+  #_js2abc = false
+  #if (defined(invoker.js2abc)) {
+  #  _js2abc = invoker.js2abc
+  #}
+
+  _ets2abc = false
+  if (defined(invoker.ets2abc)) {
+    _ets2abc = invoker.ets2abc
+  }
 
   _metadata = "$target_gen_dir/$target_name.metadata"
   _metadata_target = "${target_name}__metadata"
@@ -85,9 +98,14 @@ template("ohos_js_assets") {
                              "source_dir",
                              "deps",
                            ])
-    type = "js_assets"
     meta_data = _metadata
-    js_assets = [ source_dir ]
+    if (_ets2abc) {
+      type = "ets_assets"
+      ets_assets = [ source_dir ]
+    } else {
+      type = "js_assets"
+      js_assets = [ source_dir ]
+    }
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
@@ -268,6 +286,7 @@ template("ohos_hap") {
                              "raw_assets",
                              "resources",
                              "js_assets",
+                             "ets_assets",
                            ])
     hap_profile = invoker.hap_profile
     meta_data = _meta_data
@@ -332,7 +351,7 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
-    js2abc = _js2abc || _ets2abc
+    enable_ark = build_ark
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }

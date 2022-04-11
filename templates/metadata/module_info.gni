@@ -204,10 +204,11 @@ template("write_meta_data") {
                              "package_name",
                              "raw_assets",
                              "js_assets",
+                             "ets_assets",
                            ])
-    if (type != "js_assets" && type != "assets" && type != "resources" &&
-        type != "hap" && type != "app_profile") {
-      assert(false, "type must be one of [js_assets, assets, resources, hap]")
+    if (type != "js_assets" && type != "ets_assets" && type != "assets" &&
+        type != "resources" && type != "hap" && type != "app_profile") {
+      assert(false, "type must be one of [js_assets, ets_assets, assets, resources, hap, app_profile]")
     }
     if (type != "hap") {
       _parent_invoker = invoker.invoker
@@ -216,7 +217,7 @@ template("write_meta_data") {
       set_sources_assignment_filter(app_target_allowlist)
       sources = [ _caller_target_name ]
       if (sources != []) {
-        if (type == "js_assets" || type == "assets") {
+        if (type == "js_assets" || type == "ets_assets" || type == "assets") {
           assert(
               false,
               "Illegal target name: \"${_caller_target_name}\", target name of ohos_js_assets or ohos_assets must endswith assets or asset ")
@@ -311,6 +312,13 @@ template("write_meta_data") {
     if (defined(js_assets)) {
       args += [ "--js-assets" ]
       foreach(asset, js_assets) {
+        args += [ rebase_path(asset, root_build_dir) ]
+      }
+    }
+
+    if (defined(ets_assets)) {
+      args += [ "--ets-assets" ]
+      foreach(asset, ets_assets) {
         args += [ rebase_path(asset, root_build_dir) ]
       }
     }
