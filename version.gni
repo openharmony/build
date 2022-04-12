@@ -11,10 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# HOSP version
+# OHOS version
 declare_args() {
-  hosp_version = "2.0"
-  sdk_version = "3.1.5.5"
+  sdk_version = "3.1.5.6"
   api_version = "8"
 
   # Release type, optional values: Betax, RCx...
