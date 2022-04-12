@@ -106,6 +106,20 @@ template("_ohos_test") {
     testonly = true
   }
 
+  # copy fuzz config file
+  if (defined(invoker.fuzz_config_file)) {
+    fuzz_config_file = invoker.fuzz_config_file
+    script = "//build/ohos/testfwk/fuzz_config_file_copy.py"
+    _arguments = []
+    _arguments += [
+      "--fuzz-config-file-path",
+      rebase_path(fuzz_config_file, root_build_dir),
+      "--fuzz-config-file-output-path",
+      rebase_path(root_out_dir + "/tests/res", root_build_dir),
+    ]
+    exec_script(script, _arguments)
+  }
+
   _has_sources = defined(invoker.sources) && invoker.sources != []
   if (_has_sources) {
     _c_sources_file = "$target_gen_dir/$target_name.sources"
@@ -207,27 +221,35 @@ template("ohos_distributedtest") {
 }
 
 template("ohos_fuzztest") {
-  _ohos_test(target_name) {
-    forward_variables_from(invoker,
-                           "*",
-                           [
-                             "deps",
-                             "cflags",
-                           ])
-    test_type = "fuzztest"
-    deps = []
-    if (defined(invoker.deps)) {
-      deps += invoker.deps
+  # Judge the compliation library.
+  # Do the FUZZ compliation if the compliation library is the musl.
+  if (use_musl) {
+    _ohos_test(target_name) {
+      forward_variables_from(invoker,
+                             "*",
+                             [
+                               "deps",
+                               "cflags",
+                             ])
+      test_type = "fuzztest"
+      deps = []
+      if (defined(invoker.deps)) {
+        deps += invoker.deps
+      }
+      cflags = []
+      if (defined(invoker.cflags)) {
+        cflags += invoker.cflags
+      }
+      cflags += [
+        "-fno-sanitize-coverage=trace-pc-guard,edge,trace-cmp,indirect-calls,8bit-counters",
+        "-fsanitize=fuzzer",
+      ]
+      libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
     }
-    cflags = []
-    if (defined(invoker.cflags)) {
-      cflags += invoker.cflags
+  } else {
+    group(target_name) {
+      not_needed(invoker, "*")
     }
-    cflags += [
-      "-fno-sanitize-coverage=trace-pc-guard,edge,trace-cmp,indirect-calls,8bit-counters",
-      "-fsanitize=fuzzer",
-    ]
-    libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
   }
 }
 
