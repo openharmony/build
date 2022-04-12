@@ -88,8 +88,8 @@ def add_assets(options, package_dir, packing_cmd):
             packing_cmd.extend(['--ets-path', assets_dir])
         else:
             packing_cmd.extend(['--assets-path', assets_dir])
-    if os.path.exists(js_assets_dir) and len(os.listdir(js_assets_dir)) != 0:
-        if options.app_profile:
+    if options.app_profile:
+        if os.path.exists(js_assets_dir) and len(os.listdir(js_assets_dir)) != 0:
             packing_cmd.extend(['--js-path', js_assets_dir])
 
 def get_ark_toolchain_version(options):

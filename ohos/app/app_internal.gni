@@ -282,9 +282,9 @@ template("compile_js_assets") {
       deps = []
     }
     deps += [
-        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
-        "//developtools/ace-js2bundle:ace_loader_node_modules",
-        "//developtools/ace-ets2bundle:ets_loader_node_modules",
+      "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+      "//developtools/ace-ets2bundle:ets_loader_node_modules",
+      "//developtools/ace-js2bundle:ace_loader_node_modules",
     ]
     _ace_loader_home =
         get_label_info("//developtools/ace-js2bundle:ace_loader_node_modules",
