@@ -80,16 +80,6 @@ template("ohos_js_assets") {
   assert(defined(invoker.source_dir),
          "source_dir must be defined for ohos_js_assets")
 
-  #_js2abc = false
-  #if (defined(invoker.js2abc)) {
-  #  _js2abc = invoker.js2abc
-  #}
-
-  _ets2abc = false
-  if (defined(invoker.ets2abc)) {
-    _ets2abc = invoker.ets2abc
-  }
-
   _metadata = "$target_gen_dir/$target_name.metadata"
   _metadata_target = "${target_name}__metadata"
   write_meta_data(_metadata_target) {
@@ -99,12 +89,15 @@ template("ohos_js_assets") {
                              "deps",
                            ])
     meta_data = _metadata
-    if (_ets2abc) {
+    if (defined(invoker.ets2abc) && invoker.ets2abc) {
       type = "ets_assets"
       ets_assets = [ source_dir ]
-    } else {
+    } else if (defined(invoker.js2abc) && invoker.js2abc) {
       type = "js_assets"
       js_assets = [ source_dir ]
+    } else {
+      type = "unresolved_assets"
+      unresolved_assets = [ source_dir ]
     }
   }
   group(target_name) {
@@ -243,6 +236,10 @@ template("ohos_hap") {
     _ets2abc = invoker.ets2abc
   }
 
+  if (_ets2abc) {
+    _js2abc = false
+  }
+
   _js_build_mode = "release"
   if (defined(invoker.js_build_mode)) {
     _js_build_mode = invoker.js_build_mode
@@ -292,6 +289,7 @@ template("ohos_hap") {
     meta_data = _meta_data
     possible_deps = _deps
     type = "hap"
+    js2abc = _js2abc
     hap_path = _hap_path
   }
 

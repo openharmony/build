@@ -217,6 +217,8 @@ def main(args):
             os.path.relpath(
                 options.webpack_config_ets, options.ets_loader_home)
         ]
+        ark_frontend_dir = os.path.relpath(
+            options.ark_frontend_dir, options.ets_loader_home)
         if options.app_profile:
             cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
                         'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])

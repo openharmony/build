@@ -81,6 +81,8 @@ def write_meta_data(options, direct_deps):
         root[options.type] = options.ets_assets
     if options.type == 'assets':
         root[options.type] = options.raw_assets
+    if options.type == 'unresolved_assets':
+        root[options.type] = options.unresolved_assets
     if options.type == 'resources':
         deps = Deps(direct_deps)
         root[options.type] = options.resources
@@ -119,6 +121,12 @@ def write_meta_data(options, direct_deps):
                     root[target_type] = dep[target_type]
                     if dep.get('hap_profile'):
                         root['hap_profile'] = dep['hap_profile']
+        target_type = 'unresolved_assets'
+        for dep in deps.All(target_type):
+            if options.js2abc:
+                root['js_assets'].append(dep[target_type])
+            else:
+                root['ets_assets'].append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
 
@@ -140,6 +148,11 @@ def main():
                         help='package name for hap resources')
     parser.add_argument('--hap-profile', help='path to hap profile')
     parser.add_argument('--app-profile', help='path to app profile')
+    parser.add_argument('--unresolved-assets', help='unresolved assets directory')
+    parser.add_argument('--js2abc',
+                        action='store_true',
+                        default=False,
+                        help='whether to transform js to ark bytecode')
     options = parser.parse_args()
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
