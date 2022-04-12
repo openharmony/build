@@ -123,11 +123,6 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
         build_utils.check_output(
             cmd, cwd=loader_home, env=my_env)
         gen_dir = os.path.dirname(my_env.get("aceModuleBuild"))
-        for root, _, files in os.walk(gen_dir):
-            for file in files:
-                filename = os.path.join(root, file)
-                if filename.endswith('.js.map'):
-                    os.unlink(filename)
         if options.app_profile:
             build_utils.zip_dir(options.output,
                                 gen_dir,
@@ -220,7 +215,7 @@ def main(args):
         ark_frontend_dir = os.path.relpath(
             options.ark_frontend_dir, options.ets_loader_home)
         if options.app_profile:
-            cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
+            cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
                         'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
         else:
             cmd.extend(['--env', 'compilerType=ark',

@@ -124,9 +124,9 @@ def write_meta_data(options, direct_deps):
         target_type = 'unresolved_assets'
         for dep in deps.All(target_type):
             if options.js2abc:
-                root['js_assets'].append(dep[target_type])
+                root.get('js_assets').append(dep[target_type])
             else:
-                root['ets_assets'].append(dep[target_type])
+                root.get('ets_assets').append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
 

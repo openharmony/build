@@ -73,6 +73,12 @@ def add_assets(options, package_dir, packing_cmd):
         build_utils.extract_all(packaged_js_assets,
                                 package_dir,
                                 no_clobber=False)
+    if options.build_mode == "release":
+        for root, _, files in os.walk(assets_dir):
+            for f in files:
+                filename = os.path.join(root, f)
+                if filename.endswith('.js.map'):
+                    os.unlink(filename)
     if assets:
         if not os.path.exists(assets_dir):
             os.mkdir(assets_dir)
@@ -181,6 +187,7 @@ def parse_args(args):
                       help='path to packaged js assets')
     parser.add_option('--app-profile', default=False,
                       help='path to packaged js assets')
+    parser.add_option('--build-mode', help='debug mode or release mode')
 
     options, _ = parser.parse_args(args)
     if options.assets:

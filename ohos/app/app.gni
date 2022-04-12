@@ -358,6 +358,7 @@ template("ohos_hap") {
     hap_profile = _hap_profile
     meta_data = _meta_data
     hap_path = _hap_path
+    build_mode = _js_build_mode
 
     install_module_info = {
       module_def = get_label_info(":$target_name", "label_with_toolchain")

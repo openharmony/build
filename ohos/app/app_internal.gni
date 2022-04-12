@@ -133,6 +133,7 @@ template("package_app") {
                              "certificate_file",
                              "install_module_info",
                              "enable_ark",
+                             "build_mode",
                            ])
     script = "//build/scripts/hapbuilder.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -154,6 +155,8 @@ template("package_app") {
       rebase_path(packaged_js_assets, root_build_dir),
       "--assets=@FileArg($_rebased_metadata:root:assets)",
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
+      "--build-mode",
+      build_mode,
     ]
 
     inputs = [
