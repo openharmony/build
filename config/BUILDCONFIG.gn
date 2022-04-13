@@ -637,19 +637,31 @@ if (is_lite_system) {
     ohos_current_ld_command = ohos_current_cxx_command
     ohos_current_strip_command =
         "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
-    set_default_toolchain("//build/lite/toolchain:linux_x86_64_ohos_clang")
+    if (current_os == "ohos") {
+      set_default_toolchain("//build/lite/toolchain:linux_x86_64_ohos_clang")
+      default_compiler_configs += [
+        "//build/lite/config:ohos_clang",
+        "//build/lite/config:clang_opt",
+      ]
+    } else {
+      set_default_toolchain("//build/toolchain/linux:clang_$target_cpu")
+      default_compiler_configs += [
+        "//build/config/sanitizers:default_sanitizer_flags",
+        "//build/config:default_libs",
+        "//build/config:executable_config",
+        "//build/config/compiler:default_include_dirs",
+        "//build/config/compiler:compiler",
+      ]
+    }
+  }
+  if (current_os == "ohos") {
     default_compiler_configs += [
-      "//build/lite/config:ohos_clang",
-      "//build/lite/config:clang_opt",
+      "//build/lite/config:board_config",
+      "//build/lite/config:cpu_arch",
+      "//build/lite/config:common",
+      "//build/lite/config:default_link_path",
     ]
   }
-
-  default_compiler_configs += [
-    "//build/lite/config:board_config",
-    "//build/lite/config:cpu_arch",
-    "//build/lite/config:common",
-    "//build/lite/config:default_link_path",
-  ]
 
   if (ohos_build_type == "debug") {
     default_compiler_configs += [ "//build/lite/config:debug" ]
@@ -657,7 +669,7 @@ if (is_lite_system) {
     default_compiler_configs += [ "//build/lite/config:release" ]
   }
 
-  if (ohos_kernel_type == "liteos_a") {
+  if (ohos_kernel_type == "liteos_a" && current_os == "ohos") {
     default_compiler_configs +=
         [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
   }
@@ -674,8 +686,13 @@ if (is_lite_system) {
   default_compiler_configs += [
     "//build/lite/config:language_c",
     "//build/lite/config:language_cpp",
-    "//build/lite/config:kernel_macros",
   ]
+
+  if (current_os == "ohos") {
+    default_compiler_configs += [
+      "//build/lite/config:kernel_macros",
+    ]
+  }
 
   default_shared_library_configs =
       default_compiler_configs + [ "//build/lite/config:shared_library_config" ]
@@ -727,7 +744,7 @@ foreach(_target_type, target_type_list) {
         deps = []
       }
       if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
-        if (is_lite_system) {
+        if (is_lite_system && current_os == "ohos") {
           deps += [ "//prebuilts/lite/sysroot" ]
         } else {
           deps += [ "//build/config:${_target_type}_deps" ]
@@ -737,7 +754,7 @@ foreach(_target_type, target_type_list) {
   }
 }
 
-if (is_lite_system) {
+if (is_lite_system && current_os == "ohos") {
   _target_type_list = [
     "action",
     "action_foreach",
