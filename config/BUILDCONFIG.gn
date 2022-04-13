@@ -689,9 +689,7 @@ if (is_lite_system) {
   ]
 
   if (current_os == "ohos") {
-    default_compiler_configs += [
-      "//build/lite/config:kernel_macros",
-    ]
+    default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
   }
 
   default_shared_library_configs =
