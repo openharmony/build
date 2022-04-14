@@ -99,6 +99,9 @@ template("ohos_js_assets") {
       type = "unresolved_assets"
       unresolved_assets = [ source_dir ]
     }
+    if (defined(invoker.hap_profile)) {
+      hap_profile = invoker.hap_profile
+    }
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]

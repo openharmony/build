@@ -156,6 +156,35 @@ def main():
     options = parser.parse_args()
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
+    if not options.app_profile and options.hap_profile and options.js_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.js_assets[0]
+            options.js_assets = []
+            if len(config['module']['abilities']) > 1:
+                if config['module']['abilities'][0].get('srcLanguage') == 'js':
+                    for ability in config['module']['abilities']:
+                        options.js_assets.append(pre_path + '/' + ability['srcPath'])
+                        if ability.__contains__('forms'):
+                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
+                else:
+                    for ability in config['module']['abilities']:
+                        if ability.__contains__('forms'):
+                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
+            else:
+                options.js_assets.append(pre_path)
+
+    if not options.app_profile and options.hap_profile and options.ets_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.ets_assets[0]
+            options.ets_assets = []
+            if len(config['module']['abilities']) > 1:
+                for ability in config['module']['abilities']:
+                    options.ets_assets.append(pre_path + '/' + ability['srcPath'])
+            else:
+                options.ets_assets.append(pre_path)
+
     possible_input_strings = [
         options.type, options.raw_assets, options.js_assets, options.ets_assets, options.resources,
         options.hap_path, options.hap_profile, options.package_name, options.app_profile
