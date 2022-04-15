@@ -55,7 +55,15 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
 
 ohos_prebuilt_shared_library("musl-libc.so") {
   deps = [ "//third_party/musl:${musl_target_abi_name}_libc_musl_shared" ]
-  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/libc.so"
+
+  if (musl_target_abi_name == "soft") {
+    _libs_path_prefix = "."
+  } else {
+    _libs_path_prefix = "${musl_target_abi_name}"
+  }
+
+  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/${_libs_path_prefix}/libc.so"
+
   install_images = [
     "system",
     "updater",
