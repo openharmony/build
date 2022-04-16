@@ -19,15 +19,6 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//third_party/libusb:libusb",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
         "module_label": "//developtools/hdc:hdc",
         "target_os": [
             "linux"
@@ -587,6 +578,15 @@
     {
         "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:shortcutsSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//foundation/aafwk/standard/zidl:zidl",
         "target_os": [
             "linux",
             "windows",
