@@ -255,7 +255,7 @@ def main(args):
         ark_frontend_dir = os.path.relpath(
             options.ark_frontend_dir, options.ace_loader_home)
         if options.app_profile:
-            cmd.extend(['--env', 'buildMode=release', 'compilerType=ark',
+            cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
                         'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
         else:
             cmd.extend(['--env', 'compilerType=ark',

@@ -124,9 +124,17 @@ def write_meta_data(options, direct_deps):
         target_type = 'unresolved_assets'
         for dep in deps.All(target_type):
             if options.js2abc:
-                root.get('js_assets').append(dep[target_type])
+                if isinstance(dep[target_type], list):
+                    for ability_path in dep[target_type]:
+                        root.get('js_assets').append(ability_path)
+                else:
+                    root.get('js_assets').append(dep[target_type])
             else:
-                root.get('ets_assets').append(dep[target_type])
+                if isinstance(dep[target_type], list):
+                    for ability_path in dep[target_type]:
+                        root.get('ets_assets').append(ability_path)
+                else:
+                    root.get('ets_assets').append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
 
@@ -184,6 +192,17 @@ def main():
                     options.ets_assets.append(pre_path + '/' + ability['srcPath'])
             else:
                 options.ets_assets.append(pre_path)
+
+    if not options.app_profile and options.hap_profile and options.unresolved_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.unresolved_assets
+            options.unresolved_assets = []
+            if len(config['module']['abilities']) > 1:
+                for ability in config['module']['abilities']:
+                    options.unresolved_assets.append(pre_path + '/' + ability['srcPath'])
+            else:
+                options.unresolved_assets.append(pre_path)
 
     possible_input_strings = [
         options.type, options.raw_assets, options.js_assets, options.ets_assets, options.resources,
