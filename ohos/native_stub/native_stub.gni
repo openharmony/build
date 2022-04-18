@@ -1,0 +1,160 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/python.gni")
+
+declare_args() {
+  native_stub = "native-stub"
+  native_stub_signature_save_dir = "//interface/native-stub"
+}
+
+stub_signature_out_dir = "$root_out_dir/${native_stub}/signature"
+
+# Generate native stub library from native stub description file for system components.
+#
+# Variables:
+#  stub_description_file:
+#  min_compact_version: string specifies the minimal compactible version of native stub.
+#    set to major_version in default.
+#
+template("ohos_native_stub_library") {
+  forward_variables_from(invoker, [ "testonly" ])
+  assert(defined(invoker.stub_description_file),
+         "stub description file is necessary ")
+
+  _stub_description_file = invoker.stub_description_file
+
+  _system_capability = ""
+  if (defined(invoker.system_capability)) {
+    _system_capability = invoker.system_capability
+  }
+
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+
+  _output_name = target_name
+  if (defined(invoker.output_name)) {
+    _output_name = invoker.output_name
+  }
+
+  _output_extension = "z.so"
+  if (defined(invoker.output_extension)) {
+    _output_extension = invoker.output_extension
+  }
+
+  _native_stub_target = "${target_name}__native_stub"
+  _generated_native_stub_file =
+      target_gen_dir + "/${target_name}.stub/" +
+      get_path_info(_stub_description_file, "name") + ".c"
+
+  _current_label = get_label_info(":${target_name}", "label_with_toolchain")
+  action_with_pydeps(_native_stub_target) {
+    deps = _deps
+    script = "//build/ohos/ndk/generate_ndk_stub_file.py"
+    depfile = "${target_gen_dir}/${target_name}.d"
+    args = [
+      "--output",
+      rebase_path(_generated_native_stub_file, root_build_dir),
+      "--ndk-description-file",
+      rebase_path(_stub_description_file, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+    ]
+    inputs = [ _stub_description_file ]
+    outputs = [ _generated_native_stub_file ]
+
+    _stub_config_info = {
+      label = _current_label
+      lib_name = _output_name
+      system_capability = _system_capability
+    }
+    metadata = {
+      ndk_config = [ _stub_config_info ]
+    }
+  }
+
+  _stub_shlib_target = "${target_name}"
+
+  shared_library(_stub_shlib_target) {
+    forward_variables_from(invoker,
+                           [
+                             "cflags",
+                             "ldflags",
+                             "configs",
+                             "libs",
+                             "include_dirs",
+                           ])
+    deps = [ ":$_native_stub_target" ]
+    sources = [ _generated_native_stub_file ]
+    output_dir = target_out_dir
+    output_name = _output_name
+    output_extension = _output_extension
+  }
+}
+
+# Specify native-stub header files
+#
+# Input variables:
+#   sources: List of files.
+#
+template("ohos_native_stub_headers") {
+  assert(defined(invoker.sources), "sources are necessary ")
+
+  _stub_header_signature_target = "${target_name}__stub_signature_check"
+  _target_name = target_name
+  action_with_pydeps(_stub_header_signature_target) {
+    if (defined(invoker.deps)) {
+      deps = invoker.deps
+    }
+
+    script = "//build/ohos/ndk/check_ndk_header_signature.py"
+    depfile = "${target_gen_dir}/${target_name}.d"
+
+    inputs = []
+    foreach(src, invoker.sources) {
+      _all_files = []
+      _all_files = exec_script("//build/scripts/find.py",
+                               [ rebase_path(src) ],
+                               "list lines")
+
+      inputs += _all_files
+    }
+
+    _output = "$target_gen_dir/$target_name.stamp"
+
+    args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--generated-signature",
+      rebase_path("$stub_signature_out_dir/$_target_name/signature.txt",
+                  root_build_dir),
+      "--saved-signature",
+      rebase_path("$native_stub_signature_save_dir/$_target_name/signature.txt",
+                  root_build_dir),
+      "--output",
+      rebase_path(_output, root_build_dir),
+    ]
+    foreach(f, inputs) {
+      args += [
+        "--headers",
+        rebase_path(f, root_build_dir),
+        "--root-build-dir",
+        rebase_path("//", root_build_dir),
+      ]
+    }
+
+    outputs = [ _output ]
+  }
+}
