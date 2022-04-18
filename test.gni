@@ -247,7 +247,7 @@ template("ohos_fuzztest") {
       if (target_cpu == "arm64") {
         libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/aarch64-linux-ohos/libclang_rt.fuzzer.a" ]
       } else {
-        libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]        
+        libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
       }
     }
   } else {
