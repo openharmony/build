@@ -592,5 +592,14 @@
             "windows",
             "darwin"
         ]
+    },
+	{
+        "install_dir": "toolchains",
+        "module_label": "//foundation/aafwk/standard/idl:idl",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
     }
 ]
