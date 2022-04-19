@@ -47,6 +47,10 @@ def do_build(args):
     build_targets = args.build_target
     gn_args = args.gn_args
 
+    if args.target_cpu is not None:
+        cmd.extend(['--target-cpu', ''.join(args.target_cpu)])
+
+
     if args.product_name == 'ohos-sdk':
         gn_args.append('build_ohos_ndk=true')
         gn_args.append('build_ohos_sdk=true')
