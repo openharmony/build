@@ -52,13 +52,14 @@ def _prepare_root(system_path, target_cpu):
 
 
 def _prepare_updater(updater_path):
-    _dir_list = ['dev', 'proc', 'sys']
+    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('/bin/init', os.path.join(updater_path, 'init'))
+    os.symlink('bin/init', os.path.join(updater_path, 'init'))
+    os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
 
 
 def _prepare_ramdisk(ramdisk_path):
@@ -75,6 +76,8 @@ def _make_image(args):
     if args.image_name == 'system':
         _prepare_root(args.input_path, args.target_cpu)
     elif args.image_name == 'updater':
+        _prepare_updater(args.input_path)
+    elif args.image_name == 'updater_ramdisk':
         _prepare_updater(args.input_path)
     elif args.image_name == 'ramdisk':
         _prepare_ramdisk(args.input_path)
