@@ -51,6 +51,7 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
     "ramdisk",
   ]
   part_name = "common"
+  module_install_dir = "lib"
 }
 
 ohos_prebuilt_shared_library("musl-libc.so") {
