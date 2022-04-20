@@ -46,9 +46,8 @@ def _prepare_root(system_path, target_cpu):
     os.symlink('/system/bin/init', os.path.join(root_dir, 'init'))
     os.symlink('/system/etc', os.path.join(root_dir, 'etc'))
     if target_cpu == 'arm64':
-        os.symlink('/system/lib64', os.path.join(root_dir, 'lib'))
-    else:
-        os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
+        os.symlink('/system/lib64', os.path.join(root_dir, 'lib64'))
+    os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
 
 
 def _prepare_updater(updater_path):

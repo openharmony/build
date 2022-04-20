@@ -24,6 +24,10 @@ vendor/bin/*,               00755,      0,          2000,       0
 updater/bin/*,              00755,      0,          2000,       0
 updater/system/bin/*,       00755,      0,          2000,       0
 system/lib/ld-musl-arm.so.1,00755,      0,          2000,       0
+system/lib/ld-musl-aarch64.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-arm.so.1,00755,      0,          2000,       0
+updater/lib/ld-musl-aarch64.so.1,00755,      0,          2000,       0
 system/lib/ld-musl-arm-asan.so.1,00755,      0,          2000,       0
+system/lib/ld-musl-aarch64-asan.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-arm-asan.so.1,00755,      0,          2000,       0
+updater/lib/ld-musl-aaarch64-asan.so.1,00755,      0,          2000,       0
