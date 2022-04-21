@@ -77,8 +77,12 @@ def write_meta_data(options, direct_deps):
         root['resources'] = options.resources
     if options.type == 'js_assets':
         root[options.type] = options.js_assets
+    if options.type == 'ets_assets':
+        root[options.type] = options.ets_assets
     if options.type == 'assets':
         root[options.type] = options.raw_assets
+    if options.type == 'unresolved_assets':
+        root[options.type] = options.unresolved_assets
     if options.type == 'resources':
         deps = Deps(direct_deps)
         root[options.type] = options.resources
@@ -98,15 +102,17 @@ def write_meta_data(options, direct_deps):
     if options.type == 'hap':
         deps = Deps(direct_deps)
         root['hap_path'] = options.hap_path
-        for target_type in ['js_assets', 'assets', 'resources']:
+        for target_type in ['js_assets', 'ets_assets', 'assets', 'resources']:
             root[target_type] = []
         if options.js_assets:
             root['js_assets'] = options.js_assets
+        if options.ets_assets:
+            root['ets_assets'] = options.ets_assets
         if options.raw_assets:
             root['assets'] = options.raw_assets
         if options.resources:
             root['resources'] = options.resources
-        for target_type in ['js_assets', 'assets', 'resources', 'app_profile']:
+        for target_type in ['js_assets', 'ets_assets', 'assets', 'resources', 'app_profile']:
             for dep in deps.All(target_type):
                 if root.get(target_type):
                     root.get(target_type).extend(dep[target_type])
@@ -115,6 +121,20 @@ def write_meta_data(options, direct_deps):
                     root[target_type] = dep[target_type]
                     if dep.get('hap_profile'):
                         root['hap_profile'] = dep['hap_profile']
+        target_type = 'unresolved_assets'
+        for dep in deps.All(target_type):
+            if options.js2abc:
+                if isinstance(dep[target_type], list):
+                    for ability_path in dep[target_type]:
+                        root.get('js_assets').append(ability_path)
+                else:
+                    root.get('js_assets').append(dep[target_type])
+            else:
+                if isinstance(dep[target_type], list):
+                    for ability_path in dep[target_type]:
+                        root.get('ets_assets').append(ability_path)
+                else:
+                    root.get('ets_assets').append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
 
@@ -127,6 +147,7 @@ def main():
     parser.add_argument('--type', help='type of module', required=True)
     parser.add_argument('--raw-assets', nargs='+', help='raw assets directory')
     parser.add_argument('--js-assets', nargs='+', help='js assets directory')
+    parser.add_argument('--ets-assets', nargs='+', help='ets assets directory')
     parser.add_argument('--resources', nargs='+', help='resources directory')
     parser.add_argument('--hap-path', help='path to output hap')
     parser.add_argument('--depfile', help='path to .d file')
@@ -135,11 +156,56 @@ def main():
                         help='package name for hap resources')
     parser.add_argument('--hap-profile', help='path to hap profile')
     parser.add_argument('--app-profile', help='path to app profile')
+    parser.add_argument('--unresolved-assets', help='unresolved assets directory')
+    parser.add_argument('--js2abc',
+                        action='store_true',
+                        default=False,
+                        help='whether to transform js to ark bytecode')
     options = parser.parse_args()
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
+    if not options.app_profile and options.hap_profile and options.js_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.js_assets[0]
+            options.js_assets = []
+            if len(config['module']['abilities']) > 1:
+                if config['module']['abilities'][0].get('srcLanguage') == 'js':
+                    for ability in config['module']['abilities']:
+                        options.js_assets.append(pre_path + '/' + ability['srcPath'])
+                        if ability.__contains__('forms'):
+                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
+                else:
+                    for ability in config['module']['abilities']:
+                        if ability.__contains__('forms'):
+                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
+            else:
+                options.js_assets.append(pre_path)
+
+    if not options.app_profile and options.hap_profile and options.ets_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.ets_assets[0]
+            options.ets_assets = []
+            if len(config['module']['abilities']) > 1:
+                for ability in config['module']['abilities']:
+                    options.ets_assets.append(pre_path + '/' + ability['srcPath'])
+            else:
+                options.ets_assets.append(pre_path)
+
+    if not options.app_profile and options.hap_profile and options.unresolved_assets:
+        with open(options.hap_profile) as profile:
+            config = json.load(profile)
+            pre_path = options.unresolved_assets
+            options.unresolved_assets = []
+            if len(config['module']['abilities']) > 1:
+                for ability in config['module']['abilities']:
+                    options.unresolved_assets.append(pre_path + '/' + ability['srcPath'])
+            else:
+                options.unresolved_assets.append(pre_path)
+
     possible_input_strings = [
-        options.type, options.raw_assets, options.js_assets, options.resources,
+        options.type, options.raw_assets, options.js_assets, options.ets_assets, options.resources,
         options.hap_path, options.hap_profile, options.package_name, options.app_profile
     ]
     input_strings = [x for x in possible_input_strings if x]

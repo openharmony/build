@@ -132,7 +132,8 @@ template("package_app") {
                              "key_alias",
                              "certificate_file",
                              "install_module_info",
-                             "js2abc",
+                             "enable_ark",
+                             "build_mode",
                            ])
     script = "//build/scripts/hapbuilder.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -154,6 +155,8 @@ template("package_app") {
       rebase_path(packaged_js_assets, root_build_dir),
       "--assets=@FileArg($_rebased_metadata:root:assets)",
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
+      "--build-mode",
+      build_mode,
     ]
 
     inputs = [
@@ -227,7 +230,7 @@ template("package_app") {
         install_modules = [ install_module_info ]
       }
     }
-    if (defined(js2abc) && js2abc) {
+    if (defined(enable_ark) && enable_ark) {
       _ark_dpes = [
         "//ark/ts2abc/ts2panda:ts2abc_js_file($host_toolchain)",
         "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
@@ -245,7 +248,7 @@ template("package_app") {
         rebase_path(nodejs, root_build_dir),
         "--js2abc-js",
         rebase_path(_js2abc_js, root_build_dir),
-        "--js2abc",
+        "--enable-ark",
       ]
       inputs += [
         nodejs,
@@ -278,38 +281,22 @@ template("compile_js_assets") {
 
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
 
-    _ace_loader_home = "//prebuilts/sdk/js-loader/build-tools/ace-loader/"
+    if (!defined(deps)) {
+      deps = []
+    }
+    deps += [
+      "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
+      "//developtools/ace-ets2bundle:ets_loader_node_modules",
+      "//developtools/ace-js2bundle:ace_loader_node_modules",
+    ]
+    _ace_loader_home =
+        get_label_info("//developtools/ace-js2bundle:ace_loader_node_modules",
+                       "target_out_dir") + "/ace_loader_ark"
     _webpack_config_js = "${_ace_loader_home}/webpack.rich.config.js"
-
-    if (js2abc) {
-      if (!defined(deps)) {
-        deps = [ "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)" ]
-      }
-      deps += [
-        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
-        "//developtools/ace-js2bundle:ace_loader_node_modules",
-      ]
-      _ace_loader_home =
-          get_label_info("//developtools/ace-js2bundle:ace_loader_node_modules",
-                         "target_out_dir") + "/ace_loader_ark"
-      _webpack_config_js = "${_ace_loader_home}/webpack.rich.config.js"
-    }
-
-    if (ets2abc) {
-      if (!defined(deps)) {
-        deps = [ "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)" ]
-      }
-      deps += [
-        "//ark/ts2abc/ts2panda:ark_ts2abc_build($host_toolchain)",
-        "//developtools/ace-ets2bundle:ets_loader_node_modules",
-      ]
-      _ace_loader_home =
-          get_label_info(
-              "//developtools/ace-ets2bundle:ets_loader_node_modules",
-              "target_out_dir") + "/ets_loader_ark"
-      _webpack_config_js = "${_ace_loader_home}/webpack.config.js"
-    }
-
+    _ets_loader_home =
+        get_label_info("//developtools/ace-ets2bundle:ets_loader_node_modules",
+                       "target_out_dir") + "/ets_loader_ark"
+    _webpack_config_ets = "${_ets_loader_home}/webpack.config.js"
     _webpack_js = "${_ace_loader_home}/node_modules/webpack/bin/webpack.js"
 
     inputs = [
@@ -319,6 +306,7 @@ template("compile_js_assets") {
 
     args = [
       "--js-assets-dir=@FileArg($_rebased_metadata:root:js_assets)",
+      "--ets-assets-dir=@FileArg($_rebased_metadata:root:ets_assets)",
       "--output",
       rebase_path(_packaged_js_assets, root_build_dir),
       "--depfile",
@@ -329,10 +317,14 @@ template("compile_js_assets") {
       rebase_path(_webpack_js, root_build_dir),
       "--webpack-config-js",
       rebase_path(_webpack_config_js, root_build_dir),
+      "--webpack-config-ets",
+      rebase_path(_webpack_config_ets, root_build_dir),
       "--build-mode",
       build_mode,
       "--ace-loader-home",
       rebase_path(_ace_loader_home, root_build_dir),
+      "--ets-loader-home",
+      rebase_path(_ets_loader_home, root_build_dir),
       "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
     ]
@@ -351,15 +343,15 @@ template("compile_js_assets") {
               "target_out_dir")
       if (ets2abc) {
         args += [ "--ets2abc" ]
-      } else {
+      } else if (js2abc) {
         args += [ "--js2abc" ]
       }
-
       args += [
         "--ark-frontend-dir",
         rebase_path(_ark_dir, root_build_dir),
       ]
     }
+
     if (defined(hap_profile)) {
       inputs += [ hap_profile ]
     }

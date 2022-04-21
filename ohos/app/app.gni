@@ -70,6 +70,9 @@ template("ohos_assets") {
 #
 # Variables:
 #   source_dir: js assets directory, only one directory supported, string not list.
+#   js2abc: whether to transform js bundle to ark bytecode, default value
+#             follows build_ark.
+#   ets2abc: whether to transform ets bundle to ark bytecode, default value false
 #   deps: dependencies of this target.
 #
 template("ohos_js_assets") {
@@ -85,9 +88,20 @@ template("ohos_js_assets") {
                              "source_dir",
                              "deps",
                            ])
-    type = "js_assets"
     meta_data = _metadata
-    js_assets = [ source_dir ]
+    if (defined(invoker.ets2abc) && invoker.ets2abc) {
+      type = "ets_assets"
+      ets_assets = [ source_dir ]
+    } else if (defined(invoker.js2abc) && invoker.js2abc) {
+      type = "js_assets"
+      js_assets = [ source_dir ]
+    } else {
+      type = "unresolved_assets"
+      unresolved_assets = [ source_dir ]
+    }
+    if (defined(invoker.hap_profile)) {
+      hap_profile = invoker.hap_profile
+    }
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
@@ -225,6 +239,10 @@ template("ohos_hap") {
     _ets2abc = invoker.ets2abc
   }
 
+  if (_ets2abc) {
+    _js2abc = false
+  }
+
   _js_build_mode = "release"
   if (defined(invoker.js_build_mode)) {
     _js_build_mode = invoker.js_build_mode
@@ -268,11 +286,13 @@ template("ohos_hap") {
                              "raw_assets",
                              "resources",
                              "js_assets",
+                             "ets_assets",
                            ])
     hap_profile = invoker.hap_profile
     meta_data = _meta_data
     possible_deps = _deps
     type = "hap"
+    js2abc = _js2abc
     hap_path = _hap_path
   }
 
@@ -332,7 +352,7 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
-    js2abc = _js2abc || _ets2abc
+    enable_ark = build_ark
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }
@@ -341,6 +361,7 @@ template("ohos_hap") {
     hap_profile = _hap_profile
     meta_data = _meta_data
     hap_path = _hap_path
+    build_mode = _js_build_mode
 
     install_module_info = {
       module_def = get_label_info(":$target_name", "label_with_toolchain")

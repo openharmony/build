@@ -52,7 +52,7 @@ def run_cmd(cmd, dir_list=None):
 
 
 def get_dir_list(input_path, dir_list):
-    if os.path.isdir(input_path):
+    if os.path.isdir(input_path) and not os.path.islink(input_path):
         dir_list.append(input_path)
         tem_list = os.listdir(input_path)
         for each in tem_list:
@@ -68,20 +68,32 @@ def build_run_fitimage(args):
     root_dir = src_dir[:index]
 
     if BOOT_TYPE == "two_stages":
-        fit_cmd = \
-            [os.path.join(root_dir, "make-boot.sh"),
-             os.path.join(root_dir, "../../..")]
+        if "updater_ramdisk.img" in args.device:
+            fit_cmd = \
+                ["cp", '-f', "./updater_ramdisk.img",
+                 os.path.join(root_dir, "images", "updater.img")]
+        else:
+            fit_cmd = \
+                [os.path.join(root_dir, "make-boot.sh"),
+                 os.path.join(root_dir, "../../..")]
     else:
-        if not os.path.exists("./ohos.its"):
-            print("error there is no configuration file")
-            return -1
-        if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
-            print("error there is no kernel image")
-            return -1
-
-        fit_cmd = \
-            ["mkimage", '-f', "./ohos.its",
-             os.path.join(root_dir, "images", "boot.img")]
+        if "updater_ramdisk.img" in args.device:
+            if not os.path.exists("./ohos_updater.its"):
+                print("error there is no configuration file")
+                return -1
+            fit_cmd = \
+                ["mkimage", '-f', "./ohos_updater.its",
+                 os.path.join(root_dir, "images", "updater.img")]
+        else:
+            if not os.path.exists("./ohos.its"):
+                print("error there is no configuration file")
+                return -1
+            if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
+                print("error there is no kernel image")
+                return -1
+            fit_cmd = \
+                ["mkimage", '-f', "./ohos.its",
+                 os.path.join(root_dir, "images", "boot.img")]
 
     res = run_cmd(fit_cmd)
     if res[1] != 0:
@@ -115,7 +127,10 @@ def build_run_chmod(args):
     if BOOT_TYPE == "two_stages":
         return 0
 
-    chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
+    if "updater_ramdisk.img" in args.device:
+        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "updater.img")]
+    else:
+        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
     res = run_cmd(chmod_cmd)
     if res[1] != 0:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",

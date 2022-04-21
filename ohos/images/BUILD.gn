@@ -25,11 +25,15 @@ group("make_images") {
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
     ]
-    if (!is_asan) {
-      deps += [ ":${_platform}_updater_image" ]
-    }
     if (enable_ramdisk) {
       deps += [ ":${_platform}_ramdisk_image" ]
+      if (!is_asan) {
+        deps += [ ":${_platform}_updater_ramdisk_image" ]
+      }
+    } else {
+      if (!is_asan) {
+        deps += [ ":${_platform}_updater_image" ]
+      }
     }
   }
 }
@@ -52,10 +56,14 @@ foreach(_platform, target_platform_list) {
     "system",
     "vendor",
     "userdata",
-    "updater",
   ]
   if (enable_ramdisk) {
-    image_list += [ "ramdisk" ]
+    image_list += [
+      "ramdisk",
+      "updater_ramdisk",
+    ]
+  } else {
+    image_list += [ "updater" ]
   }
   foreach(_image_name, image_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
@@ -67,12 +75,16 @@ foreach(_platform, target_platform_list) {
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
       device_image_config_file =
           "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
-      if (_image_name == "ramdisk") {
+      if (_image_name == "ramdisk" || _image_name == "updater_ramdisk") {
         output_image_file = "$root_build_dir/${_image_name}.img"
       } else {
         output_image_file = "$current_platform_dir/images/${_image_name}.img"
       }
-      image_input_path = "$current_platform_dir/${_image_name}"
+      if (_image_name == "updater_ramdisk") {
+        image_input_path = "$current_platform_dir/updater"
+      } else {
+        image_input_path = "$current_platform_dir/${_image_name}"
+      }
       if (_image_name == "userdata") {
         image_input_path = "$current_platform_dir/data"
       }

@@ -128,6 +128,7 @@ template("ohos_executable") {
                              "symlink_target_name",
                              "output_dir",
                              "install_enable",
+                             "version_script",
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
@@ -180,6 +181,17 @@ template("ohos_executable") {
 
     if (!defined(output_name)) {
       output_name = target_name
+    }
+
+    if (defined(invoker.version_script)) {
+      _version_script = rebase_path(invoker.version_script, root_build_dir)
+      if (!defined(ldflags)) {
+        ldflags = []
+      }
+      ldflags += [
+        "-rdynamic",
+        "-Wl,--version-script=${_version_script}",
+      ]
     }
 
     if (defined(invoker.external_deps)) {
