@@ -175,13 +175,6 @@ config feature$$useriam$$user_idm
         string "feature"
         default ""
         depends on useriam$$user_idm
-config useriam$$auth_executor_mgr
-    bool "auth_executor_mgr"
-    default n
-config feature$$useriam$$auth_executor_mgr
-        string "feature"
-        default ""
-        depends on useriam$$auth_executor_mgr
 config useriam$$useriam_common
     bool "useriam_common"
     default n
