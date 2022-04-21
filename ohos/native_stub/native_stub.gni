@@ -12,9 +12,11 @@
 # limitations under the License.
 
 import("//build/config/python.gni")
+import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
   native_stub = "native-stub"
+  stub_version_script_suffix = ".map.txt"
   native_stub_signature_save_dir = "//interface/native-stub"
 }
 
@@ -23,9 +25,17 @@ stub_signature_out_dir = "$root_out_dir/${native_stub}/signature"
 # Generate native stub library from native stub description file for system components.
 #
 # Variables:
-#  stub_description_file:
-#  min_compact_version: string specifies the minimal compactible version of native stub.
-#    set to major_version in default.
+#  stub_description_file: stub description file, json format with stub function names
+#  install_enable: default is false, if you want install, assign with true
+#
+# Example:
+# ohos_native_stub_library("libtest_stub") {
+#   output_extension = "so"
+#   stub_description_file = "./libtest.stub.json"
+# }
+# It will generate libtest_stub.so with symbols defined in libtest.stub.json.
+# The stub library will not be installed by default.
+#
 #
 template("ohos_native_stub_library") {
   forward_variables_from(invoker, [ "testonly" ])
@@ -87,6 +97,31 @@ template("ohos_native_stub_library") {
 
   _stub_shlib_target = "${target_name}"
 
+  target_label = get_label_info(":${target_name}", "label_with_toolchain")
+  if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+    subsystem_name = invoker.subsystem_name
+    part_name = invoker.part_name
+  } else if (defined(invoker.part_name)) {
+    part_name = invoker.part_name
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+    subsystem_name =
+        exec_script(get_subsystem_script, _arguments, "trim string")
+  } else if (defined(invoker.subsystem_name)) {
+    subsystem_name = invoker.subsystem_name
+    part_name = subsystem_name
+  } else {
+    subsystem_name = "common"
+    part_name = subsystem_name
+  }
+
   shared_library(_stub_shlib_target) {
     forward_variables_from(invoker,
                            [
@@ -101,6 +136,127 @@ template("ohos_native_stub_library") {
     output_dir = target_out_dir
     output_name = _output_name
     output_extension = _output_extension
+
+    install_module_info = {
+      module_def = target_label
+      module_info_file =
+          rebase_path(get_label_info(module_def, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      subsystem_name = subsystem_name
+      part_name = part_name
+      toolchain = current_toolchain
+      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+    }
+    metadata = {
+      install_modules = [ install_module_info ]
+    }
+  }
+
+  ohos_module_name = target_name
+  generate_module_info("${ohos_module_name}_info") {
+    module_name = ohos_module_name
+    module_type = "lib"
+    module_source_dir = target_out_dir
+
+    module_install_name = ohos_module_name
+    if (defined(invoker.output_name)) {
+      module_install_name = invoker.output_name
+    }
+
+    module_install_images = [ "system" ]
+    if (defined(invoker.install_images)) {
+      module_install_images = []
+      module_install_images += invoker.install_images
+    }
+
+    module_output_extension = shlib_extension
+    if (defined(invoker.output_extension)) {
+      module_output_extension = "." + invoker.output_extension
+    }
+
+    install_enable = false
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+
+    if (defined(invoker.module_install_dir)) {
+      module_install_dir = invoker.module_install_dir
+    }
+
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
+    }
+
+    if (defined(invoker.symlink_target_name)) {
+      symlink_target_name = invoker.symlink_target_name
+    }
+
+    if (defined(invoker.output_prefix_override)) {
+      output_prefix_override = invoker.output_prefix_override
+    }
+    notice = "$target_out_dir/$ohos_module_name.notice.txt"
+  }
+}
+
+# Generate native stub library version script from native stub description file for system components.
+#
+# Variables:
+#  stub_description_file: stub description file, json format with stub function names
+#
+# Example:
+# ohos_native_stub_versionscript("libtest_stub_versionscript") {
+#   stub_description_file = "./libtest.stub.json"
+# }
+# It will generate version script with symbols defined in libtest.stub.json.
+# The generated version script location is:
+#    get_label_info(":libtest_stub_versionscript", "target_gen_dir") + "/" +
+#      get_label_info(":libtest_stub_versionscript", "name") + stub_version_script_suffix
+#
+# ohos_executable() or ohos_shared_library() can use version scripit as follow:
+# ohos_shared_library("libtest") {
+#   ...
+#   deps += [ ":libtest_stub_versionscript"]
+#   version_script = get_label_info(":libtest_stub_versionscript", "target_gen_dir") + "/" +
+#         get_label_info(":libtest_stub_versionscript", "name") + stub_version_script_suffix
+#   ...
+# }
+#  In this way, libtest.z.so will only export symbols specified in libtest.stub.json.
+#
+#
+template("ohos_native_stub_versionscript") {
+  assert(defined(invoker.stub_description_file),
+         "stub description file is necessary ")
+
+  _stub_description_file = invoker.stub_description_file
+
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+
+  _output_name = target_name
+  if (defined(invoker.output_name)) {
+    _output_name = invoker.output_name
+  }
+
+  _ndk_version_script_target = target_name
+  _generated_version_script =
+      target_gen_dir + "/$target_name" + stub_version_script_suffix
+  action_with_pydeps(_ndk_version_script_target) {
+    deps = _deps
+    script = "//build/ohos/ndk/generate_version_script.py"
+    depfile = "${target_gen_dir}/${target_name}.d"
+    args = [
+      "--output",
+      rebase_path(_generated_version_script, root_build_dir),
+      "--ndk-description-file",
+      rebase_path(_stub_description_file, root_build_dir),
+      "--shlib-name",
+      _output_name,
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+    ]
+    outputs = [ _generated_version_script ]
   }
 }
 
