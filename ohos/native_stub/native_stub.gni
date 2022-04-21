@@ -128,6 +128,7 @@ template("ohos_native_stub_library") {
                              "cflags",
                              "ldflags",
                              "configs",
+                             "public_configs",
                              "libs",
                              "include_dirs",
                            ])
