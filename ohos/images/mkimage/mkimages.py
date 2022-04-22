@@ -81,8 +81,7 @@ def mk_images(args):
     mkfs_tools, mk_configs, _ = load_config(config_file)
     if "ramdisk.img" == device:
         mk_configs = \
-            " ".join([src_dir, device, "../../build/ohos/images/mkimage/"
-                                       "ramdisk_resource_config.ini"])
+            " ".join([src_dir, device, "%s/../ramdisk_resource_config.ini" % src_dir])
     elif "updater_ramdisk.img" == device:
         mk_configs = \
             " ".join([src_dir, device, "../../build/ohos/images/mkimage/"
