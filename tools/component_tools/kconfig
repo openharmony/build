@@ -631,13 +631,13 @@ config feature$$updater$$updater
         depends on updater$$updater
 endmenu
 menu "developtools"
-config developtools$$hdc_standard
-    bool "hdc_standard"
+config developtools$$hdc
+    bool "hdc"
     default n
-config feature$$developtools$$hdc_standard
+config feature$$developtools$$hdc
         string "feature"
         default ""
-        depends on developtools$$hdc_standard
+        depends on developtools$$hdc
 config developtools$$profiler
     bool "profiler"
     default n
