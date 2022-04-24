@@ -449,7 +449,7 @@
     },
     {
         "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_napi_shared_library",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_shared_library",
         "target_os": [
             "windows",
             "darwin"
@@ -457,7 +457,7 @@
     },
     {
         "install_dir": "previewer/common/bin/module",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
         "target_os": [
             "windows",
             "darwin"
@@ -465,7 +465,7 @@
     },
     {
         "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
             "windows",
             "darwin"
@@ -473,7 +473,7 @@
     },
     {
         "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_resource_dynamic_library_standard",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_resource_dynamic_library_standard",
         "target_os": [
             "windows",
             "darwin"
@@ -481,7 +481,7 @@
     },
     {
         "install_dir": "previewer/common",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
         "target_os": [
             "windows",
             "darwin"
@@ -489,7 +489,7 @@
     },
     {
         "install_dir": "previewer/resources",
-        "module_label": "//foundation/ace/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
         "target_os": [
             "windows"
         ]

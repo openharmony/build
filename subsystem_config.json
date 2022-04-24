@@ -1,7 +1,7 @@
 {
-  "ace": {
-    "path": "foundation/ace",
-    "name": "ace"
+  "arkui": {
+    "path": "foundation/arkui",
+    "name": "arkui"
   },
   "ai": {
     "path": "foundation/ai",
