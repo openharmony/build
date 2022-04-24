@@ -81,6 +81,8 @@ def do_build(args):
         cmd.append('-v')
     if args.keep_ninja_going:
         cmd.append('--keep-ninja-going')
+    if args.fast_rebuild:
+        cmd.append('--fast-rebuild')
     try:
         return check_output(cmd)
     except KeyboardInterrupt:
@@ -105,6 +107,7 @@ def main():
     parser.add_option('--export-para', action='append', default=[])
     parser.add_option('--build-only-gn', action='store_true')
     parser.add_option('--ccache', action='store_true')
+    parser.add_option('--fast-rebuild', action='store_true')
     args, _ = parser.parse_args()
 
     if args.source_root_dir is None:
