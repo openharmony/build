@@ -85,15 +85,7 @@ def build_run_fitimage(args):
                 ["mkimage", '-f', "./ohos_updater.its",
                  os.path.join(root_dir, "images", "updater.img")]
         else:
-            if not os.path.exists("./ohos.its"):
-                print("error there is no configuration file")
-                return -1
-            if not os.path.exists(os.path.join(root_dir, "images", "zImage-dtb")):
-                print("error there is no kernel image")
-                return -1
-            fit_cmd = \
-                ["mkimage", '-f', "./ohos.its",
-                 os.path.join(root_dir, "images", "boot.img")]
+            return 0
 
     res = run_cmd(fit_cmd)
     if res[1] != 0:
@@ -107,7 +99,10 @@ def build_run_cpio(args):
     work_dir = os.getcwd()
     os.chdir(args.src_dir)
 
-    output_path = os.path.join(work_dir, args.device)
+    if args.device == "ramdisk.img":
+        output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
+    else:
+        output_path = os.path.join(work_dir, args.device)
     ramdisk_cmd = ['cpio', '-o', '-H', 'newc', '-O', output_path]
     dir_list = []
     get_dir_list("./", dir_list)
@@ -130,7 +125,7 @@ def build_run_chmod(args):
     if "updater_ramdisk.img" in args.device:
         chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "updater.img")]
     else:
-        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "boot.img")]
+        chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "ramdisk.img")]
     res = run_cmd(chmod_cmd)
     if res[1] != 0:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
