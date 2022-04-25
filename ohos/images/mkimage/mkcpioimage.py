@@ -18,6 +18,7 @@ import shutil
 import sys
 import argparse
 import subprocess
+import filecmp
 
 DTC_419 = "dtc_419_path"
 DTC_510 = "dtc_510_path"
