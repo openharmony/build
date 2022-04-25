@@ -169,7 +169,7 @@ def parse_resource_config(resource_config_file_path):
                 BOOT_TYPE = section_options.get("boot_type", None)
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
-            if os.path.exists(source_path):
+            if source_path != None and os.path.exists(source_path):
                 shutil.copy(source_path, target_path)
             else:
                 if each_section[0] not in [DTC_419, DTC_510, "board"]:
