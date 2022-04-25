@@ -156,8 +156,8 @@ def parse_resource_config(resource_config_file_path):
             if each_section[0] == "DEFAULT":
                 continue
             section_options = dict(ramdisk_config.items(each_section[0]))
-            source_path = section_options.get("source_path", None)
-            target_path = section_options.get("target_path", None)
+            source_path = section_options.get("source_path", "")
+            target_path = section_options.get("target_path", "")
             if each_section[0] in NEED_CLEAR_RESOURCE_SECTION:
                 if each_section[0] == FSTAB_REQUIRED:
                     need_clear_section_target_path_list.append(source_path)
@@ -169,9 +169,10 @@ def parse_resource_config(resource_config_file_path):
                 BOOT_TYPE = section_options.get("boot_type", None)
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
-            if source_path != None and os.path.exists(source_path):
+            if os.path.exists(source_path):
                 shutil.copy(source_path, target_path)
             else:
+                # "board": updater ramdisk has no source_path in board section
                 if each_section[0] not in [DTC_419, DTC_510, "board"]:
                     print("Error: source file does not exist! path: %s" %
                           source_path)
