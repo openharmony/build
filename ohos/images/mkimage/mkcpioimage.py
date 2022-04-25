@@ -172,7 +172,7 @@ def parse_resource_config(resource_config_file_path):
             if os.path.exists(source_path):
                 shutil.copy(source_path, target_path)
             else:
-                if each_section[0] not in [DTC_419, DTC_510]:
+                if each_section[0] not in [DTC_419, DTC_510, "board"]:
                     print("Error: source file does not exist! path: %s" %
                           source_path)
                     sys.exit(1)
