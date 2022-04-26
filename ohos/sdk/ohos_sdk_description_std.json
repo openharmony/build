@@ -10,7 +10,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//developtools/hdc_standard:hdc_std",
+        "module_label": "//developtools/hdc:hdc_std",
         "target_os": [
             "linux",
             "windows",
@@ -24,41 +24,6 @@
             "linux",
             "windows",
             "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc",
-        "target_os": [
-            "linux"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_win",
-        "target_os": [
-            "windows"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_darwin",
-        "target_os": [
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_lib_winapi",
-        "target_os": [
-            "windows"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_lib_winusbapi",
-        "target_os": [
-            "windows"
         ]
     },
     {
