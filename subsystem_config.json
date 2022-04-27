@@ -191,8 +191,12 @@
     "path": "base/customization",
     "name": "customization"
   },
-    "web": {
+  "web": {
     "path": "base/web",
     "name": "web"
+  },
+  "thirdparty": {
+    "path": "third_party",
+    "name": "thirdparty"
   }
 }

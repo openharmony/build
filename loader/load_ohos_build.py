@@ -427,6 +427,9 @@ class LoadBuildConfig(object):
 
     def _merge_build_config(self):
         _build_files = self._build_info.get('build_files')
+        is_thirdparty_subsystem = False
+        if _build_files[0].startswith(self._source_root_dir + 'third_party'):
+            is_thirdparty_subsystem = True
         subsystem_name = None
         parts_info = {}
         parts_path_dict = {}
@@ -437,7 +440,7 @@ class LoadBuildConfig(object):
             else:
                 _parts_config = read_build_file(_build_file)
             _subsystem_name = _parts_config.get('subsystem')
-            if subsystem_name and _subsystem_name != subsystem_name:
+            if not is_thirdparty_subsystem and subsystem_name and _subsystem_name != subsystem_name:
                 raise Exception(
                     "subsystem name config incorrect in '{}'.".format(
                         _build_file))
