@@ -18,6 +18,7 @@ import shutil
 import sys
 import argparse
 import subprocess
+import filecmp
 
 DTC_419 = "dtc_419_path"
 DTC_510 = "dtc_510_path"
@@ -170,7 +171,11 @@ def parse_resource_config(resource_config_file_path):
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
             if os.path.exists(source_path):
-                shutil.copy(source_path, target_path)
+                if os.path.exists(target_path):
+                    if not filecmp.cmp(source_path, target_path):
+                        shutil.copy(source_path, target_path)
+                else:
+                    shutil.copy(source_path, target_path)
             else:
                 # "board": updater ramdisk has no source_path in board section
                 if each_section[0] not in [DTC_419, DTC_510, "board"]:
