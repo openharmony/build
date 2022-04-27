@@ -37,6 +37,9 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
         if sdk_modules_info is not None:
             all_module_info.extend(sdk_modules_info)
 
+    # thirdparty subsystem part module list
+    thirdparty_module_list = []
+
     # Generate a list of modules by part
     modules_info_dict = {}
     modules_def = {}  # remove duplicates
@@ -46,6 +49,9 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
             continue
 
         modules_def[module_def] = ''
+        thirdparty = info.get('subsystem_name')
+        if thirdparty == 'thirdparty':
+            thirdparty_module_list.append(info)
         _module_part_name = info.get('part_name')
         if _module_part_name not in modules_info_dict:
             modules_info_dict[_module_part_name] = []
@@ -65,6 +71,10 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
             part_install_modules.append(install_module)
         else:
             part_no_install_modules.append(install_module)
+
+    # Depended thirdparty modules are installed by default
+    # rather than configured in product config.
+    part_install_modules.extend(thirdparty_module_list)
 
     # write install modules file
     write_json_file(install_modules_file, part_install_modules)
