@@ -348,11 +348,16 @@ config("compiler") {
 
     # Compiler instrumentation can introduce dependencies in DSOs to symbols in
     # the executable they are loaded into, so they are unresolved at link-time.
-    if (!using_sanitizer && !is_safestack) {
+    if (is_ohos || (!using_sanitizer && !is_safestack)) {
       ldflags += [
         "-Wl,-z,defs",
         "-Wl,--as-needed",
       ]
+    }
+
+    # Change default thread stack size to 2MB for asan.
+    if (is_ohos && using_sanitizer) {
+      ldflags += [ "-Wl,-z,stack-size=2097152" ]
     }
   }
 
