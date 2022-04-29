@@ -24,11 +24,11 @@ import optparse
 
 # Any new non-system import must be added to:
 
-# Some clients do not add //build/scripts/util to PYTHONPATH.
-from . import md5_check  # pylint: disable=relative-import
-
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 import gn_helpers
+
+# Some clients do not add //build/scripts/util to PYTHONPATH.
+from . import md5_check  # pylint: disable=relative-import
 
 # Definition copied from pylib/constants/__init__.py to avoid adding
 # a dependency on pylib.
