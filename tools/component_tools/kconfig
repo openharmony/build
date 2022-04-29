@@ -168,13 +168,6 @@ config feature$$security$$dataclassification
         depends on security$$dataclassification
 endmenu
 menu "useriam"
-config useriam$$user_idm
-    bool "user_idm"
-    default n
-config feature$$useriam$$user_idm
-        string "feature"
-        default ""
-        depends on useriam$$user_idm
 config useriam$$pin_auth
     bool "pin_auth"
     default n
