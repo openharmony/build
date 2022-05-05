@@ -645,13 +645,13 @@ config feature$$developtools$$hiperf
         string "feature"
         default ""
         depends on developtools$$hiperf
-config developtools$$bytrace_standard
-    bool "bytrace_standard"
+config developtools$$bytrace
+    bool "bytrace"
     default n
-config feature$$developtools$$bytrace_standard
+config feature$$developtools$$bytrace
         string "feature"
         default ""
-        depends on developtools$$bytrace_standard
+        depends on developtools$$bytrace
 config developtools$$packing_tool
     bool "packing_tool"
     default n
