@@ -64,13 +64,13 @@ endmenu
 menu "ai"
 endmenu
 menu "account"
-config account$$os_account_standard
-    bool "os_account_standard"
+config account$$os_account
+    bool "os_account"
     default n
-config feature$$account$$os_account_standard
+config feature$$account$$os_account
         string "feature"
         default ""
-        depends on account$$os_account_standard
+        depends on account$$os_account
 endmenu
 menu "distributeddatamgr"
 config distributeddatamgr$$distributeddataobject
