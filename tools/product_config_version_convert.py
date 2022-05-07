@@ -1,8 +1,17 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright 2022 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import argparse
 import os
@@ -10,7 +19,7 @@ import sys
 import json
 
 
-def Merge_files(args):
+def merge_files(args):
     products_dir = "../../productdefine/common/products"
     device_dir = "../../productdefine/common/device"
     products_path = r'%s/%s' % (products_dir,args )
@@ -19,7 +28,6 @@ def Merge_files(args):
         name = data["product_name"]
         company = data["product_company"]
         device = data["product_device"]
-    f.close()
     device_path = r'%s/%s' % (device_dir,device+'.json' )
     path_str = "../../vendor/" + company + "/" + name
     path = os.path.join(path_str)
@@ -28,17 +36,19 @@ def Merge_files(args):
         pass
     else:
         os.mkdir(path)
-    device_read = open(device_path,"r",encoding='utf-8')
-    products_read = open(products_path,"r",encoding='utf-8')
-    data_1 = json.load(device_read)
-    data_2 = json.load(products_read)
-    data_3 = Merge(data_1 , data_2)
-    new_json = json.dumps(data_3, indent=4)
-    new_write = open(new_file_name,"w")
-    new_write.write(new_json)
-    device_read.close()
-    products_read.close()
-    new_write.close()
+    try:
+        device_read = open(device_path, "r", encoding='utf-8')
+        products_read = open(products_path, "r", encoding='utf-8')
+        data_device_read = json.load(device_read)
+        data_products_read = json.load(products_read)
+        data_all = merge(data_device_read , data_products_read)
+        new_json = json.dumps(data_all, indent=4)
+        new_write = open(new_file_name,"w")
+        new_write.write(new_json)
+    finally:
+        device_read.close()
+        products_read.close()
+        new_write.close()
     readjson(new_file_name,device)
 
 
@@ -79,14 +89,13 @@ def readjson(path,device):
         f.seek(0)
         f.write(json_data)
         f.truncate()
-    f.close()
 
-def Merge(dict1, dict2): 
+def merge(dict1, dict2): 
     res = {**dict1, **dict2} 
     return res 
 
 def main(args):
-    Merge_files(args)
+    merge_files(args)
 
 if __name__ == '__main__':
     main(sys.argv[1])
