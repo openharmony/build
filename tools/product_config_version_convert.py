@@ -60,7 +60,7 @@ def readjson(path,device):
         parts = data['parts']
         subsystem_list = list() 
         for key in parts: 
-            substr=str(key).split(":")
+            substr = str(key).split(":")
             if substr[0] not in subsystem_list:
                 subsystem_list.append(substr[0])
                 components_list = list()
@@ -73,7 +73,7 @@ def readjson(path,device):
                     if substr[0] == str(key_sub).split(":")[0]:
                         components_list.append({"component":str(key_sub).split(":")[1],"features":features})
                 subsystems_list.append({"subsystem":substr[0],"components":components_list})
-        config_dic["subsystems"]=subsystems_list
+        config_dic["subsystems"] = subsystems_list
         del data['parts']
         data.update({"version": "3.0"})
         data.update({"board": device})
