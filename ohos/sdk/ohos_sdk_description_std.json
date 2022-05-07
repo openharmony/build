@@ -66,6 +66,15 @@
         ]
     },
     {
+        "install_dir": "toolchains",
+        "module_label": "//developtools/global_resource_tool:restool",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/api",
         "module_label": "//interface/sdk-js:ohos_declaration_common",
         "target_os": [
