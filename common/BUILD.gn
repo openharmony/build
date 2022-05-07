@@ -27,7 +27,6 @@ group("common_packages") {
     "//third_party/giflib:libgif",
     "//third_party/libpng:libpng",
     "//third_party/sqlite:sqlite",
-    "//third_party/zlib:libz",
   ]
 
   deps += [ "musl:musl_install" ]
