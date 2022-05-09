@@ -38,7 +38,4 @@ group("common_packages") {
       "asan:libclang_rt.asan.so",
     ]
   }
-
-  # global subsystem's configuration
-  deps += [ "//third_party/protobuf/src:protobuf_standard" ]
 }
