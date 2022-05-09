@@ -24,8 +24,6 @@ group("common_packages") {
     assert(common_feature_verify)
   }
   deps = [
-    "//third_party/giflib:libgif",
-    "//third_party/libpng:libpng",
     "//third_party/sqlite:sqlite",
     "//third_party/zlib:libz",
   ]
