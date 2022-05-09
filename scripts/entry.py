@@ -84,7 +84,7 @@ def do_build(args):
         cmd.append('--keep-ninja-going')
     if args.fast_rebuild:
         cmd.append('--fast-rebuild')
-    if args.log_level=='debug':
+    if args.log_level == 'debug':
         cmd.append('--log-level=debug')
     try:
         return check_output(cmd)
