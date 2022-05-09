@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from email.policy import default
 import os
 import sys
 import optparse
@@ -83,6 +84,8 @@ def do_build(args):
         cmd.append('--keep-ninja-going')
     if args.fast_rebuild:
         cmd.append('--fast-rebuild')
+    if args.log_level=='debug':
+        cmd.append('--log-level=debug')
     try:
         return check_output(cmd)
     except KeyboardInterrupt:
@@ -108,6 +111,7 @@ def main():
     parser.add_option('--build-only-gn', action='store_true')
     parser.add_option('--ccache', action='store_true')
     parser.add_option('--fast-rebuild', action='store_true')
+    parser.add_option('--log-level', default='info')
     args, _ = parser.parse_args()
 
     if args.source_root_dir is None:
