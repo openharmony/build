@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from email.policy import default
+
 import os
 import sys
 import optparse
@@ -86,6 +86,10 @@ def do_build(args):
         cmd.append('--fast-rebuild')
     if args.log_level == 'debug':
         cmd.append('--log-level=debug')
+    if args.device_type:
+        cmd.append('--device-type=' + args.device_type)
+    if args.build_variant:
+        cmd.append('--build-variant=' + args.build_variant)
     try:
         return check_output(cmd)
     except KeyboardInterrupt:
@@ -112,6 +116,8 @@ def main():
     parser.add_option('--ccache', action='store_true')
     parser.add_option('--fast-rebuild', action='store_true')
     parser.add_option('--log-level', default='info')
+    parser.add_option('--device-type', default='default')
+    parser.add_option('--build-variant', default='user')
     args, _ = parser.parse_args()
 
     if args.source_root_dir is None:
