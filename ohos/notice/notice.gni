@@ -35,74 +35,80 @@ declare_args() {
 #
 template("collect_notice") {
   assert(defined(invoker.module_source_dir), "module_source_dir is required.")
-  action_with_pydeps(target_name) {
-    forward_variables_from(invoker,
-                           [
-                             "module_name",
-                             "module_source_dir",
-                             "deps",
-                             "license_file",
-                             "testonly",
-                             "module_type",
-                             "outputs",
+  if (!enable_notice_collection) {
+    group(target_name) {
+      not_needed(invoker, "*")
+    }
+  } else {
+    action_with_pydeps(target_name) {
+      forward_variables_from(invoker,
+                             [
+                               "module_name",
+                               "module_source_dir",
+                               "deps",
+                               "license_file",
+                               "testonly",
+                               "module_type",
+                               "outputs",
 
-                             # Some license file are generated in gn gen.
-                             # Such notices should not be used as sources.
-                             "license_as_sources",
-                           ])
-    script = rebase_path("//build/ohos/notice/collect_module_notice_file.py")
-    depfile = "${target_gen_dir}/$target_name.d"
+                               # Some license file are generated in gn gen.
+                               # Such notices should not be used as sources.
+                               "license_as_sources",
+                             ])
+      script = rebase_path("//build/ohos/notice/collect_module_notice_file.py")
+      depfile = "${target_gen_dir}/$target_name.d"
 
-    if (!defined(outputs)) {
-      outputs = []
-      if (defined(module_type) &&
-          (module_type == "static_library" || module_type == "source_set")) {
-        _current_toolchain = get_label_info(current_toolchain, "name")
+      if (!defined(outputs)) {
+        outputs = []
+        if (defined(module_type) &&
+            (module_type == "static_library" || module_type == "source_set")) {
+          _current_toolchain = get_label_info(current_toolchain, "name")
 
-        # Although static library and source set are not installed, their
-        # notice files still needs to be collected.
-        # We may collect a little more notice files than needed.
-        outputs += [ "${static_libraries_notice_dir}/$_current_toolchain/$module_name.a.txt" ]
-      } else {
-        if (defined(module_type) && module_type == "java_library" &&
-            defined(license_file) &&
-            get_path_info(license_file, "extension") == "zip") {
-          outputs = [ "$target_out_dir/$module_name.notice.zip" ]
+          # Although static library and source set are not installed, their
+          # notice files still needs to be collected.
+          # We may collect a little more notice files than needed.
+          outputs += [ "${static_libraries_notice_dir}/$_current_toolchain/$module_name.a.txt" ]
         } else {
-          outputs += [ "$target_out_dir/$module_name.notice.txt" ]
+          if (defined(module_type) && module_type == "java_library" &&
+              defined(license_file) &&
+              get_path_info(license_file, "extension") == "zip") {
+            outputs = [ "$target_out_dir/$module_name.notice.zip" ]
+          } else {
+            outputs += [ "$target_out_dir/$module_name.notice.txt" ]
+          }
         }
       }
-    }
 
-    args = [
-      "--module-source-dir",
-      rebase_path(module_source_dir, root_build_dir),
-      "--depfile",
-      rebase_path(depfile, root_build_dir),
+      args = [
+        "--module-source-dir",
+        rebase_path(module_source_dir, root_build_dir),
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
 
-      # use default Lisense for modules couldn't find lincese
-      "--default-license",
-      rebase_path("//build/ohos/notice/license", root_build_dir),
-    ]
-    foreach(o, outputs) {
-      args += [
-        "--output",
-        rebase_path(o, root_build_dir),
+        # use default Lisense for modules couldn't find lincese
+        "--default-license",
+        rebase_path("//build/ohos/notice/license", root_build_dir),
       ]
-    }
+      foreach(o, outputs) {
+        args += [
+          "--output",
+          rebase_path(o, root_build_dir),
+        ]
+      }
 
-    if (defined(license_file)) {
-      _license_as_sources = true
-      if (defined(license_as_sources)) {
-        _license_as_sources = license_as_sources
+      if (defined(license_file)) {
+        _license_as_sources = true
+        if (defined(license_as_sources)) {
+          _license_as_sources = license_as_sources
+        }
+        if (_license_as_sources) {
+          inputs = [ license_file ]
+        }
+        args += [
+          "--license-file",
+          rebase_path(license_file, root_build_dir),
+        ]
       }
-      if (_license_as_sources) {
-        inputs = [ license_file ]
-      }
-      args += [
-        "--license-file",
-        rebase_path(license_file, root_build_dir),
-      ]
     }
   }
 }
