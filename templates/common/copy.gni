@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
+import("//build/config/python.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/templates/metadata/module_info.gni")
 
@@ -83,36 +85,76 @@ template("ohos_copy") {
     _deps += [ ":$_notice_target" ]
   }
 
-  copy(target_name) {
-    forward_variables_from(invoker,
-                           [
-                             "testonly",
-                             "visibility",
-                             "public_configs",
-                             "sources",
-                             "outputs",
-                           ])
-    deps = _deps
+  if (defined(invoker.enable_strip) && invoker.enable_strip) {
+    action_with_pydeps(target_name) {
+      forward_variables_from(invoker,
+                             [
+                               "testonly",
+                               "visibility",
+                               "public_configs",
+                               "sources",
+                               "outputs",
+                             ])
+      deps = _deps
+      script = "//build/templates/common/delete_symbol.py"
+      args = [
+        "--strip",
+        rebase_path("${clang_base_path}/bin/llvm-strip", root_out_dir),
+        "--input",
+        rebase_path(sources[0], root_out_dir),
+        "--output",
+        rebase_path(outputs[0], root_out_dir),
+      ]
 
-    if (!_bypass_module_info_generation) {
-      _install_module_info = {
-        module_def = _target_label
-        module_info_file =
-            rebase_path(get_label_info(_target_label, "target_out_dir"),
-                        root_build_dir) +
-            "/${_main_target_name}_module_info.json"
-        subsystem_name = _subsystem_name
-        part_name = _part_name
-        toolchain = current_toolchain
-        toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+      if (!_bypass_module_info_generation) {
+        _install_module_info = {
+          module_def = _target_label
+          module_info_file =
+              rebase_path(get_label_info(_target_label, "target_out_dir"),
+                          root_build_dir) +
+              "/${_main_target_name}_module_info.json"
+          subsystem_name = _subsystem_name
+          part_name = _part_name
+          toolchain = current_toolchain
+          toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+        }
+
+        metadata = {
+          install_modules = [ _install_module_info ]
+        }
       }
+    }
+  } else {
+    copy(target_name) {
+      forward_variables_from(invoker,
+                             [
+                               "testonly",
+                               "visibility",
+                               "public_configs",
+                               "sources",
+                               "outputs",
+                             ])
+      deps = _deps
 
-      metadata = {
-        install_modules = [ _install_module_info ]
+      if (!_bypass_module_info_generation) {
+        _install_module_info = {
+          module_def = _target_label
+          module_info_file =
+              rebase_path(get_label_info(_target_label, "target_out_dir"),
+                          root_build_dir) +
+              "/${_main_target_name}_module_info.json"
+          subsystem_name = _subsystem_name
+          part_name = _part_name
+          toolchain = current_toolchain
+          toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+        }
+
+        metadata = {
+          install_modules = [ _install_module_info ]
+        }
       }
     }
   }
-
   if (!_bypass_module_info_generation) {
     generate_module_info("${_main_target_name}_info") {
       forward_variables_from(invoker,

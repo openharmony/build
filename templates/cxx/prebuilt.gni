@@ -16,6 +16,7 @@ import("//build/templates/common/copy.gni")
 template("ohos_prebuilt_executable") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
+  _copy_output = "${target_out_dir}/${invoker.source}"
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
@@ -39,10 +40,14 @@ template("ohos_prebuilt_executable") {
                            ])
     set_sources_assignment_filter([])
     sources = [ invoker.source ]
-    outputs = [ "${target_out_dir}/${invoker.source}" ]
+    outputs = [ _copy_output ]
     module_type = "bin"
     prebuilt = true
     install_enable = false
+    enable_strip = false
+    if (defined(invoker.enable_strip) && invoker.enable_strip) {
+      enable_strip = true
+    }
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
     }
@@ -54,7 +59,7 @@ template("ohos_prebuilt_shared_library") {
 
   _copy_output = "${target_out_dir}/${invoker.source}"
   config("${target_name}__config") {
-    libs = [ _copy_output ]
+    libs = [ "${target_out_dir}/${invoker.source}" ]
   }
   ohos_copy(target_name) {
     forward_variables_from(invoker,
@@ -83,6 +88,10 @@ template("ohos_prebuilt_shared_library") {
     module_type = "lib"
     prebuilt = true
     install_enable = true
+    enable_strip = false
+    if (defined(invoker.enable_strip) && invoker.enable_strip) {
+      enable_strip = true
+    }
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
     }
