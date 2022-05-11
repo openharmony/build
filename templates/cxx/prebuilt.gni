@@ -59,7 +59,7 @@ template("ohos_prebuilt_shared_library") {
 
   _copy_output = "${target_out_dir}/${invoker.source}"
   config("${target_name}__config") {
-    libs = [ "${target_out_dir}/${invoker.source}" ]
+    libs = [ _copy_output ]
   }
   ohos_copy(target_name) {
     forward_variables_from(invoker,
