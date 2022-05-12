@@ -163,7 +163,6 @@ prebuilts/build-tools/common,${tool_repo}/openharmony/compiler/restool/2.007/res
 prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
-prebuilts/python,${tool_repo}/openharmony/compiler/python/3.8.5/${host_platform}/python-${host_platform}-x86-3.8.5.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/clang-480513-${host_platform}-x86_64.tar.bz2
 prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220425.tar.gz
 """
@@ -179,11 +178,13 @@ prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/10.0
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
 prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip
 prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz
+prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz
 """
 
 darwin_copy_config="""
 prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.1.5.4/previewer-3.1.5.4.mac.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
+prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
