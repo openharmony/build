@@ -39,7 +39,7 @@ group("make_images") {
 }
 
 build_image_tools_path = [
-  "//out/${device_name}/clang_x64/distributeddatamgr/e2fsprogs",
+  "//out/${device_name}/clang_x64/distributeddatamgr/distributedfilejs",
   "//out/${device_name}/clang_x64/filemanagement/storage_service",
   "//third_party/e2fsprogs/prebuilt/host/bin",
   "//build/ohos/images/mkimage",
