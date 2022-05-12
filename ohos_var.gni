@@ -129,6 +129,10 @@ declare_args() {
   enforce_selinux = false
 }
 
+declare_args() {
+  enable_notice_collection = true
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
