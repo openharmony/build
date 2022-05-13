@@ -90,6 +90,7 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
 }
 
 ohos_prebuilt_shared_library("musl-libcxx.so") {
+  enable_strip = true
   if (target_cpu == "arm") {
     source = "${clang_base_path}/lib/arm-linux-ohos/c++/libc++.so"
   } else if (target_cpu == "arm64") {
