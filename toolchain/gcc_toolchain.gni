@@ -31,6 +31,10 @@ declare_args() {
        (!strip_debug_info && symbol_level > 0 && !is_component_build))
 }
 
+declare_args() {
+  share_ccache = ""
+}
+
 # When the arg is set via args.gn, it applies to all toolchains. In order to not
 # hit the assert in grit_rule.gni, explicitly disable for host toolchains.
 if (is_linux && target_os == "ohos") {
@@ -161,7 +165,12 @@ template("gcc_toolchain") {
       compiler_prefix = "${analyzer_wrapper} "
       asm = invoker.cc
     } else {
-      compiler_prefix = "${toolchain_cc_wrapper} "
+      if (share_ccache != "") {
+        compiler_prefix = "CCACHE_DIR=" + share_ccache +
+                          " CCACHE_NOHASHDIR=1 ${toolchain_cc_wrapper} "
+      } else {
+        compiler_prefix = "${toolchain_cc_wrapper} "
+      }
     }
 
     cc = compiler_prefix + invoker.cc
