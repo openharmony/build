@@ -38,13 +38,14 @@ def _prepare_root(system_path, target_cpu):
     os.makedirs(root_dir, exist_ok=True)
     _dir_list = [
         'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data',
-        'chipset', 'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod'
+        'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod'
     ]
     for _dir_name in _dir_list:
         os.makedirs(os.path.join(root_dir, _dir_name), exist_ok=True)
     os.symlink('/system/bin', os.path.join(root_dir, 'bin'))
     os.symlink('/system/bin/init', os.path.join(root_dir, 'init'))
     os.symlink('/system/etc', os.path.join(root_dir, 'etc'))
+    os.symlink('/vendor', os.path.join(root_dir, 'chipset'))
     if target_cpu == 'arm64':
         os.symlink('/system/lib64', os.path.join(root_dir, 'lib64'))
     os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
