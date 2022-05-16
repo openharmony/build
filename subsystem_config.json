@@ -35,6 +35,10 @@
     "path": "utils",
     "name": "utils"
   },
+  "bundlemanager": {
+    "path": "foundation/bundlemanager",
+    "name": "bundlemanager"
+  },
   "appexecfwk": {
     "path": "foundation/appexecfwk",
     "name": "appexecfwk"
