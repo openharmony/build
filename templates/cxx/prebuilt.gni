@@ -161,7 +161,11 @@ template("ohos_prebuilt_etc") {
                            ])
     set_sources_assignment_filter([])
     sources = [ invoker.source ]
-    outputs = [ "${target_out_dir}/${invoker.source}" ]
+    if (defined(invoker.output)) {
+      outputs = [ "${target_out_dir}/${invoker.output}" ]
+    } else {
+      outputs = [ "${target_out_dir}/${invoker.source}" ]
+    }
     module_type = "etc"
     prebuilt = true
     install_enable = true
