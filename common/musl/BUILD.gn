@@ -21,7 +21,6 @@ group("musl_install") {
     ":musl-libc.so",
     ":musl-libcxx.so",
     ":musl_ld_path_etc_cfg",
-    "updater:updater_ld-musl-arm.so.1",
     "//third_party/musl:musl_libs",
   ]
 }
@@ -48,6 +47,7 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
   install_enable = true
   install_images = [
     "system",
+    "updater",
     "ramdisk",
   ]
   part_name = "common"
@@ -80,7 +80,7 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
     source = "ld-musl-aarch64.path"
   }
   if (is_asan) {
-    source = string_replace(source, ".path", "-asan.path")
+    output = string_replace(source, ".path", "-asan.path")
   }
   install_images = [
     "system",
