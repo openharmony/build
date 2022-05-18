@@ -69,13 +69,20 @@ case $(uname -s) in
         exit $RET
 esac
 
-export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:$PATH
 # set python3
-PYTHON3=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.9.2/bin/python3
+PYTHON3_DIR=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.9.2/
+PYTHON3=${PYTHON3_DIR}/bin/python3
+PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
   echo -e "\033[33m Please execute the build/prebuilts_download.sh \033[0m"
   exit 1
+else
+  if [[ ! -f "${PYTHON}" ]]; then
+    ln -s "${PYTHON3}" "${PYTHON}"
+  fi
 fi
+
+export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
 ${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
 
