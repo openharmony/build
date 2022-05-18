@@ -175,8 +175,8 @@ template("ohos_copy") {
       }
 
       if (_is_prebuilt) {
-        _sources = invoker.sources
-        module_source = _sources[0]
+        _outputs = invoker.outputs
+        module_source = string_replace(_outputs[0], "${target_out_dir}/", "", 1)
       }
       prebuilt = _is_prebuilt
 
