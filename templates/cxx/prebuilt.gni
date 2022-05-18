@@ -16,7 +16,11 @@ import("//build/templates/common/copy.gni")
 template("ohos_prebuilt_executable") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
-  _copy_output = "${target_out_dir}/${invoker.source}"
+  if (defined(invoker.output)) {
+    _copy_output = "${target_out_dir}/${invoker.output}"
+  } else {
+    _copy_output = "${target_out_dir}/${invoker.source}"
+  }
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
@@ -57,7 +61,11 @@ template("ohos_prebuilt_executable") {
 template("ohos_prebuilt_shared_library") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
-  _copy_output = "${target_out_dir}/${invoker.source}"
+  if (defined(invoker.output)) {
+    _copy_output = "${target_out_dir}/${invoker.output}"
+  } else {
+    _copy_output = "${target_out_dir}/${invoker.source}"
+  }
   config("${target_name}__config") {
     libs = [ _copy_output ]
   }
@@ -105,7 +113,11 @@ template("ohos_prebuilt_shared_library") {
 template("ohos_prebuilt_static_library") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
-  _copy_output = "${target_out_dir}/${invoker.source}"
+  if (defined(invoker.output)) {
+    _copy_output = "${target_out_dir}/${invoker.output}"
+  } else {
+    _copy_output = "${target_out_dir}/${invoker.source}"
+  }
   config("${target_name}__config") {
     libs = [ _copy_output ]
   }
@@ -138,6 +150,11 @@ template("ohos_prebuilt_static_library") {
 template("ohos_prebuilt_etc") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
+  if (defined(invoker.output)) {
+    _copy_output = "${target_out_dir}/${invoker.output}"
+  } else {
+    _copy_output = "${target_out_dir}/${invoker.source}"
+  }
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
@@ -161,11 +178,7 @@ template("ohos_prebuilt_etc") {
                            ])
     set_sources_assignment_filter([])
     sources = [ invoker.source ]
-    if (defined(invoker.output)) {
-      outputs = [ "${target_out_dir}/${invoker.output}" ]
-    } else {
-      outputs = [ "${target_out_dir}/${invoker.source}" ]
-    }
+    outputs = [ _copy_output ]
     module_type = "etc"
     prebuilt = true
     install_enable = true
