@@ -26,14 +26,12 @@ group("make_images") {
       ":${_platform}_vendor_image",
     ]
     if (enable_ramdisk) {
-      deps += [ ":${_platform}_ramdisk_image" ]
-      if (!is_asan) {
-        deps += [ ":${_platform}_updater_ramdisk_image" ]
-      }
+      deps += [
+        ":${_platform}_ramdisk_image",
+        ":${_platform}_updater_ramdisk_image",
+      ]
     } else {
-      if (!is_asan) {
-        deps += [ ":${_platform}_updater_image" ]
-      }
+      deps += [ ":${_platform}_updater_image" ]
     }
   }
 }
