@@ -22,7 +22,7 @@ command -v ninja &>/dev/null || { echo >&2 "ninja command not found, please inst
 set -e
 
 # build both asan and nonasan images
-cd ${TOPDIR}
+cd "${TOPDIR}"
 ./build.sh "$@" --gn-args is_asan=true
 mv out out.a
 ./build.sh "$@" --gn-args is_asan=false
@@ -105,15 +105,15 @@ make_mixed_asan_img() {
             echo "$f is found in /system/etc/init/"
             sed -i 's,/system/bin/,/data/bin/,g' system/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' system/etc/init/$f); do
-                sed -i 's,/system/lib/,/data/lib/,g' ./$xml
+                sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
             done
         elif [ -f vendor/etc/init/$f ]; then
             echo "$f is found in /vendor/etc/init/"
             sed -i 's,/vendor/bin/,/data/bin/,g' vendor/etc/init/$f
             sed -i 's,/system/bin/,/data/bin/,g' vendor/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' vendor/etc/init/$f); do
-                sed -i 's,/vendor/lib/,/data/lib/,g' ./$xml
-                sed -i 's,/system/lib/,/data/lib/,g' ./$xml
+                sed -i 's,/vendor/\(lib[^/]*\)/,/data/\1/,g' ./$xml
+                sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
             done
             make_vendor=true
         else
@@ -147,8 +147,8 @@ remount() {
 EOF
 }
 
-cp -a "$asan_dir"/vendor/{lib,bin} data/
-cp -a "$asan_dir"/system/{lib,bin} data/
+cp -a "$asan_dir"/vendor/{lib*,bin} data/
+cp -a "$asan_dir"/system/{lib*,bin} data/
 add_mkshrc
 sed -i.bak 's,shutil.rmtree(userdata_path),return,g' "${TOPDIR}"/build/ohos/images/build_image.py
 sed -i.bak '$adata/bin/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
