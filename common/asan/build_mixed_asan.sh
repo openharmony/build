@@ -151,7 +151,9 @@ cp -a "$asan_dir"/vendor/{lib,bin} data/
 cp -a "$asan_dir"/system/{lib,bin} data/
 add_mkshrc
 sed -i.bak 's,shutil.rmtree(userdata_path),return,g' "${TOPDIR}"/build/ohos/images/build_image.py
+sed -i.bak '$adata/bin/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
 make_userdata_img
+mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
 mv "${TOPDIR}"/build/ohos/images/build_image.py.bak "${TOPDIR}"/build/ohos/images/build_image.py
 
 # backup images
