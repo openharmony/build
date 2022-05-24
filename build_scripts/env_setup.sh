@@ -7,7 +7,7 @@ sed -i "s@&& @@g" ./Dockerfile
 sed -i "s:\t::g" ./Dockerfile
 sed -i "s:\\\::g" ./Dockerfile
 mv Dockerfile rundocker.sh
-chmod 777 rundocker.sh
+chmod a+x rundocker.sh
 ./rundocker.sh
 apt-get install unzip
 apt-get install flex bison
