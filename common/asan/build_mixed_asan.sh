@@ -104,6 +104,7 @@ make_mixed_asan_img() {
         if [ -f system/etc/init/$f ]; then
             echo "$f is found in /system/etc/init/"
             sed -i 's,/system/bin/,/data/bin/,g' system/etc/init/$f
+            sed -i 's/"critical"/"critical.asan"/g' system/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' system/etc/init/$f); do
                 sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
             done
@@ -111,6 +112,7 @@ make_mixed_asan_img() {
             echo "$f is found in /vendor/etc/init/"
             sed -i 's,/vendor/bin/,/data/bin/,g' vendor/etc/init/$f
             sed -i 's,/system/bin/,/data/bin/,g' vendor/etc/init/$f
+            sed -i 's/"critical"/"critical.asan"/g' vendor/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' vendor/etc/init/$f); do
                 sed -i 's,/vendor/\(lib[^/]*\)/,/data/\1/,g' ./$xml
                 sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
@@ -147,11 +149,21 @@ remount() {
 EOF
 }
 
+# $1   file that need to be patched
+# $2   file offset
+# $3   instruction count, 4 bytes per instruction on arm architecture
+patch_file_nop() {
+    while true; do echo -e -n "\x1F\x20\x03\xD5"; done | dd conv=notrunc bs=1 of=$1 seek=$2 count=$((4*$3))
+}
+
 cp -a "$asan_dir"/vendor/{lib*,bin} data/
 cp -a "$asan_dir"/system/{lib*,bin} data/
 add_mkshrc
 sed -i.bak 's,shutil.rmtree(userdata_path),return,g' "${TOPDIR}"/build/ohos/images/build_image.py
 sed -i.bak '$adata/bin/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
+if [ -f data/lib64/libclang_rt.asan.so -a "$(md5sum data/lib64/libclang_rt.asan.so|awk '{print $1}')" = "e4ade6eb02f6bbbd7f7faebcda3f0a26" ] ; then
+    patch_file_nop data/lib64/libclang_rt.asan.so 356872 17 # patch function 'GetThreadStackAndTls'
+fi
 make_userdata_img
 mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
 mv "${TOPDIR}"/build/ohos/images/build_image.py.bak "${TOPDIR}"/build/ohos/images/build_image.py
