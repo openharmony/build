@@ -13,25 +13,58 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cp ../../docs/docker/Dockerfile ./
-sed -i "s@FROM ubuntu:18.04@@g" ./Dockerfile
-sed -i "s@WORKDIR /home/openharmony@@g" ./Dockerfile
-sed -i "s@RUN @@g" ./Dockerfile
-sed -i "s@&& @@g" ./Dockerfile
-sed -i "s:\t::g" ./Dockerfile
-sed -i "s:\\\::g" ./Dockerfile
-mv Dockerfile rundocker.sh
-chmod a+x rundocker.sh
-./rundocker.sh
-apt-get install unzip
-apt-get install flex bison
-apt-get install zip
-apt-get install ruby
-apt-get install openssl libssl-dev
-apt-get install openjdk-8-jre-headless
-apt-get install genext2fs
-apt-get install u-boot-tools -y
-apt-get install mtools
+cp ./docs/docker/Dockerfile ./build/build_scripts/
+
+sed -i "s@FROM ubuntu:18.04@@g" ./build/build_scripts/Dockerfile
+sed -i "s@WORKDIR /home/openharmony@@g" ./build/build_scripts/Dockerfile
+sed -i "s@ENV LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8@@g" ./build/build_scripts/Dockerfile
+
+sed -i "s@RUN @@g" ./build/build_scripts/Dockerfile
+sed -i "s@&& @@g" ./build/build_scripts/Dockerfile
+
+sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
+sed -i "s@\\\@@g" ./build/build_scripts/Dockerfile
+
+
+sed -i 's@ruby\S*\s@ruby @' ./build/build_scripts/Dockerfile
+sed -i "s@python3.8-distutils@python3-distutils@g" ./build/build_scripts/Dockerfile
+sed -i "s@git-core@git@g" ./build/build_scripts/Dockerfile
+sed -i "s@zlib*@zlib@g" ./build/build_scripts/Dockerfile
+sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
+sed -i '/pip3 install/i python3 -m pip install --user ohos-build' ./build/build_scripts/Dockerfile
+sed -i '/pip3 install six/i pip3 install testresource' ./build/build_scripts/Dockerfile
+sed -i 's@/root/.bashrc@/home/'$USER'/.bashrc@g' ./build/build_scripts/Dockerfile
+
+result1=$(echo $SHELL | grep "bash")
+result2=$(echo $SHELL | grep "zsh")
+
+if [[ "$result1" != "" ]]
+then
+    sed -i "s@/root/.bashrc@~/.bashrc@g" ./build/build_scripts/Dockerfile 
+elif [ [$result2 != ""] ]
+then
+    sed -i "s@/root/.bashrc@~/.zshrc@g" ./build/build_scripts/Dockerfile
+else
+    echo "Shell is not default, please configure the PATH variable manually"
+fi
+
+
+mv ./build/build_scripts/Dockerfile ./build/build_scripts/rundocker.sh
+chmod +x ./build/build_scripts/rundocker.sh
+sudo ./build/build_scripts/rundocker.sh
+# rm ./build/build_scripts/rundocker.sh
+
+if [[ "$result1" != "" ]]
+then
+    source ~/.bashrc
+    
+elif [[$result2 != ""]]
+then
+    source ~/.zshrc
+else
+    echo "Shell is not default, please configure the PATH variable manually"
+fi
+
 
 
 
