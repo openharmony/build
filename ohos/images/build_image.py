@@ -61,6 +61,7 @@ def _prepare_updater(updater_path):
     os.symlink('bin/init', os.path.join(updater_path, 'init'))
     os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
     os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
+    os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
 
 def _prepare_ramdisk(ramdisk_path):
