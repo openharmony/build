@@ -172,7 +172,7 @@ prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/windows/cmake-win
 prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
 prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
 prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.1.5.6/previewer-3.1.5.6.win.tar.gz
+prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/windows/clang-480513-windows-x86_64.tar.bz2
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/windows/libcxx-ndk-480513-windows-x86_64.tar.bz2
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
@@ -182,7 +182,7 @@ prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}
 """
 
 darwin_copy_config="""
-prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.1.5.6/previewer-3.1.5.6.mac.tar.gz
+prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
 prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz
 """
