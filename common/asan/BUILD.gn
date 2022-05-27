@@ -22,6 +22,11 @@ ohos_prebuilt_shared_library("libclang_rt.asan.so") {
   } else {
     source = ""
   }
+  install_images = [
+    "system",
+    "ramdisk",
+    "updater",
+  ]
   part_name = "common"
 }
 
