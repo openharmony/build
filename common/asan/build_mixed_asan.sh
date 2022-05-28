@@ -23,8 +23,17 @@ set -e
 
 # build both asan and nonasan images
 cd "${TOPDIR}"
+if [ -d out.a ]; then
+    if [ -d out ]; then
+        mv out out.n
+    fi
+    mv out.a out
+fi
 ./build.sh "$@" --gn-args is_asan=true
 mv out out.a
+if [ -d out.n ]; then
+    mv out.n out
+fi
 ./build.sh "$@" --gn-args is_asan=false
 
 
