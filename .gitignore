@@ -3,4 +3,4 @@
 .idea/
 lite/
 .vscode/
-build_scripts/
+build_scripts/rundocker.sh

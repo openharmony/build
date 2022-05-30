@@ -32,18 +32,15 @@ sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
 sed -i '/pip3 install/i python3 -m pip install --user ohos-build' ./build/build_scripts/Dockerfile
 sed -i '/pip3 install six/i pip3 install testresource' ./build/build_scripts/Dockerfile
 
-userhome=~
-sed -i 's@/root/.bashrc@'$userhome'/.bashrc@g' ./build/build_scripts/Dockerfile
-
 result1=$(echo $SHELL | grep "bash")
 result2=$(echo $SHELL | grep "zsh")
-
+userhome=~
 if [[ "$result1" != "" ]]
 then
-    sed -i "s@/root/.bashrc@~/.bashrc@g" ./build/build_scripts/Dockerfile 
+    sed -i "s@/root/.bashrc@"$userhome"/.bashrc@g" ./build/build_scripts/Dockerfile
 elif [ [$result2 != ""] ]
 then
-    sed -i "s@/root/.bashrc@~/.zshrc@g" ./build/build_scripts/Dockerfile
+    sed -i "s@/root/.bashrc@"$userhome"/.zshrc@g" ./build/build_scripts/Dockerfile
 else
     echo "Shell is not default, please configure the PATH variable manually"
 fi
@@ -51,11 +48,10 @@ fi
 mv ./build/build_scripts/Dockerfile ./build/build_scripts/rundocker.sh
 chmod +x ./build/build_scripts/rundocker.sh
 sudo ./build/build_scripts/rundocker.sh
-# rm ./build/build_scripts/rundocker.sh
 
-echo "------------------------------------------------------------"
-echo "Please execute source ~/.bashrc, or restart the shell window"
-echo "------------------------------------------------------------"
+echo "--------------------------------------------------------------------------------"
+echo "Please execute source ~/.bashrc or source ~/.bashrc, or restart the shell window"
+echo "--------------------------------------------------------------------------------"
 
 
 
