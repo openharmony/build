@@ -47,6 +47,10 @@
     "path": "foundation/aafwk",
     "name": "aafwk"
   },
+  "ability": {
+    "path": "foundation/ability",
+    "name": "ability"
+  },
   "notification": {
     "path": "base/notification",
     "name": "notification"
