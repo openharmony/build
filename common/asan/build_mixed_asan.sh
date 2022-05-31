@@ -96,6 +96,11 @@ hdf_devmgr.cfg
 hdf_peripheral.cfg
 )
 
+cfg_group5=(
+foundation.cfg
+graphic.cfg
+)
+
 make_mixed_asan_img() {
     eval ${1:+cfg_group=cfg_group${1}[@]}
 
@@ -185,6 +190,7 @@ make_mixed_asan_img 1
 make_mixed_asan_img 2
 make_mixed_asan_img 3
 make_mixed_asan_img 4
+make_mixed_asan_img 5
 
 # restore images
 rm -rf images && mv images.bak images
