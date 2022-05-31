@@ -36,29 +36,17 @@
         ]
     },
     {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_linux",
-        "target_os": [
-            "linux"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_windows",
-        "target_os": [
-            "windows"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_darwin",
-        "target_os": [
+	"install_dir": "toolchains",
+	"module_label": "//developtools/global_resource_tool:restool",
+	"target_os": [
+	    "linux",
+	    "windows",
             "darwin"
         ]
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_systemres",
+        "module_label": "//developtools/global_resource_tool:restool_systemres",
         "target_os": [
             "windows",
             "linux",
