@@ -25,10 +25,12 @@ group("make_images") {
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
     ]
+    if (!is_asan) {
+      deps += [ ":${_platform}_updater_image" ]
+    }
     if (enable_ramdisk) {
       deps += [ ":${_platform}_ramdisk_image" ]
     }
-    deps += [ ":${_platform}_updater_image" ]
   }
 }
 
