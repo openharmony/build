@@ -13,7 +13,7 @@
 # limitations under the License.
 
 objdir=${SYSROOT:-.}
-symbolizer=${SYMBOLIZER:-llvm-symbolizer}
+symbolizer=${SYMBOLIZER:-addr2line}
 help=no
 
 while test -n "${1}"; do
@@ -24,7 +24,7 @@ while test -n "${1}"; do
         shift
         ;;
     -p | --symbolizer)
-        symbolizer="${2:-llvm-symbolizer}"
+        symbolizer="${2:-addr2line}"
         shift
         shift
         ;;
@@ -48,7 +48,7 @@ Translate call stack to symbolized forms.
     Options:
 
     -o,  --objdir  <objects_dir>    dir that contains the call stack binaries.
-    -p,  --symbolizer <symbolizer>  symbolizer for translating call stacks, default is llvm-symbolizer.
+    -p,  --symbolizer <symbolizer>  symbolizer for translating call stacks, default is addr2line.
     -h,  --help                     print help info
 END
 }
@@ -58,22 +58,20 @@ test $help = yes && print_help && exit 0
 find_unstripped() {
     file="$(basename $1)"
     shift
-    find "$@" -type f -name "$file" -exec sh -c  'file $1 | grep -q "not stripped"' sh {} \; -print | head -n 1
+    find "$@" -type f -name "$file" -exec sh -c  'file $1 | grep -q "not stripped"' sh {} \; -print
 }
 
 find_file() {
-    if [ -d "$objdir/lib.unstripped" ]; then
-        find_unstripped $1 "$objdir/lib.unstripped" "$objdir/exe.unstripped"
-    else
-        find_unstripped $1 "$objdir"
-    fi
+    find_unstripped $1 "$objdir"
 }
 
 getsym2() {
-    file="$(find_file $1)"
-    if [ -f "$file" ]; then
-        ${test} $symbolizer -C -f -p -e "${file}" $2 2>/dev/null
-    fi
+    files="$(find_file $1)"
+    for file in $files; do
+        if [ -f "$file" ]; then
+            ${test} $symbolizer -C -f -p -e "${file}" $2 2>/dev/null
+        fi
+    done
 }
 
 getsym() {
