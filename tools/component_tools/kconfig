@@ -725,13 +725,13 @@ config feature$$multimedia$$multimedia_image_standard
         string "feature"
         default ""
         depends on multimedia$$multimedia_image_standard
-config multimedia$$multimedia_audio_standard
-    bool "multimedia_audio_standard"
+config multimedia$$multimedia_audio_framework
+    bool "multimedia_audio_framework"
     default n
-config feature$$multimedia$$multimedia_audio_standard
+config feature$$multimedia$$multimedia_audio_framework
         string "feature"
         default ""
-        depends on multimedia$$multimedia_audio_standard
+        depends on multimedia$$multimedia_audio_framework
 config multimedia$$media_library
     bool "media_library"
     default n
