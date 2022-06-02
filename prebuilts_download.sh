@@ -71,6 +71,7 @@ function check_sha256_by_mark() {
         sha256_result=0
     else
         echo -e "${check_url} Sha256 mismatch or files not downloaded yet."
+        rm -rf ${code_dir}/${unzip_dir}/*.mark
         sha256_result=1
     fi
 }
