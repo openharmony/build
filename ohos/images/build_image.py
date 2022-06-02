@@ -58,7 +58,7 @@ def _prepare_updater(updater_path):
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('bin/init', os.path.join(updater_path, 'init'))
+    os.symlink('bin/init_early', os.path.join(updater_path, 'init'))
     os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
     os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
@@ -71,7 +71,7 @@ def _prepare_ramdisk(ramdisk_path):
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('bin/init', os.path.join(ramdisk_path, 'init'))
+    os.symlink('bin/init_early', os.path.join(ramdisk_path, 'init'))
 
 
 def _make_image(args):
