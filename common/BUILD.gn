@@ -23,9 +23,7 @@ group("common_packages") {
   if (device_name == "hi3516dv300") {
     assert(common_feature_verify)
   }
-  deps = [
-    "//third_party/sqlite:sqlite",
-  ]
+  deps = [ "//third_party/sqlite:sqlite" ]
 
   deps += [ "musl:musl_install" ]
 

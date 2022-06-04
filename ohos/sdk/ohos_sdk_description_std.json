@@ -565,7 +565,7 @@
     },
 	{
         "install_dir": "toolchains",
-        "module_label": "//foundation/aafwk/standard/idl:idl",
+        "module_label": "//foundation/ability/ability_runtime/idl:idl",
         "target_os": [
             "linux",
             "windows",
