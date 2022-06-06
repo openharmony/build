@@ -25,6 +25,54 @@ class Module():
         self._external_deps = external_deps
         self._raw_data = raw_data
 
+    @property
+    def module_name(self):
+        return self._module_name
+    
+    @module_name.setter
+    def module_name(self, value):
+        self._module_name = value
+
+    @property
+    def subsystem_name(self):
+        return self._subsystem_name
+
+    @subsystem_name.setter
+    def subsystem_name(self, value):
+        self._subsystem_name = value
+
+    @property
+    def part_name(self):
+        return self._part_name
+
+    @part_name.setter
+    def part_name(self, value):
+        self._part_name = value
+
+    @property
+    def deps(self):
+        return self._deps
+    
+    @deps.setter
+    def deps(self, value):
+        self._deps = value
+
+    @property
+    def external_deps(self):
+        return self._external_deps
+
+    @external_deps.setter
+    def external_deps(self, value):
+        self._external_deps = value
+
+    @property
+    def raw_data(self):
+        return self._raw_data
+
+    @raw_data.setter
+    def raw_data(self, value):
+        self._raw_data = value
+
     @staticmethod
     def create_module_by_string(ohos_string):
         module_name = ''
@@ -34,10 +82,10 @@ class Module():
         module_pattern = re.compile(r'(?<=ohos_shared_library\(").+(?="\))')
         try:
             module_name = module_pattern.search(ohos_string).group()
-        except Exception as e:
+        except AttributeError as e:
             print('The BUILD.gn file is not written in a standard format and cannot be parsed, The error snippet is :')
             print(ohos_string)
-
+            
         subsystem_pattern = re.compile(r'(?<=subsystem_name = ").+?(?="\n)')
         if subsystem_pattern.search(ohos_string) != None:
             subsystem_name = subsystem_pattern.search(ohos_string).group()
@@ -80,8 +128,24 @@ class Node():
         self._deps = set()
         self._external_deps = set()
 
+    @property
+    def components_name(self):
+        return self._components_name
+
+    @components_name.setter
+    def components_name(self, value):
+        self._components_name = value
+
+    @property
+    def deps(self):
+        return self._deps
+    
+    @deps.setter
+    def deps(self, value):
+        self._deps = value
+
     def add_module(self, module):
-        self._modules[module._module_name] = module
-        self._deps = self._deps | module._deps
-        self._external_deps = self._external_deps | module._external_deps
+        self._modules[module.module_name] = module
+        self._deps = self._deps | module.deps
+        self._external_deps = self._external_deps | module.external_deps
 

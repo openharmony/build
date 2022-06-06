@@ -34,8 +34,8 @@ def draw_deps_pictrue_by_gn(output_path):
     for node_name in component_nodes:
         graph.node(name=node_name, color='red')
     for node_name in component_nodes:
-        deps = component_nodes[node_name]._deps
-        external_deps = component_nodes[node_name]._deps
+        deps = component_nodes[node_name].deps
+        external_deps = component_nodes[node_name].deps
         all_deps = deps | external_deps
         for dep_name in all_deps:
             part_name = dep_name.split(':')[0]
@@ -50,7 +50,7 @@ def draw_deps_pictrue_by_gn(output_path):
 def merge_module():
     # create component nodes
     for module_name in module_dict:
-        part_name = module_dict[module_name]._part_name
+        part_name = module_dict[module_name].part_name
         if part_name in component_nodes:
             component_nodes[part_name].add_module(module_dict[module_name])
         else:
@@ -71,7 +71,7 @@ def read_build_gn_file(file_path):
         results = pattern.findall(file_data)
         for ohos_module_string in results:
             module = Module.create_module_by_string(ohos_module_string)
-            module_dict[module._module_name] = module
+            module_dict[module.module_name] = module
 
 
 def _colletct_build_gn_path(root_path):
