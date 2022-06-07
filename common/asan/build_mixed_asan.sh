@@ -118,7 +118,7 @@ make_mixed_asan_img() {
         if [ -f system/etc/init/$f ]; then
             echo "$f is found in /system/etc/init/"
             sed -i 's,/system/bin/,/data/bin/,g' system/etc/init/$f
-            sed -i 's/"critical"/"critical.asan"/g' system/etc/init/$f
+            sed -i '/"critical"/d' system/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' system/etc/init/$f); do
                 sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
             done
@@ -126,12 +126,12 @@ make_mixed_asan_img() {
             echo "$f is found in /vendor/etc/init/"
             sed -i 's,/vendor/bin/,/data/bin/,g' vendor/etc/init/$f
             sed -i 's,/system/bin/,/data/bin/,g' vendor/etc/init/$f
-            sed -i 's/"critical"/"critical.asan"/g' vendor/etc/init/$f
+            sed -i '/"critical"/d' vendor/etc/init/$f
             for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' vendor/etc/init/$f); do
                 sed -i 's,/vendor/\(lib[^/]*\)/,/data/\1/,g' ./$xml
                 sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
             done
-            make_vendor=true
+            local make_vendor=true
         else
             echo -e "\033[33m==== WARNING: $f is not found in /system/etc/init/ nor in /vendor/etc/init/ ====\033[0m"
         fi
