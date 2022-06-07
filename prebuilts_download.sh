@@ -165,7 +165,7 @@ prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/clang-480513-${host_platform}-x86_64.tar.bz2
-prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220425.tar.gz
+prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220601.tar.gz
 """
 
 linux_copy_config="""
