@@ -351,13 +351,6 @@ config feature$$appexecfwk$$distributed_bundle_framework
         string "feature"
         default ""
         depends on appexecfwk$$distributed_bundle_framework
-config appexecfwk$$eventhandler
-    bool "eventhandler"
-    default n
-config feature$$appexecfwk$$eventhandler
-        string "feature"
-        default ""
-        depends on appexecfwk$$eventhandler
 config appexecfwk$$bundle_framework
     bool "bundle_framework"
     default n
@@ -418,6 +411,13 @@ config feature$$notification$$ces_standard
         string "feature"
         default ""
         depends on notification$$ces_standard
+config notification$$eventhandler
+    bool "eventhandler"
+    default n
+config feature$$notification$$eventhandler
+        string "feature"
+        default ""
+        depends on notification$$eventhandler
 endmenu
 menu "communication"
 config communication$$ipc_js
