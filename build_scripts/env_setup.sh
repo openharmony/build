@@ -25,12 +25,11 @@ sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
 sed -i "s@\\\@@g" ./build/build_scripts/Dockerfile
 
 sed -i 's@ruby\S*\s@ruby @' ./build/build_scripts/Dockerfile
-sed -i "s@python3.8-distutils@python3-distutils@g" ./build/build_scripts/Dockerfile
 sed -i "s@git-core@git@g" ./build/build_scripts/Dockerfile
 sed -i "s@zlib*@zlib@g" ./build/build_scripts/Dockerfile
 sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
 sed -i '/pip3 install/i python3 -m pip install --user ohos-build' ./build/build_scripts/Dockerfile
-sed -i '/pip3 install six/i pip3 install testresource' ./build/build_scripts/Dockerfile
+sed -i '/pip3 install six/i pip3 install testresources' ./build/build_scripts/Dockerfile
 
 result1=$(echo $SHELL | grep "bash")
 result2=$(echo $SHELL | grep "zsh")
@@ -50,7 +49,7 @@ chmod +x ./build/build_scripts/rundocker.sh
 sudo ./build/build_scripts/rundocker.sh
 
 echo "--------------------------------------------------------------------------------"
-echo "Please execute source ~/.bashrc or source ~/.bashrc, or restart the shell window"
+echo "Please execute source ~/.bashrc or source ~/.zshrc, or restart the shell window"
 echo "--------------------------------------------------------------------------------"
 
 
