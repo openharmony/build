@@ -64,7 +64,7 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     } else if (target_cpu == "arm") {
       _clang_rt_dso_path = "arm-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "x86_64") {
-      _clang_rt_dso_path = ""
+      _clang_rt_dso_path = "x86_64-linux-ohos/libclang_rt.asan.so"
     }
   }
 
@@ -648,7 +648,7 @@ template("config_plus_compiler_rt") {
   _clang_rt_dso_paths = []
   if ((host_os == "linux" || host_os == "mac") && target_os == "ohos" &&
       !is_mingw) {
-    _clang_rt_libs_dir = "$clang_base_path/lib64/clang/10.0.1/lib/"
+    _clang_rt_libs_dir = "$clang_base_path/lib64/clang/12.0.1/lib/"
 
     _dso_names = []
     foreach(dso_name, minimal_rt_lib_names) {
@@ -658,7 +658,7 @@ template("config_plus_compiler_rt") {
       } else if (target_cpu == "arm") {
         _dso_names += [ "arm-linux-ohos/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "x86_64") {
-        _dso_names += []
+        _dso_names += [ "x86_64-linux-ohos/libclang_rt.${dso_name}.a" ]
       }
     }
 

@@ -95,6 +95,8 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     source = "${clang_base_path}/lib/arm-linux-ohos/c++/libc++.so"
   } else if (target_cpu == "arm64") {
     source = "${clang_base_path}/lib/aarch64-linux-ohos/c++/libc++.so"
+  } else if (target_cpu == "x86_64") {
+    source = "${clang_base_path}/lib/x86_64-linux-ohos/c++/libc++.so"
   } else {
     source = ""
   }
