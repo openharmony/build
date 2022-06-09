@@ -15,6 +15,10 @@ import("//build/config/python.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
 
+if (is_ohos) {
+  import("//build/config/ohos/abi.gni")
+}
+
 template("merge_profile") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.hap_profile),
@@ -236,6 +240,12 @@ template("package_app") {
                        get_label_info(lib, "name") + "_module_info.json"
         _rebased_module_info = rebase_path(_module_info, root_build_dir)
         args += [ "--dso=@FileArg($_rebased_module_info:source)" ]
+      }
+      if (is_ohos) {
+        args += [
+          "--ohos-app-abi",
+          ohos_app_abi,
+        ]
       }
     }
 

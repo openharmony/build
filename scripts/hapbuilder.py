@@ -140,9 +140,10 @@ def create_hap(options, signed_hap):
             tweak_hap_profile(options, package_dir)
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
-            os.mkdir(lib_path)
+            hap_lib_path = os.path.join(lib_path, options.ohos_app_abi)
+            os.makedirs(hap_lib_path)
             for dso in sorted(options.dso):
-                shutil.copy(dso, lib_path)
+                shutil.copy(dso, hap_lib_path)
             packing_cmd.extend(['--lib-path', lib_path])
 
         build_utils.check_output(packing_cmd)
@@ -165,6 +166,7 @@ def parse_args(args):
     parser.add_option('--dso',
                       action="append",
                       help='path to dynamic shared objects')
+    parser.add_option('--ohos-app-abi', help='ohos app abi')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--nodejs-path', help='path to node')
     parser.add_option('--js2abc-js', help='path to ts2abc.js')
