@@ -948,13 +948,13 @@ config feature$$xts$$phone_tests
         depends on xts$$phone_tests
 endmenu
 menu "distributedhardware"
-config distributedhardware$$device_manager_base
-    bool "device_manager_base"
+config distributedhardware$$device_manager
+    bool "device_manager"
     default n
-config feature$$distributedhardware$$device_manager_base
+config feature$$distributedhardware$$device_manager
         string "feature"
         default ""
-        depends on distributedhardware$$device_manager_base
+        depends on distributedhardware$$device_manager
 endmenu
 menu "ark"
 config ark$$ark
