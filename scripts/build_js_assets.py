@@ -67,7 +67,8 @@ def make_my_env(build_dir, options, js2abc, ability_index):
     my_env = {
         "aceModuleBuild": assets_dir,
         "buildMode": options.build_mode,
-        "PATH": os.environ.get('PATH')
+        "PATH": os.environ.get('PATH'),
+        "appResource": os.path.join(gen_dir, "ResourceTable.txt")
     }
     with open(options.hap_profile) as profile:
         config = json.load(profile)
@@ -77,9 +78,11 @@ def make_my_env(build_dir, options, js2abc, ability_index):
                 my_env["abilityType"] = 'form'
             else:
                 my_env["abilityType"] = config['module']['abilities'][ability_index]['type']
+        elif config['module'].__contains__('testRunner'):
+            my_env["abilityType"] = 'testrunner'
+
     if options.app_profile:
         my_env["aceProfilePath"] = os.path.join(gen_dir, "resources/base/profile")
-        my_env["appResource"] = os.path.join(gen_dir, "ResourceTable.txt")
         my_env["aceModuleJsonPath"] = os.path.abspath(options.hap_profile)
     else:
         manifest = os.path.join(build_dir, 'manifest.json')
@@ -142,6 +145,8 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
                     with open(options.hap_profile) as profile:
                         config = json.load(profile)
                         data = make_manifest_data(config, options, js2abc, asset_index)
+                        if config['module'].__contains__('testRunner'):
+                            src_path = config['module']['testRunner']['srcPath']
                         if options.js_asset_cnt > 1 and asset_index < len(config['module']['abilities']):
                             if 'srcPath' in config['module']['abilities'][asset_index]:
                                 src_path = config['module']['abilities'][asset_index]['srcPath']
