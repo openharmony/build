@@ -149,14 +149,19 @@ class SAInfoMerger(object):
                 _format.format('<libpath>', libpath_nodes_count), source_file)
         else:
             libpath = libpath_nodes[0].text.strip()
-            if libpath.startswith("/system/lib") or libpath.startswith("system/lib"):
-                libname = ntpath.basename(libpath)
+            system_lib_dir = "/system/lib"
+            if self.is_64bit_arch:
+                system_lib_dir = "/system/lib64"
+            if libpath.startswith(system_lib_dir):
+                libname = libpath.replace("%s/" % system_lib_dir, "")
+            elif libpath.startswith(system_lib_dir[1:]):
+                libname = libpath.replace("%s/" % system_lib_dir[1:], "")
             else:
                 libname = libpath
             # [Temporary scheme] no additional process for 64-bit arch and
             # a libpath without prefixed directory
-            if not self.is_64bit_arch and "/" in libpath:
-                libpath = os.path.join("/system/lib", libname)
+            if "/" in libpath:
+                libpath = os.path.join(system_lib_dir, libname)
                 libpath_nodes[0].text = libpath
             reconstructed_str = '<libpath>{}</libpath>\n'.format(libpath)
             # fix weird indent problem after converting the node to string
