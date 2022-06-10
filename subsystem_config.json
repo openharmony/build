@@ -180,7 +180,7 @@
     "name": "resourceschedule"
   },
   "barrierfree": {
-    "path": "base/accessibility",
+    "path": "foundation/barrierfree/accessibility",
     "name": "accessibility"
   },
   "securec": {
