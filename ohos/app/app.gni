@@ -17,6 +17,32 @@ import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
 
+# Declare an OHOS AppScope target
+#
+# Variables:
+#   app_profile: common config of hap.
+#   sources: list of asset files to be included in hap.
+#
+template("ohos_app_scope") {
+  forward_variables_from(invoker, [ "testonly" ])
+  assert(defined(invoker.app_profile),
+         "app_profile must be defined for ohos_app_scope")
+  assert(defined(invoker.sources), "sources must be defined for ohos_app_scope")
+
+  _metadata = "$target_gen_dir/$target_name.metadata"
+  _metadata_target = "${target_name}__metadata"
+  write_meta_data(_metadata_target) {
+    forward_variables_from(invoker, [ "app_profile" ])
+    type = "app_profile"
+    meta_data = _metadata
+    resources = invoker.sources
+    app_profile = invoker.app_profile
+  }
+  group(target_name) {
+    public_deps = [ ":$_metadata_target" ]
+  }
+}
+
 # Declare an OHOS assets target
 #
 # Variables:
@@ -44,6 +70,9 @@ template("ohos_assets") {
 #
 # Variables:
 #   source_dir: js assets directory, only one directory supported, string not list.
+#   js2abc: whether to transform js bundle to ark bytecode, default value
+#             follows build_ark.
+#   ets2abc: whether to transform ets bundle to ark bytecode, default value false
 #   deps: dependencies of this target.
 #
 template("ohos_js_assets") {
@@ -59,9 +88,20 @@ template("ohos_js_assets") {
                              "source_dir",
                              "deps",
                            ])
-    type = "js_assets"
     meta_data = _metadata
-    js_assets = [ source_dir ]
+    if (defined(invoker.ets2abc) && invoker.ets2abc) {
+      type = "ets_assets"
+      ets_assets = [ source_dir ]
+    } else if (defined(invoker.js2abc) && invoker.js2abc) {
+      type = "js_assets"
+      js_assets = [ source_dir ]
+    } else {
+      type = "unresolved_assets"
+      unresolved_assets = [ source_dir ]
+    }
+    if (defined(invoker.hap_profile)) {
+      hap_profile = invoker.hap_profile
+    }
   }
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
@@ -84,20 +124,44 @@ template("ohos_resources") {
   if (defined(invoker.deps)) {
     _deps += invoker.deps
   }
+
+  module_config = ""
+  module_configs = string_split(invoker.hap_profile, "/")
+  foreach(_module_config, module_configs) {
+    module_config = _module_config
+  }
+  _generated_profile = "$target_gen_dir/${target_name}/${module_config}"
   _metadata_target = "${target_name}__metadata"
   write_meta_data(_metadata_target) {
-    forward_variables_from(invoker,
-                           [
-                             "package_name",
-                             "hap_profile",
-                           ])
+    forward_variables_from(invoker, [ "package_name" ])
     type = "resources"
     meta_data = _metadata
     resources = invoker.sources
+    hap_profile = _generated_profile
     deps = _deps
+    possible_deps = _deps
   }
 
   _deps += [ ":$_metadata_target" ]
+
+  # compile_resources target here only used for concat app.json to module.json
+  _compile_profile_target = "${target_name}__compile_profile"
+  merge_profile(_compile_profile_target) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "hap_profile",
+                           ])
+    meta_data = _metadata
+    generated_profile = _generated_profile
+    if (defined(deps)) {
+      deps += _deps
+    } else {
+      deps = _deps
+    }
+  }
+
+  _deps += [ ":$_compile_profile_target" ]
 
   # compile_resources target here only used for resources.h generation
   _compile_resources_target = "${target_name}__compile_resources"
@@ -107,8 +171,8 @@ template("ohos_resources") {
                            [
                              "deps",
                              "package_name",
-                             "hap_profile",
                            ])
+    hap_profile = _generated_profile
     meta_data = _metadata
     generated_header_dir = _generated_header_dir
     if (defined(deps)) {
@@ -125,7 +189,10 @@ template("ohos_resources") {
 
   group(target_name) {
     public_deps = [ ":$_metadata_target" ]
-    deps = [ ":$_compile_resources_target" ]
+    deps = [
+      ":$_compile_profile_target",
+      ":$_compile_resources_target",
+    ]
     public_configs = [ ":$_resources_config" ]
   }
 }
@@ -172,6 +239,10 @@ template("ohos_hap") {
     _ets2abc = invoker.ets2abc
   }
 
+  if (_ets2abc) {
+    _js2abc = false
+  }
+
   _js_build_mode = "release"
   if (defined(invoker.js_build_mode)) {
     _js_build_mode = invoker.js_build_mode
@@ -215,10 +286,13 @@ template("ohos_hap") {
                              "raw_assets",
                              "resources",
                              "js_assets",
+                             "ets_assets",
                            ])
+    hap_profile = invoker.hap_profile
     meta_data = _meta_data
     possible_deps = _deps
     type = "hap"
+    js2abc = _js2abc
     hap_path = _hap_path
   }
 
@@ -278,7 +352,7 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
     ]
-    js2abc = _js2abc || _ets2abc
+    enable_ark = build_ark
     if (defined(shared_libraries)) {
       deps += shared_libraries
     }
@@ -287,6 +361,7 @@ template("ohos_hap") {
     hap_profile = _hap_profile
     meta_data = _meta_data
     hap_path = _hap_path
+    build_mode = _js_build_mode
 
     install_module_info = {
       module_def = get_label_info(":$target_name", "label_with_toolchain")
