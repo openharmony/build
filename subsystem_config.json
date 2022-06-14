@@ -20,7 +20,7 @@
     "name": "security"
   },
   "useriam": {
-    "path": "base/user_iam",
+    "path": "base/useriam",
     "name": "useriam"
   },
   "startup": {
