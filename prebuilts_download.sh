@@ -35,7 +35,7 @@ fi
 echo "tool_repo=$tool_repo"
 
 if [ -z "$NPM_REGISTRY" ];then
-	npm_registry='http://registry.npm.taobao.org'
+	npm_registry='https://repo.huaweicloud.com/repository/npm/'
 else
 	npm_registry=$NPM_REGISTRY
 fi
