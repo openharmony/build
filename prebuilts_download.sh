@@ -25,6 +25,14 @@ if [ "X${SKIP_SSL}" == "XYES" ];then
 else
     wget_ssl_check=''
 fi
+
+if [ -z "$NPM_REGISTRY" ];then
+	npm_registry='https://repo.huaweicloud.com/repository/npm/'
+else
+	npm_registry=$NPM_REGISTRY
+fi
+echo "npm_registry=$npm_registry"
+
 sha256_result=0
 check_sha256=''
 local_sha256=''
@@ -177,7 +185,7 @@ if [ ! -d "${code_dir}/third_party/jsframework" ]; then
 else
     cd ${code_dir}/third_party/jsframework/
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -201,7 +209,7 @@ if [ ! -d "${code_dir}/developtools/ace-ets2bundle/compiler" ]; then
 else
     cd ${code_dir}/developtools/ace-ets2bundle/compiler
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -214,7 +222,7 @@ if [ ! -d "${code_dir}/developtools/ace-js2bundle/ace-loader" ]; then
 else
     cd ${code_dir}/developtools/ace-js2bundle/ace-loader
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -225,7 +233,7 @@ fi
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     cd ${code_dir}/ark/ts2abc/ts2panda
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
     fi
@@ -248,7 +256,7 @@ fi
 if [ -d "${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader" ]; then
     cd ${code_dir}/prebuilts/sdk/js-loader/build-tools/ace-loader
     export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-    npm config set registry http://registry.npm.taobao.org
+    npm config set registry ${npm_registry}
     npm config set @ohos:registry=https://repo.harmonyos.com/npm/
     if [ "X${SKIP_SSL}" == "XYES" ];then
         npm config set strict-ssl false
