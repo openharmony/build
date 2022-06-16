@@ -434,13 +434,13 @@ config feature$$communication$$ipc
         string "feature"
         default ""
         depends on communication$$ipc
-config communication$$dsoftbus_standard
-    bool "dsoftbus_standard"
+config communication$$dsoftbus
+    bool "dsoftbus"
     default n
-config feature$$communication$$dsoftbus_standard
+config feature$$communication$$dsoftbus
         string "feature"
         default ""
-        depends on communication$$dsoftbus_standard
+        depends on communication$$dsoftbus
 config communication$$wifi_standard
     bool "wifi_standard"
     default n
