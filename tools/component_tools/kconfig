@@ -981,8 +981,6 @@ config feature$$ark$$ark_js_runtime
 endmenu
 menu "compileruntime"
 endmenu
-menu "iot"
-endmenu
 menu "iot_hardware"
 endmenu
 menu "kernel"

@@ -151,10 +151,6 @@
     "path": "base/compileruntime",
     "name": "compileruntime"
   },
-  "iot": {
-    "path": "domains/iot",
-    "name": "domains"
-  },
   "iot_hardware": {
     "path": "base/iot_hardware",
     "name": "iot_hardware"
