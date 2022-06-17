@@ -58,25 +58,28 @@ test $help = yes && print_help && exit 0
 find_unstripped() {
     file="$(basename $1)"
     shift
-    find "$@" -type f -name "$file" -exec sh -c  'file $1 | grep -q "not stripped"' sh {} \; -print
+    if [ "${file:0:8}" = "ld-musl-" ]; then
+        file="libc.so"
+    fi
+    find "$@" -type f -name "$file" -exec sh -c  'file -L $1 | grep -q "not stripped"' sh {} \; -print
 }
 
 find_file() {
-    find_unstripped $1 "$objdir"
+    find_unstripped $1 $objdir
 }
 
 getsym2() {
     files="$(find_file $1)"
     for file in $files; do
         if [ -f "$file" ]; then
-            ${test} $symbolizer -C -f -p -e "${file}" $2 2>/dev/null
+            $symbolizer -C -f -p -e "${file}" $2 2>/dev/null
         fi
     done
 }
 
 getsym() {
     if [ $# -gt 0 ]; then
-        getsym2 $objdir${1//+/ }
+        getsym2 ${1//+/ }
     fi
 }
 
