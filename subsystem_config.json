@@ -44,8 +44,8 @@
     "name": "appexecfwk"
   },
   "aafwk": {
-    "path": "foundation/aafwk",
-    "name": "aafwk"
+    "path": "foundation/ability",
+    "name": "ability"
   },
   "ability": {
     "path": "foundation/ability",
