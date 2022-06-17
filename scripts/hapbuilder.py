@@ -58,15 +58,27 @@ def add_resources(packaged_resources, package_dir, packing_cmd):
             packing_cmd.extend(['--index-path', index_file_path])
             resources_path = os.path.join(package_dir, 'resources')
             if os.path.exists(resources_path):
-                packing_cmd.extend(['--res-path', resources_path])
+                packing_cmd.extend(['--resources-path', resources_path])
 
 
-def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
-    assets_dir = os.path.join(package_dir, 'assets')
+def add_assets(options, package_dir, packing_cmd):
+    packaged_js_assets, assets = options.packaged_js_assets, options.assets
+    if options.app_profile:
+        assets_dir = os.path.join(package_dir, 'ets')
+        js_assets_dir = os.path.join(package_dir, 'js')
+    else:
+        assets_dir = os.path.join(package_dir, 'assets')
+
     if packaged_js_assets:
         build_utils.extract_all(packaged_js_assets,
                                 package_dir,
                                 no_clobber=False)
+    if options.build_mode == "release":
+        for root, _, files in os.walk(assets_dir):
+            for f in files:
+                filename = os.path.join(root, f)
+                if filename.endswith('.js.map'):
+                    os.unlink(filename)
     if assets:
         if not os.path.exists(assets_dir):
             os.mkdir(assets_dir)
@@ -78,8 +90,13 @@ def add_assets(packaged_js_assets, assets, package_dir, packing_cmd):
                 shutil.copytree(
                     item, os.path.join(assets_dir, os.path.basename(item)))
     if os.path.exists(assets_dir) and len(os.listdir(assets_dir)) != 0:
-        packing_cmd.extend(['--assets-path', assets_dir])
-
+        if options.app_profile:
+            packing_cmd.extend(['--ets-path', assets_dir])
+        else:
+            packing_cmd.extend(['--assets-path', assets_dir])
+    if options.app_profile:
+        if os.path.exists(js_assets_dir) and len(os.listdir(js_assets_dir)) != 0:
+            packing_cmd.extend(['--js-path', js_assets_dir])
 
 def get_ark_toolchain_version(options):
     cmd = [options.nodejs_path, options.js2abc_js, '--bc-version']
@@ -87,14 +104,21 @@ def get_ark_toolchain_version(options):
 
 
 def tweak_hap_profile(options, package_dir):
-    hap_profile = os.path.join(package_dir, 'config.json')
+    config_name = 'config.json'
+    if options.app_profile:
+        config_name = 'module.json'
+    hap_profile = os.path.join(package_dir, config_name)
     if not os.path.exists(hap_profile):
-        raise Exception('Error: config.json of hap file not exists')
+        raise Exception('Error: {} of hap file not exists'.format(config_name))
     config = {}
     with open(hap_profile, 'r') as fileobj:
         config = json.load(fileobj)
-        config['module']['distro']['virtualMachine'] = 'ark{}'.format(
-            get_ark_toolchain_version(options))
+        if options.app_profile:
+            config.get('module')['virtualMachine'] = 'ark{}'.format(
+                get_ark_toolchain_version(options))
+        else:
+            config.get('module').get('distro')['virtualMachine'] = 'ark{}'.format(
+                get_ark_toolchain_version(options))
     build_utils.write_json(config, hap_profile)
 
 
@@ -109,11 +133,10 @@ def create_hap(options, signed_hap):
                                         os.path.basename(options.hap_profile))
         shutil.copy(options.hap_profile, hap_profile_path)
         packing_cmd.extend(['--json-path', hap_profile_path])
-        add_assets(options.packaged_js_assets, options.assets, package_dir,
-                   packing_cmd)
+        add_assets(options, package_dir, packing_cmd)
 
         add_resources(options.packaged_resources, package_dir, packing_cmd)
-        if options.js2abc:
+        if options.enable_ark:
             tweak_hap_profile(options, package_dir)
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
@@ -145,7 +168,7 @@ def parse_args(args):
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--nodejs-path', help='path to node')
     parser.add_option('--js2abc-js', help='path to ts2abc.js')
-    parser.add_option('--js2abc',
+    parser.add_option('--enable-ark',
                       action='store_true',
                       default=False,
                       help='whether to transform js to ark bytecode')
@@ -162,6 +185,9 @@ def parse_args(args):
                       help='path to packaged resources')
     parser.add_option('--packaged-js-assets',
                       help='path to packaged js assets')
+    parser.add_option('--app-profile', default=False,
+                      help='path to packaged js assets')
+    parser.add_option('--build-mode', help='debug mode or release mode')
 
     options, _ = parser.parse_args(args)
     if options.assets:
