@@ -118,7 +118,7 @@ function npm_install() {
         if [ "X${SKIP_SSL}" == "XYES" ];then
             npm config set strict-ssl false
         fi
-        # npm cache clean -f
+        npm cache clean -f
         npm install
     fi
 }
@@ -268,9 +268,9 @@ if [ ! -f "${node_js_pkg}" ]; then
 fi
 
 npm_install_config="""
-third_party/jsframework,prebuilts/build-tools/common/js-framework
 developtools/ace-ets2bundle/compiler,
 developtools/ace-js2bundle/ace-loader,
+third_party/jsframework,prebuilts/build-tools/common/js-framework,
 ark/ts2abc/ts2panda,prebuilts/build-tools/common/ts2abc
 """
 
