@@ -152,13 +152,13 @@ config feature$$security$$selinux
         string "feature"
         default ""
         depends on security$$selinux
-config security$$deviceauth_standard
-    bool "deviceauth_standard"
+config security$$device_auth
+    bool "device_auth"
     default n
-config feature$$security$$deviceauth_standard
+config feature$$security$$device_auth
         string "feature"
         default ""
-        depends on security$$deviceauth_standard
+        depends on security$$device_auth
 config security$$dataclassification
     bool "dataclassification"
     default n
