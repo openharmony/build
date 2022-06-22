@@ -155,8 +155,11 @@ class SAInfoMerger(object):
                 libname = libpath
             # [Temporary scheme] no additional process for 64-bit arch and
             # a libpath without prefixed directory
-            if not self.is_64bit_arch and "/" in libpath:
-                libpath = os.path.join("/system/lib", libname)
+            if "/" in libpath:
+                if self.is_64bit_arch:
+                    libpath = os.path.join("/system/lib64", libname)
+                else:
+                    libpath = os.path.join("/system/lib", libname)
                 libpath_nodes[0].text = libpath
             reconstructed_str = '<libpath>{}</libpath>\n'.format(libpath)
             # fix weird indent problem after converting the node to string
