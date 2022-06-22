@@ -177,8 +177,8 @@ prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/open
 prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz,gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz,previewer
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2,llvm
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64.tar.bz2,libcxx-ndk
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64.tar.bz2,libcxx-ndk
+prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2,libcxx-ndk
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
 prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip,esp-2019r2-8.2.0
 prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz,csky
 prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz,linux-x86
@@ -186,7 +186,7 @@ prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}
 
 darwin_copy_config="""
 prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64.tar.bz2,libcxx-ndk
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
 prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
 """
 
