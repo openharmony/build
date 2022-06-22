@@ -48,12 +48,12 @@ result2=$(echo $SHELL | grep "zsh")
 userhome=~
 if [[ "$result1" != "" ]]
 then
-	    sed -i "s@/root/.bashrc@"$userhome"/.bashrc@g" ./build/build_scripts/Dockerfile
-    elif [ [$result2 != ""] ]
-    then
-	    sed -i "s@/root/.bashrc@"$userhome"/.zshrc@g" ./build/build_scripts/Dockerfile
-	else
-		echo "Shell is not default, please configure the PATH variable manually"
+	sed -i "s@/root/.bashrc@"$userhome"/.bashrc@g" ./build/build_scripts/Dockerfile
+elif [ [$result2 != ""] ]
+then
+	sed -i "s@/root/.bashrc@"$userhome"/.zshrc@g" ./build/build_scripts/Dockerfile
+else
+	echo "Shell is not default, please configure the PATH variable manually"
 fi
 
 mv ./build/build_scripts/Dockerfile ./build/build_scripts/rundocker.sh
