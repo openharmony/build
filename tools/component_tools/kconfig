@@ -508,13 +508,13 @@ config feature$$hdf$$display_device_driver
         string "feature"
         default ""
         depends on hdf$$display_device_driver
-config hdf$$usb_device_driver
-    bool "usb_device_driver"
+config hdf$$drivers_peripheral_usb
+    bool "drivers_peripheral_usb"
     default n
-config feature$$hdf$$usb_device_driver
+config feature$$hdf$$drivers_peripheral_usb
         string "feature"
         default ""
-        depends on hdf$$usb_device_driver
+        depends on hdf$$drivers_peripheral_usb
 config hdf$$audio_device_driver
     bool "audio_device_driver"
     default n
