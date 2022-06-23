@@ -536,13 +536,13 @@ config feature$$hdf$$input_device_driver
         string "feature"
         default ""
         depends on hdf$$input_device_driver
-config hdf$$battery_device_driver
-    bool "battery_device_driver"
+config hdf$$drivers_peripheral_battery
+    bool "drivers_peripheral_battery"
     default n
-config feature$$hdf$$battery_device_driver
+config feature$$hdf$$drivers_peripheral_battery
         string "feature"
         default ""
-        depends on hdf$$battery_device_driver
+        depends on hdf$$drivers_peripheral_battery
 config hdf$$vibrator_device_driver
     bool "vibrator_device_driver"
     default n
@@ -571,13 +571,13 @@ config feature$$hdf$$light_device_driver
         string "feature"
         default ""
         depends on hdf$$light_device_driver
-config hdf$$power_device_driver
-    bool "power_device_driver"
+config hdf$$drivers_peripheral_power
+    bool "drivers_peripheral_power"
     default n
-config feature$$hdf$$power_device_driver
+config feature$$hdf$$drivers_peripheral_power
         string "feature"
         default ""
-        depends on hdf$$power_device_driver
+        depends on hdf$$drivers_peripheral_power
 config hdf$$sensor_device_driver
     bool "sensor_device_driver"
     default n
@@ -599,13 +599,13 @@ config feature$$hdf$$bluetooth_device_driver
         string "feature"
         default ""
         depends on hdf$$bluetooth_device_driver
-config hdf$$thermal_device_driver
-    bool "thermal_device_driver"
+config hdf$$drivers_peripheral_thermal
+    bool "drivers_peripheral_thermal"
     default n
-config feature$$hdf$$thermal_device_driver
+config feature$$hdf$$drivers_peripheral_thermal
         string "feature"
         default ""
-        depends on hdf$$thermal_device_driver
+        depends on hdf$$drivers_peripheral_thermal
 endmenu
 menu "updater"
 config updater$$update_service
