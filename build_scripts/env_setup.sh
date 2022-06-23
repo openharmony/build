@@ -35,7 +35,7 @@ sed -i "s@git-core@git@g" ./build/build_scripts/Dockerfile
 sed -i "s@zlib*@zlib@g" ./build/build_scripts/Dockerfile
 
 sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
-sed -i '/chmod +x /a python3 -m pip install --user ohos-build' ./build/build_scripts/Dockerfile
+sed -i '/chmod +x /a python3 -m pip install --user build/lite' ./build/build_scripts/Dockerfile
 sed -i '/pip3 install six/i pip3 install testresources' ./build/build_scripts/Dockerfile
 
 
