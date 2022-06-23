@@ -573,7 +573,7 @@
     },
 	{
         "install_dir": "toolchains",
-        "module_label": "//foundation/ability/ability_runtime/idl_tool:idl",
+        "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
             "linux",
             "windows",
