@@ -529,13 +529,13 @@ config feature$$hdf$$device_driver_framework
         string "feature"
         default ""
         depends on hdf$$device_driver_framework
-config hdf$$input_device_driver
-    bool "input_device_driver"
+config hdf$$drivers_peripheral_input
+    bool "drivers_peripheral_input"
     default n
-config feature$$hdf$$input_device_driver
+config feature$$hdf$$drivers_peripheral_input
         string "feature"
         default ""
-        depends on hdf$$input_device_driver
+        depends on hdf$$drivers_peripheral_input
 config hdf$$drivers_peripheral_battery
     bool "drivers_peripheral_battery"
     default n
@@ -543,13 +543,13 @@ config feature$$hdf$$drivers_peripheral_battery
         string "feature"
         default ""
         depends on hdf$$drivers_peripheral_battery
-config hdf$$vibrator_device_driver
-    bool "vibrator_device_driver"
+config hdf$$drivers_peripheral_vibrator
+    bool "drivers_peripheral_vibrator"
     default n
-config feature$$hdf$$vibrator_device_driver
+config feature$$hdf$$drivers_peripheral_vibrator
         string "feature"
         default ""
-        depends on hdf$$vibrator_device_driver
+        depends on hdf$$drivers_peripheral_vibrator
 config hdf$$wlan_device_driver
     bool "wlan_device_driver"
     default n
@@ -564,13 +564,13 @@ config feature$$hdf$$codec_device_driver
         string "feature"
         default ""
         depends on hdf$$codec_device_driver
-config hdf$$light_device_driver
-    bool "light_device_driver"
+config hdf$$drivers_peripheral_light
+    bool "drivers_peripheral_light"
     default n
-config feature$$hdf$$light_device_driver
+config feature$$hdf$$drivers_peripheral_light
         string "feature"
         default ""
-        depends on hdf$$light_device_driver
+        depends on hdf$$drivers_peripheral_light
 config hdf$$drivers_peripheral_power
     bool "drivers_peripheral_power"
     default n
@@ -578,13 +578,13 @@ config feature$$hdf$$drivers_peripheral_power
         string "feature"
         default ""
         depends on hdf$$drivers_peripheral_power
-config hdf$$sensor_device_driver
-    bool "sensor_device_driver"
+config hdf$$drivers_peripheral_sensor
+    bool "drivers_peripheral_sensor"
     default n
-config feature$$hdf$$sensor_device_driver
+config feature$$hdf$$drivers_peripheral_sensor
         string "feature"
         default ""
-        depends on hdf$$sensor_device_driver
+        depends on hdf$$drivers_peripheral_sensor
 config hdf$$camera_device_driver
     bool "camera_device_driver"
     default n
