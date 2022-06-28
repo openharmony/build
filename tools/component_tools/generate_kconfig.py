@@ -81,7 +81,7 @@ def gen_kconfig(config_path, outdir):
 
 if __name__ == "__main__":
     INTRO = 'Genenrate newly kconfig input file.\n\
-        For exmaple: python3 generate_kconfig.py\n\
+        For example: python3 generate_kconfig.py\n\
         or           python3 generate_kconfig.py --base_product={$repo}/productdefine/common/base/base_product.json --outdir=./'
     parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -89,9 +89,9 @@ if __name__ == "__main__":
     )
     parser.add_argument('--base_product', type=str, default="./../../../productdefine/common/base/base_product.json",
                         help='Basic config path in repo prodcutdefine,\
-                                defalut={$repo}/productdefine/common/base/base_product.json')
+                                default={$repo}/productdefine/common/base/base_product.json')
     parser.add_argument('--outdir', type=str, default="./",
                         help="define output file path dir, default={$current_dir}")
     args = parser.parse_args()
-    print("read base_product fle: ", os.path.abspath(args.base_product))
+    print("read base_product file: ", os.path.abspath(args.base_product))
     gen_kconfig(args.base_product, args.outdir)

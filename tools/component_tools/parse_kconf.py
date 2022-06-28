@@ -167,14 +167,14 @@ def generate_config_with_full_deps(deps_path, base_product_path, config_path, ou
 
 def main():
     intro = 'Genenrate newly kconfig input file.\n\
-        For exmaple: python3 parse_kconf.py --deps={$repo}/out/{your_product}/part_deps_info/part_deps_info.json \n\
+        For example: python3 parse_kconf.py --deps={$repo}/out/{your_product}/part_deps_info/part_deps_info.json \n\
         or           python3 parse_kconf.py --base_product={$repo}/productdefine/common/base/base_product.json \
 --out=./product.json --deps={$repo}/out/{your_product}/part_deps_info/part_deps_info.json --config=./.config'
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description=intro)
     parser.add_argument('--deps', type=str, required=True, default="",
-                        help='Must Requried! Depencencies info after gn building')
+                        help='Must Required! Depencencies info after gn building')
     parser.add_argument('--base_product', type=str, default="./../../../productdefine/common/base/base_product.json",
                         help='base_product.json file')
     parser.add_argument('--config', type=str, default="./.config",
@@ -182,9 +182,9 @@ def main():
     parser.add_argument('--out', type=str, default="./product.json",
                         help="define output file path and name, like './product.json'")
     args = parser.parse_args()
-    print("read deps fle: ", os.path.abspath(args.deps))
-    print("read kconfig fle: ", os.path.abspath(args.config))
-    print("read base_product fle: ", os.path.abspath(args.base_product))
+    print("read deps file: ", os.path.abspath(args.deps))
+    print("read kconfig file: ", os.path.abspath(args.config))
+    print("read base_product file: ", os.path.abspath(args.base_product))
 
     generate_config_with_full_deps(args.deps, args.base_product, args.config, args.out)
 

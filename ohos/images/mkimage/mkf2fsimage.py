@@ -36,7 +36,7 @@ def args_parse(args):
     parser.add_argument("--dac_config",
                         help="The path of fs config to sload.f2fs.")
     parser.add_argument("--timestamp", help="The timestamp for filesystem.")
-    parser.add_argument("--label", help="The lable for filesystem.")
+    parser.add_argument("--label", help="The label for filesystem.")
     parser.add_argument("--file_context",
                         help="The path of file_context to sload.f2fs.")
     parser.add_argument("--root_dir", help="The root dir for root image.")

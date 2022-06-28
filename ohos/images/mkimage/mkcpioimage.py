@@ -31,7 +31,7 @@ def args_parse(args):
     parser = argparse.ArgumentParser(description='mkcpioimage.py')
 
     parser.add_argument("src_dir", help="The source file for sload.")
-    parser.add_argument("device", help="The deivce for mkfs.")
+    parser.add_argument("device", help="The device for mkfs.")
     parser.add_argument("resource_config",
                         help="The ramdisk resource config file.")
 
