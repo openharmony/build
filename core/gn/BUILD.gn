@@ -23,11 +23,9 @@ print("host_toolchain=$host_toolchain")
 # load build configs and write load result to out_build_dir/build_configs
 build_loader_script = rebase_path("//build/loader/load.py")
 
-_platforms_config_file =
-    "${preloader_output_dir}/${product_name}/platforms.build"
+_platforms_config_file = "${preloader_output_dir}/platforms.build"
 
-_subsystem_config_file =
-    "${preloader_output_dir}/${product_name}/subsystem_config.json"
+_subsystem_config_file = "${preloader_output_dir}/subsystem_config.json"
 
 build_platform = ""
 
