@@ -70,8 +70,15 @@ def read_build_gn_file(file_path):
         pattern = re.compile(r'ohos_shared_library.*?\}', re.DOTALL)
         results = pattern.findall(file_data)
         for ohos_module_string in results:
-            module = Module.create_module_by_string(ohos_module_string)
+            module = Module.create_module_by_string(ohos_module_string, True)
             module_dict[module.module_name] = module
+        
+        pattern = re.compile(r'ohos_executable.*?\}', re.DOTALL)
+        results = pattern.findall(file_data)
+        for ohos_module_string in results:
+            module = Module.create_module_by_string(ohos_module_string, False)
+            module_dict[module.module_name] = module
+        
 
 
 def _colletct_build_gn_path(root_path):

@@ -74,12 +74,13 @@ class Module():
         self._raw_data = value
 
     @staticmethod
-    def create_module_by_string(ohos_string):
+    def create_module_by_string(ohos_string, is_so):
         module_name = ''
         subsystem_name = ''
         part_name = ''
 
-        module_pattern = re.compile(r'(?<=ohos_shared_library\(").+(?="\))')
+        module_pattern = re.compile(r'(?<=ohos_shared_library\(").+(?="\))') if is_so else \
+            re.compile(r'(?<=ohos_executable\(").+(?="\))')
         try:
             module_name = module_pattern.search(ohos_string).group()
         except AttributeError as e:
