@@ -31,3 +31,5 @@ system/lib/ld-musl-arm-asan.so.1,00755,      0,          2000,       0
 system/lib/ld-musl-aarch64-asan.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-arm-asan.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-aaarch64-asan.so.1,00755,      0,          2000,       0
+vendor/etc/thermal_config/hdf/thermal_hdi_config.xml,00644,	3025,	3025,	0
+system/etc/ledconfig/led_config.json,00644,	3025,	3025,		0
