@@ -59,9 +59,7 @@ config("feature_flags") {
       "USE_X11=1",
     ]
   }
-  if (use_allocator != "tcmalloc") {
-    defines += [ "NO_TCMALLOC" ]
-  }
+
   if ((is_asan || is_lsan || is_tsan || is_msan) && using_sanitizer) {
     defines += [
       "MEMORY_TOOL_REPLACES_ALLOCATOR",

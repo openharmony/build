@@ -26,6 +26,27 @@
             "darwin"
         ]
     },
+   {
+        "install_dir": "toolchains",
+        "module_label": "//third_party/selinux:libselinux",
+        "target_os": [
+            "linux"
+        ]
+    },
+   {
+        "install_dir": "toolchains",
+        "module_label": "//third_party/selinux:libsepol",
+        "target_os": [
+            "linux"
+       ]
+    },
+   {
+        "install_dir": "toolchains",
+        "module_label": "//third_party/pcre2:libpcre2",
+        "target_os": [
+            "linux"
+       ]
+     },
     {
         "install_dir": "toolchains",
         "module_label": "//developtools/hapsigner:lib",
@@ -36,29 +57,17 @@
         ]
     },
     {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_linux",
-        "target_os": [
-            "linux"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_windows",
-        "target_os": [
-            "windows"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_darwin",
-        "target_os": [
+	"install_dir": "toolchains",
+	"module_label": "//developtools/global_resource_tool:restool",
+	"target_os": [
+	    "linux",
+	    "windows",
             "darwin"
         ]
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//prebuilts/build-tools/common/restool:restool_systemres",
+        "module_label": "//developtools/global_resource_tool:restool_systemres",
         "target_os": [
             "windows",
             "linux",
@@ -462,6 +471,14 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_curl_shared_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "previewer/resources",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
         "target_os": [
@@ -577,7 +594,7 @@
     },
 	{
         "install_dir": "toolchains",
-        "module_label": "//foundation/aafwk/standard/idl:idl",
+        "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
             "linux",
             "windows",

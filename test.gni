@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
@@ -245,9 +246,10 @@ template("ohos_fuzztest") {
         "-fsanitize=fuzzer",
       ]
       if (target_cpu == "arm64") {
-        libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/aarch64-linux-ohos/libclang_rt.fuzzer.a" ]
+        libs =
+            [ "$clang_lib_base_path/aarch64-linux-ohos/libclang_rt.fuzzer.a" ]
       } else {
-        libs = [ "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/10.0.1/lib/arm-linux-ohos/libclang_rt.fuzzer.a" ]
+        libs = [ "$clang_lib_base_path/arm-linux-ohos/libclang_rt.fuzzer.a" ]
       }
     }
   } else {

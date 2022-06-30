@@ -35,7 +35,7 @@ fi
 echo "tool_repo=$tool_repo"
 
 if [ -z "$NPM_REGISTRY" ];then
-	npm_registry='http://registry.npm.taobao.org'
+	npm_registry='https://repo.huaweicloud.com/repository/npm/'
 else
 	npm_registry=$NPM_REGISTRY
 fi
@@ -53,10 +53,10 @@ function check_sha256() {
     check_sha256=$(curl -s -k ${check_url}.sha256)
     local_sha256=$(sha256sum ${local_file} |awk '{print $1}')
     if [ "X${check_sha256}" == "X${local_sha256}" ];then
-        echo -e "${success_color},${check_url} Sha256 check OK."
+        echo -e "${success_color},${check_url} Sha256 check download OK."
         sha256_result=0
     else
-        echo -e "${failed_color},${check_url} Sha256 check Failed.Retry!"
+        echo -e "${failed_color},${check_url} Sha256 check download Failed.Retry!"
         sha256_result=1
     fi
 }
@@ -66,11 +66,13 @@ function check_sha256_by_mark() {
     check_url=$1 # source URL
     check_sha256=$(curl -s -k ${check_url}.sha256)
     echo $1
-    if [ -f "${code_dir}/${unzip_dir}/${check_sha256}.mark" ];then
+    if [ -f "${code_dir}/${unzip_dir}/${check_sha256}.${unzip_filename}.mark" ];then
         echo -e "${success_color},${check_url} Sha256 markword check OK."
         sha256_result=0
     else
-        echo -e "${check_url} Sha256 mismatch or files not downloaded yet."
+        echo -e "${check_url} Sha256 markword mismatch or files not downloaded yet."
+        rm -rf ${code_dir}/${unzip_dir}/*.${unzip_filename}.mark
+        rm -rf ${code_dir}/${unzip_dir}/${unzip_filename}
         sha256_result=1
     fi
 }
@@ -116,7 +118,7 @@ function npm_install() {
         if [ "X${SKIP_SSL}" == "XYES" ];then
             npm config set strict-ssl false
         fi
-        # npm cache clean -f
+        npm cache clean -f
         npm install
     fi
 }
@@ -138,6 +140,7 @@ function node_modules_copy() {
 
 case $(uname -s) in
     Linux)
+
         host_platform=linux
         ;;
     Darwin)
@@ -158,33 +161,33 @@ bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
 # download file list
 # todo: add product related config
 copy_config="""
-prebuilts/sdk/js-loader/build-tools,${tool_repo}/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz
-prebuilts/build-tools/common,${tool_repo}/openharmony/compiler/restool/2.007/restool-2.007.tar.gz
-prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz
-prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz
-prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/clang-480513-${host_platform}-x86_64.tar.bz2
-prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220425.tar.gz
+prebuilts/sdk/js-loader/build-tools,${tool_repo}/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz,ace-loader
+prebuilts/build-tools/common,${tool_repo}/openharmony/compiler/restool/2.007/restool-2.007.tar.gz,restool
+prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz,${host_platform}
+prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz,gn
+prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz,ninja
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
+prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220601.tar.gz,ark_js_prebuilts
 """
 
 linux_copy_config="""
-prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz
-prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz
-prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz
-prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz
-prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.1.5.6/previewer-3.1.5.6.win.tar.gz
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/windows/clang-480513-windows-x86_64.tar.bz2
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/windows/libcxx-ndk-480513-windows-x86_64.tar.bz2
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
-prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip
-prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz
-prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz
+prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz,windows-x86
+prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz,clang-mingw
+prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz,prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi
+prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz,gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
+prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz,previewer
+prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2,llvm
+prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2,libcxx-ndk
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
+prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip,esp-2019r2-8.2.0
+prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz,csky
+prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz,linux-x86
 """
 
 darwin_copy_config="""
-prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.1.5.6/previewer-3.1.5.6.mac.tar.gz
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/10.0.1-480513/${host_platform}/libcxx-ndk-480513-${host_platform}-x86_64.tar.bz2
-prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz
+prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
+prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
 """
 
 if [[ "${host_platform}" == "linux" ]]; then
@@ -202,16 +205,16 @@ for i in $(echo ${copy_config})
 do
     unzip_dir=$(echo $i|awk -F ',' '{print $1}')
     huaweicloud_url=$(echo $i|awk -F ',' '{print $2}')
+    unzip_filename=$(echo $i|awk -F ',' '{print $3}')
     md5_huaweicloud_url=$(echo ${huaweicloud_url}|md5sum|awk '{print $1}')
     bin_file=$(basename ${huaweicloud_url})
     bin_file_suffix=${bin_file#*.}
-    #huaweicloud_file_name=$(echo ${huaweicloud_url}|awk -F '/' '{print $NF}')
 
+    check_sha256_by_mark ${huaweicloud_url}
     if [ ! -d "${code_dir}/${unzip_dir}" ];then
         mkdir -p "${code_dir}/${unzip_dir}"
     fi
 
-    check_sha256_by_mark ${huaweicloud_url}
     if [ ${sha256_result} -gt 0 ]; then
         hwcloud_download "${bin_dir}/${md5_huaweicloud_url}.${bin_file}"  "${huaweicloud_url}"
         if [ "X${bin_file:0-3}" = "Xzip" ];then
@@ -228,25 +231,25 @@ do
             rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
             mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-480513" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" ];then
             rm -rf "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-            ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
+            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
+            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-480513" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" ];then
             rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-            ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
+            mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-480513" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" ];then
             rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-480513" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-            ln -snf 10.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
+            mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
         fi
         if [ -d "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf" ];then
             chmod 755 "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0" -R
         fi
-        echo 0 > "${code_dir}/${unzip_dir}/${check_sha256}.mark"
+        echo 0 > "${code_dir}/${unzip_dir}/${check_sha256}.${unzip_filename}.mark"
     fi
     echo "k"
 done
@@ -265,9 +268,9 @@ if [ ! -f "${node_js_pkg}" ]; then
 fi
 
 npm_install_config="""
-third_party/jsframework,prebuilts/build-tools/common/js-framework
 developtools/ace-ets2bundle/compiler,
 developtools/ace-js2bundle/ace-loader,
+third_party/jsframework,prebuilts/build-tools/common/js-framework,
 ark/ts2abc/ts2panda,prebuilts/build-tools/common/ts2abc
 """
 

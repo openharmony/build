@@ -15,6 +15,10 @@ import("//build/config/python.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
 
+if (is_ohos) {
+  import("//build/config/ohos/abi.gni")
+}
+
 template("merge_profile") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.hap_profile),
@@ -75,7 +79,21 @@ template("compile_resources") {
                            ])
     script = "//build/scripts/compile_resources.py"
     depfile = "$target_gen_dir/$target_name.d"
-
+    if (defined(deps)) {
+      deps += [
+        "//developtools/global_resource_tool:restool($host_toolchain)",
+        "//developtools/global_resource_tool:restool_id_defined($host_toolchain)",
+      ]
+    } else {
+      deps = [
+        "//developtools/global_resource_tool:restool($host_toolchain)",
+        "//developtools/global_resource_tool:restool_id_defined($host_toolchain)",
+      ]
+    }
+    restool_path =
+        get_label_info(
+            "//developtools/global_resource_tool:restool($host_toolchain)",
+            "root_out_dir") + "/developtools/global_restool/restool"
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
@@ -87,7 +105,7 @@ template("compile_resources") {
       "--depfile",
       rebase_path(depfile, root_build_dir),
       "--restool-path",
-      rebase_path(restool, root_build_dir),
+      rebase_path(restool_path, root_build_dir),
       "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
     ]
@@ -222,6 +240,12 @@ template("package_app") {
                        get_label_info(lib, "name") + "_module_info.json"
         _rebased_module_info = rebase_path(_module_info, root_build_dir)
         args += [ "--dso=@FileArg($_rebased_module_info:source)" ]
+      }
+      if (is_ohos) {
+        args += [
+          "--ohos-app-abi",
+          ohos_app_abi,
+        ]
       }
     }
 

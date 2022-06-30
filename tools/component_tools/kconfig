@@ -152,13 +152,13 @@ config feature$$security$$selinux
         string "feature"
         default ""
         depends on security$$selinux
-config security$$deviceauth_standard
-    bool "deviceauth_standard"
+config security$$device_auth
+    bool "device_auth"
     default n
-config feature$$security$$deviceauth_standard
+config feature$$security$$device_auth
         string "feature"
         default ""
-        depends on security$$deviceauth_standard
+        depends on security$$device_auth
 config security$$dataclassification
     bool "dataclassification"
     default n
@@ -351,13 +351,6 @@ config feature$$appexecfwk$$distributed_bundle_framework
         string "feature"
         default ""
         depends on appexecfwk$$distributed_bundle_framework
-config appexecfwk$$eventhandler
-    bool "eventhandler"
-    default n
-config feature$$appexecfwk$$eventhandler
-        string "feature"
-        default ""
-        depends on appexecfwk$$eventhandler
 config appexecfwk$$bundle_framework
     bool "bundle_framework"
     default n
@@ -418,6 +411,13 @@ config feature$$notification$$ces_standard
         string "feature"
         default ""
         depends on notification$$ces_standard
+config notification$$eventhandler
+    bool "eventhandler"
+    default n
+config feature$$notification$$eventhandler
+        string "feature"
+        default ""
+        depends on notification$$eventhandler
 endmenu
 menu "communication"
 config communication$$ipc_js
@@ -434,13 +434,13 @@ config feature$$communication$$ipc
         string "feature"
         default ""
         depends on communication$$ipc
-config communication$$dsoftbus_standard
-    bool "dsoftbus_standard"
+config communication$$dsoftbus
+    bool "dsoftbus"
     default n
-config feature$$communication$$dsoftbus_standard
+config feature$$communication$$dsoftbus
         string "feature"
         default ""
-        depends on communication$$dsoftbus_standard
+        depends on communication$$dsoftbus
 config communication$$wifi_standard
     bool "wifi_standard"
     default n
@@ -508,13 +508,13 @@ config feature$$hdf$$display_device_driver
         string "feature"
         default ""
         depends on hdf$$display_device_driver
-config hdf$$usb_device_driver
-    bool "usb_device_driver"
+config hdf$$drivers_peripheral_usb
+    bool "drivers_peripheral_usb"
     default n
-config feature$$hdf$$usb_device_driver
+config feature$$hdf$$drivers_peripheral_usb
         string "feature"
         default ""
-        depends on hdf$$usb_device_driver
+        depends on hdf$$drivers_peripheral_usb
 config hdf$$audio_device_driver
     bool "audio_device_driver"
     default n
@@ -529,27 +529,27 @@ config feature$$hdf$$device_driver_framework
         string "feature"
         default ""
         depends on hdf$$device_driver_framework
-config hdf$$input_device_driver
-    bool "input_device_driver"
+config hdf$$drivers_peripheral_input
+    bool "drivers_peripheral_input"
     default n
-config feature$$hdf$$input_device_driver
+config feature$$hdf$$drivers_peripheral_input
         string "feature"
         default ""
-        depends on hdf$$input_device_driver
-config hdf$$battery_device_driver
-    bool "battery_device_driver"
+        depends on hdf$$drivers_peripheral_input
+config hdf$$drivers_peripheral_battery
+    bool "drivers_peripheral_battery"
     default n
-config feature$$hdf$$battery_device_driver
+config feature$$hdf$$drivers_peripheral_battery
         string "feature"
         default ""
-        depends on hdf$$battery_device_driver
-config hdf$$vibrator_device_driver
-    bool "vibrator_device_driver"
+        depends on hdf$$drivers_peripheral_battery
+config hdf$$drivers_peripheral_vibrator
+    bool "drivers_peripheral_vibrator"
     default n
-config feature$$hdf$$vibrator_device_driver
+config feature$$hdf$$drivers_peripheral_vibrator
         string "feature"
         default ""
-        depends on hdf$$vibrator_device_driver
+        depends on hdf$$drivers_peripheral_vibrator
 config hdf$$wlan_device_driver
     bool "wlan_device_driver"
     default n
@@ -564,27 +564,27 @@ config feature$$hdf$$codec_device_driver
         string "feature"
         default ""
         depends on hdf$$codec_device_driver
-config hdf$$light_device_driver
-    bool "light_device_driver"
+config hdf$$drivers_peripheral_light
+    bool "drivers_peripheral_light"
     default n
-config feature$$hdf$$light_device_driver
+config feature$$hdf$$drivers_peripheral_light
         string "feature"
         default ""
-        depends on hdf$$light_device_driver
-config hdf$$power_device_driver
-    bool "power_device_driver"
+        depends on hdf$$drivers_peripheral_light
+config hdf$$drivers_peripheral_power
+    bool "drivers_peripheral_power"
     default n
-config feature$$hdf$$power_device_driver
+config feature$$hdf$$drivers_peripheral_power
         string "feature"
         default ""
-        depends on hdf$$power_device_driver
-config hdf$$sensor_device_driver
-    bool "sensor_device_driver"
+        depends on hdf$$drivers_peripheral_power
+config hdf$$drivers_peripheral_sensor
+    bool "drivers_peripheral_sensor"
     default n
-config feature$$hdf$$sensor_device_driver
+config feature$$hdf$$drivers_peripheral_sensor
         string "feature"
         default ""
-        depends on hdf$$sensor_device_driver
+        depends on hdf$$drivers_peripheral_sensor
 config hdf$$camera_device_driver
     bool "camera_device_driver"
     default n
@@ -599,13 +599,13 @@ config feature$$hdf$$bluetooth_device_driver
         string "feature"
         default ""
         depends on hdf$$bluetooth_device_driver
-config hdf$$thermal_device_driver
-    bool "thermal_device_driver"
+config hdf$$drivers_peripheral_thermal
+    bool "drivers_peripheral_thermal"
     default n
-config feature$$hdf$$thermal_device_driver
+config feature$$hdf$$drivers_peripheral_thermal
         string "feature"
         default ""
-        depends on hdf$$thermal_device_driver
+        depends on hdf$$drivers_peripheral_thermal
 endmenu
 menu "updater"
 config updater$$update_service
@@ -725,20 +725,20 @@ config feature$$multimedia$$multimedia_image_standard
         string "feature"
         default ""
         depends on multimedia$$multimedia_image_standard
-config multimedia$$multimedia_audio_standard
-    bool "multimedia_audio_standard"
+config multimedia$$multimedia_audio_framework
+    bool "multimedia_audio_framework"
     default n
-config feature$$multimedia$$multimedia_audio_standard
+config feature$$multimedia$$multimedia_audio_framework
         string "feature"
         default ""
-        depends on multimedia$$multimedia_audio_standard
-config multimedia$$multimedia_media_library_standard
-    bool "multimedia_media_library_standard"
+        depends on multimedia$$multimedia_audio_framework
+config multimedia$$media_library
+    bool "media_library"
     default n
-config feature$$multimedia$$multimedia_media_library_standard
+config feature$$multimedia$$media_library
         string "feature"
         default ""
-        depends on multimedia$$multimedia_media_library_standard
+        depends on multimedia$$media_library
 config multimedia$$multimedia_camera_standard
     bool "multimedia_camera_standard"
     default n
@@ -948,13 +948,13 @@ config feature$$xts$$phone_tests
         depends on xts$$phone_tests
 endmenu
 menu "distributedhardware"
-config distributedhardware$$device_manager_base
-    bool "device_manager_base"
+config distributedhardware$$device_manager
+    bool "device_manager"
     default n
-config feature$$distributedhardware$$device_manager_base
+config feature$$distributedhardware$$device_manager
         string "feature"
         default ""
-        depends on distributedhardware$$device_manager_base
+        depends on distributedhardware$$device_manager
 endmenu
 menu "ark"
 config ark$$ark
@@ -980,8 +980,6 @@ config feature$$ark$$ark_js_runtime
         depends on ark$$ark_js_runtime
 endmenu
 menu "compileruntime"
-endmenu
-menu "iot"
 endmenu
 menu "iot_hardware"
 endmenu
