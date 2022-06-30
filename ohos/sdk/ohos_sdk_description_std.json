@@ -30,24 +30,21 @@
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libselinux",
         "target_os": [
-            "linux",
-            "darwin"
+            "linux"
         ]
     },
    {
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libsepol",
         "target_os": [
-            "linux",
-            "darwin"
+            "linux"
        ]
     },
    {
         "install_dir": "toolchains",
         "module_label": "//third_party/pcre2:libpcre2",
         "target_os": [
-            "linux",
-            "darwin"
+            "linux"
        ]
      },
     {
