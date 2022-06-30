@@ -10,6 +10,11 @@ declare_args() {
   # Whether unstripped binaries, i.e. compiled with debug symbols, should be
   # considered runtime_deps rather than stripped ones.
   ohos_unstripped_runtime_outputs = true
+  ohos_extra_cflags = ""
+  ohos_extra_cppflags = ""
+  ohos_extra_cxxflags = ""
+  ohos_extra_asmflags = ""
+  ohos_extra_ldflags = ""
 }
 
 # The ohos clang toolchains share most of the same parameters, so we have this
@@ -49,6 +54,11 @@ template("ohos_clang_toolchain") {
     nm = "${_prefix}/llvm-nm"
     strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
     use_unstripped_as_runtime_outputs = ohos_unstripped_runtime_outputs
+    extra_cflags = ohos_extra_cflags
+    extra_cppflags = ohos_extra_cppflags
+    extra_cxxflags = ohos_extra_cxxflags
+    extra_asmflags = ohos_extra_asmflags
+    extra_ldflags = ohos_extra_ldflags
 
     # Don't use .cr.so for loadable_modules since they are always loaded via
     # absolute path.
