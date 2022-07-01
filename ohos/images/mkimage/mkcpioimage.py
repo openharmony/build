@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import configparser
+import json
 import os
 import shutil
 import sys
@@ -20,12 +21,13 @@ import argparse
 import subprocess
 import filecmp
 
+BOOT_TYPE = ""
 DTC_419 = "dtc_419_path"
 DTC_510 = "dtc_510_path"
 FSTAB_REQUIRED = "fstab_required_path"
 NEED_CLEAR_RESOURCE_SECTION = \
     [DTC_419, DTC_510, FSTAB_REQUIRED, "mkimage_path"]
-
+need_clear_section_target_path_list = []
 
 def args_parse(args):
     parser = argparse.ArgumentParser(description='mkcpioimage.py')
@@ -92,7 +94,9 @@ def build_run_fitimage(args):
     if res[1] != 0:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
-
+        print("error run fit image errno: %s" % str(res))
+        clear_resource_file(need_clear_section_target_path_list)
+        sys.exit(2)
     return res[1]
 
 
@@ -108,11 +112,14 @@ def build_run_cpio(args):
     dir_list = []
     get_dir_list("./", dir_list)
     res = run_cmd(ramdisk_cmd, dir_list)
+    os.chdir(work_dir)
     if res[1] != 0:
+        print("error run cpio ramdisk errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
-    os.chdir(work_dir)
-    return res[1]
+        clear_resource_file(need_clear_section_target_path_list)
+        sys.exit(1)
+    return
 
 
 def build_run_chmod(args):
@@ -129,8 +136,11 @@ def build_run_chmod(args):
         chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "ramdisk.img")]
     res = run_cmd(chmod_cmd)
     if res[1] != 0:
+        print("error run chmod errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
+        clear_resource_file(need_clear_section_target_path_list)
+        sys.exit(3)
     return res[1]
 
 
@@ -143,7 +153,6 @@ def parse_resource_config(resource_config_file_path):
     dtc_419_source_path = ""
     dtc_510_source_path = ""
     global BOOT_TYPE
-    BOOT_TYPE = ""
     need_clear_section_target_path_list = []
     if os.path.exists(resource_config_file_path):
         ramdisk_config = configparser.ConfigParser()
@@ -200,26 +209,16 @@ def clear_resource_file(input_file_path_list):
 def main(args):
     args = args_parse(args)
     print("Make cpio image!")
+    config = {}
+    with open("../../ohos_config.json") as f:
+        config = json.load(f)
+    if config.get('component_type', '') != 'system_component':
+        global need_clear_section_target_path_list
+        need_clear_section_target_path_list = parse_resource_config(args.resource_config)
+    build_run_cpio(args)
+    build_run_fitimage(args)
+    build_run_chmod(args)
 
-    need_clear_section_target_path_list = \
-        parse_resource_config(args.resource_config)
-
-    res = build_run_cpio(args)
-    if res != 0:
-        print("error run cpio ramdisk errno: %s" % str(res))
-        clear_resource_file(need_clear_section_target_path_list)
-        sys.exit(1)
-    res = build_run_fitimage(args)
-    if res != 0:
-        print("error run fit image errno: %s" % str(res))
-        clear_resource_file(need_clear_section_target_path_list)
-        sys.exit(2)
-    res = build_run_chmod(args)
-    if res != 0:
-        print("error run chmod errno: %s" % str(res))
-        clear_resource_file(need_clear_section_target_path_list)
-        sys.exit(3)
-    clear_resource_file(need_clear_section_target_path_list)
 
 
 if __name__ == '__main__':
