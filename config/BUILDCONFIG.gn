@@ -84,7 +84,11 @@ if (defined(product_build_config.build_selinux)) {
 if (defined(product_build_config.support_jsapi)) {
   support_jsapi = product_build_config.support_jsapi
 } else {
-  support_jsapi = true
+  if (defined(global_parts_info) && !defined(global_parts_info.arkui_napi)) {
+    support_jsapi = false
+  } else {
+    support_jsapi = true
+  }
 }
 
 if (target_os == "") {
