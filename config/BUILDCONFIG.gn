@@ -46,6 +46,19 @@
 # When writing build files, to do something only for the host:
 #   if (current_toolchain == host_toolchain) { ...
 
+check_mac_system_and_cpu_script =
+    rebase_path("//build/scripts/check_mac_system_and_cpu.py")
+check_darwin_system_result =
+    exec_script(check_mac_system_and_cpu_script, [ "system" ], "string")
+
+if (check_darwin_system_result != "") {
+  check_mac_host_cpu_result =
+      exec_script(check_mac_system_and_cpu_script, [ "cpu" ], "string")
+  if (check_mac_host_cpu_result != "") {
+    host_cpu = "arm64"
+  }
+}
+
 declare_args() {
   product_name = ""
   device_name = ""
@@ -241,7 +254,11 @@ if (target_os == "ohos" && target_cpu == "x86_64") {
 if (host_os == "linux") {
   host_platform_dir = "linux-x86_64"
 } else if (host_os == "mac") {
-  host_platform_dir = "darwin-x86_64"
+  if (host_cpu == "arm64") {
+    host_platform_dir = "darwin-arm64"
+  } else {
+    host_platform_dir = "darwin-x86_64"
+  }
 } else {
   assert(false, "Unsupported host_os: $host_os")
 }
