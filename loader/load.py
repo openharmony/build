@@ -257,7 +257,9 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
             continue
         for syscap_string in syscap['syscap']:
             if syscap_string.startswith("SystemCapability.") == True:
-                target_syscap_for_init_list.append("const." + syscap_string + "=true\n")
+                target_syscap_init_str = "const." + syscap_string + "=true\n"
+                if target_syscap_init_str not in target_syscap_for_init_list:
+                     target_syscap_for_init_list.append(target_syscap_init_str)
             else:
                 raise Exception("""In bundle.json of part [{}], The syscap string [{}] is incorrect,
                  need start with \"SystemCapability.\"""".format(syscap['component'], syscap_string))
