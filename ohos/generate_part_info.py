@@ -40,6 +40,9 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
     # thirdparty subsystem part module list
     thirdparty_module_list = []
 
+    # driver/interface part moudle list
+    hdi_module_list = []
+
     # Generate a list of modules by part
     modules_info_dict = {}
     modules_def = {}  # remove duplicates
@@ -52,6 +55,8 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
         thirdparty = info.get('subsystem_name')
         if thirdparty == 'thirdparty':
             thirdparty_module_list.append(info)
+        if str(module_def).startswith("//driver/interface"):
+            hdi_module_list.append(info)
         _module_part_name = info.get('part_name')
         if _module_part_name not in modules_info_dict:
             modules_info_dict[_module_part_name] = []
@@ -72,10 +77,11 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
         else:
             part_no_install_modules.append(install_module)
 
-    # Depended thirdparty modules are installed by default
+    # Depended thirdparty modules and driver/interface modules
+    # are installed by default
     # rather than configured in product config.
     part_install_modules.extend(thirdparty_module_list)
-
+    part_install_modules.extend(hdi_module_list)
     # write install modules file
     write_json_file(install_modules_file, part_install_modules)
 
@@ -96,7 +102,6 @@ def main():
     parser.add_argument('--current-toolchain', help='', required=True)
     parser.add_argument('--depfile', required=False)
     args = parser.parse_args()
-
     gen_output_file(args.part_name, args.origin_part_name, args.input_file,
                     args.sdk_modules_info_file, args.output_install_file,
                     args.output_deps_file, args.current_toolchain)
