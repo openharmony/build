@@ -74,12 +74,20 @@ ndk_targets = [
 if (ndk_system == "win") {
   ndk_targets += [ "//third_party/musl/ndk_script:windows_x86_64" ]
 } else if (ndk_system == "mac") {
-  ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+  if (host_cpu == "arm64") {
+    ndk_targets += [ "//third_party/musl/ndk_script:darwin_arm64" ]
+  } else {
+    ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+  }
 } else if (ndk_system == "linux") {
   ndk_targets += [ "//third_party/musl/ndk_script:linux_x86_64" ]
 } else if (ndk_system == "default") {
   if (host_os == "mac") {
-    ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+    if (host_cpu == "arm64") {
+      ndk_targets += [ "//third_party/musl/ndk_script:darwin_arm64" ]
+    } else {
+      ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+    }
   } else {
     ndk_targets += [
       "//third_party/musl/ndk_script:windows_x86_64",
