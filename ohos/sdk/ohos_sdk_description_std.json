@@ -190,7 +190,7 @@
         ]
     },
     {
-    	"install_dir": "js/build-tools/ace-loader/bin/ark/build-win/",
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/",
         "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_win",
         "target_os": [
             "windows"
@@ -220,6 +220,48 @@
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/",
         "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
         "target_os": [
             "darwin"
         ]
