@@ -19,3 +19,11 @@ ohos_clang_toolchain("ohos_clang_arm64") {
     current_cpu = "arm64"
   }
 }
+
+ohos_clang_toolchain("ohos_clang_x86_64") {
+  sysroot = "${musl_sysroot}"
+  lib_dir = "usr/lib/x86_64-linux-ohos"
+  toolchain_args = {
+    current_cpu = "x86_64"
+  }
+}

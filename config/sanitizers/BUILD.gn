@@ -64,7 +64,7 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     } else if (target_cpu == "arm") {
       _clang_rt_dso_path = "arm-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "x86_64") {
-      _clang_rt_dso_path = ""
+      _clang_rt_dso_path = "x86_64-linux-ohos/libclang_rt.asan.so"
     }
   }
 
@@ -658,7 +658,7 @@ template("config_plus_compiler_rt") {
       } else if (target_cpu == "arm") {
         _dso_names += [ "arm-linux-ohos/libclang_rt.${dso_name}.a" ]
       } else if (target_cpu == "x86_64") {
-        _dso_names += []
+        _dso_names += [ "x86_64-linux-ohos/libclang_rt.${dso_name}.a" ]
       }
     }
 

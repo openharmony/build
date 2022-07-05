@@ -248,6 +248,8 @@ template("ohos_fuzztest") {
       if (target_cpu == "arm64") {
         libs =
             [ "$clang_lib_base_path/aarch64-linux-ohos/libclang_rt.fuzzer.a" ]
+      } else if (target_cpu == "x86_64") {
+        libs = [ "$clang_lib_base_path/x86_64-linux-ohos/libclang_rt.fuzzer.a" ]
       } else {
         libs = [ "$clang_lib_base_path/arm-linux-ohos/libclang_rt.fuzzer.a" ]
       }
