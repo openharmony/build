@@ -212,6 +212,8 @@ template("ohos_executable") {
         "${innersdk_dir_name}",
         "--current-toolchain",
         current_toolchain,
+        "--innerkits-adapter-info-file",
+        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -505,6 +507,8 @@ template("ohos_shared_library") {
         "${innersdk_dir_name}",
         "--current-toolchain",
         current_toolchain,
+        "--innerkits-adapter-info-file",
+        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -746,6 +750,8 @@ template("ohos_static_library") {
         "${innersdk_dir_name}",
         "--current-toolchain",
         current_toolchain,
+        "--innerkits-adapter-info-file",
+        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -920,6 +926,8 @@ template("ohos_source_set") {
         "${innersdk_dir_name}",
         "--current-toolchain",
         current_toolchain,
+        "--innerkits-adapter-info-file",
+        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
