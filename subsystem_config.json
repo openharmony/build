@@ -20,7 +20,7 @@
     "name": "security"
   },
   "useriam": {
-    "path": "base/user_iam",
+    "path": "base/useriam",
     "name": "useriam"
   },
   "startup": {
@@ -44,8 +44,8 @@
     "name": "appexecfwk"
   },
   "aafwk": {
-    "path": "foundation/aafwk",
-    "name": "aafwk"
+    "path": "foundation/ability",
+    "name": "ability"
   },
   "ability": {
     "path": "foundation/ability",
@@ -151,10 +151,6 @@
     "path": "base/compileruntime",
     "name": "compileruntime"
   },
-  "iot": {
-    "path": "domains/iot",
-    "name": "domains"
-  },
   "iot_hardware": {
     "path": "base/iot_hardware",
     "name": "iot_hardware"
@@ -180,7 +176,7 @@
     "name": "resourceschedule"
   },
   "barrierfree": {
-    "path": "base/accessibility",
+    "path": "foundation/barrierfree/accessibility",
     "name": "accessibility"
   },
   "securec": {

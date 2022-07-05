@@ -49,16 +49,17 @@
 declare_args() {
   product_name = ""
   device_name = ""
-  preloader_output_dir = "//out/preloader"
+}
+
+declare_args() {
+  preloader_output_dir = "//out/preloader/${product_name}"
 }
 
 product_build_config =
-    read_file("${preloader_output_dir}/${product_name}/build_config.json",
-              "json")
+    read_file("${preloader_output_dir}/build_config.json", "json")
 
 global_parts_info =
-    read_file("${preloader_output_dir}/${product_name}/parts_config.json",
-              "json")
+    read_file("${preloader_output_dir}/parts_config.json", "json")
 
 product_company = product_build_config.product_company
 device_company = product_build_config.device_company
@@ -83,7 +84,11 @@ if (defined(product_build_config.build_selinux)) {
 if (defined(product_build_config.support_jsapi)) {
   support_jsapi = product_build_config.support_jsapi
 } else {
-  support_jsapi = true
+  if (defined(global_parts_info) && !defined(global_parts_info.arkui_napi)) {
+    support_jsapi = false
+  } else {
+    support_jsapi = true
+  }
 }
 
 if (target_os == "") {

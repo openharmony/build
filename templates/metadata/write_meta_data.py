@@ -169,7 +169,7 @@ def main():
             config = json.load(profile)
             pre_path = options.js_assets[0]
             options.js_assets = []
-            if len(config['module']['abilities']) > 1:
+            if len(config['module']['abilities']) > 1 or config['module'].__contains__('testRunner'):
                 if config['module']['abilities'][0].get('srcLanguage') == 'js':
                     for ability in config['module']['abilities']:
                         options.js_assets.append(pre_path + '/' + ability['srcPath'])
@@ -181,6 +181,8 @@ def main():
                             options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
             else:
                 options.js_assets.append(pre_path)
+            if config['module'].__contains__('testRunner'):
+                options.js_assets.append(pre_path + '/' + config['module']['testRunner']['srcPath'])
 
     if not options.app_profile and options.hap_profile and options.ets_assets:
         with open(options.hap_profile) as profile:

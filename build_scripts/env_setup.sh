@@ -11,9 +11,11 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.
 
 cp ./docs/docker/Dockerfile ./build/build_scripts/
+
+sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
+sed -i "s@\\\@@g" ./build/build_scripts/Dockerfile
 
 sed -i "s@FROM ubuntu:18.04@@g" ./build/build_scripts/Dockerfile
 sed -i "s@WORKDIR /home/openharmony@@g" ./build/build_scripts/Dockerfile
@@ -21,19 +23,28 @@ sed -i "s@ENV LANG=en_US.UTF-8 LANGUAGE=en_US.UTF-8 LC_ALL=en_US.UTF-8@@g" ./bui
 sed -i "s@RUN @@g" ./build/build_scripts/Dockerfile
 sed -i "s@&& @@g" ./build/build_scripts/Dockerfile
 
+sed -i 's@rm -rf /bin/sh.*\s@@' ./build/build_scripts/Dockerfile
+sed -i 's@ln -s /bin.*\s@@g' ./build/build_scripts/Dockerfile
+sed -i 's@ln -s /usr.*\s@@g' ./build/build_scripts/Dockerfile
+sed -i 's@locale-gen .*\s@@g' ./build/build_scripts/Dockerfile
+sed -i 's@^export PATH=.*\s@@g' ./build/build_scripts/Dockerfile
+
+sed -i 's@ruby\S*\s@ruby @' ./build/build_scripts/Dockerfile
+sed -i 's@python3\S*\s@@g' ./build/build_scripts/Dockerfile
+sed -i "s@git-core@git@g" ./build/build_scripts/Dockerfile
+sed -i "s@zlib*@zlib@g" ./build/build_scripts/Dockerfile
+
+sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
+sed -i '/chmod +x /a python3 -m pip install --user build/lite' ./build/build_scripts/Dockerfile
+sed -i '/pip3 install six/i pip3 install testresources' ./build/build_scripts/Dockerfile
+
+
 sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
 sed -i "s@\\\@@g" ./build/build_scripts/Dockerfile
 
-sed -i 's@ruby\S*\s@ruby @' ./build/build_scripts/Dockerfile
-sed -i "s@python3.8-distutils@python3-distutils@g" ./build/build_scripts/Dockerfile
-sed -i "s@git-core@git@g" ./build/build_scripts/Dockerfile
-sed -i "s@zlib*@zlib@g" ./build/build_scripts/Dockerfile
-sed -i "s@cd /home/openharmony@cd /../..@g" ./build/build_scripts/Dockerfile
-sed -i '/pip3 install/i python3 -m pip install --user ohos-build' ./build/build_scripts/Dockerfile
-sed -i '/pip3 install six/i pip3 install testresource' ./build/build_scripts/Dockerfile
-
 result1=$(echo $SHELL | grep "bash")
 result2=$(echo $SHELL | grep "zsh")
+
 userhome=~
 if [[ "$result1" != "" ]]
 then
@@ -50,9 +61,5 @@ chmod +x ./build/build_scripts/rundocker.sh
 sudo ./build/build_scripts/rundocker.sh
 
 echo "--------------------------------------------------------------------------------"
-echo "Please execute source ~/.bashrc or source ~/.bashrc, or restart the shell window"
+echo "Please execute source ~/.bashrc or source ~/.zshrc, or restart the shell window"
 echo "--------------------------------------------------------------------------------"
-
-
-
-
