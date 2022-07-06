@@ -684,13 +684,13 @@ config feature$$sensors$$miscdevice
         depends on sensors$$miscdevice
 endmenu
 menu "graphic"
-config graphic$$graphic_standard
-    bool "graphic_standard"
+config graphic$$graphic_graphic_2d
+    bool "graphic_graphic_2d"
     default n
-config feature$$graphic$$graphic_standard
+config feature$$graphic$$graphic_graphic_2d
         string "feature"
         default ""
-        depends on graphic$$graphic_standard
+        depends on graphic$$graphic_graphic_2d
 endmenu
 menu "window"
 config window$$window_manager
