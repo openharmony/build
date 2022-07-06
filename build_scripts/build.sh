@@ -25,7 +25,7 @@ function help() {
   echo "  ./build.sh --product-name {product-name} [options]"
   echo
   echo "Examples:"
-  echo "  ./build.sh --product-name Hi3516DV300 --ccache"
+  echo "  ./build.sh --product-name rk3568 --ccache"
   echo
   echo "options"
   echo "  --ccache          use ccache, default: false"
