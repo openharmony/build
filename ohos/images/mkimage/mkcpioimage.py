@@ -85,9 +85,9 @@ def build_run_fitimage(args):
             if not os.path.exists("./ohos_updater.its"):
                 print("error there is no configuration file")
                 return -1
-            if len(mkimage_tool) == 0:
+        if not len(mkimage_tool) == 0:
             fit_cmd = \
-                ["mkimage", '-f', "./ohos_updater.its","mkimage_tool",
+                ["mkimage", '-f', "./ohos_updater.its"
                  os.path.join(root_dir, "images", "updater.img")]
         else:
             return 0
