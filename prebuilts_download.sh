@@ -151,6 +151,15 @@ case $(uname -s) in
         exit 1
 esac
 
+case $(uname -m) in
+    arm64)
+
+        host_cpu=arm64
+        ;;
+    *)
+        host_cpu=x86_64
+esac
+
 # sync code directory
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
@@ -166,7 +175,6 @@ prebuilts/build-tools/common,${tool_repo}/openharmony/compiler/restool/2.007/res
 prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz,${host_platform}
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz,gn
 prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz,ninja
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
 prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz,ark_js_prebuilts
 """
 
@@ -178,6 +186,7 @@ prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_
 prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz,previewer
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2,llvm
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2,libcxx-ndk
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
 prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip,esp-2019r2-8.2.0
 prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz,csky
@@ -186,7 +195,12 @@ prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}
 
 darwin_copy_config="""
 prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
+if [[ "${host_cpu}" == "arm64" ]]; then
+    prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64-20220622.tar.bz2,llvm
+else
+    prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
+fi
+prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
 prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
 """
 
