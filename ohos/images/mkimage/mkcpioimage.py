@@ -21,6 +21,7 @@ import argparse
 import subprocess
 import filecmp
 
+mkimage_tool = ""
 BOOT_TYPE = ""
 DTC_419 = "dtc_419_path"
 DTC_510 = "dtc_510_path"
@@ -84,8 +85,9 @@ def build_run_fitimage(args):
             if not os.path.exists("./ohos_updater.its"):
                 print("error there is no configuration file")
                 return -1
+            if len(mkimage_tool) == 0:
             fit_cmd = \
-                ["mkimage", '-f', "./ohos_updater.its",
+                ["mkimage", '-f', "./ohos_updater.its","mkimage_tool",
                  os.path.join(root_dir, "images", "updater.img")]
         else:
             return 0
@@ -174,6 +176,8 @@ def parse_resource_config(resource_config_file_path):
                 BOOT_TYPE = section_options.get("boot_type", None)
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
+            if each_section[0] =="mkimage_path":
+               global mkimage_tool = os.path.pwdpath(source_path)  
             if os.path.exists(source_path):
                 if os.path.exists(target_path):
                     if not filecmp.cmp(source_path, target_path):
@@ -213,6 +217,7 @@ def main(args):
     with open("../../ohos_config.json") as f:
         config = json.load(f)
     if config.get('component_type', '') != 'system_component':
+        if os.path.exist(args.resource_config):
         global need_clear_section_target_path_list
         need_clear_section_target_path_list = parse_resource_config(args.resource_config)
     build_run_cpio(args)
