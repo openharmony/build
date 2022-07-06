@@ -193,16 +193,21 @@ prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29
 prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz,linux-x86
 """
 
-darwin_copy_config="""
-prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
 if [[ "${host_cpu}" == "arm64" ]]; then
+    darwin_copy_config="""
+    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
     prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64-20220622.tar.bz2,llvm
+    prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
+    prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
+    """
 else
+    darwin_copy_config="""
+    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
     prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
+    prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
+    prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
+    """
 fi
-prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
-prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
-"""
 
 if [[ "${host_platform}" == "linux" ]]; then
     copy_config+=${linux_copy_config}
@@ -255,10 +260,16 @@ do
             mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
             ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" ];then
-            rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
+        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-${host_cpu}/clang-530132" ];then
+            if [[ "${host_cpu}" == "arm64" ]]; then
+                rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
+                mv "${code_dir}/prebuilts/clang/ohos/darwin-arm64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
+                ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm/lib/clang/current"
+            else
+                rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+                mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+                ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
+            fi
         fi
         if [ -d "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf" ];then
             chmod 755 "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0" -R

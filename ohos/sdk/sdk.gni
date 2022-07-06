@@ -31,7 +31,11 @@ ohos_sdk_copy_dir = "$root_build_dir/ohos-sdk"
 sdk_toolchains = {
   linux = "//build/toolchain/linux:clang_x64"
   windows = "//build/toolchain/mingw:mingw_x86_64"
-  darwin = "//build/toolchain/mac:clang_x64"
+  if (host_cpu == "arm64") {
+    darwin = "//build/toolchain/mac:clang_arm64"
+  } else {
+    darwin = "//build/toolchain/mac:clang_x64"
+  }
 }
 
 if (host_os == "mac") {
