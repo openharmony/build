@@ -284,5 +284,20 @@ do
     node_modules_copy ${code_path} ${modules_path}
 done
 
+
+ohos_hypium_path="""
+developtools/ace-ets2bundle/compiler,
+developtools/ace-js2bundle/ace-loader
+"""
+for i in $ohos_hypium_path
+do
+    dest_dir=${code_dir}/$(echo $i|awk -F ',' '{print $1}')/node_modules/@ohos/hypium
+    echo ${dest_dir}
+    if [ ! -d "${dest_dir}" ]; then
+        mkdir -p "${dest_dir}"
+    fi
+    cp -r ${code_dir}/test/arkXtest/jsunit/* ${dest_dir}
+done
+
 cd ${code_dir}
 echo -e "\n"
