@@ -18,6 +18,7 @@ import os
 import argparse
 import shutil
 import xml.etree.ElementTree as ET
+
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
@@ -217,8 +218,8 @@ def _get_subsystem_path(part_name):
     if info is None:
         raise Exception(
             "subsystem '{}' info doesn't exist.".format(subsystem_name))
-    subsystem_path = info.get('path')
-    return subsystem_path
+    subsystem_paths = info.get('path')
+    return subsystem_paths
 
 
 def _parse_module_out_path(module_out_path):
@@ -248,16 +249,51 @@ def _find_resource_config_file(config_file_name, subsystem_path, module_name):
 
 def _get_res_config_file(module_out_path):
     part_name, module_name = _parse_module_out_path(module_out_path)
-    subsystem_path = _get_subsystem_path(part_name)
-    if subsystem_path is None:
-        return None
-    resource_config_file = _find_resource_config_file('ohos_test.xml',
-                                                      subsystem_path,
-                                                      module_name)
-    if not os.path.exists(resource_config_file):
+    subsystem_paths = _get_subsystem_path(part_name)
+    resource_config_files = []
+    if not subsystem_paths:
+        return resource_config_files
+    for _path in subsystem_paths:
         resource_config_file = _find_resource_config_file(
-            'harmony_test.xml', subsystem_path, module_name)
-    return resource_config_file
+            'ohos_test.xml', _path, module_name)
+        if not os.path.exists(resource_config_file):
+            resource_config_file = _find_resource_config_file(
+                'harmony_test.xml', _path, module_name)
+        resource_config_files.append(resource_config_file)
+    return resource_config_files
+
+
+def _get_resources_list(resource_config_file, testcase_target_name,
+                        part_build_out_path, resource_output_path):
+    if not os.path.exists(resource_config_file):
+        raise Exception(
+            "testcase '{}' resource_config_file config incorrect.".format(
+                testcase_target_name))
+    test_resource_path = os.path.dirname(resource_config_file)
+    resources_list = find_testcase_resources(resource_config_file,
+                                             testcase_target_name,
+                                             test_resource_path,
+                                             part_build_out_path,
+                                             resource_output_path)
+    return resources_list
+
+
+def _get_resources_list_auto_match(module_out_path, testcase_target_name,
+                                   part_build_out_path, resource_output_path):
+    resource_config_files = _get_res_config_file(module_out_path)
+    all_resources_list = []
+    for resource_config_file in resource_config_files:
+        if resource_config_file is None or not os.path.exists(
+                resource_config_file):
+            continue
+        test_resource_path = os.path.dirname(resource_config_file)
+        resources_list = find_testcase_resources(resource_config_file,
+                                                 testcase_target_name,
+                                                 test_resource_path,
+                                                 part_build_out_path,
+                                                 resource_output_path)
+        all_resources_list.extend(resources_list)
+    return all_resources_list
 
 
 def main():
@@ -273,34 +309,24 @@ def main():
     if not args.resource_config_file:
         if not args.module_out_path:
             raise Exception('Missing parameter module_out_path.')
-        resource_config_file = _get_res_config_file(args.module_out_path)
-        if resource_config_file is None:
-            print("warning: cannot find resource config file, target: '{}'".
-                  format(args.testcase_target_name))
-            return 0
-        if not os.path.exists(resource_config_file):
-            return 0
+        resources_list = _get_resources_list_auto_match(
+            args.module_out_path, args.testcase_target_name,
+            args.part_build_out_path, args.resource_output_path)
     else:
-        resource_config_file = args.resource_config_file
-        if not os.path.exists(resource_config_file):
-            raise Exception(
-                "testcase '{}' resource_config_file config incorrect.".format(
-                    args.testcase_target_name))
-
-    test_resource_path = os.path.dirname(resource_config_file)
-    resources_list = find_testcase_resources(resource_config_file,
+        resources_list = _get_resources_list(args.resource_config_file,
                                              args.testcase_target_name,
-                                             test_resource_path,
                                              args.part_build_out_path,
                                              args.resource_output_path)
+    if not resources_list:
+        return 0
     write_json_file(args.output_file, resources_list)
     result_dest_list = copy_testcase_resources(resources_list)
     if args.depfile and result_dest_list:
         result_dest_list.sort()
         build_utils.write_depfile(args.depfile,
-                                 args.output_file,
-                                 result_dest_list,
-                                 add_pydeps=False)
+                                  args.output_file,
+                                  result_dest_list,
+                                  add_pydeps=False)
     return 0
 
 
