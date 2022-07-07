@@ -87,12 +87,12 @@ def build_run_fitimage(args):
                 return -1
             if not len(mkimage_tool) == 0:
                 fit_cmd = \
-                ["mkimage_tool", '-f', "./ohos_updater.its"
-                 os.path.join(root_dir, "images", "updater.img")]
+                    ["mkimage_tool", '-f', "./ohos_updater.its"
+                     os.path.join(root_dir, "images", "updater.img")]
             else:
                 fit_cmd = \
-                ["mkimage", '-f', "./ohos_updater.its"
-                 os.path.join(root_dir, "images", "updater.img")]
+                    ["mkimage", '-f', "./ohos_updater.its"
+                     os.path.join(root_dir, "images", "updater.img")]
     else:
         return 0
 
