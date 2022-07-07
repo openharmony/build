@@ -296,7 +296,7 @@ npm_install_config="""
 developtools/ace-ets2bundle/compiler,
 developtools/ace-js2bundle/ace-loader,
 third_party/jsframework,prebuilts/build-tools/common/js-framework,
-ark/ts2abc/ts2panda,prebuilts/build-tools/common/ts2abc
+arkcompiler/ets_frontend/ts2panda,prebuilts/build-tools/common/ts2abc
 """
 
 for i in $(echo ${npm_install_config})

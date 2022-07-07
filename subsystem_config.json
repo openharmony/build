@@ -144,7 +144,7 @@
     "name": "distributedhardware"
   },
   "ark": {
-    "path": "ark",
+    "path": "arkcompiler",
     "name": "ark"
   },
   "compileruntime": {
