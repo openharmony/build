@@ -87,14 +87,14 @@ def build_run_fitimage(args):
                 return -1
             if not len(mkimage_tool) == 0:
                 fit_cmd = \
-                    ["mkimage_tool", '-f', "./ohos_updater.its"
+                    [mkimage_tool, '-f', "./ohos_updater.its",
                      os.path.join(root_dir, "images", "updater.img")]
             else:
                 fit_cmd = \
-                    ["mkimage", '-f', "./ohos_updater.its"
+                    ["mkimage", '-f', "./ohos_updater.its",
                      os.path.join(root_dir, "images", "updater.img")]
-    else:
-        return 0
+        else:
+            return 0
 
     res = run_cmd(fit_cmd)
     if res[1] != 0:
@@ -181,7 +181,8 @@ def parse_resource_config(resource_config_file_path):
             if each_section[0] == DTC_510:
                 dtc_510_source_path = source_path
             if each_section[0] =="mkimage_path" and os.path.exists(each_section[0]):
-               global mkimage_tool = os.path.pwdpath(source_path)  
+               global mkimage_tool
+               mkimage_tool = os.path.pwdpath(source_path) 
             if os.path.exists(source_path):
                 if os.path.exists(target_path):
                     if not filecmp.cmp(source_path, target_path):
@@ -220,10 +221,9 @@ def main(args):
     config = {}
     with open("../../ohos_config.json") as f:
         config = json.load(f)
-    if config.get('component_type', '') != 'system_component':
-        if os.path.exist(args.resource_config):
-            global need_clear_section_target_path_list
-            need_clear_section_target_path_list = parse_resource_config(args.resource_config)
+    if os.path.exists(args.resource_config):
+        global need_clear_section_target_path_list
+        need_clear_section_target_path_list = parse_resource_config(args.resource_config)
     build_run_cpio(args)
     build_run_fitimage(args)
     build_run_chmod(args)
