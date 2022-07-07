@@ -40,7 +40,7 @@
 
 # f2fs 文件系统类型配置参数
 # make_f2fs 配置参数
-# label标签，不设置默认使用mountpoint为lable
+# label标签，不设置默认使用mountpoint为label
 --label xxx
 # prjquota 使能开关
 --prjquota

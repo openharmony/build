@@ -35,9 +35,9 @@ def _get_system_capability(targets_build_config):
         if _ndk_config_infos is None:
             raise Exception("read file '{}' failed.".format(_bc_file))
         _ndk_config_info = _ndk_config_infos[0]
-        _target_lable = _ndk_config_info.get('label')
+        _target_label = _ndk_config_info.get('label')
         _bc_syscap = _ndk_config_info.get('system_capability')
-        if not _bc_syscap or not _target_lable:
+        if not _bc_syscap or not _target_label:
             continue
         _lib_name = _ndk_config_info.get('lib_name')
         _syscap_info[_lib_name] = _bc_syscap

@@ -31,7 +31,7 @@ basic:
 
 advanced:
   cmd: python3 full_components_generator.py -h
-  Get more infomation
+  Get more information
 
 @Date 2022/01/14
 """
@@ -114,7 +114,7 @@ def main():
     # Only for version 3.0 config
     # 'device_name' has been replaced by 'board' in 3.0
     # device info has been merged into product in 3.0
-    # 'target cpu' need to be arm intead of arm64 due to adaption work has not been done
+    # 'target cpu' need to be arm instead of arm64 due to adaption work has not been done
     ret = {
         "product_name": "ohos-arm64",
         "version": "3.0",

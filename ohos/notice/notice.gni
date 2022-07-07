@@ -85,7 +85,7 @@ template("collect_notice") {
         "--depfile",
         rebase_path(depfile, root_build_dir),
 
-        # use default Lisense for modules couldn't find lincese
+        # use default License for modules couldn't find license
         "--default-license",
         rebase_path("//build/ohos/notice/license", root_build_dir),
       ]

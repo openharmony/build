@@ -78,8 +78,8 @@ function check_sha256_by_mark() {
 }
 
 function hwcloud_download() {
-    # when proxy certfication not required : wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
-    # when proxy certfication required (special char need URL translate, e.g '!' -> '%21'git
+    # when proxy certification not required : wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
+    # when proxy certification required (special char need URL translate, e.g '!' -> '%21'git
     # wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
 
     download_local_file=$1
@@ -163,8 +163,8 @@ esac
 # sync code directory
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
-# "prebuilts" directory will be generated under project root which is used to saved binary (arround 9.5GB)
-# downloaded files will be automatically unziped under this path
+# "prebuilts" directory will be generated under project root which is used to saved binary (around 9.5GB)
+# downloaded files will be automatically unzipped under this path
 bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
 
 # download file list

@@ -81,7 +81,7 @@ def _merge_external_deps_label(deps_data, external_deps_data):
             raise Exception(
                 "module '{}' external deps info is incorrect.".format(
                     _module_alias))
-        _info['external_deps_lable'] = ext_deps_label_info.get('deps')
+        _info['external_deps_label'] = ext_deps_label_info.get('deps')
     return deps_data
 
 
