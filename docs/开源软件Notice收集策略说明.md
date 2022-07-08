@@ -10,9 +10,9 @@
 
 静态库本身是不会被打包的，一般是作为动态库或者可执行程序的一部分被打包到系统中的，为了确保完备，静态库的都会收集。
 
-最终合并的Notice.txt要体现出镜像中每个文件都是用了哪些License，模块和License要有对应关系。
+最终合并的NOTICE.txt要体现出镜像中每个文件都是用了哪些License，模块和License要有对应关系。
 
-最终合并的Notice.txt文件在/system/etc/ 目录下。
+最终合并的NOTICE.txt文件在/system/etc/ 目录下。
 
 
 
