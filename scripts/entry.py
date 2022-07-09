@@ -51,6 +51,8 @@ def do_build(args):
     if args.target_cpu is not None:
         cmd.extend(['--target-cpu', ''.join(args.target_cpu)])
 
+    if args.compile_config is not None:
+        cmd.extend(['--compile-config', ''.join(args.compile_config)])
 
     if args.product_name == 'ohos-sdk':
         gn_args.append('build_ohos_ndk=true')
@@ -104,6 +106,7 @@ def main():
     parser.add_option('--device-name')
     parser.add_option('--target-cpu')
     parser.add_option('--target-os')
+    parser.add_option('--compile-config')
     parser.add_option('-T', '--build-target', action='append', default=[])
     parser.add_option('--gn-args', action='append', default=[])
     parser.add_option('--ninja-args', action='append', default=[])
