@@ -88,6 +88,12 @@ if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = false
 }
 
+if (defined(product_build_config.enable_mesa3d)) {
+  enable_mesa3d = product_build_config.enable_mesa3d
+} else {
+  enable_mesa3d = false
+}
+
 if (defined(product_build_config.build_selinux)) {
   build_selinux = product_build_config.build_selinux
 } else {
