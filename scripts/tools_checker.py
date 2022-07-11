@@ -13,8 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import sys
 import subprocess
+import json
 
 
 def run_command(cmd, verbose=None):
@@ -33,16 +35,23 @@ def package_installed(pkg_name):
     return r
 
 
-def check_build_requried_packages():
-    _build_package_list = [
-        'binutils', 'flex', 'bison', 'git', 'build-essential', 'zip', 'curl',
-        'unzip', 'm4', 'wget', 'perl', 'bc'
-    ]
+def check_build_requried_packages(host_version,check=True):
+    cur_dir = os.getcwd()
+    build_package_json = os.path.join(cur_dir, 'build/scripts/build_package_list.json')
+    with open(build_package_json, 'r') as file:
+        file_json = json.load(file)
+        for _version in file_json.keys():
+            if host_version == _version or host_version.startswith(_version):
+                _build_package_list = file_json["{}".format(_version)]["dep_package"]
+    uninstall_package_list = []
     for pkg in _build_package_list:
         if package_installed(pkg):
-            print("\033[33m {} is not installed. please install it.\033[0m".
-                  format(pkg))
-            sys.exit(1)
+            if check:
+                print("\033[33m {} is not installed. please install it.\033[0m".
+                      format(pkg))
+            uninstall_package_list.append(pkg)
+    install_package_list = list(set(_build_package_list).difference(uninstall_package_list))
+    return _build_package_list,install_package_list,uninstall_package_list
 
 
 def check_os_version():
@@ -70,7 +79,7 @@ def check_os_version():
         print("\033[33m Available OS version are {}.\033[0m".format(
             ', '.join(available_releases)))
         return -1
-    return 0
+    return host_os,host_version
 
 
 def main():
