@@ -55,7 +55,7 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
         thirdparty = info.get('subsystem_name')
         if thirdparty == 'thirdparty':
             thirdparty_module_list.append(info)
-        if str(module_def).startswith("//driver/interface"):
+        if str(module_def).startswith("//drivers/interface"):
             hdi_module_list.append(info)
         _module_part_name = info.get('part_name')
         if _module_part_name not in modules_info_dict:
