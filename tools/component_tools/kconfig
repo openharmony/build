@@ -852,13 +852,13 @@ config feature$$global$$resmgr_standard
         depends on global$$resmgr_standard
 endmenu
 menu "powermgr"
-config powermgr$$display_manager_native
-    bool "display_manager_native"
+config powermgr$$display_manager
+    bool "display_manager"
     default n
-config feature$$powermgr$$display_manager_native
+config feature$$powermgr$$display_manager
         string "feature"
         default ""
-        depends on powermgr$$display_manager_native
+        depends on powermgr$$display_manager
 config powermgr$$thermal_manager
     bool "thermal_manager"
     default n
