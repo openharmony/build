@@ -866,13 +866,13 @@ config feature$$powermgr$$thermal_manager
         string "feature"
         default ""
         depends on powermgr$$thermal_manager
-config powermgr$$battery_statistics_native
-    bool "battery_statistics_native"
+config powermgr$$battery_statistics
+    bool "battery_statistics"
     default n
-config feature$$powermgr$$battery_statistics_native
+config feature$$powermgr$$battery_statistics
         string "feature"
         default ""
-        depends on powermgr$$battery_statistics_native
+        depends on powermgr$$battery_statistics
 config powermgr$$battery_manager_native
     bool "battery_manager_native"
     default n
