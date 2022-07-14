@@ -40,3 +40,8 @@ ohos_prebuilt_etc("asan.cfg") {
   module_install_dir = "etc/init/"
   part_name = "common"
 }
+
+ohos_copy("asan_image_conf") {
+  sources = [ "system_image_conf.txt" ]
+  outputs = [ "${product_output_dir}/imagesconf/{{source_file_part}}" ]
+}
