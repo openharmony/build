@@ -44,7 +44,7 @@
 
 build-target 是传给ninja的参数，build.ninja里面的任务都可以。
   1. gn里面的一个target都可以，包括可执行程序，动态库，group，action，部件名
-  2. 如果直接指定名称报unkonw target的话，可能是重名等原因，按照gn的全名称指定：{目标所在BUILD.gn的路径}:{目标名}， 比如： `--build-target utils/native/base:utils`
+  2. 如果直接指定名称报unkonw target的话，可能是重名等原因，按照gn的全名称指定：{目标所在BUILD.gn的路径}:{目标名}， 比如： `--build-target commonlibrary/c_utils/base:utils`
   3. build-target参数一次可以指定多，比如：`--build-target A --build-target B`
   4. subsystem_name不是编译目标
   5. 部件名是一个特殊的目标，根据ohos.build编译系统生产的gn目标，如果直接指定部件名，使用`--build-target {部件名}` 报错unkonw target，可以使用一个部件的全名称指定：`--build-target out/{device_name}/build_configs/{subsystem_name}/{part_name}:{part_name}`

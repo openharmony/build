@@ -35,6 +35,10 @@
     "path": "utils",
     "name": "utils"
   },
+  "commonlibrary": {
+    "path": "commonlibrary",
+    "name": "commonlibrary"
+  },
   "bundlemanager": {
     "path": "foundation/bundlemanager",
     "name": "bundlemanager"
