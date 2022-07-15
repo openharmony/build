@@ -746,13 +746,13 @@ config feature$$multimedia$$multimedia_camera_standard
         string "feature"
         default ""
         depends on multimedia$$multimedia_camera_standard
-config multimedia$$multimedia_media_standard
-    bool "multimedia_media_standard"
+config multimedia$$multimedia_player_framework
+    bool "multimedia_player_framework"
     default n
-config feature$$multimedia$$multimedia_media_standard
+config feature$$multimedia$$multimedia_player_framework
         string "feature"
         default ""
-        depends on multimedia$$multimedia_media_standard
+        depends on multimedia$$multimedia_player_framework
 config multimedia$$multimedia_histreamer
     bool "multimedia_histreamer"
     default n
