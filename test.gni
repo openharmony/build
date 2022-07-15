@@ -439,6 +439,16 @@ template("ohos_js_test") {
   ]
   exec_script(_gen_module_list_script, _arguments)
 
+  # copy testcase resource
+  testcase_target_name = target_name
+  _testcase_resources("${testcase_target_name}_resource_copy") {
+    if (defined(invoker.resource_config_file)) {
+      resource_config_file = invoker.resource_config_file
+    }
+    module_out_path = invoker.module_out_path
+    test_output_dir = _test_output_dir
+  }
+
   _suite_path = get_label_info(":$target_name", "dir")
   _template_path = "//test/developertest/libs/js_template"
   _target_path = "${_template_path}/$target_name"
@@ -454,6 +464,7 @@ template("ohos_js_test") {
       "--target_path",
       rebase_path(_target_path, root_build_dir),
     ]
+    deps = [ ":${testcase_target_name}_resource_copy" ]
   }
 
   _target_js_assets = "${target_name}__intl_js_assets"
