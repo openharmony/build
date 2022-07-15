@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -11,80 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/config/sanitizers/sanitizers.gni")
-import("//build/ohos_var.gni")
-
 print("root_out_dir=$root_out_dir")
 print("root_build_dir=$root_build_dir")
 print("root_gen_dir=$root_gen_dir")
 print("current_toolchain=$current_toolchain")
 print("host_toolchain=$host_toolchain")
 
-# load build configs and write load result to out_build_dir/build_configs
-build_loader_script = rebase_path("//build/loader/load.py")
-
-_platforms_config_file = "${preloader_output_dir}/platforms.build"
-
-_subsystem_config_file = "${preloader_output_dir}/subsystem_config.json"
-
-build_platform = ""
-
-arguments = [
-  "--subsystem-config-file",
-  rebase_path(_subsystem_config_file),
-  "--platforms-config-file",
-  rebase_path(_platforms_config_file),
-  "--source-root-dir",
-  rebase_path("//"),
-  "--gn-root-out-dir",
-  rebase_path(root_build_dir),
-  "--target-os",
-  target_os,
-  "--target-cpu",
-  target_cpu,
-]
-
-arguments += [
-  "--os-level",
-  os_level,
-]
-
-if (build_platform != "") {
-  arguments += [
-    "--build-platform-name",
-    build_platform,
-  ]
-}
-
-if (scalable_build) {
-  arguments += [ "--scalable-build" ]
-}
-
-if (build_example) {
-  arguments += [
-    "--example-subsystem-file",
-    rebase_path("//build/subsystem_config_example.json", "$root_out_dir"),
-  ]
-}
-if (build_xts) {
-  arguments += [ "--build-xts" ]
-}
-
-arguments += [
-  "--ignore-api-check",
-  "xts",
-  "common",
-  "developertest",
-]
-
-load_result = exec_script(build_loader_script, arguments, "string")
-
-if (load_result != "") {
-  print()
-  print(load_result)
-}
-
-print("build configs generation is complete.")
+# run loader
+import("//build/core/gn/loader.gni")
 
 # gn target defined
 if (product_name == "ohos-sdk") {
@@ -130,9 +64,11 @@ if (product_name == "ohos-sdk") {
 
   group("make_test") {
     testonly = true
-    deps = [ ":build_all_test_pkg" ]
-    deps += [ "//build/ohos/packages:package_testcase_mlf" ]
-    deps += [ "//build/ohos/packages:package_testcase" ]
+    deps = [
+      "//build/ohos/packages:build_all_test_pkg",
+      "//build/ohos/packages:package_testcase",
+      "//build/ohos/packages:package_testcase_mlf",
+    ]
     if (archive_component) {
       deps += [ "//build/ohos/testfwk:archive_testcase" ]
     }
