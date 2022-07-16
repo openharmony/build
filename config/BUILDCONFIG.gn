@@ -771,7 +771,7 @@ foreach(_target_type, target_type_list) {
       }
       if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
         if (is_lite_system && current_os == "ohos") {
-          deps += [ "//prebuilts/lite/sysroot" ]
+          deps += [ "//third_party/musl:sysroot_lite" ]
         } else {
           deps += [ "//build/config:${_target_type}_deps" ]
         }
@@ -794,7 +794,7 @@ if (is_lite_system && current_os == "ohos") {
           deps = []
         }
         if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
-          deps += [ "//prebuilts/lite/sysroot" ]
+          deps += [ "//third_party/musl:sysroot_lite" ]
         }
       }
     }
