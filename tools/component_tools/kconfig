@@ -880,13 +880,13 @@ config feature$$powermgr$$battery_manager_native
         string "feature"
         default ""
         depends on powermgr$$battery_manager_native
-config powermgr$$power_manager_native
-    bool "power_manager_native"
+config powermgr$$power_manager
+    bool "power_manager"
     default n
-config feature$$powermgr$$power_manager_native
+config feature$$powermgr$$power_manager
         string "feature"
         default ""
-        depends on powermgr$$power_manager_native
+        depends on powermgr$$power_manager
 endmenu
 menu "usb"
 config usb$$usb_manager
