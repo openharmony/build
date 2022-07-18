@@ -133,6 +133,10 @@ declare_args() {
   enable_notice_collection = true
 }
 
+declare_args() {
+  load_test_config = true
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 

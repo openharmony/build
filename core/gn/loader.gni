@@ -20,6 +20,9 @@ _platforms_config_file = "${preloader_output_dir}/platforms.build"
 
 _subsystem_config_file = "${preloader_output_dir}/subsystem_config.json"
 
+_exclusion_modules_config_file =
+    "${preloader_output_dir}/exclusion_modules.json"
+
 build_platform = ""
 
 arguments = [
@@ -27,6 +30,8 @@ arguments = [
   rebase_path(_subsystem_config_file),
   "--platforms-config-file",
   rebase_path(_platforms_config_file),
+  "--exclusion-modules-config-file",
+  rebase_path(_exclusion_modules_config_file),
   "--source-root-dir",
   rebase_path("//"),
   "--gn-root-out-dir",
@@ -61,6 +66,10 @@ if (build_example) {
 }
 if (build_xts) {
   arguments += [ "--build-xts" ]
+}
+
+if (load_test_config) {
+  arguments += [ "--load-test-config" ]
 }
 
 arguments += [
