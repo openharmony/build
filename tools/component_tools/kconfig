@@ -762,13 +762,13 @@ config feature$$multimedia$$multimedia_histreamer
         depends on multimedia$$multimedia_histreamer
 endmenu
 menu "multimodalinput"
-config multimodalinput$$multimodalinput_base
-    bool "multimodalinput_base"
+config multimodalinput$$input
+    bool "input"
     default n
-config feature$$multimodalinput$$multimodalinput_base
+config feature$$multimodalinput$$input
         string "feature"
         default ""
-        depends on multimodalinput$$multimodalinput_base
+        depends on multimodalinput$$input
 endmenu
 menu "telephony"
 config telephony$$data_storage
