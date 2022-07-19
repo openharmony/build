@@ -990,7 +990,7 @@ config feature$$ark$$ark_js_runtime
 endmenu
 menu "commonlibrary"
 endmenu
-menu "iot_hardware"
+menu "iothardware"
 endmenu
 menu "kernel"
 config kernel$$linux

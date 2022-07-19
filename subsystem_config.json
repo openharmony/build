@@ -151,9 +151,9 @@
     "path": "arkcompiler",
     "name": "ark"
   },
-  "iot_hardware": {
-    "path": "base/iot_hardware",
-    "name": "iot_hardware"
+  "iothardware": {
+    "path": "base/iothardware",
+    "name": "iothardware"
   },
   "kernel": {
     "path": "kernel",
