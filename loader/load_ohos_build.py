@@ -359,7 +359,8 @@ class LoadBuildConfig(object):
 
     def __init__(self, source_root_dir, subsystem_build_info,
                  config_output_dir, variant_toolchains, subsystem_name,
-                 target_arch, ignored_subsystems):
+                 target_arch, ignored_subsystems,
+                 exclusion_modules_config_file, load_test_config):
         self._source_root_dir = source_root_dir
         self._build_info = subsystem_build_info
         self._config_output_relpath = config_output_dir
@@ -376,6 +377,8 @@ class LoadBuildConfig(object):
         self._parts_path_dict = {}
         self._part_hisysevent_config = {}
         self._parts_module_list = {}
+        self._exclusion_modules_config_file = exclusion_modules_config_file
+        self._load_test_config = load_test_config
 
     def _parsing_config(self, parts_config):
         _parts_info_dict = {}
@@ -435,7 +438,9 @@ class LoadBuildConfig(object):
         parts_path_dict = {}
         for _build_file in _build_files:
             if _build_file.endswith('bundle.json'):
-                bundle_part_obj = load_bundle_file.BundlePartObj(_build_file)
+                bundle_part_obj = load_bundle_file.BundlePartObj(
+                    _build_file, self._exclusion_modules_config_file,
+                    self._load_test_config)
                 _parts_config = bundle_part_obj.to_ohos_build()
             else:
                 _parts_config = read_build_file(_build_file)
@@ -637,6 +642,8 @@ def get_parts_info(source_root_dir,
                    variant_toolchains,
                    target_arch,
                    ignored_subsystems,
+                   exclusion_modules_config_file,
+                   load_test_config,
                    build_xts=False):
     """parts info,
     get info from build config file.
@@ -658,7 +665,9 @@ def get_parts_info(source_root_dir,
         build_loader = LoadBuildConfig(source_root_dir, build_config_info,
                                        config_output_relpath,
                                        variant_toolchains, subsystem_name,
-                                       target_arch, ignored_subsystems)
+                                       target_arch, ignored_subsystems,
+                                       exclusion_modules_config_file,
+                                       load_test_config)
         _parts_variants = build_loader.parts_variants()
         parts_variants.update(_parts_variants)
         _inner_kits_info = build_loader.parts_inner_kits_info()

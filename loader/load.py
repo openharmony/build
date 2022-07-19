@@ -321,7 +321,9 @@ def load(args):
     # loading ohos.build and gen part variant info
     parts_config_info = load_ohos_build.get_parts_info(
         source_root_dir, config_output_relpath, _subsystem_info,
-        variant_toolchains, target_arch, args.ignore_api_check, args.build_xts)
+        variant_toolchains, target_arch, args.ignore_api_check,
+        args.exclusion_modules_config_file, args.load_test_config,
+        args.build_xts)
     # check parts_config_info
     _check_parts_config_info(parts_config_info)
     parts_variants = parts_config_info.get('parts_variants')
@@ -484,11 +486,13 @@ def main():
     parser.add_argument('--platforms-config-file', required=True)
     parser.add_argument('--subsystem-config-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
+    parser.add_argument('--exclusion-modules-config-file', required=False)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--gn-root-out-dir', default='.')
     parser.add_argument('--build-platform-name', default='phone')
     parser.add_argument('--build-xts', dest='build_xts', action='store_true')
     parser.set_defaults(build_xts=False)
+    parser.add_argument('--load-test-config', action='store_true')
     parser.add_argument('--target-os', default='ohos')
     parser.add_argument('--target-cpu', default='arm64')
     parser.add_argument('--os-level', default='standard')
