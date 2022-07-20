@@ -882,13 +882,13 @@ config feature$$powermgr$$battery_statistics
         string "feature"
         default ""
         depends on powermgr$$battery_statistics
-config powermgr$$battery_manager_native
-    bool "battery_manager_native"
+config powermgr$$battery_manager
+    bool "battery_manager"
     default n
-config feature$$powermgr$$battery_manager_native
+config feature$$powermgr$$battery_manager
         string "feature"
         default ""
-        depends on powermgr$$battery_manager_native
+        depends on powermgr$$battery_manager
 config powermgr$$power_manager
     bool "power_manager"
     default n
