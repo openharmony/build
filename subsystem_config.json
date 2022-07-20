@@ -151,10 +151,6 @@
     "path": "arkcompiler",
     "name": "ark"
   },
-  "compileruntime": {
-    "path": "base/compileruntime",
-    "name": "compileruntime"
-  },
   "iot_hardware": {
     "path": "base/iot_hardware",
     "name": "iot_hardware"
