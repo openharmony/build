@@ -404,6 +404,13 @@ config feature$$aafwk$$zidl
         string "feature"
         default ""
         depends on aafwk$$zidl
+config aafwk$$dmsfwk
+    bool "dmsfwk"
+    default n
+config feature$$aafwk$$dmsfwk
+        string "feature"
+        default ""
+        depends on aafwk$$dmsfwk
 endmenu
 menu "notification"
 config notification$$ans_standard
@@ -501,13 +508,6 @@ config feature$$distributedschedule$$safwk
         string "feature"
         default ""
         depends on distributedschedule$$safwk
-config distributedschedule$$dmsfwk_standard
-    bool "dmsfwk_standard"
-    default n
-config feature$$distributedschedule$$dmsfwk_standard
-        string "feature"
-        default ""
-        depends on distributedschedule$$dmsfwk_standard
 endmenu
 menu "hdf"
 config hdf$$display_device_driver
