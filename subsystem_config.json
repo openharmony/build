@@ -99,6 +99,18 @@
     "path": "base/miscservices",
     "name": "miscservices"
   },
+  "inputmethod": {
+    "path": "base/inputmethod",
+    "name": "inputmethod"
+  },
+  "request": {
+    "path": "base/request",
+    "name": "request"
+  },
+  "theme": {
+    "path": "base/theme",
+    "name": "theme"
+  },
   "multimedia": {
     "path": "foundation/multimedia",
     "name": "multimedia"
