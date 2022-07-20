@@ -299,6 +299,15 @@ config feature$$hiviewdfx$$hicollie_native
         default ""
         depends on hiviewdfx$$hicollie_native
 endmenu
+menu
+config commonlibrary$$c_utils
+    bool "c_utils"
+    default n
+config feature$$commonlibrary$$c_utils
+        string "feature"
+        default ""
+        depends on commonlibrary$$c_utils
+endmenu
 menu "utils"
 config utils$$utils_base
     bool "utils_base"
