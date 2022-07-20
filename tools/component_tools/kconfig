@@ -1004,13 +1004,13 @@ endmenu
 menu "msdp"
 endmenu
 menu "deviceprofile"
-config deviceprofile$$device_profile_core
-    bool "device_profile_core"
+config deviceprofile$$device_info_manager
+    bool "device_info_manager"
     default n
-config feature$$deviceprofile$$device_profile_core
+config feature$$deviceprofile$$device_info_manager
         string "feature"
         default ""
-        depends on deviceprofile$$device_profile_core
+        depends on deviceprofile$$device_info_manager
 endmenu
 menu "filemanagement"
 config filemanagement$$user_file_service
