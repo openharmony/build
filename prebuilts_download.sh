@@ -195,7 +195,7 @@ prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}
 
 if [[ "${host_cpu}" == "arm64" ]]; then
     darwin_copy_config="""
-    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
+    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.5.3/previewer-3.2.5.3-master-20220713.mac-arm64.tar.gz,previewer
     prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64-20220622.tar.bz2,llvm
     prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
     prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
