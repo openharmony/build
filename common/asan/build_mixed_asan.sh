@@ -111,6 +111,8 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
     sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
 
     # make some services run in asan version
     local make_system=false
