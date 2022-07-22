@@ -93,7 +93,7 @@ template("compile_resources") {
     restool_path =
         get_label_info(
             "//developtools/global_resource_tool:restool($host_toolchain)",
-            "root_out_dir") + "/developtools/global_restool/restool"
+            "root_out_dir") + "/developtools/global_resource_tool/restool"
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
