@@ -988,7 +988,7 @@ config feature$$ark$$ark_js_runtime
         default ""
         depends on ark$$ark_js_runtime
 endmenu
-menu "compileruntime"
+menu "commonlibrary"
 endmenu
 menu "iot_hardware"
 endmenu
