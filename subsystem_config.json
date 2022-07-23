@@ -95,9 +95,9 @@
     "path": "foundation/window",
     "name": "window"
   },
-  "miscservices": {
-    "path": "base/miscservices",
-    "name": "miscservices"
+  "time": {
+    "path": "base/time",
+    "name": "time"
   },
   "inputmethod": {
     "path": "base/inputmethod",
