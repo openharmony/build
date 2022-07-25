@@ -16,60 +16,12 @@
 import argparse
 import os
 import sys
-import glob
-import json
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
-EXTRA_INNER_KITS = {}
-
-def load_extra_bundle_json(subsys_path):
-    global EXTRA_INNER_KITS
-    search_path = "{}/{}".format(subsys_path, "**/bundle.json")
-    for bundle_path in glob.glob(search_path, recursive=True):
-        data = read_json_file(bundle_path)
-        part_name = data.get('component').get('name')
-        if EXTRA_INNER_KITS.get(part_name) is None:
-            EXTRA_INNER_KITS[part_name] = {}
-        part_build = data.get('component').get('build')
-        inner_kits = {}
-        if part_build and part_build.get('inner_kits'):
-            inner_kits = part_build.get('inner_kits')
-        else:
-            continue
-        for kit in inner_kits:
-            module_name = kit.get('name').split(':')[1]
-            lib_type = kit.get('type') if kit.get('type') else 'so'
-            prebuilt = kit.get('prebuilt_enable')
-            if prebuilt is None:
-                prebuilt = False
-            EXTRA_INNER_KITS.get(part_name)[module_name] = {
-                "header_base" : kit.get('header').get('header_base'),
-                "header_files" : kit.get('header').get('header_files'),
-                "label" : kit.get('name'),
-                "name" : module_name,
-                "part_name" : part_name,
-                "prebuilt_enable" : prebuilt,
-                "type" : lib_type
-            }
-            if prebuilt:
-                prebuilt_source_libs = kit.get('prebuilt_source')
-                prebuilt_source = prebuilt_source_libs.get(read_json_file("../../ohos_config.json").get("target_cpu"))
-                EXTRA_INNER_KITS.get(part_name).get(module_name)['prebuilt_source'] = prebuilt_source
-
-def load_extra_inner_kits(extra_inner_kits_outputs):
-    global EXTRA_INNER_KITS
-    if os.path.exists(extra_inner_kits_outputs):
-        EXTRA_INNER_KITS = read_json_file(extra_inner_kits_outputs)
-        return
-
-    extra_paths = ["../../third_party", "../../drivers/interface"]
-    for path in extra_paths:
-        load_extra_bundle_json(path)
-    write_json_file(json.dumps(extra_inner_kits_outputs), EXTRA_INNER_KITS)
 
 def get_toolchain(current_variant, external_part_variants, platform_toolchain):
     if current_variant == 'phone':
@@ -88,8 +40,6 @@ def get_toolchain(current_variant, external_part_variants, platform_toolchain):
 def _get_external_module_info(parts_inner_kits_info, external_part_name,
                               external_module_name, adapted_part_name):
     _inner_kits_info_dict = parts_inner_kits_info.get(external_part_name)
-    if _inner_kits_info_dict is None:
-        _inner_kits_info_dict = EXTRA_INNER_KITS.get(external_part_name)
     if _inner_kits_info_dict is None:
         raise Exception(
             "external dep part '{}' doesn't exist.".format(external_part_name))
@@ -188,9 +138,7 @@ def main():
     deps = []
     libs = []
     include_dirs = []
-    # load third_party and hdf parts. For auto deps install
-    extra_inner_kits_outputs = 'build_configs/parts_info/extra_inner_kits_info.json'
-    load_extra_inner_kits(extra_inner_kits_outputs)
+
     # load inner kits info file
     inner_kits_info_file = 'build_configs/parts_info/inner_kits_info.json'
     all_kits_info_dict = read_json_file(inner_kits_info_file)
@@ -204,8 +152,9 @@ def main():
         raise Exception("read pre_build parts_variants failed.")
 
     # load toolchains info
-    toolchain_variant_info_file = \
-                    'build_configs/platforms_info/toolchain_to_variant.json'
+    toolchain_variant_info_file = os.path.join('build_configs',
+                                               'platforms_info',
+                                               'toolchain_to_variant.json')
     toolchain_variant_info = read_json_file(toolchain_variant_info_file)
     if toolchain_variant_info is None:
         raise Exception("read pre_build parts_variants failed.")
@@ -228,9 +177,7 @@ def main():
         _adapted_part_name = _parts_compatibility.get(external_part_name)
 
         # Check if the subsystem has source code
-        external_part_check = external_part_name in parts_src_flag \
-            or external_part_name in EXTRA_INNER_KITS
-        if not use_sdk and external_part_check :
+        if not use_sdk and external_part_name in parts_src_flag:
             external_module_desc_info = _get_external_module_info(
                 all_kits_info_dict, external_part_name, external_module_name,
                 _adapted_part_name)
