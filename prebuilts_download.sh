@@ -18,6 +18,9 @@ while [ $# -gt 0 ]; do
                           # hacker to get and modify data stream between server and client!
     SKIP_SSL=YES
     ;;
+    -h|--help)
+    HELP=YES
+    ;;
     --tool-repo)
     TOOL_REPO="$2"
     shift
@@ -40,121 +43,38 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "X${SKIP_SSL}" == "XYES" ];then
-    wget_ssl_check='--no-check-certificate'
+    wget_ssl_check="--skip-ssl"
 else
     wget_ssl_check=''
 fi
 
-if [ -z "$TOOL_REPO" ];then
-	tool_repo='https://repo.huaweicloud.com'
+if [ "X${HELP}" == "XYES" ];then
+    help="-h"
 else
-	tool_repo=$TOOL_REPO
+    help=''
 fi
-echo "tool_repo=$tool_repo"
 
-if [ -z "$NPM_REGISTRY" ];then
-	npm_registry='https://repo.huaweicloud.com/repository/npm/'
+if [ ! -z "$TOOL_REPO" ];then
+    tool_repo="--tool-repo $TOOL_REPO"
 else
-	npm_registry=$NPM_REGISTRY
+    tool_repo=''
 fi
-echo "npm_registry=$npm_registry"
 
-sha256_result=0
-check_sha256=''
-local_sha256=''
+if [ ! -z "$NPM_REGISTRY" ];then
+    npm_registry="--npm-registry $NPM_REGISTRY"
+else
+    npm_registry=''
+fi
 
-function check_sha256() {
-    success_color='\033[1;42mSuccess\033[0m'
-    failed_color='\033[1;41mFailed\033[0m'
-    check_url=$1 # source URL
-    local_file=$2  # local absolute path
-    check_sha256=$(curl -s -k ${check_url}.sha256)
-    local_sha256=$(sha256sum ${local_file} |awk '{print $1}')
-    if [ "X${check_sha256}" == "X${local_sha256}" ];then
-        echo -e "${success_color},${check_url} Sha256 check download OK."
-        sha256_result=0
-    else
-        echo -e "${failed_color},${check_url} Sha256 check download Failed.Retry!"
-        sha256_result=1
-    fi
-}
+trusted_host='repo.huaweicloud.com'
+index_url='http://repo.huaweicloud.com/repository/pypi/simple'
 
-function check_sha256_by_mark() {
-    success_color='\033[1;42mSuccess\033[0m'
-    check_url=$1 # source URL
-    check_sha256=$(curl -s -k ${check_url}.sha256)
-    echo $1
-    if [ -f "${code_dir}/${unzip_dir}/${check_sha256}.${unzip_filename}.mark" ];then
-        echo -e "${success_color},${check_url} Sha256 markword check OK."
-        sha256_result=0
-    else
-        echo -e "${check_url} Sha256 markword mismatch or files not downloaded yet."
-        rm -rf ${code_dir}/${unzip_dir}/*.${unzip_filename}.mark
-        rm -rf ${code_dir}/${unzip_dir}/${unzip_filename}
-        sha256_result=1
-    fi
-}
-
-function hwcloud_download() {
-    # when proxy certification not required : wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://domain.com:port" ${huaweicloud_url}
-    # when proxy certification required (special char need URL translate, e.g '!' -> '%21'git
-    # wget -t3 -T10 -O ${bin_dir} -e "https_proxy=http://username:password@domain.com:port" ${huaweicloud_url}
-
-    download_local_file=$1
-    download_source_url=$2
-    for((i=1;i<=3;i++));
-    do
-        if [ -f "${download_local_file}" ];then
-            check_sha256 "${download_source_url}" "${download_local_file}"
-            if [ ${sha256_result} -gt 0 ];then
-                rm -rf "${download_local_file:-/tmp/20210721_not_exit_file}"
-            else
-                return 0
-            fi
-        fi
-        if [ ! -f "${download_local_file}" ];then
-            wget -t3 -T10 ${wget_ssl_check} -O  "${download_local_file}" "${download_source_url}"
-        fi
-    done
-    # three times error, exit
-    echo -e """Sha256 check failed!
-Download URL: ${download_source_url}
-Local file: ${download_local_file}
-Remote sha256: ${check_sha256}
-Local sha256: ${local_sha256}"""
-    exit 1
-}
-
-function npm_install() {
-    full_code_path=${code_dir}/$1
-    if [ ! -d ${full_code_path} ]; then
-        echo "${full_code_path} not exist, it shouldn't happen, pls check..."
-    else
-        cd ${full_code_path}
-        export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
-        npm config set registry ${npm_registry}
-        if [ "X${SKIP_SSL}" == "XYES" ];then
-            npm config set strict-ssl false
-        fi
-        npm cache clean -f
-        npm install
-    fi
-}
-
-function node_modules_copy() {
-    full_code_path=${code_dir}/$1
-    tool_path=$2
-    if [ -d "${full_code_path}" ] & [ ! -z ${tool_path} ]; then
-        if [ -d "${code_dir}/${tool_path}" ]; then
-            echo -e "\n"
-            echo "${code_dir}/${tool_path} already exist, it will be replaced with node-${node_js_ver}"
-            /bin/rm -rf ${code_dir}/${tool_path}
-            echo -e "\n"
-        fi
-        mkdir -p ${code_dir}/${tool_path}
-        /bin/cp -R ${full_code_path}/node_modules ${code_dir}/${tool_path}
-    fi
-}
+script_path=$(cd $(dirname $0);pwd)
+code_dir=$(dirname ${script_path})
+pip3 install --trusted-host $trusted_host -i $index_url rich
+echo "prebuilts_download start"
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help
+echo "prebuilts_download end"
 
 case $(uname -s) in
     Linux)
@@ -169,178 +89,10 @@ case $(uname -s) in
         exit 1
 esac
 
-case $(uname -m) in
-    arm64)
-
-        host_cpu=arm64
-        ;;
-    *)
-        host_cpu=x86_64
-esac
-
-# sync code directory
-script_path=$(cd $(dirname $0);pwd)
-code_dir=$(dirname ${script_path})
-# "prebuilts" directory will be generated under project root which is used to saved binary (around 9.5GB)
-# downloaded files will be automatically unzipped under this path
-bin_dir=${code_dir}/../OpenHarmony_2.0_canary_prebuilts
-
-# download file list
-# todo: add product related config
-copy_config="""
-prebuilts/sdk/js-loader/build-tools,${tool_repo}/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz,ace-loader
-prebuilts/build-tools/common,${tool_repo}/openharmony/compiler/restool/2.007/restool-2.007.tar.gz,restool
-prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/${host_platform}/cmake-${host_platform}-x86-3.16.5.tar.gz,${host_platform}
-prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/gn/1717/${host_platform}/gn-${host_platform}-x86-1717.tar.gz,gn
-prebuilts/build-tools/${host_platform}-x86/bin,${tool_repo}/openharmony/compiler/ninja/1.10.1/${host_platform}/ninja-${host_platform}-x86-1.10.1.tar.gz,ninja
-prebuilts/ark_tools,${tool_repo}/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz,ark_js_prebuilts
-"""
-
-linux_copy_config="""
-prebuilts/cmake,${tool_repo}/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz,windows-x86
-prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz,clang-mingw
-prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz,prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi
-prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz,gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
-prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz,previewer
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2,llvm
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2,libcxx-ndk
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
-prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip,esp-2019r2-8.2.0
-prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz,csky
-prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_20200510.tar.gz,linux-x86
-"""
-
-if [[ "${host_cpu}" == "arm64" ]]; then
-    darwin_copy_config="""
-    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.5.3/previewer-3.2.5.3-master-20220713.mac-arm64.tar.gz,previewer
-    prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64-20220622.tar.bz2,llvm
-    prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
-    prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
-    """
-else
-    darwin_copy_config="""
-    prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
-    prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
-    prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
-    prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
-    """
-fi
-
 if [[ "${host_platform}" == "linux" ]]; then
-    copy_config+=${linux_copy_config}
+    sed -i "1s%.*%#!$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
 elif [[ "${host_platform}" == "darwin" ]]; then
-    copy_config+=${darwin_copy_config}
+    sed -i "" "1s%.*%#!$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
 fi
-
-# download and initialize prebuild files
-if [ ! -d "${bin_dir}" ];then
-    mkdir -p "${bin_dir}"
-fi
-
-for i in $(echo ${copy_config})
-do
-    unzip_dir=$(echo $i|awk -F ',' '{print $1}')
-    huaweicloud_url=$(echo $i|awk -F ',' '{print $2}')
-    unzip_filename=$(echo $i|awk -F ',' '{print $3}')
-    md5_huaweicloud_url=$(echo ${huaweicloud_url}|md5sum|awk '{print $1}')
-    bin_file=$(basename ${huaweicloud_url})
-    bin_file_suffix=${bin_file#*.}
-
-    check_sha256_by_mark ${huaweicloud_url}
-    if [ ! -d "${code_dir}/${unzip_dir}" ];then
-        mkdir -p "${code_dir}/${unzip_dir}"
-    fi
-
-    if [ ${sha256_result} -gt 0 ]; then
-        hwcloud_download "${bin_dir}/${md5_huaweicloud_url}.${bin_file}"  "${huaweicloud_url}"
-        if [ "X${bin_file:0-3}" = "Xzip" ];then
-            unzip -o "${bin_dir}/${md5_huaweicloud_url}.${bin_file}" -d "${code_dir}/${unzip_dir}/"
-        elif [ "X${bin_file:0-6}" = "Xtar.gz" ];then
-            tar -xvzf "${bin_dir}/${md5_huaweicloud_url}.${bin_file}"  -C  "${code_dir}/${unzip_dir}"
-        else
-            tar -xvf "${bin_dir}/${md5_huaweicloud_url}.${bin_file}"  -C  "${code_dir}/${unzip_dir}"
-        fi
-        # it is used to handle some redundant files under prebuilts path
-        # todo: remove redundant files before prebuilts_download
-        if [ -d "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi" ];then
-            mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/"
-            rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
-            mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
-        fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" ];then
-            rm -rf "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
-        fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" ];then
-            rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-            ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
-        fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-${host_cpu}/clang-530132" ];then
-            if [[ "${host_cpu}" == "arm64" ]]; then
-                rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
-                mv "${code_dir}/prebuilts/clang/ohos/darwin-arm64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
-                ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm/lib/clang/current"
-            else
-                rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-                mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-                ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
-            fi
-        fi
-        if [ -d "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf" ];then
-            chmod 755 "${code_dir}/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0" -R
-        fi
-        echo 0 > "${code_dir}/${unzip_dir}/${check_sha256}.${unzip_filename}.mark"
-    fi
-    echo "k"
-done
-
-
-# npm env setup and install
-
-node_js_ver=v12.18.4
-node_js_name=node-${node_js_ver}-${host_platform}-x64
-node_js_pkg=${node_js_name}.tar.gz
-mkdir -p ${code_dir}/prebuilts/build-tools/common/nodejs
-cd ${code_dir}/prebuilts/build-tools/common/nodejs
-if [ ! -f "${node_js_pkg}" ]; then
-    wget -t3 -T10 ${wget_ssl_check} ${tool_repo}/nodejs/${node_js_ver}/${node_js_pkg}
-    tar zxf ${node_js_pkg}
-fi
-
-npm_install_config="""
-developtools/ace-ets2bundle/compiler,
-developtools/ace-js2bundle/ace-loader,
-third_party/jsframework,prebuilts/build-tools/common/js-framework,
-arkcompiler/ets_frontend/ts2panda,prebuilts/build-tools/common/ts2abc
-"""
-
-for i in $(echo ${npm_install_config})
-do
-    code_path=$(echo $i|awk -F ',' '{print $1}')
-    modules_path=$(echo $i|awk -F ',' '{print $2}')
-    npm_install ${code_path}
-    echo ${code_path}
-    echo ${modules_path}
-    node_modules_copy ${code_path} ${modules_path}
-done
-
-
-ohos_hypium_path="""
-developtools/ace-ets2bundle/compiler,
-developtools/ace-js2bundle/ace-loader
-"""
-for i in $ohos_hypium_path
-do
-    dest_dir=${code_dir}/$(echo $i|awk -F ',' '{print $1}')/node_modules/@ohos/hypium
-    echo ${dest_dir}
-    if [ ! -d "${dest_dir}" ]; then
-        mkdir -p "${dest_dir}"
-    fi
-    cp -r ${code_dir}/test/arkXtest/jsunit/* ${dest_dir}
-done
-
-cd ${code_dir}
+${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9 install --trusted-host $trusted_host -i $index_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
 echo -e "\n"
