@@ -100,6 +100,12 @@ if (defined(product_build_config.build_selinux)) {
   build_selinux = false
 }
 
+if (defined(product_build_config.build_seccomp)) {
+  build_seccomp = product_build_config.build_seccomp
+} else {
+  build_seccomp = false
+}
+
 if (defined(product_build_config.support_jsapi)) {
   support_jsapi = product_build_config.support_jsapi
 } else {
