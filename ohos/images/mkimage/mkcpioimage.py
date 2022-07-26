@@ -75,9 +75,9 @@ def build_run_cpio(args):
     os.chdir(work_dir)
     if conf_size < os.path.getsize(output_path):
         print("Image size is larger than the conf image size. "
-              "conf_size: %d, image_size: %d, config_file_path: %s" %
-              (conf_size, os.path.getsize(output_path), args.resource_config))
-        return -1
+              "conf_size: %d, image_size: %d" %
+              (conf_size, os.path.getsize(output_path)))
+        sys.exit(1)
     if res[1] != 0:
         print("error run cpio ramdisk errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
