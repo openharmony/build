@@ -181,8 +181,7 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
 
 def _npm_install(args, code_dir, unzip_dir, unzip_filename):
     procs = []
-    cmd = 'export PATH={}/{}/{}/bin:$PATH'.format(code_dir, unzip_dir, unzip_filename)
-    _run_cmd(cmd)
+    os.environ['PATH'] = '{}/{}/{}/bin:{}'.format(code_dir, unzip_dir, unzip_filename, os.environ.get('PATH'))
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(code_dir, install_info)
         if os.path.exists(full_code_path):
