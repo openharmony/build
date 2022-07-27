@@ -21,6 +21,7 @@ command -v ninja &>/dev/null || { echo >&2 "ninja command not found, please inst
 
 args=()
 cfg_groups=()
+build_variant=root
 while test $# -gt 0; do
     case "$1" in
     -g[0-9]:*)
@@ -31,6 +32,10 @@ while test $# -gt 0; do
         is_asan=*);;
         *)args+=("$1" "$2");;
         esac
+        shift
+        ;;
+    --build-variant)
+        build_variant=$2
         shift
         ;;
     *)
@@ -50,12 +55,12 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=true
+./build.sh "${args[@]}" --gn-args is_asan=true --build-variant ${build_variant}
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=false
+./build.sh "${args[@]}" --gn-args is_asan=false --build-variant ${build_variant}
 
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
@@ -110,6 +115,7 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/etc/init/asan.cfg system/etc/init/
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
+    sed -i 's,enforcing,permissive,g' system/etc/selinux/config
     sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
