@@ -521,6 +521,14 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_sec_shared_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "previewer/resources",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
         "target_os": [
