@@ -474,7 +474,7 @@
     },
     {
         "install_dir":"previewer/common/bin/",
-        "module_label": "//foundation/window/window_manager/previewer_demo:copy_previewer_demo_library",
+        "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
             "windows",
             "darwin"
