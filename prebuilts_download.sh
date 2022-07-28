@@ -42,6 +42,28 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+case $(uname -s) in
+    Linux)
+
+        host_platform=linux
+        ;;
+    Darwin)
+        host_platform=darwin
+        ;;
+    *)
+        echo "Unsupported host platform: $(uname -s)"
+        exit 1
+esac
+
+case $(uname -m) in
+    arm64)
+
+        host_cpu=arm64
+        ;;
+    *)
+        host_cpu=x86_64
+esac
+
 if [ "X${SKIP_SSL}" == "XYES" ];then
     wget_ssl_check="--skip-ssl"
 else
@@ -66,6 +88,8 @@ else
     npm_registry=''
 fi
 
+cpu="--host-cpu $host_cpu"
+platform="--host-platform $host_platform"
 trusted_host='repo.huaweicloud.com'
 index_url='http://repo.huaweicloud.com/repository/pypi/simple'
 
@@ -73,21 +97,9 @@ script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 pip3 install --trusted-host $trusted_host -i $index_url rich
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform
 echo "prebuilts_download end"
 
-case $(uname -s) in
-    Linux)
-
-        host_platform=linux
-        ;;
-    Darwin)
-        host_platform=darwin
-        ;;
-    *)
-        echo "Unsupported host platform: $(uname -s)"
-        exit 1
-esac
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
