@@ -31,25 +31,25 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang-530132",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang-530132-20220730",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang-530132",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang-530132-20220730",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang-530132",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang-530132-20220730",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang-530132",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang-530132-20220730",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
@@ -126,7 +126,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -136,7 +136,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -227,7 +227,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -237,7 +237,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -310,7 +310,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-arm64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-arm64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -371,7 +371,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-x86_64.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-x86_64-20220730.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
