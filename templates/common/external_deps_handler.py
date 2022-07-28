@@ -156,6 +156,11 @@ def main():
                                                'platforms_info',
                                                'toolchain_to_variant.json')
     toolchain_variant_info = read_json_file(toolchain_variant_info_file)
+
+    # load auto install info
+    auto_install_part_file = "build_configs/auto_install_parts.json"
+    auto_install_parts = read_json_file(auto_install_part_file)
+
     if toolchain_variant_info is None:
         raise Exception("read pre_build parts_variants failed.")
     toolchain_platform = toolchain_variant_info.get('toolchain_platform')
@@ -177,7 +182,11 @@ def main():
         _adapted_part_name = _parts_compatibility.get(external_part_name)
 
         # Check if the subsystem has source code
-        if not use_sdk and external_part_name in parts_src_flag:
+        # hdf and third_party's external deps always valid because they need auto install
+        is_external_part_valid = external_part_name in parts_src_flag \
+            or external_part_name in auto_install_parts
+
+        if not use_sdk and is_external_part_valid:
             external_module_desc_info = _get_external_module_info(
                 all_kits_info_dict, external_part_name, external_module_name,
                 _adapted_part_name)

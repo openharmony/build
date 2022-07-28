@@ -188,6 +188,14 @@ def _get_required_build_targets(parts_targets, target_platform_parts):
     return required_build_targets
 
 
+def _get_auto_install_list(parts_path_info):
+    auto_install_part_list = []
+    for part, path in parts_path_info.items():
+        if str(path).startswith("drivers/interface") or \
+            str(path).startswith("third_party"):
+            auto_install_part_list.append(part)
+    return auto_install_part_list
+
 def _get_parts_src_list(required_parts_targets, parts_info):
     parts_name_map = {}
     for _list in parts_info.values():
@@ -406,6 +414,10 @@ def load(args):
     write_json_file(parts_src_flag_file,
                     _get_parts_src_list(required_parts_targets, parts_info),
                     check_changes=True)
+    # write auto install part file
+    auto_install_list = _get_auto_install_list(parts_config_info.get("parts_path_info"))
+    auto_install_list_file = os.path.join(config_output_dir, "auto_install_parts.json")
+    write_json_file(auto_install_list_file, auto_install_list)
 
     # write platforms_list.gni
     platforms_list_gni_file = os.path.join(config_output_dir,
