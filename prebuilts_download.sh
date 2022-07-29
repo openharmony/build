@@ -184,9 +184,9 @@ prebuilts/mingw-w64/ohos/linux-x86_64,${tool_repo}/openharmony/compiler/mingw-w6
 prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz,prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi
 prebuilts/gcc/linux-x86/aarch64,${tool_repo}/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz,gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu
 prebuilts/previewer/windows,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz,previewer
-prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64.tar.bz2,llvm
+prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2,llvm
 prebuilts/clang/ohos/windows-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2,libcxx-ndk
-prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
+prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64-20220730.tar.bz2,llvm
 prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-x86_64-20220622.tar.bz2,libcxx-ndk
 prebuilts/gcc/linux-x86/esp,${tool_repo}/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip,esp-2019r2-8.2.0
 prebuilts/gcc/linux-x86/csky,${tool_repo}/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz,csky
@@ -196,14 +196,14 @@ prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}
 if [[ "${host_cpu}" == "arm64" ]]; then
     darwin_copy_config="""
     prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.5.3/previewer-3.2.5.3-master-20220713.mac-arm64.tar.gz,previewer
-    prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64-20220622.tar.bz2,llvm
+    prebuilts/clang/ohos/${host_platform}-arm64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-arm64--20220730.tar.bz2,llvm
     prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
     prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
     """
 else
     darwin_copy_config="""
     prebuilts/previewer/darwin,${tool_repo}/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz,previewer
-    prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64.tar.bz2,llvm
+    prebuilts/clang/ohos/${host_platform}-x86_64,${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/clang-530132-${host_platform}-x86_64-20220730.tar.bz2,llvm
     prebuilts/clang/ohos/${host_platform}-${host_cpu},${tool_repo}/openharmony/compiler/clang/12.0.1-530132/${host_platform}/libcxx-ndk-530132-${host_platform}-${host_cpu}-20220622.tar.bz2,libcxx-ndk
     prebuilts/python,${tool_repo}/openharmony/compiler/python/3.9.2/${host_platform}/python-${host_platform}-x86-3.9.2_202205071615.tar.gz,darwin-x86
     """
@@ -250,24 +250,24 @@ do
             rm -rf "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
             mv "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2/" "${code_dir}/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132-20220730" ];then
             rm -rf "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
+            mv "${code_dir}/prebuilts/clang/ohos/windows-x86_64/clang-530132-20220730" "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm"
             ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/windows-x86_64/llvm/lib/clang/current"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132-20220730" ];then
             rm -rf "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
-            mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
+            mv "${code_dir}/prebuilts/clang/ohos/linux-x86_64/clang-530132-20220730" "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm"
             ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/current"
         fi
-        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-${host_cpu}/clang-530132" ];then
+        if [ -d "${code_dir}/prebuilts/clang/ohos/darwin-${host_cpu}/clang-530132-20220730" ];then
             if [[ "${host_cpu}" == "arm64" ]]; then
                 rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
-                mv "${code_dir}/prebuilts/clang/ohos/darwin-arm64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
+                mv "${code_dir}/prebuilts/clang/ohos/darwin-arm64/clang-530132-20220730" "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm"
                 ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-arm64/llvm/lib/clang/current"
             else
                 rm -rf "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
-                mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
+                mv "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/clang-530132-20220730" "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm"
                 ln -snf 12.0.1 "${code_dir}/prebuilts/clang/ohos/darwin-x86_64/llvm/lib/clang/current"
             fi
         fi
