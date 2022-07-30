@@ -183,7 +183,7 @@ def _node_modules_copy(config, code_dir):
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
         if os.path.exists(dest_dir):
-            shutil.rmtree(dest_dir)
+            shutil.rmtree(os.path.dirname(dest_dir))
         shutil.copytree(src_dir, dest_dir, symlinks=True)
 
 def _file_handle(config, code_dir):
