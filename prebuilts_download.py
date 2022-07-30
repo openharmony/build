@@ -78,29 +78,6 @@ def _check_sha256_by_mark(args, check_url, code_dir, unzip_dir, unzip_filename):
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
 
-def _get_platform_info():
-    host_platform = ''
-    cmd = 'uname -s'
-    res = _run_cmd(cmd)
-    if res[0] == 'Linux':
-        host_platform = 'linux'
-    elif res[0] == 'Darwin':
-        host_platform = 'darwin'
-    else:
-        progress.console.log('Unsupported host platform: {}'.format(res), style='red')
-        sys.exit()
-    return host_platform
-
-def _get_cpu_info():
-    host_cpu = ''
-    cmd = 'uname -m'
-    res = _run_cmd(cmd)
-    if res[0] == 'arm64':
-        host_cpu = 'arm64'
-    else:
-        host_cpu = 'x86_64'
-    return host_cpu
-
 def _config_parse(config, tool_repo):
     unzip_dir = config.get('unzip_dir')
     huaweicloud_url = tool_repo + config.get('file_path')
@@ -181,17 +158,17 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
 
 def _npm_install(args, code_dir, unzip_dir, unzip_filename):
     procs = []
+    skip_ssl_cmd = ''
+    unsafe_perm_cmd = ''
     os.environ['PATH'] = '{}/{}/{}/bin:{}'.format(code_dir, unzip_dir, unzip_filename, os.environ.get('PATH'))
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(code_dir, install_info)
         if os.path.exists(full_code_path):
             npm = '{}/{}/{}/bin/npm'.format(code_dir, unzip_dir, unzip_filename)
             if args.skip_ssl:
-                cmd = 'cd {};{} config set registry {};{} config set strict-ssl false;{} cache clean -f;{} install'.format(
-                          full_code_path, npm, args.npm_registry, npm, npm, npm)
-            else:
-                cmd = 'cd {};{} config set registry {};{} cache clean -f;{} install'.format(
-                          full_code_path, npm, args.npm_registry, npm, npm)
+                skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
+            cmd = 'cd {};{} config set registry {};{}{} cache clean -f;{} install'.format(
+                      full_code_path, npm, args.npm_registry, skip_ssl_cmd, npm, npm)
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             procs.append(proc)
         else:
@@ -236,13 +213,15 @@ def main():
     parser.add_argument('--skip-ssl', action='store_true', help='skip ssl authentication')
     parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
     parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/', help='npm download source')
+    parser.add_argument('--host-cpu', help='host cpu', required=True)
+    parser.add_argument('--host-platform', help='host platform', required=True)
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if args.skip_ssl:
         ssl._create_default_https_context = ssl._create_unverified_context
 
-    host_platform = _get_platform_info()
-    host_cpu = _get_cpu_info()
+    host_platform = args.host_platform
+    host_cpu = args.host_cpu
     tool_repo = args.tool_repo
     config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
