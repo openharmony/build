@@ -167,8 +167,10 @@ def _npm_install(args, code_dir, unzip_dir, unzip_filename):
             npm = '{}/{}/{}/bin/npm'.format(code_dir, unzip_dir, unzip_filename)
             if args.skip_ssl:
                 skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
-            cmd = 'cd {};{} config set registry {};{}{} cache clean -f;{} install'.format(
-                      full_code_path, npm, args.npm_registry, skip_ssl_cmd, npm, npm)
+            if args.unsafe_perm:
+                unsafe_perm_cmd = '--unsafe-perm;'
+            cmd = 'cd {};{} config set registry {};{}{} cache clean -f;{} install {}'.format(
+                      full_code_path, npm, args.npm_registry, skip_ssl_cmd, npm, npm, unsafe_perm_cmd)
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             procs.append(proc)
         else:
@@ -211,6 +213,7 @@ def _file_handle(config, code_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--skip-ssl', action='store_true', help='skip ssl authentication')
+    parser.add_argument('--unsafe-perm', action='store_true', help='add "--unsafe-perm" for npm install')
     parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
     parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/', help='npm download source')
     parser.add_argument('--host-cpu', help='host cpu', required=True)
