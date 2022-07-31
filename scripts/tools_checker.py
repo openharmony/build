@@ -115,11 +115,17 @@ def main():
     :return 0: Return 0 on success.
     """
     check_result = check_os_version()
-    if check_result != 0:
-        return
+    
+    if check_result == -1:
+        return -1
 
-    check_build_requried_packages()
-    return 0
+    _, _, missing_packages = check_build_requried_packages(check_result[1], check=True)
+
+    if(len(missing_packages) == 0):
+        return 0
+    else:
+        print("\033[31m Missing dependencies, please check!\033[0m")
+        return -1
 
 
 if __name__ == '__main__':
