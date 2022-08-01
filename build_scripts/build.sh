@@ -14,6 +14,20 @@
 
 set -e
 set +e
+echo "++++++++++++++++++++++++++++++++++++++++"
+function check_shell_environment() {
+  shell_result=$(ls -l /bin/sh)
+  echo ${shell_result}
+  shell_expect="-> /bin/bash"
+  if [[ $shell_result =~ $shell_expect ]];then
+	  echo "The ubutu system shell is bash"
+  else
+	  echo -e "\033[31m The shell of your system must point to  /bin/sh -> /bin/bash,because some commands may not be supported in dash \n You can follow the tips below modify the Ubuntu shell to bash. \033[0m"
+	  echo -e "\033[31m [1]:Open the Terminal tool and execute the following command: sudo dpkg-reconfigure dash \n [2]:Enter the password and select <no>  \033[0m"
+          exit 1 
+  fi
+}
+check_shell_environment 
 
 echo "++++++++++++++++++++++++++++++++++++++++"
 date +%F' '%H:%M:%S
