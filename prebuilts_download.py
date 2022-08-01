@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,15 +17,13 @@ import os
 import sys
 import argparse
 import subprocess
-import signal
 import tarfile
 import zipfile
 import ssl
 import shutil
 from multiprocessing import cpu_count
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
-from threading import Event
 from urllib.request import urlopen
 import urllib.error
 from rich.progress import (
@@ -50,11 +48,6 @@ progress = Progress(
     "•",
     TimeRemainingColumn(),
 )
-
-done_event = Event()
-def _handle_sigint(signum, frame):
-    done_event.set()
-signal.signal(signal.SIGINT, _handle_sigint)
 
 def _run_cmd(cmd):
     res = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
@@ -145,8 +138,6 @@ def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filenam
     progress.console.log("Decompressing {}".format(local_file))
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     progress.console.log("Decompressed {}".format(local_file))
-    if done_event.is_set():
-        return
 
 def _hwcloud_download(args, config, bin_dir, code_dir):
     try:
@@ -155,6 +146,7 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
         cnt = 1
     with progress:
         with ThreadPoolExecutor(max_workers=cnt) as pool:
+            tasks = dict()
             for config_info in config:
                 unzip_dir, huaweicloud_url, unzip_filename, md5_huaweicloud_url, bin_file = _config_parse(config_info, args.tool_repo)
                 abs_unzip_dir = os.path.join(code_dir, unzip_dir)
@@ -171,13 +163,17 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                     if os.path.exists(local_file):
                         if _check_sha256(huaweicloud_url, local_file):
                             progress.console.log('{}, Sha256 check download OK.'.format(local_file), style='green')
-                            pool.submit(_uncompress, args, local_file, code_dir, unzip_dir, unzip_filename, args.mark_file_path)
+                            task = pool.submit(_uncompress, args, local_file, code_dir, unzip_dir, unzip_filename, args.mark_file_path)
+                            tasks[task] = os.path.basename(huaweicloud_url)
                         else:
                             os.remove(local_file)
                     else:
                         filename = huaweicloud_url.split("/")[-1]
                         task_id = progress.add_task("download", filename=filename, start=False)
-                        pool.submit(_copy_url, args, task_id, huaweicloud_url, local_file, code_dir, unzip_dir, unzip_filename, args.mark_file_path)
+                        task = pool.submit(_copy_url, args, task_id, huaweicloud_url, local_file, code_dir, unzip_dir, unzip_filename, args.mark_file_path)
+                        tasks[task] = os.path.basename(huaweicloud_url)
+            for task in as_completed(tasks):
+                progress.console.log('{}, download and decompress completed'.format(tasks.get(task)), style='green')
 
 def _npm_install(args, code_dir, unzip_dir, unzip_filename):
     procs = []
@@ -205,9 +201,10 @@ def _node_modules_copy(config, code_dir):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
-        if os.path.exists(dest_dir):
+        if os.path.exists(os.path.dirname(dest_dir)):
             shutil.rmtree(os.path.dirname(dest_dir))
-        shutil.copytree(src_dir, dest_dir, symlinks=True)
+        os.makedirs(os.path.dirname(dest_dir))
+        os.symlink(src_dir, dest_dir)
 
 def _file_handle(config, code_dir):
     for config_info in config:
@@ -220,6 +217,8 @@ def _file_handle(config, code_dir):
             if tmp_dir:
                 tmp_dir = code_dir + tmp_dir
                 shutil.move(src_dir, tmp_dir)
+                cmd = 'mv {}/*.mark {}'.format(dest_dir, tmp_dir)
+                _run_cmd(cmd)
                 if os.path.exists(dest_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(tmp_dir, dest_dir)
@@ -248,7 +247,6 @@ def main():
     config_info = read_json_file(config_file)
     args.npm_install_config = config_info.get('npm_install_path')
     node_modules_copy_config = config_info.get('node_modules_copy')
-    ohos_hypium_copy_config = config_info.get('ohos_hypium_copy')
     file_handle_config = config_info.get('file_handle_config')
 
     args.bin_dir = os.path.join(args.code_dir, config_info.get('prebuilts_download_dir'))
