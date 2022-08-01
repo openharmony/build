@@ -88,6 +88,12 @@ else
     npm_registry=''
 fi
 
+if [ $UID -ne 0 ]; then
+    npm_para=''
+else
+    npm_para='--unsafe-perm'
+fi
+
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
 trusted_host='repo.huaweicloud.com'
@@ -97,7 +103,7 @@ script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 pip3 install --trusted-host $trusted_host -i $index_url rich
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para
 echo "prebuilts_download end"
 
 
