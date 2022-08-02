@@ -18,12 +18,11 @@ echo "++++++++++++++++++++++++++++++++++++++++"
 function check_shell_environment() {
   case $(uname -s) in 
     Linux)
-          shell_result=$(ls -l /bin/sh)
-          echo ${shell_result}
-          if [[ $shell_result =~ "-> /bin/bash" ]] || [[ $shell_result =~ "-> bash" ]];then
-            echo "The ubuntu system shell is bash"
+          shell_result=$(/bin/sh -c 'echo ${BASH_VERSION}')
+          if [ -n "${shell_result}" ]; then
+            echo "The system shell is bash ${shell_result}"
           else
-            echo -e "\033[33m The shell of your system need point to  /bin/sh -> /bin/bash or /bin/sh -> bash ,because some commands may not be supported in dash such as pushd, shopt \n You can follow the tips below modify the Ubuntu shell to bash. \033[0m"
+            echo -e "\033[33m The shell of your system must be bash, because some commands may not be supported in dash such as pushd and shopt etc. \n You can follow these tips to modify the system shell to bash on Ubuntu: \033[0m"
             echo -e "\033[33m [1]:Open the Terminal tool and execute the following command: sudo dpkg-reconfigure dash \n [2]:Enter the password and select <no>  \033[0m"
             exit 1
           fi
