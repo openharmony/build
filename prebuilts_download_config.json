@@ -9,19 +9,23 @@
   "node_modules_copy": [
     {
       "src": "third_party/jsframework/node_modules",
-      "dest": "prebuilts/build-tools/common/js-framework/node_modules"
+      "dest": "prebuilts/build-tools/common/js-framework/node_modules",
+      "use_symlink": "True"
     },
     {
       "src": "arkcompiler/ets_frontend/ts2panda/node_modules",
-      "dest": "prebuilts/build-tools/common/ts2abc/node_modules"
+      "dest": "prebuilts/build-tools/common/ts2abc/node_modules",
+      "use_symlink": "True"
     },
     {
       "src": "test/arkXtest/jsunit",
-      "dest": "developtools/ace-ets2bundle/compiler/node_modules/@ohos/hypium"
+      "dest": "developtools/ace-ets2bundle/compiler/node_modules/@ohos/hypium",
+      "use_symlink": "False"
     },
     {
       "src": "test/arkXtest/jsunit",
-      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/@ohos/hypium"
+      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/@ohos/hypium",
+      "use_symlink": "False"
     }
   ],
   "file_handle_config": [

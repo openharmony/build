@@ -201,10 +201,14 @@ def _node_modules_copy(config, code_dir):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
+        use_symlink = config_info.get('use_symlink')
         if os.path.exists(os.path.dirname(dest_dir)):
             shutil.rmtree(os.path.dirname(dest_dir))
-        os.makedirs(os.path.dirname(dest_dir))
-        os.symlink(src_dir, dest_dir)
+        if use_symlink == 'True':
+            os.makedirs(os.path.dirname(dest_dir))
+            os.symlink(src_dir, dest_dir)
+        else:
+            shutil.copytree(src_dir, dest_dir, symlinks=True)
 
 def _file_handle(config, code_dir):
     for config_info in config:
