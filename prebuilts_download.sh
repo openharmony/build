@@ -108,7 +108,7 @@ else
     trusted_host='repo.huaweicloud.com'
 fi
 
-if [ ! -z "$PIPY_URL" ];then
+if [ ! -z "$PYPI_URL" ];then
     pypi_url=$PYPI_URL
 else
     pypi_url='http://repo.huaweicloud.com/repository/pypi/simple'
