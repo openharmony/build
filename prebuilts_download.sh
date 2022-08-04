@@ -104,6 +104,9 @@ fi
 
 if [ ! -z "$TRUSTED_HOST" ];then
     trusted_host=$TRUSTED_HOST
+elif [ ! -z "$PYPI_URL" ];then
+    trusted_host=${PYPI_URL/#*:\/\//}       # remove prefix part such as http:// https:// etc.
+    trusted_host=${trusted_host/%[:\/]*/}   # remove suffix part including the port number
 else
     trusted_host='repo.huaweicloud.com'
 fi
