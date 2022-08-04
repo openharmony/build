@@ -83,12 +83,11 @@ def _config_parse(config, tool_repo):
 def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_path):
     dest_dir = os.path.join(code_dir, unzip_dir)
     if src_file[-3:] == 'zip':
-        z = zipfile.ZipFile(src_file, 'r')
-        z.extractall(dest_dir)
+        cmd = 'unzip -o {} -d {};echo 0 > {}'.format(src_file, dest_dir, mark_file_path)
+    elif src_file[-6:] == 'tar.gz':
+        cmd = 'tar -xvzf {} -C {};echo 0 > {}'.format(src_file, dest_dir, mark_file_path)
     else:
-        t = tarfile.open(src_file, 'r')
-        t.extractall(dest_dir)
-    cmd = 'echo 0 > {}'.format(mark_file_path)
+        cmd = 'tar -xvf {} -C {};echo 0 > {}'.format(src_file, dest_dir, mark_file_path)
     _run_cmd(cmd)
 
     # npm install
