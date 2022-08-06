@@ -38,6 +38,10 @@ while test $# -gt 0; do
         build_variant=$2
         shift
         ;;
+    --no-build)
+        no_build=true
+        shift
+        ;;
     *)
         args+=("$1")
         ;;
@@ -45,7 +49,7 @@ while test $# -gt 0; do
     shift
 done
 
-set -e
+set -e -- "${args[@]}"
 
 # build both asan and nonasan images
 cd "${TOPDIR}"
@@ -55,12 +59,12 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=true --build-variant ${build_variant}
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --build-variant ${build_variant}
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=false --build-variant ${build_variant}
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --build-variant ${build_variant}
 
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
@@ -115,6 +119,7 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/etc/init/asan.cfg system/etc/init/
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
+    sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
     sed -i 's,enforcing,permissive,g' system/etc/selinux/config
     sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
