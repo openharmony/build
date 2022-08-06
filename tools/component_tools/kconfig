@@ -493,21 +493,21 @@ config feature$$communication$$netmanager_base
         default ""
         depends on communication$$netmanager_base
 endmenu
-menu "distributedschedule"
-config distributedschedule$$samgr_standard
-    bool "samgr_standard"
+menu "systemabilitymgr"
+config systemabilitymgr$$samgr
+    bool "samgr"
     default n
-config feature$$distributedschedule$$samgr_standard
+config feature$$systemabilitymgr$$samgr
         string "feature"
         default ""
-        depends on distributedschedule$$samgr_standard
-config distributedschedule$$safwk
+        depends on systemabilitymgr$$samgr
+config systemabilitymgr$$safwk
     bool "safwk"
     default n
-config feature$$distributedschedule$$safwk
+config feature$$systemabilitymgr$$safwk
         string "feature"
         default ""
-        depends on distributedschedule$$safwk
+        depends on systemabilitymgr$$safwk
 endmenu
 menu "hdf"
 config hdf$$display_device_driver

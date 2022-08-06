@@ -67,9 +67,9 @@
     "path": "base/location",
     "name": "location"
   },
-  "distributedschedule": {
-    "path": "foundation/distributedschedule",
-    "name": "distributedschedule"
+  "systemabilitymgr": {
+    "path": "foundation/systemabilitymgr",
+    "name": "systemabilitymgr"
   },
   "hdf": {
     "path": "drivers",
