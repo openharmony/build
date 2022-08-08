@@ -293,6 +293,7 @@ if [ ! -f "${node_js_pkg}" ]; then
 fi
 
 npm_install_config="""
+interface/sdk-js/build-tools,
 developtools/ace-ets2bundle/compiler,
 developtools/ace-js2bundle/ace-loader,
 third_party/jsframework,prebuilts/build-tools/common/js-framework,
