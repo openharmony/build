@@ -309,6 +309,7 @@ template("compile_js_assets") {
       deps = []
     }
     deps += [
+      "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap($host_toolchain)",
       "//arkcompiler/ets_frontend/ts2panda:ark_ts2abc_build($host_toolchain)",
       "//developtools/ace-ets2bundle:ets_loader_node_modules",
       "//developtools/ace-js2bundle:ace_loader_node_modules",
@@ -362,8 +363,11 @@ template("compile_js_assets") {
     }
 
     if (js2abc || ets2abc) {
-      _ark_dir = get_label_info(
+      _ts2abc_dir = get_label_info(
               "//arkcompiler/ets_frontend/ts2panda:ark_ts2abc_build($host_toolchain)",
+              "target_out_dir")
+      _es2abc_dir = get_label_info(
+              "//arkcompiler/ets_frontend/es2panda:es2panda_build($host_toolchain)",
               "target_out_dir")
       if (ets2abc) {
         args += [ "--ets2abc" ]
@@ -371,8 +375,10 @@ template("compile_js_assets") {
         args += [ "--js2abc" ]
       }
       args += [
-        "--ark-frontend-dir",
-        rebase_path(_ark_dir, root_build_dir),
+        "--ark-ts2abc-dir",
+        rebase_path(_ts2abc_dir, root_build_dir),
+        "--ark-es2abc-dir",
+        rebase_path(_es2abc_dir, root_build_dir),
       ]
     }
 
