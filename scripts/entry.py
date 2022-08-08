@@ -86,6 +86,8 @@ def do_build(args):
         cmd.append('--keep-ninja-going')
     if args.fast_rebuild:
         cmd.append('--fast-rebuild')
+    if args.disable_package_image:
+        cmd.append('--disable-package-image')
     if args.log_level == 'debug':
         cmd.append('--log-level=debug')
     if args.device_type:
@@ -120,6 +122,7 @@ def main():
     parser.add_option('--build-only-gn', action='store_true')
     parser.add_option('--ccache', action='store_true')
     parser.add_option('--fast-rebuild', action='store_true')
+    parser.add_option('--disable-package-image', action='store_true')
     parser.add_option('--log-level', default='info')
     parser.add_option('--device-type', default='default')
     parser.add_option('--build-variant', default='user')
