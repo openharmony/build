@@ -108,6 +108,7 @@ make_vendor_img() { pushd ../../; $make_vendor_img_cmd; popd; }
 make_userdata_img() { pushd ../../; $make_userdata_img_cmd; popd; }
 
 make_mixed_asan_img() {
+    echo "make mixed asan system$1.img or/and vendor$1.img ..."
     cfg_group=(${@:2})
 
     # backup system and vendor
@@ -188,6 +189,7 @@ patch_file_nop() {
 }
 
 make_data_asan_img() {
+    echo "make mixed asan userdata.img ..."
     cp -a "$asan_dir"/vendor/{lib*,bin} data/
     cp -a "$asan_dir"/system/{lib*,bin} data/
     add_mkshrc data/
@@ -222,6 +224,22 @@ make_custom_asan_imgs() {
 make_data_asan_img
 make_mixed_asan_img
 make_custom_asan_imgs
+
+# Collect all necessary artifacts into images directory
+if [ -f "$asan_dir"/images/system.img ]; then
+    # full asan images
+    mv "$asan_dir"/images/system.img images/systemF.img
+    mv "$asan_dir"/images/vendor.img images/vendorF.img
+    # unstripped binaries
+    rm -rf images/unstripped
+    mkdir -p images/unstripped/{asan,nonasan}
+    mv "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
+    cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
+    mv ../../{exe,lib}.unstripped images/unstripped/nonasan/
+    # asan log resolve scripts
+    cp "${TOPDIR}"/build/common/asan/{symbolize,resolve_asan_log}.sh images/
+    chmod +x images/*.sh
+fi
 
 shopt -s nullglob && mv system*.img vendor*.img images/
 
