@@ -31,6 +31,7 @@ group("common_packages") {
     deps += [
       "asan:asan.cfg",
       "asan:asan.options",
+      "asan:asan_helper",
       "asan:libclang_rt.asan.so",
     ]
   }

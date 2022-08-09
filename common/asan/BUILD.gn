@@ -40,3 +40,8 @@ ohos_prebuilt_etc("asan.cfg") {
   module_install_dir = "etc/init/"
   part_name = "common"
 }
+
+ohos_shared_library("asan_helper") {
+  sources = [ "asan_helper.c" ]
+  part_name = "common"
+}
