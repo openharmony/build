@@ -610,11 +610,19 @@
             "darwin"
         ]
     },
-	{
+    {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
             "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "simulator/bin",
+        "module_label": "//foundation/ability/ability_runtime/frameworks/simulator:copy_ability_simulator",
+        "target_os": [
             "windows",
             "darwin"
         ]
