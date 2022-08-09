@@ -99,7 +99,7 @@ handle_error() {
 trap handle_error EXIT
 
 # get make image command
-json_data="$(ninja -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
+json_data="$(ninja -w dupbuild=warn -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
 make_system_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/system.img")|.command')"
 make_vendor_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/vendor.img")|.command')"
 make_userdata_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/userdata.img")|.command')"
