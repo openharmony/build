@@ -582,7 +582,7 @@ if (is_standard_system) {
 # Lite OS use different buildconfig.gn
 if (is_lite_system) {
   import("//build/lite/ohos_var.gni")
-  import("${device_path}/config.gni")
+  import("${device_config_path}/config.gni")
   target_arch_cflags = board_cflags
   if (board_arch != "") {
     target_arch_cflags += [ "-march=$board_arch" ]
