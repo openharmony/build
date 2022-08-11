@@ -68,6 +68,10 @@ declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 
+declare_args() {
+  enable_lto_O0 = false
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
