@@ -94,7 +94,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         },
         {
@@ -195,7 +195,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         },
         {
@@ -298,7 +298,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         },
         {
@@ -359,7 +359,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220629.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         },
         {
