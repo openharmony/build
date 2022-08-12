@@ -240,7 +240,7 @@ OpenHarmony的配置文件主要有四个。
     "subsystem": "ace",                                        # 所属子系统
     }
     ```
-    ohos.build文件包含两个部分，第一部分subsystem说明了子系统的名称，parts定义了该子系统包含的部件，要添加一个部件，需要把该部件对应的内容添加进parts中去。添加的时候需要指明该部件包含的模块module_list，假如有提供给其它部件的接口，需要在inner_kits中说明，假如有测试用例，需要在test_list中说明，inner_kits与test_list没有也可以不添加。
+    ohos.build文件包含两个部分，subsystem部分说明了子系统的名称，parts部分定义了该子系统包含的部件，要添加一个部件，需要把该部件对应的内容添加进parts中去。添加的时候需要指明该部件包含的模块module_list，假如有提供给其它部件的接口，需要在inner_kits中说明，假如有测试用例，需要在test_list中说明，inner_kits与test_list没有也可以不添加。
 
     这两个文件均在对应的子系统根目录下，新增模块均在指定的目录下新增模块的gn目标即可，如果要新增一个部件，则需要在部件目录中新建一个bundle.json或者ohos.build，然后再在//vendor/{product_company}/{product-name}/config.json中添加对应的部件，直接添加到原有部件后即可。具体流程请参照编译构建指导的[配置规则](https://gitee.com/openharmony/docs/tree/master/zh-cn/device-dev/subsystems/subsys-build-all.md#配置规则)与[新增并编译不同配置](https://gitee.com/openharmony/docs/tree/master/zh-cn/device-dev/subsystems/subsys-build-all.md#新增并编译不同配置)，其中详细的介绍了如何添加一个模块、部件或者子系统。
 
