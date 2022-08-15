@@ -12,10 +12,10 @@
 # limitations under the License.
 
 template("ohos_group") {
-    group(target_name) {
-        deps = []
-        if (defined(invoker.deps)) {
-            deps += invoker.deps
-        }
+  group(target_name) {
+    deps = []
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
     }
+  }
 }

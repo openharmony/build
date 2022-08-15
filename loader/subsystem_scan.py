@@ -59,6 +59,14 @@ def _scan_build_file(subsystem_path):
     return _files
 
 
+def _check_path_prefix(paths):
+    allow_path_prefix = ['vendor', 'device']
+    result = list(
+        filter(lambda x: x is False,
+               map(lambda p: p.split('/')[0] in allow_path_prefix, paths)))
+    return len(result) <= 1
+
+
 def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
     subsystem_infos = _read_config(subsystem_config_file,
                                    example_subsystem_file)
@@ -68,13 +76,21 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
     no_src_subsystem = {}
     _build_configs = {}
     for key, val in subsystem_infos.items():
+        _all_build_config_files = []
+        if not isinstance(val, list):
+            val = [val]
+        else:
+            if not _check_path_prefix(val):
+                raise Exception(
+                    "subsystem '{}' path configuration is incorrect.".format(
+                        key))
         _info = {'path': val}
-        _subsystem_path = os.path.join(source_root_dir, val)
-
-        _build_config_files = _scan_build_file(_subsystem_path)
-
-        if _build_config_files:
-            _info['build_files'] = _build_config_files
+        for _path in val:
+            _subsystem_path = os.path.join(source_root_dir, _path)
+            _build_config_files = _scan_build_file(_subsystem_path)
+            _all_build_config_files.extend(_build_config_files)
+        if _all_build_config_files:
+            _info['build_files'] = _all_build_config_files
             _build_configs[key] = _info
         else:
             no_src_subsystem[key] = val

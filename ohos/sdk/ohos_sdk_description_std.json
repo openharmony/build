@@ -166,7 +166,7 @@
     },
     {
     	"install_dir": "js/build-tools/ace-loader/bin/ark/",
-	    "module_label": "//ark/ts2abc/ts2panda:panda_ts2abc",
+	    "module_label": "//arkcompiler/ets_frontend/ts2panda:panda_ts2abc",
 	    "target_os": [
             "windows",
             "linux",
@@ -175,7 +175,7 @@
     },
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/",
-        "module_label": "//ark/ts2abc/ts2panda:panda_ts2abc_ets",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:panda_ts2abc_ets",
         "target_os": [
             "windows",
             "linux",
@@ -184,42 +184,84 @@
     },
     {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build",
         "target_os": [
             "linux"
         ]
     },
     {
-    	"install_dir": "js/build-tools/ace-loader/bin/ark/build-win/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build_win",
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_win",
         "target_os": [
             "windows"
         ]
     },
     {
     	"install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build_mac",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_mac",
         "target_os": [
             "darwin"
         ]
     },
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build_ets",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_ets",
         "target_os": [
             "linux"
         ]
     },
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build_win_ets",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_win_ets",
         "target_os": [
             "windows"
         ]
     },
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/",
-        "module_label": "//ark/ts2abc/ts2panda:ts2abc_build_mac_ets",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
         "target_os": [
             "darwin"
         ]
@@ -388,7 +430,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//ark/runtime_core/assembler:ark_asm",
+        "module_label": "//arkcompiler/runtime_core/assembler:ark_asm",
         "target_os": [
             "windows",
             "linux",
@@ -397,7 +439,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//ark/runtime_core/disassembler:ark_disasm",
+        "module_label": "//arkcompiler/runtime_core/disassembler:ark_disasm",
         "target_os": [
             "windows",
             "linux",
@@ -431,8 +473,8 @@
         ]
     },
     {
-        "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_shared_library",
+        "install_dir":"previewer/common/bin/",
+        "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
             "windows",
             "darwin"
@@ -455,24 +497,8 @@
         ]
     },
     {
-        "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_resource_dynamic_library_standard",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "previewer/common",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_curl_shared_library",
         "target_os": [
             "windows",
             "darwin"
@@ -483,14 +509,6 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_curl_cacert",
         "target_os": [
             "windows"
-        ]
-    },
-    {
-        "install_dir": "previewer/common/bin",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_ohos_fonts",
-        "target_os": [
-            "windows",
-            "darwin"
         ]
     },
     {
@@ -601,11 +619,19 @@
             "darwin"
         ]
     },
-	{
+    {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
             "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "simulator/bin",
+        "module_label": "//foundation/ability/ability_runtime/frameworks/simulator:copy_ability_simulator",
+        "target_os": [
             "windows",
             "darwin"
         ]

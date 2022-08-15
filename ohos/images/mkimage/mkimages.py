@@ -88,15 +88,10 @@ def mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     sparse_img2simg(is_sparse, device)
 
 def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
+    # get ramdisk sieze frome ramdisk_image_conf.txt
+    ramdisk_size = mk_configs.split(" ")[1]
     mk_configs = \
-            " ".join([src_dir, device, "%s/../ramdisk_resource_config.ini" % src_dir])
-    res = run_cmd(" ".join([mkfs_tools, mk_configs]))
-    verify_ret(res)
-    sparse_img2simg(is_sparse, device)
-
-def mk_updater_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
-    mk_configs = \
-            " ".join([src_dir, device, "%s/../updater_ramdisk_resource_config.ini" % src_dir])
+            " ".join([src_dir, device, ramdisk_size])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
     sparse_img2simg(is_sparse, device)
@@ -126,7 +121,7 @@ def mk_images(args):
     elif "updater_ramdisk.img" == device:
         if config.get('component_type', '') == 'system_component':
             return
-        mk_updater_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
+        mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
     else:
         mk_other_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
 

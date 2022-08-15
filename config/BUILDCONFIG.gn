@@ -88,10 +88,22 @@ if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = false
 }
 
+if (defined(product_build_config.enable_mesa3d)) {
+  enable_mesa3d = product_build_config.enable_mesa3d
+} else {
+  enable_mesa3d = false
+}
+
 if (defined(product_build_config.build_selinux)) {
   build_selinux = product_build_config.build_selinux
 } else {
   build_selinux = false
+}
+
+if (defined(product_build_config.build_seccomp)) {
+  build_seccomp = product_build_config.build_seccomp
+} else {
+  build_seccomp = false
 }
 
 if (defined(product_build_config.support_jsapi)) {
@@ -570,7 +582,7 @@ if (is_standard_system) {
 # Lite OS use different buildconfig.gn
 if (is_lite_system) {
   import("//build/lite/ohos_var.gni")
-  import("${device_path}/config.gni")
+  import("${device_config_path}/config.gni")
   target_arch_cflags = board_cflags
   if (board_arch != "") {
     target_arch_cflags += [ "-march=$board_arch" ]
@@ -765,7 +777,7 @@ foreach(_target_type, target_type_list) {
       }
       if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
         if (is_lite_system && current_os == "ohos") {
-          deps += [ "//prebuilts/lite/sysroot" ]
+          deps += [ "//third_party/musl:sysroot_lite" ]
         } else {
           deps += [ "//build/config:${_target_type}_deps" ]
         }
@@ -788,7 +800,7 @@ if (is_lite_system && current_os == "ohos") {
           deps = []
         }
         if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
-          deps += [ "//prebuilts/lite/sysroot" ]
+          deps += [ "//third_party/musl:sysroot_lite" ]
         }
       }
     }

@@ -27,6 +27,10 @@ declare_args() {
 }
 
 declare_args() {
+  sdk_build_public = false
+}
+
+declare_args() {
   # Whether build the qemu images, this image is usd to run on emulator device.
   build_qemu_image = false
 
@@ -131,6 +135,10 @@ declare_args() {
 
 declare_args() {
   enable_notice_collection = true
+}
+
+declare_args() {
+  load_test_config = true
 }
 
 # build target type

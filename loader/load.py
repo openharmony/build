@@ -188,6 +188,14 @@ def _get_required_build_targets(parts_targets, target_platform_parts):
     return required_build_targets
 
 
+def _get_auto_install_list(parts_path_info):
+    auto_install_part_list = []
+    for part, path in parts_path_info.items():
+        if str(path).startswith("drivers/interface") or \
+            str(path).startswith("third_party"):
+            auto_install_part_list.append(part)
+    return auto_install_part_list
+
 def _get_parts_src_list(required_parts_targets, parts_info):
     parts_name_map = {}
     for _list in parts_info.values():
@@ -321,7 +329,9 @@ def load(args):
     # loading ohos.build and gen part variant info
     parts_config_info = load_ohos_build.get_parts_info(
         source_root_dir, config_output_relpath, _subsystem_info,
-        variant_toolchains, target_arch, args.ignore_api_check, args.build_xts)
+        variant_toolchains, target_arch, args.ignore_api_check,
+        args.exclusion_modules_config_file, args.load_test_config,
+        args.build_xts)
     # check parts_config_info
     _check_parts_config_info(parts_config_info)
     parts_variants = parts_config_info.get('parts_variants')
@@ -404,6 +414,10 @@ def load(args):
     write_json_file(parts_src_flag_file,
                     _get_parts_src_list(required_parts_targets, parts_info),
                     check_changes=True)
+    # write auto install part file
+    auto_install_list = _get_auto_install_list(parts_config_info.get("parts_path_info"))
+    auto_install_list_file = os.path.join(config_output_dir, "auto_install_parts.json")
+    write_json_file(auto_install_list_file, auto_install_list)
 
     # write platforms_list.gni
     platforms_list_gni_file = os.path.join(config_output_dir,
@@ -484,11 +498,13 @@ def main():
     parser.add_argument('--platforms-config-file', required=True)
     parser.add_argument('--subsystem-config-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
+    parser.add_argument('--exclusion-modules-config-file', required=False)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--gn-root-out-dir', default='.')
     parser.add_argument('--build-platform-name', default='phone')
     parser.add_argument('--build-xts', dest='build_xts', action='store_true')
     parser.set_defaults(build_xts=False)
+    parser.add_argument('--load-test-config', action='store_true')
     parser.add_argument('--target-os', default='ohos')
     parser.add_argument('--target-cpu', default='arm64')
     parser.add_argument('--os-level', default='standard')

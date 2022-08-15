@@ -73,13 +73,13 @@ config feature$$account$$os_account
         depends on account$$os_account
 endmenu
 menu "distributeddatamgr"
-config distributeddatamgr$$distributeddataobject
-    bool "distributeddataobject"
+config distributeddatamgr$$data_object
+    bool "data_object"
     default n
-config feature$$distributeddatamgr$$distributeddataobject
+config feature$$distributeddatamgr$$data_object
         string "feature"
         default ""
-        depends on distributeddatamgr$$distributeddataobject
+        depends on distributeddatamgr$$data_object
 config distributeddatamgr$$native_appdatamgr
     bool "native_appdatamgr"
     default n
@@ -299,6 +299,15 @@ config feature$$hiviewdfx$$hicollie_native
         default ""
         depends on hiviewdfx$$hicollie_native
 endmenu
+menu
+config commonlibrary$$c_utils
+    bool "c_utils"
+    default n
+config feature$$commonlibrary$$c_utils
+        string "feature"
+        default ""
+        depends on commonlibrary$$c_utils
+endmenu
 menu "utils"
 config utils$$utils_base
     bool "utils_base"
@@ -395,6 +404,13 @@ config feature$$aafwk$$zidl
         string "feature"
         default ""
         depends on aafwk$$zidl
+config aafwk$$dmsfwk
+    bool "dmsfwk"
+    default n
+config feature$$aafwk$$dmsfwk
+        string "feature"
+        default ""
+        depends on aafwk$$dmsfwk
 endmenu
 menu "notification"
 config notification$$ans_standard
@@ -477,28 +493,21 @@ config feature$$communication$$netmanager_base
         default ""
         depends on communication$$netmanager_base
 endmenu
-menu "distributedschedule"
-config distributedschedule$$samgr_standard
-    bool "samgr_standard"
+menu "systemabilitymgr"
+config systemabilitymgr$$samgr
+    bool "samgr"
     default n
-config feature$$distributedschedule$$samgr_standard
+config feature$$systemabilitymgr$$samgr
         string "feature"
         default ""
-        depends on distributedschedule$$samgr_standard
-config distributedschedule$$safwk
+        depends on systemabilitymgr$$samgr
+config systemabilitymgr$$safwk
     bool "safwk"
     default n
-config feature$$distributedschedule$$safwk
+config feature$$systemabilitymgr$$safwk
         string "feature"
         default ""
-        depends on distributedschedule$$safwk
-config distributedschedule$$dmsfwk_standard
-    bool "dmsfwk_standard"
-    default n
-config feature$$distributedschedule$$dmsfwk_standard
-        string "feature"
-        default ""
-        depends on distributedschedule$$dmsfwk_standard
+        depends on systemabilitymgr$$safwk
 endmenu
 menu "hdf"
 config hdf$$display_device_driver
@@ -746,13 +755,13 @@ config feature$$multimedia$$multimedia_camera_standard
         string "feature"
         default ""
         depends on multimedia$$multimedia_camera_standard
-config multimedia$$multimedia_media_standard
-    bool "multimedia_media_standard"
+config multimedia$$multimedia_player_framework
+    bool "multimedia_player_framework"
     default n
-config feature$$multimedia$$multimedia_media_standard
+config feature$$multimedia$$multimedia_player_framework
         string "feature"
         default ""
-        depends on multimedia$$multimedia_media_standard
+        depends on multimedia$$multimedia_player_framework
 config multimedia$$multimedia_histreamer
     bool "multimedia_histreamer"
     default n
@@ -762,13 +771,13 @@ config feature$$multimedia$$multimedia_histreamer
         depends on multimedia$$multimedia_histreamer
 endmenu
 menu "multimodalinput"
-config multimodalinput$$multimodalinput_base
-    bool "multimodalinput_base"
+config multimodalinput$$input
+    bool "input"
     default n
-config feature$$multimodalinput$$multimodalinput_base
+config feature$$multimodalinput$$input
         string "feature"
         default ""
-        depends on multimodalinput$$multimodalinput_base
+        depends on multimodalinput$$input
 endmenu
 menu "telephony"
 config telephony$$data_storage
@@ -852,13 +861,13 @@ config feature$$global$$resmgr_standard
         depends on global$$resmgr_standard
 endmenu
 menu "powermgr"
-config powermgr$$display_manager_native
-    bool "display_manager_native"
+config powermgr$$display_manager
+    bool "display_manager"
     default n
-config feature$$powermgr$$display_manager_native
+config feature$$powermgr$$display_manager
         string "feature"
         default ""
-        depends on powermgr$$display_manager_native
+        depends on powermgr$$display_manager
 config powermgr$$thermal_manager
     bool "thermal_manager"
     default n
@@ -866,27 +875,27 @@ config feature$$powermgr$$thermal_manager
         string "feature"
         default ""
         depends on powermgr$$thermal_manager
-config powermgr$$battery_statistics_native
-    bool "battery_statistics_native"
+config powermgr$$battery_statistics
+    bool "battery_statistics"
     default n
-config feature$$powermgr$$battery_statistics_native
+config feature$$powermgr$$battery_statistics
         string "feature"
         default ""
-        depends on powermgr$$battery_statistics_native
-config powermgr$$battery_manager_native
-    bool "battery_manager_native"
+        depends on powermgr$$battery_statistics
+config powermgr$$battery_manager
+    bool "battery_manager"
     default n
-config feature$$powermgr$$battery_manager_native
+config feature$$powermgr$$battery_manager
         string "feature"
         default ""
-        depends on powermgr$$battery_manager_native
-config powermgr$$power_manager_native
-    bool "power_manager_native"
+        depends on powermgr$$battery_manager
+config powermgr$$power_manager
+    bool "power_manager"
     default n
-config feature$$powermgr$$power_manager_native
+config feature$$powermgr$$power_manager
         string "feature"
         default ""
-        depends on powermgr$$power_manager_native
+        depends on powermgr$$power_manager
 endmenu
 menu "usb"
 config usb$$usb_manager
@@ -979,9 +988,9 @@ config feature$$ark$$ark_js_runtime
         default ""
         depends on ark$$ark_js_runtime
 endmenu
-menu "compileruntime"
+menu "commonlibrary"
 endmenu
-menu "iot_hardware"
+menu "iothardware"
 endmenu
 menu "kernel"
 config kernel$$linux
@@ -995,13 +1004,13 @@ endmenu
 menu "msdp"
 endmenu
 menu "deviceprofile"
-config deviceprofile$$device_profile_core
-    bool "device_profile_core"
+config deviceprofile$$device_info_manager
+    bool "device_info_manager"
     default n
-config feature$$deviceprofile$$device_profile_core
+config feature$$deviceprofile$$device_info_manager
         string "feature"
         default ""
-        depends on deviceprofile$$device_profile_core
+        depends on deviceprofile$$device_info_manager
 endmenu
 menu "filemanagement"
 config filemanagement$$user_file_service

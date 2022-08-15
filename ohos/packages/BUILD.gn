@@ -381,7 +381,7 @@ foreach(_platform, target_platform_list) {
     testonly = true
     deps = [
       ":${_platform}_parts_list",
-      "//build/core/gn:build_all_test_pkg",
+      ":build_all_test_pkg",
     ]
     script = "//build/ohos/packages/resources_collect.py"
     inputs = [ _system_install_info_file ]
@@ -420,7 +420,7 @@ foreach(_platform, target_platform_list) {
     testonly = true
     deps = [
       ":${_platform}_parts_list",
-      "//build/core/gn:build_all_test_pkg",
+      ":build_all_test_pkg",
     ]
     script = "//build/ohos/packages/resources_collect.py"
     inputs = [ _system_install_info_file ]
@@ -510,4 +510,12 @@ group("package_testcase") {
       ":package_testcase_${_platform}",
     ]
   }
+}
+
+group("build_all_test_pkg") {
+  testonly = true
+  deps = [
+    "$root_build_dir/build_configs:parts_test",
+    "//test/developertest:make_temp_test",
+  ]
 }

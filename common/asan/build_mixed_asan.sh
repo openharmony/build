@@ -21,6 +21,7 @@ command -v ninja &>/dev/null || { echo >&2 "ninja command not found, please inst
 
 args=()
 cfg_groups=()
+build_variant=root
 while test $# -gt 0; do
     case "$1" in
     -g[0-9]:*)
@@ -33,6 +34,14 @@ while test $# -gt 0; do
         esac
         shift
         ;;
+    --build-variant)
+        build_variant=$2
+        shift
+        ;;
+    --no-build)
+        no_build=true
+        shift
+        ;;
     *)
         args+=("$1")
         ;;
@@ -40,7 +49,7 @@ while test $# -gt 0; do
     shift
 done
 
-set -e
+set -e -- "${args[@]}"
 
 # build both asan and nonasan images
 cd "${TOPDIR}"
@@ -50,12 +59,12 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=true
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --build-variant ${build_variant}
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
-./build.sh "${args[@]}" --gn-args is_asan=false
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --build-variant ${build_variant}
 
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
@@ -90,7 +99,7 @@ handle_error() {
 trap handle_error EXIT
 
 # get make image command
-json_data="$(ninja -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
+json_data="$(ninja -w dupbuild=warn -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
 make_system_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/system.img")|.command')"
 make_vendor_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/vendor.img")|.command')"
 make_userdata_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/userdata.img")|.command')"
@@ -99,6 +108,7 @@ make_vendor_img() { pushd ../../; $make_vendor_img_cmd; popd; }
 make_userdata_img() { pushd ../../; $make_userdata_img_cmd; popd; }
 
 make_mixed_asan_img() {
+    echo "make mixed asan system$1.img or/and vendor$1.img ..."
     cfg_group=(${@:2})
 
     # backup system and vendor
@@ -110,7 +120,11 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/etc/init/asan.cfg system/etc/init/
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
+    sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
+    sed -i 's,enforcing,permissive,g' system/etc/selinux/config
     sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
 
     # make some services run in asan version
     local make_system=false
@@ -175,6 +189,7 @@ patch_file_nop() {
 }
 
 make_data_asan_img() {
+    echo "make mixed asan userdata.img ..."
     cp -a "$asan_dir"/vendor/{lib*,bin} data/
     cp -a "$asan_dir"/system/{lib*,bin} data/
     add_mkshrc data/
@@ -209,6 +224,22 @@ make_custom_asan_imgs() {
 make_data_asan_img
 make_mixed_asan_img
 make_custom_asan_imgs
+
+# Collect all necessary artifacts into images directory
+if [ -f "$asan_dir"/images/system.img ]; then
+    # full asan images
+    mv "$asan_dir"/images/system.img images/systemF.img
+    mv "$asan_dir"/images/vendor.img images/vendorF.img
+    # unstripped binaries
+    rm -rf images/unstripped
+    mkdir -p images/unstripped/{asan,nonasan}
+    mv "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
+    cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
+    mv ../../{exe,lib}.unstripped images/unstripped/nonasan/
+    # asan log resolve scripts
+    cp "${TOPDIR}"/build/common/asan/{symbolize,resolve_asan_log}.sh images/
+    chmod +x images/*.sh
+fi
 
 shopt -s nullglob && mv system*.img vendor*.img images/
 

@@ -21,22 +21,13 @@ import argparse
 import subprocess
 import filecmp
 
-mkimage_tool = ""
-BOOT_TYPE = ""
-DTC_419 = "dtc_419_path"
-DTC_510 = "dtc_510_path"
-FSTAB_REQUIRED = "fstab_required_path"
-NEED_CLEAR_RESOURCE_SECTION = \
-    [DTC_419, DTC_510, FSTAB_REQUIRED, "mkimage_path"]
-need_clear_section_target_path_list = []
 
 def args_parse(args):
     parser = argparse.ArgumentParser(description='mkcpioimage.py')
 
     parser.add_argument("src_dir", help="The source file for sload.")
     parser.add_argument("device", help="The device for mkfs.")
-    parser.add_argument("resource_config",
-                        help="The ramdisk resource config file.")
+    parser.add_argument("conf_size", help="The deivce config image size.")
 
     args = parser.parse_known_args(args)[0]
     return args
@@ -66,52 +57,15 @@ def get_dir_list(input_path, dir_list):
         dir_list.append(input_path)
 
 
-def build_run_fitimage(args):
-    src_dir = args.src_dir
-    index = src_dir.rfind('/')
-    root_dir = src_dir[:index]
-
-    if BOOT_TYPE == "two_stages":
-        if "updater_ramdisk.img" in args.device:
-            fit_cmd = \
-                ["cp", '-f', "./updater_ramdisk.img",
-                 os.path.join(root_dir, "images", "updater.img")]
-        else:
-            fit_cmd = \
-                [os.path.join(root_dir, "make-boot.sh"),
-                 os.path.join(root_dir, "../../..")]
-    else:
-        if "updater_ramdisk.img" in args.device:
-            if not os.path.exists("./ohos_updater.its"):
-                print("error there is no configuration file")
-                return -1
-            if not len(mkimage_tool) == 0:
-                fit_cmd = \
-                    [mkimage_tool, '-f', "./ohos_updater.its",
-                     os.path.join(root_dir, "images", "updater.img")]
-            else:
-                fit_cmd = \
-                    ["mkimage", '-f', "./ohos_updater.its",
-                     os.path.join(root_dir, "images", "updater.img")]
-        else:
-            return 0
-
-    res = run_cmd(fit_cmd)
-    if res[1] != 0:
-        print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
-                        res[2].decode(), res[3].decode()]))
-        print("error run fit image errno: %s" % str(res))
-        clear_resource_file(need_clear_section_target_path_list)
-        sys.exit(2)
-    return res[1]
-
-
 def build_run_cpio(args):
     work_dir = os.getcwd()
     os.chdir(args.src_dir)
 
+    conf_size = int(args.conf_size)
     if args.device == "ramdisk.img":
         output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
+    elif args.device == "updater_ramdisk.img":
+        output_path = os.path.join("%s/../images" % os.getcwd(), "updater.img")
     else:
         output_path = os.path.join(work_dir, args.device)
     ramdisk_cmd = ['cpio', '-o', '-H', 'newc', '-O', output_path]
@@ -119,6 +73,11 @@ def build_run_cpio(args):
     get_dir_list("./", dir_list)
     res = run_cmd(ramdisk_cmd, dir_list)
     os.chdir(work_dir)
+    if conf_size < os.path.getsize(output_path):
+        print("Image size is larger than the conf image size. "
+              "conf_size: %d, image_size: %d" %
+              (conf_size, os.path.getsize(output_path)))
+        sys.exit(1)
     if res[1] != 0:
         print("error run cpio ramdisk errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
@@ -132,9 +91,6 @@ def build_run_chmod(args):
     src_dir = args.src_dir
     src_index = src_dir.rfind('/')
     root_dir = src_dir[:src_index]
-
-    if BOOT_TYPE == "two_stages":
-        return 0
 
     if "updater_ramdisk.img" in args.device:
         chmod_cmd = ['chmod', '664', os.path.join(root_dir, "images", "updater.img")]
@@ -150,82 +106,13 @@ def build_run_chmod(args):
     return res[1]
 
 
-def parse_resource_config(resource_config_file_path):
-    """
-    parse ramdisk_resource_config.ini
-    :param resource_config_file_path: ramdisk_resource_config.ini path
-    :return:
-    """
-    dtc_419_source_path = ""
-    dtc_510_source_path = ""
-    global BOOT_TYPE
-    need_clear_section_target_path_list = []
-    if os.path.exists(resource_config_file_path):
-        ramdisk_config = configparser.ConfigParser()
-        ramdisk_config.read(resource_config_file_path)
-        for each_section in ramdisk_config.items():
-            if each_section[0] == "DEFAULT":
-                continue
-            section_options = dict(ramdisk_config.items(each_section[0]))
-            source_path = section_options.get("source_path", "")
-            target_path = section_options.get("target_path", "")
-            if each_section[0] in NEED_CLEAR_RESOURCE_SECTION:
-                if each_section[0] == FSTAB_REQUIRED:
-                    need_clear_section_target_path_list.append(source_path)
-                else:
-                    need_clear_section_target_path_list.append(target_path)
-            if each_section[0] == DTC_419:
-                dtc_419_source_path = source_path
-            if each_section[0] == "board":
-                BOOT_TYPE = section_options.get("boot_type", None)
-            if each_section[0] == DTC_510:
-                dtc_510_source_path = source_path
-            if each_section[0] =="mkimage_path" and os.path.exists(each_section[0]):
-               global mkimage_tool
-               mkimage_tool = os.path.pwdpath(source_path) 
-            if os.path.exists(source_path):
-                if os.path.exists(target_path):
-                    if not filecmp.cmp(source_path, target_path):
-                        shutil.copy(source_path, target_path)
-                else:
-                    shutil.copy(source_path, target_path)
-            else:
-                # "board": updater ramdisk has no source_path in board section
-                if each_section[0] not in [DTC_419, DTC_510, "board"]:
-                    print("Error: source file does not exist! path: %s" %
-                          source_path)
-                    sys.exit(1)
-        if not os.path.exists(dtc_419_source_path) and \
-                not os.path.exists(dtc_510_source_path):
-            print("Warning: dtc tool does not exists, ")
-    else:
-        print("Error: ramdisk_resource_config.ini file does not exist!")
-        sys.exit(1)
-    return need_clear_section_target_path_list
-
-
-def clear_resource_file(input_file_path_list):
-    """
-    clear resource file
-    :param input_file_path_list: List of files to clean up
-    :return:
-    """
-    for each_path in input_file_path_list:
-        if os.path.exists(each_path):
-            os.remove(each_path)
-
-
 def main(args):
     args = args_parse(args)
     print("Make cpio image!")
     config = {}
     with open("../../ohos_config.json") as f:
         config = json.load(f)
-    if os.path.exists(args.resource_config):
-        global need_clear_section_target_path_list
-        need_clear_section_target_path_list = parse_resource_config(args.resource_config)
     build_run_cpio(args)
-    build_run_fitimage(args)
     build_run_chmod(args)
 
 

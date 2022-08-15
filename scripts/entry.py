@@ -51,6 +51,8 @@ def do_build(args):
     if args.target_cpu is not None:
         cmd.extend(['--target-cpu', ''.join(args.target_cpu)])
 
+    if args.compile_config is not None:
+        cmd.extend(['--compile-config', ''.join(args.compile_config)])
 
     if args.product_name == 'ohos-sdk':
         gn_args.append('build_ohos_ndk=true')
@@ -84,6 +86,8 @@ def do_build(args):
         cmd.append('--keep-ninja-going')
     if args.fast_rebuild:
         cmd.append('--fast-rebuild')
+    if args.disable_package_image:
+        cmd.append('--disable-package-image')
     if args.log_level == 'debug':
         cmd.append('--log-level=debug')
     if args.device_type:
@@ -106,6 +110,7 @@ def main():
     parser.add_option('--device-name')
     parser.add_option('--target-cpu')
     parser.add_option('--target-os')
+    parser.add_option('--compile-config')
     parser.add_option('-T', '--build-target', action='append', default=[])
     parser.add_option('--gn-args', action='append', default=[])
     parser.add_option('--ninja-args', action='append', default=[])
@@ -117,6 +122,7 @@ def main():
     parser.add_option('--build-only-gn', action='store_true')
     parser.add_option('--ccache', action='store_true')
     parser.add_option('--fast-rebuild', action='store_true')
+    parser.add_option('--disable-package-image', action='store_true')
     parser.add_option('--log-level', default='info')
     parser.add_option('--device-type', default='default')
     parser.add_option('--build-variant', default='user')

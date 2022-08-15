@@ -45,7 +45,8 @@ def parse_args(args):
                       action='store_true',
                       default=False,
                       help='whether to transform ets to ark bytecode')
-    parser.add_option('--ark-frontend-dir', help='path to ark frontend dir')
+    parser.add_option('--ark-ts2abc-dir', help='path to ark ts2abc dir')
+    parser.add_option('--ark-es2abc-dir', help='path to ark es2abc dir')
     parser.add_option('--ace-loader-home', help='path to ace-loader dir.')
     parser.add_option('--ets-loader-home', help='path to ets-loader dir.')
     parser.add_option('--app-profile', default=False, help='path to app-profile.')
@@ -234,8 +235,11 @@ def main(args):
         with ZipFile(options.output, 'w') as file:
             return
 
-    if options.ark_frontend_dir:
-        depfiles.extend(build_utils.get_all_files(options.ark_frontend_dir))
+    if options.ark_ts2abc_dir:
+        depfiles.extend(build_utils.get_all_files(options.ark_ts2abc_dir))
+
+    if options.ark_es2abc_dir:
+        depfiles.extend(build_utils.get_all_files(options.ark_es2abc_dir))
 
     depfiles.append(options.webpack_js)
     depfiles.append(options.webpack_config_js)
@@ -257,14 +261,14 @@ def main(args):
             os.path.relpath(
                 options.webpack_config_js, options.ace_loader_home)
         ]
-        ark_frontend_dir = os.path.relpath(
-            options.ark_frontend_dir, options.ace_loader_home)
+        ark_ts2abc_dir = os.path.relpath(
+            options.ark_ts2abc_dir, options.ace_loader_home)
         if options.app_profile:
             cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
-                        'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+                        'arkFrontendDir={}'.format(ark_ts2abc_dir), 'nodeJs={}'.format(node_js)])
         else:
             cmd.extend(['--env', 'compilerType=ark',
-                    'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+                    'arkFrontendDir={}'.format(ark_ts2abc_dir), 'nodeJs={}'.format(node_js)])
         build_utils.call_and_write_depfile_if_stale(
             lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir),
             options,
@@ -287,14 +291,14 @@ def main(args):
             os.path.relpath(
                 options.webpack_config_ets, options.ets_loader_home)
         ]
-        ark_frontend_dir = os.path.relpath(
-            options.ark_frontend_dir, options.ets_loader_home)
+        ark_es2abc_dir = os.path.relpath(
+            options.ark_es2abc_dir, options.ets_loader_home)
         if options.app_profile:
             cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
-                        'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+                        'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
         else:
             cmd.extend(['--env', 'compilerType=ark',
-                        'arkFrontendDir={}'.format(ark_frontend_dir), 'nodeJs={}'.format(node_js)])
+                        'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
         build_utils.call_and_write_depfile_if_stale(
             lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir),
             options,

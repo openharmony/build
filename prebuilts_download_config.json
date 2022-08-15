@@ -1,0 +1,395 @@
+{
+  "prebuilts_download_dir": "../OpenHarmony_canary_prebuilts",
+  "npm_install_path": [
+    "developtools/ace-ets2bundle/compiler",
+    "developtools/ace-js2bundle/ace-loader",
+    "third_party/jsframework",
+    "arkcompiler/ets_frontend/ts2panda",
+    "interface/sdk-js/build-tools"
+  ],
+  "node_modules_copy": [
+    {
+      "src": "third_party/jsframework/node_modules",
+      "dest": "prebuilts/build-tools/common/js-framework/node_modules",
+      "use_symlink": "True"
+    },
+    {
+      "src": "arkcompiler/ets_frontend/ts2panda/node_modules",
+      "dest": "prebuilts/build-tools/common/ts2abc/node_modules",
+      "use_symlink": "True"
+    },
+    {
+      "src": "test/arkXtest/jsunit",
+      "dest": "developtools/ace-ets2bundle/compiler/node_modules/@ohos/hypium",
+      "use_symlink": "False"
+    },
+    {
+      "src": "test/arkXtest/jsunit",
+      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/@ohos/hypium",
+      "use_symlink": "False"
+    }
+  ],
+  "file_handle_config": [
+    {
+      "src": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi",
+      "tmp": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2",
+      "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
+    },
+    {
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang-530132-20220730",
+      "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
+      "symlink_src": "/lib/clang/12.0.1",
+      "symlink_dest": "/lib/clang/current"
+    },
+    {
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang-530132-20220730",
+      "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
+      "symlink_src": "/lib/clang/12.0.1",
+      "symlink_dest": "/lib/clang/current"
+    },
+    {
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang-530132-20220730",
+      "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
+      "symlink_src": "/lib/clang/12.0.1",
+      "symlink_dest": "/lib/clang/current"
+    },
+    {
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang-530132-20220730",
+      "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
+      "symlink_src": "/lib/clang/12.0.1",
+      "symlink_dest": "/lib/clang/current"
+    },
+    {
+      "src": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf",
+      "dest": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0"
+    }
+  ],
+  "linux": {
+    "arm64": {
+      "copy_config": [
+        {
+          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
+          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
+          "unzip_filename": "ace-loader"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common",
+          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
+          "unzip_filename": "restool"
+        },
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
+          "unzip_filename": "linux"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
+          "file_path": "/openharmony/compiler/gn/1717/linux/gn-linux-x86-1717.tar.gz",
+          "unzip_filename": "gn"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.10.1/linux/ninja-linux-x86-1.10.1.tar.gz",
+          "unzip_filename": "ninja"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
+          "unzip_filename": "ark_js_prebuilts"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common/nodejs",
+          "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
+          "unzip_filename": "node-v12.18.4-linux-x64"
+        }
+      ],
+      "linux_copy_config": [
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz",
+          "unzip_filename": "windows-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/mingw-w64/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz",
+          "unzip_filename": "clang-mingw"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi",
+          "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz",
+          "unzip_filename": "prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi"
+        },
+         {
+          "unzip_dir": "prebuilts/gcc/linux-x86/aarch64",
+          "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz",
+          "unzip_filename": "gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu"
+        },
+        {
+          "unzip_dir": "prebuilts/previewer/windows",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz",
+          "unzip_filename": "previewer"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/libcxx-ndk-530132-linux-x86_64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
+          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
+          "unzip_filename": "esp-2019r2-8.2.0"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
+          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
+          "unzip_filename": "csky"
+        },
+        {
+          "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
+          "unzip_filename": "linux-x86"
+        }
+      ]
+    },
+    "x86_64": {
+      "copy_config": [
+        {
+          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
+          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
+          "unzip_filename": "ace-loader"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common",
+          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
+          "unzip_filename": "restool"
+        },
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
+          "unzip_filename": "linux"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
+          "file_path": "/openharmony/compiler/gn/1717/linux/gn-linux-x86-1717.tar.gz",
+          "unzip_filename": "gn"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.10.1/linux/ninja-linux-x86-1.10.1.tar.gz",
+          "unzip_filename": "ninja"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
+          "unzip_filename": "ark_js_prebuilts"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common/nodejs",
+          "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
+          "unzip_filename": "node-v12.18.4-linux-x64"
+        }
+      ],
+      "linux_copy_config": [
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz",
+          "unzip_filename": "windows-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/mingw-w64/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz",
+          "unzip_filename": "clang-mingw"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi",
+          "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi.tar.gz",
+          "unzip_filename": "prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/aarch64",
+          "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz",
+          "unzip_filename": "gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu"
+        },
+        {
+          "unzip_dir": "prebuilts/previewer/windows",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz",
+          "unzip_filename": "previewer"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/libcxx-ndk-530132-linux-x86_64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
+          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
+          "unzip_filename": "esp-2019r2-8.2.0"
+        },
+        {
+          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
+          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
+          "unzip_filename": "csky"
+        },
+        {
+          "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
+          "unzip_filename": "linux-x86"
+        }
+      ]
+    }
+  },
+  "darwin": {
+    "arm64": {
+      "copy_config": [
+        {
+          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
+          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
+          "unzip_filename": "ace-loader"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common",
+          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
+          "unzip_filename": "restool"
+        },
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "unzip_filename": "darwin"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
+          "file_path": "/openharmony/compiler/gn/1717/darwin/gn-darwin-x86-1717.tar.gz",
+          "unzip_filename": "gn"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.10.1/darwin/ninja-darwin-x86-1.10.1.tar.gz",
+          "unzip_filename": "ninja"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
+          "unzip_filename": "ark_js_prebuilts"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common/nodejs",
+          "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
+          "unzip_filename": "node-v12.18.4-darwin-x64"
+        }
+      ],
+      "darwin_copy_config": [
+        {
+          "unzip_dir": "prebuilts/previewer/darwin",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz",
+          "unzip_filename": "previewer"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-arm64-20220730_01.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/libcxx-ndk-530132-darwin-arm64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.9.2/darwin/python-darwin-x86-3.9.2_202205071615.tar.gz",
+          "unzip_filename": "darwin-x86"
+        }
+      ]
+    },
+    "x86_64": {
+      "copy_config": [
+        {
+          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
+          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
+          "unzip_filename": "ace-loader"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common",
+          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
+          "unzip_filename": "restool"
+        },
+        {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "unzip_filename": "darwin"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
+          "file_path": "/openharmony/compiler/gn/1717/darwin/gn-darwin-x86-1717.tar.gz",
+          "unzip_filename": "gn"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.10.1/darwin/ninja-darwin-x86-1.10.1.tar.gz",
+          "unzip_filename": "ninja"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
+          "unzip_filename": "ark_js_prebuilts"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/common/nodejs",
+          "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
+          "unzip_filename": "node-v12.18.4-darwin-x64"
+        }
+      ],
+      "darwin_copy_config": [
+        {
+          "unzip_dir": "prebuilts/previewer/darwin",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz",
+          "unzip_filename": "previewer"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-x86_64-20220730.tar.bz2",
+          "unzip_filename": "llvm"
+        },
+        {
+          "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
+          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/libcxx-ndk-530132-darwin-x86_64-20220622.tar.bz2",
+          "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.9.2/darwin/python-darwin-x86-3.9.2_202205071615.tar.gz",
+          "unzip_filename": "darwin-x86"
+        }
+      ]
+    }
+  }
+}

@@ -35,6 +35,10 @@
     "path": "utils",
     "name": "utils"
   },
+  "commonlibrary": {
+    "path": "commonlibrary",
+    "name": "commonlibrary"
+  },
   "bundlemanager": {
     "path": "foundation/bundlemanager",
     "name": "bundlemanager"
@@ -63,9 +67,9 @@
     "path": "base/location",
     "name": "location"
   },
-  "distributedschedule": {
-    "path": "foundation/distributedschedule",
-    "name": "distributedschedule"
+  "systemabilitymgr": {
+    "path": "foundation/systemabilitymgr",
+    "name": "systemabilitymgr"
   },
   "hdf": {
     "path": "drivers",
@@ -88,12 +92,24 @@
     "name": "graphic"
   },
   "window": {
-    "path": "foundation/windowmanager",
+    "path": "foundation/window",
     "name": "window"
   },
-  "miscservices": {
-    "path": "base/miscservices",
-    "name": "miscservices"
+  "time": {
+    "path": "base/time",
+    "name": "time"
+  },
+  "inputmethod": {
+    "path": "base/inputmethod",
+    "name": "inputmethod"
+  },
+  "request": {
+    "path": "base/request",
+    "name": "request"
+  },
+  "theme": {
+    "path": "base/theme",
+    "name": "theme"
   },
   "multimedia": {
     "path": "foundation/multimedia",
@@ -144,16 +160,12 @@
     "name": "distributedhardware"
   },
   "ark": {
-    "path": "ark",
+    "path": "arkcompiler",
     "name": "ark"
   },
-  "compileruntime": {
-    "path": "base/compileruntime",
-    "name": "compileruntime"
-  },
-  "iot_hardware": {
-    "path": "base/iot_hardware",
-    "name": "iot_hardware"
+  "iothardware": {
+    "path": "base/iothardware",
+    "name": "iothardware"
   },
   "kernel": {
     "path": "kernel",
