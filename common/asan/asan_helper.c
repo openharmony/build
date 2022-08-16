@@ -25,6 +25,7 @@
 
 static void* (*real_dlopen)(const char *file, int mode);
 static bool g_isAsan = false;
+static bool g_enableRandomDelay = false;
 
 static void __attribute__((constructor)) init(void)
 {
@@ -43,10 +44,19 @@ static void __attribute__((constructor)) init(void)
         free(line);
         fclose(mapsFile);
     }
+    char *env = getenv("LD_RANDOM_DELAY");
+    if ((env != NULL) && (env[0] == '1')) {
+        srand((unsigned)getpid());
+        g_enableRandomDelay = true;
+    }
 }
 
 void *dlopen(const char *file, int mode)
 {
+    if (g_enableRandomDelay) {
+        /* randomly sleep 0-10ms */
+        usleep((useconds_t)rand() % 10000);
+    }
     if (g_isAsan && file != NULL && file[0] == '/') {
         char *f = NULL;
         char *p = strchr(file + 1, '/');
