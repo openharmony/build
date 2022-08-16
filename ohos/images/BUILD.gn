@@ -21,6 +21,8 @@ group("make_images") {
   deps = []
   foreach(_platform, target_platform_list) {
     deps += [
+      ":${_platform}_chip_prod_image",
+      ":${_platform}_sys_prod_image",
       ":${_platform}_system_image",
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
@@ -54,6 +56,8 @@ foreach(_platform, target_platform_list) {
     "system",
     "vendor",
     "userdata",
+    "sys_prod",
+    "chip_prod",
   ]
   if (enable_ramdisk) {
     image_list += [
