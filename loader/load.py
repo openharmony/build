@@ -316,7 +316,7 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
 
     # Generate SystemCapability.json & syscap.json & syscap.para
     target_syscap_list.sort()
-    syscap_info_dict = read_json_file(pre_syscap_info_path)
+    syscap_info_dict = read_json_file(os.path.join(pre_syscap_info_path, "SystemCapability.json"))
     syscap_info_dict.update({'syscap':{'os':target_syscap_list}})
     system_etc_path = os.path.join(system_path, "etc/")
     if not os.path.exists(system_path):
@@ -490,7 +490,7 @@ def load(args):
     # check part feature
     _check_product_part_feature(parts_info,
                                 os.path.dirname(args.platforms_config_file))
-    pre_syscap_info_path = os.path.join(os.path.dirname(args.platforms_config_file), "SystemCapability.json")
+    pre_syscap_info_path = os.path.dirname(args.platforms_config_file)
     system_path = os.path.join(source_root_dir, os.path.join(os.path.dirname(args.platforms_config_file), "system/"))
     generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
 
