@@ -27,6 +27,16 @@
       "src": "test/arkXtest/jsunit",
       "dest": "developtools/ace-js2bundle/ace-loader/node_modules/@ohos/hypium",
       "use_symlink": "False"
+    },
+    {
+      "src": "test/arkXtest/jsunit/",
+      "dest": "developtools/ace-ets2bundle/compiler/node_modules/hypium/",
+      "use_symlink": "False"
+    },
+    {
+      "src": "test/arkXtest/jsunit/",
+      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/hypium/",
+      "use_symlink": "False"
     }
   ],
   "file_handle_config": [
