@@ -272,7 +272,8 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
         for syscap in value:
             if syscap not in all_syscap_list:
                 raise Exception(
-                    "In config.json of part [{}],the syscap[{}] is incorrect, please check the syscap name".format(key, syscap))
+                    "In config.json of part [{}],the syscap[{}] is incorrect, \
+                    please check the syscap name".format(key, syscap))
 
     for syscap in syscap_info_list:
         remove_list = []
