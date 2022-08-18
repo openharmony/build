@@ -52,6 +52,7 @@ done
 set -e -- "${args[@]}"
 
 # build both asan and nonasan images
+start_time=$(date +%s)
 cd "${TOPDIR}"
 if [ -d out.a ]; then
     if [ -d out ]; then
@@ -60,11 +61,13 @@ if [ -d out.a ]; then
     mv out.a out
 fi
 ${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --build-variant ${build_variant}
+step1_time=$(date +%s)
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
 ${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --build-variant ${build_variant}
+step2_time=$(date +%s)
 
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
@@ -242,6 +245,8 @@ if [ -f "$asan_dir"/images/system.img ]; then
 fi
 
 shopt -s nullglob && mv system*.img vendor*.img images/
+step3_time=$(date +%s)
 
 echo -e "\033[32m==== Done! ====\033[0m"
+echo "asan build time" $((${step1_time}-${start_time})) "s, nonasan build time" $((${step2_time}-${step1_time})) "s, image build time" $((${step3_time}-${step2_time})) "s"
 popd
