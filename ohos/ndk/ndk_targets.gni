@@ -60,6 +60,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_decoder:native_media_vdec_header",
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:libnative_media_venc",
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:native_media_venc_header",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:libnative_media_codecbase",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:native_media_codecbase_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
 ]
