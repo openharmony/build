@@ -71,7 +71,10 @@ foreach(_platform, target_platform_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
       script = "//build/ohos/images/build_image.py"
       depfile = "$target_gen_dir/$target_name.d"
-      deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
+      deps = [
+        "//build/ohos/packages:${_platform}_install_modules",
+        "//build/ohos/packages:high_privilege_process_validate",
+      ]
 
       image_config_file =
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"

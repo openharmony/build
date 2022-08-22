@@ -244,6 +244,31 @@ foreach(_platform, target_platform_list) {
       args += rebase_path(post_process_modules_list, root_build_dir)
     }
   }
+
+  action("high_privilege_process_validate") {
+    script = "//build/ohos/packages/high_privilege_process_validate.py"
+
+    deps = [ ":${_platform}_install_modules" ]
+
+    # result is not used in script
+    process_validate_result = "${current_platform_dir}/cfg_validate_result.txt"
+
+    _process_path = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+    _system_cfg_folder = "${current_platform_dir}/system/etc/init"
+
+    _vendor_cfg_folder = "${current_platform_dir}/vendor/etc/init"
+
+    outputs = [ process_validate_result ]
+
+    args = [
+      "--sys-cfg-folder",
+      rebase_path(_system_cfg_folder, root_build_dir),
+      "--vendor-cfg-folder",
+      rebase_path(_vendor_cfg_folder, root_build_dir),
+      "--high-privilege-process-list-path",
+      rebase_path(_process_path, root_build_dir),
+    ]
+  }
 }
 
 # required_install_module_list.json
