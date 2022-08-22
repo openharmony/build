@@ -444,6 +444,48 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_ets",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/api/@internal/full",
 	    "module_label": "//interface/sdk-js:ets_internal_api",
 	    "target_os": [
