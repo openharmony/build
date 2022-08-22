@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/secure/secure_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
@@ -83,6 +84,11 @@ template("ohos_executable") {
     }
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -150,6 +156,7 @@ template("ohos_executable") {
       configs -= invoker.remove_configs
     }
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -380,6 +387,11 @@ template("ohos_shared_library") {
     output_dir = "${root_out_dir}"
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -457,6 +469,7 @@ template("ohos_shared_library") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -650,6 +663,11 @@ template("ohos_static_library") {
                "json")
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -710,6 +728,7 @@ template("ohos_static_library") {
       configs -= [ "//build/config/compiler:thin_archive" ]
     }
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -825,6 +844,11 @@ template("ohos_source_set") {
                "json")
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -884,6 +908,7 @@ template("ohos_source_set") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]

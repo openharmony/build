@@ -1,0 +1,52 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/secure/secure_config.gni")
+
+config("auto_var_init_configs") {
+  if (using_auto_var_init && !is_mingw) {
+    assert(
+        is_clang,
+        "currently, automatic variable initialization only supported with clang")
+    configs = [ ":auto_var_zero_init_config" ]
+  }
+}
+
+all_secure_configs = [ ":auto_var_init_configs" ]
+
+# This config is applied by default to all targets. It sets the compiler flags
+# for automatic variable initialization, or, if no config is set, does nothing.
+config("default_secure_configs") {
+  configs = all_secure_configs
+}
+
+# Set the uninitialized local variables to pattern.
+config("auto_var_pattern_init_config") {
+  cflags = [ "-ftrivial-auto-var-init=pattern" ]
+}
+
+# Set the uninitialized local variables to zero. But it will be removed from clang int the future.
+# Currently, enabling the config of pattern for all components is impractical and may cause system
+# instability. So on the premise that the system is stable, the config of zero need to be gradually replaced with
+# the config of pattern.
+config("auto_var_zero_init_config") {
+  cflags = [
+    "-ftrivial-auto-var-init=zero",
+    "-enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang",
+  ]
+}
+
+# Do not set the uninitialized local variables to any value.
+config("auto_var_uninit_config") {
+  cflags = [ "-ftrivial-auto-var-init=uninitialized" ]
+}
