@@ -50,14 +50,32 @@ function help() {
   echo "  ./build.sh --product-name rk3568 --ccache"
   echo
   echo "options"
-  echo "  --ccache          use ccache, default: false"
-  echo "  --jobs N          run N jobs in parallel"
-  echo "  --build-target    build target name"
+  echo "  --ccache              use ccache, default: false"
+  echo "  --jobs N              run N jobs in parallel"
+  echo "  --build-target        build target name"
 
-  echo "  --gn-args         gn args"
-  echo "  --export-para     export env"
-  echo "  --help, -h        print help info"
-  echo
+  echo "  --gn-args             specifies gn build arguments, eg: --gn-args=\"foo=\"bar\" enable=true blah=7\""
+  echo "  --export-para         export env"
+  echo "  --help, -h            print help info"
+  echo "  --source-root-dir     source root directory"
+  echo "  --product-name        build product name"
+  echo "  --device-name         build device name"
+  echo "  --target-cpu          select cpu"
+  echo "  --target-os           target os"
+  echo "  --compile-config      compile config"
+  echo "  --ninja args          ninja args"
+  echo "  --verbose, -v         show all command lines while building"
+  echo "  --keep-ninja-going    keeps ninja going until 1000000 jobs fail"
+  echo "  --sparse-image        sparse image, default: true"
+  echo "  --build-only-gn       only do gn parse, do not run ninja"
+  echo "  --fast-rebuild        it will skip prepare, preloader, gn_gen steps so we can enable it only"
+  echo "  --log-level           specifies the log level during compilation, three levels are optional: debug, info and error, default: info"
+  echo "  --device-type         specifies device type"
+  echo "  --build-variant       specifies device operating mode"
+  echo "  --share-ccache        it is customized path to place ccache, which allow one ccache shared with many project"
+  echo "  --disable-post-build  it will skip post build process, you can enable it if you do not need post build. Post build include post_build.patch_ohos_para, 
+                                post_build.package_image(), stat_ccache(), generate_ninja_trace(start_time), get_warning_list(), compute_overlap_rate()"
+  echo "  --disable-package-image  it will skip compress image process, you can enable it if you do not need compress image"
   exit 1
 }
 
