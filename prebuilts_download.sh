@@ -134,9 +134,11 @@ python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $np
 echo "prebuilts_download end"
 
 if [[ "${host_platform}" == "linux" ]]; then
-    sed -i "1s%.*%#!$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
+    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
 elif [[ "${host_platform}" == "darwin" ]]; then
-    sed -i "" "1s%.*%#!$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
+    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
 fi
-${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9 install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
+prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
+prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
 echo -e "\n"
