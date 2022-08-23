@@ -55,7 +55,7 @@ def run_cmd(cmd):
 
 
 def build_run_mkf2fs(args):
-    libuuid_path = os.path.realpath("./clang_x64/distributeddatamgr/distributedfilejs/")
+    libuuid_path = os.path.realpath("./clang_x64/thirdparty/e2fsprogs/")
     os.environ['LD_LIBRARY_PATH'] = libuuid_path
     mkf2fs_opts = ""
     mkf2fs_cmd = ""
@@ -85,11 +85,11 @@ def build_run_mkf2fs(args):
 
 def build_run_sloadf2fs(args):
     libselinux_path = os.path.realpath("./clang_x64/security/selinux/")
-    libuuid_path = os.path.realpath("./clang_x64/distributeddatamgr/distributedfilejs/")
+    libuuid_path = os.path.realpath("./clang_x64/thirdparty/e2fsprogs/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libuuid_path
 
     oldcwd = os.getcwd();
-    os.chdir("./clang_x64/filemanagement/storage_service")
+    os.chdir("./clang_x64/thirdparty/f2fs_tools/")
     run_cmd("ln -s fsck.f2fs sload.f2fs")
     os.chdir(oldcwd);
 
