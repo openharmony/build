@@ -19,7 +19,6 @@ import json
 import argparse
 
 """
-@Author y00609440
 @Desc:
   This script is used to generate full components
   example for creating new products
