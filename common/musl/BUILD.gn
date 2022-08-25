@@ -26,23 +26,14 @@ group("musl_install") {
 }
 
 ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
-  deps = [ "//third_party/musl:${musl_target_abi_name}_create_linker" ]
+  deps = [ "//third_party/musl:soft_create_linker" ]
   if (is_asan) {
     asan = "-asan"
   } else {
     asan = ""
   }
-  if (musl_target_abi_name == "soft") {
-    _libs_path_prefix = "."
-  } else {
-    _libs_path_prefix = "${musl_target_abi_name}"
-  }
-  if (musl_target_abi_name == "a7_hard_neon-vfpv4") {
-    musl_subarch = "hf"
-  } else {
-    musl_subarch = ""
-  }
-  _muls_linker_so = "${root_out_dir}/common/common/libc/${_libs_path_prefix}/ld-musl-${musl_arch}${musl_subarch}${asan}.so.1"
+
+  _muls_linker_so = "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
   source = _muls_linker_so
   install_enable = true
   install_images = [
@@ -55,16 +46,8 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
 }
 
 ohos_prebuilt_shared_library("musl-libc.so") {
-  deps = [ "//third_party/musl:${musl_target_abi_name}_libc_musl_shared" ]
-
-  if (musl_target_abi_name == "soft") {
-    _libs_path_prefix = "."
-  } else {
-    _libs_path_prefix = "${musl_target_abi_name}"
-  }
-
-  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/${_libs_path_prefix}/libc.so"
-
+  deps = [ "//third_party/musl:soft_libc_musl_shared" ]
+  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/./libc.so"
   install_images = [
     "system",
     "updater",
