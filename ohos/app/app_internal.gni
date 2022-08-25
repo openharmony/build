@@ -323,6 +323,7 @@ template("compile_js_assets") {
                        "target_out_dir") + "/ets_loader_ark"
     _webpack_config_ets = "${_ets_loader_home}/webpack.config.js"
     _webpack_js = "${_ace_loader_home}/node_modules/webpack/bin/webpack.js"
+    _manifest_file_path = "${target_gen_dir}/manifest_file"
 
     inputs = [
       meta_data,
@@ -352,6 +353,8 @@ template("compile_js_assets") {
       rebase_path(_ets_loader_home, root_build_dir),
       "--hap-profile=@FileArg($_rebased_metadata:root:hap_profile)",
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
+      "--manifest-file-path",
+      rebase_path(_manifest_file_path, root_build_dir),
     ]
     if (defined(testonly) && testonly == true) {
       _js_sources_file = target_gen_dir + "/$main_target_name.sources"

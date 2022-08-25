@@ -50,6 +50,7 @@ def parse_args(args):
     parser.add_option('--ace-loader-home', help='path to ace-loader dir.')
     parser.add_option('--ets-loader-home', help='path to ets-loader dir.')
     parser.add_option('--app-profile', default=False, help='path to app-profile.')
+    parser.add_option('--manifest-file-path', help='path to manifest.json dir.')
 
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
@@ -132,38 +133,40 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
                 with open(options.js_sources_file, 'wb') as js_sources_file:
                     sources = get_all_js_sources(ability_dir)
                     js_sources_file.write('\n'.join(sources).encode())
-            with build_utils.temp_dir() as build_dir:
-                my_env = make_my_env(build_dir, options, js2abc, asset_index)
-                my_env["aceModuleRoot"] = ability_dir
-                gen_dir = my_env.get("aceModuleBuild")
-                if options.app_profile:
-                    gen_dir = os.path.dirname(gen_dir)
-                my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
-                if not options.app_profile:
-                    src_path = 'default'
-                manifest = os.path.join(build_dir, 'manifest.json')
-                if not os.path.exists(manifest) and not options.app_profile:
-                    with open(options.hap_profile) as profile:
-                        config = json.load(profile)
-                        data = make_manifest_data(config, options, js2abc, asset_index)
-                        if config['module'].__contains__('testRunner'):
-                            src_path = config['module']['testRunner']['srcPath']
-                        if options.js_asset_cnt > 1 and asset_index < len(config['module']['abilities']):
-                            if 'srcPath' in config['module']['abilities'][asset_index]:
-                                src_path = config['module']['abilities'][asset_index]['srcPath']
-                        if config['module']['abilities'][0].get('srcLanguage') == 'ets':
-                            for ability in config['module']['abilities']:
-                                if ability.__contains__('forms'):
-                                    src_path = ability['forms'][0].get('name')
-                        if asset_index >= len(config['module']['abilities']):
-                            for ability in config['module']['abilities']:
-                                if ability.__contains__('forms'):
-                                    src_path = ability['forms'][0].get('name')
+            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'js', str(asset_index)))
+            if not os.path.exists(build_dir):
+                os.makedirs(build_dir)
+            my_env = make_my_env(build_dir, options, js2abc, asset_index)
+            my_env["aceModuleRoot"] = ability_dir
+            gen_dir = my_env.get("aceModuleBuild")
+            if options.app_profile:
+                gen_dir = os.path.dirname(gen_dir)
+            my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
+            if not options.app_profile:
+                src_path = 'default'
+            manifest = os.path.join(build_dir, 'manifest.json')
+            if not os.path.exists(manifest) and not options.app_profile:
+                with open(options.hap_profile) as profile:
+                    config = json.load(profile)
+                    data = make_manifest_data(config, options, js2abc, asset_index)
+                    if config['module'].__contains__('testRunner'):
+                        src_path = config['module']['testRunner']['srcPath']
+                    if options.js_asset_cnt > 1 and asset_index < len(config['module']['abilities']):
+                        if 'srcPath' in config['module']['abilities'][asset_index]:
+                            src_path = config['module']['abilities'][asset_index]['srcPath']
+                    if config['module']['abilities'][0].get('srcLanguage') == 'ets':
+                        for ability in config['module']['abilities']:
+                            if ability.__contains__('forms'):
+                                src_path = ability['forms'][0].get('name')
+                    if asset_index >= len(config['module']['abilities']):
+                        for ability in config['module']['abilities']:
+                            if ability.__contains__('forms'):
+                                src_path = ability['forms'][0].get('name')
 
-                        build_utils.write_json(data, manifest)
-                        my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
-                build_utils.check_output(
-                    cmd, cwd=loader_home, env=my_env)
+                    build_utils.write_json(data, manifest)
+                    my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
+            build_utils.check_output(
+                cmd, cwd=loader_home, env=my_env)
     else:
         for asset_index in range(options.ets_asset_cnt):
             ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
@@ -171,25 +174,27 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
                 with open(options.js_sources_file, 'wb') as js_sources_file:
                     sources = get_all_js_sources(ability_dir)
                     js_sources_file.write('\n'.join(sources).encode())
-            with build_utils.temp_dir() as build_dir:
-                my_env = make_my_env(build_dir, options, js2abc, asset_index)
-                my_env["aceModuleRoot"] = ability_dir
-                gen_dir = my_env.get("aceModuleBuild")
-                if options.app_profile:
-                    gen_dir = os.path.dirname(gen_dir)
-                if not options.app_profile:
-                    src_path = 'default'
-                manifest = os.path.join(build_dir, 'manifest.json')
-                if not os.path.exists(manifest) and not options.app_profile:
-                    with open(options.hap_profile) as profile:
-                        config = json.load(profile)
-                        data = make_manifest_data(config, options, js2abc, asset_index)
-                        if 'srcPath' in config['module']['abilities'][asset_index]:
-                            src_path = config['module']['abilities'][asset_index]['srcPath']
-                        build_utils.write_json(data, manifest)
-                        my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
-                build_utils.check_output(
-                    cmd, cwd=loader_home, env=my_env)
+            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'ets', str(asset_index)))
+            if not os.path.exists(build_dir):
+                os.makedirs(build_dir)
+            my_env = make_my_env(build_dir, options, js2abc, asset_index)
+            my_env["aceModuleRoot"] = ability_dir
+            gen_dir = my_env.get("aceModuleBuild")
+            if options.app_profile:
+                gen_dir = os.path.dirname(gen_dir)
+            if not options.app_profile:
+                src_path = 'default'
+            manifest = os.path.join(build_dir, 'manifest.json')
+            if not os.path.exists(manifest) and not options.app_profile:
+                with open(options.hap_profile) as profile:
+                    config = json.load(profile)
+                    data = make_manifest_data(config, options, js2abc, asset_index)
+                    if 'srcPath' in config['module']['abilities'][asset_index]:
+                        src_path = config['module']['abilities'][asset_index]['srcPath']
+                    build_utils.write_json(data, manifest)
+                    my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
+            build_utils.check_output(
+                cmd, cwd=loader_home, env=my_env)
     if options.app_profile:
         build_utils.zip_dir(options.output,
                             gen_dir,
