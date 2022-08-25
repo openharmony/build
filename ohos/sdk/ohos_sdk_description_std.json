@@ -610,6 +610,15 @@
             "darwin"
         ]
     },
+	{
+        "install_dir": "toolchains/patchcheck",
+        "module_label": "//developtools/packing_tool/patch:patchSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
     {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
