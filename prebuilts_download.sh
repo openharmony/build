@@ -21,6 +21,9 @@ while [ $# -gt 0 ]; do
     -h|--help)
     HELP=YES
     ;;
+    --disable-rich-module) # disable the rich module of python
+    DISABLE_RICH=YES
+    ;;
     --tool-repo)
     TOOL_REPO="$2"
     shift
@@ -123,14 +126,18 @@ else
     npm_para='--unsafe-perm'
 fi
 
+if [ "X${DISABLE_RICH}" == "XYES" ];then
+  disable_rich='--disable-rich'
+else
+  pip3 install --trusted-host $trusted_host -i $pypi_url rich
+fi
+
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
-
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
-pip3 install --trusted-host $trusted_host -i $pypi_url rich
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich
 echo "prebuilts_download end"
 
 if [[ "${host_platform}" == "linux" ]]; then
