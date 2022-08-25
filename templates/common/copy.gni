@@ -99,11 +99,11 @@ template("ohos_copy") {
       script = "//build/templates/common/delete_symbol.py"
       args = [
         "--strip",
-        rebase_path("${clang_base_path}/bin/llvm-strip", root_out_dir),
+        rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir),
         "--input",
-        rebase_path(sources[0], root_out_dir),
+        rebase_path(sources[0], root_build_dir),
         "--output",
-        rebase_path(outputs[0], root_out_dir),
+        rebase_path(outputs[0], root_build_dir),
       ]
 
       if (!_bypass_module_info_generation) {
