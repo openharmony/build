@@ -312,15 +312,6 @@
         ]
     },
     {
-        "install_dir": "js/api",
-        "module_label": "//interface/sdk-js:system_api",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "toolchains/syscapcheck",
         "module_label": "//interface/sdk-js:syscap_check",
         "target_os": [
