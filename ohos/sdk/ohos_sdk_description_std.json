@@ -625,5 +625,13 @@
             "windows",
             "darwin"
         ]
+    },
+    {
+        "install_dir": "previewer/common/bin/module/net",
+        "module_label": "//foundation/communication/netstack/frameworks/js/napi/http:copy_http_napi",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
     }
 ]
