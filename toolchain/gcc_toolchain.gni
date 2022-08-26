@@ -376,6 +376,9 @@ template("gcc_toolchain") {
       if (is_mingw_link) {
         command = "$command --libfile=\"$libfile\""
       }
+      if (full_mini_debug) {
+        command = "$command --mini-debug"
+      }
       command = "$command -- $link_command"
 
       rspfile_content = "-Wl,--whole-archive {{inputs}} {{solibs}} -Wl,--no-whole-archive $solink_libs_section_prefix {{libs}} $solink_libs_section_postfix"
@@ -523,7 +526,11 @@ template("gcc_toolchain") {
 
       link_wrapper =
           rebase_path("//build/toolchain/gcc_link_wrapper.py", root_build_dir)
-      command = "$python_path \"$link_wrapper\" --output=\"$outfile\"$strip_switch$map_switch -- $link_command"
+      command = "$python_path \"$link_wrapper\" --output=\"$outfile\"$strip_switch$map_switch "
+      if (full_mini_debug) {
+        command = "$command --mini-debug"
+      }
+      command = "$command -- $link_command"
       description = "LINK $outfile"
       rspfile_content = "{{inputs}}"
       outputs = [ outfile ]

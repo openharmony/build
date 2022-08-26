@@ -290,6 +290,12 @@ declare_args() {
 }
 
 declare_args() {
+  # Enable mini debug info, it will add .gnu_debugdata
+  # section in each stripped sofile
+  full_mini_debug = true
+}
+
+declare_args() {
   build_xts = false
 }
 

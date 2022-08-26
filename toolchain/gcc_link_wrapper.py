@@ -75,6 +75,10 @@ def main():
     parser.add_argument('--clang_rt_dso_path',
                         help=('Clang asan runtime shared library'))
     parser.add_argument('command', nargs='+', help='Linking command')
+    parser.add_argument('--mini-debug',
+                        action='store_true',
+                        default=False,
+                        help='Add .gnu_debugdata section for stripped sofile')
     args = parser.parse_args()
 
     # Work-around for gold being slow-by-default. http://crbug.com/632230
@@ -96,6 +100,15 @@ def main():
         result = subprocess.call(
             command_to_run(
                 [args.strip, '-o', args.output, args.unstripped_file]))
+
+    if args.mini_debug and not args.unstripped_file.endswith(".exe"):
+        unstripped_libfile = os.path.abspath(args.unstripped_file)
+        script_path = os.path.join(
+            os.path.dirname(__file__), 'mini_debug_info.py')
+        ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
+        result = subprocess.call(
+            wrapper_utils.command_to_run(
+                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output, '--root-path', ohos_root_path]))
 
     return result
 
