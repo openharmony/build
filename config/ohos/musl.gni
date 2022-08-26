@@ -12,7 +12,6 @@
 # limitations under the License.
 
 if (use_musl){
-  musl_target_abi_name = "soft"
   musl_target = "//third_party/musl:musl_libs"
   musl_sysroot = get_label_info(musl_target, "target_out_dir")
   import("//third_party/musl/musl_config.gni")

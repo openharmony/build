@@ -155,10 +155,6 @@ declare_args() {
   is_large_system = !(is_standard_system || is_small_system || is_mini_system)
 }
 
-declare_args(){
-  device_config_path = ""
-}
-
 is_lite_system = is_mini_system || is_small_system
 
 # =============================================================================
@@ -504,16 +500,10 @@ if (!is_ohos) {
 
 set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
+  declare_args() {
+    device_config_path = ""
+  }
   import("${device_config_path}/config.gni")
-  target_arch_cflags = []
-  if (board_arch != "") {
-    target_arch_cflags += [ "-march=$board_arch" ]
-  }
-  if (board_cpu != "") {
-    target_arch_cflags += [ "-mcpu=$board_cpu" ]
-  }
-
-  default_compiler_configs = [ "//build/config:cpu_arch" ]
 
   # =============================================================================
   # TARGET DEFAULTS
@@ -533,7 +523,7 @@ if (is_standard_system) {
   # sub-config of an existing one, most commonly the main "compiler" one.
 
   # Holds all configs used for running the compiler.
-  default_compiler_configs += [
+  default_compiler_configs = [
     "//build/config:feature_flags",
     "//build/config/compiler:afdo",
     "//build/config/compiler:afdo_optimize_size",
