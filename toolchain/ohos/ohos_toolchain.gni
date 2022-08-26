@@ -54,8 +54,10 @@ template("ohos_clang_toolchain") {
     ld = cxx
     readelf = "${_prefix}/llvm-readobj"
     nm = "${_prefix}/llvm-nm"
-    strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
-    use_unstripped_as_runtime_outputs = ohos_unstripped_runtime_outputs
+    if (!is_debug) {
+      strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
+      use_unstripped_as_runtime_outputs = ohos_unstripped_runtime_outputs
+    }
     extra_cflags = ohos_extra_cflags
     extra_cppflags = ohos_extra_cppflags
     extra_cxxflags = ohos_extra_cxxflags
