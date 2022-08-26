@@ -15,6 +15,16 @@ import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
 
+default_opt_configs = [
+  "//build/config/compiler:default_symbols",
+  "//build/config/compiler:default_optimization",
+]
+
+debug_level_configs = [
+  "//build/config/compiler:symbols",
+  "//build/config/compiler:no_optimize",
+]
+
 template("ohos_executable") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
@@ -232,6 +242,16 @@ template("ohos_executable") {
       }
     }
 
+    # We don't need to change config when "is_debug==true"
+    # "enable_debug_components" isn't blank means some components using debug level compilation
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
     if (target_toolchain == "${current_toolchain}") {
       install_module_info = {
         module_def = target_label
@@ -528,7 +548,6 @@ template("ohos_shared_library") {
       }
     }
 
-    #if (target_toolchain == "${current_toolchain}") {
     install_module_info = {
       module_def = target_label
       module_info_file =
@@ -542,10 +561,15 @@ template("ohos_shared_library") {
     metadata = {
       install_modules = [ install_module_info ]
     }
-
-    #}
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
   }
-
   if (target_toolchain == "${current_toolchain}") {
     ohos_module_name = target_name
     generate_module_info("${ohos_module_name}_info") {
@@ -770,6 +794,14 @@ template("ohos_static_library") {
         include_dirs += external_deps_info.include_dirs
       }
     }
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
   }
 }
 
@@ -944,6 +976,14 @@ template("ohos_source_set") {
       }
       if (defined(external_deps_info.include_dirs)) {
         include_dirs += external_deps_info.include_dirs
+      }
+    }
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
       }
     }
   }

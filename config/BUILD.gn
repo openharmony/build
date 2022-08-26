@@ -103,7 +103,6 @@ config("feature_flags") {
 
 config("debug") {
   defines = [
-    "_DEBUG",
     "DYNAMIC_ANNOTATIONS_ENABLED=1",
     "WTF_USE_DYNAMIC_ANNOTATIONS=1",
   ]

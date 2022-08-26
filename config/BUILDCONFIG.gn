@@ -296,6 +296,23 @@ declare_args() {
 }
 
 declare_args() {
+  # Full Debug mode. Setting optimize level to "-O0" and symbol level to "-g3".
+  # It should be used with "is_debug"
+  ohos_full_debug = false
+}
+
+declare_args() {
+  # Specifies which components use the DEBUG compilation level
+  # Using this arg like this, --gn-args 'enable_debug_components="component1,component2"'
+  enable_debug_components = ""
+}
+
+declare_args() {
+  # We use this arg to split "enable_debug_components" to a list
+  debug_components = string_split(enable_debug_components, ",")
+}
+
+declare_args() {
   build_xts = false
 }
 
