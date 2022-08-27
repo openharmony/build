@@ -41,6 +41,24 @@ group("make_packages") {
   }
 }
 
+all_parts_host_info_file = "${root_build_dir}/all_parts_host.json"
+all_host_symlink_file = "${root_build_dir}/all_host_symlink.json"
+
+action("generate_host_symlink") {
+  script = "//build/ohos/packages/generate_host_symlink.py"
+  inputs = [ all_parts_host_info_file ]
+  outputs = [ all_host_symlink_file ]
+  deps = [ "//build/ohos/common:generate_host_info" ]
+  args = [
+    "--all-parts-host-info-file",
+    rebase_path(all_parts_host_info_file),
+    "--output-file",
+    rebase_path(all_host_symlink_file),
+    "--root-build-dir",
+    rebase_path(root_build_dir),
+  ]
+}
+
 all_parts_info_file = "${root_build_dir}/all_parts_info.json"
 all_platforms_parts =
     "${root_build_dir}/build_configs/target_platforms_parts.json"
@@ -191,6 +209,7 @@ foreach(_platform, target_platform_list) {
     deps = [
       ":${current_platform}_hisysevent_install_info",
       ":${current_platform}_sa_profile_install_info",
+      ":generate_host_symlink",
       ":merge_system_notice_file_${current_platform}",
       ":verify_notice_file_${current_platform}",
     ]

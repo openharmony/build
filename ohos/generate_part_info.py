@@ -24,7 +24,8 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 # read subsystem module, generate subsystem install list and deps list.
 def gen_output_file(part_name, origin_part_name, all_modules_file,
                     sdk_modules_info_file, install_modules_file,
-                    dep_modules_file, current_toolchain):
+                    dep_modules_file, output_host_file,
+                    current_toolchain, host_toolchain):
     # read subsystem module info
     all_module_info = read_json_file(all_modules_file)
     if all_module_info is None:
@@ -43,6 +44,9 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
     # driver/interface part moudle list
     hdi_module_list = []
 
+    # driver/interface and thirdparty subsystem part module list
+    external_module_list = []
+
     # Generate a list of modules by part
     modules_info_dict = {}
     modules_def = {}  # remove duplicates
@@ -55,8 +59,10 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
         thirdparty = info.get('subsystem_name')
         if thirdparty == 'thirdparty':
             thirdparty_module_list.append(info)
+            external_module_list.append(info)
         if str(module_def).startswith("//drivers/interface"):
             hdi_module_list.append(info)
+            external_module_list.append(info)
         _module_part_name = info.get('part_name')
         if _module_part_name not in modules_info_dict:
             modules_info_dict[_module_part_name] = []
@@ -70,12 +76,20 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
     # Current part dependent module list
     part_install_modules = []
     part_no_install_modules = []
+    part_host_modules = []
     for install_module in part_module_list:
         toolchain = install_module.get('toolchain')
         if toolchain == '' or toolchain == current_toolchain:
             part_install_modules.append(install_module)
         else:
+            if toolchain == host_toolchain:
+                part_host_modules.append(install_module)
             part_no_install_modules.append(install_module)
+
+    for install_module in external_module_list:
+        toolchain = install_module.get('toolchain')
+        if toolchain == host_toolchain:
+            part_host_modules.append(install_module)
 
     # Depended thirdparty modules and driver/interface modules
     # are installed by default
@@ -89,6 +103,7 @@ def gen_output_file(part_name, origin_part_name, all_modules_file,
     modules_info_dict[part_name] = part_no_install_modules
     # write dep modules file
     write_json_file(dep_modules_file, modules_info_dict)
+    write_json_file(output_host_file, part_host_modules)
 
 
 def main():
@@ -99,12 +114,15 @@ def main():
     parser.add_argument('--sdk-modules-info-file', help='', required=True)
     parser.add_argument('--output-install-file', help='', required=True)
     parser.add_argument('--output-deps-file', help='', required=True)
+    parser.add_argument('--output-host-file', help='', required=True)
     parser.add_argument('--current-toolchain', help='', required=True)
+    parser.add_argument('--host-toolchain', help='', required=True)
     parser.add_argument('--depfile', required=False)
     args = parser.parse_args()
     gen_output_file(args.part_name, args.origin_part_name, args.input_file,
                     args.sdk_modules_info_file, args.output_install_file,
-                    args.output_deps_file, args.current_toolchain)
+                    args.output_deps_file, args.output_host_file,
+                    args.current_toolchain, args.host_toolchain)
     return 0
 
 

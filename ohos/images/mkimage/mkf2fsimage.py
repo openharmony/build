@@ -90,7 +90,6 @@ def build_run_sloadf2fs(args):
 
     oldcwd = os.getcwd();
     os.chdir("./clang_x64/thirdparty/f2fs_tools/")
-    run_cmd("ln -s fsck.f2fs sload.f2fs")
     os.chdir(oldcwd);
 
     sloadf2fs_opts = ""
