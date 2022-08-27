@@ -12,13 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 set -e
-for i in "$@"; do
-  case "$i" in
+while [ $# -gt 0 ]; do
+  case "$1" in
     -skip-ssl|--skip-ssl) # wget、npm skip ssl check, which will allow
                           # hacker to get and modify data stream between server and client!
     SKIP_SSL=YES
     ;;
+    --tool-repo)
+    TOOL_REPO="$2"
+    shift
+    ;;
+    --tool-repo=*)
+    TOOL_REPO="${1#--tool-repo=}"
+    ;;
+    --npm-registry)
+    NPM_REGISTRY="$2"
+    shift
+    ;;
+    --npm-registry=*)
+    NPM_REGISTRY="${1#--npm-registry=}"
+    ;;
+    *)
+    echo "$0: Warning: unsupported parameter: $1" >&2
+    ;;
   esac
+  shift
 done
 
 if [ "X${SKIP_SSL}" == "XYES" ];then
