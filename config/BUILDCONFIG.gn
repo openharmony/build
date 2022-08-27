@@ -76,6 +76,7 @@ global_parts_info =
 
 product_company = product_build_config.product_company
 device_company = product_build_config.device_company
+device_build_path = product_build_config.device_build_path
 target_os = product_build_config.target_os
 target_cpu = product_build_config.target_cpu
 product_toolchain = product_build_config.product_toolchain_label
@@ -500,10 +501,13 @@ if (!is_ohos) {
 
 set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
-  declare_args() {
-    device_config_path = ""
+  if("$device_build_path" == ""){
+    board_arch = "armv8-a"
+    board_cpu = "cortex-a7"
+    board_fpu = "neon-fp-armv8"
+  }else{
+    import("//${device_build_path}/config.gni")
   }
-  import("${device_config_path}/config.gni")
 
   # =============================================================================
   # TARGET DEFAULTS
