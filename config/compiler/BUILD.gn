@@ -714,9 +714,7 @@ config("compiler_cpu_abi") {
         cflags += [
           "-march=$arm_arch",
           "-mfloat-abi=$arm_float_abi",
-          "-mfpu=$arm_fpu",
         ]
-        ldflags += ["-march=$arm_arch"]
       }
       if (arm_tune != "") {
         cflags += [ "-mtune=$arm_tune" ]
