@@ -33,7 +33,8 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
     asan = ""
   }
 
-  _muls_linker_so = "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
+  _muls_linker_so =
+      "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
   source = _muls_linker_so
   install_enable = true
   install_images = [

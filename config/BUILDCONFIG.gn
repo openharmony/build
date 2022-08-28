@@ -501,11 +501,11 @@ if (!is_ohos) {
 
 set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
-  if("$device_build_path" == ""){
+  if ("$device_build_path" == "") {
     board_arch = "armv8-a"
     board_cpu = "cortex-a7"
     board_fpu = "neon-fp-armv8"
-  }else{
+  } else {
     import("//${device_build_path}/config.gni")
   }
 
