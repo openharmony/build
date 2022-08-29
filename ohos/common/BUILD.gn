@@ -41,6 +41,18 @@ generated_file("generate_src_installed_info") {
   output_conversion = "json"
 }
 
+host_info_file = "${root_build_dir}/all_parts_host.json"
+
+generated_file("generate_host_info") {
+  deps = []
+  foreach(part_label, parts_list) {
+    deps += [ get_label_info(part_label, "label_with_toolchain") ]
+  }
+  outputs = [ host_info_file ]
+  data_keys = [ "part_host_info" ]
+  output_conversion = "json"
+}
+
 action_with_pydeps("gen_binary_installed_info") {
   deps = [ ":generate_src_installed_info" ]
   script = "//build/ohos/common/binary_install_info.py"
@@ -63,6 +75,7 @@ action_with_pydeps("merge_all_parts") {
   script = "//build/ohos/common/merge_all_subsystem.py"
   deps = [
     ":gen_binary_installed_info",
+    ":generate_host_info",
     ":generate_src_installed_info",
   ]
   sources = [
