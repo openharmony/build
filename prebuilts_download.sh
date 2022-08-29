@@ -129,7 +129,14 @@ fi
 if [ "X${DISABLE_RICH}" == "XYES" ];then
   disable_rich='--disable-rich'
 else
-  pip3 install --trusted-host $trusted_host -i $pypi_url rich
+  set +e
+  pip3 install --trusted-host $trusted_host -i $pypi_url rich;
+  if [ $? -eq 0 ];then
+      echo "rich installed successfully"
+  else
+      disable_rich='--disable-rich'
+  fi
+  set -e
 fi
 
 cpu="--host-cpu $host_cpu"
