@@ -48,7 +48,7 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
 
 ohos_prebuilt_shared_library("musl-libc.so") {
   deps = [ "//third_party/musl:soft_libc_musl_shared" ]
-  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/./libc.so"
+  source = "${musl_sysroot}/usr/lib/${musl_target_triple}/libc.so"
   install_images = [
     "system",
     "updater",
