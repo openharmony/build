@@ -120,10 +120,23 @@ if (current_cpu == "arm" || v8_current_cpu == "arm") {
     }
   }
 } else if (current_cpu == "arm64" || v8_current_cpu == "arm64") {
+  if (!defined(board_arch)) {
+    arm_arch = "armv8-a"
+  } else {
+    arm_arch = "$board_arch"
+  }
+  if (!defined(board_cpu)) {
+    arm_cpu = "cortex-a55"
+  } else {
+    arm_cpu = "$board_cpu"
+  }
+  if (!defined(board_fpu)) {
+    arm_fpu = "neon-fp-armv8"
+  } else {
+    arm_fpu = "$board_fpu"
+  }
+
   # arm64 supports only "hard".
-  arm_arch = "$board_arch"
   arm_float_abi = "hard"
-  arm_cpu = "$board_cpu"
-  arm_fpu = "$board_fpu"
   arm_use_neon = true
 }
