@@ -501,8 +501,11 @@ if (!is_ohos) {
 
 set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
-  if ("$device_build_path" != "") {
-    import("//${device_build_path}/config.gni")
+  file_exist = exec_script("//build/scripts/check_file_exist.py",
+                           [ "${device_build_path}/config.gni" ],
+                           "string")
+  if (file_exist != "") {
+    import("${device_build_path}/config.gni")
   }
 
   # =============================================================================
