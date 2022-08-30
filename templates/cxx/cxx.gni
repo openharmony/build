@@ -185,7 +185,7 @@ template("ohos_executable") {
       ldflags += [ "-static" ]
       if (is_ohos && use_musl) {
         import("//build/config/ohos/musl.gni")
-        deps += [ "//third_party/musl:${musl_target_abi_name}_static_libs" ]
+        deps += [ "//third_party/musl:soft_static_libs" ]
       }
     }
 
