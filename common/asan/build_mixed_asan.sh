@@ -248,5 +248,5 @@ shopt -s nullglob && mv system*.img vendor*.img images/
 step3_time=$(date +%s)
 
 echo -e "\033[32m==== Done! ====\033[0m"
-echo "asan build time" $((${step1_time}-${start_time})) "s, nonasan build time" $((${step2_time}-${step1_time})) "s, image build time" $((${step3_time}-${step2_time})) "s"
+echo "asan build cost $((${step1_time}-${start_time}))s, nonasan build cost $((${step2_time}-${step1_time}))s, image build cost $((${step3_time}-${step2_time}))s"
 popd
