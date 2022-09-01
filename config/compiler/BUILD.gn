@@ -737,7 +737,9 @@ config("compiler_cpu_abi") {
   }
 
   asmflags = cflags
-  asmflags += [ "-march=armv8.2-a+dotprod+fp16" ]
+  if (current_cpu == "arm64") {
+    asmflags += [ "-march=armv8.2-a+dotprod+fp16" ]
+  }
 }
 
 # This provides options to tweak code generation that are necessary
