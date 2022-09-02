@@ -144,6 +144,10 @@ declare_args() {
 }
 
 declare_args() {
+  skip_generate_module_list_file = false
+}
+
+declare_args() {
   load_test_config = true
 }
 
