@@ -16,7 +16,6 @@
 import os
 import sys
 import argparse
-import glob
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
@@ -47,13 +46,14 @@ def _read_config(subsystem_config_file, example_subsystem_file):
 
 
 def _scan_build_file(subsystem_path):
-    build_config_file_name = "ohos.build"
-    search_str = "{}/**/{}".format(subsystem_path, build_config_file_name)
-    _files = glob.glob(search_str, recursive=True)
-    bundle_file_name = 'bundle.json'
-    _bundle_files = glob.glob("{}/**/{}".format(subsystem_path,
-                                                bundle_file_name),
-                              recursive=True)
+    _files = []
+    _bundle_files = []
+    for root, dirs, files in os.walk(subsystem_path):
+        for name in files:
+            if name == 'ohos.build':
+                _files.append(os.path.join(root, name))
+            elif name == 'bundle.json':
+                _bundle_files.append(os.path.join(root, name))
     if _bundle_files:
         _files.extend(_bundle_files)
     return _files
