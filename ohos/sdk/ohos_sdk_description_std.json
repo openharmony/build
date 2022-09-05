@@ -475,7 +475,8 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
@@ -483,7 +484,8 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
@@ -499,7 +501,8 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
