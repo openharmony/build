@@ -98,6 +98,10 @@ def do_build(args):
         cmd.append('--share-ccache=' + args.share_ccache)
     if args.disable_post_build:
         cmd.append('--disable-post-build')
+    if args.disable_part_of_post_build:
+        cmd.append('--disable-part-of-post-build')
+        for option in args.disable_part_of_post_build:
+            cmd.append(option)
     try:
         return check_output(cmd)
     except KeyboardInterrupt:
@@ -126,6 +130,7 @@ def main():
     parser.add_option('--fast-rebuild', action='store_true')
     parser.add_option('--disable-package-image', action='store_true')
     parser.add_option('--disable-post-build', action='store_true')
+    parser.add_option('--disable-part-of-post-build', action='append', default=[])
     parser.add_option('--log-level', default='info')
     parser.add_option('--device-type', default='default')
     parser.add_option('--build-variant', default='user')
