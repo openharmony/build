@@ -3,6 +3,7 @@
 # found in the LICENSE file.
 
 import("//build/config/clang/clang.gni")
+import("//build/config/ohos/config.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/misc/overrides/build.gni")
 import("//build/ohos_var.gni")
@@ -609,25 +610,30 @@ config("sanitizer_trap_all_flags") {
 }
 
 config("cfi_config") {
-  _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
+  if (is_ohos) {
+    _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
 
-  configs = [
-    "//build/config/gcc:symbol_visibility_default",
-    ":sanitizer_trap_all_flags",
-  ]
-  cflags = [
-    "-flto",
-    "-fsanitize=cfi",
-    "-fsanitize-cfi-cross-dso",
-    "-fsanitize-blacklist=" + rebase_path(_cfi_blocklist_path, root_build_dir),
-  ]
+    configs = [
+      "//build/config/gcc:symbol_visibility_default",
+      ":sanitizer_trap_all_flags",
+    ]
+    cflags = [
+      "-flto",
+      "-fsanitize=cfi",
+      "-fsanitize-cfi-cross-dso",
+      "-fsanitize-blacklist=" +
+          rebase_path(_cfi_blocklist_path, root_build_dir),
+    ]
 
-  ldflags = [
-    "-flto",
-    "-fsanitize-cfi-cross-dso",
-    "-fsanitize=cfi",
-    "-Wl,-plugin-opt,O1",
-  ]
+    ldflags = [
+      "-flto",
+      "-fsanitize=cfi",
+      "-Wl,-plugin-opt,O1",
+      "-lclang_rt.cfi",
+      "-L" +
+          rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir),
+    ]
+  }
 }
 
 config("shadow_call_stack_config") {
