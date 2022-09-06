@@ -19,6 +19,14 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//base/update/updater/services/diffpatch:diff",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//third_party/libusb:libusb",
         "target_os": [
             "linux",
