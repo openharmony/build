@@ -439,7 +439,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:app_packing_tool",
+        "module_label": "//developtools/packing_tool:app_packing_tool",
         "target_os": [
             "linux",
             "windows",
@@ -448,7 +448,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:app_unpacking_tool",
+        "module_label": "//developtools/packing_tool:app_unpacking_tool",
         "target_os": [
             "linux",
             "windows",
@@ -514,7 +514,7 @@
     },
     {
         "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool/jar:fastjson_utils_java",
+        "module_label": "//developtools/packing_tool:fastjson_utils_java",
         "target_os": [
             "linux",
             "windows",
@@ -523,7 +523,7 @@
     },
     {
         "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool/jar:haptobin_tool",
+        "module_label": "//developtools/packing_tool:haptobin_tool",
         "target_os": [
             "linux",
             "windows",
