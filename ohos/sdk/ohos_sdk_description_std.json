@@ -22,8 +22,7 @@
         "module_label": "//base/update/updater/services/diffpatch:diff",
         "target_os": [
             "linux",
-            "windows",
-            "darwin"
+            "windows"
         ]
     },
     {
