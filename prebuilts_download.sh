@@ -254,6 +254,18 @@ else
     npm install
 fi
 
+if [ ! -d "${code_dir}/interface/sdk-js/build-tools" ]; then
+    echo "${code_dir}/interface/sdk-js/build-tools not exist, it shouldn't happen, pls check..."
+else
+    cd ${code_dir}/interface/sdk-js/build-tools
+    export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/${node_js_name}/bin:$PATH
+    npm config set registry ${npm_registry}
+    if [ "X${SKIP_SSL}" == "XYES" ];then
+        npm config set strict-ssl false
+    fi
+    npm cache clean -f
+    npm install
+fi
 
 if [ -d "${code_dir}/ark/ts2abc/ts2panda" ]; then
     cd ${code_dir}/ark/ts2abc/ts2panda
