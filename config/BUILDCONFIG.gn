@@ -93,6 +93,12 @@ if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = false
 }
 
+if (defined(product_build_config.enable_absystem)) {
+  enable_absystem = product_build_config.enable_absystem
+} else {
+  enable_absystem = false
+}
+
 if (defined(product_build_config.enable_mesa3d)) {
   enable_mesa3d = product_build_config.enable_mesa3d
 } else {
