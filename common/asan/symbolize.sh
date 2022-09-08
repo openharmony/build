@@ -80,7 +80,7 @@ getsym2() {
     files="$(find_file $1)"
     for file in $files; do
         if [ -f "$file" ]; then
-            sym=$($symbolizer -C -f -p -e "${file}" $2 2>/dev/null)
+            sym="$sym $($symbolizer -C -f -p -e "${file}" $2 2>/dev/null)"
         fi
     done
 }
