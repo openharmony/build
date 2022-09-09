@@ -1,8 +1,8 @@
 {
   "prebuilts_download_dir": "../OpenHarmony_canary_prebuilts",
   "npm_install_path": [
-    "developtools/ace-ets2bundle/compiler",
-    "developtools/ace-js2bundle/ace-loader",
+    "developtools/ace_ets2bundle/compiler",
+    "developtools/ace_js2bundle/ace-loader",
     "third_party/jsframework",
     "arkcompiler/ets_frontend/ts2panda",
     "interface/sdk-js/build-tools"
@@ -20,22 +20,22 @@
     },
     {
       "src": "test/arkXtest/jsunit",
-      "dest": "developtools/ace-ets2bundle/compiler/node_modules/@ohos/hypium",
+      "dest": "developtools/ace_ets2bundle/compiler/node_modules/@ohos/hypium",
       "use_symlink": "False"
     },
     {
       "src": "test/arkXtest/jsunit",
-      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/@ohos/hypium",
+      "dest": "developtools/ace_js2bundle/ace-loader/node_modules/@ohos/hypium",
       "use_symlink": "False"
     },
     {
       "src": "test/arkXtest/jsunit/",
-      "dest": "developtools/ace-ets2bundle/compiler/node_modules/hypium/",
+      "dest": "developtools/ace_ets2bundle/compiler/node_modules/hypium/",
       "use_symlink": "False"
     },
     {
       "src": "test/arkXtest/jsunit/",
-      "dest": "developtools/ace-js2bundle/ace-loader/node_modules/hypium/",
+      "dest": "developtools/ace_js2bundle/ace-loader/node_modules/hypium/",
       "use_symlink": "False"
     }
   ],
