@@ -27,6 +27,16 @@
       "src": "test/arkXtest/jsunit",
       "dest": "developtools/ace_js2bundle/ace-loader/node_modules/@ohos/hypium",
       "use_symlink": "False"
+    },
+    {
+      "src": "test/arkXtest/jsunit/",
+      "dest": "developtools/ace_ets2bundle/compiler/node_modules/hypium/",
+      "use_symlink": "False"
+    },
+    {
+      "src": "test/arkXtest/jsunit/",
+      "dest": "developtools/ace_js2bundle/ace-loader/node_modules/hypium/",
+      "use_symlink": "False"
     }
   ],
   "file_handle_config": [
@@ -36,25 +46,25 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang-530132-20220730",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang-971024-20220827",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang-530132-20220730",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang-971024-20220827",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang-530132-20220730",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang-971024-20220827",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang-530132-20220730",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang-971024-20220827",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
@@ -65,6 +75,13 @@
     }
   ],
   "linux": {
+    "node_config": [
+      {
+        "unzip_dir": "prebuilts/build-tools/common/nodejs",
+        "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
+        "unzip_filename": "node-v12.18.4-linux-x64"
+      }
+    ],
     "arm64": {
       "copy_config": [
         {
@@ -96,11 +113,6 @@
           "unzip_dir": "prebuilts/ark_tools",
           "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220815.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common/nodejs",
-          "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
-          "unzip_filename": "node-v12.18.4-linux-x64"
         }
       ],
       "linux_copy_config": [
@@ -126,27 +138,27 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.6.3/previewer-3.2.6.3-master-20220819.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/windows/clang-971024-windows-x86_64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/windows/libcxx-ndk-971024-windows-x86_64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/linux/clang-971024-linux-x86_64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/libcxx-ndk-530132-linux-x86_64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/linux/libcxx-ndk-971024-linux-x86_64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -197,11 +209,6 @@
           "unzip_dir": "prebuilts/ark_tools",
           "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220815.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common/nodejs",
-          "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
-          "unzip_filename": "node-v12.18.4-linux-x64"
         }
       ],
       "linux_copy_config": [
@@ -227,27 +234,27 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.6.3/previewer-3.2.6.3-master-20220819.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/clang-530132-windows-x86_64-20220730.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/windows/clang-971024-windows-x86_64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/windows/libcxx-ndk-530132-windows-x86_64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/windows/libcxx-ndk-971024-windows-x86_64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/clang-530132-linux-x86_64-20220730.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/linux/clang-971024-linux-x86_64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/linux/libcxx-ndk-530132-linux-x86_64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/linux/libcxx-ndk-971024-linux-x86_64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -269,6 +276,13 @@
     }
   },
   "darwin": {
+    "node_config": [
+      {
+        "unzip_dir": "prebuilts/build-tools/common/nodejs",
+        "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
+        "unzip_filename": "node-v12.18.4-darwin-x64"
+      }
+    ],
     "arm64": {
       "copy_config": [
         {
@@ -300,27 +314,22 @@
           "unzip_dir": "prebuilts/ark_tools",
           "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220815.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common/nodejs",
-          "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
-          "unzip_filename": "node-v12.18.4-darwin-x64"
         }
       ],
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.5.3/previewer-3.2.5.3-master-20220713.mac-arm64.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-arm64-20220730_01.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/darwin/clang-971024-darwin-arm64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/libcxx-ndk-530132-darwin-arm64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/darwin/libcxx-ndk-971024-darwin-arm64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -361,27 +370,22 @@
           "unzip_dir": "prebuilts/ark_tools",
           "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220809.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common/nodejs",
-          "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
-          "unzip_filename": "node-v12.18.4-darwin-x64"
         }
       ],
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.2.5/previewer-3.2.2.5-Master-20220527.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.6.3/previewer-3.2.6.3-master-20220819.mac.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/clang-530132-darwin-x86_64-20220730.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/darwin/clang-971024-darwin-x86_64-20220827.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-530132/darwin/libcxx-ndk-530132-darwin-x86_64-20220622.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-971024/darwin/libcxx-ndk-971024-darwin-x86_64-20220827.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {

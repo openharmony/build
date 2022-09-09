@@ -253,31 +253,71 @@ def syscap_sort(syscap):
     return syscap['component']
 
 def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path):
+    syscap_product_dict = read_json_file(os.path.join(pre_syscap_info_path, "syscap.json"))
     target_parts_list = _get_required_build_parts_list(target_platform_parts)
     syscap_info_list = parts_config_info.get('syscap_info')
     target_syscap_with_part_name_list = []
     target_syscap_list = []
     target_syscap_for_init_list = []
+    all_syscap_list = []
     for syscap in syscap_info_list:
         if syscap['component'] not in target_parts_list:
             continue
         if 'syscap' not in syscap or syscap['syscap'] == None or len(syscap['syscap']) == 0 or syscap['syscap'] == [""]:
             continue
         for syscap_string in syscap['syscap']:
+            all_syscap_list.append(syscap_string.split('=')[0].strip())
+
+    for key, value in syscap_product_dict['part_to_syscap'].items():
+        for syscap in value:
+            if syscap not in all_syscap_list:
+                raise Exception(
+                    "In config.json of part [{}],the syscap[{}] is incorrect, \
+                    please check the syscap name".format(key, syscap))
+
+    for syscap in syscap_info_list:
+        remove_list = []
+        if syscap['component'] not in target_parts_list:
+            continue
+        if 'syscap' not in syscap or syscap['syscap'] == None or len(syscap['syscap']) == 0 or syscap['syscap'] == [""]:
+            continue
+        for syscap_string in syscap['syscap']:
             if syscap_string.startswith("SystemCapability.") == True:
-                target_syscap_init_str = "const." + syscap_string + "=true\n"
+                target_syscap_init_str = "const."
+                syscap_name = syscap_string.split('=')[0].strip()
+                all_syscap_product = syscap_product_dict['syscap']
+                if syscap_name in all_syscap_product and not all_syscap_product[syscap_name]:
+                    remove_list.append(syscap_string)
+                    continue
+                elif syscap_name in all_syscap_product and all_syscap_product[syscap_name]:
+                    target_syscap_init_str += syscap_name + '=true\n'
+                else:
+                    if syscap_string.endswith('true'):
+                        target_syscap_init_str += syscap_name + '=true\n'
+                    elif syscap_string.endswith('false'):
+                        remove_list.append(syscap_string)
+                        continue
+                    else:
+                        target_syscap_init_str += syscap_string + "=true\n"
                 if target_syscap_init_str not in target_syscap_for_init_list:
-                     target_syscap_for_init_list.append(target_syscap_init_str)
+                    target_syscap_for_init_list.append(target_syscap_init_str)
             else:
                 raise Exception("""In bundle.json of part [{}], The syscap string [{}] is incorrect,
                  need start with \"SystemCapability.\"""".format(syscap['component'], syscap_string))
+
+        for remove_str in remove_list:
+            syscap['syscap'].remove(remove_str)
+        for i in range(len(syscap['syscap'])):
+            if syscap['syscap'][i].endswith('true') or syscap['syscap'][i].endswith('false'):
+                syscap['syscap'][i] = syscap['syscap'][i].split('=')[0].strip()
+
         syscap['syscap'].sort()
         target_syscap_with_part_name_list.append(syscap)
         target_syscap_list.extend(syscap['syscap'])
 
     # Generate SystemCapability.json & syscap.json & syscap.para
     target_syscap_list.sort()
-    syscap_info_dict = read_json_file(pre_syscap_info_path)
+    syscap_info_dict = read_json_file(os.path.join(pre_syscap_info_path, "SystemCapability.json"))
     syscap_info_dict.update({'syscap':{'os':target_syscap_list}})
     system_etc_path = os.path.join(system_path, "etc/")
     if not os.path.exists(system_path):
@@ -451,7 +491,7 @@ def load(args):
     # check part feature
     _check_product_part_feature(parts_info,
                                 os.path.dirname(args.platforms_config_file))
-    pre_syscap_info_path = os.path.join(os.path.dirname(args.platforms_config_file), "SystemCapability.json")
+    pre_syscap_info_path = os.path.dirname(args.platforms_config_file)
     system_path = os.path.join(source_root_dir, os.path.join(os.path.dirname(args.platforms_config_file), "system/"))
     generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
 

@@ -727,10 +727,19 @@ config("compiler_cpu_abi") {
       if (is_clang && is_ohos) {
         ldflags += [ "-Wl,--hash-style=gnu" ]
       }
+      cflags += [
+        "-march=$arm_arch",
+        "-mfloat-abi=$arm_float_abi",
+        "-mfpu=$arm_fpu",
+      ]
+      ldflags += [ "-march=$arm_arch" ]
     }
   }
 
   asmflags = cflags
+  if (current_cpu == "arm64") {
+    asmflags += [ "-march=armv8.2-a+dotprod+fp16" ]
+  }
 }
 
 # This provides options to tweak code generation that are necessary
@@ -1400,15 +1409,18 @@ config("no_optimize") {
       "/Ob0",  # Disable all inlining (on by default).
       "/GF",  # Enable string pooling (off by default).
     ]
-  } else if (is_ohos) {
+  } else if (is_ohos && !ohos_full_debug) {
     # On ohos we kind of optimize some things that don't affect debugging
     # much even when optimization is disabled to get the binary size down.
     if (is_clang) {
       cflags = [ "-Oz" ] + common_optimize_on_cflags
+      ldflags = common_optimize_on_ldflags
     } else {
       cflags = [ "-Os" ] + common_optimize_on_cflags
+      ldflags = common_optimize_on_ldflags
     }
   } else {
+    # On ohos_full_debug mode, we close all optimization
     cflags = [ "-O0" ]
     ldflags = []
   }
@@ -1655,7 +1667,12 @@ config("symbols") {
         # [1] crrev.com/a81d5ade0b043208e06ad71a38bcf9c348a1a52f
         cflags += [ "-gdwarf-3" ]
       }
-      cflags += [ "-g2" ]
+      if (!ohos_full_debug) {
+        cflags += [ "-g2" ]
+      } else {
+        # Set -g3 symbol level when ohos_full_debug is true
+        cflags += [ "-g3" ]
+      }
     }
     if (use_debug_fission && !is_nacl && !is_ohos) {
       # NOTE: Some Chrome OS builds globally set |use_debug_fission| to true,

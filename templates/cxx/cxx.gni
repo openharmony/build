@@ -11,9 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/secure/secure_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
+
+default_opt_configs = [
+  "//build/config/compiler:default_symbols",
+  "//build/config/compiler:default_optimization",
+]
+
+debug_level_configs = [
+  "//build/config/compiler:symbols",
+  "//build/config/compiler:no_optimize",
+]
 
 template("ohos_executable") {
   assert(!defined(invoker.output_dir),
@@ -83,6 +94,11 @@ template("ohos_executable") {
     }
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -150,6 +166,7 @@ template("ohos_executable") {
       configs -= invoker.remove_configs
     }
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -175,7 +192,7 @@ template("ohos_executable") {
       ldflags += [ "-static" ]
       if (is_ohos && use_musl) {
         import("//build/config/ohos/musl.gni")
-        deps += [ "//third_party/musl:${musl_target_abi_name}_static_libs" ]
+        deps += [ "//third_party/musl:soft_static_libs" ]
       }
     }
 
@@ -232,6 +249,16 @@ template("ohos_executable") {
       }
     }
 
+    # We don't need to change config when "is_debug==true"
+    # "enable_debug_components" isn't blank means some components using debug level compilation
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
     if (target_toolchain == "${current_toolchain}") {
       install_module_info = {
         module_def = target_label
@@ -380,6 +407,11 @@ template("ohos_shared_library") {
     output_dir = "${root_out_dir}"
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -457,6 +489,7 @@ template("ohos_shared_library") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -528,7 +561,6 @@ template("ohos_shared_library") {
       }
     }
 
-    #if (target_toolchain == "${current_toolchain}") {
     install_module_info = {
       module_def = target_label
       module_info_file =
@@ -542,10 +574,15 @@ template("ohos_shared_library") {
     metadata = {
       install_modules = [ install_module_info ]
     }
-
-    #}
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
   }
-
   if (target_toolchain == "${current_toolchain}") {
     ohos_module_name = target_name
     generate_module_info("${ohos_module_name}_info") {
@@ -650,6 +687,11 @@ template("ohos_static_library") {
                "json")
   }
 
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker,
@@ -710,6 +752,7 @@ template("ohos_static_library") {
       configs -= [ "//build/config/compiler:thin_archive" ]
     }
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -770,6 +813,14 @@ template("ohos_static_library") {
         include_dirs += external_deps_info.include_dirs
       }
     }
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
+      }
+    }
   }
 }
 
@@ -823,6 +874,11 @@ template("ohos_source_set") {
     write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
                deps_data,
                "json")
+  }
+
+  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+  ohos_auto_initialize_config(_auto_initialize_config_target) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -884,6 +940,7 @@ template("ohos_source_set") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
+    configs += [ ":$_auto_initialize_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -944,6 +1001,14 @@ template("ohos_source_set") {
       }
       if (defined(external_deps_info.include_dirs)) {
         include_dirs += external_deps_info.include_dirs
+      }
+    }
+    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
+      foreach(component_name, debug_components) {
+        if (part_name == component_name) {
+          configs -= default_opt_configs
+          configs += debug_level_configs
+        }
       }
     }
   }

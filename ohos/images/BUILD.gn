@@ -19,8 +19,16 @@ import("//build/ohos/build_var.gni")
 import("${build_configs_path}/platforms_list.gni")
 group("make_images") {
   deps = []
+  if (is_standard_system) {
+    deps = [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
   foreach(_platform, target_platform_list) {
     deps += [
+      ":${_platform}_chip_prod_image",
+      ":${_platform}_sys_prod_image",
       ":${_platform}_system_image",
       ":${_platform}_userdata_image",
       ":${_platform}_vendor_image",
@@ -37,8 +45,8 @@ group("make_images") {
 }
 
 build_image_tools_path = [
-  "//out/${device_name}/clang_x64/distributeddatamgr/distributedfilejs",
-  "//out/${device_name}/clang_x64/filemanagement/storage_service",
+  "//out/${device_name}/clang_x64/thirdparty/e2fsprogs",
+  "//out/${device_name}/clang_x64/thirdparty/f2fs_tools",
   "//third_party/e2fsprogs/prebuilt/host/bin",
   "//build/ohos/images/mkimage",
 ]
@@ -54,6 +62,8 @@ foreach(_platform, target_platform_list) {
     "system",
     "vendor",
     "userdata",
+    "sys_prod",
+    "chip_prod",
   ]
   if (enable_ramdisk) {
     image_list += [
@@ -67,7 +77,10 @@ foreach(_platform, target_platform_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
       script = "//build/ohos/images/build_image.py"
       depfile = "$target_gen_dir/$target_name.d"
-      deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
+      deps = [
+        "//build/ohos/packages:${_platform}_install_modules",
+        "//build/ohos/packages:high_privilege_process_validate",
+      ]
 
       image_config_file =
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"

@@ -335,7 +335,8 @@ def add_to_zip_hermetic(zip_file,
                         zip_path,
                         src_path=None,
                         data=None,
-                        compress=None):
+                        compress=None,
+                        compress_level=6):
     """Adds a file to the given ZipFile with a hard-coded modified time.
 
     Args:
@@ -380,7 +381,9 @@ def add_to_zip_hermetic(zip_file,
     compress_type = zip_file.compression
     if compress is not None:
         compress_type = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
-    zip_file.writestr(zipinfo, data, compress_type)
+    if os.getenv("ZIP_COMPRESS_LEVEL"):
+        compress_level = int(os.getenv("ZIP_COMPRESS_LEVEL"))
+    zip_file.writestr(zipinfo, data, compress_type, compress_level)
 
 
 def do_zip(inputs,

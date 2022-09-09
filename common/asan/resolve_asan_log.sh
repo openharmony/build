@@ -20,6 +20,7 @@ if tar tf "${logdir}" &>/dev/null; then
     logdir="${logdir}.d"
 fi
 
-for f in $(find "${logdir}" -name 'asan.log.*'); do
-    ./symbolize.sh < "$f" > "$f".resolved
+for f in $(find "${logdir}" -type f -name 'asan.log.*' -a '!' -name '*.resolved'); do
+    echo resolve $f
+    ./symbolize.sh --max-count 100 < "$f" > "$f".resolved
 done

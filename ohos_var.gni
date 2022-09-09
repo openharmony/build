@@ -49,6 +49,12 @@ declare_args() {
   # updater package dir
   updater_base_dir = "updater"
 
+  # sys_prod package dir
+  sys_prod_base_dir = "sys_prod"
+
+  # chip_prod package dir
+  chip_prod_base_dir = "chip_prod"
+
   # check sdk interface
   sdk_interface_check = true
 
@@ -138,7 +144,15 @@ declare_args() {
 }
 
 declare_args() {
+  skip_generate_module_list_file = false
+}
+
+declare_args() {
   load_test_config = true
+}
+
+declare_args() {
+  build_variant = "user"
 }
 
 # build target type
@@ -190,8 +204,8 @@ if (host_os == "mac") {
 }
 
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
-hap_unpacking_tool = "//developtools/packing_tool/jar/app_unpacking_tool.jar"
-hap_packing_tool = "//developtools/packing_tool/jar/app_packing_tool.jar"
+hap_packing_tool =
+    "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
 nodejs_version = "v12.18.4"
 if (host_os == "mac") {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"

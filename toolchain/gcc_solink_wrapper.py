@@ -24,8 +24,8 @@ def collect_soname(args):
     toc = ''
     readelf = subprocess.Popen(wrapper_utils.command_to_run(
         [args.readelf, '-d', args.sofile]),
-                               stdout=subprocess.PIPE,
-                               bufsize=-1)
+        stdout=subprocess.PIPE,
+        bufsize=-1)
     for line in readelf.stdout:
         if b'SONAME' in line:
             toc += line.decode()
@@ -122,6 +122,10 @@ def main():
                         metavar='FILE')
     parser.add_argument('--libfile', required=False, metavar='FILE')
     parser.add_argument('command', nargs='+', help='Linking command')
+    parser.add_argument('--mini-debug',
+                        action='store_true',
+                        default=False,
+                        help='Add .gnu_debugdata section for stripped sofile')
     args = parser.parse_args()
 
     if args.sofile.endswith(".dll"):
@@ -164,6 +168,15 @@ def main():
         sofile_output_dir = os.path.dirname(args.sofile)
         unstripped_libfile = os.path.join(sofile_output_dir, libfile_name)
         shutil.copy2(unstripped_libfile, args.libfile)
+
+    if args.mini_debug and not args.sofile.endswith(".dll"):
+        unstripped_libfile = os.path.abspath(args.sofile)
+        script_path = os.path.join(
+            os.path.dirname(__file__), 'mini_debug_info.py')
+        ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
+        result = subprocess.call(
+            wrapper_utils.command_to_run(
+                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output, '--root-path', ohos_root_path]))
 
     return result
 

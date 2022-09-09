@@ -15,29 +15,31 @@
 objdir=${SYSROOT:-.}
 symbolizer=${SYMBOLIZER:-addr2line}
 help=no
+max_count=10000
 
 while test -n "${1}"; do
     case "${1}" in
     -o | --objdir)
         objdir="${2}"
         shift
-        shift
         ;;
     -p | --symbolizer)
-        symbolizer="${2:-addr2line}"
+        symbolizer="${2}"
         shift
+        ;;
+    --max-count)
+        max_count="${2}"
         shift
         ;;
     -h | --help)
-        shift
         help=yes
         break
         ;;
     *)
-        shift
-        break
+        echo "$0: Warning: unsupported parameter $1" >&2
         ;;
     esac
+    shift
 done
 
 print_help() {
@@ -49,6 +51,7 @@ Translate call stack to symbolized forms.
 
     -o,  --objdir  <objects_dir>    dir that contains the call stack binaries.
     -p,  --symbolizer <symbolizer>  symbolizer for translating call stacks, default is addr2line.
+    --max-count <max-count>         max calls of symbolizer for translatings, default is 10000.
     -h,  --help                     print help info
 END
 }
@@ -69,10 +72,15 @@ find_file() {
 }
 
 getsym2() {
+    cur_count=$((${cur_count:-0}+1))
+    if [ $cur_count -gt $max_count ]; then
+        sym="(resolve count $cur_count exceeds max_count $max_count)"
+        return
+    fi
     files="$(find_file $1)"
     for file in $files; do
         if [ -f "$file" ]; then
-            $symbolizer -C -f -p -e "${file}" $2 2>/dev/null
+            sym="$sym $($symbolizer -C -f -p -e "${file}" $2 2>/dev/null)"
         fi
     done
 }
@@ -84,5 +92,7 @@ getsym() {
 }
 
 while read -r line; do
-    echo "$line" $(getsym $(echo "$line" | sed -n 's/.*(\(.*\)).*/\1/p'))
+    sym=
+    getsym $(echo "$line" | sed -n 's/.*(\(.*+.*\)).*/\1/p')
+    echo "$line" "$sym"
 done

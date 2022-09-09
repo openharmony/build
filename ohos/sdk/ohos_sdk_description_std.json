@@ -19,6 +19,14 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//base/update/updater/services/diffpatch:diff",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//third_party/libusb:libusb",
         "target_os": [
             "linux",
@@ -312,15 +320,6 @@
         ]
     },
     {
-        "install_dir": "js/api",
-        "module_label": "//interface/sdk-js:system_api",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "toolchains/syscapcheck",
         "module_label": "//interface/sdk-js:syscap_check",
         "target_os": [
@@ -448,7 +447,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:app_packing_tool",
+        "module_label": "//developtools/packing_tool:app_packing_tool",
         "target_os": [
             "linux",
             "windows",
@@ -457,7 +456,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/packing_tool/jar:app_unpacking_tool",
+        "module_label": "//developtools/packing_tool:app_unpacking_tool",
         "target_os": [
             "linux",
             "windows",
@@ -476,8 +475,7 @@
         "install_dir":"previewer/common/bin/",
         "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
-            "windows",
-            "darwin"
+            "windows"
         ]
     },
     {
@@ -485,7 +483,8 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
@@ -493,7 +492,16 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin/module/data",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributeddatamgr_library",
+        "target_os": [
+          "windows",
+          "darwin"
         ]
     },
     {
@@ -501,7 +509,8 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
@@ -513,7 +522,7 @@
     },
     {
         "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool/jar:fastjson_utils_java",
+        "module_label": "//developtools/packing_tool:fastjson_utils_java",
         "target_os": [
             "linux",
             "windows",
@@ -522,7 +531,7 @@
     },
     {
         "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool/jar:haptobin_tool",
+        "module_label": "//developtools/packing_tool:haptobin_tool",
         "target_os": [
             "linux",
             "windows",
@@ -622,6 +631,14 @@
     {
         "install_dir": "simulator/bin",
         "module_label": "//foundation/ability/ability_runtime/frameworks/simulator:copy_ability_simulator",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir":"previewer/common/bin/module/data",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributeddata_library",
         "target_os": [
             "windows",
             "darwin"

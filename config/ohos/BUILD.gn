@@ -95,6 +95,11 @@ config("runtime_library") {
   }
 
   ldflags += [ "-Wl,--warn-shared-textrel" ]
+
+  # We add this parameter to speed up link process, enable_lto_O0 default is false.
+  if (!is_mac && !is_win && use_lld && enable_lto_O0) {
+    ldflags += [ "-Wl,--lto-O0" ]
+  }
 }
 
 config("executable_config") {

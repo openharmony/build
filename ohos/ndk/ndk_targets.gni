@@ -23,6 +23,8 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
   "//base/startup/init/interfaces/kits/syscap:libdeviceinfo_ndk",
   "//base/startup/init/interfaces/kits/syscap:deviceinfo_header",
+  "//foundation/ai/mindspore/mindspore/lite/interfaces/kits/c:mindspore_header",
+  "//foundation/ai/mindspore/mindspore/lite/interfaces/kits/c:mindspore_lib",
   "//foundation/arkui/ace_engine/interfaces/native:ace_header",
   "//foundation/arkui/ace_engine/interfaces/native:libace_ndk",
   "//foundation/arkui/napi:libnapi_ndk",
@@ -60,6 +62,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_decoder:native_media_vdec_header",
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:libnative_media_venc",
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:native_media_venc_header",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:libnative_media_codecbase",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:native_media_codecbase_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
 ]

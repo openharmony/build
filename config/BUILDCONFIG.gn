@@ -68,6 +68,10 @@ declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 
+declare_args() {
+  enable_lto_O0 = false
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
@@ -76,6 +80,7 @@ global_parts_info =
 
 product_company = product_build_config.product_company
 device_company = product_build_config.device_company
+device_build_path = product_build_config.device_build_path
 target_os = product_build_config.target_os
 target_cpu = product_build_config.target_cpu
 product_toolchain = product_build_config.product_toolchain_label
@@ -283,6 +288,37 @@ if (host_os == "linux") {
 declare_args() {
   # Debug build. Enabling official builds automatically sets is_debug to false.
   is_debug = false
+}
+
+declare_args() {
+  # Enable mini debug info, it will add .gnu_debugdata
+  # section in each stripped sofile
+
+  # Currently, we don't publish ohos-adapted python on m1 platform,
+  # So that we disable mini debug info on m1 platform until
+  # ohos-adapted python publishing on m1 platform
+  if (host_os == "mac" && host_cpu == "arm64") {
+    full_mini_debug = false
+  } else {
+    full_mini_debug = true
+  }
+}
+
+declare_args() {
+  # Full Debug mode. Setting optimize level to "-O0" and symbol level to "-g3".
+  # It should be used with "is_debug"
+  ohos_full_debug = false
+}
+
+declare_args() {
+  # Specifies which components use the DEBUG compilation level
+  # Using this arg like this, --gn-args 'enable_debug_components="component1,component2"'
+  enable_debug_components = ""
+}
+
+declare_args() {
+  # We use this arg to split "enable_debug_components" to a list
+  debug_components = string_split(enable_debug_components, ",")
 }
 
 declare_args() {
@@ -500,6 +536,13 @@ if (!is_ohos) {
 
 set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
+  file_exist = exec_script("//build/scripts/check_file_exist.py",
+                           [ "${device_build_path}/config.gni" ],
+                           "string")
+  if (file_exist != "") {
+    import("${device_build_path}/config.gni")
+  }
+
   # =============================================================================
   # TARGET DEFAULTS
   # =============================================================================
@@ -538,6 +581,7 @@ if (is_standard_system) {
     "//build/config/compiler:no_common",
     "//build/config/coverage:default_coverage",
     "//build/config/sanitizers:default_sanitizer_flags",
+    "//build/config/secure:default_secure_configs",
   ]
 
   if (is_ohos) {

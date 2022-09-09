@@ -1,0 +1,97 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/python.gni")
+
+# Generate .ts or .cpp files from .idl files.
+#
+# Variables
+#   sources: Paths to .idl file to compile, one idl target can only handle
+#     one idl source file.
+#   gen_type: Only support ts and cpp type currently
+#       "ts": generate ts interface files
+#       "cpp": generate cpp interface files
+#
+# Example
+#   ohos_idl("foo_idl") {
+#       gen_type = "cpp"
+#       sources = [
+#         "cpp/bar/FooBarServiceCallback.idl",
+#       ]
+#   }
+template("ohos_idl") {
+  forward_variables_from(invoker, [ "testonly" ])
+  assert(defined(invoker.sources), "sources are necessary")
+  _idl_target = "//foundation/ability/idl_tool:idl($host_toolchain)"
+  _idl_module_info_target =
+      get_label_info("$_idl_target", "label_no_toolchain") +
+      "_info($host_toolchain)"
+  _idl_module_info =
+      get_label_info("$_idl_module_info_target", "target_out_dir") + "/" +
+      get_label_info("$_idl_target", "name") + "_module_info.json"
+  _rebased_idl_module_info = rebase_path("$_idl_module_info", root_build_dir)
+
+  _libcxx_target = "//build/common/musl:musl-libcxx.so($host_toolchain)"
+  _libcxx_module_info_target =
+      get_label_info("$_libcxx_target", "label_no_toolchain") +
+      "_info($host_toolchain)"
+  _libcxx_module_info =
+      get_label_info("$_libcxx_module_info_target", "target_out_dir") + "/" +
+      get_label_info("$_libcxx_target", "name") + "_module_info.json"
+  _rebased_libcxx_module_info =
+      rebase_path("$_libcxx_module_info", root_build_dir)
+  forward_variables_from(invoker, [ "gen_type" ])
+  assert(defined(gen_type),
+         "need define gen_type to point which type files should be generated")
+
+  if (gen_type == "cpp") {
+    _idl_include_target_name = "${target_name}__inculde"
+    config(_idl_include_target_name) {
+      include_dirs = [ target_gen_dir ]
+    }
+  }
+
+  action_with_pydeps(target_name) {
+    script = "//build/scripts/idl.py"
+    sources = invoker.sources
+    args = [
+      "--idl-path",
+      "@FileArg($_rebased_idl_module_info:source)",
+      "--libcxx-path",
+      "@FileArg($_rebased_libcxx_module_info:source)",
+    ]
+    deps = [
+      "${_idl_module_info_target}",
+      "${_idl_target}",
+      "${_libcxx_module_info_target}",
+      "${_libcxx_target}",
+    ]
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    _output_archive = "${target_gen_dir}/${target_name}.zip"
+    if (gen_type == "cpp") {
+      public_configs = [ ":$_idl_include_target_name" ]
+    }
+    args += [
+      "--gen-type",
+      gen_type,
+      "--output-archive-path",
+      rebase_path(_output_archive, root_build_dir),
+      "--generated-src-directory",
+      rebase_path(target_gen_dir + "/$target_name", root_build_dir),
+    ]
+    args += rebase_path(sources, root_build_dir)
+    outputs = [ _output_archive ]
+  }
+}
