@@ -351,6 +351,7 @@ template("ohos_hap") {
       ":$_metadata_target",
       ":$_notice_target",
       ":$_resources_target",
+      "//developtools/packing_tool:packing_tool",
     ]
     enable_ark = build_ark
     if (defined(shared_libraries)) {
