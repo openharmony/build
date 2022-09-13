@@ -560,6 +560,6 @@ group("build_all_test_pkg") {
   testonly = true
   deps = [
     "$root_build_dir/build_configs:parts_test",
-    "//test/developertest:make_temp_test",
+    "//test/testfwk/developer_test:make_temp_test",
   ]
 }

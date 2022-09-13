@@ -192,7 +192,7 @@ template("ohos_performancetest") {
       deps += invoker.deps
     }
     deps += [
-      "//test/developertest/aw/cxx/hwext:performance_test_static",
+      "//test/testfwk/developer_test/aw/cxx/hwext:performance_test_static",
       "//third_party/googletest:gtest_main",
     ]
   }
@@ -220,7 +220,7 @@ template("ohos_distributedtest") {
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    deps += [ "//test/developertest/aw/cxx/distributed:distributedtest_lib" ]
+    deps += [ "//test/testfwk/developer_test/aw/cxx/distributed:distributedtest_lib" ]
   }
 }
 
@@ -453,7 +453,7 @@ template("ohos_js_test") {
   }
 
   _suite_path = get_label_info(":$target_name", "dir")
-  _template_path = "//test/developertest/libs/js_template"
+  _template_path = "//test/testfwk/developer_test/libs/js_template"
   _target_path = "${_template_path}/$target_name"
   _target_js_copy = "${target_name}__js_copy"
   action_with_pydeps(_target_js_copy) {
