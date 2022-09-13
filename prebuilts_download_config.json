@@ -29,7 +29,7 @@
       "use_symlink": "False"
     },
     {
-      "src": "test/testfwkl/arkxtest/jsunit/",
+      "src": "test/testfwk/arkxtest/jsunit/",
       "dest": "developtools/ace_ets2bundle/compiler/node_modules/hypium/",
       "use_symlink": "False"
     },
