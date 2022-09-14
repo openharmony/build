@@ -42,7 +42,7 @@ def do_build(args):
     cmd = [
         'python3',
         build_py,
-        '-p',
+        '--product-name',
         args.product_name,
     ]
     build_targets = args.build_target
@@ -60,7 +60,7 @@ def do_build(args):
         build_targets.append('build_ohos_sdk')
 
     if args.build_only_gn:
-        cmd.append('--build-only-gn')
+        cmd.append('--build-only-gn=True')
 
     if args.sparse_image:
         gn_args.append('sparse_image=true')
@@ -71,7 +71,7 @@ def do_build(args):
             gn_args.append('pycache_enable=true')
 
     if build_targets:
-        cmd.append('-T')
+        cmd.append('--build-target')
         for target in build_targets:
             cmd.append(target)
 
@@ -83,11 +83,11 @@ def do_build(args):
     if args.verbose:
         cmd.append('-v')
     if args.keep_ninja_going:
-        cmd.append('--keep-ninja-going')
+        cmd.append('--keep-ninja-going=True')
     if args.fast_rebuild:
-        cmd.append('--fast-rebuild')
+        cmd.append('--fast-rebuild=True')
     if args.disable_package_image:
-        cmd.append('--disable-package-image')
+        cmd.append('--disable-package-image=True')
     if args.log_level == 'debug':
         cmd.append('--log-level=debug')
     if args.export_rust_project:
@@ -99,7 +99,7 @@ def do_build(args):
     if args.share_ccache:
         cmd.append('--share-ccache=' + args.share_ccache)
     if args.disable_post_build:
-        cmd.append('--disable-post-build')
+        cmd.append('--disable-post-build=True')
     if args.disable_part_of_post_build:
         cmd.append('--disable-part-of-post-build')
         for option in args.disable_part_of_post_build:

@@ -1,0 +1,208 @@
+{
+    "args": [
+        {
+            "argName": "--log-level",
+            "argDefault": "info",
+            "argHelp": "specifies the log level during compilation. you can select two levels: debug, info.In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
+            "argPhase": "gnBuild",
+            "argType": "str",
+            "argAttribute": {
+                "optional": ["debug", "info"]
+            },
+            "resolveFuntion": "resolveVerbose",
+            "testFunction": "testVerbose"
+        },
+        {
+            "argName": "--strict-mode",
+            "argDefault": "False",
+            "argHelp": "check all produce of each phase to early terminates a potentially problematic compilation ",
+            "argPhase": "loader",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveStrictMode",
+            "testFunction": "testStrictMode"
+        },
+        {
+            "argName": "--rename-last-log",
+            "argDefault": "True",
+            "argHelp": "rename last build log",
+            "argPhase": "prebuild",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveRenameLastLog",
+            "testFunction": "testRenameLastLog"
+        },
+        {
+            "argName": "--ccache",
+            "argDefault": "False",
+            "argHelp": "enable ccache",
+            "argPhase": "prebuild",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveCCache",
+            "testFunction": "testCCache"
+        },
+        {
+            "argName": "--enable-pycache",
+            "argDefault": "False",
+            "argHelp": "enable pycache",
+            "argPhase": "prebuild",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolvePycache",
+            "testFunction": "testPycache"
+        },
+        {
+            "argName": "--build-type",
+            "argDefault": "debug",
+            "argHelp": "release or debug version, mini/small only",
+            "argPhase": "prebuild",
+            "argType": "str",
+            "argAttribute":{
+                "optional": ["debug", "release"]
+            },
+            "resolveFuntion": "resolveBuildType",
+            "testFunction": "testBuildType"
+        },
+        {
+            "argName": "--target-cpu",
+            "argDefault": "arm",
+            "argHelp": "specifies the desired cpu architecture for the build, currently we support arm64, arm",
+            "argPhase": "prebuild",
+            "argType": "str",
+            "argAttribute":{
+                "optional": ["arm", "arm64", "x86_64", "x64"]
+            },
+            "resolveFuntion": "resolveTargetCpu",
+            "testFunction": "testBuildTargetCpu"
+        },
+        {
+            "argName": "--product-name",
+            "argDefault": "",
+            "argHelp": "build a specified product with {product_name}@{company}",
+            "argPhase": "preload",
+            "argType": "str",
+            "argAttribute":{
+                "abbreviation": "-p"
+            },
+            "resolveFuntion": "resolveProduct",
+            "testFunction": "testProduct"
+        },
+        {
+            "argName": "--full-compilation",
+            "argDefault": "False",
+            "argHelp": "full code compilation",
+            "argPhase": "prebuild",
+            "argType": "bool",
+            "argAttribute":{
+                "abbreviation": "-f"
+            },
+            "resolveFuntion": "resolveFullCompilation",
+            "testFunction": "testFullCompilation"
+        },
+        {
+            "argName": "--build-target",
+            "argDefault": [],
+            "argHelp": "compile single target",
+            "argPhase": "targetGenerate",
+            "argType": "list",
+            "argAttribute":{
+                "abbreviation": "-b"
+            },
+            "resolveFuntion": "resolveBuildTarget",
+            "testFunction": "testBuildTarget"
+        },
+        {
+            "argName": "--gn-args",
+            "argDefault": [],
+            "argHelp": "specifies gn build arguments",
+            "argPhase": "targetGenerate",
+            "argType": "list",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveGnArgs",
+            "testFunction": "testGnArgs"
+        },
+        {
+            "argName": "--keep-ninja-going",
+            "argDefault": "False",
+            "argHelp": "keeps ninja going until 1000000 jobs fail",
+            "argPhase": "targetCompilation",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveKeepNinjaGoing",
+            "testFunction": "testKeepNinjaGoing"
+        },
+        {
+            "argName": "--build-only-gn",
+            "argDefault": "False",
+            "argHelp": "only do gn parse, donot run ninja",
+            "argPhase": "targetGenerate",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveBuildOnlyGn",
+            "testFunction": "testBuildOnlyGn"
+        },
+        {
+            "argName": "--build-variant",
+            "argDefault": "user",
+            "argHelp": "specifies device operating mode",
+            "argPhase": "postbuild",
+            "argType": "str",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveBuildVariant",
+            "testFunction": "testBuildVariant"
+        },
+        {
+            "argName": "--device-type",
+            "argDefault": "default",
+            "argHelp": "specifies device type",
+            "argPhase": "postbuild",
+            "argType": "str",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveDeviceType",
+            "testFunction": "testDeviceType"
+        },
+        {
+            "argName": "--disable-package-image",
+            "argDefault": "False",
+            "argHelp": "specifies device type",
+            "argPhase": "postbuild",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveDisablePackageImage",
+            "testFunction": "testDisablePackageImage"
+        },
+        {
+            "argName": "--disable-part-of-post-build",
+            "argDefault": [],
+            "argHelp": "specifies device type",
+            "argPhase": "postbuild",
+            "argType": "list",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveDisablePartofPostBuild",
+            "testFunction": "testDisablePartofPostBuild"
+        }
+    ]
+}

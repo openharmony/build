@@ -13,11 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 import os
 import sys
 import argparse
 
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from loader import subsystem_info  # noqa: E402
 from loader import platforms_loader  # noqa: E402
 from loader import generate_targets_gn  # noqa: E402
@@ -163,8 +166,9 @@ def _get_parts_by_platform(target_platform_parts):
 
 
 def _check_parts_config_info(parts_config_info):
-    if not ('parts_info' in parts_config_info and 'subsystem_parts'
-            in parts_config_info and 'parts_variants' in parts_config_info
+    if not ('parts_info' in parts_config_info and
+            'subsystem_parts' in parts_config_info
+            and 'parts_variants' in parts_config_info
             and 'parts_kits_info' in parts_config_info
             and 'parts_inner_kits_info' in parts_config_info
             and 'parts_targets' in parts_config_info):
@@ -192,7 +196,7 @@ def _get_auto_install_list(parts_path_info):
     auto_install_part_list = []
     for part, path in parts_path_info.items():
         if str(path).startswith("drivers/interface") or \
-            str(path).startswith("third_party"):
+                str(path).startswith("third_party"):
             auto_install_part_list.append(part)
     return auto_install_part_list
 
@@ -250,11 +254,14 @@ def _check_args(args, source_root_dir):
         if not _real_out_dir.startswith(source_root_dir):
             raise Exception("args gn_root_out_dir is incorrect.")
 
+
 def syscap_sort(syscap):
     return syscap['component']
 
+
 def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path):
-    syscap_product_dict = read_json_file(os.path.join(pre_syscap_info_path, "syscap.json"))
+    syscap_product_dict = read_json_file(
+        os.path.join(pre_syscap_info_path, "syscap.json"))
     target_parts_list = _get_required_build_parts_list(target_platform_parts)
     syscap_info_list = parts_config_info.get('syscap_info')
     target_syscap_with_part_name_list = []
@@ -318,8 +325,9 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
 
     # Generate SystemCapability.json & syscap.json & syscap.para
     target_syscap_list.sort()
-    syscap_info_dict = read_json_file(os.path.join(pre_syscap_info_path, "SystemCapability.json"))
-    syscap_info_dict.update({'syscap':{'os':target_syscap_list}})
+    syscap_info_dict = read_json_file(os.path.join(
+        pre_syscap_info_path, "SystemCapability.json"))
+    syscap_info_dict.update({'syscap': {'os': target_syscap_list}})
     system_etc_path = os.path.join(system_path, "etc/")
     if not os.path.exists(system_path):
         os.mkdir(system_path)
@@ -328,14 +336,18 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
     syscap_info_json = os.path.join(system_etc_path, "SystemCapability.json")
     write_json_file(syscap_info_json, syscap_info_dict)
     target_syscap_with_part_name_list.sort(key=syscap_sort)
-    syscap_info_with_part_name_file = os.path.join(system_etc_path, "syscap.json")
-    write_json_file(syscap_info_with_part_name_file, {'components': target_syscap_with_part_name_list})
+    syscap_info_with_part_name_file = os.path.join(
+        system_etc_path, "syscap.json")
+    write_json_file(syscap_info_with_part_name_file, {
+                    'components': target_syscap_with_part_name_list})
     if not os.path.exists(os.path.join(system_etc_path, "param/")):
         os.mkdir(os.path.join(system_etc_path, "param/"))
-    target_syscap_for_init_file = os.path.join(system_etc_path, "param/syscap.para")
+    target_syscap_for_init_file = os.path.join(
+        system_etc_path, "param/syscap.para")
     f = open(target_syscap_for_init_file, "w")
     f.writelines(target_syscap_for_init_list)
     f.close()
+
 
 def load(args):
     source_root_dir = args.source_root_dir
@@ -456,8 +468,10 @@ def load(args):
                     _get_parts_src_list(required_parts_targets, parts_info),
                     check_changes=True)
     # write auto install part file
-    auto_install_list = _get_auto_install_list(parts_config_info.get("parts_path_info"))
-    auto_install_list_file = os.path.join(config_output_dir, "auto_install_parts.json")
+    auto_install_list = _get_auto_install_list(
+        parts_config_info.get("parts_path_info"))
+    auto_install_list_file = os.path.join(
+        config_output_dir, "auto_install_parts.json")
     write_json_file(auto_install_list_file, auto_install_list)
 
     # write platforms_list.gni
@@ -493,8 +507,11 @@ def load(args):
     _check_product_part_feature(parts_info,
                                 os.path.dirname(args.platforms_config_file))
     pre_syscap_info_path = os.path.dirname(args.platforms_config_file)
-    system_path = os.path.join(source_root_dir, os.path.join(os.path.dirname(args.platforms_config_file), "system/"))
-    generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
+    system_path = os.path.join(source_root_dir, os.path.join(
+        os.path.dirname(args.platforms_config_file), "system/"))
+    generate_syscap_files(
+        parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
+
 
 
 def _output_infos_by_platform(part_name_infos, parts_info_dict):

@@ -1,0 +1,20 @@
+{
+    "root_path": null,
+    "board": null,
+    "kernel": null,
+    "product": null,
+    "product_path": null,
+    "device_path": null,
+    "device_company": null,
+    "os_level": null,
+    "version": null,
+    "patch_cache": null,
+    "product_json": null,
+    "component_type": null,
+    "product_config_path": null,
+    "target_cpu": null,
+    "target_os": null,
+    "out_path": null,
+    "subsystem_config_json": null,
+    "device_config_path": null
+  }
