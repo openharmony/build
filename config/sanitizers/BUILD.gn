@@ -620,7 +620,6 @@ config("cfi_config") {
     cflags = [
       "-flto",
       "-fsanitize=cfi",
-      "-fsanitize-cfi-cross-dso",
       "-fsanitize-blacklist=" +
           rebase_path(_cfi_blocklist_path, root_build_dir),
     ]
