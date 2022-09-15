@@ -107,6 +107,10 @@
     "path": "base/request",
     "name": "request"
   },
+  "print": {
+    "path": "base/print",
+    "name": "print"
+  },
   "theme": {
     "path": "base/theme",
     "name": "theme"
