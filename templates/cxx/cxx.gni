@@ -101,15 +101,7 @@ template("ohos_executable") {
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
-                           ])
+    forward_variables_from(invoker, [ "sanitize" ])
   }
 
   _test_target = defined(invoker.testonly) && invoker.testonly
@@ -150,12 +142,7 @@ template("ohos_executable") {
                              "use_exceptions",
 
                              # Sanitizer variables
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
+                             "sanitize",
                            ])
     output_dir = output_dir
 
@@ -414,15 +401,7 @@ template("ohos_shared_library") {
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
-                           ])
+    forward_variables_from(invoker, [ "sanitize" ])
   }
 
   _test_target = defined(invoker.testonly) && invoker.testonly
@@ -464,12 +443,7 @@ template("ohos_shared_library") {
                              "use_exceptions",
 
                              # Sanitizer variables
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
+                             "sanitize",
                            ])
     output_dir = output_dir
 
@@ -694,15 +668,7 @@ template("ohos_static_library") {
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
-                           ])
+    forward_variables_from(invoker, [ "sanitize" ])
   }
 
   _test_target = defined(invoker.testonly) && invoker.testonly
@@ -735,12 +701,7 @@ template("ohos_static_library") {
                              "use_exceptions",
 
                              # Sanitizer variables
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
+                             "sanitize",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs
@@ -883,15 +844,7 @@ template("ohos_source_set") {
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
-                           ])
+    forward_variables_from(invoker, [ "sanitize" ])
   }
 
   _test_target = defined(invoker.testonly) && invoker.testonly
@@ -925,12 +878,7 @@ template("ohos_source_set") {
                              "use_exceptions",
 
                              # Sanitizer variables
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
+                             "sanitize",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs

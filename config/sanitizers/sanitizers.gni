@@ -261,41 +261,64 @@ if (use_fuzzing_engine) {
 
 template("ohos_sanitizer_config") {
   config(target_name) {
-    forward_variables_from(invoker,
-                           [
-                             "cfi",
-                             "scs",
-                             "scudo",
-                             "ubsan",
-                             "boundary_sanitize",
-                             "integer_overflow_sanitize",
-                           ])
-    configs = []
-    _cfi = defined(cfi) && cfi
-    if (_cfi) {
-      configs += [ "//build/config/sanitizers:cfi_config" ]
-    }
-    _scudo = defined(scudo) && scudo
-    if (_scudo) {
-      configs += [ "//build/config/sanitizers:scudo_config" ]
-    }
-    _ubsan = defined(ubsan) && ubsan
-    if (_ubsan) {
-      configs +=
-          [ "//build/config/sanitizers:undefined_behavior_sanitize_config" ]
-    }
-    _integer_sanitize =
-        defined(integer_overflow_sanitize) && integer_overflow_sanitize
-    if (_integer_sanitize) {
-      configs += [ "//build/config/sanitizers:integer_overflow_config" ]
-    }
-    _scs = defined(scs) && scs
-    if (_scs) {
-      configs += [ "//build/config/sanitizers:shadow_call_stack_config" ]
-    }
-    _boundary_sanitize = defined(boundary_sanitize) && boundary_sanitize
-    if (_boundary_sanitize) {
-      configs += [ "//build/config/sanitizers:boundary_sanitize_config" ]
+    forward_variables_from(invoker, [ "sanitize" ])
+    if (defined(sanitize)) {
+      configs = []
+      _mode = "release"
+      _debug = defined(sanitize.debug) && sanitize.debug
+      if (_debug) {
+        _mode = "debug"
+      }
+      _cfi = defined(sanitize.cfi) && sanitize.cfi
+      if (_cfi) {
+        configs += [ "//build/config/sanitizers:cfi_config" ]
+      }
+      _scudo = defined(sanitize.scudo) && sanitize.scudo
+      if (_scudo) {
+        configs += [ "//build/config/sanitizers:scudo_config" ]
+      }
+      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan
+      if (_ubsan) {
+        configs +=
+            [ "//build/config/sanitizers:undefined_behavior_sanitize_config" ]
+      }
+      _scs = defined(sanitize.scs) && sanitize.scs
+      if (_scs) {
+        configs += [ "//build/config/sanitizers:shadow_call_stack_config" ]
+      }
+      _boundary_sanitize =
+          defined(sanitize.boundary_sanitize) && sanitize.boundary_sanitize
+      if (_boundary_sanitize) {
+        configs += [ "//build/config/sanitizers:boundary_sanitize_config" ]
+      }
+
+      _integer_overflow =
+          defined(sanitize.integer_overflow) && sanitize.integer_overflow
+      _unsigned_integer_overflow =
+          defined(sanitize.unsigned_integer_overflow) &&
+          sanitize.unsigned_integer_overflow
+      _signed_integer_overflow = defined(sanitize.signed_integer_overflow) &&
+                                 sanitize.signed_integer_overflow
+      if (_unsigned_integer_overflow || _integer_overflow) {
+        configs +=
+            [ "//build/config/sanitizers:unsigned_integer_overflow_config" ]
+      }
+      if (_signed_integer_overflow || _integer_overflow) {
+        configs +=
+            [ "//build/config/sanitizers:signed_integer_overflow_config" ]
+      }
+      if (_integer_overflow || _unsigned_integer_overflow ||
+          _signed_integer_overflow) {
+        configs +=
+            [ "//build/config/sanitizers:common_integer_overflow_config_" +
+              _mode ]
+      }
+
+      if (defined(sanitize.blocklist)) {
+        cflags = [ "-fsanitize-blacklist=" +
+                   rebase_path(get_path_info(sanitize.blocklist, "abspath")) ]
+      }
+      configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }
   }
 }
