@@ -374,15 +374,6 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/syntax_parser/dist",
-        "module_label": "//developtools/ace_ets2bundle:ets_loader_syntax",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "ets/build-tools/ets-loader/components",
         "module_label": "//developtools/ace_ets2bundle:components",
         "target_os": [
