@@ -609,30 +609,25 @@ config("sanitizer_trap_all_flags") {
   ldflags = cflags
 }
 
-config("cfi_config") {
-  if (is_ohos) {
-    _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
+# By default, cfi is in release mode
+config("cfi_config_release") {
+  _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
 
-    configs = [
-      "//build/config/gcc:symbol_visibility_default",
-      ":sanitizer_trap_all_flags",
-    ]
-    cflags = [
-      "-flto",
-      "-fsanitize=cfi",
-      "-fsanitize-blacklist=" +
-          rebase_path(_cfi_blocklist_path, root_build_dir),
-    ]
+  configs = [ "//build/config/gcc:symbol_visibility_default" ]
+  cflags = [
+    "-flto",
+    "-fsanitize=cfi",
+    "-fsanitize-blacklist=" + rebase_path(_cfi_blocklist_path, root_build_dir),
+  ]
+}
 
-    ldflags = [
-      "-flto",
-      "-fsanitize=cfi",
-      "-Wl,-plugin-opt,O1",
-      "-lclang_rt.cfi",
-      "-L" +
-          rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir),
-    ]
-  }
+# Debug mode, add no-trap and recover options over release mode
+config("cfi_config_debug") {
+  configs = [ ":cfi_config_release" ]
+  cflags = [
+    "-fno-sanitize-trap=cfi",
+    "-fsanitize-recover=cfi,undefined",
+  ]
 }
 
 config("shadow_call_stack_config") {
@@ -647,16 +642,16 @@ config("shadow_call_stack_config") {
 }
 
 template("config_plus_compiler_rt") {
-  forward_variables_from(invoker, [ "minimal_rt_lib_names" ])
-  not_needed([ "minimal_rt_lib_names" ])
+  forward_variables_from(invoker, [ "compiler_rt_shared_lib_names" ])
+  not_needed([ "compiler_rt_shared_lib_names" ])
 
   _clang_rt_dso_paths = []
   if ((host_os == "linux" || host_os == "mac") && target_os == "ohos" &&
       !is_mingw && is_ohos) {
     _dso_names = []
-    foreach(dso_name, minimal_rt_lib_names) {
-      # Add runtime library support
-      _dso_names += [ "${abi_target}/libclang_rt.${dso_name}.a" ]
+    foreach(dso_name, compiler_rt_shared_lib_names) {
+      # Add runtime shared library support
+      _dso_names += [ "${abi_target}/libclang_rt.${dso_name}.so" ]
     }
 
     foreach(rt_lib, _dso_names) {
@@ -674,18 +669,12 @@ template("config_plus_compiler_rt") {
                              "libs",
                              "configs",
                            ])
+
+    # Link library by its fullpath
     if (defined(libs)) {
       libs += _clang_rt_dso_paths
     } else {
       libs = _clang_rt_dso_paths
-    }
-
-    foreach(dso, _clang_rt_dso_paths) {
-      if (defined(ldflags)) {
-        ldflags += [ "-Wl,--exclude-libs,${dso}" ]
-      } else {
-        ldflags = [ "-Wl,--exclude-libs,${dso}" ]
-      }
     }
   }
 }
@@ -693,7 +682,7 @@ template("config_plus_compiler_rt") {
 config_plus_compiler_rt("scudo_config") {
   cflags = [ "-fsanitize=scudo" ]
   configs = [ ":sanitizer_trap_all_flags" ]
-  minimal_rt_lib_names = [ "scudo_minimal" ]
+  compiler_rt_shared_lib_names = [ "scudo_minimal" ]
 }
 
 config_plus_compiler_rt("undefined_behavior_sanitize_config") {
@@ -705,7 +694,7 @@ config_plus_compiler_rt("undefined_behavior_sanitize_config") {
     "-fno-sanitize=implicit-integer-sign-change",
   ]
   configs = [ ":sanitizer_trap_all_flags" ]
-  minimal_rt_lib_names = [
+  compiler_rt_shared_lib_names = [
     "ubsan_standalone",
     "ubsan_minimal",
   ]
@@ -720,7 +709,7 @@ config_plus_compiler_rt("boundary_sanitize_config") {
     "-fno-sanitize=implicit-integer-sign-change",
   ]
   configs = [ ":sanitizer_trap_all_flags" ]
-  minimal_rt_lib_names = [ "ubsan_minimal" ]
+  compiler_rt_shared_lib_names = [ "ubsan_minimal" ]
 }
 
 config("common_integer_overflow_config_release") {
@@ -752,10 +741,10 @@ config("unsigned_integer_overflow_config") {
 }
 
 config_plus_compiler_rt("compiler_rt_debug") {
-  minimal_rt_lib_names = [ "ubsan_standalone" ]
+  compiler_rt_shared_lib_names = [ "ubsan_standalone" ]
 }
 
 config_plus_compiler_rt("compiler_rt_release") {
   cflags = [ "-fsanitize-minimal-runtime" ]
-  minimal_rt_lib_names = [ "ubsan_minimal" ]
+  compiler_rt_shared_lib_names = [ "ubsan_minimal" ]
 }
