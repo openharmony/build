@@ -17,6 +17,9 @@
 2.  Gn运行后会生成ninja文件。
 3.  通过运行ninja来执行编译任务。
 
+**图 1**  编译构建子系统架构图<a name="fig16488143010409"></a>  
+![](docs/figures/build_framework_ZN.png "编译构建子系统架构图")
+
 ## 目录<a name="section161941989596"></a>
 
 ```
@@ -336,7 +339,7 @@ OpenHarmony的配置文件主要有四个。
 
 ## 相关仓<a name="section1371113476307"></a>
 
-编译构建子系统
+**[编译构建子系统](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/编译构建子系统.md)**
 
-**build**
+**[build\_lite](https://gitee.com/openharmony/build_lite/blob/master/README_zh.md)**
 
