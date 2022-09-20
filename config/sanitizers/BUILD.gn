@@ -652,23 +652,15 @@ template("config_plus_compiler_rt") {
 
   _clang_rt_dso_paths = []
   if ((host_os == "linux" || host_os == "mac") && target_os == "ohos" &&
-      !is_mingw) {
-    _clang_rt_libs_dir = "$clang_base_path/lib64/clang/12.0.1/lib/"
-
+      !is_mingw && is_ohos) {
     _dso_names = []
     foreach(dso_name, minimal_rt_lib_names) {
       # Add runtime library support
-      if (target_cpu == "arm64") {
-        _dso_names += [ "aarch64-linux-ohos/libclang_rt.${dso_name}.a" ]
-      } else if (target_cpu == "arm") {
-        _dso_names += [ "arm-linux-ohos/libclang_rt.${dso_name}.a" ]
-      } else if (target_cpu == "x86_64") {
-        _dso_names += [ "x86_64-linux-ohos/libclang_rt.${dso_name}.a" ]
-      }
+      _dso_names += [ "${abi_target}/libclang_rt.${dso_name}.a" ]
     }
 
     foreach(rt_lib, _dso_names) {
-      _clang_rt_dso_paths += [ "$_clang_rt_libs_dir/${rt_lib}" ]
+      _clang_rt_dso_paths += [ "$clang_lib_base_path/${rt_lib}" ]
     }
   }
 
@@ -731,16 +723,39 @@ config_plus_compiler_rt("boundary_sanitize_config") {
   minimal_rt_lib_names = [ "ubsan_minimal" ]
 }
 
-config_plus_compiler_rt("integer_overflow_config") {
+config("common_integer_overflow_config_release") {
   _integer_overflow_blocklist = "./integer_overflow_blocklist.txt"
   cflags = [
     "-fsanitize-blacklist=" +
         rebase_path(_integer_overflow_blocklist, root_build_dir),
-    "-fsanitize=unsigned-integer-overflow,signed-integer-overflow",
-    "-fsanitize-minimal-runtime",
     "-fno-sanitize-trap=integer,undefined",
     "-fno-sanitize-recover=integer,undefined",
   ]
-  configs = [ ":sanitizer_trap_all_flags" ]
+}
+
+config("common_integer_overflow_config_debug") {
+  _integer_overflow_blocklist = "./integer_overflow_blocklist.txt"
+  cflags = [
+    "-fsanitize-blacklist=" +
+        rebase_path(_integer_overflow_blocklist, root_build_dir),
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+  ]
+}
+
+config("signed_integer_overflow_config") {
+  cflags = [ "-fsanitize=signed-integer-overflow" ]
+}
+
+config("unsigned_integer_overflow_config") {
+  cflags = [ "-fsanitize=unsigned-integer-overflow" ]
+}
+
+config_plus_compiler_rt("compiler_rt_debug") {
+  minimal_rt_lib_names = [ "ubsan_standalone" ]
+}
+
+config_plus_compiler_rt("compiler_rt_release") {
+  cflags = [ "-fsanitize-minimal-runtime" ]
   minimal_rt_lib_names = [ "ubsan_minimal" ]
 }
