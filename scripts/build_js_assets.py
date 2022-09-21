@@ -272,14 +272,14 @@ def main(args):
             os.path.relpath(
                 options.webpack_config_js, options.ace_loader_home)
         ]
-        ark_ts2abc_dir = os.path.relpath(
-            options.ark_ts2abc_dir, options.ace_loader_home)
+        ark_es2abc_dir = os.path.relpath(
+            options.ark_es2abc_dir, options.ace_loader_home)
         if options.app_profile:
             cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
-                        'arkFrontendDir={}'.format(ark_ts2abc_dir), 'nodeJs={}'.format(node_js)])
+                        'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
         else:
             cmd.extend(['--env', 'compilerType=ark',
-                    'arkFrontendDir={}'.format(ark_ts2abc_dir), 'nodeJs={}'.format(node_js)])
+                    'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
         build_utils.call_and_write_depfile_if_stale(
             lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir),
             options,
