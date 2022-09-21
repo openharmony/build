@@ -263,7 +263,7 @@ template("ohos_sanitizer_config") {
   config(target_name) {
     forward_variables_from(invoker, [ "sanitize" ])
     if (defined(sanitize)) {
-      configs = []
+      configs = [ "//build/config/sanitizers:sanitizer_trap_all_flags" ]
       _mode = "release"
       _debug = defined(sanitize.debug) && sanitize.debug
       if (_debug) {
@@ -271,7 +271,7 @@ template("ohos_sanitizer_config") {
       }
       _cfi = defined(sanitize.cfi) && sanitize.cfi
       if (_cfi) {
-        configs += [ "//build/config/sanitizers:cfi_config" ]
+        configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
       }
       _scudo = defined(sanitize.scudo) && sanitize.scudo
       if (_scudo) {

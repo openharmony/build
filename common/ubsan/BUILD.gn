@@ -1,0 +1,49 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if (is_ohos) {
+  import("//build/config/ohos/config.gni")
+  import("//build/ohos.gni")
+  group("ubsan") {
+    deps = [
+      ":libclang_rt.ubsan_minimal.so",
+      ":libclang_rt.ubsan_standalone.so",
+      ":ubsan.cfg",
+    ]
+  }
+
+  ohos_prebuilt_etc("ubsan.cfg") {
+    source = "ubsan.cfg"
+    module_install_dir = "etc/init/"
+    part_name = "common"
+  }
+
+  ohos_prebuilt_shared_library("libclang_rt.ubsan_standalone.so") {
+    source =
+        "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_standalone.so"
+    install_images = [
+      "system",
+      "updater",
+    ]
+    part_name = "common"
+  }
+
+  ohos_prebuilt_shared_library("libclang_rt.ubsan_minimal.so") {
+    source = "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_minimal.so"
+    install_images = [
+      "system",
+      "updater",
+    ]
+    part_name = "common"
+  }
+}

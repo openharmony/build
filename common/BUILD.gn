@@ -35,4 +35,7 @@ group("common_packages") {
       "asan:libclang_rt.asan.so",
     ]
   }
+
+  # ubsan is always enabled
+  deps += [ "ubsan:ubsan" ]
 }
