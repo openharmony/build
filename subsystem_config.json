@@ -148,11 +148,11 @@
     "name": "xts"
   },
   "wukong": {
-    "path": "test/wukong",
+    "path": "test/ostest/wukong",
     "name": "wukong"
   },
   "arkXtest": {
-    "path": "test/arkXtest",
+    "path": "test/testfwk/arkxtest",
     "name": "arkXtest"
   },
   "distributedhardware": {

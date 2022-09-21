@@ -19,22 +19,22 @@
       "use_symlink": "True"
     },
     {
-      "src": "test/arkXtest/jsunit",
+      "src": "test/testfwk/arkxtest/jsunit",
       "dest": "developtools/ace_ets2bundle/compiler/node_modules/@ohos/hypium",
       "use_symlink": "False"
     },
     {
-      "src": "test/arkXtest/jsunit",
+      "src": "test/testfwk/arkxtest/jsunit",
       "dest": "developtools/ace_js2bundle/ace-loader/node_modules/@ohos/hypium",
       "use_symlink": "False"
     },
     {
-      "src": "test/arkXtest/jsunit/",
+      "src": "test/testfwk/arkxtest/jsunit/",
       "dest": "developtools/ace_ets2bundle/compiler/node_modules/hypium/",
       "use_symlink": "False"
     },
     {
-      "src": "test/arkXtest/jsunit/",
+      "src": "test/testfwk/arkxtest/jsunit/",
       "dest": "developtools/ace_js2bundle/ace-loader/node_modules/hypium/",
       "use_symlink": "False"
     }
