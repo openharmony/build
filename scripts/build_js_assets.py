@@ -145,10 +145,14 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
             if not options.app_profile:
                 src_path = 'default'
             manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest) and not options.app_profile:
+            if not os.path.exists(manifest):
                 with open(options.hap_profile) as profile:
                     config = json.load(profile)
                     data = make_manifest_data(config, options, js2abc, asset_index)
+                    build_utils.write_json(data, manifest)
+            if not options.app_profile:
+                with open(options.hap_profile) as profile:
+                    config = json.load(profile)
                     if config['module'].__contains__('testRunner'):
                         src_path = config['module']['testRunner']['srcPath']
                     if options.js_asset_cnt > 1 and asset_index < len(config['module']['abilities']):
@@ -163,7 +167,6 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
                             if ability.__contains__('forms'):
                                 src_path = ability['forms'][0].get('name')
 
-                    build_utils.write_json(data, manifest)
                     my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
             build_utils.check_output(
                 cmd, cwd=loader_home, env=my_env)
@@ -185,13 +188,16 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
             if not options.app_profile:
                 src_path = 'default'
             manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest) and not options.app_profile:
+            if not os.path.exists(manifest):
                 with open(options.hap_profile) as profile:
                     config = json.load(profile)
                     data = make_manifest_data(config, options, js2abc, asset_index)
+                    build_utils.write_json(data, manifest)
+            if not options.app_profile:
+                with open(options.hap_profile) as profile:
+                    config = json.load(profile)
                     if 'srcPath' in config['module']['abilities'][asset_index]:
                         src_path = config['module']['abilities'][asset_index]['srcPath']
-                    build_utils.write_json(data, manifest)
                     my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
             build_utils.check_output(
                 cmd, cwd=loader_home, env=my_env)
