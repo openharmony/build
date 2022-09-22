@@ -155,7 +155,9 @@ template("ohos_copy") {
       }
     }
   }
-  if (!_bypass_module_info_generation) {
+  if (skip_gen_module_info) {
+    not_needed(invoker, "*")
+  } else if (!_bypass_module_info_generation) {
     generate_module_info("${_main_target_name}_info") {
       forward_variables_from(invoker,
                              [

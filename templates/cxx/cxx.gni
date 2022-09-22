@@ -267,7 +267,10 @@ template("ohos_executable") {
     }
   }
 
-  if (!_ohos_test) {
+  if (skip_gen_module_info) {
+    not_needed(invoker, "*")
+    not_needed([ "_ohos_test" ])
+  } else if (!_ohos_test) {
     ohos_module_name = target_name
     generate_module_info("${ohos_module_name}_info") {
       module_name = ohos_module_name
