@@ -84,6 +84,10 @@ foreach(_platform, target_platform_list) {
 
       image_config_file =
           "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
+      if (is_debug) {
+        image_config_file =
+            "//build/ohos/images/mkimage/debug/${_image_name}_image_conf.txt"
+      }
       device_image_config_file =
           "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
       if (_image_name == "ramdisk" || _image_name == "updater_ramdisk") {
