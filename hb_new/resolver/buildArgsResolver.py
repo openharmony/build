@@ -31,6 +31,7 @@ from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from util.typeCheckUtil import TypeCheckUtil
 from util.logUtil import LogUtil
 from util.systemUtil import SystemUtil
+from lite.hb_internal.set.set import set_product
 
 
 
@@ -105,6 +106,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolvePycache(self, targetArg: Arg, **kwargs) -> StatusCode:
+        buildModule = kwargs.get("buildModule")
+        if isinstance(buildModule, BuildModuleInterface):
+            gn = buildModule.targetGenerator.unwrapped_preloader
+            gn.regist_arg('pycache_enable', targetArg.argValue)
         return StatusCode()
     
     def resolveTargetCpu(self, targetArg: Arg, **kwargs) -> StatusCode:
@@ -123,6 +128,15 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
     
     def resolveGnArgs(self, targetArg: Arg, **kwargs) -> StatusCode:
+        buildModule = kwargs.get("buildModule")
+        if isinstance(buildModule, BuildModuleInterface):
+            gn = buildModule.targetGenerator.unwrapped_preloader
+            for gn_arg in targetArg.argValue:
+                try:
+                    variable, value = gn_arg.split('=')
+                    gn.regist_arg(variable, value)
+                except ValueError:
+                    raise OHOSException(f'Invalid gn args: {gn_arg}')
         return StatusCode()
     
     def resolveKeepNinjaGoing(self, targetArg: Arg, **kwargs) -> StatusCode:
@@ -138,13 +152,34 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
     
     def resolveProduct(self, targetArg: Arg, **kwargs) -> StatusCode:
-        
+        if '@' in targetArg.argValue:
+            product, company = targetArg.argValue.split('@')
+        else:
+            product = targetArg.argValue
+            company = None
+        set_product(product_name=product, company=company)
         return StatusCode()
     
     def resolveBuildVariant(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
     
     def resolveDeviceType(self, targetArg: Arg, **kwargs) -> StatusCode:
+        config = kwargs.get("config")
+        ohos_para_data = []
+        ohos_para_file_path = os.path.join(config.out_path, 'packages/phone/system/etc/param/ohos.para')
+        if targetArg.argValue != 'default':
+            with open(ohos_para_file_path, 'r', encoding='utf-8') as ohos_para_file:
+                for line in ohos_para_file:
+                    ohos_para_data.append(line)
+            for i, line in enumerate(ohos_para_data):
+                if ohos_para_data[i].__contains__('const.build.characteristics'):
+                    ohos_para_data[i] = 'const.build.characteristics=' + targetArg.argValue + '\n'
+                    break
+            data = ''
+            for line in ohos_para_data:
+                data += line
+            with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
+                ohos_para_file.write(data)
         return StatusCode()
     
     def _mapArgsToFunction(self, json: dict):
