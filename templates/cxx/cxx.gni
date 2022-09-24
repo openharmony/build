@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
+import("//build/config/ohos/config.gni")
 import("//build/config/secure/secure_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
@@ -169,18 +171,23 @@ template("ohos_executable") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
 
     if (defined(invoker.static_link) && invoker.static_link) {
       no_default_deps = true
       configs -= [ "//build/config:executable_config" ]
-      if (!defined(ldflags)) {
-        ldflags = []
-      }
       ldflags += [ "-static" ]
       if (is_ohos && use_musl) {
         import("//build/config/ohos/musl.gni")
         deps += [ "//third_party/musl:soft_static_libs" ]
       }
+    } else if (is_ohos) {
+      if (current_cpu == "arm") {
+        libs += [ "unwind" ]
+      }
+      libs += [ "c++" ]
     }
 
     if (!defined(output_name)) {
@@ -441,6 +448,7 @@ template("ohos_shared_library") {
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
+                             "stl",
 
                              # Sanitizer variables
                              "sanitize",
@@ -484,14 +492,44 @@ template("ohos_shared_library") {
       ldflags += [ "-Wl,--version-script=${_version_script}" ]
     }
 
-    if (!defined(deps)) {
-      deps = []
-    }
-    if (!_test_target) {
-      deps += [ ":$_notice_target" ]
+    if (!defined(ldflags)) {
+      ldflags = []
     }
     if (!defined(libs)) {
       libs = []
+    }
+    if (!defined(cflags_cc)) {
+      cflags_cc = []
+    }
+    if (!defined(deps)) {
+      deps = []
+    }
+    if (is_ohos) {
+      if (defined(invoker.stl)) {
+        cflags_cc += [
+          "-nostdinc++",
+          "-I" + rebase_path(
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
+                  root_build_dir),
+        ]
+        ldflags += [
+          "-nostdlib++",
+          "-L" + rebase_path("${clang_stl_path}/${abi_target}/c++",
+                             root_build_dir),
+        ]
+
+        libs += [ invoker.stl ]
+      } else {
+        if (current_cpu == "arm") {
+          libs += [ "unwind" ]
+        }
+
+        libs += [ "c++" ]
+      }
+    }
+
+    if (!_test_target) {
+      deps += [ ":$_notice_target" ]
     }
     if (!defined(include_dirs)) {
       include_dirs = []
