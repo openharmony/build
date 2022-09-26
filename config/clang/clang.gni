@@ -17,4 +17,6 @@ declare_args() {
   clang_base_path = default_clang_base_path
 
   clang_lib_base_path = clang_lib_path
+
+  clang_stl_path = "//prebuilts/clang/ohos/${host_platform_dir}/libcxx-ndk/lib"
 }
