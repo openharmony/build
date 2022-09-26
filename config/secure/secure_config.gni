@@ -14,9 +14,6 @@
 declare_args() {
   # Enable the config that variables are automatically initialized by default.
   enable_auto_var_init = false
-
-  # Enable zero initialization config.
-  enable_auto_zero_init = false
 }
 
 using_auto_var_init = enable_auto_var_init
@@ -51,9 +48,7 @@ template("ohos_auto_initialize_config") {
           configs += [ "//build/config/secure:auto_var_uninit_config" ]
         }
       } else {
-        if (enable_auto_zero_init) {
-          configs += [ "//build/config/secure:auto_var_zero_init_config" ]
-        }
+        configs += [ "//build/config/secure:auto_var_zero_init_config" ]
       }
     }
   }
