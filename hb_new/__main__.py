@@ -92,7 +92,7 @@ def main_hb_new():
     preloader = PreloaderAdapt(config)
     preload = Preload(preloader)
 
-    loader = LoaderAdapt(config)
+    loader = OHOSLoader(config)
     load = Load(loader)
 
     gn = Gn(config)
