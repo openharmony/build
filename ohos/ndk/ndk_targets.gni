@@ -21,6 +21,8 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
   "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
+  "//base/security/huks/interfaces/kits/c:libhuks_ndk",
+  "//base/security/huks/interfaces/kits/c:huks_header",
   "//base/startup/init/interfaces/kits/syscap:libdeviceinfo_ndk",
   "//base/startup/init/interfaces/kits/syscap:deviceinfo_header",
   "//foundation/ai/mindspore/mindspore/lite/interfaces/kits/c:mindspore_header",
