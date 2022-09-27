@@ -31,9 +31,7 @@ from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from util.typeCheckUtil import TypeCheckUtil
 from util.logUtil import LogUtil
 from util.systemUtil import SystemUtil
-from lite.hb_internal.set.set import set_product
-
-
+from util.typeCheckUtil import TypeCheckUtil
 
 
 class BuildArgsResolver(ArgsResolverInterface):
@@ -43,16 +41,16 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     def resolveVerbose(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-        
+
     def resolveStrictMode(self, targetArg: Arg, **kwargs) -> StatusCode:
         buildModule = kwargs.get("buildModule")
-        if strtobool(Arg.argValue) and isinstance(buildModule, BuildModuleInterface) :
+        if strtobool(Arg.argValue) and isinstance(buildModule, BuildModuleInterface):
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
             if not (preloader.outputs.check_outputs() and loader.outputs.check_outputs()):
                 return StatusCode(status=False, info='')
         return StatusCode()
-            
+
     def resolveRenameLastLog(self, targetArg, **kwargs) -> StatusCode:
         TypeCheckUtil.checkArgType(kwargs.get('config'), Config)
         config = kwargs.get("config")
@@ -62,7 +60,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         if os.path.exists(logfile):
             mtime = os.stat(logfile).st_mtime
             os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
-            
+
         return StatusCode()
 
     def resolveCCache(self, targetArg: Arg, **kwargs) -> StatusCode:
@@ -101,7 +99,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 ccache_max_size = '100G'
 
             cmd = ['ccache', '-M', ccache_max_size]
-            
+
             SystemUtil.exec_command(cmd, log_path=config.log_path)
         return StatusCode()
 
@@ -111,69 +109,102 @@ class BuildArgsResolver(ArgsResolverInterface):
             gn = buildModule.targetGenerator.unwrapped_preloader
             gn.regist_arg('pycache_enable', targetArg.argValue)
         return StatusCode()
-    
+
     def resolveTargetCpu(self, targetArg: Arg, **kwargs) -> StatusCode:
         config = kwargs.get("config")
         if isinstance(config, Config):
             config.target_cpu = targetArg.argValue
         return StatusCode()
-    
+
     def resolveBuildType(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveFullCompilation(self, targetArg: Arg, **kwargs) -> StatusCode:
+        buildModule = kwargs.get("buildModule")
+        config = kwargs.get("config")
+        if isinstance(buildModule, BuildModuleInterface) and isinstance(config, Config):
+            build_executor = buildModule.targetCompiler.unwrapped_build_executor
+            target_list = build_executor.args_dict.get('build_target', None)
+            if isinstance(target_list, list):
+                target_list.append('make_all')
+                target_list.append('make_test')
+            else:
+                return StatusCode(False, 'build_target has not registed to build executor')
         return StatusCode()
-    
+
     def resolveBuildTarget(self, targetArg: Arg, **kwargs) -> StatusCode:
+        buildModule = kwargs.get("buildModule")
+        config = kwargs.get("config")
+        if isinstance(buildModule, BuildModuleInterface) and \
+                isinstance(targetArg.argValue, list) and isinstance(config, Config):
+            build_executor = buildModule.targetCompiler.unwrapped_build_executor
+            target_list = []
+            if len(targetArg.argValue) <= 1:
+                target_list = [
+                    'images'] if config.os_level == 'standard' else ['packages']
+            else:
+                for tmp_list in targetArg.argValue[1:]:
+                    for target in tmp_list:
+                        target_list.append(target)
+            build_executor.regist_arg('build_target', target_list)
         return StatusCode()
-    
+
     def resolveGnArgs(self, targetArg: Arg, **kwargs) -> StatusCode:
         buildModule = kwargs.get("buildModule")
         if isinstance(buildModule, BuildModuleInterface):
-            gn = buildModule.targetGenerator.unwrapped_preloader
-            for gn_arg in targetArg.argValue:
-                try:
-                    variable, value = gn_arg.split('=')
-                    gn.regist_arg(variable, value)
-                except ValueError:
-                    raise OHOSException(f'Invalid gn args: {gn_arg}')
+            gn = buildModule.targetGenerator.unwrapped_build_file_generator
+            for tmp_list in targetArg.argValue:
+                for gn_arg in tmp_list:
+                    try:
+                        variable, value = gn_arg.split('=')
+                        if TypeCheckUtil.isBoolType(value):
+                            value = bool(value)
+                        elif TypeCheckUtil.isIntType(value):
+                            value = int(value)
+                        else:
+                            value = str(value)
+                        gn.regist_arg(variable, value)
+                    except ValueError:
+                        raise OHOSException(f'Invalid gn args: {gn_arg}')
         return StatusCode()
-    
+
     def resolveKeepNinjaGoing(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveBuildOnlyGn(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveDisablePackageImage(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveDisablePartofPostBuild(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveProduct(self, targetArg: Arg, **kwargs) -> StatusCode:
-        if '@' in targetArg.argValue:
-            product, company = targetArg.argValue.split('@')
-        else:
-            product = targetArg.argValue
-            company = None
-        set_product(product_name=product, company=company)
+        # if '@' in targetArg.argValue:
+        #     product, company = targetArg.argValue.split('@')
+        # else:
+        #     product = targetArg.argValue
+        #     company = None
+        # set_product(product_name=product, company=company)
         return StatusCode()
-    
+
     def resolveBuildVariant(self, targetArg: Arg, **kwargs) -> StatusCode:
         return StatusCode()
-    
+
     def resolveDeviceType(self, targetArg: Arg, **kwargs) -> StatusCode:
         config = kwargs.get("config")
         ohos_para_data = []
-        ohos_para_file_path = os.path.join(config.out_path, 'packages/phone/system/etc/param/ohos.para')
+        ohos_para_file_path = os.path.join(
+            config.out_path, 'packages/phone/system/etc/param/ohos.para')
         if targetArg.argValue != 'default':
             with open(ohos_para_file_path, 'r', encoding='utf-8') as ohos_para_file:
                 for line in ohos_para_file:
                     ohos_para_data.append(line)
             for i, line in enumerate(ohos_para_data):
                 if ohos_para_data[i].__contains__('const.build.characteristics'):
-                    ohos_para_data[i] = 'const.build.characteristics=' + targetArg.argValue + '\n'
+                    ohos_para_data[i] = 'const.build.characteristics=' + \
+                        targetArg.argValue + '\n'
                     break
             data = ''
             for line in ohos_para_data:
@@ -181,7 +212,13 @@ class BuildArgsResolver(ArgsResolverInterface):
             with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
                 ohos_para_file.write(data)
         return StatusCode()
-    
+
+    def resolveCompiler(self, targetArg: Arg, **kwargs) -> StatusCode:
+        return StatusCode()
+
+    def resolveDisablePartOfPostBuild(self, targetArg: Arg, **kwargs) -> StatusCode:
+        return StatusCode()
+
     def _mapArgsToFunction(self, json: dict):
         for entity in json['args']:
             argsName = str(entity['argName']).replace("-", "_")[2:]

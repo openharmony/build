@@ -24,7 +24,7 @@ class BuildFileGenerator():
         self._buildFileGenerator = buildFileGenerator
     
     @property
-    def unwrapped_preloader(self):
+    def unwrapped_build_file_generator(self):
         return self._buildFileGenerator
         
     def run(self) -> StatusCode:

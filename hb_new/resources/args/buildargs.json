@@ -41,7 +41,7 @@
             "argDefault": "False",
             "argHelp": "enable ccache",
             "argPhase": "prebuild",
-            "argType": "bool",
+            "argType": "gate",
             "argAttribute":{
 
             },
@@ -100,7 +100,7 @@
             "argName": "--full-compilation",
             "argDefault": "False",
             "argHelp": "full code compilation",
-            "argPhase": "prebuild",
+            "argPhase": "targetCompilation",
             "argType": "bool",
             "argAttribute":{
                 "abbreviation": "-f"
@@ -110,8 +110,8 @@
         },
         {
             "argName": "--build-target",
-            "argDefault": [],
-            "argHelp": "compile single target",
+            "argDefault": [ ["default"] ],
+            "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
             "argPhase": "targetGenerate",
             "argType": "list",
             "argAttribute":{
@@ -137,7 +137,7 @@
             "argDefault": "False",
             "argHelp": "keeps ninja going until 1000000 jobs fail",
             "argPhase": "targetCompilation",
-            "argType": "bool",
+            "argType": "gate",
             "argAttribute":{
 
             },
@@ -185,7 +185,7 @@
             "argDefault": "False",
             "argHelp": "specifies device type",
             "argPhase": "postbuild",
-            "argType": "bool",
+            "argType": "gate",
             "argAttribute":{
 
             },
@@ -193,16 +193,28 @@
             "testFunction": "testDisablePackageImage"
         },
         {
+            "argName": "--compiler",
+            "argDefault": "clang",
+            "argHelp": "specifies compiler",
+            "argPhase": "targetGenerate",
+            "argType": "str",
+            "argAttribute":{
+                "abbreviation": "-c"
+            },
+            "resolveFuntion": "resolveCompiler",
+            "testFunction": "testCompiler"
+        },
+        {
             "argName": "--disable-part-of-post-build",
             "argDefault": [],
-            "argHelp": "specifies device type",
-            "argPhase": "postbuild",
+            "argHelp": "specifies compiler",
+            "argPhase": "prebuild",
             "argType": "list",
             "argAttribute":{
 
             },
-            "resolveFuntion": "resolveDisablePartofPostBuild",
-            "testFunction": "testDisablePartofPostBuild"
+            "resolveFuntion": "resolveDisablePartOfPostBuild",
+            "testFunction": "testDisablePartOfPostBuild"
         }
     ]
 }

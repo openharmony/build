@@ -34,7 +34,7 @@ from resources.config import Config
 from util.systemUtil import SystemUtil
 from util.ioUtil import IoUtil
 from util.productUtil import ProductUtil
-
+from util.logUtil import LogUtil
 
 
 class GnAdapter(BuildFileGeneratorInterface):
@@ -71,6 +71,8 @@ class GnAdapter(BuildFileGeneratorInterface):
         ] + gn_args
         if os_level == 'mini' or os_level == 'small':
             gn_cmd.append(f'--script-executable={sys.executable}')
+
+        LogUtil.hb_info('Excuting gn command: {}'.format(' '.join(gn_cmd)))
         SystemUtil.exec_command(
             gn_cmd, log_path=self.config.log_path, env=self.env())
 
@@ -248,13 +250,17 @@ class Gn(BuildFileGeneratorInterface):
         self.regist_arg('is_{}_system'.format(self.config.os_level), True)
 
         self.regist_arg('ohos_kernel_type', self.config.kernel)
-        self.regist_arg('ohos_build_compiler_specified', ProductUtil.get_compiler(self.config.device_path))
+        self.regist_arg('ohos_build_compiler_specified',
+                        ProductUtil.get_compiler(self.config.device_path))
 
+        if ProductUtil.get_compiler(self.config.device_path) == 'clang':
+            self.regist_arg('ohos_build_compiler_dir', self.config.clang_path)
 
     def _regist_timestamp(self):
-        self.regist_arg('ohos_build_time', SystemUtil.get_current_time(type='timestamp'))
-        self.regist_arg('ohos_build_datetime', SystemUtil.get_current_time(type='datetime'))     
-        
+        self.regist_arg('ohos_build_time',
+                        SystemUtil.get_current_time(type='timestamp'))
+        self.regist_arg('ohos_build_datetime',
+                        SystemUtil.get_current_time(type='datetime'))
 
     '''Description: Execute 'gn gen' command using registed args
     @parameter: kwargs TBD
@@ -265,7 +271,11 @@ class Gn(BuildFileGeneratorInterface):
         gn_gen_cmd = [self.exec, 'gen',
                       '--args={}'.format(' '.join(self._convert_args())),
                       self.config.out_path]
+        if self.config.os_level == 'mini' or self.config.os_level == 'small':
+            gn_gen_cmd.append(f'--script-executable={sys.executable}')
         try:
+            LogUtil.write_log(self.config.log_path, 'Excuting gn command: {} {} --args="{}" {}'.format(
+                self.exec, 'gen', ' '.join(self._convert_args()).replace('"', "\\\""), ' '.join(gn_gen_cmd[3:])), 'info')
             SystemUtil.exec_command(gn_gen_cmd, self.config.log_path)
         except OHOSException:
             return StatusCode(False, '')

@@ -25,4 +25,21 @@ class TypeCheckUtil(metaclass=NoInstance):
     def checkArgType(object, targetClass):
         if not isinstance(object, targetClass):
             raise OHOSException(f'type error')
-         
+        
+    @staticmethod
+    def isBoolType(value):
+        if isinstance(value, bool):
+            return True
+        elif isinstance(value, str):
+            return value in [ 'true', 'True', 'false', 'False' ]
+        else:
+            return False
+        
+    @staticmethod
+    def isIntType(value):
+        if isinstance(value, int):
+            return True
+        elif isinstance(value, str):
+            return value.isdigit()
+        else:
+            return False

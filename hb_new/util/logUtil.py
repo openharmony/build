@@ -55,3 +55,11 @@ class LogUtil(metaclass=NoInstance):
             return f'[OHOS {level.upper()}] {msg}'
         else:
             return f'{Colors.WARNING}[OHOS {level.upper()}]{Colors.END} {msg}'
+
+    @staticmethod
+    def write_log(log_path, msg, level):
+        with open(log_path, 'at', encoding='utf-8') as log_file:
+            for line in str(msg).splitlines():
+                sys.stderr.write(LogUtil.message(level, line))
+                sys.stderr.flush()
+                log_file.write(LogUtil.message(level, line))

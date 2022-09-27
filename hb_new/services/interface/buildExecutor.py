@@ -24,7 +24,7 @@ class BuildExecutor():
         self._buildExecutor = buildExecutor
     
     @property
-    def unwrapped_preloader(self):
+    def unwrapped_build_executor(self):
         return self._buildExecutor
         
     def run(self) -> StatusCode:

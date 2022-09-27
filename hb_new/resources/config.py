@@ -325,8 +325,8 @@ class Config(metaclass=Singleton):
         if os.path.isfile(repo_gn_path):
             return repo_gn_path
         else:
-            # TODO: Add logic to deal with it
-            pass
+            raise OHOSException('There is no clang executable file at {}, \
+                          please execute build/prebuilts_download.sh'.format(repo_gn_path))
 
     @property
     def ninja_path(self):
@@ -335,8 +335,8 @@ class Config(metaclass=Singleton):
         if os.path.isfile(repo_ninja_path):
             return repo_ninja_path
         else:
-            # TODO: Add logic to deal with it
-            pass
+            raise OHOSException('There is no clang executable file at {}, \
+                          please execute build/prebuilts_download.sh'.format(repo_ninja_path))
 
     @property
     def clang_path(self):
@@ -347,8 +347,8 @@ class Config(metaclass=Singleton):
             return f'//{repo_clang_path}'
         # clang installed manually or auto download
         else:
-            # TODO: Add logic to deal with it
-            pass
+            raise OHOSException('There is no clang executable file at {}, \
+                          please execute build/prebuilts_download.sh'.format(repo_clang_path))
 
     @property
     def patch_cache(self):

@@ -22,9 +22,13 @@ import platform
 from lite.hb_internal.common.config import Config as _Config
 
 from containers.statusCode import StatusCode
+from exceptions.ohosException import OHOSException
 from services.interface.buildExecutorInterface import BuildExecutorInterface
 from resources.config import Config
 from util.systemUtil import SystemUtil
+from util.ioUtil import IoUtil
+from util.logUtil import LogUtil
+
 
 class NinjaAdapter(BuildExecutorInterface):
 
@@ -34,9 +38,9 @@ class NinjaAdapter(BuildExecutorInterface):
 
     def _internel_run(self) -> StatusCode:
         cmd_dict = dict()
-        cmd_dict['ninja'] = {'default_target':'packages'}
+        cmd_dict['ninja'] = {'default_target': 'packages'}
         self.ninja_build(cmd_dict)
-        
+
     def env(self):
         system = platform.system().lower()
         if self.config.os_level == 'standard':
@@ -78,7 +82,6 @@ class NinjaAdapter(BuildExecutorInterface):
         ninja_cmd = [
             ninja_path, '-w', 'dupbuild=warn', '-C', self.config.out_path
         ] + my_ninja_args
-
         SystemUtil.exec_command(ninja_cmd,
                                 log_path=self.config.log_path,
                                 log_filter=True,
@@ -91,4 +94,43 @@ class Ninja(BuildExecutorInterface):
         super().__init__(config)
 
     def _internel_run(self) -> StatusCode:
-        pass
+        self._regist_ninja_path()
+        self._execute_ninja_cmd()
+
+    def _execute_ninja_cmd(self):
+        ninja_cmd = [self.exec, '-w', 'dupbuild=warn',
+                     '-C', self.config.out_path] + self._convert_args()
+        try:
+            LogUtil.write_log(self.config.log_path,
+                'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
+            SystemUtil.exec_command(ninja_cmd, self.config.log_path)
+        except OHOSException:
+            return StatusCode(False, '')
+
+    def _convert_args(self) -> list:
+        args_list = []
+        for key, value in self._args_dict.items():
+            if key == 'build_target' and isinstance(value, list):
+                args_list += value
+            else:
+                args_list.insert(0, value)
+        return args_list
+
+    def _regist_ninja_path(self) -> StatusCode:
+        config_data = IoUtil.read_json_file(os.path.join(
+            self.config.root_path, 'build/prebuilts_download_config.json'))
+        copy_config_list = config_data[os.uname().sysname.lower(
+        )][os.uname().machine.lower()]['copy_config']
+
+        gn_path = ''
+        for config in copy_config_list:
+            if config['unzip_filename'] == 'ninja':
+                gn_path = os.path.join(
+                    self.config.root_path, config['unzip_dir'], 'ninja')
+                break
+
+        if os.path.exists(gn_path):
+            self.exec = gn_path
+            return StatusCode()
+        return StatusCode(False, 'There is no gn executable file at {}, \
+                          please execute build/prebuilts_download.sh'.format(gn_path))

@@ -74,18 +74,18 @@ def add_options(parser: argparse.ArgumentParser) -> argparse.Namespace:
             oh_arg.argValue = args.__dict__[oh_arg.argName]
     return args, oh_args_list, all_args
 
-def hb_set_adapt(root_path, product_name) -> None:
+def hb_set_adapt(root_path:str, product_name:str) -> None:
     args_dict = {}
     args_dict['root_path'] = root_path
-    args_dict['product'] = product_name
+    args_dict['product'] = product_name if '@' not in product_name else product_name.split("@")[0]
     args = argparse.Namespace(**args_dict)
     hb_set(args)
 
 def main_hb_new():
     parser = argparse.ArgumentParser()
-    args, arg_list, all_args   = add_options(parser)
+    args, arg_list, all_args = add_options(parser)
     
-    hb_set_adapt(CURRENT_OHOS_ROOT,args.product_name)
+    hb_set_adapt(CURRENT_OHOS_ROOT, args.product_name)
 
     config = Config()
 
@@ -98,7 +98,7 @@ def main_hb_new():
     gn = Gn(config)
     buildFileGenerator = BuildFileGenerator(gn)
 
-    ninja = NinjaAdapter(config)
+    ninja = Ninja(config)
     buildExecutor = BuildExecutor(ninja)
 
     buildArgsResolever = BuildArgsResolver(all_args)
@@ -111,7 +111,7 @@ def main_hb_new():
 
 def stub_run():
     parser = argparse.ArgumentParser()
-    args, arg_list, all_args   = add_options(parser)
+    args, arg_list, all_args = add_options(parser)
     
     hb_set_adapt(CURRENT_OHOS_ROOT, args.product_name)
 
@@ -138,5 +138,4 @@ def stub_run():
     
 
 if __name__ == "__main__":
-    
     sys.exit(main_hb_new())

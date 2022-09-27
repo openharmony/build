@@ -83,9 +83,9 @@ def do_build(args):
     if args.verbose:
         cmd.append('-v')
     if args.keep_ninja_going:
-        cmd.append('--keep-ninja-going=True')
+        cmd.append('--keep-ninja-going')
     if args.fast_rebuild:
-        cmd.append('--fast-rebuild=True')
+        cmd.append('--fast-rebuild')
     if args.disable_package_image:
         cmd.append('--disable-package-image=True')
     if args.log_level == 'debug':

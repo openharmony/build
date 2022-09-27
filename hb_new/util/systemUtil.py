@@ -32,7 +32,8 @@ class SystemUtil(metaclass=NoInstance):
     def exec_command(cmd, log_path='out/build.log', **kwargs):
         useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
         is_log_filter = kwargs.pop('log_filter', False)
-
+        if not os.path.exists(os.path.dirname(log_path)):
+            os.makedirs(os.path.dirname(log_path))
         with open(log_path, 'at', encoding='utf-8') as log_file:
             process = subprocess.Popen(cmd,
                                     stdout=subprocess.PIPE,
