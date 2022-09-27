@@ -211,6 +211,7 @@ def _file_handle(config, code_dir):
         tmp_dir = config_info.get('tmp')
         symlink_src = config_info.get('symlink_src')
         symlink_dest = config_info.get('symlink_dest')
+        rename = config_info.get('rename')
         if os.path.exists(src_dir):
             if tmp_dir:
                 tmp_dir = code_dir + tmp_dir
@@ -220,11 +221,12 @@ def _file_handle(config, code_dir):
                 if os.path.exists(dest_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(tmp_dir, dest_dir)
-            elif symlink_src and symlink_dest:
+            elif rename:
                 if os.path.exists(dest_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
-                os.symlink(dest_dir + symlink_src, dest_dir + symlink_dest)
+                if symlink_src and symlink_dest:
+                    os.symlink(dest_dir + symlink_src, dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
 
