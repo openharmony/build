@@ -95,6 +95,11 @@ def make_manifest_data(config, options, js2abc, ability_index):
     data = dict()
     data['appID'] = config['app']['bundleName']
     ability_cnt = len(config['module']['abilities'])
+    assets_cnt = 0
+    if js2abc:
+        assets_cnt = options.js_asset_cnt
+    else:
+        assets_cnt = options.ets_asset_cnt
     if ability_index < ability_cnt and config['module']['abilities'][ability_index].__contains__("label"):
         data['appName'] = config['module']['abilities'][ability_index]['label']
     if options.app_profile:
@@ -105,12 +110,20 @@ def make_manifest_data(config, options, js2abc, ability_index):
     else:
         data['versionName'] = config['app']['version']['name']
         data['versionCode'] = config['app']['version']['code']
-        if ability_index < len(config['module']['js']):
-            data['pages'] = config['module']['js'][ability_index]['pages']
-            data['window'] = config['module']['js'][ability_index]['window']
-            if config['module']['js'][ability_index].get('type') == 'form':
-                data['pages']  = []
-                data['type']  = 'form'
+        for js_module in config['module']['js']:
+            ability_name = ''
+            js_module_name = js_module.get('name').split('.')[-1]
+            if ability_index < ability_cnt:
+                ability_name = config['module']['abilities'][ability_index]['name'].split('.')[-1]
+            if js_module_name != ability_name:
+                if (js_module_name == 'default' and ability_name == 'MainAbility') or assets_cnt == 1:
+                    ability_name = 'default'
+            if js_module_name == ability_name:
+                data['pages'] = js_module.get('pages')
+                data['window'] = js_module.get('window')
+                if js_module.get('type') == 'form':
+                    data['pages'] = []
+                    data['type'] = 'form'
         data['deviceType'] = config['module']['deviceType']
     if js2abc and (config['module']['abilities'][0].get('srcLanguage') == 'ets' or ability_index >= ability_cnt):
         for js_page in config['module']['js']:
