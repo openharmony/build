@@ -20,6 +20,7 @@ import subprocess
 import ssl
 import shutil
 import importlib
+import time
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
@@ -183,6 +184,8 @@ def _npm_install(args, code_dir, unzip_dir, unzip_filename):
             cmd = 'cd {};{} config set registry {};{}{} cache clean -f;{} install {}'.format(
                       full_code_path, npm, args.npm_registry, skip_ssl_cmd, npm, npm, unsafe_perm_cmd)
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # wait proc Popen with 0.1 second
+            time.sleep(0.1)
             procs.append(proc)
         else:
             raise Exception("{} not exist, it shouldn't happen, pls check...".format(full_code_path))
