@@ -265,15 +265,15 @@ template("ohos_sanitizer_config") {
     if (defined(sanitize)) {
       configs = [ "//build/config/sanitizers:sanitizer_trap_all_flags" ]
       _mode = "release"
-      _debug = defined(sanitize.debug) && sanitize.debug
+      _debug = (defined(sanitize.debug) && sanitize.debug) || is_asan
       if (_debug) {
         _mode = "debug"
       }
-      _cfi = defined(sanitize.cfi) && sanitize.cfi
+      _cfi = defined(sanitize.cfi) && sanitize.cfi && !is_asan
       if (_cfi) {
         configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
       }
-      _scudo = defined(sanitize.scudo) && sanitize.scudo
+      _scudo = defined(sanitize.scudo) && sanitize.scudo && !is_asan && !is_tsan
       if (_scudo) {
         configs += [ "//build/config/sanitizers:scudo_config" ]
       }
