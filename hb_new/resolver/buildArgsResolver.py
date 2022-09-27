@@ -36,14 +36,44 @@ from util.typeCheckUtil import TypeCheckUtil
 
 class BuildArgsResolver(ArgsResolverInterface):
 
-    def __init__(self, json):
-        super().__init__(json)
+    def __init__(self, args_dict: dict):
+        super().__init__(args_dict)
 
-    def resolveVerbose(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveProduct(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        if targetArg.argValue == 'ohos-sdk':
+            targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+            targetGenerator.regist_arg('build_ohos_sdk', True)
+            if buildModule.args_dict['build_target'].argValue[0] == 'default':
+                buildModule.args_dict['build_target'].argValue = [
+                    'build_ohos_sdk']
+            buildModule.args_dict['target_cpu'].argValue = 'arm64'
         return StatusCode()
 
-    def resolveStrictMode(self, targetArg: Arg, **kwargs) -> StatusCode:
-        buildModule = kwargs.get("buildModule")
+    def resolveTargetCpu(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        config.target_cpu = targetArg.argValue
+        return StatusCode()
+
+    def resolveBuildTarget(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        build_executor = buildModule.targetCompiler.unwrapped_build_executor
+        target_list = []
+        if len(targetArg.argValue) == 1:
+            if targetArg.argValue[0] == 'default':
+                target_list = [
+                    'images'] if config.os_level == 'standard' else ['packages']
+            else:
+                target_list = targetArg.argValue
+        else:
+            for tmp_list in targetArg.argValue[1:]:
+                for target in tmp_list:
+                    target_list.append(target)
+        if len(target_list) != 0:
+            build_executor.regist_arg('build_target', target_list)
+        return StatusCode()
+
+    def resolveVerbose(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        return StatusCode()
+
+    def resolveStrictMode(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         if strtobool(Arg.argValue) and isinstance(buildModule, BuildModuleInterface):
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
@@ -51,23 +81,17 @@ class BuildArgsResolver(ArgsResolverInterface):
                 return StatusCode(status=False, info='')
         return StatusCode()
 
-    def resolveRenameLastLog(self, targetArg, **kwargs) -> StatusCode:
-        TypeCheckUtil.checkArgType(kwargs.get('config'), Config)
-        config = kwargs.get("config")
-
-        out_path = config.out_path
-        logfile = os.path.join(out_path, 'build.log')
-        if os.path.exists(logfile):
-            mtime = os.stat(logfile).st_mtime
-            os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
-
+    def resolveRenameLastLog(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        if targetArg.argValue:
+            out_path = config.out_path
+            logfile = os.path.join(out_path, 'build.log')
+            if os.path.exists(logfile):
+                mtime = os.stat(logfile).st_mtime
+                os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
         return StatusCode()
 
-    def resolveCCache(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveCCache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         if targetArg.argValue:
-            TypeCheckUtil.checkArgType(kwargs.get('config'), Config)
-            config = kwargs.get("config")
-
             ccache_path = find_executable('ccache')
             if ccache_path is None:
                 LogUtil.hb_warning('Failed to find ccache, ccache disabled.')
@@ -103,97 +127,93 @@ class BuildArgsResolver(ArgsResolverInterface):
             SystemUtil.exec_command(cmd, log_path=config.log_path)
         return StatusCode()
 
-    def resolvePycache(self, targetArg: Arg, **kwargs) -> StatusCode:
-        buildModule = kwargs.get("buildModule")
-        if isinstance(buildModule, BuildModuleInterface):
-            gn = buildModule.targetGenerator.unwrapped_preloader
-            gn.regist_arg('pycache_enable', targetArg.argValue)
+    def resolvePycache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        gn = buildModule.targetGenerator.unwrapped_build_file_generator
+        gn.regist_arg('pycache_enable', targetArg.argValue)
         return StatusCode()
 
-    def resolveTargetCpu(self, targetArg: Arg, **kwargs) -> StatusCode:
-        config = kwargs.get("config")
-        if isinstance(config, Config):
-            config.target_cpu = targetArg.argValue
+    def resolveBuildType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveBuildType(self, targetArg: Arg, **kwargs) -> StatusCode:
-        return StatusCode()
-
-    def resolveFullCompilation(self, targetArg: Arg, **kwargs) -> StatusCode:
-        buildModule = kwargs.get("buildModule")
-        config = kwargs.get("config")
-        if isinstance(buildModule, BuildModuleInterface) and isinstance(config, Config):
+    def resolveFullCompilation(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        if targetArg.argValue:
             build_executor = buildModule.targetCompiler.unwrapped_build_executor
             target_list = build_executor.args_dict.get('build_target', None)
             if isinstance(target_list, list):
                 target_list.append('make_all')
                 target_list.append('make_test')
             else:
-                return StatusCode(False, 'build_target has not registed to build executor')
+                build_executor.regist_arg(
+                    'build_target', ['make_all', 'make_test'])
         return StatusCode()
 
-    def resolveBuildTarget(self, targetArg: Arg, **kwargs) -> StatusCode:
-        buildModule = kwargs.get("buildModule")
-        config = kwargs.get("config")
-        if isinstance(buildModule, BuildModuleInterface) and \
-                isinstance(targetArg.argValue, list) and isinstance(config, Config):
-            build_executor = buildModule.targetCompiler.unwrapped_build_executor
-            target_list = []
-            if len(targetArg.argValue) <= 1:
-                target_list = [
-                    'images'] if config.os_level == 'standard' else ['packages']
+    def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        gn = buildModule.targetGenerator.unwrapped_build_file_generator
+        for tmp_list in targetArg.argValue:
+            for gn_arg in tmp_list:
+                try:
+                    variable, value = gn_arg.split('=')
+                    if TypeCheckUtil.isBoolType(value):
+                        value = bool(value)
+                    elif TypeCheckUtil.isIntType(value):
+                        value = int(value)
+                    else:
+                        value = str(value)
+                    gn.regist_arg(variable, value)
+                except ValueError:
+                    raise OHOSException(f'Invalid gn args: {gn_arg}')
+        return StatusCode()
+
+    def resolveExportPara(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        for tmp_list in targetArg.argValue:
+            for gn_arg in tmp_list:
+                try:
+                    variable, value = gn_arg.split(':')
+                    if TypeCheckUtil.isBoolType(value):
+                        value = bool(value)
+                    elif TypeCheckUtil.isIntType(value):
+                        value = int(value)
+                    else:
+                        value = str(value)
+                    targetGenerator.regist_arg(variable, value)
+                except ValueError:
+                    raise OHOSException(f'Invalid gn args: {gn_arg}')
+        return StatusCode()
+
+    def resolveJobs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        return StatusCode()
+
+    def resolveTest(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        if len(targetArg.argValue) > 0:
+            targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+            test_arg = list(targetArg.argValue[0])
+            test_type = test_arg[0]
+            test_target = test_arg[1]
+            if test_type == 'notest':
+                targetGenerator.regist_arg('ohos_test_args', 'notest')
+            elif test_type == "xts":
+                targetGenerator.regist_arg('ohos_xts_test_args', test_target)
             else:
-                for tmp_list in targetArg.argValue[1:]:
-                    for target in tmp_list:
-                        target_list.append(target)
-            build_executor.regist_arg('build_target', target_list)
+                return StatusCode(False, '')
         return StatusCode()
 
-    def resolveGnArgs(self, targetArg: Arg, **kwargs) -> StatusCode:
-        buildModule = kwargs.get("buildModule")
-        if isinstance(buildModule, BuildModuleInterface):
-            gn = buildModule.targetGenerator.unwrapped_build_file_generator
-            for tmp_list in targetArg.argValue:
-                for gn_arg in tmp_list:
-                    try:
-                        variable, value = gn_arg.split('=')
-                        if TypeCheckUtil.isBoolType(value):
-                            value = bool(value)
-                        elif TypeCheckUtil.isIntType(value):
-                            value = int(value)
-                        else:
-                            value = str(value)
-                        gn.regist_arg(variable, value)
-                    except ValueError:
-                        raise OHOSException(f'Invalid gn args: {gn_arg}')
+    def resolveKeepNinjaGoing(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveKeepNinjaGoing(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveBuildOnlyGn(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveBuildOnlyGn(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveDisablePackageImage(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveDisablePackageImage(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveDisablePartofPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveDisablePartofPostBuild(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveBuildVariant(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveProduct(self, targetArg: Arg, **kwargs) -> StatusCode:
-        # if '@' in targetArg.argValue:
-        #     product, company = targetArg.argValue.split('@')
-        # else:
-        #     product = targetArg.argValue
-        #     company = None
-        # set_product(product_name=product, company=company)
-        return StatusCode()
-
-    def resolveBuildVariant(self, targetArg: Arg, **kwargs) -> StatusCode:
-        return StatusCode()
-
-    def resolveDeviceType(self, targetArg: Arg, **kwargs) -> StatusCode:
-        config = kwargs.get("config")
+    def resolveDeviceType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         ohos_para_data = []
         ohos_para_file_path = os.path.join(
             config.out_path, 'packages/phone/system/etc/param/ohos.para')
@@ -213,19 +233,21 @@ class BuildArgsResolver(ArgsResolverInterface):
                 ohos_para_file.write(data)
         return StatusCode()
 
-    def resolveCompiler(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveCompiler(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveDisablePartOfPostBuild(self, targetArg: Arg, **kwargs) -> StatusCode:
+    def resolveDisablePartOfPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def _mapArgsToFunction(self, json: dict):
-        for entity in json['args']:
-            argsName = str(entity['argName']).replace("-", "_")[2:]
-            functionName = entity['resolveFuntion']
-            if not hasattr(self, functionName) or \
-                    not hasattr(self.__getattribute__(functionName), '__call__'):
-                raise OHOSException(
-                    f'There is no resolution for arg: ' + argsName)
-            self._argsToFunction[argsName] = self.__getattribute__(
-                functionName)
+    def _mapArgsToFunction(self, args_dict: dict):
+        for entity in args_dict.values():
+            if isinstance(entity, Arg):
+                argsName = entity.argName
+                functionName = entity.resolveFuntion
+                if not hasattr(self, functionName) or \
+                        not hasattr(self.__getattribute__(functionName), '__call__'):
+                    raise OHOSException(
+                        f'There is no resolution for arg: ' + argsName)
+                entity.resolveFuntion = self.__getattribute__(functionName)
+                self._argsToFunction[argsName] = self.__getattribute__(
+                    functionName)

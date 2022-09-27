@@ -52,27 +52,32 @@ from modules.ohosBuildmodule import OHOSBuildModule
 from resources.config import Config
 
 from containers.arg import Arg
+from util.logUtil import LogUtil
 
 from lite.hb_internal.set.set import exec_command as hb_set
 VERSION = "0.4.6"
 
 CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def add_options(parser: argparse.ArgumentParser) -> argparse.Namespace:
-    oh_args_list = []
+def add_options(parser: argparse.ArgumentParser):
     args_file_path = os.path.join(os.path.dirname(
         os.path.abspath(__file__)), 'resources/args/buildargs.json')
+    args_dict = {}
     with open(args_file_path) as args_file:
         all_args = json.load(args_file)
         for arg in all_args['args']:
+            arg = dict(arg)
             ArgsFactory.genenic_add_option(parser, arg)
+
             oh_arg = Arg.createInstanceByDict(arg)
-            oh_args_list.append(oh_arg)
+            if oh_arg.argAttribute.get('deprecated', None):
+                LogUtil.hb_warning('{} will be deprecated, please consider use other options'.format(oh_arg.argName))
+            args_dict[oh_arg.argName] = oh_arg
     args = parser.parse_args(sys.argv[2:])
     
-    for oh_arg in oh_args_list:
+    for oh_arg in args_dict.values():
             oh_arg.argValue = args.__dict__[oh_arg.argName]
-    return args, oh_args_list, all_args
+    return args_dict
 
 def hb_set_adapt(root_path:str, product_name:str) -> None:
     args_dict = {}
@@ -83,12 +88,12 @@ def hb_set_adapt(root_path:str, product_name:str) -> None:
 
 def main_hb_new():
     parser = argparse.ArgumentParser()
-    args, arg_list, all_args = add_options(parser)
+    args_dict = add_options(parser)
     
-    hb_set_adapt(CURRENT_OHOS_ROOT, args.product_name)
+    hb_set_adapt(CURRENT_OHOS_ROOT, args_dict['product_name'].argValue)
 
     config = Config()
-
+    
     preloader = PreloaderAdapt(config)
     preload = Preload(preloader)
 
@@ -101,38 +106,10 @@ def main_hb_new():
     ninja = Ninja(config)
     buildExecutor = BuildExecutor(ninja)
 
-    buildArgsResolever = BuildArgsResolver(all_args)
+    buildArgsResolever = BuildArgsResolver(args_dict)
     argsResolver = ArgsResolver(buildArgsResolever)
 
-    ohosBuildModule = OHOSBuildModule(arg_list, argsResolver, preload, load, buildFileGenerator, buildExecutor)
-    builder = BuildModule(ohosBuildModule)
-    builder.run()
-    
-
-def stub_run():
-    parser = argparse.ArgumentParser()
-    args, arg_list, all_args = add_options(parser)
-    
-    hb_set_adapt(CURRENT_OHOS_ROOT, args.product_name)
-
-    config = Config()
-
-    preloader = PreloaderAdapt(config)
-    preload = Preload(preloader)
-
-    loader = LoaderAdapt(config)
-    load = Load(loader)
-
-    gn = Gn(config)
-    buildFileGenerator = BuildFileGenerator(gn)
-
-    ninja = Ninja(config)
-    buildExecutor = BuildExecutor(ninja)
-    
-    buildArgsResolever = BuildArgsResolver(all_args)
-    argsResolver = ArgsResolver(buildArgsResolever)
-
-    ohosBuildModule = OHOSBuildModule(arg_list, argsResolver, preload, load, buildFileGenerator, buildExecutor)
+    ohosBuildModule = OHOSBuildModule(args_dict, argsResolver, preload, load, buildFileGenerator, buildExecutor)
     builder = BuildModule(ohosBuildModule)
     builder.run()
     

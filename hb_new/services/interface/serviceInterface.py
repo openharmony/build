@@ -16,8 +16,10 @@
 # limitations under the License.
 
 from abc import ABCMeta, abstractmethod
+
 from containers.statusCode import StatusCode
 from exceptions.ohosException import OHOSException
+from util.logUtil import LogUtil
 
 
 class ServiceInterface(metaclass=ABCMeta):
@@ -27,11 +29,11 @@ class ServiceInterface(metaclass=ABCMeta):
         self._exec = ''
 
     @property
-    def args_dict(self):
+    def args_dict(self) -> dict:
         return self._args_dict
 
     @property
-    def exec(self):
+    def exec(self) -> str:
         return self._exec
 
     @exec.setter
@@ -40,7 +42,8 @@ class ServiceInterface(metaclass=ABCMeta):
 
     def regist_arg(self, argName: str, argValue: str) -> None:
         if argName in self._args_dict:
-            raise OHOSException("duplicated regist arg {}".format(argName))
+            LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
+                argName, self._args_dict[argName], argValue))
 
         self.args_dict[argName] = argValue
 

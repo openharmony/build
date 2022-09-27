@@ -17,16 +17,20 @@
 #
 
 from distutils.util import strtobool
-from argparse import Namespace
+
+
 class Arg():
 
-    def __init__(self, name: str, help: str, phase: str, attribute: str, value: str, argtype: str):
+    def __init__(self, name: str, help: str, phase: str,
+                 attribute: str, value: str, argtype: str,
+                 resolveFuntion: str):
         self._argName = name
         self._argHelp = help
         self._argPhase = phase
         self._argAttribute = attribute
         self._argValue = value
         self._argType = argtype
+        self._resolveFuntion = resolveFuntion
 
     @property
     def argName(self):
@@ -35,7 +39,7 @@ class Arg():
     @property
     def argValue(self):
         return self._argValue
-    
+
     @argValue.setter
     def argValue(self, value):
         self._argValue = value
@@ -51,22 +55,31 @@ class Arg():
     @property
     def argPhase(self):
         return self._argPhase
-    
+
     @property
     def argType(self):
         return self._argType
 
+    @property
+    def resolveFuntion(self):
+        return self._resolveFuntion
+
+    @resolveFuntion.setter
+    def resolveFuntion(self, value):
+        self._resolveFuntion = value
+
     @staticmethod
-    def createInstanceByDict(jsonDict):
+    def createInstanceByDict(jsonDict: dict):
         name = str(jsonDict['argName']).replace("-", "_")[2:]
         help = jsonDict['argHelp']
         phase = jsonDict['argPhase']
         attibute = jsonDict['argAttribute']
         arg_type = jsonDict['argType']
-        default_value = strtobool(jsonDict['argDefault']) if jsonDict['argType'] == 'bool' else jsonDict['argDefault']
-        return Arg(name, help, phase, attibute, default_value, arg_type)
-    
+        default_value = strtobool(
+            jsonDict['argDefault']) if jsonDict['argType'] == 'bool' else jsonDict['argDefault']
+        resolveFuntion = jsonDict['resolveFuntion']
+        return Arg(name, help, phase, attibute, default_value, arg_type, resolveFuntion)
+
     @staticmethod
     def createInstanceByArgparse(args_parser):
         pass
-    

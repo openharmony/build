@@ -21,26 +21,24 @@ from abc import ABCMeta, abstractmethod
 from containers.arg import Arg
 from exceptions.ohosException import OHOSException
 from containers.statusCode import StatusCode
+from resources.config import Config
+
 
 class ArgsResolverInterface(metaclass=ABCMeta):
-    
-    def __init__(self, json:dict):
+
+    def __init__(self, args_dict: dict):
         self._argsToFunction = dict()
-        self._mapArgsToFunction(json)
-          
-    def resolveArg(self, targetArg:'Arg', **kwargs) -> StatusCode:
+        self._mapArgsToFunction(args_dict)
+
+    def resolveArg(self, targetArg: Arg, buildmodule, config: Config) -> StatusCode:
         if targetArg.argName not in self._argsToFunction.keys():
             raise OHOSException()
         if not hasattr(self._argsToFunction[targetArg.argName], '__call__'):
             raise OHOSException()
-        
+
         resolveFunction = self._argsToFunction[targetArg.argName]
-        return resolveFunction(targetArg, **kwargs)
-                
-    
-    @abstractmethod    
+        return resolveFunction(targetArg, buildmodule, config)
+
+    @abstractmethod
     def _mapArgsToFunction(self, json):
         pass
-        
-        
-    

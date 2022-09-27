@@ -1,28 +1,28 @@
 {
     "args": [
         {
-            "argName": "--log-level",
-            "argDefault": "info",
-            "argHelp": "specifies the log level during compilation. you can select two levels: debug, info.In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
-            "argPhase": "gnBuild",
+            "argName": "--product-name",
+            "argDefault": "",
+            "argHelp": "build a specified product with {product_name}@{company}",
+            "argPhase": "prebuild",
             "argType": "str",
-            "argAttribute": {
-                "optional": ["debug", "info"]
+            "argAttribute":{
+                "abbreviation": "-p"
             },
-            "resolveFuntion": "resolveVerbose",
-            "testFunction": "testVerbose"
+            "resolveFuntion": "resolveProduct",
+            "testFunction": "testProduct"
         },
         {
-            "argName": "--strict-mode",
-            "argDefault": "False",
-            "argHelp": "check all produce of each phase to early terminates a potentially problematic compilation ",
-            "argPhase": "loader",
-            "argType": "bool",
-            "argAttribute": {
-
+            "argName": "--target-cpu",
+            "argDefault": "arm",
+            "argHelp": "specifies the desired cpu architecture for the build, currently we support arm64, arm",
+            "argPhase": "prebuild",
+            "argType": "str",
+            "argAttribute":{
+                "optional": ["arm", "arm64", "x86_64", "x64"]
             },
-            "resolveFuntion": "resolveStrictMode",
-            "testFunction": "testStrictMode"
+            "resolveFuntion": "resolveTargetCpu",
+            "testFunction": "testBuildTargetCpu"
         },
         {
             "argName": "--rename-last-log",
@@ -61,10 +61,34 @@
             "testFunction": "testPycache"
         },
         {
+            "argName": "--disable-part-of-post-build",
+            "argDefault": [],
+            "argHelp": "specifies compiler",
+            "argPhase": "prebuild",
+            "argType": "list",
+            "argAttribute":{
+                "deprecated": "true"
+            },
+            "resolveFuntion": "resolveDisablePartOfPostBuild",
+            "testFunction": "testDisablePartOfPostBuild"
+        },
+        {
+            "argName": "--build-only-gn",
+            "argDefault": "False",
+            "argHelp": "only do gn parse, donot run ninja",
+            "argPhase": "prebuild",
+            "argType": "bool",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveBuildOnlyGn",
+            "testFunction": "testBuildOnlyGn"
+        },
+        {
             "argName": "--build-type",
             "argDefault": "debug",
             "argHelp": "release or debug version, mini/small only",
-            "argPhase": "prebuild",
+            "argPhase": "targetGenerate",
             "argType": "str",
             "argAttribute":{
                 "optional": ["debug", "release"]
@@ -73,52 +97,40 @@
             "testFunction": "testBuildType"
         },
         {
-            "argName": "--target-cpu",
-            "argDefault": "arm",
-            "argHelp": "specifies the desired cpu architecture for the build, currently we support arm64, arm",
-            "argPhase": "prebuild",
+            "argName": "--log-level",
+            "argDefault": "info",
+            "argHelp": "specifies the log level during compilation. you can select two levels: debug, info.In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
+            "argPhase": "targetGenerate",
             "argType": "str",
-            "argAttribute":{
-                "optional": ["arm", "arm64", "x86_64", "x64"]
+            "argAttribute": {
+                "optional": ["debug", "info"]
             },
-            "resolveFuntion": "resolveTargetCpu",
-            "testFunction": "testBuildTargetCpu"
+            "resolveFuntion": "resolveVerbose",
+            "testFunction": "testVerbose"
         },
         {
-            "argName": "--product-name",
-            "argDefault": "",
-            "argHelp": "build a specified product with {product_name}@{company}",
-            "argPhase": "preload",
-            "argType": "str",
-            "argAttribute":{
-                "abbreviation": "-p"
-            },
-            "resolveFuntion": "resolveProduct",
-            "testFunction": "testProduct"
-        },
-        {
-            "argName": "--full-compilation",
-            "argDefault": "False",
-            "argHelp": "full code compilation",
-            "argPhase": "targetCompilation",
-            "argType": "bool",
-            "argAttribute":{
-                "abbreviation": "-f"
-            },
-            "resolveFuntion": "resolveFullCompilation",
-            "testFunction": "testFullCompilation"
-        },
-        {
-            "argName": "--build-target",
-            "argDefault": [ ["default"] ],
-            "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
+            "argName": "--export-para",
+            "argDefault": [],
+            "argHelp": "regist args to target generator",
             "argPhase": "targetGenerate",
             "argType": "list",
             "argAttribute":{
-                "abbreviation": "-b"
+                "deprecated": "true"
             },
-            "resolveFuntion": "resolveBuildTarget",
-            "testFunction": "testBuildTarget"
+            "resolveFuntion": "resolveExportPara",
+            "testFunction": "testExportPara"
+        },
+        {
+            "argName": "--test",
+            "argDefault": [],
+            "argHelp": "regist args to target generator",
+            "argPhase": "targetGenerate",
+            "argType": "list",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveTest",
+            "testFunction": "testTest"
         },
         {
             "argName": "--gn-args",
@@ -133,6 +145,54 @@
             "testFunction": "testGnArgs"
         },
         {
+            "argName": "--compiler",
+            "argDefault": "clang",
+            "argHelp": "specifies compiler",
+            "argPhase": "targetGenerate",
+            "argType": "str",
+            "argAttribute":{
+                "abbreviation": "-c"
+            },
+            "resolveFuntion": "resolveCompiler",
+            "testFunction": "testCompiler"
+        },
+        {
+            "argName": "--strict-mode",
+            "argDefault": "False",
+            "argHelp": "check all produce of each phase to early terminates a potentially problematic compilation ",
+            "argPhase": "loader",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveStrictMode",
+            "testFunction": "testStrictMode"
+        },
+        {
+            "argName": "--build-target",
+            "argDefault": ["default"],
+            "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
+            "argPhase": "targetCompilation",
+            "argType": "list",
+            "argAttribute":{
+                "abbreviation": "-b"
+            },
+            "resolveFuntion": "resolveBuildTarget",
+            "testFunction": "testBuildTarget"
+        },
+        {
+            "argName": "--full-compilation",
+            "argDefault": "False",
+            "argHelp": "full code compilation",
+            "argPhase": "targetCompilation",
+            "argType": "bool",
+            "argAttribute":{
+                "abbreviation": "-f"
+            },
+            "resolveFuntion": "resolveFullCompilation",
+            "testFunction": "testFullCompilation"
+        },
+        {
             "argName": "--keep-ninja-going",
             "argDefault": "False",
             "argHelp": "keeps ninja going until 1000000 jobs fail",
@@ -145,25 +205,13 @@
             "testFunction": "testKeepNinjaGoing"
         },
         {
-            "argName": "--build-only-gn",
-            "argDefault": "False",
-            "argHelp": "only do gn parse, donot run ninja",
-            "argPhase": "targetGenerate",
-            "argType": "bool",
-            "argAttribute":{
-
-            },
-            "resolveFuntion": "resolveBuildOnlyGn",
-            "testFunction": "testBuildOnlyGn"
-        },
-        {
             "argName": "--build-variant",
             "argDefault": "user",
             "argHelp": "specifies device operating mode",
             "argPhase": "postbuild",
             "argType": "str",
             "argAttribute":{
-
+                "optional": ["user", "root"]
             },
             "resolveFuntion": "resolveBuildVariant",
             "testFunction": "testBuildVariant"
@@ -193,28 +241,16 @@
             "testFunction": "testDisablePackageImage"
         },
         {
-            "argName": "--compiler",
-            "argDefault": "clang",
-            "argHelp": "specifies compiler",
-            "argPhase": "targetGenerate",
+            "argName": "--jobs",
+            "argDefault": [],
+            "argHelp": "regist args to target generator",
+            "argPhase": "prebuild",
             "argType": "str",
             "argAttribute":{
-                "abbreviation": "-c"
+                "deprecated": "true"
             },
-            "resolveFuntion": "resolveCompiler",
-            "testFunction": "testCompiler"
-        },
-        {
-            "argName": "--disable-part-of-post-build",
-            "argDefault": [],
-            "argHelp": "specifies compiler",
-            "argPhase": "prebuild",
-            "argType": "list",
-            "argAttribute":{
-
-            },
-            "resolveFuntion": "resolveDisablePartOfPostBuild",
-            "testFunction": "testDisablePartOfPostBuild"
+            "resolveFuntion": "resolveJobs",
+            "testFunction": "testJobs"
         }
     ]
 }

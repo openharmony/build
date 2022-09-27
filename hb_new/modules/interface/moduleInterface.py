@@ -18,17 +18,14 @@
 
 from abc import ABCMeta, abstractmethod
 
-from util.typeCheckUtil import TypeCheckUtil
 from resolver.interface.argsResolver import ArgsResolver
-from containers.arg import Arg
 from containers.statusCode import StatusCode
 
 
 class ModuleInterface(metaclass=ABCMeta):
 
-    def __init__(self, args: list, argsResolver: ArgsResolver):
-        TypeCheckUtil.checkArgType(args[0], Arg)
-        self._args = args
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+        self._args_dict = args_dict
         self._argsResolver = argsResolver
 
     @property
@@ -36,8 +33,8 @@ class ModuleInterface(metaclass=ABCMeta):
         return self._argsResolver
 
     @property
-    def args(self):
-        return self._args
+    def args_dict(self) -> dict:
+        return self._args_dict
 
     @abstractmethod
     def run(args) -> StatusCode:

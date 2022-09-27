@@ -29,9 +29,9 @@ from containers.statusCode import StatusCode
 
 class BuildModuleInterface(ModuleInterface):
 
-    def __init__(self, args: list, argsResolver: ArgsResolver, preloader: Preload, loader: Load,
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, preloader: Preload, loader: Load,
                  targetGenerator: BuildFileGenerator, targetCompiler: BuildExecutor):
-        super().__init__(args, argsResolver)
+        super().__init__(args_dict, argsResolver)
         self._loader = loader
         self._preloader = preloader
         self._targetGenerator = targetGenerator
