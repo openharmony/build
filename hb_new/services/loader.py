@@ -29,6 +29,7 @@ from util.loader import subsystem_info  # noqa: E402
 from util.loader import platforms_loader  # noqa: E402
 from util.loader import generate_targets_gn  # noqa: E402
 from util.loader import load_ohos_build  # noqa: E402
+from util.loader import subsystem_scan  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
 
 
@@ -37,7 +38,7 @@ class LoaderAdapt(LoadInterface):
     def __init__(self, config: Config):
         super().__init__(config)
         self.config = config
-        
+
     def _create_NameSpace(self) -> argparse.Namespace:
         args_dict = {}
         args_dict['subsystem_config_file'] = os.path.join(
@@ -46,7 +47,7 @@ class LoaderAdapt(LoadInterface):
             self.config.root_path, 'out/preloader', self.config.product, 'platforms.build')
         args_dict['exclusion_modules_config_file'] = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
-        # origin loader depends on '/' to split path, so we use '/' buf for os.join() 
+        # origin loader depends on '/' to split path, so we use '/' buf for os.join()
         args_dict['source_root_dir'] = self.config.root_path + '/'
         args_dict['gn_root_out_dir'] = self.config.out_path
         args_dict['build_platform_name'] = 'phone'
@@ -110,211 +111,166 @@ class LoaderAdapt(LoadInterface):
         args = self.parse_config()
         return load(args)
 
+
 class OHOSLoader(LoadInterface):
-    
+
     def __init__(self, config: Config):
         super().__init__(config)
         self.config = config
-
-    def _create_NameSpace(self) -> argparse.Namespace:
-        args_dict = {}
-        args_dict['subsystem_config_file'] = os.path.join(
+        self.subsystem_config_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'subsystem_config.json')
-        args_dict['platforms_config_file'] = os.path.join(
+        self.platforms_config_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'platforms.build')
-        args_dict['exclusion_modules_config_file'] = os.path.join(
+        self.exclusion_modules_config_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
-        # origin loader depends on '/' to split path, so we use '/' buf for os.join() 
-        args_dict['source_root_dir'] = self.config.root_path + '/'
-        args_dict['gn_root_out_dir'] = self.config.out_path
-        args_dict['build_platform_name'] = 'phone'
-        args_dict['build_xts']
-        return argparse.Namespace(**args_dict)
+        self.source_root_dir = self.config.root_path + '/'
 
-    def parse_config(self) -> argparse.ArgumentParser:
-        parser = argparse.ArgumentParser()
+        self.gn_root_out_dir = self.config.out_path
+        if self.gn_root_out_dir.startswith('/'):
+            self.gn_root_out_dir = os.path.relpath(self.gn_root_out_dir,
+                                                   self.config.root_path)
 
-        parser.add_argument('--subsystem-config-file', required=False)
-        _subsystem_config_file = os.path.join(
-            self.config.root_path, 'out/preloader', self.config.product, 'subsystem_config.json')
-        parser.set_defaults(subsystem_config_file=_subsystem_config_file)
+        self.os_level = self.config.os_level if self.config.os_level else "standard"
+        self.target_cpu = self.config.target_cpu if self.config.target_cpu else "arm"
+        self.target_os = self.config.target_os if self.config.target_os else "ohos"
+        self.config_output_relpath = os.path.join(self.gn_root_out_dir, 'build_configs')
+        self.config_output_dir = os.path.join(self.source_root_dir, self.config_output_relpath)
+        self.target_arch = '{}_{}'.format(self.target_os, self.target_cpu)
 
-        parser.add_argument('--platforms-config-file', required=False)
-        _platforms_config_file = os.path.join(
-            self.config.root_path, 'out/preloader', self.config.product, 'platforms.build')
-        parser.set_defaults(platforms_config_file=_platforms_config_file)
+        self.example_subsystem_file = os.path.join(
+            self.config.root_path, 'build',
+            'subsystem_config_example.json')
 
-        parser.add_argument('--example-subsystem-file', required=False)
+    def __post_init__(self):
 
-        parser.add_argument('--exclusion-modules-config-file', required=False)
-        _exclusion_modules_config_file = os.path.join(
-            self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
-        parser.set_defaults(
-            exclusion_modules_config_file=_exclusion_modules_config_file)
+        self.scalable_build = self.args_dict['scalable_build']
+        self.build_platform_name = self.args_dict['build_platform_name']
+        self.build_xts = self.args_dict['build_xts']
+        self.ignore_api_check = self.args_dict['ignore_api_check']
+        self.load_test_config = self.args_dict['load_test_config']
 
-        parser.add_argument('--source-root-dir', required=False)
-        _source_root_dir = self.config.root_path + '/'
-        parser.set_defaults(source_root_dir=_source_root_dir)
+        self._subsystem_info = _get_subsystem_info(
+            self.subsystem_config_file,
+            self.example_subsystem_file,
+            self.source_root_dir,
+            self.config_output_relpath,
+            self.os_level)
 
-        parser.add_argument('--gn-root-out-dir', default='.')
-        _gn_root_out_dir = self.config.out_path
-        parser.set_defaults(gn_root_out_dir=_gn_root_out_dir)
+        self._platforms_info = platforms_loader.get_platforms_info(
+            self.platforms_config_file,
+            self.source_root_dir,
+            self.gn_root_out_dir,
+            self.target_arch,
+            self.config_output_relpath,
+            self.scalable_build)
 
-        parser.add_argument('--build-platform-name', default='phone')
-        parser.add_argument('--build-xts', dest='build_xts',
-                            action='store_true', default=False)
-        parser.add_argument('--load-test-config',
-                            action='store_true', default=True)
+        self.variant_toolchains = self._platforms_info.get('variant_toolchain_info').get('platform_toolchain')
+        self._all_platforms = self.variant_toolchains.keys()
 
-        # TODO: resolve Config class default target-os and target-cpu values
-        parser.add_argument('--target-os', default='ohos')
-        parser.add_argument('--target-cpu', default='arm64')
-        _target_cpu = self.config.target_cpu
-        parser.set_defaults(target_cpu=_target_cpu)
-
-        parser.add_argument('--os-level', default='standard')
-        _os_level = self.config.os_level
-        parser.set_defaults(os_level=_os_level)
-
-        parser.add_argument('--ignore-api-check', nargs='*',
-                            default=['xts', 'common', 'developertest'])
-
-        parser.add_argument('--scalable-build', action='store_true')
-        parser.set_defaults(scalable_build=False)
-
-        return parser.parse_args([])
-        
-    def _internel_run(self) -> StatusCode:
-        args = self.parse_config()
-        return self.runLoad(args)
-    
-    def runLoad(self, args):
-        source_root_dir = args.source_root_dir
-        
-        _check_args(args, source_root_dir)
-        
-        config_output_relpath = os.path.join(args.gn_root_out_dir, 'build_configs')
-        config_output_dir = os.path.join(source_root_dir, config_output_relpath)
-        
-        _subsystem_info = subsystem_info.get_subsystem_info(
-            args.subsystem_config_file, 
-            args.example_subsystem_file,
-            source_root_dir, 
-            config_output_relpath, 
-            args.os_level)
-
-        target_arch = '{}_{}'.format(args.target_os, args.target_cpu)
-
-        _platforms_info = platforms_loader.get_platforms_info(
-            args.platforms_config_file, 
-            source_root_dir, 
-            args.gn_root_out_dir,
-            target_arch, 
-            config_output_relpath, 
-            args.scalable_build)
-
-        variant_toolchains = _platforms_info.get('variant_toolchain_info').get('platform_toolchain')
-        _all_platforms = variant_toolchains.keys()
-
-        if args.build_platform_name == 'all':
-            build_platforms = _all_platforms
-        elif args.build_platform_name in _all_platforms:
-            build_platforms = [args.build_platform_name]
+        if self.build_platform_name == 'all':
+            self.build_platforms = self._all_platforms
+        elif self.build_platform_name in self._all_platforms:
+            self.build_platforms = [self.build_platform_name]
         else:
             raise Exception(
                 "The target_platform is incorrect, only allows [{}].".format(
-                    ', '.join(_all_platforms)))
+                    ', '.join(self._all_platforms)))
 
-        parts_config_info = load_ohos_build.get_parts_info(
-            source_root_dir,
-            config_output_relpath,
-            _subsystem_info,
-            variant_toolchains,
-            target_arch,
-            args.ignore_api_check,
-            args.exclusion_modules_config_file,
-            args.load_test_config,
-            args.build_xts)
-        
-        _check_parts_config_info(parts_config_info)
-        
-        parts_targets = parts_config_info.get('parts_targets')
-        parts_info = parts_config_info.get('parts_info')
-        target_platform_parts = _get_platforms_all_parts(
-            source_root_dir, 
-            args.target_os, 
-            args.target_cpu,
-            _platforms_info.get('all_parts'), 
-            build_platforms, 
-            parts_config_info.get('parts_variants'))
-        
-        target_platform_stubs = _get_platforms_all_stubs(
-            source_root_dir, 
-            args.target_os, 
-            args.target_cpu,
-            _platforms_info.get('all_stubs'), 
-            build_platforms, 
-            parts_config_info.get('parts_variants'))
-        
-        required_phony_targets = _get_required_build_targets(
-            parts_config_info.get('phony_target'), 
-            target_platform_parts)
-        
-        _generate_target_platform_parts(config_output_dir, target_platform_parts)
+        self.parts_config_info = load_ohos_build.get_parts_info(
+            self.source_root_dir,
+            self.config_output_relpath,
+            self._subsystem_info,
+            self.variant_toolchains,
+            self.target_arch,
+            self.ignore_api_check,
+            self.exclusion_modules_config_file,
+            self.load_test_config,
+            self.build_xts)
 
-        _generate_system_capabilities(build_platforms, config_output_dir, target_platform_parts, parts_info)
+        self.parts_targets = self.parts_config_info.get('parts_targets')
+        self.parts_info = self.parts_config_info.get('parts_info')
+        self.target_platform_parts = _get_platforms_all_parts(
+            self.source_root_dir,
+            self.target_os,
+            self.target_cpu,
+            self._platforms_info.get('all_parts'),
+            self.build_platforms,
+            self.parts_config_info.get('parts_variants'))
+
+        self.target_platform_stubs = _get_platforms_all_stubs(
+            self.source_root_dir,
+            self.target_os,
+            self.target_cpu,
+            self._platforms_info.get('all_stubs'),
+            self.build_platforms,
+            self.parts_config_info.get('parts_variants'))
+
+        self.required_phony_targets = _get_required_build_targets(
+            self.parts_config_info.get('phony_target'),
+            self.target_platform_parts)
+
+        self.required_parts_targets = _get_required_build_targets(
+            self.parts_targets, self.target_platform_parts)
+
+    def _internel_run(self) -> StatusCode:
+        
+        self.__post_init__()
+
+        _check_parts_config_info(self.parts_config_info)
+
+        _generate_target_platform_parts(self.config_output_dir, self.target_platform_parts)
+
+        _generate_system_capabilities(self.build_platforms, self.config_output_dir, self.target_platform_parts,
+                                      self.parts_info)
 
         generate_targets_gn.gen_stub_targets(
-            parts_config_info.get('parts_kits_info'), 
-            target_platform_stubs,
-            config_output_dir)
+            self.parts_config_info.get('parts_kits_info'),
+            self.target_platform_stubs,
+            self.config_output_dir)
 
         # platforms_parts_by_src.json
-        _generate_platforms_part_by_src(parts_targets, source_root_dir, config_output_relpath, target_platform_parts)
-        
-        required_parts_targets = _get_required_build_targets(
-            parts_targets, target_platform_parts)
-        
-        generate_targets_gn.gen_targets_gn(required_parts_targets,
-                                        config_output_dir)
-        
-        generate_targets_gn.gen_phony_targets(required_phony_targets,
-                                              config_output_dir)
-        
-        _generate_build_targets_info(config_output_dir, required_parts_targets)
-        
+        _generate_platforms_part_by_src(self.parts_targets, self.source_root_dir, self.config_output_relpath,
+                                        self.target_platform_parts)
+
+        generate_targets_gn.gen_targets_gn(self.required_parts_targets,
+                                           self.config_output_dir)
+
+        generate_targets_gn.gen_phony_targets(self.required_phony_targets,
+                                              self.config_output_dir)
+
+        _generate_build_targets_info(self.config_output_dir, self.required_parts_targets)
+
         # required_parts_targets_list.json
-        _generate_build_target_list(config_output_dir, required_parts_targets)
+        _generate_build_target_list(self.config_output_dir, self.required_parts_targets)
 
         # parts src flag file
-        _generate_src_flag(config_output_dir, required_parts_targets, parts_info)
-        
+        _generate_src_flag(self.config_output_dir, self.required_parts_targets, self.parts_info)
+
         # write auto install part file
-        _generate_auto_install_part(parts_config_info, config_output_dir)
+        _generate_auto_install_part(self.parts_config_info, self.config_output_dir)
 
         # write platforms_list.gni
-        _generate_platforms_list(config_output_dir, build_platforms)
+        _generate_platforms_list(self.config_output_dir, self.build_platforms)
 
         # parts_different_info.json
         # Generate parts differences in different platforms, using phone as base.
-        _generate_part_different_info(target_platform_parts, config_output_dir)
-        
+        _generate_part_different_info(self.target_platform_parts, self.config_output_dir)
+
         # for testfwk
-        _output_infos_for_testfwk(parts_config_info, target_platform_parts,
-                                config_output_dir)
+        _output_infos_for_testfwk(self.parts_config_info, self.target_platform_parts,
+                                  self.config_output_dir)
 
         # check part feature
-        _check_product_part_feature(parts_info,
-                                    os.path.dirname(args.platforms_config_file))
-        
-        #generate syscap
-        pre_syscap_info_path = os.path.dirname(args.platforms_config_file)
-        system_path = os.path.join(source_root_dir, os.path.join(
-            os.path.dirname(args.platforms_config_file), "system/"))
-        _generate_syscap_files(
-            parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
+        _check_product_part_feature(self.parts_info,
+                                    os.path.dirname(self.platforms_config_file))
 
- 
+        # generate syscap
+        pre_syscap_info_path = os.path.dirname(self.platforms_config_file)
+        system_path = os.path.join(self.source_root_dir, os.path.join(
+            os.path.dirname(self.platforms_config_file), "system/"))
+        _generate_syscap_files(
+            self.parts_config_info, self.target_platform_parts, pre_syscap_info_path, system_path)
+
 def _load_component_dist(source_root_dir, target_os, target_cpu):
     _parts_variants_info = {}
     _dir = "component_dist/{}-{}/packages_to_install".format(
@@ -616,7 +572,7 @@ def _generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_
     syscap_info_with_part_name_file = os.path.join(
         system_etc_path, "syscap.json")
     write_json_file(syscap_info_with_part_name_file, {
-                    'components': target_syscap_with_part_name_list})
+        'components': target_syscap_with_part_name_list})
     if not os.path.exists(os.path.join(system_etc_path, "param/")):
         os.mkdir(os.path.join(system_etc_path, "param/"))
     target_syscap_for_init_file = os.path.join(
@@ -680,7 +636,7 @@ def _generate_target_platform_parts(config_output_dir, target_platform_parts):
     write_json_file(target_platform_parts_file,
                     target_platform_parts,
                     check_changes=True)
-
+    
 '''Description: Generate parts differences in different platforms, using phone as base.(/out/${product_name}/build_configs/parts_different_info.json)
 @parameter: target platform parts, config output directory
 @return :none
@@ -696,33 +652,33 @@ def _generate_part_different_info(target_platform_parts, config_output_dir):
 '''Description: output platforms list into a gni file.(/out/${product_name}/build_configs/platforms_list.gni)
 @parameter: build platforms, config output directory
 @return :none
-'''  
+'''
 def _generate_platforms_list(config_output_dir, build_platforms):
     platforms_list_gni_file = os.path.join(config_output_dir,
                                             "platforms_list.gni")
     _platforms = set(build_platforms)
     _gni_file_content = ['target_platform_list = [', '  "{}"'.format('",\n  "'.join(_platforms)), ']',
-                     'kits_platform_list = [', '  "{}",'.format('",\n  "'.join(_platforms))]
+                         'kits_platform_list = [', '  "{}",'.format('",\n  "'.join(_platforms))]
     if 'phone' not in build_platforms:
         _gni_file_content.append('  "phone"')
     _gni_file_content.append(']')
     write_file(platforms_list_gni_file, '\n'.join(_gni_file_content))
-    
+
 '''Description: output auto install part into a json file.(/out/${product_name}/build_configs/auto_install_parts.json)
 @parameter: parts config information, config output directory
 @return :none
-'''   
+'''
 def _generate_auto_install_part(parts_config_info, config_output_dir):
     auto_install_list = _get_auto_install_list(
-            parts_config_info.get("parts_path_info"))
+        parts_config_info.get("parts_path_info"))
     auto_install_list_file = os.path.join(
         config_output_dir, "auto_install_parts.json")
     write_json_file(auto_install_list_file, auto_install_list)
-    
+
 '''Description: output src flag into a json file.(/out/${product_name}/build_configs/parts_src_flag.json)
 @parameter: parts information, config output directory, required parts targets
 @return :none
-'''  
+'''
 def _generate_src_flag(config_output_dir, required_parts_targets, parts_info):
     parts_src_flag_file = os.path.join(config_output_dir,
                                         "parts_src_flag.json")
@@ -733,7 +689,7 @@ def _generate_src_flag(config_output_dir, required_parts_targets, parts_info):
 '''Description: output build target list into a json file.(/out/${product_name}/build_configs/required_parts_targets_list.json)
 @parameter: required parts targets, config output directory
 @return :none
-'''  
+'''
 def _generate_build_target_list(config_output_dir, required_parts_targets):
     build_targets_list_file = os.path.join(config_output_dir,
                                         "required_parts_targets_list.json")
@@ -743,22 +699,22 @@ def _generate_build_target_list(config_output_dir, required_parts_targets):
 '''Description: output build target info into a json file.(/out/${product_name}/build_configs/required_parts_targets.json)
 @parameter: required parts targets, config output directory
 @return :none
-'''  
+'''
 def _generate_build_targets_info(config_output_dir, required_parts_targets):
     build_targets_info_file = os.path.join(config_output_dir,
-                                        "required_parts_targets.json")
+                                           "required_parts_targets.json")
     write_json_file(build_targets_info_file, required_parts_targets)
 
 '''Description: output platforms part by src into a json file.(/out/${product_name}/build_configs/platforms_parts_by_src.json)
 @parameter: parts targets, source root directopry, config output relpath, target platform parts
 @return :none
-'''  
+'''
 def _generate_platforms_part_by_src(parts_targets, source_root_dir, config_output_relpath, target_platform_parts):
     platforms_parts_by_src = _get_platforms_parts(parts_targets,
-                                                target_platform_parts)
+                                                  target_platform_parts)
     platforms_parts_by_src_file = os.path.join(source_root_dir,
-                                            config_output_relpath,
-                                            "platforms_parts_by_src.json")
+                                               config_output_relpath,
+                                               "platforms_parts_by_src.json")
     write_json_file(platforms_parts_by_src_file,
                     platforms_parts_by_src,
                     check_changes=True)
@@ -766,8 +722,8 @@ def _generate_platforms_part_by_src(parts_targets, source_root_dir, config_outpu
 '''Description: output system capabilities into a json file.(/out/${product_name}/build_configs/${platform}_system_capabilities.json)
 @parameter: parts targets, source root directopry, config output relpath, target platform parts
 @return :none
-'''  
-def _generate_system_capabilities(build_platforms, config_output_dir, target_platform_parts, parts_info): 
+'''
+def _generate_system_capabilities(build_platforms, config_output_dir, target_platform_parts, parts_info):
     for platform in build_platforms:
         platform_parts = target_platform_parts.get(platform)
         platform_capabilities = []
@@ -786,4 +742,34 @@ def _generate_system_capabilities(build_platforms, config_output_dir, target_pla
         write_json_file(platform_part_json_file,
                         sorted(platform_capabilities),
                         check_changes=True)
-             
+
+def _generate_subsystem_configs(output_dir, subsystem_configs):
+    build_config_file = os.path.join(output_dir, 'subsystem_info',
+                                     "subsystem_build_config.json")
+    write_json_file(build_config_file, subsystem_configs)
+
+    src_subsystem = {}
+    for key, val in subsystem_configs.get('subsystem').items():
+        src_subsystem[key] = val.get('path')
+    src_output_file = os.path.join(output_dir, 'subsystem_info',
+                                   "src_subsystem_info.json")
+    write_json_file(src_output_file, src_subsystem)
+
+    no_src_output_file = os.path.join(output_dir, 'subsystem_info',
+                                      "no_src_subsystem_info.json")
+    write_json_file(no_src_output_file,
+                    subsystem_configs.get('no_src_subsystem'))
+
+def _get_subsystem_info(subsystem_config_file, example_subsystem_file,
+                        source_root_dir, config_output_relpath, os_level):
+    if not subsystem_config_file:
+        subsystem_config_file = 'build/subsystem_config.json'
+
+    subsystem_configs = {}
+    output_dir_realpath = os.path.join(source_root_dir, config_output_relpath)
+    subsystem_configs = subsystem_scan.scan(subsystem_config_file,
+                                            example_subsystem_file,
+                                            source_root_dir)
+
+    _generate_subsystem_configs(output_dir_realpath, subsystem_configs)
+    return subsystem_configs.get('subsystem')

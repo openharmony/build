@@ -171,7 +171,7 @@
         {
             "argName": "--scalable-build",
             "argDefault": "False",
-            "argHelp": "",
+            "argHelp": "Select whether to read information from parts.json generate by preload",
             "argPhase": "loader",
             "argType": "bool",
             "argAttribute": {
@@ -183,7 +183,7 @@
         {
             "argName": "--build-platform-name",
             "argDefault": "phone",
-            "argHelp": "",
+            "argHelp": "name of the compilation platform. The current optional value is 'phone'",
             "argPhase": "loader",
             "argType": "str",
             "argAttribute": {
@@ -195,7 +195,7 @@
         {
             "argName": "--build-xts",
             "argDefault": "False",
-            "argHelp": "",
+            "argHelp": "Select whether to load the components included in the subsystem xts",
             "argPhase": "loader",
             "argType": "bool",
             "argAttribute": {
@@ -207,7 +207,7 @@
         {
             "argName": "--ignore-api-check",
             "argDefault": [],
-            "argHelp": "",
+            "argHelp": "Skip the check of some subsystems",
             "argPhase": "loader",
             "argType": "list",
             "argAttribute": {
@@ -219,7 +219,7 @@
         {
             "argName": "--load-test-config",
             "argDefault": "True",
-            "argHelp": "",
+            "argHelp": "Select whether to load the test field in bundle.json, that is, whether to call the test case",
             "argPhase": "loader",
             "argType": "bool",
             "argAttribute": {

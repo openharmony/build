@@ -45,7 +45,7 @@ class ServiceInterface(metaclass=ABCMeta):
             LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
                 argName, self._args_dict[argName], argValue))
 
-        self.args_dict[argName] = argValue
+        self._args_dict[argName] = argValue
 
     @abstractmethod
     def run(self) -> StatusCode:

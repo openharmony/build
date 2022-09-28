@@ -85,12 +85,11 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     def resolveBuildXts(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         loader = buildModule.loader.unwrapped_loader
-        for gn_list in buildModule.args_dict['gn_args'].argValue:
-            for gn_arg in gn_list:
-                if 'build_xts' in gn_arg:
-                    variable, value = gn_arg.split('=')
-                    loader.regist_arg(variable, bool(value))
-                    return StatusCode()
+        for gn_arg in buildModule.args_dict['gn_args'].argValue:
+            if 'build_xts' in gn_arg:
+                variable, value = gn_arg.split('=')
+                loader.regist_arg(variable, bool(value))
+                return StatusCode()
         loader.regist_arg("build_xts", bool(targetArg.argValue))
         return StatusCode()
 
