@@ -16,14 +16,14 @@ declare_args() {
   enable_auto_var_init = false
 }
 
-using_auto_var_init = enable_auto_var_init
+using_security_flag = enable_auto_var_init
 
 if (!is_ohos) {
-  using_auto_var_init = false
+  using_security_flag = false
 }
 
 assert(
-    !using_auto_var_init || is_clang,
+    !using_security_flag || is_clang,
     "automatic variable initialization requires setting is_clang = true in 'gn args'")
 
 template("ohos_auto_initialize_config") {
@@ -41,14 +41,14 @@ template("ohos_auto_initialize_config") {
             "auto_var_init can only be set to pattern, zero or uninit, for example, auto_var_init = \"pattern\"")
 
         if (auto_var_init == "pattern") {
-          configs += [ "//build/config/secure:auto_var_pattern_init_config" ]
+          configs += [ "//build/config/security:auto_var_pattern_init_config" ]
         } else if (auto_var_init == "zero") {
-          configs += [ "//build/config/secure:auto_var_zero_init_config" ]
+          configs += [ "//build/config/security:auto_var_zero_init_config" ]
         } else if (auto_var_init == "uninit") {
-          configs += [ "//build/config/secure:auto_var_uninit_config" ]
+          configs += [ "//build/config/security:auto_var_uninit_config" ]
         }
       } else {
-        configs += [ "//build/config/secure:auto_var_zero_init_config" ]
+        configs += [ "//build/config/security:auto_var_zero_init_config" ]
       }
     }
   }

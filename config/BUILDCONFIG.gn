@@ -581,7 +581,7 @@ if (is_standard_system) {
     "//build/config/compiler:no_common",
     "//build/config/coverage:default_coverage",
     "//build/config/sanitizers:default_sanitizer_flags",
-    "//build/config/secure:default_secure_configs",
+    "//build/config/security:default_security_configs",
   ]
 
   if (is_ohos) {
