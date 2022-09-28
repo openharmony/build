@@ -13,7 +13,7 @@
 
 import("//build/config/clang/clang.gni")
 import("//build/config/ohos/config.gni")
-import("//build/config/secure/secure_config.gni")
+import("//build/config/security/security_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
