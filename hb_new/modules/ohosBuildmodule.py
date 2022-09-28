@@ -56,7 +56,7 @@ class OHOSBuildModule(BuildModuleInterface):
         return self.preloader.run()
 
     def _load(self) -> StatusCode:
-        for preloadArg in [arg for arg in self.args_dict.values()if arg.argPhase == 'load']:
+        for preloadArg in [arg for arg in self.args_dict.values()if arg.argPhase == 'loader']:
             status_code = self.argsResolver.resolveArg(
                 preloadArg, self, config=self.config)
             if not status_code.status:

@@ -81,6 +81,40 @@ class BuildArgsResolver(ArgsResolverInterface):
                 return StatusCode(status=False, info='')
         return StatusCode()
 
+    def resolveScalableBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        loader = buildModule.loader.unwrapped_loader
+        loader.regist_arg("scalable_build", bool(targetArg.argValue))
+        return StatusCode()
+
+    def resolveBuildPlatformName(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        loader = buildModule.loader.unwrapped_loader
+        loader.regist_arg("build_platform_name", targetArg.argValue)
+        return StatusCode()
+
+    def resolveBuildXts(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        loader = buildModule.loader.unwrapped_loader
+        for gn_list in buildModule.args_dict['gn_args'].argValue:
+            for gn_arg in gn_list:
+                if 'build_xts' in gn_arg:
+                    variable, value = gn_arg.split('=')
+                    loader.regist_arg(variable, bool(value))
+                    return StatusCode()
+        loader.regist_arg("build_xts", bool(targetArg.argValue))
+        return StatusCode()
+
+    def resolveIgnoreApiCheck(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        loader = buildModule.loader.unwrapped_loader
+        if len(targetArg.argValue):
+            loader.regist_arg("ignore_api_check", sum(targetArg.argValue, []))
+        else:
+            loader.regist_arg("ignore_api_check", ['xts', 'common', 'developertest'])
+        return StatusCode()
+
+    def resolveLoadTestConfig(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        loader = buildModule.loader.unwrapped_loader
+        loader.regist_arg("load_test_config", bool(targetArg.argValue))
+        return StatusCode()
+
     def resolveRenameLastLog(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         if targetArg.argValue:
             out_path = config.out_path
@@ -133,6 +167,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolveBuildType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        if targetArg.argValue == 'debug':
+            targetGenerator.regist_arg('isdebug', True)
+        targetGenerator.regist_arg('ohos_build_type', targetArg.argValue)
         return StatusCode()
 
     def resolveFullCompilation(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:

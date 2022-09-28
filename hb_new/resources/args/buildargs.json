@@ -169,6 +169,66 @@
             "testFunction": "testStrictMode"
         },
         {
+            "argName": "--scalable-build",
+            "argDefault": "False",
+            "argHelp": "",
+            "argPhase": "loader",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveScalableBuild",
+            "testFunction": "testScalableBuild"
+        },
+        {
+            "argName": "--build-platform-name",
+            "argDefault": "phone",
+            "argHelp": "",
+            "argPhase": "loader",
+            "argType": "str",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveBuildPlatformName",
+            "testFunction": "testBuildPlatformName"
+        },
+        {
+            "argName": "--build-xts",
+            "argDefault": "False",
+            "argHelp": "",
+            "argPhase": "loader",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveBuildXts",
+            "testFunction": "testBuildXts"
+        },
+        {
+            "argName": "--ignore-api-check",
+            "argDefault": ["xts", "common", "developertest"],
+            "argHelp": "",
+            "argPhase": "loader",
+            "argType": "list",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveIgnoreApiCheck",
+            "testFunction": "testIgnoreApiCheck"
+        },
+        {
+            "argName": "--load-test-config",
+            "argDefault": "True",
+            "argHelp": "",
+            "argPhase": "loader",
+            "argType": "bool",
+            "argAttribute": {
+
+            },
+            "resolveFuntion": "resolveLoadTestConfig",
+            "testFunction": "testLoadTestConfig"
+        },
+        {
             "argName": "--build-target",
             "argDefault": ["default"],
             "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
