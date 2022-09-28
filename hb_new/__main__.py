@@ -76,7 +76,12 @@ def add_options(parser: argparse.ArgumentParser):
     args = parser.parse_args(sys.argv[2:])
     
     for oh_arg in args_dict.values():
-            oh_arg.argValue = args.__dict__[oh_arg.argName]
+        assigned_value = args.__dict__[oh_arg.argName]
+        if oh_arg.argType == 'list':
+            assigned_value = sum(assigned_value, [])
+        elif oh_arg.argType == 'bool':
+            assigned_value = bool(assigned_value)
+        oh_arg.argValue = assigned_value
     return args_dict
 
 def hb_set_adapt(root_path:str, product_name:str) -> None:

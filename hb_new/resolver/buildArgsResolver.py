@@ -43,9 +43,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         if targetArg.argValue == 'ohos-sdk':
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
             targetGenerator.regist_arg('build_ohos_sdk', True)
-            if buildModule.args_dict['build_target'].argValue[0] == 'default':
-                buildModule.args_dict['build_target'].argValue = [
-                    'build_ohos_sdk']
+            if len(buildModule.args_dict['build_target'].argValue) == 0:
+                buildModule.args_dict['build_target'].argValue = ['build_ohos_sdk']
             buildModule.args_dict['target_cpu'].argValue = 'arm64'
         return StatusCode()
 
@@ -56,25 +55,18 @@ class BuildArgsResolver(ArgsResolverInterface):
     def resolveBuildTarget(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         build_executor = buildModule.targetCompiler.unwrapped_build_executor
         target_list = []
-        if len(targetArg.argValue) == 1:
-            if targetArg.argValue[0] == 'default':
-                target_list = [
-                    'images'] if config.os_level == 'standard' else ['packages']
-            else:
-                target_list = targetArg.argValue
+        if len(targetArg.argValue):
+            target_list = targetArg.argValue
         else:
-            for tmp_list in targetArg.argValue[1:]:
-                for target in tmp_list:
-                    target_list.append(target)
-        if len(target_list) != 0:
-            build_executor.regist_arg('build_target', target_list)
+            target_list = ['images'] if config.os_level == 'standard' else ['packages']
+        build_executor.regist_arg('build_target', target_list)
         return StatusCode()
 
     def resolveVerbose(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
     def resolveStrictMode(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
-        if strtobool(Arg.argValue) and isinstance(buildModule, BuildModuleInterface):
+        if bool(targetArg.argValue) and isinstance(buildModule, BuildModuleInterface):
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
             if not (preloader.outputs.check_outputs() and loader.outputs.check_outputs()):
@@ -105,7 +97,7 @@ class BuildArgsResolver(ArgsResolverInterface):
     def resolveIgnoreApiCheck(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         loader = buildModule.loader.unwrapped_loader
         if len(targetArg.argValue):
-            loader.regist_arg("ignore_api_check", sum(targetArg.argValue, []))
+            loader.regist_arg("ignore_api_check", targetArg.argValue)
         else:
             loader.regist_arg("ignore_api_check", ['xts', 'common', 'developertest'])
         return StatusCode()
@@ -186,48 +178,45 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
-        gn = buildModule.targetGenerator.unwrapped_build_file_generator
-        for tmp_list in targetArg.argValue:
-            for gn_arg in tmp_list:
-                try:
-                    variable, value = gn_arg.split('=')
-                    if TypeCheckUtil.isBoolType(value):
-                        value = bool(value)
-                    elif TypeCheckUtil.isIntType(value):
-                        value = int(value)
-                    else:
-                        value = str(value)
-                    gn.regist_arg(variable, value)
-                except ValueError:
-                    raise OHOSException(f'Invalid gn args: {gn_arg}')
+        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        for gn_arg in targetArg.argValue:
+            try:
+                variable, value = gn_arg.split('=')
+                if TypeCheckUtil.isBoolType(value):
+                    value = bool(value)
+                elif TypeCheckUtil.isIntType(value):
+                    value = int(value)
+                else:
+                    value = str(value)
+                targetGenerator.regist_arg(variable, value)
+            except ValueError:
+                raise OHOSException(f'Invalid gn args: {gn_arg}')
         return StatusCode()
 
     def resolveExportPara(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
-        for tmp_list in targetArg.argValue:
-            for gn_arg in tmp_list:
-                try:
-                    variable, value = gn_arg.split(':')
-                    if TypeCheckUtil.isBoolType(value):
-                        value = bool(value)
-                    elif TypeCheckUtil.isIntType(value):
-                        value = int(value)
-                    else:
-                        value = str(value)
-                    targetGenerator.regist_arg(variable, value)
-                except ValueError:
-                    raise OHOSException(f'Invalid gn args: {gn_arg}')
+        for gn_arg in targetArg.argValue:
+            try:
+                variable, value = gn_arg.split(':')
+                if TypeCheckUtil.isBoolType(value):
+                    value = bool(value)
+                elif TypeCheckUtil.isIntType(value):
+                    value = int(value)
+                else:
+                    value = str(value)
+                targetGenerator.regist_arg(variable, value)
+            except ValueError:
+                raise OHOSException(f'Invalid gn args: {gn_arg}')
         return StatusCode()
 
     def resolveJobs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
     def resolveTest(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
-        if len(targetArg.argValue) > 0:
+        if len(targetArg.argValue) > 1:
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
-            test_arg = list(targetArg.argValue[0])
-            test_type = test_arg[0]
-            test_target = test_arg[1]
+            test_type = targetArg.argValue[0]
+            test_target = targetArg.argValue[1]
             if test_type == 'notest':
                 targetGenerator.regist_arg('ohos_test_args', 'notest')
             elif test_type == "xts":

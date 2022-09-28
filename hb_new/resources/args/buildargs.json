@@ -206,7 +206,7 @@
         },
         {
             "argName": "--ignore-api-check",
-            "argDefault": ["xts", "common", "developertest"],
+            "argDefault": [],
             "argHelp": "",
             "argPhase": "loader",
             "argType": "list",
@@ -230,7 +230,7 @@
         },
         {
             "argName": "--build-target",
-            "argDefault": ["default"],
+            "argDefault": [],
             "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
             "argPhase": "targetCompilation",
             "argType": "list",

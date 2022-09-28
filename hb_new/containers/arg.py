@@ -22,7 +22,7 @@ from distutils.util import strtobool
 class Arg():
 
     def __init__(self, name: str, help: str, phase: str,
-                 attribute: str, value: str, argtype: str,
+                 attribute: str, value, argtype: str,
                  resolveFuntion: str):
         self._argName = name
         self._argHelp = help
