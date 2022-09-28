@@ -637,7 +637,7 @@
     },
     {
         "install_dir": "previewer/common/bin/module/net",
-        "module_label": "//foundation/communication/netstack/frameworks/js/napi/http:copy_http_napi",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_communication_library",
         "target_os": [
             "windows",
             "darwin"
