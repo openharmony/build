@@ -44,8 +44,11 @@ template("ohos_clang_toolchain") {
     libs_section_prefix = "${ohos_libc_dir}/Scrt1.o"
     libs_section_prefix += " ${ohos_libc_dir}/crti.o"
     libs_section_postfix = "${ohos_libc_dir}/crtn.o"
-    solink_libs_section_prefix = " ${ohos_libc_dir}/crti.o"
+    clang_rt_dir = rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
+    solink_libs_section_prefix = "${ohos_libc_dir}/crti.o"
+    solink_libs_section_prefix += " ${clang_rt_dir}/clang_rt.crtbegin.o"
     solink_libs_section_postfix = "${ohos_libc_dir}/crtn.o"
+    solink_libs_section_postfix += " ${clang_rt_dir}/clang_rt.crtend.o"
 
     _prefix = rebase_path("${clang_base_path}/bin", root_build_dir)
     cc = "${_prefix}/clang"
