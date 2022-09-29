@@ -37,7 +37,7 @@ sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util import build_utils  # noqa: E402
-from scripts.util.file_utils import write_json_file  # noqa: E402
+from scripts.util.file_utils import write_json_file, read_json_file  # noqa: E402
 
 XML_ESCAPE_TABLE = {
     "&": "&amp;",
@@ -80,6 +80,9 @@ def copy_static_library_notices(options, depfiles):
                             os.path.basename(file))
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copyfile(file, dest)
+        if os.path.isfile("{}.json".format(file)):
+            os.makedirs(os.path.dirname("{}.json".format(dest)), exist_ok=True)
+            shutil.copyfile("{}.json".format(file), "{}.json".format(dest))
 
 
 def write_file(file, string):
@@ -110,6 +113,20 @@ def generate_txt_notice_files(file_hash, input_dir, output_filename,
                     output_file, '/{}'.format(
                         re.sub('.txt.*', '',
                                os.path.relpath(filename, input_dir))))
+            write_file(output_file, '-' * 60)
+            write_file(output_file, "Notices for software(s):")
+            software_list = []
+            for filename in value:
+                json_filename = '{}.json'.format(filename)
+                contents = read_json_file(json_filename)
+                if contents is not None and contents not in software_list:
+                    software_list.append(contents)
+            for contens_value in software_list:
+                notice_source_path = contens_value[0].get('Path').strip()
+                software_name = contens_value[0].get('Software').strip()
+
+                write_file(output_file, "Software: {}".format(software_name))
+                write_file(output_file, "Path: {}".format(notice_source_path))
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
