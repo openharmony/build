@@ -55,6 +55,9 @@ def collect_notice_files(options, dest_dir, depfiles):
                 os.makedirs(os.path.dirname(dest), exist_ok=True)
                 shutil.copyfile(module_info['notice'], dest)
                 depfiles.append(module_info['notice'])
+                if os.path.isfile("{}.json".format(module_info['notice'])):
+                    os.makedirs(os.path.dirname("{}.json".format(dest)), exist_ok=True)
+                    shutil.copyfile("{}.json".format(module_info['notice']), "{}.json".format(dest))
 
     notice_files = build_utils.get_all_files(options.notice_root_dir)
     depfiles.extend(notice_files)
@@ -63,6 +66,9 @@ def collect_notice_files(options, dest_dir, depfiles):
                             os.path.relpath(file, options.notice_root_dir))
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         shutil.copyfile(file, dest)
+        if os.path.isfile("{}.json".format(file)):
+            os.makedirs(os.path.dirname("{}.json".format(dest)), exist_ok=True)
+            shutil.copyfile("{}.json".format(file), "{}.json".format(dest))
 
 
 def main():

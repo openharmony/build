@@ -19,7 +19,7 @@ import os
 import shutil
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
-from scripts.util.file_utils import read_json_file  # noqa: E402
+from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
 README_FILE_NAME = 'README.OpenSource'
@@ -48,39 +48,80 @@ def find_license_recursively(current_dir, default_license):
                                     default_license)
 
 
+def find_opensource_recursively(current_dir):
+    if is_top_dir(current_dir):
+        return None
+    candidate = os.path.join(current_dir, README_FILE_NAME)
+    if os.path.isfile(candidate):
+        return os.path.join(candidate)
+    return find_opensource_recursively(os.path.dirname(current_dir))
+
+
 def get_license_from_readme(readme_path):
     contents = read_json_file(readme_path)
     if contents is None:
         raise Exception("Error: failed to read {}.".format(readme_path))
 
     notice_file = contents[0].get('License File').strip()
+    notice_name = contents[0].get('Name').strip()  
+    notice_version = contents[0].get('Version Number').strip()
     if notice_file is None:
         raise Exception("Error: value of notice file is empty in {}.".format(
             readme_path))
+    if notice_name is None:
+        raise Exception("Error: Name of notice file is empty in {}.".format(
+            readme_path))
+    if notice_version is None:
+        raise Exception("Error: Version Number of notice file is empty in {}.".format(
+            readme_path))
 
-    return os.path.join(os.path.dirname(readme_path), notice_file)
+    return os.path.join(os.path.dirname(readme_path), notice_file), notice_name, notice_version
 
 
 def do_collect_notice_files(options, depfiles):
+    module_notice_info_list = []
+    module_notice_info = {}
     notice_file = options.license_file
+    if notice_file:
+        opensource_file = find_opensource_recursively(options.module_source_dir)
+        if opensource_file is not None and os.path.exists(opensource_file):
+            notice_file_info = get_license_from_readme(opensource_file)
+            module_notice_info['Software'] = "{} {}".format(notice_file_info[1], notice_file_info[2])
+        else:
+            module_notice_info['Software'] = ""
     if notice_file is None:
         readme_path = os.path.join(options.module_source_dir,
                                    README_FILE_NAME)
         if os.path.exists(readme_path):
             depfiles.append(readme_path)
-            notice_file = get_license_from_readme(readme_path)
+            notice_file_info = get_license_from_readme(readme_path)
+            notice_file = notice_file_info[0]
+            module_notice_info['Software'] = "{} {}".format(notice_file_info[1], notice_file_info[2])
 
     if notice_file is None:
         notice_file = find_license_recursively(options.module_source_dir,
                                                options.default_license)
+        opensource_file = find_opensource_recursively(options.module_source_dir)
+        if opensource_file is not None and os.path.exists(opensource_file):
+            notice_file_info = get_license_from_readme(opensource_file)
+            module_notice_info['Software'] = "{} {}".format(notice_file_info[1], notice_file_info[2])
+        else:
+            module_notice_info['Software'] = ""
+
+    module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
+    module_notice_info_list.append(module_notice_info)
 
     if notice_file:
         for output in options.output:
+            notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
+            os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
             if os.path.exists(notice_file):
                 shutil.copy(notice_file, output)
+                write_json_file(notice_info_json, module_notice_info_list)
             else:
                 build_utils.touch(output)
+                build_utils.touch(notice_info_json)
         depfiles.append(notice_file)
 
 
