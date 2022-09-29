@@ -22,8 +22,8 @@ import argparse
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lite'))
 
-from services.preloader import PreloaderAdapt
 from services.preloader import OHOSPreloader
 from services.interface.preload import Preload
 
@@ -65,7 +65,7 @@ def main_hb_new():
 
     config = Config()
     
-    preloader = PreloaderAdapt(config)
+    preloader = OHOSPreloader(config)
     preload = Preload(preloader)
 
     loader = OHOSLoader(config)

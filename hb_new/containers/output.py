@@ -34,4 +34,8 @@ class Output():
         else:
             self._is_produced = self._check_output()
         return self._is_produced
+
+    @property 
+    def full_path(self):
+        return os.path.join(self._path, self._outcome)
             
