@@ -43,13 +43,12 @@ from modules.interface.buildModule import BuildModule
 from modules.ohosBuildmodule import OHOSBuildModule
 
 from resources.config import Config
+from resources.global_var import CURRENT_OHOS_ROOT
 
 from containers.arg import Arg
 
 from lite.hb_internal.set.set import exec_command as hb_set
-VERSION = "1.0.0"
 
-CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 def hb_set_adapt(root_path:str, product_name:str) -> None:
     args_dict = {}

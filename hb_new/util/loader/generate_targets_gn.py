@@ -18,8 +18,9 @@ import os
 import sys
 import shutil
 
-_SOURCE_ROOT = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', '..'))
+from resources.global_var import CURRENT_OHOS_ROOT
+
+_SOURCE_ROOT= CURRENT_OHOS_ROOT
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(_SOURCE_ROOT, 'third_party'))
 from jinja2 import Template  # noqa: E402
