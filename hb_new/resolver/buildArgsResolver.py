@@ -179,6 +179,7 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator.regist_arg('device_type', buildModule.args_dict['device_type'].argValue)
         for gn_arg in targetArg.argValue:
             try:
                 variable, value = gn_arg.split('=')
