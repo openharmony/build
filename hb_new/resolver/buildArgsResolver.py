@@ -180,6 +180,7 @@ class BuildArgsResolver(ArgsResolverInterface):
     def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
         targetGenerator.regist_arg('device_type', buildModule.args_dict['device_type'].argValue)
+        targetGenerator.regist_arg('build_variant', buildModule.args_dict['build_variant'].argValue)
         for gn_arg in targetArg.argValue:
             try:
                 variable, value = gn_arg.split('=')
@@ -236,6 +237,30 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolveBuildVariant(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        ohos_para_data = []
+        ohos_para_file_path = os.path.join(
+            config.out_path, 'packages/phone/system/etc/param/ohos.para')
+        if not os.path.exists(ohos_para_file_path):
+            return StatusCode()
+        with open(ohos_para_file_path, 'r', encoding='utf-8') as ohos_para_file:
+                for line in ohos_para_file:
+                    ohos_para_data.append(line)
+        for i, line in enumerate(ohos_para_data):
+            if ohos_para_data[i].__contains__('const.secure'):
+                if targetArg.argValue == 'user':
+                    ohos_para_data[i] = 'const.secure=1\n'
+                else:
+                    ohos_para_data[i] = 'const.secure=0\n'
+            if ohos_para_data[i].__contains__('const.debuggable'):
+                if targetArg.argValue == 'user':
+                    ohos_para_data[i] = 'const.debuggable=0\n' 
+                else:
+                    ohos_para_data[i] = 'const.debuggable=1\n'
+        data = ''
+        for line in ohos_para_data:
+            data += line
+        with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
+            ohos_para_file.write(data)
         return StatusCode()
 
     def resolveDeviceType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
