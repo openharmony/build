@@ -16,20 +16,96 @@
 # limitations under the License.
 #
 
+import os
+import argparse
+import sys
+import json
 from distutils.util import strtobool
+from hb_new.exceptions.ohosException import OHOSException
+
+from util.logUtil import LogUtil
+from resolver.argsFactory import ArgsFactory
+
+
+class ArgType():
+
+    NONE = 0
+    BOOL = 1
+    INT = 2
+    STR = 3
+    LIST = 4
+    DICT = 5
+    GATE = 6
+
+    @staticmethod
+    def getType(value: str):
+        if value == 'bool':
+            return ArgType.BOOL
+        elif value == "int":
+            return ArgType.INT
+        elif value == 'str':
+            return ArgType.STR
+        elif value == "list":
+            return ArgType.LIST
+        elif value == 'dict':
+            return ArgType.DICT
+        elif value == 'gate':
+            return ArgType.GATE
+        else:
+            return ArgType.NONE
+
+
+class BuildPhase():
+
+    NONE = 0
+    PRE_BUILD = 1
+    PRE_LOAD = 2
+    LOAD = 3
+    PRE_TARGET_GENERATE = 4
+    TARGET_GENERATE = 5
+    POST_TARGET_GENERATE = 6
+    PRE_TARGET_COMPILATION = 7
+    TARGET_COMPILATION = 8
+    POST_TARGET_COMPILATION = 9
+    POST_BUILD = 10
+
+    @staticmethod
+    def getType(value: str):
+        if value == 'prebuild':
+            return BuildPhase.PRE_BUILD
+        elif value == "preload":
+            return BuildPhase.PRE_LOAD
+        elif value == 'load':
+            return BuildPhase.LOAD
+        elif value == "preTargetGenerate":
+            return BuildPhase.PRE_TARGET_GENERATE
+        elif value == 'targetGenerate':
+            return BuildPhase.TARGET_GENERATE
+        elif value == 'postTargetGenerate':
+            return BuildPhase.POST_TARGET_GENERATE
+        elif value == 'preTargetCompilation':
+            return BuildPhase.PRE_TARGET_COMPILATION
+        elif value == 'targetCompilation':
+            return BuildPhase.TARGET_COMPILATION
+        elif value == 'postTargetCompilation':
+            return BuildPhase.POST_TARGET_COMPILATION
+        elif value == 'postbuild':
+            return BuildPhase.POST_BUILD
+        else:
+            return BuildPhase.NONE
 
 
 class Arg():
 
     def __init__(self, name: str, help: str, phase: str,
-                 attribute: str, value, argtype: str,
+                 attribute: dict, argtype: ArgType, value,
                  resolveFuntion: str):
         self._argName = name
         self._argHelp = help
         self._argPhase = phase
         self._argAttribute = attribute
-        self._argValue = value
         self._argType = argtype
+        self._argValue = value
         self._resolveFuntion = resolveFuntion
 
     @property
@@ -69,17 +145,54 @@ class Arg():
         self._resolveFuntion = value
 
     @staticmethod
-    def createInstanceByDict(jsonDict: dict):
-        name = str(jsonDict['argName']).replace("-", "_")[2:]
-        help = jsonDict['argHelp']
-        phase = jsonDict['argPhase']
-        attibute = jsonDict['argAttribute']
-        arg_type = jsonDict['argType']
-        default_value = strtobool(
-            jsonDict['argDefault']) if jsonDict['argType'] == 'bool' else jsonDict['argDefault']
-        resolveFuntion = jsonDict['resolveFuntion']
-        return Arg(name, help, phase, attibute, default_value, arg_type, resolveFuntion)
+    def createInstanceByDict(data: dict):
+        arg_name = str(data['argName']).replace("-", "_")[2:]
+        arg_help = str(data['argHelp'])
+        arg_phase = BuildPhase.getType(str(data['argPhase']))
+        arg_attibute = dict(data['argAttribute'])
+        arg_type = ArgType.getType(data['argType'])
+        arg_value = ''
+        if arg_type == ArgType.BOOL or arg_type == ArgType.GATE:
+            arg_value = bool(strtobool(data['argDefault']))
+        elif arg_type == ArgType.INT:
+            arg_value = int(data['argDefault'])
+        elif arg_type == ArgType.STR:
+            arg_value = data['argDefault']
+        elif arg_type == ArgType.LIST:
+            arg_value = list(data['argDefault'])
+        elif arg_type == ArgType.DICT:
+            arg_value = dict(data['argDefault'])
+        else:
+            raise OHOSException('Unknown arg type')
+        resolveFuntion = data['resolveFuntion']
+        return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
 
     @staticmethod
-    def createInstanceByArgparse(args_parser):
-        pass
+    def parse_all_args() -> dict:
+        parser = argparse.ArgumentParser()
+        args_file_path = os.path.join(os.path.dirname(os.path.dirname(
+            os.path.abspath(__file__))), 'resources/args/buildargs.json')
+        args_dict = {}
+
+        with open(args_file_path) as args_file:
+            all_args = json.load(args_file)
+            for arg in all_args['args']:
+                arg = dict(arg)
+                ArgsFactory.genenic_add_option(parser, arg)
+
+                oh_arg = Arg.createInstanceByDict(arg)
+                if oh_arg.argAttribute.get('deprecated', None):
+                    LogUtil.hb_warning(
+                        '{} will be deprecated, please consider use other options'.format(oh_arg.argName))
+                args_dict[oh_arg.argName] = oh_arg
+        args = parser.parse_args(sys.argv[2:])
+
+        for oh_arg in args_dict.values():
+            assigned_value = args.__dict__[oh_arg.argName]
+            if oh_arg.argType == ArgType.LIST:
+                assigned_value = sum(assigned_value, [])
+            elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
+                assigned_value = bool(assigned_value)
+            oh_arg.argValue = assigned_value
+
+        return args_dict

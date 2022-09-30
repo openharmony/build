@@ -73,18 +73,6 @@
             "testFunction": "testDisablePartOfPostBuild"
         },
         {
-            "argName": "--build-only-gn",
-            "argDefault": "False",
-            "argHelp": "only do gn parse, donot run ninja",
-            "argPhase": "prebuild",
-            "argType": "bool",
-            "argAttribute":{
-
-            },
-            "resolveFuntion": "resolveBuildOnlyGn",
-            "testFunction": "testBuildOnlyGn"
-        },
-        {
             "argName": "--build-type",
             "argDefault": "debug",
             "argHelp": "release or debug version, mini/small only",
@@ -160,7 +148,7 @@
             "argName": "--strict-mode",
             "argDefault": "False",
             "argHelp": "check all produce of each phase to early terminates a potentially problematic compilation ",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "bool",
             "argAttribute": {
 
@@ -172,7 +160,7 @@
             "argName": "--scalable-build",
             "argDefault": "False",
             "argHelp": "Select whether to read information from parts.json generate by preload",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "bool",
             "argAttribute": {
 
@@ -184,7 +172,7 @@
             "argName": "--build-platform-name",
             "argDefault": "phone",
             "argHelp": "name of the compilation platform. The current optional value is 'phone'",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "str",
             "argAttribute": {
 
@@ -196,7 +184,7 @@
             "argName": "--build-xts",
             "argDefault": "False",
             "argHelp": "Select whether to load the components included in the subsystem xts",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "bool",
             "argAttribute": {
 
@@ -208,7 +196,7 @@
             "argName": "--ignore-api-check",
             "argDefault": [],
             "argHelp": "Skip the check of some subsystems",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "list",
             "argAttribute": {
 
@@ -220,7 +208,7 @@
             "argName": "--load-test-config",
             "argDefault": "True",
             "argHelp": "Select whether to load the test field in bundle.json, that is, whether to call the test case",
-            "argPhase": "loader",
+            "argPhase": "load",
             "argType": "bool",
             "argAttribute": {
 
@@ -311,6 +299,29 @@
             },
             "resolveFuntion": "resolveJobs",
             "testFunction": "testJobs"
+        },
+        {
+            "argName": "--fast-rebuild",
+            "argDefault": "False",
+            "argHelp": "it will skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script",
+            "argPhase": "targetGenerate",
+            "argType": "gate",
+            "argAttribute":{
+            },
+            "resolveFuntion": "resolveFastRebuild",
+            "testFunction": "testFastRebuild"
+        },
+        {
+            "argName": "--build-only-gn",
+            "argDefault": "False",
+            "argHelp": "only do gn parse, donot run ninja",
+            "argPhase": "targetCompilation",
+            "argType": "gate",
+            "argAttribute":{
+
+            },
+            "resolveFuntion": "resolveBuildOnlyGn",
+            "testFunction": "testBuildOnlyGn"
         }
     ]
 }

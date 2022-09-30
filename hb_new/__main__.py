@@ -18,10 +18,7 @@
 
 import os
 import sys
-import json
 import argparse
-
-
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -30,21 +27,17 @@ from services.preloader import PreloaderAdapt
 from services.preloader import OHOSPreloader
 from services.interface.preload import Preload
 
-from services.loader import LoaderAdapt
 from services.loader import OHOSLoader
 from services.interface.load import Load
 
-from services.gn import GnAdapter
 from services.gn import Gn
 from services.interface.buildFileGenerator import BuildFileGenerator
 
-from services.ninja import NinjaAdapter
 from services.ninja import Ninja
 from services.interface.buildExecutor import BuildExecutor
 
 from resolver.interface.argsResolver import ArgsResolver
 from resolver.buildArgsResolver import BuildArgsResolver
-from resolver.argsFactory import ArgsFactory
 
 from modules.interface.buildModule import BuildModule
 from modules.ohosBuildmodule import OHOSBuildModule
@@ -52,37 +45,11 @@ from modules.ohosBuildmodule import OHOSBuildModule
 from resources.config import Config
 
 from containers.arg import Arg
-from util.logUtil import LogUtil
 
 from lite.hb_internal.set.set import exec_command as hb_set
-VERSION = "0.4.6"
+VERSION = "1.0.0"
 
 CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-def add_options(parser: argparse.ArgumentParser):
-    args_file_path = os.path.join(os.path.dirname(
-        os.path.abspath(__file__)), 'resources/args/buildargs.json')
-    args_dict = {}
-    with open(args_file_path) as args_file:
-        all_args = json.load(args_file)
-        for arg in all_args['args']:
-            arg = dict(arg)
-            ArgsFactory.genenic_add_option(parser, arg)
-
-            oh_arg = Arg.createInstanceByDict(arg)
-            if oh_arg.argAttribute.get('deprecated', None):
-                LogUtil.hb_warning('{} will be deprecated, please consider use other options'.format(oh_arg.argName))
-            args_dict[oh_arg.argName] = oh_arg
-    args = parser.parse_args(sys.argv[2:])
-    
-    for oh_arg in args_dict.values():
-        assigned_value = args.__dict__[oh_arg.argName]
-        if oh_arg.argType == 'list':
-            assigned_value = sum(assigned_value, [])
-        elif oh_arg.argType == 'bool':
-            assigned_value = bool(assigned_value)
-        oh_arg.argValue = assigned_value
-    return args_dict
 
 def hb_set_adapt(root_path:str, product_name:str) -> None:
     args_dict = {}
@@ -92,8 +59,7 @@ def hb_set_adapt(root_path:str, product_name:str) -> None:
     hb_set(args)
 
 def main_hb_new():
-    parser = argparse.ArgumentParser()
-    args_dict = add_options(parser)
+    args_dict = Arg.parse_all_args()
     
     hb_set_adapt(CURRENT_OHOS_ROOT, args_dict['product_name'].argValue)
 

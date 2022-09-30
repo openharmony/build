@@ -19,8 +19,6 @@
 import os
 
 from distutils.spawn import find_executable
-from distutils.util import strtobool
-
 
 from containers.arg import Arg
 from containers.statusCode import StatusCode
@@ -44,7 +42,8 @@ class BuildArgsResolver(ArgsResolverInterface):
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
             targetGenerator.regist_arg('build_ohos_sdk', True)
             if len(buildModule.args_dict['build_target'].argValue) == 0:
-                buildModule.args_dict['build_target'].argValue = ['build_ohos_sdk']
+                buildModule.args_dict['build_target'].argValue = [
+                    'build_ohos_sdk']
             buildModule.args_dict['target_cpu'].argValue = 'arm64'
         return StatusCode()
 
@@ -58,7 +57,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         if len(targetArg.argValue):
             target_list = targetArg.argValue
         else:
-            target_list = ['images'] if config.os_level == 'standard' else ['packages']
+            target_list = [
+                'images'] if config.os_level == 'standard' else ['packages']
         build_executor.regist_arg('build_target', target_list)
         return StatusCode()
 
@@ -98,7 +98,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         if len(targetArg.argValue):
             loader.regist_arg("ignore_api_check", targetArg.argValue)
         else:
-            loader.regist_arg("ignore_api_check", ['xts', 'common', 'developertest'])
+            loader.regist_arg("ignore_api_check", [
+                              'xts', 'common', 'developertest'])
         return StatusCode()
 
     def resolveLoadTestConfig(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
@@ -227,9 +228,6 @@ class BuildArgsResolver(ArgsResolverInterface):
     def resolveKeepNinjaGoing(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
-    def resolveBuildOnlyGn(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
-        return StatusCode()
-
     def resolveDisablePackageImage(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
@@ -263,6 +261,12 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolveDisablePartOfPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        return StatusCode()
+
+    def resolveBuildOnlyGn(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        return StatusCode()
+
+    def resolveFastRebuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         return StatusCode()
 
     def _mapArgsToFunction(self, args_dict: dict):

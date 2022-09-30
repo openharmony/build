@@ -25,9 +25,6 @@ from exceptions.ohosException import OHOSException
 
 class ArgsFactory():
 
-    def __init__(self) -> None:
-        pass
-
     @staticmethod
     def genenic_add_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
         if arg['argType'] == 'bool':
