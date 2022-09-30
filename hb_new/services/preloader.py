@@ -15,509 +15,70 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-import os
+import sys 
 from containers.statusCode import StatusCode
-from containers.preloader_outputs import PrealoaderOutputs
-from containers.preloader_dirs import PreloaderDirs
 from services.interface.preloadInterface import PreloadInterface
 from resources.config import Config
-from util.ioUtil import IoUtil
-from util.parse_lite_subsystems_config import parse_lite_subsystem_config
-from util.parse_vendor_product_config import get_vendor_parts_list
+
+from lite.hb_internal.preloader.preloader import Preloader
+from hb_internal.common.config import Config as _Config
 
 
-class _MyProduct():
-
-    def __init__(self, product_name, config_dirs, config_json):
-        self._name = product_name
-        self._dirs = config_dirs
-        self._device = None
-        self._config = {}
-        self._build_vars = {}
-        self._parts = {}
-        self._syscap_info = {}
-        self._parsed = False
-        self._config_file = config_json
-
-    def _sanitize(self, config):
-        if config and self._name != config.get('product_name'):
-            raise Exception(
-                "product name configuration incorrect for '{}'".format(
-                    self._name))
-
-    def _get_base_parts(self, base_config_dir, os_level):
-        system_base_config_file = os.path.join(base_config_dir,
-                                              '{}_system.json'.format(os_level))
-        if not os.path.exists(system_base_config_file):
-            raise Exception("product configuration '{}' doesn't exist.".format(
-                system_base_config_file))
-        return IoUtil.read_json_file(system_base_config_file)
-
-    def _get_inherit_parts(self, inherit, source_root_dir):
-        inherit_parts = {}
-        for _config in inherit:
-            _file = os.path.join(source_root_dir, _config)
-            _info = IoUtil.read_json_file(_file)
-            parts = _info.get('parts')
-            if parts:
-                inherit_parts.update(parts)
-            else:
-                inherit_parts.update(get_vendor_parts_list(_info))
-        return inherit_parts
-
-    def _get_sys_relate_parts(self, system_component_info, _parts, source_root_dir):
-        _info = IoUtil.read_json_file(os.path.join(source_root_dir, system_component_info))
-        ret = {}
-        parts = _info.get('parts')
-        if not parts:
-            parts = get_vendor_parts_list(_info)
-        for part, featrue in parts.items():
-            if not _parts.get(part):
-                ret[part] = featrue
-        return ret
-
-    def _get_product_specific_parts(self):
-        part_name = 'product_{}'.format(self._name)
-        subsystem_name = part_name
-        info = {}
-        info['{}:{}'.format(subsystem_name, part_name)] = {}
-        return info
-
-    def _get_product_specific_subsystem(self):
-        info = {}
-        self._do_parse()
-        subsystem_name = 'product_{}'.format(self._name)
-        if self._get_product_build_path():
-            info[subsystem_name] = {
-                'name': subsystem_name,
-                'path': self._get_product_build_path()
-            }
-        return info
-
-    def _get_product_build_path(self):
-        return self._config.get('product_build_path')
-
-    def _get_parts_and_build_vars(self):
-        self._config = IoUtil.read_json_file(self._config_file)
-        version = self._config.get('version', '3.0')
-        self._update_parts(self._config, version)
-        self._update_build_vars(self._config, version)
-        return self._parts, self._build_vars
-
-    def _get_device(self):
-        self._do_parse()
-        return self._device
-
-    def _remove_excluded_components(self):
-        items_to_remove = []
-        for part, val in self._parts.items():
-            if "exclude" in val and val["exclude"] == "true":
-                items_to_remove.append(part)
-        for item in items_to_remove:
-            del self._parts[item]
-
-    def _do_parse(self):
-        self._config = IoUtil.read_json_file(self._config_file)
-        version = self._config.get('version', '3.0')
-        product_name = self._config.get('product_name')
-        if product_name == None:
-            product_name = ""
-        os_level = self._config.get('type')
-        if os_level == None:
-            os_level = ""
-        api_version = self._config.get('api_version')
-        if api_version == None:
-            api_version = 0
-        manufacturer_id = self._config.get('manufacturer_id')
-        if manufacturer_id == None:
-            manufacturer_id = 0
-        self._syscap_info = {'product':product_name, 'api_version':api_version,
-            'system_type':os_level, 'manufacturer_id':manufacturer_id}
-
-        self._sanitize(self._config)
-        self._update_device(self._config, version)
-        self._update_parts(self._config, version)
-        self._update_build_vars(self._config, version)
-        if version == '3.0':
-          if os.path.dirname(self._config_file) != self._dirs.built_in_product_dir and not hasattr(self._config, 'product_build_path'):
-              self._config['product_build_path'] = os.path.relpath(os.path.dirname(self._config_file), self._dirs.source_root_dir)
-        self._remove_excluded_components()
-        self._parsed = True
-
-    # Generate build_info needed for V3 configuration
-    def _get_device_info(self, config):
-        # NOTE:
-        # Product_name, device_company are necessary for
-        # config.json, DON NOT use .get to replace []
-        device_info = {
-            'device_name': config['board'],
-            'device_company': config['device_company']
-        }
-        if config.get('target_os'):
-            device_info['target_os'] = config.get('target_os')
-        else:
-            device_info['target_os'] = 'ohos'
-        if config.get('target_cpu'):
-            device_info['target_cpu'] = config['target_cpu']
-        else:
-            # Target cpu is used to set default toolchain for standard system.
-            print(
-                "The target_cpu needs to be specified, default target_cpu=arm")
-            device_info['target_cpu'] = 'arm'
-        if config.get('kernel_version'):
-            device_info['kernel_version'] = config.get('kernel_version')
-        if config.get('device_build_path'):
-            device_info['device_build_path'] = config.get('device_build_path')
-        else:
-            device_build_path = os.path.join(self._dirs.device_dir,
-                                            config['device_company'],
-                                            config['board'])
-            if not os.path.exists(device_build_path):
-                device_build_path = os.path.join(self._dirs.device_dir,
-                                                'board',
-                                                config['device_company'],
-                                                config['board'])
-            device_info['device_build_path'] = device_build_path
-        return device_info
-
-    # Update the _build_vars based on the product configuration in the vendor warehouse
-    def _update_build_vars(self, config, version):
-        build_vars = {}
-        if version == "1.0":
-          build_vars = {"os_level": 'large'}
-        else:
-          if version == "2.0":
-              build_vars['os_level'] = config.get("type", "standard")
-              device_name = config.get('product_device')
-              if device_name:
-                build_vars['device_name'] = device_name
-              else:
-                build_vars['device_name'] = ''
-              build_vars['product_company'] = config.get('product_company')
-          else:
-              build_vars['os_level'] = config.get('type', 'mini')
-              build_vars['device_name'] = config.get('board')
-              if config.get('product_company'):
-                build_vars['product_company'] = config.get('product_company')
-              elif os.path.dirname(self._config_file) != self._dirs.built_in_product_dir:
-                relpath = os.path.relpath(self._config_file, self._dirs.vendor_dir)
-                build_vars['product_company'] = relpath.split('/')[0]
-              else:
-                build_vars['product_company'] = config.get('device_company')
-          build_vars['product_name'] = config.get('product_name')
-          if 'enable_ramdisk' in config:
-              build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
-          if 'build_selinux' in config:
-              build_vars['build_selinux'] = config.get('build_selinux')
-          if 'build_seccomp' in config:
-              build_vars['build_seccomp'] = config.get('build_seccomp')
-          if 'support_jsapi' in config:
-              build_vars['support_jsapi'] = config.get('support_jsapi')
-        self._build_vars = build_vars
-
-
-    # Update the _device based on the product configuration in the vendor warehouse
-    def _update_device(self, config, version):
-      if version == "2.0":
-        device_name = config.get('product_device')
-        if device_name:
-          self._device = _MyDevice(device_name, self._dirs)
-      else:
-        device_name = config.get('board')
-        if device_name:
-            device_info = self._get_device_info(config)
-            self._device = _MyDevice(device_name, self._dirs, device_info)
-
-    # Update the _parts based on the product configuration in the vendor warehouse
-    def _update_parts(self, config, version):
-        if version == "1.0":
-          _parts = {}
-          self._parts = _parts
-        else:
-          # 1. inherit parts information from base config
-          if version == "2.0":
-              os_level = config.get("type", "standard")
-          else:
-              os_level = config.get("type", "mini")
-          # 2. product config based on default minimum system
-          based_on_mininum_system = config.get('based_on_mininum_system')
-          if based_on_mininum_system == "true":
-              self._parts = self._get_base_parts(self._dirs.built_in_base_dir, os_level)
-          # 3. inherit parts information from inherit config
-          inherit = config.get('inherit')
-          if inherit:
-              self._parts.update(
-                  self._get_inherit_parts(inherit, self._dirs.source_root_dir))
-
-          # 4. chipset products relate system parts config
-          sys_info_path = config.get('system_component')
-          if sys_info_path:
-              sys_parts = self._get_sys_relate_parts(sys_info_path, self._parts, self._dirs.source_root_dir)
-              self._parts.update(sys_parts)
-          all_parts = {}
-          if version == "2.0":
-            current_product_parts = config.get("parts")
-            if current_product_parts:
-              all_parts.update(current_product_parts)
-          else:
-            all_parts.update(get_vendor_parts_list(config))
-            all_parts.update(self._get_product_specific_parts())
-
-            device_name = config.get('board')
-            if device_name:
-                all_parts.update(self._device.get_device_specific_parts())
-          self._parts.update(all_parts)
-
-
-class _MyDevice():
-
-    def __init__(self, device_name, config_dirs, device_info=None):
-        self._name = device_name
-        self._dirs = config_dirs
-        if device_info is None:
-            self._device_info = self._make_device_info(
-                self._name, self._dirs.built_in_device_dir)
-        else:
-            self._device_info = device_info
-
-    def get_device_info(self):
-        return self._device_info
-
-    def _make_device_info(self, device_name, config_dir):
-        device_config_file = os.path.join(config_dir,
-                                          '{}.json'.format(device_name))
-        device_info = IoUtil.read_json_file(device_config_file)
-        if device_info and device_info.get('device_name') != device_name:
-            raise Exception("device name configuration incorrect in '{}'".format(
-                device_config_file))
-        return device_info
-
-    def get_device_specific_parts(self):
-        info = {}
-        if self._device_info:
-            device_build_path = self._device_info.get('device_build_path')
-            if device_build_path:
-                subsystem_name = 'device_{}'.format(self._name)
-                part_name = subsystem_name
-                info['{}:{}'.format(subsystem_name, part_name)] = {}
-        return info
-
-    def get_device_specific_subsystem(self):
-        info = {}
-        subsystem_name = 'device_{}'.format(self._name)
-        if self._get_device_build_path():
-            info[subsystem_name] = {
-                'name': subsystem_name,
-                'path': self._get_device_build_path()
-            }
-        return info
-
-    def _get_device_build_path(self):
-        if self._device_info:
-            return self._device_info.get('device_build_path')
-        else:
-            return None
+class PreloaderAdapt(PreloadInterface):
+    
+    def __init__(self, config) -> None:
+        super().__init__(config)
+        self.preloader = Preloader(_Config())
+        
+    def _internel_run(self) -> StatusCode:
+        return self.preloader.run()
 
 class OHOSPreloader(PreloadInterface):
 
     def __init__(self, config: Config):
         super().__init__(config)
-        # All kinds of directories and subsystem_config_json
-        self._dirs = PreloaderDirs(config)
 
-        # Product & Device
-        self._product = _MyProduct(config.product, self._dirs,
-                                config.product_json)
-        self._device = self._product._get_device()
-        self._all_parts, self._build_vars = self._product._get_parts_and_build_vars()
-        if self._device:
-            device_info = self._device.get_device_info()
-            if device_info:
-                if config.target_cpu:
-                    device_info["target_cpu"] = config.target_cpu
-                if config.compile_config:
-                    device_info[config.compile_config] = True
-                self._build_vars.update(device_info)
-
-        # generate toolchain
-        self._os_level = self._build_vars.get('os_level')
-        self._target_os = self._build_vars.get('target_os')
-        self._target_cpu = self._build_vars.get('target_cpu')
-        if self._os_level == 'mini' or self._os_level == 'small':
-            self._toolchain_label = ""
-        else:
-            self._toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
-                self._target_os, self._target_cpu)
-
-        # add toolchain label
-        self._build_vars['product_toolchain_label'] = self._toolchain_label
-                # All kinds of output files
-        os.makedirs(self._dirs.preloader_output_dir, exist_ok=True)
-        self._outputs = PrealoaderOutputs(self._dirs.preloader_output_dir)
-                # output platform config
-        self._parts_config_file = os.path.relpath(self._outputs._parts_json.full_path,
-                                            self._dirs.preloader_output_dir)
-
-    # generate platforms build info to out/preloader/product_name/platforms.build
-    def _generate_platforms_build(self) -> StatusCode:
-        config = {
-            'target_os': self._target_os,
-            "target_cpu": self._target_cpu,
-            "toolchain": self._toolchain_label,
-            "parts_config": self._parts_config_file
-        }
-        platform_config = {'version': 2, 'platforms': {'phone': config}}
-        IoUtil.dump_json_file(self._outputs._platforms_build.full_path, platform_config)
-
-    # generate build gnargs prop info to out/preloader/product_name/build_gnargs.prop
-    def _generate_build_gnargs_prop(self) -> StatusCode:
-        all_features = {}
-        for _part_name, vals in self._all_parts.items():
-            _features = vals.get('features')
-            if _features:
-                all_features.update(_features)
-        attr_list = []
-        for key, val in all_features.items():
-            _item = ''
-            if isinstance(val, bool):
-                _item = f'{key}={str(val).lower()}'
-            elif isinstance(val, int):
-                _item = f'{key}={val}'
-            elif isinstance(val, str):
-                _item = f'{key}="{val}"'
-            else:
-                raise Exception("part feature '{key}:{val}' type not support.")
-            attr_list.append(_item)
-        with open(self._outputs._build_gnargs_prop.full_path, 'w') as fobj:
-            fobj.write('\n'.join(attr_list))
-
-    # generate features to out/preloader/product_name/features.json
-    def _generate_features_json(self) -> StatusCode:
-        all_features = {}
-        part_feature_map = {}
-        for _part_name, vals in self._all_parts.items():
-            _features = vals.get('features')
-            if _features:
-                all_features.update(_features)
-            if _features:
-                part_feature_map[_part_name.split(':')[1]] = list(_features.keys())
-        parts_feature_info = {
-            "features": all_features,
-            "part_to_feature": part_feature_map
-        }
-        IoUtil.dump_json_file(self._outputs._features_json.full_path, parts_feature_info)
-
-    # generate syscap to out/preloader/product_name/syscap.json
-    def _generate_syscap_json(self) -> StatusCode:
-        all_syscap = {}
-        part_syscap_map = {}
-        for _part_name, vals in self._all_parts.items():
-            _syscap = vals.get('syscap')
-            if _syscap:
-                all_syscap.update(_syscap)
-                part_syscap_map[_part_name.split(':')[1]] = _syscap
-        parts_syscap_info = {
-            "syscap": all_syscap,
-            "part_to_syscap": part_syscap_map
-        }
-        IoUtil.dump_json_file(self._outputs._syscap_json.full_path, parts_syscap_info)
-
-    # generate exclusion modules info to out/preloader/product_name/exclusion_modules.json
-    def _generate_exclusion_modules_json(self) -> StatusCode:
-        exclusions = {}
-        for _part_name, vals in self._all_parts.items():
-            _exclusions = vals.get('exclusions')
-            if _exclusions:
-                pair = dict()
-                pair[_part_name] = _exclusions
-                exclusions.update(pair)
-        IoUtil.dump_json_file(self._outputs._exclusion_modules_json.full_path, exclusions)
-
-    # generate build config info to out/preloader/product_name/build_config.json
-    def _generate_build_config_json(self) -> StatusCode:
-        IoUtil.dump_json_file(self._outputs._build_config_json.full_path, self._build_vars)
-
-    # generate build prop info to out/preloader/product_name/build.prop
-    def _generate_build_prop(self) -> StatusCode:
-        build_vars_list = []
-        for k, v in self._build_vars.items():
-            build_vars_list.append('{}={}'.format(k, v))
-        with open(self._outputs._build_prop.full_path, 'w') as fobj:
-            fobj.write('\n'.join(build_vars_list))
-
-    # generate parts to out/preloader/product_name/parts.json
-    def _generate_parts_json(self) -> StatusCode:
-        parts_info = {"parts": sorted(list(self._all_parts.keys()))}
-        IoUtil.dump_json_file(self._outputs._parts_json.full_path, parts_info)
-
-    # generate parts config to out/preloader/product_name/parts_config.json
-    def _generate_parts_config_json(self) -> StatusCode:
-        parts_config = {}
-        for part in self._all_parts:
-            part = part.replace(":", "_")
-            part = part.replace("-", "_")
-            part = part.replace(".", "_")
-            part = part.replace("/", "_")
-            parts_config[part] = True
-        IoUtil.dump_json_file(self._outputs._parts_config_json.full_path, parts_config)
-
-    # generate subsystem config info to out/preloader/product_name/subsystem_config.json
-    def _generate_subsystem_config_json(self) -> StatusCode:
-        subsystem_info = self._get_org_subsystem_info(self._dirs.subsystem_config_json,
-                                                self._os_level, self._dirs)
-        if subsystem_info:
-            subsystem_info.update(self._product._get_product_specific_subsystem())
-            subsystem_info.update(self._device.get_device_specific_subsystem())
-        IoUtil.dump_json_file(self._outputs._subsystem_config_json.full_path, subsystem_info)
-
-    # generate systemcapability_json to out/preloader/product_name/systemcapability.json
-    def _generate_systemcapability_json(self) -> StatusCode:
-        IoUtil.dump_json_file(self._outputs._systemcapability_json.full_path, self._product._syscap_info)
-
-    def _get_org_subsystem_info(self, subsystem_config_file, os_level, config_dirs):
-        subsystem_info = {}
-        if os_level == "standard":
-            subsystem_info = IoUtil.read_json_file(subsystem_config_file)
-        elif os_level == "mini" or os_level == "small":
-            ohos_build_output_dir = os.path.join(config_dirs.preloader_output_dir,
-                                                '{}_system'.format(os_level))
-            subsystem_info = parse_lite_subsystem_config(
-                config_dirs.lite_components_dir, ohos_build_output_dir,
-                config_dirs.source_root_dir, subsystem_config_file)
-        return subsystem_info
-
-    def _internel_run(self, *args) -> StatusCode:
-
-        # save systemcapability_json to out/preloader/product_name/systemcapability.json
+    def _internel_run(self) -> StatusCode:
+        self._generate_build_prop()
+        self._generate_build_config_json()
+        self._generate_parts_json()
+        self._generate_parts_config_json()
+        self._generate_build_gnargs_prop()
+        self._generate_features_json()
+        self._generate_syscap_json()
+        self._generate_exclusion_modules_json()
+        self._generate_platforms_build()
         self._generate_systemcapability_json()
 
-        # save parts to out/preloader/product_name/parts.json
-        self._generate_parts_json()
+    def _generate_build_prop(self) -> StatusCode: 
+        pass
 
-        # save parts config to out/preloader/product_name/parts_config.json
-        self._generate_parts_config_json()
+    def _generate_build_config_json(self) -> StatusCode:
+        pass
 
-        # save features to out/preloader/product_name/features.json
-        self._generate_features_json()
+    def _generate_parts_json(self) -> StatusCode:
+        pass
 
-        # save syscap to out/preloader/product_name/syscap.json
-        self._generate_syscap_json()
+    def _generate_parts_config_json(self) -> StatusCode:
+        pass
 
-        # Save build gnargs prop info to out/preloader/product_name/build_gnargs.prop
-        self._generate_build_gnargs_prop()
+    def _generate_build_gnargs_prop(self) -> StatusCode:
+        pass
 
-        # save exclusion modules info to out/preloader/product_name/exclusion_modules.json
-        self._generate_exclusion_modules_json()
+    def _generate_features_json(self) -> StatusCode:
+        pass
 
-        # save platforms build info to out/preloader/product_name/platforms.build
-        self._generate_platforms_build()
+    def _generate_syscap_json(self) -> StatusCode:
+        pass
 
-        # save build prop info to out/preloader/product_name/build.prop
-        self._generate_build_prop()
-        
-        # save build config info to out/preloader/product_name/build_config.json
-        self._generate_build_config_json()
+    def _generate_exclusion_modules_json(self) -> StatusCode:
+        pass
 
-        # save subsystem config info to out/preloader/product_name/subsystem_config.json
-        self._generate_subsystem_config_json()
+    def _generate_subsystem_config_json(self) -> StatusCode:
+        pass
+
+    def _generate_platforms_build(self) -> StatusCode:
+        pass
+
+    def _generate_systemcapability_json(self) -> StatusCode:
+        pass
