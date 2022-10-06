@@ -94,7 +94,6 @@ def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
             " ".join([src_dir, device, ramdisk_size])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
-    sparse_img2simg(is_sparse, device)
 
 def mk_other_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     mk_configs = " ".join([src_dir, device, mk_configs])
