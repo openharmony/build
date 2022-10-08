@@ -286,19 +286,19 @@ template("ohos_sanitizer_config") {
       if (_scs) {
         configs += [ "//build/config/sanitizers:shadow_call_stack_config" ]
       }
-      _boundary_sanitize =
-          defined(sanitize.boundary_sanitize) && sanitize.boundary_sanitize
+      _boundary_sanitize = defined(sanitize.boundary_sanitize) &&
+                           sanitize.boundary_sanitize && !is_asan
       if (_boundary_sanitize) {
         configs += [ "//build/config/sanitizers:boundary_sanitize_config" ]
       }
 
-      _integer_overflow =
-          defined(sanitize.integer_overflow) && sanitize.integer_overflow
+      _integer_overflow = defined(sanitize.integer_overflow) &&
+                          sanitize.integer_overflow && !is_asan
       _unsigned_integer_overflow =
           defined(sanitize.unsigned_integer_overflow) &&
-          sanitize.unsigned_integer_overflow
+          sanitize.unsigned_integer_overflow && !is_asan
       _signed_integer_overflow = defined(sanitize.signed_integer_overflow) &&
-                                 sanitize.signed_integer_overflow
+                                 sanitize.signed_integer_overflow && !is_asan
       if (_unsigned_integer_overflow || _integer_overflow) {
         configs +=
             [ "//build/config/sanitizers:unsigned_integer_overflow_config" ]

@@ -34,8 +34,12 @@ group("common_packages") {
       "asan:asan_helper",
       "asan:libclang_rt.asan.so",
     ]
+  } else {
+    # ubsan.cfg defines the log_path, different with asan.cfg
+    deps += [
+      "ubsan:libclang_rt.ubsan_minimal.so",
+      "ubsan:libclang_rt.ubsan_standalone.so",
+      "ubsan:ubsan.cfg",
+    ]
   }
-
-  # ubsan is always enabled
-  deps += [ "ubsan:ubsan" ]
 }
