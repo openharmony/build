@@ -261,14 +261,12 @@ template("ohos_ndk_copy") {
   }
   _dest = invoker.dest_dir
 
-  set_sources_assignment_filter([ "*os-irrelevant*" ])
-  sources = [ _dest ]
+  sources = filter_exclude([ _dest ], ["*os-irrelevant*"])
   if (sources == []) {
     _notice_rel_dir = ndk_os_irrelevant_out_dir
   } else {
     _notice_rel_dir = ndk_os_specific_out_dir
   }
-  set_sources_assignment_filter([])
   sources = []
 
   _main_target_name = target_name

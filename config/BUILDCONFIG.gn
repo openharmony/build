@@ -540,7 +540,7 @@ if (!is_ohos) {
   sources_assignment_filter += []
 }
 
-set_sources_assignment_filter(sources_assignment_filter)
+#set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
   file_exist = exec_script("//build/scripts/check_file_exist.py",
                            [ "${device_build_path}/config.gni" ],
