@@ -73,6 +73,7 @@ def build_run_cpio(args):
     get_dir_list("./", dir_list)
     res = run_cmd(ramdisk_cmd, dir_list)
     os.chdir(work_dir)
+    zip_ramdisk(args)
     if conf_size < os.path.getsize(output_path):
         print("Image size is larger than the conf image size. "
               "conf_size: %d, image_size: %d" %
@@ -82,9 +83,29 @@ def build_run_cpio(args):
         print("error run cpio ramdisk errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
-        clear_resource_file(need_clear_section_target_path_list)
         sys.exit(1)
     return
+
+
+def zip_ramdisk(args):
+    src_dir = args.src_dir
+    src_index = src_dir.rfind('/')
+    root_dir = src_dir[:src_index]
+
+    if "ramdisk.img" == args.device:
+        ramdisk_img = os.path.join(root_dir, "images", "ramdisk.img")
+        ramdisk_gz = os.path.join(root_dir, "images", "ramdisk.img.gz")
+    elif "updater_ramdisk.img" == args.device:
+        ramdisk_img = os.path.join(root_dir, "images", "updater.img")
+        ramdisk_gz = os.path.join(root_dir, "images", "updater.img.gz")
+    if os.path.exists(ramdisk_gz):
+        os.remove(ramdisk_gz)
+    res_gzip = run_cmd(["gzip", ramdisk_img])
+    res_mv_gz = run_cmd(["mv", ramdisk_gz, ramdisk_img])
+    if res_gzip[1] != 0 or res_mv_gz[1] != 0:
+        print("Failed to compress ramdisk image. %s, %s" %
+                (str(res_gzip), str(res_mv_gz)))
+        sys.exit(1)
 
 
 def build_run_chmod(args):
@@ -101,7 +122,6 @@ def build_run_chmod(args):
         print("error run chmod errno: %s" % str(res))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
-        clear_resource_file(need_clear_section_target_path_list)
         sys.exit(3)
     return res[1]
 
@@ -114,7 +134,6 @@ def main(args):
         config = json.load(f)
     build_run_cpio(args)
     build_run_chmod(args)
-
 
 
 if __name__ == '__main__':
