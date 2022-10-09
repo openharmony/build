@@ -21,10 +21,21 @@ import argparse
 import sys
 import json
 from distutils.util import strtobool
-from hb_new.exceptions.ohosException import OHOSException
 
+from resources.global_var import CURRENT_BUILD_ARGS
+from resources.global_var import CURRENT_SET_ARGS
+
+from exceptions.ohosException import OHOSException
 from util.logUtil import LogUtil
 from resolver.argsFactory import ArgsFactory
+
+
+class ModuleType():
+    BUILD = 0
+    SET = 1
+    ENV = 2
+    CLEAN = 3
+    TOOL = 4
 
 
 class ArgType():
@@ -168,10 +179,15 @@ class Arg():
         return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
 
     @staticmethod
-    def parse_all_args() -> dict:
+    def parse_all_args(module_type: ModuleType) -> dict:
         parser = argparse.ArgumentParser()
-        args_file_path = os.path.join(os.path.dirname(os.path.dirname(
-            os.path.abspath(__file__))), 'resources/args/buildargs.json')
+        if module_type == ModuleType.BUILD:
+            args_file_path = CURRENT_BUILD_ARGS
+        elif module_type == ModuleType.SET:
+            args_file_path = CURRENT_SET_ARGS
+        else:
+            raise OHOSException(
+                'There is no such module {}'.format(module_type))
         args_dict = {}
 
         with open(args_file_path) as args_file:

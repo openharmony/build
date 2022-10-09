@@ -16,26 +16,28 @@
 # limitations under the License.
 #
 
-from abc import ABCMeta, abstractmethod
+from abc import abstractmethod
 
+from modules.interface.moduleInterface import ModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
+from services.interface.menuInterface import MenuInterface
 from containers.statusCode import StatusCode
 
-
-class ModuleInterface(metaclass=ABCMeta):
-
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
-        self._args_dict = args_dict
-        self._argsResolver = argsResolver
-
-    @property
-    def argsResolver(self):
-        return self._argsResolver
-
-    @property
-    def args_dict(self) -> dict:
-        return self._args_dict
-
+class SetModuleInterface(ModuleInterface):
+    
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
+        super().__init__(args_dict, argsResolver)
+        self._menu = menu
+    
     @abstractmethod
-    def run(self) -> StatusCode:
+    def _set_product(self) -> StatusCode:
         pass
+    
+    @abstractmethod
+    def _set_parameter(self) -> StatusCode:
+        pass
+    
+    def run(self) -> StatusCode:
+        self._set_product()
+        self._set_parameter()
+    

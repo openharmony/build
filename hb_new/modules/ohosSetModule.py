@@ -14,19 +14,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
+from modules.interface.setModuleInterface import SetModuleInterface
+from resolver.interface.argsResolver import ArgsResolver
+from services.interface.menuInterface import MenuInterface
 from containers.statusCode import StatusCode
-from services.interface.preloadInterface import PreloadInterface
 
-
-class Preload():
-
-    def __init__(self, preloader: PreloadInterface):
-        self._preloader = preloader
-
-    @property
-    def unwrapped_preloader(self):
-        return self._preloader
+class OHOSSetModule(SetModuleInterface):
+    
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
+        super().__init__(args_dict, argsResolver, menu)
         
-    def run(self) -> StatusCode:
-        return self._preloader.run()
+    def _set_product(self) -> StatusCode:
+        self.argsResolver.resolveProductName(self.args_dict['product_name'])
+    
+    def _set_parameter(self) -> StatusCode:
+        self.argsResolver.resolveSetParameter(self.args_dict['all'])
+    
+    

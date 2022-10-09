@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys 
 from containers.statusCode import StatusCode
 from services.interface.preloadInterface import PreloadInterface
 from resources.config import Config
@@ -25,13 +24,14 @@ from hb_internal.common.config import Config as _Config
 
 
 class PreloaderAdapt(PreloadInterface):
-    
+
     def __init__(self, config) -> None:
         super().__init__(config)
         self.preloader = Preloader(_Config())
-        
+
     def _internel_run(self) -> StatusCode:
         return self.preloader.run()
+
 
 class OHOSPreloader(PreloadInterface):
 
@@ -50,7 +50,7 @@ class OHOSPreloader(PreloadInterface):
         self._generate_platforms_build()
         self._generate_systemcapability_json()
 
-    def _generate_build_prop(self) -> StatusCode: 
+    def _generate_build_prop(self) -> StatusCode:
         pass
 
     def _generate_build_config_json(self) -> StatusCode:

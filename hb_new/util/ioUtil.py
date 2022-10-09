@@ -20,7 +20,6 @@ import os
 import json
 import importlib
 import re
-import sys
 import shutil
 
 from util.logUtil import LogUtil

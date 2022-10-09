@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 #
@@ -14,15 +14,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
+from containers.statusCode import StatusCode
+from modules.interface.setModuleInterface import SetModuleInterface
 
-import os
-
-VERSION = "1.0.0"
-CURRENT_OHOS_ROOT = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-CURRENT_BUILD_DIR = os.path.join(CURRENT_OHOS_ROOT, 'build')
-CURRENT_HB_DIR = os.path.join(CURRENT_BUILD_DIR, 'hb_new')
-CURRENT_BUILD_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/buildargs.json')
-CURRENT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/setargs.json')
+class SetModule():
+    
+    def __init__(self, setModule: SetModuleInterface) -> None:
+        self._setModule = setModule
+        
+    def run(self) -> StatusCode:
+        return self._setModule.run()

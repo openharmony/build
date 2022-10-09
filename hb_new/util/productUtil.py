@@ -22,14 +22,12 @@ from collections import defaultdict
 from util.ioUtil import IoUtil
 from exceptions.ohosException import OHOSException
 from resources.config import Config
-from lite.hb_internal.cts.menuconfig import Menuconfig
-from lite.hb_internal.cts.common import Separator
-from lite.hb_internal.preloader.parse_vendor_product_config import get_vendor_parts_list
 
 from helper.noInstance import NoInstance
 
+
 class ProductUtil(metaclass=NoInstance):
-    
+
     @staticmethod
     def get_products():
         config = Config()
@@ -60,7 +58,8 @@ class ProductUtil(metaclass=NoInstance):
             if item[0] in ".":
                 continue
             else:
-                product_name = item[0:-len('.json')] if item.endswith('.json') else item
+                product_name = item[0:-len('.json')
+                                    ] if item.endswith('.json') else item
                 config_path = os.path.join(bip_path, item)
                 info = IoUtil.read_json_file(config_path)
                 yield {
@@ -113,7 +112,7 @@ class ProductUtil(metaclass=NoInstance):
             }
         else:
             raise OHOSException(f'wrong version number in {product_json}')
-    
+
     @staticmethod
     def get_all_components(product_json):
         if not os.path.isfile(product_json):
@@ -121,7 +120,8 @@ class ProductUtil(metaclass=NoInstance):
 
         config = Config()
         # Get all inherit files
-        files = [ os.path.join(config.root_path, file) for file in IoUtil.read_json_file(product_json).get('inherit', []) ]
+        files = [os.path.join(config.root_path, file) for file in IoUtil.read_json_file(
+            product_json).get('inherit', [])]
         # Add the product config file to last with highest priority
         files.append(product_json)
 
@@ -136,11 +136,10 @@ class ProductUtil(metaclass=NoInstance):
                 all_parts.update(parts)
             else:
                 # v3 config files
-                all_parts.update(get_vendor_parts_list(_info))
-                
+                all_parts.update(ProductUtil.get_vendor_parts_list(_info))
+
         return all_parts
-    
-    
+
     @staticmethod
     def get_features(product_json):
         all_parts = ProductUtil.get_all_components(product_json)
@@ -162,7 +161,7 @@ class ProductUtil(metaclass=NoInstance):
                         "part feature '{key}:{val}' type not support.")
                 features_list.append(_item)
         return features_list
-    
+
     @staticmethod
     def get_features_dict(product_json):
         all_parts = ProductUtil.get_all_components(product_json)
@@ -171,13 +170,13 @@ class ProductUtil(metaclass=NoInstance):
             if "features" not in val:
                 continue
             for key, val in val["features"].items():
-                if type(val) in [ bool, int, str ]:
+                if type(val) in [bool, int, str]:
                     features_dict[key] = val
                 else:
                     raise Exception(
                         "part feature '{key}:{val}' type not support.")
         return features_dict
-                
+
     @staticmethod
     def get_components(product_json, subsystems):
         if not os.path.isfile(product_json):
@@ -211,35 +210,6 @@ class ProductUtil(metaclass=NoInstance):
         raise OHOSException(f'product {product_name}@{company} not found')
 
     @staticmethod
-    def product_menuconfig():
-        product_path_dict = {}
-        company_separator = None
-        for product_info in ProductUtil.get_products():
-            company = product_info['company']
-            product = product_info['name']
-            if company_separator is None or company_separator != company:
-                company_separator = company
-                product_key = Separator(company_separator)
-                product_path_dict[product_key] = None
-
-            product_path_dict['{}@{}'.format(product, company)] = product_info
-
-        if not len(product_path_dict):
-            raise OHOSException('no valid product found')
-
-        choices = [
-            product if isinstance(product, Separator) else {
-                'name': product.split('@')[0],
-                'value': product.split('@')[1]
-            } for product in product_path_dict.keys()
-        ]
-        menu = Menuconfig()
-        product = menu.list_promt('product', 'Which product do you need?',
-                                  choices).get('product')
-        product_key = f'{product[0]}@{product[1]}'
-        return product_path_dict[product_key]
-    
-    @staticmethod
     def get_compiler(config_path):
         config = os.path.join(config_path, 'config.gni')
         if not os.path.isfile(config):
@@ -252,3 +222,101 @@ class ProductUtil(metaclass=NoInstance):
             raise OHOSException(f'board_toolchain_type is None in {config}')
 
         return compiler_list[0]
+
+    @staticmethod
+    def get_vendor_parts_list(config):
+        return _transform(config).get('parts')
+
+
+def _transform(config):
+    subsystems = config.get('subsystems')
+    if subsystems:
+        config.pop('subsystems')
+        parts = _from_ss_to_parts(subsystems)
+        config['parts'] = parts
+    return config
+
+
+def _from_ss_to_parts(subsystems):
+    parts = dict()
+    for subsystem in subsystems:
+        ss_name = subsystem.get('subsystem')
+        components = subsystem.get('components')
+        if components:
+            for com in components:
+                com_name = com.get('component')
+                features = com.get('features')
+                syscap = com.get('syscap')
+                exclusions = com.get('exclusions')
+                if features:
+                    pairs = get_features(features)
+                    parts['{}:{}'.format(ss_name, com_name)] = pairs
+                else:
+                    parts['{}:{}'.format(ss_name, com_name)] = dict()
+                if syscap:
+                    pairs = get_syscap(syscap)
+                    parts.get('{}:{}'.format(ss_name, com_name)).update(pairs)
+                if exclusions:
+                    pairs = get_exclusion_modules(exclusions)
+                    parts.get('{}:{}'.format(ss_name, com_name)).update(pairs)
+                # Copy other key-values
+                for key, val in com.items():
+                    if key in ['component', 'features', 'syscap', 'exclusions']:
+                        continue
+                    parts['{}:{}'.format(ss_name, com_name)][key] = val
+    return parts
+
+
+def get_features(features):
+    feats = {}
+    for feat in features:
+        if not feat:
+            continue
+        match = feat.index("=")
+        if match <= 0:
+            print("Warning: invalid feature [" + feat + "]")
+            continue
+        key = feat[:match].strip()
+        val = feat[match + 1:].strip().strip('"')
+        if val == 'true':
+            feats[key] = True
+        elif val == 'false':
+            feats[key] = False
+        elif re.match(r'[0-9]+', val):
+            feats[key] = int(val)
+        else:
+            feats[key] = val.replace('\"', '"')
+
+    pairs = dict()
+    pairs['features'] = feats
+    return pairs
+
+
+def get_syscap(syscap):
+    feats = {}
+    for feat in syscap:
+        if not feat:
+            continue
+        if '=' not in feat:
+            raise Exception("Error: invalid syscap [{}]".format(feat))
+        match = feat.index("=")
+        key = feat[:match].strip()
+        val = feat[match + 1:].strip().strip('"')
+        if val == 'true':
+            feats[key] = True
+        elif val == 'false':
+            feats[key] = False
+        elif re.match(r'[0-9]+', val):
+            feats[key] = int(val)
+        else:
+            feats[key] = val.replace('\"', '"')
+
+    pairs = dict()
+    pairs['syscap'] = feats
+    return pairs
+
+
+def get_exclusion_modules(exclusions):
+    pairs = dict()
+    pairs['exclusions'] = exclusions
+    return pairs

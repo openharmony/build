@@ -15,27 +15,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+import os
+import platform
+
+from resources.global_var import CURRENT_OHOS_ROOT
+from resources.global_var import CURRENT_HB_DIR
 from exceptions.ohosException import OHOSException
 from helper.singleton import Singleton
 from util.ioUtil import IoUtil
-import os
-import platform
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-# TODO: search oh root path
 def get_config_path():
-    search_path = os.getcwd()
-    root_path = os.path.abspath(os.sep)
-    while search_path != root_path:
-        config_path = os.path.join(search_path, 'ohos_config.json')
-        if os.path.isfile(config_path):
-            return config_path
-        search_path = os.path.dirname(search_path)
-    return os.path.abspath(
-        os.path.join(os.path.dirname(__file__), 'config', 'config.json'))
+    if os.path.exists(os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')):
+        return os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')
+    else:
+        return os.path.join(CURRENT_HB_DIR, 'resources', 'config', 'config.json')
 
 
 class Config(metaclass=Singleton):
