@@ -83,7 +83,7 @@ def do_collect_notice_files(options, depfiles):
     module_notice_info = {}
     notice_file = options.license_file
     if notice_file:
-        opensource_file = find_opensource_recursively(options.module_source_dir)
+        opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
             module_notice_info['Software'] = "{} {}".format(notice_file_info[1], notice_file_info[2])
@@ -101,7 +101,7 @@ def do_collect_notice_files(options, depfiles):
     if notice_file is None:
         notice_file = find_license_recursively(options.module_source_dir,
                                                options.default_license)
-        opensource_file = find_opensource_recursively(options.module_source_dir)
+        opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
             module_notice_info['Software'] = "{} {}".format(notice_file_info[1], notice_file_info[2])
