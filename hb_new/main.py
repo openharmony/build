@@ -76,7 +76,7 @@ class Main():
 
             config = Config()
 
-            preloader = PreloaderAdapt(config)
+            preloader = OHOSPreloader(config)
             preload = Preload(preloader)
 
             loader = OHOSLoader(config)
