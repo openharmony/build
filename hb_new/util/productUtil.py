@@ -31,6 +31,41 @@ class ProductUtil(metaclass=NoInstance):
     @staticmethod
     def get_products():
         config = Config()
+        # ext products configuration
+        _ext_scan_path = os.path.join(config.root_path,
+                                      'out/products_ext/vendor')
+        if os.path.exists(_ext_scan_path):
+            for company in os.listdir(_ext_scan_path):
+                company_path = os.path.join(_ext_scan_path, company)
+                if not os.path.isdir(company_path):
+                    continue
+
+                for product in os.listdir(company_path):
+                    p_config_path = os.path.join(company_path, product)
+                    config_path = os.path.join(p_config_path, 'config.json')
+
+                    if os.path.isfile(config_path):
+                        info = IoUtil.read_json_file(config_path)
+                        product_name = info.get('product_name')
+                        if info.get('product_path'):
+                            product_path = os.path.join(
+                                config.root_path, info.get('product_path'))
+                        else:
+                            product_path = p_config_path
+                        if product_name is not None:
+                            yield {
+                                'company': company,
+                                "name": product_name,
+                                'product_config_path': p_config_path,
+                                'product_path': product_path,
+                                'version': info.get('version', '3.0'),
+                                'os_level': info.get('type', "mini"),
+                                'build_out_path': info.get('build_out_path'),
+                                'subsystem_config_json':
+                                info.get('subsystem_config_json'),
+                                'config': config_path,
+                                'component_type': info.get('component_type', '')
+                            }
         for company in os.listdir(config.vendor_path):
             company_path = os.path.join(config.vendor_path, company)
             if not os.path.isdir(company_path):
@@ -47,7 +82,8 @@ class ProductUtil(metaclass=NoInstance):
                         yield {
                             'company': company,
                             "name": product_name,
-                            'path': product_path,
+                            'product_config_path': product_path,
+                            'product_path': product_path,
                             'version': info.get('version', '3.0'),
                             'os_level': info.get('type', "mini"),
                             'config': config_path,
@@ -65,7 +101,8 @@ class ProductUtil(metaclass=NoInstance):
                 yield {
                     'company': 'built-in',
                     "name": product_name,
-                    'path': bip_path,
+                    'product_config_path': bip_path,
+                    'product_path': bip_path,
                     'version': info.get('version', '2.0'),
                     'os_level': info.get('type', 'standard'),
                     'config': config_path,
@@ -94,12 +131,22 @@ class ProductUtil(metaclass=NoInstance):
         elif version == '3.0':
             device_company = info.get('device_company')
             board = info.get('board')
-            board_path = os.path.join(config.root_path, 'device',
-                                      device_company, board)
-            # board and soc decoupling feature will add boards directory path here.
-            if not os.path.exists(board_path):
-                board_path = os.path.join(config.root_path, 'device', 'board',
+            _board_path = info.get('board_path')
+            if _board_path and os.path.exists(
+                    os.path.join(config.root_path, _board_path)):
+                board_path = os.path.join(config.root_path, _board_path)
+            else:
+                board_path = os.path.join(config.root_path, 'device',
                                           device_company, board)
+                # board and soc decoupling feature will add boards
+                # directory path here.
+                if not os.path.exists(board_path):
+                    board_path = os.path.join(config.root_path, 'device',
+                                              'board', device_company, board)
+            board_config_path = None
+            if info.get('board_config_path'):
+                board_config_path = os.path.join(config.root_path,
+                                                 info.get('board_config_path'))
 
             return {
                 'board': info.get('board'),
@@ -107,6 +154,7 @@ class ProductUtil(metaclass=NoInstance):
                 'kernel_version': info.get('kernel_version'),
                 'company': info.get('device_company'),
                 'board_path': board_path,
+                'board_config_path': board_config_path,
                 'target_cpu': info.get('target_cpu'),
                 'target_os': info.get('target_os')
             }
@@ -142,7 +190,28 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     def get_features(product_json):
-        all_parts = ProductUtil.get_all_components(product_json)
+        if not os.path.isfile(product_json):
+            raise OHOSException(f'features {product_json} not found')
+
+        config = Config()
+        # Get all inherit files
+        files = [os.path.join(config.root_path, file) for file in IoUtil.read_json_file(product_json).get('inherit', [])]
+        # Add the product config file to last with highest priority
+        files.append(product_json)
+
+        # Read all parts in order
+        all_parts = {}
+        for _file in files:
+            if not os.path.isfile(_file):
+                continue
+            _info = IoUtil.read_json_file(_file)
+            parts = _info.get('parts')
+            if parts:
+                all_parts.update(parts)
+            else:
+                # v3 config files
+                all_parts.update(ProductUtil.get_vendor_parts_list(_info))
+
         # Get all features
         features_list = []
         for part, val in all_parts.items():

@@ -21,9 +21,8 @@ import os
 import subprocess
 from datetime import datetime
 
-from helper.noInstance import NoInstance
-
 from util.logUtil import LogUtil
+from helper.noInstance import NoInstance
 from exceptions.ohosException import OHOSException
 
 

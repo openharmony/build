@@ -30,6 +30,10 @@ class SetModuleInterface(ModuleInterface):
         super().__init__(args_dict, argsResolver)
         self._menu = menu
     
+    @property
+    def menu(self):
+        return self._menu
+    
     @abstractmethod
     def _set_product(self) -> StatusCode:
         pass
@@ -39,6 +43,7 @@ class SetModuleInterface(ModuleInterface):
         pass
     
     def run(self) -> StatusCode:
-        self._set_product()
+        if not self.args_dict['all'].argValue:
+            self._set_product()
         self._set_parameter()
     

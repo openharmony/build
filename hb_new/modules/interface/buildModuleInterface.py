@@ -18,6 +18,7 @@
 
 from abc import abstractmethod
 
+
 from modules.interface.moduleInterface import ModuleInterface
 from services.interface.preload import Preload
 from services.interface.load import Load
@@ -54,19 +55,20 @@ class BuildModuleInterface(ModuleInterface):
         return self._targetCompiler
 
     def run(self) -> StatusCode:
-        '''TODO:
-        implement skiping each phase
-        '''
-        self._prebuild()
-        self._preload()
-        self._load()
-        self._preTargetGenerate()
-        self._targetGenerate()
-        self._postTargetGenerate()
-        self._preTargetCompilation()
-        self._targetCompilation()
-        self._postTargetCompilation()
-        self._postBuild()
+        try:
+            self._prebuild()
+            self._preload()
+            self._load()
+            self._preTargetGenerate()
+            self._targetGenerate()
+            self._postTargetGenerate()
+            self._preTargetCompilation()
+            self._targetCompilation()
+            self._postTargetCompilation()
+        except Exception:
+            raise
+        finally:
+            self._postBuild()
 
     @abstractmethod
     def _prebuild(self):

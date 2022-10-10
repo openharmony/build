@@ -19,10 +19,15 @@
 import os
 
 VERSION = "1.0.0"
-CURRENT_OHOS_ROOT = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 CURRENT_BUILD_DIR = os.path.join(CURRENT_OHOS_ROOT, 'build')
 CURRENT_HB_DIR = os.path.join(CURRENT_BUILD_DIR, 'hb_new')
-CURRENT_BUILD_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/buildargs.json')
+
+ARGS_DIR = os.path.join(CURRENT_HB_DIR, 'resources/args')
+DEFAULT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/buildargs.json')
+DEFAULT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/setargs.json')
+CURRENT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/buildargs.json')
 CURRENT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/setargs.json')
+
+BUILD_CONFIG_FILE = os.path.join(CURRENT_HB_DIR, 'resources/config/config.json')
+ROOT_CONFIG_FILE = os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')

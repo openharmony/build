@@ -28,9 +28,9 @@ class OHOSSetModule(SetModuleInterface):
         super().__init__(args_dict, argsResolver, menu)
         
     def _set_product(self) -> StatusCode:
-        self.argsResolver.resolveProductName(self.args_dict['product_name'])
+        self.argsResolver.resolveProductName(self.args_dict['product_name'], self)
     
     def _set_parameter(self) -> StatusCode:
-        self.argsResolver.resolveSetParameter(self.args_dict['all'])
+        self.argsResolver.resolveSetParameter(self.args_dict['all'], self)
     
     

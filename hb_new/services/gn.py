@@ -19,13 +19,7 @@
 
 import sys
 import os
-import platform
-from argparse import Namespace
 from enum import Enum
-
-from lite.hb_internal.common.config import Config as _Config
-from lite.hb_internal.common.device import Device
-from lite.hb_internal.common.product import Product
 
 from containers.statusCode import StatusCode
 from exceptions.ohosException import OHOSException
@@ -35,105 +29,6 @@ from util.systemUtil import SystemUtil
 from util.ioUtil import IoUtil
 from util.productUtil import ProductUtil
 from util.logUtil import LogUtil
-
-
-class GnAdapter(BuildFileGeneratorInterface):
-
-    def __init__(self, config: Config, args: Namespace):
-        super().__init__(config)
-        self._args = args
-        self._args_list = []
-        self.config = _Config()
-
-    def _internel_run(self) -> StatusCode:
-        self._regist_all_args()
-        self.gn_build(vars(self._args))
-
-    def gn_build(self, cmd_args):
-        # Gn cmd init and execute
-        if self.config.os_level == "standard":
-            gn_path = 'gn'
-        else:
-            gn_path = self.config.gn_path
-        gn_args = cmd_args.get('gn', [])
-        if cmd_args.get('log_level') == 'debug':
-            gn_args.append('-v')
-            gn_args.append(
-                '--tracelog={}/gn_trace.log'.format(self.config._out_path))
-        os_level = self.config.os_level
-        if cmd_args.get('build_variant'):
-            self.register_args('build_variant', cmd_args.get('build_variant'))
-        gn_cmd = [
-            gn_path,
-            'gen',
-            '--args={}'.format(" ".join(self._args_list)),
-            self.config.out_path,
-        ] + gn_args
-        if os_level == 'mini' or os_level == 'small':
-            gn_cmd.append(f'--script-executable={sys.executable}')
-
-        LogUtil.hb_info('Excuting gn command: {}'.format(' '.join(gn_cmd)))
-        SystemUtil.exec_command(
-            gn_cmd, log_path=self.config.log_path, env=self.env())
-
-    def env(self):
-        system = platform.system().lower()
-        if self.config.os_level == 'standard':
-            path = os.environ.get('PATH')
-            my_python = os.path.join(
-                self.config.root_path,
-                f'prebuilts/python/{system}-x86/3.8.5/bin')
-            os.environ['PATH'] = f'{my_python}:{path}'
-        path = os.environ.get('PATH')
-        my_build_tools = os.path.join(
-            self.config.root_path, f'prebuilts/build-tools/{system}-x86/bin')
-        os.environ['PATH'] = f'{my_build_tools}:{path}'
-        return os.environ
-
-    def _regist_all_args(self):
-        if Device.get_compiler(self.config.device_path) != '':
-            self.register_args('ohos_build_compiler_specified',
-                               Device.get_compiler(self.config.device_path))
-        self.register_args('product_path', self.config.product_path)
-        self.register_args('product_name', self.config.product)
-        if self.config.board:
-            self.register_args('device_name', self.config.board)
-        if self.config.target_cpu:
-            self.register_args('target_cpu', self.config.target_cpu)
-        if self.config.target_os:
-            self.register_args('target_os', self.config.target_os)
-        if self.config.os_level:
-            self.register_args(f'is_{self.config.os_level}_system',
-                               'true')
-        if self.config.product == 'ohos-sdk':
-            self.register_args('build_ohos_sdk', 'true')
-            self.register_args('build_ohos_ndk', 'true')
-        self.register_args('device_path', self.config.device_path)
-        self.register_args('device_config_path',
-                           self.config.device_config_path)
-        self.register_args('product_config_path',
-                           self.config.product_config_path)
-        if self.config.os_level != "standard":
-            self.register_args('device_company',
-                               self.config.device_company)
-        if self.config.kernel:
-            self.register_args('ohos_kernel_type', self.config.kernel)
-
-        self._args_list += Product.get_features(self.config.product_json)
-
-    def register_args(self, args_name, args_value, quota=True):
-        quota = False if args_value in ['true', 'false'] else quota
-        if quota:
-            if isinstance(args_value, list):
-                self._args_list += [
-                    '{}="{}"'.format(args_name, "&&".join(args_value))
-                ]
-            else:
-                self._args_list += ['{}="{}"'.format(args_name, args_value)]
-        else:
-            self._args_list += ['{}={}'.format(args_name, args_value)]
-        if args_name == 'ohos_build_target' and len(args_value):
-            self.config.fs_attr = None
 
 
 class CMDTYPE(Enum):

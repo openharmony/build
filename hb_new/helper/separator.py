@@ -16,14 +16,12 @@
 # limitations under the License.
 #
 
-from abc import abstractmethod
+class Separator(object):
+    line = '-' * 15
 
-class MenuInterface():
-    
-    @abstractmethod
-    def select_product(self) -> dict:
-        pass
-    
-    @abstractmethod
-    def select_compile_option(self) -> dict:
-        pass
+    def __init__(self, line=None):
+        if line:
+            self.line = f'\n{line}'
+
+    def __str__(self):
+        return self.line

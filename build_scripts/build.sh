@@ -125,7 +125,7 @@ fi
 export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
 ${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
-${PYTHON3} ${source_root_dir}/build/hb_new/__main__.py build $@
+${PYTHON3} ${source_root_dir}/build/hb_new/main.py build $@
 
 if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m=====build ${product_name} error=====\033[0m"

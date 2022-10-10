@@ -66,7 +66,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         return StatusCode()
 
     def resolveStrictMode(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
-        if bool(targetArg.argValue) and isinstance(buildModule, BuildModuleInterface):
+        if targetArg.argValue:
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
             if not (preloader.outputs.check_outputs() and loader.outputs.check_outputs()):
@@ -161,8 +161,10 @@ class BuildArgsResolver(ArgsResolverInterface):
     def resolveBuildType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
         if targetArg.argValue == 'debug':
-            targetGenerator.regist_arg('isdebug', True)
-        targetGenerator.regist_arg('ohos_build_type', targetArg.argValue)
+            targetGenerator.regist_arg('is_debug', True)
+        '''For historical reasons, this value must be debug
+        '''
+        targetGenerator.regist_arg('ohos_build_type', 'debug')
         return StatusCode()
 
     def resolveFullCompilation(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
@@ -281,6 +283,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                 data += line
             with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
                 ohos_para_file.write(data)
+        return StatusCode()
+    
+    def resolveCleanLastArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:
+        Arg.clean_args_file()
         return StatusCode()
 
     def resolveCompiler(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config) -> StatusCode:

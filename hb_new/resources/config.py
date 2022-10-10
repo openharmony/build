@@ -20,48 +20,73 @@ import os
 import platform
 
 from resources.global_var import CURRENT_OHOS_ROOT
-from resources.global_var import CURRENT_HB_DIR
+from resources.global_var import BUILD_CONFIG_FILE
+from resources.global_var import ROOT_CONFIG_FILE
 from exceptions.ohosException import OHOSException
 from helper.singleton import Singleton
 from util.ioUtil import IoUtil
 
 
 def get_config_path():
-    if os.path.exists(os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')):
-        return os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')
-    else:
-        return os.path.join(CURRENT_HB_DIR, 'resources', 'config', 'config.json')
+    if not os.path.exists(ROOT_CONFIG_FILE):
+        IoUtil.copy_file(BUILD_CONFIG_FILE, ROOT_CONFIG_FILE)
+    return ROOT_CONFIG_FILE
 
 
 class Config(metaclass=Singleton):
     def __init__(self):
+        self.config_json = ""
+        self._root_path = ""
+        self._board = ""
+        self._kernel = ""
+        self._product = ""
+        self._product_path = ""
+        self._device_path = ""
+        self._device_company = ""
+        self._patch_cache = ""
+        self._version = ""
+        self._os_level = ""
+        self._product_json = ""
+        self._target_os = ""
+        self._target_cpu = ""
+        self._out_path = ""
+        self._compile_config = ""
+        self._component_type = ""
+        self._device_config_path = ""
+        self._product_config_path = ""
+        self._subsystem_config_json = ""
+        self.fs_attr = set()
+        self.platform = platform.system()
+        self.__post__init()
+        
+    def __post__init(self):
         self.config_json = get_config_path()
-
         config_content = IoUtil.read_json_file(self.config_json)
-        self._root_path = config_content.get('root_path', None)
-        self._board = config_content.get('board', None)
-        self._kernel = config_content.get('kernel', None)
-        self._product = config_content.get('product', None)
-        self._product_path = config_content.get('product_path', None)
-        self._device_path = config_content.get('device_path', None)
-        self._device_company = config_content.get('device_company', None)
-        self._patch_cache = config_content.get('patch_cache', None)
-        self._version = config_content.get('version', '3.0')
-        self._os_level = config_content.get('os_level', 'small')
-        self._product_json = config_content.get('product_json', None)
-        self._target_os = config_content.get('target_os', None)
-        self._target_cpu = config_content.get('target_cpu', None)
-        self._out_path = config_content.get('out_path', None)
-        self._compile_config = config_content.get('compile_config', None)
-        self._component_type = config_content.get('component_type', None)
-        self._device_config_path = config_content.get('device_config_path',
+        self.root_path = CURRENT_OHOS_ROOT
+        self.board = config_content.get('board', None)
+        self.kernel = config_content.get('kernel', None)
+        self.product = config_content.get('product', None)
+        self.product_path = config_content.get('product_path', None)
+        self.device_path = config_content.get('device_path', None)
+        self.device_company = config_content.get('device_company', None)
+        self.patch_cache = config_content.get('patch_cache', None)
+        self.version = config_content.get('version', '3.0')
+        self.os_level = config_content.get('os_level', 'small')
+        self.product_json = config_content.get('product_json', None)
+        self.target_os = config_content.get('target_os', None)
+        self.target_cpu = config_content.get('target_cpu', None)
+        self.out_path = config_content.get('out_path', None)
+        self.compile_config = config_content.get('compile_config', None)
+        self.component_type = config_content.get('component_type', None)
+        self.device_config_path = config_content.get('device_config_path',
                                                       None)
-        self._product_config_path = config_content.get('product_config_path',
+        self.product_config_path = config_content.get('product_config_path',
                                                        None)
-        self._subsystem_config_json = config_content.get(
+        self.subsystem_config_json = config_content.get(
             'subsystem_config_json', None)
         self.fs_attr = set()
         self.platform = platform.system()
+        
 
     @property
     def component_type(self):
@@ -138,12 +163,6 @@ class Config(metaclass=Singleton):
     @root_path.setter
     def root_path(self, value):
         self._root_path = os.path.abspath(value)
-        if not os.path.isdir(self._root_path):
-            raise OHOSException(f'{self._root_path} is not a valid path')
-
-        config_path = os.path.join(self._root_path, 'ohos_config.json')
-        if not os.path.isfile(config_path):
-            self.config_create(config_path)
         self.config_update('root_path', self._root_path)
 
     @property
@@ -353,10 +372,6 @@ class Config(metaclass=Singleton):
     def patch_cache(self, value):
         self._patch_cache = value
         self.config_update('patch_cache', self._patch_cache)
-
-    def config_create(self, config_path):
-        IoUtil.copy_file("config/config.json", config_path)
-        self.config_json = config_path
 
     def config_update(self, key, value):
         config_content = IoUtil.read_json_file(self.config_json)

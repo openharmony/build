@@ -19,14 +19,17 @@
 import os
 import argparse
 import sys
-import json
 from distutils.util import strtobool
 
 from resources.global_var import CURRENT_BUILD_ARGS
+from resources.global_var import DEFAULT_BUILD_ARGS
 from resources.global_var import CURRENT_SET_ARGS
+from resources.global_var import DEFAULT_SET_ARGS
+from resources.global_var import ARGS_DIR
 
 from exceptions.ohosException import OHOSException
 from util.logUtil import LogUtil
+from util.ioUtil import IoUtil
 from resolver.argsFactory import ArgsFactory
 
 
@@ -180,31 +183,25 @@ class Arg():
 
     @staticmethod
     def parse_all_args(module_type: ModuleType) -> dict:
-        parser = argparse.ArgumentParser()
-        if module_type == ModuleType.BUILD:
-            args_file_path = CURRENT_BUILD_ARGS
-        elif module_type == ModuleType.SET:
-            args_file_path = CURRENT_SET_ARGS
-        else:
-            raise OHOSException(
-                'There is no such module {}'.format(module_type))
         args_dict = {}
+        parser = argparse.ArgumentParser()
+        all_args = Arg.read_args_file(module_type)
+        
+        for arg in all_args.values():
+            arg = dict(arg)
+            ArgsFactory.genenic_add_option(parser, arg)
 
-        with open(args_file_path) as args_file:
-            all_args = json.load(args_file)
-            for arg in all_args['args']:
-                arg = dict(arg)
-                ArgsFactory.genenic_add_option(parser, arg)
-
-                oh_arg = Arg.createInstanceByDict(arg)
-                if oh_arg.argAttribute.get('deprecated', None):
-                    LogUtil.hb_warning(
-                        '{} will be deprecated, please consider use other options'.format(oh_arg.argName))
-                args_dict[oh_arg.argName] = oh_arg
-        args = parser.parse_args(sys.argv[2:])
+            oh_arg = Arg.createInstanceByDict(arg)
+            if oh_arg.argAttribute.get('deprecated', None):
+                LogUtil.hb_warning(
+                    '{} will be deprecated, please consider use other options'.format(oh_arg.argName))
+            args_dict[oh_arg.argName] = oh_arg
+        args = parser.parse_known_args(sys.argv[2:])
 
         for oh_arg in args_dict.values():
-            assigned_value = args.__dict__[oh_arg.argName]
+            if isinstance(oh_arg, argparse.Namespace):
+                oh_arg._get_args
+            assigned_value = args[0].__dict__[oh_arg.argName]
             if oh_arg.argType == ArgType.LIST:
                 assigned_value = sum(assigned_value, [])
             elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
@@ -212,3 +209,41 @@ class Arg():
             oh_arg.argValue = assigned_value
 
         return args_dict
+    
+    @staticmethod
+    def write_args_file(key:str, value, module_type: ModuleType):
+        args_file_path = ''
+        if module_type == ModuleType.BUILD:
+            args_file_path = CURRENT_BUILD_ARGS
+        elif module_type == ModuleType.SET:
+            args_file_path = CURRENT_SET_ARGS
+        else:
+            raise OHOSException(
+                'There is no such module {}'.format(module_type))
+        args_file = IoUtil.read_json_file(args_file_path)
+        args_file[key]["argDefault"] = value
+        IoUtil.dump_json_file(args_file_path, args_file)
+        
+    @staticmethod
+    def read_args_file(module_type: ModuleType):
+        args_file_path = ''
+        default_file_path = ''
+        if module_type == ModuleType.BUILD:
+            args_file_path = CURRENT_BUILD_ARGS
+            default_file_path = DEFAULT_BUILD_ARGS
+        elif module_type == ModuleType.SET:
+            args_file_path = CURRENT_SET_ARGS
+            default_file_path = DEFAULT_SET_ARGS
+        else:
+            raise OHOSException(
+                'There is no such module {}'.format(module_type))
+        if not os.path.exists(args_file_path):
+            IoUtil.copy_file(src=default_file_path, dst=args_file_path)
+        return IoUtil.read_json_file(args_file_path)
+    
+    @staticmethod
+    def clean_args_file():
+        for file in os.listdir(ARGS_DIR):
+            if file.endswith('.json'):
+                os.remove(os.path.join(ARGS_DIR, file))
+        

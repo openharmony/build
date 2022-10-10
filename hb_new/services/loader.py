@@ -16,8 +16,6 @@
 # limitations under the License.
 
 import os
-import argparse
-import sys
 
 from containers.statusCode import StatusCode
 from services.interface.loadInterface import LoadInterface
