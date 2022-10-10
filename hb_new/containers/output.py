@@ -17,6 +17,7 @@
 
 import os
 
+
 class Output():
 
     def __init__(self, path: str, outcome: str, check_func=None):

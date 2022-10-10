@@ -19,6 +19,7 @@
 from exceptions.ohosException import OHOSException
 from helper.noInstance import NoInstance
 
+
 class TypeCheckUtil(metaclass=NoInstance):
     
     @staticmethod

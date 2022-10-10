@@ -23,6 +23,7 @@ from resolver.interface.argsResolver import ArgsResolver
 from services.interface.menuInterface import MenuInterface
 from containers.statusCode import StatusCode
 
+
 class SetModuleInterface(ModuleInterface):
     
     def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):

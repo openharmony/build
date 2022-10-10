@@ -26,6 +26,7 @@ from util.logUtil import LogUtil
 from helper.noInstance import NoInstance
 from exceptions.ohosException import OHOSException
 
+
 class IoUtil(metaclass=NoInstance):
     
     @staticmethod

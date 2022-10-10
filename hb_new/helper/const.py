@@ -17,6 +17,7 @@
 
 from exceptions.ohosException import OHOSException
 
+
 class Const():
     
     def __setattr__(self, __name: str, __value: Any) -> None:

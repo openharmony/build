@@ -20,6 +20,7 @@ import unittest
 from services.preloader import Preloader
 from resources.config import Config
 
+
 class PreloaderTest(unittest.TestCase):
     
     def setUp(self):

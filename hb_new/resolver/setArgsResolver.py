@@ -27,6 +27,7 @@ from resources.config import Config
 from util.productUtil import ProductUtil
 from util.deviceUtil import DeviceUtil
 
+
 class SetArgsResolver(ArgsResolverInterface):
     
     def __init__(self, args_dict: dict):

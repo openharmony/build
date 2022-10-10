@@ -29,6 +29,7 @@ from util.loader import load_ohos_build  # noqa: E402
 from util.loader import subsystem_scan  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
 
+
 class OHOSLoader(LoadInterface):
 
     def __init__(self, config: Config):

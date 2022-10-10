@@ -20,6 +20,7 @@ import re
 
 from exceptions.ohosException import OHOSException
 
+
 class DeviceUtil():
     @staticmethod
     def is_in_device():

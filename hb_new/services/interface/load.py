@@ -18,6 +18,7 @@
 from containers.statusCode import StatusCode
 from services.interface.loadInterface import LoadInterface
 
+
 class Load():
 
     def __init__(self, loader: LoadInterface):

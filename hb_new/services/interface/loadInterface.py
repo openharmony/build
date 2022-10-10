@@ -24,6 +24,7 @@ from containers.loader_outputs import LoaderOutputs
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
 
+
 class LoadInterface(ServiceInterface):
     
     def __init__(self, config:Config):

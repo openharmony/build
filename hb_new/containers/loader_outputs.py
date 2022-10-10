@@ -19,6 +19,7 @@ import os
 
 from containers.output import Output
 
+
 class LoaderOutputs():
 
     def __init__(self, output_dir: str):

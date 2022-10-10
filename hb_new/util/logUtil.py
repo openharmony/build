@@ -21,6 +21,7 @@ import sys
 from containers.colors import Colors
 from helper.noInstance import NoInstance
 
+
 class LogUtil(metaclass=NoInstance):
     
     @staticmethod            

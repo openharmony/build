@@ -18,6 +18,7 @@
 
 from containers.output import Output
 
+
 class PrealoaderOutputs():
 
     def __init__(self, output_dir: str):
@@ -42,35 +43,46 @@ class PrealoaderOutputs():
                 return False
         return True
 
+
 def check_build_prop(output:Output) -> bool:
     return True
+
 
 def check_build_config(output:Output) -> bool:
     return True
 
+
 def check_parts(output:Output) -> bool:
     return True
+
 
 def check_parts_config(output:Output) -> bool:
     return True
 
+
 def check_build_gnargs(output:Output) -> bool:
     return True
+
 
 def check_features(output:Output) -> bool:
     return True
 
+
 def check_syscap(output:Output) -> bool:
     return True
+
 
 def check_exclusion_modules(output:Output) -> bool:
     return True
 
+
 def check_subsystem_config(output:Output) -> bool:
     return True
 
+
 def check_platforms_build(output:Output) -> bool:
     return True
+
 
 def check_system_capability(output:Output) -> bool:
     return True

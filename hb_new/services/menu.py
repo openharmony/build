@@ -18,5 +18,6 @@
 
 from services.interface.menuInterface import MenuInterface
 
+
 class Menu(MenuInterface):
     pass

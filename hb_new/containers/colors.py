@@ -18,6 +18,7 @@
 
 from dataclasses import dataclass
 
+
 @dataclass
 class Colors():
     HEADER = '\033[95m'

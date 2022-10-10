@@ -19,6 +19,7 @@
 from containers.statusCode import StatusCode
 from modules.interface.setModuleInterface import SetModuleInterface
 
+
 class SetModule():
     
     def __init__(self, setModule: SetModuleInterface) -> None:
