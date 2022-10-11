@@ -44,3 +44,16 @@ class TypeCheckUtil(metaclass=NoInstance):
             return value.isdigit()
         else:
             return False
+        
+    @staticmethod
+    def tile_list(value:list) -> list:
+        result = []
+        for entity in value:
+            if isinstance(entity, list):
+                result += TypeCheckUtil.tile_list(entity)
+            elif isinstance(entity, str):
+                result.append(entity)
+            else:
+                pass
+        return result
+                

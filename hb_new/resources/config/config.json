@@ -16,5 +16,6 @@
     "target_os": null,
     "out_path": null,
     "subsystem_config_json": null,
-    "device_config_path": null
+    "device_config_path": null,
+    "support_cpu": null
   }

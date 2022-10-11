@@ -20,7 +20,7 @@ from abc import ABCMeta, abstractmethod
 
 from containers.arg import Arg
 from exceptions.ohosException import OHOSException
-from containers.statusCode import StatusCode
+from containers.status import throw_exception
 from resources.config import Config
 
 
@@ -30,7 +30,8 @@ class ArgsResolverInterface(metaclass=ABCMeta):
         self._argsToFunction = dict()
         self._mapArgsToFunction(args_dict)
 
-    def resolveArg(self, targetArg: Arg, buildmodule, config: Config) -> StatusCode:
+    @throw_exception
+    def resolveArg(self, targetArg: Arg, buildmodule, config: Config):
         if targetArg.argName not in self._argsToFunction.keys():
             raise OHOSException()
         if not hasattr(self._argsToFunction[targetArg.argName], '__call__'):

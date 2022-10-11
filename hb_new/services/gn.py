@@ -21,7 +21,7 @@ import sys
 import os
 from enum import Enum
 
-from containers.statusCode import StatusCode
+from containers.status import throw_exception
 from exceptions.ohosException import OHOSException
 from services.interface.buildFileGeneratorInterface import BuildFileGeneratorInterface
 from resources.config import Config
@@ -47,13 +47,14 @@ class Gn(BuildFileGeneratorInterface):
         super().__init__(config)
         self._regist_gn_path()
 
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         self._regist_product_information()
         self._regist_product_features()
         self._regist_timestamp()
         self.execute_gn_cmd(CMDTYPE.GEN)
 
-    def execute_gn_cmd(self, cmd_type: int, **kwargs) -> StatusCode:
+    @throw_exception
+    def execute_gn_cmd(self, cmd_type: int, **kwargs):
         if cmd_type == CMDTYPE.GEN:
             return self._execute_gn_gen_cmd()
         elif cmd_type == CMDTYPE.PATH:
@@ -69,14 +70,15 @@ class Gn(BuildFileGeneratorInterface):
         elif cmd_type == CMDTYPE.CLEAN:
             return self._execute_gn_clean_cmd(kwargs)
         else:
-            return StatusCode(False, 'Unsupported gn cmd type')
+            raise OHOSException('Unsupported gn cmd type', '3003')
 
     '''Description: Get gn excutable path and regist it
     @parameter: none
-    @return: StatusCode
+    @return: Status
     '''
 
-    def _regist_gn_path(self) -> StatusCode:
+    @throw_exception
+    def _regist_gn_path(self):
         config_data = IoUtil.read_json_file(os.path.join(
             self.config.root_path, 'build/prebuilts_download_config.json'))
         copy_config_list = config_data[os.uname().sysname.lower(
@@ -91,9 +93,9 @@ class Gn(BuildFileGeneratorInterface):
 
         if os.path.exists(gn_path):
             self.exec = gn_path
-            return StatusCode()
-        return StatusCode(False, 'There is no gn executable file at {}, \
-                          please execute build/prebuilts_download.sh'.format(gn_path))
+        else:
+            raise OHOSException('There is no gn executable file at {}, \
+                            please execute build/prebuilts_download.sh'.format(gn_path), '3003')
 
     '''Description: Convert all registed args into a list
     @parameter: none
@@ -114,6 +116,22 @@ class Gn(BuildFileGeneratorInterface):
                 args_list.append('{}={}'.format(key, value))
 
         return args_list
+
+    '''Description: Convert all registed flags into a list
+    @parameter: none
+    @return: list of all registed args
+    '''
+
+    def _covert_flags(self) -> list:
+        flags_list = []
+
+        for key, value in self.flags_dict.items():
+            if value == '':
+                flags_list.append('{} '.format(key))
+            else:
+                flags_list.append('{}={}'.format(key, str(value)).lower())
+
+        return flags_list
 
     '''Description: Regist compiling product features to gn command args, See features defination
     @parameter: none
@@ -159,13 +177,14 @@ class Gn(BuildFileGeneratorInterface):
 
     '''Description: Execute 'gn gen' command using registed args
     @parameter: kwargs TBD
-    @return: StatusCode
+    @return: Status
     '''
 
-    def _execute_gn_gen_cmd(self, **kwargs) -> StatusCode:
+    @throw_exception
+    def _execute_gn_gen_cmd(self, **kwargs):
         gn_gen_cmd = [self.exec, 'gen',
                       '--args={}'.format(' '.join(self._convert_args())),
-                      self.config.out_path]
+                      self.config.out_path, ' '.join(self._covert_flags())]
         if self.config.os_level == 'mini' or self.config.os_level == 'small':
             gn_gen_cmd.append(f'--script-executable={sys.executable}')
         try:
@@ -173,22 +192,22 @@ class Gn(BuildFileGeneratorInterface):
                 self.exec, 'gen', ' '.join(self._convert_args()).replace('"', "\\\""), ' '.join(gn_gen_cmd[3:])), 'info')
             SystemUtil.exec_command(gn_gen_cmd, self.config.log_path)
         except OHOSException:
-            return StatusCode(False, '')
+            raise OHOSException('GN phase failed', '3005')
 
-    def _execute_gn_path_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_path_cmd(self, **kwargs):
         pass
 
-    def _execute_gn_desc_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_desc_cmd(self, **kwargs):
         pass
 
-    def _execute_gn_ls_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_ls_cmd(self, **kwargs):
         pass
 
-    def _execute_gn_refs_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_refs_cmd(self, **kwargs):
         pass
 
-    def _execute_gn_format_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_format_cmd(self, **kwargs):
         pass
 
-    def _execute_gn_clean_cmd(self, **kwargs) -> StatusCode:
+    def _execute_gn_clean_cmd(self, **kwargs):
         pass

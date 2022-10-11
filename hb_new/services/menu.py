@@ -38,25 +38,50 @@ from exceptions.ohosException import OHOSException
 from services.interface.menuInterface import MenuInterface
 from helper.separator import Separator
 from containers.arg import Arg, ModuleType
+from resources.config import Config
 
 from util.logUtil import LogUtil
 from util.productUtil import ProductUtil
 
 
-
 class Menu(MenuInterface):
 
     def select_compile_option(self) -> dict:
+        config = Config()
         results = {}
         all_build_args = Arg.parse_all_args(ModuleType.BUILD)
         for arg in all_build_args.values():
             if isinstance(arg, Arg) and arg.argAttribute.get("optional"):
-                choices = [
-                    choice if isinstance(choice, Separator) else {
-                        'name': choice,
-                        'value': arg.argName
-                    } for choice in arg.argAttribute.get("optional")
-                ]
+                if arg.argName != 'target_cpu':
+                    choices = [
+                        choice if isinstance(choice, Separator) else {
+                            'name': choice,
+                            'value': arg.argName
+                        } for choice in arg.argAttribute.get("optional")
+                    ]
+                else:
+                    if config.support_cpu != None and isinstance(config.support_cpu, list):
+                        choices = []
+                        for cpu in config.support_cpu:
+                            choices.append({
+                                'name': cpu,
+                                'value': arg.argName,
+                            })
+                    elif config.target_cpu != None:
+                        choices = [
+                            {
+                                'name': config.target_cpu,
+                                'value': arg.argName,
+                            }
+                        ]
+                    else:
+                        choices = [
+                            {
+                                'name': all_build_args['target_cpu'].argValue,
+                                'value': arg.argName,
+                            }
+                        ]
+
                 result = self._list_promt(arg.argName, 'select {} value'.format(
                     arg.argName), choices)[arg.argName][0]
                 results[arg.argName] = result

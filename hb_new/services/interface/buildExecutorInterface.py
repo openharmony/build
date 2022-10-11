@@ -18,7 +18,6 @@
 
 from abc import abstractmethod
 
-from containers.statusCode import StatusCode
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
 
@@ -37,9 +36,9 @@ class BuildExecutorInterface(ServiceInterface):
     def config(self, value):
         self._config = value
 
-    def run(self) -> StatusCode:
-        self._internel_run()
+    def run(self):
+        return self._internel_run()
 
     @abstractmethod
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         pass

@@ -16,8 +16,8 @@
 
 import os
 from util.ioUtil import IoUtil
-from util.preloader import parse_lite_subsystems_config
 from util.preloader.parse_vendor_product_config import get_vendor_parts_list
+from containers.status import throw_exception
 
 class Outputs:
 
@@ -82,6 +82,7 @@ class Product():
                 "product name configuration incorrect for '{}'".format(
                     self._name))
 
+    @throw_exception
     def _get_base_parts(self, base_config_dir, os_level):
         system_base_config_file = os.path.join(base_config_dir,
                                                '{}_system.json'.format(os_level))
@@ -168,6 +169,7 @@ class Product():
         manufacturer_id = self._config.get('manufacturer_id')
         if manufacturer_id == None:
             manufacturer_id = 0
+        
         self._syscap_info = {'product': product_name, 'api_version': api_version,
                              'system_type': os_level, 'manufacturer_id': manufacturer_id}
 

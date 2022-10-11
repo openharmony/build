@@ -24,29 +24,37 @@ import shutil
 
 from util.logUtil import LogUtil
 from helper.noInstance import NoInstance
-from exceptions.ohosException import OHOSException
 
 
 class IoUtil(metaclass=NoInstance):
-    
+
     @staticmethod
-    def read_json_file(input_file):
+    def read_json_file(input_file) -> dict:
         if not os.path.isfile(input_file):
-            raise OHOSException(f'{input_file} not found')
+            raise Exception(f'{input_file} not found')
 
         with open(input_file, 'rb') as input_f:
             data = json.load(input_f)
             return data
-    
-    @staticmethod    
+
+    @staticmethod
     def dump_json_file(dump_file, json_data):
         with open(dump_file, 'wt', encoding='utf-8') as json_file:
             json.dump(json_data, json_file, ensure_ascii=False, indent=2)
-        
+
+    @staticmethod
+    def read_file(file_path):
+        if not os.path.exists(file_path):
+            raise Exception("file '{}' doesn't exist.".format(file_path))
+        data = None
+        with open(file_path, 'r') as input_f:
+            data = input_f.read()
+        return data
+
     @staticmethod
     def read_yaml_file(input_file):
         if not os.path.isfile(input_file):
-            raise OHOSException(f'{input_file} not found')
+            raise Exception(f'{input_file} not found')
 
         yaml = importlib.import_module('yaml')
         with open(input_file, 'rt', encoding='utf-8') as yaml_file:
@@ -55,9 +63,9 @@ class IoUtil(metaclass=NoInstance):
             except yaml.YAMLError as exc:
                 if hasattr(exc, 'problem_mark'):
                     mark = exc.problem_mark
-                    raise OHOSException(f'{input_file} load failed, error line:'
+                    raise Exception(f'{input_file} load failed, error line:'
                                         f' {mark.line + 1}:{mark.column + 1}')
-                    
+
     @staticmethod
     def get_failed_log(log_path):
         with open(log_path, 'rt', encoding='utf-8') as log_file:
@@ -79,10 +87,7 @@ class IoUtil(metaclass=NoInstance):
         if os.path.isfile(error_log):
             with open(error_log, 'rt', encoding='utf-8') as log_file:
                 LogUtil.hb_error(log_file.read())
-                
+
     @staticmethod
     def copy_file(src, dst):
         return shutil.copy(src, dst)
-    
-
-    

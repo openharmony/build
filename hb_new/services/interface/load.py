@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from containers.statusCode import StatusCode
 from services.interface.loadInterface import LoadInterface
 
 
@@ -28,5 +27,5 @@ class Load():
     def unwrapped_loader(self):
         return self._loader
 
-    def run(self) -> StatusCode:
-        return self._loader.run()
+    def run(self):
+       self._loader.run()

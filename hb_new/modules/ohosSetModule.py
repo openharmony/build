@@ -19,18 +19,17 @@
 from modules.interface.setModuleInterface import SetModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
 from services.interface.menuInterface import MenuInterface
-from containers.statusCode import StatusCode
 
 
 class OHOSSetModule(SetModuleInterface):
     
     def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
         super().__init__(args_dict, argsResolver, menu)
-        
-    def _set_product(self) -> StatusCode:
+
+    def set_product(self):
         self.argsResolver.resolveProductName(self.args_dict['product_name'], self)
     
-    def _set_parameter(self) -> StatusCode:
+    def set_parameter(self):
         self.argsResolver.resolveSetParameter(self.args_dict['all'], self)
     
     

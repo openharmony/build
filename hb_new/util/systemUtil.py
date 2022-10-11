@@ -16,37 +16,34 @@
 # limitations under the License.
 #
 
-import re
 import os
 import subprocess
+
 from datetime import datetime
 
 from util.logUtil import LogUtil
 from helper.noInstance import NoInstance
 from exceptions.ohosException import OHOSException
+from containers.status import throw_exception
 
 
 class SystemUtil(metaclass=NoInstance):
-    
+
     @staticmethod
-    def exec_command(cmd, log_path='out/build.log', **kwargs):
-        useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
-        is_log_filter = kwargs.pop('log_filter', False)
+    def exec_command(cmd: list, log_path='out/build.log', **kwargs):
+        is_log_filter = kwargs.pop('log_filter', True)
+        if '' in cmd:
+            cmd.remove('')
         if not os.path.exists(os.path.dirname(log_path)):
             os.makedirs(os.path.dirname(log_path))
         with open(log_path, 'at', encoding='utf-8') as log_file:
             process = subprocess.Popen(cmd,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.STDOUT,
-                                    encoding='utf-8',
-                                    **kwargs)
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.STDOUT,
+                                       encoding='utf-8',
+                                       **kwargs)
             for line in iter(process.stdout.readline, ''):
-                if is_log_filter:
-                    info = re.findall(useful_info_pattern, line)
-                    if len(info):
-                        LogUtil.hb_info(info[0])
-                else:
-                    LogUtil.hb_info(line)
+                LogUtil.hb_info(line)
                 log_file.write(line)
 
         process.wait()
@@ -54,32 +51,11 @@ class SystemUtil(metaclass=NoInstance):
 
         if ret_code != 0:
             if is_log_filter:
-                SystemUtil.get_failed_log(log_path)
-            raise OHOSException('Please check build log in {}'.format(log_path))
-        
-    @staticmethod    
-    def get_failed_log(log_path):
-        with open(log_path, 'rt', encoding='utf-8') as log_file:
-            data = log_file.read()
-        failed_pattern = re.compile(
-            r'(\[\d+/\d+\].*?)(?=\[\d+/\d+\]|'
-            'ninja: build stopped)', re.DOTALL)
-        failed_log = failed_pattern.findall(data)
-        for log in failed_log:
-            if 'FAILED:' in log:
-                LogUtil.hb_error(log)
+                LogUtil.get_failed_log(log_path)
+            raise OHOSException(
+                'Please check build log in {}'.format(log_path))
 
-        failed_pattern = re.compile(r'(ninja: error:.*?)\n', re.DOTALL)
-        failed_log = failed_pattern.findall(data)
-        for log in failed_log:
-            LogUtil.hb_error(log)
-
-        error_log = os.path.join(os.path.dirname(log_path), 'error.log')
-        if os.path.isfile(error_log):
-            with open(error_log, 'rt', encoding='utf-8') as log_file:
-                LogUtil.hb_error(log_file.read())
-                
-    @staticmethod      
+    @staticmethod
     def get_current_time(type='default'):
         if type == 'timestamp':
             return int(datetime.utcnow().timestamp() * 1000)

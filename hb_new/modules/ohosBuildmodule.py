@@ -23,7 +23,6 @@ from services.interface.preload import Preload
 from services.interface.load import Load
 from services.interface.buildFileGenerator import BuildFileGenerator
 from services.interface.buildExecutor import BuildExecutor
-from containers.statusCode import StatusCode
 from containers.arg import BuildPhase
 
 
@@ -39,56 +38,44 @@ class OHOSBuildModule(BuildModuleInterface):
     def config(self):
         return self._config
 
-    def _prebuild(self) -> StatusCode:
-        return self._run_phase(BuildPhase.PRE_BUILD)
+    def _prebuild(self) :
+        self._run_phase(BuildPhase.PRE_BUILD)
 
-    def _preload(self) -> StatusCode:
-        status_code = self._run_phase(BuildPhase.PRE_LOAD)
-        if not status_code.status:
-            return status_code
+    def _preload(self) :
+        self._run_phase(BuildPhase.PRE_LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').argValue:
-            return self.preloader.run()
+            self.preloader.run()
 
-    def _load(self) -> StatusCode:
-        status_code = self._run_phase(BuildPhase.LOAD)
-        if not status_code.status:
-            return status_code
+    def _load(self) :
+        self._run_phase(BuildPhase.LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').argValue:
-            return self.loader.run()
+            self.loader.run()
 
-    def _preTargetGenerate(self) -> StatusCode:
-        return self._run_phase(BuildPhase.PRE_TARGET_GENERATE)
+    def _preTargetGenerate(self) :
+        self._run_phase(BuildPhase.PRE_TARGET_GENERATE)
 
-    def _targetGenerate(self) -> StatusCode:
-        status_code = self._run_phase(BuildPhase.TARGET_GENERATE)
-        if not status_code.status:
-            return status_code
+    def _targetGenerate(self) :
+        self._run_phase(BuildPhase.TARGET_GENERATE)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get("fast_rebuild").argValue:
-            return self.targetGenerator.run()
+            self.targetGenerator.run()
 
-    def _postTargetGenerate(self) -> StatusCode:
-        return self._run_phase(BuildPhase.POST_TARGET_GENERATE)
+    def _postTargetGenerate(self) :
+        self._run_phase(BuildPhase.POST_TARGET_GENERATE)
 
-    def _preTargetCompilation(self) -> StatusCode:
-        return self._run_phase(BuildPhase.PRE_TARGET_COMPILATION)
+    def _preTargetCompilation(self) :
+        self._run_phase(BuildPhase.PRE_TARGET_COMPILATION)
 
-    def _targetCompilation(self) -> StatusCode:
-        status_code = self._run_phase(BuildPhase.TARGET_COMPILATION)
-        if not status_code.status:
-            return status_code
+    def _targetCompilation(self) :
+        self._run_phase(BuildPhase.TARGET_COMPILATION)
         if self.args_dict.get('build_only_gn', None) and not self.args_dict.get("build_only_gn").argValue:
-            return self.targetCompiler.run()
+            self.targetCompiler.run()
 
-    def _postTargetCompilation(self) -> StatusCode:
-        return self._run_phase(BuildPhase.POST_TARGET_COMPILATION)
+    def _postTargetCompilation(self) :
+        self._run_phase(BuildPhase.POST_TARGET_COMPILATION)
 
-    def _postBuild(self) -> StatusCode:
-        return self._run_phase(BuildPhase.POST_BUILD)
+    def _postBuild(self) :
+        self._run_phase(BuildPhase.POST_BUILD)
 
-    def _run_phase(self, phase: BuildPhase) -> StatusCode:
+    def _run_phase(self, phase: BuildPhase) :
         for phase_arg in [arg for arg in self.args_dict.values()if arg.argPhase == phase]:
-            status_code = self.argsResolver.resolveArg(
-                phase_arg, self, config=self.config)
-            if not status_code.status:
-                return status_code
-        return StatusCode()
+            self.argsResolver.resolveArg(phase_arg, self, config=self.config)

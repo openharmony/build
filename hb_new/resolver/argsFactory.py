@@ -18,8 +18,6 @@
 
 import argparse
 
-from distutils.util import strtobool
-
 from exceptions.ohosException import OHOSException
 
 
@@ -45,7 +43,7 @@ def _add_bool_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
         return _add_bool_abbreviation_option(parser, arg)
     else:
         return parser.add_argument(arg['argName'], help=arg['argHelp'],
-                                   default=strtobool(arg['argDefault']), choices=['True', 'False'])
+                                   default=arg['argDefault'], choices=['True', 'False'])
 
 
 def _add_str_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
@@ -72,7 +70,7 @@ def _add_gate_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
 
 def _add_bool_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
     return parser.add_argument(arg['argAttribute'].get('abbreviation'), arg['argName'], help=arg['argHelp'],
-                               default=strtobool(arg['argDefault']),  action="store_true")
+                               default=arg['argDefault'],  action="store_true")
 
 
 def _add_str_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:

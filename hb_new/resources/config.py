@@ -55,10 +55,11 @@ class Config(metaclass=Singleton):
         self._device_config_path = ""
         self._product_config_path = ""
         self._subsystem_config_json = ""
+        self._support_cpu = ""
         self.fs_attr = set()
         self.platform = platform.system()
         self.__post__init()
-        
+
     def __post__init(self):
         self.config_json = get_config_path()
         config_content = IoUtil.read_json_file(self.config_json)
@@ -79,14 +80,14 @@ class Config(metaclass=Singleton):
         self.compile_config = config_content.get('compile_config', None)
         self.component_type = config_content.get('component_type', None)
         self.device_config_path = config_content.get('device_config_path',
-                                                      None)
+                                                     None)
         self.product_config_path = config_content.get('product_config_path',
-                                                       None)
+                                                      None)
         self.subsystem_config_json = config_content.get(
             'subsystem_config_json', None)
+        self.support_cpu = config_content.get('support_cpu', None)
         self.fs_attr = set()
         self.platform = platform.system()
-        
 
     @property
     def component_type(self):
@@ -290,6 +291,15 @@ class Config(metaclass=Singleton):
         self._subsystem_config_json = value
         self.config_update('subsystem_config_json',
                            self._subsystem_config_json)
+
+    @property
+    def support_cpu(self):
+        return self._support_cpu
+
+    @support_cpu.setter
+    def support_cpu(self, value):
+        self._support_cpu = value
+        self.config_update('support_cpu', self._support_cpu)
 
     @property
     def log_path(self):

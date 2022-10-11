@@ -156,7 +156,8 @@ class ProductUtil(metaclass=NoInstance):
                 'board_path': board_path,
                 'board_config_path': board_config_path,
                 'target_cpu': info.get('target_cpu'),
-                'target_os': info.get('target_os')
+                'target_os': info.get('target_os'),
+                'support_cpu': info.get('support_cpu'),
             }
         else:
             raise OHOSException(f'wrong version number in {product_json}')
@@ -195,7 +196,8 @@ class ProductUtil(metaclass=NoInstance):
 
         config = Config()
         # Get all inherit files
-        files = [os.path.join(config.root_path, file) for file in IoUtil.read_json_file(product_json).get('inherit', [])]
+        files = [os.path.join(config.root_path, file) for file in IoUtil.read_json_file(
+            product_json).get('inherit', [])]
         # Add the product config file to last with highest priority
         files.append(product_json)
 
@@ -295,6 +297,10 @@ class ProductUtil(metaclass=NoInstance):
     @staticmethod
     def get_vendor_parts_list(config):
         return _transform(config).get('parts')
+
+    @staticmethod
+    def has_component(product_name: str) -> bool:
+        pass
 
 
 def _transform(config):

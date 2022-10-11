@@ -16,7 +16,6 @@
 # limitations under the License.
 #
 
-from containers.statusCode import StatusCode
 from services.interface.buildExecutorInterface import BuildExecutorInterface
 
 
@@ -29,5 +28,5 @@ class BuildExecutor():
     def unwrapped_build_executor(self):
         return self._buildExecutor
         
-    def run(self) -> StatusCode:
+    def run(self):
         return self._buildExecutor.run()

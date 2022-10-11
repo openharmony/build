@@ -16,7 +16,6 @@
 # limitations under the License.
 
 from containers.arg import Arg
-from containers.statusCode import StatusCode
 from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from resources.config import Config
 
@@ -26,5 +25,5 @@ class ArgsResolver():
     def __init__(self, argsResolver: ArgsResolverInterface):
         self._argsResolver = argsResolver
 
-    def resolveArg(self, targetArg: Arg, buildmodule, config: Config) -> StatusCode:
-        return self._argsResolver.resolveArg(targetArg, buildmodule, config)
+    def resolveArg(self, targetArg: Arg, buildmodule, config: Config):
+        self._argsResolver.resolveArg(targetArg, buildmodule, config)

@@ -21,29 +21,27 @@ from abc import abstractmethod
 from modules.interface.moduleInterface import ModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
 from services.interface.menuInterface import MenuInterface
-from containers.statusCode import StatusCode
 
 
 class SetModuleInterface(ModuleInterface):
-    
+
     def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
         super().__init__(args_dict, argsResolver)
         self._menu = menu
-    
+
     @property
     def menu(self):
         return self._menu
-    
+
     @abstractmethod
-    def _set_product(self) -> StatusCode:
+    def set_product(self):
         pass
-    
+
     @abstractmethod
-    def _set_parameter(self) -> StatusCode:
+    def set_parameter(self):
         pass
-    
-    def run(self) -> StatusCode:
+
+    def run(self):
         if not self.args_dict['all'].argValue:
-            self._set_product()
-        self._set_parameter()
-    
+            self.set_product()
+        self.set_parameter()

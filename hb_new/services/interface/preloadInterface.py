@@ -19,7 +19,6 @@ import os
 
 from abc import abstractmethod
 
-from containers.statusCode import StatusCode
 from containers.preloader_outputs import PrealoaderOutputs
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
@@ -37,9 +36,9 @@ class PreloadInterface(ServiceInterface):
     def outputs(self):
         return self._preloader_outputs
     
-    def run(self) -> StatusCode:
-        return self._internel_run()
+    def run(self):
+        self._internel_run()
 
     @abstractmethod
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         pass

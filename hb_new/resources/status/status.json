@@ -1,0 +1,26 @@
+{
+    "0000": {
+        "code": "0000",
+        "solution": "Unknown solution method"
+    },
+    "1000": {
+        "code": "1000",
+        "solution": "Unknown solution method for preload phase"
+    },
+    "2000": {
+        "code": "2000",
+        "solution": "Unknown solution method for load phase"
+    },
+    "3000": {
+        "code": "3000",
+        "solution": "Unknown solution method for gn phase"
+    },
+    "4000": {
+        "code": "4000",
+        "solution": "Unknown solution method for ninja phase"
+    },
+    "4001": {
+        "code": "4001",
+        "solution": "You could run cmd 'hb tool --desc' to show what components or module this product have,\n\t\tand if you execute hb build in a directory, it will build the part corresponding \n\t\tto the current directory by default but for compiling whole product."
+    }
+}

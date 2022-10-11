@@ -18,14 +18,14 @@
 
 from abc import abstractmethod
 
-
+from exceptions.ohosException import OHOSException
 from modules.interface.moduleInterface import ModuleInterface
 from services.interface.preload import Preload
 from services.interface.load import Load
 from services.interface.buildExecutor import BuildExecutor
 from services.interface.buildFileGenerator import BuildFileGenerator
 from resolver.interface.argsResolver import ArgsResolver
-from containers.statusCode import StatusCode
+from util.logUtil import LogUtil
 
 
 class BuildModuleInterface(ModuleInterface):
@@ -54,7 +54,7 @@ class BuildModuleInterface(ModuleInterface):
     def targetCompiler(self):
         return self._targetCompiler
 
-    def run(self) -> StatusCode:
+    def run(self):
         try:
             self._prebuild()
             self._preload()
@@ -64,9 +64,13 @@ class BuildModuleInterface(ModuleInterface):
             self._postTargetGenerate()
             self._preTargetCompilation()
             self._targetCompilation()
+        except OHOSException as exception:
+            LogUtil.write_log(self.targetCompiler.unwrapped_build_executor.config.log_path,
+                    'Reason: {}\n'
+                    'Solution: {}'
+                    .format(str(exception), exception.get_solution()), 'error')
+        else: 
             self._postTargetCompilation()
-        except Exception:
-            raise
         finally:
             self._postBuild()
 

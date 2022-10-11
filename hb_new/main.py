@@ -23,7 +23,6 @@ import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from services.preloader import PreloaderAdapt
 from services.preloader import OHOSPreloader
 from services.interface.preload import Preload
 
@@ -53,17 +52,17 @@ from resources.config import Config
 from containers.arg import Arg
 from containers.arg import ModuleType
 
+
 from exceptions.ohosException import OHOSException
 
-from util.logUtil import LogUtil
 
 class Main():
 
     @staticmethod
     def init_module(moduleType: ModuleType) -> ModuleInterface:
         module = None
-        args_dict = Arg.parse_all_args(moduleType)
         if moduleType == ModuleType.BUILD:
+            args_dict = Arg.parse_all_args(moduleType)
 
             if args_dict.get("product_name").argValue != '':
                 set_args_dict = Arg.parse_all_args(ModuleType.SET)
@@ -71,8 +70,7 @@ class Main():
                 menu = Menu()
                 ohosSetModule = OHOSSetModule(
                     set_args_dict, setArgsResolever, menu)
-                set_module = SetModule(ohosSetModule)
-                set_module.run()
+                ohosSetModule.set_product()
 
             config = Config()
 
@@ -96,6 +94,10 @@ class Main():
 
             module = BuildModule(ohosBuildModule)
         elif moduleType == ModuleType.SET:
+            # each set should clean last compilation arg files
+            Arg.clean_args_file()
+
+            args_dict = Arg.parse_all_args(moduleType)
             setArgsResolever = SetArgsResolver(args_dict)
             menu = Menu()
             ohosSetModule = OHOSSetModule(args_dict, setArgsResolever, menu)
@@ -127,8 +129,10 @@ class Main():
             raise OHOSException(
                 'There is no such option {}'.format(module_type))
 
-        status = module.run()
+        module.run()
+        
         return 0
+
 
 
 if __name__ == "__main__":

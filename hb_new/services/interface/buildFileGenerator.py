@@ -16,7 +16,6 @@
 # limitations under the License.
 #
 
-from containers.statusCode import StatusCode
 from services.interface.buildFileGeneratorInterface import BuildFileGeneratorInterface
 
 
@@ -29,5 +28,5 @@ class BuildFileGenerator():
     def unwrapped_build_file_generator(self):
         return self._buildFileGenerator
         
-    def run(self) -> StatusCode:
+    def run(self):
         return self._buildFileGenerator.run()

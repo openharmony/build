@@ -19,7 +19,6 @@
 import os
 import argparse
 import sys
-from distutils.util import strtobool
 
 from resources.global_var import CURRENT_BUILD_ARGS
 from resources.global_var import DEFAULT_BUILD_ARGS
@@ -30,6 +29,7 @@ from resources.global_var import ARGS_DIR
 from exceptions.ohosException import OHOSException
 from util.logUtil import LogUtil
 from util.ioUtil import IoUtil
+from util.typeCheckUtil import TypeCheckUtil
 from resolver.argsFactory import ArgsFactory
 
 
@@ -167,7 +167,7 @@ class Arg():
         arg_type = ArgType.getType(data['argType'])
         arg_value = ''
         if arg_type == ArgType.BOOL or arg_type == ArgType.GATE:
-            arg_value = bool(strtobool(data['argDefault']))
+            arg_value = data['argDefault']
         elif arg_type == ArgType.INT:
             arg_value = int(data['argDefault'])
         elif arg_type == ArgType.STR:
@@ -186,32 +186,36 @@ class Arg():
         args_dict = {}
         parser = argparse.ArgumentParser()
         all_args = Arg.read_args_file(module_type)
-        
+
         for arg in all_args.values():
             arg = dict(arg)
             ArgsFactory.genenic_add_option(parser, arg)
 
             oh_arg = Arg.createInstanceByDict(arg)
-            if oh_arg.argAttribute.get('deprecated', None):
-                LogUtil.hb_warning(
-                    '{} will be deprecated, please consider use other options'.format(oh_arg.argName))
             args_dict[oh_arg.argName] = oh_arg
-        args = parser.parse_known_args(sys.argv[2:])
+
+        parser_args = parser.parse_known_args(sys.argv[2:])
 
         for oh_arg in args_dict.values():
             if isinstance(oh_arg, argparse.Namespace):
                 oh_arg._get_args
-            assigned_value = args[0].__dict__[oh_arg.argName]
+            assigned_value = parser_args[0].__dict__[oh_arg.argName]
             if oh_arg.argType == ArgType.LIST:
-                assigned_value = sum(assigned_value, [])
+                assigned_value = TypeCheckUtil.tile_list(assigned_value)
+                assigned_value = list(set(assigned_value))
             elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
                 assigned_value = bool(assigned_value)
+
+            if oh_arg.argAttribute.get('deprecated', None) and oh_arg.argValue != assigned_value:
+                LogUtil.hb_warning(
+                    'compile option "{}" will be deprecated, please consider use other options'.format(oh_arg.argName))
             oh_arg.argValue = assigned_value
+            Arg.write_args_file(oh_arg.argName, oh_arg.argValue, module_type)
 
         return args_dict
-    
+
     @staticmethod
-    def write_args_file(key:str, value, module_type: ModuleType):
+    def write_args_file(key: str, value, module_type: ModuleType):
         args_file_path = ''
         if module_type == ModuleType.BUILD:
             args_file_path = CURRENT_BUILD_ARGS
@@ -220,10 +224,10 @@ class Arg():
         else:
             raise OHOSException(
                 'There is no such module {}'.format(module_type))
-        args_file = IoUtil.read_json_file(args_file_path)
+        args_file = Arg.read_args_file(module_type)
         args_file[key]["argDefault"] = value
         IoUtil.dump_json_file(args_file_path, args_file)
-        
+
     @staticmethod
     def read_args_file(module_type: ModuleType):
         args_file_path = ''
@@ -240,10 +244,9 @@ class Arg():
         if not os.path.exists(args_file_path):
             IoUtil.copy_file(src=default_file_path, dst=args_file_path)
         return IoUtil.read_json_file(args_file_path)
-    
+
     @staticmethod
     def clean_args_file():
         for file in os.listdir(ARGS_DIR):
             if file.endswith('.json'):
                 os.remove(os.path.join(ARGS_DIR, file))
-        

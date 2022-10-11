@@ -31,3 +31,4 @@ CURRENT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/setargs.json')
 
 BUILD_CONFIG_FILE = os.path.join(CURRENT_HB_DIR, 'resources/config/config.json')
 ROOT_CONFIG_FILE = os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')
+STATUS_FILE = os.path.join(CURRENT_HB_DIR, 'resources/status/status.json')

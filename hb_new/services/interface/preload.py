@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from containers.statusCode import StatusCode
 from services.interface.preloadInterface import PreloadInterface
 
 
@@ -28,5 +27,5 @@ class Preload():
     def unwrapped_preloader(self):
         return self._preloader
         
-    def run(self) -> StatusCode:
-        return self._preloader.run()
+    def run(self):
+        self._preloader.run()

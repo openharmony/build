@@ -19,7 +19,6 @@ import os
 
 from abc import abstractmethod
 
-from containers.statusCode import StatusCode
 from containers.loader_outputs import LoaderOutputs
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
@@ -38,9 +37,9 @@ class LoadInterface(ServiceInterface):
     def outputs(self):
         return self._outputs
 
-    def run(self) -> StatusCode:
+    def run(self):
         return self._internel_run()
 
     @abstractmethod
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         pass

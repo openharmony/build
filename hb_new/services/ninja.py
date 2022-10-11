@@ -18,7 +18,6 @@
 
 import os
 
-from containers.statusCode import StatusCode
 from exceptions.ohosException import OHOSException
 from services.interface.buildExecutorInterface import BuildExecutorInterface
 from resources.config import Config
@@ -32,19 +31,19 @@ class Ninja(BuildExecutorInterface):
     def __init__(self, config: Config):
         super().__init__(config)
 
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         self._regist_ninja_path()
         self._execute_ninja_cmd()
 
     def _execute_ninja_cmd(self):
         ninja_cmd = [self.exec, '-w', 'dupbuild=warn',
                      '-C', self.config.out_path] + self._convert_args()
+        LogUtil.write_log(self.config.log_path,
+                            'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
         try:
-            LogUtil.write_log(self.config.log_path,
-                              'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
             SystemUtil.exec_command(ninja_cmd, self.config.log_path)
         except OHOSException:
-            return StatusCode(False, '')
+            raise OHOSException('ninja error', '4000')
 
     def _convert_args(self) -> list:
         args_list = []
@@ -52,10 +51,13 @@ class Ninja(BuildExecutorInterface):
             if key == 'build_target' and isinstance(value, list):
                 args_list += value
             else:
-                args_list.insert(0, value)
+                if value == '':
+                    args_list.insert(0, key)
+                else:
+                    args_list.insert(0, ' {}{} '.format(key, value))
         return args_list
 
-    def _regist_ninja_path(self) -> StatusCode:
+    def _regist_ninja_path(self):
         config_data = IoUtil.read_json_file(os.path.join(
             self.config.root_path, 'build/prebuilts_download_config.json'))
         copy_config_list = config_data[os.uname().sysname.lower(
@@ -70,6 +72,6 @@ class Ninja(BuildExecutorInterface):
 
         if os.path.exists(gn_path):
             self.exec = gn_path
-            return StatusCode()
-        return StatusCode(False, 'There is no gn executable file at {}, \
-                          please execute build/prebuilts_download.sh'.format(gn_path))
+        else:
+            raise OHOSException('There is no gn executable file at {}, \
+                            please execute build/prebuilts_download.sh'.format(gn_path), '4000')

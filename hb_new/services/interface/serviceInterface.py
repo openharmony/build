@@ -17,8 +17,6 @@
 
 from abc import ABCMeta, abstractmethod
 
-from containers.statusCode import StatusCode
-from exceptions.ohosException import OHOSException
 from util.logUtil import LogUtil
 
 
@@ -48,5 +46,5 @@ class ServiceInterface(metaclass=ABCMeta):
         self._args_dict[argName] = argValue
 
     @abstractmethod
-    def run(self) -> StatusCode:
+    def run(self):
         pass

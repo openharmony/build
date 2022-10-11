@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
-import sys
 import os
+import sys
 import importlib
 import importlib.util
 
@@ -35,20 +35,17 @@ def is_in_ohos_dir():
 
 def main():
     in_ohos_dir, ohos_root_path = is_in_ohos_dir()
-    if in_ohos_dir and ohos_root_path == os.getcwd():
-        entry_path = os.path.join(ohos_root_path, 'build', 'hb_new', 'main.py')
+    if in_ohos_dir :
+        entry_path = os.path.join(os.path.abspath(os.path.relpath(
+            ohos_root_path, os.path.curdir)), 'build', 'hb_new', 'main.py')
         spec = importlib.util.spec_from_file_location('main', entry_path)
         api = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(api)
         main = api.Main()
         main.main()
-    elif in_ohos_dir and ohos_root_path != os.getcwd():
-        relpath = os.path.relpath(os.path.curdir, ohos_root_path)
-        entry = importlib.import_module(relpath)
-        entry.main()
     else:
         raise Exception(
-            "hb_error: Please call hb utilities inside source root directory")
+            "[OHOS_ERROR]: Please call hb utilities inside ohos source directory")
 
 
 if __name__ == "__main__":

@@ -18,7 +18,6 @@
 
 from abc import abstractmethod
 
-from containers.statusCode import StatusCode
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
 
@@ -28,18 +27,26 @@ class BuildFileGeneratorInterface(ServiceInterface):
     def __init__(self, config: Config):
         super().__init__()
         self._config = config
-    
-    @property    
+        self._flags_dict = {}
+
+    @property
     def config(self):
         return self._config
-    
+
     @config.setter
     def config(self, value):
         self._config = value
 
-    def run(self) -> StatusCode:
+    @property
+    def flags_dict(self):
+        return self._flags_dict
+
+    def regist_flag(self, key, value):
+        self._flags_dict[key] = value
+
+    def run(self):
         self._internel_run()
-        
+
     @abstractmethod
-    def _internel_run(self) -> StatusCode:
+    def _internel_run(self):
         pass

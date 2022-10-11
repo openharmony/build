@@ -16,5 +16,16 @@
 # limitations under the License.
 #
 
+from resources.global_var import STATUS_FILE
+from util.ioUtil import IoUtil
 class OHOSException(Exception):
-    pass
+
+    def __init__(self, message, code=0):
+        super().__init__(message)
+        self._code = code
+        
+    def get_solution(self) -> str:
+        status_file = IoUtil.read_json_file(STATUS_FILE)
+        if not self._code in status_file.keys():
+            return 'UNKNOWN REASON'
+        return status_file[str(self._code)]['solution']

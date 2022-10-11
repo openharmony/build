@@ -16,11 +16,14 @@
 import sys
 import os
 
+from exceptions.ohosException import OHOSException
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from . import merge_platform_build
 
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
+from containers.status import throw_exception
 
 
 class PlatformsLoader:
@@ -100,6 +103,7 @@ class PlatformsLoader:
             stub_parts = []
         return parts, stub_parts
 
+    @throw_exception
     def _loading(self):
         if self._is_load:
             return
@@ -108,6 +112,8 @@ class PlatformsLoader:
         config_base_dir = os.path.dirname(self._platforms_config_file)
         all_parts = {}
         all_stubs = {}
+        if _platforms_info is None:
+            raise OHOSException('this product do not support thish arch', '2001')
         for _platform_name, _info in _platforms_info.items():
             if self._scalable_build is False:
                 _file_name = _info.get('parts_config')
@@ -138,6 +144,7 @@ class PlatformsLoader:
         self._all_parts = all_parts
         self._all_stubs = all_stubs
         self._is_load = True
+
 
     def get_all_parts(self):
         self._loading()

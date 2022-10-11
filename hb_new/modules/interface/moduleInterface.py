@@ -19,7 +19,6 @@
 from abc import ABCMeta, abstractmethod
 
 from resolver.interface.argsResolver import ArgsResolver
-from containers.statusCode import StatusCode
 
 
 class ModuleInterface(metaclass=ABCMeta):
@@ -37,5 +36,5 @@ class ModuleInterface(metaclass=ABCMeta):
         return self._args_dict
 
     @abstractmethod
-    def run(self) -> StatusCode:
+    def run(self):
         pass

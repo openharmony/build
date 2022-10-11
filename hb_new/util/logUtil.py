@@ -17,14 +17,23 @@
 #
 
 import sys
+import re
+import os
 
 from containers.colors import Colors
 from helper.noInstance import NoInstance
 
 
+class LogLevel():
+    INFO = 0
+    WARNING = 1
+    ERROR = 2
+    DEBUG = 3
+
+
 class LogUtil(metaclass=NoInstance):
-    
-    @staticmethod            
+
+    @staticmethod
     def hb_info(msg):
         level = 'info'
         for line in str(msg).splitlines():
@@ -37,15 +46,15 @@ class LogUtil(metaclass=NoInstance):
         for line in str(msg).splitlines():
             sys.stderr.write(LogUtil.message(level, line))
             sys.stderr.flush()
-    
+
     @staticmethod
     def hb_error(msg):
         level = 'error'
         for line in str(msg).splitlines():
             sys.stderr.write(LogUtil.message(level, line))
             sys.stderr.flush()
-    
-    @staticmethod        
+
+    @staticmethod
     def message(level, msg):
         if isinstance(msg, str) and not msg.endswith('\n'):
             msg += '\n'
@@ -64,3 +73,26 @@ class LogUtil(metaclass=NoInstance):
                 sys.stderr.write(LogUtil.message(level, line))
                 sys.stderr.flush()
                 log_file.write(LogUtil.message(level, line))
+                
+    @staticmethod    
+    def get_failed_log(log_path):
+        with open(log_path, 'rt', encoding='utf-8') as log_file:
+            data = log_file.read()
+
+        failed_pattern = re.compile(
+            r'(\[\d+/\d+\].*?)(?=\[\d+/\d+\]|'
+            'ninja: build stopped)', re.DOTALL)
+        failed_log = failed_pattern.findall(data)
+        for log in failed_log:
+            if 'FAILED:' in log:
+                LogUtil.hb_error(log)
+
+        failed_pattern = re.compile(r'(ninja: error:.*?)\n', re.DOTALL)
+        failed_log = failed_pattern.findall(data)
+        for log in failed_log:
+            LogUtil.hb_error(log)
+
+        error_log = os.path.join(os.path.dirname(log_path), 'error.log')
+        if os.path.isfile(error_log):
+            with open(error_log, 'rt', encoding='utf-8') as log_file:
+                LogUtil.hb_error(log_file.read())
