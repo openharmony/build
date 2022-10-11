@@ -114,11 +114,6 @@
           "unzip_filename": "ace-loader"
         },
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
           "unzip_filename": "linux"
@@ -208,11 +203,6 @@
           "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
           "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
           "unzip_filename": "ace-loader"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
         },
         {
           "unzip_dir": "prebuilts/cmake",
@@ -315,11 +305,6 @@
           "unzip_filename": "ace-loader"
         },
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
           "unzip_filename": "darwin"
@@ -369,11 +354,6 @@
           "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
           "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
           "unzip_filename": "ace-loader"
-        },
-        {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
         },
         {
           "unzip_dir": "prebuilts/cmake",
