@@ -109,11 +109,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
-        {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
           "unzip_filename": "restool"
@@ -204,11 +199,6 @@
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
         {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
@@ -310,11 +300,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
-        {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
           "unzip_filename": "restool"
@@ -365,11 +350,6 @@
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
         {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
