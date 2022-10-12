@@ -53,7 +53,7 @@ def get_package_name_from_profile(options):
 
 def compile_resources(options):
     with build_utils.temp_dir() as build:
-        res_dir = os.path.join(build, 'gen/resources')
+        res_dir = os.path.join(build, 'gen/compile/resources')
         gen_dir = os.path.join(os.path.dirname(options.output_header_file), "gen")
         gen_dir = os.path.abspath(gen_dir)
         header_dir = os.path.join(build, 'header')
