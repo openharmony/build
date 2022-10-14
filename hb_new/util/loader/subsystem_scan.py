@@ -19,6 +19,7 @@ import argparse
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
+from util.logUtil import LogUtil
 
 _default_subsystem = {"common": "build/common"}
 
@@ -100,6 +101,7 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
         'subsystem': _build_configs,
         'no_src_subsystem': no_src_subsystem
     }
+    LogUtil.hb_info('subsytem config scan completed')
     return scan_result
 
 

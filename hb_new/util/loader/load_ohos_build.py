@@ -16,6 +16,7 @@
 import os
 import sys
 from . import load_bundle_file
+from util.logUtil import LogUtil
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501  pylint: disable=C0413, E0611
@@ -696,4 +697,5 @@ def get_parts_info(source_root_dir,
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
     parts_config_dict['syscap_info'] = system_syscap
+    LogUtil.hb_info('all parts scan completed')
     return parts_config_dict
