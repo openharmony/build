@@ -10,7 +10,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_std",
+        "module_label": "//developtools/hdc:hdc",
         "target_os": [
             "linux",
             "windows",
