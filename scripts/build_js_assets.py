@@ -30,6 +30,8 @@ def parse_args(args):
     parser.add_option('--output', help='stamp file')
     parser.add_option('--js-assets-dir', help='js assets directory')
     parser.add_option('--ets-assets-dir', help='ets assets directory')
+    parser.add_option('--js-forms-dir', help='js forms directory')
+    parser.add_option('--testrunner-dir', help='testrunner directory')
     parser.add_option('--nodejs-path', help='path to nodejs app')
     parser.add_option('--webpack-js', help='path to webpack.js')
     parser.add_option('--webpack-config-js', help='path to webpack.config.js')
@@ -55,53 +57,35 @@ def parse_args(args):
     options, _ = parser.parse_args(args)
     options.js_assets_dir = build_utils.parse_gn_list(options.js_assets_dir)
     options.ets_assets_dir = build_utils.parse_gn_list(options.ets_assets_dir)
+    options.js_forms_dir = build_utils.parse_gn_list(options.js_forms_dir)
+    options.testrunner_dir = build_utils.parse_gn_list(options.testrunner_dir)
     return options
 
-def make_my_env(build_dir, options, js2abc, ability_index):
+def make_my_env(options, js2abc):
     out_dir = os.path.abspath(os.path.dirname(options.output))
+    gen_dir = os.path.join(out_dir, "gen")
     assets_dir = os.path.join(out_dir, "assets")
     if options.app_profile:
         if js2abc:
             assets_dir = os.path.join(assets_dir, "js")
         else:
             assets_dir = os.path.join(assets_dir, "ets")
-    gen_dir = os.path.join(out_dir, "gen")
     my_env = {
         "aceModuleBuild": assets_dir,
         "buildMode": options.build_mode,
         "PATH": os.environ.get('PATH'),
         "appResource": os.path.join(gen_dir, "ResourceTable.txt")
     }
-    with open(options.hap_profile) as profile:
-        config = json.load(profile)
-        ability_cnt = len(config['module']['abilities'])
-        if ability_index < ability_cnt and (options.js_asset_cnt > 1 or options.ets_asset_cnt > 1):
-            if config['module']['abilities'][ability_index].__contains__('forms'):
-                my_env["abilityType"] = 'form'
-            else:
-                my_env["abilityType"] = config['module']['abilities'][ability_index]['type']
-        elif config['module'].__contains__('testRunner'):
-            my_env["abilityType"] = 'testrunner'
-
     if options.app_profile:
         my_env["aceProfilePath"] = os.path.join(gen_dir, "resources/base/profile")
         my_env["aceModuleJsonPath"] = os.path.abspath(options.hap_profile)
-    else:
-        manifest = os.path.join(build_dir, 'manifest.json')
-        my_env["aceManifestPath"] = manifest
     return my_env
 
-def make_manifest_data(config, options, js2abc, ability_index):
+def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path):
     data = dict()
     data['appID'] = config['app']['bundleName']
-    ability_cnt = len(config['module']['abilities'])
-    assets_cnt = 0
-    if js2abc:
-        assets_cnt = options.js_asset_cnt
-    else:
-        assets_cnt = options.ets_asset_cnt
-    if ability_index < ability_cnt and config['module']['abilities'][ability_index].__contains__("label"):
-        data['appName'] = config['module']['abilities'][ability_index]['label']
+    if config['module']['abilities'][asset_index].__contains__("label"):
+        data['appName'] = config['module']['abilities'][asset_index]['label']
     if options.app_profile:
         data['versionName'] = config['app']['versionName']
         data['versionCode'] = config['app']['versionCode']
@@ -110,123 +94,81 @@ def make_manifest_data(config, options, js2abc, ability_index):
     else:
         data['versionName'] = config['app']['version']['name']
         data['versionCode'] = config['app']['version']['code']
+        data['deviceType'] = config['module']['deviceType']
         for js_module in config['module']['js']:
-            ability_name = ''
             js_module_name = js_module.get('name').split('.')[-1]
-            if ability_index < ability_cnt:
-                ability_name = config['module']['abilities'][ability_index]['name'].split('.')[-1]
-            if js_module_name != ability_name:
-                if (js_module_name == 'default' and ability_name == 'MainAbility') or assets_cnt == 1:
-                    ability_name = 'default'
-            if js_module_name == ability_name:
+
+            # According to the page name and ability entry match the corresponding page for ability
+            # Compatibility with mismatches due to "MainAbility" and "default"
+            if js_module_name == src_path or (js_module_name == 'MainAbility' and src_path == 'default') \
+               or (js_module_name == 'default' and src_path == 'MainAbility'):
                 data['pages'] = js_module.get('pages')
                 data['window'] = js_module.get('window')
-                if js_module.get('type') == 'form':
-                    data['pages'] = []
+                if js_module.get('type') == 'form' and options.js_forms_dir:
                     data['type'] = 'form'
-        data['deviceType'] = config['module']['deviceType']
-    if js2abc and (config['module']['abilities'][0].get('srcLanguage') == 'ets' or ability_index >= ability_cnt):
-        for js_page in config['module']['js']:
-            if js_page.get('type') == 'form':
-                data['pages'] = js_page.get('pages')
-                data['type'] = js_page.get('type')
-                data['window'] = js_page.get('window')
-    if not js2abc:
-        if not options.app_profile and ability_index < len(config['module']['js']):
-            data['mode'] = config['module']['js'][ability_index].get('mode')
+            if not js2abc:
+                data['mode'] = js_module.get('mode')
     return data
 
-def build_ace(cmd, options, js2abc, loader_home, assets_dir):
-    gen_dir = ''
-    src_path = ''
-    if js2abc:
-        for asset_index in range(options.js_asset_cnt):
-            ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
-            if options.js_sources_file:
-                with open(options.js_sources_file, 'wb') as js_sources_file:
-                    sources = get_all_js_sources(ability_dir)
-                    js_sources_file.write('\n'.join(sources).encode())
-            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'js', str(asset_index)))
-            if not os.path.exists(build_dir):
-                os.makedirs(build_dir)
-            my_env = make_my_env(build_dir, options, js2abc, asset_index)
-            my_env["aceModuleRoot"] = ability_dir
-            gen_dir = my_env.get("aceModuleBuild")
-            if options.app_profile:
-                gen_dir = os.path.dirname(gen_dir)
+def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
+    my_env = make_my_env(options, js2abc)
+    gen_dir = my_env.get("aceModuleBuild")
+    assets_cnt = len(assets_dir)
+    for asset_index in range(assets_cnt):
+        ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
+        my_env["aceModuleRoot"] = ability_dir
+        if options.js_sources_file:
+            with open(options.js_sources_file, 'wb') as js_sources_file:
+                sources = get_all_js_sources(ability_dir)
+                js_sources_file.write('\n'.join(sources).encode())
+        src_path = os.path.basename(assets_dir[asset_index])
+
+        # Create a fixed directory for manifest.json
+        if js2abc:
+            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'js', src_path))
             my_env.update({"cachePath": os.path.join(build_dir, ".cache")})
-            if not options.app_profile:
-                src_path = 'default'
-            manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest):
-                with open(options.hap_profile) as profile:
-                    config = json.load(profile)
-                    data = make_manifest_data(config, options, js2abc, asset_index)
-                    build_utils.write_json(data, manifest)
-            if not options.app_profile:
-                with open(options.hap_profile) as profile:
-                    config = json.load(profile)
-                    if config['module'].__contains__('testRunner'):
-                        src_path = config['module']['testRunner']['srcPath']
-                    if options.js_asset_cnt > 1 and asset_index < len(config['module']['abilities']):
-                        if 'srcPath' in config['module']['abilities'][asset_index]:
-                            src_path = config['module']['abilities'][asset_index]['srcPath']
-                    if config['module']['abilities'][0].get('srcLanguage') == 'ets':
-                        for ability in config['module']['abilities']:
-                            if ability.__contains__('forms'):
-                                src_path = ability['forms'][0].get('name')
-                    if asset_index >= len(config['module']['abilities']):
-                        for ability in config['module']['abilities']:
-                            if ability.__contains__('forms'):
-                                src_path = ability['forms'][0].get('name')
+        else:
+            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'ets', src_path))
+        if not os.path.exists(build_dir):
+            os.makedirs(build_dir)
+        manifest = os.path.join(build_dir, 'manifest.json')
 
-                    my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
-            build_utils.check_output(
-                cmd, cwd=loader_home, env=my_env)
-    else:
-        for asset_index in range(options.ets_asset_cnt):
-            ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
-            if options.js_sources_file:
-                with open(options.js_sources_file, 'wb') as js_sources_file:
-                    sources = get_all_js_sources(ability_dir)
-                    js_sources_file.write('\n'.join(sources).encode())
-            build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'ets', str(asset_index)))
-            if not os.path.exists(build_dir):
-                os.makedirs(build_dir)
-            my_env = make_my_env(build_dir, options, js2abc, asset_index)
-            my_env["aceModuleRoot"] = ability_dir
-            gen_dir = my_env.get("aceModuleBuild")
-            if options.app_profile:
-                gen_dir = os.path.dirname(gen_dir)
-            if not options.app_profile:
-                src_path = 'default'
-            manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest):
-                with open(options.hap_profile) as profile:
-                    config = json.load(profile)
-                    data = make_manifest_data(config, options, js2abc, asset_index)
-                    build_utils.write_json(data, manifest)
-            if not options.app_profile:
-                with open(options.hap_profile) as profile:
-                    config = json.load(profile)
-                    if 'srcPath' in config['module']['abilities'][asset_index]:
-                        src_path = config['module']['abilities'][asset_index]['srcPath']
-                    my_env["aceModuleBuild"] = os.path.join(my_env.get("aceModuleBuild"), src_path)
-            build_utils.check_output(
-                cmd, cwd=loader_home, env=my_env)
+        # Determine abilityType according to config.json
+        if assets_name == 'testrunner_dir':
+            my_env["abilityType"] = 'testrunner'
+        elif assets_name != 'js_forms_dir' and not options.app_profile and assets_cnt > 1:
+            with open(options.hap_profile) as profile:
+                config = json.load(profile)
+                if config['module']['abilities'][asset_index].__contains__('forms'):
+                    my_env["abilityType"] = 'form'
+                else:
+                    my_env["abilityType"] = config['module']['abilities'][asset_index]['type']
+        else:
+            my_env["abilityType"] = 'page'
+
+        # Generate manifest.json only when abilityType is page
+        data = dict()
+        if my_env["abilityType"] == 'page':
+            with open(options.hap_profile) as profile:
+                config = json.load(profile)
+                data = make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path)
+                build_utils.write_json(data, manifest)
+
+        # If missing page, skip it
+        if not data.__contains__('pages'):
+            print('Warning: There is no page matching this {}'.format(src_path))
+            continue
+
+        if not options.app_profile:
+            my_env["aceManifestPath"] = manifest
+            my_env["aceModuleBuild"] = os.path.join(gen_dir, src_path)
+        build_utils.check_output(cmd, cwd=loader_home, env=my_env)
+
     if options.app_profile:
-        build_utils.zip_dir(options.output,
-                            gen_dir,
-                            zip_prefix_path=src_path)
-    elif not options.app_profile and not options.hap_profile:
-        build_utils.zip_dir(options.output,
-                            gen_dir,
-                            zip_prefix_path='assets/js/{}/'.format(src_path))
+        gen_dir = os.path.dirname(gen_dir)
+        build_utils.zip_dir(options.output, gen_dir)
     else:
-        build_utils.zip_dir(options.output,
-                            gen_dir,
-                            zip_prefix_path='assets/js/')
-
+        build_utils.zip_dir(options.output, gen_dir, zip_prefix_path='assets/js/')
 
 def get_all_js_sources(base):
     sources = []
@@ -237,7 +179,6 @@ def get_all_js_sources(base):
 
     return sources
 
-
 def main(args):
     options = parse_args(args)
 
@@ -245,16 +186,6 @@ def main(args):
         options.nodejs_path, options.webpack_js, options.webpack_config_js, options.webpack_config_ets
     ]
     depfiles = []
-    options.js_asset_cnt = 0
-    options.ets_asset_cnt = 0
-    if options.js_assets_dir:
-        options.js_asset_cnt = len(options.js_assets_dir)
-        for asset_index in range(options.js_asset_cnt):
-            depfiles.extend(build_utils.get_all_files(options.js_assets_dir[asset_index]))
-    if options.ets_assets_dir:
-        options.ets_asset_cnt = len(options.ets_assets_dir)
-        for asset_index in range(options.ets_asset_cnt):
-            depfiles.extend(build_utils.get_all_files(options.ets_assets_dir[asset_index]))
     if not options.js_assets_dir and not options.ets_assets_dir:
         with ZipFile(options.output, 'w') as file:
             return
@@ -272,51 +203,34 @@ def main(args):
     depfiles.extend(build_utils.get_all_files(options.ets_loader_home))
 
     node_js = os.path.relpath(options.nodejs_path, options.ace_loader_home)
-
+    assets_dict = dict()
     if options.js_assets_dir:
-        js2abc = True
-        loader_home = options.ace_loader_home
-        assets_dir = options.js_assets_dir
-        cmd = [
-            node_js,
-            os.path.relpath(
-                options.webpack_js, options.ace_loader_home),
-            '--config',
-            os.path.relpath(
-                options.webpack_config_js, options.ace_loader_home)
-        ]
-        ark_es2abc_dir = os.path.relpath(
-            options.ark_es2abc_dir, options.ace_loader_home)
-        if options.app_profile:
-            cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
-                        'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
-        else:
-            cmd.extend(['--env', 'compilerType=ark',
-                    'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
-        build_utils.call_and_write_depfile_if_stale(
-            lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir),
-            options,
-            depfile_deps=depfiles,
-            input_paths=depfiles + inputs,
-            input_strings=cmd + [options.build_mode],
-            output_paths=([options.output]),
-            force=False,
-            add_pydeps=False)
-
+        assets_dict['js_assets_dir'] = options.js_assets_dir
     if options.ets_assets_dir:
-        js2abc = False
-        loader_home = options.ets_loader_home
-        assets_dir = options.ets_assets_dir
+        assets_dict['ets_assets_dir'] = options.ets_assets_dir
+    if options.js_forms_dir:
+        assets_dict['js_forms_dir'] = options.js_forms_dir
+    if options.testrunner_dir:
+        assets_dict['testrunner_dir'] = options.testrunner_dir
+
+    for assets_name, assets_dir in assets_dict.items():
+        for asset in assets_dir:
+            depfiles.extend(build_utils.get_all_files(asset))
+        if assets_name == 'ets_assets_dir':
+            js2abc = False
+            loader_home = options.ets_loader_home
+            webpack_config = options.webpack_config_ets
+        else:
+            js2abc = True
+            loader_home = options.ace_loader_home
+            webpack_config = options.webpack_config_js
         cmd = [
             node_js,
-            os.path.relpath(
-                options.webpack_js, options.ets_loader_home),
+            os.path.relpath(options.webpack_js, loader_home),
             '--config',
-            os.path.relpath(
-                options.webpack_config_ets, options.ets_loader_home)
+            os.path.relpath(webpack_config, loader_home)
         ]
-        ark_es2abc_dir = os.path.relpath(
-            options.ark_es2abc_dir, options.ets_loader_home)
+        ark_es2abc_dir = os.path.relpath(options.ark_es2abc_dir, loader_home)
         if options.app_profile:
             cmd.extend(['--env', 'buildMode={}'.format(options.build_mode), 'compilerType=ark',
                         'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
@@ -324,7 +238,7 @@ def main(args):
             cmd.extend(['--env', 'compilerType=ark',
                         'arkFrontendDir={}'.format(ark_es2abc_dir), 'nodeJs={}'.format(node_js)])
         build_utils.call_and_write_depfile_if_stale(
-            lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir),
+            lambda: build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name),
             options,
             depfile_deps=depfiles,
             input_paths=depfiles + inputs,
@@ -332,7 +246,6 @@ def main(args):
             output_paths=([options.output]),
             force=False,
             add_pydeps=False)
-
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
