@@ -43,7 +43,8 @@ class Ninja(BuildExecutorInterface):
         try:
             SystemUtil.exec_command(ninja_cmd, self.config.log_path)
         except OHOSException:
-            raise OHOSException('ninja error', '4000')
+            #TODO: Analysis falied log to classify failure reason
+            raise OHOSException('ninja phase failed', '4000')
 
     def _convert_args(self) -> list:
         args_list = []
@@ -63,15 +64,14 @@ class Ninja(BuildExecutorInterface):
         copy_config_list = config_data[os.uname().sysname.lower(
         )][os.uname().machine.lower()]['copy_config']
 
-        gn_path = ''
+        ninja_path = ''
         for config in copy_config_list:
             if config['unzip_filename'] == 'ninja':
-                gn_path = os.path.join(
+                ninja_path = os.path.join(
                     self.config.root_path, config['unzip_dir'], 'ninja')
                 break
 
-        if os.path.exists(gn_path):
-            self.exec = gn_path
+        if os.path.exists(ninja_path):
+            self.exec = ninja_path
         else:
-            raise OHOSException('There is no gn executable file at {}, \
-                            please execute build/prebuilts_download.sh'.format(gn_path), '4000')
+            raise OHOSException('There is no gn executable file at {}'.format(ninja_path), '0001')

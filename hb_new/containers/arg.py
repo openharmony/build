@@ -31,6 +31,7 @@ from util.logUtil import LogUtil
 from util.ioUtil import IoUtil
 from util.typeCheckUtil import TypeCheckUtil
 from resolver.argsFactory import ArgsFactory
+from containers.status import throw_exception
 
 
 class ModuleType():
@@ -159,6 +160,7 @@ class Arg():
         self._resolveFuntion = value
 
     @staticmethod
+    @throw_exception
     def createInstanceByDict(data: dict):
         arg_name = str(data['argName']).replace("-", "_")[2:]
         arg_help = str(data['argHelp'])
@@ -177,7 +179,7 @@ class Arg():
         elif arg_type == ArgType.DICT:
             arg_value = dict(data['argDefault'])
         else:
-            raise OHOSException('Unknown arg type')
+            raise OHOSException('Unknown arg type "{}" for arg "{}"'.format(arg_type, arg_name), "0003")
         resolveFuntion = data['resolveFuntion']
         return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
 
@@ -215,6 +217,7 @@ class Arg():
         return args_dict
 
     @staticmethod
+    @throw_exception
     def write_args_file(key: str, value, module_type: ModuleType):
         args_file_path = ''
         if module_type == ModuleType.BUILD:
@@ -223,12 +226,14 @@ class Arg():
             args_file_path = CURRENT_SET_ARGS
         else:
             raise OHOSException(
-                'There is no such module {}'.format(module_type))
+                'You are trying to write args file, but there is no corresponding module "{}" args file'
+                .format(module_type), "0002")
         args_file = Arg.read_args_file(module_type)
         args_file[key]["argDefault"] = value
         IoUtil.dump_json_file(args_file_path, args_file)
 
     @staticmethod
+    @throw_exception
     def read_args_file(module_type: ModuleType):
         args_file_path = ''
         default_file_path = ''
@@ -240,7 +245,8 @@ class Arg():
             default_file_path = DEFAULT_SET_ARGS
         else:
             raise OHOSException(
-                'There is no such module {}'.format(module_type))
+                'You are trying to write args file, but there is no corresponding module "{}" args file'
+                .format(module_type), "0002")
         if not os.path.exists(args_file_path):
             IoUtil.copy_file(src=default_file_path, dst=args_file_path)
         return IoUtil.read_json_file(args_file_path)

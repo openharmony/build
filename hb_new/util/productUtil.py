@@ -22,6 +22,7 @@ from collections import defaultdict
 from util.ioUtil import IoUtil
 from exceptions.ohosException import OHOSException
 from resources.config import Config
+from containers.status import throw_exception
 
 from helper.noInstance import NoInstance
 
@@ -110,6 +111,7 @@ class ProductUtil(metaclass=NoInstance):
                 }
 
     @staticmethod
+    @throw_exception
     def get_device_info(product_json):
         info = IoUtil.read_json_file(product_json)
         config = Config()
@@ -163,6 +165,7 @@ class ProductUtil(metaclass=NoInstance):
             raise OHOSException(f'wrong version number in {product_json}')
 
     @staticmethod
+    @throw_exception
     def get_all_components(product_json):
         if not os.path.isfile(product_json):
             raise OHOSException(f'features {product_json} not found')
@@ -190,6 +193,7 @@ class ProductUtil(metaclass=NoInstance):
         return all_parts
 
     @staticmethod
+    @throw_exception
     def get_features(product_json):
         if not os.path.isfile(product_json):
             raise OHOSException(f'features {product_json} not found')
@@ -234,6 +238,7 @@ class ProductUtil(metaclass=NoInstance):
         return features_list
 
     @staticmethod
+    @throw_exception
     def get_features_dict(product_json):
         all_parts = ProductUtil.get_all_components(product_json)
         features_dict = {}
@@ -249,6 +254,7 @@ class ProductUtil(metaclass=NoInstance):
         return features_dict
 
     @staticmethod
+    @throw_exception
     def get_components(product_json, subsystems):
         if not os.path.isfile(product_json):
             raise OHOSException(f'{product_json} not found')
@@ -267,6 +273,7 @@ class ProductUtil(metaclass=NoInstance):
             product_data.get('kernel_type', '')
 
     @staticmethod
+    @throw_exception
     def get_product_info(product_name, company=None):
         for product_info in ProductUtil.get_products():
             cur_company = product_info['company']
@@ -281,6 +288,7 @@ class ProductUtil(metaclass=NoInstance):
         raise OHOSException(f'product {product_name}@{company} not found')
 
     @staticmethod
+    @throw_exception
     def get_compiler(config_path):
         config = os.path.join(config_path, 'config.gni')
         if not os.path.isfile(config):

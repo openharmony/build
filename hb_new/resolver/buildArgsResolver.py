@@ -33,6 +33,7 @@ from util.systemUtil import SystemUtil
 from util.typeCheckUtil import TypeCheckUtil
 from util.componentUtil import ComponentUtil
 
+
 class BuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
@@ -46,11 +47,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                 buildModule.args_dict['build_target'].argValue = [
                     'build_ohos_sdk']
             buildModule.args_dict['target_cpu'].argValue = 'arm64'
-        
 
     def resolveTargetCpu(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         config.target_cpu = targetArg.argValue
-        
+
     @throw_exception
     def resolveBuildTarget(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         build_executor = buildModule.targetCompiler.unwrapped_build_executor
@@ -67,17 +67,18 @@ class BuildArgsResolver(ArgsResolverInterface):
                 '''
                 component_name = ComponentUtil.get_component_name(os.getcwd())
                 LogUtil.write_log(Config().log_path, 'In the component "{}" directory,'
-                                  'this compilation will compile only this component'.format(component_name),
+                                  'this compilation will compile only this component'.format(
+                                      component_name),
                                   'warning')
                 target_list.append(component_name)
                 target_list.append(component_name + '_test')
             else:
                 component_name = ComponentUtil.get_component_name(os.getcwd())
-                component_name = os.path.basename(os.getcwd()) if component_name == '' else component_name
+                component_name = os.path.basename(
+                    os.getcwd()) if component_name == '' else component_name
                 raise OHOSException('There is no target component "{}" for the current product {}'
-                                  .format(component_name, Config().product), "4001")
+                                    .format(component_name, Config().product), "4001")
         build_executor.regist_arg('build_target', target_list)
-        
 
     def resolveLogLevel(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue == 'debug':
@@ -85,25 +86,24 @@ class BuildArgsResolver(ArgsResolverInterface):
             targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
             targetGenerator.regist_flag('-v', ''),
             targetCompiler.regist_arg('-v', '')
-        
+
     @throw_exception
     def resolveStrictMode(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
-            if not (preloader.outputs.check_outputs() and loader.outputs.check_outputs()):
-                raise OHOSException('ERROR', "3002")
-        
+            if not preloader.outputs.check_outputs():
+                raise OHOSException('Preloader result not correct', "1001")
+            if not loader.outputs.check_outputs():
+                raise OHOSException('Loader result not correct ', "2001")
 
     def resolveScalableBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("scalable_build", bool(targetArg.argValue))
-        
 
     def resolveBuildPlatformName(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("build_platform_name", targetArg.argValue)
-        
 
     def resolveBuildXts(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         loader = buildModule.loader.unwrapped_loader
@@ -113,7 +113,6 @@ class BuildArgsResolver(ArgsResolverInterface):
                 loader.regist_arg(variable, bool(value))
                 return
         loader.regist_arg("build_xts", bool(targetArg.argValue))
-        
 
     def resolveIgnoreApiCheck(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         loader = buildModule.loader.unwrapped_loader
@@ -122,12 +121,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         else:
             loader.regist_arg("ignore_api_check", [
                               'xts', 'common', 'developertest'])
-        
 
     def resolveLoadTestConfig(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("load_test_config", bool(targetArg.argValue))
-        
 
     def resolveRenameLastLog(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
@@ -136,7 +133,6 @@ class BuildArgsResolver(ArgsResolverInterface):
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
                 os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
-        
 
     def resolveCCache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
@@ -173,13 +169,11 @@ class BuildArgsResolver(ArgsResolverInterface):
             cmd = ['ccache', '-M', ccache_max_size]
 
             SystemUtil.exec_command(cmd, log_path=config.log_path)
-        
 
     def resolvePycache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
             gn = buildModule.targetGenerator.unwrapped_build_file_generator
             gn.regist_arg('pycache_enable', targetArg.argValue)
-        
 
     def resolveBuildType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
@@ -188,7 +182,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         '''For historical reasons, this value must be debug
         '''
         targetGenerator.regist_arg('ohos_build_type', 'debug')
-        
+
+    # TODO: '-f' option should clean all out product
 
     def resolveFullCompilation(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
@@ -200,7 +195,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             else:
                 build_executor.regist_arg(
                     'build_target', ['make_all', 'make_test'])
-        
+
     @throw_exception
     def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
@@ -219,8 +214,8 @@ class BuildArgsResolver(ArgsResolverInterface):
                     value = str(value)
                 targetGenerator.regist_arg(variable, value)
             except ValueError:
-                raise OHOSException(f'Invalid gn args: {gn_arg}')
-        
+                raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
+
     @throw_exception
     def resolveExportPara(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
@@ -235,27 +230,30 @@ class BuildArgsResolver(ArgsResolverInterface):
                     value = str(value)
                 targetGenerator.regist_arg(variable, value)
             except ValueError:
-                raise OHOSException(f'Invalid gn args: {gn_arg}')
-        
+                raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
+
     @throw_exception
     def resolveTest(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if len(targetArg.argValue) > 1:
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
-            test_type = targetArg.argValue[0]
-            test_target = targetArg.argValue[1]
-            if test_type == 'notest':
+            # TODO: Ask sternly why the xts subsystem passes parameters in this way?
+            if 'notest' in targetArg.argValue:
                 targetGenerator.regist_arg('ohos_test_args', 'notest')
-            elif test_type == "xts":
-                targetGenerator.regist_arg('ohos_xts_test_args', test_target)
+            elif 'xts' in targetArg.argValue:
+                test_target_index = 1
+                if targetArg.argValue.index('xts') == 1:
+                    test_target_index = 0
+                targetGenerator.regist_arg(
+                    'ohos_xts_test_args', targetArg.argValue[test_target_index])
             else:
-                raise OHOSException('Option not support', "3003")
-        
+                raise OHOSException('Test type value "{}" is not support'
+                                    .format(targetArg.argValue), "0002")
 
     def resolveKeepNinjaGoing(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
             targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
             targetCompiler.regist_arg('-k', '1000000000')
-        
+
     def resolveBuildVariant(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         ohos_para_data = []
         ohos_para_file_path = os.path.join(
@@ -281,7 +279,6 @@ class BuildArgsResolver(ArgsResolverInterface):
             data += line
         with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
             ohos_para_file.write(data)
-        
 
     def resolveDeviceType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         ohos_para_data = []
@@ -301,12 +298,11 @@ class BuildArgsResolver(ArgsResolverInterface):
                 data += line
             with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
                 ohos_para_file.write(data)
-        
 
     def resolveCleanArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         if targetArg.argValue:
             Arg.clean_args_file()
-        
+
     # PlaceHolder
     def resolveCompiler(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
@@ -314,15 +310,15 @@ class BuildArgsResolver(ArgsResolverInterface):
     # PlaceHolder
     def resolveJobs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
-    
+
     # PlaceHolder
     def resolveDisablePartOfPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
-    
+
     # PlaceHolder
     def resolveDisablePackageImage(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
-    
+
     # PlaceHolder
     def resolveDisablePartofPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
@@ -330,7 +326,7 @@ class BuildArgsResolver(ArgsResolverInterface):
     # PlaceHolder
     def resolveBuildOnlyGn(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
-    
+
     # PlaceHolder
     def resolveFastRebuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
         return
@@ -344,7 +340,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 if not hasattr(self, functionName) or \
                         not hasattr(self.__getattribute__(functionName), '__call__'):
                     raise OHOSException(
-                        f'There is no resolution for arg: ' + argsName)
+                        'There is no resolution function for arg: {}'.format(
+                            argsName),
+                        "0004")
                 entity.resolveFuntion = self.__getattribute__(functionName)
                 self._argsToFunction[argsName] = self.__getattribute__(
                     functionName)

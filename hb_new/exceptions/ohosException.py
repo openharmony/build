@@ -16,8 +16,8 @@
 # limitations under the License.
 #
 
+import json
 from resources.global_var import STATUS_FILE
-from util.ioUtil import IoUtil
 class OHOSException(Exception):
 
     def __init__(self, message, code=0):
@@ -25,7 +25,8 @@ class OHOSException(Exception):
         self._code = code
         
     def get_solution(self) -> str:
-        status_file = IoUtil.read_json_file(STATUS_FILE)
-        if not self._code in status_file.keys():
-            return 'UNKNOWN REASON'
-        return status_file[str(self._code)]['solution']
+        with open (STATUS_FILE, "r") as data:
+            status_file = json.load(data)
+            if not self._code in status_file.keys():
+                return 'UNKNOWN REASON'
+            return status_file[str(self._code)]['solution']

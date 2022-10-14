@@ -3,6 +3,74 @@
         "code": "0000",
         "solution": "Unknown solution method"
     },
+    "0001": {
+        "code": "0001",
+        "solution": "Please execute build/prebuilts_download.sh"
+    },
+    "0002": {
+        "code": "0002",
+        "solution": "Using '--test' option like this format --test xts test/xts/acts/startup_lite/bootstrap_hal:ActsBootstrapTest "
+    },
+    "0003": {
+        "code": "0003",
+        "solution": "Args must be declare as 'bool', 'gate', 'str', 'list' in argType attribute. Please check your corresponding arg"
+    },
+    "0004": {
+        "code": "0004",
+        "solution": "build/hb_new/util/deviceUtil.py"
+    },
+    "0005": {
+        "code": "0005",
+        "solution": "build/hb_new/util/deviceUtil.py"
+    },
+    "0006": {
+        "code": "0006",
+        "solution": "build/hb_new/util/deviceUtil.py"
+    },
+    "0007": {
+        "code": "0007",
+        "solution": "build/hb_new/util/deviceUtil.py"
+    },
+    "0008": {
+        "code": "0008",
+        "solution": "build/hb_new/util/ioUtil.py"
+    },
+    "0009": {
+        "code": "0009",
+        "solution": "build/hb_new/util/ioUtil.py"
+    },
+    "0010": {
+        "code": "0010",
+        "solution": "build/hb_new/util/ioUtil.py"
+    },
+    "0011": {
+        "code": "0011",
+        "solution": "build/hb_new/util/ioUtil.py"
+    },
+    "0012": {
+        "code": "0012",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
+    "0013": {
+        "code": "0013",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
+    "0014": {
+        "code": "0014",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
+    "0015": {
+        "code": "0015",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
+    "0016": {
+        "code": "0016",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
+    "0017": {
+        "code": "0017",
+        "solution": "build/hb_new/util/productUtil.py"
+    },
     "1000": {
         "code": "1000",
         "solution": "Unknown solution method for preload phase"
@@ -14,6 +82,14 @@
     "3000": {
         "code": "3000",
         "solution": "Unknown solution method for gn phase"
+    },
+    "3001": {
+        "code": "3001",
+        "solution": "See support gn command type in enum class CMDTYPE which locate in build/hb_new/services/gn.py"
+    },
+    "3002": {
+        "code": "3002",
+        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
     },
     "4000": {
         "code": "4000",

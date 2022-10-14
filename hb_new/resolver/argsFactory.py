@@ -19,11 +19,13 @@
 import argparse
 
 from exceptions.ohosException import OHOSException
+from containers.status import throw_exception
 
 
 class ArgsFactory():
 
     @staticmethod
+    @throw_exception
     def genenic_add_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
         if arg['argType'] == 'bool':
             return _add_bool_option(parser, arg)
@@ -34,8 +36,8 @@ class ArgsFactory():
         elif arg['argType'] == 'gate':
             return _add_gate_option(parser, arg)
         else:
-            raise OHOSException(
-                'Unknown arg type of {}'.format(arg['argType']))
+            raise OHOSException('Unknown arg type "{}" for arg "{}"'
+                                .format(arg['argType'], arg['argName']), "0003")
 
 
 def _add_bool_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:

@@ -22,8 +22,8 @@ import importlib
 import re
 import shutil
 
-from util.logUtil import LogUtil
 from helper.noInstance import NoInstance
+from exceptions.ohosException import OHOSException
 
 
 class IoUtil(metaclass=NoInstance):
@@ -31,7 +31,7 @@ class IoUtil(metaclass=NoInstance):
     @staticmethod
     def read_json_file(input_file) -> dict:
         if not os.path.isfile(input_file):
-            raise Exception(f'{input_file} not found')
+            raise OHOSException(f'{input_file} not found', '0008')
 
         with open(input_file, 'rb') as input_f:
             data = json.load(input_f)
@@ -45,7 +45,7 @@ class IoUtil(metaclass=NoInstance):
     @staticmethod
     def read_file(file_path):
         if not os.path.exists(file_path):
-            raise Exception("file '{}' doesn't exist.".format(file_path))
+            raise OHOSException("file '{}' doesn't exist.".format(file_path), '0009')
         data = None
         with open(file_path, 'r') as input_f:
             data = input_f.read()
@@ -54,7 +54,7 @@ class IoUtil(metaclass=NoInstance):
     @staticmethod
     def read_yaml_file(input_file):
         if not os.path.isfile(input_file):
-            raise Exception(f'{input_file} not found')
+            raise OHOSException(f'{input_file} not found', '0010')
 
         yaml = importlib.import_module('yaml')
         with open(input_file, 'rt', encoding='utf-8') as yaml_file:
@@ -63,30 +63,8 @@ class IoUtil(metaclass=NoInstance):
             except yaml.YAMLError as exc:
                 if hasattr(exc, 'problem_mark'):
                     mark = exc.problem_mark
-                    raise Exception(f'{input_file} load failed, error line:'
-                                        f' {mark.line + 1}:{mark.column + 1}')
-
-    @staticmethod
-    def get_failed_log(log_path):
-        with open(log_path, 'rt', encoding='utf-8') as log_file:
-            data = log_file.read()
-        failed_pattern = re.compile(
-            r'(\[\d+/\d+\].*?)(?=\[\d+/\d+\]|'
-            'ninja: build stopped)', re.DOTALL)
-        failed_log = failed_pattern.findall(data)
-        for log in failed_log:
-            if 'FAILED:' in log:
-                LogUtil.hb_error(log)
-
-        failed_pattern = re.compile(r'(ninja: error:.*?)\n', re.DOTALL)
-        failed_log = failed_pattern.findall(data)
-        for log in failed_log:
-            LogUtil.hb_error(log)
-
-        error_log = os.path.join(os.path.dirname(log_path), 'error.log')
-        if os.path.isfile(error_log):
-            with open(error_log, 'rt', encoding='utf-8') as log_file:
-                LogUtil.hb_error(log_file.read())
+                    raise OHOSException(f'{input_file} load failed, error line:'
+                                        f' {mark.line + 1}:{mark.column + 1}', '0011')
 
     @staticmethod
     def copy_file(src, dst):

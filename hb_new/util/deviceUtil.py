@@ -19,7 +19,7 @@ import os
 import re
 
 from exceptions.ohosException import OHOSException
-
+from containers.status import throw_exception
 
 class DeviceUtil():
     @staticmethod
@@ -33,13 +33,14 @@ class DeviceUtil():
             'config.gni' in os.listdir(kernel_path)
 
     @staticmethod
+    @throw_exception
     def get_device_path(board_path, kernel_type, kernel_version):
         for kernel_config, kernel_path in DeviceUtil.get_kernel_config(board_path):
             if DeviceUtil.match_kernel(kernel_config, kernel_type, kernel_version):
                 return kernel_path
 
         raise OHOSException(f'cannot find {kernel_type}_{kernel_version} '
-                            f'in {board_path}')
+                            f'in {board_path}', "0004")
 
     @staticmethod
     def get_kernel_config(board_path):
@@ -64,6 +65,7 @@ class DeviceUtil():
                 re.search(version_pattern, data)
 
     @staticmethod
+    @throw_exception
     def get_kernel_info(config):
         kernel_pattern = r'kernel_type ?= ?"(\w+)"'
         version_pattern = r'kernel_version ?= ?"([a-zA-Z0-9._]*)"'
@@ -74,17 +76,19 @@ class DeviceUtil():
             version_list = re.findall(version_pattern, data)
             if not len(kernel_list) or not len(version_list):
                 raise OHOSException(f'kernel_type or kernel_version '
-                                    f'not found in {config}')
+                                    f'not found in {config}', '0005')
 
             return kernel_list[0], version_list[0]
 
     @staticmethod
+    @throw_exception
     def check_path(path):
         if os.path.isdir(path) or os.path.isfile(path):
             return
-        raise OHOSException(f'invalid path: {path}')
+        raise OHOSException(f'invalid path: {path}', '0006')
 
     @staticmethod
+    @throw_exception
     def get_compiler(config_path):
         config = os.path.join(config_path, 'config.gni')
         if not os.path.isfile(config):
@@ -94,6 +98,6 @@ class DeviceUtil():
             data = config_file.read()
         compiler_list = re.findall(compiler_pattern, data)
         if not len(compiler_list):
-            raise OHOSException(f'board_toolchain_type is None in {config}')
+            raise OHOSException(f'board_toolchain_type is None in {config}', '0007')
 
         return compiler_list[0]

@@ -28,30 +28,29 @@ class OHOSPreloader(PreloadInterface):
 
     def __init__(self, config: Config):
         super().__init__(config)
-        self._dirs = None
-        self._outputs = None
-        self._product = None
-        self._all_parts = {}
-        self._build_vars = {}
-        self._os_level = ""
-        self._target_cpu = ""
-        self._toolchain_label = ""
-        self._subsystem_info = {}
 
-    def __post_init__(self):
+        self._dirs = Dirs(config)
 
-        self._dirs = Dirs(self._config)
+        # preloader_output_dir
+        self.preloader_output_dir = os.path.join(
+            config.root_path, 'out/preloader', config.product)
 
         # All kinds of output files
         os.makedirs(self._dirs.preloader_output_dir, exist_ok=True)
-        self._outputs = Outputs(self._dirs.preloader_output_dir)
+        self._outputs = Outputs(
+            self._dirs.preloader_output_dir)
 
-        # Product
+        # Product & device
         self._product = Product(
-            self._config.product, self._dirs, self._config.product_json, self._config)
-        
+            config.product, self._dirs, config.product_json)
+
+    def __post_init__(self):
+
         # product parse
         self._product._do_parse()
+
+        # get device information
+        self._device = self._product._device
 
         # get all parts
         self._all_parts = self._product._parts
@@ -59,13 +58,25 @@ class OHOSPreloader(PreloadInterface):
         # get build config info
         self._build_vars = self._product._build_vars
 
-        # get toolchain
+        if self._device:
+            device_info = self._device.get_device_info()
+            if device_info:
+                if self._config.target_cpu:
+                    device_info["target_cpu"] = self._config.target_cpu
+                if self._config.compile_config:
+                    device_info[self._config.compile_config] = True
+                self._build_vars.update(device_info)
+
+        # generate toolchain
         self._os_level = self._build_vars.get('os_level')
         self._target_os = self._build_vars.get('target_os')
         self._target_cpu = self._build_vars.get('target_cpu')
-        self._toolchain_label = self._build_vars['product_toolchain_label']
+        self._toolchain_label = self._get_toolchain_label()
 
-        # get subsystem info
+        # add toolchain label
+        self._build_vars['product_toolchain_label'] = self._toolchain_label
+
+        # subsystem info
         self._subsystem_info = self._get_org_subsystem_info()
 
     def _internel_run(self):
@@ -197,7 +208,7 @@ class OHOSPreloader(PreloadInterface):
             self._subsystem_info.update(
                 self._product._get_product_specific_subsystem())
             self._subsystem_info.update(
-                self._product.get_device_specific_subsystem())
+                self._device.get_device_specific_subsystem())
         IoUtil.dump_json_file(
             self._outputs.subsystem_config_json, self._subsystem_info)
 
@@ -220,3 +231,11 @@ class OHOSPreloader(PreloadInterface):
                 self._dirs.lite_components_dir, ohos_build_output_dir,
                 self._dirs.source_root_dir, self._dirs.subsystem_config_json)
         return subsystem_info
+
+    def _get_toolchain_label(self):
+        if self._os_level == 'mini' or self._os_level == 'small':
+            toolchain_label = ""
+        else:
+            toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
+                self._target_os, self._target_cpu)
+        return toolchain_label

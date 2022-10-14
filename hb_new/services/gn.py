@@ -70,7 +70,7 @@ class Gn(BuildFileGeneratorInterface):
         elif cmd_type == CMDTYPE.CLEAN:
             return self._execute_gn_clean_cmd(kwargs)
         else:
-            raise OHOSException('Unsupported gn cmd type', '3003')
+            raise OHOSException('You are tring to use an unsupported gn cmd type "{}"'.format(cmd_type), '3001')
 
     '''Description: Get gn excutable path and regist it
     @parameter: none
@@ -94,8 +94,7 @@ class Gn(BuildFileGeneratorInterface):
         if os.path.exists(gn_path):
             self.exec = gn_path
         else:
-            raise OHOSException('There is no gn executable file at {}, \
-                            please execute build/prebuilts_download.sh'.format(gn_path), '3003')
+            raise OHOSException('There is no gn executable file at {}'.format(gn_path), '0001')
 
     '''Description: Convert all registed args into a list
     @parameter: none
@@ -192,7 +191,8 @@ class Gn(BuildFileGeneratorInterface):
                 self.exec, 'gen', ' '.join(self._convert_args()).replace('"', "\\\""), ' '.join(gn_gen_cmd[3:])), 'info')
             SystemUtil.exec_command(gn_gen_cmd, self.config.log_path)
         except OHOSException:
-            raise OHOSException('GN phase failed', '3005')
+            #TODO: Analysis falied log to classify failure reason
+            raise OHOSException('GN phase failed', '3002')
 
     def _execute_gn_path_cmd(self, **kwargs):
         pass
