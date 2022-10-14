@@ -335,6 +335,8 @@ template("compile_js_assets") {
     args = [
       "--js-assets-dir=@FileArg($_rebased_metadata:root:js_assets)",
       "--ets-assets-dir=@FileArg($_rebased_metadata:root:ets_assets)",
+      "--js-forms-dir=@FileArg($_rebased_metadata:root:js_forms)",
+      "--testrunner-dir=@FileArg($_rebased_metadata:root:testrunner)",
       "--output",
       rebase_path(_packaged_js_assets, root_build_dir),
       "--depfile",
