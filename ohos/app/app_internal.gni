@@ -49,6 +49,8 @@ template("merge_profile") {
       rebase_path(hap_profile, root_build_dir),
       "--generated-profile",
       rebase_path(generated_profile, root_build_dir),
+      "--release-type",
+      release_type,
     ]
     outputs = [ generated_profile ]
   }
