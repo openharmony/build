@@ -22,7 +22,7 @@ from modules.interface.setModuleInterface import SetModuleInterface
 
 class SetModule():
     
-    def __init__(self, setModule: SetModuleInterface) -> None:
+    def __init__(self, setModule: SetModuleInterface):
         self._setModule = setModule
         
     def run(self):

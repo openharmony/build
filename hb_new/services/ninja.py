@@ -28,14 +28,18 @@ from util.logUtil import LogUtil
 
 class Ninja(BuildExecutorInterface):
 
-    def __init__(self, config: Config):
-        super().__init__(config)
-
-    def _internel_run(self):
+    def __init__(self):
+        super().__init__()
+        self.config = Config()
         self._regist_ninja_path()
+
+    def run(self):
         self._execute_ninja_cmd()
 
     def _execute_ninja_cmd(self):
+        """execute ninja cmd using registed args
+        :raise OHOSException: when ninja failed
+        """
         ninja_cmd = [self.exec, '-w', 'dupbuild=warn',
                      '-C', self.config.out_path] + self._convert_args()
         LogUtil.write_log(self.config.log_path,
@@ -47,6 +51,8 @@ class Ninja(BuildExecutorInterface):
             raise OHOSException('ninja phase failed', '4000')
 
     def _convert_args(self) -> list:
+        """convert all registed args into a list
+        """
         args_list = []
         for key, value in self._args_dict.items():
             if key == 'build_target' and isinstance(value, list):
@@ -59,6 +65,9 @@ class Ninja(BuildExecutorInterface):
         return args_list
 
     def _regist_ninja_path(self):
+        """find ninja executable
+        :raise OHOSException: when can't find the ninja excutable
+        """
         config_data = IoUtil.read_json_file(os.path.join(
             self.config.root_path, 'build/prebuilts_download_config.json'))
         copy_config_list = config_data[os.uname().sysname.lower(

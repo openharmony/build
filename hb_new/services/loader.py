@@ -18,7 +18,6 @@
 import os
 
 from services.interface.loadInterface import LoadInterface
-from resources.config import Config
 
 from util.loader import platforms_loader  # noqa: E402
 from util.loader import generate_targets_gn  # noqa: E402
@@ -29,9 +28,8 @@ from util.logUtil import LogUtil
 
 class OHOSLoader(LoadInterface):
 
-    def __init__(self, config: Config):
-        super().__init__(config)
-        self.config = config
+    def __init__(self):
+        super().__init__()
         self.source_root_dir = ""
         self.gn_root_out_dir = ""
         self.os_level = ""
@@ -133,59 +131,6 @@ class OHOSLoader(LoadInterface):
 
         self.required_parts_targets = self._get_required_build_targets()
 
-    def _internel_run(self):
-
-        LogUtil.hb_info('Loading configuration file...')
-
-        self.__post_init__()
-
-        self._execute_loader_args_display()
-
-        self._check_parts_config_info()
-
-        self._generate_subsystem_configs()
-
-        self._generate_target_platform_parts()
-
-        self._generate_system_capabilities()
-
-        self._generate_stub_targets()
-
-        # platforms_parts_by_src.json
-        self._generate_platforms_part_by_src()
-
-        self._generate_target_gn()
-
-        self._generate_phony_targets_build_file()
-
-        self._generate_required_parts_targets()
-
-        # required_parts_targets_list.json
-        self._generate_required_parts_targets_list()
-
-        # parts src flag file
-        self._generate_src_flag()
-
-        # write auto install part file
-        self._generate_auto_install_part()
-
-        # write platforms_list.gni
-        self._generate_platforms_list()
-
-        # parts_different_info.json
-        # Generate parts differences in different platforms, using phone as base.
-        self._generate_part_different_info()
-
-        # for testfwk
-        self._generate_infos_for_testfwk()
-
-        # check part feature
-        self._check_product_part_feature()
-
-        # generate syscap
-        self._generate_syscap_files()
-
-        LogUtil.write_log(self.config.log_path, 'build configs generation is complete', 'info')
 
 # check method
 
@@ -197,7 +142,7 @@ class OHOSLoader(LoadInterface):
     '''
 
     def _check_args(self):
-
+        LogUtil.hb_info("Checking all build args...")
         # check subsystem_config_file
         if not read_json_file(self.subsystem_config_file):
             self.subsystem_config_file = os.path.join(
@@ -223,6 +168,7 @@ class OHOSLoader(LoadInterface):
                             please check whether the corresponding file('build/subsystem_config_example.json') exists")
 
     def _check_product_part_feature(self):
+        LogUtil.hb_info("Checking all product features...")
         product_preloader_dir = os.path.dirname(self.platforms_config_file)
         _preloader_feature_file = os.path.join(product_preloader_dir,
                                                'features.json')
@@ -244,6 +190,7 @@ class OHOSLoader(LoadInterface):
                             key, _f_name))
 
     def _check_parts_config_info(self):
+        LogUtil.hb_info("Checking parts config...")
         if not ('parts_info' in self.parts_config_info
                 and 'subsystem_parts' in self.parts_config_info
                 and 'parts_variants' in self.parts_config_info
@@ -757,6 +704,7 @@ class OHOSLoader(LoadInterface):
         return result
 
     def _execute_loader_args_display(self):
+        LogUtil.hb_info('Loading configuration file...')
         args = []
         args.append('platforms_config_file="{}"'.format(self.platforms_config_file))
         args.append('subsystem_config_file="{}"'.format(self.subsystem_config_file))

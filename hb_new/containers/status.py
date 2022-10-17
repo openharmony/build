@@ -49,13 +49,29 @@ def throw_exception(func):
                               'Code:      {}'
                               '\n'
                               '\n'
-                              'Reason:    {}\n'
+                              'Reason:    {}'
                               '\n'
-                              'Solution:  {}\n'
+                              '\n'
+                              'Solution:  {}'
+                              '\n'
+                              '\n'
                               .format(exception._code, str(exception), exception.get_solution()), 'error')
             exit()
         except Exception as exception:
-            LogUtil.write_log(Config().log_path, str(exception), 'error')
+            LogUtil.write_log(Config().log_path,
+                    traceback.format_exc() + '\n',
+                    'error')
+            LogUtil.write_log(Config().log_path,
+                              'Code:      {}'
+                              '\n'
+                              '\n'
+                              'Reason:    {}'
+                              '\n'
+                              '\n'
+                              'Solution:  {}'
+                              '\n'
+                              '\n'
+                              .format('0000', str(exception), 'no solution'), 'error')
             exit()
         else:
             return r

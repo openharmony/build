@@ -14,32 +14,35 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-from modules.interface.setModuleInterface import SetModuleInterface
+from containers.arg import CleanPhase
+from modules.interface.cleanModuleInterface import CleanModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
-from services.interface.menuInterface import MenuInterface
 from exceptions.ohosException import OHOSException
 
 
-class OHOSSetModule(SetModuleInterface):
+class OHOSCleanModule(CleanModuleInterface):
 
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
-        super().__init__(args_dict, argsResolver, menu)
-        OHOSSetModule._instance = self
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+        super().__init__(args_dict, argsResolver)
+        OHOSCleanModule._instance = self
 
     @staticmethod
     def get_instance():
-        if OHOSSetModule._instance is not None:
-            return OHOSSetModule._instance
+        if OHOSCleanModule._instance is not None:
+            return OHOSCleanModule._instance
         else:
             raise OHOSException(
-                'OHOSSetModule has not been instantiated', '0000')
+                'OHOSCleanModule has not been instantiated', '0000')
 
-    def set_product(self):
-        self.argsResolver.resolveArg(self.args_dict['product_name'], self)
+    def clean_regular(self):
+        self._run_phase(CleanPhase.REGULAR)
 
-    def set_parameter(self):
-        self.argsResolver.resolveArg(self.args_dict['all'], self)
+    def clean_deep(self):
+        self._run_phase(CleanPhase.DEEP)
+
+    def _run_phase(self, phase: CleanPhase):
+        for phase_arg in [arg for arg in self.args_dict.values()if arg.argPhase == phase]:
+            self.argsResolver.resolveArg(phase_arg, self)

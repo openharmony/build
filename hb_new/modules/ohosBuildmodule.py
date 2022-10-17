@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 
+
 from resources.config import Config
 from modules.interface.buildModuleInterface import BuildModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
@@ -24,58 +25,87 @@ from services.interface.load import Load
 from services.interface.buildFileGenerator import BuildFileGenerator
 from services.interface.buildExecutor import BuildExecutor
 from containers.arg import BuildPhase
+from exceptions.ohosException import OHOSException
+from util.systemUtil import SystemUtil
+from util.logUtil import LogUtil
+from containers.status import throw_exception
 
 
 class OHOSBuildModule(BuildModuleInterface):
+
+    _instance = None
 
     def __init__(self, args_dict: dict, argsResolver: ArgsResolver, preloader: Preload,
                  loader: Load, targetGenerator: BuildFileGenerator, targetCompiler: BuildExecutor):
         super().__init__(args_dict, argsResolver, preloader,
                          loader, targetGenerator, targetCompiler)
         self._config = Config()
+        OHOSBuildModule._instance = self
+        self._start_time = SystemUtil.get_current_time()
 
     @property
     def config(self):
         return self._config
 
-    def _prebuild(self) :
+    @property
+    def build_time(self):
+        return SystemUtil.get_current_time() - self._start_time
+
+    @staticmethod
+    def get_instance():
+        if OHOSBuildModule._instance is not None:
+            return OHOSBuildModule._instance
+        else:
+            raise OHOSException(
+                'OHOSBuildModule has not been instantiated', '0000')
+
+    @throw_exception
+    def run(self):
+        try:
+            super().run()
+        except OHOSException as exception:
+            raise exception
+        else:
+            LogUtil.hb_info('Cost time:  {}'.format(self.build_time))
+
+    def _prebuild(self):
         self._run_phase(BuildPhase.PRE_BUILD)
 
-    def _preload(self) :
+    def _preload(self):
         self._run_phase(BuildPhase.PRE_LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').argValue:
             self.preloader.run()
 
-    def _load(self) :
+    def _load(self):
         self._run_phase(BuildPhase.LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').argValue:
             self.loader.run()
 
-    def _preTargetGenerate(self) :
+    def _preTargetGenerate(self):
         self._run_phase(BuildPhase.PRE_TARGET_GENERATE)
 
-    def _targetGenerate(self) :
+    def _targetGenerate(self):
         self._run_phase(BuildPhase.TARGET_GENERATE)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get("fast_rebuild").argValue:
             self.targetGenerator.run()
 
-    def _postTargetGenerate(self) :
+    def _postTargetGenerate(self):
         self._run_phase(BuildPhase.POST_TARGET_GENERATE)
 
-    def _preTargetCompilation(self) :
+    def _preTargetCompilation(self):
         self._run_phase(BuildPhase.PRE_TARGET_COMPILATION)
 
-    def _targetCompilation(self) :
+    def _targetCompilation(self):
         self._run_phase(BuildPhase.TARGET_COMPILATION)
         if self.args_dict.get('build_only_gn', None) and not self.args_dict.get("build_only_gn").argValue:
             self.targetCompiler.run()
 
-    def _postTargetCompilation(self) :
+    def _postTargetCompilation(self):
         self._run_phase(BuildPhase.POST_TARGET_COMPILATION)
 
-    def _postBuild(self) :
+    def _postBuild(self):
         self._run_phase(BuildPhase.POST_BUILD)
 
-    def _run_phase(self, phase: BuildPhase) :
+    def _run_phase(self, phase: BuildPhase):
         for phase_arg in [arg for arg in self.args_dict.values()if arg.argPhase == phase]:
-            self.argsResolver.resolveArg(phase_arg, self, config=self.config)
+            self.argsResolver.resolveArg(phase_arg, self)

@@ -25,7 +25,6 @@ from services.interface.load import Load
 from services.interface.buildExecutor import BuildExecutor
 from services.interface.buildFileGenerator import BuildFileGenerator
 from resolver.interface.argsResolver import ArgsResolver
-from util.logUtil import LogUtil
 
 
 class BuildModuleInterface(ModuleInterface):
@@ -65,10 +64,7 @@ class BuildModuleInterface(ModuleInterface):
             self._preTargetCompilation()
             self._targetCompilation()
         except OHOSException as exception:
-            LogUtil.write_log(self.targetCompiler.unwrapped_build_executor.config.log_path,
-                    'Reason: {}\n'
-                    'Solution: {}'
-                    .format(str(exception), exception.get_solution()), 'error')
+            raise exception
         else: 
             self._postTargetCompilation()
         finally:

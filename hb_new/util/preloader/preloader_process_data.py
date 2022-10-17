@@ -15,7 +15,9 @@
 
 
 import os
+
 from resources.config import Config
+from util.logUtil import LogUtil
 from util.ioUtil import IoUtil
 from util.preloader.parse_vendor_product_config import get_vendor_parts_list
 
@@ -25,6 +27,7 @@ class Outputs:
         self.__post_init__(output_dir)
 
     def __post_init__(self, output_dir):
+        os.makedirs(output_dir, exist_ok=True)
         self.build_prop = os.path.join(output_dir, 'build.prop')
         self.build_config_json = os.path.join(output_dir, 'build_config.json')
         self.parts_json = os.path.join(output_dir, 'parts.json')
@@ -253,7 +256,7 @@ class Product():
             device_info['target_cpu'] = config['target_cpu']
         else:
             # Target cpu is used to set default toolchain for standard system.
-            print(
+            LogUtil.hb_warning(
                 "The target_cpu needs to be specified, default target_cpu=arm")
             device_info['target_cpu'] = 'arm'
         if config.get('kernel_version'):

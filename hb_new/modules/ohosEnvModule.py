@@ -14,32 +14,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-from modules.interface.setModuleInterface import SetModuleInterface
+from modules.interface.envModuleInterface import EnvModuleInterface
 from resolver.interface.argsResolver import ArgsResolver
-from services.interface.menuInterface import MenuInterface
 from exceptions.ohosException import OHOSException
 
-
-class OHOSSetModule(SetModuleInterface):
-
+class OHOSEnvModule(EnvModuleInterface):
+    
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
-        super().__init__(args_dict, argsResolver, menu)
-        OHOSSetModule._instance = self
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+        super().__init__(args_dict, argsResolver)
+        OHOSEnvModule._instance = self
 
     @staticmethod
     def get_instance():
-        if OHOSSetModule._instance is not None:
-            return OHOSSetModule._instance
+        if OHOSEnvModule._instance is not None:
+            return OHOSEnvModule._instance
         else:
             raise OHOSException(
-                'OHOSSetModule has not been instantiated', '0000')
+                'OHOSCleanModule has not been instantiated', '0000')
 
-    def set_product(self):
-        self.argsResolver.resolveArg(self.args_dict['product_name'], self)
-
-    def set_parameter(self):
-        self.argsResolver.resolveArg(self.args_dict['all'], self)
+    def env_check(self):
+        self.argsResolver.resolveArg(self.args_dict['check'], self)
+    
+    def env_install(self):
+        self.argsResolver.resolveArg(self.args_dict['install'], self)

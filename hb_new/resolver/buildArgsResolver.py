@@ -18,6 +18,7 @@
 
 import os
 
+from lite.hb_internal.build.part_rom_statistics import output_part_rom_status
 from distutils.spawn import find_executable
 from containers.status import throw_exception
 
@@ -25,13 +26,14 @@ from containers.arg import Arg
 from exceptions.ohosException import OHOSException
 from modules.interface.buildModuleInterface import BuildModuleInterface
 from resources.config import Config
-from resources.global_var import CURRENT_OHOS_ROOT
+from resources.global_var import CURRENT_OHOS_ROOT, DEFAULT_CCACHE_DIR
 from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from util.typeCheckUtil import TypeCheckUtil
 from util.logUtil import LogUtil
 from util.systemUtil import SystemUtil
 from util.typeCheckUtil import TypeCheckUtil
 from util.componentUtil import ComponentUtil
+from util.productUtil import ProductUtil
 
 
 class BuildArgsResolver(ArgsResolverInterface):
@@ -39,7 +41,47 @@ class BuildArgsResolver(ArgsResolverInterface):
     def __init__(self, args_dict: dict):
         super().__init__(args_dict)
 
-    def resolveProduct(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveProduct(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--product-name' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        config = Config()
+        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator.regist_arg('product_name', config.product)
+        targetGenerator.regist_arg('product_path', config.product_path)
+        targetGenerator.regist_arg(
+            'product_config_path', config.product_config_path)
+
+        targetGenerator.regist_arg('device_name', config.board)
+        targetGenerator.regist_arg('device_path', config.device_path)
+        targetGenerator.regist_arg('device_company', config.device_company)
+        targetGenerator.regist_arg(
+            'device_config_path', config.device_config_path)
+
+        targetGenerator.regist_arg('target_cpu', config.target_cpu)
+        targetGenerator.regist_arg(
+            'is_{}_system'.format(config.os_level), True)
+
+        targetGenerator.regist_arg('ohos_kernel_type', config.kernel)
+        targetGenerator.regist_arg('ohos_build_compiler_specified',
+                                   ProductUtil.get_compiler(config.device_path))
+
+        targetGenerator.regist_arg('ohos_build_time',
+                                   SystemUtil.get_current_time(type='timestamp'))
+        targetGenerator.regist_arg('ohos_build_datetime',
+                                   SystemUtil.get_current_time(type='datetime'))
+
+        features_dict = ProductUtil.get_features_dict(config.product_json)
+        for key, value in features_dict.items():
+            targetGenerator.regist_arg(key, value)
+
+        if ProductUtil.get_compiler(config.device_path) == 'clang':
+            targetGenerator.regist_arg(
+                'ohos_build_compiler_dir', config.clang_path)
+
         if targetArg.argValue == 'ohos-sdk':
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
             targetGenerator.regist_arg('build_ohos_sdk', True)
@@ -48,11 +90,26 @@ class BuildArgsResolver(ArgsResolverInterface):
                     'build_ohos_sdk']
             buildModule.args_dict['target_cpu'].argValue = 'arm64'
 
-    def resolveTargetCpu(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveTargetCpu(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--target-cpu' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        config = Config()
         config.target_cpu = targetArg.argValue
 
+    @staticmethod
     @throw_exception
-    def resolveBuildTarget(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    def resolveBuildTarget(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--build-target' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        :raise OHOSException: when build target not exist in compiling product.
+        """
+        config = Config()
         build_executor = buildModule.targetCompiler.unwrapped_build_executor
         target_list = []
         if len(targetArg.argValue):
@@ -76,19 +133,35 @@ class BuildArgsResolver(ArgsResolverInterface):
                 component_name = ComponentUtil.get_component_name(os.getcwd())
                 component_name = os.path.basename(
                     os.getcwd()) if component_name == '' else component_name
-                raise OHOSException('There is no target component "{}" for the current product {}'
+                raise OHOSException('There is no target component "{}" for the current product "{}"'
                                     .format(component_name, Config().product), "4001")
         build_executor.regist_arg('build_target', target_list)
 
-    def resolveLogLevel(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveLogLevel(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--log-level' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        """
         if targetArg.argValue == 'debug':
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
             targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
             targetGenerator.regist_flag('-v', ''),
+            targetGenerator.regist_flag(
+                '--tracelog', '{}/gn_trace.log'.format(Config().out_path))
+            targetGenerator.regist_flag('--ide', 'json')
             targetCompiler.regist_arg('-v', '')
 
+    @staticmethod
     @throw_exception
-    def resolveStrictMode(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    def resolveStrictMode(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--strict-mode' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        :raise OHOSException: when preloader or loader results not correct
+        """
         if targetArg.argValue:
             preloader = buildModule.preloader.unwrapped_preloader
             loader = buildModule.loader.unwrapped_loader
@@ -97,15 +170,33 @@ class BuildArgsResolver(ArgsResolverInterface):
             if not loader.outputs.check_outputs():
                 raise OHOSException('Loader result not correct ', "2001")
 
-    def resolveScalableBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveScalableBuild(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--scalable-build' arg.
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("scalable_build", bool(targetArg.argValue))
 
-    def resolveBuildPlatformName(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveBuildPlatformName(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '---build-platform-name' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("build_platform_name", targetArg.argValue)
 
-    def resolveBuildXts(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveBuildXts(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--build-xts' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
         loader = buildModule.loader.unwrapped_loader
         for gn_arg in buildModule.args_dict['gn_args'].argValue:
             if 'build_xts' in gn_arg:
@@ -114,7 +205,13 @@ class BuildArgsResolver(ArgsResolverInterface):
                 return
         loader.regist_arg("build_xts", bool(targetArg.argValue))
 
-    def resolveIgnoreApiCheck(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveIgnoreApiCheck(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--ignore-api-check' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
         loader = buildModule.loader.unwrapped_loader
         if len(targetArg.argValue):
             loader.regist_arg("ignore_api_check", targetArg.argValue)
@@ -122,20 +219,40 @@ class BuildArgsResolver(ArgsResolverInterface):
             loader.regist_arg("ignore_api_check", [
                               'xts', 'common', 'developertest'])
 
-    def resolveLoadTestConfig(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveLoadTestConfig(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--load-test-config' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
         loader = buildModule.loader.unwrapped_loader
         loader.regist_arg("load_test_config", bool(targetArg.argValue))
 
-    def resolveRenameLastLog(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveRenameLastLog(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--rename-last-log' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
         if targetArg.argValue:
+            config = Config()
             out_path = config.out_path
             logfile = os.path.join(out_path, 'build.log')
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
                 os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
 
-    def resolveCCache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveCCache(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--ccache' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
         if targetArg.argValue:
+            config = Config()
             ccache_path = find_executable('ccache')
             if ccache_path is None:
                 LogUtil.hb_warning('Failed to find ccache, ccache disabled.')
@@ -146,7 +263,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             if not ccache_local_dir:
                 ccache_local_dir = '.ccache'
             if ccache_base is None:
-                ccache_base = os.path.join(config.root_path, ccache_local_dir)
+                ccache_base = DEFAULT_CCACHE_DIR
                 if not os.path.exists(ccache_base):
                     os.makedirs(ccache_base)
 
@@ -164,28 +281,43 @@ class BuildArgsResolver(ArgsResolverInterface):
             os.environ['CCACHE_MASK'] = '002'
             ccache_max_size = os.environ.get('CCACHE_MAXSIZE')
             if not ccache_max_size:
-                ccache_max_size = '100G'
+                ccache_max_size = '50G'
 
             cmd = ['ccache', '-M', ccache_max_size]
 
             SystemUtil.exec_command(cmd, log_path=config.log_path)
 
-    def resolvePycache(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolvePycache(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--enable-pycache' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
         if targetArg.argValue:
             gn = buildModule.targetGenerator.unwrapped_build_file_generator
             gn.regist_arg('pycache_enable', targetArg.argValue)
 
-    def resolveBuildType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveBuildType(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--build-type' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        """
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
         if targetArg.argValue == 'debug':
             targetGenerator.regist_arg('is_debug', True)
-        '''For historical reasons, this value must be debug
-        '''
+        # For historical reasons, this value must be debug
         targetGenerator.regist_arg('ohos_build_type', 'debug')
 
-    # TODO: '-f' option should clean all out product
-
-    def resolveFullCompilation(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveFullCompilation(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--full-compilation' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
         if targetArg.argValue:
             build_executor = buildModule.targetCompiler.unwrapped_build_executor
             target_list = build_executor.args_dict.get('build_target', None)
@@ -196,8 +328,15 @@ class BuildArgsResolver(ArgsResolverInterface):
                 build_executor.regist_arg(
                     'build_target', ['make_all', 'make_test'])
 
+    @staticmethod
     @throw_exception
-    def resolveGnArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    def resolveGnArgs(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--gn-args' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        :raise OHOSException: when some gn_arg is not in 'key=value' format.
+        """
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
         targetGenerator.regist_arg(
             'device_type', buildModule.args_dict['device_type'].argValue)
@@ -216,8 +355,14 @@ class BuildArgsResolver(ArgsResolverInterface):
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
 
+    @staticmethod
     @throw_exception
-    def resolveExportPara(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    def resolveExportPara(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--export-para' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        """
         targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
         for gn_arg in targetArg.argValue:
             try:
@@ -232,8 +377,14 @@ class BuildArgsResolver(ArgsResolverInterface):
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
 
+    @staticmethod
     @throw_exception
-    def resolveTest(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    def resolveTest(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--test' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        """
         if len(targetArg.argValue) > 1:
             targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
             # TODO: Ask sternly why the xts subsystem passes parameters in this way?
@@ -249,12 +400,25 @@ class BuildArgsResolver(ArgsResolverInterface):
                 raise OHOSException('Test type value "{}" is not support'
                                     .format(targetArg.argValue), "0002")
 
-    def resolveKeepNinjaGoing(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveKeepNinjaGoing(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--keep-ninja-going' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: targetCompilation.
+        """
         if targetArg.argValue:
             targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
             targetCompiler.regist_arg('-k', '1000000000')
 
-    def resolveBuildVariant(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveBuildVariant(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--build-variant' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation.
+        """
+        config = Config()
         ohos_para_data = []
         ohos_para_file_path = os.path.join(
             config.out_path, 'packages/phone/system/etc/param/ohos.para')
@@ -280,7 +444,14 @@ class BuildArgsResolver(ArgsResolverInterface):
         with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
             ohos_para_file.write(data)
 
-    def resolveDeviceType(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveDeviceType(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--device-type' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation.
+        """
+        config = Config()
         ohos_para_data = []
         ohos_para_file_path = os.path.join(
             config.out_path, 'packages/phone/system/etc/param/ohos.para')
@@ -299,50 +470,77 @@ class BuildArgsResolver(ArgsResolverInterface):
             with open(ohos_para_file_path, 'w', encoding='utf-8') as ohos_para_file:
                 ohos_para_file.write(data)
 
-    def resolveCleanArgs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveCleanArgs(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--clean-args' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: postbuild
+        """
         if targetArg.argValue:
             Arg.clean_args_file()
 
+    @staticmethod
+    def resolveArchiveImage(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--archive-image' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation
+        """
+        if targetArg.argValue:
+            config = Config()
+            image_path = os.path.join(
+                config.out_path, 'packages', 'phone', 'images')
+            if os.path.exists(image_path):
+                packaged_file_path = os.path.join(
+                    config.out_path, 'images.tar.gz')
+                cmd = ['tar', '-zcvf', packaged_file_path, image_path]
+                SystemUtil.exec_command(cmd, log_path=config.out_path)
+            else:
+                LogUtil.hb_info(
+                    '"--archive-image" option not work, cause the currently compiled product is not a standard product')
+
+    @staticmethod
+    def resolveRomSizeStatistics(targetArg: Arg, buildModule: BuildModuleInterface):
+        """resolve '--rom-size-statistics' arg
+        :param targetArg: arg object which is used to get arg value.
+        :param buildModule [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation
+        """
+        if targetArg.argValue:
+            output_part_rom_status(CURRENT_OHOS_ROOT)
+
     # PlaceHolder
-    def resolveCompiler(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveCompiler(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveJobs(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveJobs(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveDisablePartOfPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveDisablePartOfPostBuild(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveDisablePackageImage(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveDisablePackageImage(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveDisablePartofPostBuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveDisablePartofPostBuild(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveBuildOnlyGn(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveBuildOnlyGn(targetArg: Arg, buildModule: BuildModuleInterface):
         return
 
     # PlaceHolder
-    def resolveFastRebuild(self, targetArg: Arg, buildModule: BuildModuleInterface, config: Config):
+    @staticmethod
+    def resolveFastRebuild(targetArg: Arg, buildModule: BuildModuleInterface):
         return
-
-    @throw_exception
-    def _mapArgsToFunction(self, args_dict: dict):
-        for entity in args_dict.values():
-            if isinstance(entity, Arg):
-                argsName = entity.argName
-                functionName = entity.resolveFuntion
-                if not hasattr(self, functionName) or \
-                        not hasattr(self.__getattribute__(functionName), '__call__'):
-                    raise OHOSException(
-                        'There is no resolution function for arg: {}'.format(
-                            argsName),
-                        "0004")
-                entity.resolveFuntion = self.__getattribute__(functionName)
-                self._argsToFunction[argsName] = self.__getattribute__(
-                    functionName)

@@ -26,19 +26,78 @@ from resources.config import Config
 
 class PreloadInterface(ServiceInterface):
 
-    def __init__(self, config: Config):
+    def __init__(self):
         super().__init__()
-        self._config = config    
-        # TODO: We should provide ability to overide output to adapt each system  
-        self._preloader_outputs = PrealoaderOutputs(os.path.join(config.root_path,'out/preloader', config.product))
-        
-    @property    
+        self._config = Config()
+        self._preloader_outputs = PrealoaderOutputs(os.path.join(self._config.root_path,
+                                                    'out/preloader', self._config.product))
+
+    @property
     def outputs(self):
         return self._preloader_outputs
-    
+
+    @property
+    def config(self):
+        return self._config
+
     def run(self):
-        self._internel_run()
+        self.__post_init__()
+        self._generate_build_prop()
+        self._generate_build_config_json()
+        self._generate_parts_json()
+        self._generate_parts_config_json()
+        self._generate_build_gnargs_prop()
+        self._generate_features_json()
+        self._generate_syscap_json()
+        self._generate_exclusion_modules_json()
+        self._generate_platforms_build()
+        self._generate_subsystem_config_json()
+        self._generate_systemcapability_json()
 
     @abstractmethod
-    def _internel_run(self):
+    def __post_init__(self):
+        pass
+
+    @abstractmethod
+    def _generate_build_prop(self):
+        pass
+
+    @abstractmethod
+    def _generate_build_config_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_parts_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_parts_config_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_build_gnargs_prop(self):
+        pass
+
+    @abstractmethod
+    def _generate_features_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_syscap_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_exclusion_modules_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_platforms_build(self):
+        pass
+
+    @abstractmethod
+    def _generate_subsystem_config_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_systemcapability_json(self):
         pass

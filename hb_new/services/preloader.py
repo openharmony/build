@@ -16,32 +16,31 @@
 # limitations under the License.
 
 import os
-from services.interface.preloadInterface import PreloadInterface
-from resources.config import Config
 
+from services.interface.preloadInterface import PreloadInterface
 from util.ioUtil import IoUtil
 from util.preloader.preloader_process_data import Dirs, Outputs, Product
 from util.preloader.parse_lite_subsystems_config import parse_lite_subsystem_config
+from util.logUtil import LogUtil
 
 
 class OHOSPreloader(PreloadInterface):
 
-    def __init__(self, config: Config):
-        super().__init__(config)
-        self._dirs = None
-        self._outputs = None
-        self._product = None
-        self._all_parts = {}
-        self._build_vars = {}
+    def __init__(self):
+        super().__init__()
+        self._dirs = ""
+        self._outputs = ""
+        self._product = ""
         self._os_level = ""
         self._target_cpu = ""
         self._target_os = ""
         self._toolchain_label = ""
         self._subsystem_info = {}
+        self._all_parts = {}
+        self._build_vars = {}
 
     def __post_init__(self):
         self._dirs = Dirs(self._config)
-        os.makedirs(self._dirs.preloader_output_dir, exist_ok=True)
         self._outputs = Outputs(self._dirs.preloader_output_dir)
         self._product = Product(self._dirs, self._config)      
         self._all_parts = self._product._parts
@@ -51,20 +50,6 @@ class OHOSPreloader(PreloadInterface):
         self._target_cpu = self._build_vars.get('target_cpu')
         self._toolchain_label = self._build_vars['product_toolchain_label']
         self._subsystem_info = self._get_org_subsystem_info()
-
-    def _internel_run(self):
-        self.__post_init__()
-        self._generate_build_prop()
-        self._generate_build_config_json()
-        self._generate_parts_json()
-        self._generate_parts_config_json()
-        self._generate_build_gnargs_prop()
-        self._generate_features_json()
-        self._generate_syscap_json()
-        self._generate_exclusion_modules_json()
-        self._generate_platforms_build()
-        self._generate_subsystem_config_json()
-        self._generate_systemcapability_json()
 
 # generate method
 
@@ -79,6 +64,7 @@ class OHOSPreloader(PreloadInterface):
         }
         platform_config = {'version': 2, 'platforms': {'phone': config}}
         IoUtil.dump_json_file(self._outputs.platforms_build, platform_config)
+        LogUtil.hb_info('generated platforms build info to {}/platforms.build'.format(self._dirs.preloader_output_dir))
 
     # generate build gnargs prop info to out/preloader/product_name/build_gnargs.prop
     def _generate_build_gnargs_prop(self):
@@ -101,6 +87,7 @@ class OHOSPreloader(PreloadInterface):
             attr_list.append(_item)
         with open(self._outputs.build_gnargs_prop, 'w') as fobj:
             fobj.write('\n'.join(attr_list))
+        LogUtil.hb_info('generated build gnargs prop info to {}/build_gnargs.prop'.format(self._dirs.preloader_output_dir))
 
     # generate features to out/preloader/product_name/features.json
     def _generate_features_json(self):
@@ -118,6 +105,7 @@ class OHOSPreloader(PreloadInterface):
             "part_to_feature": part_feature_map
         }
         IoUtil.dump_json_file(self._outputs.features_json, parts_feature_info)
+        LogUtil.hb_info('generated features info to {}/features.json'.format(self._dirs.preloader_output_dir))
 
     # generate syscap to out/preloader/product_name/syscap.json
     def _generate_syscap_json(self):
@@ -133,6 +121,7 @@ class OHOSPreloader(PreloadInterface):
             "part_to_syscap": part_syscap_map
         }
         IoUtil.dump_json_file(self._outputs.syscap_json, parts_syscap_info)
+        LogUtil.hb_info('generated syscap info to {}/syscap.json'.format(self._dirs.preloader_output_dir))
 
     # generate exclusion modules info to out/preloader/product_name/exclusion_modules.json
     def _generate_exclusion_modules_json(self):
@@ -144,11 +133,13 @@ class OHOSPreloader(PreloadInterface):
                 pair[_part_name] = _exclusions
                 exclusions.update(pair)
         IoUtil.dump_json_file(self._outputs.exclusion_modules_json, exclusions)
+        LogUtil.hb_info('generated exclusion modules info to {}/exclusion_modules.json'.format(self._dirs.preloader_output_dir))
 
     # generate build config info to out/preloader/product_name/build_config.json
     def _generate_build_config_json(self):
         IoUtil.dump_json_file(
             self._outputs.build_config_json, self._build_vars)
+        LogUtil.hb_info('generated build config info to {}/build_config.json'.format(self._dirs.preloader_output_dir))
 
     # generate build prop info to out/preloader/product_name/build.prop
     def _generate_build_prop(self):
@@ -157,11 +148,13 @@ class OHOSPreloader(PreloadInterface):
             build_vars_list.append('{}={}'.format(k, v))
         with open(self._outputs.build_prop, 'w') as fobj:
             fobj.write('\n'.join(build_vars_list))
+        LogUtil.hb_info('generated build prop info to {}/build.prop'.format(self._dirs.preloader_output_dir))
 
     # generate parts to out/preloader/product_name/parts.json
     def _generate_parts_json(self):
         parts_info = {"parts": sorted(list(self._all_parts.keys()))}
         IoUtil.dump_json_file(self._outputs.parts_json, parts_info)
+        LogUtil.hb_info('generated product parts info to {}/parts.json'.format(self._dirs.preloader_output_dir))
 
     # generate parts config to out/preloader/product_name/parts_config.json
     def _generate_parts_config_json(self):
@@ -173,6 +166,7 @@ class OHOSPreloader(PreloadInterface):
             part = part.replace("/", "_")
             parts_config[part] = True
         IoUtil.dump_json_file(self._outputs.parts_config_json, parts_config)
+        LogUtil.hb_info('generated parts config info to {}/parts_config.json'.format(self._dirs.preloader_output_dir))
 
     # generate subsystem config info to out/preloader/product_name/subsystem_config.json
     def _generate_subsystem_config_json(self):
@@ -183,11 +177,13 @@ class OHOSPreloader(PreloadInterface):
                 self._product._get_device_specific_subsystem())
         IoUtil.dump_json_file(
             self._outputs.subsystem_config_json, self._subsystem_info)
+        LogUtil.hb_info('generated subsystem config info to {}/subsystem_config.json'.format(self._dirs.preloader_output_dir))
 
     # generate systemcapability_json to out/preloader/product_name/systemcapability.json
     def _generate_systemcapability_json(self):
         IoUtil.dump_json_file(
             self._outputs.systemcapability_json, self._product._syscap_info)
+        LogUtil.hb_info('generated system capability info to {}/systemcapability.json'.format(self._dirs.preloader_output_dir))
 
 # get method
 
@@ -203,4 +199,3 @@ class OHOSPreloader(PreloadInterface):
                 self._dirs.lite_components_dir, ohos_build_output_dir,
                 self._dirs.source_root_dir, self._dirs.subsystem_config_json)
         return subsystem_info
-

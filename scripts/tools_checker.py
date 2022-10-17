@@ -18,6 +18,7 @@ import sys
 import subprocess
 import json
 
+from hb_new.resources.global_var import CURRENT_OHOS_ROOT
 
 def run_command(cmd, verbose=None):
     """Execute command `cmd`
@@ -58,7 +59,7 @@ def check_build_requried_packages(host_version, check=True):
     :return uninstall_package_list: Packages missing.
     """
     cur_dir = os.getcwd()
-    build_package_json = os.path.join(cur_dir, 'build/scripts/build_package_list.json')
+    build_package_json = os.path.join(CURRENT_OHOS_ROOT, 'build/scripts/build_package_list.json')
     with open(build_package_json, 'r') as file:
         file_json = json.load(file)
         for _version in file_json.keys():

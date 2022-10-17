@@ -13,7 +13,7 @@
     },
     "all": {
         "argName": "--all",
-        "argDefault": "False",
+        "argDefault": false,
         "argHelp": "Use a graphical interface to customize most compile-time parameters",
         "argPhase": "prebuild",
         "argType": "gate",

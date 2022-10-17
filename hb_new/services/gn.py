@@ -27,7 +27,6 @@ from services.interface.buildFileGeneratorInterface import BuildFileGeneratorInt
 from resources.config import Config
 from util.systemUtil import SystemUtil
 from util.ioUtil import IoUtil
-from util.productUtil import ProductUtil
 from util.logUtil import LogUtil
 
 
@@ -43,14 +42,12 @@ class CMDTYPE(Enum):
 
 class Gn(BuildFileGeneratorInterface):
 
-    def __init__(self, config: Config):
-        super().__init__(config)
+    def __init__(self):
+        super().__init__()
+        self.config = Config()
         self._regist_gn_path()
 
-    def _internel_run(self):
-        self._regist_product_information()
-        self._regist_product_features()
-        self._regist_timestamp()
+    def run(self):
         self.execute_gn_cmd(CMDTYPE.GEN)
 
     @throw_exception
@@ -70,7 +67,8 @@ class Gn(BuildFileGeneratorInterface):
         elif cmd_type == CMDTYPE.CLEAN:
             return self._execute_gn_clean_cmd(kwargs)
         else:
-            raise OHOSException('You are tring to use an unsupported gn cmd type "{}"'.format(cmd_type), '3001')
+            raise OHOSException(
+                'You are tring to use an unsupported gn cmd type "{}"'.format(cmd_type), '3001')
 
     '''Description: Get gn excutable path and regist it
     @parameter: none
@@ -94,7 +92,8 @@ class Gn(BuildFileGeneratorInterface):
         if os.path.exists(gn_path):
             self.exec = gn_path
         else:
-            raise OHOSException('There is no gn executable file at {}'.format(gn_path), '0001')
+            raise OHOSException(
+                'There is no gn executable file at {}'.format(gn_path), '0001')
 
     '''Description: Convert all registed args into a list
     @parameter: none
@@ -118,7 +117,7 @@ class Gn(BuildFileGeneratorInterface):
 
     '''Description: Convert all registed flags into a list
     @parameter: none
-    @return: list of all registed args
+    @return: list of all registed flags
     '''
 
     def _covert_flags(self) -> list:
@@ -126,64 +125,22 @@ class Gn(BuildFileGeneratorInterface):
 
         for key, value in self.flags_dict.items():
             if value == '':
-                flags_list.append('{} '.format(key))
+                flags_list.append('{}'.format(key))
             else:
                 flags_list.append('{}={}'.format(key, str(value)).lower())
 
         return flags_list
 
-    '''Description: Regist compiling product features to gn command args, See features defination
-    @parameter: none
-    @return: none
-    '''
-
-    def _regist_product_features(self):
-        features_dict = ProductUtil.get_features_dict(self.config.product_json)
-
-        for key, value in features_dict.items():
-            self.regist_arg(key, value)
-
-    '''Description: Regist compiling product information to gn args
-    @parameter: none
-    @return: none
-    '''
-
-    def _regist_product_information(self):
-        self.regist_arg('product_name', self.config.product)
-        self.regist_arg('product_path', self.config.product_path)
-        self.regist_arg('product_config_path', self.config.product_config_path)
-
-        self.regist_arg('device_name', self.config.board)
-        self.regist_arg('device_path', self.config.device_path)
-        self.regist_arg('device_company', self.config.device_company)
-        self.regist_arg('device_config_path', self.config.device_config_path)
-
-        self.regist_arg('target_cpu', self.config.target_cpu)
-        self.regist_arg('is_{}_system'.format(self.config.os_level), True)
-
-        self.regist_arg('ohos_kernel_type', self.config.kernel)
-        self.regist_arg('ohos_build_compiler_specified',
-                        ProductUtil.get_compiler(self.config.device_path))
-
-        if ProductUtil.get_compiler(self.config.device_path) == 'clang':
-            self.regist_arg('ohos_build_compiler_dir', self.config.clang_path)
-
-    def _regist_timestamp(self):
-        self.regist_arg('ohos_build_time',
-                        SystemUtil.get_current_time(type='timestamp'))
-        self.regist_arg('ohos_build_datetime',
-                        SystemUtil.get_current_time(type='datetime'))
-
     '''Description: Execute 'gn gen' command using registed args
     @parameter: kwargs TBD
-    @return: Status
+    @return: None
     '''
 
     @throw_exception
     def _execute_gn_gen_cmd(self, **kwargs):
         gn_gen_cmd = [self.exec, 'gen',
                       '--args={}'.format(' '.join(self._convert_args())),
-                      self.config.out_path, ' '.join(self._covert_flags())]
+                      self.config.out_path] + self._covert_flags()
         if self.config.os_level == 'mini' or self.config.os_level == 'small':
             gn_gen_cmd.append(f'--script-executable={sys.executable}')
         try:
@@ -191,8 +148,8 @@ class Gn(BuildFileGeneratorInterface):
                 self.exec, 'gen', ' '.join(self._convert_args()).replace('"', "\\\""), ' '.join(gn_gen_cmd[3:])), 'info')
             SystemUtil.exec_command(gn_gen_cmd, self.config.log_path)
         except OHOSException:
-            #TODO: Analysis falied log to classify failure reason
-            raise OHOSException('GN phase failed', '3002')
+            # TODO: Analysis falied log to classify failure reason
+            raise OHOSException('GN phase failed', '3000')
 
     def _execute_gn_path_cmd(self, **kwargs):
         pass

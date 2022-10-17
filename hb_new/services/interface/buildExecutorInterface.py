@@ -19,26 +19,13 @@
 from abc import abstractmethod
 
 from services.interface.serviceInterface import ServiceInterface
-from resources.config import Config
 
 
 class BuildExecutorInterface(ServiceInterface):
 
-    def __init__(self, config: Config):
+    def __init__(self):
         super().__init__()
-        self._config = config
-
-    @property
-    def config(self):
-        return self._config
-
-    @config.setter
-    def config(self, value):
-        self._config = value
-
-    def run(self):
-        return self._internel_run()
 
     @abstractmethod
-    def _internel_run(self):
+    def run(self):
         pass

@@ -19,11 +19,20 @@
 import os
 import argparse
 import sys
+from enum import Enum
 
 from resources.global_var import CURRENT_BUILD_ARGS
 from resources.global_var import DEFAULT_BUILD_ARGS
+
 from resources.global_var import CURRENT_SET_ARGS
 from resources.global_var import DEFAULT_SET_ARGS
+
+from resources.global_var import CURRENT_CLEAN_ARGS
+from resources.global_var import DEFAULT_CLEAN_ARGS
+
+from resources.global_var import DEFAULT_ENV_ARGS
+from resources.global_var import CURRENT_ENV_ARGS
+
 from resources.global_var import ARGS_DIR
 
 from exceptions.ohosException import OHOSException
@@ -34,12 +43,13 @@ from resolver.argsFactory import ArgsFactory
 from containers.status import throw_exception
 
 
-class ModuleType():
+class ModuleType(Enum):
     BUILD = 0
     SET = 1
     ENV = 2
     CLEAN = 3
     TOOL = 4
+    HELP = 5
 
 
 class ArgType():
@@ -108,6 +118,22 @@ class BuildPhase():
             return BuildPhase.POST_BUILD
         else:
             return BuildPhase.NONE
+
+
+class CleanPhase():
+
+    REGULAR = 0
+    DEEP = 1
+    NONE = 2
+
+    @staticmethod
+    def getType(value: str):
+        if value == 'regular':
+            return CleanPhase.REGULAR
+        elif value == 'deep':
+            return CleanPhase.DEEP
+        else:
+            return CleanPhase.NONE
 
 
 class Arg():
@@ -179,9 +205,22 @@ class Arg():
         elif arg_type == ArgType.DICT:
             arg_value = dict(data['argDefault'])
         else:
-            raise OHOSException('Unknown arg type "{}" for arg "{}"'.format(arg_type, arg_name), "0003")
+            raise OHOSException('Unknown arg type "{}" for arg "{}"'.format(
+                arg_type, arg_name), "0003")
         resolveFuntion = data['resolveFuntion']
         return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
+
+    @staticmethod
+    def print_help(module_type: ModuleType):
+        parser = argparse.ArgumentParser()
+        all_args = Arg.read_args_file(module_type)
+
+        for arg in all_args.values():
+            arg = dict(arg)
+            ArgsFactory.genenic_add_option(parser, arg)
+
+        parser.parse_known_args(sys.argv[2:])
+        parser.print_help()
 
     @staticmethod
     def parse_all_args(module_type: ModuleType) -> dict:
@@ -192,27 +231,26 @@ class Arg():
         for arg in all_args.values():
             arg = dict(arg)
             ArgsFactory.genenic_add_option(parser, arg)
-
             oh_arg = Arg.createInstanceByDict(arg)
             args_dict[oh_arg.argName] = oh_arg
 
         parser_args = parser.parse_known_args(sys.argv[2:])
 
         for oh_arg in args_dict.values():
-            if isinstance(oh_arg, argparse.Namespace):
-                oh_arg._get_args
-            assigned_value = parser_args[0].__dict__[oh_arg.argName]
-            if oh_arg.argType == ArgType.LIST:
-                assigned_value = TypeCheckUtil.tile_list(assigned_value)
-                assigned_value = list(set(assigned_value))
-            elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
-                assigned_value = bool(assigned_value)
+            if isinstance(oh_arg, Arg):
+                assigned_value = parser_args[0].__dict__[oh_arg.argName]
+                if oh_arg.argType == ArgType.LIST:
+                    assigned_value = TypeCheckUtil.tile_list(assigned_value)
+                    assigned_value = list(set(assigned_value))
+                elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
+                    assigned_value = bool(assigned_value)
 
-            if oh_arg.argAttribute.get('deprecated', None) and oh_arg.argValue != assigned_value:
-                LogUtil.hb_warning(
-                    'compile option "{}" will be deprecated, please consider use other options'.format(oh_arg.argName))
-            oh_arg.argValue = assigned_value
-            Arg.write_args_file(oh_arg.argName, oh_arg.argValue, module_type)
+                if oh_arg.argAttribute.get('deprecated', None) and oh_arg.argValue != assigned_value:
+                    LogUtil.hb_warning(
+                        'compile option "{}" will be deprecated, please consider use other options'.format(oh_arg.argName))
+                oh_arg.argValue = assigned_value
+                Arg.write_args_file(
+                    oh_arg.argName, oh_arg.argValue, module_type)
 
         return args_dict
 
@@ -224,6 +262,10 @@ class Arg():
             args_file_path = CURRENT_BUILD_ARGS
         elif module_type == ModuleType.SET:
             args_file_path = CURRENT_SET_ARGS
+        elif module_type == ModuleType.CLEAN:
+            args_file_path = CURRENT_CLEAN_ARGS
+        elif module_type == ModuleType.ENV:
+            args_file_path = CURRENT_ENV_ARGS
         else:
             raise OHOSException(
                 'You are trying to write args file, but there is no corresponding module "{}" args file'
@@ -243,6 +285,12 @@ class Arg():
         elif module_type == ModuleType.SET:
             args_file_path = CURRENT_SET_ARGS
             default_file_path = DEFAULT_SET_ARGS
+        elif module_type == ModuleType.CLEAN:
+            args_file_path = CURRENT_CLEAN_ARGS
+            default_file_path = DEFAULT_CLEAN_ARGS
+        elif module_type == ModuleType.ENV:
+            args_file_path = CURRENT_ENV_ARGS
+            default_file_path = DEFAULT_ENV_ARGS
         else:
             raise OHOSException(
                 'You are trying to write args file, but there is no corresponding module "{}" args file'
@@ -254,5 +302,5 @@ class Arg():
     @staticmethod
     def clean_args_file():
         for file in os.listdir(ARGS_DIR):
-            if file.endswith('.json'):
+            if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
                 os.remove(os.path.join(ARGS_DIR, file))

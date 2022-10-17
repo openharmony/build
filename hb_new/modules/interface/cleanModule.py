@@ -16,24 +16,13 @@
 # limitations under the License.
 #
 
-from abc import abstractmethod
-
-from services.interface.serviceInterface import ServiceInterface
+from modules.interface.cleanModuleInterface import CleanModuleInterface
 
 
-class BuildFileGeneratorInterface(ServiceInterface):
+class CleanModule():
 
-    def __init__(self):
-        super().__init__()
-        self._flags_dict = {}
+    def __init__(self, cleanModule: CleanModuleInterface):
+        self._cleanModule = cleanModule
 
-    @property
-    def flags_dict(self):
-        return self._flags_dict
-
-    def regist_flag(self, key, value):
-        self._flags_dict[key] = value
-
-    @abstractmethod
     def run(self):
-        pass
+        return self._cleanModule.run()

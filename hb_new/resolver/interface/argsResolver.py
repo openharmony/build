@@ -17,7 +17,6 @@
 
 from containers.arg import Arg
 from resolver.interface.argsResolverInterface import ArgsResolverInterface
-from resources.config import Config
 
 
 class ArgsResolver():
@@ -25,5 +24,5 @@ class ArgsResolver():
     def __init__(self, argsResolver: ArgsResolverInterface):
         self._argsResolver = argsResolver
 
-    def resolveArg(self, targetArg: Arg, buildmodule, config: Config):
-        self._argsResolver.resolveArg(targetArg, buildmodule, config)
+    def resolveArg(self, targetArg: Arg, module):
+        self._argsResolver.resolveArg(targetArg, module)

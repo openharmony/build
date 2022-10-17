@@ -14,7 +14,7 @@
     "target_cpu": {
       "argName": "--target-cpu",
       "argDefault": "arm",
-      "argHelp": "specifies the desired cpu architecture for the build, currently we support arm64, arm",
+      "argHelp": "specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb set --all' to list product all supported cpu architectures",
       "argPhase": "prebuild",
       "argType": "str",
       "argAttribute": {
@@ -41,7 +41,7 @@
     "ccache": {
       "argName": "--ccache",
       "argDefault": false,
-      "argHelp": "enable ccache",
+      "argHelp": "enable ccache, this option could improve compilation speed",
       "argPhase": "prebuild",
       "argType": "gate",
       "argAttribute": {},
@@ -61,7 +61,7 @@
     "disable_part_of_post_build": {
       "argName": "--disable-part-of-post-build",
       "argDefault": [],
-      "argHelp": "specifies compiler",
+      "argHelp": "deprecated, please do not use this option",
       "argPhase": "prebuild",
       "argType": "list",
       "argAttribute": {
@@ -73,7 +73,7 @@
     "build_type": {
       "argName": "--build-type",
       "argDefault": "release",
-      "argHelp": "release or debug version, mini/small only",
+      "argHelp": "specifies compile release or debug version",
       "argPhase": "targetGenerate",
       "argType": "str",
       "argAttribute": {
@@ -88,7 +88,7 @@
     "log_level": {
       "argName": "--log-level",
       "argDefault": "info",
-      "argHelp": "specifies the log level during compilation. you can select two levels: debug, info.In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
+      "argHelp": "specifies the log level during compilation. you can select two levels: debug, info. In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
       "argPhase": "targetGenerate",
       "argType": "str",
       "argAttribute": {
@@ -103,7 +103,7 @@
     "export_para": {
       "argName": "--export-para",
       "argDefault": [],
-      "argHelp": "regist args to target generator",
+      "argHelp": "deprecated, please do not use this option",
       "argPhase": "targetGenerate",
       "argType": "list",
       "argAttribute": {
@@ -125,7 +125,7 @@
     "gn_args": {
       "argName": "--gn-args",
       "argDefault": [],
-      "argHelp": "specifies gn build arguments",
+      "argHelp": "specifies gn build arguments, you could use this option like this 'hb build --gn-args is_debug=true'",
       "argPhase": "targetGenerate",
       "argType": "list",
       "argAttribute": {},
@@ -157,7 +157,7 @@
     "scalable_build": {
       "argName": "--scalable-build",
       "argDefault": false,
-      "argHelp": "Select whether to read information from parts.json generate by preload",
+      "argHelp": "select whether to read information from parts.json generate by preload",
       "argPhase": "load",
       "argType": "bool",
       "argAttribute": {},
@@ -177,7 +177,7 @@
     "build_xts": {
       "argName": "--build-xts",
       "argDefault": false,
-      "argHelp": "Select whether to load the components included in the subsystem xts",
+      "argHelp": "select whether to load the components included in the subsystem xts",
       "argPhase": "load",
       "argType": "bool",
       "argAttribute": {},
@@ -187,7 +187,7 @@
     "ignore_api_check": {
       "argName": "--ignore-api-check",
       "argDefault": [],
-      "argHelp": "Skip the check of some subsystems",
+      "argHelp": "skip the check of some subsystems",
       "argPhase": "load",
       "argType": "list",
       "argAttribute": {},
@@ -197,7 +197,7 @@
     "load_test_config": {
       "argName": "--load-test-config",
       "argDefault": true,
-      "argHelp": "Select whether to load the test field in bundle.json, that is, whether to call the test case",
+      "argHelp": "select whether to load the test field in bundle.json, that is, whether to call the test case",
       "argPhase": "load",
       "argType": "bool",
       "argAttribute": {},
@@ -207,8 +207,8 @@
     "build_target": {
       "argName": "--build-target",
       "argDefault": [],
-      "argHelp": "Compile single target, you could use 'hb tool --ls' to list all build target",
-      "argPhase": "targetCompilation",
+      "argHelp": "compile single target, you could use 'hb tool --ls' to list all build target",
+      "argPhase": "prebuild",
       "argType": "list",
       "argAttribute": {
         "abbreviation": "-b"
@@ -220,7 +220,7 @@
       "argName": "--full-compilation",
       "argDefault": false,
       "argHelp": "full code compilation",
-      "argPhase": "targetCompilation",
+      "argPhase": "prebuild",
       "argType": "bool",
       "argAttribute": {
         "abbreviation": "-f"
@@ -266,17 +266,19 @@
     "disable_package_image": {
       "argName": "--disable-package-image",
       "argDefault": false,
-      "argHelp": "specifies device type",
+      "argHelp": "deprecated, please do not use this option",
       "argPhase": "postTargetCompilation",
       "argType": "gate",
-      "argAttribute": {},
+      "argAttribute": {
+        "deprecated": "true"
+      },
       "resolveFuntion": "resolveDisablePackageImage",
       "testFunction": "testDisablePackageImage"
     },
     "jobs": {
       "argName": "--jobs",
       "argDefault": "",
-      "argHelp": "regist args to target generator",
+      "argHelp": "deprecated, please do not use this option",
       "argPhase": "prebuild",
       "argType": "str",
       "argAttribute": {
@@ -314,5 +316,25 @@
       "argAttribute": {},
       "resolveFuntion": "resolveCleanArgs",
       "testFunction": "testCleanArgs"
+    },
+    "archive_image": {
+      "argName": "--archive-image",
+      "argDefault": false,
+      "argHelp": "archive image when build product complete",
+      "argPhase": "postTargetCompilation",
+      "argType": "gate",
+      "argAttribute": {},
+      "resolveFuntion": "resolveArchiveImage",
+      "testFunction": "testArchiveImage"
+    },
+    "rom_size_statistics": {
+      "argName": "--rom-size-statistics",
+      "argDefault": false,
+      "argHelp": "statistics on the actual rom size for each compiled component",
+      "argPhase": "postTargetCompilation",
+      "argType": "gate",
+      "argAttribute": {},
+      "resolveFuntion": "resolveRomSizeStatistics",
+      "testFunction": "testRomSizeStatistics"
     }
 }

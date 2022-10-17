@@ -45,7 +45,7 @@ def _add_bool_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
         return _add_bool_abbreviation_option(parser, arg)
     else:
         return parser.add_argument(arg['argName'], help=arg['argHelp'],
-                                   default=arg['argDefault'], choices=['True', 'False'])
+                                   default=arg['argDefault'], choices=['True', 'False', 'true', 'false'])
 
 
 def _add_str_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
@@ -67,7 +67,7 @@ def _add_list_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
 
 
 def _add_gate_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
-    return parser.add_argument(arg['argName'], help=arg['argHelp'], action='store_true')
+    return parser.add_argument(arg['argName'], help=arg['argHelp'], action='store_true', default=arg['argDefault'])
 
 
 def _add_bool_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:

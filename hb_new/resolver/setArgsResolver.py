@@ -22,11 +22,9 @@ from containers.arg import Arg
 from containers.arg import ModuleType
 from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from modules.interface.setModuleInterface import SetModuleInterface
-from exceptions.ohosException import OHOSException
 from resources.config import Config
 from util.productUtil import ProductUtil
 from util.deviceUtil import DeviceUtil
-from containers.status import throw_exception
 
 
 class SetArgsResolver(ArgsResolverInterface):
@@ -34,7 +32,8 @@ class SetArgsResolver(ArgsResolverInterface):
     def __init__(self, args_dict: dict):
         super().__init__(args_dict)
 
-    def resolveProductName(self, targetArg: Arg, setModule: SetModuleInterface):
+    @staticmethod
+    def resolveProductName(targetArg: Arg, setModule: SetModuleInterface):
         config = Config()
         product_info = dict()
         device_info = dict()
@@ -105,24 +104,11 @@ class SetArgsResolver(ArgsResolverInterface):
         Arg.write_args_file(targetArg.argName,
                             product_info.get('name'), ModuleType.SET)
 
-    def resolveSetParameter(self, targetArg: Arg, setModule: SetModuleInterface):
+    @staticmethod
+    def resolveSetParameter(targetArg: Arg, setModule: SetModuleInterface):
         if targetArg.argValue:
-            self.resolveProductName(
+            SetArgsResolver.resolveProductName(
                 setModule.args_dict['product_name'], setModule)
             options = setModule.menu.select_compile_option()
             for argName, argVaule in options.items():
                 Arg.write_args_file(argName, argVaule, ModuleType.BUILD)
-    
-    @throw_exception
-    def _mapArgsToFunction(self, args_dict: dict):
-        for entity in args_dict.values():
-            if isinstance(entity, Arg):
-                argsName = entity.argName
-                functionName = entity.resolveFuntion
-                if not hasattr(self, functionName) or \
-                        not hasattr(self.__getattribute__(functionName), '__call__'):
-                    raise OHOSException(
-                        f'There is no resolution for arg: ' + argsName, '0000')
-                entity.resolveFuntion = self.__getattribute__(functionName)
-                self._argsToFunction[argsName] = self.__getattribute__(
-                    functionName)

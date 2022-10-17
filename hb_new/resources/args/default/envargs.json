@@ -1,0 +1,23 @@
+{
+    "check": {
+        "argName": "--check",
+        "argDefault": true,
+        "argHelp": "check that the current running environment contains all dependencies",
+        "argPhase": "prebuild",
+        "argType": "gate",
+        "argAttribute": {
+        },
+        "resolveFuntion": "resolveCheck",
+        "testFunction": "testCheck"
+    },
+    "install": {
+        "argName": "--install",
+        "argDefault": false,
+        "argHelp": "install all dependent software for compiling L0, L1 and L2 products",
+        "argPhase": "prebuild",
+        "argType": "gate",
+        "argAttribute": {},
+        "resolveFuntion": "resolveInstall",
+        "testFunction": "TestInstall"
+    }
+}

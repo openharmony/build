@@ -16,12 +16,11 @@
 # limitations under the License.
 #
 
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 from containers.arg import Arg
 from exceptions.ohosException import OHOSException
 from containers.status import throw_exception
-from resources.config import Config
 
 
 class ArgsResolverInterface(metaclass=ABCMeta):
@@ -31,15 +30,27 @@ class ArgsResolverInterface(metaclass=ABCMeta):
         self._mapArgsToFunction(args_dict)
 
     @throw_exception
-    def resolveArg(self, targetArg: Arg, buildmodule, config: Config):
+    def resolveArg(self, targetArg: Arg, module):
         if targetArg.argName not in self._argsToFunction.keys():
             raise OHOSException()
         if not hasattr(self._argsToFunction[targetArg.argName], '__call__'):
             raise OHOSException()
 
         resolveFunction = self._argsToFunction[targetArg.argName]
-        return resolveFunction(targetArg, buildmodule, config)
+        return resolveFunction(targetArg, module)
 
-    @abstractmethod
-    def _mapArgsToFunction(self, json):
-        pass
+    @throw_exception
+    def _mapArgsToFunction(self, args_dict: dict):
+        for entity in args_dict.values():
+            if isinstance(entity, Arg):
+                argsName = entity.argName
+                functionName = entity.resolveFuntion
+                if not hasattr(self, functionName) or \
+                        not hasattr(self.__getattribute__(functionName), '__call__'):
+                    raise OHOSException(
+                        'There is no resolution function for arg: {}'.format(
+                            argsName),
+                        "0004")
+                entity.resolveFuntion = self.__getattribute__(functionName)
+                self._argsToFunction[argsName] = self.__getattribute__(
+                    functionName)

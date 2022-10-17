@@ -20,8 +20,9 @@
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(__file__))) # ohos/build/hb_new dir
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) # ohos/build dir
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lite')) # ohos/build/lite dir
 
 from services.preloader import OHOSPreloader
 from services.interface.preload import Preload
@@ -40,14 +41,19 @@ from services.menu import Menu
 from resolver.interface.argsResolver import ArgsResolver
 from resolver.buildArgsResolver import BuildArgsResolver
 from resolver.setArgsResolver import SetArgsResolver
+from resolver.cleanArgsResolver import CleanArgsResolver
+from resolver.envArgsResolver import EnvArgsResolver
 
 from modules.interface.moduleInterface import ModuleInterface
 from modules.interface.buildModule import BuildModule
 from modules.interface.setModule import SetModule
+from modules.interface.cleanModule import CleanModule
+from modules.interface.envModule import EnvModule
+
 from modules.ohosBuildmodule import OHOSBuildModule
 from modules.ohosSetModule import OHOSSetModule
-
-from resources.config import Config
+from modules.ohosCleanModule import OHOSCleanModule
+from modules.ohosEnvModule import OHOSEnvModule
 
 from containers.arg import Arg
 from containers.arg import ModuleType
@@ -68,48 +74,51 @@ class Main():
                 set_args_dict = Arg.parse_all_args(ModuleType.SET)
                 setArgsResolever = SetArgsResolver(set_args_dict)
                 menu = Menu()
-                ohosSetModule = OHOSSetModule(
-                    set_args_dict, setArgsResolever, menu)
+                ohosSetModule = OHOSSetModule(set_args_dict, setArgsResolever, menu)
                 ohosSetModule.set_product()
 
-            config = Config()
-
-            preloader = OHOSPreloader(config)
-            preload = Preload(preloader)
-
-            loader = OHOSLoader(config)
-            load = Load(loader)
-
-            gn = Gn(config)
-            buildFileGenerator = BuildFileGenerator(gn)
-
-            ninja = Ninja(config)
-            buildExecutor = BuildExecutor(ninja)
-
+            preloader = OHOSPreloader()
+            loader = OHOSLoader()
+            gn = Gn()
+            ninja = Ninja()
             buildArgsResolever = BuildArgsResolver(args_dict)
+
+            preload = Preload(preloader)
+            load = Load(loader)
+            buildFileGenerator = BuildFileGenerator(gn)
+            buildExecutor = BuildExecutor(ninja)
             argsResolver = ArgsResolver(buildArgsResolever)
 
             ohosBuildModule = OHOSBuildModule(args_dict, argsResolver, preload, load,
                                               buildFileGenerator, buildExecutor)
 
             module = BuildModule(ohosBuildModule)
+            
         elif moduleType == ModuleType.SET:
             # each set should clean last compilation arg files
             Arg.clean_args_file()
-
             args_dict = Arg.parse_all_args(moduleType)
             setArgsResolever = SetArgsResolver(args_dict)
             menu = Menu()
             ohosSetModule = OHOSSetModule(args_dict, setArgsResolever, menu)
-
             module = SetModule(ohosSetModule)
+            
         elif moduleType == ModuleType.ENV:
-            pass
+            args_dict = Arg.parse_all_args(moduleType)
+            envArgsResolver = EnvArgsResolver(args_dict)
+            ohosEnvModule = OHOSEnvModule(args_dict, envArgsResolver)
+            module = EnvModule(ohosEnvModule)
+            
         elif moduleType == ModuleType.CLEAN:
-            pass
+            args_dict = Arg.parse_all_args(moduleType)
+            cleanArgsResolever = CleanArgsResolver(args_dict)
+            ohosCleanModule = OHOSCleanModule(args_dict, cleanArgsResolever)
+            module = CleanModule(ohosCleanModule)
+            
         elif moduleType == ModuleType.TOOL:
             pass
-
+        elif moduleType == ModuleType.HELP:
+            pass
         return module
 
     @staticmethod
@@ -125,6 +134,8 @@ class Main():
             module = Main.init_module(ModuleType.CLEAN)
         elif module_type == 'tool':
             module = Main.init_module(ModuleType.TOOL)
+        elif module_type == 'help':
+            module = Main.init_module(ModuleType.HELP)
         else:
             raise OHOSException(
                 'There is no such option {}'.format(module_type))

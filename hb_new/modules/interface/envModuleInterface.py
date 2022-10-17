@@ -18,22 +18,23 @@
 
 from abc import abstractmethod
 
-from services.interface.serviceInterface import ServiceInterface
+from modules.interface.moduleInterface import ModuleInterface
+from resolver.interface.argsResolver import ArgsResolver
 
-
-class BuildFileGeneratorInterface(ServiceInterface):
-
-    def __init__(self):
-        super().__init__()
-        self._flags_dict = {}
-
-    @property
-    def flags_dict(self):
-        return self._flags_dict
-
-    def regist_flag(self, key, value):
-        self._flags_dict[key] = value
+class EnvModuleInterface(ModuleInterface):
+    
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+        super().__init__(args_dict, argsResolver)
 
     @abstractmethod
-    def run(self):
+    def env_check(self):
         pass
+
+    @abstractmethod
+    def env_install(self):
+        pass
+    
+    def run(self):
+        self.env_check()
+        self.env_install()
+        
