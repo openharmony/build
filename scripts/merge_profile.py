@@ -32,28 +32,27 @@ def parse_args(args):
     parser.add_option('--app-profile', default=False, help='path to app profile')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--generated-profile', help='path to generated profile')
-    parser.add_option('--release-type', help='release type')
     options, _ = parser.parse_args(args)
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
     return options
 
 def merge_profile(options):
-    all_data = {}
-    with open(options.hap_profile) as f0:
-        if len(options.app_profile) == 0:
-            all_data = json.load(f0)
-        else:
+    if len(options.app_profile) == 0:
+        shutil.copyfile(options.hap_profile, options.generated_profile)
+    else:
+        all_data = {}
+        with open(options.hap_profile) as f0:
             module_data = json.load(f0)["module"]
             with open(options.app_profile) as f1:
                 app_data = json.load(f1)["app"]
                 all_data["app"] = app_data
                 all_data["module"] = module_data
                 f1.close()
-        f0.close()
-    all_data["app"]["apiReleaseType"] = options.release_type
-    f3 = open(options.generated_profile, "w")
-    json.dump(all_data, f3, indent=4, ensure_ascii=False)
-    f3.close()
+            f0.close()
+        f3 = open(options.generated_profile, "w")
+        json.dump(all_data, f3, indent=4, ensure_ascii=False)
+        f3.close()
+
 
 def main(args):
     options = parse_args(args)
