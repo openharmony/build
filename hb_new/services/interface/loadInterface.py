@@ -17,7 +17,6 @@
 
 from abc import abstractmethod
 
-from containers.loader_outputs import LoaderOutputs
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
 
@@ -27,7 +26,6 @@ class LoadInterface(ServiceInterface):
     def __init__(self):
         super().__init__()
         self._config = Config()
-        self._outputs = LoaderOutputs(self._config.root_path)
 
     @property
     def config(self):

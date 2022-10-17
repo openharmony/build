@@ -16,14 +16,14 @@
 # limitations under the License.
 
 from modules.interface.envModuleInterface import EnvModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from exceptions.ohosException import OHOSException
 
 class OHOSEnvModule(EnvModuleInterface):
     
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface):
         super().__init__(args_dict, argsResolver)
         OHOSEnvModule._instance = self
 

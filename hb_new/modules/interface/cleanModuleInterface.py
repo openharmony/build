@@ -18,13 +18,12 @@
 
 from abc import abstractmethod
 
-from containers.arg import Arg
 from modules.interface.moduleInterface import ModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 
 class CleanModuleInterface(ModuleInterface):
     
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface):
         super().__init__(args_dict, argsResolver)
     
     @abstractmethod
@@ -34,20 +33,8 @@ class CleanModuleInterface(ModuleInterface):
     @abstractmethod
     def clean_deep(self):
         pass
-    
-    def _get_all_abstract_method(self):
-        return list(filter(lambda m: not m.startswith('_') 
-                           and callable(getattr(self, m))
-                           and m.startswith('clean')
-                           and hasattr(m, __isabstractmethod__)
-                           , dir(self)))
-    
-    def run(self):
-        if self.args_dict['clean_all'].argValue:
-            for arg in self.args_dict.values():
-                if isinstance(arg, Arg):
-                    arg.argValue = True
-                    
+
+    def run(self):   
         self.clean_regular()
         self.clean_deep()
         

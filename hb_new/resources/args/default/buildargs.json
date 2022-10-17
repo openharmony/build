@@ -2,7 +2,7 @@
     "product_name": {
       "argName": "--product-name",
       "argDefault": "",
-      "argHelp": "build a specified product with {product_name}@{company}",
+      "argHelp": "build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
       "argPhase": "prebuild",
       "argType": "str",
       "argAttribute": {

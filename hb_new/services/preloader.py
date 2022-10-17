@@ -53,7 +53,10 @@ class OHOSPreloader(PreloadInterface):
 
 # generate method
 
-    # generate platforms build info to out/preloader/product_name/platforms.build
+    '''Description: generate platforms build info to "out/preloader/{product_name}/platforms.build"
+    @parameter:none
+    @return :none
+    '''
     def _generate_platforms_build(self):
         config = {
             'target_os': self._target_os,
@@ -66,7 +69,10 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(self._outputs.platforms_build, platform_config)
         LogUtil.hb_info('generated platforms build info to {}/platforms.build'.format(self._dirs.preloader_output_dir))
 
-    # generate build gnargs prop info to out/preloader/product_name/build_gnargs.prop
+    '''Description: generate build gnargs prop info to "out/preloader/{product_name}/build_gnargs.prop"
+    @parameter:none
+    @return :none
+    '''
     def _generate_build_gnargs_prop(self):
         all_features = {}
         for _part_name, vals in self._all_parts.items():
@@ -89,7 +95,10 @@ class OHOSPreloader(PreloadInterface):
             fobj.write('\n'.join(attr_list))
         LogUtil.hb_info('generated build gnargs prop info to {}/build_gnargs.prop'.format(self._dirs.preloader_output_dir))
 
-    # generate features to out/preloader/product_name/features.json
+    '''Description: generate features to "out/preloader/{product_name}/features.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_features_json(self):
         all_features = {}
         part_feature_map = {}
@@ -107,7 +116,10 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(self._outputs.features_json, parts_feature_info)
         LogUtil.hb_info('generated features info to {}/features.json'.format(self._dirs.preloader_output_dir))
 
-    # generate syscap to out/preloader/product_name/syscap.json
+    '''Description: generate syscap to "out/preloader/product_name/syscap.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_syscap_json(self):
         all_syscap = {}
         part_syscap_map = {}
@@ -123,7 +135,10 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(self._outputs.syscap_json, parts_syscap_info)
         LogUtil.hb_info('generated syscap info to {}/syscap.json'.format(self._dirs.preloader_output_dir))
 
-    # generate exclusion modules info to out/preloader/product_name/exclusion_modules.json
+    '''Description: generate exclusion modules info to "out/preloader/product_name/exclusion_modules.json"
+    @parameter:none
+    @return :none
+    '''    
     def _generate_exclusion_modules_json(self):
         exclusions = {}
         for _part_name, vals in self._all_parts.items():
@@ -135,13 +150,19 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(self._outputs.exclusion_modules_json, exclusions)
         LogUtil.hb_info('generated exclusion modules info to {}/exclusion_modules.json'.format(self._dirs.preloader_output_dir))
 
-    # generate build config info to out/preloader/product_name/build_config.json
+    '''Description: generate build config info to "out/preloader/product_name/build_config.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_build_config_json(self):
         IoUtil.dump_json_file(
             self._outputs.build_config_json, self._build_vars)
         LogUtil.hb_info('generated build config info to {}/build_config.json'.format(self._dirs.preloader_output_dir))
 
-    # generate build prop info to out/preloader/product_name/build.prop
+    '''Description: generate build prop info to "out/preloader/product_name/build.prop"
+    @parameter:none
+    @return :none
+    '''
     def _generate_build_prop(self):
         build_vars_list = []
         for k, v in self._build_vars.items():
@@ -150,13 +171,19 @@ class OHOSPreloader(PreloadInterface):
             fobj.write('\n'.join(build_vars_list))
         LogUtil.hb_info('generated build prop info to {}/build.prop'.format(self._dirs.preloader_output_dir))
 
-    # generate parts to out/preloader/product_name/parts.json
+    '''Description: generate parts to "out/preloader/product_name/parts.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_parts_json(self):
         parts_info = {"parts": sorted(list(self._all_parts.keys()))}
         IoUtil.dump_json_file(self._outputs.parts_json, parts_info)
         LogUtil.hb_info('generated product parts info to {}/parts.json'.format(self._dirs.preloader_output_dir))
 
-    # generate parts config to out/preloader/product_name/parts_config.json
+    '''Description: generate parts config to "out/preloader/product_name/parts_config.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_parts_config_json(self):
         parts_config = {}
         for part in self._all_parts:
@@ -168,7 +195,10 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(self._outputs.parts_config_json, parts_config)
         LogUtil.hb_info('generated parts config info to {}/parts_config.json'.format(self._dirs.preloader_output_dir))
 
-    # generate subsystem config info to out/preloader/product_name/subsystem_config.json
+    '''Description: generate subsystem config info to "out/preloader/product_name/subsystem_config.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_subsystem_config_json(self):
         if self._subsystem_info:
             self._subsystem_info.update(
@@ -179,7 +209,10 @@ class OHOSPreloader(PreloadInterface):
             self._outputs.subsystem_config_json, self._subsystem_info)
         LogUtil.hb_info('generated subsystem config info to {}/subsystem_config.json'.format(self._dirs.preloader_output_dir))
 
-    # generate systemcapability_json to out/preloader/product_name/systemcapability.json
+    '''Description: generate systemcapability_json to "out/preloader/product_name/systemcapability.json"
+    @parameter:none
+    @return :none
+    '''
     def _generate_systemcapability_json(self):
         IoUtil.dump_json_file(
             self._outputs.systemcapability_json, self._product._syscap_info)

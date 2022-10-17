@@ -17,7 +17,7 @@
 #
 
 from modules.interface.setModuleInterface import SetModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from services.interface.menuInterface import MenuInterface
 from exceptions.ohosException import OHOSException
 
@@ -26,8 +26,9 @@ class OHOSSetModule(SetModuleInterface):
 
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
-        super().__init__(args_dict, argsResolver, menu)
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface, menu: MenuInterface):
+        super().__init__(args_dict, argsResolver)
+        self._menu = menu
         OHOSSetModule._instance = self
 
     @staticmethod
@@ -37,6 +38,9 @@ class OHOSSetModule(SetModuleInterface):
         else:
             raise OHOSException(
                 'OHOSSetModule has not been instantiated', '0000')
+    @property
+    def menu(self):
+        return self._menu
 
     def set_product(self):
         self.argsResolver.resolveArg(self.args_dict['product_name'], self)

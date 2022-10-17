@@ -20,17 +20,17 @@ from abc import abstractmethod
 
 from exceptions.ohosException import OHOSException
 from modules.interface.moduleInterface import ModuleInterface
-from services.interface.preload import Preload
-from services.interface.load import Load
-from services.interface.buildExecutor import BuildExecutor
-from services.interface.buildFileGenerator import BuildFileGenerator
-from resolver.interface.argsResolver import ArgsResolver
+from services.interface.preloadInterface import PreloadInterface
+from services.interface.loadInterface import LoadInterface
+from services.interface.buildExecutorInterface import BuildExecutorInterface
+from services.interface.buildFileGeneratorInterface import BuildFileGeneratorInterface
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 
 
 class BuildModuleInterface(ModuleInterface):
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, preloader: Preload, loader: Load,
-                 targetGenerator: BuildFileGenerator, targetCompiler: BuildExecutor):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface, preloader: PreloadInterface, loader: LoadInterface,
+                 targetGenerator: BuildExecutorInterface, targetCompiler: BuildFileGeneratorInterface):
         super().__init__(args_dict, argsResolver)
         self._loader = loader
         self._preloader = preloader

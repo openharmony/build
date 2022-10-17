@@ -17,7 +17,7 @@
 
 from containers.arg import CleanPhase
 from modules.interface.cleanModuleInterface import CleanModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 from exceptions.ohosException import OHOSException
 
 
@@ -25,7 +25,7 @@ class OHOSCleanModule(CleanModuleInterface):
 
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface):
         super().__init__(args_dict, argsResolver)
         OHOSCleanModule._instance = self
 

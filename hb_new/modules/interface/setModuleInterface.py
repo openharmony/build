@@ -19,19 +19,13 @@
 from abc import abstractmethod
 
 from modules.interface.moduleInterface import ModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
-from services.interface.menuInterface import MenuInterface
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 
 
 class SetModuleInterface(ModuleInterface):
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, menu: MenuInterface):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface):
         super().__init__(args_dict, argsResolver)
-        self._menu = menu
-
-    @property
-    def menu(self):
-        return self._menu
 
     @abstractmethod
     def set_product(self):

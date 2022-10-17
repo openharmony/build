@@ -18,12 +18,12 @@
 
 from abc import ABCMeta, abstractmethod
 
-from resolver.interface.argsResolver import ArgsResolver
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
 
 
 class ModuleInterface(metaclass=ABCMeta):
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface):
         self._args_dict = args_dict
         self._argsResolver = argsResolver
 

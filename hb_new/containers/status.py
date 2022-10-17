@@ -16,11 +16,13 @@
 # limitations under the License.
 #
 
+import os
 import traceback
 
-from resources.config import Config
 from exceptions.ohosException import OHOSException
 from util.logUtil import LogUtil
+from util.ioUtil import IoUtil
+from resources.global_var import ROOT_CONFIG_FILE, CURRENT_OHOS_ROOT
 
 
 '''Description: Function decorator that catch all exception raised by target function,
@@ -37,15 +39,37 @@ def foo():
     ....
     
 '''
+
+
 def throw_exception(func):
     def wrapper(*args, **kwargs):
         try:
             r = func(*args, **kwargs)
-        except OHOSException as exception:
-            LogUtil.write_log(Config().log_path,
+        except OHOSException and Exception as exception:
+            _code = ''
+            _solution = ''
+            _log_path = ''
+
+            if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') != None:
+                _log_path = os.path.join(IoUtil.read_json_file(
+                    ROOT_CONFIG_FILE).get('out_path'), 'build.log')
+            else:
+                _log_path = os.path.join(CURRENT_OHOS_ROOT, 'out', 'build.log')
+
+            if isinstance(exception, OHOSException):
+                _code = exception._code
+            else:
+                _code = '0000'
+
+            if isinstance(exception, OHOSException):
+                _solution = exception.get_solution()
+            else:
+                _solution = 'no solution'
+
+            LogUtil.write_log(_log_path,
                               traceback.format_exc() + '\n',
                               'error')
-            LogUtil.write_log(Config().log_path,
+            LogUtil.write_log(_log_path,
                               'Code:      {}'
                               '\n'
                               '\n'
@@ -55,23 +79,7 @@ def throw_exception(func):
                               'Solution:  {}'
                               '\n'
                               '\n'
-                              .format(exception._code, str(exception), exception.get_solution()), 'error')
-            exit()
-        except Exception as exception:
-            LogUtil.write_log(Config().log_path,
-                    traceback.format_exc() + '\n',
-                    'error')
-            LogUtil.write_log(Config().log_path,
-                              'Code:      {}'
-                              '\n'
-                              '\n'
-                              'Reason:    {}'
-                              '\n'
-                              '\n'
-                              'Solution:  {}'
-                              '\n'
-                              '\n'
-                              .format('0000', str(exception), 'no solution'), 'error')
+                              .format(_code, str(exception), _solution), 'error')
             exit()
         else:
             return r

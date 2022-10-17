@@ -15,7 +15,8 @@
 
 import sys
 import os
-
+from containers.status import throw_exception
+from exceptions.ohosException import OHOSException
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util import file_utils  # noqa: E402
 
@@ -26,45 +27,47 @@ class BundlePartObj(object):
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._load_test_config = load_test_config
         self._loading_config()
-
+    
+    @throw_exception
     def _loading_config(self):
         if not os.path.exists(self._build_config_file):
-            raise Exception("file '{}' doesn't exist.".format(
-                self._build_config_file))
+            raise OHOSException("file '{}' doesn't exist.".format(
+                self._build_config_file), "2011")
         self.bundle_info = file_utils.read_json_file(self._build_config_file)
         if self.bundle_info is None:
-            raise Exception("read file '{}' failed.".format(
-                self._build_config_file))
+            raise OHOSException("read file '{}' failed.".format(
+                self._build_config_file), "2011")
         self._check_format()
         self.exclusion_modules_info = file_utils.read_json_file(
             self._exclusion_modules_config_file)
-
+    
+    @throw_exception
     def _check_format(self):
         _tip_info = "bundle.json info is incorrect in '{}'".format(
             self._build_config_file)
         if 'component' not in self.bundle_info:
-            raise Exception("{}, 'component' is required.".format(_tip_info))
+            raise OHOSException("{}, 'component' is required.".format(_tip_info), "2011")
         _component_info = self.bundle_info.get('component')
         if 'name' not in _component_info:
-            raise Exception(
-                "{}, 'component.name' is required.".format(_tip_info))
+            raise OHOSException(
+                "{}, 'component.name' is required.".format(_tip_info), "2011")
         if 'subsystem' not in _component_info:
-            raise Exception(
-                "{}, 'component.subsystem' is required.".format(_tip_info))
+            raise OHOSException(
+                "{}, 'component.subsystem' is required.".format(_tip_info), "2011")
         if 'build' not in _component_info:
-            raise Exception(
-                "{}, 'component.build' is required.".format(_tip_info))
+            raise OHOSException(
+                "{}, 'component.build' is required.".format(_tip_info), "2011")
         _bundle_build = _component_info.get('build')
         if 'sub_component' not in _bundle_build and 'group_type' not in _bundle_build:
-            raise Exception(
+            raise OHOSException(
                 "{}, 'component.build.sub_component' or 'component.build.group_type' is required.".format(
-                    _tip_info))
+                    _tip_info), "2011")
         if 'group_type' in _bundle_build:
             group_list = ['base_group', 'fwk_group', 'service_group']
             _module_groups = _bundle_build.get('group_type')
             for _group_type, _module_list in _module_groups.items():
                 if _group_type not in group_list:
-                    raise Exception("{}, incorrect group type".format(_tip_info))
+                    raise OHOSException("{}, incorrect group type".format(_tip_info), "2011")
 
     def to_ohos_build(self):
         _component_info = self.bundle_info.get('component')

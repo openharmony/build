@@ -15,10 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from cmath import log
 import os
 
 from services.interface.loadInterface import LoadInterface
-
+from containers.status import throw_exception
+from exceptions.ohosException import OHOSException
 from util.loader import platforms_loader  # noqa: E402
 from util.loader import generate_targets_gn  # noqa: E402
 from util.loader import load_ohos_build  # noqa: E402
@@ -94,19 +96,9 @@ class OHOSLoader(LoadInterface):
             self.config_output_relpath,
             self.scalable_build)
 
-        self.variant_toolchains = self._platforms_info.get(
-            'variant_toolchain_info').get('platform_toolchain')
+        self.variant_toolchains = self._platforms_info.get('variant_toolchain_info').get('platform_toolchain')
         self._all_platforms = self.variant_toolchains.keys()
-
-        if self.build_platform_name == 'all':
-            self.build_platforms = self._all_platforms
-        elif self.build_platform_name in self._all_platforms:
-            self.build_platforms = [self.build_platform_name]
-        else:
-            raise Exception(
-                "The target_platform is incorrect, only allows [{}].".format(
-                    ', '.join(self._all_platforms)))
-
+        self.build_platforms = self._get_build_platforms()
         self.parts_config_info = load_ohos_build.get_parts_info(
             self.source_root_dir,
             self.config_output_relpath,
@@ -131,7 +123,6 @@ class OHOSLoader(LoadInterface):
 
         self.required_parts_targets = self._get_required_build_targets()
 
-
 # check method
 
     '''Description: Check the parameters passed in config. If the parameters are not 
@@ -140,7 +131,7 @@ class OHOSLoader(LoadInterface):
     @parameter:none
     @return :none
     '''
-
+    @throw_exception
     def _check_args(self):
         LogUtil.hb_info("Checking all build args...")
         # check subsystem_config_file
@@ -148,25 +139,26 @@ class OHOSLoader(LoadInterface):
             self.subsystem_config_file = os.path.join(
                 self.source_root_dir, 'build/subsystem_config.json')
         if not read_json_file(self.subsystem_config_file):
-            raise Exception("Cannot get the content from platform config file, \
-                            please check whether the corresponding file('out/preloader/${product_name}/subsystem_config.json' or 'build/subsystem_config.json') is written correctly.")
+            raise OHOSException("Cannot get the content from platform config file, \
+                            please check whether the corresponding file('out/preloader/{}/subsystem_config.json' or 'build/subsystem_config.json') is written correctly.".format(self.config.product), "2001")
 
         # check gn_root_out_dir
         if not self.gn_root_out_dir:
-            raise Exception("Args gn_root_out_dir is required.")
+            raise OHOSException("Args gn_root_out_dir is required.", "2002")
         if not os.path.realpath(self.gn_root_out_dir).startswith(self.source_root_dir):
-            raise Exception("Args gn_root_out_dir is incorrect.")
+            raise OHOSException("Args gn_root_out_dir is incorrect.", "2003")
 
         # check platform config file
         if not read_json_file(self.platforms_config_file):
-            raise Exception("Cannot get the content from platform config file, \
-                            please check whether the corresponding file('out/preloader/${product_name}/platforms.build') is written correctly.")
+            raise OHOSException("Cannot get the content from platform config file, \
+                            please check whether the corresponding file('out/preloader/${product_name}/platforms.build') is written correctly.".format(self.config.product), "2004")
 
         # check example subsystem file
         if not read_json_file(self.example_subsystem_file):
-            raise Exception("Cannot get the content from example subsystem file, \
-                            please check whether the corresponding file('build/subsystem_config_example.json') exists")
+            raise OHOSException("Cannot get the content from example subsystem file, \
+                            please check whether the corresponding file('build/subsystem_config_example.json') exists.", "2005")
 
+    @throw_exception
     def _check_product_part_feature(self):
         LogUtil.hb_info("Checking all product features...")
         product_preloader_dir = os.path.dirname(self.platforms_config_file)
@@ -184,11 +176,12 @@ class OHOSLoader(LoadInterface):
                 continue
             for _f_name in vals:
                 if _f_name not in def_feature_list:
-                    raise Exception(
+                    raise OHOSException(
                         "The product use a feature that is not supported"
                         " by this part, part_name='{}', feature='{}'".format(
-                            key, _f_name))
+                            key, _f_name),"2006")
 
+    @throw_exception
     def _check_parts_config_info(self):
         LogUtil.hb_info("Checking parts config...")
         if not ('parts_info' in self.parts_config_info
@@ -197,8 +190,7 @@ class OHOSLoader(LoadInterface):
                 and 'parts_kits_info' in self.parts_config_info
                 and 'parts_inner_kits_info' in self.parts_config_info
                 and 'parts_targets' in self.parts_config_info):
-            raise Exception("Loading ohos.build information is incorrect.")
-
+            raise OHOSException("Loading ohos.build information is incorrect.", "2007")
 
 # generate method
 
@@ -209,6 +201,7 @@ class OHOSLoader(LoadInterface):
     @parameter:none
     @return :none
     '''
+    @throw_exception
     def _generate_syscap_files(self):
         pre_syscap_info_path = os.path.dirname(self.platforms_config_file)
         system_path = os.path.join(self.source_root_dir, os.path.join(
@@ -231,9 +224,9 @@ class OHOSLoader(LoadInterface):
         for key, value in syscap_product_dict['part_to_syscap'].items():
             for syscap in value:
                 if syscap not in all_syscap_list:
-                    raise Exception(
+                    raise OHOSException(
                         "In config.json of part [{}],the syscap[{}] is incorrect, \
-                        please check the syscap name".format(key, syscap))
+                        please check the syscap name".format(key, syscap),"2008")
 
         for syscap in syscap_info_list:
             remove_list = []
@@ -263,8 +256,8 @@ class OHOSLoader(LoadInterface):
                         target_syscap_for_init_list.append(
                             target_syscap_init_str)
                 else:
-                    raise Exception("""In bundle.json of part [{}], The syscap string [{}] is incorrect,
-                    need start with \"SystemCapability.\"""".format(syscap['component'], syscap_string))
+                    raise OHOSException("""In bundle.json of part [{}], The syscap string [{}] is incorrect,
+                    need start with \"SystemCapability.\"""".format(syscap['component'], syscap_string), "2009")
 
             for remove_str in remove_list:
                 syscap['syscap'].remove(remove_str)
@@ -290,12 +283,14 @@ class OHOSLoader(LoadInterface):
         syscap_info_json = os.path.join(
             system_etc_path, "SystemCapability.json")
         write_json_file(syscap_info_json, syscap_info_dict)
+        LogUtil.hb_info("generate syscap info file to '{}'".format(syscap_info_json))
         target_syscap_with_part_name_list.sort(
             key=lambda syscap: syscap['component'])
         syscap_info_with_part_name_file = os.path.join(
             system_etc_path, "syscap.json")
         write_json_file(syscap_info_with_part_name_file, {
             'components': target_syscap_with_part_name_list})
+        LogUtil.hb_info("generate syscap info with part name list to '{}'".format(syscap_info_with_part_name_file))
         if not os.path.exists(os.path.join(system_etc_path, "param/")):
             os.mkdir(os.path.join(system_etc_path, "param/"))
         target_syscap_for_init_file = os.path.join(
@@ -303,6 +298,7 @@ class OHOSLoader(LoadInterface):
         f = open(target_syscap_for_init_file, "w")
         f.writelines(target_syscap_for_init_list)
         f.close()
+        LogUtil.hb_info("generate target syscap for init list to '{}'".format(target_syscap_for_init_file))
 
     '''Description: output infos for testfwk into a json file(/out/${product_name}/build_configs/infos_for_testfwk.json)
     @parameter:none
@@ -322,6 +318,7 @@ class OHOSLoader(LoadInterface):
             _output_infos[_platform] = result
         write_json_file(infos_for_testfwk_file,
                         _output_infos, check_changes=True)
+        LogUtil.hb_info("generate infos for testfwk to '{}'".format(infos_for_testfwk_file))
 
     '''Description: output all target platform parts into a json file(/out/${product_name}/build_configs/target_platforms_parts.json)
     @parameter:none
@@ -333,6 +330,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(target_platform_parts_file,
                         self.target_platform_parts,
                         check_changes=True)
+        LogUtil.hb_info("generate target platform parts to '{}'".format(target_platform_parts_file))
 
     '''Description: Generate parts differences in different platforms, using phone as base.(/out/${product_name}/build_configs/parts_different_info.json)
     @parameter: none
@@ -345,6 +343,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(parts_different_info_file,
                         parts_different_info,
                         check_changes=True)
+        LogUtil.hb_info("generate part different info to '{}'".format(parts_different_info_file))
 
     '''Description: output platforms list into a gni file.(/out/${product_name}/build_configs/platforms_list.gni)
     @parameter: none
@@ -360,6 +359,7 @@ class OHOSLoader(LoadInterface):
             _gni_file_content.append('  "phone"')
         _gni_file_content.append(']')
         write_file(platforms_list_gni_file, '\n'.join(_gni_file_content))
+        LogUtil.hb_info("generate platforms list to '{}'".format(platforms_list_gni_file))
 
     '''Description: output auto install part into a json file.(/out/${product_name}/build_configs/auto_install_parts.json)
     @parameter: none
@@ -375,6 +375,7 @@ class OHOSLoader(LoadInterface):
         auto_install_list_file = os.path.join(
             self.config_output_dir, "auto_install_parts.json")
         write_json_file(auto_install_list_file, auto_install_part_list)
+        LogUtil.hb_info("generate auto install part to '{}'".format(auto_install_list_file))
 
     '''Description: output src flag into a json file.(/out/${product_name}/build_configs/parts_src_flag.json)
     @parameter: none
@@ -386,6 +387,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(parts_src_flag_file,
                         self._get_parts_src_list(),
                         check_changes=True)
+        LogUtil.hb_info("generated parts src flag to '{}/subsystem_info/parts_src_flag.json'".format(self.config_output_dir))
 
     '''Description: output build target list into a json file.(/out/${product_name}/build_configs/required_parts_targets_list.json)
     @parameter: none
@@ -396,6 +398,7 @@ class OHOSLoader(LoadInterface):
                                                "required_parts_targets_list.json")
         write_json_file(build_targets_list_file,
                         list(self.required_parts_targets.values()))
+        LogUtil.hb_info("generate build targets list file to '{}'".format(build_targets_list_file))
 
     '''Description: output build target info into a json file.(/out/${product_name}/build_configs/required_parts_targets.json)
     @parameter: none
@@ -405,6 +408,7 @@ class OHOSLoader(LoadInterface):
         build_targets_info_file = os.path.join(self.config_output_dir,
                                                "required_parts_targets.json")
         write_json_file(build_targets_info_file, self.required_parts_targets)
+        LogUtil.hb_info("generate required parts targets to '{}'".format(build_targets_info_file))
 
     '''Description: output platforms part by src into a json file.(/out/${product_name}/build_configs/platforms_parts_by_src.json)
     @parameter: none
@@ -418,7 +422,8 @@ class OHOSLoader(LoadInterface):
         write_json_file(platforms_parts_by_src_file,
                         platforms_parts_by_src,
                         check_changes=True)
-
+        LogUtil.hb_info("generated platforms parts by src to '{}'".format(platforms_parts_by_src_file))
+        
     '''Description: output system configs info into 4 files:[
         (/out/${product_name}/build_configs/subsystem_info/parts_list.gni),
         (/out/${product_name}/build_configs/subsystem_info/inner_kits_list.gni),
@@ -440,8 +445,7 @@ class OHOSLoader(LoadInterface):
         generate_targets_gn.gen_phony_targets(self.required_phony_targets,
                                               self.config_output_dir)
 
-
-    '''Description: output system configs info into 4 files:[
+    '''Description: output system configs info into 2 files:[
         (/out/${product_name}/build_configs/subsystem_info/${platform}-stub/BUILG.gn),
         (/out/${product_name}/build_configs/subsystem_info/${platform}-stub/zframework_stub_exists.gni)]
     @parameter: none
@@ -476,6 +480,7 @@ class OHOSLoader(LoadInterface):
             write_json_file(platform_part_json_file,
                             sorted(platform_capabilities),
                             check_changes=True)
+            LogUtil.hb_info("generated system capabilities to '{}/{}_system_capabilities.json'".format(self.config_output_dir, platform))
 
     '''Description: output system configs info into three json files:[
         (/out/${product_name}/build_configs/subsystem_info/subsystem_build_config.json),
@@ -488,6 +493,7 @@ class OHOSLoader(LoadInterface):
         build_config_file = os.path.join(self.config_output_dir, 'subsystem_info',
                                          "subsystem_build_config.json")
         write_json_file(build_config_file, self.subsystem_configs)
+        LogUtil.hb_info("generated subsystem build config to '{}/subsystem_info/subsystem_build_config.json'".format(self.config_output_dir))
 
         src_subsystem = {}
         for key, val in self.subsystem_configs.get('subsystem').items():
@@ -495,15 +501,28 @@ class OHOSLoader(LoadInterface):
         src_output_file = os.path.join(self.config_output_dir, 'subsystem_info',
                                        "src_subsystem_info.json")
         write_json_file(src_output_file, src_subsystem)
+        LogUtil.hb_info("generated src subsystem info to '{}/subsystem_info/src_subsystem_info.json'".format(self.config_output_dir))
 
         no_src_output_file = os.path.join(self.config_output_dir, 'subsystem_info',
                                           "no_src_subsystem_info.json")
         write_json_file(no_src_output_file,
                         self.subsystem_configs.get('no_src_subsystem'))
-
+        LogUtil.hb_info("generated no src subsystem info to '{}/subsystem_info/no_src_subsystem_info.json'".format(self.config_output_dir))
 
 # get method
-
+    @throw_exception
+    def _get_build_platforms(self) ->list:
+        build_platforms = []
+        if self.build_platform_name == 'all':
+            build_platforms =  self._all_platforms
+        elif self.build_platform_name in self._all_platforms:
+            build_platforms =  [self.build_platform_name]
+        else:
+            raise OHOSException(
+                "The target_platform is incorrect, only allows [{}].".format(
+                    ', '.join(self._all_platforms)), "2010")
+        return build_platforms
+    
     def _get_parts_by_platform(self) -> dict:
         parts_info = {}
         if 'phone' in self.target_platform_parts:

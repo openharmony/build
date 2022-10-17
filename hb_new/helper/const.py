@@ -20,7 +20,7 @@ from exceptions.ohosException import OHOSException
 
 class Const():
     
-    def __setattr__(self, __name: str, __value: Any) -> None:
+    def __setattr__(self, __name: str, __value) -> None:
         if __name in self.__dict__:
             raise OHOSException("Const type can't set value")
         

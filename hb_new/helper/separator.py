@@ -18,6 +18,7 @@
 
 class Separator(object):
     line = '-' * 15
+    long_line = '-' * 100
 
     def __init__(self, line=None):
         if line:

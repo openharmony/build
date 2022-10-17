@@ -20,9 +20,9 @@ import os
 
 from lite.hb_internal.build.part_rom_statistics import output_part_rom_status
 from distutils.spawn import find_executable
-from containers.status import throw_exception
 
 from containers.arg import Arg
+from containers.status import throw_exception
 from exceptions.ohosException import OHOSException
 from modules.interface.buildModuleInterface import BuildModuleInterface
 from resources.config import Config
@@ -49,7 +49,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         config = Config()
-        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator = buildModule.targetGenerator
         targetGenerator.regist_arg('product_name', config.product)
         targetGenerator.regist_arg('product_path', config.product_path)
         targetGenerator.regist_arg(
@@ -83,7 +83,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 'ohos_build_compiler_dir', config.clang_path)
 
         if targetArg.argValue == 'ohos-sdk':
-            targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+            targetGenerator = buildModule.targetGenerator
             targetGenerator.regist_arg('build_ohos_sdk', True)
             if len(buildModule.args_dict['build_target'].argValue) == 0:
                 buildModule.args_dict['build_target'].argValue = [
@@ -110,7 +110,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :raise OHOSException: when build target not exist in compiling product.
         """
         config = Config()
-        build_executor = buildModule.targetCompiler.unwrapped_build_executor
+        build_executor = buildModule.targetCompiler
         target_list = []
         if len(targetArg.argValue):
             target_list = targetArg.argValue
@@ -145,8 +145,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: targetGenerate.
         """
         if targetArg.argValue == 'debug':
-            targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
-            targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
+            targetGenerator = buildModule.targetGenerator
+            targetCompiler = buildModule.targetCompiler
             targetGenerator.regist_flag('-v', ''),
             targetGenerator.regist_flag(
                 '--tracelog', '{}/gn_trace.log'.format(Config().out_path))
@@ -163,8 +163,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         :raise OHOSException: when preloader or loader results not correct
         """
         if targetArg.argValue:
-            preloader = buildModule.preloader.unwrapped_preloader
-            loader = buildModule.loader.unwrapped_loader
+            preloader = buildModule.preloader
+            loader = buildModule.loader
             if not preloader.outputs.check_outputs():
                 raise OHOSException('Preloader result not correct', "1001")
             if not loader.outputs.check_outputs():
@@ -177,7 +177,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: load.
         """
-        loader = buildModule.loader.unwrapped_loader
+        loader = buildModule.loader
         loader.regist_arg("scalable_build", bool(targetArg.argValue))
 
     @staticmethod
@@ -187,7 +187,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: load.
         """
-        loader = buildModule.loader.unwrapped_loader
+        loader = buildModule.loader
         loader.regist_arg("build_platform_name", targetArg.argValue)
 
     @staticmethod
@@ -197,7 +197,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: load.
         """
-        loader = buildModule.loader.unwrapped_loader
+        loader = buildModule.loader
         for gn_arg in buildModule.args_dict['gn_args'].argValue:
             if 'build_xts' in gn_arg:
                 variable, value = gn_arg.split('=')
@@ -212,7 +212,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: load.
         """
-        loader = buildModule.loader.unwrapped_loader
+        loader = buildModule.loader
         if len(targetArg.argValue):
             loader.regist_arg("ignore_api_check", targetArg.argValue)
         else:
@@ -226,7 +226,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: load.
         """
-        loader = buildModule.loader.unwrapped_loader
+        loader = buildModule.loader
         loader.regist_arg("load_test_config", bool(targetArg.argValue))
 
     @staticmethod
@@ -295,7 +295,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         if targetArg.argValue:
-            gn = buildModule.targetGenerator.unwrapped_build_file_generator
+            gn = buildModule.targetGenerator
             gn.regist_arg('pycache_enable', targetArg.argValue)
 
     @staticmethod
@@ -305,7 +305,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: targetGenerate.
         """
-        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator = buildModule.targetGenerator
         if targetArg.argValue == 'debug':
             targetGenerator.regist_arg('is_debug', True)
         # For historical reasons, this value must be debug
@@ -319,7 +319,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         if targetArg.argValue:
-            build_executor = buildModule.targetCompiler.unwrapped_build_executor
+            build_executor = buildModule.targetCompiler
             target_list = build_executor.args_dict.get('build_target', None)
             if isinstance(target_list, list):
                 target_list.append('make_all')
@@ -337,7 +337,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         :raise OHOSException: when some gn_arg is not in 'key=value' format.
         """
-        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator = buildModule.targetGenerator
         targetGenerator.regist_arg(
             'device_type', buildModule.args_dict['device_type'].argValue)
         targetGenerator.regist_arg(
@@ -363,7 +363,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param buildModule [maybe unused]: build module object which is used to get other services.
         :phase: targetGenerate.
         """
-        targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+        targetGenerator = buildModule.targetGenerator
         for gn_arg in targetArg.argValue:
             try:
                 variable, value = gn_arg.split(':')
@@ -386,7 +386,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: targetGenerate.
         """
         if len(targetArg.argValue) > 1:
-            targetGenerator = buildModule.targetGenerator.unwrapped_build_file_generator
+            targetGenerator = buildModule.targetGenerator
             # TODO: Ask sternly why the xts subsystem passes parameters in this way?
             if 'notest' in targetArg.argValue:
                 targetGenerator.regist_arg('ohos_test_args', 'notest')
@@ -408,7 +408,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: targetCompilation.
         """
         if targetArg.argValue:
-            targetCompiler = buildModule.targetCompiler.unwrapped_build_executor
+            targetCompiler = buildModule.targetCompiler
             targetCompiler.regist_arg('-k', '1000000000')
 
     @staticmethod

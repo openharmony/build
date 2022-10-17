@@ -15,11 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 from abc import abstractmethod
 
-from containers.preloader_outputs import PrealoaderOutputs
 from services.interface.serviceInterface import ServiceInterface
 from resources.config import Config
 
@@ -29,8 +26,6 @@ class PreloadInterface(ServiceInterface):
     def __init__(self):
         super().__init__()
         self._config = Config()
-        self._preloader_outputs = PrealoaderOutputs(os.path.join(self._config.root_path,
-                                                    'out/preloader', self._config.product))
 
     @property
     def outputs(self):

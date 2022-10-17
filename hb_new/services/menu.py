@@ -87,18 +87,41 @@ class Menu(MenuInterface):
                 results[arg.argName] = result
         return results
 
+    def _select_os_level(self) -> str:
+        choices = [
+            {
+                'name': 'mini',
+                'value': 'os_level'
+            },
+            {
+                'name': 'small',
+                'value': 'os_level'
+            },
+            {
+                'name': 'standard',
+                'value': 'os_level'
+            }
+        ]
+        return self._list_promt('os_level', 'Which os_level do you need?',
+                                choices).get('os_level')[0]
+
     def select_product(self) -> dict:
         product_path_dict = {}
         company_separator = None
+        os_level = self._select_os_level()
         for product_info in ProductUtil.get_products():
-            company = product_info['company']
-            product = product_info['name']
-            if company_separator is None or company_separator != company:
-                company_separator = company
-                product_key = Separator(company_separator)
-                product_path_dict[product_key] = None
+            if product_info['os_level'] == None:
+                raise OHOSException("")
+            if product_info['os_level'] == os_level:
+                company = product_info['company']
+                product = product_info['name']
+                if company_separator is None or company_separator != company:
+                    company_separator = company
+                    product_key = Separator(company_separator)
+                    product_path_dict[product_key] = None
 
-            product_path_dict['{}@{}'.format(product, company)] = product_info
+                product_path_dict['{}@{}'.format(product,
+                                                 company)] = product_info
 
         if not len(product_path_dict):
             raise OHOSException('no valid product found')

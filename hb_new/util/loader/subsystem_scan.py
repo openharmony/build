@@ -16,21 +16,22 @@
 import os
 import sys
 import argparse
-
+from containers.status import throw_exception
+from exceptions.ohosException import OHOSException
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
 from util.logUtil import LogUtil
 
 _default_subsystem = {"common": "build/common"}
 
-
+@throw_exception
 def _read_config(subsystem_config_file, example_subsystem_file):
     if not os.path.exists(subsystem_config_file):
-        raise Exception(
-            "config file '{}' doesn't exist.".format(subsystem_config_file))
+        raise OHOSException(
+            "config file '{}' doesn't exist.".format(subsystem_config_file),"2013")
     subsystem_config = read_json_file(subsystem_config_file)
     if subsystem_config is None:
-        raise Exception("read file '{}' failed.".format(subsystem_config_file))
+        raise OHOSException("read file '{}' failed.".format(subsystem_config_file), "2013")
 
     # example subsystem
     if example_subsystem_file:
@@ -41,7 +42,7 @@ def _read_config(subsystem_config_file, example_subsystem_file):
     subsystem_info = {}
     for key, val in subsystem_config.items():
         if 'path' not in val:
-            raise Exception("subsystem '{}' not config path.".format(key))
+            raise OHOSException("subsystem '{}' not config path.".format(key), "2013")
         subsystem_info[key] = val.get('path')
     return subsystem_info
 
@@ -67,7 +68,7 @@ def _check_path_prefix(paths):
                map(lambda p: p.split('/')[0] in allow_path_prefix, paths)))
     return len(result) <= 1
 
-
+@throw_exception
 def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
     subsystem_infos = _read_config(subsystem_config_file,
                                    example_subsystem_file)
@@ -82,9 +83,9 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
             val = [val]
         else:
             if not _check_path_prefix(val):
-                raise Exception(
+                raise OHOSException(
                     "subsystem '{}' path configuration is incorrect.".format(
-                        key))
+                        key), "2013")
         _info = {'path': val}
         for _path in val:
             _subsystem_path = os.path.join(source_root_dir, _path)

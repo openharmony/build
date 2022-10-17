@@ -25,6 +25,7 @@ from resources.global_var import ROOT_CONFIG_FILE
 from exceptions.ohosException import OHOSException
 from helper.singleton import Singleton
 from util.ioUtil import IoUtil
+from containers.status import throw_exception
 
 
 def get_config_path():
@@ -153,11 +154,10 @@ class Config(metaclass=Singleton):
         self.config_update('product_json', self._product_json)
 
     @property
+    @throw_exception
     def root_path(self):
         if self._root_path is None:
-            raise OHOSException('Failed to get root_path. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
 
         return self._root_path
 
@@ -169,9 +169,7 @@ class Config(metaclass=Singleton):
     @property
     def board(self):
         if self._board is None:
-            raise OHOSException('Failed to get board. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
         return self._board
 
     @board.setter
@@ -182,9 +180,7 @@ class Config(metaclass=Singleton):
     @property
     def device_company(self):
         if self._device_company is None:
-            raise OHOSException('Failed to get device_company. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
         return self._device_company
 
     @device_company.setter
@@ -204,9 +200,7 @@ class Config(metaclass=Singleton):
     @property
     def product(self):
         if self._product is None:
-            raise OHOSException('Failed to get product. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
         return self._product
 
     @product.setter
@@ -217,9 +211,7 @@ class Config(metaclass=Singleton):
     @property
     def product_path(self):
         if self._product_path is None:
-            raise OHOSException('Failed to get product_path. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
         return self._product_path
 
     @product_path.setter
@@ -234,9 +226,7 @@ class Config(metaclass=Singleton):
     @property
     def device_path(self):
         if self._device_path is None:
-            raise OHOSException('Failed to get device_path. '
-                                'Please run command "hb set" to '
-                                'init OHOS development environment')
+            raise OHOSException('Failed to init compile config', '0019')
         return self._device_path
 
     @device_path.setter

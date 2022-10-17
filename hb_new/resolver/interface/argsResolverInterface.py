@@ -32,7 +32,7 @@ class ArgsResolverInterface(metaclass=ABCMeta):
     @throw_exception
     def resolveArg(self, targetArg: Arg, module):
         if targetArg.argName not in self._argsToFunction.keys():
-            raise OHOSException()
+            raise OHOSException('You are tring to call {} resolve function, but it has not been defined yet', '0000')
         if not hasattr(self._argsToFunction[targetArg.argName], '__call__'):
             raise OHOSException()
 

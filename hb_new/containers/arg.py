@@ -44,6 +44,7 @@ from containers.status import throw_exception
 
 
 class ModuleType(Enum):
+    
     BUILD = 0
     SET = 1
     ENV = 2
@@ -211,7 +212,7 @@ class Arg():
         return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
 
     @staticmethod
-    def print_help(module_type: ModuleType):
+    def get_help(module_type: ModuleType) -> str:
         parser = argparse.ArgumentParser()
         all_args = Arg.read_args_file(module_type)
 
@@ -219,8 +220,10 @@ class Arg():
             arg = dict(arg)
             ArgsFactory.genenic_add_option(parser, arg)
 
+        parser.usage = 'hb {} [option]'.format(module_type.name.lower())
         parser.parse_known_args(sys.argv[2:])
-        parser.print_help()
+
+        return parser.format_help()
 
     @staticmethod
     def parse_all_args(module_type: ModuleType) -> dict:
@@ -234,6 +237,7 @@ class Arg():
             oh_arg = Arg.createInstanceByDict(arg)
             args_dict[oh_arg.argName] = oh_arg
 
+        parser.usage = 'hb {} [option]'.format(module_type.name.lower())
         parser_args = parser.parse_known_args(sys.argv[2:])
 
         for oh_arg in args_dict.values():
@@ -293,8 +297,8 @@ class Arg():
             default_file_path = DEFAULT_ENV_ARGS
         else:
             raise OHOSException(
-                'You are trying to write args file, but there is no corresponding module "{}" args file'
-                .format(module_type), "0002")
+                'You are trying to read args file, but there is no corresponding module "{}" args file'
+                .format(module_type.name.lower()), "0018")
         if not os.path.exists(args_file_path):
             IoUtil.copy_file(src=default_file_path, dst=args_file_path)
         return IoUtil.read_json_file(args_file_path)

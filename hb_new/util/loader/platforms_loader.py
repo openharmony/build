@@ -15,6 +15,7 @@
 
 import sys
 import os
+from util.logUtil import LogUtil
 
 from exceptions.ohosException import OHOSException
 
@@ -39,14 +40,15 @@ class PlatformsLoader:
         self._target_arch = target_arch
         self._scalable_build = scalable_build
 
+    @throw_exception
     def _read_platforms_config(self):
         if not os.path.exists(self._platforms_config_file):
-            raise Exception("config file '{}' doesn't exist.".format(
-                self._platforms_config_file))
+            raise OHOSException("config file '{}' doesn't exist.".format(
+                self._platforms_config_file), "2012")
         config_info = read_json_file(self._platforms_config_file)
         if config_info is None:
-            raise Exception("read file '{}' failed.".format(
-                self._platforms_config_file))
+            raise OHOSException("read file '{}' failed.".format(
+                self._platforms_config_file), "2012")
         config_version = config_info.get('version')
         platforms_info = config_info.get('platforms')
 
@@ -59,7 +61,7 @@ class PlatformsLoader:
                 if target_os is None or target_cpu is None:
                     error_info = "platform '{}' config incorrect,"\
                         "target_os or target_cpu is None."
-                    raise Exception(error_info.format(_name))
+                    raise OHOSException(error_info.format(_name), "2012")
                 arch = "{}_{}".format(target_os, target_cpu)
                 if arch in platforms_config:
                     _infos = platforms_config.get(arch)
@@ -74,7 +76,7 @@ class PlatformsLoader:
                     if target_os is None or target_cpu is None:
                         error_info = "platform '{}' config incorrect,"\
                             "target_os or target_cpu is None."
-                        raise Exception(error_info.format(_name))
+                        raise OHOSException(error_info.format(_name), "2012")
                     arch = "{}_{}".format(target_os, target_cpu)
                     if arch in platforms_config:
                         _infos = platforms_config.get(arch)
@@ -194,6 +196,7 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
     all_parts_file = os.path.join(source_root_dir, config_output_relpath,
                                   platforms_info_output_dir, "all_parts.json")
     write_json_file(all_parts_file, all_parts)
+    LogUtil.hb_info("generate all parts of platforms info to '{}'".format(all_parts_file))
 
     # variant to toolchain and toolchain to variant
     toolchain_to_variant_dict = platform_loader.platforms_toolchain()
@@ -204,6 +207,7 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
     write_json_file(toolchain_variant_info_file,
                     toolchain_to_variant_dict,
                     check_changes=True)
+    LogUtil.hb_info("generate toolchain to variant of platforms info to '{}'".format(toolchain_variant_info_file))
 
     result = {}
     result['all_parts'] = all_parts

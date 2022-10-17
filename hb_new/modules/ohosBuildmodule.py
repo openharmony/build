@@ -17,13 +17,12 @@
 #
 
 
-from resources.config import Config
 from modules.interface.buildModuleInterface import BuildModuleInterface
-from resolver.interface.argsResolver import ArgsResolver
-from services.interface.preload import Preload
-from services.interface.load import Load
-from services.interface.buildFileGenerator import BuildFileGenerator
-from services.interface.buildExecutor import BuildExecutor
+from resolver.interface.argsResolverInterface import ArgsResolverInterface
+from services.interface.preloadInterface import PreloadInterface
+from services.interface.loadInterface import LoadInterface
+from services.interface.buildFileGeneratorInterface import BuildFileGeneratorInterface
+from services.interface.buildExecutorInterface import BuildExecutorInterface
 from containers.arg import BuildPhase
 from exceptions.ohosException import OHOSException
 from util.systemUtil import SystemUtil
@@ -35,17 +34,12 @@ class OHOSBuildModule(BuildModuleInterface):
 
     _instance = None
 
-    def __init__(self, args_dict: dict, argsResolver: ArgsResolver, preloader: Preload,
-                 loader: Load, targetGenerator: BuildFileGenerator, targetCompiler: BuildExecutor):
+    def __init__(self, args_dict: dict, argsResolver: ArgsResolverInterface, preloader: PreloadInterface,
+                 loader: LoadInterface, targetGenerator: BuildFileGeneratorInterface, targetCompiler: BuildExecutorInterface):
         super().__init__(args_dict, argsResolver, preloader,
                          loader, targetGenerator, targetCompiler)
-        self._config = Config()
         OHOSBuildModule._instance = self
         self._start_time = SystemUtil.get_current_time()
-
-    @property
-    def config(self):
-        return self._config
 
     @property
     def build_time(self):

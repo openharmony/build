@@ -38,7 +38,7 @@ class ServiceInterface(metaclass=ABCMeta):
     def exec(self, value):
         self._exec = value
 
-    def regist_arg(self, argName: str, argValue: str) -> None:
+    def regist_arg(self, argName: str, argValue: str):
         if argName in self._args_dict.keys() and self._args_dict[argName] != argValue:
             LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
                 argName, self._args_dict[argName], argValue))
