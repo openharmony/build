@@ -152,6 +152,11 @@ declare_args() {
 }
 
 declare_args() {
+  # Skip module_info generation when the packaging image is not needed
+  skip_gen_module_info = false
+}
+
+declare_args() {
   build_variant = "user"
 }
 
