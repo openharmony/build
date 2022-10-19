@@ -56,9 +56,9 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-sed -i bak '2s/.*/9437184/' build/ohos/images/mkimage/ramdisk_image_conf.txt
-sed -i bak '2s/.*/67108864/' build/ohos/images/mkimage/update_ramdisk_image_conf.txt
-sed -i bak '2s/.*/2516582400/' build/ohos/images/mkimage/system_image_conf.txt
+sed -i.bak '2s/.*/9437184/' build/ohos/images/mkimage/ramdisk_image_conf.txt
+sed -i.bak '2s/.*/67108864/' build/ohos/images/mkimage/updater_ramdisk_image_conf.txt
+sed -i.bak '2s/.*/2516582400/' build/ohos/images/mkimage/system_image_conf.txt
 ${no_build+echo skip} ./build_m40musl.sh "$@" --gn-args is_asan=true --gn-args asan_detector=true --build-variant ${build_variant} --nopkg
 step1_time=$(date +%s)
 mv out out.a
@@ -66,10 +66,9 @@ if [ -d out.n ]; then
     mv out.n out
 fi
 mv build/ohos/images/mkimage/ramdisk_image_conf.txt.bak build/ohos/images/mkimage/ramdisk_image_conf.txt
-mv build/ohos/images/mkimage/update_ramdisk_image_conf.txt.bak build/ohos/images/mkimage/update_ramdisk_image_conf.txt
+mv build/ohos/images/mkimage/updater_ramdisk_image_conf.txt.bak build/ohos/images/mkimage/updater_ramdisk_image_conf.txt
 ${no_build+echo skip} ./build_m40musl.sh "$@" --gn-args is_asan=false --gn-args asan_detector=true --build-variant ${build_variant} --nopkg
 step2_time=$(date +%s)
-
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
 nonasan_dir=$(ls -d out/*/packages/phone/)
@@ -96,7 +95,7 @@ handle_error() {
         set +e
         pushd "$nonasan_dir"
 	test -f build/ohos/images/mkimage/ramdisk_image_conf.txt.bak && mv -f build/ohos/images/mkimage/ramdisk_image_conf.txt.bak build/ohos/images/mkimage/ramdisk_image_conf.txt
-        test -f build/ohos/images/mkimage/update_ramdisk_image_conf.txt.bak && mv-f build/ohos/images/mkimage/update_ramdisk_image_conf.txt.bak build/ohos/images/mkimage/update_ramdisk_image_conf.txt
+        test -f build/ohos/images/mkimage/updater_ramdisk_image_conf.txt.bak && mv -f build/ohos/images/mkimage/updater_ramdisk_image_conf.txt.bak build/ohos/images/mkimage/updater_ramdisk_image_conf.txt
         test -f build/ohos/images/mkimage/system_image_conf.txt.bak && mv -f build/ohos/images/mkimage/system_image_conf.txt.bak build/ohos/images/mkimage/system_image_conf.txt
         test -f build/ohos/images/mkimage/dac.txt.bak && mv -f build/ohos/images/mkimage/dac.txt.bak build/ohos/images/mkimage/dac.txt
     fi
@@ -108,9 +107,9 @@ json_data="$(ninja -w dupbuild=warn -C ../../ -t compdb | jq '.[]|select(.output
 make_system_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/system.img")|.command')"
 make_vendor_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/vendor.img")|.command')"
 make_userdata_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/userdata.img")|.command')"
-make_system_img() { pushd ../../; $make_system_img_cmd; popd; }
-make_vendor_img() { pushd ../../; $make_vendor_img_cmd; popd; }
-make_userdata_img() { pushd ../../; $make_userdata_img_cmd; popd; }
+make_system_img() { pushd ../../; echo $make_system_img_cmd; $make_system_img_cmd; popd; }
+make_vendor_img() { pushd ../../; echo $make_vendor_img_cmd; $make_vendor_img_cmd; popd; }
+make_userdata_img() { pushd ../../; echo $make_userdata_img_cmd; $make_userdata_img_cmd; popd; }
 
 add_mkshrc() {
     cat <<EOF >${1:-.}/.mkshrc
@@ -124,7 +123,7 @@ EOF
 }
 
 make_mixed_asan_img() {
-    echo "make mixed asan system$1.img or/and vendor$1.img ..."
+    echo "make mixed asan system.img and vendor.img ..."
     mkdir -p system/asan/ && cp -a "$asan_dir"/system/{lib*, bin} $_
     mkdir -p vendor/asan/ && cp -a "$asan_dir"/vendor/{lib*, bin} $_
 
@@ -135,7 +134,7 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
     test -f system/etc/selinux/config && sed -i 's,enforcing,permissive,g' system/etc/selinux/config
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
-    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/\1\/asan\/\2/g' system/etc/ld-musl-namespace-*.ini
 
     # remove ubsan.cfg
     rm -rf system/etc/init/ubsan.cfg
@@ -153,8 +152,8 @@ make_mixed_asan_img() {
         fi
     fi
     # make image
-    make_system_image
-    make_vendor_image
+    make_system_img
+    make_vendor_img
 
     mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
 }
@@ -178,4 +177,4 @@ step3_time=$(date +%s)
 popd
 
 echo -e "\033[32m==== Done! ====\033[0m"
-echo "asan build cost $((${step1_time}-${start_time}))s, nonasan build cost $((${step2_time}-${step1_time}))s, image build cost $((${step3_time}-${step2_time}))s"
+echo "asan build cost $((${step1_time}-${start_time}))s, nonasan build cost $((${step2_time}-${step1_time}))s, image build cost $((${step3_time}-${step2_time}))s."
