@@ -33,7 +33,7 @@ API_GEN_PATH = os.path.join(OUTPATH, "build-tools/api")
 DEL_TARGET = ["//interface/sdk-js:bundle_api"]
 PERMISSION_CONVERT_DIR = os.path.join(API_MODIFY_DIR, "permissions_converter")
 PERMISSION_CONVERT_TOOL = os.path.join(PERMISSION_CONVERT_DIR, "convert.js")
-CONFIG_FILE = os.path.join("base", "global", "system_resources", "systemres", "main", "config.json")
+CONFIG_FILE = os.path.join("utils", "system_resources", "systemres", "main", "config.json")
 PERMISSION_GEN_PATH = os.path.join(API_GEN_PATH, "permissions.d.ts")
 
 
