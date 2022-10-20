@@ -55,6 +55,7 @@ def merge_profile(options):
     json.dump(all_data, f3, indent=4, ensure_ascii=False)
     f3.close()
 
+
 def main(args):
     options = parse_args(args)
     inputs = [options.hap_profile]
