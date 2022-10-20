@@ -44,6 +44,116 @@ group("make_images") {
   }
 }
 
+group("chip_prod_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_chip_prod_image" ]
+  }
+}
+
+group("sys_prod_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_sys_prod_image" ]
+  }
+}
+
+group("system_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_system_image" ]
+  }
+}
+
+group("userdata_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_userdata_image" ]
+  }
+}
+
+group("vendor_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_vendor_image" ]
+  }
+}
+
+group("ramdisk_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    if (enable_ramdisk) {
+      deps += [ ":${_platform}_ramdisk_image" ]
+    }
+  }
+}
+
+group("updater_ramdisk_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    if (enable_ramdisk) {
+      deps += [ ":${_platform}_updater_ramdisk_image" ]
+    }
+  }
+}
+
+group("updater_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    if (!enable_ramdisk) {
+      deps += [ ":${_platform}_updater_image" ]
+    }
+  }
+}
+
 build_image_tools_path = [
   "//out/${device_name}/clang_x64/thirdparty/e2fsprogs",
   "//out/${device_name}/clang_x64/thirdparty/f2fs_tools",
