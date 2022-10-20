@@ -74,6 +74,7 @@ def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_p
     if os.path.basename(unzip_dir) == 'nodejs':
         _npm_install(args, code_dir, unzip_dir, unzip_filename)
 
+
 def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path, progress):
     # download files
     download_buffer_size = 32768
@@ -94,6 +95,7 @@ def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filenam
     progress.console.log("Decompressing {}".format(local_file))
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     progress.console.log("Decompressed {}".format(local_file))
+
 
 def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path):
     # download files

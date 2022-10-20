@@ -326,7 +326,7 @@ def generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_i
         os.mkdir(system_etc_path)
     syscap_info_json = os.path.join(system_etc_path, "SystemCapability.json")
     write_json_file(syscap_info_json, syscap_info_dict)
-    target_syscap_with_part_name_list.sort(key = syscap_sort)
+    target_syscap_with_part_name_list.sort(key=syscap_sort)
     syscap_info_with_part_name_file = os.path.join(system_etc_path, "syscap.json")
     write_json_file(syscap_info_with_part_name_file, {'components': target_syscap_with_part_name_list})
     if not os.path.exists(os.path.join(system_etc_path, "param/")):
