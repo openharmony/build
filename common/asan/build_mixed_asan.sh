@@ -52,6 +52,7 @@ done
 set -e -- "${args[@]}"
 
 # build both asan and nonasan images
+start_time=$(date +%s)
 cd "${TOPDIR}"
 if [ -d out.a ]; then
     if [ -d out ]; then
@@ -60,11 +61,13 @@ if [ -d out.a ]; then
     mv out.a out
 fi
 ${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --build-variant ${build_variant}
+step1_time=$(date +%s)
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
 ${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --build-variant ${build_variant}
+step2_time=$(date +%s)
 
 
 asan_dir=$(ls -d out.a/*/packages/phone/)
@@ -121,17 +124,16 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
     sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
-    sed -i 's,enforcing,permissive,g' system/etc/selinux/config
+    sed -i 's,enforcing,permissive,g' system/etc/selinux/config || :
     sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
-    sed -i '/^\s*namespace.default.asani.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
 
     # make some services run in asan version
     local make_system=false
     local make_vendor=false
-    white_list = ("ueventd.cfg")
     for f in ${cfg_group[@]/%/.cfg}; do
-        if [ -f system/etc/init/$f && [[ ${white_list[@]/${f}/} != ${white_list[@]} ]] ]; then
+        if [ -f system/etc/init/$f ]; then
             echo "$f is found in /system/etc/init/"
             sed -i 's,/system/bin/,/data/bin/,g' system/etc/init/$f
             sed -i '/"critical"/d' system/etc/init/$f
@@ -243,15 +245,8 @@ if [ -f "$asan_dir"/images/system.img ]; then
 fi
 
 shopt -s nullglob && mv system*.img vendor*.img images/
-
-# get make image command
-json_data="$(ninja -w dupbuild=warn -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
-make_system_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/system.img")|.command')"
-make_vendor_img_cmd="$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/vendor.img")|.command')"
-make_userdata_img_cmd"$(echo "$json_data" | jq -r 'select(.output=="packages/phone/images/userdata.img")|.command')"
-make_system_img() { pushd ../../; echo $make_system_img_cmd; $make_system_img_cmd; popd; }
-make_vendor_img() { pushd ../../; echo $make_wendor_img_cmd; $make_vendor_img_cmd; popd; }
-make_userdata_img() { pushd ../../; echo $make_userdata_img_cmd; $make_userdata_img_cmd; popd; }
+step3_time=$(date +%s)
 
 echo -e "\033[32m==== Done! ====\033[0m"
+echo "asan build cost $((${step1_time}-${start_time}))s, nonasan build cost $((${step2_time}-${step1_time}))s, image build cost $((${step3_time}-${step2_time}))s"
 popd
