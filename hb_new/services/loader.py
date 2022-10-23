@@ -15,7 +15,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from cmath import log
 import os
 
 from services.interface.loadInterface import LoadInterface
@@ -43,16 +42,13 @@ class OHOSLoader(LoadInterface):
         self.subsystem_config_file = ""
         self.platforms_config_file = ""
         self.exclusion_modules_config_file = ""
-
         self.example_subsystem_file = ""
         self.scalable_build = ""
         self.build_platform_name = ""
         self.build_xts = ""
         self.ignore_api_check = ""
         self.load_test_config = ""
-
         self.subsystem_configs = ""
-
         self._subsystem_info = ""
 
     def __post_init__(self):
@@ -81,13 +77,11 @@ class OHOSLoader(LoadInterface):
         self.build_xts = self.args_dict['build_xts']
         self.ignore_api_check = self.args_dict['ignore_api_check']
         self.load_test_config = self.args_dict['load_test_config']
-
         self.subsystem_configs = subsystem_scan.scan(self.subsystem_config_file,
                                                      self.example_subsystem_file,
                                                      self.source_root_dir)
 
         self._subsystem_info = self.subsystem_configs.get('subsystem')
-
         self._platforms_info = platforms_loader.get_platforms_info(
             self.platforms_config_file,
             self.source_root_dir,
@@ -95,7 +89,6 @@ class OHOSLoader(LoadInterface):
             self.target_arch,
             self.config_output_relpath,
             self.scalable_build)
-
         self.variant_toolchains = self._platforms_info.get('variant_toolchain_info').get('platform_toolchain')
         self._all_platforms = self.variant_toolchains.keys()
         self.build_platforms = self._get_build_platforms()
@@ -109,18 +102,13 @@ class OHOSLoader(LoadInterface):
             self.exclusion_modules_config_file,
             self.load_test_config,
             self.build_xts)
-
         self.parts_targets = self.parts_config_info.get('parts_targets')
         self.phony_targets = self.parts_config_info.get('phony_target')
         self.parts_info = self.parts_config_info.get('parts_info')
         self.target_platform_parts = self._get_platforms_all_parts()
-
         self.target_platform_stubs = self._get_platforms_all_stubs()
-
         self.required_parts_targets_list = self._get_required_build_parts_list()
-
         self.required_phony_targets = self._get_required_phony_targets()
-
         self.required_parts_targets = self._get_required_build_targets()
 
 # check method
