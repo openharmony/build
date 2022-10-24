@@ -724,7 +724,6 @@ if (is_lite_system) {
     } else {
       set_default_toolchain("//build/toolchain/linux:clang_$target_cpu")
       default_compiler_configs += [
-        "//build/config/sanitizers:default_sanitizer_flags",
         "//build/config:default_libs",
         "//build/config:executable_config",
         "//build/config/compiler:default_include_dirs",
@@ -764,6 +763,7 @@ if (is_lite_system) {
   default_compiler_configs += [
     "//build/lite/config:language_c",
     "//build/lite/config:language_cpp",
+     "//build/config/sanitizers:default_sanitizer_flags"
   ]
 
   if (current_os == "ohos") {
