@@ -22,8 +22,6 @@ import("//build/ohos/hisysevent/hisysevent.gni")
 # import target_platform_list
 import("${build_configs_path}/platforms_list.gni")
 yml_file = rebase_path(product_path) + "/fs.yml"
-print(yml_file)
-print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 is_exist_yml_file = exec_script(rebase_path("//build/ohos/file_exists.py"),
                                 [
                                   "--filename",
@@ -51,9 +49,6 @@ group("make_packages") {
   if (make_osp) {
     deps += [ ":open_source_package" ]
   }
-  if (!is_standard_system && is_exist_yml_file == "True") {
-    deps += [ ":packer" ]
-  }
 }
 
 action("packer") {
@@ -62,7 +57,7 @@ action("packer") {
     inputs = [ yml_file ]
   }
   outputs = [ "${root_build_dir}/result.txt" ]
-  deps = []
+  deps = [ ":make_packages" ]
   args = [
     "--product",
     product_name,

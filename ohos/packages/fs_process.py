@@ -16,16 +16,19 @@
 # limitations under the License.
 #
 
-import argparse
-from collections import namedtuple
+
 import os
 import sys
 import shutil
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+import argparse
+sys.path.append(os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util import utils
+
 
 class Config:
     def __init__(self):
+
         self.product = ""
         self.root_path = ""
         self.out_path = ""
@@ -33,8 +36,9 @@ class Config:
         self.product_path = ""
         self.fs_attr = set()
 
+
 class Packer():
-    def __init__(self,args) -> None:
+    def __init__(self, args) -> None:
         self.config = Config()
         self.config.product = args.product
         self.config.root_path = args.root_path
@@ -62,7 +66,7 @@ class Packer():
         for lib in libs:
             source_file = os.path.join(src_path, lib)
             target_file = os.path.join(target_path, lib)
-            shutil.copy(source_file, target_file)
+            shutil.move(source_file, target_file)
 
     @classmethod
     def is_lib(cls, lib):
@@ -218,15 +222,10 @@ class Packer():
         return fs_cfg
 
     def fs_make(self, cmd_args):
-        print(self.config.product_path)
-        print(self.config .fs_attr)
-        print(self.config.root_path)
-        print(self.config.out_path)
-        print(self.config.log_path)
         fs_cfg_path = os.path.join(self.config.product_path, 'fs.yml')
         if not os.path.isfile(fs_cfg_path):
             utils.hb_info(f'{fs_cfg_path} not found, stop packing fs. '
-                    'If the product does not need to be packaged, ignore it.')
+                          'If the product does not need to be packaged, ignore it.')
             return
         if self.config.fs_attr is None:
             utils.hb_info('component compiling, no need to pack fs')
@@ -241,6 +240,7 @@ class Packer():
             for fs_process_func in self.packing_process:
                 fs_process_func()
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--product', required=True)
@@ -249,10 +249,9 @@ if __name__ == "__main__":
     parser.add_argument('--log-path', required=True)
     parser.add_argument('--product-path', required=True)
     args = parser.parse_args()
-    
+
     packer = Packer(args)
 
-    packer.config.fs_attr.add('dmverity_enable')
     packer.replace_items = {
         r'${product_name}': args.product,
         r'${root_path}': args.root_path,

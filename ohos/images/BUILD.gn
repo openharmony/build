@@ -24,23 +24,25 @@ group("make_images") {
       "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
       "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
     ]
-  }
-  foreach(_platform, target_platform_list) {
-    deps += [
-      ":${_platform}_chip_prod_image",
-      ":${_platform}_sys_prod_image",
-      ":${_platform}_system_image",
-      ":${_platform}_userdata_image",
-      ":${_platform}_vendor_image",
-    ]
-    if (enable_ramdisk) {
+    foreach(_platform, target_platform_list) {
       deps += [
-        ":${_platform}_ramdisk_image",
-        ":${_platform}_updater_ramdisk_image",
+        ":${_platform}_chip_prod_image",
+        ":${_platform}_sys_prod_image",
+        ":${_platform}_system_image",
+        ":${_platform}_userdata_image",
+        ":${_platform}_vendor_image",
       ]
-    } else {
-      deps += [ ":${_platform}_updater_image" ]
+      if (enable_ramdisk) {
+        deps += [
+          ":${_platform}_ramdisk_image",
+          ":${_platform}_updater_ramdisk_image",
+        ]
+      } else {
+        deps += [ ":${_platform}_updater_image" ]
+      }
     }
+  } else {
+    deps += [ "//build/ohos/packages:packer" ]
   }
 }
 
