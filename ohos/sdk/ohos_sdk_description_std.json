@@ -847,6 +847,14 @@
         ]
     },
     {
+        "install_dir":"previewer/common/bin/module/data",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributedkvstore_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "previewer/common/bin/module/net",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_communication_library",
         "target_os": [
