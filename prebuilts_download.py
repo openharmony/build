@@ -196,14 +196,14 @@ def _npm_install(args, code_dir, unzip_dir, unzip_filename):
         if proc.returncode:
             raise Exception(err.decode())
 
-def _node_modules_copy(config, code_dir):
+def _node_modules_copy(config, code_dir, enable_symlink):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
         use_symlink = config_info.get('use_symlink')
         if os.path.exists(os.path.dirname(dest_dir)):
             shutil.rmtree(os.path.dirname(dest_dir))
-        if use_symlink == 'True':
+        if use_symlink == 'True' and enable_symlink == True:
             os.makedirs(os.path.dirname(dest_dir))
             os.symlink(src_dir, dest_dir)
         else:
@@ -255,6 +255,7 @@ def main():
     parser.add_argument('--skip-ssl', action='store_true', help='skip ssl authentication')
     parser.add_argument('--unsafe-perm', action='store_true', help='add "--unsafe-perm" for npm install')
     parser.add_argument('--disable-rich', action='store_true', help='disable the rich module')
+    parser.add_argument('--enable-symlink', action='store_true', help='enable symlink while copying node_modules')
     parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
     parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/',
                         help='npm download source')
@@ -294,7 +295,7 @@ def main():
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
     _file_handle(file_handle_config, args.code_dir)
-    _node_modules_copy(node_modules_copy_config, args.code_dir)
+    _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
 
 if __name__ == '__main__':
     sys.exit(main())
