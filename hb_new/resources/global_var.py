@@ -30,11 +30,13 @@ DEFAULT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/builda
 DEFAULT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/setargs.json')
 DEFAULT_CLEAN_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/cleanargs.json')
 DEFAULT_ENV_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/envargs.json')
+DEFAULT_TOOL_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/toolargs.json')
 
 CURRENT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/buildargs.json')
 CURRENT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/setargs.json')
 CURRENT_CLEAN_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/cleanargs.json')
 CURRENT_ENV_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/envargs.json')
+CURRENT_TOOL_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/toolargs.json')
 
 BUILD_CONFIG_FILE = os.path.join(CURRENT_HB_DIR, 'resources/config/config.json')
 ROOT_CONFIG_FILE = os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')

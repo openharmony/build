@@ -32,6 +32,8 @@ from resources.global_var import DEFAULT_CLEAN_ARGS
 
 from resources.global_var import DEFAULT_ENV_ARGS
 from resources.global_var import CURRENT_ENV_ARGS
+from resources.global_var import DEFAULT_TOOL_ARGS
+from resources.global_var import CURRENT_TOOL_ARGS
 
 from resources.global_var import ARGS_DIR
 
@@ -50,7 +52,6 @@ class ModuleType(Enum):
     ENV = 2
     CLEAN = 3
     TOOL = 4
-    HELP = 5
 
 
 class ArgType():
@@ -62,6 +63,7 @@ class ArgType():
     LIST = 4
     DICT = 5
     GATE = 6
+    SUBPARSERS = 7
 
     @staticmethod
     def getType(value: str):
@@ -77,6 +79,8 @@ class ArgType():
             return ArgType.DICT
         elif value == 'gate':
             return ArgType.GATE
+        elif value == 'subparsers':
+            return ArgType.SUBPARSERS
         else:
             return ArgType.NONE
 
@@ -205,6 +209,8 @@ class Arg():
             arg_value = list(data['argDefault'])
         elif arg_type == ArgType.DICT:
             arg_value = dict(data['argDefault'])
+        elif arg_type == ArgType.SUBPARSERS:
+            arg_value = list(data['argDefault'])
         else:
             raise OHOSException('Unknown arg type "{}" for arg "{}"'.format(
                 arg_type, arg_name), "0003")
@@ -246,6 +252,12 @@ class Arg():
                 if oh_arg.argType == ArgType.LIST:
                     assigned_value = TypeCheckUtil.tile_list(assigned_value)
                     assigned_value = list(set(assigned_value))
+                elif oh_arg.argType == ArgType.SUBPARSERS:
+                    assigned_value = TypeCheckUtil.tile_list(assigned_value)
+                    if len(assigned_value):
+                        assigned_value = list(set(assigned_value))
+                        assigned_value.extend(parser_args[1])
+                        assigned_value.sort(key = sys.argv[2:].index)
                 elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
                     assigned_value = bool(assigned_value)
 
@@ -270,6 +282,8 @@ class Arg():
             args_file_path = CURRENT_CLEAN_ARGS
         elif module_type == ModuleType.ENV:
             args_file_path = CURRENT_ENV_ARGS
+        elif module_type == ModuleType.TOOL:
+            args_file_path = CURRENT_TOOL_ARGS
         else:
             raise OHOSException(
                 'You are trying to write args file, but there is no corresponding module "{}" args file'
@@ -295,6 +309,9 @@ class Arg():
         elif module_type == ModuleType.ENV:
             args_file_path = CURRENT_ENV_ARGS
             default_file_path = DEFAULT_ENV_ARGS
+        elif module_type == ModuleType.TOOL:
+            args_file_path = CURRENT_TOOL_ARGS
+            default_file_path = DEFAULT_TOOL_ARGS
         else:
             raise OHOSException(
                 'You are trying to read args file, but there is no corresponding module "{}" args file'

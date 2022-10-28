@@ -35,6 +35,8 @@ class ArgsFactory():
             return _add_list_option(parser, arg)
         elif arg['argType'] == 'gate':
             return _add_gate_option(parser, arg)
+        elif arg['argType'] == 'subparsers':
+            return _add_list_option(parser, arg)
         else:
             raise OHOSException('Unknown arg type "{}" for arg "{}"'
                                 .format(arg['argType'], arg['argName']), "0003")

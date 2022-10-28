@@ -155,6 +155,22 @@
         "code": "3002",
         "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
     },
+    "3003": {
+        "code": "3003",
+        "solution": "Please check your corresponding arg. You can view the corresponding options in the json file('resources/status/status.json'). \n\t\tOr you can run cmd 'hb tool -h' to show usage"
+    },
+    "3004": {
+        "code": "3004",
+        "solution": "This command requires an existing build directory. Please check whether the corresponding file('out/{product_name}/args.gn' exists."
+    },
+    "3005": {
+        "code": "3005",
+        "solution": "Please check whether the target gn file exists in the corresponding path."
+    },
+    "3006": {
+        "code": "3006",
+        "solution": "Please use '=' to connect argument and value."
+    },
     "4000": {
         "code": "4000",
         "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"

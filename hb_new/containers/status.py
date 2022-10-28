@@ -40,7 +40,6 @@ def foo():
     
 '''
 
-
 def throw_exception(func):
     def wrapper(*args, **kwargs):
         try:
@@ -48,39 +47,37 @@ def throw_exception(func):
         except OHOSException and Exception as exception:
             _code = ''
             _solution = ''
-            _log_path = ''
-
-            if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') != None:
-                _log_path = os.path.join(IoUtil.read_json_file(
-                    ROOT_CONFIG_FILE).get('out_path'), 'build.log')
-            else:
-                _log_path = os.path.join(CURRENT_OHOS_ROOT, 'out', 'build.log')
 
             if isinstance(exception, OHOSException):
                 _code = exception._code
-            else:
-                _code = '0000'
-
-            if isinstance(exception, OHOSException):
                 _solution = exception.get_solution()
             else:
+                _code = '0000'
                 _solution = 'no solution'
-
-            LogUtil.write_log(_log_path,
-                              traceback.format_exc() + '\n',
-                              'error')
-            LogUtil.write_log(_log_path,
-                              'Code:      {}'
-                              '\n'
-                              '\n'
-                              'Reason:    {}'
-                              '\n'
-                              '\n'
-                              'Solution:  {}'
-                              '\n'
-                              '\n'
-                              .format(_code, str(exception), _solution), 'error')
+            
+            _print_formatted_tracebak(_code, str(exception), _solution)
             exit()
         else:
             return r
     return wrapper
+
+def _print_formatted_tracebak(_code, _exception, _solution):
+    _log_path = ''
+    if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') != None:
+        _log_path = os.path.join(IoUtil.read_json_file(
+            ROOT_CONFIG_FILE).get('out_path'), 'build.log')
+    else:
+        _log_path = os.path.join(CURRENT_OHOS_ROOT, 'out', 'build.log')
+    LogUtil.write_log(_log_path, traceback.format_exc() + '\n', 'error')
+    LogUtil.write_log(_log_path,
+                        'Code:      {}'
+                        '\n'
+                        '\n'
+                        'Reason:    {}'
+                        '\n'
+                        '\n'
+                        'Solution:  {}'
+                        '\n'
+                        '\n'
+                        .format(_code, _exception, _solution), 'error')
+    

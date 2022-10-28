@@ -41,17 +41,20 @@ from resolver.buildArgsResolver import BuildArgsResolver
 from resolver.setArgsResolver import SetArgsResolver
 from resolver.cleanArgsResolver import CleanArgsResolver
 from resolver.envArgsResolver import EnvArgsResolver
+from resolver.toolArgsResolver import ToolArgsResolver
 
 from modules.interface.moduleInterface import ModuleInterface
 from modules.interface.buildModuleInterface import BuildModuleInterface
 from modules.interface.setModuleInterface import SetModuleInterface
 from modules.interface.envModuleInterface import EnvModuleInterface
 from modules.interface.cleanModuleInterface import CleanModuleInterface
+from modules.interface.toolModuleInterface import ToolModuleInterface
 
 from modules.ohosBuildmodule import OHOSBuildModule
 from modules.ohosSetModule import OHOSSetModule
 from modules.ohosCleanModule import OHOSCleanModule
 from modules.ohosEnvModule import OHOSEnvModule
+from modules.ohosToolModule import OHOSToolModule
 
 from helper.separator import Separator
 from util.logUtil import LogUtil
@@ -93,6 +96,13 @@ class Main():
         args_dict = Arg.parse_all_args(ModuleType.CLEAN)
         cleanArgsResolever = CleanArgsResolver(args_dict)
         return OHOSCleanModule(args_dict, cleanArgsResolever)
+        
+    def _init_tool_module(self) -> ToolModuleInterface:
+        Arg.clean_args_file()
+        args_dict = Arg.parse_all_args(ModuleType.TOOL)
+        gn = Gn()
+        toolArgsResolever = ToolArgsResolver(args_dict)
+        return OHOSToolModule(args_dict, toolArgsResolever, gn)
 
     def init_module(self, moduleType: ModuleType) -> ModuleInterface:
         module = None
@@ -105,11 +115,8 @@ class Main():
         elif moduleType == ModuleType.CLEAN:
             module = self._init_clean_module()
         elif moduleType == ModuleType.TOOL:
-            pass
-        elif moduleType == ModuleType.HELP:
-            for type in ModuleType:
-                LogUtil.hb_info(Separator.long_line)
-                LogUtil.hb_info(Arg.get_help(type))
+            module = self._init_tool_module()
+
         return module
 
     @staticmethod
@@ -128,7 +135,10 @@ class Main():
         elif module_type == 'tool':
             module = main.init_module(ModuleType.TOOL)
         elif module_type == 'help':
-            module = main.init_module(ModuleType.HELP)
+            for type in ModuleType:
+                LogUtil.hb_info(Separator.long_line)
+                LogUtil.hb_info(Arg.get_help(type))
+            exit()
         else:
             raise OHOSException(
                 'There is no such option {}'.format(module_type), '0018')
