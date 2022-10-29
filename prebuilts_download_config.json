@@ -1,5 +1,5 @@
 {
-  "prebuilts_download_dir": "../OpenHarmony_canary_prebuilts",
+  "prebuilts_download_dir": "../openharmony_prebuilts",
   "npm_install_path": [
     "developtools/ace_ets2bundle/compiler",
     "developtools/ace_js2bundle/ace-loader",
