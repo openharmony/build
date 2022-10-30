@@ -183,8 +183,8 @@ def _npm_install(args, code_dir, unzip_dir, unzip_filename):
                 skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
             if args.unsafe_perm:
                 unsafe_perm_cmd = '--unsafe-perm;'
-            cmd = 'cd {};{} config set registry {};{}{} cache clean -f;{} install {}'.format(
-                      full_code_path, npm, args.npm_registry, skip_ssl_cmd, npm, npm, unsafe_perm_cmd)
+            cmd = 'cd {};{}{} cache clean -f;{} install --registry {} {}'.format(
+                      full_code_path, skip_ssl_cmd, npm, npm, args.npm_registry, unsafe_perm_cmd)
             proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
