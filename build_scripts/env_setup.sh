@@ -56,6 +56,25 @@ else
     echo "Shell is not default, please configure the PATH variable manually"
 fi
 
+archive='sed -i "s@http://.*archive.ubuntu.com@http://repo.huaweicloud.com@g" /etc/apt/sources.list'
+security='sed -i "s@http://.*security.ubuntu.com@http://repo.huaweicloud.com@g" /etc/apt/sources.list'
+
+while true
+do
+    read -p "Will modify /etc/apt/sources.list, Backup to /etc/apt/sources.list.bak(y/n):" sign_value
+
+    if [[ $sign_value == "n" ]]
+    then
+        sed -i -e "s|$archive||" ./build/build_scripts/Dockerfile
+        sed -i -e "s|$security||" ./build/build_scripts/Dockerfile
+        break
+    elif [[ $sign_value == "y" || $sign_value == "" ]]
+    then
+        sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+        break
+    fi
+done
+
 mv ./build/build_scripts/Dockerfile ./build/build_scripts/rundocker.sh
 chmod +x ./build/build_scripts/rundocker.sh
 sudo ./build/build_scripts/rundocker.sh
