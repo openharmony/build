@@ -49,7 +49,7 @@ def read_file(sources_file):
 def get_subsystem_paths(file, root_dir):
     paths = {
         'common': 'build',
-        'third_party': 'third_party',
+        'thirdparty': 'third_party',
         'test': 'test',
         'mcl': 'mcl'
     }
