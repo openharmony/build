@@ -158,7 +158,7 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
             if not options.app_profile:
                 src_path = 'default'
             manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest):
+            if not os.path.exists(manifest) and not options.app_profile:
                 with open(options.hap_profile) as profile:
                     config = json.load(profile)
                     data = make_manifest_data(config, options, js2abc, asset_index)
@@ -201,7 +201,7 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir):
             if not options.app_profile:
                 src_path = 'default'
             manifest = os.path.join(build_dir, 'manifest.json')
-            if not os.path.exists(manifest):
+            if not os.path.exists(manifest) and not options.app_profile:
                 with open(options.hap_profile) as profile:
                     config = json.load(profile)
                     data = make_manifest_data(config, options, js2abc, asset_index)
