@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,34 +19,29 @@
 import os
 import argparse
 import sys
-from enum import Enum
 
+from enum import Enum
 from resources.global_var import CURRENT_BUILD_ARGS
 from resources.global_var import DEFAULT_BUILD_ARGS
-
 from resources.global_var import CURRENT_SET_ARGS
 from resources.global_var import DEFAULT_SET_ARGS
-
 from resources.global_var import CURRENT_CLEAN_ARGS
 from resources.global_var import DEFAULT_CLEAN_ARGS
-
 from resources.global_var import DEFAULT_ENV_ARGS
 from resources.global_var import CURRENT_ENV_ARGS
 from resources.global_var import DEFAULT_TOOL_ARGS
 from resources.global_var import CURRENT_TOOL_ARGS
-
 from resources.global_var import ARGS_DIR
-
-from exceptions.ohosException import OHOSException
-from util.logUtil import LogUtil
-from util.ioUtil import IoUtil
-from util.typeCheckUtil import TypeCheckUtil
-from resolver.argsFactory import ArgsFactory
+from exceptions.ohos_exception import OHOSException
+from util.log_util import LogUtil
+from util.io_util import IoUtil
+from util.type_check_util import TypeCheckUtil
+from resolver.args_factory import ArgsFactory
 from containers.status import throw_exception
 
 
 class ModuleType(Enum):
-    
+
     BUILD = 0
     SET = 1
     ENV = 2
@@ -66,7 +61,7 @@ class ArgType():
     SUBPARSERS = 7
 
     @staticmethod
-    def getType(value: str):
+    def get_type(value: str):
         if value == 'bool':
             return ArgType.BOOL
         elif value == "int":
@@ -100,7 +95,7 @@ class BuildPhase():
     POST_BUILD = 10
 
     @staticmethod
-    def getType(value: str):
+    def get_type(value: str):
         if value == 'prebuild':
             return BuildPhase.PRE_BUILD
         elif value == "preload":
@@ -132,7 +127,7 @@ class CleanPhase():
     NONE = 2
 
     @staticmethod
-    def getType(value: str):
+    def get_type(value: str):
         if value == 'regular':
             return CleanPhase.REGULAR
         elif value == 'deep':
@@ -143,61 +138,61 @@ class CleanPhase():
 
 class Arg():
 
-    def __init__(self, name: str, help: str, phase: str,
+    def __init__(self, name: str, helps: str, phase: str,
                  attribute: dict, argtype: ArgType, value,
-                 resolveFuntion: str):
-        self._argName = name
-        self._argHelp = help
-        self._argPhase = phase
-        self._argAttribute = attribute
-        self._argType = argtype
-        self._argValue = value
-        self._resolveFuntion = resolveFuntion
+                 resolve_function: str):
+        self._arg_name = name
+        self._arg_help = helps
+        self._arg_phase = phase
+        self._arg_attribute = attribute
+        self._arg_type = argtype
+        self._arg_value = value
+        self._resolve_function = resolve_function
 
     @property
-    def argName(self):
-        return self._argName
+    def arg_name(self):
+        return self._arg_name
 
     @property
-    def argValue(self):
-        return self._argValue
+    def arg_value(self):
+        return self._arg_value
 
-    @argValue.setter
-    def argValue(self, value):
-        self._argValue = value
-
-    @property
-    def argHelp(self):
-        return self._argHelp
+    @arg_value.setter
+    def arg_value(self, value):
+        self._arg_value = value
 
     @property
-    def argAttribute(self):
-        return self._argAttribute
+    def arg_help(self):
+        return self._arg_help
 
     @property
-    def argPhase(self):
-        return self._argPhase
+    def arg_attribute(self):
+        return self._arg_attribute
 
     @property
-    def argType(self):
-        return self._argType
+    def arg_phase(self):
+        return self._arg_phase
 
     @property
-    def resolveFuntion(self):
-        return self._resolveFuntion
+    def arg_type(self):
+        return self._arg_type
 
-    @resolveFuntion.setter
-    def resolveFuntion(self, value):
-        self._resolveFuntion = value
+    @property
+    def resolve_function(self):
+        return self._resolve_function
+
+    @resolve_function.setter
+    def resolve_function(self, value):
+        self._resolve_function = value
 
     @staticmethod
     @throw_exception
-    def createInstanceByDict(data: dict):
-        arg_name = str(data['argName']).replace("-", "_")[2:]
-        arg_help = str(data['argHelp'])
-        arg_phase = BuildPhase.getType(str(data['argPhase']))
-        arg_attibute = dict(data['argAttribute'])
-        arg_type = ArgType.getType(data['argType'])
+    def create_instance_by_dict(data: dict):
+        arg_name = str(data['arg_name']).replace("-", "_")[2:]
+        arg_help = str(data['arg_help'])
+        arg_phase = BuildPhase.get_type(str(data['arg_phase']))
+        arg_attibute = dict(data['arg_attribute'])
+        arg_type = ArgType.get_type(data['arg_type'])
         arg_value = ''
         if arg_type == ArgType.BOOL or arg_type == ArgType.GATE:
             arg_value = data['argDefault']
@@ -214,8 +209,8 @@ class Arg():
         else:
             raise OHOSException('Unknown arg type "{}" for arg "{}"'.format(
                 arg_type, arg_name), "0003")
-        resolveFuntion = data['resolveFuntion']
-        return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolveFuntion)
+        resolve_function = data['resolve_function']
+        return Arg(arg_name, arg_help, arg_phase, arg_attibute, arg_type, arg_value, resolve_function)
 
     @staticmethod
     def get_help(module_type: ModuleType) -> str:
@@ -224,7 +219,7 @@ class Arg():
 
         for arg in all_args.values():
             arg = dict(arg)
-            ArgsFactory.genenic_add_option(parser, arg)
+            ArgsFactory.genetic_add_option(parser, arg)
 
         parser.usage = 'hb {} [option]'.format(module_type.name.lower())
         parser.parse_known_args(sys.argv[2:])
@@ -239,34 +234,35 @@ class Arg():
 
         for arg in all_args.values():
             arg = dict(arg)
-            ArgsFactory.genenic_add_option(parser, arg)
-            oh_arg = Arg.createInstanceByDict(arg)
-            args_dict[oh_arg.argName] = oh_arg
+            ArgsFactory.genetic_add_option(parser, arg)
+            oh_arg = Arg.create_instance_by_dict(arg)
+            args_dict[oh_arg.arg_name] = oh_arg
 
         parser.usage = 'hb {} [option]'.format(module_type.name.lower())
         parser_args = parser.parse_known_args(sys.argv[2:])
 
         for oh_arg in args_dict.values():
             if isinstance(oh_arg, Arg):
-                assigned_value = parser_args[0].__dict__[oh_arg.argName]
-                if oh_arg.argType == ArgType.LIST:
+                assigned_value = parser_args[0].__dict__[oh_arg.arg_name]
+                if oh_arg.arg_type == ArgType.LIST:
                     assigned_value = TypeCheckUtil.tile_list(assigned_value)
                     assigned_value = list(set(assigned_value))
-                elif oh_arg.argType == ArgType.SUBPARSERS:
+                elif oh_arg.arg_type == ArgType.SUBPARSERS:
                     assigned_value = TypeCheckUtil.tile_list(assigned_value)
                     if len(assigned_value):
                         assigned_value = list(set(assigned_value))
                         assigned_value.extend(parser_args[1])
-                        assigned_value.sort(key = sys.argv[2:].index)
-                elif oh_arg.argType == ArgType.BOOL or oh_arg.argType == ArgType.GATE:
+                        assigned_value.sort(key=sys.argv[2:].index)
+                elif oh_arg.arg_type == ArgType.BOOL or oh_arg.arg_type == ArgType.GATE:
                     assigned_value = bool(assigned_value)
 
-                if oh_arg.argAttribute.get('deprecated', None) and oh_arg.argValue != assigned_value:
+                if oh_arg.arg_attribute.get('deprecated', None) and oh_arg.arg_value != assigned_value:
                     LogUtil.hb_warning(
-                        'compile option "{}" will be deprecated, please consider use other options'.format(oh_arg.argName))
-                oh_arg.argValue = assigned_value
+                        'compile option "{}" will be deprecated, \
+                            please consider use other options'.format(oh_arg.arg_name))
+                oh_arg.arg_value = assigned_value
                 Arg.write_args_file(
-                    oh_arg.argName, oh_arg.argValue, module_type)
+                    oh_arg.arg_name, oh_arg.arg_value, module_type)
 
         return args_dict
 

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,27 +19,38 @@
 import os
 
 VERSION = "1.0.0"
-CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 CURRENT_BUILD_DIR = os.path.join(CURRENT_OHOS_ROOT, 'build')
 CURRENT_HB_DIR = os.path.join(CURRENT_BUILD_DIR, 'hb_new')
 DEFAULT_CCACHE_DIR = os.path.join(CURRENT_OHOS_ROOT, '.ccache')
 
 ARGS_DIR = os.path.join(CURRENT_HB_DIR, 'resources/args')
 
-DEFAULT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/buildargs.json')
-DEFAULT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/setargs.json')
-DEFAULT_CLEAN_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/cleanargs.json')
-DEFAULT_ENV_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/envargs.json')
-DEFAULT_TOOL_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/default/toolargs.json')
+DEFAULT_BUILD_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/default/buildargs.json')
+DEFAULT_SET_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/default/setargs.json')
+DEFAULT_CLEAN_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/default/cleanargs.json')
+DEFAULT_ENV_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/default/envargs.json')
+DEFAULT_TOOL_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/default/toolargs.json')
 
-CURRENT_BUILD_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/buildargs.json')
+CURRENT_BUILD_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/buildargs.json')
 CURRENT_SET_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/setargs.json')
-CURRENT_CLEAN_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/cleanargs.json')
+CURRENT_CLEAN_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/cleanargs.json')
 CURRENT_ENV_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/envargs.json')
-CURRENT_TOOL_ARGS = os.path.join(CURRENT_HB_DIR, 'resources/args/toolargs.json')
+CURRENT_TOOL_ARGS = os.path.join(
+    CURRENT_HB_DIR, 'resources/args/toolargs.json')
 
-BUILD_CONFIG_FILE = os.path.join(CURRENT_HB_DIR, 'resources/config/config.json')
+BUILD_CONFIG_FILE = os.path.join(
+    CURRENT_HB_DIR, 'resources/config/config.json')
 ROOT_CONFIG_FILE = os.path.join(CURRENT_OHOS_ROOT, 'ohos_config.json')
 STATUS_FILE = os.path.join(CURRENT_HB_DIR, 'resources/status/status.json')
 
-ENV_SETUP_FILE = os.path.join(CURRENT_BUILD_DIR, 'build_scripts', 'env_setup.sh')
+ENV_SETUP_FILE = os.path.join(
+    CURRENT_BUILD_DIR, 'build_scripts', 'env_setup.sh')

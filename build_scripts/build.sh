@@ -79,18 +79,18 @@ function help() {
   exit 1
 }
 
-export source_root_dir=$(cd $(dirname $0);pwd)
+export SOURCE_ROOT_DIR=$(cd $(dirname $0);pwd)
 
-while [[ ! -f "${source_root_dir}/.gn" ]]; do
-    source_root_dir="$(dirname "${source_root_dir}")"
-    if [[ "${source_root_dir}" == "/" ]]; then
+while [[ ! -f "${SOURCE_ROOT_DIR}/.gn" ]]; do
+    SOURCE_ROOT_DIR="$(dirname "${SOURCE_ROOT_DIR}")"
+    if [[ "${SOURCE_ROOT_DIR}" == "/" ]]; then
         echo "Cannot find source tree containing $(pwd)"
         exit 1
     fi
 done
 
-if [[ "${source_root_dir}x" == "x" ]]; then
-  echo "Error: source_root_dir cannot be empty."
+if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
+  echo "Error: SOURCE_ROOT_DIR cannot be empty."
   exit 1
 fi
 
@@ -110,7 +110,7 @@ case $(uname -s) in
 esac
 
 # set python3
-PYTHON3_DIR=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.9.2/
+PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/3.9.2/
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
@@ -122,10 +122,28 @@ else
   fi
 fi
 
-export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
+export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
-${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
-${PYTHON3} ${source_root_dir}/build/hb_new/main.py build $@
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
+
+flag=true
+args_list=$@
+for var in $@
+do
+  OPTIONS=${var%%=*}
+  PARAM=${var#*=}
+  if [[ "$OPTIONS" == "using_hb_new" && "$PARAM" == "false" ]]; then
+    flag=false
+    echo "using hb_old"
+    ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/entry.py --source-root-dir ${SOURCE_ROOT_DIR} $args_list
+  else
+    shift
+  fi
+done
+if [[ ${flag} == "true" ]]; then
+  echo "using hb_new"
+  ${PYTHON3} ${SOURCE_ROOT_DIR}/build/hb_new/main.py build $args_list
+fi
 
 if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m=====build ${product_name} error=====\033[0m"

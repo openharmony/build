@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -15,6 +15,7 @@
 
 import json
 import os
+import stat
 
 from scripts.util.file_utils import read_json_file
 
@@ -49,7 +50,8 @@ def _read_lite_component_configs(file):
 
 def _save_as_ohos_build(config, ohos_build):
     new_config = json.dumps(config, indent=2, sort_keys=True)
-    with open(ohos_build, 'w') as fout:
+    with os.fdopen(os.open(ohos_build,
+                           os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as fout:
         fout.write(new_config)
 
 

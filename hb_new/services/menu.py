@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -33,15 +33,13 @@ from prompt_toolkit.layout.containers import ConditionalContainer
 from prompt_toolkit.layout.containers import HSplit
 from prompt_toolkit.layout.dimension import LayoutDimension as D
 from prompt_toolkit.token import Token
-
-from exceptions.ohosException import OHOSException
-from services.interface.menuInterface import MenuInterface
+from exceptions.ohos_exception import OHOSException
+from services.interface.menu_interface import MenuInterface
 from helper.separator import Separator
 from containers.arg import Arg, ModuleType
 from resources.config import Config
-
-from util.logUtil import LogUtil
-from util.productUtil import ProductUtil
+from util.log_util import LogUtil
+from util.product_util import ProductUtil
 
 
 class Menu(MenuInterface):
@@ -51,40 +49,40 @@ class Menu(MenuInterface):
         results = {}
         all_build_args = Arg.parse_all_args(ModuleType.BUILD)
         for arg in all_build_args.values():
-            if isinstance(arg, Arg) and arg.argAttribute.get("optional"):
-                if arg.argName != 'target_cpu':
+            if isinstance(arg, Arg) and arg.arg_attribute.get("optional"):
+                if arg.arg_name != 'target_cpu':
                     choices = [
                         choice if isinstance(choice, Separator) else {
                             'name': choice,
-                            'value': arg.argName
-                        } for choice in arg.argAttribute.get("optional")
+                            'value': arg.arg_name
+                        } for choice in arg.arg_attribute.get("optional")
                     ]
                 else:
-                    if config.support_cpu != None and isinstance(config.support_cpu, list):
+                    if config.support_cpu is not None and isinstance(config.support_cpu, list):
                         choices = []
                         for cpu in config.support_cpu:
                             choices.append({
                                 'name': cpu,
-                                'value': arg.argName,
+                                'value': arg.arg_name,
                             })
-                    elif config.target_cpu != None:
+                    elif config.target_cpu is not None:
                         choices = [
                             {
                                 'name': config.target_cpu,
-                                'value': arg.argName,
+                                'value': arg.arg_name,
                             }
                         ]
                     else:
                         choices = [
                             {
-                                'name': all_build_args['target_cpu'].argValue,
-                                'value': arg.argName,
+                                'name': all_build_args.get('target_cpu').arg_value,
+                                'value': arg.arg_name,
                             }
                         ]
 
-                result = self._list_promt(arg.argName, 'select {} value'.format(
-                    arg.argName), choices)[arg.argName][0]
-                results[arg.argName] = result
+                result = self._list_promt(arg.arg_name, 'select {} value'.format(
+                    arg.arg_name), choices).get(arg.arg_name)[0]
+                results[arg.arg_name] = result
         return results
 
     def _select_os_level(self) -> str:
@@ -110,7 +108,7 @@ class Menu(MenuInterface):
         company_separator = None
         os_level = self._select_os_level()
         for product_info in ProductUtil.get_products():
-            if product_info['os_level'] == None:
+            if product_info['os_level'] is None:
                 raise OHOSException("")
             if product_info['os_level'] == os_level:
                 company = product_info['company']
@@ -135,7 +133,7 @@ class Menu(MenuInterface):
         product = self._list_promt('product', 'Which product do you need?',
                                    choices).get('product')
         product_key = f'{product[0]}@{product[1]}'
-        return product_path_dict[product_key]
+        return product_path_dict.get(product_key)
 
     def _list_promt(self, name, message, choices, **kwargs):
         questions = self._get_questions('list', name, message, choices)

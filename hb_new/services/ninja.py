@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,12 +18,12 @@
 
 import os
 
-from exceptions.ohosException import OHOSException
-from services.interface.buildExecutorInterface import BuildExecutorInterface
+from exceptions.ohos_exception import OHOSException
+from services.interface.build_executor_interface import BuildExecutorInterface
 from resources.config import Config
-from util.systemUtil import SystemUtil
-from util.ioUtil import IoUtil
-from util.logUtil import LogUtil
+from util.system_util import SystemUtil
+from util.io_util import IoUtil
+from util.log_util import LogUtil
 
 
 class Ninja(BuildExecutorInterface):
@@ -43,11 +43,11 @@ class Ninja(BuildExecutorInterface):
         ninja_cmd = [self.exec, '-w', 'dupbuild=warn',
                      '-C', self.config.out_path] + self._convert_args()
         LogUtil.write_log(self.config.log_path,
-                            'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
+                          'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
         try:
-            SystemUtil.exec_command(ninja_cmd, self.config.log_path)
+            SystemUtil.exec_command(
+                ninja_cmd, self.config.log_path, log_filter=True)
         except OHOSException:
-            #TODO: Analysis falied log to classify failure reason
             raise OHOSException('ninja phase failed', '4000')
 
     def _convert_args(self) -> list:
@@ -83,4 +83,5 @@ class Ninja(BuildExecutorInterface):
         if os.path.exists(ninja_path):
             self.exec = ninja_path
         else:
-            raise OHOSException('There is no gn executable file at {}'.format(ninja_path), '0001')
+            raise OHOSException(
+                'There is no gn executable file at {}'.format(ninja_path), '0001')

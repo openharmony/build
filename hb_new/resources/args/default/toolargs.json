@@ -1,60 +1,60 @@
 {
     "ls": {
-        "argName": "--ls",
+        "arg_name": "--ls",
         "argDefault": [],
-        "argHelp": "Lists all targets matching the given pattern for the given build directory. You could use this option like this: 1.'hb tool --ls <out_dir> [<label_pattern>] [<options>]'",
-        "argPhase": "prebuild",
-        "argType": "subparsers",
-        "argAttribute": {
+        "arg_help": "Lists all targets matching the given pattern for the given build directory. You could use this option like this: 1.'hb tool --ls <out_dir> [<label_pattern>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
             "support_sub_options":{
                 "all-toolchains":{
-                    "argName": "--all-toolchains",
+                    "arg_name": "--all-toolchains",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "as":{
-                    "argName": "--as",
+                    "arg_name": "--as",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "buildfile",
                             "label",
                             "output"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "testonly":{
-                    "argName": "--testonly",
+                    "arg_name": "--testonly",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "true",
                             "false"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "type":{
-                    "argName": "--type",
+                    "arg_name": "--type",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "action",
                             "copy",
@@ -66,70 +66,70 @@
                             "static_library"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 }
             }
         },
-        "resolveFuntion": "resolveListTargets",
+        "resolve_function": "resolve_list_targets",
         "testFunction": "testListTargets"
     },
     "desc": {
-        "argName": "--desc",
+        "arg_name": "--desc",
         "argDefault": [],
-        "argHelp": "Displays information about a given target or config. You could use this option like this: 1.'hb tool --desc <out_dir> <component_module> [<what to show>] [<options>]'",
-        "argPhase": "prebuild",
-        "argType": "subparsers",
-        "argAttribute": {
+        "arg_help": "Displays information about a given target or config. You could use this option like this: 1.'hb tool --desc <out_dir> <component_module> [<what to show>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
             "support_sub_options":{
                 "all":{
-                    "argName": "--all",
+                    "arg_name": "--all",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "as":{
-                    "argName": "--as",
+                    "arg_name": "--as",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "buildfile",
                             "label",
                             "output"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "testonly":{
-                    "argName": "--testonly",
+                    "arg_name": "--testonly",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "true",
                             "false"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "type":{
-                    "argName": "--type",
+                    "arg_name": "--type",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "action",
                             "copy",
@@ -141,126 +141,126 @@
                             "static_library"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "tree":{
-                    "argName": "--tree",
+                    "arg_name": "--tree",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 }
             }
         },
-        "resolveFuntion": "resolveDescTargets",
+        "resolve_function": "resolve_desc_targets",
         "testFunction": "testDescTargets"
     },
     "path": {
-        "argName": "--path",
+        "arg_name": "--path",
         "argDefault": [],
-        "argHelp": "Finds paths of dependencies between two targets. You could use this option like this: 1.'hb tool --path <out_dir> <component1_module1> <component2_module2> [<options>]'",
-        "argPhase": "prebuild",
-        "argType": "subparsers",
-        "argAttribute": {
+        "arg_help": "Finds paths of dependencies between two targets. You could use this option like this: 1.'hb tool --path <out_dir> <component1_module1> <component2_module2> [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
             "support_sub_options":{
                 "--all":[],
                 "--public":[],
                 "--with-data":[]
             }
         },
-        "resolveFuntion": "resolvePathTargets",
+        "resolve_function": "resolve_path_targets",
         "testFunction": "testPathTargets"
     },
     "refs": {
-        "argName": "--refs",
+        "arg_name": "--refs",
         "argDefault": [],
-        "argHelp": "Finds reverse dependencies (which targets reference something). You could use this option like this: 1.'hb tool --refs <out_dir> [<component_module>|<file>] [<options>]'",
-        "argPhase": "prebuild",
-        "argType": "subparsers",
-        "argAttribute": {
+        "arg_help": "Finds reverse dependencies (which targets reference something). You could use this option like this: 1.'hb tool --refs <out_dir> [<component_module>|<file>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
             "support_sub_options":{
                 "all":{
-                    "argName": "--all",
+                    "arg_name": "--all",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "all-toolchains":{
-                    "argName": "--all-toolchains",
+                    "arg_name": "--all-toolchains",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "as":{
-                    "argName": "--as",
+                    "arg_name": "--as",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "buildfile",
                             "label",
                             "output"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "q":{
-                    "argName": "-q",
+                    "arg_name": "-q",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "testonly":{
-                    "argName": "--testonly",
+                    "arg_name": "--testonly",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "true",
                             "false"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "tree":{
-                    "argName": "--tree",
+                    "arg_name": "--tree",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "type":{
-                    "argName": "--type",
+                    "arg_name": "--type",
                     "argDefault": "",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "action",
                             "copy",
@@ -272,70 +272,70 @@
                             "static_library"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 }
             }
         },
-        "resolveFuntion": "resolveRefsTargets",
+        "resolve_function": "resolve_refs_targets",
         "testFunction": "testRefsTargets"
     },
     "format": {
-        "argName": "--format",
+        "arg_name": "--format",
         "argDefault": [],
-        "argHelp": "Formats .gn file to a standard format. You could use this option like this: 1.'hb tool --format /abspath/some/BUILD.gn [<options>]'",
-        "argPhase": "prebuild",
-        "argType": "subparsers",
-        "argAttribute": {
+        "arg_help": "Formats .gn file to a standard format. You could use this option like this: 1.'hb tool --format /abspath/some/BUILD.gn [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
             "support_sub_options":{
                 "dry-run":{
-                    "argName": "--dry-run",
+                    "arg_name": "--dry-run",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "dump-tree":{
-                    "argName": "--dump-tree",
+                    "arg_name": "--dump-tree",
                     "argDefault": "text",
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "str",
-                    "argAttribute": {
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
                         "optional":[
                             "text",
                             "json"
                         ]
                     },
-                    "resolveFuntion": "",
+                    "resolve_function": "",
                     "testFunction": ""
                 },
                 "stdin":{
-                    "argName": "--stdin",
+                    "arg_name": "--stdin",
                     "argDefault": false,
-                    "argHelp": "",
-                    "argPhase": "prebuild",
-                    "argType": "bool",
-                    "argAttribute": {},
-                    "resolveFuntion": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
                     "testFunction": ""
                 }
             }
         },
-        "resolveFuntion": "resolveFormatTargets",
+        "resolve_function": "resolve_format_targets",
         "testFunction": "testFormatTargets"
     },
     "clean": {
-        "argName": "--clean",
+        "arg_name": "--clean",
         "argDefault": "",
-        "argHelp": "Deletes the contents of the output directory except for args.gn. You could use this option like this: 1.'hb tool --clean <out_dir>'",
-        "argPhase": "prebuild",
-        "argType": "str",
-        "argAttribute": {},
-        "resolveFuntion": "resolveCleanTargets",
+        "arg_help": "Deletes the contents of the output directory except for args.gn. You could use this option like this: 1.'hb tool --clean <out_dir>'",
+        "arg_phase": "prebuild",
+        "arg_type": "str",
+        "arg_attribute": {},
+        "resolve_function": "resolve_clean_targets",
         "testFunction": "testCleanTargets"
     }
 }

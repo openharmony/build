@@ -13,63 +13,63 @@
     },
     "0003": {
         "code": "0003",
-        "solution": "Args must be declare as 'bool', 'gate', 'str', 'list' in argType attribute. Please check your corresponding arg"
+        "solution": "Args must be declare as 'bool', 'gate', 'str', 'list' in arg_type attribute. Please check your corresponding arg"
     },
     "0004": {
         "code": "0004",
-        "solution": "build/hb_new/util/deviceUtil.py"
+        "solution": "build/hb_new/util/device_util.py"
     },
     "0005": {
         "code": "0005",
-        "solution": "build/hb_new/util/deviceUtil.py"
+        "solution": "build/hb_new/util/device_util.py"
     },
     "0006": {
         "code": "0006",
-        "solution": "build/hb_new/util/deviceUtil.py"
+        "solution": "build/hb_new/util/device_util.py"
     },
     "0007": {
         "code": "0007",
-        "solution": "build/hb_new/util/deviceUtil.py"
+        "solution": "build/hb_new/util/device_util.py"
     },
     "0008": {
         "code": "0008",
-        "solution": "build/hb_new/util/ioUtil.py"
+        "solution": "build/hb_new/util/io_util.py"
     },
     "0009": {
         "code": "0009",
-        "solution": "build/hb_new/util/ioUtil.py"
+        "solution": "build/hb_new/util/io_util.py"
     },
     "0010": {
         "code": "0010",
-        "solution": "build/hb_new/util/ioUtil.py"
+        "solution": "build/hb_new/util/io_util.py"
     },
     "0011": {
         "code": "0011",
-        "solution": "build/hb_new/util/ioUtil.py"
+        "solution": "build/hb_new/util/io_util.py"
     },
     "0012": {
         "code": "0012",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0013": {
         "code": "0013",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0014": {
         "code": "0014",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0015": {
         "code": "0015",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0016": {
         "code": "0016",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0017": {
         "code": "0017",
-        "solution": "build/hb_new/util/productUtil.py"
+        "solution": "build/hb_new/util/product_util.py"
     },
     "0018": {
         "code": "0018",

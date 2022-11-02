@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -14,29 +14,26 @@
 # limitations under the License.
 
 
-import optparse
+import argparse
 import os
 import sys
 import json
 
-sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from scripts.util import build_utils  # noqa: E402
 
 
 def parse_args(args):
-    parser = optparse.OptionParser()
-
-    parser.add_option(
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         '--generated-build-file',
         help='path to generated platform build file')
-    parser.add_option(
+    parser.add_argument(
         '--required-build-file', help='path to required platform build file')
-    parser.add_option(
+    parser.add_argument(
         '--optional-build-file', help='path to optional platform build file')
-    parser.add_option(
+    parser.add_argument(
         '--stub-build-file', help='path to stub platform build file')
-
-    options, _ = parser.parse_args(args)
+    options = parser.parse_args(args)
     return options
 
 

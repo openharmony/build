@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -41,8 +41,8 @@ def main():
         spec = importlib.util.spec_from_file_location('main', entry_path)
         api = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(api)
-        main = api.Main()
-        main.main()
+        main_api = api.Main()
+        main_api.main()
     else:
         raise Exception(
             "[OHOS_ERROR]: Please call hb utilities inside ohos source directory")

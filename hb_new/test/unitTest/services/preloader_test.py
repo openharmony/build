@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,19 +17,19 @@
 
 import unittest
 
-from services.preloader import Preloader
+from services.preloader import OHOSPreloader
 from resources.config import Config
 
 
 class PreloaderTest(unittest.TestCase):
-    
+
     def setUp(self):
-        self.preloader = Preloader(Config())
+        self.preloader = OHOSPreloader(Config())
         return super().setUp()
-    
+
     def tearDown(self):
         return super().tearDown()
-    
+
     def test_generate_build_prop(self):
         pass
 
@@ -62,6 +62,6 @@ class PreloaderTest(unittest.TestCase):
 
     def test_generate_systemcapability_json(self):
         pass
-    
+
     def test_internel_run(self):
         pass

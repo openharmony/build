@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,21 +17,22 @@ import os
 import sys
 import argparse
 from containers.status import throw_exception
-from exceptions.ohosException import OHOSException
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
-from util.logUtil import LogUtil
+from util.log_util import LogUtil
 
 _default_subsystem = {"common": "build/common"}
+
 
 @throw_exception
 def _read_config(subsystem_config_file, example_subsystem_file):
     if not os.path.exists(subsystem_config_file):
         raise OHOSException(
-            "config file '{}' doesn't exist.".format(subsystem_config_file),"2013")
+            "config file '{}' doesn't exist.".format(subsystem_config_file), "2013")
     subsystem_config = read_json_file(subsystem_config_file)
     if subsystem_config is None:
-        raise OHOSException("read file '{}' failed.".format(subsystem_config_file), "2013")
+        raise OHOSException("read file '{}' failed.".format(
+            subsystem_config_file), "2013")
 
     # example subsystem
     if example_subsystem_file:
@@ -42,7 +43,8 @@ def _read_config(subsystem_config_file, example_subsystem_file):
     subsystem_info = {}
     for key, val in subsystem_config.items():
         if 'path' not in val:
-            raise OHOSException("subsystem '{}' not config path.".format(key), "2013")
+            raise OHOSException(
+                "subsystem '{}' not config path.".format(key), "2013")
         subsystem_info[key] = val.get('path')
     return subsystem_info
 
@@ -67,6 +69,7 @@ def _check_path_prefix(paths):
         filter(lambda x: x is False,
                map(lambda p: p.split('/')[0] in allow_path_prefix, paths)))
     return len(result) <= 1
+
 
 @throw_exception
 def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
@@ -109,6 +112,7 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsystem-config-file', required=True)
+    parser.add_argument('--subsystem-config-overlay-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--output-dir', required=True)

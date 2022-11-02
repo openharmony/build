@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -22,9 +22,9 @@ import platform
 from resources.global_var import CURRENT_OHOS_ROOT
 from resources.global_var import BUILD_CONFIG_FILE
 from resources.global_var import ROOT_CONFIG_FILE
-from exceptions.ohosException import OHOSException
+from exceptions.ohos_exception import OHOSException
 from helper.singleton import Singleton
-from util.ioUtil import IoUtil
+from util.io_util import IoUtil
 from containers.status import throw_exception
 
 
@@ -56,6 +56,7 @@ class Config(metaclass=Singleton):
         self._device_config_path = ""
         self._product_config_path = ""
         self._subsystem_config_json = ""
+        self._subsystem_config_overlay_json = ""
         self._support_cpu = ""
         self.fs_attr = set()
         self.platform = platform.system()
@@ -283,6 +284,16 @@ class Config(metaclass=Singleton):
                            self._subsystem_config_json)
 
     @property
+    def subsystem_config_overlay_json(self):
+        return self._subsystem_config_overlay_json
+
+    @subsystem_config_overlay_json.setter
+    def subsystem_config_overlay_json(self, value):
+        self._subsystem_config_overlay_json = value
+        self.config_update('subsystem_config_overlay_json',
+                           self._subsystem_config_overlay_json)
+
+    @property
     def support_cpu(self):
         return self._support_cpu
 
@@ -313,15 +324,6 @@ class Config(metaclass=Singleton):
             raise OHOSException(
                 f'Invalid built-in product path: {_built_in_product_path}')
         return _built_in_product_path
-
-    @property
-    def built_in_device_path(self):
-        _built_in_device_path = os.path.join(self.root_path,
-                                             'productdefine/common/device')
-        if not os.path.isdir(_built_in_device_path):
-            raise OHOSException(
-                f'Invalid built-in product path: {_built_in_device_path}')
-        return _built_in_device_path
 
     @property
     def build_tools_path(self):

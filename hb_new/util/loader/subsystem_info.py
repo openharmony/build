@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -16,9 +16,9 @@
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from . import subsystem_scan  # noqa: E402
 from scripts.util.file_utils import write_json_file  # noqa: E402
+from . import subsystem_scan  # noqa: E402
+from resources.config import Config
 
 
 def _output_subsystem_configs(output_dir, subsystem_configs):
@@ -53,6 +53,17 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
     subsystem_configs = subsystem_scan.scan(subsystem_config_file,
                                             example_subsystem_file,
                                             source_root_dir)
-
+    config = Config()
+    subsystem_config_overlay_file = os.path.join(
+        config.product_path, "subsystem_config_overlay.json")
+    if os.path.isfile(subsystem_config_overlay_file):
+        subsystem_config_overlay = {}
+        subsystem_config_overlay = subsystem_scan.scan(subsystem_config_overlay_file,
+                                                       example_subsystem_file,
+                                                       source_root_dir)
+        subsystem_configs['subsystem'].update(
+            subsystem_config_overlay['subsystem'])
+        subsystem_configs['no_src_subsystem'].update(
+            subsystem_config_overlay['no_src_subsystem'])
     _output_subsystem_configs(output_dir_realpath, subsystem_configs)
     return subsystem_configs.get('subsystem')

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -15,16 +15,11 @@
 
 import sys
 import os
-from util.logUtil import LogUtil
-
-from exceptions.ohosException import OHOSException
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from . import merge_platform_build
-
+from util.log_util import LogUtil
+from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 from containers.status import throw_exception
+from . import merge_platform_build
 
 
 class PlatformsLoader:
@@ -115,7 +110,8 @@ class PlatformsLoader:
         all_parts = {}
         all_stubs = {}
         if _platforms_info is None:
-            raise OHOSException('this product do not support thish arch', '2001')
+            raise OHOSException(
+                'this product do not support thish arch', '2001')
         for _platform_name, _info in _platforms_info.items():
             if self._scalable_build is False:
                 _file_name = _info.get('parts_config')
@@ -146,7 +142,6 @@ class PlatformsLoader:
         self._all_parts = all_parts
         self._all_stubs = all_stubs
         self._is_load = True
-
 
     def get_all_parts(self):
         self._loading()
@@ -196,7 +191,8 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
     all_parts_file = os.path.join(source_root_dir, config_output_relpath,
                                   platforms_info_output_dir, "all_parts.json")
     write_json_file(all_parts_file, all_parts)
-    LogUtil.hb_info("generate all parts of platforms info to '{}'".format(all_parts_file))
+    LogUtil.hb_info(
+        "generate all parts of platforms info to '{}'".format(all_parts_file))
 
     # variant to toolchain and toolchain to variant
     toolchain_to_variant_dict = platform_loader.platforms_toolchain()
@@ -207,7 +203,8 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
     write_json_file(toolchain_variant_info_file,
                     toolchain_to_variant_dict,
                     check_changes=True)
-    LogUtil.hb_info("generate toolchain to variant of platforms info to '{}'".format(toolchain_variant_info_file))
+    LogUtil.hb_info("generate toolchain to variant of platforms info to '{}'".format(
+        toolchain_variant_info_file))
 
     result = {}
     result['all_parts'] = all_parts

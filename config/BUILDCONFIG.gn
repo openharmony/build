@@ -65,6 +65,10 @@ declare_args() {
 }
 
 declare_args() {
+  using_hb_new = true
+}
+
+declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 

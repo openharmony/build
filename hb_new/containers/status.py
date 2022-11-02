@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,9 +19,9 @@
 import os
 import traceback
 
-from exceptions.ohosException import OHOSException
-from util.logUtil import LogUtil
-from util.ioUtil import IoUtil
+from exceptions.ohos_exception import OHOSException
+from util.log_util import LogUtil
+from util.io_util import IoUtil
 from resources.global_var import ROOT_CONFIG_FILE, CURRENT_OHOS_ROOT
 
 
@@ -36,14 +36,15 @@ Usage:
 def foo():
     ...
     raise OHOSException('SOME ERROR HAPPENDED', '0000')
-    ....
+    ...
     
 '''
+
 
 def throw_exception(func):
     def wrapper(*args, **kwargs):
         try:
-            r = func(*args, **kwargs)
+            return func(*args, **kwargs)
         except OHOSException and Exception as exception:
             _code = ''
             _solution = ''
@@ -54,30 +55,28 @@ def throw_exception(func):
             else:
                 _code = '0000'
                 _solution = 'no solution'
-            
+
             _print_formatted_tracebak(_code, str(exception), _solution)
-            exit()
-        else:
-            return r
+            exit(-1)
     return wrapper
+
 
 def _print_formatted_tracebak(_code, _exception, _solution):
     _log_path = ''
-    if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') != None:
+    if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') is not None:
         _log_path = os.path.join(IoUtil.read_json_file(
             ROOT_CONFIG_FILE).get('out_path'), 'build.log')
     else:
         _log_path = os.path.join(CURRENT_OHOS_ROOT, 'out', 'build.log')
     LogUtil.write_log(_log_path, traceback.format_exc() + '\n', 'error')
     LogUtil.write_log(_log_path,
-                        'Code:      {}'
-                        '\n'
-                        '\n'
-                        'Reason:    {}'
-                        '\n'
-                        '\n'
-                        'Solution:  {}'
-                        '\n'
-                        '\n'
-                        .format(_code, _exception, _solution), 'error')
-    
+                      'Code:      {}'
+                      '\n'
+                      '\n'
+                      'Reason:    {}'
+                      '\n'
+                      '\n'
+                      'Solution:  {}'
+                      '\n'
+                      '\n'
+                      .format(_code, _exception, _solution), 'error')

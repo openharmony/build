@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -16,7 +16,7 @@
 import sys
 import os
 from containers.status import throw_exception
-from exceptions.ohosException import OHOSException
+from exceptions.ohos_exception import OHOSException
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util import file_utils  # noqa: E402
 
@@ -27,7 +27,7 @@ class BundlePartObj(object):
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._load_test_config = load_test_config
         self._loading_config()
-    
+
     @throw_exception
     def _loading_config(self):
         if not os.path.exists(self._build_config_file):
@@ -40,13 +40,14 @@ class BundlePartObj(object):
         self._check_format()
         self.exclusion_modules_info = file_utils.read_json_file(
             self._exclusion_modules_config_file)
-    
+
     @throw_exception
     def _check_format(self):
         _tip_info = "bundle.json info is incorrect in '{}'".format(
             self._build_config_file)
         if 'component' not in self.bundle_info:
-            raise OHOSException("{}, 'component' is required.".format(_tip_info), "2011")
+            raise OHOSException(
+                "{}, 'component' is required.".format(_tip_info), "2011")
         _component_info = self.bundle_info.get('component')
         if 'name' not in _component_info:
             raise OHOSException(
@@ -58,16 +59,18 @@ class BundlePartObj(object):
             raise OHOSException(
                 "{}, 'component.build' is required.".format(_tip_info), "2011")
         _bundle_build = _component_info.get('build')
-        if 'sub_component' not in _bundle_build and 'group_type' not in _bundle_build:
+        if 'sub_component' not in _bundle_build and 'group_type' not in _bundle_build \
+                and 'modules' not in _bundle_build:
             raise OHOSException(
-                "{}, 'component.build.sub_component' or 'component.build.group_type' is required.".format(
-                    _tip_info), "2011")
+                "{}, 'component.build.sub_component','component.build.group_type' or \
+                'component.build.modules' is required.".format(_tip_info), "2011")
         if 'group_type' in _bundle_build:
             group_list = ['base_group', 'fwk_group', 'service_group']
             _module_groups = _bundle_build.get('group_type')
             for _group_type, _module_list in _module_groups.items():
                 if _group_type not in group_list:
-                    raise OHOSException("{}, incorrect group type".format(_tip_info), "2011")
+                    raise OHOSException(
+                        "{}, incorrect group type".format(_tip_info), "2011")
 
     def to_ohos_build(self):
         _component_info = self.bundle_info.get('component')
@@ -82,6 +85,9 @@ class BundlePartObj(object):
         if _component_info.get('build').__contains__('sub_component'):
             _part_info['module_list'] = _component_info.get('build').get(
                 'sub_component')
+        elif _component_info.get('build').__contains__('modules'):
+            _part_info['module_list'] = _component_info.get(
+                'build').get('modules')
         elif _component_info.get('build').__contains__('group_type'):
             _module_groups = _component_info.get('build').get('group_type')
             for _group_type, _module_list in _module_groups.items():
@@ -93,6 +99,8 @@ class BundlePartObj(object):
             _part_info['module_list'] = module_list
         if 'inner_kits' in _bundle_build:
             _part_info['inner_kits'] = _bundle_build.get('inner_kits')
+        elif 'inner_api' in _bundle_build:
+            _part_info['inner_kits'] = _bundle_build.get('inner_api')
         if 'test' in _bundle_build and self._load_test_config:
             _part_info['test_list'] = _bundle_build.get('test')
         if 'features' in _component_info:
@@ -100,6 +108,7 @@ class BundlePartObj(object):
         if 'syscap' in _component_info:
             _part_info['system_capabilities'] = _component_info.get('syscap')
         if 'hisysevent_config' in _component_info:
-            _part_info['hisysevent_config'] = _component_info.get('hisysevent_config')
+            _part_info['hisysevent_config'] = _component_info.get(
+                'hisysevent_config')
         _ohos_build_info['parts'] = {_part_name: _part_info}
         return _ohos_build_info

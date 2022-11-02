@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -27,7 +27,7 @@ def get_features(features):
             continue
         match = feat.index("=")
         if match <= 0:
-            print("Warning: invalid feature [" + feat + "]")
+            print("Warning: invalid feature [{}}]".format(feat))
             continue
         key = feat[:match].strip()
         val = feat[match + 1:].strip().strip('"')

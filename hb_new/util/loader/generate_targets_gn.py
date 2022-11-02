@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,48 +19,47 @@ import sys
 import shutil
 
 from resources.global_var import CURRENT_OHOS_ROOT
-from util.logUtil import LogUtil
+from util.log_util import LogUtil
 
-_SOURCE_ROOT= CURRENT_OHOS_ROOT
 # Import jinja2 from third_party/jinja2
-sys.path.insert(1, os.path.join(_SOURCE_ROOT, 'third_party'))
+sys.path.insert(1, os.path.join(CURRENT_OHOS_ROOT, 'third_party'))
 from jinja2 import Template  # noqa: E402
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import write_file  # noqa: E402
 
-parts_list_gni_template = """
+PARTS_LIST_GNI_TEMPLATE = """
 parts_list = [
   {}
 ]
 """
 
-inner_kits_gni_template = """
+INNER_KITS_GNI_TEMPLATE = """
 inner_kits_list = [
   {}
 ]
 """
 
-system_kits_gni_template = """
+SYSTEM_KITS_GNI_TEMPLATE = """
 system_kits_list = [
   {}
 ]
 """
 
-parts_test_gni_template = """
+PARTS_TEST_GNI_TEMPLATE = """
 parts_test_list = [
   {}
 ]
 """
 
-phony_target_list_template = """
+PHONY_TARGET_LIST_TEMPLATE = """
 group("part_phony_targets") {{
   deps = [
     {}
   ]
 }}"""
 
-phony_group_template = """
+PHONY_GROUP_TEMPLATE = """
 group("{}_phony") {{
   deps = [ "{}" ]
 }}"""
@@ -88,8 +87,9 @@ def gen_targets_gn(parts_targets, config_output_dir):
     parts_list_gni_file = os.path.join(config_output_dir, 'parts_list.gni')
     parts_list_content = '"{}",'.format('",\n  "'.join(parts_list))
     write_file(parts_list_gni_file,
-               parts_list_gni_template.format(parts_list_content))
-    LogUtil.hb_info("generate part list gni file to '{}/parts_list.gni'".format(config_output_dir))
+               PARTS_LIST_GNI_TEMPLATE.format(parts_list_content))
+    LogUtil.hb_info(
+        "generate part list gni file to '{}/parts_list.gni'".format(config_output_dir))
 
     inner_kits_gni_file = os.path.join(config_output_dir,
                                        'inner_kits_list.gni')
@@ -98,8 +98,9 @@ def gen_targets_gn(parts_targets, config_output_dir):
     else:
         inner_kits_content = ''
     write_file(inner_kits_gni_file,
-               inner_kits_gni_template.format(inner_kits_content))
-    LogUtil.hb_info("generate inner kits gni file to '{}/inner_kits_list.gni'".format(config_output_dir))
+               INNER_KITS_GNI_TEMPLATE.format(inner_kits_content))
+    LogUtil.hb_info(
+        "generate inner kits gni file to '{}/inner_kits_list.gni'".format(config_output_dir))
 
     system_list_gni_file = os.path.join(config_output_dir,
                                         'system_kits_list.gni')
@@ -108,8 +109,9 @@ def gen_targets_gn(parts_targets, config_output_dir):
     else:
         system_kits_content = ''
     write_file(system_list_gni_file,
-               system_kits_gni_template.format(system_kits_content))
-    LogUtil.hb_info("generate system list gni file to '{}/system_kits_list.gni'".format(config_output_dir))
+               SYSTEM_KITS_GNI_TEMPLATE.format(system_kits_content))
+    LogUtil.hb_info(
+        "generate system list gni file to '{}/system_kits_list.gni'".format(config_output_dir))
 
     parts_test_gni_file = os.path.join(config_output_dir,
                                        'parts_test_list.gni')
@@ -118,13 +120,14 @@ def gen_targets_gn(parts_targets, config_output_dir):
     else:
         test_list_content = ''
     write_file(parts_test_gni_file,
-               parts_test_gni_template.format(test_list_content))
-    LogUtil.hb_info("generate parts test gni file to '{}/parts_test_list.gni'".format(config_output_dir))
+               PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
+    LogUtil.hb_info(
+        "generate parts test gni file to '{}/parts_test_list.gni'".format(config_output_dir))
 
     build_gn_file = os.path.join(config_output_dir, 'BUILD.gn')
     shutil.copyfile(gn_file_template, build_gn_file)
-    LogUtil.hb_info("generate build gn file to '{}/BUILD.gn'".format(config_output_dir))
-    
+    LogUtil.hb_info(
+        "generate build gn file to '{}/BUILD.gn'".format(config_output_dir))
 
 
 def gen_phony_targets(variant_phony_targets, config_output_dir):
@@ -133,7 +136,7 @@ def gen_phony_targets(variant_phony_targets, config_output_dir):
     for part_name, part_label in variant_phony_targets.items():
         phony_target_list.append('{}_phony'.format(part_name))
         phony_group_list.append(
-            phony_group_template.format(part_name, part_label))
+            PHONY_GROUP_TEMPLATE.format(part_name, part_label))
 
     phony_list_content = ''
     if phony_target_list:
@@ -141,13 +144,15 @@ def gen_phony_targets(variant_phony_targets, config_output_dir):
             '",\n  ":'.join(phony_target_list))
     phony_build_content = []
     phony_build_content.append(
-        phony_target_list_template.format(phony_list_content))
+        PHONY_TARGET_LIST_TEMPLATE.format(phony_list_content))
     phony_build_content.extend(phony_group_list)
 
     phony_build_file = os.path.join(config_output_dir, 'phony_targets',
                                     'BUILD.gn')
     write_file(phony_build_file, '\n'.join(phony_build_content))
-    LogUtil.hb_info("generate phony target build file to '{}/phony_targets/BUILD.gn'".format(config_output_dir))
+    LogUtil.hb_info(
+        "generate phony target build file to '{}/phony_targets/BUILD.gn'".format(config_output_dir))
+
 
 def gen_stub_targets(parts_kits_info, platform_stubs, config_output_dir):
     template = Template("""
@@ -205,10 +210,13 @@ def gen_stub_targets(parts_kits_info, platform_stubs, config_output_dir):
                 combined_jar_deps=',\n'.join(stub_kit_targets),
                 sources_list_files=',\n'.join(dist_stub))
             write_file(gn_file, gn_contents)
-            LogUtil.hb_info("generated platform stub to '{}/{}-stub/BUILD.gn'".format(config_output_dir, platform))
-            
+            LogUtil.hb_info(
+                "generated platform stub to '{}/{}-stub/BUILD.gn'".format(config_output_dir, platform))
+
         else:
             gni_contents.append('zframework_stub_exists = false')
 
         write_file(gni_file, '\n'.join(gni_contents))
-        LogUtil.hb_info("generated platform zframework stub to '{}/subsystem_info/{}-stub/zframework_stub_exists.gni'".format(config_output_dir, platform))
+        LogUtil.hb_info(
+            "generated platform zframework stub to '{}/subsystem_info/{}-stub/zframework_stub_exists.gni'".format(
+                config_output_dir, platform))

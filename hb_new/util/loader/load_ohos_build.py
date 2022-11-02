@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,14 +17,12 @@ import os
 import sys
 
 from containers.status import throw_exception
-from . import load_bundle_file
-from util.logUtil import LogUtil
-from exceptions.ohosException import OHOSException
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from util.log_util import LogUtil
+from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501  pylint: disable=C0413, E0611
+from . import load_bundle_file
 
-import_list = """
+IMPORT_LIST = """
 # import("//build/ohos.gni")
 # import("//build/ohos_var.gni")
 import("//build/ohos/ohos_part.gni")
@@ -32,7 +30,7 @@ import("//build/ohos/ohos_kits.gni")
 import("//build/ohos/ohos_test.gni")
 """
 
-part_template = """
+PART_TEMPLATE = """
 ohos_part("{}") {{
   subsystem_name = "{}"
   module_list = [
@@ -42,7 +40,7 @@ ohos_part("{}") {{
   variant = "{}"
 }}"""
 
-inner_kits_template = """
+INNER_KITS_TEMPLATE = """
 ohos_inner_kits("{0}_inner_kits") {{
   sdk_libs = [
 {1}
@@ -52,7 +50,7 @@ ohos_inner_kits("{0}_inner_kits") {{
   variant = "{3}"
 }}"""
 
-system_kits_template = """
+SYSTEM_KITS_TEMPLATE = """
 ohos_system_kits("{0}_system_kits") {{
   sdk_libs = [
 {1}
@@ -62,7 +60,7 @@ ohos_system_kits("{0}_system_kits") {{
   variant = "{3}"
 }}"""
 
-test_template = """
+TEST_TEMPLATE = """
 ohos_part_test("{0}_test") {{
   testonly = true
   test_packages = [
@@ -78,6 +76,8 @@ def _normalize(label, path):
     if not label.startswith('//'):
         label = '//{}/{}'.format(path, label)
     return label
+
+
 @throw_exception
 def get_syscap_from_bundle(bundle_file):
     if not os.path.exists(bundle_file):
@@ -85,10 +85,12 @@ def get_syscap_from_bundle(bundle_file):
             "config file '{}' doesn't exist.".format(bundle_file), "2014")
     bundle_config = read_json_file(bundle_file)
     if bundle_config is None:
-        raise OHOSException("read file '{}' failed.".format(bundle_file), "2014")
+        raise OHOSException(
+            "read file '{}' failed.".format(bundle_file), "2014")
     part_name = bundle_config.get('component').get('name')
     part_syscap = bundle_config.get('component').get('syscap')
     return part_name, part_syscap
+
 
 def read_build_file(ohos_build_file):
     if not os.path.exists(ohos_build_file):
@@ -96,7 +98,8 @@ def read_build_file(ohos_build_file):
             "config file '{}' doesn't exist.".format(ohos_build_file), "2014")
     subsystem_config = read_json_file(ohos_build_file)
     if subsystem_config is None:
-        raise OHOSException("read file '{}' failed.".format(ohos_build_file), "2014")
+        raise OHOSException(
+            "read file '{}' failed.".format(ohos_build_file), "2014")
     return subsystem_config
 
 
@@ -163,7 +166,7 @@ class PartObject(object):
             inner_kits_libs_gn.append('    },')
 
         inner_kits_libs_gn_line = '\n'.join(inner_kits_libs_gn)
-        inner_kits_def = inner_kits_template.format(part_name,
+        inner_kits_def = INNER_KITS_TEMPLATE.format(part_name,
                                                     inner_kits_libs_gn_line,
                                                     self._origin_name,
                                                     self._variant_name)
@@ -216,7 +219,7 @@ class PartObject(object):
             kits.append('"{}"'.format(_kits_lib.get('name')))
             system_kits_libs_gn.append('    },')
         _kits_libs_gn_line = '\n'.join(system_kits_libs_gn)
-        system_kits_def = system_kits_template.format(part_name,
+        system_kits_def = SYSTEM_KITS_TEMPLATE.format(part_name,
                                                       _kits_libs_gn_line,
                                                       self._origin_name,
                                                       self._variant_name)
@@ -226,7 +229,7 @@ class PartObject(object):
     def _parsing_config(self, part_name, part_config, subsystem_name):
         self._part_target_list = []
         build_gn_content = []
-        build_gn_content.append(import_list)
+        build_gn_content.append(IMPORT_LIST)
 
         # ohos part
         if 'module_list' not in part_config:
@@ -237,7 +240,7 @@ class PartObject(object):
             module_list_line = ''
         else:
             module_list_line = '"{}",'.format('",\n    "'.join(module_list))
-        parts_definition = part_template.format(part_name, subsystem_name,
+        parts_definition = PART_TEMPLATE.format(part_name, subsystem_name,
                                                 module_list_line,
                                                 self._origin_name,
                                                 self._variant_name)
@@ -260,7 +263,7 @@ class PartObject(object):
             self._part_target_list.append('test')
             test_list = part_config.get('test_list')
             test_list_line = '"{}",'.format('",\n    "'.join(test_list))
-            test_def = test_template.format(part_name, test_list_line,
+            test_def = TEST_TEMPLATE.format(part_name, test_list_line,
                                             subsystem_name)
             build_gn_content.append(test_def)
         self._build_gn_content = build_gn_content
@@ -309,7 +312,8 @@ class PartObject(object):
     def get_target_label(self, config_output_relpath):
         """target label."""
         if config_output_relpath.startswith('/'):
-            raise OHOSException("args config output relative path is incorrect.", "2003")
+            raise OHOSException(
+                "args config output relative path is incorrect.", "2003")
         if self._toolchain == '':
             return "//{0}/{1}:{1}".format(config_output_relpath,
                                           self._part_name)
@@ -321,7 +325,8 @@ class PartObject(object):
     def part_group_targets(self, config_output_relpath):
         """part group target."""
         if config_output_relpath.startswith('/'):
-            raise OHOSException("args config output relative path is incorrect.", "2003")
+            raise OHOSException(
+                "args config output relative path is incorrect.", "2003")
         _labels = {}
         _labels['part'] = self.get_target_label(config_output_relpath)
         for group_label in self._part_target_list:
@@ -472,7 +477,8 @@ class LoadBuildConfig(object):
         for _build_file in _build_files:
             if _build_file.endswith('bundle.json'):
                 part_name, part_syscap = get_syscap_from_bundle(_build_file)
-                subsystem_syscap.append({'component': part_name, 'syscap': part_syscap})
+                subsystem_syscap.append(
+                    {'component': part_name, 'syscap': part_syscap})
         return subsystem_syscap
 
     def parse(self):
@@ -541,6 +547,27 @@ class LoadBuildConfig(object):
         self.parse()
         return self._parts_module_list
 
+    def parts_info_filter(self, save_part):
+        if save_part is None:
+            raise Exception
+        self._parts_variants = {
+            key: value for key, value in self._parts_variants.items() if save_part == key}
+        self._part_list = {key: value for key,
+                           value in self._part_list.items() if save_part == key}
+        self._part_targets_label = {
+            key: value for key, value in self._part_targets_label.items() if save_part == key}
+        self._parts_info_dict = {
+            key: value for key, value in self._parts_info_dict.items() if save_part == key}
+        self._phony_targets = {
+            key: value for key, value in self._phony_targets.items() if save_part == key}
+        self._parts_path_dict = {
+            key: value for key, value in self._parts_path_dict.items() if save_part == key}
+        for key, value in self._part_hisysevent_config.items():
+            if save_part == key:
+                self._part_hisysevent_config = {key: value}
+        self._parts_module_list = {
+            key: value for key, value in self._parts_module_list.items() if save_part == key}
+
 
 def _output_parts_info(parts_config_dict, config_output_path):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
@@ -560,7 +587,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         _part_subsystem_file = os.path.join(parts_info_output_path,
                                             "part_subsystem.json")
         write_json_file(_part_subsystem_file, _part_subsystem_dict)
-        LogUtil.hb_info("generate part-subsystem of parts-info to '{}'".format(_part_subsystem_file))
+        LogUtil.hb_info(
+            "generate part-subsystem of parts-info to '{}'".format(_part_subsystem_file))
 
     # subsystem_parts.json
     if 'subsystem_parts' in parts_config_dict:
@@ -568,8 +596,9 @@ def _output_parts_info(parts_config_dict, config_output_path):
         subsystem_parts_file = os.path.join(parts_info_output_path,
                                             "subsystem_parts.json")
         write_json_file(subsystem_parts_file, subsystem_parts)
-        LogUtil.hb_info("generate ubsystem-parts of parts-info to '{}'".format(subsystem_parts_file))
-        
+        LogUtil.hb_info(
+            "generate ubsystem-parts of parts-info to '{}'".format(subsystem_parts_file))
+
         # adapter mini system
         for _sub_name, _p_list in subsystem_parts.items():
             _output_info = {}
@@ -578,7 +607,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
                                                  'mini_adapter',
                                                  '{}.json'.format(_sub_name))
             write_json_file(_sub_info_output_file, _output_info)
-        LogUtil.hb_info("generate mini adapter info to '{}/mini_adapter/'".format(config_output_path))
+        LogUtil.hb_info(
+            "generate mini adapter info to '{}/mini_adapter/'".format(config_output_path))
 
     # parts_variants.json
     if 'parts_variants' in parts_config_dict:
@@ -586,7 +616,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         parts_variants_info_file = os.path.join(parts_info_output_path,
                                                 "parts_variants.json")
         write_json_file(parts_variants_info_file, parts_variants)
-        LogUtil.hb_info("generate parts variants info to '{}'".format(parts_variants_info_file))
+        LogUtil.hb_info("generate parts variants info to '{}'".format(
+            parts_variants_info_file))
 
     # inner_kits_info.json
     if 'parts_inner_kits_info' in parts_config_dict:
@@ -594,7 +625,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         parts_inner_kits_info_file = os.path.join(parts_info_output_path,
                                                   "inner_kits_info.json")
         write_json_file(parts_inner_kits_info_file, parts_inner_kits_info)
-        LogUtil.hb_info("generate parts inner kits info to '{}'".format(parts_inner_kits_info_file))
+        LogUtil.hb_info("generate parts inner kits info to '{}'".format(
+            parts_inner_kits_info_file))
 
     # parts_targets.json
     if 'parts_targets' in parts_config_dict:
@@ -602,15 +634,17 @@ def _output_parts_info(parts_config_dict, config_output_path):
         parts_targets_info_file = os.path.join(parts_info_output_path,
                                                "parts_targets.json")
         write_json_file(parts_targets_info_file, parts_targets)
-        LogUtil.hb_info("generate parts targets info to '{}'".format(parts_targets_info_file))
-        
+        LogUtil.hb_info("generate parts targets info to '{}'".format(
+            parts_targets_info_file))
+
     # phony_targets.json
     if 'phony_target' in parts_config_dict:
         phony_target = parts_config_dict.get('phony_target')
         phony_target_info_file = os.path.join(parts_info_output_path,
                                               "phony_target.json")
         write_json_file(phony_target_info_file, phony_target)
-        LogUtil.hb_info("generate phony targets info to '{}'".format(phony_target_info_file))
+        LogUtil.hb_info("generate phony targets info to '{}'".format(
+            phony_target_info_file))
 
     # paths_path_info.json
     if 'parts_path_info' in parts_config_dict:
@@ -618,7 +652,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         parts_path_info_file = os.path.join(parts_info_output_path,
                                             'parts_path_info.json')
         write_json_file(parts_path_info_file, parts_path_info)
-        LogUtil.hb_info("generate parts path info to '{}'".format(parts_path_info_file))
+        LogUtil.hb_info(
+            "generate parts path info to '{}'".format(parts_path_info_file))
         path_to_parts = {}
         for _key, _val in parts_path_info.items():
             _p_list = path_to_parts.get(_val, [])
@@ -627,7 +662,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         path_to_parts_file = os.path.join(parts_info_output_path,
                                           'path_to_parts.json')
         write_json_file(path_to_parts_file, path_to_parts)
-        LogUtil.hb_info("generate path to parts to '{}'".format(path_to_parts_file))
+        LogUtil.hb_info(
+            "generate path to parts to '{}'".format(path_to_parts_file))
 
     # hisysevent_config
     if 'hisysevent_config' in parts_config_dict:
@@ -635,7 +671,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         hisysevent_info_file = os.path.join(parts_info_output_path,
                                             'hisysevent_configs.json')
         write_json_file(hisysevent_info_file, hisysevent_config)
-        LogUtil.hb_info("generate hisysevent info to '{}'".format(hisysevent_info_file))
+        LogUtil.hb_info(
+            "generate hisysevent info to '{}'".format(hisysevent_info_file))
 
     # _parts_modules_info
     if 'parts_modules_info' in parts_config_dict:
@@ -652,7 +689,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         parts_modules_info_file = os.path.join(parts_info_output_path,
                                                'parts_modules_info.json')
         write_json_file(parts_modules_info_file, _output_info)
-        LogUtil.hb_info("generate parts modules info to '{}'".format(parts_modules_info_file))
+        LogUtil.hb_info("generate parts modules info to '{}'".format(
+            parts_modules_info_file))
 
 
 def get_parts_info(source_root_dir,
@@ -679,14 +717,24 @@ def get_parts_info(source_root_dir,
     _parts_modules_info = {}
     system_syscap = []
     for subsystem_name, build_config_info in subsystem_info.items():
-        if subsystem_name == 'xts' and build_xts is False:
-            continue
+
         build_loader = LoadBuildConfig(source_root_dir, build_config_info,
                                        config_output_relpath,
                                        variant_toolchains, subsystem_name,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
                                        load_test_config)
+        # xts subsystem special handling, device_attest and
+        # device_attest_lite parts need to be compiled into the version image, other parts are not
+        if subsystem_name == 'xts' and build_xts is False:
+            xts_device_attest_name = {}
+            if 'device_attest' in build_loader.parts_modules_info():
+                xts_device_attest_name = 'device_attest'
+            elif 'device_attest_lite' in build_loader.parts_modules_info():
+                xts_device_attest_name = 'device_attest_lite'
+            else:
+                continue
+            build_loader.parts_info_filter(xts_device_attest_name)
         _parts_variants = build_loader.parts_variants()
         parts_variants.update(_parts_variants)
         _inner_kits_info = build_loader.parts_inner_kits_info()
@@ -701,7 +749,8 @@ def get_parts_info(source_root_dir,
         _parts_hisysevent_config.update(build_loader.parts_hisysevent_config())
         _parts_modules_info.update(build_loader.parts_modules_info())
         system_syscap.extend(build_loader.parse_syscap_info())
-    LogUtil.hb_info("generate all parts build gn file to '{}/{}'".format(source_root_dir, config_output_relpath))
+    LogUtil.hb_info(
+        "generate all parts build gn file to '{}/{}'".format(source_root_dir, config_output_relpath))
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts

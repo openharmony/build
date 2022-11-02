@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,9 +17,10 @@
 import os
 
 from resources.config import Config
-from util.logUtil import LogUtil
-from util.ioUtil import IoUtil
+from util.log_util import LogUtil
+from util.io_util import IoUtil
 from util.preloader.parse_vendor_product_config import get_vendor_parts_list
+
 
 class Outputs:
 
@@ -39,8 +40,11 @@ class Outputs:
                                                    'exclusion_modules.json')
         self.subsystem_config_json = os.path.join(output_dir,
                                                   'subsystem_config.json')
+        self.subsystem_config_overlay_json = os.path.join(output_dir,
+                                                  'subsystem_config_overlay.json')
         self.platforms_build = os.path.join(output_dir, 'platforms.build')
-        self.systemcapability_json = os.path.join(output_dir, 'SystemCapability.json')
+        self.systemcapability_json = os.path.join(
+            output_dir, 'SystemCapability.json')
 
 
 class Dirs:
@@ -51,8 +55,8 @@ class Dirs:
     def __post_init__(self, config):
         self.source_root_dir = config.root_path
         self.built_in_product_dir = config.built_in_product_path
-        self.productdefine_dir = os.path.join(self.source_root_dir, 'productdefine/common')
-        self.built_in_device_dir = config.built_in_device_path
+        self.productdefine_dir = os.path.join(
+            self.source_root_dir, 'productdefine/common')
         self.built_in_base_dir = os.path.join(self.productdefine_dir, 'base')
 
         # Configs of vendor specified products are stored in ${vendor_dir} directory.
@@ -60,10 +64,15 @@ class Dirs:
         # Configs of device specified products are stored in ${device_dir} directory.
         self.device_dir = os.path.join(config.root_path, 'device')
 
-        self.subsystem_config_json = os.path.join(config.root_path, config.subsystem_config_json)
-        self.lite_components_dir = os.path.join(config.root_path, 'build/lite/components')
+        self.subsystem_config_json = os.path.join(
+            config.root_path, config.subsystem_config_json)
+        self.subsystem_config_overlay_json = os.path.join(config.product_path,
+                                                          'subsystem_config_overlay.json')
+        self.lite_components_dir = os.path.join(
+            config.root_path, 'build/lite/components')
 
-        self.preloader_output_dir = os.path.join(config.root_path, 'out/preloader', config.product)
+        self.preloader_output_dir = os.path.join(
+            config.root_path, 'out/preloader', config.product)
 
 
 class Product():
@@ -104,19 +113,19 @@ class Product():
     # Update the syscap info
     def _update_syscap_info(self):
         product_name = self._config.get('product_name')
-        if product_name == None:
+        if product_name is None:
             product_name = ""
         os_level = self._config.get('type')
-        if os_level == None:
+        if os_level is None:
             os_level = ""
         api_version = self._config.get('api_version')
-        if api_version == None:
+        if api_version is None:
             api_version = 0
         manufacturer_id = self._config.get('manufacturer_id')
-        if manufacturer_id == None:
+        if manufacturer_id is None:
             manufacturer_id = 0
-        self._syscap_info = {'product':product_name, 'api_version':api_version,
-            'system_type':os_level, 'manufacturer_id':manufacturer_id}
+        self._syscap_info = {'product': product_name, 'api_version': api_version,
+                             'system_type': os_level, 'manufacturer_id': manufacturer_id}
 
     # Update the _device_name and _device_info based on the product configuration in the vendor warehouse
     def _update_device(self):
@@ -124,7 +133,8 @@ class Product():
             device_name = self._config.get('product_device')
             if device_name:
                 self._device_name = device_name
-                self._device_info = self._get_device_info_v2(device_name, self._dirs.built_in_device_dir)
+                self._device_info = self._get_device_info_v2(
+                    device_name, self._dirs.built_in_device_dir)
         else:
             device_name = self._config.get('board')
             if device_name:
@@ -141,80 +151,91 @@ class Product():
             _parts = {}
             self._parts = _parts
         else:
-          # 1. inherit parts information from base config
-          if self._version == "2.0":
-              os_level = self._config.get("type", "standard")
-          else:
-              os_level = self._config.get("type", "mini")
-          # 2. product config based on default minimum system
-          based_on_mininum_system = self._config.get('based_on_mininum_system')
-          if based_on_mininum_system == "true":
-              self._parts = self._get_base_parts(self._dirs.built_in_base_dir, os_level)
-          # 3. inherit parts information from inherit config
-          inherit = self._config.get('inherit')
-          if inherit:
-              self._parts.update(
-                  self._get_inherit_parts(inherit, self._dirs.source_root_dir))
+            # 1. inherit parts information from base config
+            if self._version == "2.0":
+                os_level = self._config.get("type", "standard")
+            else:
+                os_level = self._config.get("type", "mini")
+            # 2. product config based on default minimum system
+            based_on_mininum_system = self._config.get(
+                'based_on_mininum_system')
+            if based_on_mininum_system == "true":
+                self._parts = self._get_base_parts(
+                    self._dirs.built_in_base_dir, os_level)
+            # 3. inherit parts information from inherit config
+            inherit = self._config.get('inherit')
+            if inherit:
+                self._parts.update(
+                    self._get_inherit_parts(inherit, self._dirs.source_root_dir))
 
-          # 4. chipset products relate system parts config
-          sys_info_path = self._config.get('system_component')
-          if sys_info_path:
-              sys_parts = self._get_sys_relate_parts(sys_info_path, self._parts, self._dirs.source_root_dir)
-              self._parts.update(sys_parts)
-          all_parts = {}
-          if self._version == "2.0":
-            current_product_parts = self._config.get("parts")
-            if current_product_parts:
-              all_parts.update(current_product_parts)
-          else:
-            all_parts.update(get_vendor_parts_list(self._config))
-            all_parts.update(self._get_product_specific_parts())
+            # 4. chipset products relate system parts config
+            sys_info_path = self._config.get('system_component')
+            if sys_info_path:
+                sys_parts = self._get_sys_relate_parts(
+                    sys_info_path, self._parts, self._dirs.source_root_dir)
+                self._parts.update(sys_parts)
+            all_parts = {}
+            if self._version == "2.0":
+                current_product_parts = self._config.get("parts")
+                if current_product_parts:
+                    all_parts.update(current_product_parts)
+            else:
+                all_parts.update(get_vendor_parts_list(self._config))
+                all_parts.update(self._get_product_specific_parts())
 
-            device_name = self._config.get('board')
-            if device_name:
-                all_parts.update(self._get_device_specific_parts())
-          self._parts.update(all_parts)
+                device_name = self._config.get('board')
+                if device_name:
+                    all_parts.update(self._get_device_specific_parts())
+            self._parts.update(all_parts)
 
     # Update the _build_vars based on the product configuration in the vendor warehouse
     def _update_build_vars(self):
         config = self._config
         build_vars = {}
         if self._version == "1.0":
-          build_vars = {"os_level": 'large'}
+            build_vars = {"os_level": 'large'}
         else:
-          if self._version == "2.0":
-              build_vars['os_level'] = config.get("type", "standard")
-              device_name = config.get('product_device')
-              if device_name:
-                build_vars['device_name'] = device_name
-              else:
-                build_vars['device_name'] = ''
-              build_vars['product_company'] = config.get('product_company')
-          else:
-              build_vars['os_level'] = config.get('type', 'mini')
-              build_vars['device_name'] = config.get('board')
-              if config.get('product_company'):
+            if self._version == "2.0":
+                build_vars['os_level'] = config.get("type", "standard")
+                device_name = config.get('product_device')
+                if device_name:
+                    build_vars['device_name'] = device_name
+                else:
+                    build_vars['device_name'] = ''
                 build_vars['product_company'] = config.get('product_company')
-              elif os.path.dirname(self._config_file) != self._dirs.built_in_product_dir:
-                relpath = os.path.relpath(self._config_file, self._dirs.vendor_dir)
-                build_vars['product_company'] = relpath.split('/')[0]
-              else:
-                build_vars['product_company'] = config.get('device_company')
-          build_vars['product_name'] = config.get('product_name')
-          if 'enable_ramdisk' in config:
-              build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
-          if 'build_selinux' in config:
-              build_vars['build_selinux'] = config.get('build_selinux')
-          if 'build_seccomp' in config:
-              build_vars['build_seccomp'] = config.get('build_seccomp')
-          if 'support_jsapi' in config:
-              build_vars['support_jsapi'] = config.get('support_jsapi')
+            else:
+                build_vars['os_level'] = config.get('type', 'mini')
+                build_vars['device_name'] = config.get('board')
+                if config.get('product_company'):
+                    build_vars['product_company'] = config.get(
+                        'product_company')
+                elif os.path.dirname(self._config_file) != self._dirs.built_in_product_dir:
+                    relpath = os.path.relpath(
+                        self._config_file, self._dirs.vendor_dir)
+                    build_vars['product_company'] = relpath.split('/')[0]
+                else:
+                    build_vars['product_company'] = config.get(
+                        'device_company')
+            build_vars['product_name'] = config.get('product_name')
+            if 'enable_ramdisk' in config:
+                build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
+            if 'build_selinux' in config:
+                build_vars['build_selinux'] = config.get('build_selinux')
+            if 'build_seccomp' in config:
+                build_vars['build_seccomp'] = config.get('build_seccomp')
+            if 'support_jsapi' in config:
+                build_vars['support_jsapi'] = config.get('support_jsapi')
+            if 'chipprod_config_path' in config:
+                chipprod_config_path = os.path.join(
+                    self._dirs.source_root_dir, config.get('chipprod_config_path'))
+                if os.path.exists(chipprod_config_path):
+                    build_vars['chipprod_config_path'] = chipprod_config_path
         build_vars.update(self._device_info)
         if build_vars['os_level'] == 'mini' or build_vars['os_level'] == 'small':
             toolchain_label = ""
         else:
             toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
-                self._device_info['target_os'], self._device_info['target_cpu'])
+                self._device_info.get('target_os'), self._device_info.get('target_cpu'))
         build_vars['product_toolchain_label'] = toolchain_label
         self._build_vars = build_vars
 
@@ -265,19 +286,19 @@ class Product():
             device_info['device_build_path'] = config.get('device_build_path')
         else:
             device_build_path = os.path.join(self._dirs.device_dir,
-                                            config['device_company'],
-                                            config['board'])
+                                             config['device_company'],
+                                             config['board'])
             if not os.path.exists(device_build_path):
                 device_build_path = os.path.join(self._dirs.device_dir,
-                                                'board',
-                                                config['device_company'],
-                                                config['board'])
+                                                 'board',
+                                                 config['device_company'],
+                                                 config['board'])
             device_info['device_build_path'] = device_build_path
         return device_info
 
     def _get_device_specific_parts(self) -> dict:
         info = {}
-        if self._device_info and self._device_info.get('device_build_path'):           
+        if self._device_info and self._device_info.get('device_build_path'):
             subsystem_name = 'device_{}'.format(self._device_name)
             part_name = subsystem_name
             info['{}:{}'.format(subsystem_name, part_name)] = {}
@@ -295,7 +316,7 @@ class Product():
 
     def _get_base_parts(self, base_config_dir, os_level) -> dict:
         system_base_config_file = os.path.join(base_config_dir,
-                                              '{}_system.json'.format(os_level))
+                                               '{}_system.json'.format(os_level))
         if not os.path.exists(system_base_config_file):
             raise Exception("product configuration '{}' doesn't exist.".format(
                 system_base_config_file))
@@ -314,7 +335,8 @@ class Product():
         return inherit_parts
 
     def _get_sys_relate_parts(self, system_component_info, _parts, source_root_dir) -> dict:
-        _info = IoUtil.read_json_file(os.path.join(source_root_dir, system_component_info))
+        _info = IoUtil.read_json_file(os.path.join(
+            source_root_dir, system_component_info))
         ret = {}
         parts = _info.get('parts')
         if not parts:
@@ -345,6 +367,8 @@ class Product():
     def _get_full_product_config(self) -> dict:
         config = IoUtil.read_json_file(self._config_file)
         if config.get("version") == '3.0':
-            if os.path.dirname(self._config_file) != self._dirs.built_in_product_dir and not hasattr(self._config, 'product_build_path'):
-                config['product_build_path'] = os.path.relpath(os.path.dirname(self._config_file), self._dirs.source_root_dir)
+            if os.path.dirname(self._config_file) != self._dirs.built_in_product_dir \
+                    and not hasattr(self._config, 'product_build_path'):
+                config['product_build_path'] = os.path.relpath(
+                    os.path.dirname(self._config_file), self._dirs.source_root_dir)
         return config
