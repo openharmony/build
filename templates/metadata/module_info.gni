@@ -54,7 +54,7 @@ template("generate_module_info") {
   }
   module_deps = [ get_label_info(module_label, "label_no_toolchain") ]
 
-  gen_script = rebase_path("//build/templates/metadata/gen_module_info.py")
+  gen_script = "//build/templates/metadata/gen_module_info.py"
 
   if (!defined(module_source_dir)) {
     module_source_dir = "$root_out_dir"
@@ -106,11 +106,16 @@ template("generate_module_info") {
     rebase_path(module_source_dir, "$root_build_dir"),
     "--label-name",
     module_name,
-    "--install-name",
-    module_install_name,
     "--output-file",
     rebase_path(output_file, "$root_build_dir"),
   ]
+
+  if (module_install_name != "") {
+    arguments += [
+      "--install-name",
+      module_install_name,
+    ]
+  }
 
   if (defined(invoker.module_alt_output_extension)) {
     arguments += [
@@ -127,19 +132,19 @@ template("generate_module_info") {
   }
 
   if (defined(module_install_images)) {
-    if (!defined(module_install_dir)) {
-      module_install_dir = ""
+    if (defined(module_install_dir) && module_install_dir != "") {
+      arguments += [
+        "--module-install-dir",
+        module_install_dir,
+      ]
     }
-    if (!defined(relative_install_dir)) {
-      relative_install_dir = ""
+    if (defined(relative_install_dir) && relative_install_dir != "") {
+      arguments += [
+        "--relative-install-dir",
+        relative_install_dir,
+      ]
     }
-    arguments += [
-      "--module-install-dir",
-      module_install_dir,
-      "--relative-install-dir",
-      relative_install_dir,
-      "--install-images",
-    ]
+    arguments += [ "--install-images" ]
     arguments += module_install_images
   }
 
@@ -149,11 +154,6 @@ template("generate_module_info") {
       "--prebuilt",
       "--module-source",
       module_source,
-    ]
-  } else {
-    arguments += [
-      "--install-name",
-      module_install_name,
     ]
   }
 
@@ -180,9 +180,17 @@ template("generate_module_info") {
     ]
   }
 
-  exec_script(gen_script, arguments)
+  if (defined(build_ohos_sdk) && build_ohos_sdk) {
+    exec_script(gen_script, arguments)
+  } else {
+    action(target_name) {
+      script = gen_script
+      outputs = [ output_file ]
+      args = arguments
+    }
+  }
 
-  generated_file("${target_name}") {
+  generated_file("${target_name}_install_info") {
     outputs = [ "${target_out_dir}/${module_name}_install_info.json" ]
     data_keys = [ "install_modules" ]
     output_conversion = "json"
