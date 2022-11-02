@@ -85,6 +85,53 @@ template("ohos_copy") {
     _deps += [ ":$_notice_target" ]
   }
 
+  if (!_bypass_module_info_generation) {
+    _module_info_target = "${_main_target_name}_info"
+    generate_module_info(_module_info_target) {
+      forward_variables_from(invoker,
+                             [
+                               "module_install_dir",
+                               "relative_install_dir",
+                               "module_source_dir",
+                               "module_install_name",
+                               "module_type",
+                               "install_enable",
+                             ])
+      module_name = _main_target_name
+      if (!defined(module_type)) {
+        module_type = "unknown"
+      }
+      if (!defined(module_source_dir)) {
+        module_source_dir = "${target_out_dir}"
+      }
+
+      if (_is_prebuilt) {
+        _outputs = invoker.outputs
+        module_source = string_replace(_outputs[0], "${target_out_dir}/", "", 1)
+      }
+      prebuilt = _is_prebuilt
+
+      if (!defined(install_enable)) {
+        install_enable = false
+      }
+
+      module_install_images = [ "system" ]
+      if (defined(invoker.install_images)) {
+        module_install_images = []
+        module_install_images += invoker.install_images
+      }
+
+      if (defined(invoker.symlink_target_name)) {
+        symlink_target_name = invoker.symlink_target_name
+      }
+
+      notice = "$target_out_dir/$_main_target_name.notice.txt"
+    }
+    if (!skip_gen_module_info) {
+      _deps += [ ":$_module_info_target" ]
+    }
+  }
+
   if (defined(invoker.enable_strip) && invoker.enable_strip) {
     action_with_pydeps(target_name) {
       forward_variables_from(invoker,
@@ -153,50 +200,6 @@ template("ohos_copy") {
           install_modules = [ _install_module_info ]
         }
       }
-    }
-  }
-  if (skip_gen_module_info) {
-    not_needed(invoker, "*")
-  } else if (!_bypass_module_info_generation) {
-    generate_module_info("${_main_target_name}_info") {
-      forward_variables_from(invoker,
-                             [
-                               "module_install_dir",
-                               "relative_install_dir",
-                               "module_source_dir",
-                               "module_install_name",
-                               "module_type",
-                               "install_enable",
-                             ])
-      module_name = _main_target_name
-      if (!defined(module_type)) {
-        module_type = "unknown"
-      }
-      if (!defined(module_source_dir)) {
-        module_source_dir = "${target_out_dir}"
-      }
-
-      if (_is_prebuilt) {
-        _outputs = invoker.outputs
-        module_source = string_replace(_outputs[0], "${target_out_dir}/", "", 1)
-      }
-      prebuilt = _is_prebuilt
-
-      if (!defined(install_enable)) {
-        install_enable = false
-      }
-
-      module_install_images = [ "system" ]
-      if (defined(invoker.install_images)) {
-        module_install_images = []
-        module_install_images += invoker.install_images
-      }
-
-      if (defined(invoker.symlink_target_name)) {
-        symlink_target_name = invoker.symlink_target_name
-      }
-
-      notice = "$target_out_dir/$_main_target_name.notice.txt"
     }
   }
 }

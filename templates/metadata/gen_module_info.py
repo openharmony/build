@@ -126,7 +126,7 @@ def main():
     parser.add_argument('--type', help='module type', required=True)
     parser.add_argument('--source-dir', help='', required=True)
     parser.add_argument('--install-images', nargs='+', help='')
-    parser.add_argument('--install-name', help='', required=False)
+    parser.add_argument('--install-name', help='', required=False, default='')
     parser.add_argument('--suffix', help='', required=False)
     parser.add_argument('--alternative-suffix',
                         help='alternative extension for java library targets',
@@ -144,8 +144,8 @@ def main():
     parser.add_argument('--collect', dest='collect', action='store_true')
     parser.add_argument('--notice', help='path to notice')
     parser.set_defaults(collect=False)
-    parser.add_argument('--module-install-dir', help='', required=False)
-    parser.add_argument('--relative-install-dir', help='', required=False)
+    parser.add_argument('--module-install-dir', help='', required=False, default='')
+    parser.add_argument('--relative-install-dir', help='', required=False, default='')
     parser.add_argument('--prefix-override',
                         dest='prefix_override',
                         action='store_true')
