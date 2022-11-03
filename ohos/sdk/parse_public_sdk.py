@@ -31,6 +31,10 @@ API_MODIFY_TOOL = os.path.join(API_MODIFY_DIR, "delete_systemapi_plugin.js")
 API_PATH = os.path.join(OUTPATH, "api")
 API_GEN_PATH = os.path.join(OUTPATH, "build-tools/api")
 DEL_TARGET = ["//interface/sdk-js:bundle_api"]
+PERMISSION_CONVERT_DIR = os.path.join(API_MODIFY_DIR, "permissions_converter")
+PERMISSION_CONVERT_TOOL = os.path.join(PERMISSION_CONVERT_DIR, "convert.js")
+CONFIG_FILE = os.path.join("base", "global", "system_resources", "systemres", "main", "config.json")
+PERMISSION_GEN_PATH = os.path.join(API_GEN_PATH, "permissions.d.ts")
 
 
 def copy_sdk_interface(source_root):
@@ -57,6 +61,18 @@ def remove_system_api_method(source_root, nodejs):
                         stdout=subprocess.PIPE)
     p.wait()
 
+
+def convert_permission_method(source_root, nodejs):
+    tool = os.path.abspath(os.path.join(source_root, PERMISSION_CONVERT_TOOL))
+    nodejs = os.path.abspath(nodejs)
+    config = os.path.abspath(os.path.join(source_root, CONFIG_FILE))
+    output_path = os.path.abspath(os.path.join(source_root, PERMISSION_GEN_PATH))
+    cmd = "{} {} {} {}".format(nodejs, tool, config, output_path)
+    process = subprocess.Popen(cmd, shell=True,
+                        cwd=os.path.abspath(os.path.join(source_root, PERMISSION_CONVERT_DIR)),
+                        stdout=subprocess.PIPE)
+    process.wait()
+
 def regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file):
     info_list = read_json_file(sdk_description_file)
     public_info_list = []
@@ -73,6 +89,7 @@ def regenerate_sdk_description_file(source_root, sdk_description_file, output_pu
 def parse_step(sdk_description_file, source_root, nodejs, output_pub_sdk_desc_file):
     copy_sdk_interface(source_root)
     remove_system_api_method(source_root, nodejs)
+    convert_permission_method(source_root, nodejs)
     replace_sdk_api_dir(source_root)
     regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file)
 

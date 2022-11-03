@@ -159,9 +159,9 @@
     "path": "foundation/distributedhardware",
     "name": "distributedhardware"
   },
-  "ark": {
+  "arkcompiler": {
     "path": "arkcompiler",
-    "name": "ark"
+    "name": "arkcompiler"
   },
   "iothardware": {
     "path": "base/iothardware",

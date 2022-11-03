@@ -80,10 +80,10 @@ def readjson(path,device):
         data.update(config_dic)
         for datakey in data:
             if "enable_ramdisk" in datakey:
-                dict_keys = ["product_name","device_company","device_build_path","target_cpu","type","version","board","enable_ramdisk","subsystems"]
+                dict_keys = ["product_name","device_company","device_build_path","target_cpu","type","version","board","enable_ramdisk","enable_absystem","subsystems"]
                 break
             else:
-                dict_keys = ["product_name","device_company","device_build_path","target_cpu","type","version","board","subsystems"]
+                dict_keys = ["product_name","device_company","device_build_path","target_cpu","type","version","board","enable_absystem","subsystems"]
         dict_you_want = { new_key: data[new_key] for new_key in dict_keys }
         json_data = json.dumps(dict_you_want, indent=2)
         f.seek(0)

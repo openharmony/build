@@ -150,8 +150,8 @@ def main():
     parser.add_argument(
         '--additional-system-files',
         action='append',
-        help=
-        "additional system files is used for files don't have module infos. use with caution"
+        help="additional system files is used for files don't have module infos. \
+                use with caution"
     )
     parser.add_argument('--post-process-modules-info-files',
                         nargs='*',
