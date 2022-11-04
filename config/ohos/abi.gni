@@ -8,7 +8,7 @@
 assert(is_ohos)
 
 declare_args() {
-  # Adds intrumentation to each function. Writes a file with the order that
+  # Adds instrumentation to each function. Writes a file with the order that
   # functions are called at startup.
   use_order_profiling = false
 
