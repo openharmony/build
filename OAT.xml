@@ -23,9 +23,9 @@ licensefile:
 
 tasklist(only for batch mode):
 1. task: Define oat check thread, each task will start a new thread.
-2. task name: Only an name, no practical effect.
-3. task policy: Default policy for projects under this task, this field is required and the specified policy must defined in policylist.
-4. task filter: Default filefilter for projects under this task, this field is required and the specified filefilter must defined in filefilterlist.
+2. task name: Only a name, no practical effect.
+3. task policy: Default policy for projects under this task, this field is required and the specified policy must be defined in policylist.
+4. task filter: Default filefilter for projects under this task, this field is required and the specified filefilter must be defined in filefilterlist.
 5. task project: Projects to be checked, the path field define the source root dir of the project.
 
 
@@ -42,8 +42,8 @@ policyList:
     "filename" is used to check whether the specified file exists in the specified path(support projectroot in default OAT.xml), supported file names: LICENSE, README, README.OpenSource
 
 4. policyitem name: This field is used for define the license, copyright, "*" means match all, the "!" prefix means could not match this value. For example, "!GPL" means can not use GPL license. 
-5. policyitem path: This field is used for define the source file scope to apply this policyitem, the "!" prefix means exclude the files. For example, "!.*/lib/.*" means files in lib dir will be exclude while process this policyitem.
-6. policyitem rule and group: These two fields are used together to merge policy results. "may" policyitems in the same group means any one in this group passed, the result will be passed.
+5. policyitem path: This field is used for define the source file scope to apply this policyitem, the "!" prefix means exclude the files. For example, "!.*/lib/.*" means files in lib dir will be excluded while process this policyitem.
+6. policyitem rule and group: These two fields are used together to merge policy results. "may" policyitems in the same group means anyone in this group passed, the result will be passed.
 7. policyitem filefilter: Used to bind filefilter which define filter rules.
 8. filefilter: Filter rules, the type filename is used to filter file name, the type filepath is used to filter file path.
 

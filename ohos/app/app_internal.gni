@@ -257,14 +257,14 @@ template("package_app") {
       }
     }
     if (defined(enable_ark) && enable_ark) {
-      _ark_dpes = [
-        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",
+      _ark_deps = [
         "//arkcompiler/ets_frontend/ts2panda:ark_ts2abc_build($host_toolchain)",
+        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",
       ]
       if (defined(deps)) {
-        deps += _ark_dpes
+        deps += _ark_deps
       } else {
-        deps = _ark_dpes
+        deps = _ark_deps
       }
       _js2abc_js = get_label_info(
                        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",

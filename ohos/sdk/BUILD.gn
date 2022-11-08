@@ -20,7 +20,7 @@ parse_script = "//build/ohos/sdk/parse_sdk_description.py"
 ohos_sdk_description_file = "//build/ohos/sdk/ohos_sdk_description_std.json"
 
 if (sdk_build_public) {
-  pulibc_sdk_config_parser = "//build/ohos/sdk/parse_public_sdk.py"
+  public_sdk_config_parser = "//build/ohos/sdk/parse_public_sdk.py"
   ohos_sdk_pub_description_file =
       "//out/sdk-public/ohos_sdk_pub_description_std.json"
   public_sdk_args = [
@@ -33,7 +33,7 @@ if (sdk_build_public) {
     "--output-pub-sdk-desc-file",
     rebase_path(ohos_sdk_pub_description_file, root_build_dir),
   ]
-  exec_script(pulibc_sdk_config_parser, public_sdk_args)
+  exec_script(public_sdk_config_parser, public_sdk_args)
   ohos_sdk_description_file = ohos_sdk_pub_description_file
 }
 

@@ -42,7 +42,7 @@
 
 **需要注意及检查的问题**
 
-1. 三方的开源软件，比如openssl，icu等，这部分软件基本上在源码目录下都是要求配置Readme.OpenSource，要检查Readme.OpenSource文件是否和BUILD.gn文件在同一个目录，以及Reame.OpenSource文件中配置的License文件是否存在以及真是有效。
+1. 三方的开源软件，比如openssl，icu等，这部分软件基本上在源码目录下都是要求配置Readme.OpenSource，要检查Readme.OpenSource文件是否和BUILD.gn文件在同一个目录，以及Readme.OpenSource文件中配置的License文件是否存在以及真是有效。
 2. 代码目录下，如果代码使用的不是Apache2.0 License，需要在目录下提供对应的License文件，或者直接在模块中指定license_file。
 3. 如果BUILD.gn中添加的源码文件不是当前目录的，需要检查下源码文件所在仓下的license是否和BUILD.gn文件所在仓的一致，不一致的需要处理。
 
