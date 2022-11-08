@@ -25,7 +25,6 @@ sys.path.append(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__)))))
 from lite.hb_internal.common import utils
 
-
 class Config:
     def __init__(self):
 
@@ -38,13 +37,13 @@ class Config:
 
 
 class Packer():
-    def __init__(self, args) -> None:
+    def __init__(self, packer_args) -> None:
         self.config = Config()
-        self.config.product = args.product
-        self.config.root_path = args.root_path
-        self.config.out_path = args.out_path
-        self.config.log_path = args.log_path
-        self.config.product_path = args.product_path
+        self.config.product = packer_args.product
+        self.config.root_path = packer_args.root_path
+        self.config.out_path = packer_args.out_path
+        self.config.log_path = packer_args.log_path
+        self.config.product_path = packer_args.product_path
         self.replace_items = {
             r'${product_name}': self.config.product,
             r'${root_path}': self.config.root_path,
