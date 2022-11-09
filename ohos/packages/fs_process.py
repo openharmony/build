@@ -24,26 +24,11 @@ import argparse
 sys.path.append(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__)))))
 from lite.hb_internal.common import utils
-
-class Config:
-    def __init__(self):
-
-        self.product = ""
-        self.root_path = ""
-        self.out_path = ""
-        self.log_path = ""
-        self.product_path = ""
-        self.fs_attr = set()
-
+from lite.hb_internal.common.config import Config
 
 class Packer():
     def __init__(self, packer_args) -> None:
         self.config = Config()
-        self.config.product = packer_args.product
-        self.config.root_path = packer_args.root_path
-        self.config.out_path = packer_args.out_path
-        self.config.log_path = packer_args.log_path
-        self.config.product_path = packer_args.product_path
         self.replace_items = {
             r'${product_name}': self.config.product,
             r'${root_path}': self.config.root_path,
