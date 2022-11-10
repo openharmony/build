@@ -194,6 +194,16 @@
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
           "unzip_filename": "linux-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/bpftool_v5.10.93.tar.gz",
+          "unzip_filename": "bpftool"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/pahole_v1.24.tar.gz",
+          "unzip_filename": "pahole"
         }
       ]
     },
@@ -285,6 +295,16 @@
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
           "unzip_filename": "linux-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/bpftool_v5.10.93.tar.gz",
+          "unzip_filename": "bpftool"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/pahole_v1.24.tar.gz",
+          "unzip_filename": "pahole"
         }
       ]
     }
