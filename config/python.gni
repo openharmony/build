@@ -45,7 +45,7 @@ template("python_library") {
 
       # Filter out comments.
       sources = _py_files
-      sources = filter_exclude(sources, ["#*"])
+      sources = filter_exclude(sources, [ "#*" ])
 
       # Even though the .pydep file is not used at runtime, it must be added
       # so that "gn analyze" will mark the target as changed when .py files
@@ -85,7 +85,7 @@ template("action_with_pydeps") {
   if (defined(sources)) {
     _old_sources = sources
   }
-  sources = filter_exclude(_pydeps_raw, ["#*"])
+  sources = filter_exclude(_pydeps_raw, [ "#*" ])
   _pydeps = sources
   sources = _old_sources
 
@@ -128,7 +128,7 @@ template("action_foreach_with_pydeps") {
   if (defined(sources)) {
     _old_sources = sources
   }
-  sources = filter_exclude(_pydeps_raw, ["#*"])
+  sources = filter_exclude(_pydeps_raw, [ "#*" ])
   _pydeps = sources
   sources = _old_sources
 
