@@ -77,6 +77,10 @@ def write_meta_data(options, direct_deps):
         root['resources'] = options.resources
     if options.type == 'js_assets':
         root[options.type] = options.js_assets
+        if options.js_forms:
+            root['js_forms'] = options.js_forms
+        if options.testrunner:
+            root['testrunner'] = options.testrunner
     if options.type == 'ets_assets':
         root[options.type] = options.ets_assets
     if options.type == 'assets':
@@ -99,6 +103,8 @@ def write_meta_data(options, direct_deps):
     if options.type == 'hap' or options.type == 'resources':
         hap_profile = options.hap_profile
         root['hap_profile'] = hap_profile if hap_profile else ""
+
+    # Merge all metadata
     if options.type == 'hap':
         deps = Deps(direct_deps)
         root['hap_path'] = options.hap_path
@@ -121,6 +127,10 @@ def write_meta_data(options, direct_deps):
                     root[target_type] = dep[target_type]
                     if dep.get('hap_profile'):
                         root['hap_profile'] = dep['hap_profile']
+                    if dep.get('js_forms'):
+                        root['js_forms'] = dep['js_forms']
+                    if dep.get('testrunner'):
+                        root['testrunner'] = dep['testrunner']
         target_type = 'unresolved_assets'
         for dep in deps.All(target_type):
             if options.js2abc:
@@ -137,6 +147,37 @@ def write_meta_data(options, direct_deps):
                     root.get('ets_assets').append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
+# Collect assets entry according to config.json
+def load_assets(options, assets, assets_type):
+    pre_path = assets[0]
+    with open(options.hap_profile) as profile:
+        config = json.load(profile)
+
+        # In multi-ability cases, load the assets entry according to "srcPath" in config.json
+        if os.path.basename(pre_path) == 'js' or os.path.basename(pre_path) == 'ets':
+            assets = []
+            for ability in config['module']['abilities']:
+                if assets_type == 'js':
+                    if ability.__contains__('srcPath') and ability.get('srcLanguage') == assets_type:
+                        assets.append(os.path.join(pre_path, ability['srcPath']))
+
+                    # Load js form entry according to "jsComponentName" in config.json
+                    if ability.__contains__('forms'):
+                        for form in ability['forms']:
+                            if form.__contains__('jsComponentName'):
+                                options.js_forms.append(os.path.join(pre_path, form['jsComponentName']))
+                            else:
+                                raise Exception('"module.abilities.ability.forms.form.jsComponentName" is required')
+                else:
+                    if ability.__contains__('srcPath'):
+                        assets.append(os.path.join(pre_path, ability['srcPath']))
+        else:
+            pre_path = os.path.dirname(pre_path)
+
+        # Load testrunner entry
+        if config['module'].__contains__('testRunner') and assets_type == 'js':
+            options.testrunner.append(os.path.join(pre_path, config['module']['testRunner']['srcPath']))
+    return assets
 
 def main():
     parser = argparse.ArgumentParser()
@@ -156,7 +197,7 @@ def main():
                         help='package name for hap resources')
     parser.add_argument('--hap-profile', help='path to hap profile')
     parser.add_argument('--app-profile', help='path to app profile')
-    parser.add_argument('--unresolved-assets', help='unresolved assets directory')
+    parser.add_argument('--unresolved-assets', nargs='+', help='unresolved assets directory')
     parser.add_argument('--js2abc',
                         action='store_true',
                         default=False,
@@ -164,47 +205,19 @@ def main():
     options = parser.parse_args()
     direct_deps = options.deps_metadata if options.deps_metadata else []
 
-    if not options.app_profile and options.hap_profile and options.js_assets:
-        with open(options.hap_profile) as profile:
-            config = json.load(profile)
-            pre_path = options.js_assets[0]
-            options.js_assets = []
-            if len(config['module']['abilities']) > 1 or config['module'].__contains__('testRunner'):
-                if config['module']['abilities'][0].get('srcLanguage') == 'js':
-                    for ability in config['module']['abilities']:
-                        options.js_assets.append(pre_path + '/' + ability['srcPath'])
-                        if ability.__contains__('forms'):
-                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
-                else:
-                    for ability in config['module']['abilities']:
-                        if ability.__contains__('forms'):
-                            options.js_assets.append(pre_path + '/' + ability['forms'][0]['name'])
-            else:
-                options.js_assets.append(pre_path)
-            if config['module'].__contains__('testRunner'):
-                options.js_assets.append(pre_path + '/' + config['module']['testRunner']['srcPath'])
+    # js forms entry list
+    options.js_forms = []
 
-    if not options.app_profile and options.hap_profile and options.ets_assets:
-        with open(options.hap_profile) as profile:
-            config = json.load(profile)
-            pre_path = options.ets_assets[0]
-            options.ets_assets = []
-            if len(config['module']['abilities']) > 1:
-                for ability in config['module']['abilities']:
-                    options.ets_assets.append(pre_path + '/' + ability['srcPath'])
-            else:
-                options.ets_assets.append(pre_path)
+    # testrunner entry list
+    options.testrunner = []
 
-    if not options.app_profile and options.hap_profile and options.unresolved_assets:
-        with open(options.hap_profile) as profile:
-            config = json.load(profile)
-            pre_path = options.unresolved_assets
-            options.unresolved_assets = []
-            if len(config['module']['abilities']) > 1:
-                for ability in config['module']['abilities']:
-                    options.unresolved_assets.append(pre_path + '/' + ability['srcPath'])
-            else:
-                options.unresolved_assets.append(pre_path)
+    if options.hap_profile:
+        if options.js_assets:
+            options.js_assets = load_assets(options, options.js_assets, 'js')
+        if options.ets_assets:
+            options.ets_assets = load_assets(options, options.ets_assets, 'ets')
+        if options.unresolved_assets:
+            options.unresolved_assets = load_assets(options, options.unresolved_assets, 'unresolved')
 
     possible_input_strings = [
         options.type, options.raw_assets, options.js_assets, options.ets_assets, options.resources,
