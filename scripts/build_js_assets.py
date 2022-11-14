@@ -154,10 +154,10 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
                 data = make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path)
                 build_utils.write_json(data, manifest)
 
-        # If missing page, skip it
-        if not data.__contains__('pages'):
-            print('Warning: There is no page matching this {}'.format(src_path))
-            continue
+            # If missing page, skip it
+            if not data.__contains__('pages'):
+                print('Warning: There is no page matching this {}'.format(src_path))
+                continue
 
         if not options.app_profile:
             my_env["aceManifestPath"] = manifest
