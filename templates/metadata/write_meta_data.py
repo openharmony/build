@@ -177,6 +177,8 @@ def load_assets(options, assets, assets_type):
         # Load testrunner entry
         if config['module'].__contains__('testRunner') and assets_type == 'js':
             options.testrunner.append(os.path.join(pre_path, config['module']['testRunner']['srcPath']))
+    if not assets:
+        assets.append(pre_path)
     return assets
 
 def main():
