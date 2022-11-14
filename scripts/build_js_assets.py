@@ -84,14 +84,13 @@ def make_my_env(options, js2abc):
 def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path):
     data = dict()
     data['appID'] = config['app']['bundleName']
-    if config['module']['abilities'][asset_index].__contains__("label"):
-        data['appName'] = config['module']['abilities'][asset_index]['label']
     if options.app_profile:
         data['versionName'] = config['app']['versionName']
         data['versionCode'] = config['app']['versionCode']
         data['pages'] = config['module']['pages']
         data['deviceType'] = config['module']['deviceTypes']
     else:
+        data['appName'] = config['module']['abilities'][asset_index].get('label')
         data['versionName'] = config['app']['version']['name']
         data['versionCode'] = config['app']['version']['code']
         data['deviceType'] = config['module']['deviceType']
