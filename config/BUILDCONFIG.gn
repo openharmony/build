@@ -805,6 +805,7 @@ if (is_lite_system) {
 
 set_defaults("executable") {
   configs = default_executable_configs
+  rustflags = [ "-Cdebuginfo=2" ]
 }
 
 set_defaults("static_library") {
@@ -813,6 +814,10 @@ set_defaults("static_library") {
 
 set_defaults("shared_library") {
   configs = default_shared_library_configs
+}
+
+set_defaults("rust_library") {
+  rustflags = [ "-Cdebuginfo=2" ]
 }
 
 set_defaults("source_set") {

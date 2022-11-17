@@ -1,0 +1,4 @@
+executable("hello_world_rust"){
+    sources = [ "main.rs" ]
+    configs = []
+}

@@ -1,0 +1,3 @@
+group("default"){
+    deps = [ "//build/rust/src:hello_world_rust"]
+}

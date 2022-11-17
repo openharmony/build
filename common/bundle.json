@@ -12,6 +12,7 @@
     "build": {
       "sub_component": [
         "//build/common:common_packages",
+        "//build/rust:default",
         "//third_party/f2fs-tools:f2fs-tools_host_toolchain"
       ]
     }
