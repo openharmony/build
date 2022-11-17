@@ -76,7 +76,7 @@ def store_args(args):
 def start_check():
     print('---Start  check---\n')
     # check all gn
-    cg = CheckGn(csctglb.ohos_root, csctglb.whitelist, csctglb.check_path)
+    cg = CheckGn(csctglb.ohos_root, check_path=csctglb.check_path)
     gn_errs = cg.output()
 
     # check all bundle.json

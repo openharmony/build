@@ -71,7 +71,9 @@ def main():
     table.align['定位'] = 'l'
     table.align['错误说明'] = 'l'
     info = table.get_string()
-
+    print('If you have any question, please access component static check rules:',
+    'https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/subsystems/subsys-build-component-building-rules.md',
+    'or https://gitee.com/openharmony/build/tree/master/tools/component_tools/static_check/readme.md')
     print('There are(is) {} error(s):\n'.format(len(errs_info)))
     print(str(info))
     return
