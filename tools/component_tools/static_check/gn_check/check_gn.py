@@ -65,26 +65,26 @@ class CheckGn(object):
             dict: key是文件名（包含路径），values是target列表
         """
 
-        TARGET_PATTERN = r"^( *)("
+        target_pattern = r"^( *)("
         for target in self.TARGET_NAME:
-            TARGET_PATTERN += target
+            target_pattern += target
             if target != self.TARGET_NAME[-1]:
-                TARGET_PATTERN += r'|'
-        TARGET_PATTERN += r")[\s|\S]*?\n\1}$"
+                target_pattern += r'|'
+        target_pattern += r")[\s|\S]*?\n\1}$"
         all_gn_data = dict()
 
-        for f in self.all_gn_files:
-            if not f.endswith('.gn'):
+        for gn_file in self.all_gn_files:
+            if not gn_file.endswith('.gn'):
                 continue
-            file = open(f, errors='ignore')
-            iter = GnCommon.find_paragraph_iter(TARGET_PATTERN, file.read())
+            file = open(gn_file, errors='ignore')
+            targets_ret = GnCommon.find_paragraph_iter(target_pattern, file.read())
             file.close()
             target = list()  # 每个文件中的target
-            for it in iter:
-                target.append(it.group())
+            for target_ret in targets_ret:
+                target.append(target_ret.group())
             if len(target) == 0:
                 continue
-            all_gn_data.update({f[len(self.ohos_root)+1:]: target})
+            all_gn_data.update({gn_file[len(self.ohos_root) + 1:]: target})
         return all_gn_data
 
     def get_all_abs_path(self) -> list:
@@ -93,19 +93,19 @@ class CheckGn(object):
         Returns:
             list: list中的元素是字典，每个字典中是一条绝对路径的信息
         """
-        ABS_PATH_PATTERN = r'"\/(\/[^\/\n]*)+"'
+        abs_path_pattern = r'"\/(\/[^\/\n]*)+"'
         ret_list = list()
 
         all_info = GnCommon.grep_one(
-            ABS_PATH_PATTERN, self.abs_check_path, exclude=self.black_dir, grep_parameter='Porn')
+            abs_path_pattern, self.abs_check_path, excludes=self.black_dir, grep_parameter='Porn')
         if all_info is None:
             return None
         row_info = all_info.split('\n')
         for item in row_info:
-            it = item.split(':')
-            path = it[0][len(self.ohos_root)+1:]
-            line_number = it[1]
-            content = it[2].strip('"')
+            abs_info = item.split(':')
+            path = abs_info[0][len(self.ohos_root) + 1:]
+            line_number = abs_info[1]
+            content = abs_info[2].strip('"')
             ret_list.append(
                 {'path': path, 'line_number': line_number, 'content': content})
         return ret_list
@@ -120,20 +120,20 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '文件', '定位', '违反规则', '错误说明']
         """
-        PATTERN = 'product_name|device_name'
-        ISSUE = '存在 product_name 或 device_name'
-        RULES = '规则4.1 部件编译脚本中禁止使用产品名称变量'
+        pattern = 'product_name|device_name'
+        issue = '存在 product_name 或 device_name'
+        rules = '规则4.1 部件编译脚本中禁止使用产品名称变量'
         bad_targets_to_excel = list()
         all_info = GnCommon.grep_one(
-            PATTERN, self.abs_check_path, exclude=self.black_dir)
+            pattern, self.abs_check_path, excludes=self.black_dir)
         if all_info is None:
             return None
         product_name_data = all_info.split('\n')
         for line in product_name_data:
             info = line.split(':')
-            file_name = info[0][len(self.abs_check_path)+1:]
+            file_name = info[0][len(self.abs_check_path) + 1:]
             bad_targets_to_excel.append([file_name, 'line:{}:{}'.format(
-                info[1], info[2].strip()), RULES, ISSUE])
+                info[1], info[2].strip()), rules, issue])
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_PART)
 
@@ -149,32 +149,32 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '子系统', '部件', '文件', '定位', '违反规则', '错误说明']
         """
-        PATTERN = 'product_name|device_name'
-        ISSUE = '存在 product_name 或 device_name'
-        RULES = '规则4.1 部件编译脚本中禁止使用产品名称变量'
+        pattern = 'product_name|device_name'
+        issue = '存在 product_name 或 device_name'
+        rules = '规则4.1 部件编译脚本中禁止使用产品名称变量'
         bad_targets_to_excel = list()
         all_info = GnCommon.grep_one(
-            PATTERN, self.abs_check_path, exclude=self.black_dir)
+            pattern, self.abs_check_path, excludes=self.black_dir)
         if all_info is None:
             return None
         product_name_data = all_info.split('\n')
 
         for line in product_name_data:
             info = line.split(':')
-            file_name = info[0][len(self.ohos_root)+1:]
+            file_name = info[0][len(self.ohos_root) + 1:]
 
             subsys_comp = list()
-            for k, v in self.subsystem_info.items():
-                if file_name.startswith(k):
-                    subsys_comp.append(v['subsystem'])
-                    subsys_comp.append(v['component'])
+            for path, content in self.subsystem_info.items():
+                if file_name.startswith(path):
+                    subsys_comp.append(content['subsystem'])
+                    subsys_comp.append(content['component'])
                     break
             if subsys_comp:
                 bad_targets_to_excel.append([subsys_comp[0], subsys_comp[1], file_name, 'line:{}:{}'.format(
-                    info[1], info[2].strip()), RULES, ISSUE])
+                    info[1], info[2].strip()), rules, issue])
             else:
                 bad_targets_to_excel.append(['null', 'null', file_name, 'line:{}:{}'.format(
-                    info[1], info[2].strip()), RULES, ISSUE])
+                    info[1], info[2].strip()), rules, issue])
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_ALL)
 
@@ -190,7 +190,7 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '文件', '定位', '违反规则', '错误说明']
         """
-        RULES = '规则3.2 部件编译目标必须指定部件和子系统名'
+        rules = '规则3.2 部件编译目标必须指定部件和子系统名'
         bad_targets_to_excel = list()
         all_gn_data = self.get_all_gn_data()
 
@@ -198,14 +198,14 @@ class CheckGn(object):
             bad_target_to_excel = list()
             if len(values) == 0:
                 continue
-            for it in values:
+            for target in values:
                 flags = [False, False]
-                if it.find('subsystem_name') == -1:
+                if target.find('subsystem_name') == -1:
                     flags[0] = True
-                if it.find('part_name') == -1:
+                if target.find('part_name') == -1:
                     flags[1] = True
                 if any(flags):
-                    content = it.split()[0]
+                    content = target.split()[0]
                     grep_info = GnCommon.grep_one(
                         content, key, grep_parameter='n')
                     if grep_info is None:
@@ -217,11 +217,11 @@ class CheckGn(object):
                     issue += 'part_name' if flags[1] else ''
                     pos = 'line {}:{}'.format(row_number_info, content)
                     bad_target_to_excel.append(
-                        [key[len(self.check_path)+1:], pos, RULES, issue])
+                        [key[len(self.check_path) + 1:], pos, rules, issue])
             if not bad_target_to_excel:
                 continue
-            for i in range(len(bad_target_to_excel)):
-                bad_targets_to_excel.append(bad_target_to_excel[i])
+            for target_item in bad_target_to_excel:
+                bad_targets_to_excel.append(target_item)
 
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_PART)
@@ -238,7 +238,7 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '子系统', '部件', '文件', '定位', '违反规则', '错误说明']
         """
-        RULES = '规则3.2 部件编译目标必须指定部件和子系统名'
+        rules = '规则3.2 部件编译目标必须指定部件和子系统名'
         bad_targets_to_excel = list()
         all_gn_data = self.get_all_gn_data()
 
@@ -246,14 +246,14 @@ class CheckGn(object):
             bad_target_to_excel = list()
             if len(values) == 0:
                 continue
-            for it in values:
+            for target in values:
                 flags = [False, False]
-                if it.find('subsystem_name') == -1:
+                if target.find('subsystem_name') == -1:
                     flags[0] = True
-                if it.find('part_name') == -1:
+                if target.find('part_name') == -1:
                     flags[1] = True
                 if any(flags):
-                    content = it.split()[0]
+                    content = target.split()[0]
                     grep_info = GnCommon.grep_one(
                         content, key, grep_parameter='n')
                     if grep_info is None:
@@ -265,14 +265,14 @@ class CheckGn(object):
                     issue += 'part_name' if flags[1] else ''
                     pos = 'line {}:{}'.format(row_number_info, content)
                     bad_target_to_excel.append(
-                        ['null', 'null', key, pos, RULES, issue])
+                        ['null', 'null', key, pos, rules, issue])
             if not bad_target_to_excel:
                 continue
-            for k, v in self.subsystem_info.items():
-                if key.startswith(k):
-                    for i in range(len(bad_target_to_excel)):
-                        bad_target_to_excel[i][:2] = v['subsystem'], v['component']
-                        bad_targets_to_excel.append(bad_target_to_excel[i])
+            for path, content in self.subsystem_info.items():
+                if key.startswith(path):
+                    for target_item in bad_target_to_excel:
+                        target_item[:2] = content['subsystem'], content['component']
+                        bad_targets_to_excel.append(target_item)
                     break
 
         bad_targets_to_excel = pd.DataFrame(
@@ -289,8 +289,8 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '文件', '定位', '违反规则', '错误说明']
         """
-        RULES = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
-        IISUE = '引用使用了绝对路径'
+        rules = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
+        issue = '引用使用了绝对路径'
         bad_targets_to_excel = list()
         abs_path = self.get_all_abs_path()
         if abs_path is None:
@@ -301,7 +301,7 @@ class CheckGn(object):
                     or item['content'].startswith('//build'):
                 continue
             bad_targets_to_excel.append([item['path'][len(
-                self.check_path)+1:], 'line {}:{}'.format(item['line_number'], item['content']), RULES, IISUE])
+                self.check_path) + 1:], 'line {}:{}'.format(item['line_number'], item['content']), rules, issue])
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_PART)
 
@@ -316,8 +316,8 @@ class CheckGn(object):
             pd.DataFrame: 数据的组织方式为[
             '子系统', '部件', '文件', '定位', '违反规则', '错误说明']
         """
-        RULES = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
-        IISUE = '引用使用了绝对路径'
+        rules = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
+        issue = '引用使用了绝对路径'
         bad_targets_to_excel = list()
         abs_path = self.get_all_abs_path()
         if abs_path is None:
@@ -327,17 +327,17 @@ class CheckGn(object):
                     or item['content'].startswith('//build'):
                 continue
             subsys_comp = list()
-            for k, v in self.subsystem_info.items():
-                if item['path'].startswith(k):
-                    subsys_comp.append(v['subsystem'])
-                    subsys_comp.append(v['component'])
+            for path, content in self.subsystem_info.items():
+                if item['path'].startswith(path):
+                    subsys_comp.append(content['subsystem'])
+                    subsys_comp.append(content['component'])
                     break
             if subsys_comp:
                 bad_targets_to_excel.append([subsys_comp[0], subsys_comp[1], item['path'], 'line {}:{}'.format(
-                    item['line_number'], item['content']), RULES, IISUE])
+                    item['line_number'], item['content']), rules, issue])
             else:
                 bad_targets_to_excel.append(['null', 'null', item['path'], 'line {}:{}'.format(
-                    item['line_number'], item['content']), RULES, IISUE])
+                    item['line_number'], item['content']), rules, issue])
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_ALL)
 

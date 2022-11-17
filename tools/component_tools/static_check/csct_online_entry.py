@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Copyright (c) 2022 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,9 @@
 import os
 import sys
 import subprocess
+import logging
+
+
 
 def csct_online(pr_list):
     """
@@ -24,38 +27,49 @@ def csct_online(pr_list):
             resutl: check result
     """
     if len(pr_list) == 0:
-        sys.stderr.write('error: pr_list is empty.\n')
+        sys.stderr.write("error: pr_list is empty.\n")
         return True, " "
 
     status = True
     result = " "
-    root_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    csct_project_path = os.path.join(root_dir, "build/tools/component_tools/static_check/")
+    root_dir = os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    )
+    csct_project_path = os.path.join(
+        root_dir, "build/tools/component_tools/static_check/"
+    )
 
     try:
-        cmd = "python3 " + csct_project_path + "csct_online.py " + "'" + pr_list + "'"
-        print(cmd)
-        p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, errors='replace')
-        result, errcode = p.communicate()
+        file = "%scsct_online.py" % csct_project_path
+        ret = subprocess.Popen(
+            ["python3", file, pr_list],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            errors="replace",
+        )
+        result, errcode = ret.communicate(timeout=30)
         if len(errcode) != 0:
-            print("Popen error: ", errcode)
+            logging.error("Popen error: ", errcode)
             status = False
         else:
             status = False if len(result) != 0 else True
-    except Exception as r:
+    except Exception as err:
         status = False
-        print('error: ', r)
+        logging.error(err)
 
     return status, result
 
+
 def test():
     if len(sys.argv) == 1:
-        sys.stderr.write('test error: pr_list is empty.\n')
+        sys.stderr.write("test error: pr_list is empty.\n")
         return False
 
     prs = sys.argv[1]
     status, result = csct_online(prs)
     return status, result
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.exit(test())
