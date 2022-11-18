@@ -72,6 +72,10 @@ declare_args() {
   enable_lto_O0 = false
 }
 
+declare_args() {
+  enable_gn_2021 = true
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
