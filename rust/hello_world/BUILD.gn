@@ -1,0 +1,5 @@
+executable("hello_world_rust"){
+    sources = [ "src/main.rs" ]
+    configs = []
+    deps = [ "//build/rust/rust_log:rust_log_dylib" ] 
+}

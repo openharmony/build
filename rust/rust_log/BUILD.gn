@@ -1,0 +1,32 @@
+group("rust_log") {
+  deps = [
+    ":rust_log_rlib",
+    ":rust_log_dylib",
+    # ":rust_log_staticlib",
+    # ":rust_log_cdylib",
+  ]
+}
+
+rust_library("rust_log_rlib") {
+  sources = [ "src/rlib.rs" ]
+  crate_type = "rlib"
+}
+
+rust_library("rust_log_dylib") {
+  sources = [ "src/dylib.rs"]
+  crate_type = "dylib"
+}
+
+# rust_library("rust_log_staticlib") {
+#   sources = [
+#     "src/staticlib.rs",
+#   ]
+#   crate_type = "staticlib"
+# }
+
+# rust_library("rust_log_cdylib") {
+#   sources = [
+#     "src/cdylib.rs",
+#   ]
+#   crate_type = "cdylib"
+# }

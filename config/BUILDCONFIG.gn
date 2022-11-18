@@ -833,6 +833,7 @@ target_type_list = [
   "loadable_module",
   "shared_library",
   "static_library",
+  "rust_library",
   "source_set",
 ]
 
