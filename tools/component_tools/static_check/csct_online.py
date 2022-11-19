@@ -34,19 +34,70 @@ def auto_install_required_package():
     return 0
 
 
-VERSION = "0.0.1"
+class CsctOnline(object):
+    """This is a component static checker online class"""
+
+    version = ""
+    log_verbose = False
+    pr_list = ""
+
+    def __init__(self, pr_list="", log_verbose=False) -> None:
+        self.version = "0.0.1"
+        self.pr_list = pr_list
+        self.log_verbose = log_verbose
+
+    def __verbose_print(self, verbose_flag, print_content):
+        if verbose_flag is True:
+            print(print_content)
+
+    def __print_pretty(self, errs_info):
+        if auto_install_required_package() == 0:
+            from prettytable import PrettyTable
+
+        table = PrettyTable(["文件", "定位", "违反规则", "错误说明"])
+        table.add_rows(errs_info)
+        table.align["文件"] = "l"
+        table.align["定位"] = "l"
+        table.align["错误说明"] = "l"
+        info = table.get_string()
+        print(
+            "If you have any question, please access component static check rules:",
+            "https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/"
+            "subsystems/subsys-build-component-building-rules.md",
+            "or https://gitee.com/openharmony/build/tree/master/tools/component_tools/static_check/readme.md",
+        )
+        print("There are(is) {} error(s):\n".format(len(errs_info)))
+        print(str(info))
+
+    def csct_check_process(self):
+        pr_list = self.pr_list
+        self.__verbose_print(
+            self.log_verbose,
+            "\nCsct check begin!\tPull request list: {}.".format(pr_list),
+        )
+        csct_prehandler = GiteeCsctPrehandler(
+            pr_list, "BUILD.gn", "bundle.json", ".gni"
+        )
+
+        _, gn_errs = CheckGnOnline(csct_prehandler.get_diff_dict("BUILD.gn")).output()
+        _, gni_errs = CheckGnOnline(csct_prehandler.get_diff_dict(".gni")).output()
+        _, bundle_errs = BundleCheckOnline.check_diff(
+            csct_prehandler.get_diff_dict("bundle.json")
+        )
+
+        errs_info = gn_errs + gni_errs + bundle_errs
+        if len(errs_info) == 0:
+            self.__verbose_print(self.log_verbose, "Result: without any errors.")
+        else:
+            self.__print_pretty(errs_info)
+
+        self.__verbose_print(self.log_verbose, "Csct check end!\n")
+        return errs_info
 
 
-def verbose_print(verbose_flag, print_content):
-    if verbose_flag is True:
-        print(print_content)
-
-
-def main():
-    if auto_install_required_package() == 0:
-        from prettytable import PrettyTable
+def add_options(version):
     parser = argparse.ArgumentParser(
-        description=f"Component Static Check Tool Online version {VERSION}",
+        description=f"Component Static Check Tool Online version {version}",
     )
     parser.add_argument(
         "-v",
@@ -60,48 +111,15 @@ def main():
         metavar="pr_list", type=str, dest="pr_list", help="pull request url list"
     )
     args = parser.parse_args()
-    pr_list = args.pr_list
-    v_flag = args.verbose
+    return args
 
-    verbose_print(v_flag, "\nCsct check begin!")
-    verbose_print(v_flag, "\tPull request list: {}.".format(pr_list))
-    csct_prehandler = GiteeCsctPrehandler(pr_list, "BUILD.gn", "bundle.json", ".gni")
-    gn_status, gn_errs = CheckGnOnline(
-        csct_prehandler.get_diff_dict("BUILD.gn")
-    ).output()
-    gni_status, gni_errs = CheckGnOnline(csct_prehandler.get_diff_dict(".gni")).output()
-    bundle_status, bundle_errs = BundleCheckOnline.check_diff(
-        csct_prehandler.get_diff_dict("bundle.json")
-    )
-    errs_info = bundle_errs + gn_errs + gni_errs
-    status = gn_status and gni_status and bundle_status
-    verbose_print(
-        v_flag,
-        "gn_errs {}, gni_errs {}, bundle_errs{}".format(
-            len(gn_errs), len(gni_errs), len(bundle_errs)
-        ),
-    )
-    verbose_print(v_flag, "Csct check end!\n")
 
-    if len(errs_info) == 0:
-        verbose_print(v_flag, "Result: without any errors.")
-        return
-
-    table = PrettyTable(["文件", "定位", "违反规则", "错误说明"])
-    table.add_rows(errs_info)
-    table.align["文件"] = "l"
-    table.align["定位"] = "l"
-    table.align["错误说明"] = "l"
-    info = table.get_string()
-    print(
-        "If you have any question, please access component static check rules:",
-        "https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/"
-        "subsystems/subsys-build-component-building-rules.md",
-        "or https://gitee.com/openharmony/build/tree/master/tools/component_tools/static_check/readme.md",
-    )
-    print("There are(is) {} error(s):\n".format(len(errs_info)))
-    print(str(info))
-    return
+def main():
+    csct_online = CsctOnline()
+    args = add_options(csct_online.version)
+    csct_online.pr_list = args.pr_list
+    csct_online.log_verbose = args.verbose
+    errs_info = csct_online.csct_check_process()
 
 
 if __name__ == "__main__":

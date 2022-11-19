@@ -19,7 +19,6 @@ import subprocess
 import logging
 
 
-
 def csct_online(pr_list):
     """
     pr_list: pull request list, example: https://xxxxx/pulls/1410;https://xxxxx/pulls/250
@@ -42,7 +41,7 @@ def csct_online(pr_list):
     try:
         file = "%scsct_online.py" % csct_project_path
         ret = subprocess.Popen(
-            ["python3", file, pr_list],
+            ["/usr/bin/python3", file, pr_list],
             shell=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

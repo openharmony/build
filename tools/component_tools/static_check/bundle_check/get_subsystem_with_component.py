@@ -15,6 +15,7 @@
 
 import argparse
 import os
+import stat
 import json
 
 
@@ -31,7 +32,10 @@ def get_subsystem_components(ohos_path: str):
 
     with open(subsystem_json_path, 'rb') as file:
         subsystem_json = json.load(file)
+
     # get sunsystems
+    bundle_json_list = []
+    subsystem_name = ""
     for i in subsystem_json:
         subsystem_name = subsystem_json[i]["name"]
         subsystem_path = os.path.join(ohos_path, subsystem_json[i]["path"])
@@ -40,24 +44,26 @@ def get_subsystem_components(ohos_path: str):
             continue
         cmd = 'find %s -name bundle.json' % subsystem_path
         bundle_json_list = os.popen(cmd).readlines()
-        # get components
-        component_list = []
-        for j in bundle_json_list:
-            bundle_path = j.strip()
-            with open(bundle_path, 'rb') as bundle_file:
-                bundle_json = json.load(bundle_file)
-            component_item = {}
-            if 'segment' in bundle_json and 'destPath' in bundle_json["segment"]:
-                destpath = bundle_json["segment"]["destPath"]
-                component_item[bundle_json["component"]["name"]] = destpath
-                if os.path.isabs(destpath):
-                    ErrorInfo.g_component_abs_path.append(destpath)
-            else:
-                component_item[bundle_json["component"]["name"]
-                               ] = "Unknow. Please check %s" % bundle_path
-                ErrorInfo.g_component_path_empty.append(bundle_path)
-            component_list.append(component_item)
-        subsystem_item[subsystem_name] = component_list
+
+    # get components
+    component_list = []
+    for j in bundle_json_list:
+        bundle_path = j.strip()
+        with open(bundle_path, 'rb') as bundle_file:
+            bundle_json = json.load(bundle_file)
+        component_item = {}
+        if 'segment' in bundle_json and 'destPath' in bundle_json["segment"]:
+            destpath = bundle_json["segment"]["destPath"]
+            component_item[bundle_json["component"]["name"]] = destpath
+            if os.path.isabs(destpath):
+                ErrorInfo.g_component_abs_path.append(destpath)
+        else:
+            component_item[bundle_json["component"]["name"]] = \
+                            "Unknow. Please check %s" % bundle_path
+            ErrorInfo.g_component_path_empty.append(bundle_path)
+        component_list.append(component_item)
+
+    subsystem_item[subsystem_name] = component_list
     return subsystem_item
 
 
@@ -66,7 +72,7 @@ def get_subsystem_components_modified(ohos_root) -> dict:
 
     subsystem_info = get_subsystem_components(ohos_root)
     if subsystem_info is None:
-        return None
+        return ret
     for subsystem_k, subsystem_v in subsystem_info.items():
         for component in subsystem_v:
             for key, value in component.items():
@@ -79,11 +85,14 @@ def export_to_json(subsystem_item: dict,
                    output_name: str = "subsystem_component_path.json"):
     subsystem_item_json = json.dumps(
         subsystem_item, indent=4, separators=(', ', ': '))
-    out_path = os.path.abspath(
+
+    out_abs_path = os.path.abspath(
         os.path.normpath(output_path)) + '/' + output_name
-    with open(out_path, 'w') as file:
+    flags = os.O_WRONLY | os.O_CREAT
+    modes = stat.S_IWUSR | stat.S_IRUSR
+    with os.fdopen(os.open(out_abs_path, flags, modes), 'w') as file:
         file.write(subsystem_item_json)
-    print("output path: " + out_path)
+    print("output path: " + out_abs_path)
 
 
 def parse_args():

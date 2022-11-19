@@ -16,6 +16,7 @@
 import argparse
 import os
 import sys
+import stat
 import pandas as pd
 from prettytable import PrettyTable
 
@@ -26,7 +27,7 @@ from bundle_check.bundle_json_check import BundlesCheck
 class CsctGlobal(object):
     """This is a gn variable check class"""
 
-    VERSION = ""
+    version = ""
     csct_path = ""
     ohos_root = ""
     repo_url = ""
@@ -37,7 +38,7 @@ class CsctGlobal(object):
     whitelist = ()
 
     def __init__(self) -> None:
-        VERSION = "0.0.1"
+        version = "0.0.1"
         self.csct_path = sys.path[0]
         root = os.path.join(self.csct_path, "../../../..")
         self.ohos_root = os.path.normpath(root)
@@ -46,10 +47,9 @@ class CsctGlobal(object):
             whitelist = file.read().split("\n")
             self.whitelist = tuple(whitelist)
 
-
     def add_option(self, parser):
         parser.add_argument(
-            "-v", "--version", action="version", version=f"%(prog)s {self.VERSION}."
+            "-v", "--version", action="version", version=f"%(prog)s {self.version}."
         )
         parser.add_argument(
             "-gd",
@@ -88,7 +88,6 @@ class CsctGlobal(object):
             help="specific output format(stdout by default).",
         )
 
-
     def store_args(self, args):
         if args.repo_pr is not None:
             self.repo_url = args.repo_pr[0]
@@ -96,7 +95,6 @@ class CsctGlobal(object):
         self.diff_files_path = args.diff_files_path
         self.output_format = args.output_format
         self.check_path = args.path
-
 
     def start_check(self):
         print("---Start  check---\n")
@@ -112,7 +110,11 @@ class CsctGlobal(object):
         table = PrettyTable(gn_errs.columns.to_list())
         table.add_rows(gn_errs.values.tolist())
         table_str = table.get_string()
-        with open(os.path.join(out_path, "gn_problems.txt"), "w") as file:
+        flags = os.O_WRONLY | os.O_CREAT
+        modes = stat.S_IWUSR | stat.S_IRUSR
+        with os.fdopen(
+            os.open(os.path.join(out_path, "gn_problems.txt"), flags, modes), "w"
+        ) as file:
             file.write(table_str)
 
         # merge excel
@@ -124,7 +126,6 @@ class CsctGlobal(object):
         print("\nStatic check finish.\nPlease check: " + output_path)
         return
 
-
     def check_end(self):
         print("\n---End check---")
         return
@@ -133,7 +134,7 @@ class CsctGlobal(object):
 def main():
     csctglb = CsctGlobal()
     parser = argparse.ArgumentParser(
-        description=f"Component Static Check Tool version {csctglb.VERSION}",
+        description=f"Component Static Check Tool version {csctglb.version}",
     )
     csctglb.add_option(parser)
     args = parser.parse_args()

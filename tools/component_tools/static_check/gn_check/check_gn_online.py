@@ -54,9 +54,12 @@ class CheckGnOnline(object):
                 if pos == end + 1:
                     end = pos
                     contents += '\n{}'.format(content)
+                elif start != end:
+                    row_range.append([start, end, contents])
+                    contents = content
+                    start = pos
+                    end = pos
                 else:
-                    if start != end:
-                        row_range.append([start, end, contents])
                     contents = content
                     start = pos
                     end = pos
@@ -87,7 +90,7 @@ class CheckGnOnline(object):
     def check_abs_path(self, key: str, line: list) -> None:
         rules = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
         issue = '存在绝对路径'
-        abs_path_pattern = r'"\/(\/[^\/\n]*)+"'
+        abs_path_pattern = r'"\/(\/[^\/\n]*){1,63}"'
         abs_info = list()
         abs_iter = re.finditer(abs_path_pattern, line[1])
         for match in abs_iter:
@@ -101,6 +104,33 @@ class CheckGnOnline(object):
             self.status = False
         return
 
+    def iter_modified_line(self, key, modified_line, target_pattern) -> None:
+        rules = '规则3.2 部件编译目标必须指定部件和子系统名'
+        check_list = ['subsystem_name', 'part_name']
+        for line in modified_line:
+            targets = re.finditer(target_pattern, line[2], re.M)
+            for it_target in targets:
+                flag = {check_list[0]: False, check_list[1]: False}
+                target = it_target.group()
+                start_target = target.split('\n')[0]
+                target_pos = line[2].find(start_target)
+                line_offset = line[2].count('\n', 1, target_pos)
+
+                if target.find(check_list[0]) == -1:
+                    flag[check_list[0]] = True
+                if target.find(check_list[1]) == -1:
+                    flag[check_list[1]] = True
+                if any(flag.values()):
+                    issue = 'target不存在'
+                    issue += check_list[0] if flag[check_list[0]] else ''
+                    issue += ',' if all(flag.values()) else ''
+                    issue += check_list[1] if flag[check_list[1]] else ''
+                    pos = "line:{}  {}".format(
+                        line[0] + line_offset, start_target)
+                    self.err_info.append([key, pos, rules, issue])
+                    self.status = False
+        return
+
     def check_pn_sn(self) -> None:
         rules = '规则3.2 部件编译目标必须指定部件和子系统名'
         target_pattern = r"^( *)("
@@ -109,36 +139,18 @@ class CheckGnOnline(object):
             if target != self.TARGET_NAME[-1]:
                 target_pattern += r'|'
         target_pattern += r")[\s|\S]*?\n\1}$"
-        check_list = ['subsystem_name', 'part_name']
+
         gn_data_merge = self.merge_line()
         for key, values in gn_data_merge.items():
+            flag = False
+            repo_name = key.split(',')[0].split('/')[-1]
             for white_repo in self.whitelist:
-                if key.startswith(white_repo):
+                if repo_name.startswith(white_repo):
+                    flag = True
                     break
-            else:
-                for line in values:
-                    targets = re.finditer(target_pattern, line[2], re.M)
-                    for it_target in targets:
-                        flag = {check_list[0]: False, check_list[1]: False}
-                        target = it_target.group()
-                        start_target = target.split('\n')[0]
-                        target_pos = line[2].find(start_target)
-                        line_offset = line[2].count('\n', 1, target_pos)
-
-                        if target.find(check_list[0]) == -1:
-                            flag[check_list[0]] = True
-                        if target.find(check_list[1]) == -1:
-                            flag[check_list[1]] = True
-                        if any(flag.values()):
-                            issue = 'target不存在'
-                            issue += check_list[0] if flag[check_list[0]] else ''
-                            issue += ',' if all(flag.values()) else ''
-                            issue += check_list[1] if flag[check_list[1]] else ''
-                            pos = "line:{}  {}".format(
-                                line[0] + line_offset, start_target)
-                            self.err_info.append([key, pos, rules, issue])
-                            self.status = False
-
+            if flag:
+                break
+            self.iter_modified_line(key, values, target_pattern)
         return
 
     def check(self):
@@ -156,7 +168,7 @@ class CheckGnOnline(object):
 
     def output(self):
         self.check()
-        
+
         return self.status, self.err_info
 
 

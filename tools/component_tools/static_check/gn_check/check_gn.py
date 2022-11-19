@@ -93,13 +93,13 @@ class CheckGn(object):
         Returns:
             list: list中的元素是字典，每个字典中是一条绝对路径的信息
         """
-        abs_path_pattern = r'"\/(\/[^\/\n]*)+"'
+        abs_path_pattern = r'"\/(\/[^\/\n]*){1,63}"'
         ret_list = list()
 
         all_info = GnCommon.grep_one(
             abs_path_pattern, self.abs_check_path, excludes=self.black_dir, grep_parameter='Porn')
         if all_info is None:
-            return None
+            return list()
         row_info = all_info.split('\n')
         for item in row_info:
             abs_info = item.split(':')
@@ -127,7 +127,7 @@ class CheckGn(object):
         all_info = GnCommon.grep_one(
             pattern, self.abs_check_path, excludes=self.black_dir)
         if all_info is None:
-            return None
+            return pd.DataFrame()
         product_name_data = all_info.split('\n')
         for line in product_name_data:
             info = line.split(':')
@@ -156,7 +156,7 @@ class CheckGn(object):
         all_info = GnCommon.grep_one(
             pattern, self.abs_check_path, excludes=self.black_dir)
         if all_info is None:
-            return None
+            return pd.DataFrame()
         product_name_data = all_info.split('\n')
 
         for line in product_name_data:
@@ -206,10 +206,8 @@ class CheckGn(object):
                     flags[1] = True
                 if any(flags):
                     content = target.split()[0]
-                    grep_info = GnCommon.grep_one(
-                        content, key, grep_parameter='n')
-                    if grep_info is None:
-                        return None
+                    grep_info = GnCommon.grep_one(content, os.path.join(
+                        self.ohos_root, key), grep_parameter='n')
                     row_number_info = grep_info.split(':')[0]
                     issue = '不存在 '
                     issue += 'subsystem_name' if flags[0] else ''
@@ -253,11 +251,9 @@ class CheckGn(object):
                 if target.find('part_name') == -1:
                     flags[1] = True
                 if any(flags):
-                    content = target.split()[0]
-                    grep_info = GnCommon.grep_one(
-                        content, key, grep_parameter='n')
-                    if grep_info is None:
-                        return None
+                    content = target.split('\n')[0].strip()
+                    grep_info = GnCommon.grep_one(content, os.path.join(
+                        self.ohos_root, key), grep_parameter='n')
                     row_number_info = grep_info.split(':')[0]
                     issue = '不存在 '
                     issue += 'subsystem_name' if flags[0] else ''
@@ -270,10 +266,10 @@ class CheckGn(object):
                 continue
             for path, content in self.subsystem_info.items():
                 if key.startswith(path):
-                    for target_item in bad_target_to_excel:
-                        target_item[:2] = content['subsystem'], content['component']
-                        bad_targets_to_excel.append(target_item)
-                    break
+                    bad_target_to_excel[:][:2] = content['subsystem'], content['component']
+                    
+            for target_item in bad_target_to_excel:
+                bad_targets_to_excel.append(target_item)
 
         bad_targets_to_excel = pd.DataFrame(
             bad_targets_to_excel, columns=self.COLUMNS_NAME_FOR_ALL)
@@ -293,8 +289,6 @@ class CheckGn(object):
         issue = '引用使用了绝对路径'
         bad_targets_to_excel = list()
         abs_path = self.get_all_abs_path()
-        if abs_path is None:
-            return None
 
         for item in abs_path:
             if item['content'].startswith('//third_party') \
@@ -320,8 +314,7 @@ class CheckGn(object):
         issue = '引用使用了绝对路径'
         bad_targets_to_excel = list()
         abs_path = self.get_all_abs_path()
-        if abs_path is None:
-            return None
+
         for item in abs_path:
             if item['content'].startswith('//third_party') \
                     or item['content'].startswith('//build'):

@@ -51,11 +51,16 @@ class BundleCheckTools:
     def get_root_path() -> str:
         cur_path = os.path.dirname(os.path.abspath(__file__))
         root_path = os.path.normpath(os.path.join(cur_path, '../../../../../'))
-        if BundleCheckTools.is_project(root_path):
-            return root_path
-        print('get root path failed, please check script "bundle_check_common.py" under',
-            'the path(build/tools/component_tools/static_check/bundle_check).')
-        return None
+        try:
+            if BundleCheckTools.is_project(root_path):
+                return root_path
+            else:
+                raise ValueError(
+                    'get root path failed, please check script "bundle_check_common.py" under '
+                    'the path(build/tools/component_tools/static_check/bundle_check).')
+        except ValueError as get_path_error:
+            print("Error: ", repr(get_path_error))
+        return ""
 
     @staticmethod
     def is_project(path:str) -> bool:
@@ -71,16 +76,20 @@ class BundleCheckTools:
     @staticmethod
     def get_ohos_version(root:str) -> str:
         if not BundleCheckTools.is_project(root):
-            return None
+            return ""
+
         version_path = os.path.join(root, 'build/version.gni')
+        lines = []
         with open(version_path, 'r', encoding='utf-8') as version_file:
-            for line in version_file.readlines():
-                line = line.strip()
-                if line and line[0] == '#':
-                    continue
-                if 'sdk_version =' in line:
-                    match_result = re.match(r'\s*sdk_version\s*=\s*"(\d+\.\d+).*"', line)
-                    if match_result:
-                        return match_result.group(1)
-                    else:
-                        return None
+            lines = version_file.readlines()
+        for line in lines:
+            line = line.strip()
+            if line and line[0] == '#':
+                continue
+            if 'sdk_version =' in line:
+                match_result = re.match(r'\s*sdk_version\s*=\s*"(\d+\.\d+).*"', line)
+                if match_result:
+                    return match_result.group(1)
+                else:
+                    return ""
+        return ""

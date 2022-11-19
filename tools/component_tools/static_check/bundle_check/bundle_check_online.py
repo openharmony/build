@@ -16,7 +16,7 @@
 import os
 import re
 from bundle_check.bundle_check_common import BundleCheckTools
-from bundle_check.warning_info import *
+from bundle_check.warning_info import BCWarnInfo
 
 
 class BundleCheckOnline:
@@ -41,16 +41,17 @@ class BundleCheckOnline:
             diff_list = diff[file_path]
             for i in diff_list:
                 ret = BundleCheckOnline.check_diff_by_line(i[1])
-                if ret:
-                    line = list(("line" + str(i[0]) + ": " + i[1], ret))
-                    if file_path in diff_dict.keys():
-                        diff_dict[file_path].append(line)
+                if not ret:
+                    continue
+                line = list(("line" + str(i[0]) + ": " + i[1], ret))
+                if file_path in diff_dict.keys():
+                    diff_dict[file_path].append(line)
         # trans to list
         err_list = []
         for file in diff_dict:
             for i in diff_dict[file]:
                 row = [file, i[0]]
-                row.extend([CHECK_RULE_2_1, i[1]])
+                row.extend([BCWarnInfo.CHECK_RULE_2_1, i[1]])
                 err_list.append(row)
         if err_list:
             return True, err_list
@@ -59,56 +60,75 @@ class BundleCheckOnline:
 
     def check_diff_by_line(line:str) -> str:
         line = line.strip()
-        match = re.match(r'"(\w+)":\s*"(.*)"', line)
+        match = re.match(r'"(\w+)"\s*:\s*"(.*)"', line)
         if not match:
-            return None
+            return ""
         key = match.group(1)
         value = match.group(2)
+        
         if key == 'name':
-            if value.startswith('//') and ':' in value:
-                # exclude inner_kits:name
-                return None
-            component_name = value.split('/')[1] if ('/' in value) else value
-            if not (0 < len(component_name) < 64):
-                return COMPONENT_NAME_FROMAT_LEN
-            if not re.match(r'([a-z]+_)*([a-z]+)\b', component_name):
-                return COMPONENT_NAME_FROMAT
-            return None
+            return _check_line_name(value)
         if key == 'version':
-            if len(value) < 3:
-                return VERSION_ERROR
-            ohos_root_path = BundleCheckTools.get_root_path()
-            if ohos_root_path is None:
-                # when project is not exist, do not raise checking error
-                return None
-            ohos_version = BundleCheckTools.get_ohos_version(ohos_root_path)
-            if value != ohos_version:
-                return VERSION_ERROR + ' ohos version is: ' + value
-            return None
+            return _check_line_version(value)
         if key == 'destPath':
             if os.path.isabs(value):
-                return SEGMENT_DESTPATH_ABS
-            return None
+                return BCWarnInfo.SEGMENT_DESTPATH_ABS
+            return ""
         if key == 'subsystem':
             if not re.match(r'[a-z]+$', value):
-                return COMPONENT_SUBSYSTEM_LOWCASE
+                return BCWarnInfo.COMPONENT_SUBSYSTEM_LOWCASE
         if key == 'rom' or key == 'ram':
-            if len(value) == 0:
-                return r'"component:rom/ram" 字段不能为空。'
-            num, unit = BundleCheckTools.split_by_unit(value)
-            if num <= 0:
-                return '"component:{}" 非数值或者小于等于 0。'.format(key)
-            if unit:
-                unit_types = ["KB", "KByte", "MByte", "MB"]
-                if unit not in unit_types:
-                    return '"component:{}" 的单位错误（KB, KByte, MByte, MB，默认为KByte）。'.format(key)
+            return _check_line_rom_ram(key, value)
         if key == 'syscap':
-            if len(value) == 0:
-                return COMPONENT_SYSCAP_STRING_EMPTY
-            match = re.match(r'^SystemCapability(\.[A-Z][a-zA-Z]+)+$', value)
-            if not match:
-                return COMPONENT_SYSCAP_STRING_FORMAT_ERROR
+            return _check_line_syscap(value)
         if key == 'features':
             if len(value) == 0:
-                return COMPONENT_FEATURES_STRING_EMPTY
-        return None
+                return BCWarnInfo.COMPONENT_FEATURES_STRING_EMPTY
+        return ""
+
+
+def _check_line_name(value):
+    if value.startswith('//') and ':' in value:
+        # exclude inner_kits:name
+        return ""
+    component_name = value.split('/')[1] if ('/' in value) else value
+    if not (0 < len(component_name) < 64):
+        return BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
+    if not re.match(r'^([a-z_]{1,63})$', component_name):
+        return BCWarnInfo.COMPONENT_NAME_FROMAT
+    return ""
+
+
+def _check_line_version(value):
+    if len(value) < 3:
+        return BCWarnInfo.VERSION_ERROR
+    ohos_root_path = BundleCheckTools.get_root_path()
+    if not ohos_root_path:
+        # when project is not exist, do not raise checking error
+        return ""
+    ohos_version = BundleCheckTools.get_ohos_version(ohos_root_path)
+    if ohos_version and value != ohos_version:
+        return BCWarnInfo.VERSION_ERROR + ' ohos version is: ' + value
+    return ""
+
+
+def _check_line_rom_ram(key, value):
+    if len(value) == 0:
+        return r'"component:rom/ram" 字段不能为空。'
+    num, unit = BundleCheckTools.split_by_unit(value)
+    if num <= 0:
+        return '"component:{}" 非数值或者小于等于 0。'.format(key)
+    if unit:
+        unit_types = ["KB", "KByte", "MByte", "MB"]
+        if unit not in unit_types:
+            return '"component:{}" 的单位错误（KB, KByte, MByte, MB，默认为KByte）。'.format(key)
+    return ""
+
+
+def _check_line_syscap(value):
+    if len(value) == 0:
+        return BCWarnInfo.COMPONENT_SYSCAP_STRING_EMPTY
+    match = re.match(r'^SystemCapability(\.[A-Z][a-zA-Z]{1,63}){2,6}$', value)
+    if not match:
+        return BCWarnInfo.COMPONENT_SYSCAP_STRING_FORMAT_ERROR
+    return ""

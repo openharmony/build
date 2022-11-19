@@ -18,7 +18,6 @@ import sys
 import re
 import argparse
 import subprocess
-import chardet
 import logging
 
 
@@ -35,37 +34,82 @@ def add2dict(diff_dict, path, line_num: str, content):
     diff_dict.update({key: value_list})
 
 
-def strip_diff(diff_dict, gitee_path_prefix, gitee_pr_diff):
-    pattern1 = "---\ (a/)?.*"
-    pattern2 = "\+\+\+\ b/(.*)"
-    pattern3 = "@@\ -[0-9]+,[0-9]+\ \+([0-9]+)(,[0-9]+)?\ @@.*"
-    pattern4 = "[\ +-](.*)"
-    pattern5 = "([\ +])?(.*)"
-    line_num = 0
-    fullpath = ""
-    match_flag = False
-    curr_key = ""
+def __diff_match_filename_with_minus(control_block, line):
+    pattern = "---\ (a/)?.*"
+    if re.match(pattern, line) is None:
+        return False
+
+    control_block["match_flag"] = False
+    return True
+
+
+def __diff_match_filename_with_plus(control_block, line):
+    pattern = "\+\+\+\ b/(.*)"
+    if re.match(pattern, line) is None:
+        return False
+
+    for key in control_block["diff_dict"]:
+        if re.search(key, line) is not None:
+            control_block["curr_key"] = key
+            res = re.match(pattern, line)
+            control_block["fullpath"] = (
+                "{}, {}".format(control_block["pull_request_url"], res.group(1).strip())
+            )
+            control_block["match_flag"] = True
+    return True
+
+
+def __diff_match_start_linenum(control_block, line):
+    pattern = "@@\ -[0-9]+,[0-9]+\ \+([0-9]+)(,[0-9]+)?\ @@.*"
+    if control_block["match_flag"] is False or re.match(pattern, line) is None:
+        return False
+
+    res = re.match(pattern, line)
+    control_block["line_num"] = int(res.group(1))
+    return True
+
+
+def __diff_match_code_line(control_block, line):
+    diff_dict = control_block["diff_dict"]
+    pattern1 = "[\ +-](.*)"
+    pattern2 = "([\ +])?(.*)"
+    if control_block["match_flag"] is False or re.match(pattern1, line) is None:
+        return False
+
+    res = re.match(pattern2, line)
+    if res.group(1) == "+":
+        add2dict(
+            diff_dict[control_block["curr_key"]],
+            control_block["fullpath"],
+            control_block["line_num"],
+            res.group(2),
+        )
+    if res.group(1) != "-":
+        control_block["line_num"] = control_block["line_num"] + 1
+    return True
+
+
+def strip_diff(diff_dict, pull_request_url, gitee_pr_diff):
+    control_block = {
+        "line_num": 0,
+        "fullpath": "",
+        "match_flag": False,
+        "curr_key": "",
+        "diff_dict": diff_dict,
+        "pull_request_url": pull_request_url,
+    }
+
+    strip_diff_handlers = [
+        __diff_match_filename_with_minus,
+        __diff_match_filename_with_plus,
+        __diff_match_start_linenum,
+        __diff_match_code_line,
+    ]
 
     for line in gitee_pr_diff.splitlines():
-        if re.match(pattern1, line) is not None:
-            match_flag = False
-            continue
-        elif re.match(pattern2, line) is not None:
-            for key in diff_dict:
-                if re.search(key, line) is not None:
-                    curr_key = key
-                    res = re.match(pattern2, line)
-                    fullpath = gitee_path_prefix + res.group(1).strip()
-                    match_flag = True
-        elif match_flag is True and re.match(pattern3, line) is not None:
-            res = re.match(pattern3, line)
-            line_num = int(res.group(1))
-        elif match_flag is True and re.match(pattern4, line) is not None:
-            res = re.match(pattern5, line)
-            if res.group(1) == "+":
-                add2dict(diff_dict[curr_key], fullpath, line_num, res.group(2))
-            if res.group(1) != "-":
-                line_num = line_num + 1
+        for handler in strip_diff_handlers:
+            if handler(control_block, line) is True:
+                break
 
 
 def get_diff_by_repo_pr_num(repo_url, pr_num):
@@ -74,7 +118,7 @@ def get_diff_by_repo_pr_num(repo_url, pr_num):
     gitee_pr_diff = ""
     try:
         ret = subprocess.Popen(
-            ["curl", "-L", "-s", diff_url],
+            ["/usr/bin/curl", "-L", "-s", diff_url],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             errors="replace",
@@ -102,30 +146,32 @@ class GiteeCsctPrehandler:
             pr_num = pr_split_group[1].strip("/")
 
             gitee_pr_diff = get_diff_by_repo_pr_num(repo_url, pr_num)
-            strip_diff(self.diff_dict, repo_url, gitee_pr_diff)
+            strip_diff(self.diff_dict, pr_item, gitee_pr_diff)
 
     def clear_repo_num_file(self):
         self.diff_dict.clear()
 
     def get_diff_dict(self, pattern):
+        ret_diff = {}
         if pattern in self.diff_dict.keys():
-            return self.diff_dict[pattern]
-        return None
+            ret_diff = self.diff_dict[pattern]
+        return ret_diff
 
 
-def test(repo_num_file):
-    result = "test finish"
-    csct_prehandler = GiteeCsctPrehandler(
-        repo_num_file, "BUILD.gn", "bundle.json", ".gni"
-    )
+def test():
+    if len(sys.argv) == 1:
+        sys.stderr.write("test error: pr_list is empty.\n")
+        return
+
+    pr_list = sys.argv[1]
+    csct_prehandler = GiteeCsctPrehandler(pr_list, "BUILD.gn", "bundle.json", ".gni")
 
     print("==================start get diff====================")
     print(csct_prehandler.get_diff_dict("BUILD.gn"))
     print("==================start get diff====================")
     print(csct_prehandler.get_diff_dict("bundle.json"))
     print("========================end=========================")
-    return True, result
 
 
 if __name__ == "__main__":
-    sys.exit(test("repo_prNum.conf"))
+    sys.exit(test())
