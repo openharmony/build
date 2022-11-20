@@ -213,6 +213,11 @@ config("compiler") {
     ":compiler_codegen",
   ]
 
+  if (is_ohos && is_standard_system && is_clang &&
+      (target_cpu == "arm" || target_cpu == "arm64")) {
+    ldflags += [ "-Wl,--pack-dyn-relocs=android+relr" ]
+  }
+
   # In general, Windows is totally different, but all the other builds share
   # some common GCC configuration.
   if (!is_win) {
