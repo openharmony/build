@@ -52,7 +52,7 @@ def _prepare_root(system_path, target_cpu):
 
 
 def _prepare_updater(updater_path):
-    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64', 'vendor' ]
+    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64', 'vendor']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
         if os.path.exists(_path):

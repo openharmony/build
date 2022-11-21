@@ -176,7 +176,8 @@ def main():
         ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
         result = subprocess.call(
             wrapper_utils.command_to_run(
-                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output, '--root-path', ohos_root_path]))
+                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
+                '--root-path', ohos_root_path]))
 
     return result
 

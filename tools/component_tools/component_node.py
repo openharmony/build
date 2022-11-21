@@ -16,6 +16,7 @@ limitations under the License.
 """
 import re
 
+
 class Module():
     def __init__(self, module_name, subsystem_name, part_name, deps, external_deps, raw_data):
         self._module_name = module_name
@@ -99,7 +100,7 @@ class Module():
         deps_raw = deps_pattern.search(ohos_string).group() if deps_pattern.search(ohos_string) != None \
                    else ''
         deps_list = []
-        deps_raw_list = deps_raw.replace('\n','').replace(' ','').replace('"','').split(',')
+        deps_raw_list = deps_raw.replace('\n', '').replace(' ', '').replace('"', '').split(',')
         for dep in deps_raw_list:
             dep = dep.split('/')[-1]
             deps_list.append(dep)
@@ -108,7 +109,7 @@ class Module():
         external_deps_raw = external_deps_pattern.search(ohos_string).group() if external_deps_pattern.search(ohos_string) != None \
                             else ''
         external_deps_list = []
-        external_deps_raw_list = external_deps_raw.replace('\n','').replace(' ','').replace('"','').split(',')
+        external_deps_raw_list = external_deps_raw.replace('\n', '').replace(' ', '').replace('"', '').split(',')
         for dep in external_deps_raw_list:
             dep = dep.split('/')[-1]
             external_deps_list.append(dep)
@@ -118,7 +119,7 @@ class Module():
         if deps_list.__contains__(''):
             deps_list.remove('')
         external_deps = set(external_deps_list)
-        deps = set(set(deps_list)-external_deps)
+        deps = set(set(deps_list) - external_deps)
         return Module(module_name, subsystem_name, part_name, deps, external_deps, ohos_string)
 
 

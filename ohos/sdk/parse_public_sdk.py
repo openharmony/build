@@ -44,12 +44,14 @@ def copy_sdk_interface(source_root):
         shutil.rmtree(dest)
     shutil.copytree(source, dest)
 
+
 def replace_sdk_api_dir(source_root):
     dest = os.path.join(source_root, API_PATH)
     if os.path.exists:
         shutil.rmtree(dest)
     source = os.path.join(source_root, API_GEN_PATH)
     shutil.copytree(source, dest)
+
 
 def remove_system_api_method(source_root, nodejs):
     tool = os.path.join(source_root, API_MODIFY_TOOL)
@@ -73,6 +75,7 @@ def convert_permission_method(source_root, nodejs):
                         stdout=subprocess.PIPE)
     process.wait()
 
+
 def regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file):
     info_list = read_json_file(sdk_description_file)
     public_info_list = []
@@ -86,12 +89,14 @@ def regenerate_sdk_description_file(source_root, sdk_description_file, output_pu
         public_info_list.append(info)
     write_json_file(output_pub_sdk_desc_file, public_info_list)
 
+
 def parse_step(sdk_description_file, source_root, nodejs, output_pub_sdk_desc_file):
     copy_sdk_interface(source_root)
     remove_system_api_method(source_root, nodejs)
     convert_permission_method(source_root, nodejs)
     replace_sdk_api_dir(source_root)
     regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file)
+
 
 def main():
     parser = argparse.ArgumentParser()
