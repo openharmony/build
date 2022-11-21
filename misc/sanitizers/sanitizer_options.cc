@@ -20,11 +20,11 @@ void _sanitizer_options_link_helper() { }
 // aren't referenced from the Chrome executable. We must ensure that those
 // callbacks are not sanitizer-instrumented, and that they aren't stripped by
 // the linker.
-#define SANITIZER_HOOK_ATTRIBUTE                                           \
-  extern "C"                                                               \
-  __attribute__((no_sanitize("address", "memory", "thread", "undefined"))) \
-  __attribute__((visibility("default")))                                   \
-  __attribute__((used))
+#define SANITIZER_HOOK_ATTRIBUTE                                             \
+    extern "C"                                                               \
+    __attribute__((no_sanitize("address", "memory", "thread", "undefined"))) \
+    __attribute__((visibility("default")))                                   \
+    __attribute__((used))
 #endif
 
 #if defined(ADDRESS_SANITIZER)
@@ -84,15 +84,15 @@ extern const char* kAsanDefaultOptionsNaCl;
 __attribute__((weak)) const char* kAsanDefaultOptionsNaCl = nullptr;
 
 SANITIZER_HOOK_ATTRIBUTE const char *__asan_default_options() {
-  if (kAsanDefaultOptionsNaCl)
-    return kAsanDefaultOptionsNaCl;
-  return kAsanDefaultOptions;
+    if (kAsanDefaultOptionsNaCl)
+        return kAsanDefaultOptionsNaCl;
+    return kAsanDefaultOptions;
 }
 
 extern char kASanDefaultSuppressions[];
 
 SANITIZER_HOOK_ATTRIBUTE const char *__asan_default_suppressions() {
-  return kASanDefaultSuppressions;
+    return kASanDefaultSuppressions;
 }
 #endif  // OS_LINUX || OS_MACOSX
 #endif  // ADDRESS_SANITIZER
@@ -116,13 +116,13 @@ const char kTsanDefaultOptions[] =
     "strict_memcmp=0 strip_path_prefix=/../../ ";
 
 SANITIZER_HOOK_ATTRIBUTE const char *__tsan_default_options() {
-  return kTsanDefaultOptions;
+    return kTsanDefaultOptions;
 }
 
 extern char kTSanDefaultSuppressions[];
 
 SANITIZER_HOOK_ATTRIBUTE const char *__tsan_default_suppressions() {
-  return kTSanDefaultSuppressions;
+    return kTSanDefaultSuppressions;
 }
 
 #endif  // THREAD_SANITIZER && OS_LINUX
@@ -137,7 +137,7 @@ const char kMsanDefaultOptions[] =
     "intercept_memcmp=0 strip_path_prefix=/../../ ";
 
 SANITIZER_HOOK_ATTRIBUTE const char *__msan_default_options() {
-  return kMsanDefaultOptions;
+    return kMsanDefaultOptions;
 }
 
 #endif  // MEMORY_SANITIZER
@@ -151,13 +151,13 @@ const char kLsanDefaultOptions[] =
     "print_suppressions=1 strip_path_prefix=/../../ ";
 
 SANITIZER_HOOK_ATTRIBUTE const char *__lsan_default_options() {
-  return kLsanDefaultOptions;
+    return kLsanDefaultOptions;
 }
 
 extern char kLSanDefaultSuppressions[];
 
 SANITIZER_HOOK_ATTRIBUTE const char *__lsan_default_suppressions() {
-  return kLSanDefaultSuppressions;
+    return kLSanDefaultSuppressions;
 }
 
 #endif  // LEAK_SANITIZER
@@ -169,7 +169,7 @@ const char kUbsanDefaultOptions[] =
     "print_stacktrace=1 strip_path_prefix=/../../ ";
 
 SANITIZER_HOOK_ATTRIBUTE const char* __ubsan_default_options() {
-  return kUbsanDefaultOptions;
+    return kUbsanDefaultOptions;
 }
 
 #endif  // UNDEFINED_SANITIZER
