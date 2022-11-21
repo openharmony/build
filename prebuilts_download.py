@@ -166,7 +166,8 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                                            unzip_dir, unzip_filename, args.mark_file_path)
         for task in as_completed(tasks):
             if not args.disable_rich:
-                args.progress.console.log('{}, download and decompress completed'.format(tasks.get(task)), style='green')
+                args.progress.console.log('{}, download and decompress completed'.format(tasks.get(task)),
+                style='green')
             else:
                 print('{}, download and decompress completed'.format(tasks.get(task)))
 

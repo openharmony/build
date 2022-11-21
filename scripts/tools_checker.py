@@ -46,7 +46,7 @@ def package_installed(pkg_name):
     return r
 
 
-def check_build_requried_packages(host_version,check=True):
+def check_build_requried_packages(host_version, check=True):
     """Check whether packages required by build process installed or not.
     By parsing file `REPO_ROOT/build/scripts/build_package_list.json`.
     Example content: `{"18.04":{"dep_package":["pkg1","pkg2",...]}, "20.04":{...}}`
@@ -72,7 +72,7 @@ def check_build_requried_packages(host_version,check=True):
                       format(pkg))
             uninstall_package_list.append(pkg)
     install_package_list = list(set(_build_package_list).difference(uninstall_package_list))
-    return _build_package_list,install_package_list,uninstall_package_list
+    return _build_package_list,install_package_list, uninstall_package_list
 
 
 def check_os_version():
@@ -106,7 +106,7 @@ def check_os_version():
         print("\033[33m Available OS version are {}.\033[0m".format(
             ', '.join(available_releases)))
         return -1
-    return host_os,host_version
+    return host_os, host_version
 
 
 def main():

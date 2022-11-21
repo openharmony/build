@@ -17,12 +17,14 @@ import os
 import sys
 import subprocess
 
+
 def run_cmd(cmd):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
 
     return res.pid, res.returncode, sout, serr
+
 
 def check_darwin_system():
     check_system_cmd = "uname -s"
@@ -33,6 +35,7 @@ def check_darwin_system():
 
     return 0
 
+
 def check_m1_cpu():
     check_host_cpu_cmd = "sysctl machdep.cpu.brand_string"
     res = run_cmd(check_host_cpu_cmd)
@@ -42,6 +45,7 @@ def check_m1_cpu():
             print("host cpu is m1")
 
     return 0
+
 
 def main():
     if sys.argv[1] == "cpu":

@@ -16,10 +16,12 @@
 import os
 import sys
 
+
 def check_exist(filepath):
     if os.path.exists(filepath):
         print(filepath + " exists")
     return 0
+
 
 def main():
     filepath = sys.argv[1]

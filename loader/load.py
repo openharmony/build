@@ -196,6 +196,7 @@ def _get_auto_install_list(parts_path_info):
             auto_install_part_list.append(part)
     return auto_install_part_list
 
+
 def _get_parts_src_list(required_parts_targets, parts_info):
     parts_name_map = {}
     for _list in parts_info.values():
