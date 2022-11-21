@@ -1,0 +1,18 @@
+import("//build/templates/cxx/cxx.gni")
+import("//build/templates/cxx/prebuilt.gni")
+
+ohos_executable("hello_world_c") {
+  sources = [ "src/main.c" ]
+
+  #configs = []
+  deps = [ "//build/rust/rust_log:rust_log_staticlib" ]
+}
+
+ohos_prebuilt_executable("hello_world_prebuilt") {
+  source = "//out/qemu-arm-linux/common/common/hello_world_c"
+  output = "hello_world_c"
+  install_enable = true
+  install_images = [ "system" ]
+  deps = [ ":hello_world_c" ]
+  part_name = "common"
+}

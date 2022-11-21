@@ -1,0 +1,5 @@
+shared_library("libsimple_c_printer") {
+  sources = [ "libsimple_c_printer.rs" ]
+  crate_name = "simple_c_printer"
+  crate_type = "cdylib"
+}

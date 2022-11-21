@@ -5,19 +5,27 @@ declare_args() {
   rust_sysroot_absolute = ""
 }
 
-
 if (!defined(rust_compiler_prefix)) {
   rust_compiler_prefix = ""
 }
 rust_sysroot = "//prebuilts/rustc/linux-x86_64"
-rustc_bin = rebase_path("${rust_sysroot}/bin/rustc", root_build_dir)
-rustc = "$rust_compiler_prefix${rustc_bin}"
+rustc_bin = rebase_path("${rust_sysroot}/bin", root_build_dir)
+rustc = "${rustc_bin}/rustc"
 
-rust_libs = rebase_path("${rust_sysroot}/lib/rustlib/arm-unknown-linux-musleabi/lib", root_build_dir)
-clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang", root_build_dir)
+# rust_libs = rebase_path("${rust_sysroot}/lib/rustlib/arm-unknown-linux-musleabi/lib", root_build_dir)
+rust_libs =
+    rebase_path("${rust_sysroot}/lib/rustlib/arm-unknown-linux-musleabi/deps",
+                root_build_dir)
+clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang",
+                    root_build_dir)
 musl_path = rebase_path("//out/rk3568/obj/third_party/musl", root_build_dir)
-musllib = rebase_path("//out/rk3568/obj/third_party/musl/usr/lib/arm-linux-ohos/", root_build_dir)
-base_rlibs_path = rebase_path("//build/rust/std/arm-unknown-linux-musleabi/deps", root_build_dir)
+musllib =
+    rebase_path("//out/rk3568/obj/third_party/musl/usr/lib/arm-linux-ohos/",
+                root_build_dir)
+base_rlibs_path =
+    rebase_path("//build/rust/std/arm-unknown-linux-musleabi/deps",
+                root_build_dir)
+
 #base_rlibs = "--extern 'noprelude:alloc=$base_rlibs_path/liballoc-d5b3485202f14b28.rlib' --extern 'noprelude:compiler_builtins=$base_rlibs_path/libcompiler_builtins-f6451f3f81ca4033.rlib' --extern 'noprelude:core=$base_rlibs_path/libcore-00c09370df344412.rlib' --extern 'noprelude:panic_unwind=$base_rlibs_path/libpanic_unwind-fd8e20a41056a70d.rlib' --extern 'noprelude:proc_macro=$base_rlibs_path/libproc_macro-71cd9204b17c0d2d.rlib' --extern 'noprelude:std=$base_rlibs_path/libstd-aa9faca4b24b8903.rlib'"
 base_rlibs = "--extern 'noprelude:alloc=$base_rlibs_path/liballoc-fab3a62110163e76.rlib' --extern 'noprelude:compiler_builtins=$base_rlibs_path/libcompiler_builtins-8c4ecabd0cb06122.rlib' --extern 'noprelude:core=$base_rlibs_path/libcore-482b22b5a77239ac.rlib' --extern 'noprelude:panic_unwind=$base_rlibs_path/libpanic_unwind-591915e967618237.rlib' --extern 'noprelude:proc_macro=$base_rlibs_path/libproc_macro-874434e28ab7d19d.rlib' --extern 'noprelude:std=$base_rlibs_path/libstd-e2d7cc624ec4db87.rlib'"
 

@@ -1,0 +1,4 @@
+executable("c_hello_rust") {
+  sources = [ "main.c" ]
+  deps = [ "//build/rust_example/test_rust_ffi/simple_printer:libsimple_c_printer" ]
+}

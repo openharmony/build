@@ -1,5 +1,8 @@
 #This was originally a compilation entry, but now "default" is added to the component dependency of build/common/bundle.json.
 
 group("default") {
-    deps = [ "//build/rust/hello_world:hello_world_rust"]
+  deps = [
+    # "//build/rust/hello_world:hello_world_rust",
+    "//build/rust/hello_world_c:hello_world_c",
+  ]
 }

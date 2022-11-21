@@ -13,9 +13,11 @@
 
 # The location of the build configuration file.
 buildconfig = "//build/config/BUILDCONFIG.gn"
+# buildconfig =  "//build/rust_example/BUILDCONFIG.gn"
 
 # The source root location.
 root = "//build/core/gn"
+# root = "//build/rust_example:default"
 
 # The executable used to execute scripts in action and exec_script.
 script_executable = "/usr/bin/env"

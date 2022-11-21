@@ -1,0 +1,3 @@
+group("default") {
+  deps = [ "//build/rust_example/test_rust_ffi/c_hello_rust:c_hello_rust" ]
+}
