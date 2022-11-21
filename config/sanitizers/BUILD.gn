@@ -73,7 +73,6 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
       "$clang_base_path/lib/clang/$clang_version/lib/$_clang_rt_dso_path"
 
   copy("copy_asan_runtime") {
-    set_sources_assignment_filter([])
     sources = [ _clang_rt_dso_full_path ]
     outputs = [ "$root_out_dir/{{source_file_part}}" ]
   }

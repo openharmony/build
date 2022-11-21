@@ -72,6 +72,10 @@ declare_args() {
   enable_lto_O0 = false
 }
 
+declare_args() {
+  enable_gn_2021 = true
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
@@ -546,7 +550,7 @@ if (!is_ohos) {
   sources_assignment_filter += []
 }
 
-set_sources_assignment_filter(sources_assignment_filter)
+#set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
   file_exist = exec_script("//build/scripts/check_file_exist.py",
                            [ "${device_build_path}/config.gni" ],

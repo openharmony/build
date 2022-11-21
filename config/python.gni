@@ -44,8 +44,8 @@ template("python_library") {
       _py_files = read_file(invoker.pydeps_file, "list lines")
 
       # Filter out comments.
-      set_sources_assignment_filter([ "#*" ])
       sources = _py_files
+      sources = filter_exclude(sources, [ "#*" ])
 
       # Even though the .pydep file is not used at runtime, it must be added
       # so that "gn analyze" will mark the target as changed when .py files
@@ -85,10 +85,8 @@ template("action_with_pydeps") {
   if (defined(sources)) {
     _old_sources = sources
   }
-  set_sources_assignment_filter([ "#*" ])
-  sources = _pydeps_raw
+  sources = filter_exclude(_pydeps_raw, [ "#*" ])
   _pydeps = sources
-  set_sources_assignment_filter([])
   sources = _old_sources
 
   action(target_name) {
@@ -130,10 +128,8 @@ template("action_foreach_with_pydeps") {
   if (defined(sources)) {
     _old_sources = sources
   }
-  set_sources_assignment_filter([ "#*" ])
-  sources = _pydeps_raw
+  sources = filter_exclude(_pydeps_raw, [ "#*" ])
   _pydeps = sources
-  set_sources_assignment_filter([])
   sources = _old_sources
 
   action_foreach(target_name) {

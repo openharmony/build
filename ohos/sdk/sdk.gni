@@ -127,7 +127,6 @@ template("make_sdk_modules") {
         _sdk_modules += [ "${_target_label}(${invoker.sdk_toolchain})" ]
       }
       sources = []
-      set_sources_assignment_filter([])
     }
     not_needed(invoker, [ "sdk_toolchain" ])
 

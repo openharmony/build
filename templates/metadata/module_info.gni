@@ -223,8 +223,8 @@ template("write_meta_data") {
       _parent_invoker = invoker.invoker
       _caller_target_name = get_label_info(":${_parent_invoker.target_name}",
                                            "label_no_toolchain")
-      set_sources_assignment_filter(app_target_allowlist)
       sources = [ _caller_target_name ]
+      sources = filter_exclude(sources, app_target_allowlist)
       if (sources != []) {
         if (type == "js_assets" || type == "ets_assets" ||
             type == "unresolved_assets" || type == "assets") {
@@ -237,7 +237,6 @@ template("write_meta_data") {
               "Illegal target name: \"${_caller_target_name}\", target name of ohos_resources must endswith res or resources or resource")
         }
       }
-      set_sources_assignment_filter([])
     }
 
     script = "//build/templates/metadata/write_meta_data.py"
@@ -264,18 +263,17 @@ template("write_meta_data") {
 
     _deps_metadata = []
     inputs = []
-    set_sources_assignment_filter(app_target_allowlist)
     foreach(d, _possible_deps) {
       sources = []
       _target_label = get_label_info(d, "label_no_toolchain")
       sources += [ _target_label ]
+      sources = filter_exclude(sources, app_target_allowlist)
       if (sources == []) {
         _deps_metadata += [ get_label_info(d, "target_gen_dir") + "/" +
                             get_label_info(d, "name") + ".metadata" ]
         deps += [ "${_target_label}__metadata" ]
       }
     }
-    set_sources_assignment_filter([])
 
     if (_deps_metadata != []) {
       args += [ "--deps-metadata" ]
