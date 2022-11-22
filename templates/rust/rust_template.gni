@@ -1,0 +1,75 @@
+template("ohos_rust_executable") {
+  _target_name = target_name
+  executable("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "bin"
+  }
+}
+
+template("ohos_rust_shared_library") {
+  _target_name = target_name
+  rust_library("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "dylib"
+  }
+}
+
+template("ohos_rust_static_library") {
+  _target_name = target_name
+  rust_library("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "rlib"
+  }
+}
+
+template("ohos_rust_shared_ffi") {
+  _target_name = target_name
+  shared_library("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "cdylib"
+  }
+}
+
+template("ohos_rust_static_ffi") {
+  _target_name = target_name
+  static_library("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "staticlib"
+  }
+}
+
+template("ohos_rust_proc_macro") {
+  _target_name = target_name
+  rust_proc_macro("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "proc-macro"
+  }
+}
+
+
+template("ohos_rust_test") {
+  _target_name = target_name
+  executable("$_target_name") {
+    forward_variables_from(invoker, "*")
+    #sources = invoker.sources
+    crate_name = _target_name
+    crate_type = "bin"
+    rustflags = [
+      "--cfg",
+      "feature=\"test\"",
+      "--test",
+    ]
+  }
+}
