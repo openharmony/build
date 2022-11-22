@@ -266,10 +266,10 @@ template("write_meta_data") {
     _deps_metadata = []
     inputs = []
     foreach(d, _possible_deps) {
-      sources = []
+      sources_raw = []
       _target_label = get_label_info(d, "label_no_toolchain")
-      sources += [ _target_label ]
-      sources = filter_exclude(sources, app_target_allowlist)
+      sources_raw += [ _target_label ]
+      sources = filter_exclude(sources_raw, app_target_allowlist)
       if (sources == []) {
         _deps_metadata += [ get_label_info(d, "target_gen_dir") + "/" +
                             get_label_info(d, "name") + ".metadata" ]
