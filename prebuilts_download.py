@@ -197,6 +197,7 @@ def _npm_install(args, code_dir, unzip_dir, unzip_filename):
         if proc.returncode:
             raise Exception(err.decode())
 
+
 def _node_modules_copy(config, code_dir, enable_symlink):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))

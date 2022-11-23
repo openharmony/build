@@ -61,6 +61,7 @@ def parse_args(args):
     options.testrunner_dir = build_utils.parse_gn_list(options.testrunner_dir)
     return options
 
+
 def make_my_env(options, js2abc):
     out_dir = os.path.abspath(os.path.dirname(options.output))
     gen_dir = os.path.join(out_dir, "gen")
@@ -80,6 +81,7 @@ def make_my_env(options, js2abc):
         my_env["aceProfilePath"] = os.path.join(gen_dir, "resources/base/profile")
         my_env["aceModuleJsonPath"] = os.path.abspath(options.hap_profile)
     return my_env
+
 
 def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path):
     data = dict()
@@ -108,6 +110,7 @@ def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_pat
             if not js2abc:
                 data['mode'] = js_module.get('mode')
     return data
+
 
 def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
     my_env = make_my_env(options, js2abc)
@@ -169,6 +172,7 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
     else:
         build_utils.zip_dir(options.output, gen_dir, zip_prefix_path='assets/js/')
 
+
 def get_all_js_sources(base):
     sources = []
     for root, _, files in os.walk(base):
@@ -177,6 +181,7 @@ def get_all_js_sources(base):
                 sources.append(os.path.join(root, file))
 
     return sources
+
 
 def main(args):
     options = parse_args(args)

@@ -81,7 +81,7 @@ def readjson(path, device):
         for datakey in data:
             if "enable_ramdisk" in datakey:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
-                "board", "enable_ramdisk", "enable_absystem","subsystems"]
+                "board", "enable_ramdisk", "enable_absystem", "subsystems"]
                 break
             else:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
