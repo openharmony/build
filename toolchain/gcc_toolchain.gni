@@ -577,7 +577,7 @@ template("gcc_toolchain") {
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
-
+ 
     tool("rust_cdylib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
@@ -599,6 +599,14 @@ template("gcc_toolchain") {
     tool("rust_dylib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.dylib.so"
+      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} --target=arm-unknown-linux-musleabi -Clink-arg=--sysroot=$musl_path -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=arm-linux-ohos -C target-feature=-crt-static -L $musllib -L dependency=$rust_libs -L dependency=$base_rlibs_path  $base_rlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      description = "RUST $outfile"
+      outputs = [ outfile ]
+    }
+
+    tool("rust_macro") {
+      depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} --target=arm-unknown-linux-musleabi -Clink-arg=--sysroot=$musl_path -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=arm-linux-ohos -C target-feature=-crt-static -L $musllib -L dependency=$rust_libs -L dependency=$base_rlibs_path  $base_rlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]

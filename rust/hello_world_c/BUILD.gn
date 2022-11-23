@@ -5,7 +5,7 @@ ohos_executable("hello_world_c") {
   sources = [ "src/main.c" ]
 
   #configs = []
-  deps = [ "//build/rust/rust_log:rust_log_cdylib" ]
+  deps = [ "//build/rust/rust_log" ]
 }
 
 ohos_prebuilt_executable("hello_world_prebuilt") {

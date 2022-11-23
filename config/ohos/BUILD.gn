@@ -81,6 +81,8 @@ config("runtime_library") {
     "-L" + rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir),
     "-L" + rebase_path("${clang_base_path}/lib/clang/12.0.1/lib/${abi_target}",
                        root_build_dir),
+    "-L" + rebase_path("${clang_base_path}/lib/clang/12.0.1/lib/${abi_target}/c++",
+                       root_build_dir),
   ]
 
   libs += [

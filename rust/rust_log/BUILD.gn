@@ -1,9 +1,10 @@
 group("rust_log") {
   deps = [
-    # ":rust_log_rlib",
-    # ":rust_log_dylib",
+    ":rust_log_rlib",
+    ":rust_log_dylib",
     ":rust_log_staticlib",
-    # ":rust_log_cdylib",
+    ":rust_log_cdylib",
+    ":rust_log_proc_macro"
   ]
 }
 
@@ -29,4 +30,10 @@ shared_library("rust_log_cdylib") {
   sources = [ "src/cdylib.rs" ]
   crate_name = "rust_log_cdylib"
   crate_type = "cdylib"
+}
+
+rust_proc_macro("rust_log_proc_macro") {
+  sources = [ "src/proc_macro.rs" ]
+  crate_name = "rust_log_proc_macro"
+  crate_type = "proc-macro"
 }

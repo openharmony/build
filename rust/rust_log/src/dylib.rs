@@ -1,8 +1,8 @@
-pub struct RustLogMessage {
-    pub id: i32,
-    pub msg: String,
+pub struct RustLogMessageDylib {
+    pub dy_id: i32,
+    pub dy_msg: String,
 }
 
-pub fn rust_log(msg: RustLogMessage) {
-    println!("id:{} message:{:?}", msg.id, msg.msg)
+pub fn rust_log_dylib(msg: RustLogMessageDylib) {
+    println!("id:{} message:{:?}", msg.dy_id, msg.dy_msg)
 }

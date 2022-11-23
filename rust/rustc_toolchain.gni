@@ -3,12 +3,19 @@ declare_args() {
   use_ohos_rust_toolchain = true
   rustc_version = ""
   rust_sysroot_absolute = ""
+  is_rust_nightly = true
+  is_rust_stable = false 
 }
 
 if (!defined(rust_compiler_prefix)) {
   rust_compiler_prefix = ""
 }
-rust_sysroot = "//prebuilts/rustc/linux-x86_64"
+if(is_rust_nightly) {
+  rust_sysroot = "//prebuilts/rustc/linux-x86_64/nightly"
+} else {
+  rust_sysroot = "//prebuilts/rustc/linux-x86_64/stable"
+}
+
 rustc_bin = rebase_path("${rust_sysroot}/bin", root_build_dir)
 rustc = "${rustc_bin}/rustc"
 

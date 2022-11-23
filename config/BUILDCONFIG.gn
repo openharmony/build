@@ -820,6 +820,13 @@ set_defaults("rust_library") {
   rustflags = [ "-Cdebuginfo=2" ]
 }
 
+set_defaults("rust_proc_macro") {
+  rustflags = [
+    "-Cdebuginfo=2",
+    "--edition=2021",
+  ]
+}
+
 set_defaults("source_set") {
   configs = default_compiler_configs
 }

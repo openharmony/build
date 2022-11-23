@@ -3,6 +3,6 @@ pub struct RustLogMessage {
     pub msg: String,
 }
 
-pub fn rust_log(msg: RustLogMessage) {
+pub fn rust_log_rlib(msg: RustLogMessage) {
     println!("id:{} message:{:?}", msg.id, msg.msg)
 }
