@@ -26,6 +26,7 @@ sys.path.append(os.path.dirname(os.path.dirname(
 from lite.hb_internal.common import utils
 from lite.hb_internal.common.config import Config
 
+
 class Packer():
     def __init__(self, packer_args) -> None:
         self.config = Config()

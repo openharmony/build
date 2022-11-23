@@ -175,7 +175,7 @@ def main():
         install_dests = gen_install_dests(
             args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir,
             args.updater_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir, source_file_name,
-            args.install_images,args.module_install_dir, args.relative_install_dir, args.type)
+            args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
 
     module_info_data = gen_module_info(args.type, args.target_label,
                                        args.label_name, args.source_dir,

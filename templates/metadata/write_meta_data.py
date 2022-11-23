@@ -147,6 +147,7 @@ def write_meta_data(options, direct_deps):
                     root.get('ets_assets').append(dep[target_type])
     build_utils.write_json(meta_data, options.output, only_if_changed=True)
 
+
 # Collect assets entry according to config.json
 def load_assets(options, assets, assets_type):
     pre_path = assets[0]
@@ -180,6 +181,7 @@ def load_assets(options, assets, assets_type):
     if not assets:
         assets.append(pre_path)
     return assets
+
 
 def main():
     parser = argparse.ArgumentParser()
