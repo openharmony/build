@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_dylib_crate") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":simple_printer_dylib" ]
+}
+
+ohos_rust_shared_library("simple_printer_dylib") {
+  sources = [ "src/simple_printer.rs" ]
+  crate_name = "simple_printer_dylib"
+  crate_type = "dylib"
+}

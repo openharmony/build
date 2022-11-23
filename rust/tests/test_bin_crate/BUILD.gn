@@ -1,0 +1,5 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_bin_crate") {
+  sources = [ "src/main.rs" ]
+}

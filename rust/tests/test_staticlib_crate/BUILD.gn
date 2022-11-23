@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_executable("test_staticlib_crate") {
+  sources = [ "src/main.c" ]
+  deps = [ ":simple_printer_staticlib" ]
+}
+
+ohos_rust_static_ffi("simple_printer_staticlib") {
+  sources = [ "src/simple_printer.rs" ]
+  crate_name = "simple_printer_staticlib"
+  crate_type = "staticlib"
+}

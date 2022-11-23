@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_executable("test_cdylib_crate") {
+  sources = [ "src/main.c" ]
+  deps = [ ":simple_printer_cdylib" ]
+}
+
+ohos_rust_shared_ffi("simple_printer_cdylib") {
+  sources = [ "src/simple_printer.rs" ]
+  crate_name = "simple_printer_cdylib"
+  crate_type = "cdylib"
+}

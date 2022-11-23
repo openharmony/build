@@ -2,7 +2,10 @@
 
 group("default") {
   deps = [
-    "//build/rust/hello_world:hello_world_rust",
-    "//build/rust/hello_world_c:hello_world_c",
+    "//build/rust/tests/test_bin_crate",
+    "//build/rust/tests/test_rlib_crate",
+    "//build/rust/tests/test_dylib_crate",
+    "//build/rust/tests/test_staticlib_crate",
+    "//build/rust/tests/test_cdylib_crate",
   ]
 }

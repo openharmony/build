@@ -581,8 +581,6 @@ template("gcc_toolchain") {
     tool("rust_cdylib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
-
-      # command = "$rustc --crate-name {{crate_name}} {{source}} --crate-type {{crate_type}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} --target=arm-unknown-linux-musleabi -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=arm-linux-ohos -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L dependency=$rust_libs -L dependency=$base_rlibs_path $base_rlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
@@ -591,7 +589,7 @@ template("gcc_toolchain") {
     tool("rust_bin") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/{{crate_name}}"
-      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} --target=arm-unknown-linux-musleabi -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=arm-linux-ohos -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L dependency=$rust_libs -L dependency=$base_rlibs_path $base_rlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} --target=arm-unknown-linux-musleabi -Clinker=$clang -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=arm-linux-ohos -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L dependency=$rust_libs -L dependency=$base_rlibs_path $base_rlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }

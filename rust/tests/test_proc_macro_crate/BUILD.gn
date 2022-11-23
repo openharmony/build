@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_proc_macro_crate") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":simple_printer_proc_macro" ]
+}
+
+ohos_rust_proc_macro("simple_printer_proc_macro") {
+  sources = [ "src/simple_printer_macro.rs" ]
+  crate_name = "simple_printer_proc_macro"
+  crate_type = "proc-macro"
+}
