@@ -202,7 +202,7 @@
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
-          "file_path": "/openharmony/develop_tools/pahole_v1.24_20221114.tar.gz",
+          "file_path": "/openharmony/develop_tools/pahole_v1.21_20221124.tar.gz",
           "unzip_filename": "pahole"
         }
       ]
@@ -303,7 +303,7 @@
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
-          "file_path": "/openharmony/develop_tools/pahole_v1.24_20221114.tar.gz",
+          "file_path": "/openharmony/develop_tools/pahole_v1.21_20221124.tar.gz",
           "unzip_filename": "pahole"
         }
       ]
