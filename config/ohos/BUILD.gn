@@ -73,7 +73,7 @@ config("runtime_library") {
   libs = []
 
   # arm builds of libc++ starting in NDK r12 depend on unwind.
-  if (current_cpu == "arm") {
+  if (current_cpu == "arm" || current_cpu == "arm64") {
     libs += [ "unwind" ]
   }
 

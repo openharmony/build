@@ -173,4 +173,5 @@ fi
 prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
 prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
 $prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
+
 echo -e "\n"

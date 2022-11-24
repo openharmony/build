@@ -16,6 +16,7 @@ import("//build/toolchain/ohos/ohos_toolchain.gni")
 ohos_clang_toolchain("ohos_arm_{{ product_name }}") {
   sysroot = "${musl_sysroot}"
   lib_dir = "usr/lib/arm-linux-ohos"
+  rust_abi_target = "arm-unknown-linux-musleabi"
   toolchain_args = {
     current_cpu = "arm"
     {{ part_attributes_list }}
