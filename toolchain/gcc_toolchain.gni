@@ -609,7 +609,7 @@ template("gcc_toolchain") {
     tool("rust_dylib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.dylib.so"
-      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path  $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
@@ -617,7 +617,7 @@ template("gcc_toolchain") {
     tool("rust_macro") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
-      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path  $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
@@ -675,7 +675,7 @@ template("clang_toolchain") {
     if (defined(rust_abi_target)) {
       stdlib_path = "${rust_path}/lib/rustlib/${rust_abi_target}/lib"
       if (rust_abi_target == "x86_64-unknown-linux-gnu") {
-        stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-c6c03e024a2f1e46.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-b7c79d85cf21a511.rlib' --extern 'noprelude:core=$stdlib_path/libcore-05898138a596088a.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-f568c570fff954b1.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-8f8af17ceb8d77cc.rlib' --extern 'noprelude:std=$stdlib_path/libstd-f30f0c72643db558.rlib'"
+        stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-c6c03e024a2f1e46.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-b7c79d85cf21a511.rlib' --extern 'noprelude:core=$stdlib_path/libcore-05898138a596088a.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-f568c570fff954b1.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-8f8af17ceb8d77cc.rlib' --extern 'noprelude:std=$stdlib_path/libstd-f30f0c72643db558.rlib' --extern `std=${rust_path}/lib/libstd.dylib.so`"
         cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
       }
     }

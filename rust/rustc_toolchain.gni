@@ -1,3 +1,6 @@
+import("//build/config/ohos/config.gni")
+import("//build/config/ohos/musl.gni")
+
 declare_args() {
   enable_rust = true
   use_ohos_rust_toolchain = true
@@ -14,6 +17,7 @@ if (is_rust_nightly) {
 } else {
   rust_version = "1.59.0"
 }
+
 rust_path = "${rust_base}/${host_platform_dir}/${rust_version}"
 rust_bin = "${rust_path}/bin"
 rustc = "${rust_bin}/rustc"
@@ -22,9 +26,6 @@ stdlib_host_path = "${rust_path}/lib"
 
 clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang",
                     root_build_dir)
-musl_path = rebase_path("//out/rk3568/obj/third_party/musl", root_build_dir)
-musllib =
-    rebase_path("//out/rk3568/obj/third_party/musl/usr/lib/arm-linux-ohos/",
-                root_build_dir)
-
+musl_path = rebase_path("${musl_sysroot}", root_build_dir)
+musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
 #rustc_command_args = "--crate-name {{crate_name}} {{source}} --crate-type {{crate-type}} {{rustflags}}"

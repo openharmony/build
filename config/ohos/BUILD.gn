@@ -88,8 +88,7 @@ config("runtime_library") {
   libs += [
     rebase_path(libclang_rt_file),
     "c",
-    # rebase_path("${clang_base_path}/lib/libc++abi.so"),
-    # "c++abi",
+    rebase_path(libcxxabi_file),
   ]
 
   if (current_cpu == "arm" && arm_version == 6) {

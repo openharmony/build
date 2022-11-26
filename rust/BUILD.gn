@@ -1,7 +1,27 @@
 #This was originally a compilation entry, but now "default" is added to the component dependency of build/common/bundle.json.
+import("//build/ohos.gni")
 
 group("default") {
   deps = [
     "//build/rust/tests",
+    ":libstd.dylib.so"
   ]
+}
+
+ohos_prebuilt_shared_library("libstd.dylib.so") {
+  if (target_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-0476d75b0591c5e6.so"
+  } else if (target_cpu == "arm64") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libstd-0476d75b0591c5e6.so"
+  } else if (target_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/libstd-f30f0c72643db558.so"
+  } else {
+    source = ""
+  }
+  install_images = [
+    "system",
+    "uptater",
+  ]
+  output = "libstd.dylib.so"
+  part_name = "common"
 }
