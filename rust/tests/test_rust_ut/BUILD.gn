@@ -1,0 +1,13 @@
+import("//build/ohos.gni")
+
+ohos_rust_test("test_rust_ut") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":test_rust_ut_add" ]
+}
+
+ohos_rust_shared_library("test_rust_ut_add") {
+  sources = [ "src/main.rs" ]
+  crate_name = "test_rust_ut_add"
+  crate_type = "dylib"
+}
+

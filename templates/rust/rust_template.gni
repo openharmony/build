@@ -59,7 +59,7 @@ template("ohos_rust_test") {
     forward_variables_from(invoker, "*")
     crate_name = _target_name
     crate_type = "bin"
-    rustflags = [
+    rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
