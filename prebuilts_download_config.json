@@ -74,10 +74,6 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf",
-      "dest": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0"
-    },
-    {
       "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk",
       "rename": "true"
@@ -181,16 +177,6 @@
           "unzip_filename": "libcxx-ndk"
         },
         {
-          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
-          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
-          "unzip_filename": "esp-2019r2-8.2.0"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
-          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
-          "unzip_filename": "csky"
-        },
-        {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
           "unzip_filename": "linux-x86"
@@ -280,16 +266,6 @@
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
           "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/linux/libcxx-ndk_linux-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
-          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
-          "unzip_filename": "esp-2019r2-8.2.0"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
-          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
-          "unzip_filename": "csky"
         },
         {
           "unzip_dir": "prebuilts/python",
