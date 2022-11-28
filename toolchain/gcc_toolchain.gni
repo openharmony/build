@@ -577,6 +577,12 @@ template("gcc_toolchain") {
     tool("rust_staticlib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/{{crate_name}}.a"
+      #staticlibname = "{{target_output_name}}.a" #{{output_extension}}" # e.g. "libfoo.a".
+      #outfile = "{{output_dir}}/$staticlibname"
+      #depfile = "$outfile.d"
+      #rspfile = "$outfile.rsp"
+      #unstripped_outfile = outfile
+      #pool = "//build/toolchain:link_pool($default_toolchain)"
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
@@ -585,30 +591,56 @@ template("gcc_toolchain") {
     tool("rust_rlib") {
       depfile = "{{target_out_dir}}/{{crate_name}}.d"
       outfile = "{{target_out_dir}}/lib{{crate_name}}.rlib"
+      #rlibname = "{{target_output_name}}.rlib" #{{output_extension}}" # e.g. "libfoo.rlib".
+      #outfile = "{{output_dir}}/$rlibname"
+      #depfile = "$outfile.d"
+      #rspfile = "$outfile.rsp"
+      #unstripped_outfile = outfile
+      #pool = "//build/toolchain:link_pool($default_toolchain)"
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
 
     tool("rust_cdylib") {
-      depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
+      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      #outfile = "{{target_out_dir}}/lib{{crate_name}}.z.so"
+      cdylibname = "lib{{target_output_name}}.z.so" #{{output_extension}}" # e.g. "libfoo.z.so".
+      outfile = "{{output_dir}}/$cdylibname"
+      depfile = "$outfile.d"
+      #rspfile = "$outfile.rsp"
+      #unstripped_outfile = outfile
+      #pool = "//build/toolchain:link_pool($default_toolchain)"
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
 
     tool("rust_bin") {
-      depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      outfile = "{{target_out_dir}}/{{crate_name}}"
+      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      #outfile = "{{target_out_dir}}/{{crate_name}}"
+      exename = "{{target_output_name}}{{output_extension}}"
+      outfile = "{{output_dir}}/$exename"
+      depfile = "$outfile.d"
+      #rspfile = "$outfile.rsp"
+      #unstripped_outfile = outfile
+      #pool = "//build/toolchain:link_pool($default_toolchain)"
+
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
 
     tool("rust_dylib") {
-      depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      outfile = "{{target_out_dir}}/lib{{crate_name}}.dylib.so"
+      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
+      #outfile = "{{target_out_dir}}/lib{{crate_name}}.dylib.so"
+      dylibname = "lib{{target_output_name}}.dylib.so" #{{output_extension}}" # e.g. "libfoo.dylib.so".
+      outfile = "{{output_dir}}/$dylibname"
+      depfile = "$outfile.d"
+      #rspfile = "$outfile.rsp"
+      #unstripped_outfile = outfile
+      #pool = "//build/toolchain:link_pool($default_toolchain)"
+
       command = "$rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]

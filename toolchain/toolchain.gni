@@ -61,14 +61,20 @@ assert(!use_xcode_clang || target_os == "ios",
 executable_extension = ""
 if (is_mac) {
   shlib_extension = ".dylib"
+  dylib_extension = ".dylib.so"
+  rlib_extension = ".rlib"
 } else if (is_ohos && is_component_build) {
   # By appending .z, we prevent name collisions with libraries already loaded by the ohos.
   shlib_extension = ".z.so"
+  dylib_extension = ".dylib.so"
+  rlib_extension = ".rlib"
 } else if (is_mingw) {
   shlib_extension = ".dll"
   executable_extension = ".exe"
 } else if (is_posix) {
   shlib_extension = ".so"
+  dylib_extension = ".dylib.so"
+  rlib_extension = ".rlib"
 } else if (is_win) {
   shlib_extension = ".dll"
 } else {

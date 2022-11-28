@@ -10,9 +10,9 @@ group("default") {
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
   if (target_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-0476d75b0591c5e6.so"
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-e2d7cc624ec4db87.so"
   } else if (target_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libstd-0476d75b0591c5e6.so"
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libstd-2ffed83c5c6f6122.so"
   } else if (target_cpu == "arm") {
     source = "//prebuilts/rustc/linux-x86_64/nightly/lib/libstd-f30f0c72643db558.so"
   } else {
