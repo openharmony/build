@@ -299,7 +299,7 @@ config feature$$hiviewdfx$$hicollie_native
         default ""
         depends on hiviewdfx$$hicollie_native
 endmenu
-menu
+menu "commonlibrary"
 config commonlibrary$$c_utils
     bool "c_utils"
     default n
