@@ -678,6 +678,8 @@ def get_parts_info(source_root_dir,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
                                        load_test_config)
+        
+        // xts子系统特殊处理，device_attest和device_attest_lite部件需要编译到版本镜像中，其他部件独立不需要编译到版本镜像中
         if subsystem_name == 'xts' and build_xts is False:
             xts_device_attest_name = {}
             if 'device_attest' in build_loader.parts_modules_info():
