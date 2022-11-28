@@ -379,6 +379,26 @@ template("ohos_shared_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  # auto set auto_relative_install_dir by innerapi_tags
+  if (defined(invoker.innerapi_tags)) {
+    is_chipsetsdk = false
+    is_platformsdk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk*" ])) {
+      is_chipsetsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk*" ])) {
+      is_platformsdk = true
+    }
+
+    if (is_chipsetsdk && is_platformsdk) {
+      auto_relative_install_dir = "chipset-pub-sdk"
+    } else if (is_chipsetsdk) {
+      auto_relative_install_dir = "chipset-sdk"
+    } else if (is_platformsdk) {
+      auto_relative_install_dir = "platformsdk"
+    }
+  }
+
   if (check_deps) {
     deps_data = {
     }
@@ -492,6 +512,53 @@ template("ohos_shared_library") {
         output_prefix_override = invoker.output_prefix_override
       }
       notice = "$target_out_dir/$ohos_module_name.notice.txt"
+
+      # update relative_install_dir if auto_relative_install_dir defined
+      if (defined(auto_relative_install_dir)) {
+        relative_install_dir = auto_relative_install_dir
+      }
+
+      # Passing shlib_type and innerapi_tags to generate_module_info
+      if (defined(invoker.shlib_type)) {
+        invalid = true
+        valid_types = [
+          "sa",
+          "sa_stub",
+          "sa_proxy",
+          "hdi",
+          "hdi_stub",
+          "hdi_proxy",
+          "innerapi",
+          "napi",
+        ]
+        foreach(t, filter_include(valid_types, [ invoker.shlib_type ])) {
+          if (t == invoker.shlib_type) {
+            invalid = false
+          }
+        }
+        shlib_type = invoker.shlib_type
+        assert(
+            invalid != true,
+            "$target_label has invalid shlib_type value: $shlib_type, allowed values: $valid_types")
+      }
+      if (defined(invoker.innerapi_tags)) {
+        invalid = false
+        valid_tags = [
+          "chipsetsdk",
+          "chipsetsdk_indirect",
+          "platformsdk",
+          "platformsdk_indirect",
+        ]
+        foreach(tag, filter_exclude(invoker.innerapi_tags, valid_tags)) {
+          if (tag != "") {
+            invalid = true
+          }
+        }
+        innerapi_tags = invoker.innerapi_tags
+        assert(
+            invalid != true,
+            "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
+      }
     }
   }
 
@@ -660,6 +727,22 @@ template("ohos_shared_library") {
           configs -= default_opt_configs
           configs += debug_level_configs
         }
+      }
+    }
+
+    # Hide symbols for all sa libraries if not specified by version_script
+    if (defined(invoker.shlib_type) && invoker.shlib_type == "sa") {
+      if (!defined(invoker.version_script)) {
+        configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
+      }
+    }
+
+    # Set version_script for hdi service libraries
+    if (defined(invoker.shlib_type) && invoker.shlib_type == "hdi") {
+      if (!defined(invoker.version_script)) {
+        _version_script = rebase_path("//build/templates/cxx/hdi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
     }
   }
