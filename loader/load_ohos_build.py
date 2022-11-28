@@ -460,15 +460,6 @@ class LoadBuildConfig(object):
         subsystem_config['parts'] = parts_info
         return subsystem_config, parts_path_dict
 
-    def parse_syscap_info(self):
-        _build_files = self._build_info.get('build_files')
-        subsystem_syscap = []
-        for _build_file in _build_files:
-            if _build_file.endswith('bundle.json'):
-                part_name, part_syscap = get_syscap_from_bundle(_build_file)
-                subsystem_syscap.append({'component': part_name, 'syscap': part_syscap})
-        return subsystem_syscap
-
     def parse(self):
         """parse part info from build config file."""
         if self._is_load:
@@ -479,6 +470,17 @@ class LoadBuildConfig(object):
         self._parsing_config(parts_config)
         self._parts_path_dict = parts_path_dict
         self._is_load = True
+
+    def parse_syscap_info(self):
+        self.parse()
+        _build_files = self._build_info.get('build_files')
+        subsystem_syscap = []
+        for _build_file in _build_files:
+            if _build_file.endswith('bundle.json'):
+                part_name, part_syscap = get_syscap_from_bundle(_build_file)
+                if part_name in self._part_list.keys():
+                    subsystem_syscap.append({'component': part_name, 'syscap': part_syscap})
+        return subsystem_syscap
 
     def parts_variants(self):
         """parts varinats info."""
