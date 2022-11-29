@@ -544,8 +544,8 @@ class LoadBuildConfig(object):
         self._parts_info_dict = {key : value for key, value in self._parts_info_dict.items() if save_part == key}
         self._phony_targets = {key : value for key, value in self._phony_targets.items() if save_part == key}
         self._parts_path_dict = {key : value for key, value in self._parts_path_dict.items() if save_part == key}
-        if save_part == key:
-            for key, value in self._part_hisysevent_config.items():
+        for key, value in self._part_hisysevent_config.items():
+            if save_part == key:
                 self._part_hisysevent_config[key] = value
         self._parts_module_list = {key : value for key, value in self._parts_module_list.items() if save_part == key}
 
