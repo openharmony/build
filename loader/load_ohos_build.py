@@ -538,14 +538,16 @@ class LoadBuildConfig(object):
     def parts_info_filter(self, save_part):
         if save_part is None:
             raise Exception
-        self._parts_variants = { key : value for key, value in self._parts_variants.items() if save_part == key }
-        self._part_list = { key : value for key, value in self._part_list.items() if save_part == key }
-        self._part_targets_label = { key : value for key, value in self._part_targets_label.items() if save_part == key }
-        self._parts_info_dict = { key : value for key, value in self._parts_info_dict.items() if save_part == key }
-        self._phony_targets = { key : value for key, value in self._phony_targets.items() if save_part == key }
-        self._parts_path_dict = { key : value for key, value in self._parts_path_dict.items() if save_part == key }
-        self._part_hisysevent_config = { key : value for key, value in self._part_hisysevent_config.items() if save_part == key }
-        self._parts_module_list = { key : value for key, value in self._parts_module_list.items() if save_part == key }
+        self._parts_variants = {key : value for key, value in self._parts_variants.items() if save_part == key}
+        self._part_list = {key : value for key, value in self._part_list.items() if save_part == key}
+        self._part_targets_label = {key : value for key, value in self._part_targets_label.items() if save_part == key}
+        self._parts_info_dict = {key : value for key, value in self._parts_info_dict.items() if save_part == key}
+        self._phony_targets = {key : value for key, value in self._phony_targets.items() if save_part == key}
+        self._parts_path_dict = {key : value for key, value in self._parts_path_dict.items() if save_part == key}
+        if save_part == key:
+            for key, value in self._part_hisysevent_config.items():
+                self._part_hisysevent_config[key] = value
+        self._parts_module_list = {key : value for key, value in self._parts_module_list.items() if save_part == key}
 
 def _output_parts_info(parts_config_dict, config_output_path):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
@@ -679,7 +681,8 @@ def get_parts_info(source_root_dir,
                                        exclusion_modules_config_file,
                                        load_test_config)
         
-        # xts subsystem special handling, device_attest and device_attest_lite parts need to be compiled into the version image, other parts are not
+        # xts subsystem special handling, device_attest and 
+        # device_attest_lite parts need to be compiled into the version image, other parts are not
         if subsystem_name == 'xts' and build_xts is False:
             xts_device_attest_name = {}
             if 'device_attest' in build_loader.parts_modules_info():
