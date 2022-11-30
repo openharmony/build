@@ -42,6 +42,10 @@ template("generate_module_info") {
                            "module_output_extension",
                            "module_source",
                            "notice",
+                           "shlib_type",
+                           "innerapi_tags",
+                           "part_name",
+                           "subsystem_name",
                          ])
 
   if (!defined(module_label)) {
@@ -179,6 +183,29 @@ template("generate_module_info") {
         "--notice",
         rebase_path(notice, root_build_dir),
       ]
+    }
+
+    if (defined(part_name)) {
+      args += [
+        "--part-name",
+        part_name,
+      ]
+    }
+    if (defined(subsystem_name)) {
+      args += [
+        "--subsystem-name",
+        subsystem_name,
+      ]
+    }
+    if (defined(shlib_type)) {
+      args += [
+        "--shlib-type",
+        shlib_type,
+      ]
+    }
+    if (defined(innerapi_tags)) {
+      args += [ "--innerapi-tags" ]
+      args += innerapi_tags
     }
     script = gen_script
     outputs = [ output_file ]
