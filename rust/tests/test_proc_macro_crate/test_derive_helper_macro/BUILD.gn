@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_derive_helper_macro") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":derive_helper_macro(${host_toolchain})" ]
+}
+
+ohos_rust_proc_macro("derive_helper_macro") {
+  sources = [ "src/lib.rs" ]
+  crate_name = "derive_helper_macro"
+  crate_type = "proc-macro"
+}

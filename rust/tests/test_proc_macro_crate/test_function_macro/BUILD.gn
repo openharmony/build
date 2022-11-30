@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_function_macro") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":function_macro(${host_toolchain})" ]
+}
+
+ohos_rust_proc_macro("function_macro") {
+  sources = [ "src/lib.rs" ]
+  crate_name = "function_macro"
+  crate_type = "proc-macro"
+}

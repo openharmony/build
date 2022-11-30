@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+ohos_rust_executable("test_attribute_macro") {
+  sources = [ "src/main.rs" ]
+  deps = [ ":attribute_macro(${host_toolchain})" ]
+}
+
+ohos_rust_proc_macro("attribute_macro") {
+  sources = [ "src/lib.rs" ]
+  crate_name = "attribute_macro"
+  crate_type = "proc-macro"
+}

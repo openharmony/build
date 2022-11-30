@@ -1,12 +1,8 @@
-import("//build/ohos.gni")
-
-ohos_rust_executable("test_proc_macro_crate") {
-  sources = [ "src/main.rs" ]
-  deps = [ ":simple_printer_proc_macro" ]
-}
-
-ohos_rust_proc_macro("simple_printer_proc_macro") {
-  sources = [ "src/simple_printer_macro.rs" ]
-  crate_name = "simple_printer_proc_macro"
-  crate_type = "proc-macro"
+group("test_proc_macro_crate") {
+  deps = [
+    "test_attribute_macro",
+    "test_derive_helper_macro",
+    "test_derive_macro:test_derive_macro(${host_toolchain})",
+    "test_function_macro",
+  ]
 }
