@@ -6,6 +6,8 @@ group("tests") {
     "//build/rust/tests/test_proc_macro_crate",
     "//build/rust/tests/test_rlib_crate",
     "//build/rust/tests/test_staticlib_crate",
+    "//build/rust/tests/test_rust_ut",
+    "//build/rust/tests/test_rust_st",
   ]
 
   deps += [
@@ -15,5 +17,7 @@ group("tests") {
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
     "test_rlib_crate:test_rlib_crate(${host_toolchain})",
     "test_staticlib_crate:test_staticlib_crate(${host_toolchain})",
+    "test_rust_ut:test_rust_ut(${host_toolchain})",
+    "test_rust_st:test_rust_st(${host_toolchain})",
   ]
 }

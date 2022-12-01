@@ -4,7 +4,8 @@ import("//build/ohos.gni")
 group("default") {
   deps = [
     "//build/rust/tests",
-    ":libstd.dylib.so"
+    ":libstd.dylib.so",
+    ":libtest.dylib.so",
   ]
 }
 
@@ -23,5 +24,23 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
     "uptater",
   ]
   output = "libstd.dylib.so"
+  part_name = "common"
+}
+
+ohos_prebuilt_shared_library("libtest.dylib.so") {
+  if (target_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libtest-24f7fe12f298b0ef.so"
+  } else if (target_cpu == "arm64") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libtest-29a4bc4bda1b4f47.so"
+  } else if (target_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/libtest-8d62c2c8a15c5ce5.so"
+  } else {
+    source = ""
+  }
+  install_images = [
+    "system",
+    "uptater",
+  ]
+  output = "libtest.dylib.so"
   part_name = "common"
 }

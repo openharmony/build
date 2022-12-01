@@ -739,7 +739,7 @@ template("clang_toolchain") {
     if (defined(rust_abi_target)) {
       stdlib_path = "${rust_path}/lib/rustlib/${rust_abi_target}/lib"
       if (rust_abi_target == "x86_64-unknown-linux-gnu") {
-        stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-c6c03e024a2f1e46.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-b7c79d85cf21a511.rlib' --extern 'noprelude:core=$stdlib_path/libcore-05898138a596088a.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-f568c570fff954b1.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-8f8af17ceb8d77cc.rlib' --extern 'noprelude:std=$stdlib_path/libstd-f30f0c72643db558.rlib' --extern test=$stdlib_path/libtest-8d62c2c8a15c5ce5.rlib --extern '${rust_path}/lib/libstd-f30f0c72643db558.so'"
+        stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-c6c03e024a2f1e46.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-b7c79d85cf21a511.rlib' --extern 'noprelude:core=$stdlib_path/libcore-05898138a596088a.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-f568c570fff954b1.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-8f8af17ceb8d77cc.rlib' --extern 'noprelude:std=$stdlib_path/libstd-f30f0c72643db558.rlib' --extern test=${rust_path}/lib/libtest-8d62c2c8a15c5ce5.so --extern 'std=${rust_path}/lib/libstd-f30f0c72643db558.so'"
         cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
       }
     }
