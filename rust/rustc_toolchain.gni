@@ -21,6 +21,7 @@ if (is_rust_nightly) {
 rust_path = "${rust_base}/${host_platform_dir}/${rust_version}"
 rust_bin = "${rust_path}/bin"
 rustc = "${rust_bin}/rustc"
+clippy_driver = "${rust_bin}/clippy-driver"
 
 stdlib_host_path = "${rust_path}/lib"
 
