@@ -157,7 +157,8 @@ declare_args() {
 }
 
 declare_args() {
-  build_variant = "user"
+  build_variant = "root"
+  device_type = "default"
 }
 
 # build target type
