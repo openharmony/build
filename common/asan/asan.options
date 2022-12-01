@@ -13,3 +13,4 @@ report_globals=0
 handle_abort=0
 allow_user_poisoning=0
 log_exe_name=true
+handle_segv=0
