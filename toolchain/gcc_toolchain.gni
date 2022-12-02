@@ -619,7 +619,7 @@ template("gcc_toolchain") {
       strip_level = "symbols"  # rustc supports none, debuginfo and symbols
                                # three strip degree.
       strip_switch = " -C strip=$strip_level"
-      command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+      command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -Clink-arg=-Wl,-soname=\"$cdylibname\" -o $outfile {{rustdeps}} {{externs}}"
       description = "RUST $outfile"
       outputs = [ outfile ]
     }
