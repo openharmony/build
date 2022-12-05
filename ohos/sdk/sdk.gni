@@ -38,6 +38,12 @@ sdk_toolchains = {
   }
 }
 
+if (host_cpu == "arm64") {
+  arch = "arm64"
+} else {
+  arch = "x64"
+}
+
 if (host_os == "mac") {
   sdk_systems = [ sdk_system_darwin ]
 } else {
