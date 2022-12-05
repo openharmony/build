@@ -55,6 +55,8 @@ parse_args = [
   rebase_path("./variant_to_product.json", root_build_dir),
   "--source-root-dir",
   rebase_path("//", root_build_dir),
+  "--node-js",
+  rebase_path(nodejs, root_build_dir),
 ]
 foreach(p, target_platform_list) {
   parse_args += [
