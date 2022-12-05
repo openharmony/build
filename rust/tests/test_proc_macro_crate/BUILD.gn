@@ -2,7 +2,6 @@ group("test_proc_macro_crate") {
   deps = [
     "test_attribute_macro",
     "test_derive_helper_macro",
-    "test_derive_macro:test_derive_macro(${host_toolchain})",
     "test_function_macro",
   ]
 }

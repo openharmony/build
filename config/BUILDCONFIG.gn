@@ -625,13 +625,14 @@ if (is_standard_system) {
   }
 
   # Static libraries and source sets use only the compiler ones.
-  default_static_library_configs = default_compiler_configs
+  default_static_library_configs = default_compiler_configs + [ "//build/config/rust:rust_config" ]
   default_source_set_configs = default_compiler_configs
 
   # Executable defaults.
   default_executable_configs = default_compiler_configs + [
                                  "//build/config:default_libs",
                                  "//build/config:executable_config",
+                                 "//build/config/rust:rust_config",
                                ]
 
   # Shared library and loadable module defaults (also for components in component
@@ -639,6 +640,7 @@ if (is_standard_system) {
   default_shared_library_configs = default_compiler_configs + [
                                      "//build/config:default_libs",
                                      "//build/config:shared_library_config",
+                                     "//build/config/rust:rust_config",
                                    ]
 }
 
@@ -805,7 +807,6 @@ if (is_lite_system) {
 
 set_defaults("executable") {
   configs = default_executable_configs
-  rustflags = [ "-Cdebuginfo=2" ]
 }
 
 set_defaults("static_library") {
@@ -817,14 +818,11 @@ set_defaults("shared_library") {
 }
 
 set_defaults("rust_library") {
-  rustflags = [ "-Cdebuginfo=2" ]
+  configs = [ "//build/config/rust:rust_config" ]
 }
 
 set_defaults("rust_proc_macro") {
-  rustflags = [
-    "-Cdebuginfo=2",
-    "--edition=2021",
-  ]
+  configs = [ "//build/config/rust:rust_config" ]
 }
 
 set_defaults("source_set") {

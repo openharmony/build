@@ -6,8 +6,6 @@ group("tests") {
     "//build/rust/tests/test_proc_macro_crate",
     "//build/rust/tests/test_rlib_crate",
     "//build/rust/tests/test_staticlib_crate",
-    "//build/rust/tests/test_rust_ut",
-    "//build/rust/tests/test_rust_st",
   ]
 
   deps += [
@@ -15,9 +13,16 @@ group("tests") {
     "test_cdylib_crate:test_cdylib_crate(${host_toolchain})",
     "test_dylib_crate:test_dylib_crate(${host_toolchain})",
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
-    "test_rlib_crate:test_rlib_crate(${host_toolchain})",
-    "test_staticlib_crate:test_staticlib_crate(${host_toolchain})",
+  ]
+}
+
+group("ohos_rust_xxxtest_tests") {
+  testonly = true
+  deps = [
+    "//build/rust/tests/test_rust_ut",
+    "//build/rust/tests/test_rust_st",
     "test_rust_ut:test_rust_ut(${host_toolchain})",
     "test_rust_st:test_rust_st(${host_toolchain})",
+    "//build/rust/tests/test_proc_macro_crate/test_derive_macro:test_derive_macro(${host_toolchain})",
   ]
 }

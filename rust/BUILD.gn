@@ -3,7 +3,7 @@ import("//build/ohos.gni")
 
 group("default") {
   deps = [
-    "//build/rust/tests",
+    "//build/rust/tests:tests",
     ":libstd.dylib.so",
     ":libtest.dylib.so",
   ]

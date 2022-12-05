@@ -1,6 +1,8 @@
 import("//build/ohos.gni")
+import("//build/test.gni")
 
-ohos_rust_test("test_rust_st") {
+ohos_rust_systemtest("test_rust_st") {
+  module_out_path = "rust_build_test/test_rust_st"
   sources = [ "test/test.rs" ]
   deps = [ ":test_rust_st_add" ]
 }

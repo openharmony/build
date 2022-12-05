@@ -639,3 +639,53 @@ template("ohos_js_stage_unittest") {
     test_type = "unittest"
   }
 }
+
+template("ohos_rust_unittest") {
+  _target_name = target_name
+  ohos_unittest("$_target_name") {
+    forward_variables_from(invoker, "*")
+    if (!defined(invoker.crate_name)) {
+      crate_name = _target_name
+    }
+    crate_type = "bin"
+    if (defined(invoker.crate_type)) {
+      assert(invoker.crate_type == crate_type,
+             "crate_type should be $crate_type or use default value.")
+    }
+
+    if (!defined(rustflags)) {
+      rustflags = []
+    }
+    rustflags += [
+      "--cfg",
+      "feature=\"test\"",
+      "--test",
+      "-Csymbol-mangling-version=v0",
+    ]
+  }
+}
+
+template("ohos_rust_systemtest") {
+  _target_name = target_name
+  ohos_systemtest("$_target_name") {
+    forward_variables_from(invoker, "*")
+    if (!defined(invoker.crate_name)) {
+      crate_name = _target_name
+    }
+    crate_type = "bin"
+    if (defined(invoker.crate_type)) {
+      assert(invoker.crate_type == crate_type,
+             "crate_type should be $crate_type or use default value.")
+    }
+
+    if (!defined(rustflags)) {
+      rustflags = []
+    }
+    rustflags += [
+      "--cfg",
+      "feature=\"test\"",
+      "--test",
+      "-Csymbol-mangling-version=v0",
+    ]
+  }
+}

@@ -1,7 +1,9 @@
 import("//build/ohos.gni")
+import("//build/test.gni")
 
 #ohos_rust_executable("test_derive_macro") {
-ohos_rust_test("test_derive_macro") {
+ohos_rust_systemtest("test_derive_macro") {
+  module_out_path = "rust_build_test/test_derive_macro"
   sources = [ "src/main.rs" ]
   deps = [ ":derive_macro(${host_toolchain})" ]
 }
