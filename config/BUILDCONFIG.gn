@@ -72,6 +72,10 @@ declare_args() {
   enable_lto_O0 = false
 }
 
+declare_args() {
+  enable_gn_2021 = true
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
@@ -91,6 +95,18 @@ if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = product_build_config.enable_ramdisk
 } else {
   enable_ramdisk = false
+}
+if (defined(product_build_config.chipprod_config_path)) {
+  chipprod_config_path = product_build_config.chipprod_config_path
+  import("${chipprod_config_path}/chip_product_list.gni")
+} else {
+  chip_product_list = []
+}
+
+if (defined(product_build_config.enable_absystem)) {
+  enable_absystem = product_build_config.enable_absystem
+} else {
+  enable_absystem = false
 }
 
 if (defined(product_build_config.enable_mesa3d)) {
@@ -534,7 +550,7 @@ if (!is_ohos) {
   sources_assignment_filter += []
 }
 
-set_sources_assignment_filter(sources_assignment_filter)
+#set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
   file_exist = exec_script("//build/scripts/check_file_exist.py",
                            [ "${device_build_path}/config.gni" ],
@@ -581,7 +597,7 @@ if (is_standard_system) {
     "//build/config/compiler:no_common",
     "//build/config/coverage:default_coverage",
     "//build/config/sanitizers:default_sanitizer_flags",
-    "//build/config/secure:default_secure_configs",
+    "//build/config/security:default_security_configs",
   ]
 
   if (is_ohos) {
@@ -724,7 +740,6 @@ if (is_lite_system) {
     } else {
       set_default_toolchain("//build/toolchain/linux:clang_$target_cpu")
       default_compiler_configs += [
-        "//build/config/sanitizers:default_sanitizer_flags",
         "//build/config:default_libs",
         "//build/config:executable_config",
         "//build/config/compiler:default_include_dirs",
@@ -764,6 +779,7 @@ if (is_lite_system) {
   default_compiler_configs += [
     "//build/lite/config:language_c",
     "//build/lite/config:language_cpp",
+     "//build/config/sanitizers:default_sanitizer_flags"
   ]
 
   if (current_os == "ohos") {

@@ -299,7 +299,7 @@ config feature$$hiviewdfx$$hicollie_native
         default ""
         depends on hiviewdfx$$hicollie_native
 endmenu
-menu
+menu "commonlibrary"
 config commonlibrary$$c_utils
     bool "c_utils"
     default n
@@ -727,13 +727,13 @@ config feature$$miscservices$$inputmethod_native
         depends on miscservices$$inputmethod_native
 endmenu
 menu "multimedia"
-config multimedia$$multimedia_image_standard
-    bool "multimedia_image_standard"
+config multimedia$$multimedia_image_framework
+    bool "multimedia_image_framework"
     default n
-config feature$$multimedia$$multimedia_image_standard
+config feature$$multimedia$$multimedia_image_framework
         string "feature"
         default ""
-        depends on multimedia$$multimedia_image_standard
+        depends on multimedia$$multimedia_image_framework
 config multimedia$$multimedia_audio_framework
     bool "multimedia_audio_framework"
     default n

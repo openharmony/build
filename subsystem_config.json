@@ -107,6 +107,10 @@
     "path": "base/request",
     "name": "request"
   },
+  "print": {
+    "path": "base/print",
+    "name": "print"
+  },
   "theme": {
     "path": "base/theme",
     "name": "theme"
@@ -159,9 +163,9 @@
     "path": "foundation/distributedhardware",
     "name": "distributedhardware"
   },
-  "ark": {
+  "arkcompiler": {
     "path": "arkcompiler",
-    "name": "ark"
+    "name": "arkcompiler"
   },
   "iothardware": {
     "path": "base/iothardware",

@@ -334,6 +334,44 @@ template("ohos_hap") {
     module_source_dir = get_label_info(":${_main_target_name}", "dir")
   }
 
+  _module_info_target = "${_main_target_name}_info"
+  generate_module_info(_module_info_target) {
+    module_name = _main_target_name
+    module_type = "app"
+
+    module_source_dir = get_path_info(_hap_path, "dir")
+    module_install_name = get_path_info(_hap_path, "name")
+    if (defined(invoker.module_install_name)) {
+      module_install_name = invoker.module_install_name
+    }
+
+    module_install_images = [ "system" ]
+    if (defined(invoker.install_images)) {
+      module_install_images = []
+      module_install_images += invoker.install_images
+    }
+    install_enable = true
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+
+    module_output_extension = ".hap"
+
+    module_install_dir = "${module_type}"
+    if (defined(invoker.module_install_dir)) {
+      module_install_dir = invoker.module_install_dir
+    }
+
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
+    }
+
+    if (defined(invoker.symlink_target_name)) {
+      symlink_target_name = invoker.symlink_target_name
+    }
+    notice = "$target_out_dir/$_main_target_name.notice.txt"
+  }
+
   package_app(target_name) {
     forward_variables_from(invoker,
                            [
@@ -353,6 +391,9 @@ template("ohos_hap") {
       ":$_resources_target",
       "//developtools/packing_tool:packing_tool",
     ]
+    if (!skip_gen_module_info) {
+      deps += [ ":$_module_info_target" ]
+    }
     enable_ark = build_ark
     if (defined(shared_libraries)) {
       deps += shared_libraries
@@ -374,42 +415,5 @@ template("ohos_hap") {
       toolchain = current_toolchain
       toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
     }
-  }
-
-  generate_module_info("${_main_target_name}_info") {
-    module_name = _main_target_name
-    module_type = "app"
-
-    module_source_dir = get_path_info(_hap_path, "dir")
-    module_install_name = get_path_info(_hap_path, "name")
-    if (defined(invoker.module_install_name)) {
-      module_install_name = invoker.module_install_name
-    }
-
-    module_install_images = [ "system" ]
-    if (defined(invoker.install_images)) {
-      module_install_images = []
-      module_install_images += invoker.install_images
-    }
-    install_enable = true
-    if (defined(invoker.install_enable)) {
-      install_enable = invoker.enable
-    }
-
-    module_output_extension = ".hap"
-
-    module_install_dir = "${module_type}"
-    if (defined(invoker.module_install_dir)) {
-      module_install_dir = invoker.module_install_dir
-    }
-
-    if (defined(invoker.relative_install_dir)) {
-      relative_install_dir = invoker.relative_install_dir
-    }
-
-    if (defined(invoker.symlink_target_name)) {
-      symlink_target_name = invoker.symlink_target_name
-    }
-    notice = "$target_out_dir/$_main_target_name.notice.txt"
   }
 }

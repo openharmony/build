@@ -18,9 +18,11 @@ import shutil
 import argparse
 import subprocess
 
+
 def copy_strip(args):
     shutil.copy(args.input, args.output)
     subprocess.call([args.strip, args.output], shell=False)
+
 
 def main():
     parser = argparse.ArgumentParser()

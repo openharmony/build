@@ -42,7 +42,6 @@ template("ohos_prebuilt_executable") {
                              "license_file",
                              "license_as_sources",
                            ])
-    set_sources_assignment_filter([])
     sources = [ invoker.source ]
     outputs = [ _copy_output ]
     module_type = "bin"
@@ -90,7 +89,6 @@ template("ohos_prebuilt_shared_library") {
                              "license_file",
                              "license_as_sources",
                            ])
-    set_sources_assignment_filter([])
     sources = [ invoker.source ]
     outputs = [ _copy_output ]
     module_type = "lib"
@@ -136,7 +134,6 @@ template("ohos_prebuilt_static_library") {
                              "license_file",
                              "license_as_sources",
                            ])
-    set_sources_assignment_filter([])
     sources = [ invoker.source ]
     outputs = [ _copy_output ]
     bypass_module_info_generation = true
@@ -176,7 +173,6 @@ template("ohos_prebuilt_etc") {
                              "license_file",
                              "license_as_sources",
                            ])
-    set_sources_assignment_filter([])
     sources = [ invoker.source ]
     outputs = [ _copy_output ]
     module_type = "etc"

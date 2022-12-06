@@ -1,0 +1,98 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+import("//build/config/clang/clang.gni")
+
+declare_args() {
+  # Enable the config that variables are automatically initialized by default.
+  enable_auto_var_init = false
+}
+
+using_security_flag = enable_auto_var_init
+
+if (!is_ohos) {
+  using_security_flag = false
+}
+
+# support_stack_protector_ret = true if clang support -fstack-protector-ret
+clang_bin = rebase_path("${default_clang_base_path}/bin/clang", root_build_dir)
+cmd = "${clang_bin} --help | grep fstack-protector-ret | wc -l"
+
+# exec_script returns 1 if grep fstack-protector-ret failed, indicating fstack-protector-ret not supported
+res = exec_script("//build/lite/run_shell_cmd.py", [ cmd ], "value")
+if (res == 1) {
+  support_stack_protector_ret = true
+} else {
+  support_stack_protector_ret = false
+}
+
+assert(
+    !using_security_flag || is_clang,
+    "automatic variable initialization requires setting is_clang = true in 'gn args'")
+
+template("ohos_auto_initialize_config") {
+  config(target_name) {
+    forward_variables_from(invoker, [ "auto_var_init" ])
+
+    configs = []
+
+    # Currently, only the clang compiler and standard system support automatic variable initialization.
+    if (is_clang && is_standard_system) {
+      if (defined(auto_var_init)) {
+        assert(
+            auto_var_init == "pattern" || auto_var_init == "zero" ||
+                auto_var_init == "uninit",
+            "auto_var_init can only be set to pattern, zero or uninit, for example, auto_var_init = \"pattern\"")
+
+        if (auto_var_init == "pattern") {
+          configs += [ "//build/config/security:auto_var_pattern_init_config" ]
+        } else if (auto_var_init == "zero") {
+          configs += [ "//build/config/security:auto_var_zero_init_config" ]
+        } else if (auto_var_init == "uninit") {
+          configs += [ "//build/config/security:auto_var_uninit_config" ]
+        }
+      } else {
+        configs += [ "//build/config/security:auto_var_zero_init_config" ]
+      }
+    }
+  }
+}
+
+template("ohos_stack_protector_ret_config") {
+  config(target_name) {
+    forward_variables_from(invoker, [ "stack_protector_ret" ])
+    cflags = []
+    if (defined(stack_protector_ret) && stack_protector_ret &&
+        support_stack_protector_ret) {
+      cflags += [ "-fstack-protector-ret" ]
+    }
+  }
+}
+
+template("ohos_security_config") {
+  config(target_name) {
+    configs = []
+    _auto_initialize_config_target = "${target_name}__auto_initialize_config"
+    ohos_auto_initialize_config(_auto_initialize_config_target) {
+      forward_variables_from(invoker, [ "auto_var_init" ])
+    }
+
+    _stack_protector_ret_config_target =
+        "${target_name}__stack_protector_config"
+    ohos_stack_protector_ret_config(_stack_protector_ret_config_target) {
+      forward_variables_from(invoker, [ "stack_protector_ret" ])
+    }
+
+    configs += [ ":$_auto_initialize_config_target" ]
+    configs += [ ":$_stack_protector_ret_config_target" ]
+  }
+}

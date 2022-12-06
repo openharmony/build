@@ -38,7 +38,7 @@ def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
     cmd.extend(['-keyPwd', keyalias])
     cmd.extend(['-appCertFile', certificate_file])
     cmd.extend(['-profileSigned', '1'])
-    cmd.extend(['-inForm','zip'])
+    cmd.extend(['-inForm', 'zip'])
     child = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)

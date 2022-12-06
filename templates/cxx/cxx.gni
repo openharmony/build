@@ -13,7 +13,7 @@
 
 import("//build/config/clang/clang.gni")
 import("//build/config/ohos/config.gni")
-import("//build/config/secure/secure_config.gni")
+import("//build/config/security/security_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/metadata/module_info.gni")
@@ -96,9 +96,13 @@ template("ohos_executable") {
     }
   }
 
-  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
-  ohos_auto_initialize_config(_auto_initialize_config_target) {
-    forward_variables_from(invoker, [ "auto_var_init" ])
+  _security_config_target = "${target_name}__security_config"
+  ohos_security_config(_security_config_target) {
+    forward_variables_from(invoker,
+                           [
+                             "auto_var_init",
+                             "stack_protector_ret",
+                           ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -124,6 +128,59 @@ template("ohos_executable") {
   }
   target_label = get_label_info(":${target_name}", "label_with_toolchain")
   target_toolchain = get_label_info(target_label, "toolchain")
+
+  if (!_ohos_test) {
+    ohos_module_name = target_name
+    _module_info_target = "${target_name}_info"
+    generate_module_info(_module_info_target) {
+      module_name = ohos_module_name
+      module_type = "bin"
+
+      module_source_dir = "$root_out_dir"
+      if (defined(output_dir)) {
+        module_source_dir = output_dir
+      }
+
+      module_install_name = ohos_module_name
+      if (defined(invoker.output_name)) {
+        module_install_name = invoker.output_name
+      }
+
+      module_install_images = [ "system" ]
+      if (defined(invoker.install_images)) {
+        module_install_images = []
+        module_install_images += invoker.install_images
+      }
+
+      module_output_extension = executable_extension
+      if (defined(invoker.output_extension)) {
+        module_output_extension = "." + invoker.output_extension
+      }
+
+      if (is_double_framework) {
+        install_enable = false
+      } else {
+        install_enable = true
+      }
+      if (defined(invoker.install_enable)) {
+        install_enable = invoker.install_enable
+      }
+
+      if (defined(invoker.module_install_dir)) {
+        module_install_dir = invoker.module_install_dir
+      }
+
+      if (defined(invoker.relative_install_dir)) {
+        relative_install_dir = invoker.relative_install_dir
+      }
+
+      if (defined(invoker.symlink_target_name)) {
+        symlink_target_name = invoker.symlink_target_name
+      }
+      notice = "$target_out_dir/$ohos_module_name.notice.txt"
+    }
+  }
+
   executable("${target_name}") {
     forward_variables_from(invoker,
                            "*",
@@ -155,7 +212,7 @@ template("ohos_executable") {
       configs -= invoker.remove_configs
     }
     configs += [ ":$_sanitize_config_target" ]
-    configs += [ ":$_auto_initialize_config_target" ]
+    configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -164,6 +221,9 @@ template("ohos_executable") {
 
     if (!defined(deps)) {
       deps = []
+    }
+    if (!_ohos_test && !skip_gen_module_info) {
+      deps += [ ":$_module_info_target" ]
     }
     if (!defined(libs)) {
       libs = []
@@ -273,57 +333,6 @@ template("ohos_executable") {
       deps += [ ":$_notice_target" ]
     }
   }
-
-  if (!_ohos_test) {
-    ohos_module_name = target_name
-    generate_module_info("${ohos_module_name}_info") {
-      module_name = ohos_module_name
-      module_type = "bin"
-
-      module_source_dir = "$root_out_dir"
-      if (defined(output_dir)) {
-        module_source_dir = output_dir
-      }
-
-      module_install_name = ohos_module_name
-      if (defined(invoker.output_name)) {
-        module_install_name = invoker.output_name
-      }
-
-      module_install_images = [ "system" ]
-      if (defined(invoker.install_images)) {
-        module_install_images = []
-        module_install_images += invoker.install_images
-      }
-
-      module_output_extension = executable_extension
-      if (defined(invoker.output_extension)) {
-        module_output_extension = "." + invoker.output_extension
-      }
-
-      if (is_double_framework) {
-        install_enable = false
-      } else {
-        install_enable = true
-      }
-      if (defined(invoker.install_enable)) {
-        install_enable = invoker.install_enable
-      }
-
-      if (defined(invoker.module_install_dir)) {
-        module_install_dir = invoker.module_install_dir
-      }
-
-      if (defined(invoker.relative_install_dir)) {
-        relative_install_dir = invoker.relative_install_dir
-      }
-
-      if (defined(invoker.symlink_target_name)) {
-        symlink_target_name = invoker.symlink_target_name
-      }
-      notice = "$target_out_dir/$ohos_module_name.notice.txt"
-    }
-  }
 }
 
 # Defines a shared_library
@@ -370,6 +379,26 @@ template("ohos_shared_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  # auto set auto_relative_install_dir by innerapi_tags
+  if (defined(invoker.innerapi_tags)) {
+    is_chipsetsdk = false
+    is_platformsdk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk*" ])) {
+      is_chipsetsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk*" ])) {
+      is_platformsdk = true
+    }
+
+    if (is_chipsetsdk && is_platformsdk) {
+      auto_relative_install_dir = "chipset-pub-sdk"
+    } else if (is_chipsetsdk) {
+      auto_relative_install_dir = "chipset-sdk"
+    } else if (is_platformsdk) {
+      auto_relative_install_dir = "platformsdk"
+    }
+  }
+
   if (check_deps) {
     deps_data = {
     }
@@ -401,9 +430,13 @@ template("ohos_shared_library") {
     output_dir = "${root_out_dir}"
   }
 
-  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
-  ohos_auto_initialize_config(_auto_initialize_config_target) {
-    forward_variables_from(invoker, [ "auto_var_init" ])
+  _security_config_target = "${target_name}__security_config"
+  ohos_security_config(_security_config_target) {
+    forward_variables_from(invoker,
+                           [
+                             "auto_var_init",
+                             "stack_protector_ret",
+                           ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -430,6 +463,105 @@ template("ohos_shared_library") {
 
   target_label = get_label_info(":${target_name}", "label_with_toolchain")
   target_toolchain = get_label_info(target_label, "toolchain")
+
+  if (target_toolchain == "${current_toolchain}") {
+    ohos_module_name = target_name
+    _module_info_target = "${target_name}_info"
+    generate_module_info(_module_info_target) {
+      module_name = ohos_module_name
+      module_type = "lib"
+      module_source_dir = "$root_out_dir"
+      if (defined(output_dir)) {
+        module_source_dir = output_dir
+      }
+
+      module_install_name = ohos_module_name
+      if (defined(invoker.output_name)) {
+        module_install_name = invoker.output_name
+      }
+
+      module_install_images = [ "system" ]
+      if (defined(invoker.install_images)) {
+        module_install_images = []
+        module_install_images += invoker.install_images
+      }
+
+      module_output_extension = shlib_extension
+      if (defined(invoker.output_extension)) {
+        module_output_extension = "." + invoker.output_extension
+      }
+
+      install_enable = true
+      if (defined(invoker.install_enable)) {
+        install_enable = invoker.install_enable
+      }
+
+      if (defined(invoker.module_install_dir)) {
+        module_install_dir = invoker.module_install_dir
+      }
+
+      if (defined(invoker.relative_install_dir)) {
+        relative_install_dir = invoker.relative_install_dir
+      }
+
+      if (defined(invoker.symlink_target_name)) {
+        symlink_target_name = invoker.symlink_target_name
+      }
+
+      if (defined(invoker.output_prefix_override)) {
+        output_prefix_override = invoker.output_prefix_override
+      }
+      notice = "$target_out_dir/$ohos_module_name.notice.txt"
+
+      # update relative_install_dir if auto_relative_install_dir defined
+      if (defined(auto_relative_install_dir)) {
+        relative_install_dir = auto_relative_install_dir
+      }
+
+      # Passing shlib_type and innerapi_tags to generate_module_info
+      if (defined(invoker.shlib_type)) {
+        invalid = true
+        valid_types = [
+          "sa",
+          "sa_stub",
+          "sa_proxy",
+          "hdi",
+          "hdi_stub",
+          "hdi_proxy",
+          "innerapi",
+          "napi",
+        ]
+        foreach(t, filter_include(valid_types, [ invoker.shlib_type ])) {
+          if (t == invoker.shlib_type) {
+            invalid = false
+          }
+        }
+        shlib_type = invoker.shlib_type
+        assert(
+            invalid != true,
+            "$target_label has invalid shlib_type value: $shlib_type, allowed values: $valid_types")
+      }
+      if (defined(invoker.innerapi_tags)) {
+        invalid = false
+        valid_tags = [
+          "chipsetsdk",
+          "chipsetsdk_indirect",
+          "platformsdk",
+          "platformsdk_indirect",
+        ]
+        foreach(tag, filter_exclude(invoker.innerapi_tags, valid_tags)) {
+          if (tag != "") {
+            invalid = true
+          }
+        }
+        innerapi_tags = invoker.innerapi_tags
+        assert(
+            invalid != true,
+            "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
+      }
+    }
+  }
+
   shared_library("${target_name}") {
     forward_variables_from(invoker,
                            "*",
@@ -471,7 +603,7 @@ template("ohos_shared_library") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
-    configs += [ ":$_auto_initialize_config_target" ]
+    configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -503,6 +635,9 @@ template("ohos_shared_library") {
     }
     if (!defined(deps)) {
       deps = []
+    }
+    if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
+      deps += [ ":$_module_info_target" ]
     }
     if (is_ohos) {
       if (defined(invoker.stl)) {
@@ -594,54 +729,21 @@ template("ohos_shared_library") {
         }
       }
     }
-  }
-  if (target_toolchain == "${current_toolchain}") {
-    ohos_module_name = target_name
-    generate_module_info("${ohos_module_name}_info") {
-      module_name = ohos_module_name
-      module_type = "lib"
-      module_source_dir = "$root_out_dir"
-      if (defined(output_dir)) {
-        module_source_dir = output_dir
-      }
 
-      module_install_name = ohos_module_name
-      if (defined(invoker.output_name)) {
-        module_install_name = invoker.output_name
+    # Hide symbols for all sa libraries if not specified by version_script
+    if (defined(invoker.shlib_type) && invoker.shlib_type == "sa") {
+      if (!defined(invoker.version_script)) {
+        configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
       }
+    }
 
-      module_install_images = [ "system" ]
-      if (defined(invoker.install_images)) {
-        module_install_images = []
-        module_install_images += invoker.install_images
+    # Set version_script for hdi service libraries
+    if (defined(invoker.shlib_type) && invoker.shlib_type == "hdi") {
+      if (!defined(invoker.version_script)) {
+        _version_script = rebase_path("//build/templates/cxx/hdi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
-
-      module_output_extension = shlib_extension
-      if (defined(invoker.output_extension)) {
-        module_output_extension = "." + invoker.output_extension
-      }
-
-      install_enable = true
-      if (defined(invoker.install_enable)) {
-        install_enable = invoker.install_enable
-      }
-
-      if (defined(invoker.module_install_dir)) {
-        module_install_dir = invoker.module_install_dir
-      }
-
-      if (defined(invoker.relative_install_dir)) {
-        relative_install_dir = invoker.relative_install_dir
-      }
-
-      if (defined(invoker.symlink_target_name)) {
-        symlink_target_name = invoker.symlink_target_name
-      }
-
-      if (defined(invoker.output_prefix_override)) {
-        output_prefix_override = invoker.output_prefix_override
-      }
-      notice = "$target_out_dir/$ohos_module_name.notice.txt"
     }
   }
 }
@@ -684,9 +786,13 @@ template("ohos_static_library") {
                "json")
   }
 
-  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
-  ohos_auto_initialize_config(_auto_initialize_config_target) {
-    forward_variables_from(invoker, [ "auto_var_init" ])
+  _security_config_target = "${target_name}__security_config"
+  ohos_security_config(_security_config_target) {
+    forward_variables_from(invoker,
+                           [
+                             "auto_var_init",
+                             "stack_protector_ret",
+                           ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -737,7 +843,7 @@ template("ohos_static_library") {
       configs -= [ "//build/config/compiler:thin_archive" ]
     }
     configs += [ ":$_sanitize_config_target" ]
-    configs += [ ":$_auto_initialize_config_target" ]
+    configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
@@ -846,9 +952,13 @@ template("ohos_source_set") {
                "json")
   }
 
-  _auto_initialize_config_target = "${target_name}__auto_initialize_config"
-  ohos_auto_initialize_config(_auto_initialize_config_target) {
-    forward_variables_from(invoker, [ "auto_var_init" ])
+  _security_config_target = "${target_name}__security_config"
+  ohos_security_config(_security_config_target) {
+    forward_variables_from(invoker,
+                           [
+                             "auto_var_init",
+                             "stack_protector_ret",
+                           ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -898,7 +1008,7 @@ template("ohos_source_set") {
     }
 
     configs += [ ":$_sanitize_config_target" ]
-    configs += [ ":$_auto_initialize_config_target" ]
+    configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]

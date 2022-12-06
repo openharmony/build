@@ -152,7 +152,13 @@ declare_args() {
 }
 
 declare_args() {
-  build_variant = "user"
+  # Skip module_info generation when the packaging image is not needed
+  skip_gen_module_info = false
+}
+
+declare_args() {
+  build_variant = "root"
+  device_type = "default"
 }
 
 # build target type

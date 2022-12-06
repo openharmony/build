@@ -10,7 +10,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//developtools/hdc:hdc_std",
+        "module_label": "//developtools/hdc:hdc",
         "target_os": [
             "linux",
             "windows",
@@ -22,7 +22,8 @@
         "module_label": "//base/update/updater/services/diffpatch:diff",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "darwin"
         ]
     },
     {
@@ -443,6 +444,48 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_ets",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/api/@internal/full",
 	    "module_label": "//interface/sdk-js:ets_internal_api",
 	    "target_os": [
@@ -788,14 +831,6 @@
         ]
     },
     {
-        "install_dir": "simulator/bin",
-        "module_label": "//foundation/ability/ability_runtime/frameworks/simulator:copy_ability_simulator",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
         "install_dir":"previewer/common/bin/module/data",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributeddata_library",
         "target_os": [
@@ -804,8 +839,16 @@
         ]
     },
     {
+        "install_dir":"previewer/common/bin/module/data",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributedkvstore_library",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "previewer/common/bin/module/net",
-        "module_label": "//foundation/communication/netstack/frameworks/js/napi/http:copy_http_napi",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_communication_library",
         "target_os": [
             "windows",
             "darwin"

@@ -122,39 +122,9 @@ template("ohos_native_stub_library") {
     part_name = subsystem_name
   }
 
-  shared_library(_stub_shlib_target) {
-    forward_variables_from(invoker,
-                           [
-                             "cflags",
-                             "ldflags",
-                             "configs",
-                             "public_configs",
-                             "libs",
-                             "include_dirs",
-                           ])
-    deps = [ ":$_native_stub_target" ]
-    sources = [ _generated_native_stub_file ]
-    output_dir = target_out_dir
-    output_name = _output_name
-    output_extension = _output_extension
-
-    install_module_info = {
-      module_def = target_label
-      module_info_file =
-          rebase_path(get_label_info(module_def, "target_out_dir"),
-                      root_build_dir) + "/${target_name}_module_info.json"
-      subsystem_name = subsystem_name
-      part_name = part_name
-      toolchain = current_toolchain
-      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
-    }
-    metadata = {
-      install_modules = [ install_module_info ]
-    }
-  }
-
   ohos_module_name = target_name
-  generate_module_info("${ohos_module_name}_info") {
+  _module_info_target = "${target_name}_info"
+  generate_module_info(_module_info_target) {
     module_name = ohos_module_name
     module_type = "lib"
     module_source_dir = target_out_dir
@@ -196,6 +166,40 @@ template("ohos_native_stub_library") {
       output_prefix_override = invoker.output_prefix_override
     }
     notice = "$target_out_dir/$ohos_module_name.notice.txt"
+  }
+
+  shared_library(_stub_shlib_target) {
+    forward_variables_from(invoker,
+                           [
+                             "cflags",
+                             "ldflags",
+                             "configs",
+                             "public_configs",
+                             "libs",
+                             "include_dirs",
+                           ])
+    deps = [ ":$_native_stub_target" ]
+    if (!skip_gen_module_info) {
+      deps += [ ":$_module_info_target" ]
+    }
+    sources = [ _generated_native_stub_file ]
+    output_dir = target_out_dir
+    output_name = _output_name
+    output_extension = _output_extension
+
+    install_module_info = {
+      module_def = target_label
+      module_info_file =
+          rebase_path(get_label_info(module_def, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      subsystem_name = subsystem_name
+      part_name = part_name
+      toolchain = current_toolchain
+      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+    }
+    metadata = {
+      install_modules = [ install_module_info ]
+    }
   }
 }
 

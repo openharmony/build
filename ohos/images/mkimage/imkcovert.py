@@ -39,7 +39,7 @@ def get_fill_cnt(inputfile, blocksize):
     indata = os.fdopen(os.open(inputfile, flags, modes), 'a')
     for _ in range(fill_cnt):
         indata.write("\0")
-    indata.close();
+    indata.close()
     return fill_cnt
 
 
@@ -66,55 +66,51 @@ def get_block_cnt(inputfile, blocksize):
 
 def get_crc_value(inputfile, blocksize):
     totalblocks = get_block_cnt(inputfile, blocksize)
-    indata = open(inputfile, 'rb')
-    ind = 0
-    md5 = hashlib.md5()
-    while (ind < totalblocks):
-        md5.update(indata.read(blocksize))
-        ind += 1
-    indata.close()
+    with open(inputfile, 'rb') as indata:
+        ind = 0
+        md5 = hashlib.md5()
+        while (ind < totalblocks):
+            md5.update(indata.read(blocksize))
+            ind += 1
     return md5.hexdigest()
 
 
 def unsparse(sparseimagefile, imagefile):
-    header = open(sparseimagefile, 'r')
-    magic_mumber = header.readline()
-    version = header.readline()
-    blocksize = int(header.readline())
-    total_blocks = int(header.readline())
-    crc_value = header.readline()
-    input_crc_value = header.readline()
-    table_numbers = int(header.readline())
-    table = []
-    flags = os.O_CREAT | os.O_RDWR
-    modes = stat.S_IWUSR | stat.S_IRUSR
-    i = 0
-    while (i < table_numbers):
-        start = int(header.readline())
-        end = int(header.readline())
-        table.append([start, end])
-        i += 1
-    fill_cnt = int(header.readline())
-    length = header.tell()
-    header.close()
-    inputrow = open(sparseimagefile, 'rb')
-    inputrow.seek(get_gap_blocksize(length, blocksize) * blocksize)
-    output = os.fdopen(os.open(imagefile, flags, modes), 'wb')
-    output.truncate(total_blocks * blocksize)
-    md5 = hashlib.md5()
-    for block in table:
-        cnt = block[1] - block[0]
-        output.seek(block[0] * blocksize)
-        indata = inputrow.read(cnt * blocksize)
-        md5.update(indata)
-        output.write(indata)
-    output.close()
-    inputrow.close()
+    with open(sparseimagefile, 'r') as header:
+        magic_mumber = header.readline()
+        version = header.readline()
+        blocksize = int(header.readline())
+        total_blocks = int(header.readline())
+        crc_value = header.readline()
+        input_crc_value = header.readline()
+        table_numbers = int(header.readline())
+        table = []
+        flags = os.O_CREAT | os.O_RDWR
+        modes = stat.S_IWUSR | stat.S_IRUSR
+        i = 0
+        while (i < table_numbers):
+            start = int(header.readline())
+            end = int(header.readline())
+            table.append([start, end])
+            i += 1
+        fill_cnt = int(header.readline())
+        length = header.tell()
+    with open(sparseimagefile, 'rb') as inputrow:
+        inputrow.seek(get_gap_blocksize(length, blocksize) * blocksize)
+        output = os.fdopen(os.open(imagefile, flags, modes), 'wb')
+        output.truncate(total_blocks * blocksize)
+        md5 = hashlib.md5()
+        for block in table:
+            cnt = block[1] - block[0]
+            output.seek(block[0] * blocksize)
+            indata = inputrow.read(cnt * blocksize)
+            md5.update(indata)
+            output.write(indata)
+        output.close()
     print("RawFileCRC: ", get_crc_value(imagefile, blocksize), crc_value)
     print("SparseCRC: ", md5.hexdigest(), input_crc_value)
-    output = open(imagefile, 'r+')
-    output.truncate(total_blocks * blocksize - fill_cnt)
-    output.close()
+    with open(imagefile, 'r+') as output:
+        output.truncate(total_blocks * blocksize - fill_cnt)
     return
 
 
@@ -201,9 +197,8 @@ def sparse(imagefile, sparseimagefile):
     outputtemp.close()
     outputrow.close()
     os.remove(temp_file)
-    output = open(imagefile, 'r+')
-    output.truncate(int(total_blocks) * int(blocksize) - int(fill_cnt))
-    output.close()
+    with open(imagefile, 'r+') as output:
+        output.truncate(int(total_blocks) * int(blocksize) - int(fill_cnt))
 
 
 if __name__ == '__main__':

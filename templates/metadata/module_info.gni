@@ -42,6 +42,10 @@ template("generate_module_info") {
                            "module_output_extension",
                            "module_source",
                            "notice",
+                           "shlib_type",
+                           "innerapi_tags",
+                           "part_name",
+                           "subsystem_name",
                          ])
 
   if (!defined(module_label)) {
@@ -54,7 +58,7 @@ template("generate_module_info") {
   }
   module_deps = [ get_label_info(module_label, "label_no_toolchain") ]
 
-  gen_script = rebase_path("//build/templates/metadata/gen_module_info.py")
+  gen_script = "//build/templates/metadata/gen_module_info.py"
 
   if (!defined(module_source_dir)) {
     module_source_dir = "$root_out_dir"
@@ -85,104 +89,129 @@ template("generate_module_info") {
     system_base_dir = "${system_base_dir}/asan"
   }
 
-  arguments = [
-    "--system-base-dir",
-    system_base_dir,
-    "--ramdisk-base-dir",
-    ramdisk_base_dir,
-    "--vendor-base-dir",
-    vendor_base_dir,
-    "--updater-base-dir",
-    updater_base_dir,
-    "--sys_prod-base-dir",
-    sys_prod_base_dir,
-    "--chip_prod-base-dir",
-    chip_prod_base_dir,
-    "--type",
-    module_type,
-    "--target-label",
-    module_label,
-    "--source-dir",
-    rebase_path(module_source_dir, "$root_build_dir"),
-    "--label-name",
-    module_name,
-    "--install-name",
-    module_install_name,
-    "--output-file",
-    rebase_path(output_file, "$root_build_dir"),
-  ]
-
-  if (defined(invoker.module_alt_output_extension)) {
-    arguments += [
-      "--alternative-suffix",
-      invoker.module_alt_output_extension,
+  action(target_name) {
+    args = [
+      "--system-base-dir",
+      system_base_dir,
+      "--ramdisk-base-dir",
+      ramdisk_base_dir,
+      "--vendor-base-dir",
+      vendor_base_dir,
+      "--updater-base-dir",
+      updater_base_dir,
+      "--sys_prod-base-dir",
+      sys_prod_base_dir,
+      "--chip_prod-base-dir",
+      chip_prod_base_dir,
+      "--type",
+      module_type,
+      "--target-label",
+      module_label,
+      "--source-dir",
+      rebase_path(module_source_dir, "$root_build_dir"),
+      "--label-name",
+      module_name,
+      "--output-file",
+      rebase_path(output_file, "$root_build_dir"),
     ]
-  }
 
-  if (defined(invoker.install_enable) && !invoker.install_enable) {
-    arguments += [ "--install-enable" ]
-  }
-  if (defined(invoker.collect) && invoker.collect) {
-    arguments += [ "--collect" ]
-  }
-
-  if (defined(module_install_images)) {
-    if (!defined(module_install_dir)) {
-      module_install_dir = ""
+    if (module_install_name != "") {
+      args += [
+        "--install-name",
+        module_install_name,
+      ]
     }
-    if (!defined(relative_install_dir)) {
-      relative_install_dir = ""
+
+    if (defined(invoker.module_alt_output_extension)) {
+      args += [
+        "--alternative-suffix",
+        invoker.module_alt_output_extension,
+      ]
     }
-    arguments += [
-      "--module-install-dir",
-      module_install_dir,
-      "--relative-install-dir",
-      relative_install_dir,
-      "--install-images",
-    ]
-    arguments += module_install_images
+
+    if (defined(invoker.install_enable) && !invoker.install_enable) {
+      args += [ "--install-enable" ]
+    }
+    if (defined(invoker.collect) && invoker.collect) {
+      args += [ "--collect" ]
+    }
+
+    if (defined(module_install_images)) {
+      if (defined(module_install_dir) && module_install_dir != "") {
+        args += [
+          "--module-install-dir",
+          module_install_dir,
+        ]
+      }
+      if (defined(relative_install_dir) && relative_install_dir != "") {
+        args += [
+          "--relative-install-dir",
+          relative_install_dir,
+        ]
+      }
+      args += [ "--install-images" ]
+      args += module_install_images
+    }
+
+    # if prebuilt, add prebuilt=True
+    if (defined(invoker.prebuilt) && invoker.prebuilt) {
+      args += [
+        "--prebuilt",
+        "--module-source",
+        module_source,
+      ]
+    }
+
+    if (module_output_extension != "") {
+      args += [
+        "--suffix",
+        module_output_extension,
+      ]
+    }
+
+    if (defined(invoker.symlink_target_name)) {
+      args += [ "--symlink-target" ]
+      args += invoker.symlink_target_name
+    }
+
+    if (defined(invoker.output_prefix_override) &&
+        invoker.output_prefix_override) {
+      args += [ "--prefix-override" ]
+    }
+    if (defined(notice)) {
+      args += [
+        "--notice",
+        rebase_path(notice, root_build_dir),
+      ]
+    }
+
+    if (defined(part_name)) {
+      args += [
+        "--part-name",
+        part_name,
+      ]
+    }
+    if (defined(subsystem_name)) {
+      args += [
+        "--subsystem-name",
+        subsystem_name,
+      ]
+    }
+    if (defined(shlib_type)) {
+      args += [
+        "--shlib-type",
+        shlib_type,
+      ]
+    }
+    if (defined(innerapi_tags)) {
+      args += [ "--innerapi-tags" ]
+      args += innerapi_tags
+    }
+    script = gen_script
+    outputs = [ output_file ]
   }
 
-  # if prebuilt, add prebuilt=True
-  if (defined(invoker.prebuilt) && invoker.prebuilt) {
-    arguments += [
-      "--prebuilt",
-      "--module-source",
-      module_source,
-    ]
-  } else {
-    arguments += [
-      "--install-name",
-      module_install_name,
-    ]
-  }
-
-  if (module_output_extension != "") {
-    arguments += [
-      "--suffix",
-      module_output_extension,
-    ]
-  }
-
-  if (defined(invoker.symlink_target_name)) {
-    arguments += [ "--symlink-target" ]
-    arguments += invoker.symlink_target_name
-  }
-
-  if (defined(invoker.output_prefix_override) &&
-      invoker.output_prefix_override) {
-    arguments += [ "--prefix-override" ]
-  }
-  if (defined(notice)) {
-    arguments += [
-      "--notice",
-      rebase_path(notice, root_build_dir),
-    ]
-  }
-
-  exec_script(gen_script, arguments)
-
-  generated_file("${target_name}") {
+  generated_file("${target_name}_install_info") {
     outputs = [ "${target_out_dir}/${module_name}_install_info.json" ]
     data_keys = [ "install_modules" ]
     output_conversion = "json"
@@ -223,8 +252,8 @@ template("write_meta_data") {
       _parent_invoker = invoker.invoker
       _caller_target_name = get_label_info(":${_parent_invoker.target_name}",
                                            "label_no_toolchain")
-      set_sources_assignment_filter(app_target_allowlist)
       sources = [ _caller_target_name ]
+      sources = filter_exclude(sources, app_target_allowlist)
       if (sources != []) {
         if (type == "js_assets" || type == "ets_assets" ||
             type == "unresolved_assets" || type == "assets") {
@@ -237,7 +266,6 @@ template("write_meta_data") {
               "Illegal target name: \"${_caller_target_name}\", target name of ohos_resources must endswith res or resources or resource")
         }
       }
-      set_sources_assignment_filter([])
     }
 
     script = "//build/templates/metadata/write_meta_data.py"
@@ -264,18 +292,17 @@ template("write_meta_data") {
 
     _deps_metadata = []
     inputs = []
-    set_sources_assignment_filter(app_target_allowlist)
     foreach(d, _possible_deps) {
-      sources = []
+      sources_raw = []
       _target_label = get_label_info(d, "label_no_toolchain")
-      sources += [ _target_label ]
+      sources_raw += [ _target_label ]
+      sources = filter_exclude(sources_raw, app_target_allowlist)
       if (sources == []) {
         _deps_metadata += [ get_label_info(d, "target_gen_dir") + "/" +
                             get_label_info(d, "name") + ".metadata" ]
         deps += [ "${_target_label}__metadata" ]
       }
     }
-    set_sources_assignment_filter([])
 
     if (_deps_metadata != []) {
       args += [ "--deps-metadata" ]

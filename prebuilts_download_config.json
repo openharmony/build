@@ -1,5 +1,5 @@
 {
-  "prebuilts_download_dir": "../OpenHarmony_canary_prebuilts",
+  "prebuilts_download_dir": "../openharmony_prebuilts",
   "npm_install_path": [
     "developtools/ace_ets2bundle/compiler",
     "developtools/ace_js2bundle/ace-loader",
@@ -46,54 +46,50 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/12.0.1",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0/xtensa-esp32-elf",
-      "dest": "/prebuilts/gcc/linux-x86/esp/esp-2019r2-8.2.0"
-    },
-    {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-942740-20220927",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-36cd05-20221030",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk",
       "rename": "true"
     }
@@ -108,11 +104,6 @@
     ],
     "arm64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
         {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
@@ -135,7 +126,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220923.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20221020.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -162,53 +153,48 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.7.5/previewer-3.2.7.5-master-20220921.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/windows/clang_windows-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/windows/clang_windows-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/windows/libcxx-ndk_windows-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/windows/libcxx-ndk_windows-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/linux/clang_linux-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/linux/clang_linux-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/linux/libcxx-ndk_linux-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/linux/libcxx-ndk_linux-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
-          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
-          "unzip_filename": "esp-2019r2-8.2.0"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
-          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
-          "unzip_filename": "csky"
         },
         {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
           "unzip_filename": "linux-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/bpftool_v5.10.93_20221114.tar.gz",
+          "unzip_filename": "bpftool"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/pahole_v1.21_20221124.tar.gz",
+          "unzip_filename": "pahole"
         }
       ]
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
         {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
@@ -221,7 +207,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/1717/linux/gn-linux-x86-1717.tar.gz",
+          "file_path": "/openharmony/compiler/gn/2024/linux/gn-linux-x86-20221108.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -231,7 +217,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220923.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20221020.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -258,43 +244,43 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.7.5/previewer-3.2.7.5-master-20220921.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/windows/clang_windows-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/windows/clang_windows-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/windows/libcxx-ndk_windows-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/windows/libcxx-ndk_windows-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/linux/clang_linux-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/linux/clang_linux-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/linux/libcxx-ndk_linux-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/linux/libcxx-ndk_linux-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/esp",
-          "file_path": "/openharmony/compiler/gcc_esp/2019r2-8.2.0/linux/esp-2019r2-8.2.0.zip",
-          "unzip_filename": "esp-2019r2-8.2.0"
-        },
-        {
-          "unzip_dir": "prebuilts/gcc/linux-x86/csky",
-          "file_path": "/openharmony/compiler/gcc_csky/v3.10.29/linux/csky-v3.10.29.tar.gz",
-          "unzip_filename": "csky"
         },
         {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
           "unzip_filename": "linux-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/bpftool_v5.10.93_20221114.tar.gz",
+          "unzip_filename": "bpftool"
+        },
+        {
+          "unzip_dir": "prebuilts/develop_tools",
+          "file_path": "/openharmony/develop_tools/pahole_v1.21_20221124.tar.gz",
+          "unzip_filename": "pahole"
         }
       ]
     }
@@ -310,11 +296,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
-        {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
           "unzip_filename": "restool"
@@ -326,7 +307,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/1717/darwin/gn-darwin-x86-1717.tar.gz",
+          "file_path": "/openharmony/compiler/gn/2024/darwin/gn-darwin-x86-20221123.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -336,24 +317,24 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220923.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20221020.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.7.5/previewer-3.2.7.5-master-20220921.mac-arm64.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.mac-arm64.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/darwin/clang_darwin-arm64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/darwin/clang_darwin-arm64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/darwin/libcxx-ndk_darwin-arm64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/darwin/libcxx-ndk_darwin-arm64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -366,11 +347,6 @@
     "x86_64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/sdk/js-loader/build-tools",
-          "file_path": "/openharmony/compiler/ace-loader/1.0/ace-loader-1.0.tar.gz",
-          "unzip_filename": "ace-loader"
-        },
-        {
           "unzip_dir": "prebuilts/build-tools/common",
           "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
           "unzip_filename": "restool"
@@ -382,7 +358,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/1717/darwin/gn-darwin-x86-1717.tar.gz",
+          "file_path": "/openharmony/compiler/gn/2024/darwin/gn-darwin-x86-20221123.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -392,24 +368,24 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20220923.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20221020.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.7.5/previewer-3.2.7.5-master-20220921.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.mac.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/darwin/clang_darwin-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/darwin/clang_darwin-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-942740/darwin/libcxx-ndk_darwin-x86_64-942740-20220927.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-36cd05/darwin/libcxx-ndk_darwin-x86_64-36cd05-20221030.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {

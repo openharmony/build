@@ -66,12 +66,14 @@ def load_config(config_file):
         sys.exit(1)
     return mkfs_tools, mk_configs, fs_type
 
+
 def verify_ret(res):
     if res[1]:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
         print("MkImages failed errno: %s" % str(res[1]))
         sys.exit(2)
+
 
 def sparse_img2simg(is_sparse, device):
     # we don't support sparse in mktools.
@@ -80,12 +82,14 @@ def sparse_img2simg(is_sparse, device):
         run_cmd(" ".join(["img2simg ", device, " ", tmp_device]))
         os.rename(tmp_device, device)
 
+
 def mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     src_dir = build_rootdir(src_dir)
     mk_configs = " ".join([src_dir, device, mk_configs])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
     sparse_img2simg(is_sparse, device)
+
 
 def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     # get ramdisk sieze frome ramdisk_image_conf.txt
@@ -94,13 +98,14 @@ def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
             " ".join([src_dir, device, ramdisk_size])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
-    sparse_img2simg(is_sparse, device)
+
 
 def mk_other_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     mk_configs = " ".join([src_dir, device, mk_configs])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
     sparse_img2simg(is_sparse, device)
+
 
 def mk_images(args):
     if len(args) != 4:

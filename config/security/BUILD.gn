@@ -11,10 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/config/secure/secure_config.gni")
+import("//build/config/security/security_config.gni")
 
 config("auto_var_init_configs") {
-  if (using_auto_var_init && !is_mingw) {
+  if (using_security_flag && !is_mingw) {
     assert(
         is_clang,
         "currently, automatic variable initialization only supported with clang")
@@ -22,12 +22,12 @@ config("auto_var_init_configs") {
   }
 }
 
-all_secure_configs = [ ":auto_var_init_configs" ]
+all_security_configs = [ ":auto_var_init_configs" ]
 
 # This config is applied by default to all targets. It sets the compiler flags
 # for automatic variable initialization, or, if no config is set, does nothing.
-config("default_secure_configs") {
-  configs = all_secure_configs
+config("default_security_configs") {
+  configs = all_security_configs
 }
 
 # Set the uninitialized local variables to pattern.

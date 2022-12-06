@@ -29,6 +29,7 @@ if (is_ohos) {
   }
 
   ohos_prebuilt_shared_library("libclang_rt.ubsan_standalone.so") {
+    enable_strip = true
     source =
         "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_standalone.so"
     install_images = [
@@ -39,6 +40,7 @@ if (is_ohos) {
   }
 
   ohos_prebuilt_shared_library("libclang_rt.ubsan_minimal.so") {
+    enable_strip = true
     source = "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_minimal.so"
     install_images = [
       "system",

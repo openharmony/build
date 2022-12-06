@@ -19,6 +19,7 @@ import sys
 
 from util import build_utils
 
+
 def parse_args(args):
     args = build_utils.expand_file_args(args)
 
@@ -43,6 +44,7 @@ def parse_args(args):
     options, paths = parser.parse_args(args)
     return options, paths
 
+
 def idl_compile(options, paths, cmd):
     my_env = None
     ld_library = os.path.dirname(options.libcxx_path)
@@ -61,6 +63,7 @@ def idl_compile(options, paths, cmd):
         os.makedirs(options.generated_src_directory, exist_ok=True)
         build_utils.extract_all(options.output_archive_path,
                                 options.generated_src_directory)
+
 
 def main(args):
     args = build_utils.expand_file_args(args)

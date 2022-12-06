@@ -91,7 +91,7 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir,
 
 def gen_module_info(module_type, module_label, module_name, source_dir,
                     module_source, module_alt_source, install_dests,
-                    symlink_target, install_enable, collect, notice):
+                    symlink_target, install_enable, collect, notice, args):
     """Generate module install info."""
     source = os.path.join(source_dir, module_source)
     data = {
@@ -105,6 +105,14 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
     }
     if notice:
         data['notice'] = notice
+    if args.part_name:
+        data['part_name'] = args.part_name
+    if args.subsystem_name:
+        data['subsystem_name'] = args.subsystem_name
+    if args.shlib_type:
+        data['shlib_type'] = args.shlib_type
+    if args.innerapi_tags:
+        data['innerapi_tags'] = args.innerapi_tags
     if module_type == 'java_library':
         data['alternative_source'] = os.path.join(source_dir,
                                                   module_alt_source)
@@ -126,7 +134,7 @@ def main():
     parser.add_argument('--type', help='module type', required=True)
     parser.add_argument('--source-dir', help='', required=True)
     parser.add_argument('--install-images', nargs='+', help='')
-    parser.add_argument('--install-name', help='', required=False)
+    parser.add_argument('--install-name', help='', required=False, default='')
     parser.add_argument('--suffix', help='', required=False)
     parser.add_argument('--alternative-suffix',
                         help='alternative extension for java library targets',
@@ -144,8 +152,12 @@ def main():
     parser.add_argument('--collect', dest='collect', action='store_true')
     parser.add_argument('--notice', help='path to notice')
     parser.set_defaults(collect=False)
-    parser.add_argument('--module-install-dir', help='', required=False)
-    parser.add_argument('--relative-install-dir', help='', required=False)
+    parser.add_argument('--module-install-dir', help='', required=False, default='')
+    parser.add_argument('--relative-install-dir', help='', required=False, default='')
+    parser.add_argument('--part-name', help='', required=False, default='')
+    parser.add_argument('--subsystem-name', help='', required=False, default='')
+    parser.add_argument('--shlib-type', help='', required=False, default='')
+    parser.add_argument('--innerapi-tags', nargs='+', help='', required=False, default='')
     parser.add_argument('--prefix-override',
                         dest='prefix_override',
                         action='store_true')
@@ -174,15 +186,15 @@ def main():
     if args.install_images:
         install_dests = gen_install_dests(
             args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir,
-            args.updater_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir, source_file_name, args.install_images,
-            args.module_install_dir, args.relative_install_dir, args.type)
+            args.updater_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir, source_file_name,
+            args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
 
     module_info_data = gen_module_info(args.type, args.target_label,
                                        args.label_name, args.source_dir,
                                        module_source, module_alt_source,
                                        install_dests, args.symlink_target,
                                        args.install_enable, args.collect,
-                                       args.notice)
+                                       args.notice, args)
 
     # write module info file
     write_json_file(args.output_file, module_info_data)

@@ -49,6 +49,8 @@ template("merge_profile") {
       rebase_path(hap_profile, root_build_dir),
       "--generated-profile",
       rebase_path(generated_profile, root_build_dir),
+      "--release-type",
+      release_type,
     ]
     outputs = [ generated_profile ]
   }
@@ -255,14 +257,14 @@ template("package_app") {
       }
     }
     if (defined(enable_ark) && enable_ark) {
-      _ark_dpes = [
-        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",
+      _ark_deps = [
         "//arkcompiler/ets_frontend/ts2panda:ark_ts2abc_build($host_toolchain)",
+        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",
       ]
       if (defined(deps)) {
-        deps += _ark_dpes
+        deps += _ark_deps
       } else {
-        deps = _ark_dpes
+        deps = _ark_deps
       }
       _js2abc_js = get_label_info(
                        "//arkcompiler/ets_frontend/ts2panda:ts2abc_js_file($host_toolchain)",
@@ -333,6 +335,8 @@ template("compile_js_assets") {
     args = [
       "--js-assets-dir=@FileArg($_rebased_metadata:root:js_assets)",
       "--ets-assets-dir=@FileArg($_rebased_metadata:root:ets_assets)",
+      "--js-forms-dir=@FileArg($_rebased_metadata:root:js_forms)",
+      "--testrunner-dir=@FileArg($_rebased_metadata:root:testrunner)",
       "--output",
       rebase_path(_packaged_js_assets, root_build_dir),
       "--depfile",
