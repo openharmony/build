@@ -238,7 +238,7 @@ action_with_pydeps("archive_windows_ndk") {
   deps = ndk_targets
   script = "//build/ohos/ndk/archive_ndk.py"
   depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${windows_system}/${ndk_zip_prefix}-${windows_system}-${current_ndk_version}"
+  _output = "$ohos_sdk_out_dir/${windows_system}/${ndk_zip_prefix}-${windows_system}-${arch}-${current_ndk_version}"
   if (release_type != "") {
     _output += "-${release_type}.zip"
   } else {
@@ -270,7 +270,7 @@ action_with_pydeps("archive_linux_ndk") {
   deps = ndk_targets
   script = "//build/ohos/ndk/archive_ndk.py"
   depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${linux_system}/${ndk_zip_prefix}-${linux_system}-${current_ndk_version}"
+  _output = "$ohos_sdk_out_dir/${linux_system}/${ndk_zip_prefix}-${linux_system}-${arch}-${current_ndk_version}"
   if (release_type != "") {
     _output += "-${release_type}.zip"
   } else {
@@ -302,7 +302,7 @@ action_with_pydeps("archive_darwin_ndk") {
   deps = ndk_targets
   script = "//build/ohos/ndk/archive_ndk.py"
   depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${darwin_system}/${ndk_zip_prefix}-${darwin_system}-${current_ndk_version}"
+  _output = "$ohos_sdk_out_dir/${darwin_system}/${ndk_zip_prefix}-${darwin_system}-${arch}-${current_ndk_version}"
   if (release_type != "") {
     _output += "-${release_type}.zip"
   } else {
