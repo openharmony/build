@@ -18,6 +18,7 @@ import sys
 import os
 import pathlib
 import re
+from convert_permissions import convert_permissions
 
 sys.path.append(
     os.path.dirname(
@@ -229,8 +230,11 @@ def main():
     parser.add_argument('--platforms', action='append', required=True)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--variant-to-product', required=True)
+    parser.add_argument('--node-js', required=True)
 
     options = parser.parse_args()
+
+    convert_permissions(options.source_root_dir, options.node_js)
 
     data = parse_description_file(options)
 
