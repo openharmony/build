@@ -153,7 +153,7 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -244,7 +244,12 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.win.tar.gz",
+          "unzip_filename": "previewer"
+        },
+        {
+          "unzip_dir": "prebuilts/previewer/windows",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.linux-x86.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -324,7 +329,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.mac-arm64.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.mac-arm64.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -375,7 +380,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.8.2/previewer-3.2.8.2-master-20221019.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.mac.tar.gz",
           "unzip_filename": "previewer"
         },
         {
