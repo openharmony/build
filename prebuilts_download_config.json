@@ -248,7 +248,7 @@
           "unzip_filename": "previewer"
         },
         {
-          "unzip_dir": "prebuilts/previewer/windows",
+          "unzip_dir": "prebuilts/previewer/linux",
           "file_path": "/openharmony/develop_tools/previewer/3.2.9.5/previewer-3.2.9.5-master-20221208.linux-x86.tar.gz",
           "unzip_filename": "previewer"
         },
