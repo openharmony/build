@@ -669,6 +669,7 @@
         "install_dir": "previewer",
         "module_label": "//developtools/ace_js2bundle:previewer_copy",
         "target_os": [
+            "linux",
             "windows",
             "darwin"
         ]
