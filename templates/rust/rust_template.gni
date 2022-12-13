@@ -141,8 +141,8 @@ template("ohos_rust_library") {
       }
 
       module_output_extension = shlib_extension
-      if (defined(invoker.output_extension)) {
-        module_output_extension = invoker.output_extension
+      if (defined(invoker.module_output_extension)) {
+        module_output_extension = invoker.module_output_extension
       }
 
       install_enable = true
@@ -349,6 +349,7 @@ template("ohos_rust_executable") {
     if (defined(invoker.clippy_lints)) {
       clippy_lints = invoker.clippy_lints
     }
+
     # if (!defined(rustc_lints) && !defined(clippy_lints)) {
     #   file_path =
     #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
@@ -410,9 +411,9 @@ template("ohos_rust_shared_library") {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
     }
-    output_extension = dylib_extension
+    module_output_extension = dylib_extension
     if (defined(invoker.output_extension)) {
-      output_extension = "." + invoker.output_extension
+      module_output_extension = "." + invoker.output_extension
     }
 
     if (defined(invoker.rustc_lints)) {
@@ -483,7 +484,7 @@ template("ohos_rust_static_library") {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
     }
-    output_extension = rlib_extension
+    module_output_extension = rlib_extension
     install_enable = false
 
     if (defined(invoker.rustc_lints)) {

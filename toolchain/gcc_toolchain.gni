@@ -204,6 +204,18 @@ template("gcc_toolchain") {
       default_executable_extension = ""
     }
 
+    if (defined(invoker.dylib_extension)) {
+      default_dylib_extension = invoker.dylib_extension
+    } else {
+      default_dylib_extension = dylib_extension
+    }
+
+    if (defined(invoker.rlib_extension)) {
+      default_rlib_extension = invoker.rlib_extension
+    } else {
+      default_rlib_extension = rlib_extension
+    }
+
     # Bring these into our scope for string interpolation with default values.
     if (defined(invoker.libs_section_prefix)) {
       libs_section_prefix = invoker.libs_section_prefix
@@ -575,48 +587,45 @@ template("gcc_toolchain") {
     }
 
     tool("rust_staticlib") {
-      depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      outfile = "{{target_out_dir}}/{{crate_name}}.a"
+      staticlibname =
+          "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.a".
+      outfile = "{{target_out_dir}}/$staticlibname"
+      depfile = "$outfile.d"
 
-      #staticlibname = "{{target_output_name}}.a" #{{output_extension}}" # e.g. "libfoo.a".
-      #outfile = "{{output_dir}}/$staticlibname"
-      #depfile = "$outfile.d"
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
       command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
-      description = "RUST $outfile"
+      description = "RUST staticlib $outfile"
       outputs = [ outfile ]
+      default_output_extension = ".a"
+      output_prefix = "lib"
     }
 
     tool("rust_rlib") {
-      depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      outfile = "{{target_out_dir}}/lib{{crate_name}}.rlib"
+      rlibname =
+          "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.rlib".
+      outfile = "{{output_dir}}/$rlibname"
+      depfile = "$outfile.d"
 
-      #rlibname = "{{target_output_name}}.rlib" #{{output_extension}}" # e.g. "libfoo.rlib".
-      #outfile = "{{output_dir}}/$rlibname"
-      #depfile = "$outfile.d"
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
       command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
-      description = "RUST $outfile"
+      description = "RUST rlib $outfile"
       outputs = [ outfile ]
+      default_output_extension = default_rlib_extension
+      output_prefix = "lib"
     }
 
     tool("rust_cdylib") {
-      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      #outfile = "{{target_out_dir}}/lib{{crate_name}}.z.so"
-      cdylibname = "lib{{target_output_name}}.z.so"  #{{output_extension}}" #
-                                                     # e.g. "libfoo.z.so".
+      cdylibname =
+          "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.z.so".
       outfile = "{{output_dir}}/$cdylibname"
       depfile = "$outfile.d"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
@@ -631,14 +640,14 @@ template("gcc_toolchain") {
       }
       command = "$command -- $rust_link_command"
 
-      description = "RUST $outfile"
+      description = "RUST cdylib $outfile"
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
+      default_output_extension = default_shlib_extension
+      output_prefix = "lib"
     }
 
     tool("rust_bin") {
-      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      #outfile = "{{target_out_dir}}/{{crate_name}}"
       exename = "{{target_output_name}}{{output_extension}}"
       outfile = "{{output_dir}}/$exename"
       depfile = "$outfile.d"
@@ -646,8 +655,7 @@ template("gcc_toolchain") {
       unstripped_outfile = "{{root_out_dir}}/exe.unstripped/$outfile"
 
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
@@ -662,25 +670,23 @@ template("gcc_toolchain") {
       }
       command = "$command -- $rust_link_command"
 
-      description = "RUST $outfile"
+      description = "RUST bin $outfile"
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
+      default_output_extension = default_executable_extension
     }
 
     tool("rust_dylib") {
-      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      #outfile = "{{target_out_dir}}/lib{{crate_name}}.dylib.so"
       dylibname =
-          "lib{{target_output_name}}.dylib.so"  #{{output_extension}}" # e.g.
-                                                # "libfoo.dylib.so".
+          "{{target_output_name}}{{output_extension}}"  # e.g.
+                                                        # "libfoo.dylib.so".
       outfile = "{{output_dir}}/$dylibname"
       depfile = "$outfile.d"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
@@ -695,26 +701,24 @@ template("gcc_toolchain") {
       }
       command = "$command -- $rust_link_command"
 
-      description = "RUST $outfile"
+      description = "RUST dylib $outfile"
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
+      default_output_extension = default_dylib_extension
+      output_prefix = "lib"
     }
 
     tool("rust_macro") {
-      #depfile = "{{target_out_dir}}/{{crate_name}}.d"
-      #outfile = "{{target_out_dir}}/lib{{crate_name}}.so"
-
       dylibname =
-          "lib{{target_output_name}}.dylib.so"  #{{output_extension}}" # e.g.
-                                                # "libfoo.dylib.so".
+          "{{target_output_name}}{{output_extension}}"  # e.g.
+                                                        # "libfoo.dylib.so".
       outfile = "{{output_dir}}/$dylibname"
       depfile = "$outfile.d"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
       #rspfile = "$outfile.rsp"
-      #unstripped_outfile = outfile
-      #pool = "//build/toolchain:link_pool($default_toolchain)"
+      pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
@@ -729,9 +733,11 @@ template("gcc_toolchain") {
       }
       command = "$command -- $rust_link_command"
 
-      description = "RUST $outfile"
+      description = "RUST proc-macro $outfile"
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
+      default_output_extension = default_dylib_extension
+      output_prefix = "lib"
     }
 
     tool("action") {
