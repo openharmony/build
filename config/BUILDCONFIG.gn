@@ -625,7 +625,8 @@ if (is_standard_system) {
   }
 
   # Static libraries and source sets use only the compiler ones.
-  default_static_library_configs = default_compiler_configs + [ "//build/config/rust:rust_config" ]
+  default_static_library_configs =
+      default_compiler_configs + [ "//build/config/rust:rust_config" ]
   default_source_set_configs = default_compiler_configs
 
   # Executable defaults.

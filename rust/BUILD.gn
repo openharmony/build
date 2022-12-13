@@ -1,21 +1,34 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 #This was originally a compilation entry, but now "default" is added to the component dependency of build/common/bundle.json.
 import("//build/ohos.gni")
-
 group("default") {
   deps = [
-    "//build/rust/tests:tests",
     ":libstd.dylib.so",
     ":libtest.dylib.so",
+    "//build/rust/tests:tests",
   ]
 }
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
-  if (target_cpu == "arm") {
+  if (current_cpu == "arm") {
     source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-e2d7cc624ec4db87.so"
-  } else if (target_cpu == "arm64") {
+  } else if (current_cpu == "arm64") {
     source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libstd-2ffed83c5c6f6122.so"
-  } else if (target_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/libstd-f30f0c72643db558.so"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
+    source =
+        "//prebuilts/rustc/linux-x86_64/nightly/lib/libstd-f30f0c72643db558.so"
   } else {
     source = ""
   }
@@ -33,7 +46,8 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   } else if (target_cpu == "arm64") {
     source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libtest-29a4bc4bda1b4f47.so"
   } else if (target_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/libtest-8d62c2c8a15c5ce5.so"
+    source =
+        "//prebuilts/rustc/linux-x86_64/nightly/lib/libtest-8d62c2c8a15c5ce5.so"
   } else {
     source = ""
   }
