@@ -316,7 +316,8 @@ template("ohos_sanitizer_config") {
 
       if (defined(sanitize.blocklist)) {
         cflags = [ "-fsanitize-blacklist=" +
-                   rebase_path(get_path_info(sanitize.blocklist, "abspath")) ]
+                   rebase_path(get_path_info(sanitize.blocklist, "abspath"),
+                               root_build_dir) ]
       }
       configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }
