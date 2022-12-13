@@ -21,6 +21,7 @@ import ssl
 import shutil
 import importlib
 import time
+import pathlib
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
@@ -115,6 +116,13 @@ def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_fil
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     print("Decompressed {}".format(local_file))
 
+def _is_system_component():
+    root_dir = root_dir = os.getcwd()
+    if pathlib.Path(root_dir + "/interface/sdk-js").exists() or pathlib.Path(root_dir + "/foundation/arkui").exists() or pathlib.Path(root_dir + "/arkcompiler").exists():
+        return True
+    else:
+        return False
+
 def _hwcloud_download(args, config, bin_dir, code_dir):
     try:
         cnt = cpu_count()
@@ -137,8 +145,9 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                     args.progress.console.log('{}, Sha256 markword check OK.'.format(huaweicloud_url), style='green')
                 else:
                     print('{}, Sha256 markword check OK.'.format(huaweicloud_url))
-                if os.path.basename(abs_unzip_dir) == 'nodejs':
-                    _npm_install(args, code_dir, unzip_dir, unzip_filename)
+                if _is_system_component():
+                   if os.path.basename(abs_unzip_dir) == 'nodejs':
+                        _npm_install(args, code_dir, unzip_dir, unzip_filename)
             else:
                 _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/*.' + unzip_filename + '.mark')
                 _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/' + unzip_filename)
@@ -273,8 +282,12 @@ def main():
     tool_repo = args.tool_repo
     config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
-    args.npm_install_config = config_info.get('npm_install_path')
-    node_modules_copy_config = config_info.get('node_modules_copy')
+    if _is_system_component():
+        args.npm_install_config = config_info.get('npm_install_path')
+        node_modules_copy_config = config_info.get('node_modules_copy')
+    else:
+        args.npm_install_config = []
+        node_modules_copy_config = []
     file_handle_config = config_info.get('file_handle_config')
 
     args.bin_dir = os.path.join(args.code_dir, config_info.get('prebuilts_download_dir'))
