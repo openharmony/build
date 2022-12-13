@@ -234,10 +234,6 @@ group("common_deps") {
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps += [ "//third_party/musl:soft_shared_libs" ]
   }
-
-  if (current_toolchain != host_toolchain && !is_mingw) {
-    public_deps += [ "//build/rust:libstd.dylib.so" ]
-  }
 }
 
 group("executable_deps") {
