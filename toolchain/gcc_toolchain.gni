@@ -670,7 +670,7 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         minidebug_switch = " --mini-debug"
       }
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS RUSTENV {{rustenv}}"
 
       description = "RUST bin $outfile"
       outputs = [ unstripped_outfile ]

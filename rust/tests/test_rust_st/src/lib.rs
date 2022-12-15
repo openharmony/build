@@ -12,7 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//! rust systemtest build
 
+/// pub add
 pub fn add(a: i32, b: i32) -> i32 {
     a + b
 }

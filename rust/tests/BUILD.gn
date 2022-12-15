@@ -18,6 +18,7 @@ group("tests") {
     "//build/rust/tests/test_dylib_crate",
     "//build/rust/tests/test_proc_macro_crate",
     "//build/rust/tests/test_rlib_crate",
+    "//build/rust/tests/test_static_link",
     "//build/rust/tests/test_staticlib_crate",
   ]
 
@@ -26,6 +27,7 @@ group("tests") {
     "test_cdylib_crate:test_cdylib_crate(${host_toolchain})",
     "test_dylib_crate:test_dylib_crate(${host_toolchain})",
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
+    "test_static_link:test_static_link(${host_toolchain})",
   ]
 }
 

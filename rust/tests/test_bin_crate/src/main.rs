@@ -17,4 +17,5 @@
 
 fn main() {
     println!("Hello, world!");
+    println!(env!("RUSTENV_TEST"));
 }

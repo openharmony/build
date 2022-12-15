@@ -13,13 +13,8 @@
  * limitations under the License.
  */
 
-//! proc_macro_derive test
+//! static link example for Rust.
 
-extern crate proc_macro;
-use proc_macro::TokenStream;
-
-/// define AnswerFn
-#[proc_macro_derive(AnswerFn)]
-pub fn derive_answer_fn(_item: TokenStream) -> TokenStream {
-    "fn answer() -> u32 { 42 }".parse().unwrap()
+fn main() {
+    println!("Hello, world!");
 }

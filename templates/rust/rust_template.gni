@@ -368,6 +368,7 @@ template("ohos_rust_executable") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
@@ -408,6 +409,9 @@ template("ohos_rust_executable") {
     } else {
       rustflags += _rustflags
     }
+    if (!defined(rust_static_link) || !rust_static_link) {
+      rustflags += [ "-Cprefer-dynamic" ]
+    }
   }
 }
 
@@ -441,6 +445,7 @@ template("ohos_rust_shared_library") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
@@ -512,6 +517,7 @@ template("ohos_rust_static_library") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
@@ -581,6 +587,7 @@ template("ohos_rust_shared_ffi") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
@@ -649,6 +656,7 @@ template("ohos_rust_static_ffi") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
@@ -977,6 +985,7 @@ template("ohos_rust_proc_macro") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
+
       # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints

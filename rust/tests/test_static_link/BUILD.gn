@@ -13,7 +13,9 @@
 
 import("//build/ohos.gni")
 
-ohos_rust_executable("test_bin_crate") {
+ohos_rust_executable("test_static_link") {
   sources = [ "src/main.rs" ]
-  rustenv = [ "RUSTENV_TEST=123" ]
+
+  # executable will static link rust libraries
+  rust_static_link = true
 }
