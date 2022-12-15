@@ -14,6 +14,7 @@
 # limitations under the License.
 
 import sys
+import json
 import os
 import argparse
 import shutil
@@ -54,14 +55,32 @@ def write_list_file(dest_path, name_list):
         for name in name_list:
             list_data.write("require('./%s')\n" % name)
 
+def get_hap_json(target_name, test_output_dir):
+    
+    if not os.path.exists(test_output_dir):
+       os.makedirs(test_output_dir)
+    else:
+       return
+    json_file = os.path.join(test_output_dir, target_name + ".json")
+    json_info_data = {"driver": {
+       "type": "JSUnitTest"
+    }}
+    with open(json_file, 'w') as out_file:
+        json.dump(json_info_data, out_file)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--suite_path', required=True)
     parser.add_argument('--template_path', required=True)
     parser.add_argument('--target_path', required=True)
+    parser.add_argument('--test_output_dir', required=True)
+    parser.add_argument('--target_name', required=True)
     args = parser.parse_args()
 
     copy_file(args.suite_path, args.template_path, args.target_path)
+    get_hap_json(args.target_name, args.test_output_dir)
+
     return 0
 
 
