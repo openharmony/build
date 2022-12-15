@@ -55,12 +55,12 @@ def write_list_file(dest_path, name_list):
         for name in name_list:
             list_data.write("require('./%s')\n" % name)
 
+
 def get_hap_json(target_name, test_output_dir):
-    
     if not os.path.exists(test_output_dir):
-       os.makedirs(test_output_dir)
+        os.makedirs(test_output_dir)
     else:
-       return
+        return
     json_file = os.path.join(test_output_dir, target_name + ".json")
     json_info_data = {"driver": {
        "type": "JSUnitTest"

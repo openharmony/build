@@ -46,8 +46,8 @@ def get_hap_json_info(project_path, build_target_name,
                      os.path.join(json_dir, (build_target_name + ".json")))
         json_file_path = os.path.join(json_dir, (build_target_name + ".json"))
         if os.path.exists(json_file_path):
-            with open(json_file_path, "r") as fp:
-                json_data = json.load(fp)
+            with open(json_file_path, "r") as out_file:
+                json_data = json.load(out_file)
             if "kits" in json_data.keys():
                 kits_list = json_data.get("kits")
                 for kits_dict in kits_list:
