@@ -363,27 +363,27 @@ template("ohos_rust_executable") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {
@@ -436,27 +436,27 @@ template("ohos_rust_shared_library") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {
@@ -507,27 +507,27 @@ template("ohos_rust_static_library") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {
@@ -576,27 +576,27 @@ template("ohos_rust_shared_ffi") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {
@@ -644,27 +644,27 @@ template("ohos_rust_static_ffi") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {
@@ -972,27 +972,27 @@ template("ohos_rust_proc_macro") {
       clippy_lints = invoker.clippy_lints
     }
 
-    # if (!defined(rustc_lints) && !defined(clippy_lints)) {
-    #   file_path =
-    #       get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
-    #   file_path_split = string_split(file_path[0], "/")
-    #   source_dir_begin = file_path_split[2]
-    #   print(source_dir_begin)
-    #   if (source_dir_begin == "openharmony") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "prebuilts") {
-    #     _rustflags += allowAllLints
-    #   } else if (source_dir_begin == "vendor") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else if (source_dir_begin == "device") {
-    #     _rustflags += rustcVendorLints
-    #     _rustflags += clippyVendorLints
-    #   } else {
-    #     _rustflags += rustcOhosLints
-    #     _rustflags += clippyOhosLints
-    #   }
-    # }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      # print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
 
     if (defined(rustc_lints)) {
       if (invoker.rustc_lints == "openharmony") {

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+//! attribute_macro example for Rust.
+
 extern crate attribute_macro;
 use attribute_macro::show_streams;
 

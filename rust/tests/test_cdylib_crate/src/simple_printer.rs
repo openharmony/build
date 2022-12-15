@@ -13,6 +13,9 @@
  * limitations under the License.
  */
 
+//! cdylib_crate example for rust
+
+/// function print_hello_world
 #[no_mangle]
 pub extern "C" fn print_hello_world() {
     println!("hello world by cdylib");

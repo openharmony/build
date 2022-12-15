@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+//! dylib_crate example for Rust.
+
 extern crate simple_printer_dylib;
 
 use simple_printer_dylib::rust_log_dylib;

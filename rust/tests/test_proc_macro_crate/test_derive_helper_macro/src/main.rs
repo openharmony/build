@@ -13,9 +13,12 @@
  * limitations under the License.
  */
 
+//! derive_helper_macro example for Rust.
+
 extern crate derive_helper_macro;
 use derive_helper_macro::HelperAttr;
 
+#[allow(dead_code)]
 #[derive(HelperAttr)]
 struct Struct {
     #[helper]

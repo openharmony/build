@@ -13,9 +13,12 @@
  * limitations under the License.
  */
 
+//! derive_helper_macro example for rust
+
 extern crate proc_macro;
 use proc_macro::TokenStream;
 
+/// function derive_helper_attr
 #[proc_macro_derive(HelperAttr, attributes(helper))]
 pub fn derive_helper_attr(_item: TokenStream) -> TokenStream {
     TokenStream::new()

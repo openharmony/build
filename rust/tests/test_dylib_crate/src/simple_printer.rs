@@ -13,11 +13,17 @@
  * limitations under the License.
  */
 
+//! dylib_crate example for Rust.
+
+/// struct RustLogMessage
 pub struct RustLogMessage {
+    /// i32: id
     pub id: i32,
+    /// String: msg
     pub msg: String,
 }
 
+/// function rust_log_dylib for print
 pub fn rust_log_dylib(msg: RustLogMessage) {
     println!("id:{} message:{:?}", msg.id, msg.msg)
 }

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+//! function_macro example for Rust.
+
 extern crate function_macro;
 use function_macro::make_answer;
 

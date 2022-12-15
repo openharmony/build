@@ -13,11 +13,18 @@
  * limitations under the License.
  */
 
+//! simple_printer
+
+/// struct RustLogMessage
+
 pub struct RustLogMessage {
+    /// i32: id
     pub id: i32,
+    /// String: msg
     pub msg: String,
 }
 
+/// function rust_log_rlib
 pub fn rust_log_rlib(msg: RustLogMessage) {
     println!("id:{} message:{:?}", msg.id, msg.msg)
 }

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+//! rlib_crate example for Rust.
+
 extern crate simple_printer_rlib;
 
 use simple_printer_rlib::rust_log_rlib;

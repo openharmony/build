@@ -13,9 +13,12 @@
  * limitations under the License.
  */
 
+//! function_macro example for rust
+
 extern crate proc_macro;
 use proc_macro::TokenStream;
 
+/// function make_answer
 #[proc_macro]
 pub fn make_answer(_item: TokenStream) -> TokenStream {
     "fn answer() -> u32 { 42 }".parse().unwrap()

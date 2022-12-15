@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+//! Hello world example for Rust.
+
 fn main() {
     println!("Hello, world!");
 }
