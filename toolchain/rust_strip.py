@@ -32,6 +32,24 @@ def command_to_run(command):
         command = command[0].split(None, 3) + command[1:]
     return command
 
+def do_strip(strip, output, unstripped_file, mini_debug):
+    if strip:
+        result = subprocess.call(
+            command_to_run(
+                [strip, '-o', output, unstripped_file]))
+
+    if mini_debug and not unstripped_file.endswith(".exe"):
+        unstripped_libfile = os.path.abspath(unstripped_file)
+        script_path = os.path.join(
+            os.path.dirname(__file__), 'mini_debug_info.py')
+        ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
+        result = subprocess.call(
+            wrapper_utils.command_to_run(
+                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', output,
+                '--root-path', ohos_root_path]))
+
+    return result
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -52,29 +70,7 @@ def main():
                         help='Add .gnu_debugdata section for stripped sofile')
     args = parser.parse_args()
 
-    result = subprocess.call(
-                wrapper_utils.command_to_run(args.command))
-                
-    if result != 0:
-        return result
-
-    # Finally, strip the linked executable (if desired).
-    if args.strip:
-        result = subprocess.call(
-            command_to_run(
-                [args.strip, '-o', args.output, args.unstripped_file]))
-
-    if args.mini_debug and not args.unstripped_file.endswith(".exe"):
-        unstripped_libfile = os.path.abspath(args.unstripped_file)
-        script_path = os.path.join(
-            os.path.dirname(__file__), 'mini_debug_info.py')
-        ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
-        result = subprocess.call(
-            wrapper_utils.command_to_run(
-                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
-                '--root-path', ohos_root_path]))
-
-    return result
+    return do_strip(args.strip, args.output, args.unstripped_file, args.mini_debug)
 
 
 if __name__ == "__main__":

@@ -586,15 +586,20 @@ template("gcc_toolchain") {
       cc_command_args = invoker.cc_command_args
     }
 
+    rustc_wrapper =
+        rebase_path("//build/toolchain/rustc_wrapper.py", root_build_dir)
     tool("rust_staticlib") {
       staticlibname =
           "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.a".
       outfile = "{{target_out_dir}}/$staticlibname"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
-      #rspfile = "$outfile.rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
-      command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
+
       description = "RUST staticlib $outfile"
       outputs = [ outfile ]
       default_output_extension = ".a"
@@ -604,12 +609,13 @@ template("gcc_toolchain") {
     tool("rust_rlib") {
       rlibname =
           "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.rlib".
-      outfile = "{{output_dir}}/$rlibname"
+      outfile = "{{target_out_dir}}/$rlibname"
       depfile = "$outfile.d"
 
-      #rspfile = "$outfile.rsp"
+      # Don't add rspfile in rust_rlib tool.
       pool = "//build/toolchain:link_pool($default_toolchain)"
-      command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile {{rustdeps}} {{externs}}"
+
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
       description = "RUST rlib $outfile"
       outputs = [ outfile ]
       default_output_extension = default_rlib_extension
@@ -621,24 +627,23 @@ template("gcc_toolchain") {
           "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.z.so".
       outfile = "{{output_dir}}/$cdylibname"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
-      #rspfile = "$outfile.rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
       strip_switch = " -C strip=$strip_level"
-      rust_link_command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -Clink-arg=-Wl,-soname=\"$cdylibname\" -o $unstripped_outfile {{rustdeps}} {{externs}}"
 
-      link_wrapper =
-          rebase_path("//build/toolchain/rust_link_wrapper.py", root_build_dir)
-      command = "$python_path \"$link_wrapper\" --output=\"$outfile\" --unstripped-file=\"$unstripped_outfile\"  --strip=\"$llvm_strip\""
+      minidebug_switch = ""
       if (full_mini_debug && !is_debug) {
-        command = "$command --mini-debug"
+        minidebug_switch = " --mini-debug"
       }
-      command = "$command -- $rust_link_command"
+
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -Clink-arg=-Wl,-soname=\"$cdylibname\" -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST cdylib $outfile"
       outputs = [ unstripped_outfile ]
@@ -651,24 +656,21 @@ template("gcc_toolchain") {
       exename = "{{target_output_name}}{{output_extension}}"
       outfile = "{{output_dir}}/$exename"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
       unstripped_outfile = "{{root_out_dir}}/exe.unstripped/$outfile"
 
-      #rspfile = "$outfile.rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
       strip_switch = " -C strip=$strip_level"
-      rust_link_command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile {{rustdeps}} {{externs}}"
-
-      link_wrapper =
-          rebase_path("//build/toolchain/rust_link_wrapper.py", root_build_dir)
-      command = "$python_path \"$link_wrapper\" --output=\"$outfile\" --unstripped-file=\"$unstripped_outfile\"  --strip=\"$llvm_strip\""
+      minidebug_switch = ""
       if (full_mini_debug && !is_debug) {
-        command = "$command --mini-debug"
+        minidebug_switch = " --mini-debug"
       }
-      command = "$command -- $rust_link_command"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS RUSTENV {{rustenv}}"
 
       description = "RUST bin $outfile"
       outputs = [ unstripped_outfile ]
@@ -682,24 +684,21 @@ template("gcc_toolchain") {
                                                         # "libfoo.dylib.so".
       outfile = "{{output_dir}}/$dylibname"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
-      #rspfile = "$outfile.rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
       strip_switch = " -C strip=$strip_level"
-      rust_link_command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile {{rustdeps}} {{externs}}"
-
-      link_wrapper =
-          rebase_path("//build/toolchain/rust_link_wrapper.py", root_build_dir)
-      command = "$python_path \"$link_wrapper\" --output=\"$outfile\" --unstripped-file=\"$unstripped_outfile\"  --strip=\"$llvm_strip\""
+      minidebug_switch = ""
       if (full_mini_debug && !is_debug) {
-        command = "$command --mini-debug"
+        minidebug_switch = " --mini-debug"
       }
-      command = "$command -- $rust_link_command"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST dylib $outfile"
       outputs = [ unstripped_outfile ]
@@ -714,24 +713,21 @@ template("gcc_toolchain") {
                                                         # "libfoo.dylib.so".
       outfile = "{{output_dir}}/$dylibname"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
       unstripped_outfile = "{{root_out_dir}}/lib.unstripped/$outfile"
 
-      #rspfile = "$outfile.rsp"
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
       strip_level = "none"  # rustc supports none, debuginfo and symbols
                             # three strip degree.
       strip_switch = " -C strip=$strip_level"
-      rust_link_command = "$clippy_driver $rustc --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile {{rustdeps}} {{externs}}"
-
-      link_wrapper =
-          rebase_path("//build/toolchain/rust_link_wrapper.py", root_build_dir)
-      command = "$python_path \"$link_wrapper\" --output=\"$outfile\" --unstripped-file=\"$unstripped_outfile\"  --strip=\"$llvm_strip\""
+      minidebug_switch = ""
       if (full_mini_debug && !is_debug) {
-        command = "$command --mini-debug"
+        minidebug_switch = " --mini-debug"
       }
-      command = "$command -- $rust_link_command"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST proc-macro $outfile"
       outputs = [ unstripped_outfile ]
