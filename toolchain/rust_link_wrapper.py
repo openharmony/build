@@ -33,29 +33,6 @@ def command_to_run(command):
     return command
 
 
-def is_static_link(command):
-    if "-static" in command:
-        return True
-    else:
-        return False
-
-
-""" since static link and dynamic link have different CRT files on ohos,
-and we use dynamic link CRT files as default, so when link statically,
-we need change the CRT files
-"""
-
-
-def update_crt(command):
-    for item in command:
-        if str(item).find("crtbegin_dynamic.o") >= 0:
-            index = command.index(item)
-            new_crtbegin = str(item).replace("crtbegin_dynamic.o",
-                                             "crtbegin_static.o")
-            command[index] = new_crtbegin
-    return command
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--strip',
@@ -64,16 +41,10 @@ def main():
     parser.add_argument('--unstripped-file',
                         help='Executable file produced by linking command',
                         metavar='FILE')
-    parser.add_argument('--map-file',
-                        help=('Use --Wl,-Map to generate a map file. Will be '
-                              'gzipped if extension ends with .gz'),
-                        metavar='FILE')
     parser.add_argument('--output',
                         required=True,
                         help='Final output executable file',
                         metavar='FILE')
-    parser.add_argument('--clang_rt_dso_path',
-                        help=('Clang asan runtime shared library'))
     parser.add_argument('command', nargs='+', help='Linking command')
     parser.add_argument('--mini-debug',
                         action='store_true',
