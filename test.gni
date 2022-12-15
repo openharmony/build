@@ -552,48 +552,51 @@ template("ohos_js_stage_test") {
   ]
   exec_script(_gen_module_list_script, _arguments)
 
-  assert(defined(invoker.hap_name), "hap_name is required in target ${target_name}")
-  assert(!defined(invoker.final_hap_path), "please use hap_name instead of final_hap_path")
+  assert(defined(invoker.hap_name),
+         "hap_name is required in target ${target_name}")
+  assert(!defined(invoker.final_hap_path),
+         "please use hap_name instead of final_hap_path")
   _hap_name = invoker.hap_name
   _final_hap_path = ""
   _target_name = ""
-  _final_hap_path = "$root_out_dir/tests/haps/${invoker.module_out_path}/${_hap_name}.hap"
+  _final_hap_path =
+      "$root_out_dir/tests/haps/${invoker.module_out_path}/${_hap_name}.hap"
   _target_name = "module_${target_name}"
 
   _archive_filename = "${_hap_name}.hap"
 
   if (_build_part_boolean == true) {
-     target("ohos_hap", _target_name) {
-        forward_variables_from(invoker, "*")
-        subsystem_name = "tests"
-        final_hap_path = _final_hap_path
-        testonly = true
-      }
+    target("ohos_hap", _target_name) {
+      forward_variables_from(invoker, "*")
+      subsystem_name = "tests"
+      final_hap_path = _final_hap_path
+      testonly = true
+    }
   } else {
-      print(tmp_subsystem_part + " is not build")
-      print(_target_name)
-      if (defined(invoker.certificate_profile)) {
-        print(invoker.certificate_profile)
-      }
-      if (defined(invoker.ets2abc)) {
-        print(invoker.ets2abc)
-      }
-      if (defined(invoker.deps)) {
-        print(invoker.deps)
-      }
-      if (defined(invoker.hap_profile)) {
-        print(invoker.hap_profile)
-      }
-      if (defined(invoker.testonly)) {
-        print(invoker.testonly)
-      }
-   }
-   
-   _deps = [ ":module_${target_name}" ]
+    print(tmp_subsystem_part + " is not build")
+    print(_target_name)
+    if (defined(invoker.certificate_profile)) {
+      print(invoker.certificate_profile)
+    }
+    if (defined(invoker.ets2abc)) {
+      print(invoker.ets2abc)
+    }
+    if (defined(invoker.deps)) {
+      print(invoker.deps)
+    }
+    if (defined(invoker.hap_profile)) {
+      print(invoker.hap_profile)
+    }
+    if (defined(invoker.testonly)) {
+      print(invoker.testonly)
+    }
+  }
 
-   _archive_testfile = "$root_out_dir/tests/$_test_type/${invoker.module_out_path}/${_archive_filename}"
-   _arguments = []
-   _arguments = [
+  _deps = [ ":module_${target_name}" ]
+
+  _archive_testfile = "$root_out_dir/tests/$_test_type/${invoker.module_out_path}/${_archive_filename}"
+  _arguments = []
+  _arguments = [
     "--build_target_name",
     target_name,
     "--project_path",
@@ -605,15 +608,15 @@ template("ohos_js_stage_test") {
     "--test_type",
     _test_type,
     "--module_out_path",
-    invoker.module_out_path
-   ]
-   if (_subsystem_name != "") {
+    invoker.module_out_path,
+  ]
+  if (_subsystem_name != "") {
     _arguments += [
       "--subsystem_name",
       _subsystem_name,
     ]
-   }
-   if (_part_name != "") {
+  }
+  if (_part_name != "") {
     _arguments += [
       "--part_name",
       _part_name,
@@ -621,12 +624,12 @@ template("ohos_js_stage_test") {
   }
 
   action(target_name) {
-      deps = _deps
-      script = rebase_path("//build/ohos/testfwk/test_js_stage_file_copy.py")
-      args = _arguments
-      outputs = [ _archive_testfile ]
-      testonly = true
-   }
+    deps = _deps
+    script = rebase_path("//build/ohos/testfwk/test_js_stage_file_copy.py")
+    args = _arguments
+    outputs = [ _archive_testfile ]
+    testonly = true
+  }
 }
 
 template("ohos_js_stage_unittest") {
