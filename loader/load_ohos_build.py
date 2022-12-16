@@ -75,6 +75,7 @@ def _normalize(label, path):
         label = '//{}/{}'.format(path, label)
     return label
 
+
 def get_syscap_from_bundle(bundle_file):
     if not os.path.exists(bundle_file):
         raise Exception(
@@ -85,6 +86,7 @@ def get_syscap_from_bundle(bundle_file):
     part_name = bundle_config.get('component').get('name')
     part_syscap = bundle_config.get('component').get('syscap')
     return part_name, part_syscap
+
 
 def read_build_file(ohos_build_file):
     if not os.path.exists(ohos_build_file):

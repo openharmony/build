@@ -41,6 +41,8 @@ performs additional actions, based on these arguments:
       the strip command on the linker's output. strip_arguments are
       comma-separated arguments to be passed to the strip command.
 """
+
+
 def main(args):
     """main function for the linker driver. Separates out the arguments for
     the main compiler driver and the linker driver, then invokes all the

@@ -98,6 +98,7 @@ def add_assets(options, package_dir, packing_cmd):
         if os.path.exists(js_assets_dir) and len(os.listdir(js_assets_dir)) != 0:
             packing_cmd.extend(['--js-path', js_assets_dir])
 
+
 def get_ark_toolchain_version(options):
     cmd = [options.nodejs_path, options.js2abc_js, '--bc-version']
     return build_utils.check_output(cmd).strip('\n')
