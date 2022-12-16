@@ -24,6 +24,7 @@ sys.path.append(
 from scripts.util.file_utils import write_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
+
 def copy_file(suite_path, template_path, target_path):
     file_list = []
     name_list = []
@@ -48,6 +49,7 @@ def copy_file(suite_path, template_path, target_path):
     for file in file_list:
         shutil.copy2(file, js_dest_path)
     write_list_file(js_dest_path, name_list)
+
 
 def write_list_file(dest_path, name_list):
     with open(os.path.join(dest_path, "List.test.js"), 'a') \

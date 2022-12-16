@@ -570,7 +570,6 @@ template("ohos_js_stage_test") {
   if (_build_part_boolean == true) {
     target("ohos_hap", _target_name) {
       forward_variables_from(invoker, "*")
-      subsystem_name = "tests"
       final_hap_path = _final_hap_path
       testonly = true
     }
