@@ -52,7 +52,6 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   } else {
     source = ""
   }
-  enable_strip = true
   install_images = [
     "system",
     "uptater",
