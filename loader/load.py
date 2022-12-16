@@ -496,6 +496,7 @@ def load(args):
     system_path = os.path.join(source_root_dir, os.path.join(os.path.dirname(args.platforms_config_file), "system/"))
     generate_syscap_files(parts_config_info, target_platform_parts, pre_syscap_info_path, system_path)
 
+
 def _output_infos_by_platform(part_name_infos, parts_info_dict):
     required_parts = {}
     subsystem_infos = {}
@@ -517,6 +518,7 @@ def _output_infos_by_platform(part_name_infos, parts_info_dict):
     result['subsystem_infos'] = subsystem_infos
     result['part_infos'] = required_parts
     return result
+
 
 def _output_infos_for_testfwk(parts_config_info, target_platform_parts,
                               infos_for_testfwk_file):

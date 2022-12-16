@@ -16,6 +16,7 @@
 import re
 import sys
 import os
+import xml.etree.ElementTree as ET
 
 
 class CheckGnOnline(object):
@@ -33,12 +34,6 @@ class CheckGnOnline(object):
         self.status = True
         self.gn_data = gn_data
         self.err_info = list()
-        config_path = os.path.join(
-            sys.path[0], 'config/csct_whitelist.conf')
-        norm_path = os.path.normpath(config_path)
-        with open(norm_path, 'r') as file:
-            whitelist = file.read().split('\n')
-            self.whitelist = tuple(whitelist)
 
     def merge_line(self) -> dict:
         ret_dict = dict()
@@ -97,6 +92,8 @@ class CheckGnOnline(object):
             path = match.group().strip('"')
             if path.startswith('//build') or path.startswith('//third_party'):
                 break
+            if path.startswith('//prebuilts'):
+                break
             abs_info.append(path)
         if len(abs_info) > 0:
             pos = "line:{}  {}".format(line[0], line[1])
@@ -142,31 +139,54 @@ class CheckGnOnline(object):
 
         gn_data_merge = self.merge_line()
         for key, values in gn_data_merge.items():
-            flag = False
-            repo_name = key.split(',')[0].split('/')[-1]
-            for white_repo in self.whitelist:
-                if repo_name.startswith(white_repo):
-                    flag = True
-                    break
-            if flag:
-                break
             self.iter_modified_line(key, values, target_pattern)
         return
+
+    def load_ohos_xml(self, path):
+        ret_dict = dict()
+        tree = ET.parse(path)
+        root = tree.getroot()
+        for node in root.iter():
+            if node.tag != 'project':
+                continue
+            repo_info = node.attrib
+            ret_item = {repo_info['name']:repo_info['groups']}
+            ret_dict.update(ret_item)
+        return ret_dict
+
+
+    def is_checked(self, name, xml_dict) :
+        if name in xml_dict.keys():
+            if xml_dict[name].find('ohos:mini') != -1:
+                return False
+            if xml_dict[name].find('ohos:small') != -1:
+                return False
+        if name.startswith('device_') or name.startswith('vendor'):
+            return False
+        if name.startswith('build') or name.startswith('third_party'):
+            return False
+        return True 
+
+
+    def pre_check(self):
+        xml_dict = self.load_ohos_xml(".repo/manifests/ohos/ohos.xml")
+        for key in list(self.gn_data.keys()):
+            repo_name = key.split(',')[0].split('/')[-3]
+            if not self.is_checked(repo_name, xml_dict):
+                self.gn_data.pop(key)
+            
 
     def check(self):
         if not self.gn_data:
             return
         for key, values in self.gn_data.items():
-            for white_repo in self.whitelist:
-                if key.startswith(white_repo):
-                    break
-            else:
-                for line in values:
-                    self.check_have_product_name(key, line)
-                    self.check_abs_path(key, line)
+            for line in values:
+                self.check_have_product_name(key, line)
+                self.check_abs_path(key, line)
         self.check_pn_sn()
 
     def output(self):
+        self.pre_check()
         self.check()
 
         return self.status, self.err_info

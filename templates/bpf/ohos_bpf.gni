@@ -1,0 +1,153 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/clang/clang.gni")
+import("//build/config/python.gni")
+import("//build/ohos/kernel/kernel.gni")
+import("//build/ohos/notice/notice.gni")
+import("//build/templates/metadata/module_info.gni")
+
+# Generate .o files from .c files
+#
+# Variables
+#   sources: Paths to .c file to compile, one bpf target can only handle
+#     one .c source file.
+#
+# Example
+#   ohos_bpf("foo_bpf") {
+#     sources = [
+#       "xxx.c",
+#     ]
+#     subsystem_name = "xxx"
+#     part_name = "xxx"
+#   }
+template("ohos_bpf") {
+  forward_variables_from(invoker, [ "testonly" ])
+  assert(defined(invoker.sources), "sources are necessary")
+
+  subsystem_name = invoker.subsystem_name
+  part_name = invoker.part_name
+  assert(subsystem_name != "")
+  assert(part_name != "")
+  _clang = "${clang_base_path}/bin/clang"
+  _include_dirs = [ "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include/asm-arm64" ]
+  if (defined(invoker.include_dirs)) {
+    _include_dirs += invoker.include_dirs
+  }
+  _src_name = get_path_info(invoker.sources, "name")
+  _output_file = "${target_out_dir}/${_src_name[0]}.o"
+
+  ohos_module_name = target_name
+  _module_info_target = "${target_name}_info"
+  generate_module_info(_module_info_target) {
+    forward_variables_from(invoker,
+                           [
+                             "module_install_dir",
+                             "relative_install_dir",
+                             "module_source_dir",
+                             "module_install_name",
+                             "module_type",
+                             "install_enable",
+                           ])
+    module_name = ohos_module_name
+    if (!defined(module_type)) {
+      module_type = "unknown"
+    }
+
+    if (!defined(module_source_dir)) {
+      module_source_dir = "${target_out_dir}"
+    }
+
+    module_install_images = [ "system" ]
+    if (defined(invoker.install_images)) {
+      module_install_images = []
+      module_install_images += invoker.install_images
+    }
+
+    module_install_name = "${_src_name[0]}.o"
+    if (defined(invoker.output_name)) {
+      module_install_name = invoker.output_name
+    }
+
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+
+    module_install_dir = "etc/bpf"
+    if (defined(invoker.module_install_dir)) {
+      module_install_dir = invoker.module_install_dir
+    }
+
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
+    }
+
+    if (defined(invoker.symlink_target_name)) {
+      symlink_target_name = invoker.symlink_target_name
+    }
+    notice = "$target_out_dir/$ohos_module_name.notice.txt"
+  }
+
+  _notice_target = "${target_name}__notice"
+  _main_target_name = target_name
+  collect_notice(_notice_target) {
+    forward_variables_from(invoker,
+                           [
+                             "testonly",
+                             "license_as_sources",
+                             "license_file",
+                           ])
+
+    module_name = _main_target_name
+    module_source_dir = get_label_info(":${_main_target_name}", "dir")
+  }
+
+  target_label = get_label_info(":${target_name}", "label_with_toolchain")
+  action_with_pydeps(target_name) {
+    script = "//build/scripts/bpf.py"
+    sources = invoker.sources
+    args = [
+      "--clang-path",
+      rebase_path(_clang, root_build_dir),
+      "--output-file",
+      rebase_path(_output_file, root_build_dir),
+      "--include-dirs",
+    ]
+    args += rebase_path(_include_dirs, root_build_dir)
+    args += [ "--input-file" ]
+    args += rebase_path(sources, root_build_dir)
+    deps = [
+      ":$_module_info_target",
+      ":$_notice_target",
+    ]
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    outputs = [ _output_file ]
+
+    install_module_info = {
+      module_def = target_label
+      part_name = part_name
+      module_info_file =
+          rebase_path(get_label_info(module_def, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      subsystem_name = subsystem_name
+      part_name = part_name
+      toolchain = current_toolchain
+      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+    }
+    metadata = {
+      install_modules = [ install_module_info ]
+    }
+  }
+}

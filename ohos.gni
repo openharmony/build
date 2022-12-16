@@ -29,3 +29,6 @@ import("//build/templates/common/ohos_templates.gni")
 
 # import prebuilt templates
 import("//build/templates/cxx/prebuilt.gni")
+
+# import bpf templates
+import("//build/templates/bpf/ohos_bpf.gni")

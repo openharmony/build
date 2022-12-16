@@ -15,6 +15,7 @@ import sys
 # system and the iOS or Mac SDK (depending on the platform "iphonesimulator",
 # "iphoneos" or "macosx" generally).
 
+
 def SplitVersion(version):
   """Splits the Xcode version to 3 values.
 
@@ -30,6 +31,7 @@ def SplitVersion(version):
   version = version.split('.')
   return itertools.islice(itertools.chain(version, itertools.repeat('0')), 0, 3)
 
+
 def FormatVersion(version):
   """Converts Xcode version to a format required for DTXcode in Info.plist
 
@@ -42,6 +44,7 @@ def FormatVersion(version):
   """
   major, minor, patch = SplitVersion(version)
   return ('%2s%s%s' % (major, minor, patch)).replace(' ', '0')
+
 
 def FillXcodeVersion(settings):
   """Fills the Xcode version and build number into |settings|."""

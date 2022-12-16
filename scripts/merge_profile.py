@@ -37,6 +37,7 @@ def parse_args(args):
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
     return options
 
+
 def merge_profile(options):
     all_data = {}
     with open(options.hap_profile) as f0:

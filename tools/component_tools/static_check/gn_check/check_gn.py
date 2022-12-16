@@ -77,7 +77,8 @@ class CheckGn(object):
             if not gn_file.endswith('.gn'):
                 continue
             file = open(gn_file, errors='ignore')
-            targets_ret = GnCommon.find_paragraph_iter(target_pattern, file.read())
+            targets_ret = GnCommon.find_paragraph_iter(
+                target_pattern, file.read())
             file.close()
             target = list()  # 每个文件中的target
             for target_ret in targets_ret:
@@ -265,9 +266,10 @@ class CheckGn(object):
             if not bad_target_to_excel:
                 continue
             for path, content in self.subsystem_info.items():
-                if key.startswith(path):
-                    bad_target_to_excel[:][:2] = content['subsystem'], content['component']
-                    
+                for index in range(len(bad_target_to_excel)):
+                    bad_target_to_excel[index][:2] = [content['subsystem'], content['component']] if key.startswith(
+                        path) else bad_target_to_excel[index][:2]
+
             for target_item in bad_target_to_excel:
                 bad_targets_to_excel.append(target_item)
 
@@ -291,8 +293,11 @@ class CheckGn(object):
         abs_path = self.get_all_abs_path()
 
         for item in abs_path:
-            if item['content'].startswith('//third_party') \
-                    or item['content'].startswith('//build'):
+            if item['content'].startswith('//third_party'):
+                continue
+            if item['content'].startswith('//build'):
+                continue
+            if item['content'].startswith('//prebuilts'):
                 continue
             bad_targets_to_excel.append([item['path'][len(
                 self.check_path) + 1:], 'line {}:{}'.format(item['line_number'], item['content']), rules, issue])
@@ -316,8 +321,11 @@ class CheckGn(object):
         abs_path = self.get_all_abs_path()
 
         for item in abs_path:
-            if item['content'].startswith('//third_party') \
-                    or item['content'].startswith('//build'):
+            if item['content'].startswith('//third_party'):
+                continue
+            if item['content'].startswith('//build'):
+                continue
+            if item['content'].startswith('//prebuilts'):
                 continue
             subsys_comp = list()
             for path, content in self.subsystem_info.items():
@@ -348,6 +356,8 @@ class CheckGn(object):
 
         out = pd.concat(
             [product_name_info, part_name_subsystem_name_info, abs_path_info])
+        for black_dir in self.black_dir:
+            out = out[~out['文件'].astype(str).str.startswith(black_dir)]
 
         print('-------------------------------')
         print('BUILD.gn check successfully!')
