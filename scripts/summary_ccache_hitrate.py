@@ -24,9 +24,9 @@ def summary_ccache_new(ccache_log):
     mis_num = 0
     hit_rate = 0
     mis_rate = 0
-    hit_dir_str = "Result: cache hit (direct)"
-    hit_pre_str = "Result: cache hit (preprocessed)"
-    mis_str = "Result: cache miss"
+    hit_dir_str = "Result: direct_cache_hit"
+    hit_pre_str = "Result: preprocessed_cache_hit"
+    mis_str = "Result: cache_miss"
     if os.path.exists(ccache_log):
         cmd = "grep -c \'{}\'  {}".format(hit_dir_str, ccache_log)
         hit_dir_num = int(
