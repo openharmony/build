@@ -118,7 +118,7 @@ if [[ ! -f "${PYTHON3}" ]]; then
   exit 1
 else
   if [[ ! -f "${PYTHON}" ]]; then
-    ln -s "${PYTHON3}" "${PYTHON}"
+    ln -sf "${PYTHON3}" "${PYTHON}"
   fi
 fi
 
