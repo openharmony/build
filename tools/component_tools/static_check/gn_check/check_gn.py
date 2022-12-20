@@ -94,7 +94,7 @@ class CheckGn(object):
         Returns:
             list: list中的元素是字典，每个字典中是一条绝对路径的信息
         """
-        abs_path_pattern = r'"\/(\/[^\/\n]*){1,63}"'
+        abs_path_pattern = r'"\/(\/[^\/\n]+){1,63}"'
         ret_list = list()
 
         all_info = GnCommon.grep_one(
@@ -132,6 +132,8 @@ class CheckGn(object):
         product_name_data = all_info.split('\n')
         for line in product_name_data:
             info = line.split(':')
+            if info[2].find("==") == -1:
+                continue
             file_name = info[0][len(self.abs_check_path) + 1:]
             bad_targets_to_excel.append([file_name, 'line:{}:{}'.format(
                 info[1], info[2].strip()), rules, issue])
@@ -162,6 +164,8 @@ class CheckGn(object):
 
         for line in product_name_data:
             info = line.split(':')
+            if info[2].find("==") == -1:
+                continue
             file_name = info[0][len(self.ohos_root) + 1:]
 
             subsys_comp = list()
@@ -299,6 +303,8 @@ class CheckGn(object):
                 continue
             if item['content'].startswith('//prebuilts'):
                 continue
+            if item['content'].startswith('//out'):
+                continue
             bad_targets_to_excel.append([item['path'][len(
                 self.check_path) + 1:], 'line {}:{}'.format(item['line_number'], item['content']), rules, issue])
         bad_targets_to_excel = pd.DataFrame(
@@ -326,6 +332,8 @@ class CheckGn(object):
             if item['content'].startswith('//build'):
                 continue
             if item['content'].startswith('//prebuilts'):
+                continue
+            if item['content'].startswith('//out'):
                 continue
             subsys_comp = list()
             for path, content in self.subsystem_info.items():
