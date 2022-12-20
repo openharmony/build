@@ -70,7 +70,7 @@ class CheckGnOnline(object):
         check_list = ['product_name', 'device_name']
         flag = {check_list[0]: False, check_list[1]: False}
         for check_item in check_list:
-            if line[1].find(check_item) != -1:
+            if line[1].find(check_item) != -1 and line[1].find("==") != -1:
                 flag[check_item] = True
         if any(flag.values()):
             issue = '存在'
@@ -85,7 +85,7 @@ class CheckGnOnline(object):
     def check_abs_path(self, key: str, line: list) -> None:
         rules = '规则3.1 部件编译脚本中只允许引用本部件路径，禁止引用其他部件的绝对或相对路径'
         issue = '存在绝对路径'
-        abs_path_pattern = r'"\/(\/[^\/\n]*){1,63}"'
+        abs_path_pattern = r'"\/(\/[^\/\n]+){1,63}"'
         abs_info = list()
         abs_iter = re.finditer(abs_path_pattern, line[1])
         for match in abs_iter:
@@ -93,6 +93,8 @@ class CheckGnOnline(object):
             if path.startswith('//build') or path.startswith('//third_party'):
                 break
             if path.startswith('//prebuilts'):
+                break
+            if path.startswith('//out'):
                 break
             abs_info.append(path)
         if len(abs_info) > 0:
@@ -150,12 +152,11 @@ class CheckGnOnline(object):
             if node.tag != 'project':
                 continue
             repo_info = node.attrib
-            ret_item = {repo_info['name']:repo_info['groups']}
+            ret_item = {repo_info['name']: repo_info['groups']}
             ret_dict.update(ret_item)
         return ret_dict
 
-
-    def is_checked(self, name, xml_dict) :
+    def is_checked(self, name, xml_dict):
         if name in xml_dict.keys():
             if xml_dict[name].find('ohos:mini') != -1:
                 return False
@@ -165,8 +166,7 @@ class CheckGnOnline(object):
             return False
         if name.startswith('build') or name.startswith('third_party'):
             return False
-        return True 
-
+        return True
 
     def pre_check(self):
         xml_dict = self.load_ohos_xml(".repo/manifests/ohos/ohos.xml")
@@ -174,7 +174,6 @@ class CheckGnOnline(object):
             repo_name = key.split(',')[0].split('/')[-3]
             if not self.is_checked(repo_name, xml_dict):
                 self.gn_data.pop(key)
-            
 
     def check(self):
         if not self.gn_data:
