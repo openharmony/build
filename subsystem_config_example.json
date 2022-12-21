@@ -1,8 +1,8 @@
 {
   "developertest": {
-    "project": "hmf/test/developertest",
-    "path": "test/developertest",
-    "name": "developertest",
-    "dir": "test"
+    "project": "hmf/test/testfwk/developer_test",
+    "path": "test/testfwk/developer_test",
+    "name": "developer_test",
+    "dir": "test/testfwk"
   }
 }
