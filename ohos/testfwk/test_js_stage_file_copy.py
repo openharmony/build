@@ -20,8 +20,8 @@ import sys
 import shutil
 
 
-def get_hap_module_info(build_target_name, module_name, 
-                            testcases_dir, subsystem_name, 
+def get_hap_module_info(build_target_name, module_name,
+                            testcases_dir, subsystem_name,
                             part_name, project_path):
     if not build_target_name or not module_name:
         raise ValueError(
@@ -37,12 +37,12 @@ def get_hap_module_info(build_target_name, module_name,
             json.dump(module_info_data, out_file)
 
 
-def get_hap_json_info(project_path, build_target_name, 
+def get_hap_json_info(project_path, build_target_name,
                       archive_testfile, test_type, module_out_path):
     json_dir = os.path.dirname(archive_testfile)
     prefix_dir = os.path.join(test_type, module_out_path)
     if os.path.exists(os.path.join(project_path, "Test.json")):
-        shutil.copy2(os.path.join(project_path, "Test.json"), 
+        shutil.copy2(os.path.join(project_path, "Test.json"),
                      os.path.join(json_dir, (build_target_name + ".json")))
         json_file_path = os.path.join(json_dir, (build_target_name + ".json"))
         if os.path.exists(json_file_path):
@@ -94,11 +94,11 @@ def main():
     _testcases_dir = os.path.dirname(args.archive_testfile)
     _testsuite_name = os.path.basename(
         args.archive_testfile).replace('.hap', '').replace('module_', '')
-    get_hap_json_info(args.project_path, args.build_target_name, 
-                      args.archive_testfile, args.test_type, 
+    get_hap_json_info(args.project_path, args.build_target_name,
+                      args.archive_testfile, args.test_type,
                       args.module_out_path)
-    get_hap_module_info(args.build_target_name, _testsuite_name, 
-                        _testcases_dir, args.subsystem_name, 
+    get_hap_module_info(args.build_target_name, _testsuite_name,
+                        _testcases_dir, args.subsystem_name,
                         args.part_name, args.project_path)
     copy_hap_case(args.final_hap_path, args.archive_testfile)
 
