@@ -26,7 +26,6 @@ group("make_images") {
     ]
     foreach(_platform, target_platform_list) {
       deps += [
-        ":${_platform}_chip_prod_image",
         ":${_platform}_sys_prod_image",
         ":${_platform}_system_image",
         ":${_platform}_userdata_image",
@@ -56,9 +55,12 @@ group("chip_prod_image") {
     ]
   }
   foreach(_platform, target_platform_list) {
-    deps += [ ":${_platform}_chip_prod_image" ]
-    foreach(_product, chip_product_list) {
-      deps += [ ":${_platform}_${_product}_chip_prod_image" ]
+    if (chip_product_list == []) {
+      deps += [ ":${_platform}_chip_prod_image" ]
+    } else {
+      foreach(_product, chip_product_list) {
+        deps += [ ":${_platform}_${_product}_chip_prod_image" ]
+      }
     }
   }
 }
