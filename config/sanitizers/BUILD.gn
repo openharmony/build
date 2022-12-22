@@ -699,16 +699,22 @@ config_plus_compiler_rt("undefined_behavior_sanitize_config") {
   ]
 }
 
-config_plus_compiler_rt("boundary_sanitize_config") {
+config("boundary_sanitize_config_release") {
   cflags = [
     "-fsanitize=bounds",
-    "-fsanitize-minimal-runtime",
     "-fno-sanitize-trap=integer,undefined",
     "-fno-sanitize-recover=integer,undefined",
     "-fno-sanitize=implicit-integer-sign-change",
   ]
-  configs = [ ":sanitizer_trap_all_flags" ]
-  compiler_rt_shared_lib_names = [ "ubsan_minimal" ]
+}
+
+config("boundary_sanitize_config_debug") {
+  cflags = [
+    "-fsanitize=bounds",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+    "-fno-sanitize=implicit-integer-sign-change",
+  ]
 }
 
 config("common_integer_overflow_config_release") {
