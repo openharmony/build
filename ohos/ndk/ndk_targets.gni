@@ -68,6 +68,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:native_media_codecbase_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
+  "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
+  "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_header",
 ]
 
 _ndk_base_libs = [
