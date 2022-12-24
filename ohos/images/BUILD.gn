@@ -28,16 +28,12 @@ group("make_images") {
       deps += [
         ":${_platform}_sys_prod_image",
         ":${_platform}_system_image",
+        ":${_platform}_updater_ramdisk_image",
         ":${_platform}_userdata_image",
         ":${_platform}_vendor_image",
       ]
       if (enable_ramdisk) {
-        deps += [
-          ":${_platform}_ramdisk_image",
-          ":${_platform}_updater_ramdisk_image",
-        ]
-      } else {
-        deps += [ ":${_platform}_updater_image" ]
+        deps += [ ":${_platform}_ramdisk_image" ]
       }
     }
     deps += [ ":chip_prod_image" ]
@@ -141,9 +137,7 @@ group("updater_ramdisk_image") {
     ]
   }
   foreach(_platform, target_platform_list) {
-    if (enable_ramdisk) {
-      deps += [ ":${_platform}_updater_ramdisk_image" ]
-    }
+    deps += [ ":${_platform}_updater_ramdisk_image" ]
   }
 }
 
@@ -156,9 +150,7 @@ group("updater_image") {
     ]
   }
   foreach(_platform, target_platform_list) {
-    if (!enable_ramdisk) {
-      deps += [ ":${_platform}_updater_image" ]
-    }
+    deps += [ ":${_platform}_updater_ramdisk_image" ]
   }
 }
 
@@ -182,14 +174,10 @@ foreach(_platform, target_platform_list) {
     "userdata",
     "sys_prod",
     "chip_prod",
+    "updater_ramdisk",
   ]
   if (enable_ramdisk) {
-    image_list += [
-      "ramdisk",
-      "updater_ramdisk",
-    ]
-  } else {
-    image_list += [ "updater" ]
+    image_list += [ "ramdisk" ]
   }
   foreach(_image_name, image_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
