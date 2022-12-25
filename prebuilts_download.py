@@ -252,6 +252,19 @@ def _import_rich_module():
     )
     return progress
 
+def _install(config, code_dir):
+    for config_info in config:
+        install_dir = code_dir + '/' + config_info.get('install_dir')
+        script = config_info.get('script')
+        cmd = '{}/{}'.format(install_dir, script)
+        args = config_info.get('args')
+        for arg in args:
+            for key in arg.keys():
+                cmd = cmd + ' --' + key + '=' + arg[key]
+        dest_dir = code_dir + '/' + config_info.get('destdir')
+        cmd = cmd + ' --destdir=' + dest_dir
+        _run_cmd(cmd)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--skip-ssl', action='store_true', help='skip ssl authentication')
@@ -283,6 +296,7 @@ def main():
     copy_config = config_info.get(host_platform).get(host_cpu).get('copy_config')
     node_config = config_info.get(host_platform).get('node_config')
     copy_config.extend(node_config)
+    install_config = config_info.get(host_platform).get(host_cpu).get('install')
     if host_platform == 'linux':
         linux_copy_config = config_info.get(host_platform).get(host_cpu).get('linux_copy_config')
         copy_config.extend(linux_copy_config)
@@ -298,6 +312,7 @@ def main():
 
     _file_handle(file_handle_config, args.code_dir)
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
+    _install(install_config, args.code_dir)
 
 if __name__ == '__main__':
     sys.exit(main())

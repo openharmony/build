@@ -23,12 +23,12 @@ group("default") {
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
   if (current_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-e2d7cc624ec4db87.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-unknown-linux-musleabi/lib/libstd-e2d7cc624ec4db87.so"
   } else if (current_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libstd-2ffed83c5c6f6122.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd-37747be394d9d22c.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
-        "//prebuilts/rustc/linux-x86_64/nightly/lib/libstd-f30f0c72643db558.so"
+        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-c244726431624c96.so"
   } else {
     source = ""
   }
@@ -43,12 +43,12 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
 
 ohos_prebuilt_shared_library("libtest.dylib.so") {
   if (target_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/arm-unknown-linux-musleabi/lib/libtest-24f7fe12f298b0ef.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-unknown-linux-musleabi/lib/libtest-24f7fe12f298b0ef.so"
   } else if (target_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/nightly/lib/rustlib/aarch64-unknown-linux-musl/lib/libtest-29a4bc4bda1b4f47.so"
-  } else if (target_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest-03fc9cb39b7ffba9.so"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
-        "//prebuilts/rustc/linux-x86_64/nightly/lib/libtest-8d62c2c8a15c5ce5.so"
+        "//prebuilts/rustc/linux-x86_64/current/lib/libtest-03f4c43f2c45172b.so"
   } else {
     source = ""
   }

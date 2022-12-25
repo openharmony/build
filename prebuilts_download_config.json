@@ -286,6 +286,38 @@
           "unzip_dir": "prebuilts/develop_tools",
           "file_path": "/openharmony/develop_tools/pahole_v1.21_20221124.tar.gz",
           "unzip_filename": "pahole"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-1.67.0-dev-x86_64-unknown-linux-gnu.tar",
+          "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-aarch64-linux-ohos.tar.gz",
+          "unzip_filename": "rustc-aarch64-std"
+        }
+      ],
+      "install": [
+        {
+          "install_dir":"prebuilts/rustc/rust-1.67.0-dev-x86_64-unknown-linux-gnu",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/linux-x86_64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-1.67.0-dev-aarch64-linux-ohos",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/linux-x86_64/current"
         }
       ]
     }

@@ -16,7 +16,7 @@ import("//build/toolchain/ohos/ohos_toolchain.gni")
 ohos_clang_toolchain("ohos_arm64_{{ product_name }}") {
   sysroot = "${musl_sysroot}"
   lib_dir = "usr/lib/aarch64-linux-ohos"
-  rust_abi_target = "aarch64-unknown-linux-musl"
+  rust_abi_target = "aarch64-linux-ohos"
   toolchain_args = {
     current_cpu = "arm64"
     {{ part_attributes_list }}

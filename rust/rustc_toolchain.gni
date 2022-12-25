@@ -19,7 +19,7 @@ declare_args() {
   use_ohos_rust_toolchain = true
   rustc_version = ""
   rust_sysroot_absolute = ""
-  is_rust_nightly = true
+  is_rust_nightly = false
   is_rust_stable = false
 }
 
@@ -28,7 +28,7 @@ rust_base = rebase_path("//prebuilts/rustc", root_build_dir)
 if (is_rust_nightly) {
   rust_version = "nightly"
 } else {
-  rust_version = "1.59.0"
+  rust_version = "current"
 }
 
 rust_path = "${rust_base}/${host_platform_dir}/${rust_version}"
