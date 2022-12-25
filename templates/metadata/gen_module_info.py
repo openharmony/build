@@ -113,6 +113,8 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
         data['shlib_type'] = args.shlib_type
     if args.innerapi_tags:
         data['innerapi_tags'] = args.innerapi_tags
+    if args.version_script:
+        data['version_script'] = args.version_script
     if module_type == 'java_library':
         data['alternative_source'] = os.path.join(source_dir,
                                                   module_alt_source)
@@ -158,6 +160,7 @@ def main():
     parser.add_argument('--subsystem-name', help='', required=False, default='')
     parser.add_argument('--shlib-type', help='', required=False, default='')
     parser.add_argument('--innerapi-tags', nargs='+', help='', required=False, default='')
+    parser.add_argument('--version_script', help='', required=False, default='')
     parser.add_argument('--prefix-override',
                         dest='prefix_override',
                         action='store_true')
