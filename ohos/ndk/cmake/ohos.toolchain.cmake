@@ -122,7 +122,6 @@ set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
 # Set the common c flags
 set(OHOS_C_COMPILER_FLAGS)
 list(APPEND OHOS_C_COMPILER_FLAGS
-  -g
   -fdata-sections
   -ffunction-sections
   -funwind-tables
@@ -148,7 +147,7 @@ set(OHOS_ASM_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the debug variant flags
 set(OHOS_DEBUG_COMPILER_FLAGS)
-list(APPEND OHOS_DEBUG_COMPILER_FLAGS -O0 -fno-limit-debug-info)
+list(APPEND OHOS_DEBUG_COMPILER_FLAGS -O0 -g -fno-limit-debug-info)
 string(REPLACE ";" " " OHOS_DEBUG_COMPILER_FLAGS   "${OHOS_DEBUG_COMPILER_FLAGS}")
 
 # set the release variant flags
