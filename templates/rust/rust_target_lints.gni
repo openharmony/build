@@ -1,0 +1,117 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/templates/cxx/cxx.gni")
+
+allowAllLints = [
+  "--cap-lints",
+  "allow",
+]
+rustcOhosLints = [
+  "-A",
+  "deprecated",
+  "-D",
+  "missing-docs",
+  "-D",
+  "warnings",
+]
+rustcVendorLints = [
+  "-A",
+  "deprecated",
+  "-D",
+  "warnings",
+]
+clippyOhosLints = [
+  "-A",
+  "clippy::type-complexity",
+  "-A",
+  "clippy::unnecessary-wraps",
+  "-A",
+  "clippy::unusual-byte-groupings",
+  "-A",
+  "clippy::upper-case-acronyms",
+]
+clippyVendorLints = [
+  "-A",
+  "clippy::complexity",
+  "-A",
+  "clippy::perf",
+  "-A",
+  "clippy::style",
+]
+
+template("rust_target_lints") {
+  _target_name = target_name
+  _crate_name = target_name
+  _crate_type = invoker.crate_type
+  _target_type = invoker.target_type
+  _rustflags = []
+
+  target(_target_type, "$_target_name") {
+    forward_variables_from(invoker, "*")
+    crate_name = _crate_name
+    crate_type = _crate_type
+
+    if (defined(invoker.rustc_lints)) {
+      rustc_lints = invoker.rustc_lints
+    }
+    if (defined(invoker.clippy_lints)) {
+      clippy_lints = invoker.clippy_lints
+    }
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+      print(source_dir_begin)
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
+
+    if (defined(rustc_lints)) {
+      if (invoker.rustc_lints == "openharmony") {
+        _rustflags += rustcOhosLints
+      } else if (rustc_lints == "vendor") {
+        _rustflags += rustcVendorLints
+      } else if (rustc_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
+    if (defined(clippy_lints)) {
+      if (invoker.clippy_lints == "openharmony") {
+        _rustflags += clippyOhosLints
+      } else if (clippy_lints == "vendor") {
+        _rustflags += clippyVendorLints
+      } else if (clippy_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
+    if (!defined(rustflags)) {
+      rustflags = _rustflags
+    } else {
+      rustflags += _rustflags
+    }
+  }
+}

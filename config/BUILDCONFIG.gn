@@ -625,13 +625,15 @@ if (is_standard_system) {
   }
 
   # Static libraries and source sets use only the compiler ones.
-  default_static_library_configs = default_compiler_configs
+  default_static_library_configs =
+      default_compiler_configs + [ "//build/config/rust:rust_config" ]
   default_source_set_configs = default_compiler_configs
 
   # Executable defaults.
   default_executable_configs = default_compiler_configs + [
                                  "//build/config:default_libs",
                                  "//build/config:executable_config",
+                                 "//build/config/rust:rust_config",
                                ]
 
   # Shared library and loadable module defaults (also for components in component
@@ -639,6 +641,7 @@ if (is_standard_system) {
   default_shared_library_configs = default_compiler_configs + [
                                      "//build/config:default_libs",
                                      "//build/config:shared_library_config",
+                                     "//build/config/rust:rust_config",
                                    ]
 }
 
@@ -782,7 +785,7 @@ if (is_lite_system) {
   default_compiler_configs += [
     "//build/lite/config:language_c",
     "//build/lite/config:language_cpp",
-     "//build/config/sanitizers:default_sanitizer_flags"
+    "//build/config/sanitizers:default_sanitizer_flags",
   ]
 
   if (current_os == "ohos") {
@@ -815,6 +818,14 @@ set_defaults("shared_library") {
   configs = default_shared_library_configs
 }
 
+set_defaults("rust_library") {
+  configs = [ "//build/config/rust:rust_config" ]
+}
+
+set_defaults("rust_proc_macro") {
+  configs = [ "//build/config/rust:rust_config" ]
+}
+
 set_defaults("source_set") {
   configs = default_compiler_configs
 }
@@ -828,6 +839,7 @@ target_type_list = [
   "loadable_module",
   "shared_library",
   "static_library",
+  "rust_library",
   "source_set",
 ]
 

@@ -90,6 +90,8 @@ def do_build(args):
         cmd.append('--disable-package-image')
     if args.log_level == 'debug':
         cmd.append('--log-level=debug')
+    if args.export_rust_project:
+        cmd.append('--export-rust-project')
     if args.device_type:
         cmd.append('--device-type=' + args.device_type)
     if args.build_variant:
@@ -125,6 +127,7 @@ def main():
     parser.add_option('--sparse-image', action='store_true')
     parser.add_option('--jobs')
     parser.add_option('--export-para', action='append', default=[])
+    parser.add_option('--export-rust-project', action='store_true')
     parser.add_option('--build-only-gn', action='store_true')
     parser.add_option('--ccache', action='store_true')
     parser.add_option('--fast-rebuild', action='store_true')

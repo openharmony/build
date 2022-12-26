@@ -4,3 +4,4 @@
 lite/
 .vscode/
 build_scripts/rundocker.sh
+tags

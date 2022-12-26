@@ -1,0 +1,47 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/ohos/config.gni")
+import("//build/config/ohos/musl.gni")
+
+declare_args() {
+  enable_rust = true
+  use_ohos_rust_toolchain = true
+  rustc_version = ""
+  rust_sysroot_absolute = ""
+  is_rust_nightly = false
+  is_rust_stable = false
+}
+
+rust_base = rebase_path("//prebuilts/rustc", root_build_dir)
+
+if (is_rust_nightly) {
+  rust_version = "nightly"
+} else {
+  rust_version = "current"
+}
+
+rust_path = "${rust_base}/${host_platform_dir}/${rust_version}"
+rust_bin = "${rust_path}/bin"
+rustc = "${rust_bin}/rustc"
+clippy_driver = "${rust_bin}/clippy-driver"
+
+stdlib_host_path = "${rust_path}/lib"
+
+clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang",
+                    root_build_dir)
+musl_path = rebase_path("${musl_sysroot}", root_build_dir)
+musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+llvm_strip =
+    rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-strip",
+                root_build_dir)

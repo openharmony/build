@@ -4,6 +4,7 @@
 
 import("//build/config/clang/clang.gni")
 import("//build/config/ohos/config.gni")
+import("//build/rust/rustc_toolchain.gni")
 import("//build/toolchain/gcc_toolchain.gni")
 
 declare_args() {
@@ -35,6 +36,7 @@ template("ohos_clang_toolchain") {
            "toolchain_args must be defined for ohos_clang_toolchain()")
     toolchain_args = invoker.toolchain_args
     toolchain_args.current_os = "ohos"
+    rust_abi_target = invoker.rust_abi_target
 
     # Output linker map files for binary size analysis.
     enable_linker_map = true
@@ -80,5 +82,20 @@ template("ohos_clang_toolchain") {
     # Don't use .cr.so for loadable_modules since they are always loaded via
     # absolute path.
     loadable_module_extension = ".so"
+    rust_abi_target = invoker.rust_abi_target
+    stdlib_path = "${rust_path}/lib/rustlib/${rust_abi_target}/lib"
+    std_dylib_path = rebase_path(
+            get_label_info("//build/rust:libstd.dylib.so", "target_out_dir"),
+            root_build_dir)
+    if (rust_abi_target == "arm-unknown-linux-musleabi") {
+      stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-fab3a62110163e76.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-8c4ecabd0cb06122.rlib' --extern 'noprelude:core=$stdlib_path/libcore-482b22b5a77239ac.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-591915e967618237.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-874434e28ab7d19d.rlib' --extern 'noprelude:std=$stdlib_path/libstd-e2d7cc624ec4db87.rlib' --extern 'std=$std_dylib_path/libstd.dylib.so' --extern 'test=$stdlib_path/libtest-24f7fe12f298b0ef.rlib'"
+      cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
+    } else if (rust_abi_target == "aarch64-linux-ohos") {
+      stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-3cbe585baad3a5fc.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-fad08d9869c5b095.rlib' --extern 'noprelude:core=$stdlib_path/libcore-b563ca2bb1f3a9b9.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-ca4b43df3d225383.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-5a595648a0be3c0f.rlib' --extern 'noprelude:std=$stdlib_path/libstd-37747be394d9d22c.rlib' --extern 'std=$std_dylib_path/libstd.dylib.so' --extern 'test=$stdlib_path/libtest-03fc9cb39b7ffba9.rlib'"
+      cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
+    } else if (rust_abi_target == "x86_64-unknown-linux-gnu") {
+      stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-703c7b85089a09a0.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-f742a15c5765001e.rlib' --extern 'noprelude:core=$stdlib_path/libcore-95c594ea0242ac01.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-9d8ca548a7441307.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-c7cdf527cc642256.rlib' --extern 'noprelude:std=$stdlib_path/libstd-c244726431624c96.rlib' --extern 'std=$std_dylib_path/libstd.dylib.so' --extern 'test=$stdlib_path/libtest-03f4c43f2c45172b.rlib'"
+      cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target}"
+    }
   }
 }

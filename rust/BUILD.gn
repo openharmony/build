@@ -1,0 +1,58 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#This was originally a compilation entry, but now "default" is added to the component dependency of build/common/bundle.json.
+import("//build/ohos.gni")
+group("default") {
+  if (current_cpu == "arm64") {
+    deps = [
+      ":libstd.dylib.so",
+      ":libtest.dylib.so",
+    ]
+  }
+}
+
+ohos_prebuilt_shared_library("libstd.dylib.so") {
+  if (current_cpu == "arm64" || current_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd-37747be394d9d22c.so"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
+    source =
+        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-c244726431624c96.so"
+  } else {
+    source = ""
+  }
+  enable_strip = true
+  install_images = [
+    "system",
+    "uptater",
+  ]
+  output = "libstd.dylib.so"
+  part_name = "common"
+}
+
+ohos_prebuilt_shared_library("libtest.dylib.so") {
+  if (current_cpu == "arm64" || current_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest-03fc9cb39b7ffba9.so"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
+    source =
+        "//prebuilts/rustc/linux-x86_64/current/lib/libtest-03f4c43f2c45172b.so"
+  } else {
+    source = ""
+  }
+  install_images = [
+    "system",
+    "uptater",
+  ]
+  output = "libtest.dylib.so"
+  part_name = "common"
+}

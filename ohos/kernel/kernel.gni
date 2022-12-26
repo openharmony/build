@@ -11,5 +11,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 declare_args() {
-    linux_kernel_version = "linux-5.10"
+  linux_kernel_version = "linux-5.10"
 }
