@@ -1,8 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright 2015 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 """
 1. add {{ldflags}} and extend everyone in {{ldflags}} to -Clink-args=%s.
 2. replace blank with newline in .rsp file because of rustc.
@@ -10,12 +20,13 @@
    delete them from .d files.
 """
 
+import os
+import stat
+import sys
+import re
 import argparse
 import pathlib
 import subprocess
-import os
-import sys
-import re
 
 import rust_strip
 sys.path.append(
@@ -26,47 +37,47 @@ from scripts.util import build_utils  # noqa: E402
 def exec_formatted_command(args):
     remaining_args = args.args
 
-    ldflags_separator = remaining_args.index("LDFLAGS")
-    rustenv_separator = remaining_args.index("RUSTENV", ldflags_separator)
-    rustc_args = remaining_args[:ldflags_separator]
-    ldflags = remaining_args[ldflags_separator + 1:rustenv_separator]
-    rustenv = remaining_args[rustenv_separator + 1:]
+    ldflags_index = remaining_args.index("LDFLAGS")
+    rustenv_index = remaining_args.index("RUSTENV", ldflags_index)
+    rustc_args = remaining_args[:ldflags_index]
+    ldflags = remaining_args[ldflags_index + 1:rustenv_index]
+    rustenv = remaining_args[rustenv_index + 1:]
 
     rustc_args.extend(["-Clink-arg=%s" % arg for arg in ldflags])
     rustc_args.insert(0, args.rustc)
 
-    # Workaround for https://bugs.chromium.org/p/gn/issues/detail?id=249
     if args.rsp:
+        flags = os.O_WRONLY
+        modes = stat.S_IWUSR | stat.S_IRUSR
         with open(args.rsp) as rspfile:
-            rsp_args = [l.rstrip() for l in rspfile.read().split(' ') if l.rstrip()]
+            rsp_content = [l.rstrip() for l in rspfile.read().split(' ') if l.rstrip()]
         with open(args.rsp, 'w') as rspfile:
-            rspfile.write("\n".join(rsp_args))
+            rspfile.write("\n".join(rsp_content))
         rustc_args.append(f'@{args.rsp}')
 
     env = os.environ.copy()
     fixed_env_vars = []
     for item in rustenv:
-        (k, v) = item.split("=", 1)
-        env[k] = v
-        fixed_env_vars.append(k)
+        (key, value) = item.split("=", 1)
+        env[key] = value
+        fixed_env_vars.append(key)
 
-    r = subprocess.run([args.clippy_driver, *rustc_args], env=env, check=False)
-    if r.returncode != 0:
-        sys.exit(r.returncode)
+    ret = subprocess.run([args.clippy_driver, *rustc_args], env=env, check=False)
+    if ret.returncode != 0:
+        sys.exit(ret.returncode)
 
-    # Now edit the depfile produced
     if args.depfile is not None:
         env_dep_re = re.compile("# env-dep:(.*)=.*")
         replacement_lines = []
         dirty = False
-        with open(args.depfile, encoding="utf-8") as d:
-            for line in d:
-                m = env_dep_re.match(line)
-                if m and m.group(1) in fixed_env_vars:
-                    dirty = True  # skip this line
+        with open(args.depfile, encoding="utf-8") as depfile:
+            for line in depfile:
+                matched = env_dep_re.match(line)
+                if matched and matched.group(1) in fixed_env_vars:
+                    dirty = True
                 else:
                     replacement_lines.append(line)
-        if dirty:  # we made a change, let's write out the file
+        if dirty:
             with build_utils.atomic_output(args.depfile) as output:
                 output.write("\n".join(replacement_lines).encode("utf-8"))
     return 0
@@ -74,10 +85,16 @@ def exec_formatted_command(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--clippy-driver', required=True, type=pathlib.Path)
-    parser.add_argument('--rustc', required=True, type=pathlib.Path)
-    parser.add_argument('--depfile', type=pathlib.Path)
-    parser.add_argument('--rsp', type=pathlib.Path)
+    parser.add_argument('--clippy-driver',
+                        required=True,
+                        type=pathlib.Path)
+    parser.add_argument('--rustc',
+                        required=True,
+                        type=pathlib.Path)
+    parser.add_argument('--depfile',
+                        type=pathlib.Path)
+    parser.add_argument('--rsp',
+                        type=pathlib.Path)
     parser.add_argument('--strip',
                         help='The strip binary to run',
                         metavar='PATH')

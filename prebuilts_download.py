@@ -252,6 +252,7 @@ def _import_rich_module():
     )
     return progress
 
+
 def _install(config, code_dir):
     for config_info in config:
         install_dir = code_dir + '/' + config_info.get('install_dir')

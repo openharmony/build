@@ -1,42 +1,29 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright 2015 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-"""Runs a linking command and optionally a strip command.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-This script exists to avoid using complex shell commands in
-gcc_toolchain.gni's tool("link"), in case the host running the compiler
-does not have a POSIX-like shell (e.g. Windows).
-"""
 
 import argparse
 import os
 import subprocess
 import sys
 
-import wrapper_utils
-
-# When running on a Windows host and using a toolchain whose tools are
-# actually wrapper scripts (i.e. .bat files on Windows) rather than binary
-# executables, the "command" to run has to be prefixed with this magic.
-# The GN toolchain definitions take care of that for when GN/Ninja is
-# running the tool directly.  When that command is passed in to this
-# script, it appears as a unitary string but needs to be split up so that
-# just 'cmd' is the actual command given to Python's subprocess module.
-BAT_PREFIX = 'cmd /c call '
-
-
-def command_to_run(command):
-    if command[0].startswith(BAT_PREFIX):
-        command = command[0].split(None, 3) + command[1:]
-    return command
 
 def do_strip(strip, output, unstripped_file, mini_debug):
     if strip:
         result = subprocess.call(
-            command_to_run(
-                [strip, '-o', output, unstripped_file]))
+            [strip, '-o', output, unstripped_file])
 
     if mini_debug and not unstripped_file.endswith(".exe"):
         unstripped_libfile = os.path.abspath(unstripped_file)
@@ -44,9 +31,8 @@ def do_strip(strip, output, unstripped_file, mini_debug):
             os.path.dirname(__file__), 'mini_debug_info.py')
         ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
         result = subprocess.call(
-            wrapper_utils.command_to_run(
-                ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', output,
-                '--root-path', ohos_root_path]))
+            ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', output,
+            '--root-path', ohos_root_path])
 
     return result
 
@@ -55,15 +41,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--strip',
                         help='The strip binary to run',
-                        metavar='PATH')
+                        metavar='FILE')
     parser.add_argument('--unstripped-file',
-                        help='Executable file produced by linking command',
+                        help='Binary file produced by linking command',
                         metavar='FILE')
     parser.add_argument('--output',
                         required=True,
-                        help='Final output executable file',
+                        help='Final output binary file',
                         metavar='FILE')
-    parser.add_argument('command', nargs='+', help='Linking command')
+    parser.add_argument('command', nargs='+',
+                        help='Linking command')
     parser.add_argument('--mini-debug',
                         action='store_true',
                         default=False,

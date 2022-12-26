@@ -242,6 +242,12 @@ template("ohos_rust_library") {
     if (!defined(deps)) {
       deps = []
     }
+    if (current_cpu == "arm64") {
+      deps += [
+        "//build/rust:libstd.dylib.so",
+        "//build/rust:libtest.dylib.so",
+      ]
+    }
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
@@ -356,6 +362,15 @@ template("ohos_rust_executable") {
     }
     configs = []
 
+    if (!defined(deps)) {
+      deps = []
+    }
+    if (current_cpu == "arm64") {
+      deps += [
+        "//build/rust:libstd.dylib.so",
+        "//build/rust:libtest.dylib.so",
+      ]
+    }
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }
