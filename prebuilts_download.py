@@ -313,7 +313,8 @@ def main():
 
     _file_handle(file_handle_config, args.code_dir)
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
-    _install(install_config, args.code_dir)
+    if install_config:
+        _install(install_config, args.code_dir)
 
 if __name__ == '__main__':
     sys.exit(main())
