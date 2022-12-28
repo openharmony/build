@@ -847,17 +847,17 @@
         ]
     },
     {
-        "install_dir": "toolchains/aot",
-        "module_label": "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler",
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "toolchains/aot/bin",
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library",
         "target_os": [
-            "windows"
+            "linux"
         ]
     }
 ]
