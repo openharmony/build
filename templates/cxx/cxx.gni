@@ -745,6 +745,31 @@ template("ohos_shared_library") {
         ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
     }
+
+    module_type_napi = false
+    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+      relative_paths = string_split(invoker.relative_install_dir, "/")
+      foreach(p, relative_paths) {
+        if (p == "module") {
+          module_type_napi = true
+        }
+      }
+      if (module_type_napi) {
+        foreach(m, filter_include(napi_white_list, [ target_name ])) {
+          if (m == target_name) {
+            module_type_napi = false
+          }
+        }
+      }
+    }
+    if (module_type_napi) {
+      if (!defined(invoker.version_script)) {
+        _version_script =
+            rebase_path("//build/templates/cxx/napi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
+      }
+    }
   }
 }
 
