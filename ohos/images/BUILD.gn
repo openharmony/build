@@ -26,7 +26,6 @@ group("make_images") {
     ]
     foreach(_platform, target_platform_list) {
       deps += [
-        ":${_platform}_chip_prod_image",
         ":${_platform}_sys_prod_image",
         ":${_platform}_system_image",
         ":${_platform}_userdata_image",
@@ -41,8 +40,28 @@ group("make_images") {
         deps += [ ":${_platform}_updater_image" ]
       }
     }
+    deps += [ ":chip_prod_image" ]
   } else {
     deps += [ "//build/ohos/packages:packer" ]
+  }
+}
+
+group("chip_prod_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    if (chip_product_list == []) {
+      deps += [ ":${_platform}_chip_prod_image" ]
+    } else {
+      foreach(_product, chip_product_list) {
+        deps += [ ":${_platform}_${_product}_chip_prod_image" ]
+      }
+    }
   }
 }
 
@@ -112,6 +131,53 @@ foreach(_platform, target_platform_list) {
         system_modules_list,
       ]
       outputs = [ output_image_file ]
+      args = [
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
+        "--image-name",
+        _image_name,
+        "--input-path",
+        rebase_path(image_input_path, root_build_dir),
+        "--image-config-file",
+        rebase_path(image_config_file, root_build_dir),
+        "--device-image-config-file",
+        rebase_path(device_image_config_file, root_build_dir),
+        "--output-image",
+        rebase_path(output_image_file, root_build_dir),
+        "--target-cpu",
+        target_cpu,
+        "--build-image-tools-path",
+      ]
+      args += rebase_path(build_image_tools_path, root_build_dir)
+      if (sparse_image) {
+        args += [ "--sparse-image" ]
+      }
+    }
+  }
+
+  # Used to generate chip_prod images of different products
+  foreach(_product, chip_product_list) {
+    _image_name = "chip_prod"
+    action_with_pydeps("${_platform}_${_product}_chip_prod_image") {
+      script = "//build/ohos/images/build_image.py"
+      depfile = "$target_gen_dir/$target_name.d"
+      deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
+
+      image_config_file =
+          "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
+      device_image_config_file =
+          "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
+      image_input_path = "${current_platform_dir}/${_image_name}/${_product}"
+      output_image_file =
+          "${current_platform_dir}/images/${_product}/${_image_name}.img"
+
+      sources = [
+        image_config_file,
+        system_module_info_list,
+        system_modules_list,
+      ]
+      outputs = [ output_image_file ]
+
       args = [
         "--depfile",
         rebase_path(depfile, root_build_dir),
