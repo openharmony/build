@@ -133,7 +133,7 @@ def main():
     parser.add_option('--disable-part-of-post-build', action='append', default=[])
     parser.add_option('--log-level', default='info')
     parser.add_option('--device-type', default='default')
-    parser.add_option('--build-variant', default='user')
+    parser.add_option('--build-variant', default='root')
     parser.add_option('--share-ccache')
     args, _ = parser.parse_args()
 
