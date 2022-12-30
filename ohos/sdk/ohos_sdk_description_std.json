@@ -859,5 +859,19 @@
         "target_os": [
             "linux"
         ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/aot/src",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/aot/src",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins",
+        "target_os": [
+            "linux"
+        ]
     }
 ]
