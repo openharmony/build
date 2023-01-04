@@ -11,6 +11,9 @@ data,                       00771,      1000,       1000,       0
 mnt,                        00755,      0,          1000,       0
 sbin,                       00750,      0,          2000,       0
 system/bin,                 00751,      0,          2000,       0
+system/etc/init,            00500,      0,          0,          0
+system/etc/param,           00500,      0,          0,          0
+system/etc/param/ohos_const,00500,      0,          0,          0
 vendor/bin,                 00751,      0,          2000,       0
 vendor,                     00755,      0,          2000,       0
 sys_prod,                   00755,      0,          2000,       0
@@ -21,6 +24,11 @@ fstab.*                     00640,      0,          2000,       0
 init*,                      00750,      0,          2000,       0
 sbin/*,                     00750,      0,          2000,       0
 system/bin/*,               00755,      0,          2000,       0
+system/etc/init/*,          00500,      0,          0,          0
+system/etc/init.cfg,        00500,      0,          0,          0
+system/etc/init.usb.cfg,    00500,      0,          0,          0
+system/etc/param/*,         00500,      0,          0,          0
+system/etc/param/ohos_const/*,00500,    0,          0,          0
 vendor/bin/*,               00755,      0,          2000,       0
 updater/bin/*,              00755,      0,          2000,       0
 updater/system/bin/*,       00755,      0,          2000,       0
