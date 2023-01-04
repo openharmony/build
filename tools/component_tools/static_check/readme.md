@@ -1,15 +1,17 @@
-# OpenHarmony部件编译构建规范本地检查脚本使用指导
+# OpenHarmony部件编译构建规范指导
 
-## 介绍
+## OpenHarmony部件编译构建规范本地检查脚本使用指导
+
+### 介绍
 
 部件编译构建规范本地检查脚本用于检查openharmony编译构建中不规范的问题，详细检查问题见[OpenHarmony部件编译构建规范修改指导](#openharmony部件编译构建规范修改指导)
-## 使用方法
+### 使用方法
 
 ```shell
 python3 csct.py  [-p path] 
 ```
 
-### 示例
+#### 示例
 
 若要检查openharmony全量的不规范问题，可以在openharmony根目录使用以下命令。
 
@@ -26,11 +28,11 @@ example：
 python3 build/tools/component_tools/static_check/csct.py -p base/global
 ```
 
-# OpenHarmony部件编译构建规范修改指导
+## OpenHarmony部件编译构建规范修改指导
 
 关于完整的OpenHarmony部件编译构建规范，请点击
 [这里](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/subsystems/subsys-build-component-building-rules.md)
-## 规则2.1 部件描述文件中字段须准确。
+### 规则2.1 部件描述文件中字段须准确。
 
 - name
 
@@ -85,7 +87,7 @@ python3 build/tools/component_tools/static_check/csct.py -p base/global
   类型：string list。deps对象描述了部件的外部依赖，必填，包括其他部件和三方开源软件，应该与部件编译脚本中依赖一致。
 
 
-  ### 修改指导：
+  #### 修改指导：
 
   以一个错误 bundle.json 为例：
 
@@ -167,7 +169,7 @@ python3 build/tools/component_tools/static_check/csct.py -p base/global
   ```
 
 
-## 规则3.1 部件编译脚本中只允许引用本部件的路径，禁止引用其他部件的绝对或相对路径。
+### 规则3.1 部件编译脚本中只允许引用本部件的路径，禁止引用其他部件的绝对或相对路径。
 
 部件间的依赖都必须使用“externel_deps”，部件编译目标的变量sources、include_dirs、configs、public_configs、deps、public_deps引用其他部件的相对和绝对路径属于非法引入依赖：
 
@@ -208,7 +210,7 @@ python3 build/tools/component_tools/static_check/csct.py -p base/global
   
 
 
-### 修改建议：
+#### 修改建议：
 
 1.若绝对路径引用的是本部件的内容，则应改为使用相对路径。
 
@@ -261,12 +263,12 @@ config("distributed_store_config") {
     ]
 ```
 
-## 规则3.2 部件编译目标必须指定部件和子系统名。
+### 规则3.2 部件编译目标必须指定部件和子系统名。
 
 部件的编译单元ohos_shared_library、ohos_static_library、ohos_executable_library、ohos_source_set都必须指定“part_name”和“subsystem_name”。
 
 
-### 修改建议：
+#### 修改建议：
 
 例如base/account/os_account/services/accountmgr/src/appaccount/BUILD.gn中
 
@@ -304,14 +306,14 @@ ohos_shared_library("app_account_service_core") {
 ```
 
 
-## 规则4.1 部件编译脚本中禁止使用产品名称变量。
+### 规则4.1 部件编译脚本中禁止使用产品名称变量。
 
 部件是通用的系统能力，与特定产品无关。编译脚本中使用产品名称，将导致部件功能与产品绑定，不具备通用性。部件不同产品形态上的差异应抽象为特性或者运行时的插件。
 
 **例外：** vendor和device目录下三方厂商部件的编译脚本例外。
 
 
-### 修改建议：
+#### 修改建议：
 例如：
 
 ```c
@@ -331,3 +333,16 @@ ohos_shared_library("app_account_service_core") {
         defines += ["NON_SEPERATE_P2P]
     }
 ```
+
+## OpenHarmony部件编译构建规范白名单仓库
+
+OpenHarmony部件编译构建规范存在白名单仓库（仅对部件编译脚本生效（.gn .gni文件）），这些源码仓或代码目录不在检查范围内，具体如下：
+
+1. [manifest](https://gitee.com/openharmony/manifest/blob/master/ohos/ohos.xml) 文件中group字段标记为 ohos:mini 或 ohos:small的源码仓或代码目录。
+2. device、vendor开头的三方厂商源码仓。
+3. build仓。
+4. 全部third_party仓。
+
+## OpenHarmony部件编译构建规范门禁拦截逃生通道
+
+OpenHarmony部件编译构建规范门禁拦截结果会在format check中体现出来，请按照指导修改，如有特殊情况需要屏蔽，须特定人员评论component-static-check-ignore屏蔽。
