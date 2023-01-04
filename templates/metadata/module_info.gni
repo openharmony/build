@@ -44,6 +44,7 @@ template("generate_module_info") {
                            "notice",
                            "shlib_type",
                            "innerapi_tags",
+                           "version_script",
                            "part_name",
                            "subsystem_name",
                          ])
@@ -206,6 +207,12 @@ template("generate_module_info") {
     if (defined(innerapi_tags)) {
       args += [ "--innerapi-tags" ]
       args += innerapi_tags
+    }
+    if (defined(version_script)) {
+      args += [
+        "--version_script",
+        version_script,
+      ]
     }
     script = gen_script
     outputs = [ output_file ]

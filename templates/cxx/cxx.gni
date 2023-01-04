@@ -177,6 +177,10 @@ template("ohos_executable") {
       if (defined(invoker.symlink_target_name)) {
         symlink_target_name = invoker.symlink_target_name
       }
+
+      if (defined(invoker.version_script)) {
+        version_script = rebase_path(invoker.version_script, root_build_dir)
+      }
       notice = "$target_out_dir/$ohos_module_name.notice.txt"
     }
   }
@@ -558,6 +562,10 @@ template("ohos_shared_library") {
         assert(
             invalid != true,
             "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
+      }
+
+      if (defined(invoker.version_script)) {
+        version_script = rebase_path(invoker.version_script, root_build_dir)
       }
     }
   }
