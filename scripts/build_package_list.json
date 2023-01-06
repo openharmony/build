@@ -38,5 +38,23 @@
         "scons",
         "gcc-arm-none-eabi",
         "gcc-arm-linux-gnueabi"
+    ]},
+    "22.04":{
+    "dep_package":[
+        "bison",
+        "ccache",
+        "default-jdk",
+        "flex",
+        "zip",
+        "ruby",
+        "libssl-dev",
+        "libtinfo5",
+        "genext2fs",
+        "u-boot-tools",
+        "mtools",
+        "mtd-utils",
+        "scons",
+        "gcc-arm-none-eabi",
+        "gcc-arm-linux-gnueabi"
     ]}
 }
