@@ -267,8 +267,6 @@ template("ohos_executable") {
         "-rdynamic",
         "-Wl,--version-script=${_version_script}",
       ]
-    } else {
-      configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
     }
 
     if (defined(invoker.external_deps)) {
