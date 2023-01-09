@@ -80,10 +80,10 @@ def check_os_version():
     By parsing file `/etc/issue`.
     :return -1: Retuern -1 if OS is not supported.
     :return host_os: Host OS type, currently only `Ubuntu` supported.
-    :return host_version: Host OS version, currently only `18.04[.X]` or `20.04[.X]` supported.
+    :return host_version: Host OS version, currently only `18.04[.X]`, `20.04[.X]` or `22.04[.X]` supported.
     """
     available_os = ('Ubuntu')
-    available_releases = ('18.04', '20.04')
+    available_releases = ('18.04', '20.04', '22.04')
     _os_info, _returncode = run_command(['cat', '/etc/issue'])
     if _returncode != 0:
         return -1
