@@ -21,8 +21,11 @@ while [ $# -gt 0 ]; do
     -h|--help)
     HELP=YES
     ;;
-    --disable-rich-module) # disable the rich module of python
+    --disable-rich)       # disable the rich module of python
     DISABLE_RICH=YES
+    ;;
+    --enable-symlink)     # enable symlink while copying node_modules
+    ENABLE_SYMLINK=YES
     ;;
     --tool-repo)
     TOOL_REPO="$2"
@@ -93,6 +96,12 @@ else
     help=''
 fi
 
+if [ "X${ENABLE_SYMLINK}" == "XYES" ];then
+    enable_symlink="--enable-symlink"
+else
+    enable_symlink=''
+fi
+
 if [ ! -z "$TOOL_REPO" ];then
     tool_repo="--tool-repo $TOOL_REPO"
 else
@@ -144,7 +153,7 @@ platform="--host-platform $host_platform"
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink
 echo "prebuilts_download end"
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
