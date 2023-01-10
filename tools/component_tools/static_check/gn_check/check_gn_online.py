@@ -180,6 +180,8 @@ class CheckGnOnline(object):
             return
         for key, values in self.gn_data.items():
             for line in values:
+                if line[1].startswith("import"):
+                    continue;
                 self.check_have_product_name(key, line)
                 self.check_abs_path(key, line)
         self.check_pn_sn()
