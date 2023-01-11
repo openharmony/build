@@ -76,6 +76,7 @@ _ndk_base_libs = [
   "//third_party/musl/ndk_script/adapter:libc_ndk",
   "//third_party/musl/ndk_script:musl_ndk_libs_arm32",
   "//third_party/musl/ndk_script:musl_ndk_libs_aarch64",
+  "//third_party/musl/ndk_script:musl_ndk_libs_x86_64",
   "//third_party/musl/ndk_script:ndk_toolchain",
 ]
 _ndk_sysroot_uapi = [ "//third_party/musl/ndk_script:musl_sysroot" ]
