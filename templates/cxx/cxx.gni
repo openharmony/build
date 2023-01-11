@@ -203,6 +203,7 @@ template("ohos_executable") {
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
+                             "use_rtti",
 
                              # Sanitizer variables
                              "sanitize",
@@ -221,6 +222,11 @@ template("ohos_executable") {
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
       configs -= [ "//build/config/compiler:no_exceptions" ]
+    }
+
+    if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      configs += [ "//build/config/compiler:rtti" ]
+      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(deps)) {
@@ -588,6 +594,7 @@ template("ohos_shared_library") {
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
+                             "use_rtti",
                              "stl",
 
                              # Sanitizer variables
@@ -616,6 +623,11 @@ template("ohos_shared_library") {
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
       configs -= [ "//build/config/compiler:no_exceptions" ]
+    }
+
+    if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      configs += [ "//build/config/compiler:rtti" ]
+      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(output_name)) {
@@ -861,6 +873,7 @@ template("ohos_static_library") {
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
+                             "use_rtti",
                              "subsystem_name",
 
                              # Sanitizer variables
@@ -881,6 +894,11 @@ template("ohos_static_library") {
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
       configs -= [ "//build/config/compiler:no_exceptions" ]
+    }
+
+    if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      configs += [ "//build/config/compiler:rtti" ]
+      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (defined(invoker.no_default_deps)) {
@@ -1028,6 +1046,7 @@ template("ohos_source_set") {
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
+                             "use_rtti",
                              "subsystem_name",
 
                              # Sanitizer variables
@@ -1046,6 +1065,11 @@ template("ohos_source_set") {
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
       configs += [ "//build/config/compiler:exceptions" ]
       configs -= [ "//build/config/compiler:no_exceptions" ]
+    }
+
+    if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      configs += [ "//build/config/compiler:rtti" ]
+      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (defined(invoker.no_default_deps)) {
