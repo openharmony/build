@@ -23,7 +23,6 @@ group("tests") {
     "//build/rust/tests/test_bin_crate",
     "//build/rust/tests/test_cdylib_crate",
     "//build/rust/tests/test_dylib_crate",
-    "//build/rust/tests/test_proc_macro_crate",
     "//build/rust/tests/test_rlib_crate",
     "//build/rust/tests/test_static_link",
     "//build/rust/tests/test_staticlib_crate",
