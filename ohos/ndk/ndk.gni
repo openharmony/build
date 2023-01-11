@@ -144,6 +144,7 @@ template("ohos_ndk_library") {
     ndk_toolchains = [
       "//build/toolchain/ohos:ohos_clang_arm",
       "//build/toolchain/ohos:ohos_clang_arm64",
+      "//build/toolchain/ohos:ohos_clang_x86_64",
     ]
   } else {
     # Don't enable cross compile if build_ohos_ndk is false.
