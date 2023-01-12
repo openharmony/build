@@ -53,6 +53,15 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
     subsystem_configs = subsystem_scan.scan(subsystem_config_file,
                                             example_subsystem_file,
                                             source_root_dir)
+    subsystem_config_overlay_file = os.path.join(source_root_dir,
+                                                 'build/subsystem_config_overlay.json')
+    if os.path.isfile(subsystem_config_overlay_file):
+        subsystem_config_overlay = {}
+        subsystem_config_overlay = subsystem_scan.scan(subsystem_config_overlay_file,
+                                                       example_subsystem_file,
+                                                       source_root_dir)
+        subsystem_configs['subsystem'].update(subsystem_config_overlay['subsystem'])
+        subsystem_configs['no_src_subsystem'].update(subsystem_config_overlay['no_src_subsystem'])
 
     _output_subsystem_configs(output_dir_realpath, subsystem_configs)
     return subsystem_configs.get('subsystem')

@@ -106,6 +106,7 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsystem-config-file', required=True)
+    parser.add_argument('--subsystem-config-overlay-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--output-dir', required=True)
