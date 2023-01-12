@@ -605,6 +605,52 @@ template("ohos_shared_library") {
         }
       }
     }
+
+    module_type_napi = false
+    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+      relative_paths = string_split(invoker.relative_install_dir, "/")
+      foreach(p, relative_paths) {
+        if (p == "module") {
+          module_type_napi = true
+        }
+      }
+      if (module_type_napi) {
+        napi_white_list = [
+          "fileio",
+          "downloadsingle",
+          "tel_call_manager_api",
+          "rpc",
+          "color_picker",
+          "accessibility",
+          "stationary",
+          "remote_file_share_native",
+          "window_animation",
+          "cryptoframework_napi",
+          "rdb",
+          "distributeddataobject_impl",
+          "medialibrary",
+          "image",
+          "featureability",
+          "medical",
+          "devicestatus",
+          "hiappevent",
+          "hiappevent_v9",
+        ]
+        foreach(m, napi_white_list) {
+          if (m == target_name) {
+            module_type_napi = false
+          }
+        }
+      }
+    }
+    if (module_type_napi) {
+      if (!defined(invoker.version_script)) {
+        _version_script =
+            rebase_path("//build/templates/cxx/napi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
+      }
+    }
   }
   if (target_toolchain == "${current_toolchain}") {
     ohos_module_name = target_name
