@@ -63,11 +63,14 @@ template("collect_notice") {
         if (defined(module_type) &&
             (module_type == "static_library" || module_type == "source_set")) {
           _current_toolchain = get_label_info(current_toolchain, "name")
+          _notice_subdir = "$_current_toolchain/${invoker.subsystem_name}/${invoker.part_name}"
 
           # Although static library and source set are not installed, their
           # notice files still needs to be collected.
           # We may collect a little more notice files than needed.
-          outputs += [ "${static_libraries_notice_dir}/$_current_toolchain/$module_name.a.txt" ]
+          outputs += [
+            "${static_libraries_notice_dir}/$_notice_subdir/$module_name.a.txt",
+          ]
         } else {
           if (defined(module_type) && module_type == "java_library" &&
               defined(license_file) &&
