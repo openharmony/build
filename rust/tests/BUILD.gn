@@ -19,14 +19,18 @@ group("tests") {
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
     "test_static_link:test_static_link(${host_toolchain})",
   ]
-  deps += [
-    "//build/rust/tests/test_bin_crate",
-    "//build/rust/tests/test_cdylib_crate",
-    "//build/rust/tests/test_dylib_crate",
-    "//build/rust/tests/test_rlib_crate",
-    "//build/rust/tests/test_static_link",
-    "//build/rust/tests/test_staticlib_crate",
-  ]
+
+  if (current_cpu == "arm64") {
+    deps += [
+      "//build/rust/tests/test_bin_crate",
+      "//build/rust/tests/test_cdylib_crate",
+      "//build/rust/tests/test_dylib_crate",
+      "//build/rust/tests/test_proc_macro_crate",
+      "//build/rust/tests/test_rlib_crate",
+      "//build/rust/tests/test_static_link",
+      "//build/rust/tests/test_staticlib_crate",
+    ]
+  }
 }
 
 group("ohos_rust_xxxtest_tests") {
