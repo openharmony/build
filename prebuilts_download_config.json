@@ -289,13 +289,18 @@
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-1.67.0-dev-x86_64-unknown-linux-gnu.tar",
+          "file_path": "/openharmony/compiler/rust/rust-1.67.0-dev-x86_64-unknown-linux-gnu_20230112.tar",
           "unzip_filename": "rustc"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-aarch64-linux-ohos.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-aarch64-linux-ohos_20230112.tar.gz",
           "unzip_filename": "rustc-aarch64-std"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-arm-linux-ohos_20230112.tar.gz",
+          "unzip_filename": "rustc-arm-std"
         }
       ],
       "install": [
@@ -311,6 +316,16 @@
         },
         {
           "install_dir":"prebuilts/rustc/rust-std-1.67.0-dev-aarch64-linux-ohos",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/linux-x86_64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-1.67.0-dev-arm-linux-ohos",
           "script":"install.sh",
           "args": [
             {
