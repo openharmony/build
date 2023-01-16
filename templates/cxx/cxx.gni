@@ -647,6 +647,7 @@ template("ohos_shared_library") {
           "devicestatus",
           "hiappevent",
           "hiappevent_v9",
+          "quickfixmanager_napi",
         ]
         foreach(m, napi_white_list) {
           if (m == target_name) {
