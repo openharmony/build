@@ -540,6 +540,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--platforms-config-file', required=True)
     parser.add_argument('--subsystem-config-file', required=True)
+    parser.add_argument('--subsystem-config-overlay-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
     parser.add_argument('--exclusion-modules-config-file', required=False)
     parser.add_argument('--source-root-dir', required=True)

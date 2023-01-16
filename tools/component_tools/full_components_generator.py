@@ -108,6 +108,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsys', type=str, default="./build/subsystem_config.json",
                         help='subsystem config file location, default=//build/subsystem_config.json')
+    parser.add_argument('--subsys_overlay', type=str, default="./build/subsystem_config_overlay.json",
+                        help='subsystem config overlay file location, default=//build/subsystem_config_overlay.json')
     parser.add_argument('--out', type=str, default="./productdefine/common/base/base_product.json",
                         help='base_config output path default //productdefine/common/base')
     args = parser.parse_args()
@@ -131,6 +133,9 @@ def main():
     }
     data = update_components(args.subsys)
     ret["subsystems"] = data.get("subsystems")
+    if os.path.isfile("./build/subsystem_config_overlay.json"):
+        overlay_data = update_components(args.subsys_overlay)
+        ret["subsystems"].update(overlay_data.get("subsystems"))
     with open(args.out, "w") as f:
         f.write(json.dumps(ret, indent=2))
     print("file has generated in path: {}".format(args.out))
