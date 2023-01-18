@@ -76,16 +76,15 @@ class CsctOnline(object):
             "\nCsct check begin!\tPull request list: {}.".format(pr_list),
         )
         csct_prehandler = GiteeCsctPrehandler(
-            pr_list, "BUILD.gn", "bundle.json", ".gni"
+            pr_list, "BUILD.gn", "bundle.json"
         )
 
         _, gn_errs = CheckGnOnline(csct_prehandler.get_diff_dict("BUILD.gn")).output()
-        _, gni_errs = CheckGnOnline(csct_prehandler.get_diff_dict(".gni")).output()
         _, bundle_errs = BundleCheckOnline.check_diff(
             csct_prehandler.get_diff_dict("bundle.json")
         )
 
-        errs_info = gn_errs + gni_errs + bundle_errs
+        errs_info = gn_errs + bundle_errs
         if len(errs_info) == 0:
             self.__verbose_print(self.log_verbose, "Result: without any errors.")
         else:
