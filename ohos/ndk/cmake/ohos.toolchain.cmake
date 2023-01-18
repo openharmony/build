@@ -137,6 +137,9 @@ endif()
 if (OHOS_ARCH STREQUAL armeabi-v7a)
     list(APPEND OHOS_C_COMPILER_FLAGS -march=armv7a)
 endif()
+if (CMAKE_BUILD_TYPE STREQUAL normal)
+    list(APPEND OHOS_C_COMPILER_FLAGS -g)
+endif()
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the common c++ flags
