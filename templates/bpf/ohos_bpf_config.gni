@@ -1,0 +1,46 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos/kernel/kernel.gni")
+
+declare_args() {
+  if (current_cpu == "arm") {
+    bpf_arch = "arm"
+  } else if (current_cpu == "arm64") {
+    bpf_arch = "aarch64"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
+    bpf_arch = "x86_64"
+  } else if (current_cpu == "mipsel") {
+    bpf_arch = "mipsel"
+  }
+}
+
+declare_args() {
+  if ((defined(target_os) && target_os == "ohos") ||
+      (defined(ohos_kernel_type) && ohos_kernel_type == "linux")) {
+    bpf_target_os = "linux"
+    bpf_target_triple = "${bpf_arch}-linux-ohos"
+  } else if (defined(ohos_kernel_type) && ohos_kernel_type == "liteos_a") {
+    bpf_target_os = "liteos_a"
+    bpf_target_triple = "arm-liteos-ohos"
+  }
+}
+
+declare_args() {
+  bpf_inc_out_dir = bpf_target_triple
+  bpf_linux_kernel_dir = "//kernel/linux/${linux_kernel_version}"
+}
+
+declare_args() {
+  kernel_tools_dir = "${bpf_linux_kernel_dir}/tools/lib/bpf"
+}
