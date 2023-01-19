@@ -432,7 +432,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/12.0.1-03bc29/darwin/clang_darwin-x86_64-03bc29-20230110.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/12.0.1-03bc29/darwin/clang_darwin-x86_64-03bc29-20230110_01.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
