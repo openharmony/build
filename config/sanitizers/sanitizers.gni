@@ -289,7 +289,8 @@ template("ohos_sanitizer_config") {
       _boundary_sanitize = defined(sanitize.boundary_sanitize) &&
                            sanitize.boundary_sanitize && !is_asan
       if (_boundary_sanitize) {
-        configs += [ "//build/config/sanitizers:boundary_sanitize_config" ]
+        configs +=
+            [ "//build/config/sanitizers:boundary_sanitize_config_" + _mode ]
       }
 
       _integer_overflow = defined(sanitize.integer_overflow) &&
