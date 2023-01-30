@@ -27,6 +27,8 @@
     StartDragService;
     OHOS_MEDIA_GetPixelMap;
     OHOS_MEDIA_NativeGetThumbnail;
+    CallOnAbilityResult;
+    CallOnRequestPermissionsFromUserResult;
 
   local:
     *;
