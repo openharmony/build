@@ -242,7 +242,7 @@ template("ohos_rust_library") {
     if (!defined(deps)) {
       deps = []
     }
-    if (current_cpu == "arm64") {
+    if (current_os == "ohos") {
       deps += [
         "//build/rust:libstd.dylib.so",
         "//build/rust:libtest.dylib.so",
@@ -365,7 +365,7 @@ template("ohos_rust_executable") {
     if (!defined(deps)) {
       deps = []
     }
-    if (current_cpu == "arm64") {
+    if (current_os == "ohos") {
       deps += [
         "//build/rust:libstd.dylib.so",
         "//build/rust:libtest.dylib.so",
