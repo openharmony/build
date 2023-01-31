@@ -684,18 +684,37 @@ config_plus_compiler_rt("scudo_config") {
   compiler_rt_shared_lib_names = [ "scudo_minimal" ]
 }
 
-config_plus_compiler_rt("undefined_behavior_sanitize_config") {
+config("all_undefined_behavior_sanitize_config_release") {
+  cflags = [
+    "-fsanitize=undefined",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fno-sanitize-recover=integer,undefined",
+  ]
+}
+
+config("all_undefined_behavior_sanitize_config_debug") {
+  cflags = [
+    "-fsanitize=undefined",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+  ]
+}
+
+config("undefined_behavior_sanitize_config_release") {
   cflags = [
     "-fsanitize=bool,integer-divide-by-zero,return,returns-nonnull-attribute,shift-exponent,unreachable,vla-bound",
-    "-fsanitize-minimal-runtime",
     "-fno-sanitize-trap=integer,undefined",
     "-fno-sanitize-recover=integer,undefined",
     "-fno-sanitize=implicit-integer-sign-change",
   ]
-  configs = [ ":sanitizer_trap_all_flags" ]
-  compiler_rt_shared_lib_names = [
-    "ubsan_standalone",
-    "ubsan_minimal",
+}
+
+config("undefined_behavior_sanitize_config_debug") {
+  cflags = [
+    "-fsanitize=bool,integer-divide-by-zero,return,returns-nonnull-attribute,shift-exponent,unreachable,vla-bound",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+    "-fno-sanitize=implicit-integer-sign-change",
   ]
 }
 

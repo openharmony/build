@@ -277,10 +277,18 @@ template("ohos_sanitizer_config") {
       if (_scudo) {
         configs += [ "//build/config/sanitizers:scudo_config" ]
       }
-      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan
+      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan && !is_asan
       if (_ubsan) {
         configs +=
-            [ "//build/config/sanitizers:undefined_behavior_sanitize_config" ]
+            [ "//build/config/sanitizers:undefined_behavior_sanitize_config_" +
+              _mode ]
+      }
+      _all_ubsan = defined(sanitize.all_ubsan) && sanitize.all_ubsan && !is_asan
+      if (_all_ubsan) {
+        configs += [
+          "//build/config/sanitizers:all_undefined_behavior_sanitize_config_" +
+              _mode,
+        ]
       }
       _scs = defined(sanitize.scs) && sanitize.scs
       if (_scs) {
