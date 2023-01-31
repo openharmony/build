@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_toolchain(current_variant, external_part_variants, platform_toolchain):
+def get_toolchain(current_variant, external_part_variants, platform_toolchain, current_toolchain):
     if current_variant == 'phone':
         toolchain = platform_toolchain.get(current_variant)
         required_include_dir = False
@@ -32,7 +32,8 @@ def get_toolchain(current_variant, external_part_variants, platform_toolchain):
             toolchain = platform_toolchain.get(current_variant)
             required_include_dir = False
         else:
-            toolchain = platform_toolchain.get('phone')
+            # not ohos platform toolchain, use current_toolchain
+            toolchain = current_toolchain
             required_include_dir = True
     return toolchain, required_include_dir
 
@@ -165,8 +166,6 @@ def main():
         raise Exception("read pre_build parts_variants failed.")
     toolchain_platform = toolchain_variant_info.get('toolchain_platform')
     current_variant = toolchain_platform.get(args.current_toolchain)
-    if not current_variant:
-        current_variant = 'phone'
     platform_toolchain = toolchain_variant_info.get('platform_toolchain')
 
     # compatibility interim
@@ -198,7 +197,7 @@ def main():
                     "external deps part '{}' variants info is None.".format(
                         external_part_name))
             toolchain, required_include_dir = get_toolchain(
-                current_variant, part_variants_info.keys(), platform_toolchain)
+                current_variant, part_variants_info.keys(), platform_toolchain, args.current_toolchain)
             dep_label_with_tc = "{}({})".format(dep_label, toolchain)
             deps += [dep_label_with_tc]
 
