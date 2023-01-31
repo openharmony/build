@@ -242,12 +242,10 @@ template("ohos_rust_library") {
     if (!defined(deps)) {
       deps = []
     }
-    if (current_os == "ohos") {
-      deps += [
-        "//build/rust:libstd.dylib.so",
-        "//build/rust:libtest.dylib.so",
-      ]
-    }
+    deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
@@ -361,16 +359,13 @@ template("ohos_rust_executable") {
              "crate_type should be $crate_type or use default value.")
     }
     configs = []
-
     if (!defined(deps)) {
       deps = []
     }
-    if (current_os == "ohos") {
-      deps += [
-        "//build/rust:libstd.dylib.so",
-        "//build/rust:libtest.dylib.so",
-      ]
-    }
+    deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }
@@ -590,6 +585,14 @@ template("ohos_rust_shared_ffi") {
              "crate_type should be $crate_type or use default value.")
     }
 
+    if (!defined(deps)) {
+      deps = []
+    }
+    deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
+
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }
@@ -659,6 +662,13 @@ template("ohos_rust_static_ffi") {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
     }
+    if (!defined(deps)) {
+      deps = []
+    }
+    deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }

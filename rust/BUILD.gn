@@ -14,12 +14,10 @@
 #This was originally a compilation entry, but now "default" is added to the component dependency of build/common/bundle.json.
 import("//build/ohos.gni")
 group("default") {
-  if (current_os == "ohos") {
-    deps = [
-      ":libstd.dylib.so",
-      ":libtest.dylib.so",
-    ]
-  }
+  deps = [
+    ":libstd.dylib.so",
+    ":libtest.dylib.so",
+  ]
 }
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
@@ -27,8 +25,7 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd-37747be394d9d22c.so"
   } else if (current_cpu == "arm") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libstd-a4ed09c4b860e683.so"
-  } else if ((current_cpu == "x86_64" || current_cpu == "x64") &&
-             current_os == "ohos") {
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
         "//prebuilts/rustc/linux-x86_64/current/lib/libstd-c244726431624c96.so"
   }
@@ -46,8 +43,7 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest-03fc9cb39b7ffba9.so"
   } else if (current_cpu == "arm") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libtest-7a70af01540caacc.so"
-  } else if ((current_cpu == "x86_64" || current_cpu == "x64") &&
-             current_os == "ohos") {
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
         "//prebuilts/rustc/linux-x86_64/current/lib/libtest-03f4c43f2c45172b.so"
   } else {
