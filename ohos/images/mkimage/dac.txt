@@ -24,6 +24,7 @@ fstab.*                     00640,      0,          2000,       0
 init*,                      00750,      0,          2000,       0
 sbin/*,                     00750,      0,          2000,       0
 system/bin/*,               00755,      0,          2000,       0
+system/bin/hiperf,          00755,      0,          2000,       292058300416
 vendor/bin/*,               00755,      0,          2000,       0
 updater/bin/*,              00755,      0,          2000,       0
 updater/system/bin/*,       00755,      0,          2000,       0
