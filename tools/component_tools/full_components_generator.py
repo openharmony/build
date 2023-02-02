@@ -17,6 +17,7 @@ limitations under the License.
 import os
 import json
 import argparse
+from lite.hb_internal.common.config import Config
 
 """
 @Desc:
@@ -105,11 +106,13 @@ def update_components(subsys_file):
 
 
 def main():
+    conf = Config()
+    subsystem_json_overlay_path = conf.product_path + '/subsystem_config_overlay.json'
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsys', type=str, default="./build/subsystem_config.json",
                         help='subsystem config file location, default=//build/subsystem_config.json')
-    parser.add_argument('--subsys_overlay', type=str, default="./build/subsystem_config_overlay.json",
-                        help='subsystem config overlay file location, default=//build/subsystem_config_overlay.json')
+    parser.add_argument('--subsys_overlay', type=str, default=subsystem_json_overlay_path,
+                        help='subsystem config overlay file location, default={}'.format(subsystem_json_overlay_path))
     parser.add_argument('--out', type=str, default="./productdefine/common/base/base_product.json",
                         help='base_config output path default //productdefine/common/base')
     args = parser.parse_args()
@@ -133,7 +136,7 @@ def main():
     }
     data = update_components(args.subsys)
     ret["subsystems"] = data.get("subsystems")
-    if os.path.isfile("./build/subsystem_config_overlay.json"):
+    if os.path.isfile(subsystem_json_overlay_path):
         overlay_data = update_components(args.subsys_overlay)
         ret["subsystems"].update(overlay_data.get("subsystems"))
     with open(args.out, "w") as f:
