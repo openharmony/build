@@ -83,6 +83,8 @@ def _make_image(args):
         _prepare_updater(args.input_path)
     elif args.image_name == 'updater_ramdisk':
         _prepare_updater(args.input_path)
+    elif args.image_name == 'updater_vendor':
+        _prepare_updater(args.input_path)
     elif args.image_name == 'ramdisk':
         _prepare_ramdisk(args.input_path)
     image_type = "raw"

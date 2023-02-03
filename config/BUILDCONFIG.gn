@@ -100,6 +100,11 @@ if (defined(product_build_config.enable_ramdisk)) {
 } else {
   enable_ramdisk = false
 }
+if (defined(product_build_config.enable_updater_vendor)) {
+  enable_updater_vendor = product_build_config.enable_updater_vendor
+} else {
+  enable_updater_vendor = false
+}
 if (defined(product_build_config.chipprod_config_path)) {
   chipprod_config_path = product_build_config.chipprod_config_path
   import("${chipprod_config_path}/chip_product_list.gni")

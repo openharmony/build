@@ -52,6 +52,9 @@ declare_args() {
   # sys_prod package dir
   sys_prod_base_dir = "sys_prod"
 
+  # updater_vendor package dir
+  updater_vendor_base_dir = "updater_vendor"
+
   # chip_prod package dir
   chip_prod_base_dir = "chip_prod"
 
