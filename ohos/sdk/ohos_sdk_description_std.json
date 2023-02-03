@@ -549,6 +549,24 @@
         ]
     },
     {
+        "install_dir": "ets/component",
+        "module_label": "//developtools/ace_ets2bundle:ets_loader_form_config",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/form_components",
+        "module_label": "//developtools/ace_ets2bundle:form_components",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/build-tools/ets-loader/deps",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_deps",
         "target_os": [
