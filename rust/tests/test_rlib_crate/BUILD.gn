@@ -22,4 +22,5 @@ ohos_rust_static_library("simple_printer_rlib") {
   sources = [ "src/simple_printer.rs" ]
   crate_name = "simple_printer_rlib"
   crate_type = "rlib"
+  features = [ "std" ]
 }

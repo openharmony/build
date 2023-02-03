@@ -348,6 +348,11 @@ template("ohos_rust_library") {
 template("ohos_rust_executable") {
   _target_name = target_name
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   ohos_executable("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -428,6 +433,11 @@ template("ohos_rust_executable") {
 template("ohos_rust_shared_library") {
   _target_name = target_name
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   ohos_rust_library("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -502,6 +512,11 @@ template("ohos_rust_shared_library") {
 template("ohos_rust_static_library") {
   _target_name = target_name
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   ohos_rust_library("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -574,6 +589,11 @@ template("ohos_rust_static_library") {
 template("ohos_rust_shared_ffi") {
   _target_name = target_name
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   ohos_shared_library("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -652,6 +672,11 @@ template("ohos_rust_shared_ffi") {
 template("ohos_rust_static_ffi") {
   _target_name = target_name
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   ohos_static_library("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -858,6 +883,11 @@ template("ohos_rust_proc_macro") {
   }
 
   _rustflags = []
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
   rust_proc_macro(target_name) {
     forward_variables_from(invoker,
                            "*",

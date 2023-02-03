@@ -16,4 +16,5 @@ import("//build/ohos.gni")
 ohos_rust_executable("test_bin_crate") {
   sources = [ "src/main.rs" ]
   rustenv = [ "RUSTENV_TEST=123" ]
+  features = [ "std" ]
 }
