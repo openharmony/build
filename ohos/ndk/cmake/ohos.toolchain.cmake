@@ -140,6 +140,24 @@ endif()
 if (CMAKE_BUILD_TYPE STREQUAL normal)
     list(APPEND OHOS_C_COMPILER_FLAGS -g)
 endif()
+if(OHOS_ENABLE_ASAN STREQUAL ON)
+	if(OHOS_ARCH STREQUAL armeabi-v7a)
+		list(APPEND OHOS_C_COMPILER_FLAGS
+			-Wl,--dynamic-linker=/lib/ld-musl-arm-asan.so.1)
+	endif()
+	if(OHOS_ARCH STREQUAL arm64-v8a)
+		list(APPEND OHOS_C_COMPILER_FLAGS
+			-Wl,--dynamic-linker=/lib/ld-musl-aarch64-asan.so.1)
+	endif()
+	list(APPEND OHOS_C_COMPILER_FLAGS
+		-shared-libasan
+		-fsanitize=address
+		-fno-omit-frame-pointer
+		-fsanitize-recover=address)
+	if(DEFINED OHOS_ASAN_BLACKLIST)
+		list(APPEND OHOS_C_COMPILER_FLAGS -fsanitize-blacklist="${OHOS_ASAN_BLACKLIST}")
+	endif()
+endif()
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the common c++ flags
