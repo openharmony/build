@@ -2,7 +2,7 @@
     "check": {
         "arg_name": "--check",
         "argDefault": true,
-        "arg_help": "check that the current running environment contains all dependencies",
+        "arg_help": "Default:True. Help:check that the current running environment contains all dependencies",
         "arg_phase": "prebuild",
         "arg_type": "gate",
         "arg_attribute": {
@@ -13,7 +13,7 @@
     "install": {
         "arg_name": "--install",
         "argDefault": false,
-        "arg_help": "install all dependent software for compiling L0, L1 and L2 products",
+        "arg_help": "Default:False. Help:install all dependent software for compiling L0, L1 and L2 products",
         "arg_phase": "prebuild",
         "arg_type": "gate",
         "arg_attribute": {},

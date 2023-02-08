@@ -2,7 +2,7 @@
     "product_name": {
         "arg_name": "--product-name",
         "argDefault": "",
-        "arg_help": "build a specified product. You could use this option like this: 1.'hb set --product-name rk3568@hihope' 2.'hb set --product-name rk3568' 3.'hb set'[graphical ui]",
+        "arg_help": "Default:''. Help:build a specified product. You could use this option like this: 1.'hb set --product-name rk3568@hihope' 2.'hb set --product-name rk3568' 3.'hb set'[graphical ui]",
         "arg_phase": "prebuild",
         "arg_type": "str",
         "arg_attribute": {
@@ -14,7 +14,7 @@
     "all": {
         "arg_name": "--all",
         "argDefault": false,
-        "arg_help": "Use a graphical interface to customize most compile-time parameters",
+        "arg_help": "Default:False. Help:Use a graphical interface to customize most compile-time parameters",
         "arg_phase": "prebuild",
         "arg_type": "gate",
         "arg_attribute": {},

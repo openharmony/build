@@ -17,6 +17,7 @@
 #
 
 import os
+import re
 import sys
 import stat
 import subprocess
@@ -275,6 +276,22 @@ class BuildArgsResolver(ArgsResolverInterface):
                 target_generator.regist_arg(variable, value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
+
+    @staticmethod
+    @throw_exception
+    def resolve_ninja_args(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--ninja-args' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        :raise OHOSException: when the value of the ninja parameter does not use quotation marks.
+        """
+        build_executor = build_module.target_compiler
+        ninja_args_list = []
+        for ninja_arg in target_arg.arg_value:
+            ninja_arg = re.sub("'", "", ninja_arg)
+            ninja_args_list.append(ninja_arg)
+        build_executor.regist_arg('ninja_args', ninja_args_list)
 
     @staticmethod
     @throw_exception

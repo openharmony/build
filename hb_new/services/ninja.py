@@ -57,6 +57,8 @@ class Ninja(BuildExecutorInterface):
         for key, value in self._args_dict.items():
             if key == 'build_target' and isinstance(value, list):
                 args_list += value
+            elif key == 'ninja_args' and isinstance(value, list):
+                args_list += value
             else:
                 if value == '':
                     args_list.insert(0, key)

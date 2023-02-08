@@ -2,7 +2,7 @@
     "ls": {
         "arg_name": "--ls",
         "argDefault": [],
-        "arg_help": "Lists all targets matching the given pattern for the given build directory. You could use this option like this: 1.'hb tool --ls <out_dir> [<label_pattern>] [<options>]'",
+        "arg_help": "Default:[]. Help:Lists all targets matching the given pattern for the given build directory. You could use this option like this: 1.'hb tool --ls <out_dir> [<label_pattern>] [<options>]'",
         "arg_phase": "prebuild",
         "arg_type": "subparsers",
         "arg_attribute": {
@@ -77,7 +77,7 @@
     "desc": {
         "arg_name": "--desc",
         "argDefault": [],
-        "arg_help": "Displays information about a given target or config. You could use this option like this: 1.'hb tool --desc <out_dir> <component_module> [<what to show>] [<options>]'",
+        "arg_help": "Default:[]. Help:Displays information about a given target or config. You could use this option like this: 1.'hb tool --desc <out_dir> <component_module> [<what to show>] [<options>]'",
         "arg_phase": "prebuild",
         "arg_type": "subparsers",
         "arg_attribute": {
@@ -162,7 +162,7 @@
     "path": {
         "arg_name": "--path",
         "argDefault": [],
-        "arg_help": "Finds paths of dependencies between two targets. You could use this option like this: 1.'hb tool --path <out_dir> <component1_module1> <component2_module2> [<options>]'",
+        "arg_help": "Default:[]. Help:Finds paths of dependencies between two targets. You could use this option like this: 1.'hb tool --path <out_dir> <component1_module1> <component2_module2> [<options>]'",
         "arg_phase": "prebuild",
         "arg_type": "subparsers",
         "arg_attribute": {
@@ -178,7 +178,7 @@
     "refs": {
         "arg_name": "--refs",
         "argDefault": [],
-        "arg_help": "Finds reverse dependencies (which targets reference something). You could use this option like this: 1.'hb tool --refs <out_dir> [<component_module>|<file>] [<options>]'",
+        "arg_help": "Default:[]. Help:Finds reverse dependencies (which targets reference something). You could use this option like this: 1.'hb tool --refs <out_dir> [<component_module>|<file>] [<options>]'",
         "arg_phase": "prebuild",
         "arg_type": "subparsers",
         "arg_attribute": {
@@ -283,7 +283,7 @@
     "format": {
         "arg_name": "--format",
         "argDefault": [],
-        "arg_help": "Formats .gn file to a standard format. You could use this option like this: 1.'hb tool --format /abspath/some/BUILD.gn [<options>]'",
+        "arg_help": "Default:[]. Help:Formats .gn file to a standard format. You could use this option like this: 1.'hb tool --format /abspath/some/BUILD.gn [<options>]'",
         "arg_phase": "prebuild",
         "arg_type": "subparsers",
         "arg_attribute": {
@@ -331,7 +331,7 @@
     "clean": {
         "arg_name": "--clean",
         "argDefault": "",
-        "arg_help": "Deletes the contents of the output directory except for args.gn. You could use this option like this: 1.'hb tool --clean <out_dir>'",
+        "arg_help": "Default:[]. Help:Deletes the contents of the output directory except for args.gn. You could use this option like this: 1.'hb tool --clean <out_dir>'",
         "arg_phase": "prebuild",
         "arg_type": "str",
         "arg_attribute": {},

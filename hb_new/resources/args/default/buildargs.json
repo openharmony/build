@@ -2,7 +2,7 @@
   "product_name": {
     "arg_name": "--product-name",
     "argDefault": "",
-    "arg_help": "build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
+    "arg_help": "Default:''. Help:Build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
     "arg_phase": "prebuild",
     "arg_type": "str",
     "arg_attribute": {
@@ -14,7 +14,7 @@
   "target_cpu": {
     "arg_name": "--target-cpu",
     "argDefault": "arm",
-    "arg_help": "specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb set --all' to list product all supported cpu architectures",
+    "arg_help": "Default:''. Help:Specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb set --all' to list product all supported cpu architectures",
     "arg_phase": "prebuild",
     "arg_type": "str",
     "arg_attribute": {
@@ -31,7 +31,7 @@
   "rename_last_log": {
     "arg_name": "--rename-last-log",
     "argDefault": true,
-    "arg_help": "rename last build log",
+    "arg_help": "Default:True. Help:You can use it to decide whether to keep the last build log",
     "arg_phase": "prebuild",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -41,7 +41,7 @@
   "ccache": {
     "arg_name": "--ccache",
     "argDefault": true,
-    "arg_help": "enable ccache, this option could improve compilation speed",
+    "arg_help": "Default:True. Help:Enable ccache, this option could improve compilation speed. --stat-ccache can summary the cache data",
     "arg_phase": "prebuild",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -51,7 +51,7 @@
   "enable_pycache": {
     "arg_name": "--enable-pycache",
     "argDefault": false,
-    "arg_help": "enable pycache",
+    "arg_help": "Default:False. Help:Enable pycache, This option can improve the execution speed of python files",
     "arg_phase": "prebuild",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -61,7 +61,7 @@
   "jobs": {
     "arg_name": "--jobs",
     "argDefault": "",
-    "arg_help": "deprecated, please do not use this option",
+    "arg_help": "Deprecated, please do not use this option",
     "arg_phase": "prebuild",
     "arg_type": "str",
     "arg_attribute": {
@@ -73,7 +73,7 @@
   "disable_part_of_post_build": {
     "arg_name": "--disable-part-of-post-build",
     "argDefault": [],
-    "arg_help": "deprecated, please do not use this option",
+    "arg_help": "Deprecated, please do not use this option",
     "arg_phase": "prebuild",
     "arg_type": "list",
     "arg_attribute": {
@@ -85,7 +85,7 @@
   "build_target": {
     "arg_name": "--build-target",
     "argDefault": [],
-    "arg_help": "compile single target, you could use 'hb tool --ls' to list all build target",
+    "arg_help": "Default:[]. Help:You use this option to specify a single compilation target, and use 'hb tool --ls' to list all build target",
     "arg_phase": "prebuild",
     "arg_type": "list",
     "arg_attribute": {
@@ -94,10 +94,20 @@
     "resolve_function": "resolve_build_target",
     "testFunction": "testBuildTarget"
   },
+  "ninja_args": {
+    "arg_name": "--ninja-args",
+    "argDefault": [],
+    "arg_help": "Default:[]. Help:You can use it to pass parameters for the ninja phase, but you need to follow the specified command format. eg. --ninja-args=-dkeeprsp ",
+    "arg_phase": "prebuild",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_ninja_args",
+    "testFunction": "testNinjaArgs"
+  },
   "full_compilation": {
     "arg_name": "--full-compilation",
     "argDefault": false,
-    "arg_help": "full code compilation",
+    "arg_help": "Default:[]. Help:You can use it to start full code compilation. The default compilation target is images. Use this option to add 'make_all' and 'make_test' to the build process.",
     "arg_phase": "prebuild",
     "arg_type": "bool",
     "arg_attribute": {
@@ -109,7 +119,7 @@
   "strict_mode": {
     "arg_name": "--strict-mode",
     "argDefault": false,
-    "arg_help": "check all produce of each phase to early terminates a potentially problematic compilation ",
+    "arg_help": "Default:False. Help:Check all produce of each phase to early terminates a potentially problematic compilation.",
     "arg_phase": "load",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -119,7 +129,7 @@
   "scalable_build": {
     "arg_name": "--scalable-build",
     "argDefault": false,
-    "arg_help": "select whether to read information from parts.json generate by preload",
+    "arg_help": "Default:False. Help:Select whether to read information from parts.json generate by preload",
     "arg_phase": "load",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -129,7 +139,7 @@
   "build_example": {
     "arg_name": "--build-example",
     "argDefault": false,
-    "arg_help": "select whether to read information from subsystem_config_example.json",
+    "arg_help": "Default:False. Help:Select whether to read information from subsystem_config_example.json",
     "arg_phase": "load",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -139,7 +149,7 @@
   "build_platform_name": {
     "arg_name": "--build-platform-name",
     "argDefault": "phone",
-    "arg_help": "name of the compilation platform. The current optional value is 'phone'",
+    "arg_help": "Default:'phone'. Help:Name of the compilation platform. The current optional value is 'phone'",
     "arg_phase": "load",
     "arg_type": "str",
     "arg_attribute": {},
@@ -149,7 +159,7 @@
   "build_xts": {
     "arg_name": "--build-xts",
     "argDefault": false,
-    "arg_help": "select whether to load the components included in the subsystem xts",
+    "arg_help": "Default:False. Help:Select whether to load the components included in the subsystem xts",
     "arg_phase": "load",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -159,7 +169,7 @@
   "ignore_api_check": {
     "arg_name": "--ignore-api-check",
     "argDefault": [],
-    "arg_help": "skip the check of some subsystems",
+    "arg_help": "Default:[]. Help:Skip the check of some subsystems",
     "arg_phase": "load",
     "arg_type": "list",
     "arg_attribute": {},
@@ -169,7 +179,7 @@
   "load_test_config": {
     "arg_name": "--load-test-config",
     "argDefault": true,
-    "arg_help": "select whether to load the test field in bundle.json, that is, whether to call the test case",
+    "arg_help": "Default:True. Help:Select whether to load the test field in bundle.json, that is, whether to call the test case",
     "arg_phase": "load",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -179,7 +189,7 @@
   "build_type": {
     "arg_name": "--build-type",
     "argDefault": "release",
-    "arg_help": "specifies compile release or debug version",
+    "arg_help": "Default:'release'. Help:Specify compile release or debug version",
     "arg_phase": "targetGenerate",
     "arg_type": "str",
     "arg_attribute": {
@@ -194,7 +204,7 @@
   "log_level": {
     "arg_name": "--log-level",
     "argDefault": "info",
-    "arg_help": "specifies the log level during compilation. you can select two levels: debug, info. In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
+    "arg_help": "Default:'INFO'. Help:Specify the log level during compilation. you can select two levels: debug, info. In debug mode, it show all command lines while building, including cxx, link, solink, etc.",
     "arg_phase": "targetGenerate",
     "arg_type": "str",
     "arg_attribute": {
@@ -209,7 +219,7 @@
   "export_para": {
     "arg_name": "--export-para",
     "argDefault": [],
-    "arg_help": "deprecated, please do not use this option",
+    "arg_help": "Deprecated, please do not use this option",
     "arg_phase": "targetGenerate",
     "arg_type": "list",
     "arg_attribute": {
@@ -221,7 +231,7 @@
   "test": {
     "arg_name": "--test",
     "argDefault": [],
-    "arg_help": "regist args to target generator",
+    "arg_help": "Default:[]. Help:You can use it to choose test type. eg. --test xts",
     "arg_phase": "targetGenerate",
     "arg_type": "list",
     "arg_attribute": {},
@@ -231,7 +241,7 @@
   "gn_args": {
     "arg_name": "--gn-args",
     "argDefault": [],
-    "arg_help": "specifies gn build arguments, you could use this option like this 'hb build --gn-args is_debug=true'",
+    "arg_help": "Default:[]. Help:Specify gn build arguments, you could use this option like this 'hb build --gn-args is_debug=true'",
     "arg_phase": "targetGenerate",
     "arg_type": "list",
     "arg_attribute": {},
@@ -241,7 +251,7 @@
   "compiler": {
     "arg_name": "--compiler",
     "argDefault": "clang",
-    "arg_help": "specifies compiler",
+    "arg_help": "Deprecated, please do not use this option",
     "arg_phase": "targetGenerate",
     "arg_type": "str",
     "arg_attribute": {
@@ -253,7 +263,7 @@
   "fast_rebuild": {
     "arg_name": "--fast-rebuild",
     "argDefault": false,
-    "arg_help": "it will skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script",
+    "arg_help": "Default:False. Help:You can use it to skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script",
     "arg_phase": "targetGenerate",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -263,7 +273,7 @@
   "keep_ninja_going": {
     "arg_name": "--keep-ninja-going",
     "argDefault": false,
-    "arg_help": "keeps ninja going until 1000000 jobs fail",
+    "arg_help": "Default:False. Help:When you need to debug one specific target, you can use this option to keep ninja going to skip some possible error until 1000000 jobs fail",
     "arg_phase": "targetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -273,7 +283,7 @@
   "build_only_gn": {
     "arg_name": "--build-only-gn",
     "argDefault": false,
-    "arg_help": "only do gn parse, do not run ninja",
+    "arg_help": "Default:False. Help:Stop build until gn phase ends",
     "arg_phase": "targetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -283,7 +293,7 @@
   "build_variant": {
     "arg_name": "--build-variant",
     "argDefault": "root",
-    "arg_help": "specifies device operating mode",
+    "arg_help": "Default:'root'. Help:specifies device operating mode",
     "arg_phase": "postTargetCompilation",
     "arg_type": "str",
     "arg_attribute": {
@@ -298,7 +308,7 @@
   "device_type": {
     "arg_name": "--device-type",
     "argDefault": "default",
-    "arg_help": "specifies device type",
+    "arg_help": "Default:'default'. Help:specifies device type",
     "arg_phase": "postTargetCompilation",
     "arg_type": "str",
     "arg_attribute": {},
@@ -320,7 +330,7 @@
   "archive_image": {
     "arg_name": "--archive-image",
     "argDefault": false,
-    "arg_help": "archive image when build product complete",
+    "arg_help": "Default:False. Help:archive image when build product complete",
     "arg_phase": "postTargetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -330,7 +340,7 @@
   "rom_size_statistics": {
     "arg_name": "--rom-size-statistics",
     "argDefault": false,
-    "arg_help": "statistics on the actual rom size for each compiled component",
+    "arg_help": "Default:False. Help:statistics on the actual rom size for each compiled component",
     "arg_phase": "postTargetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -340,7 +350,7 @@
   "stat_ccache": {
     "arg_name": "--stat-ccache",
     "argDefault": true,
-    "arg_help": "summary ccache hitrate",
+    "arg_help": "Default:True. Help:summary ccache hitrate, and generate ccache.log in ${HOME}/.ccache dir",
     "arg_phase": "postTargetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -350,7 +360,7 @@
   "get_warning_list": {
     "arg_name": "--get-warning-list",
     "argDefault": true,
-    "arg_help": "generate warning list",
+    "arg_help": "Default:True. Help:You can use it to collect the build warning and generate WarningList.txt in output dir",
     "arg_phase": "postTargetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -360,7 +370,7 @@
   "generate_ninja_trace": {
     "arg_name": "--generate-ninja-trace",
     "argDefault": true,
-    "arg_help": "generate ninja trace",
+    "arg_help": "Default:True. Help:Count the duration of each ninja thread and generate the ninja trace file(build.trace.gz)",
     "arg_phase": "postTargetCompilation",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -370,7 +380,7 @@
   "compute_overlap_rate": {
     "arg_name": "--compute-overlap-rate",
     "argDefault": true,
-    "arg_help": "compute overlap rate",
+    "arg_help": "Default:True. Help:Compute overlap rate during the post build",
     "arg_phase": "postTargetCompilation",
     "arg_type": "gate",
     "arg_attribute": {},
@@ -380,7 +390,7 @@
   "clean_args": {
     "arg_name": "--clean-args",
     "argDefault": true,
-    "arg_help": "clean all args that generated by this compilation while compilation finished",
+    "arg_help": "Default:True. Help:clean all args that generated by this compilation while compilation finished",
     "arg_phase": "postbuild",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -390,7 +400,7 @@
   "deps_guard": {
     "arg_name": "--deps-guard",
     "argDefault": true,
-    "arg_help": "simplify code, remove concise dependency analysis, and speed up rule checking",
+    "arg_help": "Default:True. Help:simplify code, remove concise dependency analysis, and speed up rule checking",
     "arg_phase": "postbuild",
     "arg_type": "bool",
     "arg_attribute": {},
