@@ -102,7 +102,7 @@ do
   fi
 done
 if [[ ${flag} == "true" ]]; then
-  ${PYTHON3} ${SOURCE_ROOT_DIR}/build/hb_new/main.py build $args_list
+  ${PYTHON3} ${SOURCE_ROOT_DIR}/build/hb/main.py build $args_list
 fi
 
 if [[ "$?" -ne 0 ]]; then
