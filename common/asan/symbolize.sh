@@ -92,7 +92,7 @@ getsym() {
 }
 
 while read -r line; do
-    sym=
+    unset sym
     getsym $(echo "$line" | sed -n 's/.*(\(.*+.*\)).*/\1/p')
     echo "$line" "$sym"
 done
