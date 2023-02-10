@@ -184,6 +184,7 @@ config("default_sanitizer_ldflags") {
     }
 
     if (is_cfi && current_toolchain == default_toolchain) {
+      ldflags += [ "-fsanitize-cfi-cross-dso" ]
       ldflags += [ "-fsanitize=cfi-vcall" ]
       if (use_cfi_cast) {
         ldflags += [
@@ -312,6 +313,7 @@ config("cfi_flags") {
       cfi_blocklist_path =
           rebase_path("//tools/cfi/blocklist.txt", root_build_dir)
     }
+    cflags += [ "-fsanitize-cfi-cross-dso" ]
     cflags += [
       "-fsanitize=cfi-vcall",
       "-fsanitize-blacklist=$cfi_blocklist_path",
@@ -616,7 +618,14 @@ config("cfi_config_release") {
   cflags = [
     "-flto",
     "-fsanitize=cfi",
+    "-fsanitize-cfi-cross-dso",
     "-fsanitize-blacklist=" + rebase_path(_cfi_blocklist_path, root_build_dir),
+  ]
+
+  ldflags = [
+    "-flto",
+    "-fsanitize=cfi",
+    "-fsanitize-cfi-cross-dso",
   ]
 }
 
@@ -627,6 +636,8 @@ config("cfi_config_debug") {
     "-fno-sanitize-trap=cfi",
     "-fsanitize-recover=cfi,undefined",
   ]
+
+  ldflags = cflags
 }
 
 config("shadow_call_stack_config") {
