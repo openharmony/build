@@ -407,6 +407,14 @@ template("ohos_shared_library") {
     } else if (is_platformsdk) {
       auto_relative_install_dir = "platformsdk"
     }
+
+    is_ndk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
+      is_ndk = true
+    }
+    if (is_ndk) {
+      auto_relative_install_dir = "ndk"
+    }
   }
 
   if (check_deps) {
@@ -554,6 +562,7 @@ template("ohos_shared_library") {
       if (defined(invoker.innerapi_tags)) {
         invalid = false
         valid_tags = [
+          "ndk",
           "chipsetsdk",
           "chipsetsdk_indirect",
           "platformsdk",
