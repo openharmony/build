@@ -214,10 +214,10 @@ make_custom_asan_imgs() {
 
     # make custom asan images
     for cfg_group in ${cfg_groups[@]}; do
-        local OLDIFS="$IFS"
+        local old_lfs="$IFS"
         IFS+=":,"
         make_mixed_asan_img ${cfg_group}
-        IFS="$OLDIFS"
+        IFS="$old_lfs"
     done
 
     # restore images
