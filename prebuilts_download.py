@@ -117,7 +117,7 @@ def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_fil
     print("Decompressed {}".format(local_file))
 
 def _is_system_component():
-    root_dir = root_dir = os.getcwd()
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if pathlib.Path(root_dir + "/interface/sdk-js").exists() or pathlib.Path(root_dir + "/foundation/arkui").exists() or pathlib.Path(root_dir + "/arkcompiler").exists():
         return True
     else:
