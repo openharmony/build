@@ -624,7 +624,6 @@ config("cfi_config_release") {
 
   ldflags = [
     "-flto",
-    "-fvisibility=default",
     "-fsanitize=cfi",
     "-fsanitize-cfi-cross-dso",
   ]
