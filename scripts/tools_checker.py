@@ -49,8 +49,8 @@ def package_installed(pkg_name):
 def check_build_requried_packages(host_version, check=True):
     """Check whether packages required by build process installed or not.
     By parsing file `REPO_ROOT/build/scripts/build_package_list.json`.
-    Example content: `{"18.04":{"dep_package":["pkg1","pkg2",...]}, "20.04":{...}}`
-    Currently there are only lists for `Ubuntu 18.04` and `Ubuntu 20.04`.
+    Example content: `{"18.04":{"dep_package":["pkg1","pkg2",...]}, "20.04":{...}, "22.04":{...}}`
+    Currently there are only lists for `Ubuntu 18.04` , `Ubuntu 20.04` and `Ubuntu 22.04`.
     :param host_version: OS version of the host.
     :param check: Whether to prompt user of missing package.
     :return _build_package_list: List of packages required by build process.
