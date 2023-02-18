@@ -22,6 +22,7 @@ command -v ninja &>/dev/null || { echo >&2 "ninja command not found, please inst
 args=()
 cfg_groups=()
 build_variant=root
+asan_in_data=true
 while test $# -gt 0; do
     case "$1" in
     -g[0-9]:*)
@@ -40,7 +41,12 @@ while test $# -gt 0; do
         ;;
     --no-build)
         no_build=true
-        shift
+        ;;
+    --no-data-asan)
+        asan_in_data=false
+        ;;
+    --data-asan)
+        asan_in_data=true
         ;;
     *)
         args+=("$1")
@@ -91,15 +97,21 @@ done
 pushd "$nonasan_dir"
 
 handle_error() {
-    if [ "$?" -ne 0 ]; then
-        set +e
+    errcode=$?
+    trap '' INT HUP
+    set +e
+    if [ $errcode -ne 0 ]; then
         pushd "$nonasan_dir"
         test -d system.bak && rm -rf system && mv system.bak system
         test -d vendor.bak && rm -rf vendor && mv vendor.bak vendor
         test -d images.bak && rm -rf images && mv images.bak images
+        test -f "${TOPDIR}"/build/ohos/images/build_image.py.bak && mv "$_" "${_%.bak}"
+        test -f "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak && mv "$_" "${_%.bak}"
     fi
+    command -v handle_error_hook && handle_error_hook $errcode "$@"
+    exit $errcode
 }
-trap handle_error EXIT
+trap 'handle_error "${args[@]}"' EXIT
 
 # get make image command
 json_data="$(ninja -w dupbuild=warn -C ../../ -t compdb | jq '.[]|select(.output|startswith("packages/phone/images/"))')"
@@ -122,48 +134,46 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/etc/asan.options system/etc/
     cp -a "$asan_dir"/system/etc/init/asan.cfg system/etc/init/
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
-    cp -a "$asan_dir"/system/etc/ld-musl-*-asan.path system/etc/
-    sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
-    sed -i 's,enforcing,permissive,g' system/etc/selinux/config || :
-    sed -i 's,/system/\([^:]*\),/data/\1:&,g' system/etc/ld-musl-*-asan.path
+    if grep -qw LD_PRELOAD system/etc/init/faultloggerd.cfg; then
+        sed -i '/LD_PRELOAD/d' system/etc/init/asan.cfg
+        sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
+    fi
+    test -f system/etc/selinux/config && sed -i 's,enforcing,permissive,g' $_
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
-    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/data\/\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/\1\/asan\/\2/g' system/etc/ld-musl-namespace-*.ini
+    if [ $asan_in_data = true ]; then
+        for d in data/asan/*; do ln -snf /$d ${d#data/asan/}/asan; done
+    else
+        mkdir -p system/asan/ && cp -a "$asan_dir"/system/{lib*,bin} $_
+        mkdir -p vendor/asan/ && cp -a "$asan_dir"/vendor/{lib*,bin} $_
+        sed -i.bak '$asystem/asan/bin/*, 00755, 0, 2000, 0\nvendor/asan/bin/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
+    fi
 
     # make some services run in asan version
-    local make_system=false
-    local make_vendor=false
-    for f in ${cfg_group[@]/%/.cfg}; do
-        if [ -f system/etc/init/$f ]; then
-            echo "$f is found in /system/etc/init/"
-            sed -i 's,/system/bin/,/data/bin/,g' system/etc/init/$f
-            sed -i '/"critical"/d' system/etc/init/$f
-            for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' system/etc/init/$f); do
-                sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
-            done
-            make_system=true
-        elif [ -f vendor/etc/init/$f ]; then
-            echo "$f is found in /vendor/etc/init/"
-            sed -i 's,/vendor/bin/,/data/bin/,g' vendor/etc/init/$f
-            sed -i 's,/system/bin/,/data/bin/,g' vendor/etc/init/$f
-            sed -i '/"critical"/d' vendor/etc/init/$f
-            for xml in $(sed -n '/\/data\/bin\/sa_main/s/.*"\([^" ]*.xml\)".*/\1/p' vendor/etc/init/$f); do
-                sed -i 's,/vendor/\(lib[^/]*\)/,/data/\1/,g' ./$xml
-                sed -i 's,/system/\(lib[^/]*\)/,/data/\1/,g' ./$xml
-            done
-            make_vendor=true
-        else
-            echo -e "\033[33m==== WARNING: $f is not found in /system/etc/init/ nor in /vendor/etc/init/ ====\033[0m"
-        fi
+    local -A make_images
+    for f in ${cfg_group[@]}; do
+        for cfg in {system,vendor}/etc/init/$f.cfg*; do
+            echo -e "\033[35mModifying service cfg: $cfg\033[0m"
+            sed -i 's,/bin/,/asan&,g;/"critical"/d' $cfg
+            make_images[${cfg::6}]=true
+        done
     done
 
+    command -v make_mixed_asan_img_hook && make_mixed_asan_img_hook "$@"
+
     # make image
-    if [ "$make_system" = true -o $# -eq 0 ]; then
+    if [ "${make_images[system]}" = true -o $# -eq 0 ]; then
         make_system_img
         mv images/system.img system${1}.img
     fi
-    if [ "$make_vendor" = true ]; then
+    if [ "${make_images[vendor]}" = true -o $# -eq 0 ]; then
         make_vendor_img
         mv images/vendor.img vendor${1}.img
+    fi
+
+    # restore dac.txt
+    if [ $asan_in_data != true ]; then
+        mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
     fi
 
     # restore system and vendor
@@ -173,7 +183,7 @@ make_mixed_asan_img() {
 
 add_mkshrc() {
     sed -i '/export HOME /d' "$asan_dir"/system/etc/init/asan.cfg
-    sed -i '/export ASAN_OPTIONS /i"export HOME /data",' "$asan_dir"/system/etc/init/asan.cfg
+    sed -i '/export ASAN_OPTIONS /i"export HOME /'$1'",' "$asan_dir"/system/etc/init/asan.cfg
     cat <<EOF >${1:-.}/.mkshrc
 dmesg -n1
 alias ls='ls --color=auto'
@@ -184,25 +194,16 @@ remount() {
 EOF
 }
 
-# $1   file that need to be patched
-# $2   file offset
-# $3   instruction count, 4 bytes per instruction on arm architecture
-patch_file_nop() {
-    while true; do echo -e -n "\x1F\x20\x03\xD5"; done | dd conv=notrunc bs=1 of=$1 seek=$2 count=$((4*$3))
-}
-
 make_data_asan_img() {
+    test $asan_in_data = true || return 0
     echo "make mixed asan userdata.img ..."
-    cp -a "$asan_dir"/vendor/{lib*,bin} data/
-    cp -a "$asan_dir"/system/{lib*,bin} data/
+    mkdir -p data/asan/{vendor,system}
+    cp -a "$asan_dir"/vendor/{lib*,bin} data/asan/vendor/
+    cp -a "$asan_dir"/system/{lib*,bin} data/asan/system/
+    chmod +x data/asan/*/bin/*
     add_mkshrc data/
     sed -i.bak 's,shutil.rmtree(userdata_path),return,g' "${TOPDIR}"/build/ohos/images/build_image.py
-    sed -i.bak '$adata/bin/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
-    if [ -f data/lib64/libclang_rt.asan.so ]; then
-        if [ "$(md5sum data/lib64/libclang_rt.asan.so|awk '{print $1}')" = "e4ade6eb02f6bbbd7f7faebcda3f0a26" ]; then
-            patch_file_nop data/lib64/libclang_rt.asan.so 356872 17 # patch function 'GetThreadStackAndTls'
-        fi
-    fi
+    sed -i.bak '$adata/asan/*, 00755, 0, 2000, 0' "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
     make_userdata_img
     mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
     mv "${TOPDIR}"/build/ohos/images/build_image.py.bak "${TOPDIR}"/build/ohos/images/build_image.py
@@ -214,37 +215,40 @@ make_custom_asan_imgs() {
 
     # make custom asan images
     for cfg_group in ${cfg_groups[@]}; do
-        local old_lfs="$IFS"
-        IFS+=":,"
-        make_mixed_asan_img ${cfg_group}
-        IFS="$old_lfs"
+        make_mixed_asan_img $(IFS=:,; echo ${cfg_group})
     done
 
     # restore images
     rm -rf images && mv images.bak images
 }
 
-make_data_asan_img
-make_mixed_asan_img
-make_custom_asan_imgs
-
 # Collect all necessary artifacts into images directory
-if [ -f "$asan_dir"/images/system.img ]; then
-    # full asan images
-    mv "$asan_dir"/images/system.img images/systemF.img
-    mv "$asan_dir"/images/vendor.img images/vendorF.img
+collect_all_artifacts() {
+    # uncomment the following three lines if you need full asan images
+    #rm -rf images/{system,vendor}F.img
+    #cp -l "$asan_dir"/images/system.img images/systemF.img
+    #cp -l "$asan_dir"/images/vendor.img images/vendorF.img
     # unstripped binaries
     rm -rf images/unstripped
     mkdir -p images/unstripped/{asan,nonasan}
-    mv "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
+    cp -al "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
     cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
-    mv ../../{exe,lib}.unstripped images/unstripped/nonasan/
+    cp -al ../../{exe,lib}.unstripped images/unstripped/nonasan/
+    cp system/lib*/libc++.so images/unstripped/nonasan/lib.unstripped/
     # asan log resolve scripts
     cp "${TOPDIR}"/build/common/asan/{symbolize,resolve_asan_log}.sh images/
     chmod +x images/*.sh
-fi
+    # mixed asan images
+    mv system*.img vendor*.img images/
+}
 
-shopt -s nullglob && mv system*.img vendor*.img images/
+shopt -s nullglob
+
+make_data_asan_img
+make_mixed_asan_img
+make_custom_asan_imgs
+collect_all_artifacts
+
 step3_time=$(date +%s)
 
 echo -e "\033[32m==== Done! ====\033[0m"

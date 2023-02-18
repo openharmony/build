@@ -22,63 +22,64 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <link.h>
 
-static void* (*real_dlopen)(const char *file, int mode);
-static bool g_isAsan = false;
-static bool g_enableRandomDelay = false;
+#if defined (__arm__)
+#define ASAN_LINKER "/lib/ld-musl-arm-asan.so.1"
+#define LIB "/lib/"
+#elif defined (__aarch64__)
+#define ASAN_LINKER "/lib/ld-musl-aarch64-asan.so.1"
+#define LIB "/lib64/"
+#else
+#error "unsupported arch"
+#endif
+
+static int g_isAsan = false;
+
+static int dl_iterate_phdr_callback(struct dl_phdr_info *info, size_t size, void *args)
+{
+    return info && info->dlpi_name && (strcmp(info->dlpi_name, ASAN_LINKER) == 0);
+}
 
 static void __attribute__((constructor)) init(void)
 {
-    real_dlopen = dlsym(RTLD_NEXT, "dlopen");
-    FILE *mapsFile = fopen("/proc/self/maps", "r");
-    if (mapsFile != NULL) {
-        char *line = NULL;
-        size_t len = 0;
-        while (-1 != getline(&line, &len, mapsFile)) {
-            char *p = strstr(line, "/ld-musl-");
-            if (p && strstr(p, "-asan.so.1")) {
-                g_isAsan = true;
-                break;
-            }
-        }
-        free(line);
-        fclose(mapsFile);
+    g_isAsan = dl_iterate_phdr(dl_iterate_phdr_callback, NULL);
+}
+
+typedef void* (*dlopen_fn_t)(const char *file, int mode);
+static void *trap_dlopen(const char *file, int mode);
+static dlopen_fn_t real_dlopen = trap_dlopen;
+static void *trap_dlopen(const char *file, int mode)
+{
+    dlopen_fn_t fn = dlsym(RTLD_NEXT, "dlopen");
+    if (fn) {
+        real_dlopen = fn;
+        return fn(file, mode);
     }
-    char *env = getenv("LD_RANDOM_DELAY");
-    if ((env != NULL) && (env[0] == '1')) {
-        srand((unsigned)getpid());
-        g_enableRandomDelay = true;
-    }
+    abort();
 }
 
 void *dlopen(const char *file, int mode)
 {
-    if (g_enableRandomDelay) {
-        /* randomly sleep 0-10ms */
-        usleep((useconds_t)rand() % 10000);
-    }
-    if (g_isAsan && file != NULL && file[0] == '/') {
+    while (g_isAsan && file != NULL) {
+        char *p = strstr(file, LIB);
+        if (p == NULL) {
+            break;
+        }
+
         char *f = NULL;
-        char *p = strchr(file + 1, '/');
-        asprintf(&f, "/data%s", (p ? p : file));
+        asprintf(&f, "%.*s/asan%s", (int)(p - file), file, p);
         if (f == NULL) {
-            exit(1);
+            break;
         }
-        mode_t old = umask(0);
-        FILE *logFile = fopen("/dev/asan/dlopen.log", "a");
-        umask(old);
-        if (logFile != NULL) {
-            char name[16] = {0};
-            prctl(PR_GET_NAME, name);
-            fprintf(logFile, "[%d:%d](%s) dlopen %s --> %s\n", getpid(), gettid(), name, file, f);
-            fclose(logFile);
-        }
+
         void *ret = real_dlopen(f, mode);
         free(f);
         f = NULL;
         if (ret != NULL) {
             return ret;
         }
+        break;
     }
     return real_dlopen(file, mode);
 }
