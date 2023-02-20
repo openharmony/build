@@ -271,7 +271,11 @@ template("ohos_sanitizer_config") {
       }
       _cfi = defined(sanitize.cfi) && sanitize.cfi && !is_asan
       if (_cfi) {
-        configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+        if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
+          configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]
+        } else {
+          configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+        }
       }
       _scudo = defined(sanitize.scudo) && sanitize.scudo && !is_asan && !is_tsan
       if (_scudo) {

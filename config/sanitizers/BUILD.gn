@@ -629,6 +629,25 @@ config("cfi_config_debug") {
   ]
 }
 
+config("cfi_cross_dso_release") {
+  configs = [ ":cfi_config_release" ]
+  cflags = [ "-fsanitize-cfi-cross-dso" ]
+  ldflags = [
+    "-flto",
+    "-fsanitize=cfi",
+    "-fsanitize-cfi-cross-dso",
+  ]
+}
+
+config("cfi_cross_dso_debug") {
+  configs = [ ":cfi_cross_dso_release" ]
+  cflags = [
+    "-fno-sanitize-trap=cfi",
+    "-fsanitize-recover=cfi,undefined",
+  ]
+  ldflags = cflags
+}
+
 config("shadow_call_stack_config") {
   if (target_cpu == "arm64") {
     cflags = [
