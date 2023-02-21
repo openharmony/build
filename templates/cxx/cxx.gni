@@ -762,7 +762,10 @@ template("ohos_shared_library") {
     # Hide symbols for all sa libraries if not specified by version_script
     if (defined(invoker.shlib_type) && invoker.shlib_type == "sa") {
       if (!defined(invoker.version_script)) {
-        configs += [ "//build/config/gcc:symbol_visibility_hidden" ]
+        _version_script =
+            rebase_path("//build/templates/cxx/singleton.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
     }
 
