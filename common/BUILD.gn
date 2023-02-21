@@ -27,12 +27,13 @@ group("common_packages") {
 
   deps += [ "musl:musl_install" ]
 
+  deps += [ "asan:libclang_rt.asan.so" ]
+
   if (is_asan) {
     deps += [
       "asan:asan.cfg",
       "asan:asan.options",
       "asan:asan_helper",
-      "asan:libclang_rt.asan.so",
     ]
   } else {
     # ubsan.cfg defines the log_path, different with asan.cfg
