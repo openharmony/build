@@ -97,8 +97,7 @@ do
   if [[ "$OPTIONS" == "using_hb_new" && "$PARAM" == "false" ]]; then
     flag=false
     ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/entry.py --source-root-dir ${SOURCE_ROOT_DIR} $args_list
-  else
-    shift
+    break
   fi
 done
 if [[ ${flag} == "true" ]]; then

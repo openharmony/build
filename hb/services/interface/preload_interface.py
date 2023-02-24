@@ -18,6 +18,7 @@
 from abc import abstractmethod
 from services.interface.service_interface import ServiceInterface
 from resources.config import Config
+from util.log_util import LogUtil
 
 
 class PreloadInterface(ServiceInterface):
@@ -33,6 +34,13 @@ class PreloadInterface(ServiceInterface):
     @property
     def config(self):
         return self._config
+
+    def regist_arg(self, arg_name: str, arg_value: str):
+        if arg_name in self._args_dict.keys() and self._args_dict[arg_name] != arg_value:
+            LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
+                arg_name, self._args_dict[arg_name], arg_value))
+
+        self._args_dict[arg_name] = arg_value
 
     def run(self):
         self.__post_init__()

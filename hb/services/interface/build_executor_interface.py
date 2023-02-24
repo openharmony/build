@@ -19,13 +19,20 @@
 from abc import abstractmethod
 from services.interface.service_interface import ServiceInterface
 from util.system_util import SystemUtil
-
+from util.log_util import LogUtil
 
 class BuildExecutorInterface(ServiceInterface):
 
     def __init__(self):
         super().__init__()
         self._start_time = SystemUtil.get_current_time()
+
+    def regist_arg(self, arg_name: str, arg_value: str):
+        if arg_name in self._args_dict.keys() and self._args_dict[arg_name] != arg_value:
+            LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
+                arg_name, self._args_dict[arg_name], arg_value))
+
+        self._args_dict[arg_name] = arg_value
 
     @abstractmethod
     def run(self):

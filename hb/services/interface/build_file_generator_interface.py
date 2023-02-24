@@ -18,7 +18,7 @@
 
 from abc import abstractmethod
 from services.interface.service_interface import ServiceInterface
-
+from util.log_util import LogUtil
 
 class BuildFileGeneratorInterface(ServiceInterface):
 
@@ -30,8 +30,8 @@ class BuildFileGeneratorInterface(ServiceInterface):
     def flags_dict(self):
         return self._flags_dict
 
-    def regist_flag(self, key, value):
-        self._flags_dict[key] = value
+    def regist_arg(self, arg_name: str, arg_value: str):
+        self._args_dict[arg_name] = arg_value
 
     @abstractmethod
     def run(self):

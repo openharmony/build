@@ -16,7 +16,6 @@
 # limitations under the License.
 
 from abc import ABCMeta, abstractmethod
-from util.log_util import LogUtil
 
 
 class ServiceInterface(metaclass=ABCMeta):
@@ -37,12 +36,9 @@ class ServiceInterface(metaclass=ABCMeta):
     def exec(self, value):
         self._exec = value
 
-    def regist_arg(self, arg_name: str, arg_value: str):
-        if arg_name in self._args_dict.keys() and self._args_dict[arg_name] != arg_value:
-            LogUtil.hb_warning('duplicated regist arg {}, the original value "{}" will be replace to "{}"'.format(
-                arg_name, self._args_dict[arg_name], arg_value))
-
-        self._args_dict[arg_name] = arg_value
+    @abstractmethod
+    def regist_arg(self, arg_name: str, arg_value):
+        pass
 
     @abstractmethod
     def run(self):
