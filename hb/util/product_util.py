@@ -86,29 +86,30 @@ class ProductUtil(metaclass=NoInstance):
                                     'config': config_path,
                                     'component_type': info.get('component_type', '')
                                 }
-        for company in os.listdir(config.vendor_path):
-            company_path = os.path.join(config.vendor_path, company)
-            if not os.path.isdir(company_path):
-                continue
+        if config.vendor_path != '':
+            for company in os.listdir(config.vendor_path):
+                company_path = os.path.join(config.vendor_path, company)
+                if not os.path.isdir(company_path):
+                    continue
 
-            for product in os.listdir(company_path):
-                product_path = os.path.join(company_path, product)
-                config_path = os.path.join(product_path, 'config.json')
+                for product in os.listdir(company_path):
+                    product_path = os.path.join(company_path, product)
+                    config_path = os.path.join(product_path, 'config.json')
 
-                if os.path.isfile(config_path):
-                    info = IoUtil.read_json_file(config_path)
-                    product_name = info.get('product_name')
-                    if product_name is not None:
-                        yield {
-                            'company': company,
-                            "name": product_name,
-                            'product_config_path': product_path,
-                            'product_path': product_path,
-                            'version': info.get('version', '3.0'),
-                            'os_level': info.get('type', "mini"),
-                            'config': config_path,
-                            'component_type': info.get('component_type', '')
-                        }
+                    if os.path.isfile(config_path):
+                        info = IoUtil.read_json_file(config_path)
+                        product_name = info.get('product_name')
+                        if product_name is not None:
+                            yield {
+                                'company': company,
+                                "name": product_name,
+                                'product_config_path': product_path,
+                                'product_path': product_path,
+                                'version': info.get('version', '3.0'),
+                                'os_level': info.get('type', "mini"),
+                                'config': config_path,
+                                'component_type': info.get('component_type', '')
+                            }
         bip_path = config.built_in_product_path
         for item in os.listdir(bip_path):
             if item[0] in ".":

@@ -106,7 +106,7 @@ class Gn(BuildFileGeneratorInterface):
 
         for key, value in self.args_dict.items():
             if isinstance(value, bool):
-                args_list.append('{}={}'.format(key, str(value)).lower())
+                args_list.append('{}={}'.format(key, str(value).lower()))
 
             elif isinstance(value, str):
                 args_list.append('{}="{}"'.format(key, value))

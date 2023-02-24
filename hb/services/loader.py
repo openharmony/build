@@ -24,6 +24,7 @@ from util.loader import platforms_loader  # noqa: E402
 from util.loader import generate_targets_gn  # noqa: E402
 from util.loader import load_ohos_build  # noqa: E402
 from util.loader import subsystem_scan  # noqa: E402
+from util.loader import subsystem_info  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
 from util.log_util import LogUtil
 
@@ -90,7 +91,12 @@ class OHOSLoader(LoadInterface):
                                                      self.example_subsystem_file,
                                                      self.source_root_dir)
 
-        self._subsystem_info = self.subsystem_configs.get('subsystem')
+        self._subsystem_info = subsystem_info.get_subsystem_info(
+            self.subsystem_config_file,
+            self.example_subsystem_file,
+            self.source_root_dir,
+            self.config_output_relpath,
+            self.os_level)
         self._platforms_info = platforms_loader.get_platforms_info(
             self.platforms_config_file,
             self.source_root_dir,
@@ -197,8 +203,8 @@ class OHOSLoader(LoadInterface):
 
     '''Description: Generate SystemCapability.json & syscap.json & syscap.para, dir:[
         (//out/preloader/${product_name}/system/etc/SystemCapability.json),
-        (//out/preloader/rk3568/system/etc/syscap.json),
-        (//out/preloader/rk3568/system/etc/param/syscap.para)]
+        (//out/preloader/${product_name}/system/etc/syscap.json),
+        (//out/preloader/${product_name}/system/etc/param/syscap.para)]
     @parameter:none
     @return :none
     '''
@@ -532,27 +538,14 @@ class OHOSLoader(LoadInterface):
     '''
 
     def _generate_subsystem_configs(self):
-        build_config_file = os.path.join(self.config_output_dir, 'subsystem_info',
-                                         "subsystem_build_config.json")
-        write_json_file(build_config_file, self.subsystem_configs)
+
+        # The function has been implemented in module util/loader/subsystem_info.py
         LogUtil.hb_info(
             "generated subsystem build config to '{}/subsystem_info/subsystem_build_config.json'".format(
                 self.config_output_dir))
-
-        src_subsystem = {}
-        for key, val in self.subsystem_configs.get('subsystem').items():
-            src_subsystem[key] = val.get('path')
-        src_output_file = os.path.join(self.config_output_dir, 'subsystem_info',
-                                       "src_subsystem_info.json")
-        write_json_file(src_output_file, src_subsystem)
         LogUtil.hb_info(
             "generated src subsystem info to '{}/subsystem_info/src_subsystem_info.json'".format(
                 self.config_output_dir))
-
-        no_src_output_file = os.path.join(self.config_output_dir, 'subsystem_info',
-                                          "no_src_subsystem_info.json")
-        write_json_file(no_src_output_file,
-                        self.subsystem_configs.get('no_src_subsystem'))
         LogUtil.hb_info(
             "generated no src subsystem info to '{}/subsystem_info/no_src_subsystem_info.json'".format(
                 self.config_output_dir))

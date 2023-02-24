@@ -313,7 +313,7 @@ class Config(metaclass=Singleton):
     def vendor_path(self):
         _vendor_path = os.path.join(self.root_path, 'vendor')
         if not os.path.isdir(_vendor_path):
-            raise OHOSException(f'Invalid vendor path: {_vendor_path}')
+            _vendor_path = ''
         return _vendor_path
 
     @property
