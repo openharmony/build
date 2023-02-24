@@ -1,0 +1,240 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/rust/rustc_toolchain.gni")
+import("//build/templates/rust/rust_template.gni")
+
+template("ohos_cargo_crate") {
+  orig_target_name = target_name
+
+  _crate_name = orig_target_name
+  if (defined(invoker.crate_name)) {
+    _crate_name = invoker.crate_name
+  }
+  assert(_crate_name != "")
+
+  # Executables need to have unique names. Work out a prefix.
+  if (defined(invoker.build_root)) {
+    _epochlabel = "unknown"
+    if (defined(invoker.epoch)) {
+      _tempepoch = string_replace(invoker.epoch, ".", "_")
+      _epochlabel = "${_tempepoch}"
+    }
+    build_script_name =
+        "${_crate_name}_${target_name}_${_epochlabel}_build_script"
+  }
+
+  _rustenv = []
+  if (defined(invoker.rustenv)) {
+    _rustenv = invoker.rustenv
+  }
+
+  # The main target, either a Rust source set or an executable.
+  rust_target(target_name) {
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "testonly",
+                             "visibility",
+                             "build_root",
+                             "build_sources",
+                             "build_deps",
+                             "build_script_inputs",
+                             "build_script_outputs",
+                             "output_dir",
+                             "target_type",
+                             "configs",
+                             "rustenv",
+                           ])
+
+    # Work out what we're building.
+    rustenv = _rustenv
+    if (!defined(rustflags)) {
+      rustflags = []
+    }
+
+    crate_type = "rlib"
+    if (defined(invoker.crate_type)) {
+      crate_type = invoker.crate_type
+    }
+    if (crate_type == "bin") {
+      target_type = "ohos_executable"
+      assert(!defined(invoker.epoch))
+    } else if (crate_type == "proc-macro") {
+      target_type = "rust_proc_macro"
+    } else {
+      assert(crate_type == "rlib" || crate_type == "dylib")
+      target_type = "ohos_rust_library"
+    }
+
+    output_dir = "${target_out_dir}/${orig_target_name}"
+
+    # Once a build script exists
+    if (defined(invoker.build_root)) {
+      if (!defined(deps)) {
+        deps = []
+      }
+      if (!defined(sources)) {
+        sources = []
+      }
+
+      _build_script_target_out_dir =
+          get_label_info(":${build_script_name}_output", "target_out_dir")
+      _build_script_out_dir = "$_build_script_target_out_dir/$orig_target_name"
+
+      flags_file = "$_build_script_out_dir/cargo_flags.rs"
+      rustflags += [ "@" + rebase_path(flags_file, root_build_dir) ]
+      sources += [ flags_file ]
+      if (defined(invoker.build_script_outputs)) {
+        inputs = []
+        foreach(extra_source,
+                filter_exclude(invoker.build_script_outputs, [ "*.rs" ])) {
+          inputs += [ "$_build_script_out_dir/$extra_source" ]
+        }
+
+        foreach(extra_source,
+                filter_include(invoker.build_script_outputs, [ "*.rs" ])) {
+          sources += [ "$_build_script_out_dir/$extra_source" ]
+        }
+      }
+      deps += [ ":${build_script_name}_output" ]
+    } else {
+      not_needed([ "orig_target_name" ])
+    }
+  }
+
+  if (defined(invoker.build_root)) {
+    action("${build_script_name}_output") {
+      script = rebase_path("//build/templates/rust/run_build_script.py")
+      build_script_target = ":${build_script_name}($host_toolchain)"
+      deps = [ build_script_target ]
+
+      if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+        subsystem_name = invoker.subsystem_name
+        part_name = invoker.part_name
+      } else if (defined(invoker.part_name)) {
+        part_name = invoker.part_name
+        _part_subsystem_info_file =
+            "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+        _arguments = [
+          "--part-name",
+          part_name,
+          "--part-subsystem-info-file",
+          rebase_path(_part_subsystem_info_file, root_build_dir),
+        ]
+        get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+        subsystem_name =
+            exec_script(get_subsystem_script, _arguments, "trim string")
+      } else if (defined(invoker.subsystem_name)) {
+        subsystem_name = invoker.subsystem_name
+        part_name = subsystem_name
+      } else {
+        subsystem_name = "common"
+        part_name = subsystem_name
+      }
+      assert(subsystem_name != "")
+      assert(part_name != "")
+
+      if (current_toolchain == host_toolchain) {
+        _build_script_build_dir = "${root_out_dir}"
+      } else {
+        _build_script_build_dir = "${root_out_dir}/clang_x64"
+      }
+      if (is_standard_system) {
+        _build_script_exe_dir =
+            "${_build_script_build_dir}/${subsystem_name}/${part_name}"
+      } else {
+        _build_script_exe_dir = "${_build_script_build_dir}"
+      }
+      build_script = "$_build_script_exe_dir/${build_script_name}"
+
+      if (is_win) {
+        build_script = "$_build_script_exe_dir/${build_script_name}.exe"
+      }
+
+      _build_script_out_dir = "$target_out_dir/$orig_target_name"
+      flags_file = "$_build_script_out_dir/cargo_flags.rs"
+
+      args = [
+        "--build-script",
+        rebase_path(build_script, root_build_dir),
+        "--rust-prefix",
+        rebase_path(
+            "//prebuilts/rustc/${host_platform_dir}/${rust_version}/bin",
+            root_build_dir),
+        "--output",
+        rebase_path(flags_file, root_build_dir),
+        "--src-dir",
+        rebase_path(get_path_info(invoker.build_root, "dir"), root_build_dir),
+        "--out-dir",
+        rebase_path(_build_script_out_dir, root_build_dir),
+      ]
+      if (defined(rust_abi_target) && rust_abi_target != "") {
+        args += [
+          "--target",
+          rust_abi_target,
+        ]
+      }
+
+      if (_rustenv != []) {
+        args += [ "--env" ]
+        args += _rustenv
+      }
+
+      if (defined(invoker.features)) {
+        args += [ "--features" ]
+        args += invoker.features
+      }
+      outputs = [ flags_file ]
+      inputs = [ build_script ]
+      if (defined(invoker.build_script_outputs)) {
+        foreach(generated_file, invoker.build_script_outputs) {
+          outputs += [ "$_build_script_out_dir/$generated_file" ]
+        }
+        args += [ "--generated-files" ]
+        args += invoker.build_script_outputs
+      }
+
+      if (defined(invoker.build_script_inputs)) {
+        inputs += invoker.build_script_inputs
+      }
+    }
+
+    if (current_toolchain == host_toolchain) {
+      rust_target(build_script_name) {
+        target_type = "ohos_executable"
+        sources = invoker.build_sources
+        crate_root = invoker.build_root
+        if (defined(invoker.build_deps)) {
+          deps = invoker.build_deps
+        }
+        rustenv = _rustenv
+        forward_variables_from(invoker,
+                               [
+                                 "features",
+                                 "edition",
+                                 "rustflags",
+                               ])
+      }
+    } else {
+      not_needed(invoker,
+                 [
+                   "build_root",
+                   "build_sources",
+                   "build_deps",
+                   "build_script_inputs",
+                   "build_script_outputs",
+                 ])
+    }
+  }
+}

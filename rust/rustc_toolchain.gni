@@ -22,6 +22,23 @@ declare_args() {
   is_rust_nightly = false
   is_rust_stable = false
 }
+if (enable_rust) {
+  if (rust_sysroot_absolute != "") {
+    rust_sysroot = get_path_info(rust_sysroot_absolute, "abspath")
+  } else if (use_ohos_rust_toolchain) {
+    if (host_os != "linux") {
+      assert(false,
+             "Attempt to use OHOS Rust toolchain on an unsupported platform")
+    }
+    rust_sysroot = "//prebuilts/rustc/linux-x86_64/current"
+  } else {
+    if (host_os != "linux") {
+      assert(false,
+             "Attempt to use nightly Rust toolchain on an unsupported platform")
+    }
+    rust_sysroot = "//prebuilts/rustc/linux-x86_64/nightly"
+  }
+}
 
 rust_base = rebase_path("//prebuilts/rustc", root_build_dir)
 
@@ -41,7 +58,9 @@ stdlib_host_path = "${rust_path}/lib"
 clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang",
                     root_build_dir)
 musl_path = rebase_path("${musl_sysroot}", root_build_dir)
-musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+if (defined(abi_target)) {
+  musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+}
 llvm_strip =
     rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-strip",
                 root_build_dir)

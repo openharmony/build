@@ -1,0 +1,55 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/templates/rust/ohos_cargo_crate.gni")
+import("//build/templates/rust/rust_template.gni")
+
+_clang_libs_dir = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib"
+
+ohos_cargo_crate("clanglibs") {
+  crate_root = get_label_info(":find_clanglibs", "target_gen_dir") + "/lib.rs"
+  sources = [ crate_root ]
+  deps = [ ":find_clanglibs" ]
+  all_dependent_configs = [ ":clanglibs_config" ]
+}
+
+action("find_clanglibs") {
+  clanglib_d_file =
+      rebase_path("$target_out_dir/find_clanglibs.d", root_build_dir)
+
+  # Incremental compilation require depfile is not in existence
+  exec_script(rebase_path("update_depfile.py"),
+              [
+                "--filename",
+                clanglib_d_file,
+                "--type",
+                "file",
+              ])
+  script = "find_clanglibs.py"
+  generated_crate_root = "$target_gen_dir/lib.rs"
+  depfile = "$target_out_dir/find_clanglibs.d"
+  args = [
+    "--clang-libs-dir",
+    rebase_path(_clang_libs_dir),
+    "--depfile",
+    rebase_path(depfile, root_build_dir),
+    "--output",
+    rebase_path(generated_crate_root, root_build_dir),
+  ]
+  outputs = [ generated_crate_root ]
+}
+
+config("clanglibs_config") {
+  rustflags = [ "-L" + rebase_path(_clang_libs_dir) ]
+  rustenv = [ "LIBCLANG_PATH=" + rebase_path(_clang_libs_dir) ]
+}
