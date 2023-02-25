@@ -18,7 +18,7 @@ limitations under the License.
 import os
 import json
 import argparse
-from lite.hb_internal.common.config import Config
+from hb.resources.config import Config
 
 """
 @Desc:

@@ -84,11 +84,12 @@ arguments += [
   "developertest",
 ]
 
-load_result = exec_script(build_loader_script, arguments, "string")
-
-if (load_result != "") {
-  print()
-  print(load_result)
+if (!using_hb_new) {
+  load_result = exec_script(build_loader_script, arguments, "string")
+  if (load_result != "") {
+    print()
+    print(load_result)
+  }
 }
 
 print("build configs generation is complete.")

@@ -17,7 +17,7 @@ import argparse
 import os
 import stat
 import json
-from lite.hb_internal.common.config import Config
+from hb.resources.config import Config
 
 
 class ErrorInfo:

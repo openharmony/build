@@ -196,7 +196,6 @@ def _get_auto_install_list(parts_path_info):
             auto_install_part_list.append(part)
     return auto_install_part_list
 
-
 def _get_parts_src_list(required_parts_targets, parts_info):
     parts_name_map = {}
     for _list in parts_info.values():
@@ -518,7 +517,6 @@ def _output_infos_by_platform(part_name_infos, parts_info_dict):
     result['subsystem_infos'] = subsystem_infos
     result['part_infos'] = required_parts
     return result
-
 
 def _output_infos_for_testfwk(parts_config_info, target_platform_parts,
                               infos_for_testfwk_file):

@@ -1,0 +1,341 @@
+{
+    "ls": {
+        "arg_name": "--ls",
+        "argDefault": [],
+        "arg_help": "Default:[]. Help:Lists all targets matching the given pattern for the given build directory. You could use this option like this: 1.'hb tool --ls <out_dir> [<label_pattern>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
+            "support_sub_options":{
+                "all-toolchains":{
+                    "arg_name": "--all-toolchains",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "as":{
+                    "arg_name": "--as",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "buildfile",
+                            "label",
+                            "output"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "testonly":{
+                    "arg_name": "--testonly",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "true",
+                            "false"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "type":{
+                    "arg_name": "--type",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "action",
+                            "copy",
+                            "executable",
+                            "group",
+                            "loadable_module",
+                            "shared_library",
+                            "source_set",
+                            "static_library"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                }
+            }
+        },
+        "resolve_function": "resolve_list_targets",
+        "testFunction": "testListTargets"
+    },
+    "desc": {
+        "arg_name": "--desc",
+        "argDefault": [],
+        "arg_help": "Default:[]. Help:Displays information about a given target or config. You could use this option like this: 1.'hb tool --desc <out_dir> <component_module> [<what to show>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
+            "support_sub_options":{
+                "all":{
+                    "arg_name": "--all",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "as":{
+                    "arg_name": "--as",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "buildfile",
+                            "label",
+                            "output"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "testonly":{
+                    "arg_name": "--testonly",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "true",
+                            "false"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "type":{
+                    "arg_name": "--type",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "action",
+                            "copy",
+                            "executable",
+                            "group",
+                            "loadable_module",
+                            "shared_library",
+                            "source_set",
+                            "static_library"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "tree":{
+                    "arg_name": "--tree",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                }
+            }
+        },
+        "resolve_function": "resolve_desc_targets",
+        "testFunction": "testDescTargets"
+    },
+    "path": {
+        "arg_name": "--path",
+        "argDefault": [],
+        "arg_help": "Default:[]. Help:Finds paths of dependencies between two targets. You could use this option like this: 1.'hb tool --path <out_dir> <component1_module1> <component2_module2> [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
+            "support_sub_options":{
+                "--all":[],
+                "--public":[],
+                "--with-data":[]
+            }
+        },
+        "resolve_function": "resolve_path_targets",
+        "testFunction": "testPathTargets"
+    },
+    "refs": {
+        "arg_name": "--refs",
+        "argDefault": [],
+        "arg_help": "Default:[]. Help:Finds reverse dependencies (which targets reference something). You could use this option like this: 1.'hb tool --refs <out_dir> [<component_module>|<file>] [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
+            "support_sub_options":{
+                "all":{
+                    "arg_name": "--all",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "all-toolchains":{
+                    "arg_name": "--all-toolchains",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "as":{
+                    "arg_name": "--as",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "buildfile",
+                            "label",
+                            "output"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "q":{
+                    "arg_name": "-q",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "testonly":{
+                    "arg_name": "--testonly",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "true",
+                            "false"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "tree":{
+                    "arg_name": "--tree",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "type":{
+                    "arg_name": "--type",
+                    "argDefault": "",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "action",
+                            "copy",
+                            "executable",
+                            "group",
+                            "loadable_module",
+                            "shared_library",
+                            "source_set",
+                            "static_library"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                }
+            }
+        },
+        "resolve_function": "resolve_refs_targets",
+        "testFunction": "testRefsTargets"
+    },
+    "format": {
+        "arg_name": "--format",
+        "argDefault": [],
+        "arg_help": "Default:[]. Help:Formats .gn file to a standard format. You could use this option like this: 1.'hb tool --format /abspath/some/BUILD.gn [<options>]'",
+        "arg_phase": "prebuild",
+        "arg_type": "subparsers",
+        "arg_attribute": {
+            "support_sub_options":{
+                "dry-run":{
+                    "arg_name": "--dry-run",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "dump-tree":{
+                    "arg_name": "--dump-tree",
+                    "argDefault": "text",
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "str",
+                    "arg_attribute": {
+                        "optional":[
+                            "text",
+                            "json"
+                        ]
+                    },
+                    "resolve_function": "",
+                    "testFunction": ""
+                },
+                "stdin":{
+                    "arg_name": "--stdin",
+                    "argDefault": false,
+                    "arg_help": "",
+                    "arg_phase": "prebuild",
+                    "arg_type": "bool",
+                    "arg_attribute": {},
+                    "resolve_function": "",
+                    "testFunction": ""
+                }
+            }
+        },
+        "resolve_function": "resolve_format_targets",
+        "testFunction": "testFormatTargets"
+    },
+    "clean": {
+        "arg_name": "--clean",
+        "argDefault": "",
+        "arg_help": "Default:[]. Help:Deletes the contents of the output directory except for args.gn. You could use this option like this: 1.'hb tool --clean <out_dir>'",
+        "arg_phase": "prebuild",
+        "arg_type": "str",
+        "arg_attribute": {},
+        "resolve_function": "resolve_clean_targets",
+        "testFunction": "testCleanTargets"
+    }
+}

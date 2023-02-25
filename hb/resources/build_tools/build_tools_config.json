@@ -1,0 +1,8 @@
+{
+    "Linux": {
+        "build_tools_path": "prebuilts/build-tools/linux-x86/bin"
+    },
+    "Windows": {
+        "build_tools_path": "prebuilts\\build-tools\\win-x86\\bin"
+    }
+}
