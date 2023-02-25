@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/cxx/cxx.gni")
 import("//build/templates/rust/ohos_rust_library.gni")
 
@@ -99,7 +100,7 @@ template("rust_target") {
   _rust_deps = _deps
   _rust_public_deps = _public_deps
 
-  _edition = "2021"
+  _edition = rust_default_edition
   if (defined(invoker.edition)) {
     _edition = invoker.edition
   }

@@ -11,9 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/rust/rust_template.gni")
-
 template("ohos_cargo_crate") {
   orig_target_name = target_name
 
@@ -23,7 +21,39 @@ template("ohos_cargo_crate") {
   }
   assert(_crate_name != "")
 
-  # Executables need to have unique names. Work out a prefix.
+  _rustenv = []
+  if (defined(invoker.rustenv)) {
+    _rustenv = invoker.rustenv
+  }
+  if (defined(invoker.cargo_pkg_authors)) {
+    _rustenv += [ string_join("",
+                              [
+                                "CARGO_PKG_AUTHORS=",
+                                invoker.cargo_pkg_authors,
+                              ]) ]
+  }
+  if (defined(invoker.cargo_pkg_version)) {
+    _rustenv += [ string_join("",
+                              [
+                                "CARGO_PKG_VERSION=",
+                                invoker.cargo_pkg_version,
+                              ]) ]
+  }
+  if (defined(invoker.cargo_pkg_name)) {
+    _rustenv += [ string_join("",
+                              [
+                                "CARGO_PKG_NAME=",
+                                invoker.cargo_pkg_name,
+                              ]) ]
+  }
+  if (defined(invoker.cargo_pkg_description)) {
+    _rustenv += [ string_join("",
+                              [
+                                "CARGO_PKG_DESCRIPTION=",
+                                invoker.cargo_pkg_description,
+                              ]) ]
+  }
+
   if (defined(invoker.build_root)) {
     _epochlabel = "unknown"
     if (defined(invoker.epoch)) {
@@ -34,12 +64,6 @@ template("ohos_cargo_crate") {
         "${_crate_name}_${target_name}_${_epochlabel}_build_script"
   }
 
-  _rustenv = []
-  if (defined(invoker.rustenv)) {
-    _rustenv = invoker.rustenv
-  }
-
-  # The main target, either a Rust source set or an executable.
   rust_target(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -57,7 +81,6 @@ template("ohos_cargo_crate") {
                              "rustenv",
                            ])
 
-    # Work out what we're building.
     rustenv = _rustenv
     if (!defined(rustflags)) {
       rustflags = []
@@ -79,7 +102,6 @@ template("ohos_cargo_crate") {
 
     output_dir = "${target_out_dir}/${orig_target_name}"
 
-    # Once a build script exists
     if (defined(invoker.build_root)) {
       if (!defined(deps)) {
         deps = []

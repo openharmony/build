@@ -16,7 +16,7 @@
 include!(concat!(env!("OUT_DIR"), "/generated/generated.rs"));
 
 pub fn say_hello_from_crate() {
-    assert_eq!(run_some_generated_code(), 42);
+    assert_eq!(run_some_generated_code(), 45);
     #[cfg(is_new_rustc)]
     println!("Is new rustc");
     #[cfg(is_old_rustc)]
@@ -51,6 +51,6 @@ mod tests {
 
     #[test]
     fn test_generated_code_works() {
-        assert_eq!(crate::run_some_generated_code(), 42);
+        assert_eq!(crate::run_some_generated_code(), 45);
     }
 }

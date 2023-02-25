@@ -17,6 +17,4 @@ ohos_cargo_crate("test_proc_macro_cargo_crate") {
   crate_root = "crate/src/lib.rs"
   crate_type = "proc-macro"
   sources = [ "crate/src/lib.rs" ]
-
-  # epoch = "0.2"
 }

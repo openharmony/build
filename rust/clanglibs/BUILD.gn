@@ -11,10 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
 import("//build/templates/rust/ohos_cargo_crate.gni")
 import("//build/templates/rust/rust_template.gni")
 
-_clang_libs_dir = "//prebuilts/clang/ohos/linux-x86_64/llvm/lib"
+_clang_libs_dir = "${default_clang_base_path}/llvm/lib"
 
 ohos_cargo_crate("clanglibs") {
   crate_root = get_label_info(":find_clanglibs", "target_gen_dir") + "/lib.rs"

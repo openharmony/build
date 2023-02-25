@@ -19,8 +19,8 @@ fn main() {
     println!("Is new rustc!");
     #[cfg(is_old_rustc)]
     println!("Is old rustc!");
-    #[cfg(is_android)]
-    println!("Is android!");
+    #[cfg(is_ohos)]
+    println!("Is ohos!");
     #[cfg(is_mac)]
     println!("Is darwin!");
 }

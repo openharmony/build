@@ -32,7 +32,7 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
   enable_strip = true
   install_images = [
     "system",
-    "uptater",
+    "updater",
   ]
   output = "libstd.dylib.so"
   part_name = "common"
@@ -51,7 +51,7 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   }
   install_images = [
     "system",
-    "uptater",
+    "updater",
   ]
   output = "libtest.dylib.so"
   part_name = "common"

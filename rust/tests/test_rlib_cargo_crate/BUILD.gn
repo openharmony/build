@@ -23,7 +23,6 @@ ohos_cargo_crate("target") {
   build_sources = [ "crate/build.rs" ]
   build_script_outputs = [ "generated/generated.rs" ]
 
-  # epoch = "0.2"
   features = [
     "my-feature_a",
     "my-feature_b",
