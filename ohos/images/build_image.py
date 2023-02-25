@@ -52,7 +52,7 @@ def _prepare_root(system_path, target_cpu):
 
 
 def _prepare_updater(updater_path):
-    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64', 'vendor']
+    _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64' ]
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
         if os.path.exists(_path):
@@ -62,8 +62,15 @@ def _prepare_updater(updater_path):
     os.symlink('/bin', os.path.join(updater_path, 'system/bin'))
     os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
     os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
-    os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
+
+def _prepare_updater_vendor(updater_vendor_path)
+    _dir_list = ['bin', 'lib', 'lib64']
+    for _dir_name in _dir_list:
+        _path = os.path.join(updater_vendor_path, _dir_name)
+        _target_path = os.path.join(updater_vendor_path, 'vendor', _dir_name)
+        if os.path.exists(_path):
+            shutil.move(_path, _target_path)
 
 
 def _prepare_ramdisk(ramdisk_path):
@@ -84,7 +91,7 @@ def _make_image(args):
     elif args.image_name == 'updater_ramdisk':
         _prepare_updater(args.input_path)
     elif args.image_name == 'updater_vendor':
-        _prepare_updater(args.input_path)
+        _prepare_updater_vendor(args.input_path)
     elif args.image_name == 'ramdisk':
         _prepare_ramdisk(args.input_path)
     image_type = "raw"
