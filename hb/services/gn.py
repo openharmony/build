@@ -114,6 +114,9 @@ class Gn(BuildFileGeneratorInterface):
             elif isinstance(value, int):
                 args_list.append('{}={}'.format(key, value))
 
+            elif isinstance(value, list):
+                args_list.append('{}="{}"'.format(key, "&&".join(value)))
+
         return args_list
 
     '''Description: Convert all registed flags into a list

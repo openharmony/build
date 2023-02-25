@@ -269,9 +269,14 @@ class BuildArgsResolver(ArgsResolverInterface):
             try:
                 variable, value = gn_arg.split('=')
                 if TypeCheckUtil.is_bool_type(value):
-                    value = bool(value)
+                    if str(value).lower() == 'false':
+                        value = False
+                    elif str(value).lower() == 'true':
+                        value = True
                 elif TypeCheckUtil.is_int_type(value):
                     value = int(value)
+                elif isinstance(value, list):
+                    value = list(value)
                 else:
                     value = str(value)
                 target_generator.regist_arg(variable, value)
