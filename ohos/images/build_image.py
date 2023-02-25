@@ -64,7 +64,7 @@ def _prepare_updater(updater_path):
     os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
-def _prepare_updater_vendor(updater_vendor_path)
+def _prepare_updater_vendor(updater_vendor_path):
     _dir_list = ['bin', 'lib', 'lib64']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_vendor_path, _dir_name)
