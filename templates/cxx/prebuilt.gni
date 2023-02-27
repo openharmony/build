@@ -21,6 +21,41 @@ template("ohos_prebuilt_executable") {
   } else {
     _copy_output = "${target_out_dir}/${invoker.source}"
   }
+
+  if (!defined(invoker.deps)) {
+    invoker.deps = []
+  }
+
+  if (!defined(invoker.stable)) {
+    invoker.stable = false
+  }
+
+  deps_info = []
+  foreach(dep, invoker.deps) {
+    info = {
+    }
+    info = {
+      target_out_dir =
+          rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+      target_name = get_label_info(dep, "name")
+    }
+    deps_info += [ info ]
+  }
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    module_deps_info = deps_info
+    type = "executable"
+    prebuilt = true
+    stable = invoker.stable
+    toolchain = get_label_info(":${target_name}", "toolchain")
+    source_path = rebase_path(invoker.source, root_build_dir)
+    output_path = rebase_path(_copy_output, root_build_dir)
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
+
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
@@ -68,6 +103,41 @@ template("ohos_prebuilt_shared_library") {
   config("${target_name}__config") {
     libs = [ _copy_output ]
   }
+
+  if (!defined(invoker.deps)) {
+    invoker.deps = []
+  }
+
+  if (!defined(invoker.stable)) {
+    invoker.stable = false
+  }
+
+  deps_info = []
+  foreach(dep, invoker.deps) {
+    info = {
+    }
+    info = {
+      target_out_dir =
+          rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+      target_name = get_label_info(dep, "name")
+    }
+    deps_info += [ info ]
+  }
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    module_deps_info = deps_info
+    type = "shared_library"
+    prebuilt = true
+    stable = invoker.stable
+    toolchain = get_label_info(":${target_name}", "toolchain")
+    source_path = rebase_path(invoker.source, root_build_dir)
+    output_path = rebase_path(_copy_output, root_build_dir)
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
+
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
@@ -152,6 +222,19 @@ template("ohos_prebuilt_etc") {
   } else {
     _copy_output = "${target_out_dir}/${invoker.source}"
   }
+
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    type = "etc"
+    prebuilt = true
+    source_path = rebase_path(invoker.source, root_build_dir)
+    output_path = rebase_path(_copy_output, root_build_dir)
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
+
   ohos_copy(target_name) {
     forward_variables_from(invoker,
                            [
