@@ -65,6 +65,10 @@ declare_args() {
 }
 
 declare_args() {
+  using_hb_new = true
+}
+
+declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 
@@ -322,7 +326,7 @@ declare_args() {
   # Currently, we don't publish ohos-adapted python on m1 platform,
   # So that we disable mini debug info on m1 platform until
   # ohos-adapted python publishing on m1 platform
-  if (host_os == "mac" && host_cpu == "arm64") {
+  if (host_os == "mac") {
     full_mini_debug = false
   } else {
     full_mini_debug = true

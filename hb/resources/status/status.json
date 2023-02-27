@@ -1,0 +1,182 @@
+{
+    "0000": {
+        "code": "0000",
+        "solution": "Unknown solution"
+    },
+    "0001": {
+        "code": "0001",
+        "solution": "Please execute build/prebuilts_download.sh"
+    },
+    "0002": {
+        "code": "0002",
+        "solution": "Using '--test' option like this format --test xts test/xts/acts/startup_lite/bootstrap_hal:ActsBootstrapTest "
+    },
+    "0003": {
+        "code": "0003",
+        "solution": "Args must be declare as 'bool', 'gate', 'str', 'list' in arg_type attribute. Please check your corresponding arg"
+    },
+    "0004": {
+        "code": "0004",
+        "solution": "build/hb/util/device_util.py"
+    },
+    "0005": {
+        "code": "0005",
+        "solution": "build/hb/util/device_util.py"
+    },
+    "0006": {
+        "code": "0006",
+        "solution": "build/hb/util/device_util.py"
+    },
+    "0007": {
+        "code": "0007",
+        "solution": "build/hb/util/device_util.py"
+    },
+    "0008": {
+        "code": "0008",
+        "solution": "build/hb/util/io_util.py"
+    },
+    "0009": {
+        "code": "0009",
+        "solution": "build/hb/util/io_util.py"
+    },
+    "0010": {
+        "code": "0010",
+        "solution": "build/hb/util/io_util.py"
+    },
+    "0011": {
+        "code": "0011",
+        "solution": "build/hb/util/io_util.py"
+    },
+    "0012": {
+        "code": "0012",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0013": {
+        "code": "0013",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0014": {
+        "code": "0014",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0015": {
+        "code": "0015",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0016": {
+        "code": "0016",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0017": {
+        "code": "0017",
+        "solution": "build/hb/util/product_util.py"
+    },
+    "0018": {
+        "code": "0018",
+        "solution": "Run 'hb help' to list all support option"
+    },
+    "0019": {
+        "code": "0019",
+        "solution": "Please run command 'hb set' to init OHOS development environment"
+    },
+    "1000": {
+        "code": "1000",
+        "solution": "Unknown solution method for preload phase"
+    },
+    "2000": {
+        "code": "2000",
+        "solution": "Unknown solution method for load phase"
+    },
+    "2001":{
+        "code": "2001",
+        "solution": "please check whether the corresponding file('out/preloader/{product_name}/subsystem_config.json' or 'build/subsystem_config.json') is written correctly"
+    },
+    "2002":{
+        "code": "2002",
+        "solution": "Gn root dir is a relative path and is currently null. Please try the following in order:\n\t\t 1. Execute hb set and check whether the out path in the configuration item (//ohos_config. json) is correctly written\n\t\t 2. Check whether the file (//build/hb/resources/gloval_var. py) has been moved, modified or deleted"
+    },
+    "2003":{
+        "code": "2003",
+        "solution": "Gn root dir is a relative path, which is currently incorrect. Normally, the path is out/{board}/{product}. Please try the following in order:\n\t\t 1. Execute hb set and check the 'out path', 'board' and 'product' fields in the configuration file (//ohos_config. json)\n\t\t 2.Check whether the file (//build/hb/resources/gloval_var. py) has been moved, modified or deleted"
+    },
+    "2004":{
+        "code": "2004",
+        "solution": "Please check whether the corresponding file('out/preloader/{product_name}/platforms.build' exists"
+    },
+    "2005":{
+        "code": "2005",
+        "solution": "Check whether the file (//build/subsystem_config_example.json) has been moved, modified or deleted"
+    },
+    "2006":{
+        "code": "2006",
+        "solution": "Please remove the feature from the product configuration file, or consider using other supported features"
+    },
+    "2007":{
+        "code": "2007",
+        "solution": "Please check the files related to part configuration and ensure that the dependencies between and within parts are correct."
+    },
+    "2008":{
+        "code": "2008",
+        "solution": "Check the declaration of parts and their syscap in the product configuration file"
+    },
+    "2009":{
+        "code": "2009",
+        "solution": "Please ensure that the bundle.json corresponding to the part is written in accordance with the specification"
+    },
+    "2010":{
+        "code": "2010",
+        "solution": "This platform is not supported. Please select a platform supported by OpenHarmony."
+    },
+    "2011":{
+        "code": "2011",
+        "solution": "Please refer to the writing rules of bundle.json to ensure that the content is correct"
+    },
+    "2012":{
+        "code": "2012",
+        "solution": "Please check the platform in the product configuration and recompile"
+    },
+    "2013":{
+        "code": "2013",
+        "solution": "The subsystem configuration file may be one of the following situations: non-existent, empty, and wrong content. Please check whether the file under out/reload/{product_name} has been removed, and then recompile"
+    },
+    "2014":{
+        "code": "2014",
+        "solution": "An error occurred in the load ohos build. Please try the following:\n\t\t1. Execute hb clean -- all\n\t\t2. Execute hb set and select the product\n\t\t3. Check//ohos_ Whether the config.json content meets the requirements."
+    },
+    "3000": {
+        "code": "3000",
+        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+    },
+    "3001": {
+        "code": "3001",
+        "solution": "See support gn command type in enum class CMDTYPE which locate in build/hb/services/gn.py"
+    },
+    "3002": {
+        "code": "3002",
+        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+    },
+    "3003": {
+        "code": "3003",
+        "solution": "Please check your corresponding arg. You can view the corresponding options in the json file('resources/status/status.json'). \n\t\tOr you can run cmd 'hb tool -h' to show usage"
+    },
+    "3004": {
+        "code": "3004",
+        "solution": "This command requires an existing build directory. Please check whether the corresponding file('out/{product_name}/args.gn' exists."
+    },
+    "3005": {
+        "code": "3005",
+        "solution": "Please check whether the target gn file exists in the corresponding path."
+    },
+    "3006": {
+        "code": "3006",
+        "solution": "Please use '=' to connect argument and value."
+    },
+    "4000": {
+        "code": "4000",
+        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+    },
+    "4001": {
+        "code": "4001",
+        "solution": "You could run cmd 'hb tool --desc' to show what components or module this product have,\n\t\tand if you execute 'hb build' in a directory, it will build the component corresponding \n\t\tto the current directory by default but for building whole product."
+    }
+}

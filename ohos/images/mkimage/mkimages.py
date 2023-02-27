@@ -89,6 +89,8 @@ def mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)
     sparse_img2simg(is_sparse, device)
+    if os.path.isdir(src_dir):
+        shutil.rmtree(src_dir)
 
 
 def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):

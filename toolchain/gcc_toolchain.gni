@@ -154,18 +154,17 @@ template("gcc_toolchain") {
       }
     }
 
-    if (defined(toolchain_args.cc_wrapper)) {
-      toolchain_cc_wrapper = toolchain_args.cc_wrapper
-    } else {
-      toolchain_cc_wrapper = cc_wrapper
-    }
-
     if (is_clang && use_clang_static_analyzer &&
         (!defined(invoker.is_clang_analysis_supported) ||
          invoker.is_clang_analysis_supported)) {
       compiler_prefix = "${analyzer_wrapper} "
       asm = invoker.cc
     } else {
+      if (defined(toolchain_args.cc_wrapper)) {
+        toolchain_cc_wrapper = toolchain_args.cc_wrapper
+      } else {
+        toolchain_cc_wrapper = cc_wrapper
+      }
       if (share_ccache != "") {
         compiler_prefix = "CCACHE_DIR=" + share_ccache +
                           " CCACHE_NOHASHDIR=1 ${toolchain_cc_wrapper} "

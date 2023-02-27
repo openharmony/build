@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
 Copyright (c) 2021 Huawei Device Co., Ltd.
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +18,7 @@ limitations under the License.
 import os
 import json
 import argparse
-from lite.hb_internal.common.config import Config
+from hb.resources.config import Config
 
 """
 @Desc:

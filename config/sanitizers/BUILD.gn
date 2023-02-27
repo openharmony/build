@@ -629,6 +629,25 @@ config("cfi_config_debug") {
   ]
 }
 
+config("cfi_cross_dso_release") {
+  configs = [ ":cfi_config_release" ]
+  cflags = [ "-fsanitize-cfi-cross-dso" ]
+  ldflags = [
+    "-flto",
+    "-fsanitize=cfi",
+    "-fsanitize-cfi-cross-dso",
+  ]
+}
+
+config("cfi_cross_dso_debug") {
+  configs = [ ":cfi_cross_dso_release" ]
+  cflags = [
+    "-fno-sanitize-trap=cfi",
+    "-fsanitize-recover=cfi,undefined",
+  ]
+  ldflags = cflags
+}
+
 config("shadow_call_stack_config") {
   if (target_cpu == "arm64") {
     cflags = [
@@ -684,18 +703,37 @@ config_plus_compiler_rt("scudo_config") {
   compiler_rt_shared_lib_names = [ "scudo_minimal" ]
 }
 
-config_plus_compiler_rt("undefined_behavior_sanitize_config") {
+config("all_undefined_behavior_sanitize_config_release") {
+  cflags = [
+    "-fsanitize=undefined",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fno-sanitize-recover=integer,undefined",
+  ]
+}
+
+config("all_undefined_behavior_sanitize_config_debug") {
+  cflags = [
+    "-fsanitize=undefined",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+  ]
+}
+
+config("undefined_behavior_sanitize_config_release") {
   cflags = [
     "-fsanitize=bool,integer-divide-by-zero,return,returns-nonnull-attribute,shift-exponent,unreachable,vla-bound",
-    "-fsanitize-minimal-runtime",
     "-fno-sanitize-trap=integer,undefined",
     "-fno-sanitize-recover=integer,undefined",
     "-fno-sanitize=implicit-integer-sign-change",
   ]
-  configs = [ ":sanitizer_trap_all_flags" ]
-  compiler_rt_shared_lib_names = [
-    "ubsan_standalone",
-    "ubsan_minimal",
+}
+
+config("undefined_behavior_sanitize_config_debug") {
+  cflags = [
+    "-fsanitize=bool,integer-divide-by-zero,return,returns-nonnull-attribute,shift-exponent,unreachable,vla-bound",
+    "-fno-sanitize-trap=integer,undefined",
+    "-fsanitize-recover=integer,undefined",
+    "-fno-sanitize=implicit-integer-sign-change",
   ]
 }
 
