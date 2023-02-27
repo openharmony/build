@@ -468,7 +468,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         if target_arg.arg_value:
             target_compiler = build_module.target_compiler
-            target_compiler.regist_arg('-k', '1000000000')
+            target_compiler.regist_arg('-k1000000', '')
 
     @staticmethod
     def resolve_build_variant(target_arg: Arg, build_module: BuildModuleInterface):
