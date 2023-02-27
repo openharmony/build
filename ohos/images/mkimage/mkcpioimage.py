@@ -66,6 +66,8 @@ def build_run_cpio(args):
         output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
     elif args.device == "updater_ramdisk.img":
         output_path = os.path.join("%s/../images" % os.getcwd(), "updater.img")
+    elif args.device == "updater_vendor.img":
+        output_path = os.path.join("%s/../images" % os.getcwd(), "updater_vendor.img")
     else:
         output_path = os.path.join(work_dir, args.device)
     ramdisk_cmd = ['cpio', '-o', '-H', 'newc', '-O', output_path]
@@ -98,6 +100,9 @@ def zip_ramdisk(args):
     elif "updater_ramdisk.img" == args.device:
         ramdisk_img = os.path.join(root_dir, "images", "updater.img")
         ramdisk_gz = os.path.join(root_dir, "images", "updater.img.gz")
+    elif "updater_vendor.img" == args.device:
+        ramdisk_img = os.path.join(root_dir, "images", "updater_vendor.img")
+        ramdisk_gz = os.path.join(root_dir, "images", "updater_vendor.img.gz")
     if os.path.exists(ramdisk_gz):
         os.remove(ramdisk_gz)
     res_gzip = run_cmd(["gzip", ramdisk_img])

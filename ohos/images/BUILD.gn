@@ -35,6 +35,9 @@ group("make_images") {
       if (enable_ramdisk) {
         deps += [ ":${_platform}_ramdisk_image" ]
       }
+      if (enable_updater_vendor) {
+        deps += [ ":${_platform}_updater_vendor_image" ]
+      }
     }
     deps += [ ":chip_prod_image" ]
   } else {
@@ -178,6 +181,9 @@ foreach(_platform, target_platform_list) {
   ]
   if (enable_ramdisk) {
     image_list += [ "ramdisk" ]
+  }
+  if (enable_updater_vendor) {
+    image_list += [ "updater_vendor" ]
   }
   foreach(_image_name, image_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
