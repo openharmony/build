@@ -19,6 +19,16 @@ import subprocess
 import json
 
 
+def find_top():
+    cur_dir = os.getcwd()
+    while cur_dir != "/":
+        build_scripts = os.path.join(
+            cur_dir, 'build/scripts/build_package_list.json')
+        if os.path.exists(build_scripts):
+            return cur_dir
+        cur_dir = os.path.dirname(cur_dir)
+
+
 def run_command(cmd, verbose=None):
     """Execute command `cmd`
     :param cmd: Command to be executed.
@@ -57,7 +67,7 @@ def check_build_requried_packages(host_version, check=True):
     :return install_package_list: Packages installed.
     :return uninstall_package_list: Packages missing.
     """
-    cur_dir = os.getcwd()
+    cur_dir = find_top()
     build_package_json = os.path.join(
         cur_dir, 'build/scripts/build_package_list.json')
     with open(build_package_json, 'r') as file:
