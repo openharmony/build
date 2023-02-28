@@ -321,6 +321,7 @@ class Arg():
 
     @staticmethod
     def clean_args_file():
-        for file in os.listdir(CURRENT_ARGS_DIR):
-            if file.endswith('.json') and os.path.exists(os.path.join(CURRENT_ARGS_DIR, file)):
-                os.remove(os.path.join(CURRENT_ARGS_DIR, file))
+        if os.path.exists(CURRENT_ARGS_DIR):
+            for file in os.listdir(CURRENT_ARGS_DIR):
+                if file.endswith('.json') and os.path.exists(os.path.join(CURRENT_ARGS_DIR, file)):
+                    os.remove(os.path.join(CURRENT_ARGS_DIR, file))
