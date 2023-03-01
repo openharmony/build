@@ -618,6 +618,14 @@ config("cfi_config_release") {
     "-fsanitize=cfi",
     "-fsanitize-blacklist=" + rebase_path(_cfi_blocklist_path, root_build_dir),
   ]
+
+  # Remove some platforms because version-script is only meaningful for elf platform that support shared libraries.
+  # Add a cfi version script to ensure cfi related symbols can be exported.
+  if (!is_mac && !is_win && !is_mingw) {
+    _cfi_version_script =
+        rebase_path("//build/config/sanitizers/cfi.versionscript")
+    ldflags = [ "-Wl,--version-script=${_cfi_version_script}" ]
+  }
 }
 
 # Debug mode, add no-trap and recover options over release mode
