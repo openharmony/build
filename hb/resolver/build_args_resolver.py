@@ -103,7 +103,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         config = Config()
-        config.target_cpu = target_arg.arg_value
+        if config.target_cpu == "":
+            config.target_cpu = target_arg.arg_value
+        elif target_arg.arg_value != "arm":
+            config.target_cpu = target_arg.arg_value
 
     @staticmethod
     @throw_exception
