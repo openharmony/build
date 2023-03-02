@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/clang/clang.gni")
 import("//build/config/ohos/config.gni")
 import("//build/config/ohos/musl.gni")
 
@@ -19,8 +20,30 @@ declare_args() {
   use_ohos_rust_toolchain = true
   rustc_version = ""
   rust_sysroot_absolute = ""
+  rust_default_edition = "2021"
   is_rust_nightly = false
   is_rust_stable = false
+}
+if (enable_rust) {
+  if (rust_sysroot_absolute != "") {
+    rust_sysroot = get_path_info(rust_sysroot_absolute, "abspath")
+  } else if (use_ohos_rust_toolchain) {
+    if (host_os != "linux") {
+      assert(false,
+             "Attempt to use OHOS Rust toolchain on an unsupported platform")
+    }
+    rust_sysroot = "//prebuilts/rustc/linux-x86_64/current"
+    is_rust_stable = true
+    is_rust_nightly = false
+  } else {
+    if (host_os != "linux") {
+      assert(false,
+             "Attempt to use OHOS Rust toolchain on an unsupported platform")
+    }
+    rust_sysroot = "//prebuilts/rustc/linux-x86_64/nightly"
+    is_rust_stable = false
+    is_rust_nightly = true
+  }
 }
 
 rust_base = rebase_path("//prebuilts/rustc", root_build_dir)
@@ -38,10 +61,11 @@ clippy_driver = "${rust_bin}/clippy-driver"
 
 stdlib_host_path = "${rust_path}/lib"
 
-clang = rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang",
-                    root_build_dir)
+clang = rebase_path("${default_clang_base_path}/bin/clang", root_build_dir)
 musl_path = rebase_path("${musl_sysroot}", root_build_dir)
-musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+if (defined(abi_target)) {
+  musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+}
 llvm_strip =
     rebase_path("//prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-strip",
                 root_build_dir)

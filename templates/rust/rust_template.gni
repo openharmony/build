@@ -11,7 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/cxx/cxx.gni")
+import("//build/templates/rust/ohos_rust_library.gni")
 
 allowAllLints = [
   "--cap-lints",
@@ -50,297 +52,95 @@ clippyVendorLints = [
   "clippy::style",
 ]
 
-template("ohos_rust_library") {
-  assert(!defined(invoker.output_dir),
-         "output_dir is not allowed to be defined.")
+template("rust_target") {
+  assert(!defined(invoker.crate_root) ||
+         !(defined(invoker.generate_crate_root) && invoker.generate_crate_root))
 
-  if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
-    subsystem_name = invoker.subsystem_name
-    part_name = invoker.part_name
-  } else if (defined(invoker.part_name)) {
-    part_name = invoker.part_name
-    _part_subsystem_info_file =
-        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
-    _arguments = [
-      "--part-name",
-      part_name,
-      "--part-subsystem-info-file",
-      rebase_path(_part_subsystem_info_file, root_build_dir),
+  _crate_name = target_name
+  if (defined(invoker.crate_name)) {
+    _crate_name = invoker.crate_name
+  }
+  _crate_type = ""
+  if (defined(invoker.crate_type)) {
+    _crate_type = invoker.crate_type
+  }
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+
+  _rustflags = []
+  if (defined(invoker.rustflags)) {
+    _rustflags += invoker.rustflags
+  }
+
+  _public_deps = [ "//build/rust:libstd.dylib.so" ]
+  if (defined(invoker.public_deps)) {
+    _public_deps += invoker.public_deps
+  }
+
+  if (defined(invoker.output_dir) && invoker.output_dir != "") {
+    _out_dir = invoker.output_dir
+  } else {
+    _out_dir = target_out_dir
+  }
+
+  if (defined(invoker.features)) {
+    foreach(i, invoker.features) {
+      _rustflags += [ "--cfg=feature=\"${i}\"" ]
+    }
+  }
+  _rustenv = [ "OUT_DIR=" + rebase_path(_out_dir) ]
+  if (defined(invoker.rustenv)) {
+    _rustenv += invoker.rustenv
+  }
+
+  assert(defined(invoker.sources), "sources must be listed")
+
+  _rust_deps = _deps
+  _rust_public_deps = _public_deps
+
+  _edition = rust_default_edition
+  if (defined(invoker.edition)) {
+    _edition = invoker.edition
+  }
+  _rustflags += [ string_join("",
+                              [
+                                "--edition=",
+                                _edition,
+                              ]) ]
+  if (invoker.target_type == "rust_proc_macro") {
+    _rustflags += [
+      "--extern",
+      "proc_macro",
     ]
-    get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
-    subsystem_name =
-        exec_script(get_subsystem_script, _arguments, "trim string")
-  } else if (defined(invoker.subsystem_name)) {
-    subsystem_name = invoker.subsystem_name
-    part_name = subsystem_name
-  } else {
-    subsystem_name = "common"
-    part_name = subsystem_name
   }
-  assert(subsystem_name != "")
-  assert(part_name != "")
-
-  if (check_deps) {
-    deps_data = {
-    }
-    module_label = get_label_info(":${target_name}", "label_with_toolchain")
-    module_deps = []
-    if (defined(invoker.deps)) {
-      foreach(dep, invoker.deps) {
-        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
-      }
-    }
-    module_ex_deps = []
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
-      module_ex_deps = invoker.external_deps
-    }
-    deps_data = {
-      part_name = part_name
-      module_label = module_label
-      deps = module_deps
-      external_deps = module_ex_deps
-    }
-    write_file("${root_out_dir}/deps_files/${part_name}__${target_name}.json",
-               deps_data,
-               "json")
-  }
-
-  if (is_standard_system) {
-    output_dir = "${root_out_dir}/${subsystem_name}/${part_name}"
-  } else {
-    output_dir = "${root_out_dir}"
-  }
-
-  _test_target = defined(invoker.testonly) && invoker.testonly
-  if (!_test_target) {
-    _notice_target = "${target_name}__notice"
-    _main_target_name = target_name
-    collect_notice(_notice_target) {
-      forward_variables_from(invoker,
-                             [
-                               "testonly",
-                               "license_as_sources",
-                               "license_file",
-                             ])
-
-      module_name = _main_target_name
-      module_source_dir = get_label_info(":${_main_target_name}", "dir")
-    }
-  }
-
-  target_label = get_label_info(":${target_name}", "label_with_toolchain")
-  target_toolchain = get_label_info(target_label, "toolchain")
-
-  if (target_toolchain == "${current_toolchain}") {
-    ohos_module_name = target_name
-    _module_info_target = "${target_name}_info"
-    generate_module_info(_module_info_target) {
-      module_name = ohos_module_name
-      module_type = "lib"
-      module_source_dir = "$root_out_dir"
-      if (defined(output_dir)) {
-        module_source_dir = output_dir
-      }
-
-      module_install_name = ohos_module_name
-      if (defined(invoker.output_name)) {
-        module_install_name = invoker.output_name
-      }
-
-      module_install_images = [ "system" ]
-      if (defined(invoker.install_images)) {
-        module_install_images = []
-        module_install_images += invoker.install_images
-      }
-
-      module_output_extension = shlib_extension
-      if (defined(invoker.module_output_extension)) {
-        module_output_extension = invoker.module_output_extension
-      }
-
-      install_enable = true
-      if (defined(invoker.install_enable)) {
-        install_enable = invoker.install_enable
-      }
-
-      if (defined(invoker.module_install_dir)) {
-        module_install_dir = invoker.module_install_dir
-      }
-
-      if (defined(invoker.relative_install_dir)) {
-        relative_install_dir = invoker.relative_install_dir
-      }
-
-      if (defined(invoker.symlink_target_name)) {
-        symlink_target_name = invoker.symlink_target_name
-      }
-
-      if (defined(invoker.output_prefix_override)) {
-        output_prefix_override = invoker.output_prefix_override
-      }
-      notice = "$target_out_dir/$ohos_module_name.notice.txt"
-    }
-  }
-
-  rust_library("${target_name}") {
+  target(invoker.target_type, "${target_name}") {
     forward_variables_from(invoker,
                            "*",
                            [
-                             "configs",
-                             "remove_configs",
-                             "no_default_deps",
-                             "external_deps",
-                             "install_images",
-                             "module_install_dir",
-                             "relative_install_dir",
-                             "symlink_target_name",
+                             "features",
+                             "deps",
+                             "public_deps",
+                             "rustflags",
+                             "rustenv",
+
+                             # "configs",
                              "output_dir",
-                             "install_enable",
-                             "version_script",
-                             "license_file",
-                             "license_as_sources",
-                             "use_exceptions",
-                             "stl",
-
-                             # Sanitizer variables
-                             "sanitize",
+                             "crate_type",
                            ])
-    output_dir = output_dir
+    crate_name = _crate_name
 
-    if (!defined(inputs)) {
-      inputs = []
+    deps = _rust_deps
+    public_deps = _rust_public_deps
+    rustflags = _rustflags
+    rustenv = _rustenv
+    crate_type = _crate_type
+    if (target_type == "rust_proc_macro") {
+      output_dir = _out_dir
     }
-
-    if (!defined(ldflags)) {
-      ldflags = []
-    }
-
-    if (defined(invoker.configs)) {
-      configs += invoker.configs
-    }
-    if (defined(invoker.remove_configs)) {
-      configs -= invoker.remove_configs
-    }
-
-    if (!defined(output_name)) {
-      output_name = target_name
-    }
-
-    if (defined(invoker.no_default_deps)) {
-      no_default_deps = invoker.no_default_deps
-    }
-
-    if (!defined(ldflags)) {
-      ldflags = []
-    }
-    if (!defined(libs)) {
-      libs = []
-    }
-    if (!defined(cflags_cc)) {
-      cflags_cc = []
-    }
-    if (!defined(deps)) {
-      deps = []
-    }
-    deps += [
-      "//build/rust:libstd.dylib.so",
-      "//build/rust:libtest.dylib.so",
-    ]
-    if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
-      deps += [ ":$_module_info_target" ]
-    }
-
-    if (is_ohos) {
-      if (defined(invoker.stl)) {
-        cflags_cc += [
-          "-nostdinc++",
-          "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
-                  root_build_dir),
-        ]
-        ldflags += [
-          "-nostdlib++",
-          "-L" + rebase_path("${clang_stl_path}/${abi_target}/c++",
-                             root_build_dir),
-        ]
-
-        libs += [ invoker.stl ]
-      } else {
-        if (current_cpu == "arm" || current_cpu == "arm64") {
-          libs += [ "unwind" ]
-        }
-        ldflags += [ "-L" + rebase_path("${clang_stl_path}/${abi_target}/c++",
-                                        root_build_dir) ]
-
-        libs += [ "c++" ]
-      }
-    }
-
-    if (!_test_target) {
-      deps += [ ":$_notice_target" ]
-    }
-    if (!defined(include_dirs)) {
-      include_dirs = []
-    }
-    if (defined(invoker.external_deps)) {
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
-      external_deps_temp_file =
-          "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path(parts_src_flag_file, root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-      ]
-      if (is_use_sdk) {
-        arguments += [ "--use-sdk" ]
-      }
-
-      exec_script(external_deps_script, arguments, "string")
-
-      external_deps_info = read_file(external_deps_temp_file, "json")
-      if (defined(external_deps_info.deps)) {
-        deps += external_deps_info.deps
-      }
-      if (defined(external_deps_info.libs)) {
-        libs += external_deps_info.libs
-      }
-      if (defined(external_deps_info.include_dirs)) {
-        include_dirs += external_deps_info.include_dirs
-      }
-    }
-
-    install_module_info = {
-      module_def = target_label
-      module_info_file =
-          rebase_path(get_label_info(module_def, "target_out_dir"),
-                      root_build_dir) + "/${target_name}_module_info.json"
-      subsystem_name = subsystem_name
-      part_name = part_name
-      toolchain = current_toolchain
-      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
-    }
-    metadata = {
-      install_modules = [ install_module_info ]
-    }
-    if (defined(is_debug) && !is_debug && enable_debug_components != "") {
-      foreach(component_name, debug_components) {
-        if (part_name == component_name) {
-          configs -= default_opt_configs
-          configs += debug_level_configs
-        }
-      }
+    if (!defined(output_name) || output_name == "") {
+      output_name = crate_name
     }
   }
 }
@@ -348,12 +148,8 @@ template("ohos_rust_library") {
 template("ohos_rust_executable") {
   _target_name = target_name
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  ohos_executable("$_target_name") {
+  rust_target("$_target_name") {
+    target_type = "ohos_executable"
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
@@ -384,7 +180,6 @@ template("ohos_rust_executable") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -433,12 +228,8 @@ template("ohos_rust_executable") {
 template("ohos_rust_shared_library") {
   _target_name = target_name
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  ohos_rust_library("$_target_name") {
+  rust_target("$_target_name") {
+    target_type = "ohos_rust_library"
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
@@ -466,7 +257,6 @@ template("ohos_rust_shared_library") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -512,12 +302,8 @@ template("ohos_rust_shared_library") {
 template("ohos_rust_static_library") {
   _target_name = target_name
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  ohos_rust_library("$_target_name") {
+  rust_target("$_target_name") {
+    target_type = "ohos_rust_library"
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
@@ -543,7 +329,6 @@ template("ohos_rust_static_library") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -589,12 +374,8 @@ template("ohos_rust_static_library") {
 template("ohos_rust_shared_ffi") {
   _target_name = target_name
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  ohos_shared_library("$_target_name") {
+  rust_target("$_target_name") {
+    target_type = "ohos_shared_library"
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
@@ -626,7 +407,6 @@ template("ohos_rust_shared_ffi") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -672,12 +452,8 @@ template("ohos_rust_shared_ffi") {
 template("ohos_rust_static_ffi") {
   _target_name = target_name
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  ohos_static_library("$_target_name") {
+  rust_target("$_target_name") {
+    target_type = "ohos_static_library"
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
@@ -707,7 +483,6 @@ template("ohos_rust_static_ffi") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -883,12 +658,8 @@ template("ohos_rust_proc_macro") {
   }
 
   _rustflags = []
-  if (defined(invoker.features)) {
-    foreach(i, invoker.features) {
-      _rustflags += [ "--cfg=feature=\"${i}\"" ]
-    }
-  }
-  rust_proc_macro(target_name) {
+  rust_target(target_name) {
+    target_type = "rust_proc_macro"
     forward_variables_from(invoker,
                            "*",
                            [
@@ -945,9 +716,6 @@ template("ohos_rust_proc_macro") {
       no_default_deps = invoker.no_default_deps
     }
 
-    if (!defined(ldflags)) {
-      ldflags = []
-    }
     if (!defined(libs)) {
       libs = []
     }
@@ -1041,7 +809,6 @@ template("ohos_rust_proc_macro") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      # print(source_dir_begin)
       if (source_dir_begin == "openharmony") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
