@@ -565,11 +565,11 @@ if (!is_ohos) {
 
 #set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
-  file_exist = exec_script(rebase_path("//build/scripts/check_file_exist.py"),
-                           [ rebase_path("//${device_build_path}/config.gni") ],
+  file_exist = exec_script("//build/scripts/check_file_exist.py",
+                           [ "${device_build_path}/config.gni" ],
                            "string")
   if (file_exist != "") {
-    import("//${device_build_path}/config.gni")
+    import("${device_build_path}/config.gni")
   }
 
   # =============================================================================
@@ -611,7 +611,6 @@ if (is_standard_system) {
     "//build/config/coverage:default_coverage",
     "//build/config/sanitizers:default_sanitizer_flags",
     "//build/config/security:default_security_configs",
-    "//build/config/rust:rust_config",
   ]
 
   if (is_ohos) {
@@ -636,13 +635,15 @@ if (is_standard_system) {
   }
 
   # Static libraries and source sets use only the compiler ones.
-  default_static_library_configs = default_compiler_configs
+  default_static_library_configs =
+      default_compiler_configs + [ "//build/config/rust:rust_config" ]
   default_source_set_configs = default_compiler_configs
 
   # Executable defaults.
   default_executable_configs = default_compiler_configs + [
                                  "//build/config:default_libs",
                                  "//build/config:executable_config",
+                                 "//build/config/rust:rust_config",
                                ]
 
   # Shared library and loadable module defaults (also for components in component
@@ -650,6 +651,7 @@ if (is_standard_system) {
   default_shared_library_configs = default_compiler_configs + [
                                      "//build/config:default_libs",
                                      "//build/config:shared_library_config",
+                                     "//build/config/rust:rust_config",
                                    ]
 }
 
@@ -827,11 +829,11 @@ set_defaults("shared_library") {
 }
 
 set_defaults("rust_library") {
-  configs = default_compiler_configs
+  configs = [ "//build/config/rust:rust_config" ]
 }
 
 set_defaults("rust_proc_macro") {
-  configs = default_compiler_configs
+  configs = [ "//build/config/rust:rust_config" ]
 }
 
 set_defaults("source_set") {
@@ -849,7 +851,6 @@ target_type_list = [
   "static_library",
   "rust_library",
   "source_set",
-  "rust_proc_macro",
 ]
 
 foreach(_target_type, target_type_list) {
