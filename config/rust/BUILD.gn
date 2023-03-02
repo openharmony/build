@@ -14,6 +14,7 @@
 config("rust_config") {
   rustflags = [
     "-Cdebuginfo=2",
+    "--edition=2021",
     "-Csymbol-mangling-version=v0",
   ]
 }
