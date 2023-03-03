@@ -64,8 +64,11 @@ def _add_str_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Argu
 
 
 def _add_list_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
-    return parser.add_argument(arg['arg_name'], help=arg['arg_help'],
-                               nargs='*', default=arg['argDefault'], action='append')
+    if arg['arg_attribute'].get('abbreviation'):
+        return _add_list_abbreviation_option(parser, arg)
+    else:
+        return parser.add_argument(arg['arg_name'], help=arg['arg_help'],
+                                   nargs='*', default=arg['argDefault'], action='append')
 
 
 def _add_gate_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
@@ -90,3 +93,8 @@ def _add_str_optional_option(parser: argparse.ArgumentParser, arg: dict) -> argp
 def _add_str_optional_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
     return parser.add_argument(arg['arg_attribute'].get('abbreviation'), arg['arg_name'], help=arg['arg_help'],
                                default=arg['argDefault'], choices=arg['arg_attribute'].get('optional'))
+
+
+def _add_list_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
+    return parser.add_argument(arg['arg_attribute'].get('abbreviation'), arg['arg_name'], help=arg['arg_help'],
+                               nargs='*', default=arg['argDefault'], action='append')

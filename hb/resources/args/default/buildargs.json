@@ -89,7 +89,7 @@
     "arg_phase": "prebuild",
     "arg_type": "list",
     "arg_attribute": {
-      "abbreviation": "-b"
+      "abbreviation": "-T"
     },
     "resolve_function": "resolve_build_target",
     "testFunction": "testBuildTarget"
