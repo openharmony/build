@@ -185,6 +185,10 @@ template("ohos_executable") {
     }
   }
 
+  if (!defined(invoker.stable)) {
+    stable = false
+  }
+
   executable("${target_name}") {
     forward_variables_from(invoker,
                            "*",
@@ -342,6 +346,32 @@ template("ohos_executable") {
     if (!_test_target) {
       deps += [ ":$_notice_target" ]
     }
+
+    module_label = get_label_info(":${target_name}", "label_with_toolchain")
+
+    deps_info = []
+    foreach(dep, deps) {
+      info = {
+      }
+      info = {
+        target_out_dir =
+            rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+        target_name = get_label_info(dep, "name")
+      }
+      deps_info += [ info ]
+    }
+    target_deps_data = {
+      label = module_label
+      module_deps_info = deps_info
+      module_libs = libs
+      type = "executable"
+      prebuilt = false
+      stable = stable
+      toolchain = get_label_info(":${target_name}", "toolchain")
+    }
+    write_file("${target_out_dir}/${target_name}_deps_data.json",
+               target_deps_data,
+               "json")
   }
 }
 
@@ -585,6 +615,10 @@ template("ohos_shared_library") {
     }
   }
 
+  if (!defined(invoker.stable)) {
+    stable = false
+  }
+
   shared_library("${target_name}") {
     forward_variables_from(invoker,
                            "*",
@@ -802,6 +836,31 @@ template("ohos_shared_library") {
         ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
     }
+
+    deps_info = []
+    foreach(dep, deps) {
+      info = {
+      }
+      info = {
+        target_out_dir =
+            rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+        target_name = get_label_info(dep, "name")
+      }
+      deps_info += [ info ]
+    }
+    module_label = get_label_info(":${target_name}", "label_with_toolchain")
+    target_deps_data = {
+      label = module_label
+      module_deps_info = deps_info
+      module_libs = libs
+      type = "shared_library"
+      prebuilt = false
+      stable = stable
+      toolchain = get_label_info(":${target_name}", "toolchain")
+    }
+    write_file("${target_out_dir}/${target_name}_deps_data.json",
+               target_deps_data,
+               "json")
   }
 }
 
@@ -990,6 +1049,30 @@ template("ohos_static_library") {
         }
       }
     }
+
+    deps_info = []
+    foreach(dep, deps) {
+      info = {
+      }
+      info = {
+        target_out_dir =
+            rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+        target_name = get_label_info(dep, "name")
+      }
+      deps_info += [ info ]
+    }
+    module_label = get_label_info(":${target_name}", "label_with_toolchain")
+    target_deps_data = {
+      label = module_label
+      module_deps_info = deps_info
+      module_libs = libs
+      type = "static_library"
+      prebuilt = false
+      toolchain = get_label_info(":${target_name}", "toolchain")
+    }
+    write_file("${target_out_dir}/${target_name}_deps_data.json",
+               target_deps_data,
+               "json")
   }
 }
 
@@ -1178,5 +1261,28 @@ template("ohos_source_set") {
         }
       }
     }
+
+    deps_info = []
+    foreach(dep, deps) {
+      info = {
+      }
+      info = {
+        target_out_dir =
+            rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+        target_name = get_label_info(dep, "name")
+      }
+      deps_info += [ info ]
+    }
+    module_label = get_label_info(":${target_name}", "label_with_toolchain")
+    target_deps_data = {
+      label = module_label
+      module_deps_info = deps_info
+      module_libs = libs
+      type = "source_set"
+      toolchain = get_label_info(":${target_name}", "toolchain")
+    }
+    write_file("${target_out_dir}/${target_name}_deps_data.json",
+               target_deps_data,
+               "json")
   }
 }

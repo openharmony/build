@@ -1,0 +1,117 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+
+template("check_abi_and_copy_deps") {
+  action(target_name) {
+    abidiff_target = "//third_party/libabigail/tools:abidiff($host_toolchain)"
+    abidw_target = "//third_party/libabigail/tools:abidw($host_toolchain)"
+    deps = invoker.sources
+    deps += [ abidiff_target ]
+    deps += [ abidw_target ]
+    outputs = []
+    check_params = []
+    foreach(element, invoker.sources) {
+      element_target_out_dir = get_label_info(element, "target_out_dir")
+      element_name = get_label_info(element, "name")
+
+      param_data = []
+      param_data = {
+        type = invoker.type
+        target_out_dir = rebase_path(element_target_out_dir, root_build_dir)
+        target_name = element_name
+        root_out_dir = rebase_path(invoker.root_out_dir, root_build_dir)
+      }
+      check_params += [ param_data ]
+
+      outputs += [ "${element_target_out_dir}/${element_name}_abi_info.dump" ]
+    }
+
+    check_datas_file =
+        "${target_out_dir}/${invoker.target_name}_check_datas.json"
+    write_file(check_datas_file, check_params, "json")
+
+    script = "//build/ohos/update/check_abi_and_copy_deps.py"
+
+    args = [
+      "--clang-readelf",
+      rebase_path("$clang_base_path/bin/llvm-readelf", root_build_dir),
+      "--target-out-dir",
+      rebase_path(target_out_dir, root_build_dir),
+      "--check-datas-file",
+      rebase_path(check_datas_file, root_build_dir),
+      "--abidiff-target-name",
+      get_label_info(abidiff_target, "name"),
+      "--abidiff-target-out-dir",
+      rebase_path(get_label_info(abidiff_target, "target_out_dir"),
+                  root_build_dir),
+      "--abidw-target-name",
+      get_label_info(abidw_target, "name"),
+      "--abidw-target-out-dir",
+      rebase_path(get_label_info(abidw_target, "target_out_dir"),
+                  root_build_dir),
+      "--abi-dumps-path",
+      rebase_path("//prebuilts/abi_dumps", root_build_dir),
+    ]
+  }
+}
+
+template("ohos_module_package") {
+  forward_variables_from(invoker, "*")
+
+  if (!defined(libraries)) {
+    libraries = []
+  }
+
+  if (!defined(prebuilts)) {
+    prebuilts = []
+  }
+
+  if (!defined(binaries)) {
+    binaries = []
+  }
+
+  if (!defined(etc)) {
+    etc = []
+  }
+
+  check_abi_and_copy_deps("${target_name}_libraries") {
+    sources = libraries
+    type = "shared_library"
+  }
+
+  check_abi_and_copy_deps("${target_name}_binaries") {
+    sources = binaries
+    type = "executable"
+  }
+
+  check_abi_and_copy_deps("${target_name}_prebuilts") {
+    sources = prebuilts
+    type = "prebuilt"
+  }
+
+  check_abi_and_copy_deps("${target_name}_etc") {
+    sources = etc
+    type = "etc"
+  }
+
+  group(target_name) {
+    deps = [
+      ":${target_name}_binaries",
+      ":${target_name}_etc",
+      ":${target_name}_libraries",
+      ":${target_name}_prebuilts",
+    ]
+  }
+}
