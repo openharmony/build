@@ -268,21 +268,23 @@ class BuildArgsResolver(ArgsResolverInterface):
             'device_type', build_module.args_dict['device_type'].arg_value)
         target_generator.regist_arg(
             'build_variant', build_module.args_dict['build_variant'].arg_value)
-        for gn_arg in target_arg.arg_value:
+        for gn_args in target_arg.arg_value:
             try:
-                variable, value = gn_arg.split('=')
-                if TypeCheckUtil.is_bool_type(value):
-                    if str(value).lower() == 'false':
-                        value = False
-                    elif str(value).lower() == 'true':
-                        value = True
-                elif TypeCheckUtil.is_int_type(value):
-                    value = int(value)
-                elif isinstance(value, list):
-                    value = list(value)
-                else:
-                    value = str(value)
-                target_generator.regist_arg(variable, value)
+                gn_args_list = gn_args.split()
+                for gn_arg in gn_args_list:
+                    variable, value = gn_arg.split('=')
+                    if TypeCheckUtil.is_bool_type(value):
+                        if str(value).lower() == 'false':
+                            value = False
+                        elif str(value).lower() == 'true':
+                            value = True
+                    elif TypeCheckUtil.is_int_type(value):
+                        value = int(value)
+                    elif isinstance(value, list):
+                        value = list(value)
+                    else:
+                        value = str(value)
+                    target_generator.regist_arg(variable, value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
 
