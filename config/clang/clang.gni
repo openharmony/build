@@ -4,9 +4,13 @@
 
 import("//build/toolchain/toolchain.gni")
 
-default_clang_base_path = "//prebuilts/clang/ohos/${host_platform_dir}/llvm"
-clang_lib_path =
-    "//prebuilts/clang/ohos/${host_platform_dir}/llvm/lib/clang/12.0.1/lib"
+declare_args() {
+  llvm_version = "12.0.1"
+}
+
+default_clang_base_path =
+    "//prebuilts/clang/ohos/${host_platform_dir}/${llvm_version}/llvm"
+clang_lib_path = "//prebuilts/clang/ohos/${host_platform_dir}/${llvm_version}/llvm/lib/clang/${llvm_version}/lib"
 
 declare_args() {
   # Indicates if the build should use the Chrome-specific plugins for enforcing
@@ -18,5 +22,5 @@ declare_args() {
 
   clang_lib_base_path = clang_lib_path
 
-  clang_stl_path = "//prebuilts/clang/ohos/${host_platform_dir}/libcxx-ndk/lib"
+  clang_stl_path = "//prebuilts/clang/ohos/${host_platform_dir}/${llvm_version}/libcxx-ndk/lib"
 }
