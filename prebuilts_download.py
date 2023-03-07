@@ -222,13 +222,24 @@ def _node_modules_copy(config, code_dir, enable_symlink):
 
 def _file_handle(config, code_dir):
     for config_info in config:
-        src_dir = code_dir + config_info.get('src')
-        dest_dir = code_dir + config_info.get('dest')
-        tmp_dir = config_info.get('tmp')
-        symlink_src = config_info.get('symlink_src')
-        symlink_dest = config_info.get('symlink_dest')
-        rename = config_info.get('rename')
-        if os.path.exists(src_dir):
+        if config_info.get('copy_dest'):
+            copy_dest_dir = code_dir + config_info.get('copy_dest')
+            if os.path.exists(copy_dest_dir):
+                remove_cmd = 'rm -rf ' + copy_dest_dir
+                _run_cmd(remove_cmd)
+            mkdir_cmd = 'mkdir -p ' + copy_dest_dir
+            _run_cmd(mkdir_cmd)
+    for config_info in config:
+        if config_info.get('src'):
+            src_dir = code_dir + config_info.get('src')
+            dest_dir = code_dir + config_info.get('dest')
+            tmp_dir = config_info.get('tmp')
+            symlink_src = config_info.get('symlink_src')
+            symlink_dest = config_info.get('symlink_dest')
+            rename = config_info.get('rename')
+            if not os.path.exists(src_dir):
+                print('Warning, file handle source directory not exist. Dir path: ' + src_dir)
+                continue
             if tmp_dir:
                 tmp_dir = code_dir + tmp_dir
                 shutil.move(src_dir, tmp_dir)
@@ -245,6 +256,17 @@ def _file_handle(config, code_dir):
                     os.symlink(dest_dir + symlink_src, dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
+        if config_info.get('copy_src'):
+            copy_src_dir = code_dir + config_info.get('copy_src')
+            copy_dest_dir = code_dir + config_info.get('copy_dest')
+            if not os.path.exists(copy_src_dir):
+                print('Warning, file handle copy source directory not exist. Dir path: ' + copy_src_dir)
+                continue
+            if copy_src_dir:
+                copy_cmd = 'cp -af ' + copy_src_dir + ' ' + copy_dest_dir
+                _run_cmd(copy_cmd)
+
+
 
 def _import_rich_module():
     module = importlib.import_module('rich.progress')
