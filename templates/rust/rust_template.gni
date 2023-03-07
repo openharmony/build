@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build/config/clang/clang.gni")
 import("//build/templates/cxx/cxx.gni")
 
 allowAllLints = [
@@ -256,7 +255,7 @@ template("ohos_rust_library") {
         cflags_cc += [
           "-nostdinc++",
           "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/${llvm_version}/llvm_ndk/include/c++/v1",
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
                   root_build_dir),
         ]
         ldflags += [
