@@ -115,6 +115,9 @@ template("ohos_copy") {
         install_enable = false
       }
 
+      part_name = _part_name
+      subsystem_name = _subsystem_name
+
       module_install_images = [ "system" ]
       if (defined(invoker.install_images)) {
         module_install_images = []
