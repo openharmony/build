@@ -1,0 +1,218 @@
+{
+  "arkui": {
+    "path": "foundation/arkui",
+    "name": "arkui"
+  },
+  "ai": {
+    "path": "foundation/ai",
+    "name": "ai"
+  },
+  "account": {
+    "path": "base/account",
+    "name": "account"
+  },
+  "distributeddatamgr": {
+    "path": "foundation/distributeddatamgr",
+    "name": "distributeddatamgr"
+  },
+  "security": {
+    "path": "base/security",
+    "name": "security"
+  },
+  "useriam": {
+    "path": "base/useriam",
+    "name": "useriam"
+  },
+  "startup": {
+    "path": "base/startup",
+    "name": "startup"
+  },
+  "hiviewdfx": {
+    "path": "base/hiviewdfx",
+    "name": "hiviewdfx"
+  },
+  "utils": {
+    "path": "utils",
+    "name": "utils"
+  },
+  "commonlibrary": {
+    "path": "commonlibrary",
+    "name": "commonlibrary"
+  },
+  "bundlemanager": {
+    "path": "foundation/bundlemanager",
+    "name": "bundlemanager"
+  },
+  "appexecfwk": {
+    "path": "foundation/appexecfwk",
+    "name": "appexecfwk"
+  },
+  "aafwk": {
+    "path": "foundation/ability",
+    "name": "ability"
+  },
+  "ability": {
+    "path": "foundation/ability",
+    "name": "ability"
+  },
+  "notification": {
+    "path": "base/notification",
+    "name": "notification"
+  },
+  "communication": {
+    "path": "foundation/communication",
+    "name": "communication"
+  },
+  "location": {
+    "path": "base/location",
+    "name": "location"
+  },
+  "systemabilitymgr": {
+    "path": "foundation/systemabilitymgr",
+    "name": "systemabilitymgr"
+  },
+  "hdf": {
+    "path": "drivers",
+    "name": "hdf"
+  },
+  "updater": {
+    "path": "base/update",
+    "name": "updater"
+  },
+  "developtools": {
+    "path": "developtools",
+    "name": "developtools"
+  },
+  "sensors": {
+    "path": "base/sensors",
+    "name": "sensors"
+  },
+  "graphic": {
+    "path": "foundation/graphic",
+    "name": "graphic"
+  },
+  "window": {
+    "path": "foundation/window",
+    "name": "window"
+  },
+  "time": {
+    "path": "base/time",
+    "name": "time"
+  },
+  "inputmethod": {
+    "path": "base/inputmethod",
+    "name": "inputmethod"
+  },
+  "request": {
+    "path": "base/request",
+    "name": "request"
+  },
+  "print": {
+    "path": "base/print",
+    "name": "print"
+  },
+  "theme": {
+    "path": "base/theme",
+    "name": "theme"
+  },
+  "multimedia": {
+    "path": "foundation/multimedia",
+    "name": "multimedia"
+  },
+  "multimodalinput": {
+    "path": "foundation/multimodalinput",
+    "name": "multimodalinput"
+  },
+  "telephony": {
+    "path": "base/telephony",
+    "name": "telephony"
+  },
+  "global": {
+    "path": "base/global",
+    "name": "global"
+  },
+  "powermgr": {
+    "path": "base/powermgr",
+    "name": "powermgr"
+  },
+  "usb": {
+    "path": "base/usb",
+    "name": "usb"
+  },
+  "applications": {
+    "path": "applications",
+    "name": "applications"
+  },
+  "wpa_supplicant-2.9": {
+    "path": "third_party/wpa_supplicant/wpa_supplicant-2.9_standard",
+    "name": "wpa_supplicant-2.9"
+  },
+  "xts": {
+    "path": "test/xts",
+    "name": "xts"
+  },
+  "wukong": {
+    "path": "test/ostest/wukong",
+    "name": "wukong"
+  },
+  "arkXtest": {
+    "path": "test/testfwk/arkxtest",
+    "name": "arkXtest"
+  },
+  "distributedhardware": {
+    "path": "foundation/distributedhardware",
+    "name": "distributedhardware"
+  },
+  "arkcompiler": {
+    "path": "arkcompiler",
+    "name": "arkcompiler"
+  },
+  "iothardware": {
+    "path": "base/iothardware",
+    "name": "iothardware"
+  },
+  "kernel": {
+    "path": "kernel",
+    "name": "kernel"
+  },
+  "msdp": {
+    "path": "base/msdp",
+    "name": "msdp"
+  },
+  "deviceprofile": {
+    "path": "foundation/deviceprofile",
+    "name": "deviceprofile"
+  },
+  "filemanagement": {
+    "path": "foundation/filemanagement",
+    "name": "filemanagement"
+  },
+  "resourceschedule": {
+    "path": "foundation/resourceschedule",
+    "name": "resourceschedule"
+  },
+  "barrierfree": {
+    "path": "foundation/barrierfree/accessibility",
+    "name": "accessibility"
+  },
+  "securec": {
+    "path": "third_party/bounds_checking_function",
+    "name": "securec"
+  },
+  "customization": {
+    "path": "base/customization",
+    "name": "customization"
+  },
+  "web": {
+    "path": "base/web",
+    "name": "web"
+  },
+  "thirdparty": {
+    "path": "third_party",
+    "name": "thirdparty"
+  },
+  "testpart": {
+    "path": "vendor/testpart",
+    "name": "testpart"
+  }
+}
