@@ -60,6 +60,10 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
+      "copy_src": "/prebuilts/clang/ohos/linux-x86_64/12.0.1/llvm/include",
+      "copy_dest": "/prebuilts/clang/ohos/linux-x86_64/12.0.1/llvm_ndk"
+    },
+    {
       "src": "/prebuilts/clang/ohos/darwin-arm64/12.0.1/clang_darwin-arm64-4133f2-20230230",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/12.0.1/llvm",
       "rename": "true",
@@ -81,6 +85,10 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
+      "copy_src": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include",
+      "copy_dest": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm_ndk"
+    },
+    {
       "src": "/prebuilts/clang/ohos/darwin-arm64/15.0.4/clang_darwin-arm64-77da71-20230230",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/15.0.4/llvm",
       "rename": "true",
@@ -98,6 +106,10 @@
       "rename": "true"
     },
     {
+      "copy_src": "/prebuilts/clang/ohos/linux-x86_64/12.0.1/libcxx-ndk/include/libcxx-ohos/include",
+      "copy_dest": "/prebuilts/clang/ohos/linux-x86_64/12.0.1/llvm_ndk"
+    },
+    {
       "src": "/prebuilts/clang/ohos/darwin-arm64/12.0.1/libcxx-ndk_darwin-arm64-4133f2-20230230",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/12.0.1/libcxx-ndk",
       "rename": "true"
@@ -111,6 +123,10 @@
       "src": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/libcxx-ndk_linux-x86_64-77da71-20230230",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/libcxx-ndk",
       "rename": "true"
+    },
+    {
+      "copy_src": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/libcxx-ndk/include/libcxx-ohos/include",
+      "copy_dest": "/prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm_ndk"
     },
     {
       "src": "/prebuilts/clang/ohos/darwin-arm64/15.0.4/libcxx-ndk_darwin-arm64-77da71-20230230",
