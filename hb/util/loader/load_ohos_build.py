@@ -604,8 +604,21 @@ def check_subsystem_and_component(parts_info_output_path):
         for subsystems_name in iter(subsystems_info):
             subsystem_name = subsystems_name['subsystem']
             components_name = subsystems_name['components']
-            compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
-                                            part_subsystem_component_info)
+            #compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
+            #                                part_subsystem_component_info)
+            for component in components_name:
+                if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
+                    continue
+                if component['component'] in list(part_subsystem_component_info.keys()):
+                    if subsystem_name in list(part_subsystem_component_info.values()):
+                        continue
+                    if subsystem_name == component['component']:
+                        continue
+                    raise Exception(
+                        'find subsystem {} failed, please check it in {}.'.format(subsystem_name, config_path))
+                else:
+                    raise Exception(
+                        'find component {} failed, please check it in {}.'.format(component['component'], config_path))
 
 
 def _output_parts_info(parts_config_dict, config_output_path):
