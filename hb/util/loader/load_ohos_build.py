@@ -570,8 +570,8 @@ class LoadBuildConfig(object):
             key: value for key, value in self._parts_module_list.items() if save_part == key}
 
 
-def compare_subsystem_and_component(components_name, subsystem_compoents_whitelist_info, 
-                                    part_subsystem_component_info,subsystem_name):
+def compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
+                                    part_subsystem_component_info):
     for component in components_name:
         if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
             continue
@@ -601,13 +601,11 @@ def check_subsystem_and_component(parts_info_output_path):
     if os.path.isfile(config_path):
         info = read_json_file(config_path)
         subsystems_info = info['subsystems']
-        for key in subsystems_info:
-            subsystems_name = subsystems_info[key]
+        for subsystems_name in iter(subsystems_info):
             subsystem_name = subsystems_name['subsystem']
-
             components_name = subsystems_name['components']
-            compare_subsystem_and_component(components_name, subsystem_compoents_whitelist_info, 
-                                            part_subsystem_component_info,subsystem_name)
+            compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
+                                            part_subsystem_component_info)
 
 
 def _output_parts_info(parts_config_dict, config_output_path):
