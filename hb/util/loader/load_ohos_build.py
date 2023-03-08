@@ -21,6 +21,7 @@ from util.log_util import LogUtil
 from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501  pylint: disable=C0413, E0611
 from . import load_bundle_file
+from resources.config import Config
 
 IMPORT_LIST = """
 # import("//build/ohos.gni")
@@ -568,6 +569,36 @@ class LoadBuildConfig(object):
         self._parts_module_list = {
             key: value for key, value in self._parts_module_list.items() if save_part == key}
 
+def check_subsystem_and_component(parts_info_output_path):
+    config = Config()
+    config_path = os.path.join(config.product_config_path, 'config.json')
+    part_subsystem_file = os.path.join(parts_info_output_path,
+                                            "part_subsystem.json")
+    part_subsystem_component_info = read_json_file(part_subsystem_file)
+
+    subsystem_compoents_whitelist_file = os.path.join(config.root_path, "build/subsystem_compoents_whitelist.json")
+    subsystem_compoents_whitelist_info = read_json_file(subsystem_compoents_whitelist_file)
+
+    if os.path.isfile(config_path):
+        info = read_json_file(config_path)
+        subsystems_info = info['subsystems']
+        for key in range(len(subsystems_info)):
+            subsystems_name = subsystems_info[key]
+            subsystem_name = subsystems_name['subsystem']
+
+            components_name = subsystems_name['components']
+            for component in components_name:
+                if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
+                    continue
+                if component['component'] in list(part_subsystem_component_info.keys()):
+                    if subsystem_name in list(part_subsystem_component_info.values()):
+                        continue
+                    if subsystem_name == component['component']:
+                        continue
+                    raise Exception('find subsystem {} failed, please check it in {}.'.format(subsystem_name, config_path))
+                else:
+                    raise Exception('find component {} failed, please check it in {}.'.format(component['component'], config_path))
+
 
 def _output_parts_info(parts_config_dict, config_output_path):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
@@ -589,6 +620,8 @@ def _output_parts_info(parts_config_dict, config_output_path):
         write_json_file(_part_subsystem_file, _part_subsystem_dict)
         LogUtil.hb_info(
             "generate part-subsystem of parts-info to '{}'".format(_part_subsystem_file))
+
+    check_subsystem_and_component(parts_info_output_path)
 
     # subsystem_parts.json
     if 'subsystem_parts' in parts_config_dict:
