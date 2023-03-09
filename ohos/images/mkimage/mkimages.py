@@ -129,8 +129,6 @@ def mk_images(args):
         if config.get('component_type', '') == 'system_component':
             return
         mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
-    elif "updater_vendor.img" == device:
-        mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
     else:
         mk_other_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
 

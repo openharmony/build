@@ -100,8 +100,6 @@ template("generate_module_info") {
       vendor_base_dir,
       "--updater-base-dir",
       updater_base_dir,
-      "--updater_vendor-base-dir",
-      updater_vendor_base_dir,
       "--sys_prod-base-dir",
       sys_prod_base_dir,
       "--chip_prod-base-dir",

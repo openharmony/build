@@ -1,5 +1,0 @@
-/updater_vendor
-25165824
---fs_type=cpio
---dac_config ../../build/ohos/images/mkimage/dac.txt
---file_context obj/base/security/selinux/file_contexts.bin
