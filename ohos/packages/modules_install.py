@@ -204,12 +204,6 @@ def main():
         shutil.rmtree(updater_install_base_dir)
         print('remove updater dir...')
 
-    updater_vendor_install_base_dir = os.path.join(args.platform_installed_path,
-                                            'updater_vendor')
-    if os.path.exists(updater_vendor_install_base_dir):
-        shutil.rmtree(updater_vendor_install_base_dir)
-        print('remove updater dir...')
-
     ramdisk_install_base_dir = os.path.join(args.platform_installed_path,
                                             'ramdisk')
     if os.path.exists(ramdisk_install_base_dir):

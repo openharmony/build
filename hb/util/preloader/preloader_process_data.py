@@ -219,8 +219,6 @@ class Product():
             build_vars['product_name'] = config.get('product_name')
             if 'enable_ramdisk' in config:
                 build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
-            if 'enable_updater_vendor' in config:
-                build_vars['enable_updater_vendor'] = config.get('enable_updater_vendor')
             if 'enable_absystem' in config:
                 build_vars['enable_absystem'] = config.get('enable_absystem')
             if 'build_selinux' in config:
