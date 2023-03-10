@@ -257,6 +257,10 @@ group("rust_library_deps") {
   public_deps = [ ":common_deps" ]
 }
 
+group("rust_proc_macro_deps") {
+  public_deps = [ ":common_deps" ]
+}
+
 group("static_library_deps") {
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps = [ "//third_party/musl:musl_headers" ]

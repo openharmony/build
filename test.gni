@@ -788,6 +788,7 @@ template("ohos_rust_systemtest") {
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=2021"
     ]
   }
 }

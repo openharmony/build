@@ -270,6 +270,7 @@ template("ohos_executable") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "crate_type",
                            ])
     output_dir = output_dir
 
