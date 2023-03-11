@@ -161,6 +161,9 @@ declare_args() {
   device_type = "default"
 }
 
+declare_args() {
+  is_use_check_deps = false
+}
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
