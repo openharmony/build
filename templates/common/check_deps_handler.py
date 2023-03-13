@@ -18,10 +18,6 @@ import json
 import sys
 import argparse
 
-sys.path.append(
-    os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__)))))
-
 
 def read_json_file(input_file):
     data = None
