@@ -724,6 +724,15 @@ if (is_lite_system) {
       ohos_current_strip_command =
           "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
       default_compiler_configs += [ "//build/lite/config:clang_opt" ]
+    } else if (board_toolchain_type == "iccarm") {
+      import("//build/config/compiler/lite/iccarm/iccarm.gni")
+      ohos_current_cc_command = "${compile_prefix}iccarm$toolchain_cmd_suffix"
+      ohos_current_cxx_command = "${compile_prefix}iccarm$toolchain_cmd_suffix"
+      ohos_current_ar_command = "${compile_prefix}iarchive$toolchain_cmd_suffix"
+      ohos_current_as_command = "${compile_prefix}iasmarm$toolchain_cmd_suffix"
+      ohos_current_ld_command = "${compile_prefix}ilinkarm$toolchain_cmd_suffix"
+      ohos_current_strip_command =
+          "${compile_prefix}ielftool$toolchain_cmd_suffix --strip"
     }
 
     # Overwrite ld cmd by customed cmd.
@@ -758,57 +767,60 @@ if (is_lite_system) {
       ]
     }
   }
-  if (current_os == "ohos") {
+  if (board_toolchain_type != "iccarm") {
+    if (current_os == "ohos") {
+      default_compiler_configs += [
+        "//build/lite/config:board_config",
+        "//build/lite/config:cpu_arch",
+        "//build/lite/config:common",
+        "//build/lite/config:default_link_path",
+      ]
+    }
+
+    if (ohos_build_type == "debug") {
+      default_compiler_configs += [ "//build/lite/config:debug" ]
+    } else if (ohos_build_type == "release") {
+      default_compiler_configs += [ "//build/lite/config:release" ]
+    }
+
+    if (ohos_kernel_type == "liteos_a" && current_os == "ohos") {
+      default_compiler_configs +=
+          [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
+    }
+
+    if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "linux") {
+      default_compiler_configs += [
+        "//build/lite/config:security",
+        "//build/lite/config:exceptions",
+      ]
+    } else if (ohos_kernel_type == "liteos_m") {
+      default_compiler_configs += [ "//build/lite/config:stack_protector" ]
+    }
+
     default_compiler_configs += [
-      "//build/lite/config:board_config",
-      "//build/lite/config:cpu_arch",
-      "//build/lite/config:common",
-      "//build/lite/config:default_link_path",
+      "//build/lite/config:language_c",
+      "//build/lite/config:language_cpp",
+      "//build/config/sanitizers:default_sanitizer_flags",
     ]
-  }
 
-  if (ohos_build_type == "debug") {
-    default_compiler_configs += [ "//build/lite/config:debug" ]
-  } else if (ohos_build_type == "release") {
-    default_compiler_configs += [ "//build/lite/config:release" ]
-  }
+    if (current_os == "ohos") {
+      default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
+    }
 
-  if (ohos_kernel_type == "liteos_a" && current_os == "ohos") {
-    default_compiler_configs +=
-        [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
+    default_shared_library_configs =
+        default_compiler_configs +
+        [ "//build/lite/config:shared_library_config" ]
+    default_static_library_configs = default_compiler_configs
+    default_executable_configs = default_compiler_configs
+    if (ohos_kernel_type != "liteos_m") {
+      default_static_library_configs +=
+          [ "//build/lite/config:static_pie_config" ]
+      default_executable_configs += [ "//build/lite/config:static_pie_config" ]
+      default_executable_configs +=
+          [ "//build/lite/config:pie_executable_config" ]
+    }
+    default_executable_configs += [ "//build/lite/config:board_exe_ld_flags" ]
   }
-
-  if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "linux") {
-    default_compiler_configs += [
-      "//build/lite/config:security",
-      "//build/lite/config:exceptions",
-    ]
-  } else if (ohos_kernel_type == "liteos_m") {
-    default_compiler_configs += [ "//build/lite/config:stack_protector" ]
-  }
-
-  default_compiler_configs += [
-    "//build/lite/config:language_c",
-    "//build/lite/config:language_cpp",
-    "//build/config/sanitizers:default_sanitizer_flags",
-  ]
-
-  if (current_os == "ohos") {
-    default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
-  }
-
-  default_shared_library_configs =
-      default_compiler_configs + [ "//build/lite/config:shared_library_config" ]
-  default_static_library_configs = default_compiler_configs
-  default_executable_configs = default_compiler_configs
-  if (ohos_kernel_type != "liteos_m") {
-    default_static_library_configs +=
-        [ "//build/lite/config:static_pie_config" ]
-    default_executable_configs += [ "//build/lite/config:static_pie_config" ]
-    default_executable_configs +=
-        [ "//build/lite/config:pie_executable_config" ]
-  }
-  default_executable_configs += [ "//build/lite/config:board_exe_ld_flags" ]
 }
 
 set_defaults("executable") {
