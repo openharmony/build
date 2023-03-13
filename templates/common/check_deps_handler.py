@@ -19,18 +19,10 @@ import sys
 import argparse
 
 
-def read_json_file(input_file):
-    data = None
-    if not os.path.exists(input_file):
-        print("file '{}' doesn't exist.".format(input_file))
-        return data
-    try:
-        with open(input_file, 'r') as input_f:
-            data = json.load(input_f)
-    except json.decoder.JSONDecodeError:
-        print("The file '{}' format is incorrect.".format(input_file))
-        raise
-    return data
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)))))
+from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
 def check_deps_with_module(parts_modules_info_file, current_part_name, deps, target_path):
