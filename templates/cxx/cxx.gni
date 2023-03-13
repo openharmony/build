@@ -58,6 +58,41 @@ template("ohos_executable") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  if (is_use_check_deps && defined(invoker.deps)) {
+    deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
+    parts_path_info =
+        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
+    path_parts_info =
+        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
+    parts_modules_info =
+        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    module_deps = []
+    if (defined(invoker.deps)) {
+      foreach(dep, invoker.deps) {
+        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
+      }
+    }
+    _args += module_deps
+    _args += [
+      "--deps",
+      "--parts-path-info-file",
+      rebase_path(parts_path_info, root_build_dir),
+      "--path-parts-info-file",
+      rebase_path(path_parts_info, root_build_dir),
+      "--parts-modules-info-file",
+      rebase_path(parts_modules_info, root_build_dir),
+      "--current-part-name",
+      part_name,
+      "--target-path-val",
+      target_path,
+    ]
+    check_deps_handler_result = exec_script(deps_script, _args, "string")
+    if (check_deps_handler_result != "") {
+      print(check_deps_handler_result)
+    }
+  }
+
   if (check_deps) {
     deps_data = {
     }
@@ -444,6 +479,41 @@ template("ohos_shared_library") {
     }
     if (is_ndk) {
       auto_relative_install_dir = "ndk"
+    }
+  }
+
+  if (is_use_check_deps && defined(invoker.deps)) {
+    deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
+    parts_path_info =
+        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
+    path_parts_info =
+        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
+    parts_modules_info =
+        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    module_deps = []
+    if (defined(invoker.deps)) {
+      foreach(dep, invoker.deps) {
+        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
+      }
+    }
+    _args += module_deps
+    _args += [
+      "--deps",
+      "--parts-path-info-file",
+      rebase_path(parts_path_info, root_build_dir),
+      "--path-parts-info-file",
+      rebase_path(path_parts_info, root_build_dir),
+      "--parts-modules-info-file",
+      rebase_path(parts_modules_info, root_build_dir),
+      "--current-part-name",
+      part_name,
+      "--target-path-val",
+      target_path,
+    ]
+    check_deps_handler_result = exec_script(deps_script, _args, "string")
+    if (check_deps_handler_result != "") {
+      print(check_deps_handler_result)
     }
   }
 
@@ -890,6 +960,41 @@ template("ohos_static_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (is_use_check_deps && defined(invoker.deps)) {
+    deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
+    parts_path_info =
+        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
+    path_parts_info =
+        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
+    parts_modules_info =
+        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    module_deps = []
+    if (defined(invoker.deps)) {
+      foreach(dep, invoker.deps) {
+        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
+      }
+    }
+    _args += module_deps
+    _args += [
+      "--deps",
+      "--parts-path-info-file",
+      rebase_path(parts_path_info, root_build_dir),
+      "--path-parts-info-file",
+      rebase_path(path_parts_info, root_build_dir),
+      "--parts-modules-info-file",
+      rebase_path(parts_modules_info, root_build_dir),
+      "--current-part-name",
+      part_name,
+      "--target-path-val",
+      target_path,
+    ]
+    check_deps_handler_result = exec_script(deps_script, _args, "string")
+    if (check_deps_handler_result != "") {
+      print(check_deps_handler_result)
+    }
+  }
 
   if (check_deps) {
     deps_data = {
