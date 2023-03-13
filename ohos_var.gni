@@ -136,6 +136,10 @@ declare_args() {
 }
 
 declare_args() {
+  enable_iccarm_sp = false
+}
+
+declare_args() {
   enforce_selinux = false
 }
 

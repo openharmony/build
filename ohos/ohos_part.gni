@@ -22,7 +22,20 @@ template("ohos_part") {
   part_label = get_label_info(":${target_name}", "label_with_toolchain")
   _deps = []
   foreach(module_label, invoker.module_list) {
-    _deps += [ get_label_info(module_label, "label_with_toolchain") ]
+    if (!is_lite_system) {
+      src_dir = get_label_info(module_label, "dir")
+      if (exec_script("/bin/sh",
+                      [
+                        "-c",
+                        "if [ -f " + rebase_path("$src_dir/BUILD.gn") +
+                            " ]; then echo true; else echo false; fi",
+                      ],
+                      "value")) {
+        _deps += [ get_label_info(module_label, "label_with_toolchain") ]
+      }
+    } else {
+      _deps += [ get_label_info(module_label, "label_with_toolchain") ]
+    }
   }
 
   # add sdk dep

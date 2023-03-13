@@ -1,0 +1,194 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("${device_path}/config.gni")
+
+config("gcc_cpu_arch") {
+  arch_cflags = board_cflags
+  if (board_arch != "") {
+    arch_cflags += [ "-march=$board_arch" ]
+  }
+  if (board_cpu != "") {
+    arch_cflags += [ "-mcpu=$board_cpu" ]
+  }
+  cflags = arch_cflags
+  cflags_cc = cflags
+  ldflags = cflags
+  asmflags = cflags
+}
+
+config("gcc_language_c") {
+  cflags_c = [ "-std=c99" ]
+}
+
+config("gcc_language_cpp") {
+  cflags_cc = [ "-std=c++11" ]
+}
+
+config("gcc_werror") {
+  cflags = [ "-Werror" ]
+  cflags_cc = cflags
+}
+
+config("gcc_common") {
+  defines = [ "_XOPEN_SOURCE=700" ]
+  cflags = [
+    "-fno-common",
+    "-fno-builtin",
+    "-fno-strict-aliasing",
+    "-Wall",
+  ]
+  if (ohos_kernel_type == "linux") {
+    cflags += [
+      "-funwind-tables",
+      "-fasynchronous-unwind-tables",
+    ]
+  }
+  cflags_cc = cflags
+  cflags += [ "-fsigned-char" ]
+}
+
+config("gcc_security") {
+  defines = [ "_FORTIFY_SOURCE=2" ]
+  cflags = [ "-fstack-protector-all" ]
+  cflags_cc = cflags
+  ldflags = [
+    "-Wl,-z,now",
+    "-Wl,-z,relro",
+    "-Wl,-z,noexecstack",
+  ]
+}
+
+config("gcc_exceptions") {
+  cflags_cc = [ "-fexceptions" ]
+  cflags_objcc = cflags_cc
+}
+
+config("gcc_no_exceptions") {
+  cflags_cc = [ "-fno-exceptions" ]
+  cflags_objcc = cflags_cc
+  ldflags = cflags_cc
+}
+
+config("gcc_stack_protector") {
+  cflags = [ "-fstack-protector-all" ]
+  cflags_cc = cflags
+}
+
+config("gcc_static_pie_config") {
+  cflags = [ "-fPIE" ]
+  cflags_cc = cflags
+}
+
+config("gcc_shared_library_config") {
+  cflags = [ "-fPIC" ]
+  cflags_cc = cflags
+}
+
+config("gcc_pie_executable_config") {
+  ldflags = [ "-pie" ]
+}
+
+config("ohos_gcc") {
+  if (ohos_kernel_type == "linux") {
+    defines = [
+      "_LIBCPP_HAS_MUSL_LIBC",
+      "__BUILD_LINUX_WITH_CLANG",
+    ]
+  }
+  ldflags = [
+    "-fuse-ld=lld",
+    "--rtlib=compiler-rt",
+  ]
+}
+
+config("gcc_opt") {
+  cflags = [ "-Os" ]
+  cflags_cc = cflags
+}
+
+config("gcc_default_link_path") {
+  ldflags = [
+    "-L.",
+    "-Wl,-rpath-link=.",
+  ]
+}
+
+config("gcc_kernel_configs") {
+  configs = []
+  if (ohos_kernel_type == "liteos_a") {
+    configs += [
+      ":gcc_security",
+      ":gcc_exceptions",
+      "//build/lite/config/kernel/liteos/cortex_a:default",
+    ]
+  }
+  if (ohos_kernel_type == "linux") {
+    configs += [
+      ":gcc_security",
+      ":gcc_exceptions",
+    ]
+  }
+  if (ohos_kernel_type == "liteos_m") {
+    configs += [ ":gcc_stack_protector" ]
+  }
+}
+
+config("gcc_build_type_configs") {
+  configs = []
+  if (ohos_build_type == "debug") {
+    configs += [ "//build/config/compiler/lite/common:debug" ]
+  } else if (ohos_build_type == "release") {
+    configs += [ "//build/config/compiler/lite/common:release" ]
+  }
+}
+
+config("gcc_compiler_configs") {
+  configs = [
+    ":gcc_cpu_arch",
+    ":gcc_language_c",
+    ":gcc_language_cpp",
+    ":gcc_common",
+    ":gcc_default_link_path",
+    ":gcc_opt",
+    ":gcc_build_type_configs",
+    ":gcc_kernel_configs",
+    "//build/config/compiler/lite/common:kernel_macros",
+    "//build/config/compiler/lite/common:board_config",
+  ]
+}
+
+config("gcc_shared_library_configs") {
+  configs = [
+    ":gcc_compiler_configs",
+    ":gcc_shared_library_config",
+  ]
+}
+
+config("gcc_static_library_configs") {
+  configs = [ ":gcc_compiler_configs" ]
+  if (ohos_kernel_type != "liteos_m") {
+    configs += [ ":gcc_static_pie_config" ]
+  }
+}
+
+config("gcc_executable_configs") {
+  configs = [ ":gcc_compiler_configs" ]
+  if (ohos_kernel_type != "liteos_m") {
+    configs += [
+      ":gcc_static_pie_config",
+      ":gcc_pie_executable_config",
+      "//build/config/compiler/lite/common:board_exe_ld_flags",
+    ]
+  }
+}
