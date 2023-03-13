@@ -31,10 +31,6 @@ config("clang_language_c") {
   cflags_c = [ "-std=c99" ]
 }
 
-config("clang_language_cpp") {
-  cflags_cc = [ "-std=c++11" ]
-}
-
 config("clang_werror") {
   cflags = [ "-Werror" ]
   cflags_cc = cflags
@@ -154,18 +150,18 @@ config("clang_build_type_configs") {
 }
 
 config("clang_compiler_configs") {
-  configs = [
-    ":clang_cpu_arch",
-    ":clang_language_c",
-    ":clang_language_cpp",
-    ":clang_common",
-    ":clang_default_link_path",
-    ":clang_opt",
-    ":clang_build_type_configs",
-    ":clang_kernel_configs",
-    "//build/config/compiler/lite/common:kernel_macros",
-    "//build/config/compiler/lite/common:board_config",
-  ]
+  configs = []
+  if (current_os == "ohos") {
+    configs += [
+      ":clang_cpu_arch",
+      ":clang_common",
+      ":clang_default_link_path",
+      ":clang_kernel_configs",
+      "//build/config/compiler/lite/common:board_config",
+      "//build/config/compiler/lite/common:kernel_macros",
+    ]
+  }
+  configs += [ ":clang_build_type_configs" ]
 }
 
 config("clang_shared_library_configs") {

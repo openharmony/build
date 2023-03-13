@@ -13,9 +13,30 @@
 
 default_compiler_configs =
     [ "//build/config/compiler/lite/gcc:gcc_compiler_configs" ]
+
 default_shared_library_configs =
     [ "//build/config/compiler/lite/gcc:gcc_shared_library_configs" ]
+default_shared_library_configs += [
+  "//build/lite/config:language_c",
+  "//build/lite/config:gcc_opt",
+  "//build/lite/config:language_cpp",
+  "//build/config/sanitizers:default_sanitizer_flags",
+]
+
 default_static_library_configs =
     [ "//build/config/compiler/lite/gcc:gcc_static_library_configs" ]
+default_static_library_configs += [
+  "//build/lite/config:language_c",
+  "//build/lite/config:gcc_opt",
+  "//build/lite/config:language_cpp",
+  "//build/config/sanitizers:default_sanitizer_flags",
+]
+
 default_executable_configs =
     [ "//build/config/compiler/lite/gcc:gcc_executable_configs" ]
+default_executable_configs += [
+  "//build/lite/config:language_c",
+  "//build/lite/config:gcc_opt",
+  "//build/lite/config:language_cpp",
+  "//build/config/sanitizers:default_sanitizer_flags",
+]
