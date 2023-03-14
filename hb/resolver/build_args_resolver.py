@@ -283,7 +283,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     elif isinstance(value, list):
                         value = list(value)
                     else:
-                        value = str(value)
+                        value = str(value).strip('"')
                     target_generator.regist_arg(variable, value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
