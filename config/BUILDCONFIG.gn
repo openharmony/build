@@ -696,8 +696,6 @@ if (is_lite_system) {
     ohos_vendor_adapter_dir = board_adapter_dir
   }
 
-  default_compiler_configs = []
-
   # Set current toolchain with to board configuration.
   if (board_toolchain != "" && use_board_toolchain) {
     ohos_build_compiler = board_toolchain_type
@@ -708,6 +706,7 @@ if (is_lite_system) {
     }
     set_default_toolchain("//build/lite/toolchain:${board_toolchain}")
     if (board_toolchain_type == "gcc") {
+      default_compiler_configs = []
       ohos_current_cc_command = "${compile_prefix}gcc$toolchain_cmd_suffix"
       ohos_current_cxx_command = "${compile_prefix}g++$toolchain_cmd_suffix"
       ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
@@ -716,6 +715,7 @@ if (is_lite_system) {
           "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
       default_compiler_configs += [ "//build/lite/config:gcc_opt" ]
     } else if (board_toolchain_type == "clang") {
+      default_compiler_configs = []
       ohos_current_cc_command = "${compile_prefix}clang$toolchain_cmd_suffix"
       ohos_current_cxx_command = "${compile_prefix}clang++$toolchain_cmd_suffix"
       compile_prefix += "llvm-"
@@ -733,6 +733,8 @@ if (is_lite_system) {
       ohos_current_ld_command = "${compile_prefix}ilinkarm$toolchain_cmd_suffix"
       ohos_current_strip_command =
           "${compile_prefix}ielftool$toolchain_cmd_suffix --strip"
+    } else {
+      default_compiler_configs = []
     }
 
     # Overwrite ld cmd by customed cmd.
@@ -741,6 +743,7 @@ if (is_lite_system) {
     }
   } else {
     # OHOS default toolchain
+    default_compiler_configs = []
     ohos_build_compiler = "clang"
     ohos_clang_toolchain_dir = rebase_path("${ohos_build_compiler_dir}/bin")
     compile_prefix += "$ohos_clang_toolchain_dir/"
