@@ -43,6 +43,7 @@ class SystemUtil(metaclass=NoInstance):
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
                                        encoding='utf-8',
+                                       errors='ignore',
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
                 if is_log_filter:

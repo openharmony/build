@@ -789,7 +789,7 @@ template("clang_toolchain") {
     }
     if (defined(rust_abi_target)) {
       if (rust_abi_target == "x86_64-unknown-linux-gnu") {
-        cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -lstdc++ -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
+        cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -lstdc++ -lclang -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
       }
     }
   }
