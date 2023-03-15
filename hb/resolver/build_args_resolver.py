@@ -29,9 +29,10 @@ from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 from modules.interface.build_module_interface import BuildModuleInterface
 from resources.config import Config
-from resources.global_var import CURRENT_OHOS_ROOT, DEFAULT_CCACHE_DIR
+from resources.global_var import CURRENT_OHOS_ROOT, DEFAULT_BUILD_ARGS
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from util.type_check_util import TypeCheckUtil
+from util.io_util import IoUtil
 from util.log_util import LogUtil
 from util.system_util import SystemUtil
 from util.type_check_util import TypeCheckUtil
@@ -103,9 +104,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         config = Config()
+        default_build_args = IoUtil.read_json_file(DEFAULT_BUILD_ARGS)
         if config.target_cpu == "":
             config.target_cpu = target_arg.arg_value
-        elif target_arg.arg_value != "arm":
+        elif target_arg.arg_value != default_build_args.get("target_cpu").get("argDefault"):
             config.target_cpu = target_arg.arg_value
 
     @staticmethod
