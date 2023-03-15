@@ -69,10 +69,6 @@ declare_args() {
 }
 
 declare_args() {
-  test_str = "test"
-}
-
-declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 

@@ -331,7 +331,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("scalable_build", bool(target_arg.arg_value))
+        loader.regist_arg("scalable_build", target_arg.arg_value)
 
     @staticmethod
     def resolve_build_example(target_arg: Arg, build_module: BuildModuleInterface):
@@ -341,7 +341,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("build_example", bool(target_arg.arg_value))
+        loader.regist_arg("build_example", target_arg.arg_value)
 
     @staticmethod
     def resolve_build_platform_name(target_arg: Arg, build_module: BuildModuleInterface):
@@ -364,9 +364,13 @@ class BuildArgsResolver(ArgsResolverInterface):
         for gn_arg in build_module.args_dict['gn_args'].arg_value:
             if 'build_xts' in gn_arg:
                 variable, value = gn_arg.split('=')
-                loader.regist_arg(variable, bool(value))
+                if str(value).lower() == 'false':
+                        value = False
+                elif str(value).lower() == 'true':
+                        value = True
+                loader.regist_arg(variable, value)
                 return
-        loader.regist_arg("build_xts", bool(target_arg.arg_value))
+        loader.regist_arg("build_xts", target_arg.arg_value)
 
     @staticmethod
     def resolve_ignore_api_check(target_arg: Arg, build_module: BuildModuleInterface):
@@ -390,7 +394,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("load_test_config", bool(target_arg.arg_value))
+        loader.regist_arg("load_test_config", target_arg.arg_value)
 
     @staticmethod
     @throw_exception
@@ -405,7 +409,10 @@ class BuildArgsResolver(ArgsResolverInterface):
             try:
                 variable, value = gn_arg.split(':')
                 if TypeCheckUtil.is_bool_type(value):
-                    value = bool(value)
+                    if str(value).lower() == 'false':
+                            value = False
+                    elif str(value).lower() == 'true':
+                            value = True
                 elif TypeCheckUtil.is_int_type(value):
                     value = int(value)
                 else:

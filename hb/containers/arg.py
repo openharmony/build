@@ -255,7 +255,10 @@ class Arg():
                         assigned_value.extend(parser_args[1])
                         assigned_value.sort(key=sys.argv[2:].index)
                 elif oh_arg.arg_type == ArgType.BOOL or oh_arg.arg_type == ArgType.GATE:
-                    assigned_value = bool(assigned_value)
+                    if str(assigned_value).lower() == 'false':
+                            assigned_value = False
+                    elif str(assigned_value).lower() == 'true':
+                            assigned_value = True
 
                 if oh_arg.arg_attribute.get('deprecated', None) and oh_arg.arg_value != assigned_value:
                     LogUtil.hb_warning(
