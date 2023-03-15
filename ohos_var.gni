@@ -258,11 +258,13 @@ if (host_os == "mac") {
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
 hap_packing_tool =
     "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
-nodejs_version = "v12.18.4"
+nodejs_version = "v14.21.3"
 if (host_os == "mac") {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
+  npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"
 } else {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+  npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/npm"
 }
 default_key_alias = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"

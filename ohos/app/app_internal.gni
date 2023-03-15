@@ -417,3 +417,152 @@ template("compile_js_assets") {
     }
   }
 }
+
+template("app_sign") {
+  forward_variables_from(invoker, [ "testonly" ])
+  action(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "private_key_path",
+                             "signature_algorithm",
+                             "certificate_profile",
+                             "keystore_path",
+                             "keystore_password",
+                             "key_alias",
+                             "certificate_file",
+                             "unsigned_hap_path_list",
+                             "hap_out_dir",
+                             "install_module_info",
+                           ])
+    script = "//build/scripts/app_sign.py"
+    _private_key_path = default_hap_private_key_path
+    if (defined(private_key_path)) {
+      _private_key_path = private_key_path
+    }
+    _signature_algorithm = default_signature_algorithm
+    if (defined(signature_algorithm)) {
+      _signature_algorithm = signature_algorithm
+    }
+    _key_alias = default_key_alias
+    if (defined(key_alias)) {
+      _key_alias = key_alias
+    }
+    _keystore_path = default_keystore_path
+    if (defined(keystore_path)) {
+      _keystore_path = keystore_path
+    }
+    _keystore_password = default_keystore_password
+    if (defined(keystore_password)) {
+      _keystore_password = keystore_password
+    }
+    _certificate_file = default_hap_certificate_file
+    if (defined(certificate_file)) {
+      _certificate_file = certificate_file
+    }
+
+    inputs = [
+      hapsigner,
+      certificate_profile,
+      _keystore_path,
+      _certificate_file,
+    ]
+
+    outputs = [ "${target_out_dir}/${target_name}.stamp" ]
+
+    args = [
+      "--private-key-path",
+      _private_key_path,
+      "--sign-algo",
+      _signature_algorithm,
+      "--certificate-profile",
+      rebase_path(certificate_profile, root_build_dir),
+      "--keyalias",
+      _key_alias,
+      "--keystore-path",
+      rebase_path(_keystore_path, root_build_dir),
+      "--keystorepasswd",
+      _keystore_password,
+      "--certificate-file",
+      rebase_path(_certificate_file, root_build_dir),
+      "--hapsigner",
+      rebase_path(hapsigner, root_build_dir),
+      "--unsigned-hap-path-list",
+      rebase_path(unsigned_hap_path_list, root_build_dir),
+      "--hap-out-dir",
+      rebase_path(hap_out_dir, root_build_dir),
+    ]
+    if (defined(install_module_info)) {
+      metadata = {
+        install_modules = [ install_module_info ]
+      }
+    }
+  }
+}
+
+template("compile_app") {
+  forward_variables_from(invoker, [ "testonly" ])
+  action(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "cwd",
+                             "build_mode",
+                             "build_profile",
+                             "app_profile",
+                             "hap_profile",
+                             "build_level",
+                             "ohos_sdk_home",
+                             "unsigned_hap_path_list",
+                             "system_lib_deps",
+                           ])
+    script = "//build/scripts/compile_app.py"
+    outputs = [ unsigned_hap_path_list ]
+
+    args = [
+      "--npm",
+      rebase_path(npm, root_build_dir),
+      "--nodejs",
+      rebase_path(nodejs, root_build_dir),
+      "--cwd",
+      rebase_path(cwd, root_build_dir),
+      "--build-profile",
+      rebase_path(build_profile, root_build_dir),
+      "--ohos-sdk-home",
+      rebase_path(ohos_sdk_home),
+      "--output-file",
+      rebase_path(unsigned_hap_path_list, root_build_dir),
+    ]
+
+    if (defined(app_profile) && app_profile) {
+      args += [
+        "--app-profile",
+        rebase_path(app_profile, root_build_dir),
+      ]
+    }
+
+    if (defined(build_mode) && build_mode == "debug") {
+      args += [
+        "--enable-debug",
+      ]
+    }
+
+    if (defined(system_lib_deps)) {
+      args += [ "--system-lib-module-info-list" ]
+      foreach(_lib_deps, system_lib_deps) {
+        _lib_out_name = get_label_info(_lib_deps, "name")
+        _lib_out_dir = get_label_info(_lib_deps, "target_out_dir")
+        args += [
+          rebase_path("${_lib_out_dir}/${_lib_out_name}_module_info.json", root_build_dir),
+        ]
+      }
+
+      if (is_ohos) {
+        args += [
+          "--ohos-app-abi",
+          ohos_app_abi,
+        ]
+      }
+    }
+  }
+}

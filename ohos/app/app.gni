@@ -197,6 +197,111 @@ template("ohos_resources") {
   }
 }
 
+template("ohos_app") {
+  forward_variables_from(invoker, [ "testonly" ])
+  certificate_profile = "signature/systemui.p7b"
+  unsigned_hap_path_list = "${target_out_dir}/unsigned_hap_path_list.json"
+  _ohos_sdk_home = "//out/sdk/packages/ohos-sdk/linux"
+  _abs_path = get_path_info("./", "abspath")
+  _hap_out_dir = "${target_out_dir}/${target_name}"
+  if (defined(invoker.build_profile)) {
+    build_profile = invoker.build_profile
+  } else {
+    build_profile = "./build-profile.json5"
+  }
+
+  _js_build_mode = "release"
+  if (defined(invoker.js_build_mode)) {
+    _js_build_mode = invoker.js_build_mode
+  }
+
+  if (defined(invoker.system_lib_deps)) {
+    _system_lib_deps = invoker.system_lib_deps
+  }
+
+  _main_target_name = target_name
+  _subsystem_name = invoker.subsystem_name
+  _part_name = invoker.part_name
+
+  assert(_subsystem_name != "")  # Mark as used
+  assert(_part_name != "")  # Mark as used
+  
+  _module_info_target = "${_main_target_name}_info"
+  generate_module_info(_module_info_target) {
+    module_name = _main_target_name
+    module_type = "app"
+    module_source_dir = get_path_info(_hap_out_dir, "dir")
+    module_install_images = [ "system" ]
+    if (defined(invoker.install_images)) {
+      module_install_images = []
+      module_install_images += invoker.install_images
+    }
+    install_enable = true
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+
+    module_install_dir = "${module_type}"
+    if (defined(invoker.module_install_dir)) {
+      module_install_dir = invoker.module_install_dir
+    }
+
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
+    }
+
+    if (defined(invoker.symlink_target_name)) {
+      symlink_target_name = invoker.symlink_target_name
+    }
+    notice = "$target_out_dir/$_main_target_name.notice.txt"
+  }
+
+  _notice_target = "${target_name}__notice"
+  collect_notice(_notice_target) {
+    forward_variables_from(invoker,
+                           [
+                             "license_as_sources",
+                             "license_file",
+                           ])
+    module_type = "app"
+    module_name = _main_target_name
+    module_source_dir = get_label_info(":${_main_target_name}", "dir")
+  }
+
+  _compile_app_target = "${target_name}_compile_app"
+  compile_app(_compile_app_target) {
+    build_mode = _js_build_mode
+    ohos_sdk_home = _ohos_sdk_home
+    cwd = _abs_path
+    deps = [ ":$_notice_target" ]
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    if (defined(invoker.system_lib_deps)) {
+      system_lib_deps = _system_lib_deps
+      deps += _system_lib_deps
+    }
+  }
+
+  app_sign(target_name) {
+    deps = [
+      ":$_compile_app_target",
+      ":$_module_info_target",
+    ]
+    hap_out_dir = _hap_out_dir
+    install_module_info = {
+      module_def = get_label_info(":$target_name", "label_with_toolchain")
+      module_info_file =
+          rebase_path(get_label_info(module_def, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      subsystem_name = _subsystem_name
+      part_name = _part_name
+      toolchain = current_toolchain
+      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+    }
+  }
+}
+
 # Declare an OHOS hap target
 #
 # Variables:
