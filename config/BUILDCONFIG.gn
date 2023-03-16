@@ -278,6 +278,10 @@ declare_args() {
   use_musl = true
 }
 
+declare_args() {
+  is_emulator = false
+}
+
 asdk_libs_dir = "//prebuilts/asdk_libs"
 
 # Whether it is a phone product.
