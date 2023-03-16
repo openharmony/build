@@ -145,7 +145,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.10.1/linux/ninja-linux-x86-1.10.1.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -246,7 +246,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.10.1/linux/ninja-linux-x86-1.10.1.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -408,7 +408,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.10.1/darwin/ninja-darwin-x86-1.10.1.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -469,7 +469,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.10.1/darwin/ninja-darwin-x86-1.10.1.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
           "unzip_filename": "ninja"
         },
         {
