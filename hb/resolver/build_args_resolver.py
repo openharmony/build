@@ -277,16 +277,16 @@ class BuildArgsResolver(ArgsResolverInterface):
                     variable, value = gn_arg.split('=')
                     if TypeCheckUtil.is_bool_type(value):
                         if str(value).lower() == 'false':
-                            value = False
+                            convert_value = False
                         elif str(value).lower() == 'true':
-                            value = True
+                            convert_value = True
                     elif TypeCheckUtil.is_int_type(value):
-                        value = int(value)
+                        convert_value = int(value)
                     elif isinstance(value, list):
-                        value = list(value)
+                        convert_value = list(value)
                     else:
-                        value = str(value).strip('"')
-                    target_generator.regist_arg(variable, value)
+                        convert_value = str(value).strip('"')
+                    target_generator.regist_arg(variable, convert_value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
 
@@ -365,9 +365,9 @@ class BuildArgsResolver(ArgsResolverInterface):
             if 'build_xts' in gn_arg:
                 variable, value = gn_arg.split('=')
                 if str(value).lower() == 'false':
-                        value = False
+                    value = False
                 elif str(value).lower() == 'true':
-                        value = True
+                    value = True
                 loader.regist_arg(variable, value)
                 return
         loader.regist_arg("build_xts", target_arg.arg_value)
@@ -410,9 +410,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 variable, value = gn_arg.split(':')
                 if TypeCheckUtil.is_bool_type(value):
                     if str(value).lower() == 'false':
-                            value = False
+                        value = False
                     elif str(value).lower() == 'true':
-                            value = True
+                        value = True
                 elif TypeCheckUtil.is_int_type(value):
                     value = int(value)
                 else:
