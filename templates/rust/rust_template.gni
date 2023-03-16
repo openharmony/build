@@ -306,8 +306,20 @@ template("ohos_rust_library") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
 
-      exec_script(external_deps_script, arguments, "string")
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {
@@ -991,8 +1003,20 @@ template("ohos_rust_proc_macro") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
 
-      exec_script(external_deps_script, arguments, "string")
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {
