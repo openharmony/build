@@ -169,6 +169,11 @@ declare_args() {
   is_use_check_deps = false
 }
 
+declare_args() {
+  # Use new skia in //third_party/skia
+  use_new_skia = false
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
