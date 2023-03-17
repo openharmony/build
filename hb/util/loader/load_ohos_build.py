@@ -461,6 +461,10 @@ class LoadBuildConfig(object):
                 raise OHOSException(
                     "subsystem name config incorrect in '{}'.".format(
                         _build_file), "2014")
+            if _subsystem_name != self._subsystem_name:
+                print("warning: subsystem name config incorrect in '{}', build file subsystem name is {},\
+                        configured subsystem name is {}.".format(
+                        _build_file, _subsystem_name, self._subsystem_name))
             subsystem_name = _subsystem_name
             _curr_parts_info = _parts_config.get('parts')
             for _pname in _curr_parts_info.keys():
