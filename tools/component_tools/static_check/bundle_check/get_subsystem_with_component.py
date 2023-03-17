@@ -17,7 +17,6 @@ import argparse
 import os
 import stat
 import json
-from hb.resources.config import Config
 
 
 class ErrorInfo:
@@ -33,13 +32,6 @@ def get_subsystem_components(ohos_path: str):
 
     with open(subsystem_json_path, 'rb') as file:
         subsystem_json = json.load(file)
-
-    conf = Config()
-    subsystem_json_overlay_path =  conf.product_path + '/subsystem_config_overlay.json'
-    if os.path.isfile(subsystem_json_overlay_path):
-        with open(subsystem_json_overlay_path, 'rb') as file:
-            subsystem_overlay_json = json.load(file)
-            subsystem_json.update(subsystem_overlay_json)
 
     bundle_json_list = []
     subsystem_name = ""
