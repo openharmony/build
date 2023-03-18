@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import tempfile
-import platform
 import re
 import subprocess
 import io
@@ -23,33 +22,30 @@ import os
 import sys
 import stat
 
-# Set up path to be able to import build_utils
+
 sys.path.append(
-    os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 from scripts.util import build_utils
 
 
-RUSTC_VERSION = re.compile(r"(\w+): (.*)")
-RUSTC_CFG = re.compile("cargo:rustc-cfg=(.*)")
-
-
 def host_triple(rustc_path):
-    """ Works out the host rustc target. """
     known_vars = dict()
     args = [rustc_path, "-vV"]
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     for lines in io.TextIOWrapper(proc.stdout, encoding="utf-8"):
-        match = RUSTC_VERSION.match(lines.rstrip())
+        rustc_version = re.compile(r"(\w+): (.*)")
+        match = rustc_version.match(lines.rstrip())
         if match:
             known_vars[match.group(1)] = match.group(2)
     return known_vars.get("host")
 
+
 def run_build_script(args, env, tempdir):
     process = subprocess.run([os.path.abspath(args.build_script)],
-                                env=env,
-                                cwd=args.src_dir,
-                                encoding='utf8',
-                                capture_output=True)
+                             env=env,
+                             cwd=args.src_dir,
+                             encoding='utf8',
+                             capture_output=True)
 
     if process.stderr.rstrip():
         print(process.stderr.rstrip(), file=sys.stderr)
@@ -57,7 +53,8 @@ def run_build_script(args, env, tempdir):
 
     flags = ""
     for line in process.stdout.split("\n"):
-        match = RUSTC_CFG.match(line.rstrip())
+        rustc_cfg = re.compile("cargo:rustc-cfg=(.*)")
+        match = rustc_cfg.match(line.rstrip())
         if match:
             flags = "%s--cfg\n%s\n" % (flags, match.group(1))
 
@@ -72,41 +69,46 @@ def run_build_script(args, env, tempdir):
             if not os.path.exists(out_dir):
                 os.makedirs(out_dir)
             with os.fdopen(os.open(input_path,
-                            os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-                            'rb') as inputs:
+                                   os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                           'rb') as inputs:
                 with build_utils.atomic_output(output_path) as output:
                     content = inputs.read()
                     output.write(content)
 
-def set_env(args, rustc_path, tempdir):
-    env = {}  # try to avoid build scripts depending on other things
-    env["RUSTC"] = os.path.abspath(rustc_path)
-    env["HOST"] = host_triple(rustc_path)
-    env["CARGO_MANIFEST_DIR"] = os.path.abspath(args.src_dir)
-    env["OUT_DIR"] = tempdir
 
-    if args.target is not None:
+def set_env(args, rustc_path, tempdir):
+    rustc_abs_path = os.path.abspath(rustc_path)
+    src_dir_abs_path = os.path.abspath(args.src_dir)
+
+    env = {
+        "RUSTC": rustc_abs_path,
+        "HOST": host_triple(rustc_abs_path),
+        "CARGO_MANIFEST_DIR": src_dir_abs_path,
+        "OUT_DIR": tempdir,
+    }
+    if args.target:
         env["TARGET"] = args.target
     else:
         env["TARGET"] = env.get("HOST")
 
-    target_components = env.get("TARGET").split("-")
-    env["CARGO_CFG_TARGET_ARCH"] = target_components[0]
+    env["CARGO_CFG_TARGET_ARCH"], *_ = env.get("TARGET").split("-")
     if args.env:
-        for environment in args.env:
-            (key, value) = environment.split("=")
-            env[key] = value
+        env.update({key: val for key, val in (e.split('=') for e in args.env)})
     if args.features:
         for feature in args.features:
-            feature_name = feature.upper().replace("-", "_")
-            env["CARGO_FEATURE_%s" % feature_name] = "1"
+            feature_name = feature.replace("-", "_").upper()
+            env[f"CARGO_FEATURE_{feature_name}"] = "1"
 
-    # Pass through a couple which are useful for diagnostics
-    if os.environ.get("RUST_LOG"):
-        env["RUST_LOG"] = os.environ.get("RUST_LOG")
-    if os.environ.get("RUST_BACKTRACE"):
-        env["RUST_BACKTRACE"] = os.environ.get("RUST_BACKTRACE")
+    rust_log = os.environ.get("RUST_LOG")
+    rust_bt = os.environ.get("RUST_BACKTRACE")
+
+    if rust_log:
+        env["RUST_LOG"] = rust_log
+    if rust_bt:
+        env["RUST_BACKTRACE"] = rust_bt
+
     return env
+
 
 def main():
     parser = argparse.ArgumentParser()
