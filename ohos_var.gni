@@ -49,6 +49,9 @@ declare_args() {
   # updater package dir
   updater_base_dir = "updater"
 
+  # updater_vendor package dir
+  updater_vendor_base_dir = "updater_vendor"
+
   # sys_prod package dir
   sys_prod_base_dir = "sys_prod"
 
