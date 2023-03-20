@@ -32,6 +32,7 @@ template("ohos_executable") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
 
+  need_check = true
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -48,6 +49,7 @@ template("ohos_executable") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
+    need_check = false
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -57,6 +59,28 @@ template("ohos_executable") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (need_check && is_use_check_deps) {
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--subsystem-name",
+      subsystem_name,
+      "--target-path",
+      target_path,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    check_part_subsystem_script =
+        rebase_path("//build/templates/common/check_part_subsystem_name.py")
+    message = exec_script(check_part_subsystem_script, _arguments, "string")
+    if (message != "") {
+      print(message)
+    }
+  }
 
   if (is_use_check_deps && defined(invoker.deps)) {
     deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
@@ -338,7 +362,19 @@ template("ohos_executable") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
-      exec_script(external_deps_script, arguments)
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {
@@ -428,6 +464,7 @@ template("ohos_shared_library") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
 
+  need_check = true
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -444,6 +481,7 @@ template("ohos_shared_library") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
+    need_check = false
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -453,6 +491,28 @@ template("ohos_shared_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (need_check && is_use_check_deps) {
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--subsystem-name",
+      subsystem_name,
+      "--target-path",
+      target_path,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    check_part_subsystem_script =
+        rebase_path("//build/templates/common/check_part_subsystem_name.py")
+    message = exec_script(check_part_subsystem_script, _arguments, "string")
+    if (message != "") {
+      print(message)
+    }
+  }
 
   # auto set auto_relative_install_dir by innerapi_tags
   if (defined(invoker.innerapi_tags)) {
@@ -826,8 +886,20 @@ template("ohos_shared_library") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
 
-      exec_script(external_deps_script, arguments, "string")
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {
@@ -935,6 +1007,7 @@ template("ohos_shared_library") {
 }
 
 template("ohos_static_library") {
+  need_check = true
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -951,6 +1024,7 @@ template("ohos_static_library") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
+    need_check = false
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -960,6 +1034,28 @@ template("ohos_static_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (need_check && is_use_check_deps) {
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--subsystem-name",
+      subsystem_name,
+      "--target-path",
+      target_path,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    check_part_subsystem_script =
+        rebase_path("//build/templates/common/check_part_subsystem_name.py")
+    message = exec_script(check_part_subsystem_script, _arguments, "string")
+    if (message != "") {
+      print(message)
+    }
+  }
 
   if (is_use_check_deps && defined(invoker.deps)) {
     deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
@@ -1132,8 +1228,20 @@ template("ohos_static_library") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
 
-      exec_script(external_deps_script, arguments)
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {
@@ -1182,6 +1290,7 @@ template("ohos_static_library") {
 }
 
 template("ohos_source_set") {
+  need_check = true
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -1198,6 +1307,7 @@ template("ohos_source_set") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
+    need_check = false
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -1207,6 +1317,28 @@ template("ohos_source_set") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (need_check && is_use_check_deps) {
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--subsystem-name",
+      subsystem_name,
+      "--target-path",
+      target_path,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    check_part_subsystem_script =
+        rebase_path("//build/templates/common/check_part_subsystem_name.py")
+    message = exec_script(check_part_subsystem_script, _arguments, "string")
+    if (message != "") {
+      print(message)
+    }
+  }
 
   if (check_deps) {
     deps_data = {
@@ -1344,8 +1476,20 @@ template("ohos_source_set") {
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
       }
+      if (is_use_check_deps) {
+        arguments += [
+          "--check-deps",
+          "--part-name",
+          "${part_name}",
+          "--module-path",
+          get_label_info(":${target_name}", "label_no_toolchain"),
+        ]
+      }
 
-      exec_script(external_deps_script, arguments)
+      handler_result = exec_script(external_deps_script, arguments, "string")
+      if (handler_result != "") {
+        print(handler_result)
+      }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
       if (defined(external_deps_info.deps)) {

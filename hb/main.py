@@ -34,12 +34,6 @@ from services.loader import OHOSLoader
 from services.gn import Gn
 from services.ninja import Ninja
 
-is_platform_support =False
-if sys.platform != "darwin":
-    is_platform_support = True
-    from services.menu import Menu
-
-
 from resolver.build_args_resolver import BuildArgsResolver
 from resolver.set_args_resolver import SetArgsResolver
 from resolver.clean_args_resolver import CleanArgsResolver
@@ -71,11 +65,7 @@ class Main():
         if args_dict.get("product_name").arg_value != '':
             set_args_dict = Arg.parse_all_args(ModuleType.SET)
             set_args_resolver = SetArgsResolver(set_args_dict)
-            if is_platform_support:
-                menu = Menu()
-            else:
-                menu = "Menu()"
-            ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, menu)
+            ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, "")
             ohos_set_module.set_product()
 
         preloader = OHOSPreloader()
@@ -90,10 +80,8 @@ class Main():
         Arg.clean_args_file()
         args_dict = Arg.parse_all_args(ModuleType.SET)
         set_args_resolver = SetArgsResolver(args_dict)
-        if is_platform_support:
-            menu = Menu()
-        else:
-            menu = "Menu()"
+        from services.menu import Menu
+        menu = Menu()
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:

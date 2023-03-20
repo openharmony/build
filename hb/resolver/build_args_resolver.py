@@ -29,9 +29,10 @@ from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 from modules.interface.build_module_interface import BuildModuleInterface
 from resources.config import Config
-from resources.global_var import CURRENT_OHOS_ROOT, DEFAULT_CCACHE_DIR
+from resources.global_var import CURRENT_OHOS_ROOT, DEFAULT_BUILD_ARGS
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from util.type_check_util import TypeCheckUtil
+from util.io_util import IoUtil
 from util.log_util import LogUtil
 from util.system_util import SystemUtil
 from util.type_check_util import TypeCheckUtil
@@ -103,9 +104,10 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: prebuild.
         """
         config = Config()
+        default_build_args = IoUtil.read_json_file(DEFAULT_BUILD_ARGS)
         if config.target_cpu == "":
             config.target_cpu = target_arg.arg_value
-        elif target_arg.arg_value != "arm":
+        elif target_arg.arg_value != default_build_args.get("target_cpu").get("argDefault"):
             config.target_cpu = target_arg.arg_value
 
     @staticmethod
@@ -275,16 +277,16 @@ class BuildArgsResolver(ArgsResolverInterface):
                     variable, value = gn_arg.split('=')
                     if TypeCheckUtil.is_bool_type(value):
                         if str(value).lower() == 'false':
-                            value = False
+                            convert_value = False
                         elif str(value).lower() == 'true':
-                            value = True
+                            convert_value = True
                     elif TypeCheckUtil.is_int_type(value):
-                        value = int(value)
+                        convert_value = int(value)
                     elif isinstance(value, list):
-                        value = list(value)
+                        convert_value = list(value)
                     else:
-                        value = str(value)
-                    target_generator.regist_arg(variable, value)
+                        convert_value = str(value).strip('"')
+                    target_generator.regist_arg(variable, convert_value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
 
@@ -329,7 +331,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("scalable_build", bool(target_arg.arg_value))
+        loader.regist_arg("scalable_build", target_arg.arg_value)
 
     @staticmethod
     def resolve_build_example(target_arg: Arg, build_module: BuildModuleInterface):
@@ -339,7 +341,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("build_example", bool(target_arg.arg_value))
+        loader.regist_arg("build_example", target_arg.arg_value)
 
     @staticmethod
     def resolve_build_platform_name(target_arg: Arg, build_module: BuildModuleInterface):
@@ -362,9 +364,13 @@ class BuildArgsResolver(ArgsResolverInterface):
         for gn_arg in build_module.args_dict['gn_args'].arg_value:
             if 'build_xts' in gn_arg:
                 variable, value = gn_arg.split('=')
-                loader.regist_arg(variable, bool(value))
+                if str(value).lower() == 'false':
+                    value = False
+                elif str(value).lower() == 'true':
+                    value = True
+                loader.regist_arg(variable, value)
                 return
-        loader.regist_arg("build_xts", bool(target_arg.arg_value))
+        loader.regist_arg("build_xts", target_arg.arg_value)
 
     @staticmethod
     def resolve_ignore_api_check(target_arg: Arg, build_module: BuildModuleInterface):
@@ -388,7 +394,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
-        loader.regist_arg("load_test_config", bool(target_arg.arg_value))
+        loader.regist_arg("load_test_config", target_arg.arg_value)
 
     @staticmethod
     @throw_exception
@@ -403,7 +409,10 @@ class BuildArgsResolver(ArgsResolverInterface):
             try:
                 variable, value = gn_arg.split(':')
                 if TypeCheckUtil.is_bool_type(value):
-                    value = bool(value)
+                    if str(value).lower() == 'false':
+                        value = False
+                    elif str(value).lower() == 'true':
+                        value = True
                 elif TypeCheckUtil.is_int_type(value):
                     value = int(value)
                 else:

@@ -368,7 +368,7 @@ class Product():
 
     def _get_full_product_config(self) -> dict:
         config = IoUtil.read_json_file(self._config_file)
-        if config.get("version") == '3.0':
+        if config.get("version") != '2.0':
             if os.path.dirname(self._config_file) != self._dirs.built_in_product_dir \
                     and not hasattr(self._config, 'product_build_path'):
                 config['product_build_path'] = os.path.relpath(

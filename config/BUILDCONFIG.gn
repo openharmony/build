@@ -294,8 +294,6 @@ is_wearable_product = "${target_platform}" == "wearable"
 
 is_intellitv_product = "${target_platform}" == "intellitv"
 
-is_emulator = false
-
 if (target_os == "ohos" && target_cpu == "x86_64") {
   is_emulator = true
 }

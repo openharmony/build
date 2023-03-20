@@ -110,5 +110,7 @@ class BundlePartObj(object):
         if 'hisysevent_config' in _component_info:
             _part_info['hisysevent_config'] = _component_info.get(
                 'hisysevent_config')
+        _part_info['part_deps'] = _component_info.get('deps', {})
+        _part_info['part_deps']['build_config_file'] = self._build_config_file
         _ohos_build_info['parts'] = {_part_name: _part_info}
         return _ohos_build_info

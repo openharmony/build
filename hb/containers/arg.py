@@ -246,22 +246,27 @@ class Arg():
             if isinstance(oh_arg, Arg):
                 assigned_value = parser_args[0].__dict__[oh_arg.arg_name]
                 if oh_arg.arg_type == ArgType.LIST:
-                    assigned_value = TypeCheckUtil.tile_list(assigned_value)
-                    assigned_value = list(set(assigned_value))
+                    convert_assigned_value = TypeCheckUtil.tile_list(assigned_value)
+                    convert_assigned_value = list(set(convert_assigned_value))
                 elif oh_arg.arg_type == ArgType.SUBPARSERS:
-                    assigned_value = TypeCheckUtil.tile_list(assigned_value)
-                    if len(assigned_value):
-                        assigned_value = list(set(assigned_value))
-                        assigned_value.extend(parser_args[1])
-                        assigned_value.sort(key=sys.argv[2:].index)
+                    convert_assigned_value = TypeCheckUtil.tile_list(assigned_value)
+                    if len(convert_assigned_value):
+                        convert_assigned_value = list(set(convert_assigned_value))
+                        convert_assigned_value.extend(parser_args[1])
+                        convert_assigned_value.sort(key=sys.argv[2:].index)
                 elif oh_arg.arg_type == ArgType.BOOL or oh_arg.arg_type == ArgType.GATE:
-                    assigned_value = bool(assigned_value)
+                    if str(assigned_value).lower() == 'false':
+                        convert_assigned_value = False
+                    elif str(assigned_value).lower() == 'true':
+                        convert_assigned_value = True
+                else:
+                    convert_assigned_value = assigned_value
 
-                if oh_arg.arg_attribute.get('deprecated', None) and oh_arg.arg_value != assigned_value:
+                if oh_arg.arg_attribute.get('deprecated', None) and oh_arg.arg_value != convert_assigned_value:
                     LogUtil.hb_warning(
                         'compile option "{}" will be deprecated, \
                             please consider use other options'.format(oh_arg.arg_name))
-                oh_arg.arg_value = assigned_value
+                oh_arg.arg_value = convert_assigned_value
                 Arg.write_args_file(
                     oh_arg.arg_name, oh_arg.arg_value, module_type)
 

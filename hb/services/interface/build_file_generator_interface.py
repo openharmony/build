@@ -30,6 +30,9 @@ class BuildFileGeneratorInterface(ServiceInterface):
     def flags_dict(self):
         return self._flags_dict
 
+    def regist_flag(self, flag_name: str, flag_value):
+        self._flags_dict[flag_name] = flag_value
+
     def regist_arg(self, arg_name: str, arg_value: str):
         self._args_dict[arg_name] = arg_value
 

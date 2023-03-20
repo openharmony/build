@@ -169,7 +169,8 @@ declare_args() {
   is_use_check_deps = false
 }
 
-declare_args() {
+use_new_skia = false
+if (is_ohos) {
   # Use new skia in //third_party/skia
   use_new_skia = false
 }
