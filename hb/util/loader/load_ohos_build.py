@@ -388,12 +388,14 @@ class LoadBuildConfig(object):
         self._parts_path_dict = {}
         self._part_hisysevent_config = {}
         self._parts_module_list = {}
+        self._parts_deps = {}
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._load_test_config = load_test_config
 
     @throw_exception
     def _parsing_config(self, parts_config):
         _parts_info_dict = {}
+        _parts_deps = {}
         _variant_phony_targets = {}
         for part_name, value in parts_config.items():
             if 'variants' in value:
@@ -437,8 +439,10 @@ class LoadBuildConfig(object):
                                 part_name), "2014")
                 self._part_hisysevent_config[part_name] = _config_files
             _parts_info_dict[part_name] = _parts_info
+            _parts_deps[part_name] = value.get('part_deps')
         self._parts_info_dict = _parts_info_dict
         self._phony_targets = _variant_phony_targets
+        self._parts_deps = _parts_deps
 
     def _merge_build_config(self):
         _build_files = self._build_info.get('build_files')
@@ -552,6 +556,10 @@ class LoadBuildConfig(object):
         self.parse()
         return self._parts_module_list
 
+    def parts_deps(self):
+        self.parse()
+        return self._parts_deps
+
     def parts_info_filter(self, save_part):
         if save_part is None:
             raise Exception
@@ -572,6 +580,8 @@ class LoadBuildConfig(object):
                 self._part_hisysevent_config = {key: value}
         self._parts_module_list = {
             key: value for key, value in self._parts_module_list.items() if save_part == key}
+        self._parts_deps = {
+            key: value for key, value in self._parts_deps.items() if save_part == key}
 
 
 def compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
@@ -737,6 +747,15 @@ def _output_parts_info(parts_config_dict, config_output_path):
         LogUtil.hb_info("generate parts modules info to '{}'".format(
             parts_modules_info_file))
 
+    # parts_deps
+    if 'parts_deps' in parts_config_dict:
+        parts_deps_info = parts_config_dict.get('parts_deps')
+        parts_deps_info_file = os.path.join(parts_info_output_path,
+                                            'parts_deps.json')
+        write_json_file(parts_deps_info_file, parts_deps_info)
+        LogUtil.hb_info(
+            "generate parts deps info to '{}'".format(parts_deps_info_file))
+
 
 def get_parts_info(source_root_dir,
                    config_output_relpath,
@@ -760,6 +779,7 @@ def get_parts_info(source_root_dir,
     _parts_path_info = {}
     _parts_hisysevent_config = {}
     _parts_modules_info = {}
+    _parts_deps = {}
     system_syscap = []
     for subsystem_name, build_config_info in subsystem_info.items():
 
@@ -793,6 +813,7 @@ def get_parts_info(source_root_dir,
         _parts_path_info.update(build_loader.parts_path_info())
         _parts_hisysevent_config.update(build_loader.parts_hisysevent_config())
         _parts_modules_info.update(build_loader.parts_modules_info())
+        _parts_deps.update(build_loader.parts_deps())
         system_syscap.extend(build_loader.parse_syscap_info())
     LogUtil.hb_info(
         "generate all parts build gn file to '{}/{}'".format(source_root_dir, config_output_relpath))
@@ -807,6 +828,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['parts_path_info'] = _parts_path_info
     parts_config_dict['hisysevent_config'] = _parts_hisysevent_config
     parts_config_dict['parts_modules_info'] = _parts_modules_info
+    parts_config_dict['parts_deps'] = _parts_deps
     _output_parts_info(parts_config_dict,
                        os.path.join(source_root_dir, config_output_relpath))
     parts_config_dict['syscap_info'] = system_syscap
