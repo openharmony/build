@@ -152,7 +152,7 @@ def get_diff_by_repo_pr_num(repo_url, pr_num):
             stderr=subprocess.PIPE,
             errors="replace",
         )
-        gitee_pr_diff, errorout = ret.communicate(timeout=20)
+        gitee_pr_diff, errorout = ret.communicate()
         if len(errorout) != 0:
             logging.error("Popen error: ", errorout)
     except Exception as err:

@@ -52,7 +52,7 @@ class CsctOnline(object):
             )
             print('installing prettytable')
             try:
-                _, __ = ret.communicate(timeout=120)
+                _, __ = ret.communicate()
                 print('prettytable installed successfully')
                 from prettytable import PrettyTable
             except Exception:
