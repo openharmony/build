@@ -15,6 +15,7 @@ import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
+import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/cxx/cxx.gni")
 
 template("_testcase_resources") {
@@ -706,12 +707,16 @@ template("ohos_rust_unittest") {
     } else {
       rustflags += _rustflags
     }
-
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
+    }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }
@@ -782,12 +787,16 @@ template("ohos_rust_systemtest") {
     } else {
       rustflags += _rustflags
     }
-
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
+    }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }

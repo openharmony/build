@@ -572,19 +572,13 @@ template("gcc_toolchain") {
       command = copy_command
       description = copy_description
     }
-    stdlibs = ""
-    if (defined(invoker.stdlibs)) {
-      stdlibs = invoker.stdlibs
-    }
-    stdlib_path = ""
-    if (defined(invoker.stdlib_path)) {
-      stdlib_path = invoker.stdlib_path
-    }
+
     cc_command_args = ""
     if (defined(invoker.cc_command_args)) {
       cc_command_args = invoker.cc_command_args
     }
 
+    rust_sysroot_relative_to_out = rebase_path(rust_sysroot, root_out_dir)
     rustc_wrapper =
         rebase_path("//build/toolchain/rustc_wrapper.py", root_build_dir)
     tool("rust_staticlib") {
@@ -597,9 +591,10 @@ template("gcc_toolchain") {
 
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
 
       description = "RUST staticlib $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ outfile ]
       default_output_extension = ".a"
       output_prefix = "lib"
@@ -610,12 +605,15 @@ template("gcc_toolchain") {
           "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.rlib".
       outfile = "{{target_out_dir}}/$rlibname"
       depfile = "$outfile.d"
+      rspfile = "$outfile.rsp"
+      rspfile_content = "{{rustdeps}} {{externs}}"
 
       # Don't add rspfile in rust_rlib tool.
       pool = "//build/toolchain:link_pool($default_toolchain)"
 
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile -- --crate-name {{crate_name}} -C prefer-dynamic {{source}} --crate-type {{crate_type}} $cc_command_args {{rustdeps}} {{externs}} --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $outfile LDFLAGS RUSTENV {{rustenv}}"
       description = "RUST rlib $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ outfile ]
       default_output_extension = default_rlib_extension
       output_prefix = "lib"
@@ -642,9 +640,10 @@ template("gcc_toolchain") {
         minidebug_switch = " --mini-debug"
       }
 
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -Clink-arg=-Wl,-soname=\"$cdylibname\" -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -Clink-arg=-Wl,-soname=\"$cdylibname\" -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST cdylib $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
       default_output_extension = default_shlib_extension
@@ -669,9 +668,10 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         minidebug_switch = " --mini-debug"
       }
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS RUSTENV {{rustenv}}"
 
       description = "RUST bin $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
       default_output_extension = default_executable_extension
@@ -697,9 +697,10 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         minidebug_switch = " --mini-debug"
       }
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST dylib $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
       default_output_extension = default_dylib_extension
@@ -726,9 +727,10 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         minidebug_switch = " --mini-debug"
       }
-      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args -L dependency=$stdlib_path $stdlibs --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
+      command = "$python_path \"$rustc_wrapper\" --clippy-driver=$clippy_driver --rustc=$rustc --depfile=$depfile --rsp=$rspfile --output=$outfile --unstripped-file=$unstripped_outfile --strip=$llvm_strip $minidebug_switch -- --crate-name {{crate_name}} -C prefer-dynamic $strip_switch {{source}} --crate-type {{crate_type}} $cc_command_args --emit=dep-info=$depfile,link -Z dep-info-omit-d-target -Z unstable-options {{rustflags}} -o $unstripped_outfile LDFLAGS {{ldflags}} RUSTENV {{rustenv}}"
 
       description = "RUST proc-macro $outfile"
+      rust_sysroot = rust_sysroot_relative_to_out
       outputs = [ unstripped_outfile ]
       outputs += [ outfile ]
       default_output_extension = default_dylib_extension
@@ -786,10 +788,8 @@ template("clang_toolchain") {
       shlib_extension = invoker.shlib_extension
     }
     if (defined(rust_abi_target)) {
-      stdlib_path = "${rust_path}/lib/rustlib/${rust_abi_target}/lib"
       if (rust_abi_target == "x86_64-unknown-linux-gnu") {
-        stdlibs = "--extern 'noprelude:alloc=$stdlib_path/liballoc-703c7b85089a09a0.rlib' --extern 'noprelude:cfg_if=$stdlib_path/libcfg_if-21f2d423d0911358.rlib' --extern 'noprelude:compiler_builtins=$stdlib_path/libcompiler_builtins-f742a15c5765001e.rlib' --extern 'noprelude:core=$stdlib_path/libcore-95c594ea0242ac01.rlib' --extern 'noprelude:getopts=$stdlib_path/libgetopts-5ffe1cc2a38f4946.rlib' --extern 'noprelude:libc=$stdlib_path/liblibc-05324fd7ac514b81.rlib' --extern 'noprelude:libhashbrown=$stdlib_path/libhashbrown-17fad901074caeb6.rlib' --extern 'noprelude:panic_abort=$stdlib_path/libpanic_abort-b27aba459f11402c.rlib' --extern 'noprelude:panic_unwind=$stdlib_path/libpanic_unwind-9d8ca548a7441307.rlib' --extern 'noprelude:proc_macro=$stdlib_path/libproc_macro-c7cdf527cc642256.rlib' --extern 'noprelude:rustc_demangle=$stdlib_path/librustc_demangle-46c8c3eb5be77633.rlib' --extern 'noprelude:unwind=$stdlib_path/libunwind-7372497c1f602d57.rlib' --extern 'noprelude:std=$stdlib_path/libstd-c244726431624c96.rlib' --extern test=${rust_path}/lib/libtest-03f4c43f2c45172b.so --extern 'std=${rust_path}/lib/libstd-c244726431624c96.so'"
-        cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
+        cc_command_args = "--target=${rust_abi_target} -Clinker=$clang -lstdc++ -lclang -Clink-arg=-fuse-ld=lld -Clink-arg=-v"
       }
     }
   }
