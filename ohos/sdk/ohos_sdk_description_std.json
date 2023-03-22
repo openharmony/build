@@ -742,6 +742,15 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin/module/util",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_ets_utils_container_library",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
         "install_dir": "previewer/common/bin",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
