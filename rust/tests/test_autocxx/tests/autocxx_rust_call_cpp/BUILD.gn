@@ -1,0 +1,55 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/templates/rust/rust_autocxx.gni")
+import("//build/templates/rust/rust_template.gni")
+
+rust_autocxx("autocxx_gen_bindings") {
+  visibility = [
+    ":autocxx_rust_cxx_staticlib",
+    ":autocxx_rust_exe",
+  ]
+  sources = [ "src/lib.rs" ]
+  if (is_component_build) {
+    export_symbols = true
+  }
+}
+
+ohos_static_library("autocxx_rust_cxx_staticlib") {
+  ohos_all_sources = get_target_outputs(":autocxx_gen_bindings")
+  rs_sources = filter_exclude(ohos_all_sources, [ "*.rs" ])
+  sources = rs_sources
+  include_dirs = [
+    "${target_gen_dir}",
+    "//third_party/rust/cxx/v1/crate/include",
+    "include",
+  ]
+  print("sources", sources)
+  print("include_dirs", include_dirs)
+  deps = [
+    ":autocxx_gen_bindings",
+    "//build/rust:cxx_cppdeps",
+  ]
+}
+
+ohos_rust_executable("autocxx_rust_exe") {
+  sources = [ "src/lib.rs" ]
+  ohos_all_sources = get_target_outputs(":autocxx_gen_bindings")
+  rs_include_file = filter_include(ohos_all_sources, [ "*include.rs" ])
+  rustenv = [ "AUTOCXX_RS_FILE=" + rebase_path(rs_include_file[0]) ]
+  print("sources", sources)
+  deps = [
+    ":autocxx_rust_cxx_staticlib",
+    "//build/rust/tests/test_autocxx:autocxx_rustdeps",
+  ]
+}

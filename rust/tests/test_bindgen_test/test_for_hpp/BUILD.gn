@@ -1,0 +1,30 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("//build/templates/rust/rust_bindgen.gni")
+import("//build/templates/rust/rust_template.gni")
+
+
+rust_bindgen("c_lib_bindgen_hpp") {
+  header = "lib.hpp"
+}
+
+ohos_rust_executable("bindgen_test_hpp") {
+  deps = [ ":c_lib_bindgen_hpp" ]
+  sources = [ "main.rs" ]
+  bindgen_output = get_target_outputs(":c_lib_bindgen_hpp")
+  inputs = bindgen_output
+  rustenv = [ "BINDGEN_RS_FILE=" + rebase_path(bindgen_output[0]) ]
+  crate_root = "main.rs"
+}
