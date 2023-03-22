@@ -15,7 +15,6 @@ import("//build/ohos.gni")
 import("//build/templates/rust/rust_bindgen.gni")
 import("//build/templates/rust/rust_template.gni")
 
-
 rust_bindgen("c_lib_bindgen_h") {
   header = "lib.h"
 }
@@ -28,4 +27,3 @@ ohos_rust_executable("bindgen_test_for_h") {
   rustenv = [ "BINDGEN_RS_FILE=" + rebase_path(bindgen_output[0]) ]
   crate_root = "main.rs"
 }
-

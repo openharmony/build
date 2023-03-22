@@ -67,6 +67,7 @@ fn main() {
     let chunks = vec![b"fearless".to_vec(), b"concurrency".to_vec()];
     let mut buf = MultiBufs { chunks, pos: 0 };
     let blobid = client.put_buf(&mut buf);
+    println!("This is a test for Rust call cpp:");
     println!("blobid = {}", blobid);
 
     // Add a add_tag.

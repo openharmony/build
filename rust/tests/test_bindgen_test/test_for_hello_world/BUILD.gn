@@ -33,4 +33,3 @@ ohos_rust_executable("bindgen_test") {
   rustenv = [ "BINDGEN_RS_FILE=" + rebase_path(bindgen_output[0]) ]
   crate_root = "main.rs"
 }
-

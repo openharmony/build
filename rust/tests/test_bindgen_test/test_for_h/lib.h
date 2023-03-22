@@ -18,21 +18,16 @@
 // A few tests for enum-related issues that should be tested with all the enum
 // representations.
 
-struct foo {
-  enum {
-    FOO_A,
-    FOO_B,
-  } member;
-};
-
 enum Foo {
     Bar = 0,
     Qux
 };
 
-enum Neg {
-    MinusOne = -1,
-    One = 1,
+struct foo {
+    enum {
+        FOO_AA,
+        FOO_BB,
+    } member;
 };
 
 /** <div rustbindgen nodebug></div> */
@@ -47,5 +42,9 @@ enum Debug {
     Debug2,
 };
 
+enum Neg {
+    MinusOne = -1,
+    One = 1,
+};
 
 #endif  //  BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_

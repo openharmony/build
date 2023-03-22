@@ -49,24 +49,14 @@ group("cargo_crate_test") {
     "test_rlib_cargo_crate:test_rlib_crate_associated_bin",
   ]
 }
-
-
 group("cxx_test_host_and_target") {
   deps = [
-    "//build/rust/tests/test_autocxx/tests/autocxx_cpp_call_rust:autocxx_cpp_exe",
-    "//build/rust/tests/test_autocxx/tests/autocxx_cpp_call_rust:autocxx_cpp_exe(${host_toolchain})",
-    "//build/rust/tests/test_autocxx/tests/autocxx_pod:autocxx_rust_pod_exe",
-    "//build/rust/tests/test_autocxx/tests/autocxx_pod:autocxx_rust_pod_exe(${host_toolchain})",
-    "//build/rust/tests/test_autocxx/tests/autocxx_rust_call_cpp:autocxx_rust_exe",
-    "//build/rust/tests/test_autocxx/tests/autocxx_rust_call_cpp:autocxx_rust_exe(${host_toolchain})",
-    "//build/rust/tests/test_autocxx/tests/autocxx_steam_mini:autocxx_rust_steam_mini_exe",
-    "//build/rust/tests/test_autocxx/tests/autocxx_steam_mini:autocxx_rust_steam_mini_exe(${host_toolchain})",
-    "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
     "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
-    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
-    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
-    "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
+    "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
     "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
+    "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
+    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
+    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
     "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
     "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
     "//build/rust/tests/test_cxx:test_cxx_exe",

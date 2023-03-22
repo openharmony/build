@@ -16,28 +16,18 @@
 #include "build/rust/tests/test_cxx/src/lib.rs.h"
 using namespace std;
 
-//   rust::Vec<rust::String> c_return_rust_vec_string() {
-//   return {"2", "0", "2", "0"};
-// }
 int main(int argc, const char* argv[])
 {
-    // ASSERT(r_return_primitive() == 2020);
+    int a = 2021;
+    int b = 4;
     print_message_in_rust();
     cout << r_return_primitive() << endl;
     cout << r_return_shared().z << endl;
-
-      auto r = r_return_box();
-  cout<<r->get()<<endl;
-  cout<<r->set(2021)<<endl;
-  cout<<r->get()<<endl;
-  cout<<std::string(r_return_rust_string())<<endl;
-  cout<<r_return_sum(2020, 1)<<endl;
-//   cout<<*r_return_unique_ptr_string()<<endl;
-// rust::Vec<rust::String> res = c_return_rust_vec_string();
-// for(auto& e:res){
-//     cout<< e<<endl;
-// }
-
-
+    auto r = r_return_box();
+    cout << "Before:" << r->get() << endl;
+    r->set(a);
+    cout << "After:" << r->get() << endl;
+    cout << std::string(r_return_rust_string()) << endl;
+    cout << r_return_sum(a, b) << endl;
     return 0;
 }

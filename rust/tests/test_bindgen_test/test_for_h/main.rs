@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-//!  bindgen test
+//!  bindgen test for .h file
 #![allow(clippy::approx_constant)]
 #![allow(clippy::eq_op)]
 mod c_ffi {
@@ -21,15 +21,23 @@ mod c_ffi {
     #![allow(non_upper_case_globals)]
     #![allow(non_camel_case_types)]
     include!(env!("BINDGEN_RS_FILE"));
-  }
+}
 
-  fn bindgen_test_layout_foo() {
-    const UNINIT: ::std::mem::MaybeUninit<c_ffi::foo> =
-        ::std::mem::MaybeUninit::uninit();
+fn bindgen_test_layout_foo() {
+    const UNINIT: ::std::mem::MaybeUninit<c_ffi::foo> = ::std::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
-    println!("::std::mem::size_of::<c_ffi::foo>:{} usize",::std::mem::size_of::<c_ffi::foo>());
-    println!("::std::mem::align_of::<c_ffi::foo>():{} usize",::std::mem::align_of::<c_ffi::foo>());
-    println!("::std::ptr::addr_of!((*ptr).member) as usize - ptr as usize:{} usize",unsafe { ::std::ptr::addr_of!((*ptr).member) as usize - ptr as usize });
+    println!(
+        "The mem size of c_ffi::foo is {} usize",
+        ::std::mem::size_of::<c_ffi::foo>()
+    );
+    println!(
+        "The mem align_of c_ffi::foo> is {} usize",
+        ::std::mem::align_of::<c_ffi::foo>()
+    );
+    println!(
+        "The ptr addr of!((*ptr).member) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).member) as usize - ptr as usize }
+    );
 }
 impl Default for c_ffi::foo {
     fn default() -> Self {

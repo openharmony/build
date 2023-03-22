@@ -75,7 +75,7 @@ Metadata_Blob client_blobstore::get_metadata(uint64_t blobid) const
     if (blob != impl->blobs.end()) {
         get_metadata.size = blob->second.data.size();
         std::for_each(blob->second.tags.cbegin(), blob->second.tags.cend(),
-                [&](auto &t) { get_metadata.tags.emplace_back(t); });
+            [&](auto &t) { get_metadata.tags.emplace_back(t); });
     }
     return get_metadata;
 }

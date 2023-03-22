@@ -64,7 +64,7 @@ template("rust_bindgen") {
     }
 
     ohos_bindgen_target =
-        "//third_party/rust/bindgen/v0_60:bindgen($host_toolchain)"
+        "//third_party/rust/bindgen-cli:bindgen($host_toolchain)"
     ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "root_out_dir")
     ohos_bindgen_executable =
         "${ohos_bindgen_obj_dir}/${subsystem_name}/${part_name}/bindgen"
@@ -73,8 +73,8 @@ template("rust_bindgen") {
       ohos_bindgen_executable = "${ohos_bindgen_executable}.exe"
     }
     llvm_config_path =
-        "//prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-config"
-    clang_path = "//prebuilts/clang/ohos/linux-x86_64/llvm/bin/clang"
+        "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/bin/llvm-config"
+    clang_path = "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/bin/clang"
 
     output_dir = "$target_gen_dir"
     out_gen_rs = "$output_dir/${target_name}.rs"

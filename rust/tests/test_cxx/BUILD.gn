@@ -28,9 +28,6 @@ ohos_executable("test_cxx_exe") {
   sources += get_target_outputs(":test_cxx_exe_gen")
 
   include_dirs = [ "${target_gen_dir}" ]
-  print("sources", sources)
-  print("include_dirs", include_dirs)
-  print("target_gen_dir", target_gen_dir)
   deps = [
     ":test_cxx_examp_rust",
     ":test_cxx_exe_gen",

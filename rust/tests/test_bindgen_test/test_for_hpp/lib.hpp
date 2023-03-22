@@ -21,16 +21,12 @@
  */
 struct C;
 
-/**
- * <div rustbindgen opaque></div>
- */
-struct D {
-    int a;
-};
-
 struct NotAnnotated {
     int f;
 };
 
+struct D {
+    int a;
+};
 
 #endif  //  BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_

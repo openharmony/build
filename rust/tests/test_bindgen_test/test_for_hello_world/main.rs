@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-//!  bindgen test
+//!  bindgen test for hello world
 #![allow(clippy::approx_constant)]
 mod c_ffi {
     #![allow(dead_code)]
@@ -32,7 +32,7 @@ use std::ffi::CString;
 /// fn main()
 fn main() {
     println!("{} + {} = {}", 3, 7, add_two_numbers_in_c(3, 7));
-    let c_str = CString::new("to").unwrap();
+    let c_str = CString::new("This is a message from C").unwrap();
     let c_world: *const c_char = c_str.as_ptr() as *const c_char;
     unsafe {
         c_ffi::say_hello(c_world);

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-//! fdhjhj
+//! #[cxx::bridge]
 #[cxx::bridge]
 mod ffi{
     #![allow(dead_code)]
@@ -21,10 +21,6 @@ mod ffi{
     struct Shared {
         z: usize,
     }
-    // unsafe extern "C++" {
-    //     fn c_return_rust_vec_string() -> Vec<String>;
-    // }
-    
     extern "Rust"{
         type R;
         fn print_message_in_rust();
@@ -32,59 +28,47 @@ mod ffi{
         fn r_return_shared() -> Shared;
         fn r_return_box() -> Box<R>;
         fn r_return_rust_string() -> String;
-        // fn r_return_unique_ptr_string() -> UniquePtr<CxxString>;
         fn get(self: &R) -> usize;
         fn set(self: &mut R, n: usize) -> usize;
         fn r_return_sum(_: usize, _: usize) -> usize;
     }
 }
-// use cxx::UniquePtr;
-// use cxx::CxxString;
-///  sd
+///  pub struct R
 #[derive(PartialEq, Debug)]
 pub struct R(pub usize);
 
 impl R {
-    fn get(&self) -> usize {
-        self.0
-    }
-
     fn set(&mut self, n: usize) -> usize {
         self.0 = n;
         n
     }
+
+    fn get(&self) -> usize {
+        self.0
+    }
 }
 
-
-
-
-fn print_message_in_rust(){
-    println!("Here is a message from Rust.")
-}
-fn r_return_primitive() -> usize {
-    2020
-}
-fn r_return_shared() -> ffi::Shared {
-    ffi::Shared { z: 2020 }
-}
 
 fn r_return_box() -> Box<R> {
-    Box::new(R(2020))
+    println!("Here is a message from Rust,test for Box<R>:");
+    Box::new(R(1995))
 }
-
+fn print_message_in_rust(){
+    println!("Here is a test for cpp call Rust.");
+}
+fn r_return_shared() -> ffi::Shared {
+    println!("Here is a message from Rust,test for ffi::Shared:");
+    ffi::Shared { z: 1996 }
+}
+fn r_return_primitive() -> usize {
+    println!("Here is a message from Rust,test for usize:");
+    1997
+}
 fn r_return_rust_string() -> String {
-    "2020".to_owned()
+    println!("Here is a message from Rust,test for String");
+    "Hello World!".to_owned()
 }
-
 fn r_return_sum(n1: usize, n2: usize) -> usize {
+    println!("Here is a message from Rust,test for {} + {} is:",n1 ,n2);
     n1 + n2
 }
-
-
-
-// fn r_return_unique_ptr_string() -> UniquePtr<CxxString> {
-//     extern "C" {
-//         fn cxx_test_suite_get_unique_ptr_string() -> *mut CxxString;
-//     }
-//     unsafe { UniquePtr::from_raw(cxx_test_suite_get_unique_ptr_string()) }
-// }

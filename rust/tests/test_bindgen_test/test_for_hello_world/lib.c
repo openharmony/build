@@ -17,10 +17,14 @@
 #include <stdint.h>
 #include <stdio.h>
 
-void say_hello(const char *message) {
-  printf("%s from C\n", message);
+void say_hello(const char *message)
+{
+    printf("This is a test for bindgen hello world:\n");
+    printf("%s\n", message);
 }
+
 uint32_t func_a_add_b(uint32_t a, uint32_t b)
 {
+    printf("This is a test for bindgen of a + b:\n");
     return a + b;
 }

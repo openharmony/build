@@ -246,4 +246,5 @@ do
     fi
     mv $file "$dir_name/$newfile_name"
 done
+cp -raf "$code_dir/third_party/gn/rust" "$code_dir/third_party/"
 echo -e "\n"

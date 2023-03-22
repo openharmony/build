@@ -15,7 +15,6 @@ import("//build/ohos.gni")
 import("//build/templates/rust/rust_bindgen.gni")
 import("//build/templates/rust/rust_template.gni")
 
-
 rust_bindgen("c_lib_bindgen_hpp") {
   header = "lib.hpp"
 }
