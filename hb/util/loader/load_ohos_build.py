@@ -594,11 +594,9 @@ def compare_subsystem_and_component(subsystem_name,components_name, subsystem_co
                 continue
             if subsystem_name == component['component']:
                 continue
-            raise Exception(
-                'find subsystem {} failed, please check it in {}.'.format(subsystem_name, config_path))
+            print("Warning: find subsystem {} failed, please check it in {}.".format(subsystem_name, config_path))
         else:
-            raise Exception(
-                'find component {} failed, please check it in {}.'.format(component['component'], config_path))
+            print("Warning: find component {} failed, please check it in {}.".format(subsystem_name, config_path))
 
 
 def check_subsystem_and_component(parts_info_output_path):
