@@ -85,7 +85,7 @@ def check_debug_info(check_file, readelf):
     infos = out.stdout.read().splitlines()
     for info in infos:
         info_str = info.decode()
-        pos = info.find(".debug_info")
+        pos = info_str.find(".debug_info")
         if pos >= 0:
             return True
     return False
@@ -158,6 +158,8 @@ def traverse_and_check(check_list, readelf, abidiff, abidw, abi_dumps_path):
                     raise Exception("Target '{}' is not stable! Check config in gn".format(target_name))
                 else:
                     copy_list.append(copy.deepcopy(get_copy_source_path(element)))
+                module_deps = get_value_from_file("deps_data", element, "module_deps_info")
+                check_list.extend(get_valid_deps(module_deps, finish_list))
             else:
                 stripped_dir = ""
                 if target_type == "shared_library":
@@ -171,8 +173,8 @@ def traverse_and_check(check_list, readelf, abidiff, abidw, abi_dumps_path):
                 if loop_count == 0:
                     copy_list.append(copy.deepcopy(get_copy_source_path(element)))
 
-            module_deps = get_value_from_file("deps_data", element, "module_deps_info")
-            check_list.extend(get_valid_deps(module_deps, finish_list))
+                    module_deps = get_value_from_file("deps_data", element, "module_deps_info")
+                    check_list.extend(get_valid_deps(module_deps, finish_list))
         loop_count += 1
     return copy_list
 
@@ -209,7 +211,7 @@ def main():
     abidw_element = (args.abidw_target_name, args.abidw_target_out_dir)
     abidw_bin = get_value_from_file("module_info", abidw_element, "source")
 
-    parent_output = os.path.join(args.target_out_dir, "module_package")
+    parent_output = os.path.join(args.target_out_dir, "module_package", "img_input")
     if not os.path.exists(parent_output):
         os.makedirs(parent_output, exist_ok=True)
 
