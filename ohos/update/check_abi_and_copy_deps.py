@@ -232,6 +232,7 @@ def main():
                 shutil.copy(file, output)
         else:
             shutil.copy(copy_element[1], output)
+    os.remove(args.check_datas_file)
 
 
 if __name__ == '__main__':
