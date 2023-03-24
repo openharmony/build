@@ -128,7 +128,9 @@ class Gn(BuildFileGeneratorInterface):
         flags_list = []
 
         for key, value in self.flags_dict.items():
-            if value == '':
+            if key == 'gn_flags' and isinstance(value, list):
+                flags_list += value
+            elif value == '':
                 flags_list.append('{}'.format(key))
             else:
                 flags_list.append('{}={}'.format(key, str(value)).lower())
