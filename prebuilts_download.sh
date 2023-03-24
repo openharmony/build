@@ -163,7 +163,7 @@ if [[ -e "${llvm_dir}/llvm_ndk" ]];then
 fi
 mkdir -p "${llvm_dir}/llvm_ndk"
 cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
-cp -rfp "${llvm_dir}/libcxx-ndk/include/libcxx-ohos/include" "${llvm_dir}/llvm_ndk"
+cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
