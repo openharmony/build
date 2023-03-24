@@ -717,10 +717,26 @@
         ]
     },
     {
-        "install_dir": "previewer",
-        "module_label": "//developtools/ace_js2bundle:previewer_copy",
+        "install_dir": "previewer/common/bin",
+        "module_label": "//tools_previewer:rich_previewer",
         "target_os": [
-            "linux",
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/liteWearable/bin",
+        "module_label": "//tools_previewer:lite_previewer",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/liteWearable",
+        "module_label": "//tools_previewer:previewer_copy_lite_configdir",
+        "target_os": [
             "windows",
             "darwin"
         ]
