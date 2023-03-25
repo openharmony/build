@@ -97,9 +97,9 @@ template("ohos_executable") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
       "--parts-path-info-file",
       rebase_path(parts_path_info, root_build_dir),
       "--path-parts-info-file",
@@ -558,9 +558,9 @@ template("ohos_shared_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
       "--parts-path-info-file",
       rebase_path(parts_path_info, root_build_dir),
       "--path-parts-info-file",
@@ -1073,9 +1073,9 @@ template("ohos_static_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
       "--parts-path-info-file",
       rebase_path(parts_path_info, root_build_dir),
       "--path-parts-info-file",
