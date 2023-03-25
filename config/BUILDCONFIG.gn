@@ -111,6 +111,14 @@ if (defined(product_build_config.chipprod_config_path)) {
   chip_product_list = []
 }
 
+if (defined(product_build_config.ext_sdk_config_file)) {
+  ext_sdk_config_file = product_build_config.ext_sdk_config_file
+}
+
+if (defined(product_build_config.ext_ndk_config_file)) {
+  ext_ndk_config_file = product_build_config.ext_ndk_config_file
+}
+
 if (defined(product_build_config.enable_absystem)) {
   enable_absystem = product_build_config.enable_absystem
 } else {
