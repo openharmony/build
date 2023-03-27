@@ -177,6 +177,25 @@ group("ohos_sdk_pre") {
   ]
 }
 
+sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
+action("check_sdk_completeness") {
+  deps = [ ":add_notice_file" ]
+
+  script = "//build/ohos/sdk/check_sdk_completeness.py"
+  _verify_result = "${target_out_dir}/check_sdk_completeness.txt"
+
+  outputs = [ _verify_result ]
+
+  args = [
+    "--sdk-delivery-list",
+    rebase_path(sdk_delivery_list, root_build_dir),
+    root_build_dir,
+    "--sdk-archive-dir",
+    rebase_path("${product_output_dir}/${product_name}", root_build_dir),
+    product_name,
+  ]
+}
+
 action_with_pydeps("add_notice_file") {
   deps = [
     ":generate_sdk_notice",
@@ -207,4 +226,8 @@ group("ohos_sdk") {
     ":add_notice_file",
     ":ohos_sdk_pre",
   ]
+
+  if (sdk_check_flag == true) {
+    deps += [ ":check_sdk_completeness" ]
+  }
 }
