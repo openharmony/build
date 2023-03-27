@@ -956,7 +956,8 @@ template("ohos_shared_library") {
     }
 
     module_type_napi = false
-    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+    if (defined(invoker.relative_install_dir) &&
+        (build_ohos_sdk != true && build_ohos_ndk != true)) {
       relative_paths = string_split(invoker.relative_install_dir, "/")
       foreach(p, relative_paths) {
         if (p == "module") {
