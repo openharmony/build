@@ -339,7 +339,7 @@ template("ohos_executable") {
       ]
     }
 
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -863,7 +863,7 @@ template("ohos_shared_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -1205,7 +1205,7 @@ template("ohos_static_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -1453,7 +1453,7 @@ template("ohos_source_set") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
