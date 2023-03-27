@@ -229,9 +229,9 @@ if (host_os == "mac") {
 } else {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
 }
-default_hap_private_key_path = "OpenHarmony Application Release"
+default_key_alias = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
-default_key_alias = "123456"
+default_hap_private_key_path = "123456"
 default_keystore_password = "123456"
 default_keystore_path = "//developtools/hapsigner/dist/OpenHarmony.p12"
 default_hap_certificate_file =
