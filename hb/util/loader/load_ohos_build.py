@@ -614,8 +614,11 @@ def check_subsystem_and_component(parts_info_output_path):
         info = read_json_file(config_path)
         subsystems_info = info['subsystems']
         for subsystems_name in iter(subsystems_info):
-            subsystem_name = subsystems_name['subsystem']
-            components_name = subsystems_name['components']
+            subsystem_name = subsystems_name.get('subsystem')
+            components_name = subsystems_name.get('components')
+            if subsystem_name is None or components_name is None:
+                print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(config_path))
+                continue
             compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
                                             part_subsystem_component_info, config_path)
 
