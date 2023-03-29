@@ -840,6 +840,9 @@ template("ohos_shared_library") {
           "-I" + rebase_path(
                   "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
                   root_build_dir),
+          "-I" + rebase_path(
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/${abi_target}/c++/v1",
+                  root_build_dir),
         ]
         ldflags += [
           "-nostdlib++",
