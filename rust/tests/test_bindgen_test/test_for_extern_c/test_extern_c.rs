@@ -28,12 +28,12 @@ extern "C" {
 fn main() {
     let x: i32 = -123;
     println!("This is an example of calling a C library function from Rust:");
-    println!("{x}的绝对值是: {}.", unsafe { abs(x) });
+    println!("The absolute value of {x} is: {}.", unsafe { abs(x) });
     let n: f64 = 9.0;
     let p: f64 = 3.0;
-    println!("{n}的{p}次方是: {}.", unsafe { pow(n, p) });
+    println!("The {n}th power of {p} is: {}.", unsafe { pow(n, p) });
     let mut y: f64 = 64.0;
-    println!("{y}的平方根是: {}.", unsafe { sqrt(y) });
+    println!("The square root of {y} is: {}.", unsafe { sqrt(y) });
     y = -3.14;
-    println!("{y}的平方根是: {}.", unsafe { sqrt(y) });
+    println!("The square root of {y} is: {}.", unsafe { sqrt(y) });
 }

@@ -22,37 +22,14 @@ mod ffi{
         z: usize,
     }
     extern "Rust"{
-        type R;
         fn print_message_in_rust();
         fn r_return_primitive() -> usize;
         fn r_return_shared() -> Shared;
-        fn r_return_box() -> Box<R>;
         fn r_return_rust_string() -> String;
-        fn get(self: &R) -> usize;
-        fn set(self: &mut R, n: usize) -> usize;
         fn r_return_sum(_: usize, _: usize) -> usize;
     }
 }
-///  pub struct R
-#[derive(PartialEq, Debug)]
-pub struct R(pub usize);
 
-impl R {
-    fn set(&mut self, n: usize) -> usize {
-        self.0 = n;
-        n
-    }
-
-    fn get(&self) -> usize {
-        self.0
-    }
-}
-
-
-fn r_return_box() -> Box<R> {
-    println!("Here is a message from Rust,test for Box<R>:");
-    Box::new(R(1995))
-}
 fn print_message_in_rust(){
     println!("Here is a test for cpp call Rust.");
 }

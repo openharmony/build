@@ -31,7 +31,7 @@ fn bindgen_test_layout_foo() {
         ::std::mem::size_of::<c_ffi::foo>()
     );
     println!(
-        "The mem align_of c_ffi::foo> is {} usize",
+        "The mem align_of c_ffi::foo is {} usize",
         ::std::mem::align_of::<c_ffi::foo>()
     );
     println!(
