@@ -33,8 +33,6 @@ class ArgsFactory():
             return _add_str_option(parser, arg)
         elif arg['arg_type'] == 'list':
             return _add_list_option(parser, arg)
-        elif arg['arg_type'] == 'gate':
-            return _add_gate_option(parser, arg)
         elif arg['arg_type'] == 'subparsers':
             return _add_list_option(parser, arg)
         else:
@@ -46,8 +44,8 @@ def _add_bool_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
     if arg['arg_attribute'].get('abbreviation'):
         return _add_bool_abbreviation_option(parser, arg)
     else:
-        return parser.add_argument(arg['arg_name'], help=arg['arg_help'],
-                                   default=arg['argDefault'], choices=['True', 'False', 'true', 'false'])
+        return parser.add_argument(arg['arg_name'], help=arg['arg_help'], action='store_true',
+                                   default=arg['argDefault'])
 
 
 def _add_str_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
@@ -69,10 +67,6 @@ def _add_list_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
     else:
         return parser.add_argument(arg['arg_name'], help=arg['arg_help'],
                                    nargs='*', default=arg['argDefault'], action='append')
-
-
-def _add_gate_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
-    return parser.add_argument(arg['arg_name'], help=arg['arg_help'], action='store_true', default=arg['argDefault'])
 
 
 def _add_bool_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:

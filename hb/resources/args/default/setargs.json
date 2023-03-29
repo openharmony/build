@@ -16,7 +16,7 @@
         "argDefault": false,
         "arg_help": "Default:False. Help:Use a graphical interface to customize most compile-time parameters",
         "arg_phase": "prebuild",
-        "arg_type": "gate",
+        "arg_type": "bool",
         "arg_attribute": {},
         "resolve_function": "resolve_set_parameter",
         "testFunction": "TestProductName"
