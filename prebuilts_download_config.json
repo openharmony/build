@@ -380,7 +380,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20220330.mac.tar.gz",
           "unzip_filename": "previewer"
         },
         {
