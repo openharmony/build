@@ -18,7 +18,7 @@
 #include <stdint.h>
 #include "build/rust/tests/test_bindgen_test/test_for_hello_world/lib2.h"
 
-uint32_t func_a_add_b(uint32_t a, uint32_t b);
-void say_hello(const char *message);
+uint32_t FuncAAddB(uint32_t a, uint32_t b);
+void SayHello(const char *message);
 
 #endif  //  BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_

@@ -19,12 +19,6 @@ import subprocess
 import argparse
 
 
-sys.path.append(
-    os.path.join(os.path.dirname(__file__),os.pardir,os.pardir)
-)
-
-from scripts.util import build_utils
-
 def run(cxx_exe, args, output, is_header):
     run_cmdargs = [os.path.abspath(cxx_exe)]
     run_cmdargs.extend(args)
@@ -36,6 +30,9 @@ def run(cxx_exe, args, output, is_header):
         print(decode_messages, file=sys.stderr)
     if res_job.returncode != 0:
         return res_job.returncode
+    sys.path.append(
+        os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
+    from scripts.util import build_utils
     with build_utils.atomic_output(output) as output:
         output.write(res_job.stdout)
     return 0

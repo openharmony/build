@@ -13,8 +13,9 @@
  * limitations under the License.
  */
 
-//!  bindgen test
+//!  bindgen test for hpp
 #![allow(clippy::approx_constant)]
+#![allow(non_snake_case)]
 mod c_ffi {
     #![allow(dead_code)]
     #![allow(non_upper_case_globals)]
@@ -22,24 +23,73 @@ mod c_ffi {
     include!(env!("BINDGEN_RS_FILE"));
 }
 
-fn bindgen_test_layout_not_annotated() {
-    const UNINIT: ::std::mem::MaybeUninit<c_ffi::NotAnnotated> =
+
+fn bindgen_test_layout_C() {
+    const UNINIT: ::std::mem::MaybeUninit<c_ffi::C> =
         ::std::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     println!(
-        "The mem size of c_ffi::NotAnnotated is {} usize",
-        ::std::mem::size_of::<c_ffi::NotAnnotated>()
+        "The mem size of c_ffi::C is {} usize",
+        ::std::mem::size_of::<c_ffi::C>()
     );
     println!(
-        "The mem align of c_ffi::NotAnnotated is {} usize",
-        ::std::mem::align_of::<c_ffi::NotAnnotated>()
+        "The align_of size of c_ffi::C is {} usize",
+        ::std::mem::align_of::<c_ffi::C>()
     );
     println!(
-        "The ptr addr_of!((*ptr).f) as usize - ptr as usize is {} usize",
-        unsafe { ::std::ptr::addr_of!((*ptr).f) as usize - ptr as usize }
+        "The addr_of!((*ptr).c) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).c) as usize - ptr as usize }
+    );
+    println!(
+        "The addr_of!((*ptr).ptr) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).ptr) as usize - ptr as usize }
+    );
+    println!(
+        "The addr_of!((*ptr).arr) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).arr) as usize - ptr as usize }
+    );
+    println!(
+        "The addr_of!((*ptr).d) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).d) as usize - ptr as usize }
+    );
+    println!(
+        "The addr_of!((*ptr).other_ptr) as usize - ptr as usize is {} usize",
+        unsafe {
+            ::std::ptr::addr_of!((*ptr).other_ptr) as usize - ptr as usize
+        }
     );
 }
 
+
+fn bindgen_test_layout_D() {
+    const UNINIT: ::std::mem::MaybeUninit<c_ffi::D> =
+        ::std::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    println!(
+        "The mem size of c_ffi::D is {} usize",
+        ::std::mem::size_of::<c_ffi::D>()
+    );
+    println!(
+        "The align_of size of c_ffi::D is {} usize",
+        ::std::mem::align_of::<c_ffi::D>()
+    );
+    println!(
+        "The addr_of!((*ptr).ptr) as usize - ptr as usize is {} usize",
+        unsafe { ::std::ptr::addr_of!((*ptr).ptr) as usize - ptr as usize }
+    );
+}
+impl Default for c_ffi::D {
+    fn default() -> Self {
+        let mut r = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(r.as_mut_ptr(), 0, 1);
+            r.assume_init()
+        }
+    }
+}
+
+/// fn main()
 fn main() {
-    bindgen_test_layout_not_annotated();
+    bindgen_test_layout_C();
+    bindgen_test_layout_D()
 }

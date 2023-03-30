@@ -24,22 +24,22 @@ mod c_ffi {
 }
 
 fn bindgen_test_layout_foo() {
-    const UNINIT: ::std::mem::MaybeUninit<c_ffi::foo> = ::std::mem::MaybeUninit::uninit();
+    const UNINIT: ::std::mem::MaybeUninit<c_ffi::Foo2> = ::std::mem::MaybeUninit::uninit();
     let ptr = UNINIT.as_ptr();
     println!(
-        "The mem size of c_ffi::foo is {} usize",
-        ::std::mem::size_of::<c_ffi::foo>()
+        "The mem size of c_ffi::Foo2 is {} usize",
+        ::std::mem::size_of::<c_ffi::Foo2>()
     );
     println!(
-        "The mem align_of c_ffi::foo is {} usize",
-        ::std::mem::align_of::<c_ffi::foo>()
+        "The align_of size of c_ffi::Foo2 is {} usize",
+        ::std::mem::align_of::<c_ffi::Foo2>()
     );
     println!(
         "The ptr addr of!((*ptr).member) as usize - ptr as usize is {} usize",
         unsafe { ::std::ptr::addr_of!((*ptr).member) as usize - ptr as usize }
     );
 }
-impl Default for c_ffi::foo {
+impl Default for c_ffi::Foo2 {
     fn default() -> Self {
         let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
         unsafe {

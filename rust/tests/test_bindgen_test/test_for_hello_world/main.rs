@@ -23,7 +23,7 @@ mod c_ffi {
 }
 /// pub fn add_two_numbers_in_c
 pub fn add_two_numbers_in_c(a: u32, b: u32) -> u32 {
-    unsafe { c_ffi::func_a_add_b(a, b) }
+    unsafe { c_ffi::FuncAAddB(a, b) }
 }
 
 use std::ffi::c_char;
@@ -35,6 +35,6 @@ fn main() {
     let c_str = CString::new("This is a message from C").unwrap();
     let c_world: *const c_char = c_str.as_ptr() as *const c_char;
     unsafe {
-        c_ffi::say_hello(c_world);
+        c_ffi::SayHello(c_world);
     }
 }

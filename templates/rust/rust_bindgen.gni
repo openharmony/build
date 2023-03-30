@@ -110,5 +110,10 @@ template("rust_bindgen") {
       "-fvisibility=default",
       "-fparse-all-comments",
     ]
+    if (defined(invoker.enable_c_plus_plus) &&
+        invoker.enable_c_plus_plus == true) {
+      args += [ "-x" ]
+      args += [ "c++" ]
+    }
   }
 }

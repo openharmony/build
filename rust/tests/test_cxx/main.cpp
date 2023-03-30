@@ -12,17 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <iostream>
 #include "build/rust/tests/test_cxx/src/lib.rs.h"
-using namespace std;
 
 int main(int argc, const char* argv[])
 {
     int a = 2021;
     int b = 4;
     print_message_in_rust();
-    cout << r_return_primitive() << endl;
-    cout << r_return_shared().z << endl;
-    cout << std::string(r_return_rust_string()) << endl;
-    cout << r_return_sum(a, b) << endl;
+    std::cout << r_return_primitive() << std::endl;
+    std::cout << r_return_shared().z << std::endl;
+    std::cout << std::string(r_return_rust_string()) << std::endl;
+    std::cout << r_return_sum(a, b) << std::endl;
     return 0;
 }

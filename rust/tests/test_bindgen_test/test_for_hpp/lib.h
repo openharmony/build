@@ -16,17 +16,28 @@
 #ifndef BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_
 #define BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_
 
-/**
- * <div rustbindgen="true" hide="true"></div>
- */
-struct C;
+// bindgen-flags: --with-derive-hash --with-derive-partialeq --with-derive-eq
+typedef int SecondInt;
 
-struct NotAnnotated {
-    int f;
+class C {
+public:
+    typedef int FirstInt;
+    typedef const char* Lookup;
+    FirstInt c;
+    FirstInt* ptr;
+    FirstInt arr[10];
+    SecondInt d;
+    SecondInt* other_ptr;
+
+    void method(FirstInt c);
+    void methodRef(FirstInt& c);
+    void complexMethodRef(Lookup& c);
+    void anotherMethod(SecondInt c);
 };
 
-struct D {
-    int a;
+class D : public C {
+public:
+    FirstInt* ptr;
 };
 
 #endif  //  BUILD_RUST_TESTS_BINDGEN_TEST_LIB_H_

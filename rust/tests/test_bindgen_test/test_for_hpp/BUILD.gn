@@ -16,7 +16,8 @@ import("//build/templates/rust/rust_bindgen.gni")
 import("//build/templates/rust/rust_template.gni")
 
 rust_bindgen("c_lib_bindgen_hpp") {
-  header = "lib.hpp"
+  header = "lib.h"
+  enable_c_plus_plus = true
 }
 
 ohos_rust_executable("bindgen_test_hpp") {
