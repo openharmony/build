@@ -153,7 +153,7 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.1/previewer-3.2.11.1-master-20230323.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -244,12 +244,12 @@
         },
         {
           "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.1/previewer-3.2.11.1-master-20230323.win.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.win.tar.gz",
           "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/previewer/linux",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.1/previewer-3.2.11.1-master-20230323.linux-x86.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.linux-x86.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -329,7 +329,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.1/previewer-3.2.11.1-master-20230323.mac-arm64.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.mac-arm64.tar.gz",
           "unzip_filename": "previewer"
         },
         {
@@ -380,7 +380,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.11.1/previewer-3.2.11.1-master-20230323.mac.tar.gz",
+          "file_path": "/openharmony/develop_tools/previewer/3.2.11.3/previewer-3.2.11.3-master-20230330.mac.tar.gz",
           "unzip_filename": "previewer"
         },
         {
