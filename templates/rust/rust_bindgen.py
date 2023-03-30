@@ -19,25 +19,22 @@ import subprocess
 import sys
 
 
-def ohos_filter_clang_args(ohos_clangargs):
-    def ohos_do_filter(args):
-        cnt = 0
-        while cnt < len(args):
-            # Intercept plugin arguments
-            if args[cnt] == '-Xclang':
-                cnt += 1
-                if args[cnt] == '-add-plugin':
+def remove_args_of_clang(ohos_clangargs):
+    def filter_args(args):
+        for i, j in enumerate(args):
+            if args[i] == '-Xclang':
+                i += 1
+                if args[i].startswith('-plugin-arg'):
+                    i += 2
+                elif args[i] == '-add-plugin':
                     pass
-                elif args[cnt].startswith('-plugin-arg'):
-                    cnt += 2
             else:
-                yield args[cnt]
-            cnt += 1
-    return list(ohos_do_filter(ohos_clangargs))
+                yield args[i]
+    return list(filter_args(ohos_clangargs))
 
 
 def main():
-    parser = argparse.ArgumentParser("run_bindgen.py")
+    parser = argparse.ArgumentParser("rust_bindgen.py")
     parser.add_argument("--exe", help="Path to bindgen", required=True)
     parser.add_argument("--llvm-config-path", help="Path to bindgen", required=True)
     parser.add_argument("--clang-path", help="Path to bindgen", required=True)
@@ -67,7 +64,7 @@ def main():
     ohos_genargs.append(args.output)
     ohos_genargs.append(args.header)
     ohos_genargs.append('--')
-    ohos_genargs.extend(ohos_filter_clang_args(args.ohos_clangargs))
+    ohos_genargs.extend(remove_args_of_clang(args.ohos_clangargs))
     env = os.environ
     if args.ld_library_path:
         env["LD_LIBRARY_PATH"] = args.ld_library_path

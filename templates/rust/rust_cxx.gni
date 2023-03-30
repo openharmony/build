@@ -55,7 +55,7 @@ template("rust_cxx") {
       cxxbridge_executable = "${cxxbridge_executable}.exe"
     }
 
-    script = "//build/templates/rust/run_cxxbridge.py"
+    script = "//build/templates/rust/rust_cxxbridge.py"
     inputs = [
       cxxbridge_executable,
       script,
@@ -67,7 +67,7 @@ template("rust_cxx") {
     ]
 
     args = [
-      "--exe",
+      "--cxxbridge",
       rebase_path(cxxbridge_executable, root_build_dir),
       "--cc",
       output_cc,

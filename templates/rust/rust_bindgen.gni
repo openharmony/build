@@ -78,7 +78,7 @@ template("rust_bindgen") {
 
     output_dir = "$target_gen_dir"
     out_gen_rs = "$output_dir/${target_name}.rs"
-    script = rebase_path("//build/templates/rust/run_bindgen.py")
+    script = rebase_path("//build/templates/rust/rust_bindgen.py")
     inputs = [ ohos_bindgen_executable ]
     depfile = "$target_out_dir/${target_name}.d"
     outputs = [ out_gen_rs ]
