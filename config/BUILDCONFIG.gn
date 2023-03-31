@@ -280,6 +280,9 @@ declare_args() {
 
   # Whether it is double framework.
   is_double_framework = false
+
+  # build for cross platform
+  build_cross_platform_version = false
 }
 
 declare_args() {
