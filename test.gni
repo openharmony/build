@@ -72,6 +72,13 @@ template("_ohos_test") {
     _deps += invoker.deps
   }
 
+  if (defined(invoker.crate_type)) {
+    _deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
+  }
+
   test_output_dir =
       "$root_out_dir/tests/${invoker.test_type}/${invoker.module_out_path}"
 

@@ -249,6 +249,16 @@
     "resolve_function": "resolve_gn_args",
     "testFunction": "testGnArgs"
   },
+  "gn_flags": {
+    "arg_name": "--gn-flags",
+    "argDefault": [],
+    "arg_help": "Default:[]. Help:Specify gn build arguments, you could use this option like this 'hb build --gn-flags \"--export-compile-commands\"",
+    "arg_phase": "targetGenerate",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_gn_flags",
+    "testFunction": "testGnFlags"
+  },
   "compiler": {
     "arg_name": "--compiler",
     "argDefault": "clang",

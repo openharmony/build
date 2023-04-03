@@ -29,7 +29,7 @@ def main():
     subsystem_allow_set = {'tests'}
 
     parser = argparse.ArgumentParser()
-    psrser.add_argument('--part-name', required=True)
+    parser.add_argument('--part-name', required=True)
     parser.add_argument('--subsystem-name', required=True)
     parser.add_argument('--target-path', required=True)
     parser.add_argument('--part-subsystem-info-file', required=True)
@@ -45,15 +45,15 @@ def main():
         raise Exception(
             "file '{}' does not exits.".format(part_subsystem_info_file))
 
-    data = file_utils.read_json_file(part_subsystem_info_file)
+    data = read_json_file(part_subsystem_info_file)
     if data is None:
         raise Exception(
             "read file '{}' failed.".format(part_subsystem_info_file))
 
     subsystems_name = data.get(args.part_name)
-    if subsystems_name is None or subsystems_name == '' or subsystems_name != args.subsystems_name:
-        print("warning: subsystem name or part name is incorrect, target is {}, subsystem name is '{}',\
-            part name is '{}'".format(args.target_path, args.subsystems_name, args.part_name))
+    if subsystems_name is None or subsystems_name == '' or subsystems_name != args.subsystem_name:
+        print("warning: subsystem name or part name is incorrect, target is {}, subsystem name is {}, part name is {}"
+            .format(args.target_path, args.subsystem_name, args.part_name))
     return 0
 
 

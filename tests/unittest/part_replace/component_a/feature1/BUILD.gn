@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -11,22 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# OHOS version
-declare_args() {
-  sdk_version = "4.0.6.1"
-  api_version = "10"
+import("//build/ohos.gni")
 
-  # Release type, optional values: Betax, RCx...
-  release_type = "Canary1"
-  meta_version = "3.0.0"
-}
-
-# ohos SDK version
-declare_args() {
-  current_sdk_version = sdk_version
-}
-
-# ohos NDK version
-declare_args() {
-  current_ndk_version = current_sdk_version
+ohos_executable("helloworld_bin") {
+  sources = [ "src/main.c" ]
+  external_deps = [ "origin_component:helloworld" ]
+  install_enable = true
+  part_name = "component_a"
 }

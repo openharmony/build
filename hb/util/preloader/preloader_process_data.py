@@ -232,6 +232,16 @@ class Product():
                     self._dirs.source_root_dir, config.get('chipprod_config_path'))
                 if os.path.exists(chipprod_config_path):
                     build_vars['chipprod_config_path'] = chipprod_config_path
+            if 'ext_sdk_config_file' in config:
+                ext_sdk_config_file = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_sdk_config_file'))
+                if os.path.exists(ext_sdk_config_file):
+                    build_vars['ext_sdk_config_file'] = ext_sdk_config_file
+            if 'ext_ndk_config_file' in config:
+                ext_ndk_config_file = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_ndk_config_file'))
+                if os.path.exists(ext_ndk_config_file):
+                    build_vars['ext_ndk_config_file'] = ext_ndk_config_file
         build_vars.update(self._device_info)
         if build_vars['os_level'] == 'mini' or build_vars['os_level'] == 'small':
             toolchain_label = ""

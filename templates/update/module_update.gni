@@ -45,6 +45,7 @@ template("check_abi_and_copy_deps") {
         "${target_out_dir}/${invoker.target_name}_check_datas.json"
     write_file(check_datas_file, check_params, "json")
 
+    inputs = [ check_datas_file ]
     script = "//build/ohos/update/check_abi_and_copy_deps.py"
 
     args = [

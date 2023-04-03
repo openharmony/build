@@ -151,6 +151,7 @@ def write_meta_data(options, direct_deps):
 # Collect assets entry according to config.json
 def load_assets(options, assets, assets_type):
     pre_path = assets[0]
+    pre_path = pre_path.rstrip('/')
     with open(options.hap_profile) as profile:
         config = json.load(profile)
 

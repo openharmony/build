@@ -1,0 +1,17 @@
+{
+  "component": {
+    "name": "component_a",
+    "description": "component_a",
+    "subsystem": "arkui",
+    "features": [],
+    "rom": "100KB",
+    "ram": "~200KB",
+    "deps": {},
+    "build": {
+      "sub_component": [
+        "//foundation/arkui/component_a/feature1:helloworld_bin"
+      ],
+      "test": []
+    }
+  }
+}

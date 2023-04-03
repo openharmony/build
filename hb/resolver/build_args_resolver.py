@@ -292,6 +292,22 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     @staticmethod
     @throw_exception
+    def resolve_gn_flags(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--gn-flags' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        :raise OHOSException: when some gn_arg is not in 'key=value' format.
+        """
+        target_generator = build_module.target_generator
+        gn_flags_list = []
+        for gn_flags in target_arg.arg_value:
+            gn_flags = re.sub("'", "", gn_flags)
+            gn_flags_list.append(gn_flags)
+        target_generator.regist_flag('gn_flags', gn_flags_list)
+
+    @staticmethod
+    @throw_exception
     def resolve_ninja_args(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--ninja-args' arg
         :param target_arg: arg object which is used to get arg value.

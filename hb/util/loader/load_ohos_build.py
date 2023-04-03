@@ -371,7 +371,7 @@ class LoadBuildConfig(object):
     def __init__(self, source_root_dir, subsystem_build_info,
                  config_output_dir, variant_toolchains, subsystem_name,
                  target_arch, ignored_subsystems,
-                 exclusion_modules_config_file, load_test_config):
+                 exclusion_modules_config_file, load_test_config, overrided_components):
         self._source_root_dir = source_root_dir
         self._build_info = subsystem_build_info
         self._config_output_relpath = config_output_dir
@@ -391,6 +391,7 @@ class LoadBuildConfig(object):
         self._parts_deps = {}
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._load_test_config = load_test_config
+        self._overrided_components = overrided_components
 
     @throw_exception
     def _parsing_config(self, parts_config):
@@ -460,6 +461,7 @@ class LoadBuildConfig(object):
                 _parts_config = bundle_part_obj.to_ohos_build()
             else:
                 _parts_config = read_build_file(_build_file)
+
             _subsystem_name = _parts_config.get('subsystem')
             if not is_thirdparty_subsystem and subsystem_name and _subsystem_name != subsystem_name:
                 raise OHOSException(
@@ -614,8 +616,11 @@ def check_subsystem_and_component(parts_info_output_path):
         info = read_json_file(config_path)
         subsystems_info = info['subsystems']
         for subsystems_name in iter(subsystems_info):
-            subsystem_name = subsystems_name['subsystem']
-            components_name = subsystems_name['components']
+            subsystem_name = subsystems_name.get('subsystem')
+            components_name = subsystems_name.get('components')
+            if subsystem_name is None or components_name is None:
+                print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(config_path))
+                continue
             compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
                                             part_subsystem_component_info, config_path)
 
@@ -763,6 +768,7 @@ def get_parts_info(source_root_dir,
                    ignored_subsystems,
                    exclusion_modules_config_file,
                    load_test_config,
+                   overrided_components,
                    build_xts=False):
     """parts info,
     get info from build config file.
@@ -780,13 +786,15 @@ def get_parts_info(source_root_dir,
     _parts_deps = {}
     system_syscap = []
     for subsystem_name, build_config_info in subsystem_info.items():
-
+        if not len(build_config_info.get("build_files")):
+            continue
         build_loader = LoadBuildConfig(source_root_dir, build_config_info,
                                        config_output_relpath,
                                        variant_toolchains, subsystem_name,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
-                                       load_test_config)
+                                       load_test_config,
+                                       overrided_components)
         # xts subsystem special handling, device_attest and
         # device_attest_lite parts need to be compiled into the version image, other parts are not
         if subsystem_name == 'xts' and build_xts is False:

@@ -53,6 +53,7 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
     "system",
     "updater",
   ]
+  enable_strip = true
   output = "libtest.dylib.so"
   part_name = "common"
 }

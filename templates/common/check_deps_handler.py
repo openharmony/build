@@ -35,7 +35,7 @@ def check_deps_with_module(parts_modules_info_file, current_part_name, deps, tar
             break
     for dep in deps:
         dep_path = dep[2:dep.find(':')]
-        if dep_path.find('third_party') != 1:
+        if dep_path.find('third_party') != -1:
             continue
         for module in parts_module_lists:
             module = module[2:module.find(':')]
@@ -50,7 +50,7 @@ def check_deps_with_module(parts_modules_info_file, current_part_name, deps, tar
 def check_deps_with_parts(current_part_name, deps, target_path, part_path):
     for dep in deps:
         dep_path = dep[2:dep.find(':')]
-        if dep_path.find('third_party') != 1:
+        if dep_path.find('third_party') != -1:
             continue
         if not dep_path.startswith(part_path):
             print("WARNING:deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!"
@@ -59,23 +59,26 @@ def check_deps_with_parts(current_part_name, deps, target_path, part_path):
 
 def check_wrong_used_deps(parts_path_info_file, path_parts_info_file, parts_modules_info_file,
                             deps, current_part_name, target_path_val):
-    parts_path_data = read_json_file(parts_path_info_file)
-    path_parts_data = read_json_file(path_parts_info_file)
     if current_part_name.find('test') != -1:
         return 0
-    if parts_path_data.get(current_part_name) is None:
+
+    parts_path_data = read_json_file(parts_path_info_file)
+    part_path = parts_path_data.get(current_part_name)
+    if part_path is None:
         print("part_name: '{}' path is not exist, please check target: '{}' "
                 .format(current_part_name, target_path_val))
         return 0
-    part_path = parts_path_data[current_part_name]
-    path_parts = path_parts_data(part_path)
-    if len(path_parts) > 1:
-        check_deps_with_module(parts_modules_info_file, current_part_name, target_path_val)
+
+    path_parts_data = read_json_file(path_parts_info_file)
+    path_to_part = path_parts_data.get(part_path)
+
+    if len(path_to_part) > 1:
+        check_deps_with_module(parts_modules_info_file, current_part_name, deps, target_path_val)
     else:
         check_deps_with_parts(current_part_name, deps, target_path_val, part_path)
     return 0
 
-    
+
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--parts-path-info-file', required=True)

@@ -13,8 +13,14 @@
 
 import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
-import("//build/ohos/ndk/ndk_targets.gni")
 import("//build/ohos/sdk/sdk.gni")
+
+if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+  ext_ndk_target = rebase_path(ext_ndk_config_file)
+  import(ext_ndk_target)
+} else {
+  import("//build/ohos/ndk/ndk_targets.gni")
+}
 
 package_info_file = "$ndk_os_irrelevant_out_dir/oh-uni-package.json"
 
