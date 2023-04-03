@@ -217,6 +217,11 @@ class Product():
                     build_vars['product_company'] = config.get(
                         'device_company')
             build_vars['product_name'] = config.get('product_name')
+            if 'ext_root_proc_conf_path' in config:
+                ext_root_proc_conf_path = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_root_proc_conf_path'))
+                if os.path.exists(ext_root_proc_conf_path):
+                    build_vars['ext_root_proc_conf_path'] = ext_root_proc_conf_path
             if 'enable_ramdisk' in config:
                 build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
             if 'enable_absystem' in config:

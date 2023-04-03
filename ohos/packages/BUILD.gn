@@ -305,7 +305,12 @@ foreach(_platform, target_platform_list) {
     # result is not used in script
     process_validate_result = "${current_platform_dir}/cfg_validate_result.txt"
 
-    _process_path = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+    # ext_root_proc_conf_path defined in config.json in vendor warehouse
+    if (ext_root_proc_conf_path != "") {
+      _process_path = ext_root_proc_conf_path
+    } else {
+      _process_path = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+    }
     _system_cfg_folder = "${current_platform_dir}/system/etc/init"
 
     _vendor_cfg_folder = "${current_platform_dir}/vendor/etc/init"

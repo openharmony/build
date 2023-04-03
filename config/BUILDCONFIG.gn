@@ -99,6 +99,11 @@ product_toolchain = product_build_config.product_toolchain_label
 if (product_toolchain == "") {
   product_toolchain = "//build/toolchain/ohos:ohos_clang_$target_cpu"
 }
+if (defined(product_build_config.ext_root_proc_conf_path)) {
+  ext_root_proc_conf_path = product_build_config.ext_root_proc_conf_path
+} else {
+  ext_root_proc_conf_path = ""
+}
 if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = product_build_config.enable_ramdisk
 } else {
