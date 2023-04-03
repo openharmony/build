@@ -192,6 +192,12 @@ declare_args() {
 # Upgrade Skia version
 use_new_skia = false
 
+# support changing the npm registry and sdk type
+declare_args() {
+  npm_registry = ""
+  sdk_type_for_app = "ohos-sdk"
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
@@ -258,7 +264,7 @@ if (host_os == "mac") {
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
 hap_packing_tool =
     "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
-nodejs_version = "v14.21.3"
+nodejs_version = "v12.18.4"
 if (host_os == "mac") {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
   npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"

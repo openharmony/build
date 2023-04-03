@@ -217,7 +217,7 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
 prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography json5
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography json5\=\=0.9.6
 
 rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
 for file in `find $rust_dir -path $rust_dir/x86_64-unknown-linux-gnu -prune -o -name "lib*.*"`

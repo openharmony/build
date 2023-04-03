@@ -40,19 +40,31 @@ def parse_args(args):
     parser.add_argument('--build-profile', help='')
     parser.add_argument('--system-lib-module-info-list', nargs='+', help='')
     parser.add_argument('--ohos-app-abi', help='')
+    parser.add_argument('--npm-registry', help='', nargs='?')
 
     options = parser.parse_args(args)
     return options
 
 
-def make_env(build_profile, cwd, npm):
-    os.environ['PATH'] = '{}:{}'.format(npm, os.environ.get('PATH'))
+def make_env(build_profile, cwd, npm, npm_registry):
+    '''
+    Set up the application compilation environment and run "npm install"
+    :param build_profile: module compilation information file
+    :param cwd: app project directory
+    :param npm: npm path
+    :param npm_registry: npm registry
+    :return: None
+    '''
     cur_dir = os.getcwd()
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
+        npm_install_cmd = [os.path.abspath(npm), 'install']
+        if npm_registry:
+            npm_registry_list = npm_registry.split(',')
+            for registry in npm_registry_list:
+                npm_install_cmd.append('--registry=' + registry)
         os.chdir(cwd)
-        npm_install_cmd = ['npm', 'install']
         subprocess.run(npm_install_cmd)
         for module in modules_list:
             src_path = module.get('srcPath')
@@ -63,6 +75,12 @@ def make_env(build_profile, cwd, npm):
 
 
 def gen_unsigned_hap_path_json(build_profile, cwd):
+    '''
+    Generate unsigned_hap_path_list
+    :param build_profile: module compilation information file
+    :param cwd: app project directory
+    :return: unsigned_hap_path_json
+    '''
     unsigned_hap_path_json = {}
     unsigned_hap_path_list = []
     with open(build_profile, 'r') as input_f:
@@ -70,8 +88,10 @@ def gen_unsigned_hap_path_json(build_profile, cwd):
         modules_list = build_info.get('modules')
         for module in modules_list:
             src_path = module.get('srcPath')
-            unsigned_hap_path = os.path.join(cwd, src_path, 'build/default/outputs/default')
-            hap_file = build_utils.find_in_directory(unsigned_hap_path, '*unsigned.hap')
+            unsigned_hap_path = os.path.join(
+                cwd, src_path, 'build/default/outputs/default')
+            hap_file = build_utils.find_in_directory(
+                unsigned_hap_path, '*unsigned.hap')
             unsigned_hap_path_list.extend(hap_file)
         unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
     return unsigned_hap_path_json
@@ -83,13 +103,20 @@ def app_compile(options, cmd, my_cwd):
 
 
 def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi):
+    '''
+    Obtain the output location of system library .so by reading the module compilation information file,
+    and copy it to the app project directory
+    :param cwd: app project directory
+    :param system_lib_module_info_list: system library module compilation information file
+    :param ohos_app_abi: app abi
+    :return: None
+    '''
     for _lib_info in system_lib_module_info_list:
         lib_info = file_utils.read_json_file(_lib_info)
         lib_path = lib_info.get('source')
         if os.path.exists(lib_path):
             lib_name = os.path.basename(lib_path)
             dest = os.path.join(cwd, 'entry/libs', ohos_app_abi, lib_name)
-            print('lijunru:dest:', dest)
             if not os.path.exists(os.path.dirname(dest)):
                 os.makedirs(os.path.dirname(dest), exist_ok=True)
             shutil.copyfile(lib_path, dest)
@@ -101,14 +128,20 @@ def main(args):
 
     # copy system lib deps to app libs dir
     if options.system_lib_module_info_list:
-        copy_libs(cwd, options.system_lib_module_info_list, options.ohos_app_abi)
+        copy_libs(cwd, options.system_lib_module_info_list,
+                  options.ohos_app_abi)
+
+    os.environ['PATH'] = '{}:{}'.format(os.path.dirname(
+        os.path.abspath(options.nodejs)), os.environ.get('PATH'))
 
     # generate unsigned_hap_path_list and run npm install
-    make_env(options.build_profile, cwd, options.npm)
+    make_env(options.build_profile, cwd, options.npm, options.npm_registry)
+
     depfiles = build_utils.get_all_files(cwd)
-    os.environ['PATH'] = '{}:{}'.format(options.nodejs, os.environ.get('PATH'))
-    cmd = ['node', './node_modules/@ohos/hvigor/bin/hvigor.js']
-    cmd.extend(['clean', 'assembleHap', '--mode'])
+
+    cmd = [os.path.abspath(options.nodejs),
+           './node_modules/@ohos/hvigor/bin/hvigor.js']
+    cmd.extend(['clean', 'assembleApp', '--mode'])
     cmd.extend([options.build_level])
     cmd.extend(['-p'])
     if options.enable_debug:
@@ -117,7 +150,6 @@ def main(args):
         cmd.extend(['debuggable=false'])
 
     outputs = options.output_file
-
     build_utils.call_and_write_depfile_if_stale(
         lambda: app_compile(options, cmd, cwd),
         options,
@@ -128,7 +160,8 @@ def main(args):
         force=False,
         add_pydeps=False
     )
-    unsigned_hap_path_json = gen_unsigned_hap_path_json(options.build_profile, cwd)
+    unsigned_hap_path_json = gen_unsigned_hap_path_json(
+        options.build_profile, cwd)
     file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
 

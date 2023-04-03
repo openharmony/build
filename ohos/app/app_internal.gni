@@ -460,6 +460,9 @@ template("app_sign") {
     if (defined(certificate_file)) {
       _certificate_file = certificate_file
     }
+    if (defined(certificate_profile)) {
+      _certificate_profile = certificate_profile
+    }
 
     inputs = [
       hapsigner,
@@ -471,17 +474,17 @@ template("app_sign") {
     outputs = [ "${target_out_dir}/${target_name}.stamp" ]
 
     args = [
-      "--private-key-path",
+      "--keyPwd",
       _private_key_path,
       "--sign-algo",
       _signature_algorithm,
-      "--certificate-profile",
-      rebase_path(certificate_profile, root_build_dir),
+      "--profileFile",
+      rebase_path(_certificate_profile, root_build_dir),
       "--keyalias",
       _key_alias,
-      "--keystore-path",
+      "--keystoreFile",
       rebase_path(_keystore_path, root_build_dir),
-      "--keystorepasswd",
+      "--keystorePwd",
       _keystore_password,
       "--certificate-file",
       rebase_path(_certificate_file, root_build_dir),
@@ -502,6 +505,14 @@ template("app_sign") {
 
 template("compile_app") {
   forward_variables_from(invoker, [ "testonly" ])
+  nodejs_version = "v14.21.1"
+  if (host_os == "mac") {
+    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
+    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"
+  } else {
+    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/npm"
+  }
   action(target_name) {
     forward_variables_from(invoker,
                            [
@@ -521,9 +532,9 @@ template("compile_app") {
 
     args = [
       "--npm",
-      rebase_path(npm, root_build_dir),
+      rebase_path(_npm, root_build_dir),
       "--nodejs",
-      rebase_path(nodejs, root_build_dir),
+      rebase_path(_nodejs, root_build_dir),
       "--cwd",
       rebase_path(cwd, root_build_dir),
       "--build-profile",
@@ -532,6 +543,8 @@ template("compile_app") {
       rebase_path(ohos_sdk_home),
       "--output-file",
       rebase_path(unsigned_hap_path_list, root_build_dir),
+      "--npm-registry",
+      npm_registry,
     ]
 
     if (defined(app_profile) && app_profile) {
@@ -542,9 +555,7 @@ template("compile_app") {
     }
 
     if (defined(build_mode) && build_mode == "debug") {
-      args += [
-        "--enable-debug",
-      ]
+      args += [ "--enable-debug" ]
     }
 
     if (defined(system_lib_deps)) {
@@ -552,9 +563,9 @@ template("compile_app") {
       foreach(_lib_deps, system_lib_deps) {
         _lib_out_name = get_label_info(_lib_deps, "name")
         _lib_out_dir = get_label_info(_lib_deps, "target_out_dir")
-        args += [
-          rebase_path("${_lib_out_dir}/${_lib_out_name}_module_info.json", root_build_dir),
-        ]
+        args +=
+            [ rebase_path("${_lib_out_dir}/${_lib_out_name}_module_info.json",
+                          root_build_dir) ]
       }
 
       if (is_ohos) {
