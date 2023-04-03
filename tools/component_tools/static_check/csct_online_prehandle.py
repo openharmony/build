@@ -34,6 +34,29 @@ def add2dict(diff_dict, path, line_num: str, content):
     diff_dict.update({key: value_list})
 
 
+def __diff_match_file_start(control_block, line):
+    pattern = "diff --git"
+    if not line.startswith(pattern):
+        return False
+
+    control_block["line_num"] = 0
+    control_block["fullpath"] = ""
+    control_block["match_flag"] = False
+    control_block["curr_key"] = ""
+    control_block["is_new_file"] = False
+
+    return True
+
+
+def __diff_match_is_newfile(control_block, line):
+    pattern = "new file"
+    if not line.startswith(pattern):
+        return False
+        
+    control_block["is_new_file"] = True
+    return True
+
+
 def __diff_match_filename_with_minus(control_block, line):
     pattern = "---\ (a/)?.*"
     if re.match(pattern, line) is None:
@@ -55,6 +78,9 @@ def __diff_match_filename_with_plus(control_block, line):
             control_block["fullpath"] = (
                 "{}, {}".format(control_block["pull_request_url"], res.group(1).strip())
             )
+            if control_block['is_new_file'] is True:
+                control_block["fullpath"] = "%s%s" % (
+                    control_block["fullpath"], "(new file)")
             control_block["match_flag"] = True
     return True
 
@@ -97,9 +123,12 @@ def strip_diff(diff_dict, pull_request_url, gitee_pr_diff):
         "curr_key": "",
         "diff_dict": diff_dict,
         "pull_request_url": pull_request_url,
+        "is_new_file": False,
     }
 
     strip_diff_handlers = [
+        __diff_match_file_start,
+        __diff_match_is_newfile,
         __diff_match_filename_with_minus,
         __diff_match_filename_with_plus,
         __diff_match_start_linenum,
@@ -123,7 +152,7 @@ def get_diff_by_repo_pr_num(repo_url, pr_num):
             stderr=subprocess.PIPE,
             errors="replace",
         )
-        gitee_pr_diff, errorout = ret.communicate(timeout=20)
+        gitee_pr_diff, errorout = ret.communicate()
         if len(errorout) != 0:
             logging.error("Popen error: ", errorout)
     except Exception as err:
@@ -164,7 +193,8 @@ def test():
         return
 
     pr_list = sys.argv[1]
-    csct_prehandler = GiteeCsctPrehandler(pr_list, "BUILD.gn", "bundle.json", ".gni")
+    csct_prehandler = GiteeCsctPrehandler(
+        pr_list, "BUILD.gn", "bundle.json", ".gni")
 
     print("==================start get diff====================")
     print(csct_prehandler.get_diff_dict("BUILD.gn"))

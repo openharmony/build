@@ -22,18 +22,6 @@ from bundle_check.bundle_check_online import BundleCheckOnline
 from csct_online_prehandle import GiteeCsctPrehandler
 
 
-def auto_install_required_package():
-    cmd = "{} -m pip install prettytable".format(sys.executable)
-    ret = subprocess.Popen(
-        [sys.executable, "-m", "pip", "install", "prettytable"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        errors="replace",
-    )
-    _, __ = ret.communicate(timeout=20)
-    return 0
-
-
 class CsctOnline(object):
     """This is a component static checker online class"""
 
@@ -51,8 +39,25 @@ class CsctOnline(object):
             print(print_content)
 
     def __print_pretty(self, errs_info):
-        if auto_install_required_package() == 0:
+        try:
             from prettytable import PrettyTable
+            print('already exist prettytable')
+        except Exception:
+            print('no prettytable')
+            ret = subprocess.Popen(
+                [sys.executable, "-m", "pip", "install", "prettytable"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                errors="replace",
+            )
+            print('installing prettytable')
+            try:
+                _, __ = ret.communicate()
+                print('prettytable installed successfully')
+                from prettytable import PrettyTable
+            except Exception:
+                print('prettytable installed failed')
+
 
         table = PrettyTable(["文件", "定位", "违反规则", "错误说明"])
         table.add_rows(errs_info)
@@ -76,16 +81,15 @@ class CsctOnline(object):
             "\nCsct check begin!\tPull request list: {}.".format(pr_list),
         )
         csct_prehandler = GiteeCsctPrehandler(
-            pr_list, "BUILD.gn", "bundle.json", ".gni"
+            pr_list, "BUILD.gn", "bundle.json"
         )
 
         _, gn_errs = CheckGnOnline(csct_prehandler.get_diff_dict("BUILD.gn")).output()
-        _, gni_errs = CheckGnOnline(csct_prehandler.get_diff_dict(".gni")).output()
         _, bundle_errs = BundleCheckOnline.check_diff(
             csct_prehandler.get_diff_dict("bundle.json")
         )
 
-        errs_info = gn_errs + gni_errs + bundle_errs
+        errs_info = gn_errs + bundle_errs
         if len(errs_info) == 0:
             self.__verbose_print(self.log_verbose, "Result: without any errors.")
         else:

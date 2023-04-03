@@ -196,7 +196,6 @@ def _get_auto_install_list(parts_path_info):
             auto_install_part_list.append(part)
     return auto_install_part_list
 
-
 def _get_parts_src_list(required_parts_targets, parts_info):
     parts_name_map = {}
     for _list in parts_info.values():
@@ -519,7 +518,6 @@ def _output_infos_by_platform(part_name_infos, parts_info_dict):
     result['part_infos'] = required_parts
     return result
 
-
 def _output_infos_for_testfwk(parts_config_info, target_platform_parts,
                               infos_for_testfwk_file):
     parts_info = parts_config_info.get('parts_info')
@@ -540,6 +538,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--platforms-config-file', required=True)
     parser.add_argument('--subsystem-config-file', required=True)
+    parser.add_argument('--subsystem-config-overlay-file', required=True)
     parser.add_argument('--example-subsystem-file', required=False)
     parser.add_argument('--exclusion-modules-config-file', required=False)
     parser.add_argument('--source-root-dir', required=True)

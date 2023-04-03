@@ -271,16 +271,28 @@ template("ohos_sanitizer_config") {
       }
       _cfi = defined(sanitize.cfi) && sanitize.cfi && !is_asan
       if (_cfi) {
-        configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+        if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
+          configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]
+        } else {
+          configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+        }
       }
       _scudo = defined(sanitize.scudo) && sanitize.scudo && !is_asan && !is_tsan
       if (_scudo) {
         configs += [ "//build/config/sanitizers:scudo_config" ]
       }
-      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan
+      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan && !is_asan
       if (_ubsan) {
         configs +=
-            [ "//build/config/sanitizers:undefined_behavior_sanitize_config" ]
+            [ "//build/config/sanitizers:undefined_behavior_sanitize_config_" +
+              _mode ]
+      }
+      _all_ubsan = defined(sanitize.all_ubsan) && sanitize.all_ubsan && !is_asan
+      if (_all_ubsan) {
+        configs += [
+          "//build/config/sanitizers:all_undefined_behavior_sanitize_config_" +
+              _mode,
+        ]
       }
       _scs = defined(sanitize.scs) && sanitize.scs
       if (_scs) {
@@ -289,7 +301,8 @@ template("ohos_sanitizer_config") {
       _boundary_sanitize = defined(sanitize.boundary_sanitize) &&
                            sanitize.boundary_sanitize && !is_asan
       if (_boundary_sanitize) {
-        configs += [ "//build/config/sanitizers:boundary_sanitize_config" ]
+        configs +=
+            [ "//build/config/sanitizers:boundary_sanitize_config_" + _mode ]
       }
 
       _integer_overflow = defined(sanitize.integer_overflow) &&

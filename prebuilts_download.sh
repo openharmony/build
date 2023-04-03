@@ -172,6 +172,38 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
 prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography
 
+rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
+for file in `find $rust_dir -path $rust_dir/x86_64-unknown-linux-gnu -prune -o -name "lib*.*"`
+do
+    dir_name=${file%/*}
+    file_name=${file##*/}
+    file_prefix=`echo $file_name | awk '{split($1, arr, "."); print arr[1]}'`
+    file_prefix=`echo $file_prefix | awk '{split($1, arr, "-"); print arr[1]}'`
+    file_suffix=`echo $file_name | awk '{split($1, arr, "."); print arr[2]}'`
+    if [[ $file_suffix != "rlib" && $file_suffix != "so" || $file_prefix == "librustc_demangle" || $file_prefix == "libcfg_if" || $file_prefix == "libunwind" ]]
+    then
+        continue
+    fi
+    if [[ $file_suffix == "rlib" ]]
+    then
+        if [[ $file_prefix == "libstd" || $file_prefix == "libtest" ]]
+        then
+            newfile_name="$file_prefix.dylib.rlib"
+        else
+            newfile_name="$file_prefix.rlib"
+        fi
+    fi
+
+    if [[ $file_suffix == "so" ]]
+    then
+        newfile_name="$file_prefix.dylib.so"
+    fi
+    if [[ "$file_name" == "$newfile_name" ]]
+    then
+        continue
+    fi
+    mv $file "$dir_name/$newfile_name"
+done
 echo -e "\n"

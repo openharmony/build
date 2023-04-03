@@ -19,18 +19,15 @@ group("tests") {
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
     "test_static_link:test_static_link(${host_toolchain})",
   ]
-
-  if (current_cpu == "arm64") {
-    deps += [
-      "//build/rust/tests/test_bin_crate",
-      "//build/rust/tests/test_cdylib_crate",
-      "//build/rust/tests/test_dylib_crate",
-      "//build/rust/tests/test_proc_macro_crate",
-      "//build/rust/tests/test_rlib_crate",
-      "//build/rust/tests/test_static_link",
-      "//build/rust/tests/test_staticlib_crate",
-    ]
-  }
+  deps += [
+    "//build/rust/tests/test_bin_crate",
+    "//build/rust/tests/test_cdylib_crate",
+    "//build/rust/tests/test_dylib_crate",
+    "//build/rust/tests/test_rlib_crate",
+    "//build/rust/tests/test_static_link",
+    "//build/rust/tests/test_staticlib_crate",
+  ]
+  deps += [ ":cargo_crate_test" ]
 }
 
 group("ohos_rust_xxxtest_tests") {
@@ -41,5 +38,13 @@ group("ohos_rust_xxxtest_tests") {
     "//build/rust/tests/test_proc_macro_crate/test_derive_macro:test_derive_macro(${host_toolchain})",
     "//build/rust/tests/test_rust_st",
     "//build/rust/tests/test_rust_ut",
+  ]
+}
+
+group("cargo_crate_test") {
+  deps = [
+    "test_bin_cargo_crate:test_bin_cargo_crate",
+    "test_proc_macro_cargo_crate:test_proc_macro_cargo_crate(${host_toolchain})",
+    "test_rlib_cargo_crate:test_rlib_crate_associated_bin",
   ]
 }

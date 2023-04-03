@@ -41,56 +41,18 @@ echo "++++++++++++++++++++++++++++++++++++++++"
 date +%F' '%H:%M:%S
 echo $@
 
-function help() {
-  echo
-  echo "Usage:"
-  echo "  ./build.sh --product-name {product-name} [options]"
-  echo
-  echo "Examples:"
-  echo "  ./build.sh --product-name rk3568 --ccache"
-  echo
-  echo "options"
-  echo "  --ccache              use ccache, default: false"
-  echo "  --jobs N              run N jobs in parallel"
-  echo "  --build-target        build target name"
+export SOURCE_ROOT_DIR=$(cd $(dirname $0);pwd)
 
-  echo "  --gn-args             specifies gn build arguments, eg: --gn-args=\"foo=\"bar\" enable=true blah=7\""
-  echo "  --export-para         export env"
-  echo "  --help, -h            print help info"
-  echo "  --source-root-dir     source root directory"
-  echo "  --product-name        build product name"
-  echo "  --device-name         build device name"
-  echo "  --target-cpu          select cpu"
-  echo "  --target-os           target os"
-  echo "  --compile-config      compile config"
-  echo "  --ninja args          ninja args"
-  echo "  --verbose, -v         show all command lines while building"
-  echo "  --keep-ninja-going    keeps ninja going until 1000000 jobs fail"
-  echo "  --sparse-image        sparse image, default: true"
-  echo "  --build-only-gn       only do gn parse, do not run ninja"
-  echo "  --fast-rebuild        it will skip prepare, preloader, gn_gen steps so we can enable it only"
-  echo "  --log-level           specifies the log level during compilation, three levels are optional: debug, info and error, default: info"
-  echo "  --device-type         specifies device type"
-  echo "  --build-variant       specifies device operating mode"
-  echo "  --share-ccache        it is customized path to place ccache, which allow one ccache shared with many project"
-  echo "  --disable-post-build  it will skip post build process, you can enable it if you do not need post build. Post build include post_build.patch_ohos_para, 
-                                post_build.package_image(), stat_ccache(), generate_ninja_trace(start_time), get_warning_list(), compute_overlap_rate()"
-  echo "  --disable-package-image  it will skip compress image process, you can enable it if you do not need compress image"
-  exit 1
-}
-
-export source_root_dir=$(cd $(dirname $0);pwd)
-
-while [[ ! -f "${source_root_dir}/.gn" ]]; do
-    source_root_dir="$(dirname "${source_root_dir}")"
-    if [[ "${source_root_dir}" == "/" ]]; then
+while [[ ! -f "${SOURCE_ROOT_DIR}/.gn" ]]; do
+    SOURCE_ROOT_DIR="$(dirname "${SOURCE_ROOT_DIR}")"
+    if [[ "${SOURCE_ROOT_DIR}" == "/" ]]; then
         echo "Cannot find source tree containing $(pwd)"
         exit 1
     fi
 done
 
-if [[ "${source_root_dir}x" == "x" ]]; then
-  echo "Error: source_root_dir cannot be empty."
+if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
+  echo "Error: SOURCE_ROOT_DIR cannot be empty."
   exit 1
 fi
 
@@ -110,7 +72,7 @@ case $(uname -s) in
 esac
 
 # set python3
-PYTHON3_DIR=${source_root_dir}/prebuilts/python/${HOST_DIR}/3.9.2/
+PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/3.9.2/
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
@@ -122,11 +84,25 @@ else
   fi
 fi
 
-export PATH=${source_root_dir}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
+export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
-${PYTHON3} ${source_root_dir}/build/scripts/tools_checker.py
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
 
-${PYTHON3} ${source_root_dir}/build/scripts/entry.py --source-root-dir ${source_root_dir} $@
+flag=true
+args_list=$@
+for var in $@
+do
+  OPTIONS=${var%%=*}
+  PARAM=${var#*=}
+  if [[ "$OPTIONS" == "using_hb_new" && "$PARAM" == "false" ]]; then
+    flag=false
+    ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/entry.py --source-root-dir ${SOURCE_ROOT_DIR} $args_list
+    break
+  fi
+done
+if [[ ${flag} == "true" ]]; then
+  ${PYTHON3} ${SOURCE_ROOT_DIR}/build/hb/main.py build $args_list
+fi
 
 if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m=====build ${product_name} error=====\033[0m"

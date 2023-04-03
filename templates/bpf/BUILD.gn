@@ -1,0 +1,46 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/templates/bpf/ohos_bpf_config.gni")
+
+_script = "//build/ohos/file_exists.py"
+_args = [
+  "--filename",
+  rebase_path(bpf_linux_kernel_dir, root_build_dir),
+  "--type",
+  "dir",
+]
+_result = exec_script(_script, _args, "string")
+if (_result == "False") {
+  bpf_linux_kernel_dir = "//kernel/linux-5.10-lts"
+  kernel_tools_dir = "${bpf_linux_kernel_dir}/tools/lib/bpf"
+}
+
+action("gen_bpf_uapi") {
+  kernel_dir = rebase_path(bpf_linux_kernel_dir, root_build_dir)
+  kernel_out_dir = rebase_path("${target_out_dir}/${bpf_inc_out_dir}")
+  kernel_tools_dir = rebase_path(kernel_tools_dir, root_build_dir)
+
+  script = "//build/templates/bpf/gen_bpf_uapi.py"
+  outputs = [ "${target_out_dir}/${target_name}.stamp" ]
+  args = [
+    "--kernel-dir",
+    kernel_dir,
+    "--kernel-out-dir",
+    kernel_out_dir,
+    "--target-cpu",
+    target_cpu,
+    "--kernel-tools-dir",
+    kernel_tools_dir,
+  ]
+}

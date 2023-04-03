@@ -227,12 +227,16 @@ class BundleJson(object):
             bundle_error["description"] = BCWarnInfo.NAME_EMPTY
             return bundle_error
 
-        match = re.match(r'^@[a-z]+/([a-z_]{1,63})$', name)
-        if not match:
-            bundle_error["description"] = BCWarnInfo.NAME_FORMAT_ERROR + \
+        bundle_error["description"] = BCWarnInfo.NAME_FORMAT_ERROR + \
                 BCWarnInfo.COMPONENT_NAME_FROMAT + \
                 BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
+        match = re.match(r'^@[a-z]+/([a-z_]{1,63})$', name)
+        if not match:
             return bundle_error
+        match = re.match(r'^([a-z]+_){1,31}[a-z]+$', name.split('/')[1])
+        if not match:
+            return bundle_error
+
         return dict()
 
     # version

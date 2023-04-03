@@ -15,6 +15,7 @@ import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
+import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/cxx/cxx.gni")
 
 template("_testcase_resources") {
@@ -69,6 +70,13 @@ template("_ohos_test") {
   _deps = []
   if (defined(invoker.deps)) {
     _deps += invoker.deps
+  }
+
+  if (defined(invoker.crate_type)) {
+    _deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
   }
 
   test_output_dir =
@@ -642,6 +650,7 @@ template("ohos_js_stage_unittest") {
 
 template("ohos_rust_unittest") {
   _target_name = target_name
+  _rustflags = []
   ohos_unittest("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -653,20 +662,75 @@ template("ohos_rust_unittest") {
              "crate_type should be $crate_type or use default value.")
     }
 
+    if (defined(invoker.rustc_lints)) {
+      rustc_lints = invoker.rustc_lints
+    }
+    if (defined(invoker.clippy_lints)) {
+      clippy_lints = invoker.clippy_lints
+    }
+
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
+
+    if (defined(rustc_lints)) {
+      if (invoker.rustc_lints == "openharmony") {
+        _rustflags += rustcOhosLints
+      } else if (rustc_lints == "vendor") {
+        _rustflags += rustcVendorLints
+      } else if (rustc_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
+    if (defined(clippy_lints)) {
+      if (invoker.clippy_lints == "openharmony") {
+        _rustflags += clippyOhosLints
+      } else if (clippy_lints == "vendor") {
+        _rustflags += clippyVendorLints
+      } else if (clippy_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
     if (!defined(rustflags)) {
-      rustflags = []
+      rustflags = _rustflags
+    } else {
+      rustflags += _rustflags
+    }
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
     }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }
 
 template("ohos_rust_systemtest") {
   _target_name = target_name
+  _rustflags = []
   ohos_systemtest("$_target_name") {
     forward_variables_from(invoker, "*")
     if (!defined(invoker.crate_name)) {
@@ -678,14 +742,68 @@ template("ohos_rust_systemtest") {
              "crate_type should be $crate_type or use default value.")
     }
 
+    if (defined(invoker.rustc_lints)) {
+      rustc_lints = invoker.rustc_lints
+    }
+    if (defined(invoker.clippy_lints)) {
+      clippy_lints = invoker.clippy_lints
+    }
+
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+
+      if (source_dir_begin == "openharmony") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
+
+    if (defined(rustc_lints)) {
+      if (invoker.rustc_lints == "openharmony") {
+        _rustflags += rustcOhosLints
+      } else if (rustc_lints == "vendor") {
+        _rustflags += rustcVendorLints
+      } else if (rustc_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
+    if (defined(clippy_lints)) {
+      if (invoker.clippy_lints == "openharmony") {
+        _rustflags += clippyOhosLints
+      } else if (clippy_lints == "vendor") {
+        _rustflags += clippyVendorLints
+      } else if (clippy_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
     if (!defined(rustflags)) {
-      rustflags = []
+      rustflags = _rustflags
+    } else {
+      rustflags += _rustflags
+    }
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
     }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }

@@ -23,7 +23,11 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_toolchain(current_variant, external_part_variants, platform_toolchain):
+# Ignore part dependency checks for test related parts
+_part_allow_set = {'unittest', 'moduletest', 'systemtest', 'fuzztest', 'distributedtest', 'test'}
+
+
+def get_toolchain(current_variant, external_part_variants, platform_toolchain, current_toolchain):
     if current_variant == 'phone':
         toolchain = platform_toolchain.get(current_variant)
         required_include_dir = False
@@ -32,7 +36,8 @@ def get_toolchain(current_variant, external_part_variants, platform_toolchain):
             toolchain = platform_toolchain.get(current_variant)
             required_include_dir = False
         else:
-            toolchain = platform_toolchain.get('phone')
+            # not ohos platform toolchain, use current_toolchain
+            toolchain = current_toolchain
             required_include_dir = True
     return toolchain, required_include_dir
 
@@ -106,6 +111,32 @@ def _get_inner_kits_adapter_info(innerkits_adapter_info_file):
     return _parts_compatibility
 
 
+def check_parts_deps(part_name, external_part_name, parts_deps_info, module_path):
+    if part_name in _part_allow_set:
+        return
+
+    if external_part_name == part_name:
+        print("WARNING: {} in target {} is dependency within part {}, Need to used deps".format(
+            external_part_name, module_path, part_name))
+
+    _tips_info = "WARNING: {} depend part {}, need set part deps info to".format(
+        module_path, external_part_name)
+
+    part_deps_info = parts_deps_info.get(part_name)
+    if not part_deps_info:
+        _warning_info = "{} {}.".format(_tips_info, part_name)
+    elif not part_deps_info.get('components') or \
+        not external_part_name in part_deps_info.get('components'):
+        _warning_info = "{} {}.".format(_tips_info, part_deps_info.get('build_config_file'))
+    else:
+        _warning_info = ""
+
+    if _warning_info != "":
+        print(_warning_info)
+
+    return
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--external-deps', nargs='*', required=True)
@@ -116,6 +147,10 @@ def main():
     parser.add_argument('--use-sdk', dest='use_sdk', action='store_true')
     parser.set_defaults(use_sdk=False)
     parser.add_argument('--current-toolchain', required=False, default='')
+    parser.add_argument('--part-name', required=False, default='')
+    parser.add_argument('--module-path', required=False, default='')
+    parser.add_argument('--check-deps', dest='check_deps', action='store_true')
+    parser.set_defaults(check_deps=False)
     parser.add_argument(
         '--innerkits-adapter-info-file',
         default='../../build/ohos/inner_kits_adapter.json')
@@ -134,6 +169,7 @@ def main():
     sdk_base_dir = args.sdk_base_dir
     sdk_dir_name = args.sdk_dir_name
     use_sdk = args.use_sdk
+    check_deps = args.check_deps
 
     deps = []
     libs = []
@@ -161,12 +197,17 @@ def main():
     auto_install_part_file = "build_configs/auto_install_parts.json"
     auto_install_parts = read_json_file(auto_install_part_file)
 
+    # load parts deps info
+    if check_deps:
+        parts_deps_file = 'build_configs/parts_info/parts_deps.json'
+        parts_deps_info = read_json_file(parts_deps_file)
+        if parts_deps_info is None:
+            raise Exception("read pre_build parts_deps failed.")
+
     if toolchain_variant_info is None:
         raise Exception("read pre_build parts_variants failed.")
     toolchain_platform = toolchain_variant_info.get('toolchain_platform')
     current_variant = toolchain_platform.get(args.current_toolchain)
-    if not current_variant:
-        current_variant = 'phone'
     platform_toolchain = toolchain_variant_info.get('platform_toolchain')
 
     # compatibility interim
@@ -180,6 +221,10 @@ def main():
 
         # Usually the value is None
         _adapted_part_name = _parts_compatibility.get(external_part_name)
+
+        if check_deps:
+            check_parts_deps(args.part_name, external_part_name,
+                parts_deps_info, args.module_path)
 
         # Check if the subsystem has source code
         # hdf and third_party's external deps always valid because they need auto install
@@ -198,7 +243,7 @@ def main():
                     "external deps part '{}' variants info is None.".format(
                         external_part_name))
             toolchain, required_include_dir = get_toolchain(
-                current_variant, part_variants_info.keys(), platform_toolchain)
+                current_variant, part_variants_info.keys(), platform_toolchain, args.current_toolchain)
             dep_label_with_tc = "{}({})".format(dep_label, toolchain)
             deps += [dep_label_with_tc]
 

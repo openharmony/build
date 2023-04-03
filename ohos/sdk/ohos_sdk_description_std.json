@@ -225,6 +225,48 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps_ets",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/deps",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ts2abc_deps_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
@@ -549,6 +591,24 @@
         ]
     },
     {
+        "install_dir": "ets/component",
+        "module_label": "//developtools/ace_ets2bundle:ets_loader_form_config",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/form_components",
+        "module_label": "//developtools/ace_ets2bundle:form_components",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/build-tools/ets-loader/deps",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_deps",
         "target_os": [
@@ -657,10 +717,26 @@
         ]
     },
     {
-        "install_dir": "previewer",
-        "module_label": "//developtools/ace_js2bundle:previewer_copy",
+        "install_dir": "previewer/common/bin",
+        "module_label": "//tools_previewer:rich_previewer",
         "target_os": [
-            "linux",
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/liteWearable/bin",
+        "module_label": "//tools_previewer:lite_previewer",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/liteWearable",
+        "module_label": "//tools_previewer:previewer_copy_lite_configdir",
+        "target_os": [
             "windows",
             "darwin"
         ]
@@ -675,6 +751,15 @@
     {
         "install_dir": "previewer/common/bin/module",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin/module/util",
+        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_ets_utils_container_library",
         "target_os": [
             "windows",
             "darwin",
@@ -858,6 +943,34 @@
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library",
         "target_os": [
             "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library_darwin",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/aot/src",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/aot/src",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/aot/src",
+        "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins_mac",
+        "target_os": [
+            "darwin"
         ]
     }
 ]

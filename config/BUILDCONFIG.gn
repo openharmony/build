@@ -65,6 +65,10 @@ declare_args() {
 }
 
 declare_args() {
+  using_hb_new = true
+}
+
+declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 
@@ -105,6 +109,14 @@ if (defined(product_build_config.chipprod_config_path)) {
   import("${chipprod_config_path}/chip_product_list.gni")
 } else {
   chip_product_list = []
+}
+
+if (defined(product_build_config.ext_sdk_config_file)) {
+  ext_sdk_config_file = product_build_config.ext_sdk_config_file
+}
+
+if (defined(product_build_config.ext_ndk_config_file)) {
+  ext_ndk_config_file = product_build_config.ext_ndk_config_file
 }
 
 if (defined(product_build_config.enable_absystem)) {
@@ -268,10 +280,17 @@ declare_args() {
 
   # Whether it is double framework.
   is_double_framework = false
+
+  # build for cross platform
+  build_cross_platform_version = false
 }
 
 declare_args() {
   use_musl = true
+}
+
+declare_args() {
+  is_emulator = false
 }
 
 asdk_libs_dir = "//prebuilts/asdk_libs"
@@ -285,8 +304,6 @@ is_ivi_product = "${target_platform}" == "ivi"
 is_wearable_product = "${target_platform}" == "wearable"
 
 is_intellitv_product = "${target_platform}" == "intellitv"
-
-is_emulator = false
 
 if (target_os == "ohos" && target_cpu == "x86_64") {
   is_emulator = true
@@ -317,7 +334,7 @@ declare_args() {
   # Currently, we don't publish ohos-adapted python on m1 platform,
   # So that we disable mini debug info on m1 platform until
   # ohos-adapted python publishing on m1 platform
-  if (host_os == "mac" && host_cpu == "arm64") {
+  if (host_os == "mac") {
     full_mini_debug = false
   } else {
     full_mini_debug = true
@@ -556,11 +573,11 @@ if (!is_ohos) {
 
 #set_sources_assignment_filter(sources_assignment_filter)
 if (is_standard_system) {
-  file_exist = exec_script("//build/scripts/check_file_exist.py",
-                           [ "${device_build_path}/config.gni" ],
+  file_exist = exec_script(rebase_path("//build/scripts/check_file_exist.py"),
+                           [ rebase_path("//${device_build_path}/config.gni") ],
                            "string")
   if (file_exist != "") {
-    import("${device_build_path}/config.gni")
+    import("//${device_build_path}/config.gni")
   }
 
   # =============================================================================
@@ -602,6 +619,7 @@ if (is_standard_system) {
     "//build/config/coverage:default_coverage",
     "//build/config/sanitizers:default_sanitizer_flags",
     "//build/config/security:default_security_configs",
+    "//build/config/rust:rust_config",
   ]
 
   if (is_ohos) {
@@ -626,15 +644,13 @@ if (is_standard_system) {
   }
 
   # Static libraries and source sets use only the compiler ones.
-  default_static_library_configs =
-      default_compiler_configs + [ "//build/config/rust:rust_config" ]
+  default_static_library_configs = default_compiler_configs
   default_source_set_configs = default_compiler_configs
 
   # Executable defaults.
   default_executable_configs = default_compiler_configs + [
                                  "//build/config:default_libs",
                                  "//build/config:executable_config",
-                                 "//build/config/rust:rust_config",
                                ]
 
   # Shared library and loadable module defaults (also for components in component
@@ -642,7 +658,6 @@ if (is_standard_system) {
   default_shared_library_configs = default_compiler_configs + [
                                      "//build/config:default_libs",
                                      "//build/config:shared_library_config",
-                                     "//build/config/rust:rust_config",
                                    ]
 }
 
@@ -692,8 +707,6 @@ if (is_lite_system) {
     ohos_vendor_adapter_dir = board_adapter_dir
   }
 
-  default_compiler_configs = []
-
   # Set current toolchain with to board configuration.
   if (board_toolchain != "" && use_board_toolchain) {
     ohos_build_compiler = board_toolchain_type
@@ -704,6 +717,7 @@ if (is_lite_system) {
     }
     set_default_toolchain("//build/lite/toolchain:${board_toolchain}")
     if (board_toolchain_type == "gcc") {
+      default_compiler_configs = []
       ohos_current_cc_command = "${compile_prefix}gcc$toolchain_cmd_suffix"
       ohos_current_cxx_command = "${compile_prefix}g++$toolchain_cmd_suffix"
       ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
@@ -712,6 +726,7 @@ if (is_lite_system) {
           "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
       default_compiler_configs += [ "//build/lite/config:gcc_opt" ]
     } else if (board_toolchain_type == "clang") {
+      default_compiler_configs = []
       ohos_current_cc_command = "${compile_prefix}clang$toolchain_cmd_suffix"
       ohos_current_cxx_command = "${compile_prefix}clang++$toolchain_cmd_suffix"
       compile_prefix += "llvm-"
@@ -720,6 +735,17 @@ if (is_lite_system) {
       ohos_current_strip_command =
           "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
       default_compiler_configs += [ "//build/lite/config:clang_opt" ]
+    } else if (board_toolchain_type == "iccarm") {
+      import("//build/config/compiler/lite/iccarm/iccarm.gni")
+      ohos_current_cc_command = "${compile_prefix}iccarm$toolchain_cmd_suffix"
+      ohos_current_cxx_command = "${compile_prefix}iccarm$toolchain_cmd_suffix"
+      ohos_current_ar_command = "${compile_prefix}iarchive$toolchain_cmd_suffix"
+      ohos_current_as_command = "${compile_prefix}iasmarm$toolchain_cmd_suffix"
+      ohos_current_ld_command = "${compile_prefix}ilinkarm$toolchain_cmd_suffix"
+      ohos_current_strip_command =
+          "${compile_prefix}ielftool$toolchain_cmd_suffix --strip"
+    } else {
+      default_compiler_configs = []
     }
 
     # Overwrite ld cmd by customed cmd.
@@ -728,6 +754,7 @@ if (is_lite_system) {
     }
   } else {
     # OHOS default toolchain
+    default_compiler_configs = []
     ohos_build_compiler = "clang"
     ohos_clang_toolchain_dir = rebase_path("${ohos_build_compiler_dir}/bin")
     compile_prefix += "$ohos_clang_toolchain_dir/"
@@ -754,57 +781,60 @@ if (is_lite_system) {
       ]
     }
   }
-  if (current_os == "ohos") {
+  if (board_toolchain_type != "iccarm") {
+    if (current_os == "ohos") {
+      default_compiler_configs += [
+        "//build/lite/config:board_config",
+        "//build/lite/config:cpu_arch",
+        "//build/lite/config:common",
+        "//build/lite/config:default_link_path",
+      ]
+    }
+
+    if (ohos_build_type == "debug") {
+      default_compiler_configs += [ "//build/lite/config:debug" ]
+    } else if (ohos_build_type == "release") {
+      default_compiler_configs += [ "//build/lite/config:release" ]
+    }
+
+    if (ohos_kernel_type == "liteos_a" && current_os == "ohos") {
+      default_compiler_configs +=
+          [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
+    }
+
+    if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "linux") {
+      default_compiler_configs += [
+        "//build/lite/config:security",
+        "//build/lite/config:exceptions",
+      ]
+    } else if (ohos_kernel_type == "liteos_m") {
+      default_compiler_configs += [ "//build/lite/config:stack_protector" ]
+    }
+
     default_compiler_configs += [
-      "//build/lite/config:board_config",
-      "//build/lite/config:cpu_arch",
-      "//build/lite/config:common",
-      "//build/lite/config:default_link_path",
+      "//build/lite/config:language_c",
+      "//build/lite/config:language_cpp",
+      "//build/config/sanitizers:default_sanitizer_flags",
     ]
-  }
 
-  if (ohos_build_type == "debug") {
-    default_compiler_configs += [ "//build/lite/config:debug" ]
-  } else if (ohos_build_type == "release") {
-    default_compiler_configs += [ "//build/lite/config:release" ]
-  }
+    if (current_os == "ohos") {
+      default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
+    }
 
-  if (ohos_kernel_type == "liteos_a" && current_os == "ohos") {
-    default_compiler_configs +=
-        [ "//build/lite/config/kernel/liteos/cortex_a:default" ]
+    default_shared_library_configs =
+        default_compiler_configs +
+        [ "//build/lite/config:shared_library_config" ]
+    default_static_library_configs = default_compiler_configs
+    default_executable_configs = default_compiler_configs
+    if (ohos_kernel_type != "liteos_m") {
+      default_static_library_configs +=
+          [ "//build/lite/config:static_pie_config" ]
+      default_executable_configs += [ "//build/lite/config:static_pie_config" ]
+      default_executable_configs +=
+          [ "//build/lite/config:pie_executable_config" ]
+    }
+    default_executable_configs += [ "//build/lite/config:board_exe_ld_flags" ]
   }
-
-  if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "linux") {
-    default_compiler_configs += [
-      "//build/lite/config:security",
-      "//build/lite/config:exceptions",
-    ]
-  } else if (ohos_kernel_type == "liteos_m") {
-    default_compiler_configs += [ "//build/lite/config:stack_protector" ]
-  }
-
-  default_compiler_configs += [
-    "//build/lite/config:language_c",
-    "//build/lite/config:language_cpp",
-    "//build/config/sanitizers:default_sanitizer_flags",
-  ]
-
-  if (current_os == "ohos") {
-    default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
-  }
-
-  default_shared_library_configs =
-      default_compiler_configs + [ "//build/lite/config:shared_library_config" ]
-  default_static_library_configs = default_compiler_configs
-  default_executable_configs = default_compiler_configs
-  if (ohos_kernel_type != "liteos_m") {
-    default_static_library_configs +=
-        [ "//build/lite/config:static_pie_config" ]
-    default_executable_configs += [ "//build/lite/config:static_pie_config" ]
-    default_executable_configs +=
-        [ "//build/lite/config:pie_executable_config" ]
-  }
-  default_executable_configs += [ "//build/lite/config:board_exe_ld_flags" ]
 }
 
 set_defaults("executable") {
@@ -820,11 +850,11 @@ set_defaults("shared_library") {
 }
 
 set_defaults("rust_library") {
-  configs = [ "//build/config/rust:rust_config" ]
+  configs = default_compiler_configs
 }
 
 set_defaults("rust_proc_macro") {
-  configs = [ "//build/config/rust:rust_config" ]
+  configs = default_compiler_configs
 }
 
 set_defaults("source_set") {
@@ -842,6 +872,7 @@ target_type_list = [
   "static_library",
   "rust_library",
   "source_set",
+  "rust_proc_macro",
 ]
 
 foreach(_target_type, target_type_list) {

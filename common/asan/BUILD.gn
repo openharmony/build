@@ -19,6 +19,8 @@ ohos_prebuilt_shared_library("libclang_rt.asan.so") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so"
   } else if (target_cpu == "arm64") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.asan.so"
+  } else if (target_cpu == "x86_64") {
+    source = "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.asan.so"
   } else {
     source = ""
   }

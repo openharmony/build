@@ -44,6 +44,7 @@ template("generate_module_info") {
                            "notice",
                            "shlib_type",
                            "innerapi_tags",
+                           "version_script",
                            "part_name",
                            "subsystem_name",
                          ])
@@ -101,6 +102,8 @@ template("generate_module_info") {
       updater_base_dir,
       "--sys_prod-base-dir",
       sys_prod_base_dir,
+      "--updater_vendor-base-dir",
+      updater_vendor_base_dir,
       "--chip_prod-base-dir",
       chip_prod_base_dir,
       "--type",
@@ -206,6 +209,12 @@ template("generate_module_info") {
     if (defined(innerapi_tags)) {
       args += [ "--innerapi-tags" ]
       args += innerapi_tags
+    }
+    if (defined(version_script)) {
+      args += [
+        "--version_script",
+        version_script,
+      ]
     }
     script = gen_script
     outputs = [ output_file ]

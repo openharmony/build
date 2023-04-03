@@ -66,6 +66,22 @@ template("ohos_sa_profile") {
       sa_install_info = [ sa_install_info ]
     }
   }
+
+  sources_output = []
+  foreach(source, invoker.sources) {
+    sources_output +=
+        [ rebase_path("${target_out_dir}/profiles/${source}", root_build_dir) ]
+  }
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    type = "etc"
+    prebuilt = true
+    output_path = sources_output
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
 }
 
 # merge sa profile insall files and generate sa profile install info

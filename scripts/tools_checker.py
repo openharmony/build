@@ -19,6 +19,16 @@ import subprocess
 import json
 
 
+def find_top():
+    cur_dir = os.getcwd()
+    while cur_dir != "/":
+        build_scripts = os.path.join(
+            cur_dir, 'build/scripts/build_package_list.json')
+        if os.path.exists(build_scripts):
+            return cur_dir
+        cur_dir = os.path.dirname(cur_dir)
+
+
 def run_command(cmd, verbose=None):
     """Execute command `cmd`
     :param cmd: Command to be executed.
@@ -57,13 +67,15 @@ def check_build_requried_packages(host_version, check=True):
     :return install_package_list: Packages installed.
     :return uninstall_package_list: Packages missing.
     """
-    cur_dir = os.getcwd()
-    build_package_json = os.path.join(cur_dir, 'build/scripts/build_package_list.json')
+    cur_dir = find_top()
+    build_package_json = os.path.join(
+        cur_dir, 'build/scripts/build_package_list.json')
     with open(build_package_json, 'r') as file:
         file_json = json.load(file)
         for _version in file_json.keys():
             if host_version == _version or host_version.startswith(_version):
-                _build_package_list = file_json["{}".format(_version)]["dep_package"]
+                _build_package_list = file_json["{}".format(
+                    _version)]["dep_package"]
     uninstall_package_list = []
     for pkg in _build_package_list:
         if package_installed(pkg):
@@ -71,8 +83,9 @@ def check_build_requried_packages(host_version, check=True):
                 print("\033[33m {} is not installed. please install it.\033[0m".
                       format(pkg))
             uninstall_package_list.append(pkg)
-    install_package_list = list(set(_build_package_list).difference(uninstall_package_list))
-    return _build_package_list,install_package_list, uninstall_package_list
+    install_package_list = list(
+        set(_build_package_list).difference(uninstall_package_list))
+    return _build_package_list, install_package_list, uninstall_package_list
 
 
 def check_os_version():
@@ -80,10 +93,10 @@ def check_os_version():
     By parsing file `/etc/issue`.
     :return -1: Retuern -1 if OS is not supported.
     :return host_os: Host OS type, currently only `Ubuntu` supported.
-    :return host_version: Host OS version, currently only `18.04[.X]` or `20.04[.X]` supported.
+    :return host_version: Host OS version, currently only `18.04[.X]`, `20.04[.X]` or `22.04[.X]` supported.
     """
     available_os = ('Ubuntu')
-    available_releases = ('18.04', '20.04')
+    available_releases = ('18.04', '20.04', '22.04')
     _os_info, _returncode = run_command(['cat', '/etc/issue'])
     if _returncode != 0:
         return -1
@@ -115,13 +128,14 @@ def main():
     :return 0: Return 0 on success.
     """
     check_result = check_os_version()
-    
+
     if check_result == -1:
         return -1
 
-    _, _, missing_packages = check_build_requried_packages(check_result[1], check=True)
+    _, _, missing_packages = check_build_requried_packages(
+        check_result[1], check=True)
 
-    if(len(missing_packages) == 0):
+    if (len(missing_packages) == 0):
         return 0
     else:
         print("\033[31m Missing dependencies, please check!\033[0m")

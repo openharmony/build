@@ -88,13 +88,16 @@ class BundleCheckOnline:
 
 
 def _check_line_name(value):
-    if value.startswith('//') and ':' in value:
-        # exclude inner_kits:name
+    if not value: # value empty
+        return BCWarnInfo.NAME_EMPTY
+    if value.startswith('//') and ':' in value: # exclude inner_kits:name
         return ""
+    if ('/' in value) and (not re.match(r'^@[a-z]+/([a-z_]{1,63})$', value)): # not component_name
+        return BCWarnInfo.NAME_FORMAT_ERROR + \
+            BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
+
     component_name = value.split('/')[1] if ('/' in value) else value
-    if not (0 < len(component_name) < 64):
-        return BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
-    if not re.match(r'^([a-z_]{1,63})$', component_name):
+    if not re.match(r'^([a-z]+_){1,31}[a-z]+$', component_name):
         return BCWarnInfo.COMPONENT_NAME_FROMAT
     return ""
 

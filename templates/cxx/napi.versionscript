@@ -18,6 +18,18 @@
     NAPI_*_GetABCCode;
     NAPI_*_GetJSCode;
 
+    *delegator_E;
+    *instance_E;
+    *mutex_E;
+
+    *_NewInstance;
+    *_GetNativeObject;
+    StartDragService;
+    OHOS_MEDIA_GetPixelMap;
+    OHOS_MEDIA_NativeGetThumbnail;
+    CallOnAbilityResult;
+    CallOnRequestPermissionsFromUserResult;
+
   local:
     *;
 };

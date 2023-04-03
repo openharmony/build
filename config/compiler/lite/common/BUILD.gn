@@ -1,0 +1,79 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("${device_path}/config.gni")
+
+config("kernel_macros") {
+  if (ohos_kernel_type == "liteos_a") {
+    defines = [
+      "__LITEOS__",
+      "__LITEOS_A__",
+    ]
+  } else if (ohos_kernel_type == "liteos_m") {
+    defines = [
+      "__LITEOS__",
+      "__LITEOS_M__",
+    ]
+  } else if (ohos_kernel_type == "linux") {
+    defines = [
+      "__linux__",
+      "__LINUX__",
+    ]
+  }
+}
+
+config("release") {
+  defines = [ "OHOS_RELEASE" ]
+}
+
+config("debug") {
+  defines = [ "OHOS_DEBUG" ]
+}
+
+config("board_config") {
+  cflags = []
+  cflags_c = []
+  cflags_cc = []
+  asmflags = []
+  ldflags = []
+  include_dirs = []
+  defines = []
+  if (defined(board_cflags)) {
+    cflags += board_cflags
+  }
+  if (defined(board_c_cflags)) {
+    cflags_c += board_c_cflags
+  }
+  if (defined(board_cxx_flags)) {
+    cflags_cc += board_cxx_flags
+  }
+  if (defined(board_asmflags)) {
+    asmflags += board_asmflags
+  }
+  if (defined(board_ld_flags)) {
+    ldflags += board_ld_flags
+  }
+  if (defined(board_include_dirs)) {
+    include_dirs += board_include_dirs
+  }
+  if (defined(board_macro_defines)) {
+    defines += board_macro_defines
+  }
+}
+
+config("board_exe_ld_flags") {
+  ldflags = []
+  if (defined(board_exe_ld_flags)) {
+    ldflags += board_exe_ld_flags
+  }
+}

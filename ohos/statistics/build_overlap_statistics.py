@@ -49,7 +49,7 @@ def read_file(sources_file):
 def get_subsystem_paths(file, root_dir):
     paths = {
         'common': 'build',
-        'third_party': 'third_party',
+        'thirdparty': 'third_party',
         'test': 'test',
         'mcl': 'mcl'
     }
@@ -145,6 +145,8 @@ def main():
     parser.add_argument('--root-source-dir', help='source root directory.')
     parser.add_argument(
         '--subsystem-config-file', help='path to subsystem java targets.')
+    parser.add_argument(
+        '--subsystem-config-overlay-file', help='path to subsystem overlay java targets.')
 
     options = parser.parse_args()
 

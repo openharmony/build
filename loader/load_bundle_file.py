@@ -55,10 +55,11 @@ class BundlePartObj(object):
             raise Exception(
                 "{}, 'component.build' is required.".format(_tip_info))
         _bundle_build = _component_info.get('build')
-        if 'sub_component' not in _bundle_build and 'group_type' not in _bundle_build:
+        if 'sub_component' not in _bundle_build and 'group_type' not in _bundle_build \
+            and 'modules' not in _bundle_build:
             raise Exception(
-                "{}, 'component.build.sub_component' or 'component.build.group_type' is required.".format(
-                    _tip_info))
+                "{}, 'component.build.sub_component','component.build.group_type' or \
+                'component.build.modules' is required.".format(_tip_info))
         if 'group_type' in _bundle_build:
             group_list = ['base_group', 'fwk_group', 'service_group']
             _module_groups = _bundle_build.get('group_type')
@@ -79,6 +80,8 @@ class BundlePartObj(object):
         if _component_info.get('build').__contains__('sub_component'):
             _part_info['module_list'] = _component_info.get('build').get(
                 'sub_component')
+        elif _component_info.get('build').__contains__('modules'):
+            _part_info['module_list'] = _component_info.get('build').get('modules')
         elif _component_info.get('build').__contains__('group_type'):
             _module_groups = _component_info.get('build').get('group_type')
             for _group_type, _module_list in _module_groups.items():
@@ -90,6 +93,8 @@ class BundlePartObj(object):
             _part_info['module_list'] = module_list
         if 'inner_kits' in _bundle_build:
             _part_info['inner_kits'] = _bundle_build.get('inner_kits')
+        elif 'inner_api' in _bundle_build:
+            _part_info['inner_kits'] = _bundle_build.get('inner_api')
         if 'test' in _bundle_build and self._load_test_config:
             _part_info['test_list'] = _bundle_build.get('test')
         if 'features' in _component_info:

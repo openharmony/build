@@ -156,23 +156,25 @@ class CheckGnOnline(object):
             ret_dict.update(ret_item)
         return ret_dict
 
-    def is_checked(self, name, xml_dict):
-        if name in xml_dict.keys():
-            if xml_dict[name].find('ohos:mini') != -1:
-                return False
-            if xml_dict[name].find('ohos:small') != -1:
-                return False
-        if name.startswith('device_') or name.startswith('vendor'):
+    def is_checked(self, file, xml_dict):
+        repo_name = file.split(',')[0].split('/')[-3]
+
+        if repo_name in xml_dict.keys():
+            if not file.endswith("(new file)"):
+                if xml_dict[repo_name].find('ohos:mini') != -1:
+                    return False
+                if xml_dict[repo_name].find('ohos:small') != -1:
+                    return False
+        if repo_name.startswith('device_') or repo_name.startswith('vendor'):
             return False
-        if name.startswith('build') or name.startswith('third_party'):
+        if repo_name.startswith('build') or repo_name.startswith('third_party'):
             return False
         return True
 
     def pre_check(self):
         xml_dict = self.load_ohos_xml(".repo/manifests/ohos/ohos.xml")
         for key in list(self.gn_data.keys()):
-            repo_name = key.split(',')[0].split('/')[-3]
-            if not self.is_checked(repo_name, xml_dict):
+            if not self.is_checked(key, xml_dict):
                 self.gn_data.pop(key)
 
     def check(self):
@@ -180,6 +182,8 @@ class CheckGnOnline(object):
             return
         for key, values in self.gn_data.items():
             for line in values:
+                if line[1].strip().startswith("import"):
+                    continue;
                 self.check_have_product_name(key, line)
                 self.check_abs_path(key, line)
         self.check_pn_sn()
