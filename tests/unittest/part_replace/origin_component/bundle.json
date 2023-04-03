@@ -1,0 +1,28 @@
+{
+  "component": {
+    "name": "origin_component",
+    "description": "common component set",
+    "subsystem": "arkui",
+    "features": [],
+    "rom": "100KB",
+    "ram": "~200KB",
+    "deps": {},
+    "build": {
+      "sub_component": [
+        "//foundation/arkui/origin_component/feature1:helloworld"
+      ],
+      "inner_kits": [
+        {
+          "name": "//foundation/arkui/origin_component/feature1:helloworld",
+          "header": {
+            "header_base": "//foundation/arkui/origin_component/feature1/include",
+            "header_files": [
+              "helloworld.h"
+            ]
+          }
+        }
+      ],
+      "test": []
+    }
+  }
+}

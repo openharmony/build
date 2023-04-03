@@ -1,0 +1,29 @@
+{
+  "component": {
+    "name": "origin_component_override",
+    "description": "common component set",
+    "subsystem": "testpart",
+    "override": "arkui:origin_component",
+    "features": [],
+    "rom": "100KB",
+    "ram": "~200KB",
+    "deps": {},
+    "build": {
+      "sub_component": [
+        "//vendor/testpart/origin_component_override/feature1:helloworld"
+      ],
+      "inner_kits": [
+        {
+          "name": "//vendor/testpart/origin_component_override/feature1:helloworld",
+          "header": {
+            "header_base": "//vendor/testpart/origin_component_override/feature1/include",
+            "header_files": [
+              "helloworld.h"
+            ]
+          }
+        }
+      ],
+      "test": []
+    }
+  }
+}
