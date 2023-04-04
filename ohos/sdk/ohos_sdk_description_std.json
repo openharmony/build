@@ -749,38 +749,12 @@
         ]
     },
     {
-        "install_dir": "previewer/common/bin/module",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_napi_modules_shared_library",
-        "target_os": [
-            "windows",
-            "darwin",
-            "linux"
-        ]
-    },
-    {
-        "install_dir": "previewer/common/bin/module/util",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_ets_utils_container_library",
-        "target_os": [
-            "windows",
-            "darwin",
-            "linux"
-        ]
-    },
-    {
         "install_dir": "previewer/common/bin",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
             "windows",
             "darwin",
             "linux"
-        ]
-    },
-    {
-        "install_dir": "previewer/common/bin/module/data",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributeddatamgr_library",
-        "target_os": [
-          "windows",
-          "darwin"
         ]
     },
     {
@@ -903,30 +877,6 @@
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
             "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir":"previewer/common/bin/module/data",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributeddata_library",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir":"previewer/common/bin/module/data",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_distributedkvstore_library",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/common/bin/module/net",
-        "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_communication_library",
-        "target_os": [
             "windows",
             "darwin"
         ]
