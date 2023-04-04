@@ -321,7 +321,10 @@ template("ohos_executable") {
       if (current_cpu == "arm" || current_cpu == "arm64") {
         libs += [ "unwind" ]
       }
-      libs += [ "c++" ]
+      libs += [
+        rebase_path(libclang_rt_file),
+        "c++",
+      ]
     }
 
     if (!defined(output_name)) {
@@ -860,7 +863,10 @@ template("ohos_shared_library") {
           libs += [ "unwind" ]
         }
 
-        libs += [ "c++" ]
+        libs += [
+          rebase_path(libclang_rt_file),
+          "c++",
+        ]
       }
     }
 

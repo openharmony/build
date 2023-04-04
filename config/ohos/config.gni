@@ -37,6 +37,6 @@ if (is_ohos) {
     assert(false, "Architecture not supported")
   }
 
-  libclang_rt_file = "${clang_base_path}/lib/clang/12.0.1/lib/${abi_target}/libclang_rt.builtins.a"
-  libcxxabi_file = "${clang_base_path}/lib/${abi_target}/c++/libc++abi.a"
+  libclang_rt_file = "${clang_base_path}/lib/clang/${clang_version}/lib/${abi_target}/libclang_rt.builtins.a"
+  libcxxabi_file = "${clang_base_path}/lib/${abi_target}/libc++abi.a"
 }

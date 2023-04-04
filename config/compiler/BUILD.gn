@@ -944,6 +944,11 @@ config("default_warnings") {
         "-Wno-error=xor-used-as-pow",
         "-Wno-error=return-stack-address",
         "-Wno-error=dangling-gsl",
+        "-Wno-unused-but-set-variable",
+        "-Wno-deprecated-declarations",
+        "-Wno-unused-but-set-parameter",
+        "-Wno-null-pointer-subtraction",
+        "-Wno-unqualified-std-cast-call",
       ]
     }
 
