@@ -28,6 +28,16 @@ example：
 python3 build/tools/component_tools/static_check/csct.py -p base/global
 ```
 
+#### 使用前须安装的python库
+
+- prettytable
+- pandas
+- openpyxl
+
+#### 结果查看
+
+程序执行结束后会在执行目录生成一个out目录，有excel和txt类型的结果，建议通过excel进行查看。
+
 ## OpenHarmony部件编译构建规范修改指导
 
 关于完整的OpenHarmony部件编译构建规范，请点击
