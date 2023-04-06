@@ -162,6 +162,10 @@ platform="--host-platform $host_platform"
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 echo "prebuilts_download start"
+if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
+    rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
+    echo "remove nodejs"
+fi
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
 
