@@ -20,6 +20,12 @@ import("//build/toolchain/toolchain.gni")
 
 # import cxx base templates
 import("//build/templates/cxx/cxx.gni")
+
+# import rust templates
+import("//build/templates/rust/ohos_cargo_crate.gni")
+import("//build/templates/rust/rust_bindgen.gni")
+import("//build/templates/rust/rust_cxx.gni")
+import("//build/templates/rust/rust_template.gni")
 if (support_jsapi) {
   import("//build/ohos/ace/ace.gni")
   import("//build/ohos/app/app.gni")

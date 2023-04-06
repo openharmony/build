@@ -18,8 +18,8 @@
 #include <set>
 #include <string>
 #include <unordered_map>
-#include "src/main.rs.h"
-#include "build/rust/tests/test_cxx_rust/include/client_blobstore.h"
+#include "main.rs.h"
+#include "client_blobstore.h"
 
 namespace nsp_org {
 namespace nsp_blobstore {

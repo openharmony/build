@@ -15,7 +15,7 @@
 #ifndef BUILD_RUST_TESTS_CLIENT_BLOBSTORE_H
 #define BUILD_RUST_TESTS_CLIENT_BLOBSTORE_H
 #include <memory>
-#include "third_party/rust/cxx/include/cxx.h"
+#include "cxx.h"
 
 namespace nsp_org {
 namespace nsp_blobstore {

@@ -77,5 +77,7 @@ def main():
         if os.path.exists(args.output):
             os.remove(args.output)
     return rescode
+
+    
 if __name__ == '__main__':
     sys.exit(main())

@@ -23,11 +23,11 @@ def run(cxx_exe, args, output, is_header_file):
     sys.path.append(
         os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
     from scripts.util import build_utils
-    my_args = [os.path.abspath(cxx_exe)]
-    my_args.extend(args)
+    run_cmd = [os.path.abspath(cxx_exe)]
+    run_cmd.extend(args)
     if is_header_file:
-        my_args.extend(["--header"])
-    res = subprocess.run(my_args, capture_output=True)
+        run_cmd.extend(["--header"])
+    res = subprocess.run(run_cmd, capture_output=True)
     if res.returncode != 0:
         return res.returncode
     with build_utils.atomic_output(output) as output:
@@ -38,9 +38,9 @@ def run(cxx_exe, args, output, is_header_file):
 def main():
     parser = argparse.ArgumentParser("rust_cxxbridge.py")
     parser.add_argument("--header", help="output h file with cxxbridge", required=True),
+    parser.add_argument("--cc", help="output cc file with cxxbridge", required=True),
     parser.add_argument("--cxxbridge", help="The path of cxxbridge executable", required=True),
-    parser.add_argument("--cc", help="output cc file with cxxbridge", required=True)
-    parser.add_argument('args', metavar='args', nargs='+', help="Args to pass through in script rust_cxxbridge.py")
+    parser.add_argument('args', metavar='args', nargs='+', help="Args to pass through in script rust_cxxbridge.py"),
     args = parser.parse_args()
     ret = run(args.cxxbridge, args.args, args.header, True)
     if ret != 0:

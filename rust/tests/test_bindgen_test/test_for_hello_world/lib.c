@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-#include "build/rust/tests/test_bindgen_test/test_for_hello_world/lib.h"
+#include "lib.h"
 #include <stdint.h>
 #include <stdio.h>
 

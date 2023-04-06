@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 #include <iostream>
-#include "build/rust/tests/test_cxx/src/lib.rs.h"
+#include "lib.rs.h"
 
 int main(int argc, const char* argv[])
 {

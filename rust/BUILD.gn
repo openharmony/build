@@ -57,21 +57,3 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   output = "libtest.dylib.so"
   part_name = "common"
 }
-
-# static_library("cxx_cppdeps") {
-#   defines = [ "RUST_CXX_NO_EXCEPTIONS" ]
-#   sources = [
-#     "//third_party/rust/cxx/include/cxx.h",
-#     "//third_party/rust/cxx/src/cxx.cc",
-#   ]
-#   deps = [ ":cxx_rustdeps" ]
-#   if (is_win) {
-#     defines += [ "CXX_RS_EXPORT=__declspec(dllexport)" ]
-#   } else {
-#     defines += [ "CXX_RS_EXPORT=__attribute__((visibility(\"default\")))" ]
-#   }
-# }
-
-# group("cxx_rustdeps") {
-#   public_deps = [ "//third_party/rust/cxx:lib" ]
-# }
