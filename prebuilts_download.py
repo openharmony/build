@@ -242,7 +242,7 @@ def _file_handle(config, code_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
                 if symlink_src and symlink_dest:
-                    os.symlink(dest_dir + symlink_src, dest_dir + symlink_dest)
+                    os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
 
