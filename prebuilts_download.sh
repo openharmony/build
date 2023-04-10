@@ -158,12 +158,42 @@ echo "prebuilts_download end"
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
 llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
+
+llvm15_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64/15.0.4"
+llvm15_win_dir="${code_dir}/prebuilts/clang/ohos/windows-x86_64/15.0.4"
+llvm_win_dir="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
+
+if [[ -d ${llvm_dir}/llvm ]]; then
+    cp "${llvm15_dir}/llvm/bin/llc" "${llvm_dir}/llvm/bin"
+    cp "${llvm15_dir}/llvm/bin/opt" "${llvm_dir}/llvm/bin"
+fi
+
+if [[ -d ${llvm_win_dir}/llvm ]]; then
+    cp "${llvm15_win_dir}/llvm/bin/llc.exe" "${llvm_win_dir}/llvm/bin"
+    cp "${llvm15_win_dir}/llvm/bin/opt.exe" "${llvm_win_dir}/llvm/bin"
+fi
+
+llvm_mac_x86_dir="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
+llvm15_mac_x86_dir="${code_dir}/prebuilts/clang/ohos/darwin-x86_64/15.0.4"
+llvm_mac_arm64_dir="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
+llvm15_mac_arm64_dir="${code_dir}/prebuilts/clang/ohos/darwin-arm64/15.0.4"
+
+if [[ -d ${llvm_mac_x86_dir}/llvm ]]; then
+    cp "${llvm15_mac_x86_dir}/llvm/bin/llc" "${llvm_mac_x86_dir}/llvm/bin"
+    cp "${llvm15_mac_x86_dir}/llvm/bin/opt" "${llvm_mac_x86_dir}/llvm/bin"
+fi
+
+if [[ -d ${llvm_mac_arm64_dir}/llvm ]]; then
+    cp "${llvm15_mac_arm64_dir}/llvm/bin/llc" "${llvm_mac_arm64_dir}/llvm/bin"
+    cp "${llvm15_mac_arm64_dir}/llvm/bin/opt" "${llvm_mac_arm64_dir}/llvm/bin"
+fi
+
 if [[ -e "${llvm_dir}/llvm_ndk" ]];then
   rm -rf "${llvm_dir}/llvm_ndk"
 fi
 mkdir -p "${llvm_dir}/llvm_ndk"
 cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
-cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
+cp -rfp "${llvm_dir}/libcxx-ndk/include/libcxx-ohos/include" "${llvm_dir}/llvm_ndk"
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
