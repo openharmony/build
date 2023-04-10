@@ -73,7 +73,7 @@ template("ohos_stack_protector_ret_config") {
     cflags = []
     if (defined(stack_protector_ret) && stack_protector_ret &&
         support_stack_protector_ret) {
-      cflags += [ "-fstack-protector-ret" ]
+      cflags += [ "-fstack-protector-ret-all" ]
     }
   }
 }
