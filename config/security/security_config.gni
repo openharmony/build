@@ -23,13 +23,13 @@ if (!is_ohos) {
   using_security_flag = false
 }
 
-# support_stack_protector_ret = true if clang support -fstack-protector-ret
+# support_stack_protector_ret = true if clang support -fstack-protector-ret-all
 clang_bin = rebase_path("${default_clang_base_path}/bin/clang", root_build_dir)
-cmd = "${clang_bin} --help | grep fstack-protector-ret | wc -l"
+cmd = "${clang_bin} --help | grep fstack-protector-ret-all | wc -l"
 
-# exec_script returns 1 if grep fstack-protector-ret failed, indicating fstack-protector-ret not supported
+# exec_script returns 1 if grep -fstack-protector-ret-all failed, indicating -fstack-protector-ret-all not supported
 res = exec_script("//build/lite/run_shell_cmd.py", [ cmd ], "value")
-if (res == 1) {
+if (current_cpu == "arm64" && res == 1) {
   support_stack_protector_ret = true
 } else {
   support_stack_protector_ret = false
@@ -73,7 +73,10 @@ template("ohos_stack_protector_ret_config") {
     cflags = []
     if (defined(stack_protector_ret) && stack_protector_ret &&
         support_stack_protector_ret) {
-      cflags += [ "-fstack-protector-ret-all" ]
+      cflags += [
+        "-fstack-protector-ret-all",
+        "--param=ssp-ret-cookie-size=100",
+      ]
     }
   }
 }
