@@ -288,6 +288,8 @@ def main():
     parser.add_argument('--host-platform', help='host platform', required=True)
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if os.path.exists(os.path.join(args.code_dir, "prebuilts/clang")):
+        shutil.rmtree(os.path.join(args.code_dir, "prebuilts/clang"))
     if args.skip_ssl:
         ssl._create_default_https_context = ssl._create_unverified_context
 
