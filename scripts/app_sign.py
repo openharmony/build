@@ -27,18 +27,19 @@ def parse_args(args):
     parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
 
-    parser.add_argument('--private-key-path', help='')
+    parser.add_argument('--keyPwd', help='')
     parser.add_argument('--sign-algo', help='')
     parser.add_argument('--certificate-profile', help='')
     parser.add_argument('--keyalias', help='')
-    parser.add_argument('--keystore-path', help='')
-    parser.add_argument('--keystorepasswd', help='')
-    parser.add_argument('--certificate-file', help='')
+    parser.add_argument('--keystoreFile', help='')
+    parser.add_argument('--keystorePwd', help='')
+    parser.add_argument('--profileFile', help='')
     parser.add_argument('--hapsigner', help='')
     parser.add_argument('--unsigned-hap-path-list', help='')
     parser.add_argument('--compatible_version', help='compatible_version')
     parser.add_argument('--hap-out-dir', help='')
-
+    parser.add_argument('--inFile', help='')
+    parser.add_argument('--outFile', help='')
     options = parser.parse_args(args)
     return options
 
@@ -50,10 +51,10 @@ def sign_app(options, unsigned_hap_path, signed_hap_path):
     cmd.extend(['-keyAlias', options.keyalias])
     cmd.extend(['-inFile', unsigned_hap_path])
     cmd.extend(['-outFile', signed_hap_path])
-    cmd.extend(['-profileFile', options.certificate_profile])
-    cmd.extend(['-keystoreFile', options.keystore_path])
-    cmd.extend(['-keystorePwd', options.keystorepasswd])
-    cmd.extend(['-keyPwd', options.private_key_path])
+    cmd.extend(['-profileFile', options.profileFile])
+    cmd.extend(['-keystoreFile', options.keystoreFile])
+    cmd.extend(['-keystorePwd', options.keystorePwd])
+    cmd.extend(['-keyPwd', options.keyPwd])
     cmd.extend(['-appCertFile', options.certificate_file])
     cmd.extend(['-profileSigned', '1'])
     cmd.extend(['-inForm', 'zip'])
@@ -68,14 +69,17 @@ def sign_app(options, unsigned_hap_path, signed_hap_path):
 
 def main(args):
     options = parse_args(args)
-    if not os.path.exists(options.hap_out_dir):
-        os.makedirs(options.hap_out_dir, exist_ok=True)
-    unsigned_hap_path_list = file_utils.read_json_file(options.unsigned_hap_path_list)
-    for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
-        signed_hap_path = unsigned_hap_path.replace('unsigned.hap', 'signed.hap')
-        signed_hap_path = os.path.basename(signed_hap_path)
-        signed_hap_path = os.path.join(options.hap_out_dir, signed_hap_path)
-        sign_app(options, unsigned_hap_path, signed_hap_path)
+    if not options.hap_out_dir:
+        sign_app(options, options.inFile, options.outFile)
+    else:
+        if not os.path.exists(options.hap_out_dir):
+            os.makedirs(options.hap_out_dir, exist_ok=True)
+        unsigned_hap_path_list = file_utils.read_json_file(options.unsigned_hap_path_list)
+        for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
+            signed_hap_path = unsigned_hap_path.replace('unsigned.hap', 'signed.hap')
+            signed_hap_path = os.path.basename(signed_hap_path)
+            signed_hap_path = os.path.join(options.hap_out_dir, signed_hap_path)
+            sign_app(options, unsigned_hap_path, signed_hap_path)
 
 
 if __name__ == '__main__':

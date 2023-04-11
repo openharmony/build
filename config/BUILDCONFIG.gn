@@ -157,7 +157,9 @@ if (defined(product_build_config.support_jsapi)) {
     support_jsapi = true
   }
 }
-
+if (defined(product_build_config.ext_sign_hap_py_path)) {
+  sign_hap_py_path = product_build_config.ext_sign_hap_py_path
+}
 if (target_os == "") {
   target_os = "ohos"
 }

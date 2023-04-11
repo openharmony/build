@@ -247,6 +247,12 @@ class Product():
                     self._dirs.source_root_dir, config.get('ext_ndk_config_file'))
                 if os.path.exists(ext_ndk_config_file):
                     build_vars['ext_ndk_config_file'] = ext_ndk_config_file
+            if 'ext_sign_hap_py_path' in config:
+                path = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_sign_hap_py_path'))
+                if os.path.exists(path):
+                    build_vars['ext_sign_hap_py_path'] = path
+
         build_vars.update(self._device_info)
         if build_vars['os_level'] == 'mini' or build_vars['os_level'] == 'small':
             toolchain_label = ""

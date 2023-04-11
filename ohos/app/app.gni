@@ -383,6 +383,7 @@ template("ohos_hap") {
                              "keystore_password",
                              "key_alias",
                              "certificate_file",
+                             "compatible_version",
                            ])
     deps = [
       ":$_js_assets_target",
