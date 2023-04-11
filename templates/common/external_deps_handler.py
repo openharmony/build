@@ -118,6 +118,7 @@ def check_parts_deps(part_name, external_part_name, parts_deps_info, module_path
     if external_part_name == part_name:
         print("WARNING: {} in target {} is dependency within part {}, Need to used deps".format(
             external_part_name, module_path, part_name))
+        return
 
     _tips_info = "WARNING: {} depend part {}, need set part deps info to".format(
         module_path, external_part_name)
