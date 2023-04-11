@@ -29,7 +29,6 @@ def parse_args(args):
 
     parser.add_argument('--keyPwd', help='')
     parser.add_argument('--sign-algo', help='')
-    parser.add_argument('--certificate-profile', help='')
     parser.add_argument('--keyalias', help='')
     parser.add_argument('--keystoreFile', help='')
     parser.add_argument('--keystorePwd', help='')
@@ -40,6 +39,9 @@ def parse_args(args):
     parser.add_argument('--hap-out-dir', help='')
     parser.add_argument('--inFile', help='')
     parser.add_argument('--outFile', help='')
+    parser.add_argument('--profileSigned', help='')
+    parser.add_argument('--inForm', help='')
+    parser.add_argument('--certificate-file', help='')
     options = parser.parse_args(args)
     return options
 
@@ -56,8 +58,8 @@ def sign_app(options, unsigned_hap_path, signed_hap_path):
     cmd.extend(['-keystorePwd', options.keystorePwd])
     cmd.extend(['-keyPwd', options.keyPwd])
     cmd.extend(['-appCertFile', options.certificate_file])
-    cmd.extend(['-profileSigned', '1'])
-    cmd.extend(['-inForm', 'zip'])
+    cmd.extend(['-profileSigned', options.profileSigned])
+    cmd.extend(['-inForm', options.inForm])
     child = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)

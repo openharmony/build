@@ -219,11 +219,9 @@ template("package_app") {
       _keystore_path,
       _certificate_file,
     ]
-    ohos_sign_py_file_path = "//build/scripts/app_sign.py"
+    _sign_hap_py_path = "//build/scripts/app_sign.py"
     if (defined(sign_hap_py_path)) {
       _sign_hap_py_path = sign_hap_py_path
-    } else {
-      _sign_hap_py_path = ohos_sign_py_file_path
     }
     args += [
       "--sign_hap_py_path",
