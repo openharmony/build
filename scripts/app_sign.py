@@ -36,6 +36,7 @@ def parse_args(args):
     parser.add_argument('--certificate-file', help='')
     parser.add_argument('--hapsigner', help='')
     parser.add_argument('--unsigned-hap-path-list', help='')
+    parser.add_argument('--compatible_version', help='compatible_version')
     parser.add_argument('--hap-out-dir', help='')
 
     options = parser.parse_args(args)
