@@ -13,7 +13,7 @@
 
 # OHOS version
 declare_args() {
-  sdk_version = "3.2.11.9"
+  sdk_version = "3.2.11.10"
   api_version = "9"
 
   # Release type, optional values: Betax, RCx...
