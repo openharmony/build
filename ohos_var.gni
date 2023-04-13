@@ -92,6 +92,10 @@ declare_args() {
 
   # Whether to make Code_OpenSource.tar.gz
   make_osp = false
+
+  # Enables EMMA Java code coverage. Instruments classes during build to
+  # produce .ec files during runtime
+  emma_coverage = false
 }
 
 declare_args() {
@@ -172,6 +176,19 @@ declare_args() {
   is_use_check_deps = false
 }
 
+declare_args() {
+  if (is_mac || is_ios) {
+    enable_bitcode = false
+    if (defined(product_build_config.enable_bitcode)) {
+      enable_bitcode = product_build_config.enable_bitcode
+    }
+  }
+}
+
+declare_args() {
+  bitcode_marker = false
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
@@ -212,6 +229,16 @@ app_target_types = [
   "ets_assets",
   "assets",
   "app_profile",
+]
+
+ohos_package_names = [
+  "ohos.*",
+  "ark.*",
+]
+
+openjdk_package_names = [
+  "java.*",
+  "javax.*",
 ]
 
 if (host_os == "mac") {

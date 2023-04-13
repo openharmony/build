@@ -330,7 +330,8 @@ template("ohos_executable") {
       ]
     }
 
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
       component_override_map = rebase_path(
               "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
@@ -852,7 +853,8 @@ template("ohos_shared_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
       component_override_map = rebase_path(
               "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
@@ -1187,7 +1189,8 @@ template("ohos_static_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
       component_override_map = rebase_path(
               "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
@@ -1462,7 +1465,8 @@ template("ohos_source_set") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
       component_override_map = rebase_path(
               "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =

@@ -15,8 +15,11 @@ import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
-import("//build/rust/rustc_toolchain.gni")
 import("//build/templates/cxx/cxx.gni")
+
+if (!build_cross_platform_version) {
+  import("//build/rust/rustc_toolchain.gni")
+}
 
 template("_testcase_resources") {
   assert(defined(invoker.testcase_target_name))

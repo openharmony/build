@@ -15,6 +15,9 @@ import("//build/misc/overrides/build.gni")
 if (current_cpu == "arm" || current_cpu == "arm64") {
   import("//build/config/arm.gni")
 }
+if (is_android) {
+  import("//build_plugins/config/aosp/config.gni")
+}
 if (is_ohos) {
   import("//build/config/ohos/config.gni")
 }
@@ -93,7 +96,7 @@ declare_args() {
   # this by default for all downstream projects, since these profiles are likely
   # nonsensical for said projects.
   clang_use_default_sample_profile =
-      is_official_build && (is_ohos || is_desktop_linux)
+      is_official_build && (is_ohos || is_android || is_desktop_linux)
 
   # Turn this on to have the compiler output extra timing information.
   compiler_timing = false
@@ -113,7 +116,7 @@ declare_args() {
   thin_lto_enable_optimizations = is_chromeos
 
   # By default only the binaries in official builds get build IDs.
-  force_local_build_id = true
+  force_local_build_id = false
 }
 
 declare_args() {
@@ -133,12 +136,12 @@ declare_args() {
   # other architectures.
   #
   # lld doesn't have the bug.
-  use_icf =
-      is_posix && !using_sanitizer && !use_clang_coverage &&
-      !(is_ohos && use_order_profiling) &&
-      (use_lld ||
-       (use_gold && ((!is_ohos && linux_use_bundled_binutils) || is_chromeos ||
-                     !(current_cpu == "x86" || current_cpu == "x64"))))
+  use_icf = is_posix && !using_sanitizer && !use_clang_coverage &&
+            !((is_ohos || is_android) && use_order_profiling) &&
+            (use_lld ||
+             (use_gold &&
+              ((!(is_ohos || is_android) && linux_use_bundled_binutils) ||
+               is_chromeos || !(current_cpu == "x86" || current_cpu == "x64"))))
 }
 
 # Apply the default logic for these values if they were not set explicitly.
@@ -152,7 +155,7 @@ if (gold_path == false) {
 }
 
 if (use_debug_fission == "default") {
-  use_debug_fission = is_debug && !is_ohos && !is_win &&
+  use_debug_fission = is_debug && !(is_ohos || is_android) && !is_win &&
                       (use_gold || use_lld) && cc_wrapper == ""
 }
 
@@ -205,6 +208,10 @@ config("compiler") {
     configs += [ "//build/config/aix:compiler" ]
   } else if (is_mingw) {
     configs += [ "//build/config/mingw:compiler" ]
+  } else if (is_android) {
+    configs += [ "//build_plugins/config/aosp:compiler" ]
+  } else if (is_ios) {
+    configs += [ "//build_plugins/config/ios:compiler" ]
   }
 
   configs += [
@@ -251,7 +258,7 @@ config("compiler") {
     # Linker warnings.
     if (fatal_linker_warnings && !(is_chromeos && current_cpu == "arm") &&
         !(is_ohos && use_order_profiling) && !is_mac && current_os != "aix" &&
-        !is_mingw) {
+        !is_mingw && !is_ios) {
       ldflags += [ "-Wl,--fatal-warnings" ]
     }
   } else {
@@ -320,7 +327,7 @@ config("compiler") {
       ldflags += [ "-Wl,--build-id=md5" ]
     }
 
-    if (!is_ohos) {
+    if (!is_ohos && !is_ohos) {
       defines += [
         "_FILE_OFFSET_BITS=64",
         "_LARGEFILE_SOURCE",
@@ -333,7 +340,7 @@ config("compiler") {
     }
   }
 
-  if (is_linux || is_ohos) {
+  if (is_linux || is_android || is_ohos) {
     if (use_pic) {
       cflags += [ "-fPIC" ]
       ldflags += [ "-fPIC" ]
@@ -366,7 +373,18 @@ config("compiler") {
     }
   }
 
-  if ((is_posix && use_lld) || (target_os == "chromeos" && is_ohos)) {
+  # Linux-specific compiler flags setup.
+  # ------------------------------------
+  if (is_android && is_clang) {
+    _rebased_aosp_toolchain_root =
+        rebase_path(aosp_toolchain_root, root_build_dir)
+
+    # Let clang find the linker in the NDK.
+    ldflags += [ "--gcc-toolchain=$_rebased_aosp_toolchain_root" ]
+  }
+
+  if ((is_posix && use_lld) || (target_os == "chromeos" && is_android) ||
+      (is_ohos && use_lld)) {
     # NOTE: Some Chrome OS builds globally disable LLD, but they also build some
     # targets against ohos toolchains which should use LLD. Therefore we
     # explicitly select LLD in these cases.
@@ -379,7 +397,7 @@ config("compiler") {
     }
   } else if (use_gold) {
     ldflags += [ "-fuse-ld=gold" ]
-    if (!is_ohos) {
+    if (!(is_ohos || is_android)) {
       # On ohos, this isn't needed.  gcc in the NDK knows to look next to
       # it with -fuse-ld=gold, and clang gets a --gcc-toolchain flag passed
       # above.
@@ -500,7 +518,8 @@ config("compiler") {
 
   # C11/C++11 compiler flags setup.
   # ---------------------------
-  if (is_linux || is_ohos || (is_nacl && is_clang) || current_os == "aix") {
+  if (is_linux || is_ohos || is_android || (is_nacl && is_clang) ||
+      current_os == "aix") {
     if (target_os == "ohos") {
       cxx11_override = use_cxx11_on_ohos
     } else {
@@ -562,7 +581,7 @@ config("compiler") {
   # example by disabling the optimize configuration.
   if (!is_debug && use_thin_lto &&
       (current_toolchain == default_toolchain ||
-       (is_ohos && defined(ohoa_secondary_abi_toolchain) &&
+       ((is_ohos || is_android) && defined(ohoa_secondary_abi_toolchain) &&
         current_toolchain == ohos_secondary_abi_toolchain))) {
     assert(use_lld || target_os == "chromeos",
            "gold plugin only supported with ChromeOS")
@@ -607,7 +626,7 @@ config("compiler") {
       if (use_lld) {
         ldflags += [ "-Wl,--lto-O" + lto_opt_level ]
         if (thin_lto_enable_optimizations) {
-          if (is_ohos) {
+          if (is_ohos || is_android) {
             ldflags += [
               "-Wl,-mllvm",
               "-Wl,-import-instr-limit=5",
@@ -619,7 +638,7 @@ config("compiler") {
       }
     }
 
-    if (!is_ohos) {
+    if (!(is_ohos || is_android)) {
       cflags += [ "-fwhole-program-vtables" ]
       if (!is_win) {
         ldflags += [ "-fwhole-program-vtables" ]
@@ -691,7 +710,7 @@ config("compiler_cpu_abi") {
   ldflags = []
   defines = []
 
-  if (is_posix && !is_mac) {
+  if (is_posix && !is_mac && !is_ios) {
     # CPU architecture. We may or may not be doing a cross compile now, so for
     # simplicity we always explicitly set the architecture.
     if (current_cpu == "x64") {
@@ -711,7 +730,7 @@ config("compiler_cpu_abi") {
         ]
       }
     } else if (current_cpu == "arm") {
-      if (is_clang && !is_ohos && !is_nacl) {
+      if (is_clang && !is_android && !is_ohos && !is_nacl) {
         cflags += [ "--target=arm-linux-gnueabihf" ]
         ldflags += [ "--target=arm-linux-gnueabihf" ]
       }
@@ -725,18 +744,20 @@ config("compiler_cpu_abi") {
         cflags += [ "-mtune=$arm_tune" ]
       }
     } else if (current_cpu == "arm64") {
-      if (is_clang && !is_ohos && !is_nacl) {
+      if (is_clang && !is_android && !is_ohos && !is_nacl) {
         cflags += [ "--target=aarch64-linux-gnu" ]
         ldflags += [ "--target=aarch64-linux-gnu" ]
       }
-      if (is_clang && is_ohos) {
+      if (is_clang && (is_android || is_ohos)) {
         ldflags += [ "-Wl,--hash-style=gnu" ]
       }
-      cflags += [
-        "-march=$arm_arch",
-        "-mfloat-abi=$arm_float_abi",
-        "-mfpu=$arm_fpu",
-      ]
+      if (!is_android) {
+        cflags += [
+          "-march=$arm_arch",
+          "-mfloat-abi=$arm_float_abi",
+          "-mfpu=$arm_fpu",
+        ]
+      }
       ldflags += [ "-march=$arm_arch" ]
     }
   }
@@ -762,7 +783,7 @@ config("compiler_codegen") {
         cflags += [ "-momit-leaf-frame-pointer" ]
       }
     } else if (current_cpu == "arm") {
-      if (is_ohos && !is_clang) {
+      if ((is_ohos || is_android) && !is_clang) {
         # Clang doesn't support these flags.
         cflags += [
           "-fno-tree-sra",
@@ -786,7 +807,7 @@ config("compiler_arm_thumb") {
   if (current_cpu == "arm" && arm_use_thumb && is_posix &&
       !(is_mac || is_nacl)) {
     cflags = [ "-mthumb" ]
-    if (is_ohos && !is_clang) {
+    if ((is_ohos || is_android) && !is_clang) {
       # Clang doesn't support this option.
       cflags += [ "-mthumb-interwork" ]
     }
@@ -832,6 +853,10 @@ config("runtime_library") {
     configs += [ "//build/config/mac:runtime_library" ]
   } else if (is_ohos) {
     configs += [ "//build/config/ohos:runtime_library" ]
+  } else if (is_android) {
+    configs += [ "//build_plugins/config/aosp:runtime_library" ]
+  } else if (is_ios) {
+    configs += [ "//build_plugins/config/ios:runtime_library" ]
   }
 
   if (is_component_build) {
@@ -926,6 +951,25 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
+    if (build_cross_platform_version) {
+      cflags += [
+        "-Wno-error=implicit-int-float-conversion",
+        "-Wno-error=implicit-fallthrough",
+        "-Wno-error=sign-compare",
+        "-Wno-error=c99-designator",
+        "-Wno-error=anon-enum-enum-conversion",
+        "-Wno-error=sizeof-array-div",
+        "-Wno-error=deprecated-copy",
+        "-Wno-error=return-stack-address",
+        "-Wno-error=reserved-identifier",
+        "-Wno-error=suggest-destructor-override",
+        "-Wno-error=suggest-override",
+        "-Wno-error=unused-but-set-variable",
+        "-Wno-error=unused-but-set-parameter",
+        "-Wno-error=option-ignored",
+        "-mno-outline-atomics",
+      ]
+    }
     if (use_musl) {
       cflags += [
         "-Wno-error=c99-designator",
@@ -992,7 +1036,7 @@ config("chromium_code") {
     }
   } else {
     cflags = [ "-Wall" ]
-    if (treat_warnings_as_errors) {
+    if (treat_warnings_as_errors && !build_cross_platform_version) {
       cflags += [ "-Werror" ]
 
       # The compiler driver can sometimes (rarely) emit warnings before calling
@@ -1324,7 +1368,7 @@ if (is_win) {
     ]
   }
 
-  if (is_mac) {
+  if (is_mac || is_ios) {
     if (symbol_level == 2) {
       # Mac dead code stripping requires symbols.
       common_optimize_on_ldflags += [ "-Wl,-dead_strip" ]
@@ -1419,7 +1463,7 @@ config("no_optimize") {
       "/Ob0",  # Disable all inlining (on by default).
       "/GF",  # Enable string pooling (off by default).
     ]
-  } else if (is_ohos && !ohos_full_debug) {
+  } else if ((is_ohos || is_android) && !ohos_full_debug) {
     # On ohos we kind of optimize some things that don't affect debugging
     # much even when optimization is disabled to get the binary size down.
     if (is_clang) {
@@ -1555,7 +1599,7 @@ if (is_clang && current_toolchain == default_toolchain) {
   } else if (clang_use_default_sample_profile) {
     assert(build_with_chromium,
            "Our default profiles currently only apply to Chromium")
-    assert(is_ohos || is_desktop_linux,
+    assert(is_ohos || is_android || is_desktop_linux,
            "The current platform has no default profile")
     _clang_sample_profile = ""
   }
@@ -1684,7 +1728,7 @@ config("symbols") {
         cflags += [ "-g3" ]
       }
     }
-    if (use_debug_fission && !is_nacl && !is_ohos) {
+    if (use_debug_fission && !is_nacl && !(is_ohos || is_android)) {
       # NOTE: Some Chrome OS builds globally set |use_debug_fission| to true,
       # but they also build some targets against ohos toolchains which aren't
       # compatible with it.
@@ -1732,7 +1776,7 @@ config("minimal_symbols") {
     }
     cflags += [ "-g1" ]
     ldflags = []
-    if (is_ohos && is_clang) {
+    if ((is_ohos || is_android) && is_clang) {
       # ohos defaults to symbol_level=1 builds in production builds
       # (https://crbug.com/648948), but clang, unlike gcc, doesn't emit
       # DW_AT_linkage_name in -g1 builds. -fdebug-info-for-profiling enables
@@ -1767,7 +1811,7 @@ config("default_symbols") {
   }
 
   # This config is removed by base unittests app.
-  if (is_ohos && is_clang && strip_debug_info) {
+  if ((is_ohos || is_android) && is_clang && strip_debug_info) {
     configs += [ ":strip_debug" ]
   }
 }

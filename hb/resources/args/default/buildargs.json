@@ -1,16 +1,4 @@
 {
-  "product_name": {
-    "arg_name": "--product-name",
-    "argDefault": "",
-    "arg_help": "Default:''. Help:Build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
-    "arg_phase": "prebuild",
-    "arg_type": "str",
-    "arg_attribute": {
-      "abbreviation": "-p"
-    },
-    "resolve_function": "resolve_product",
-    "testFunction": "testProduct"
-  },
   "target_cpu": {
     "arg_name": "--target-cpu",
     "argDefault": "arm",
@@ -27,6 +15,33 @@
     },
     "resolve_function": "resolve_target_cpu",
     "testFunction": "testBuildTargetCpu"
+  },
+  "target_os": {
+    "arg_name": "--target-os",
+    "argDefault": "ohos",
+    "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb set --all' to list product all supported os type",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "optional": [
+        "android",
+        "ios"
+      ]
+    },
+    "resolve_function": "resolve_target_os",
+    "testFunction": "testBuildTargetOs"
+  },
+  "product_name": {
+    "arg_name": "--product-name",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:Build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "abbreviation": "-p"
+    },
+    "resolve_function": "resolve_product",
+    "testFunction": "testProduct"
   },
   "rename_last_log": {
     "arg_name": "--rename-last-log",

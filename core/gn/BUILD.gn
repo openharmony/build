@@ -28,6 +28,10 @@ if (product_name == "ohos-sdk") {
       "//build/ohos/sdk:ohos_sdk",
     ]
   }
+} else if (product_name == "arkui-cross") {
+  group("arkui_targets") {
+    deps = [ "//build_plugins/sdk:arkui_cross_sdk" ]
+  }
 } else {
   group("make_all") {
     deps = [

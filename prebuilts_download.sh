@@ -27,6 +27,9 @@ while [ $# -gt 0 ]; do
     --enable-symlink)     # enable symlink while copying node_modules
     ENABLE_SYMLINK=YES
     ;;
+    --build-arkuix)     # enable symlink while copying node_modules
+    BUILD_ARKUIX=YES
+    ;;
     --tool-repo)
     TOOL_REPO="$2"
     shift
@@ -135,6 +138,12 @@ else
     npm_para='--unsafe-perm'
 fi
 
+if [ "X${BUILD_ARKUIX}" == "XYES" ];then
+    build_arkuix="--build-arkuix"
+else
+    build_arkuix=''
+fi
+
 if [ "X${DISABLE_RICH}" == "XYES" ];then
   disable_rich='--disable-rich'
 else
@@ -153,7 +162,7 @@ platform="--host-platform $host_platform"
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap

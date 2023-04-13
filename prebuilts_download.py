@@ -281,6 +281,7 @@ def main():
     parser.add_argument('--unsafe-perm', action='store_true', help='add "--unsafe-perm" for npm install')
     parser.add_argument('--disable-rich', action='store_true', help='disable the rich module')
     parser.add_argument('--enable-symlink', action='store_true', help='enable symlink while copying node_modules')
+    parser.add_argument('--build-arkuix', action='store_true', help='build ArkUI-X SDK')
     parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
     parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/',
                         help='npm download source')
@@ -296,7 +297,10 @@ def main():
     host_platform = args.host_platform
     host_cpu = args.host_cpu
     tool_repo = args.tool_repo
-    config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
+    if args.build_arkuix:
+        config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
+    else:
+        config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
     if _is_system_component():
         args.npm_install_config = config_info.get('npm_install_path')
