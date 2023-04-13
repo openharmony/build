@@ -154,6 +154,7 @@ template("package_app") {
                              "install_module_info",
                              "enable_ark",
                              "build_mode",
+                             "compatible_version",
                            ])
     script = "//build/scripts/hapbuilder.py"
     depfile = "$target_gen_dir/$target_name.d"
@@ -218,7 +219,29 @@ template("package_app") {
       _keystore_path,
       _certificate_file,
     ]
-
+    _sign_hap_py_path = "//build/scripts/app_sign.py"
+    if (defined(sign_hap_py_path)) {
+      _sign_hap_py_path = sign_hap_py_path
+    }
+    args += [
+      "--sign_hap_py_path",
+      rebase_path(_sign_hap_py_path),
+    ]
+    if (defined(compatible_version)) {
+      _sign_compatible_version = compatible_version
+      print("INFO: Set para compatible_version for remote sign app, ",
+            target_name,
+            " value is ",
+            _sign_compatible_version)
+      args += [
+        "--sign_compatible_version",
+        _sign_compatible_version,
+      ]
+    } else if (defined(sign_hap_py_path)) {
+      print(
+          "warning: Please set compatible_version for remote sign app!!! target_name: ",
+          target_name)
+    }
     args += [
       "--private-key-path",
       _private_key_path,
