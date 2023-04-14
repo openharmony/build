@@ -163,30 +163,31 @@ llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
 llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
 
 # copy libcxx-ndk library outside c++
-function copy_outside_cxx(){
+function copy_inside_cxx(){
 libcxx_dir="$1/libcxx-ndk/lib"
 for file in `ls ${libcxx_dir}`
 do
-    if [ -d "${libcxx_dir}/${file}/c++" ];then
-        `cp -r ${libcxx_dir}/${file}/c++/* ${libcxx_dir}/${file}`
+    if [ ! -d "${libcxx_dir}/${file}/c++" ];then
+        `mkdir -p ${libcxx_dir}/c++`
+        `cp -r ${libcxx_dir}/${file}/* ${libcxx_dir}/c++`
+        `mv ${libcxx_dir}/c++ ${libcxx_dir}/${file}/c++`
     fi
 done
 }
 if [[ -d "${llvm_dir}/libcxx-ndk" ]]; then
-    copy_outside_cxx ${llvm_dir}
+    copy_inside_cxx ${llvm_dir}
 fi
 
 if [[ -d "${llvm_dir_win}/libcxx-ndk" ]]; then
-    copy_outside_cxx ${llvm_dir_win}
-    `rm ${llvm_dir_win}/llvm/include/c++/v1/__config_site`
+    copy_inside_cxx ${llvm_dir_win}
 fi
 
 if [[ -d "${llvm_dir_mac_x86}/libcxx-ndk" ]]; then
-    copy_outside_cxx ${llvm_dir_mac_x86}
+    copy_inside_cxx ${llvm_dir_mac_x86}
 fi
 
 if [[ -d "${llvm_dir_mac_arm64}/libcxx-ndk" ]]; then
-    copy_outside_cxx ${llvm_dir_mac_arm64}
+    copy_inside_cxx ${llvm_dir_mac_arm64}
 fi
 
 if [[ -e "${llvm_dir}/llvm_ndk" ]];then
