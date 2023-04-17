@@ -165,6 +165,10 @@ echo "prebuilts_download start"
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
 
+if [ "X${BUILD_ARKUIX}" == "XYES" ];then
+  exit 0
+fi
+
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
 llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
 llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
