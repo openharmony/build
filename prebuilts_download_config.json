@@ -176,11 +176,6 @@
           "unzip_filename": "gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu"
         },
         {
-          "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.9.7/previewer-3.2.9.7-master-20221229.win.tar.gz",
-          "unzip_filename": "previewer"
-        },
-        {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
           "file_path": "/openharmony/compiler/clang/15.0.4-025192/windows/clang_windows-x86_64-025192-20230330.tar.bz2",
           "unzip_filename": "llvm"
@@ -275,16 +270,6 @@
           "unzip_dir": "prebuilts/gcc/linux-x86/aarch64",
           "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz",
           "unzip_filename": "gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu"
-        },
-        {
-          "unzip_dir": "prebuilts/previewer/windows",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.9.7/previewer-3.2.9.7-master-20221229.win.tar.gz",
-          "unzip_filename": "previewer"
-        },
-        {
-          "unzip_dir": "prebuilts/previewer/linux",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.9.7/previewer-3.2.9.7-master-20221229.linux-x86.tar.gz",
-          "unzip_filename": "previewer"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
@@ -419,11 +404,6 @@
       ],
       "darwin_copy_config": [
         {
-          "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.9.7/previewer-3.2.9.7-master-20221229.mac-arm64.tar.gz",
-          "unzip_filename": "previewer"
-        },
-        {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
           "file_path": "/openharmony/compiler/clang/15.0.4-025192/darwin/clang_darwin-arm64-025192-20230330.tar.bz2",
           "unzip_filename": "llvm"
@@ -479,11 +459,6 @@
         }
       ],
       "darwin_copy_config": [
-        {
-          "unzip_dir": "prebuilts/previewer/darwin",
-          "file_path": "/openharmony/develop_tools/previewer/3.2.9.7/previewer-3.2.9.7-master-20221229.mac.tar.gz",
-          "unzip_filename": "previewer"
-        },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
           "file_path": "/openharmony/compiler/clang/15.0.4-025192/darwin/clang_darwin-x86_64-025192-20230330.tar.bz2",
