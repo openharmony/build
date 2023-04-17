@@ -165,7 +165,7 @@ if (target_os == "") {
 }
 
 if (target_cpu == "") {
-  if (target_os == "ohos") {
+  if (target_os == "ohos" || target_os == "android" || target_os == "ios") {
     target_cpu = "arm"
   } else {
     target_cpu = host_cpu
@@ -438,6 +438,20 @@ if (is_standard_system) {
     } else {
       _default_toolchain = "//build/toolchain/linux:$target_cpu"
     }
+  } else if (target_os == "android") {
+    assert(host_os == "linux" || host_os == "mac",
+           "AOSP builds are only supported on Linux and Mac hosts.")
+    _default_toolchain = "//build_plugins/toolchain/aosp:aosp_clang_$target_cpu"
+  } else if (target_os == "ios") {
+    _default_toolchain = "//build_plugins/toolchain/ios:ios_clang_$target_cpu"
+    import("//build_plugins/config/ios/ios_sdk.gni")  # For use_ios_simulator
+    if (use_ios_simulator) {
+      if (target_cpu == "arm64") {
+        _default_toolchain = "//build_plugins/toolchain/ios:ios_clang_arm64_sim"
+      } else {
+        _default_toolchain = "//build_plugins/toolchain/ios:ios_clang_x64_sim"
+      }
+    }
   } else {
     assert(false, "Unsupported target_os: $target_os")
   }
@@ -478,6 +492,8 @@ if (current_os == "win" || current_os == "winuwp") {
   is_posix = false
   is_win = true
   is_mingw = false
+  is_android = false
+  is_ios = false
 } else if (current_os == "mac") {
   is_aix = false
   is_ohos = false
@@ -488,6 +504,8 @@ if (current_os == "win" || current_os == "winuwp") {
   is_posix = true
   is_win = false
   is_mingw = false
+  is_android = false
+  is_ios = false
 } else if (current_os == "ohos") {
   is_aix = false
   is_ohos = true
@@ -498,6 +516,8 @@ if (current_os == "win" || current_os == "winuwp") {
   is_posix = true
   is_win = false
   is_mingw = false
+  is_android = false
+  is_ios = false
 } else if (current_os == "linux") {
   is_aix = false
   is_ohos = false
@@ -508,6 +528,8 @@ if (current_os == "win" || current_os == "winuwp") {
   is_posix = true
   is_win = false
   is_mingw = false
+  is_android = false
+  is_ios = false
 } else if (current_os == "mingw") {
   is_aix = false
   is_ohos = false
@@ -518,6 +540,32 @@ if (current_os == "win" || current_os == "winuwp") {
   is_posix = true
   is_win = false
   is_mingw = true
+  is_android = false
+  is_ios = false
+} else if (current_os == "android") {
+  is_aix = false
+  is_ohos = false
+  is_chromeos = false
+  is_linux = false
+  is_mac = false
+  is_nacl = false
+  is_posix = true
+  is_win = false
+  is_mingw = false
+  is_android = true
+  is_ios = false
+} else if (current_os == "ios") {
+  is_aix = false
+  is_ohos = false
+  is_chromeos = false
+  is_linux = false
+  is_mac = false
+  is_nacl = false
+  is_posix = true
+  is_win = false
+  is_mingw = false
+  is_android = false
+  is_ios = true
 }
 
 # =============================================================================
@@ -547,7 +595,7 @@ if (!is_win && !is_mingw) {
     "*.def",
   ]
 }
-if (!is_mac) {
+if (!is_mac || !is_ios) {
   sources_assignment_filter += [
     "*_mac.h",
     "*_mac.cc",
@@ -565,7 +613,7 @@ if (!is_mac) {
     "*\bcocoa/*",
   ]
 }
-if (!is_linux && !is_ohos) {
+if (!is_linux && !is_ohos && !is_android && !is_ios) {
   sources_assignment_filter += [
     "*_linux.h",
     "*_linux.cc",
@@ -650,6 +698,14 @@ if (is_standard_system) {
     default_compiler_configs += [ "//build/config:release" ]
   }
 
+  if (is_android) {
+    default_compiler_configs += [
+      "//build_plugins/config/aosp:default_orderfile_instrumentation",
+      "//build_plugins/config/aosp:lld_pack_relocations",
+      "//build/config/gcc:symbol_visibility_inline_hidden",
+    ]
+  }
+
   # Static libraries and source sets use only the compiler ones.
   default_static_library_configs = default_compiler_configs
   default_source_set_configs = default_compiler_configs
@@ -659,6 +715,9 @@ if (is_standard_system) {
                                  "//build/config:default_libs",
                                  "//build/config:executable_config",
                                ]
+  if (is_android) {
+    default_executable_configs += [ "//build_plugins/config/aosp:default_libs" ]
+  }
 
   # Shared library and loadable module defaults (also for components in component
   # mode).
@@ -666,6 +725,10 @@ if (is_standard_system) {
                                      "//build/config:default_libs",
                                      "//build/config:shared_library_config",
                                    ]
+  if (is_android) {
+    default_shared_library_configs +=
+        [ "//build_plugins/config/aosp:default_libs" ]
+  }
 }
 
 # Lite OS use different buildconfig.gn

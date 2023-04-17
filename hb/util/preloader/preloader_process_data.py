@@ -142,6 +142,8 @@ class Product():
                 self._device_info = self._get_device_info_v3(self._config)
         if self._ohos_config.target_cpu:
             self._device_info["target_cpu"] = self._ohos_config.target_cpu
+        if self._ohos_config.target_os:
+            self._device_info["target_os"] = self._ohos_config.target_os
         if self._ohos_config.compile_config:
             self._device_info[self._ohos_config["compile_config"]] = True
 

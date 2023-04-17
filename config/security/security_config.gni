@@ -28,7 +28,7 @@ clang_bin = rebase_path("${default_clang_base_path}/bin/clang", root_build_dir)
 cmd = "${clang_bin} --help | grep fstack-protector-ret-all | wc -l"
 
 # exec_script returns 1 if grep -fstack-protector-ret-all failed, indicating -fstack-protector-ret-all not supported
-res = exec_script("//build/lite/run_shell_cmd.py", [ cmd ], "value")
+res = exec_script("//build/scripts/run_shell_cmd.py", [ cmd ], "value")
 if (current_cpu == "arm64" && res == 1) {
   support_stack_protector_ret = true
 } else {

@@ -140,13 +140,14 @@ template("ohos_ndk_library") {
     data_keys = [ "ndk_config" ]
   }
 
+  ndk_toolchains = []
   if (build_ohos_ndk) {
     ndk_toolchains = [
       "//build/toolchain/ohos:ohos_clang_arm",
       "//build/toolchain/ohos:ohos_clang_arm64",
       "//build/toolchain/ohos:ohos_clang_x86_64",
     ]
-  } else {
+  } else if (!build_cross_platform_version) {
     # Don't enable cross compile if build_ohos_ndk is false.
     # Cross compiling in this case may cause build failure in some scenario,
     # such as build for ASAN.

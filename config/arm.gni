@@ -79,7 +79,8 @@ if (current_cpu == "arm" || v8_current_cpu == "arm") {
     }
 
     if (arm_float_abi == "") {
-      if (current_os == "ohos" || target_os == "ohos") {
+      if (current_os == "ohos" || target_os == "ohos" ||
+          target_os == "android") {
         arm_float_abi = "softfp"
       } else if (current_os == "linux" && target_cpu != v8_target_cpu) {
         arm_float_abi = "softfp"
@@ -104,7 +105,8 @@ if (current_cpu == "arm" || v8_current_cpu == "arm") {
     }
 
     if (arm_float_abi == "") {
-      if (current_os == "ohos" || target_os == "ohos") {
+      if (current_os == "ohos" || target_os == "ohos" ||
+          target_os == "android") {
         arm_float_abi = "softfp"
       } else {
         arm_float_abi = "hard"

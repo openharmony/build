@@ -10,9 +10,14 @@ import("//build/misc/overrides/build.gni")
 if (is_ohos) {
   import("//build/config/ohos/abi.gni")
 }
+if (is_android) {
+  import("//build_plugins/config/aosp/abi.gni")
+}
 if (current_cpu == "arm" || current_cpu == "arm64") {
   import("//build/config/arm.gni")
 }
+
+is_ohos_or_android = is_ohos || is_android
 
 declare_args() {
   # How many symbols to include in the build. This affects the performance of
@@ -48,7 +53,7 @@ declare_args() {
 
   # Enables support for ThinLTO, which links 3x-10x faster than full LTO. See
   # also http://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html
-  use_thin_lto = is_cfi || (is_ohos && is_official_build)
+  use_thin_lto = is_cfi || (is_ohos_or_android && is_official_build)
 
   # Tell VS to create a PDB that references information in .obj files rather
   # than copying it all. This should improve linker performance. mspdbcmf.exe
@@ -74,7 +79,7 @@ assert(!is_cfi || use_thin_lto, "CFI requires ThinLTO")
 
 # If true, optimize for size. Does not affect windows builds.
 # Linux & Mac favor speed over size.
-optimize_for_size = is_ohos
+optimize_for_size = is_ohos_or_android
 
 declare_args() {
   # Whether we should consider the profile we're using to be accurate. Accurate
@@ -101,7 +106,7 @@ if (is_mac || is_linux) {
   # 32-bit builds (https://bugs.llvm.org/show_bug.cgi?id=18505) so disable them
   # there to avoid the unnecessary overhead.
   enable_frame_pointers = current_cpu != "arm"
-} else if (is_ohos) {
+} else if (is_ohos_or_android) {
   enable_frame_pointers =
       enable_profiling ||
       # Ensure that stacks from arm64 crash dumps are usable (crbug.com/391706).
@@ -138,36 +143,43 @@ assert(!can_unwind_with_frame_pointers || enable_frame_pointers)
 
 # Unwinding with CFI table is only possible on static library builds and
 # required only when frame pointers are not enabled.
-can_unwind_with_cfi_table = is_ohos && !is_component_build &&
+can_unwind_with_cfi_table = is_ohos_or_android && !is_component_build &&
                             !enable_frame_pointers && current_cpu == "arm"
 
 declare_args() {
   # Set to true to use lld, the LLVM linker. This flag may be used on Windows,
   # Linux.
-  use_lld = is_clang &&
-            (is_win || (use_thin_lto && target_os != "chromeos") ||
-             (is_linux && current_cpu == "x64" && target_os != "chromeos") ||
-             (is_ohos && (current_cpu != "arm" || arm_version >= 7)))
+  use_lld =
+      is_clang &&
+      (is_win || (use_thin_lto && target_os != "chromeos") ||
+       (is_linux && current_cpu == "x64" && target_os != "chromeos") ||
+       (is_ohos_or_android && (current_cpu != "arm" || arm_version >= 7) &&
+        current_cpu != "mipsel" && current_cpu != "mips64el"))
 }
 
 declare_args() {
   # Whether to use the gold linker from binutils instead of lld or bfd.
-  use_gold = !use_lld &&
-             ((is_linux && (current_cpu == "x64" || current_cpu == "x86" ||
-                            current_cpu == "arm")) ||
-              (is_ohos && (current_cpu == "x86" || current_cpu == "x64" ||
-                           current_cpu == "arm" || current_cpu == "arm64")))
+  use_gold =
+      !use_lld &&
+      !(is_linux && (current_cpu == "arm" || current_cpu == "mipsel")) &&
+      ((is_linux &&
+        (current_cpu == "x64" || current_cpu == "x86" || current_cpu == "arm" ||
+         current_cpu == "mipsel" || current_cpu == "mips64el")) ||
+       (is_ohos_or_android && (current_cpu == "x86" || current_cpu == "x64" ||
+                               current_cpu == "arm" || current_cpu == "arm64")))
 }
 
 # If it wasn't manually set, set to an appropriate default.
 assert(symbol_level >= -1 && symbol_level <= 2, "Invalid symbol_level")
 if (symbol_level == -1) {
-  if (is_ohos && use_order_profiling) {
+  if (is_ohos_or_android && use_order_profiling) {
     # With instrumentation enabled, debug info puts libchrome.so over 4gb, which
     # causes the linker to produce an invalid ELF. http://crbug.com/574476
     symbol_level = 0
-  } else if (is_ohos && !is_component_build &&
-             !(ohos_64bit_target_cpu && !build_app_secondary_abi)) {
+  } else if ((is_ohos && !is_component_build &&
+              !(ohos_64bit_target_cpu && !build_app_secondary_abi)) ||
+             (is_android && !is_component_build &&
+              !(aosp_64bit_target_cpu && !build_app_secondary_abi))) {
     # Reduce symbol level when it will cause invalid elf files to be created
     # (due to file size). https://crbug.com/648948.
     symbol_level = 1
@@ -189,7 +201,8 @@ if (symbol_level == -1) {
 # Assert that the configuration isn't going to hit https://crbug.com/648948.
 # An exception is made when target_os == "chromeos" as we only use the ohos
 # toolchain there to build relatively small binaries.
-assert(ignore_elf32_limitations || !is_ohos || target_os == "chromeos" ||
+assert(ignore_elf32_limitations || !is_ohos_or_android ||
+           target_os == "chromeos" ||
            (ohos_64bit_target_cpu && !build_app_secondary_abi) ||
            is_component_build || symbol_level < 2,
        "ohos 32-bit non-component builds cannot have symbol_level=2 " +

@@ -20,7 +20,6 @@ import("//build/toolchain/toolchain.gni")
 
 # import cxx base templates
 import("//build/templates/cxx/cxx.gni")
-import("//build/templates/rust/rust_template.gni")
 if (support_jsapi) {
   import("//build/ohos/ace/ace.gni")
   import("//build/ohos/app/app.gni")
@@ -30,9 +29,10 @@ import("//build/templates/common/ohos_templates.gni")
 
 # import prebuilt templates
 import("//build/templates/cxx/prebuilt.gni")
-
-# import bpf templates
-import("//build/templates/bpf/ohos_bpf.gni")
-
-# import cargo crate templates
-import("//build/templates/rust/ohos_cargo_crate.gni")
+if (build_cross_platform_version) {
+  import("//build_plugins/templates/java/rules.gni")
+} else {
+  import("//build/templates/bpf/ohos_bpf.gni")
+  import("//build/templates/rust/ohos_cargo_crate.gni")
+  import("//build/templates/rust/rust_template.gni")
+}
