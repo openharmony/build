@@ -13,7 +13,7 @@
     },
     "0003": {
         "code": "0003",
-        "solution": "Args must be declare as 'bool', 'gate', 'str', 'list' in arg_type attribute. Please check your corresponding arg"
+        "solution": "Args must be declare as 'bool', 'str', 'list' in arg_type attribute. Please check your corresponding arg"
     },
     "0004": {
         "code": "0004",

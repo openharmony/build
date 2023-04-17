@@ -43,7 +43,7 @@
     "argDefault": true,
     "arg_help": "Default:True. Help:Enable ccache, this option could improve compilation speed. --stat-ccache can summary the cache data",
     "arg_phase": "prebuild",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_ccache",
     "testFunction": "testCCache"
@@ -53,7 +53,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Enable pycache, This option can improve the execution speed of python files",
     "arg_phase": "prebuild",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_pycache",
     "testFunction": "testPycache"
@@ -131,7 +131,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to read information from parts.json generate by preload",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_scalable_build",
     "testFunction": "testScalableBuild"
@@ -141,7 +141,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to read information from subsystem_config_example.json",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_example",
     "testFunction": "testBuildExample"
@@ -161,7 +161,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to load the components included in the subsystem xts",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_xts",
     "testFunction": "testBuildXts"
@@ -276,7 +276,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:You can use it to skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script",
     "arg_phase": "targetGenerate",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_fast_rebuild",
     "testFunction": "testFastRebuild"
@@ -286,7 +286,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:When you need to debug one specific target, you can use this option to keep ninja going to skip some possible error until 1000000 jobs fail",
     "arg_phase": "targetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_keep_ninja_going",
     "testFunction": "testKeepNinjaGoing"
@@ -296,7 +296,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Stop build until gn phase ends",
     "arg_phase": "targetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_only_gn",
     "testFunction": "testBuildOnlyGn"
@@ -331,7 +331,7 @@
     "argDefault": false,
     "arg_help": "deprecated, please do not use this option",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {
       "deprecated": "true"
     },
@@ -343,7 +343,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:archive image when build product complete",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_archive_image",
     "testFunction": "testArchiveImage"
@@ -353,7 +353,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:statistics on the actual rom size for each compiled component",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_rom_size_statistics",
     "testFunction": "testRomSizeStatistics"
