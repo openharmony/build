@@ -718,7 +718,7 @@
     },
     {
         "install_dir": "previewer/common/bin",
-        "module_label": "//tools/previewer:rich_previewer",
+        "module_label": "//ide/tools/previewer:rich_previewer",
         "target_os": [
             "windows",
             "darwin",
@@ -727,15 +727,7 @@
     },
     {
         "install_dir": "previewer/liteWearable/bin",
-        "module_label": "//tools/previewer:lite_previewer",
-        "target_os": [
-            "windows",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "previewer/liteWearable",
-        "module_label": "//tools/previewer:previewer_copy_lite_configdir",
+        "module_label": "//ide/tools/previewer:lite_previewer",
         "target_os": [
             "windows",
             "darwin"
