@@ -26,6 +26,7 @@ if (product_name == "ohos-sdk") {
     deps = [
       "//build/ohos/ndk:ohos_ndk",
       "//build/ohos/sdk:ohos_sdk",
+      "//build/ohos/sdk:ohos_sdk_verify",
     ]
   }
 } else if (product_name == "arkui-cross") {

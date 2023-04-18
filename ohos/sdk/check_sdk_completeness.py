@@ -26,8 +26,10 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file # noqa: E402
 
 sdk_package_list = []
+sdk_package_set = set()
 sdk_package_location = ""
 product_name = ""
+sdk_version = ""
 
 
 def parse_sdk_check_list(sdk_check_list):
@@ -53,11 +55,11 @@ def parse_sdk_check_list(sdk_check_list):
 
 
 def add_files_to_sdk_package(sdk_package_directory, compressed_file):
-    sdk_package_path = sdk_package_directory[sdk_package_directory.find(product_name) + len(product_name) + 1:]
-    is_zipfile = zipfile.is_zipfile(os.path.join(sdk_package_directory, compressed_file))
-
+    archive_file = os.path.join(sdk_package_directory, compressed_file)
+    is_zipfile = zipfile.is_zipfile(archive_file)
     if is_zipfile: 
-        zip_file = zipfile.ZipFile(os.path.join(sdk_package_directory, compressed_file), 'r')
+        sdk_package_path = sdk_package_directory[sdk_package_directory.find(product_name) + len(product_name) + 1:]
+        zip_file = zipfile.ZipFile(archive_file, 'r')
         global sdk_package_list
         zip_file_path = []
         zip_file_namelist = zip_file.namelist()
@@ -65,7 +67,7 @@ def add_files_to_sdk_package(sdk_package_directory, compressed_file):
             zip_file_path.append(os.path.join(sdk_package_path, zip_file))
         sdk_package_list.extend(zip_file_path)
     else:
-        raise Exception("Error: {} is not zip".format(os.path.join(sdk_package_directory, compressed_file)))
+        raise Exception("Error: {} is not zip".format(archive_file))
 
 
 def get_sdk_package_directories(): 
@@ -93,7 +95,7 @@ def get_all_sdk_package_list():
     sdk_package_directories = get_sdk_package_directories()
     for sdk_package_directory in sdk_package_directories:
         for file_name in os.listdir(sdk_package_directory):
-            if file_name.endswith(".zip"):
+            if file_name.endswith(".zip") and file_name.find(sdk_version) != -1:
                 compressed_file_dict.setdefault(sdk_package_directory, []).append(file_name)
         if sdk_package_directory in compressed_file_dict.keys():
             for compressed_file in compressed_file_dict[sdk_package_directory]:
@@ -106,7 +108,6 @@ def get_all_sdk_package_list():
 
 def get_redundant_set(sdk_check_list):
     outside_the_list_set = set()
-    sdk_package_set = set(get_all_sdk_package_list())
     sdk_check_files, sdk_check_directories = parse_sdk_check_list(sdk_check_list)
     sdk_list_set = set(sdk_check_files)
     sym_intersection = sdk_package_set.symmetric_difference(sdk_list_set)
@@ -132,7 +133,6 @@ def get_unpacked_directories(sdk_check_list):
 
 
 def get_missing_set(sdk_check_list):
-    sdk_package_set = set(get_all_sdk_package_list())
     sdk_list_set = set(parse_sdk_check_list(sdk_check_list)[0])
     sym_intersection = sdk_package_set.symmetric_difference(sdk_list_set)
     missing_set = sdk_list_set.intersection(sym_intersection)
@@ -169,6 +169,7 @@ def main():
     parser.add_argument('root_build_dir')
     parser.add_argument('--sdk-archive-dir')
     parser.add_argument('product_name')
+    parser.add_argument('sdk_version')
     options = parser.parse_args()
 
     sdk_check_list = options.sdk_delivery_list
@@ -177,7 +178,11 @@ def main():
     sdk_package_location = os.path.join(root_build_directory, options.sdk_archive_dir)
     global product_name
     product_name = options.product_name
+    global sdk_version
+    sdk_version = options.sdk_version
 
+    global sdk_package_set 
+    sdk_package_set = set(get_all_sdk_package_list())
     output_the_verification_result(sdk_check_list)
 
 
