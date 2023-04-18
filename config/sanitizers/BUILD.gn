@@ -176,8 +176,15 @@ config("default_sanitizer_ldflags") {
 
     if (use_sanitizer_coverage) {
       if (use_libfuzzer && !is_mac) {
-        #ldflags += [ "-fsanitize=fuzzer-no-link" ]
-        ldflags += [ "-fsanitize-coverage=$sanitizer_coverage_flags" ]
+        ldflags += [ "-fsanitize=fuzzer-no-link" ]
+        fuzzer_lib_path = rebase_path(
+                "$clang_base_path/lib/clang/$clang_version/lib/$abi_target/libclang_rt.fuzzer_no_main.a",
+                root_build_dir)
+        ldflags += [
+          "-Wl,--whole-archive",
+          "$fuzzer_lib_path",
+          "-Wl,--no-whole-archive",
+        ]
       } else {
         ldflags += [ "-fsanitize-coverage=$sanitizer_coverage_flags" ]
       }
@@ -371,12 +378,9 @@ config("coverage_flags") {
     defines = [ "SANITIZER_COVERAGE" ]
 
     if (use_libfuzzer && !is_mac) {
-      #cflags += [ "-fsanitize=fuzzer-no-link" ]
-      cflags += [
-        "-fsanitize-coverage=$sanitizer_coverage_flags",
-        "-mllvm",
-        "-sanitizer-coverage-prune-blocks=1",
-      ]
+      # Adding -fsanitize=fuzzer-no-link will add -fsanitize-coverage=inline-8bit-counters,
+      # indirect-calls, trace-cmp, pc-table
+      cflags += [ "-fsanitize=fuzzer-no-link" ]
     } else {
       cflags += [
         "-fsanitize-coverage=$sanitizer_coverage_flags",
