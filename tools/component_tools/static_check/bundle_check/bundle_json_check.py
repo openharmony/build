@@ -307,7 +307,6 @@ class BundleJson(object):
         self._check_component_name(component, component_line, bundle_error_component)
         self._check_component_subsystem(component, component_line, bundle_error_component)
         self._check_component_syscap(component, bundle_error_component)
-        self._check_component_feature(component, bundle_error_component)
         self._check_component_ast(component, component_line, bundle_error_component)
         self._check_component_rom(component, component_line, bundle_error_component)
         self._check_component_ram(component, component_line, bundle_error_component)
@@ -371,35 +370,7 @@ class BundleJson(object):
             if errs:
                 bundle_error["description"] = str(errs)
                 bundle_error_component.append(bundle_error)
-        
-        # component feature 可选且可以为空
-    def _check_component_feature(self, component, bundle_error_component):
-        if 'features' not in component:
-            return
 
-        bundle_error = dict(line=self.get_line_number('"features":'),
-                            contents='"component:features"')
-        err = []
-        for feature in component["features"]:
-            if not feature: # syscap string empty
-                err.append(BCWarnInfo.COMPONENT_FEATURES_STRING_EMPTY)
-                continue
-
-            match = re.match(r'(\w+)_feature_(\w+).*', feature)
-            if not match:
-                err.append(BCWarnInfo.COMPONENT_FEATURES_FORMAT_ERROR)
-                continue
-
-            _component_name = match.group(1)
-            # _feature = match.group(2) # 暂无格式规范
-            if _component_name != component["name"]:
-                err.append(BCWarnInfo.COMPONENT_FEATURES_FORMAT_ERROR)
-        errs = list(set(err))
-        if errs:
-            bundle_error["description"] = str(errs)
-            bundle_error_component.append(bundle_error)
-        return
-        
         # component adapted_system_type
     def _check_component_ast(self, component, component_line, bundle_error_component):
         if 'adapted_system_type' not in component:
