@@ -93,3 +93,17 @@ class BundleCheckTools:
                 else:
                     return ""
         return ""
+
+    @staticmethod
+    def match_unix_like_name(name:str):
+        '''
+        @func: 检查是否符合 unix_like 命名规范（规则1.1）
+        '''
+        return re.match(r'^[a-z][a-z0-9_]{1,62}$', name)
+
+    @staticmethod
+    def match_bundle_full_name(name:str):
+        '''
+        @func: 检查 bundle.json 第一个 name 字段命名规则。
+        '''
+        return re.match(r'^@[a-z]+/([a-z_]{1,63})$', name)

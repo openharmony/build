@@ -242,7 +242,7 @@ def _file_handle(config, code_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
                 if symlink_src and symlink_dest:
-                    os.symlink(dest_dir + symlink_src, dest_dir + symlink_dest)
+                    os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
 
@@ -281,6 +281,7 @@ def main():
     parser.add_argument('--unsafe-perm', action='store_true', help='add "--unsafe-perm" for npm install')
     parser.add_argument('--disable-rich', action='store_true', help='disable the rich module')
     parser.add_argument('--enable-symlink', action='store_true', help='enable symlink while copying node_modules')
+    parser.add_argument('--build-arkuix', action='store_true', help='build ArkUI-X SDK')
     parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
     parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/',
                         help='npm download source')
@@ -288,13 +289,18 @@ def main():
     parser.add_argument('--host-platform', help='host platform', required=True)
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if os.path.exists(os.path.join(args.code_dir, "prebuilts/clang")):
+        shutil.rmtree(os.path.join(args.code_dir, "prebuilts/clang"))
     if args.skip_ssl:
         ssl._create_default_https_context = ssl._create_unverified_context
 
     host_platform = args.host_platform
     host_cpu = args.host_cpu
     tool_repo = args.tool_repo
-    config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
+    if args.build_arkuix:
+        config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
+    else:
+        config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
     if _is_system_component():
         args.npm_install_config = config_info.get('npm_install_path')

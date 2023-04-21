@@ -186,6 +186,9 @@ foreach(_platform, target_platform_list) {
       deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
       if (!asan_detector) {
         deps += [ "//build/ohos/packages:high_privilege_process_validate" ]
+        if (build_seccomp) {
+          deps += [ "//build/ohos/packages:check_seccomp_filter_name" ]
+        }
       }
 
       image_config_file =

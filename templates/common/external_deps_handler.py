@@ -118,6 +118,7 @@ def check_parts_deps(part_name, external_part_name, parts_deps_info, module_path
     if external_part_name == part_name:
         print("WARNING: {} in target {} is dependency within part {}, Need to used deps".format(
             external_part_name, module_path, part_name))
+        return
 
     _tips_info = "WARNING: {} depend part {}, need set part deps info to".format(
         module_path, external_part_name)
@@ -150,6 +151,7 @@ def main():
     parser.add_argument('--part-name', required=False, default='')
     parser.add_argument('--module-path', required=False, default='')
     parser.add_argument('--check-deps', dest='check_deps', action='store_true')
+    parser.add_argument('--component-override-map', default='', required=False)
     parser.set_defaults(check_deps=False)
     parser.add_argument(
         '--innerkits-adapter-info-file',
@@ -217,6 +219,16 @@ def main():
     for external_lib in external_deps:
         deps_desc = external_lib.split(':')
         external_part_name = deps_desc[0]
+
+        # If a part was assigned to override, replace the part
+        # Component_override_map is a map for origin part and new part.
+        if args.component_override_map:
+            component_override_map = read_json_file(
+                args.component_override_map)
+            for key, value in component_override_map.items():
+                if external_part_name == key:
+                    external_part_name = value
+
         external_module_name = deps_desc[1]
 
         # Usually the value is None

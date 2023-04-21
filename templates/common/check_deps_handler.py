@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import os
-import json
 import sys
 import argparse
 
@@ -25,70 +24,140 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def check_deps_with_module(parts_modules_info_file, current_part_name, deps, target_path):
-    parts_module_data = read_json_file(parts_modules_info_file)
+def check_third_party_deps(part_name, dep_part, parts_deps_info, _tips_info):
+    """check whether the three-party dependency is in the part declaration"""
+    if part_name == dep_part:
+        return
+    part_deps_info = parts_deps_info.get(part_name)
+    if not part_deps_info:
+        _warning_info = f"{_tips_info} {part_name}."
+    elif not part_deps_info.get('third_party') or \
+        not dep_part in part_deps_info.get('third_party'):
+        _warning_info = f"{_tips_info} {part_deps_info.get('build_config_file')}."
+    else:
+        _warning_info = ""
+
+    if _warning_info != "":
+        print(_warning_info)
+
+    return
+
+
+def load_part_info():
+    """load part path info from parts_info"""
+    # load parts path info file
+    parts_path_file = 'build_configs/parts_info/parts_path_info.json'
+    parts_path_info = read_json_file(parts_path_file)
+    if parts_path_info is None:
+        raise Exception("read pre_build parts_path_info failed.")
+
+    # load path to parts info file
+    path_parts_file = 'build_configs/parts_info/path_to_parts.json'
+    path_parts_info = read_json_file(path_parts_file)
+    if path_parts_info is None:
+        raise Exception("read pre_build path to parts failed.")
+
+    return parts_path_info, path_parts_info
+
+
+def get_path_from_label(label):
+    """get part path from target label, the format is //path:module"""
+    return label.lstrip('//').split(':')[0]
+
+
+def get_path_from_module_list(cur_part_name):
     parts_module_lists = []
-    check_dep_flag = 0
-    for parts_module in parts_module_data.get("parts"):
-        if parts_module.get("part_name") == current_part_name:
+    parts_modules_file = "build_configs/parts_info/parts_modules_info.json"
+    parts_modules_info = read_json_file(parts_modules_file)
+    if parts_modules_info is None:
+        raise Exception("read pre_build parts module info failed.")
+
+    for parts_module in parts_modules_info.get("parts"):
+        if parts_module.get("part_name") == cur_part_name:
             parts_module_lists = parts_module["module_list"]
             break
-    for dep in deps:
-        dep_path = dep[2:dep.find(':')]
-        if dep_path.find('third_party') != 1:
-            continue
-        for module in parts_module_lists:
-            module = module[2:module.find(':')]
-            if not dep_path.startswith(module):
-                check_dep_flag += 1
-        if check_dep_flag == len(parts_module_lists):
-            print("WARNING:deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!"
-                    .format(current_part_name, target_path, dep))
-            check_dep_flag = 0
+    parts_path = [get_path_from_label(x) for x in parts_module_lists]
+
+    return parts_path
 
 
-def check_deps_with_parts(current_part_name, deps, target_path, part_path):
-    for dep in deps:
-        dep_path = dep[2:dep.find(':')]
-        if dep_path.find('third_party') != 1:
-            continue
-        if not dep_path.startswith(part_path):
-            print("WARNING:deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!"
-                    .format(current_part_name, target_path, dep))
+def get_part_pattern(cur_part_name, parts_path_info, path_parts_info):
+    """get all part path from part info"""
+    part_pattern = []
+    part_path = parts_path_info.get(cur_part_name)
+    if part_path is None:
+        return part_pattern
 
-
-def check_wrong_used_deps(parts_path_info_file, path_parts_info_file, parts_modules_info_file,
-                            deps, current_part_name, target_path_val):
-    parts_path_data = read_json_file(parts_path_info_file)
-    path_parts_data = read_json_file(path_parts_info_file)
-    if current_part_name.find('test') != -1:
-        return 0
-    if parts_path_data.get(current_part_name) is None:
-        print("part_name: '{}' path is not exist, please check target: '{}' "
-                .format(current_part_name, target_path_val))
-        return 0
-    part_path = parts_path_data[current_part_name]
-    path_parts = path_parts_data(part_path)
-    if len(path_parts) > 1:
-        check_deps_with_module(parts_modules_info_file, current_part_name, target_path_val)
+    path_to_part = path_parts_info.get(part_path)
+    if len(path_to_part) == 1:
+        part_pattern.append(part_path)
     else:
-        check_deps_with_parts(current_part_name, deps, target_path_val, part_path)
-    return 0
+        part_pattern.extend(get_path_from_module_list(cur_part_name))
 
-    
-def main(argv):
+    return part_pattern
+
+
+def get_dep_part(dep_path, third_part_info):
+    """gets the part by the longest path match"""
+    for part_info in third_part_info:
+        path = part_info[0]
+        part = part_info[1][0]
+        if dep_path.find(path) != -1:
+            return part
+    return ""
+
+
+def check_part_deps(deps, part_name, part_pattern, path_parts_info, target_path):
+    parts_deps_file = 'build_configs/parts_info/parts_deps.json'
+    parts_deps_info = read_json_file(parts_deps_file)
+    if parts_deps_info is None:
+        raise Exception("read pre_build parts_deps failed.")
+
+    # filter third_party part info, sort by longest path match
+    third_party_info = [x for x in path_parts_info.items() if x[0].find('third_party') != -1]
+    third_party_info.reverse()
+    for dep in deps:
+        dep_path = get_path_from_label(dep)
+        if dep_path.find('third_party') != -1:
+            dep_part = get_dep_part(dep_path, third_party_info)
+            tips_info = "WARNING: {} depend part {}, need set part deps {} info to".format(
+                target_path, dep, dep_part)
+            check_third_party_deps(part_name, dep_part, parts_deps_info, tips_info)
+            continue
+
+        match_flag = False
+        for pattern in part_pattern:
+            if dep_path.startswith(pattern):
+                match_flag = True
+                break
+        if match_flag is False:
+            print("WARNING:deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!"
+                .format(part_name, target_path, dep))
+
+
+def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--parts-path-info-file', required=True)
-    parser.add_argument('--path-parts-info-file', required=True)
-    parser.add_argument('--parts-modules-info-file', required=True)
     parser.add_argument('--deps', nargs='*', required=True)
     parser.add_argument('--current-part-name', required=True)
     parser.add_argument('--target-path-val', required=True)
-    args = parser.parse_args(argv)
-    check_wrong_used_deps(args.parts_path_info_file, args.path_parts_info_file, args.parts_modules_info_file,
-                            args.deps, args.current_part_name, args.target_path_val)
+    args = parser.parse_args()
+
+    if args.current_part_name.find('test') != -1:
+        return 0
+
+    parts_path_info, path_parts_info = load_part_info()
+
+    part_pattern = get_part_pattern(args.current_part_name, parts_path_info, path_parts_info)
+    if not part_pattern:
+        print("part_name: '{}' path is not exist, please check target: '{}' "
+            .format(args.current_part_name, args.target_path_val))
+        return 0
+
+    check_part_deps(args.deps, args.current_part_name, part_pattern, path_parts_info,
+        args.target_path_val)
+
     return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(main())

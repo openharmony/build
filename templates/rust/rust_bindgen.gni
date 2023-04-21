@@ -1,0 +1,114 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/clang/clang.gni")
+
+template("rust_bindgen") {
+  assert(defined(invoker.header),
+         "Must specify the C header file to make bindings for.")
+  _target_name = target_name
+  if (defined(invoker.visibility)) {
+    _visibility = invoker.visibility
+  }
+  _testonly = false
+  if (defined(invoker.testonly)) {
+    _testonly = invoker.testonly
+  }
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+  action(_target_name) {
+    sources = [ invoker.header ]
+    configs = default_compiler_configs
+    if (defined(invoker.configs)) {
+      configs += invoker.configs
+    }
+    testonly = _testonly
+    if (defined(_visibility)) {
+      visibility = _visibility
+    }
+
+    if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+      subsystem_name = invoker.subsystem_name
+      part_name = invoker.part_name
+    } else if (defined(invoker.part_name)) {
+      part_name = invoker.part_name
+      _part_subsystem_info_file =
+          "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+      _arguments = [
+        "--part-name",
+        part_name,
+        "--part-subsystem-info-file",
+        rebase_path(_part_subsystem_info_file, root_build_dir),
+      ]
+      get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+      subsystem_name =
+          exec_script(get_subsystem_script, _arguments, "trim string")
+    } else if (defined(invoker.subsystem_name)) {
+      subsystem_name = invoker.subsystem_name
+      part_name = subsystem_name
+    } else {
+      subsystem_name = "common"
+      part_name = subsystem_name
+    }
+
+    ohos_bindgen_target =
+        "//third_party/rust/bindgen/bindgen-cli:bindgen($host_toolchain)"
+    ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "root_out_dir")
+    ohos_bindgen_executable =
+        "${ohos_bindgen_obj_dir}/${subsystem_name}/${part_name}/bindgen"
+    llvm_config_path = "$default_clang_base_path/bin/llvm-config"
+    clang_path = "$default_clang_base_path/bin/clang"
+
+    output_dir = "$target_gen_dir"
+    out_gen_rs = "$output_dir/${target_name}.rs"
+    script = rebase_path("//build/templates/rust/rust_bindgen.py")
+    inputs = [ ohos_bindgen_executable ]
+    depfile = "$target_out_dir/${target_name}.d"
+    outputs = [ out_gen_rs ]
+    deps = [ ohos_bindgen_target ]
+
+    deps += _deps
+    args = [
+      "--exe",
+      rebase_path(ohos_bindgen_executable),
+      "--llvm-config-path",
+      rebase_path(llvm_config_path),
+      "--clang-path",
+      rebase_path(clang_path),
+      "--header",
+      rebase_path(invoker.header, root_build_dir),
+      "--ld-library-path",
+      rebase_path(clang_base_path + "/lib", root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--output",
+      rebase_path(out_gen_rs, root_build_dir),
+    ]
+    args += [
+      "--",
+      "{{cflags}}",
+      "{{cflags_c}}",
+      "{{defines}}",
+      "{{include_dirs}}",
+      "-fvisibility=default",
+      "-fparse-all-comments",
+    ]
+    if (defined(invoker.enable_c_plus_plus) &&
+        invoker.enable_c_plus_plus == true) {
+      args += [ "-x" ]
+      args += [ "c++" ]
+    }
+  }
+}

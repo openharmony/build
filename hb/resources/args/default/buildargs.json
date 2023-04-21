@@ -1,16 +1,4 @@
 {
-  "product_name": {
-    "arg_name": "--product-name",
-    "argDefault": "",
-    "arg_help": "Default:''. Help:Build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
-    "arg_phase": "prebuild",
-    "arg_type": "str",
-    "arg_attribute": {
-      "abbreviation": "-p"
-    },
-    "resolve_function": "resolve_product",
-    "testFunction": "testProduct"
-  },
   "target_cpu": {
     "arg_name": "--target-cpu",
     "argDefault": "arm",
@@ -28,6 +16,33 @@
     "resolve_function": "resolve_target_cpu",
     "testFunction": "testBuildTargetCpu"
   },
+  "target_os": {
+    "arg_name": "--target-os",
+    "argDefault": "ohos",
+    "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb set --all' to list product all supported os type",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "optional": [
+        "android",
+        "ios"
+      ]
+    },
+    "resolve_function": "resolve_target_os",
+    "testFunction": "testBuildTargetOs"
+  },
+  "product_name": {
+    "arg_name": "--product-name",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:Build a specified product. You could use this option like this: 1.'hb build --product-name rk3568@hihope' 2.'hb build --product-name rk3568'",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "abbreviation": "-p"
+    },
+    "resolve_function": "resolve_product",
+    "testFunction": "testProduct"
+  },
   "rename_last_log": {
     "arg_name": "--rename-last-log",
     "argDefault": true,
@@ -43,7 +58,7 @@
     "argDefault": true,
     "arg_help": "Default:True. Help:Enable ccache, this option could improve compilation speed. --stat-ccache can summary the cache data",
     "arg_phase": "prebuild",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_ccache",
     "testFunction": "testCCache"
@@ -53,7 +68,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Enable pycache, This option can improve the execution speed of python files",
     "arg_phase": "prebuild",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_pycache",
     "testFunction": "testPycache"
@@ -131,7 +146,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to read information from parts.json generate by preload",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_scalable_build",
     "testFunction": "testScalableBuild"
@@ -141,7 +156,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to read information from subsystem_config_example.json",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_example",
     "testFunction": "testBuildExample"
@@ -161,7 +176,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Select whether to load the components included in the subsystem xts",
     "arg_phase": "load",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_xts",
     "testFunction": "testBuildXts"
@@ -249,6 +264,16 @@
     "resolve_function": "resolve_gn_args",
     "testFunction": "testGnArgs"
   },
+  "gn_flags": {
+    "arg_name": "--gn-flags",
+    "argDefault": [],
+    "arg_help": "Default:[]. Help:Specify gn build arguments, you could use this option like this 'hb build --gn-flags \"--export-compile-commands\"",
+    "arg_phase": "targetGenerate",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_gn_flags",
+    "testFunction": "testGnFlags"
+  },
   "compiler": {
     "arg_name": "--compiler",
     "argDefault": "clang",
@@ -266,7 +291,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:You can use it to skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script",
     "arg_phase": "targetGenerate",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_fast_rebuild",
     "testFunction": "testFastRebuild"
@@ -276,7 +301,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:When you need to debug one specific target, you can use this option to keep ninja going to skip some possible error until 1000000 jobs fail",
     "arg_phase": "targetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_keep_ninja_going",
     "testFunction": "testKeepNinjaGoing"
@@ -286,7 +311,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:Stop build until gn phase ends",
     "arg_phase": "targetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_build_only_gn",
     "testFunction": "testBuildOnlyGn"
@@ -321,7 +346,7 @@
     "argDefault": false,
     "arg_help": "deprecated, please do not use this option",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {
       "deprecated": "true"
     },
@@ -333,7 +358,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:archive image when build product complete",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_archive_image",
     "testFunction": "testArchiveImage"
@@ -343,7 +368,7 @@
     "argDefault": false,
     "arg_help": "Default:False. Help:statistics on the actual rom size for each compiled component",
     "arg_phase": "postTargetCompilation",
-    "arg_type": "gate",
+    "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_rom_size_statistics",
     "testFunction": "testRomSizeStatistics"

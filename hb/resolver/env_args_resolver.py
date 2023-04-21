@@ -22,11 +22,12 @@ import subprocess
 from containers.arg import Arg
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from modules.interface.env_module_interface import EnvModuleInterface
-from resources.global_var import ENV_SETUP_FILE
+from resources.global_var import ENV_SETUP_FILE, ROOT_CONFIG_FILE, BUILD_CONFIG_FILE
 from exceptions.ohos_exception import OHOSException
 from util.log_util import LogUtil
 from scripts.tools_checker import check_os_version, check_build_requried_packages
 from containers.status import throw_exception
+from util.io_util import IoUtil
 
 
 class EnvArgsResolver(ArgsResolverInterface):
@@ -52,6 +53,27 @@ class EnvArgsResolver(ArgsResolverInterface):
             if len(packages_info[2]) > 0:
                 LogUtil.hb_info(
                     'Run "sudo apt-get install {}" to install dependencies'.format(' '.join(packages_info[2])))
+
+            if os.path.exists(ROOT_CONFIG_FILE):
+                config_json = ROOT_CONFIG_FILE
+            else:
+                config_json = BUILD_CONFIG_FILE
+            json_data = IoUtil.read_json_file(config_json)
+            root_path = json_data.get('root_path', 'not set')
+            board = json_data.get('board', 'not set')
+            kernel = json_data.get('kernel', 'not set')
+            product = json_data.get('product', 'not set')
+            product_path = json_data.get('product_path', 'not set')
+            device_path = json_data.get('device_path', 'not set')
+            device_company = json_data.get('device_company', 'not set')
+
+            LogUtil.hb_info('root path: {}'.format(root_path))
+            LogUtil.hb_info('board: {}'.format(board))
+            LogUtil.hb_info('kernel: {}'.format(kernel))
+            LogUtil.hb_info('product: {}'.format(product))
+            LogUtil.hb_info('product path: {}'.format(product_path))
+            LogUtil.hb_info('device path: {}'.format(device_path))
+            LogUtil.hb_info('device company: {}'.format(device_company))
 
     @staticmethod
     @throw_exception

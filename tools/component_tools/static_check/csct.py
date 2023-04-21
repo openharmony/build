@@ -127,7 +127,8 @@ class CsctGlobal(object):
             self.repo_num = args.repo_pr[1]
         self.diff_files_path = args.diff_files_path
         self.output_format = args.output_format
-        self.check_path = args.path
+        if (args.path):
+            self.check_path = os.path.normpath(args.path)
         self.white_dir_settings = args.white_dir_settings
 
     def pre_check(self):

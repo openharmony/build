@@ -22,9 +22,9 @@ group("default") {
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
   if (current_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd-37747be394d9d22c.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd.dylib.so"
   } else if (current_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libstd-a4ed09c4b860e683.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libstd.dylib.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
         "//prebuilts/rustc/linux-x86_64/current/lib/libstd-c244726431624c96.so"
@@ -32,7 +32,7 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
   enable_strip = true
   install_images = [
     "system",
-    "uptater",
+    "updater",
   ]
   output = "libstd.dylib.so"
   part_name = "common"
@@ -40,9 +40,9 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
 
 ohos_prebuilt_shared_library("libtest.dylib.so") {
   if (current_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest-03fc9cb39b7ffba9.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest.dylib.so"
   } else if (current_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libtest-7a70af01540caacc.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libtest.dylib.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
         "//prebuilts/rustc/linux-x86_64/current/lib/libtest-03f4c43f2c45172b.so"
@@ -51,8 +51,9 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   }
   install_images = [
     "system",
-    "uptater",
+    "updater",
   ]
+  enable_strip = true
   output = "libtest.dylib.so"
   part_name = "common"
 }

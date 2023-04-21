@@ -23,29 +23,28 @@ import json
 from util import build_utils  # noqa: E402
 
 
-def sign_hap(hapsigner, private_key_path, sign_algo, certificate_profile,
-             keystore_path, keystorepasswd, keyalias, certificate_file,
-             unsigned_hap_path, signed_hap_path):
-    cmd = ['java', '-jar', hapsigner, 'sign-app']
-    cmd.extend(['-mode', 'localsign'])
-    cmd.extend(['-signAlg', sign_algo])
-    cmd.extend(['-keyAlias', private_key_path])
-    cmd.extend(['-inFile', unsigned_hap_path])
-    cmd.extend(['-outFile', signed_hap_path])
-    cmd.extend(['-profileFile', certificate_profile])
-    cmd.extend(['-keystoreFile', keystore_path])
-    cmd.extend(['-keystorePwd', keystorepasswd])
-    cmd.extend(['-keyPwd', keyalias])
-    cmd.extend(['-appCertFile', certificate_file])
-    cmd.extend(['-profileSigned', '1'])
-    cmd.extend(['-inForm', 'zip'])
+def sign_hap(options, unsigned_hap_path, signed_hap_path):
+    cmd = ['python3', options.sign_hap_py_path]
+    cmd.extend(['--hapsigner', options.hapsigner])
+    cmd.extend(['--sign-algo', options.sign_algo])
+    cmd.extend(['--keyalias', options.keyalias])
+    cmd.extend(['--inFile', unsigned_hap_path])
+    cmd.extend(['--outFile', signed_hap_path])
+    cmd.extend(['--profileFile', options.certificate_profile])
+    cmd.extend(['--keystoreFile', options.keystore_path])
+    cmd.extend(['--keystorePwd', options.keystorepasswd])
+    cmd.extend(['--keyPwd', options.private_key_path])
+    cmd.extend(['--certificate-file', options.certificate_file])
+    cmd.extend(['--profileSigned', '1'])
+    cmd.extend(['--inForm', 'zip'])
+    cmd.extend(['--compatible_version', options.sign_compatible_version])
     child = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)
     stdout, stderr = child.communicate()
     if child.returncode:
         print(stdout.decode(), stderr.decode())
-        raise Exception("Failed to sign hap")
+        raise Exception("Failed to sign hap {}.".format(options.sign_hap_py_path))
 
 
 def add_resources(packaged_resources, package_dir, packing_cmd):
@@ -149,11 +148,7 @@ def create_hap(options, signed_hap):
 
         build_utils.check_output(packing_cmd)
 
-        sign_hap(options.hapsigner, options.private_key_path,
-                 options.sign_algo, options.certificate_profile,
-                 options.keystore_path, options.keystorepasswd,
-                 options.keyalias, options.certificate_file, output.name,
-                 signed_hap)
+        sign_hap(options, output.name, signed_hap)
 
 
 def parse_args(args):
@@ -191,6 +186,9 @@ def parse_args(args):
     parser.add_option('--app-profile', default=False,
                       help='path to packaged js assets')
     parser.add_option('--build-mode', help='debug mode or release mode')
+    
+    parser.add_option('--sign_hap_py_path', help='sign_hap_py_path')
+    parser.add_option('--sign_compatible_version', default='', help='limit compatible_Version')
 
     options, _ = parser.parse_args(args)
     if options.assets:

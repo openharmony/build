@@ -49,6 +49,9 @@ declare_args() {
   # updater package dir
   updater_base_dir = "updater"
 
+  # updater_vendor package dir
+  updater_vendor_base_dir = "updater_vendor"
+
   # sys_prod package dir
   sys_prod_base_dir = "sys_prod"
 
@@ -89,6 +92,10 @@ declare_args() {
 
   # Whether to make Code_OpenSource.tar.gz
   make_osp = false
+
+  # Enables EMMA Java code coverage. Instruments classes during build to
+  # produce .ec files during runtime
+  emma_coverage = false
 }
 
 declare_args() {
@@ -169,11 +176,21 @@ declare_args() {
   is_use_check_deps = false
 }
 
-use_new_skia = false
-if (is_ohos) {
-  # Use new skia in //third_party/skia
-  use_new_skia = false
+declare_args() {
+  if (is_mac || is_ios) {
+    enable_bitcode = false
+    if (defined(product_build_config.enable_bitcode)) {
+      enable_bitcode = product_build_config.enable_bitcode
+    }
+  }
 }
+
+declare_args() {
+  bitcode_marker = false
+}
+
+# Upgrade Skia version
+use_new_skia = false
 
 # build target type
 target_type = "${target_os}-${target_cpu}"
@@ -217,6 +234,16 @@ app_target_types = [
   "app_profile",
 ]
 
+ohos_package_names = [
+  "ohos.*",
+  "ark.*",
+]
+
+openjdk_package_names = [
+  "java.*",
+  "javax.*",
+]
+
 if (host_os == "mac") {
   restool = "//prebuilts/build-tools/common/restool/darwin-x86/restool"
 } else {
@@ -232,9 +259,9 @@ if (host_os == "mac") {
 } else {
   nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
 }
-default_hap_private_key_path = "OpenHarmony Application Release"
+default_key_alias = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
-default_key_alias = "123456"
+default_hap_private_key_path = "123456"
 default_keystore_password = "123456"
 default_keystore_path = "//developtools/hapsigner/dist/OpenHarmony.p12"
 default_hap_certificate_file =

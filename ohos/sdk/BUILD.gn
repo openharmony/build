@@ -18,6 +18,9 @@ import("${build_configs_path}/platforms_list.gni")
 
 parse_script = "//build/ohos/sdk/parse_sdk_description.py"
 ohos_sdk_description_file = "//build/ohos/sdk/ohos_sdk_description_std.json"
+if (defined(ext_sdk_config_file) && ext_sdk_config_file != "") {
+  ohos_sdk_description_file = ext_sdk_config_file
+}
 
 if (sdk_build_public) {
   public_sdk_config_parser = "//build/ohos/sdk/parse_public_sdk.py"
@@ -162,7 +165,7 @@ action("verify_sdk_notice_file") {
   args = [
     rebase_path(sdk_notice_txt, root_build_dir),
     rebase_path(_verify_result, root_build_dir),
-    rebase_path("${product_output_dir}/ohos-sdk", root_build_dir),
+    rebase_path("${product_output_dir}/${product_name}", root_build_dir),
   ]
 }
 
@@ -171,6 +174,29 @@ group("ohos_sdk_pre") {
     ":generate_sdk_notice",
     ":verify_sdk_notice_file",
     "${generated_files_dir}:generated_ohos_sdk",
+  ]
+}
+
+sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
+action("check_sdk_completeness") {
+  deps = [
+    ":ohos_sdk",
+    "//build/ohos/ndk:ohos_ndk",
+  ]
+
+  script = "//build/ohos/sdk/check_sdk_completeness.py"
+  _verify_result = "${target_out_dir}/check_sdk_completeness.txt"
+
+  outputs = [ _verify_result ]
+
+  args = [
+    "--sdk-delivery-list",
+    rebase_path(sdk_delivery_list, root_build_dir),
+    root_build_dir,
+    "--sdk-archive-dir",
+    rebase_path("${product_output_dir}/${product_name}", root_build_dir),
+    product_name,
+    sdk_version,
   ]
 }
 
@@ -186,7 +212,7 @@ action_with_pydeps("add_notice_file") {
     "--sdk-notice-file",
     rebase_path(sdk_notice_txt, root_build_dir),
     "--sdk-archive-dir",
-    rebase_path("${product_output_dir}/ohos-sdk", root_build_dir),
+    rebase_path("${product_output_dir}/${product_name}", root_build_dir),
     "--output",
     rebase_path(_output, root_build_dir),
     "--depfile",
@@ -204,4 +230,12 @@ group("ohos_sdk") {
     ":add_notice_file",
     ":ohos_sdk_pre",
   ]
+}
+
+group("ohos_sdk_verify") {
+  deps = []
+
+  if (sdk_check_flag == true) {
+    deps += [ ":check_sdk_completeness" ]
+  }
 }

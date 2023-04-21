@@ -27,6 +27,9 @@ while [ $# -gt 0 ]; do
     --enable-symlink)     # enable symlink while copying node_modules
     ENABLE_SYMLINK=YES
     ;;
+    --build-arkuix)     # enable symlink while copying node_modules
+    BUILD_ARKUIX=YES
+    ;;
     --tool-repo)
     TOOL_REPO="$2"
     shift
@@ -135,6 +138,12 @@ else
     npm_para='--unsafe-perm'
 fi
 
+if [ "X${BUILD_ARKUIX}" == "XYES" ];then
+    build_arkuix="--build-arkuix"
+else
+    build_arkuix=''
+fi
+
 if [ "X${DISABLE_RICH}" == "XYES" ];then
   disable_rich='--disable-rich'
 else
@@ -153,17 +162,52 @@ platform="--host-platform $host_platform"
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 echo "prebuilts_download start"
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
+
+if [ "X${BUILD_ARKUIX}" == "XYES" ];then
+  exit 0
+fi
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
 llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
+llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
+llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
+llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
+
+# copy libcxx-ndk library outside c++
+function copy_outside_cxx(){
+libcxx_dir="$1/libcxx-ndk/lib"
+for file in `ls ${libcxx_dir}`
+do
+    if [ -d "${libcxx_dir}/${file}/c++" ];then
+        `cp -r ${libcxx_dir}/${file}/c++/* ${libcxx_dir}/${file}`
+    fi
+done
+}
+if [[ -d "${llvm_dir}/libcxx-ndk" ]]; then
+    copy_outside_cxx ${llvm_dir}
+fi
+
+if [[ -d "${llvm_dir_win}/libcxx-ndk" ]]; then
+    copy_outside_cxx ${llvm_dir_win}
+    `rm ${llvm_dir_win}/llvm/include/c++/v1/__config_site`
+fi
+
+if [[ -d "${llvm_dir_mac_x86}/libcxx-ndk" ]]; then
+    copy_outside_cxx ${llvm_dir_mac_x86}
+fi
+
+if [[ -d "${llvm_dir_mac_arm64}/libcxx-ndk" ]]; then
+    copy_outside_cxx ${llvm_dir_mac_arm64}
+fi
+
 if [[ -e "${llvm_dir}/llvm_ndk" ]];then
   rm -rf "${llvm_dir}/llvm_ndk"
 fi
 mkdir -p "${llvm_dir}/llvm_ndk"
 cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
-cp -rfp "${llvm_dir}/libcxx-ndk/include/libcxx-ohos/include" "${llvm_dir}/llvm_ndk"
+cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
@@ -172,6 +216,38 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
 prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography
 
+rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
+for file in `find $rust_dir -path $rust_dir/x86_64-unknown-linux-gnu -prune -o -name "lib*.*"`
+do
+    dir_name=${file%/*}
+    file_name=${file##*/}
+    file_prefix=`echo $file_name | awk '{split($1, arr, "."); print arr[1]}'`
+    file_prefix=`echo $file_prefix | awk '{split($1, arr, "-"); print arr[1]}'`
+    file_suffix=`echo $file_name | awk '{split($1, arr, "."); print arr[2]}'`
+    if [[ $file_suffix != "rlib" && $file_suffix != "so" || $file_prefix == "librustc_demangle" || $file_prefix == "libcfg_if" || $file_prefix == "libunwind" ]]
+    then
+        continue
+    fi
+    if [[ $file_suffix == "rlib" ]]
+    then
+        if [[ $file_prefix == "libstd" || $file_prefix == "libtest" ]]
+        then
+            newfile_name="$file_prefix.dylib.rlib"
+        else
+            newfile_name="$file_prefix.rlib"
+        fi
+    fi
+
+    if [[ $file_suffix == "so" ]]
+    then
+        newfile_name="$file_prefix.dylib.so"
+    fi
+    if [[ "$file_name" == "$newfile_name" ]]
+    then
+        continue
+    fi
+    mv $file "$dir_name/$newfile_name"
+done
 echo -e "\n"

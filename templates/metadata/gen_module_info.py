@@ -58,8 +58,8 @@ def _gen_install_dest(base_dir, module_install_dir, relative_install_dir,
     return _install_dir
 
 
-def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir,
-                      updater_base_dir, sys_prod_base_dir, chip_prod_base_dir, source_file_name, install_images,
+def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, updater_base_dir,
+                      updater_vendor_base_dir, sys_prod_base_dir, chip_prod_base_dir, source_file_name, install_images,
                       module_install_dir, relative_install_dir, module_type):
     """Generate module install dir by user config."""
     dests = []
@@ -78,6 +78,9 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir,
                                      relative_install_dir, module_type)
         elif image == 'updater':
             dest = _gen_install_dest(updater_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
+        elif image == 'updater_vendor':
+            dest = _gen_install_dest(updater_vendor_base_dir, module_install_dir,
                                      relative_install_dir, module_type)
         elif image == 'sys_prod':
             dest = _gen_install_dest(sys_prod_base_dir, module_install_dir,
@@ -129,6 +132,7 @@ def main():
     parser.add_argument('--ramdisk-base-dir', required=True)
     parser.add_argument('--vendor-base-dir', required=True)
     parser.add_argument('--updater-base-dir', required=True)
+    parser.add_argument('--updater_vendor-base-dir', required=True)
     parser.add_argument('--sys_prod-base-dir', required=True)
     parser.add_argument('--chip_prod-base-dir', required=True)
     parser.add_argument('--label-name', help='module name', required=True)
@@ -188,8 +192,8 @@ def main():
     install_dests = []
     if args.install_images:
         install_dests = gen_install_dests(
-            args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir,
-            args.updater_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir, source_file_name,
+            args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir, args.updater_base_dir,
+            args.updater_vendor_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir, source_file_name,
             args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
 
     module_info_data = gen_module_info(args.type, args.target_label,

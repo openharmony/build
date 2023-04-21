@@ -11,7 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/python.gni")
 import("//build/ohos.gni")
+import("//build/ohos/build_var.gni")
+import("//build/ohos_var.gni")
 
 template("check_abi_and_copy_deps") {
   action(target_name) {
@@ -42,6 +45,7 @@ template("check_abi_and_copy_deps") {
         "${target_out_dir}/${invoker.target_name}_check_datas.json"
     write_file(check_datas_file, check_params, "json")
 
+    inputs = [ check_datas_file ]
     script = "//build/ohos/update/check_abi_and_copy_deps.py"
 
     args = [
@@ -68,50 +72,274 @@ template("check_abi_and_copy_deps") {
 }
 
 template("ohos_module_package") {
-  forward_variables_from(invoker, "*")
-
-  if (!defined(libraries)) {
-    libraries = []
+  if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+    subsystem_name = invoker.subsystem_name
+    part_name = invoker.part_name
+  } else if (defined(invoker.part_name)) {
+    part_name = invoker.part_name
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    _arguments = [
+      "--part-name",
+      part_name,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+    subsystem_name =
+        exec_script(get_subsystem_script, _arguments, "trim string")
+  } else if (defined(invoker.subsystem_name)) {
+    subsystem_name = invoker.subsystem_name
+    part_name = subsystem_name
+  } else {
+    subsystem_name = "common"
+    part_name = subsystem_name
   }
 
-  if (!defined(prebuilts)) {
-    prebuilts = []
+  if (defined(invoker.zip_private_key)) {
+    zip_private_key = invoker.zip_private_key
   }
 
-  if (!defined(binaries)) {
-    binaries = []
+  if (defined(invoker.sign_cert)) {
+    sign_cert = invoker.sign_cert
   }
 
-  if (!defined(etc)) {
-    etc = []
+  if (defined(invoker.img_private_key)) {
+    img_private_key = invoker.img_private_key
+  } else {
+    img_private_key = "//base/startup/hvb/tools/vb_pub_key/test_priv.pem"
   }
 
-  check_abi_and_copy_deps("${target_name}_libraries") {
-    sources = libraries
-    type = "shared_library"
+  if (defined(invoker.img_public_key)) {
+    img_public_key = invoker.img_public_key
+    img_output_dir = "sign_img_output"
+  } else {
+    img_public_key = "//base/startup/hvb/tools/vb_pub_key/test_pub.pem"
+    img_output_dir = "img_output"
   }
 
-  check_abi_and_copy_deps("${target_name}_binaries") {
-    sources = binaries
-    type = "executable"
+  if (defined(invoker.libraries) && invoker.libraries != []) {
+    libraries = invoker.libraries
+    check_abi_and_copy_deps("${target_name}_libraries") {
+      sources = libraries
+      type = "shared_library"
+    }
   }
 
-  check_abi_and_copy_deps("${target_name}_prebuilts") {
-    sources = prebuilts
-    type = "prebuilt"
+  if (defined(invoker.prebuilts) && invoker.prebuilts != []) {
+    prebuilts = invoker.prebuilts
+    check_abi_and_copy_deps("${target_name}_prebuilts") {
+      sources = prebuilts
+      type = "prebuilt"
+    }
   }
 
-  check_abi_and_copy_deps("${target_name}_etc") {
-    sources = etc
-    type = "etc"
+  if (defined(invoker.binaries) && invoker.binaries != []) {
+    binaries = invoker.binaries
+    check_abi_and_copy_deps("${target_name}_binaries") {
+      sources = binaries
+      type = "executable"
+    }
+  }
+
+  if (defined(invoker.etc) && invoker.etc != []) {
+    etc = invoker.etc
+    check_abi_and_copy_deps("${target_name}_etc") {
+      sources = etc
+      type = "etc"
+    }
+  }
+
+  if (defined(invoker.empty)) {
+    empty = invoker.empty
+  } else {
+    empty = false
+  }
+
+  output_dir = "${target_out_dir}/"
+  package_name = target_name
+
+  if (defined(invoker.module_config)) {
+    module_config = invoker.module_config
+  }
+
+  assert(subsystem_name != "")
+  assert(part_name != "")
+  assert(zip_private_key != "")
+  assert(sign_cert != "")
+  assert(img_private_key != "")
+  assert(img_public_key != "")
+  assert(module_config != "")
+
+  ohos_copy("module_config_inner") {
+    sources = [ "$module_config" ]
+    outputs = [ "$output_dir/module_package/img_input/{{source_file_part}}" ]
+  }
+
+  action("build_image") {
+    script = "//base/update/packaging_tools/build_module_img.py"
+
+    deps = [
+      ":module_config_inner",
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/e2fsprogs/resize:resize2fs($host_toolchain)",
+    ]
+    if (defined(invoker.etc) && etc != []) {
+      deps += [ ":${package_name}_etc" ]
+    }
+    if (defined(invoker.libraries) && libraries != []) {
+      deps += [ ":${package_name}_libraries" ]
+    }
+    if (defined(invoker.prebuilts) && prebuilts != []) {
+      deps += [ ":${package_name}_prebuilts" ]
+    }
+    if (defined(invoker.binaries) && binaries != []) {
+      deps += [ ":${package_name}_binaries" ]
+    }
+
+    dac_config = "//build/ohos/images/mkimage/dac.txt"
+    file_context = "$root_build_dir/obj/base/security/selinux/file_contexts.bin"
+    image_input_path = "$output_dir/module_package/img_input"
+    output_image_file = "$output_dir/module_package/img_output/module.img"
+    output_sign_image_file =
+        "$output_dir/module_package/sign_img_output/module.img"
+    build_image_tools_path = [
+      "//${root_build_dir}/clang_x64/thirdparty/e2fsprogs",
+      "//${root_build_dir}/clang_x64/thirdparty/f2fs_tools",
+      "//third_party/e2fsprogs/prebuilt/host/bin",
+      "//build/ohos/images/mkimage",
+      "//base/startup/hvb/tools",
+    ]
+
+    sources = [ dac_config ]
+    outputs = [
+      output_image_file,
+      output_sign_image_file,
+    ]
+    args = [
+      "--image-name",
+      "module",
+      "--input-path",
+      rebase_path(image_input_path, root_build_dir),
+      "--fs-type",
+      "ext4",
+      "--dac-config",
+      rebase_path(dac_config, root_build_dir),
+      "--file-context",
+      rebase_path(file_context, root_build_dir),
+      "--output-image",
+      rebase_path(output_image_file, root_build_dir),
+      "--target-cpu",
+      target_cpu,
+      "--build-image-tools-path",
+    ]
+    args += rebase_path(build_image_tools_path, root_build_dir)
+    if (defined(invoker.img_public_key)) {
+      args += [
+        "--pubkey",
+        rebase_path(img_public_key, root_build_dir),
+        "--privkey",
+        rebase_path(img_private_key, root_build_dir),
+        "--output-sign-image-path",
+        rebase_path(output_sign_image_file, root_build_dir),
+      ]
+    }
+  }
+
+  ohos_copy("module_config_outer") {
+    sources = [ "$module_config" ]
+    outputs =
+        [ "$output_dir/module_package/$img_output_dir/{{source_file_part}}" ]
+  }
+
+  ohos_copy("pub_key_outer") {
+    sources = [ "$img_public_key" ]
+    outputs = [ "$output_dir/module_package/sign_img_output/pub_key.pem" ]
+  }
+
+  action(target_name) {
+    script = "//base/update/packaging_tools/build_module_package.py"
+    deps = [
+      ":module_config_outer",
+      "//base/update/packaging_tools/zipalign:zipalign",
+    ]
+    if (defined(invoker.img_public_key)) {
+      deps += [ ":pub_key_outer" ]
+    }
+    if (!empty) {
+      deps += [ ":build_image" ]
+    }
+
+    source_dir = "$output_dir/module_package/$img_output_dir"
+    out_dir = "$output_dir/module_package/zip_output"
+
+    sources = get_target_outputs(":module_config_outer")
+    outputs = [ "$out_dir/$package_name.zip" ]
+
+    args = [
+      "-pn",
+      package_name,
+      "-pk",
+      rebase_path(zip_private_key, root_build_dir),
+      "-sc",
+      rebase_path(sign_cert, root_build_dir),
+      rebase_path(source_dir, root_build_dir),
+      rebase_path(out_dir, root_build_dir),
+    ]
+  }
+}
+
+template("ohos_hmp") {
+  output_dir = "${root_out_dir}/"
+
+  _deps = []
+  module_packages = []
+  if (defined(invoker.module_packages)) {
+    module_packages += invoker.module_packages
+    _deps += module_packages
+  }
+
+  if (defined(invoker.pack_info)) {
+    pack_info = invoker.pack_info
+  }
+
+  assert(module_packages != "")
+  assert(pack_info != "")
+
+  package_name = target_name
+
+  action("build_hmp") {
+    script = "//base/update/packaging_tools/build_hmp.py"
+    deps = _deps
+
+    out_dir = "$output_dir/hmp"
+
+    sources = []
+    foreach(module_package, module_packages) {
+      module_name = get_label_info(module_package, "name")
+      module_out_dir = get_label_info(module_package, "target_out_dir")
+      sources +=
+          [ "$module_out_dir/module_package/zip_output/$module_name.zip" ]
+    }
+
+    outputs = [ "$out_dir/$package_name.zip" ]
+
+    args = [
+      "-pn",
+      package_name,
+      "-op",
+      rebase_path(out_dir, root_build_dir),
+      "-pi",
+      rebase_path(pack_info, root_build_dir),
+      "-mf",
+    ]
+    foreach(source, sources) {
+      source_path = rebase_path(source, root_build_dir)
+      args += [ source_path ]
+    }
   }
 
   group(target_name) {
-    deps = [
-      ":${target_name}_binaries",
-      ":${target_name}_etc",
-      ":${target_name}_libraries",
-      ":${target_name}_prebuilts",
-    ]
+    deps = [ ":build_hmp" ]
   }
 }

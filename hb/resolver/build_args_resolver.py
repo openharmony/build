@@ -95,6 +95,17 @@ class BuildArgsResolver(ArgsResolverInterface):
                 build_module.args_dict['build_target'].arg_value = [
                     'build_ohos_sdk']
             build_module.args_dict['target_cpu'].arg_value = 'arm64'
+        elif target_arg.arg_value == 'arkui-cross':
+            target_generator = build_module.target_generator
+            target_generator.regist_arg('is_cross_platform_build', True)
+            target_generator.regist_arg('build_cross_platform_version', True)
+            target_generator.regist_arg('is_component_build', False)
+            target_generator.regist_arg('use_musl', False)
+            if len(build_module.args_dict['build_target'].arg_value) == 0:
+                build_module.args_dict['build_target'].arg_value = [
+                    'arkui_targets']
+            config.out_path = os.path.join(config.root_path, 'out',
+                                           '{}_{}_{}'.format(config.board, config.target_os, config.target_cpu))
 
     @staticmethod
     def resolve_target_cpu(target_arg: Arg, build_module: BuildModuleInterface):
@@ -109,6 +120,20 @@ class BuildArgsResolver(ArgsResolverInterface):
             config.target_cpu = target_arg.arg_value
         elif target_arg.arg_value != default_build_args.get("target_cpu").get("argDefault"):
             config.target_cpu = target_arg.arg_value
+
+    @staticmethod
+    def resolve_target_os(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--target-os' arg.
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        config = Config()
+        default_build_args = IoUtil.read_json_file(DEFAULT_BUILD_ARGS)
+        if config.target_os == "":
+            config.target_os = target_arg.arg_value
+        elif target_arg.arg_value != default_build_args.get("target_os").get("argDefault"):
+            config.target_os = target_arg.arg_value
 
     @staticmethod
     @throw_exception
@@ -289,6 +314,22 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_generator.regist_arg(variable, convert_value)
             except ValueError:
                 raise OHOSException(f'Invalid gn args: {gn_arg}', "0001")
+
+    @staticmethod
+    @throw_exception
+    def resolve_gn_flags(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--gn-flags' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        :raise OHOSException: when some gn_arg is not in 'key=value' format.
+        """
+        target_generator = build_module.target_generator
+        gn_flags_list = []
+        for gn_flags in target_arg.arg_value:
+            gn_flags = re.sub("'", "", gn_flags)
+            gn_flags_list.append(gn_flags)
+        target_generator.regist_flag('gn_flags', gn_flags_list)
 
     @staticmethod
     @throw_exception

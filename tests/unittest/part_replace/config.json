@@ -1,0 +1,172 @@
+{
+  "product_name": "rk3568",
+  "device_company": "rockchip",
+  "device_build_path": "device/board/hihope/rk3568",
+  "target_cpu": "arm",
+  "type": "standard",
+  "version": "3.0",
+  "board": "rk3568",
+  "api_version": 8,
+  "enable_ramdisk": true,
+  "enable_absystem": false,
+  "build_selinux": true,
+  "build_seccomp": true,
+  "inherit": [
+    "productdefine/common/inherit/rich.json",
+    "productdefine/common/inherit/chipset_common.json"
+  ],
+  "subsystems": [
+    {
+      "subsystem": "security",
+      "components": [
+        {
+          "component": "selinux",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "communication",
+      "components": [
+        {
+          "component": "netmanager_ext",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "hdf",
+      "components": [
+        {
+          "component": "drivers_interface_ril",
+          "features": []
+        },
+        {
+          "component": "drivers_peripheral_ril",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "rockchip_products",
+      "components": [
+        {
+          "component": "rockchip_products",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "arkui",
+      "components": [
+        {
+          "component": "ace_engine",
+          "features": [
+            "ace_engine_feature_enable_accessibility = true",
+            "ace_engine_feature_enable_web = true"
+          ]
+        },
+        {
+          "component": "origin_component",
+          "features": []
+        },
+        {
+          "component": "component_a",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "wpa_supplicant-2.9",
+      "components": [
+        {
+          "component": "wpa_supplicant-2.9",
+          "features": [
+            "wpa_supplicant_driver_nl80211 = true"
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "hdf",
+      "components": [
+        {
+          "component": "drivers_interface_audio",
+          "features": []
+        },
+        {
+          "component": "drivers_peripheral_audio",
+          "features": [
+            "drivers_peripheral_audio_full_test_suite = true",
+            "drivers_peripheral_audio_alsa_lib = false"
+          ]
+        },
+        {
+          "component": "drivers_peripheral_codec",
+          "features": [
+            "drivers_peripheral_codec_support_omx = true"
+          ]
+        },
+        {
+          "component": "hdf_core",
+          "features": [
+            "hdf_core_platform_test_support = true"
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "startup",
+      "components": [
+        {
+          "component": "init",
+          "features": [
+            "enable_ohos_startup_init_feature_ab_partition = true",
+            "enable_ohos_startup_init_feature_loader = true"
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "ai",
+      "components": [
+        {
+          "component": "mindspore",
+          "features": []
+        }
+      ]
+    },
+    {
+      "subsystem": "msdp",
+      "components": [
+        {
+          "component": "device_status",
+          "features": [
+            "fusion_interaction_coordination = false"
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "communication",
+      "components": [
+        {
+          "component": "wifi",
+          "features": [
+            "wifi_feature_non_seperate_p2p = true",
+            "wifi_feature_non_hdf_driver = true"
+          ]
+        }
+      ]
+    },
+    {
+      "subsystem": "testpart",
+      "components": [
+        {
+          "component": "origin_component_override",
+          "features": []
+        }
+      ]
+    }
+  ]
+}

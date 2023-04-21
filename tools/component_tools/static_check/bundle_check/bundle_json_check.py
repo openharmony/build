@@ -197,15 +197,13 @@ class BundleJson(object):
     def check(self) -> list:
         '''
         @func: 检查该 bundle.json 规范。
+        @note: 去除检查 version 字段。
         '''
         err_name = self.check_name()
-        err_version = self.check_version()
         err_segment = self.check_segment()
         err_component = self.check_component()
         if err_name:
             self.__all_errors.append(err_name)
-        if err_version:
-            self.__all_errors.append(err_version)
         if err_segment:
             self.__all_errors.extend(err_segment)
         if err_component:
@@ -230,10 +228,10 @@ class BundleJson(object):
         bundle_error["description"] = BCWarnInfo.NAME_FORMAT_ERROR + \
                 BCWarnInfo.COMPONENT_NAME_FROMAT + \
                 BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
-        match = re.match(r'^@[a-z]+/([a-z_]{1,63})$', name)
+        match = BundleCheckTools.match_bundle_full_name(name)
         if not match:
             return bundle_error
-        match = re.match(r'^([a-z]+_){1,31}[a-z]+$', name.split('/')[1])
+        match = BundleCheckTools.match_unix_like_name(name.split('/')[1])
         if not match:
             return bundle_error
 
@@ -309,7 +307,6 @@ class BundleJson(object):
         self._check_component_name(component, component_line, bundle_error_component)
         self._check_component_subsystem(component, component_line, bundle_error_component)
         self._check_component_syscap(component, bundle_error_component)
-        self._check_component_feature(component, bundle_error_component)
         self._check_component_ast(component, component_line, bundle_error_component)
         self._check_component_rom(component, component_line, bundle_error_component)
         self._check_component_ram(component, component_line, bundle_error_component)
@@ -373,35 +370,7 @@ class BundleJson(object):
             if errs:
                 bundle_error["description"] = str(errs)
                 bundle_error_component.append(bundle_error)
-        
-        # component feature 可选且可以为空
-    def _check_component_feature(self, component, bundle_error_component):
-        if 'features' not in component:
-            return
 
-        bundle_error = dict(line=self.get_line_number('"features":'),
-                            contents='"component:features"')
-        err = []
-        for feature in component["features"]:
-            if not feature: # syscap string empty
-                err.append(BCWarnInfo.COMPONENT_FEATURES_STRING_EMPTY)
-                continue
-
-            match = re.match(r'(\w+)_feature_(\w+).*', feature)
-            if not match:
-                err.append(BCWarnInfo.COMPONENT_FEATURES_FORMAT_ERROR)
-                continue
-
-            _component_name = match.group(1)
-            # _feature = match.group(2) # 暂无格式规范
-            if _component_name != component["name"]:
-                err.append(BCWarnInfo.COMPONENT_FEATURES_FORMAT_ERROR)
-        errs = list(set(err))
-        if errs:
-            bundle_error["description"] = str(errs)
-            bundle_error_component.append(bundle_error)
-        return
-        
         # component adapted_system_type
     def _check_component_ast(self, component, component_line, bundle_error_component):
         if 'adapted_system_type' not in component:

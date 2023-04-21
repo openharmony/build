@@ -58,8 +58,7 @@ class ArgType():
     STR = 3
     LIST = 4
     DICT = 5
-    GATE = 6
-    SUBPARSERS = 7
+    SUBPARSERS = 6
 
     @staticmethod
     def get_type(value: str):
@@ -73,8 +72,6 @@ class ArgType():
             return ArgType.LIST
         elif value == 'dict':
             return ArgType.DICT
-        elif value == 'gate':
-            return ArgType.GATE
         elif value == 'subparsers':
             return ArgType.SUBPARSERS
         else:
@@ -195,7 +192,7 @@ class Arg():
         arg_attibute = dict(data['arg_attribute'])
         arg_type = ArgType.get_type(data['arg_type'])
         arg_value = ''
-        if arg_type == ArgType.BOOL or arg_type == ArgType.GATE:
+        if arg_type == ArgType.BOOL:
             arg_value = data['argDefault']
         elif arg_type == ArgType.INT:
             arg_value = int(data['argDefault'])
@@ -254,7 +251,7 @@ class Arg():
                         convert_assigned_value = list(set(convert_assigned_value))
                         convert_assigned_value.extend(parser_args[1])
                         convert_assigned_value.sort(key=sys.argv[2:].index)
-                elif oh_arg.arg_type == ArgType.BOOL or oh_arg.arg_type == ArgType.GATE:
+                elif oh_arg.arg_type == ArgType.BOOL:
                     if str(assigned_value).lower() == 'false':
                         convert_assigned_value = False
                     elif str(assigned_value).lower() == 'true':

@@ -3,8 +3,11 @@
 # found in the LICENSE file.
 
 import("//build/config/sysroot.gni")
-import("//build/rust/rustc_toolchain.gni")
 import("//build/toolchain/gcc_toolchain.gni")
+
+if (!build_cross_platform_version) {
+  import("//build/rust/rustc_toolchain.gni")
+}
 
 clang_toolchain("clang_arm") {
   toolprefix = "arm-linux-gnueabihf-"
@@ -97,7 +100,9 @@ clang_toolchain("clang_x64") {
     current_os = "linux"
   }
   shlib_extension = ".so"
-  rust_abi_target = "x86_64-unknown-linux-gnu"
+  if (!build_cross_platform_version) {
+    rust_abi_target = "x86_64-unknown-linux-gnu"
+  }
 }
 
 gcc_toolchain("x64") {

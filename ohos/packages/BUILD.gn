@@ -297,6 +297,40 @@ foreach(_platform, target_platform_list) {
     }
   }
 
+  action("check_seccomp_filter_name") {
+    script = "//build/ohos/packages/check_seccomp_library_name.py"
+    deps = [ ":${_platform}_install_modules" ]
+
+    # result is not used in script
+    process_validate_result =
+        "${current_platform_dir}/check_seccomp_filter_name.txt"
+    _system_cfg_folder = "${current_platform_dir}/system/etc/init"
+    if (target_cpu == "arm" || target_cpu == "x86") {
+      libdir = "lib"
+    } else if (target_cpu == "arm64" || target_cpu == "x86_64") {
+      libdir = "lib64"
+    } else {
+      libdir = "lib"
+    }
+    _system_seccomp_folder = "${current_platform_dir}/system/${libdir}/seccomp"
+
+    _vendor_cfg_folder = "${current_platform_dir}/vendor/etc/init"
+    _vendor_seccomp_folder = "${current_platform_dir}/vendor/${libdir}/seccomp"
+
+    outputs = [ process_validate_result ]
+
+    args = [
+      "--vendor-cfg-path",
+      rebase_path(_vendor_cfg_folder, root_build_dir),
+      "--vendor-seccomp-lib-path",
+      rebase_path(_vendor_seccomp_folder, root_build_dir),
+      "--system-cfg-path",
+      rebase_path(_system_cfg_folder, root_build_dir),
+      "--system-seccomp-lib-path",
+      rebase_path(_system_seccomp_folder, root_build_dir),
+    ]
+  }
+
   action("high_privilege_process_validate") {
     script = "//build/ohos/packages/high_privilege_process_validate.py"
 
@@ -305,7 +339,12 @@ foreach(_platform, target_platform_list) {
     # result is not used in script
     process_validate_result = "${current_platform_dir}/cfg_validate_result.txt"
 
-    _process_path = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+    # ext_root_proc_conf_path defined in config.json in vendor warehouse
+    if (ext_root_proc_conf_path != "") {
+      _process_path = ext_root_proc_conf_path
+    } else {
+      _process_path = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+    }
     _system_cfg_folder = "${current_platform_dir}/system/etc/init"
 
     _vendor_cfg_folder = "${current_platform_dir}/vendor/etc/init"

@@ -92,12 +92,12 @@ def _check_line_name(value):
         return BCWarnInfo.NAME_EMPTY
     if value.startswith('//') and ':' in value: # exclude inner_kits:name
         return ""
-    if ('/' in value) and (not re.match(r'^@[a-z]+/([a-z_]{1,63})$', value)): # not component_name
+    if ('/' in value) and (not BundleCheckTools.match_bundle_full_name(value)):
         return BCWarnInfo.NAME_FORMAT_ERROR + \
             BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
 
     component_name = value.split('/')[1] if ('/' in value) else value
-    if not re.match(r'^([a-z]+_){1,31}[a-z]+$', component_name):
+    if not BundleCheckTools.match_unix_like_name(component_name):
         return BCWarnInfo.COMPONENT_NAME_FROMAT
     return ""
 

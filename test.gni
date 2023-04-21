@@ -17,6 +17,10 @@ import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/cxx/cxx.gni")
 
+if (!build_cross_platform_version) {
+  import("//build/rust/rustc_toolchain.gni")
+}
+
 template("_testcase_resources") {
   assert(defined(invoker.testcase_target_name))
   assert(defined(invoker.test_output_dir))
@@ -69,6 +73,13 @@ template("_ohos_test") {
   _deps = []
   if (defined(invoker.deps)) {
     _deps += invoker.deps
+  }
+
+  if (defined(invoker.crate_type)) {
+    _deps += [
+      "//build/rust:libstd.dylib.so",
+      "//build/rust:libtest.dylib.so",
+    ]
   }
 
   test_output_dir =
@@ -706,12 +717,16 @@ template("ohos_rust_unittest") {
     } else {
       rustflags += _rustflags
     }
-
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
+    }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }
@@ -782,12 +797,16 @@ template("ohos_rust_systemtest") {
     } else {
       rustflags += _rustflags
     }
-
+    edition = rust_default_edition
+    if (defined(invoker.edition)) {
+      edition = invoker.edition
+    }
     rustflags += [
       "--cfg",
       "feature=\"test\"",
       "--test",
       "-Csymbol-mangling-version=v0",
+      "--edition=${edition}",
     ]
   }
 }

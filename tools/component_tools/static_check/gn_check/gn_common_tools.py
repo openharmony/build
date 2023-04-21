@@ -43,9 +43,9 @@ class GnCommon:
         基于linux的find命令查找文件
         """
         if target_filename is None:
-            target_filename = ["BUILD.gn", "*.gni"]
+            target_filename = ["BUILD.gn"]
         cmd = "find {}".format(project_path)
-        cmd += " -name {} -or -name {}".format(target_filename[0], target_filename[1])
+        cmd += " -name {}".format(target_filename[0])
         result_set = set()
         for black_dir in black_dirs:
             bd_path = os.path.join(project_path, black_dir)
@@ -71,7 +71,7 @@ class GnCommon:
         没有grep到内容，返回None
         """
         if includes is None:
-            includes = ["BUILD.gn", "*.gni"]
+            includes = ["BUILD.gn"]
         cmd = "grep -{} -s '{}' {}".format(grep_parameter,
                                         grep_pattern, grep_path)
         for include in includes:

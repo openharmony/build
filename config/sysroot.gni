@@ -18,11 +18,18 @@ if (current_os == target_os && current_cpu == target_cpu &&
 } else if (is_ohos) {
   import("//build/config/ohos/config.gni")
   sysroot = "${musl_sysroot}"
+} else if (is_android || (is_linux && use_sysroot)) {
+  import("//build_plugins/config/aosp/sysroot.gni")
 } else if (is_mac) {
   import("//build/config/mac/mac_sdk.gni")
   sysroot = mac_sdk_path
+} else if (is_ios) {
+  import("//build_plugins/config/ios/ios_sdk.gni")
+  sysroot = ios_sdk_path
 } else {
   sysroot = ""
 }
 
-link_sysroot = sysroot
+if (!defined(link_sysroot)) {
+  link_sysroot = sysroot
+}

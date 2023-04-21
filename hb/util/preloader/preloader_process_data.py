@@ -142,6 +142,8 @@ class Product():
                 self._device_info = self._get_device_info_v3(self._config)
         if self._ohos_config.target_cpu:
             self._device_info["target_cpu"] = self._ohos_config.target_cpu
+        if self._ohos_config.target_os:
+            self._device_info["target_os"] = self._ohos_config.target_os
         if self._ohos_config.compile_config:
             self._device_info[self._ohos_config["compile_config"]] = True
 
@@ -217,6 +219,11 @@ class Product():
                     build_vars['product_company'] = config.get(
                         'device_company')
             build_vars['product_name'] = config.get('product_name')
+            if 'ext_root_proc_conf_path' in config:
+                ext_root_proc_conf_path = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_root_proc_conf_path'))
+                if os.path.exists(ext_root_proc_conf_path):
+                    build_vars['ext_root_proc_conf_path'] = ext_root_proc_conf_path
             if 'enable_ramdisk' in config:
                 build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
             if 'enable_absystem' in config:
@@ -232,6 +239,22 @@ class Product():
                     self._dirs.source_root_dir, config.get('chipprod_config_path'))
                 if os.path.exists(chipprod_config_path):
                     build_vars['chipprod_config_path'] = chipprod_config_path
+            if 'ext_sdk_config_file' in config:
+                ext_sdk_config_file = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_sdk_config_file'))
+                if os.path.exists(ext_sdk_config_file):
+                    build_vars['ext_sdk_config_file'] = ext_sdk_config_file
+            if 'ext_ndk_config_file' in config:
+                ext_ndk_config_file = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_ndk_config_file'))
+                if os.path.exists(ext_ndk_config_file):
+                    build_vars['ext_ndk_config_file'] = ext_ndk_config_file
+            if 'ext_sign_hap_py_path' in config:
+                path = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_sign_hap_py_path'))
+                if os.path.exists(path):
+                    build_vars['ext_sign_hap_py_path'] = path
+
         build_vars.update(self._device_info)
         if build_vars['os_level'] == 'mini' or build_vars['os_level'] == 'small':
             toolchain_label = ""

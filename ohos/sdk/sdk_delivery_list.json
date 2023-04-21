@@ -1,0 +1,32 @@
+{
+  "darwin": {
+    "checkFiles": [],
+    "checkDirectories": [
+      "darwin/ets/",
+      "darwin/js/",
+      "darwin/native/",
+      "darwin/previewer/",
+      "darwin/toolchains/"
+    ]
+  },
+  "linux": {
+    "checkFiles": [],
+    "checkDirectories": [
+      "linux/ets/",
+      "linux/js/",
+      "linux/native/",
+      "linux/previewer/",
+      "linux/toolchains/"
+    ]
+  },
+  "windows": {
+    "checkFiles": [],
+    "checkDirectories": [
+      "windows/ets/",
+      "windows/js/",
+      "windows/native/",
+      "windows/previewer/",
+      "windows/toolchains/"
+    ]
+  }
+}

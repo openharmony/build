@@ -84,12 +84,6 @@ template("ohos_executable") {
 
   if (is_use_check_deps && defined(invoker.deps)) {
     deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
-    parts_path_info =
-        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
-    path_parts_info =
-        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
-    parts_modules_info =
-        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -97,15 +91,9 @@ template("ohos_executable") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
-      "--parts-path-info-file",
-      rebase_path(parts_path_info, root_build_dir),
-      "--path-parts-info-file",
-      rebase_path(path_parts_info, root_build_dir),
-      "--parts-modules-info-file",
-      rebase_path(parts_modules_info, root_build_dir),
       "--current-part-name",
       part_name,
       "--target-path-val",
@@ -270,6 +258,7 @@ template("ohos_executable") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "crate_type",
                            ])
     output_dir = output_dir
 
@@ -320,7 +309,10 @@ template("ohos_executable") {
       if (current_cpu == "arm" || current_cpu == "arm64") {
         libs += [ "unwind" ]
       }
-      libs += [ "c++" ]
+      libs += [
+        rebase_path(libclang_rt_file),
+        "c++",
+      ]
     }
 
     if (!defined(output_name)) {
@@ -338,7 +330,10 @@ template("ohos_executable") {
       ]
     }
 
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
+      component_override_map = rebase_path(
+              "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -358,6 +353,8 @@ template("ohos_executable") {
         current_toolchain,
         "--innerkits-adapter-info-file",
         rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+        "--component-override-map",
+        component_override_map,
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -544,12 +541,6 @@ template("ohos_shared_library") {
 
   if (is_use_check_deps && defined(invoker.deps)) {
     deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
-    parts_path_info =
-        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
-    path_parts_info =
-        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
-    parts_modules_info =
-        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -557,15 +548,9 @@ template("ohos_shared_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
-      "--parts-path-info-file",
-      rebase_path(parts_path_info, root_build_dir),
-      "--path-parts-info-file",
-      rebase_path(path_parts_info, root_build_dir),
-      "--parts-modules-info-file",
-      rebase_path(parts_modules_info, root_build_dir),
       "--current-part-name",
       part_name,
       "--target-path-val",
@@ -839,6 +824,9 @@ template("ohos_shared_library") {
           "-I" + rebase_path(
                   "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
                   root_build_dir),
+          "-I" + rebase_path(
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/${abi_target}/c++/v1",
+                  root_build_dir),
         ]
         ldflags += [
           "-nostdlib++",
@@ -852,7 +840,10 @@ template("ohos_shared_library") {
           libs += [ "unwind" ]
         }
 
-        libs += [ "c++" ]
+        libs += [
+          rebase_path(libclang_rt_file),
+          "c++",
+        ]
       }
     }
 
@@ -862,7 +853,10 @@ template("ohos_shared_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
+      component_override_map = rebase_path(
+              "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -882,6 +876,8 @@ template("ohos_shared_library") {
         current_toolchain,
         "--innerkits-adapter-info-file",
         rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+        "--component-override-map",
+        component_override_map,
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -955,7 +951,8 @@ template("ohos_shared_library") {
     }
 
     module_type_napi = false
-    if (defined(invoker.relative_install_dir) && product_name != "ohos-sdk") {
+    if (defined(invoker.relative_install_dir) &&
+        (build_ohos_sdk != true && build_ohos_ndk != true)) {
       relative_paths = string_split(invoker.relative_install_dir, "/")
       foreach(p, relative_paths) {
         if (p == "module") {
@@ -1059,12 +1056,6 @@ template("ohos_static_library") {
 
   if (is_use_check_deps && defined(invoker.deps)) {
     deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
-    parts_path_info =
-        "$root_build_dir/build_configs/parts_info/parts_path_info.json"
-    path_parts_info =
-        "$root_build_dir/build_configs/parts_info/path_to_parts.json"
-    parts_modules_info =
-        "$root_build_dir/build_configs/parts_info/parts_modules_info.json"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     module_deps = []
     if (defined(invoker.deps)) {
@@ -1072,15 +1063,9 @@ template("ohos_static_library") {
         module_deps += [ get_label_info(dep, "label_no_toolchain") ]
       }
     }
+    _args = [ "--deps" ]
     _args += module_deps
     _args += [
-      "--deps",
-      "--parts-path-info-file",
-      rebase_path(parts_path_info, root_build_dir),
-      "--path-parts-info-file",
-      rebase_path(path_parts_info, root_build_dir),
-      "--parts-modules-info-file",
-      rebase_path(parts_modules_info, root_build_dir),
       "--current-part-name",
       part_name,
       "--target-path-val",
@@ -1204,7 +1189,10 @@ template("ohos_static_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
+      component_override_map = rebase_path(
+              "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -1224,6 +1212,8 @@ template("ohos_static_library") {
         current_toolchain,
         "--innerkits-adapter-info-file",
         rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+        "--component-override-map",
+        component_override_map,
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
@@ -1317,6 +1307,29 @@ template("ohos_source_set") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (is_use_check_deps && defined(invoker.deps)) {
+    deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    module_deps = []
+    if (defined(invoker.deps)) {
+      foreach(dep, invoker.deps) {
+        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
+      }
+    }
+    _args = [ "--deps" ]
+    _args += module_deps
+    _args += [
+      "--current-part-name",
+      part_name,
+      "--target-path-val",
+      target_path,
+    ]
+    check_deps_handler_result = exec_script(deps_script, _args, "string")
+    if (check_deps_handler_result != "") {
+      print(check_deps_handler_result)
+    }
+  }
 
   if (need_check && is_use_check_deps) {
     _part_subsystem_info_file =
@@ -1452,7 +1465,10 @@ template("ohos_source_set") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps)) {
+    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
+        !build_cross_platform_version) {
+      component_override_map = rebase_path(
+              "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -1472,6 +1488,8 @@ template("ohos_source_set") {
         current_toolchain,
         "--innerkits-adapter-info-file",
         rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+        "--component-override-map",
+        component_override_map,
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
