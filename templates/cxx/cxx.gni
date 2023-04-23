@@ -822,16 +822,12 @@ template("ohos_shared_library") {
         cflags_cc += [
           "-nostdinc++",
           "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
-                  root_build_dir),
-          "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/${abi_target}/c++/v1",
+                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/libcxx-ohos/include/c++/v1",
                   root_build_dir),
         ]
         ldflags += [
           "-nostdlib++",
-          "-L" + rebase_path("${clang_stl_path}/${abi_target}/c++",
-                             root_build_dir),
+          "-L" + rebase_path("${clang_stl_path}/${abi_target}", root_build_dir),
         ]
 
         libs += [ invoker.stl ]
