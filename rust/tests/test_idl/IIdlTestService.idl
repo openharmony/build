@@ -1,0 +1,30 @@
+/*
+ * Copyright (C) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+interface IIdlTestService {
+    void idl_ipc_test_basic_001();
+    [oneway] void idl_ipc_test_basic_002();
+
+    boolean idl_ipc_test_basic_101([in] boolean iBool);
+    byte idl_ipc_test_basic_102([in] byte iByte);
+    short idl_ipc_test_basic_103([in] short iShort);
+    int idl_ipc_test_basic_104([in] int iInt);
+    long idl_ipc_test_basic_105([in] long iLong);
+    float idl_ipc_test_basic_106([in] float iFloat);
+    double idl_ipc_test_basic_107([in] double iDouble);
+    String idl_ipc_test_basic_108([in] String iString);
+    boolean idl_ipc_test_basic_199([in] boolean iBool, [in] long iLong, [in] float iFloat,
+        [in] double iDouble, [in] String iString);
+}

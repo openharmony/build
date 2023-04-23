@@ -73,6 +73,10 @@ def main(args):
         cmd.extend(['-gen-cpp'])
     elif options.gen_type == "ts":
         cmd.extend(['-gen-ts'])
+    elif options.gen_type == "rust":
+        cmd.extend(['-gen-rust'])
+    else:
+        raise Exception("Unknow gen type: {}".format(options.gen_type))
 
     outputs = [options.output_archive_path]
 
