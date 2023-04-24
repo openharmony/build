@@ -189,6 +189,9 @@ declare_args() {
   bitcode_marker = false
 }
 
+# Upgrade Skia version
+use_new_skia = false
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
