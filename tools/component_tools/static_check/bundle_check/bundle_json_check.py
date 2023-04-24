@@ -416,7 +416,7 @@ class BundleJson(object):
             bundle_error = dict(line=self.get_line_number('"rom":'),
                                 contents='"component:rom"')
             num, unit = BundleCheckTools.split_by_unit(component["rom"])
-            if num <= 0:
+            if num < 0:
                 bundle_error["description"] = BCWarnInfo.COMPONENT_ROM_SIZE_ERROR # 非数值或小于0
                 bundle_error_component.append(bundle_error)
             elif unit:

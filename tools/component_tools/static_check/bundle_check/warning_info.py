@@ -50,7 +50,7 @@ class BCWarnInfo:
     COMPONENT_AST_NO_REP = r'"component:adapted_system_type" 值最多只能有 3 个（"mini", "small", "standard"）且不能重复。'
     COMPONENT_ROM_NO_FIELD = r'缺少 "component:rom" 字段。'
     COMPONENT_ROM_EMPTY = r'"component:rom" 字段不能为空。'
-    COMPONENT_ROM_SIZE_ERROR = r'"component:rom" 非数值或者小于等于0。'
+    COMPONENT_ROM_SIZE_ERROR = r'"component:rom" 非数值或者小于0。'
     COMPONENT_ROM_UNIT_ERROR = r'"component:rom" 的单位错误(KB, KByte, MByte, MB, 默认为KByte)'
     COMPONENT_RAM_NO_FIELD = r'缺少 "component:ram" 字段。'
     COMPONENT_RAM_EMPTY = r'"component:ram" 字段不能为空。'

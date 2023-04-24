@@ -119,7 +119,7 @@ def _check_line_rom_ram(key, value):
     if len(value) == 0:
         return r'"component:rom/ram" 字段不能为空。'
     num, unit = BundleCheckTools.split_by_unit(value)
-    if num <= 0:
+    if num < 0:
         return '"component:{}" 非数值或者小于等于 0。'.format(key)
     if unit:
         unit_types = ["KB", "KByte", "MByte", "MB"]
