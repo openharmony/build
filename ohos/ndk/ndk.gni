@@ -154,6 +154,10 @@ template("ohos_ndk_library") {
     ndk_toolchains = [ "//build/toolchain/ohos:ohos_clang_${target_cpu}" ]
   }
 
+  if (ndk_toolchains == []) {
+    not_needed([ "_output_extension" ])
+  }
+
   _accumulated_deps = []
 
   foreach(_toolchain, ndk_toolchains) {
