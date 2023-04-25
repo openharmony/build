@@ -57,7 +57,7 @@ class CsctGlobal(object):
             ret_dict.update(ret_item)
         return ret_dict
 
-    def handle_white_dir(self):
+    def handle_white_dir(self, check_path):
         xml_dict = self.load_ohos_xml(os.path.join(
             self.ohos_root, '.repo/manifests/ohos/ohos.xml'))
         ret_list = ['device', 'vendor', 'build', 'third_party', 'out']
@@ -68,6 +68,10 @@ class CsctGlobal(object):
                 ret_list.append(key)
             elif vlaues.find('ohos:small') != -1:
                 ret_list.append(key)
+
+        if check_path:
+            ret_list = [x[len(check_path)+1:]
+                        for x in ret_list if x.startswith(check_path)]
 
         return tuple(ret_list)
 
@@ -133,7 +137,7 @@ class CsctGlobal(object):
 
     def pre_check(self):
         if self.white_dir_settings == 'on':
-            self.whitelist = self.handle_white_dir()
+            self.whitelist = self.handle_white_dir(self.check_path)
 
     def start_check(self):
         print("---Start  check---\n")
