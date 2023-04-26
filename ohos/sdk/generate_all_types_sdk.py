@@ -90,14 +90,22 @@ foreach(os, sdk_systems) {
     {% else %}
         {% set _display_name = sdk_type.capitalize() %}
     {% endif %}
-    package_info_file =
-        "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/oh-uni-package.json"
+    if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+      package_info_file =
+        "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/uni-package.json"
+    } else {
+      package_info_file =
+          "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/oh-uni-package.json"
+    }
     package_info = {}
     package_info = {
       path = "{{ sdk_type }}"
       displayName = "{{ _display_name }}"
       version = current_sdk_version
       apiVersion = "{{ api_version }}"
+      if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+        platformVersion = platform_version
+      }
 
       {% if release_type != "" %}
       releaseType = "{{ release_type }}"
