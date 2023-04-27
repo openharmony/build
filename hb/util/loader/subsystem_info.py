@@ -43,6 +43,24 @@ def _output_subsystem_configs(output_dir, subsystem_configs):
                     subsystem_configs.get('no_src_subsystem'))
 
 
+def  merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
+    subsystem_info = subsystem_configs[key]
+    overlay_info = subsystem_config_overlay[key]
+
+    for subsystem in overlay_info:
+        if subsystem in subsystem_info:
+            overlay_path = subsystem_config_overlay['subsystem'][subsystem]['path']
+            for path in overlay_path:
+                if path.find("vendor") != -1 or path.find("device") != -1:
+                    subsystem_configs['subsystem'][subsystem]['path'] +=\
+						subsystem_config_overlay['subsystem'][subsystem]['path']
+                    subsystem_configs['subsystem'][subsystem]['build_files'] +=\
+						subsystem_config_overlay['subsystem'][subsystem]['build_files']
+                else:
+                    continue
+        else:
+            subsystem_configs.setdefault(subsystem, subsystem_config_overlay[subsystem])
+
 def get_subsystem_info(subsystem_config_file, example_subsystem_file,
                        source_root_dir, config_output_path, os_level):
     if not subsystem_config_file:
@@ -61,9 +79,8 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
         subsystem_config_overlay = subsystem_scan.scan(subsystem_config_overlay_file,
                                                        example_subsystem_file,
                                                        source_root_dir)
-        subsystem_configs['subsystem'].update(
-            subsystem_config_overlay['subsystem'])
-        subsystem_configs['no_src_subsystem'].update(
-            subsystem_config_overlay['no_src_subsystem'])
+        merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, 'subsystem')
+        merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, 'no_src_subsystem')
+
     _output_subsystem_configs(output_dir_realpath, subsystem_configs)
     return subsystem_configs.get('subsystem')
