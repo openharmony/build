@@ -15,14 +15,16 @@ import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
 import("//build/ohos/sdk/sdk.gni")
 
+package_info_name = "oh-uni-package"
 if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
   ext_ndk_target = rebase_path(ext_ndk_config_file)
   import(ext_ndk_target)
+  package_info_name = "uni-package"
 } else {
   import("//build/ohos/ndk/ndk_targets.gni")
 }
 
-package_info_file = "$ndk_os_irrelevant_out_dir/oh-uni-package.json"
+package_info_file = "$ndk_os_irrelevant_out_dir/$package_info_name.json"
 
 package_info = {
   path = "native"
@@ -35,6 +37,9 @@ package_info = {
     meta = {
       metaVersion = meta_version
     }
+  }
+  if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+    platformVersion = platform_version
   }
   apiVersion = api_version
 }
@@ -71,36 +76,10 @@ group("all_ndk_targets") {
 
 ndk_targets = [
   ":ndk_doxygen",
-  ":ndk_cmake_files",
   ":all_ndk_targets",
   ":merge_ndk_notice",
   ":verify_ndk_notice_file",
 ]
-
-if (ndk_system == "win") {
-  ndk_targets += [ "//third_party/musl/ndk_script:windows_x86_64" ]
-} else if (ndk_system == "mac") {
-  if (host_cpu == "arm64") {
-    ndk_targets += [ "//third_party/musl/ndk_script:darwin_arm64" ]
-  } else {
-    ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
-  }
-} else if (ndk_system == "linux") {
-  ndk_targets += [ "//third_party/musl/ndk_script:linux_x86_64" ]
-} else if (ndk_system == "default") {
-  if (host_os == "mac") {
-    if (host_cpu == "arm64") {
-      ndk_targets += [ "//third_party/musl/ndk_script:darwin_arm64" ]
-    } else {
-      ndk_targets += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
-    }
-  } else {
-    ndk_targets += [
-      "//third_party/musl/ndk_script:windows_x86_64",
-      "//third_party/musl/ndk_script:linux_x86_64",
-    ]
-  }
-}
 
 group("ohos_ndk") {
   deps = ndk_targets
