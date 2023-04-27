@@ -116,7 +116,7 @@ declare_args() {
   thin_lto_enable_optimizations = is_chromeos
 
   # By default only the binaries in official builds get build IDs.
-  force_local_build_id = false
+  force_local_build_id = true
 }
 
 declare_args() {
