@@ -38,3 +38,5 @@ if (build_cross_platform_version) {
   import("//build/templates/rust/rust_cxx.gni")
   import("//build/templates/rust/rust_template.gni")
 }
+
+import("//build/templates/idl/ohos_idl.gni")
