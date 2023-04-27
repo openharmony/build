@@ -156,7 +156,7 @@
     "name": "wukong"
   },
   "testfwk": {
-    "path": "test/testfwk/arkxtest",
+    "path": "test/testfwk",
     "name": "testfwk"
   },
   "distributedhardware": {
