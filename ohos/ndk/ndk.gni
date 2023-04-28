@@ -409,6 +409,33 @@ template("ohos_ndk_headers") {
     outputs = [ _output ]
   }
 
+  _ndk_header_check_target = "${target_name}__ndk_header_check"
+  action_with_pydeps(_ndk_header_check_target) {
+    script = "//build/ohos/ndk/check_ndk_header.py"
+    inputs = []
+    foreach(src, invoker.sources) {
+      _all_files = []
+      _all_files = exec_script("//build/scripts/find.py",
+                               [ rebase_path(src) ],
+                               "list lines")
+
+      inputs += _all_files
+    }
+
+    _output = "$target_gen_dir/$target_name.gch"
+    args = [
+      "--output",
+      rebase_path(_output, root_build_dir),
+    ]
+    foreach(f, inputs) {
+      args += [
+        "--headers",
+        rebase_path(f, root_build_dir),
+      ]
+    }
+
+    outputs = [ _output ]
+  }
   ohos_ndk_copy(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -418,6 +445,9 @@ template("ohos_ndk_headers") {
                              "dest_dir",
                            ])
     deps = [ ":$_ndk_header_signature_target" ]
+    if (defined(ndk_check_header) && target_name != "libuv_uv_header") {
+      deps += [ ":$_ndk_header_check_target" ]
+    }
 
     if (defined(invoker.deps)) {
       deps += invoker.deps
