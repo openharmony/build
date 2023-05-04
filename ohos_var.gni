@@ -195,6 +195,11 @@ use_new_skia = false
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
+is_system_component =
+    exec_script(rebase_path("//build/scripts/dir_exists.py"),
+                [ rebase_path("//foundation/arkui", root_build_dir) ],
+                "string") == "True"
+
 parts_src_flag_file = "$root_build_dir/build_configs/parts_src_flag.json"
 
 innersdk_dir_name = "sdk/${target_type}"

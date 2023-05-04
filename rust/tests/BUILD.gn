@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/ohos_var.gni")
+
 group("tests") {
   deps = [
     "test_bin_crate:test_bin_crate(${host_toolchain})",
@@ -23,12 +25,14 @@ group("tests") {
     "//build/rust/tests/test_bin_crate",
     "//build/rust/tests/test_cdylib_crate",
     "//build/rust/tests/test_dylib_crate",
-    "//build/rust/tests/test_idl",
     "//build/rust/tests/test_rlib_crate",
     "//build/rust/tests/test_static_link",
     "//build/rust/tests/test_staticlib_crate",
   ]
   deps += [ ":cargo_crate_test" ]
+  if (is_system_component) {
+    deps += [ "//build/rust/tests/test_idl" ]
+  }
 }
 
 group("ohos_rust_xxxtest_tests") {
