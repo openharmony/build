@@ -23,39 +23,41 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def main():
+def check(args):
+    depfiles = []
     # ignore test related parts/subsystems
     part_allow_set = {'test', 'libc-test', 'libc-test-lib', 'developertest', 'bmssystemtestability'}
     subsystem_allow_set = {'tests'}
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--part-name', required=True)
-    parser.add_argument('--subsystem-name', required=True)
-    parser.add_argument('--target-path', required=True)
-    parser.add_argument('--part-subsystem-info-file', required=True)
-    args = parser.parse_args()
-
     if args.subsystem_name in subsystem_allow_set or args.part_name in part_allow_set:
-        return 0
+        return depfiles
 
     part_subsystem_info_file = 'build_configs/parts_info/part_subsystem.json'
-    if args.part_subsystem_info_file:
-        part_subsystem_info_file = args.part_subsystem_info_file
-    if not os.path.exists(part_subsystem_info_file):
-        raise Exception(
-            "file '{}' does not exits.".format(part_subsystem_info_file))
-
     data = read_json_file(part_subsystem_info_file)
     if data is None:
         raise Exception(
             "read file '{}' failed.".format(part_subsystem_info_file))
+    depfiles.append(part_subsystem_info_file)
 
     subsystems_name = data.get(args.part_name)
     if subsystems_name is None or subsystems_name == '' or subsystems_name != args.subsystem_name:
-        print("warning: subsystem name or part name is incorrect, target is {}, subsystem name is {}, part name is {}"
-            .format(args.target_path, args.subsystem_name, args.part_name))
-    return 0
+        message = f"warning: subsystem name or part name is incorrect, " \
+           f"target is {args.target_path}, subsystem name is {args.subsystem_name}, " \
+           f"part name is {args.part_name}"
+        print(f"[0/0] {message}")
+    return depfiles
 
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--part-name', required=True)
+    parser.add_argument('--subsystem-name', required=True)
+    parser.add_argument('--target-path', required=True)
+    args = parser.parse_args()
+
+    check(args)
+
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main())

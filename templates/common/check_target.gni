@@ -1,0 +1,58 @@
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+template("check_target") {
+  forward_variables_from(invoker,
+                         [
+                           "part_name",
+                           "subsystem_name",
+                           "target_path",
+                         ])
+
+  action(target_name) {
+    script = "//build/templates/common/check_build_target.py"
+    depfile = "${target_gen_dir}/$target_name.d"
+    outputs = [ "${target_out_dir}/${target_name}.txt" ]
+    args = [
+      "--part-name",
+      part_name,
+      "--subsystem-name",
+      subsystem_name,
+      "--target-path",
+      target_path,
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--output",
+      rebase_path(outputs[0], root_build_dir),
+    ]
+
+    if (defined(invoker.skip_check_subsystem) &&
+        invoker.skip_check_subsystem == true) {
+      args += [ "--skip-check-subsystem" ]
+    }
+
+    if (defined(invoker.module_deps)) {
+      dep_labels = []
+      foreach(label, invoker.module_deps) {
+        dep_labels += [ get_label_info(label, "label_no_toolchain") ]
+      }
+      args += [ "--deps" ]
+      args += dep_labels
+    }
+
+    if (defined(invoker.module_ex_deps)) {
+      args += [ "--external-deps" ]
+      args += invoker.module_ex_deps
+    }
+  }
+}
