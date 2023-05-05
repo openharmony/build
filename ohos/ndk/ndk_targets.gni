@@ -68,6 +68,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:native_media_venc_header",
   "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:libnative_media_codecbase",
   "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:native_media_codecbase_header",
+  "//foundation/multimedia/audio_framework/interfaces/kits/c:libohaudio_ndk",
+  "//foundation/multimedia/audio_framework/interfaces/kits/c:ohaudio_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
