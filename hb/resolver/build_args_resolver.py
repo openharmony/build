@@ -104,8 +104,6 @@ class BuildArgsResolver(ArgsResolverInterface):
             if len(build_module.args_dict['build_target'].arg_value) == 0:
                 build_module.args_dict['build_target'].arg_value = [
                     'arkui_targets']
-            config.out_path = os.path.join(config.root_path, 'out',
-                                           '{}_{}_{}'.format(config.board, config.target_os, config.target_cpu))
 
     @staticmethod
     def resolve_target_cpu(target_arg: Arg, build_module: BuildModuleInterface):
