@@ -121,7 +121,7 @@ def mk_images(args):
     device = args[2]
     is_sparse = args[3]
     mkfs_tools, mk_configs, _ = load_config(config_file)
-    if "system.img" in device:
+    if "/system.img" in device:
         mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
     elif "ramdisk.img" == device:
         mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)

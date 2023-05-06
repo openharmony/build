@@ -198,6 +198,18 @@ def main():
         shutil.rmtree(vendor_install_base_dir)
         print('remove vendor dir...')
 
+    eng_system_install_base_dir = os.path.join(args.platform_installed_path,
+                                           'eng_system')
+    if os.path.exists(eng_system_install_base_dir):
+        shutil.rmtree(eng_system_install_base_dir)
+        print('remove eng_system dir...')
+
+    eng_chipset_install_base_dir = os.path.join(args.platform_installed_path,
+                                           'eng_chipset')
+    if os.path.exists(eng_chipset_install_base_dir):
+        shutil.rmtree(eng_chipset_install_base_dir)
+        print('remove eng_chipset dir...')
+
     sys_prod_install_base_dir = os.path.join(args.platform_installed_path,
                                            'sys_prod')
     if os.path.exists(sys_prod_install_base_dir):

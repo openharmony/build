@@ -55,6 +55,12 @@ declare_args() {
   # sys_prod package dir
   sys_prod_base_dir = "sys_prod"
 
+  # eng_system package dir
+  eng_system_base_dir = "eng_system"
+
+  # eng_chipset package dir
+  eng_chipset_base_dir = "eng_chipset"
+
   # chip_prod package dir
   chip_prod_base_dir = "chip_prod"
 

@@ -38,7 +38,7 @@ def _prepare_root(system_path, target_cpu):
     os.makedirs(root_dir, exist_ok=True)
     _dir_list = [
         'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data',
-        'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod', 'module_update'
+        'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod', 'module_update', 'eng_system', 'eng_chipset'
     ]
     for _dir_name in _dir_list:
         os.makedirs(os.path.join(root_dir, _dir_name), exist_ok=True)
