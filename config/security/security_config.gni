@@ -75,7 +75,7 @@ template("ohos_stack_protector_ret_config") {
         support_stack_protector_ret) {
       cflags += [
         "-fstack-protector-ret-all",
-        "--param=ssp-ret-cookie-size=100",
+        "--param=ssp-ret-cookie-size=1000",
       ]
     }
   }
