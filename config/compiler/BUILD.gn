@@ -232,28 +232,7 @@ config("compiler") {
     # --------------------------------
     cflags += [ "-fno-strict-aliasing" ]  # See http://crbug.com/32204
 
-    # Stack protection.
-    if (is_mac) {
-      # The strong variant of the stack protector significantly increases
-      # binary size, so only enable it in debug mode.
-      if (is_debug) {
-        cflags += [ "-fstack-protector-strong" ]
-      } else {
-        cflags += [ "-fstack-protector" ]
-      }
-    } else if (is_posix && !is_chromeos && !is_nacl) {
-      cflags += [ "--param=ssp-buffer-size=4" ]
-
-      # The x86 toolchain currently has problems with stack-protector.
-      if (is_ohos && current_cpu == "x86") {
-        cflags += [ "-fno-stack-protector" ]
-      } else if (is_mingw) {
-        cflags += [ "-fno-stack-protector" ]
-      } else if (current_os != "aix") {
-        # Not available on aix.
-        cflags += [ "-fstack-protector-strong" ]
-      }
-    }
+    configs += [ "//build/config/security:stack_protector_config" ]
 
     # Linker warnings.
     if (fatal_linker_warnings && !(is_chromeos && current_cpu == "arm") &&
