@@ -58,8 +58,8 @@ def sign_app(options, unsigned_hap_path, signed_hap_path):
     cmd.extend(['-keystorePwd', options.keystorePwd])
     cmd.extend(['-keyPwd', options.keyPwd])
     cmd.extend(['-appCertFile', options.certificate_file])
-    cmd.extend(['-profileSigned', options.profileSigned])
-    cmd.extend(['-inForm', options.inForm])
+    cmd.extend(['-profileSigned', (options.profileSigned or '1')])
+    cmd.extend(['-inForm', (options.inForm or 'zip')])
     child = subprocess.Popen(cmd,
                              stdout=subprocess.PIPE,
                              stderr=subprocess.PIPE)

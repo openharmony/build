@@ -107,11 +107,17 @@ def copy_modules(system_install_info, install_modules_info_file,
                 dest = dest[1:]
             dest_list.append(dest)
             # dest_dir_prefix
-            dest_dir = os.path.join(platform_installed_path,
-                                    os.path.dirname(dest))
+            if os.path.isfile(source):
+                dest_dir = os.path.join(platform_installed_path,
+                                        os.path.dirname(dest))
+            elif os.path.isdir(source):
+                dest_dir = os.path.join(platform_installed_path, dest)
             if not os.path.exists(dest_dir):
                 os.makedirs(dest_dir)
-            shutil.copy(source, os.path.join(platform_installed_path, dest))
+            if os.path.isdir(source):
+                shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
+            elif os.path.isfile(source):
+                shutil.copy(source, os.path.join(platform_installed_path, dest))
 
         # add symlink
         if 'symlink' in module_info:
