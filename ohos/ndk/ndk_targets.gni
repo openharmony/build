@@ -103,17 +103,17 @@ _parse_args += _ndk_targets_list
 
 all_ndk_targets_list = exec_script(_parse_script, _parse_args, "list lines")
 
-if (ndk_system == "win") {
+if (ndk_platform == "win") {
   all_ndk_targets_list += [ "//third_party/musl/ndk_script:windows_x86_64" ]
-} else if (ndk_system == "mac") {
+} else if (ndk_platform == "mac") {
   if (host_cpu == "arm64") {
     all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]
   } else {
     all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
   }
-} else if (ndk_system == "linux") {
+} else if (ndk_platform == "linux") {
   all_ndk_targets_list += [ "//third_party/musl/ndk_script:linux_x86_64" ]
-} else if (ndk_system == "default") {
+} else if (ndk_platform == "default") {
   if (host_os == "mac") {
     if (host_cpu == "arm64") {
       all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]

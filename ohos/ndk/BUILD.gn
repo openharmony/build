@@ -201,7 +201,7 @@ action("verify_ndk_notice_file") {
 
 group("archive_ndk") {
   deps = []
-  if (ndk_system == "default") {
+  if (ndk_platform == "default") {
     if (host_os == "mac") {
       deps += [ ":archive_darwin_ndk" ]
     } else {
@@ -210,11 +210,11 @@ group("archive_ndk") {
         ":archive_windows_ndk",
       ]
     }
-  } else if (ndk_system == "win") {
+  } else if (ndk_platform == "win") {
     deps += [ ":archive_windows_ndk" ]
-  } else if (ndk_system == "mac") {
+  } else if (ndk_platform == "mac") {
     deps += [ ":archive_darwin_ndk" ]
-  } else if (ndk_system == "linux") {
+  } else if (ndk_platform == "linux") {
     deps += [ ":archive_linux_ndk" ]
   }
 }

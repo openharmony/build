@@ -41,12 +41,19 @@ def parse_sdk_check_list(sdk_check_list):
         raise Exception("read file '{}' failed.".format(sdk_check_list))
 
     if sys.platform == 'linux':
-        sdk_check_files = sdk_delivery_list['linux']['checkFiles']
-        sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
-        win_sdk_check_files = sdk_delivery_list['windows']['checkFiles']
-        win_sdk_check_directories = sdk_delivery_list['windows']['checkDirectories']  
-        sdk_check_files.extend(win_sdk_check_files)
-        sdk_check_directories.extend(win_sdk_check_directories)
+        if sdk_platform == 'default':
+            sdk_check_files = sdk_delivery_list['linux']['checkFiles']
+            sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
+            win_sdk_check_files = sdk_delivery_list['windows']['checkFiles']
+            win_sdk_check_directories = sdk_delivery_list['windows']['checkDirectories']
+            sdk_check_files.extend(win_sdk_check_files)
+            sdk_check_directories.extend(win_sdk_check_directories)
+        elif sdk_platform == 'win':
+            sdk_check_files = sdk_delivery_list['windows']['checkFiles']
+            sdk_check_directories = sdk_delivery_list['windows']['checkDirectories']
+        elif sdk_platform == 'linux':
+            sdk_check_files = sdk_delivery_list['linux']['checkFiles']
+            sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
     else:  
         sdk_check_files = sdk_delivery_list['darwin']['checkFiles']
         sdk_check_directories = sdk_delivery_list['darwin']['checkDirectories']
@@ -70,9 +77,14 @@ def add_files_to_sdk_package(sdk_package_directory, compressed_file):
         raise Exception("Error: {} is not zip".format(archive_file))
 
 
-def get_sdk_package_directories(): 
+def get_sdk_package_directories():
     if sys.platform == 'linux':
-        os_types = ['linux', 'windows']
+        if sdk_platform == 'default':
+            os_types = ['linux', 'windows']
+        elif sdk_platform == 'win':
+            os_types = ['windows']
+        elif sdk_platform == 'linux':
+            os_types = ['linux']
     else:
         os_types = ['darwin']
 
@@ -170,6 +182,7 @@ def main():
     parser.add_argument('--sdk-archive-dir')
     parser.add_argument('product_name')
     parser.add_argument('sdk_version')
+    parser.add_argument('--sdk-platform')
     options = parser.parse_args()
 
     sdk_check_list = options.sdk_delivery_list
@@ -180,6 +193,8 @@ def main():
     product_name = options.product_name
     global sdk_version
     sdk_version = options.sdk_version
+    global sdk_platform
+    sdk_platform = options.sdk_platform
 
     global sdk_package_set 
     sdk_package_set = set(get_all_sdk_package_list())
