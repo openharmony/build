@@ -69,7 +69,10 @@ class BundleCheckOnline:
         if key == 'name':
             return _check_line_name(value)
         if key == 'version':
-            return _check_line_version(value)
+            if len(value) == 0:
+                return BCWarnInfo.VERSION_EMPTY
+            else:
+                return ""
         if key == 'destPath':
             if os.path.isabs(value):
                 return BCWarnInfo.SEGMENT_DESTPATH_ABS
