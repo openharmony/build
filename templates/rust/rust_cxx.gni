@@ -46,7 +46,7 @@ template("rust_cxx") {
     }
 
     cxxbridge_target =
-        "//third_party/rust/cxx/gen/cmd:cxxbridge($host_toolchain)"
+        "//third_party/rust/crates/cxx/gen/cmd:cxxbridge($host_toolchain)"
 
     cxxbridge_out_dir = get_label_info(cxxbridge_target, "root_out_dir")
     cxxbridge_executable = rebase_path(

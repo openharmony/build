@@ -15,6 +15,7 @@ import("//build/ohos_var.gni")
 
 group("tests") {
   deps = [
+    ":cxx_test_host_and_target",
     "test_bin_crate:test_bin_crate(${host_toolchain})",
     "test_cdylib_crate:test_cdylib_crate(${host_toolchain})",
     "test_dylib_crate:test_dylib_crate(${host_toolchain})",
@@ -51,5 +52,22 @@ group("cargo_crate_test") {
     "test_bin_cargo_crate:test_bin_cargo_crate",
     "test_proc_macro_cargo_crate:test_proc_macro_cargo_crate(${host_toolchain})",
     "test_rlib_cargo_crate:test_rlib_crate_associated_bin",
+  ]
+}
+
+group("cxx_test_host_and_target") {
+  deps = [
+    "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
+    "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
+    "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
+    "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
+    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
+    "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
+    "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
+    "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
+    "//build/rust/tests/test_cxx:test_cxx_exe",
+    "//build/rust/tests/test_cxx:test_cxx_exe(${host_toolchain})",
+    "//build/rust/tests/test_cxx_rust:test_cxx_rust",
+    "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
   ]
 }

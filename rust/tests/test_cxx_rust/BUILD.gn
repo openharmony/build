@@ -23,7 +23,7 @@ ohos_static_library("test_cxx_rust_staticlib") {
   include_dirs = [
     "${target_gen_dir}/src",
     "//build/rust/tests/test_cxx_rust/include",
-    "//third_party/rust/cxx/include",
+    "//third_party/rust/crates/cxx/include",
   ]
   deps = [
     ":test_cxx_rust_gen",
@@ -35,6 +35,6 @@ ohos_rust_executable("test_cxx_rust") {
   sources = [ "src/main.rs" ]
   deps = [
     ":test_cxx_rust_staticlib",
-    "//third_party/rust/cxx:lib",
+    "//third_party/rust/crates/cxx:lib",
   ]
 }
