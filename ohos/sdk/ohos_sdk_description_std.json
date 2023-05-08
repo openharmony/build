@@ -721,8 +721,7 @@
         "module_label": "//ide/tools/previewer:rich_previewer",
         "target_os": [
             "windows",
-            "darwin",
-            "linux"
+            "darwin"
         ]
     },
     {
@@ -745,8 +744,7 @@
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
         "target_os": [
             "windows",
-            "darwin",
-            "linux"
+            "darwin"
         ]
     },
     {
