@@ -64,7 +64,7 @@ template("rust_bindgen") {
     }
 
     ohos_bindgen_target =
-        "//third_party/rust/bindgen/bindgen-cli:bindgen($host_toolchain)"
+        "//third_party/rust/crates/bindgen/bindgen-cli:bindgen($host_toolchain)"
     ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "root_out_dir")
     ohos_bindgen_executable =
         "${ohos_bindgen_obj_dir}/${subsystem_name}/${part_name}/bindgen"
