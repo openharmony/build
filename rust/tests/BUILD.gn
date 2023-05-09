@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 
 group("tests") {
@@ -70,4 +71,20 @@ group("cxx_test_host_and_target") {
     "//build/rust/tests/test_cxx_rust:test_cxx_rust",
     "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
   ]
+}
+
+ohos_static_library("cxx_cppdeps") {
+  part_name = "common"
+  subsystem_name = "common"
+  defines = [ "RUST_CXX_NO_EXCEPTIONS" ]
+  sources = [
+    "//third_party/rust/crates/cxx/include/cxx.h",
+    "//third_party/rust/crates/cxx/src/cxx.cc",
+  ]
+  deps = [ "//third_party/rust/crates/cxx:lib" ]
+  if (is_win) {
+    defines += [ "CXX_RS_EXPORT=__declspec(dllexport)" ]
+  } else {
+    defines += [ "CXX_RS_EXPORT=__attribute__((visibility(\"default\")))" ]
+  }
 }
