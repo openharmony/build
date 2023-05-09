@@ -21,6 +21,7 @@ import os
 import sys
 import tarfile
 import subprocess
+import argparse
 
 from urllib.request import urlretrieve
 
@@ -128,6 +129,10 @@ def npm_install(target_dir):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--branch', default='master', help='OHOS branch name')
+    parser.add_argument('--product-name', default='ohos-sdk', help='OHOS product name')
+    args = parser.parse_args()
     default_save_path = os.path.join(find_top(), 'out/sdk/packages')
     if not os.path.exists(default_save_path):
         os.makedirs(default_save_path)
@@ -143,7 +148,7 @@ def main():
                  "startTime": "",
                  "endTime": "",
                  "projectName": "openharmony",
-                 "branch": "master",
+                 "branch": args.branch,
                  "component": "",
                  "deviceLevel": "",
                  "hardwareBoard": "",
@@ -160,7 +165,7 @@ def main():
     products_list = data['result']['dailyBuildVos']
     for product in products_list:
         product_name = product['component']
-        if product_name == 'ohos-sdk':
+        if product_name == args.product_name:
             if os.path.exists(os.path.join(default_save_path, product_name)):
                 print('{} already exists. Please backup or delete it first!'.format(
                     os.path.join(default_save_path, product_name)))
