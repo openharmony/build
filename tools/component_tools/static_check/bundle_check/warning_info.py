@@ -23,6 +23,7 @@ class BCWarnInfo:
     COMPONENT_NAME_FROMAT = r"部件名使用小写加下划线风格命名, 如: unix_like。"
     COMPONENT_NAME_FROMAT_LEN = r"部件名不能超过 63 个有效英文字符."
 
+    VERSION_EMPTY = r'"Version" 字段不能为空。'
     VERSION_NO_FIELD = r'缺少 "version" 字段。'
     VERSION_ERROR = r'"version" 值有误，请检查。'
 
