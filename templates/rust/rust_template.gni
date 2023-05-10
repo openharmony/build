@@ -779,6 +779,8 @@ template("ohos_rust_proc_macro") {
       include_dirs = []
     }
     if (defined(invoker.external_deps)) {
+      component_override_map = rebase_path(
+              "${root_build_dir}/build_configs/component_override_map.json")
       external_deps_script =
           rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
@@ -798,6 +800,8 @@ template("ohos_rust_proc_macro") {
         current_toolchain,
         "--innerkits-adapter-info-file",
         rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+        "--component-override-map",
+        component_override_map,
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
