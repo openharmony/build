@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+//! test_rlib_cargo_crate
 include!(concat!(env!("OUT_DIR"), "/generated/generated.rs"));
 
+/// say_hello_from_crate
 pub fn say_hello_from_crate() {
     assert_eq!(run_some_generated_code(), 45);
     #[cfg(is_new_rustc)]

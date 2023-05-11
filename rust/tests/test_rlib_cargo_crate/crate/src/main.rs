@@ -12,7 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+//! test_rlib_cargo_crate
 
+/// test_rlib_cargo_crate main
 pub fn main() {
     test_rlib_crate::say_hello_from_crate();
 }

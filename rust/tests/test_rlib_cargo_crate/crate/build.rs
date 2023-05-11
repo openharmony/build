@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+//! test_rlib_cargo_crate
 use std::env;
 use std::path::Path;
 use std::io::Write;

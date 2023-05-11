@@ -12,10 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
+//! test_proc_macro_cargo_crate
 extern crate proc_macro;
 use proc_macro::TokenStream;
 
+/// calculate_using_proc_macro
 #[proc_macro]
 pub fn calculate_using_proc_macro(_item: TokenStream) -> TokenStream {
     "(15 + 15)".parse().unwrap()
