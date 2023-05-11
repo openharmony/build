@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+//! test_bin_cargo_crate
 fn main() {
     println!("Hello, world!");
     #[cfg(is_new_rustc)]

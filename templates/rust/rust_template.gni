@@ -180,7 +180,7 @@ template("ohos_rust_executable") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
@@ -257,7 +257,7 @@ template("ohos_rust_shared_library") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
@@ -329,7 +329,7 @@ template("ohos_rust_static_library") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
@@ -407,7 +407,7 @@ template("ohos_rust_shared_ffi") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
@@ -483,7 +483,7 @@ template("ohos_rust_static_ffi") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
@@ -864,7 +864,7 @@ template("ohos_rust_proc_macro") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
-      if (source_dir_begin == "openharmony") {
+      if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints

@@ -63,7 +63,7 @@ template("ohos_cargo_crate") {
     build_script_name =
         "${_crate_name}_${target_name}_${_epochlabel}_build_script"
   }
-
+  _rustflags = []
   rust_target(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -82,8 +82,57 @@ template("ohos_cargo_crate") {
                            ])
 
     rustenv = _rustenv
+    if (defined(invoker.rustc_lints)) {
+      rustc_lints = invoker.rustc_lints
+    }
+    if (defined(invoker.clippy_lints)) {
+      clippy_lints = invoker.clippy_lints
+    }
+
+    if (!defined(rustc_lints) && !defined(clippy_lints)) {
+      file_path =
+          get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
+      file_path_split = string_split(file_path[0], "/")
+      source_dir_begin = file_path_split[2]
+
+      if (source_dir_begin == "third_party") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else if (source_dir_begin == "device") {
+        _rustflags += rustcVendorLints
+        _rustflags += clippyVendorLints
+      } else {
+        _rustflags += rustcOhosLints
+        _rustflags += clippyOhosLints
+      }
+    }
+
+    if (defined(rustc_lints)) {
+      if (invoker.rustc_lints == "openharmony") {
+        _rustflags += rustcOhosLints
+      } else if (rustc_lints == "vendor") {
+        _rustflags += rustcVendorLints
+      } else if (rustc_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
+    if (defined(clippy_lints)) {
+      if (invoker.clippy_lints == "openharmony") {
+        _rustflags += clippyOhosLints
+      } else if (clippy_lints == "vendor") {
+        _rustflags += clippyVendorLints
+      } else if (clippy_lints == "none") {
+        _rustflags += allowAllLints
+      }
+    }
     if (!defined(rustflags)) {
-      rustflags = []
+      rustflags = _rustflags
+    } else {
+      rustflags += _rustflags
     }
 
     crate_type = "rlib"
