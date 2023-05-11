@@ -68,6 +68,55 @@ config("stack_protector_config") {
     } else if (is_ohos && current_cpu == "x86") {
       cflags += [ "-fno-stack-protector" ]
     } else if (current_os != "aix") {
+      cflags += [ "-fstack-protector-strong" ]
+    }
+  }
+}
+
+config("stack_protector_ret_all_config") {
+  cflags = []
+  if (is_mac) {
+    if (is_debug) {
+      cflags += [ "-fstack-protector-strong" ]
+    } else {
+      cflags += [ "-fstack-protector" ]
+    }
+  } else if (is_posix && !is_chromeos && !is_nacl) {
+    cflags += [ "--param=ssp-buffer-size=4" ]
+
+    if (is_mingw) {
+      cflags += [ "-fno-stack-protector" ]
+    } else if (is_ohos && current_cpu == "x86") {
+      cflags += [ "-fno-stack-protector" ]
+    } else if (current_os != "aix") {
+      if (support_stack_protector_ret == true) {
+        cflags += [
+          "-fstack-protector-ret-all",
+          "--param=ssp-ret-cookie-size=1000",
+        ]
+      } else {
+        cflags += [ "-fstack-protector-strong" ]
+      }
+    }
+  }
+}
+
+config("stack_protector_ret_strong_config") {
+  cflags = []
+  if (is_mac) {
+    if (is_debug) {
+      cflags += [ "-fstack-protector-strong" ]
+    } else {
+      cflags += [ "-fstack-protector" ]
+    }
+  } else if (is_posix && !is_chromeos && !is_nacl) {
+    cflags += [ "--param=ssp-buffer-size=4" ]
+
+    if (is_mingw) {
+      cflags += [ "-fno-stack-protector" ]
+    } else if (is_ohos && current_cpu == "x86") {
+      cflags += [ "-fno-stack-protector" ]
+    } else if (current_os != "aix") {
       if (support_stack_protector_ret == true) {
         cflags += [ "-fstack-protector-ret-strong" ]
       } else {

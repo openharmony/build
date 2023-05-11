@@ -691,6 +691,11 @@ if (is_standard_system) {
     ]
   }
 
+  if (is_ohos && is_clang && target_cpu == "arm64") {
+    default_compiler_configs +=
+        [ "//build/config/security:stack_protector_ret_strong_config" ]
+  }
+
   # Debug/release-related defines.
   if (is_debug) {
     default_compiler_configs += [ "//build/config:debug" ]

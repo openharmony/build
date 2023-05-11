@@ -145,11 +145,7 @@ template("ohos_executable") {
 
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "auto_var_init",
-                             "stack_protector_ret",
-                           ])
+    forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -259,6 +255,7 @@ template("ohos_executable") {
                              # Sanitizer variables
                              "sanitize",
                              "crate_type",
+                             "stack_protector_ret",
                            ])
     output_dir = output_dir
 
@@ -279,6 +276,19 @@ template("ohos_executable") {
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
       configs += [ "//build/config/compiler:rtti" ]
       configs -= [ "//build/config/compiler:no_rtti" ]
+    }
+
+    if (support_stack_protector_ret) {
+      if (defined(invoker.stack_protector_ret)) {
+        configs -=
+            [ "//build/config/security:stack_protector_ret_strong_config" ]
+        if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_config" ]
+        }
+      }
     }
 
     if (!defined(deps)) {
@@ -595,11 +605,7 @@ template("ohos_shared_library") {
 
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "auto_var_init",
-                             "stack_protector_ret",
-                           ])
+    forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -757,6 +763,7 @@ template("ohos_shared_library") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "stack_protector_ret",
                            ])
     output_dir = output_dir
 
@@ -786,6 +793,19 @@ template("ohos_shared_library") {
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
       configs += [ "//build/config/compiler:rtti" ]
       configs -= [ "//build/config/compiler:no_rtti" ]
+    }
+
+    if (support_stack_protector_ret) {
+      if (defined(invoker.stack_protector_ret)) {
+        configs -=
+            [ "//build/config/security:stack_protector_ret_strong_config" ]
+        if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_config" ]
+        }
+      }
     }
 
     if (!defined(output_name)) {
@@ -1101,11 +1121,7 @@ template("ohos_static_library") {
 
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "auto_var_init",
-                             "stack_protector_ret",
-                           ])
+    forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -1146,6 +1162,7 @@ template("ohos_static_library") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "stack_protector_ret",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs
@@ -1167,6 +1184,19 @@ template("ohos_static_library") {
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
       configs += [ "//build/config/compiler:rtti" ]
       configs -= [ "//build/config/compiler:no_rtti" ]
+    }
+
+    if (support_stack_protector_ret) {
+      if (defined(invoker.stack_protector_ret)) {
+        configs -=
+            [ "//build/config/security:stack_protector_ret_strong_config" ]
+        if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_config" ]
+        }
+      }
     }
 
     if (defined(invoker.no_default_deps)) {
@@ -1376,11 +1406,7 @@ template("ohos_source_set") {
 
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
-    forward_variables_from(invoker,
-                           [
-                             "auto_var_init",
-                             "stack_protector_ret",
-                           ])
+    forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -1422,6 +1448,7 @@ template("ohos_source_set") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "stack_protector_ret",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs
@@ -1441,6 +1468,19 @@ template("ohos_source_set") {
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
       configs += [ "//build/config/compiler:rtti" ]
       configs -= [ "//build/config/compiler:no_rtti" ]
+    }
+
+    if (support_stack_protector_ret) {
+      if (defined(invoker.stack_protector_ret)) {
+        configs -=
+            [ "//build/config/security:stack_protector_ret_strong_config" ]
+        if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_config" ]
+        }
+      }
     }
 
     if (defined(invoker.no_default_deps)) {
