@@ -254,7 +254,7 @@ class Arg():
                 elif oh_arg.arg_type == ArgType.BOOL:
                     if str(assigned_value).lower() == 'false':
                         convert_assigned_value = False
-                    elif str(assigned_value).lower() == 'true':
+                    elif str(assigned_value).lower() == 'true' or assigned_value is None:
                         convert_assigned_value = True
                 else:
                     convert_assigned_value = assigned_value

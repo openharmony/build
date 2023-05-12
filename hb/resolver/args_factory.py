@@ -44,7 +44,7 @@ def _add_bool_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
     if arg['arg_attribute'].get('abbreviation'):
         return _add_bool_abbreviation_option(parser, arg)
     else:
-        return parser.add_argument(arg['arg_name'], help=arg['arg_help'], action='store_true',
+        return parser.add_argument(arg['arg_name'], help=arg['arg_help'], nargs='?',
                                    default=arg['argDefault'])
 
 
@@ -71,7 +71,7 @@ def _add_list_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.Arg
 
 def _add_bool_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:
     return parser.add_argument(arg['arg_attribute'].get('abbreviation'), arg['arg_name'], help=arg['arg_help'],
-                               default=arg['argDefault'],  action="store_true")
+                               nargs='?', default=arg['argDefault'])
 
 
 def _add_str_abbreviation_option(parser: argparse.ArgumentParser, arg: dict) -> argparse.ArgumentParser:

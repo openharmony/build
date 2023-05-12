@@ -211,7 +211,6 @@
       "optional": [
         "release",
         "debug"
-        
       ]
     },
     "resolve_function": "resolve_build_type",
