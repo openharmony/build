@@ -190,7 +190,7 @@ declare_args() {
 }
 
 # Upgrade Skia version
-use_new_skia = true
+use_new_skia = false
 
 # support changing the npm registry and sdk type
 declare_args() {
