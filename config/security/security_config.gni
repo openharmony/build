@@ -15,6 +15,7 @@ import("//build/config/clang/clang.gni")
 declare_args() {
   # Enable the config that variables are automatically initialized by default.
   enable_auto_var_init = false
+  support_stack_protector_ret = false
 }
 
 using_security_flag = enable_auto_var_init
@@ -29,7 +30,8 @@ cmd = "${clang_bin} --help | grep fstack-protector-ret-all | wc -l"
 
 # exec_script returns 1 if grep -fstack-protector-ret-all failed, indicating -fstack-protector-ret-all not supported
 res = exec_script("//build/scripts/run_shell_cmd.py", [ cmd ], "value")
-if (current_cpu == "arm64" && res == 1) {
+if (target_cpu == "arm64" && res == 1 && is_ohos && is_standard_system &&
+    !is_mingw) {
   support_stack_protector_ret = true
 } else {
   support_stack_protector_ret = false
@@ -67,20 +69,6 @@ template("ohos_auto_initialize_config") {
   }
 }
 
-template("ohos_stack_protector_ret_config") {
-  config(target_name) {
-    forward_variables_from(invoker, [ "stack_protector_ret" ])
-    cflags = []
-    if (defined(stack_protector_ret) && stack_protector_ret &&
-        support_stack_protector_ret) {
-      cflags += [
-        "-fstack-protector-ret-all",
-        "--param=ssp-ret-cookie-size=1000",
-      ]
-    }
-  }
-}
-
 template("ohos_security_config") {
   config(target_name) {
     configs = []
@@ -89,13 +77,6 @@ template("ohos_security_config") {
       forward_variables_from(invoker, [ "auto_var_init" ])
     }
 
-    _stack_protector_ret_config_target =
-        "${target_name}__stack_protector_config"
-    ohos_stack_protector_ret_config(_stack_protector_ret_config_target) {
-      forward_variables_from(invoker, [ "stack_protector_ret" ])
-    }
-
     configs += [ ":$_auto_initialize_config_target" ]
-    configs += [ ":$_stack_protector_ret_config_target" ]
   }
 }
