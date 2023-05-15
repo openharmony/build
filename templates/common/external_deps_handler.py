@@ -23,10 +23,6 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-# Ignore part dependency checks for test related parts
-_part_allow_set = {'unittest', 'moduletest', 'systemtest', 'fuzztest', 'distributedtest', 'test'}
-
-
 def get_toolchain(current_variant, external_part_variants, platform_toolchain, current_toolchain):
     if current_variant == 'phone':
         toolchain = platform_toolchain.get(current_variant)
@@ -111,33 +107,6 @@ def _get_inner_kits_adapter_info(innerkits_adapter_info_file):
     return _parts_compatibility
 
 
-def check_parts_deps(part_name, external_part_name, parts_deps_info, module_path):
-    if part_name in _part_allow_set:
-        return
-
-    if external_part_name == part_name:
-        print("WARNING: {} in target {} is dependency within part {}, Need to used deps".format(
-            external_part_name, module_path, part_name))
-        return
-
-    _tips_info = "WARNING: {} depend part {}, need set part deps info to".format(
-        module_path, external_part_name)
-
-    part_deps_info = parts_deps_info.get(part_name)
-    if not part_deps_info:
-        _warning_info = "{} {}.".format(_tips_info, part_name)
-    elif not part_deps_info.get('components') or \
-        not external_part_name in part_deps_info.get('components'):
-        _warning_info = "{} {}.".format(_tips_info, part_deps_info.get('build_config_file'))
-    else:
-        _warning_info = ""
-
-    if _warning_info != "":
-        print(_warning_info)
-
-    return
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--external-deps', nargs='*', required=True)
@@ -148,11 +117,7 @@ def main():
     parser.add_argument('--use-sdk', dest='use_sdk', action='store_true')
     parser.set_defaults(use_sdk=False)
     parser.add_argument('--current-toolchain', required=False, default='')
-    parser.add_argument('--part-name', required=False, default='')
-    parser.add_argument('--module-path', required=False, default='')
-    parser.add_argument('--check-deps', dest='check_deps', action='store_true')
     parser.add_argument('--component-override-map', default='', required=False)
-    parser.set_defaults(check_deps=False)
     parser.add_argument(
         '--innerkits-adapter-info-file',
         default='../../build/ohos/inner_kits_adapter.json')
@@ -171,7 +136,6 @@ def main():
     sdk_base_dir = args.sdk_base_dir
     sdk_dir_name = args.sdk_dir_name
     use_sdk = args.use_sdk
-    check_deps = args.check_deps
 
     deps = []
     libs = []
@@ -198,13 +162,6 @@ def main():
     # load auto install info
     auto_install_part_file = "build_configs/auto_install_parts.json"
     auto_install_parts = read_json_file(auto_install_part_file)
-
-    # load parts deps info
-    if check_deps:
-        parts_deps_file = 'build_configs/parts_info/parts_deps.json'
-        parts_deps_info = read_json_file(parts_deps_file)
-        if parts_deps_info is None:
-            raise Exception("read pre_build parts_deps failed.")
 
     if toolchain_variant_info is None:
         raise Exception("read pre_build parts_variants failed.")
@@ -233,10 +190,6 @@ def main():
 
         # Usually the value is None
         _adapted_part_name = _parts_compatibility.get(external_part_name)
-
-        if check_deps:
-            check_parts_deps(args.part_name, external_part_name,
-                parts_deps_info, args.module_path)
 
         # Check if the subsystem has source code
         # hdf and third_party's external deps always valid because they need auto install

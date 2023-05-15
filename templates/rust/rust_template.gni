@@ -528,7 +528,6 @@ template("ohos_rust_static_ffi") {
 template("ohos_rust_proc_macro") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
-  need_check = true
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -545,7 +544,9 @@ template("ohos_rust_proc_macro") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    need_check = false
+    if (is_use_check_deps) {
+      skip_check_subsystem = true
+    }
   } else if (defined(invoker.subsystem_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
@@ -555,47 +556,20 @@ template("ohos_rust_proc_macro") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
-  if (is_use_check_deps && defined(invoker.deps)) {
-    deps_script = rebase_path("//build/templates/common/check_deps_handler.py")
+  if (is_use_check_deps) {
+    _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
-    module_deps = []
-    if (defined(invoker.deps)) {
-      foreach(dep, invoker.deps) {
-        module_deps += [ get_label_info(dep, "label_no_toolchain") ]
+    check_target(_check_target) {
+      module_deps = []
+      if (defined(invoker.deps)) {
+        module_deps += invoker.deps
       }
-    }
-    _args = [ "--deps" ]
-    _args += module_deps
-    _args += [
-      "--current-part-name",
-      part_name,
-      "--target-path-val",
-      target_path,
-    ]
-    check_deps_handler_result = exec_script(deps_script, _args, "string")
-    if (check_deps_handler_result != "") {
-      print(check_deps_handler_result)
-    }
-  }
-  if (need_check && is_use_check_deps) {
-    _part_subsystem_info_file =
-        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
-    target_path = get_label_info(":${target_name}", "label_no_toolchain")
-    _arguments = [
-      "--part-name",
-      part_name,
-      "--subsystem-name",
-      subsystem_name,
-      "--target-path",
-      target_path,
-      "--part-subsystem-info-file",
-      rebase_path(_part_subsystem_info_file, root_build_dir),
-    ]
-    check_part_subsystem_script =
-        rebase_path("//build/templates/common/check_part_subsystem_name.py")
-    message = exec_script(check_part_subsystem_script, _arguments, "string")
-    if (message != "") {
-      print(message)
+      if (defined(invoker.public_deps)) {
+        module_deps += invoker.public_deps
+      }
+      if (defined(invoker.external_deps)) {
+        module_ex_deps = invoker.external_deps
+      }
     }
   }
   if (check_deps) {
@@ -768,6 +742,9 @@ template("ohos_rust_proc_macro") {
     if (!defined(deps)) {
       deps = []
     }
+    if (is_use_check_deps) {
+      deps += [ ":$_check_target" ]
+    }
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
@@ -805,15 +782,6 @@ template("ohos_rust_proc_macro") {
       ]
       if (is_use_sdk) {
         arguments += [ "--use-sdk" ]
-      }
-      if (is_use_check_deps) {
-        arguments += [
-          "--check-deps",
-          "--part-name",
-          "${part_name}",
-          "--module-path",
-          get_label_info(":${target_name}", "label_no_toolchain"),
-        ]
       }
 
       handler_result = exec_script(external_deps_script, arguments, "string")
