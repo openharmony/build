@@ -190,7 +190,11 @@ declare_args() {
 }
 
 # Upgrade Skia version
-use_new_skia = true
+if (defined(build_cross_platform_version) && build_cross_platform_version) {
+  use_new_skia = false
+} else {
+  use_new_skia = true
+}
 
 # support changing the npm registry and sdk type
 declare_args() {
