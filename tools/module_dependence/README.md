@@ -20,13 +20,13 @@
 
    ```shell
    # 比如在源码根目录下执行
-   build/tools/module_dependence/part_deps.py --deps-files-path out/ohos-arm-release/deps_files
+   build/tools/module_dependence/part_deps.py --deps-files-path out/{product_name}/deps_files
    ```
 
 3. 脚本参数说明
 
    ```
-   --deps-files-path  # 必选  模块依赖数据文件目录，gn执行完成后输出在out/ohos-arm-release/deps_files目录下，如果不在源码目录执行，需要配置到正确的路径。
+   --deps-files-path  # 必选  模块依赖数据文件目录，gn执行完成后输出在out/{product_name}/deps_files目录下，如果不在源码目录执行，需要配置到正确的路径。
    --graph            # 可选  生成部件依赖图。使用该选项，需要安装对应的库
    ```
 
@@ -71,13 +71,13 @@
 
    ```shell
    # 比如在源码根目录下执行
-   build/tools/module_dependence/module_deps.py --deps-files-path out/ohos-arm-release/deps_files
+   build/tools/module_dependence/module_deps.py --deps-files-path out/{product_name}/deps_files
    ```
 
 3. 脚本参数说明
 
    ```
-   --deps-files-path  # 必选  模块依赖数据文件目录，gn执行完成后输出在out/ohos-arm-release/deps_files目录下，如果不在源码目录执行，需要配置到正确的路径。
+   --deps-files-path  # 必选  模块依赖数据文件目录，gn执行完成后输出在out/{product_name}/deps_files目录下，如果不在源码目录执行，需要配置到正确的路径。
    ```
 
 4. 输出
@@ -100,7 +100,7 @@
 
       ```
       # 比如在源码根目录下执行
-      build/tools/module_dependence/module_deps_tree.py --module-name 部件名:模块名 --module-deps-file out/ohos-arm-release/module_deps_info/module_deps_info.json
+      build/tools/module_dependence/module_deps_tree.py --module-name 部件名:模块名 --module-deps-file out/{product_name}/module_deps_info/module_deps_info.json
       ```
 
    (3) 参数说明：
