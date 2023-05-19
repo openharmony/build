@@ -23,12 +23,14 @@ _ndk_library_targets = [
   "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
   "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
   "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
+  "//base/hiviewdfx/hitrace/interfaces/native/kits:hitrace_header",
+  "//base/hiviewdfx/hitrace/interfaces/native/kits:libhitrace_ndk",
   "//base/security/huks/interfaces/kits/c:libhuks_ndk",
   "//base/security/huks/interfaces/kits/c:huks_header",
   "//base/startup/init/interfaces/kits/syscap:libdeviceinfo_ndk",
   "//base/startup/init/interfaces/kits/syscap:deviceinfo_header",
-  "//foundation/ai/mindspore/mindspore/lite/interfaces/kits/c:mindspore_header",
-  "//foundation/ai/mindspore/mindspore/lite/interfaces/kits/c:mindspore_lib",
+  "//third_party/mindspore/interfaces/kits/c:mindspore_header",
+  "//third_party/mindspore/interfaces/kits/c:mindspore_lib",
   "//foundation/arkui/ace_engine/interfaces/native:ace_header",
   "//foundation/arkui/ace_engine/interfaces/native:libace_ndk",
   "//foundation/arkui/napi:libnapi_ndk",
@@ -54,26 +56,42 @@ _ndk_library_targets = [
   "//third_party/libuv:libuv_ndk",
   "//third_party/libuv:libuv_header",
   "//third_party/libuv:libuv_uv_header",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:libpixelmap_ndk",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:image_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/audio_decoder:libnative_media_adec",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/audio_decoder:native_media_adec_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/audio_encoder:libnative_media_aenc",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/audio_encoder:native_media_aenc_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/core:libnative_media_core",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/core:native_media_core_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/video_decoder:libnative_media_vdec",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/video_decoder:native_media_vdec_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:libnative_media_venc",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/video_encoder:native_media_venc_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:libnative_media_codecbase",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/codec_base:native_media_codecbase_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_decoder:libnative_media_adec",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_decoder:native_media_adec_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_encoder:libnative_media_aenc",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_encoder:native_media_aenc_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/core:libnative_media_core",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/core:native_media_core_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/video_decoder:libnative_media_vdec",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/video_decoder:native_media_vdec_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/video_encoder:libnative_media_venc",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/video_encoder:native_media_venc_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/codec_base:libnative_media_codecbase",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/codec_base:native_media_codecbase_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avmuxer:libnative_media_avmuxer",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avmuxer:native_media_avmuxer_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avdemuxer:libnative_media_avdemuxer",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avdemuxer:native_media_avdemuxer_header",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:libnative_media_avsource",
+  "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:native_media_avsource_header",
   "//foundation/multimedia/audio_framework/interfaces/kits/c:libohaudio_ndk",
   "//foundation/multimedia/audio_framework/interfaces/kits/c:ohaudio_header",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:libpixelmap_ndk",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:image_header",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_ndk",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:image_ndk_header",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_receiver_ndk",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:image_receiver_ndk_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_header",
+  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:libpurgeable_memory_ndk",
+  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:purgeable_memory_header",
+  "//foundation/distributeddatamgr/relational_store/interfaces/ndk:native_rdb_ndk_header",
+  "//foundation/distributeddatamgr/relational_store/interfaces/ndk:libnative_rdb_ndk",
+  "//drivers/external_device_manager/interfaces/ddk/usb:libusb_ndk",
+  "//drivers/external_device_manager/interfaces/ddk/usb:usb_header",
 ]
 
 _ndk_base_libs = [
@@ -105,17 +123,17 @@ _parse_args += _ndk_targets_list
 
 all_ndk_targets_list = exec_script(_parse_script, _parse_args, "list lines")
 
-if (ndk_system == "win") {
+if (ndk_platform == "win") {
   all_ndk_targets_list += [ "//third_party/musl/ndk_script:windows_x86_64" ]
-} else if (ndk_system == "mac") {
+} else if (ndk_platform == "mac") {
   if (host_cpu == "arm64") {
     all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]
   } else {
     all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
   }
-} else if (ndk_system == "linux") {
+} else if (ndk_platform == "linux") {
   all_ndk_targets_list += [ "//third_party/musl/ndk_script:linux_x86_64" ]
-} else if (ndk_system == "default") {
+} else if (ndk_platform == "default") {
   if (host_os == "mac") {
     if (host_cpu == "arm64") {
       all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]
