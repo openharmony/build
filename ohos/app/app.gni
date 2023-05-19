@@ -200,11 +200,8 @@ template("ohos_resources") {
 template("ohos_app") {
   forward_variables_from(invoker, [ "testonly" ])
 
-  assert(defined(invoker.certificate_profile),
-         "certificate_profile must be defined for ohos_app")
-  _certificate_profile = invoker.certificate_profile
-
-  unsigned_hap_path_list = "${target_out_dir}/unsigned_hap_path_list.json"
+  signed_hap_path_list =
+      "${target_out_dir}/${target_name}/signed_hap_path_list.json"
 
   if (defined(invoker.ohos_sdk_home)) {
     _ohos_sdk_home = invoker.ohos_sdk_home
@@ -214,6 +211,15 @@ template("ohos_app") {
 
   _abs_path = get_path_info("./", "abspath")
   _hap_out_dir = "${target_out_dir}/${target_name}"
+  if (defined(invoker.hap_out_dir)) {
+    _hap_out_dir = invoker.hap_out_dir
+  }
+
+  _hap_name = target_name
+  if (defined(invoker.hap_name)) {
+    _hap_name = invoker.hap_name
+  }
+
   if (defined(invoker.build_profile)) {
     build_profile = invoker.build_profile
   } else {
@@ -230,8 +236,30 @@ template("ohos_app") {
   }
 
   _main_target_name = target_name
-  _subsystem_name = invoker.subsystem_name
-  _part_name = invoker.part_name
+
+  if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
+    _subsystem_name = invoker.subsystem_name
+    _part_name = invoker.part_name
+  } else if (defined(invoker.part_name)) {
+    _part_name = invoker.part_name
+    _part_subsystem_info_file =
+        "$root_build_dir/build_configs/parts_info/part_subsystem.json"
+    _arguments = [
+      "--part-name",
+      _part_name,
+      "--part-subsystem-info-file",
+      rebase_path(_part_subsystem_info_file, root_build_dir),
+    ]
+    _get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
+    _subsystem_name =
+        exec_script(_get_subsystem_script, _arguments, "trim string")
+  } else if (defined(invoker.subsystem_name)) {
+    _subsystem_name = invoker.subsystem_name
+    _part_name = _subsystem_name
+  } else {
+    _subsystem_name = "common"
+    _part_name = _subsystem_name
+  }
 
   assert(_subsystem_name != "")  # Mark as used
   assert(_part_name != "")  # Mark as used
@@ -282,12 +310,14 @@ template("ohos_app") {
     module_source_dir = get_label_info(":${_main_target_name}", "dir")
   }
 
-  _compile_app_target = "${target_name}_compile_app"
-  compile_app(_compile_app_target) {
+  compile_app(target_name) {
     build_mode = _js_build_mode
     ohos_sdk_home = _ohos_sdk_home
     cwd = _abs_path
-    deps = [ ":$_notice_target" ]
+    deps = [
+      ":$_module_info_target",
+      ":$_notice_target",
+    ]
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
@@ -295,15 +325,8 @@ template("ohos_app") {
       system_lib_deps = _system_lib_deps
       deps += _system_lib_deps
     }
-  }
-
-  app_sign(target_name) {
-    certificate_profile = _certificate_profile
-    deps = [
-      ":$_compile_app_target",
-      ":$_module_info_target",
-    ]
     hap_out_dir = _hap_out_dir
+    hap_name = _hap_name
     install_module_info = {
       module_def = get_label_info(":$target_name", "label_with_toolchain")
       module_info_file =
@@ -313,6 +336,15 @@ template("ohos_app") {
       toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
       part_name = _part_name
       subsystem_name = _subsystem_name
+    }
+    if (defined(invoker.test_hap)) {
+      test_hap = invoker.test_hap
+    }
+    if (defined(invoker.test_module)) {
+      test_module = invoker.test_module
+    }
+    if (defined(invoker.module_libs_dir)) {
+      module_libs_dir = invoker.module_libs_dir
     }
   }
 }

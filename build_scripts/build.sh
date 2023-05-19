@@ -35,44 +35,6 @@ function check_shell_environment() {
   esac
 }
 
-function build_sdk() {
-        ROOT_PATH=$(pwd)
-        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
-                echo "ohos-sdk exists."
-                return 0
-        fi
-        pushd ${ROOT_PATH}
-        echo "building the latest ohos-sdk..."
-        ./build.py --product-name ohos-sdk
-        if [[ "$?" -ne 0 ]]; then
-          echo "ohos-sdk build failed!"
-          exit 1
-        fi
-
-        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
-            pushd ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux
-            ls -d */ | xargs rm -rf
-            for i in $(ls); do
-                    unzip $i
-            done
-            for f in $(find . -name package.json); do
-                    pushd $(dirname $f)
-                    npm install
-                    popd
-            done
-            api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
-            sdk_version=$(grep version toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
-            for i in $(ls -d */); do
-                    mkdir -p $api_version
-                    mv $i $api_version
-                    mkdir $i
-                    ln -s ../$api_version/$i $i/$sdk_version
-            done
-            popd
-        fi
-        popd
-}
-
 check_shell_environment 
 
 echo "++++++++++++++++++++++++++++++++++++++++"
@@ -123,11 +85,87 @@ else
 fi
 
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
+
+# set nodejs and ohpm
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v14.21.1-linux-x64/bin:$PATH
+export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v14.21.1-linux-x64
+export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
+echo "Current node version is $(node -v)"
+EXPECTED_NODE_VERSION="14.21.1"
+NODE_VERSION=$(node -v)
+if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
+  echo "Node.js version mismatch. Expected $EXPECTED_NODE_VERSION but found $NODE_VERSION" >&2
+  exit 1
+fi
+echo "Node.js version check passed"
+echo "Current npm version is $(npm -v)"
+npm config set registry https://repo.huaweicloud.com/repository/npm/
+npm config set @ohos:registry https://repo.harmonyos.com/npm/
+npm config set strict-ssl false
 
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
+function init_ohpm() {
+  TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
+  cd ${TOOLS_INSTALL_DIR}
+  commandlineVersion=2.0.1.0
+  echo "download oh-command-line-tools"
+  wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/a6/v3/cXARnGbKTt-4sPEi3GcnJA/ohcommandline-tools-linux-2.0.0.1.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20230512T075353Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=C82B51F3C9F107AB460EC26392E25B2E20EF1A6CAD10A26929769B21B8C8D5B6 -O ohcommandline-tools-linux.zip
+  unzip ohcommandline-tools-linux.zip
+  OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
+  chmod +x ${OHPM_HOME}/bin/init
+  echo "init ohpm"
+  ${OHPM_HOME}/bin/init
+  export PATH=${OHPM_HOME}/bin:$PATH
+  echo "ohpm version is $(ohpm -v)"
+  ohpm config set registry https://repo.harmonyos.com/ohpm/
+  ohpm config set strict_ssl false
+  cd ${SOURCE_ROOT_DIR}
+}
+if [[ ! -f "${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
+  echo "start set ohpm"
+  init_ohpm
+  if [[ "$?" -ne 0 ]]; then
+    echo "ohpm init failed!"
+    exit 1
+  fi
+fi
 
+function build_sdk() {
+        ROOT_PATH=${SOURCE_ROOT_DIR}
+        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
+                echo "ohos-sdk exists."
+                return 0
+        fi
+        pushd ${ROOT_PATH}
+        echo "building the latest ohos-sdk..."
+        ./build.py --product-name ohos-sdk
+        if [[ "$?" -ne 0 ]]; then
+          echo "ohos-sdk build failed!"
+          exit 1
+        fi
 
+        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
+            pushd ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux
+            ls -d */ | xargs rm -rf
+            for i in $(ls); do
+                    unzip $i
+            done
+            for f in $(find . -name package.json); do
+                    pushd $(dirname $f)
+                    npm install
+                    popd
+            done
+            api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
+            sdk_version=$(grep version toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
+            for i in $(ls -d */); do
+                    mkdir -p $api_version
+                    mv $i $api_version
+                    mkdir $i
+                    ln -s ../$api_version/$i $i/$sdk_version
+            done
+            popd
+        fi
+        popd
+}
 for arg in "$@"; do
   if [ "$arg" = "--prebuilt-sdk" ]; then
     build_sdk
@@ -137,6 +175,8 @@ for arg in "$@"; do
     break
   fi
 done
+
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
 
 flag=true
 args_list=$@
