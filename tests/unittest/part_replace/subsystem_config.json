@@ -155,9 +155,9 @@
     "path": "test/ostest/wukong",
     "name": "wukong"
   },
-  "arkXtest": {
-    "path": "test/testfwk/arkxtest",
-    "name": "arkXtest"
+  "testfwk": {
+    "path": "test/testfwk",
+    "name": "testfwk"
   },
   "distributedhardware": {
     "path": "foundation/distributedhardware",
