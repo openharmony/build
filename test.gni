@@ -654,8 +654,10 @@ template("ohos_js_stage_unittest") {
 template("ohos_rust_unittest") {
   _target_name = target_name
   _rustflags = []
+  _public_deps = [ "//build/rust/tests:original_libstd.so" ]
   ohos_unittest("$_target_name") {
     forward_variables_from(invoker, "*")
+    public_deps = _public_deps
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
     }
@@ -734,8 +736,10 @@ template("ohos_rust_unittest") {
 template("ohos_rust_systemtest") {
   _target_name = target_name
   _rustflags = []
+  _public_deps = [ "//build/rust/tests:original_libstd.so" ]
   ohos_systemtest("$_target_name") {
     forward_variables_from(invoker, "*")
+    public_deps = _public_deps
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
     }
