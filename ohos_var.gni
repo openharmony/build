@@ -193,7 +193,7 @@ declare_args() {
 if (defined(build_cross_platform_version) && build_cross_platform_version) {
   use_new_skia = false
 } else {
-  use_new_skia = false
+  use_new_skia = true
 }
 
 # support changing the npm registry and sdk type
