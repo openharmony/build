@@ -1,6 +1,9 @@
 {
   "developer_test": "xts",
   "xts_acts": "xts",
+  "xts_hats": "xts",
+  "xts_dcts": "xts",
+  "xts_hits": "xts",
   "xts_tools": "xts",
   "device_attest_lite": "xts"
 }
