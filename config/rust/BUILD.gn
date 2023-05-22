@@ -15,5 +15,6 @@ config("rust_config") {
   rustflags = [
     "-Cdebuginfo=2",
     "-Csymbol-mangling-version=v0",
+    "-Copt-level=3",
   ]
 }
