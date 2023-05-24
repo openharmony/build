@@ -17,6 +17,7 @@ import sys
 import os
 import shutil
 import argparse
+import json
 from mkimage import mkimages
 
 sys.path.append(
@@ -75,6 +76,46 @@ def _prepare_ramdisk(ramdisk_path):
         os.makedirs(_path, exist_ok=True)
     os.symlink('bin/init', os.path.join(ramdisk_path, 'init'))
 
+def _prepare_eng_ststem(eng_system_path):
+    if os.path.exists(eng_system_path):
+        shutil.rmtree(eng_system_path)
+    os.makedirs(eng_system_path)
+    _dir_list_first = ['bin', 'etc']
+    for _dir_name in _dir_list_first:
+        _path = os.path.join(eng_system_path, _dir_name)
+        if os.path.exists(_path):
+            shutil.rmtree(_path)
+        os.makedirs(_path, exist_ok=True)
+    _dir_list_second = ['param', 'selinux', 'init']
+    for _dir_name in _dir_list_second:
+        _path = os.path.join(eng_system_path, 'etc', _dir_name)
+        if os.path.exists(_path):
+            shutil.rmtree(_path)
+        os.makedirs(_path, exist_ok=True)
+    _targeted_path = os.path.join(eng_system_path, 'etc/selinux/targeted')
+    if os.path.exists(_targeted_path):
+        shutil.rmtree(_targeted_path)
+    os.makedirs(_targeted_path)
+    _targeted_policy_path = os.path.join(eng_system_path, 'etc/selinux/targeted/policy')
+    if os.path.exists(_targeted_policy_path):
+        shutil.rmtree(_targeted_policy_path)
+    os.makedirs(_targeted_policy_path)
+    _param_ohos_const_path = os.path.join(eng_system_path, 'etc/param/ohos_const')
+    if os.path.exists(_param_ohos_const_path):
+        shutil.rmtree(_param_ohos_const_path)
+    os.makedirs(_param_ohos_const_path)
+
+    copy_eng_system_config = '../../build/ohos/images/mkimage/root_image.json'
+    with open(copy_eng_system_config, 'rb') as input_f:
+        default_build_args = json.load(input_f)
+    for arg in default_build_args.values():
+        sources_file = arg.get('source_file')
+        dest_file = arg.get('dest_file')
+        if(os.path.exists(dest_file)):
+            os.remove(dest_file)
+        shutil.copy(sources_file,dest_file)
+    
+
 
 def _make_image(args):
     if args.image_name == 'system':
@@ -105,6 +146,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--image-name', required=True)
+    parser.add_argument('--build-variant', required=True)
     parser.add_argument('--image-config-file', required=True)
     parser.add_argument('--device-image-config-file', required=True)
     parser.add_argument('--input-path', required=True)
@@ -121,6 +163,8 @@ def main(argv):
         os.remove(args.output_image_path)
     if args.image_name == 'userdata':
         _prepare_userdata(args.input_path)
+    elif args.image_name == 'eng_system' and args.build_variant == 'root':
+        _prepare_eng_ststem(args.input_path)
     if os.path.isdir(args.input_path):
         _make_image(args)
         _dep_files = []

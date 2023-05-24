@@ -264,6 +264,8 @@ foreach(_platform, target_platform_list) {
         rebase_path(output_image_file, root_build_dir),
         "--target-cpu",
         target_cpu,
+        "--build-variant",
+        build_variant,
         "--build-image-tools-path",
       ]
       args += rebase_path(build_image_tools_path, root_build_dir)

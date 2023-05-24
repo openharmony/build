@@ -1,0 +1,22 @@
+{
+    "system_policy": {
+        "source_file": "packages/phone/system/etc/selinux/targeted/policy/policy.31",
+        "dest_file": "packages/phone/eng_system/etc/selinux/targeted/policy/policy.31"
+    },
+    "system_ohos_para": {
+        "source_file": "packages/phone/system/etc/param/ohos.para",
+        "dest_file": "packages/phone/eng_system/etc/param/ohos.para"
+    },
+    "v1": {
+        "source_file": "packages/phone/system/etc/param/ohos_const/ohos.para",
+        "dest_file": "packages/phone/eng_system/etc/param/ohos_const/ohos.para"
+    },
+    "v2": {
+        "source_file": "packages/phone/system/bin/init",
+        "dest_file": "packages/phone/eng_system/bin/init"
+    },
+    "v3": {
+        "source_file": "packages/phone/system/etc/init/hdcd.cfg",
+        "dest_file": "packages/phone/eng_system/etc/init/hdcd.cfg"
+    }
+}
