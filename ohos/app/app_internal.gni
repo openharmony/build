@@ -423,10 +423,8 @@ template("compile_app") {
   nodejs_version = "v14.21.1"
   if (host_os == "mac") {
     _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
-    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"
   } else {
     _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
-    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/npm"
   }
   action(target_name) {
     forward_variables_from(invoker,
@@ -455,8 +453,6 @@ template("compile_app") {
     ]
 
     args = [
-      "--npm",
-      rebase_path(_npm, root_build_dir),
       "--nodejs",
       rebase_path(_nodejs, root_build_dir),
       "--cwd",
@@ -474,13 +470,6 @@ template("compile_app") {
       "--hap-name",
       hap_name,
     ]
-
-    if (defined(app_profile) && app_profile) {
-      args += [
-        "--app-profile",
-        rebase_path(app_profile, root_build_dir),
-      ]
-    }
 
     if (defined(build_mode) && build_mode == "debug") {
       args += [ "--enable-debug" ]

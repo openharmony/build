@@ -28,11 +28,8 @@ def parse_args(args):
     parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
 
-    parser.add_argument('--npm', help='npm path')
     parser.add_argument('--nodejs', help='nodejs path')
     parser.add_argument('--cwd', help='app project directory')
-    parser.add_argument('--app-profile', help='app profile file')
-    parser.add_argument('--hap-profile', help='hap profile file')
     parser.add_argument('--ohos-sdk-home', help='ohos sdk home')
     parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
     parser.add_argument('--build-level', default='project', help='module or project')
@@ -159,7 +156,6 @@ def copy_signed_hap(signed_hap_path_json, hap_out_dir, hap_name):
 def main(args):
     options = parse_args(args)
     cwd = os.path.abspath(options.cwd)
-    cur_dir = os.getcwd()
 
     # copy system lib deps to app libs dir
     if options.system_lib_module_info_list:
@@ -191,13 +187,11 @@ def main(args):
         f.write(f'sdk.dir={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
 
-    os.chdir(cwd)
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+    proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE)
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
         raise Exception('Hvigor build failed: {}'.format(stderr.decode()))
-    os.chdir(cur_dir)
 
     signed_hap_path_json = gen_signed_hap_path_json(
         options.build_profile, cwd, options)
