@@ -41,7 +41,7 @@ def copy_file(fuzz_config_file_path, fuzz_config_file_output_path):
                 remove_dir(target_file_path)
             else:
                 os.remove(target_file_path)
-    shutil.copytree(fuzz_config_file_path, target_file_path)
+    shutil.copytree(fuzz_config_file_path, target_file_path, dirs_exist_ok = True)
 
 
 def main():
