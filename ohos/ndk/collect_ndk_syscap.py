@@ -43,7 +43,9 @@ def _get_system_capability(targets_build_config):
         _syscap_info[_lib_name] = _bc_syscap
         _bc_syscap_headers = _ndk_config_info.get("system_capability_headers")
         if _bc_syscap_headers:
-            _syscap_config[_bc_syscap] = _bc_syscap_headers
+            if _bc_syscap not in _syscap_config:
+                _syscap_config[_bc_syscap] = []
+            _syscap_config[_bc_syscap] += _bc_syscap_headers
     return _syscap_info, _syscap_config
 
 
