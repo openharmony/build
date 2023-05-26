@@ -436,7 +436,7 @@ template("compile_app") {
                              "app_profile",
                              "hap_profile",
                              "build_level",
-                             "ohos_sdk_home",
+                             "sdk_home",
                              "signed_hap_path_list",
                              "system_lib_deps",
                              "hap_out_dir",
@@ -445,6 +445,7 @@ template("compile_app") {
                              "test_hap",
                              "test_module",
                              "module_libs_dir",
+                             "sdk_type_name",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [
@@ -459,8 +460,8 @@ template("compile_app") {
       rebase_path(cwd, root_build_dir),
       "--build-profile",
       rebase_path(build_profile, root_build_dir),
-      "--ohos-sdk-home",
-      rebase_path(ohos_sdk_home),
+      "--sdk-home",
+      rebase_path(sdk_home),
       "--output-file",
       rebase_path(signed_hap_path_list, root_build_dir),
       "--ohpm-registry",
@@ -507,6 +508,10 @@ template("compile_app") {
           ohos_app_abi,
         ]
       }
+    }
+    if (defined(sdk_type_name) && sdk_type_name != []) {
+      args += [ "--sdk-type-name" ]
+      args += sdk_type_name
     }
     if (defined(install_module_info)) {
       metadata = {

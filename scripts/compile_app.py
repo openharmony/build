@@ -30,7 +30,7 @@ def parse_args(args):
 
     parser.add_argument('--nodejs', help='nodejs path')
     parser.add_argument('--cwd', help='app project directory')
-    parser.add_argument('--ohos-sdk-home', help='ohos sdk home')
+    parser.add_argument('--sdk-home', help='sdk home')
     parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
     parser.add_argument('--build-level', default='project', help='module or project')
     parser.add_argument('--output-file', help='output file')
@@ -43,6 +43,7 @@ def parse_args(args):
     parser.add_argument('--test-hap', help='build ohosTest if enable', action='store_true')
     parser.add_argument('--test-module', help='specify the module within ohosTest', default='entry')
     parser.add_argument('--module-libs-dir', help='', default='entry')
+    parser.add_argument('--sdk-type-name', help='sdk type name', nargs='+', default=['sdk.dir'])
 
     options = parser.parse_args(args)
     return options
@@ -68,6 +69,8 @@ def make_env(build_profile, cwd, ohpm_registry):
             shutil.rmtree(os.path.join(cwd, 'oh_modules'))
         subprocess.run(['ohpm', 'config', 'set', 'strict_ssl', 'false'])
         subprocess.run(['chmod', '+x', 'hvigorw'])
+        if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
+            subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
 
         proc = subprocess.Popen(ohpm_install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         proc.communicate()
@@ -165,6 +168,9 @@ def main(args):
     os.environ['PATH'] = '{}:{}'.format(os.path.dirname(
         os.path.abspath(options.nodejs)), os.environ.get('PATH'))
 
+    # add arkui-x to PATH
+    os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
+
     # generate signed_hap_path_list and run ohpm install
     make_env(options.build_profile, cwd, options.ohpm_registry)
 
@@ -179,12 +185,14 @@ def main(args):
     else:
         cmd.extend(['-p', 'debuggable=false'])
 
-    sdk_dir = options.ohos_sdk_home
+    sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(options.nodejs)))
 
     with open(os.path.join(cwd, 'local.properties'), 'w') as f:
-        f.write(f'sdk.dir={sdk_dir}\n')
+        for sdk_type in options.sdk_type_name:
+            f.write(f'{sdk_type}={sdk_dir}\n')
+        # f.write(f'{options.sdk_type_name}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
 
     proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE,

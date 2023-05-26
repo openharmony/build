@@ -39,6 +39,8 @@
 | **hap_out_dir** | 单个应用中所有hap的输出目录，默认为"${target_out_dir}/${target_name}" |
 | **test_hap** | 对应用中的HAP测试ohosTest进行编译, 默认为false |
 | **test_module** | 编译的测试用例ohosTest所在的模块名，与**test_hap**共同使用，默认为entry |
+| **sdk_home** | 用于指定sdk的所在路径, 默认为"//out/sdk/packages/linux" |
+| **sdk_type_name** | 用于指定sdk类型, 默认为["sdk.dir"] |
 
 
 

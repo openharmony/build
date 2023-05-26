@@ -166,15 +166,14 @@ function build_sdk() {
         fi
         popd
 }
-for arg in "$@"; do
-  if [ "$arg" = "--prebuilt-sdk" ]; then
-    build_sdk
-    if [[ "$?" -ne 0 ]]; then
-      exit 1
-    fi
-    break
+if [[ ! -d "${SOURCE_ROOT_DIR}/out/sdk/packages/ohos-sdk/linux" && " ${@} " =~ " --prebuilt-sdk " ]]; then
+  echo "start build ohos-sdk"
+  build_sdk
+  if [[ "$?" -ne 0 ]]; then
+    echo "ohos-sdk build failed, please remove the out/sdk directory and try again!"
+    exit 1
   fi
-done
+fi
 
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
 

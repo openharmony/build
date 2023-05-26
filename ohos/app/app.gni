@@ -203,12 +203,6 @@ template("ohos_app") {
   signed_hap_path_list =
       "${target_out_dir}/${target_name}/signed_hap_path_list.json"
 
-  if (defined(invoker.ohos_sdk_home)) {
-    _ohos_sdk_home = invoker.ohos_sdk_home
-  } else {
-    _ohos_sdk_home = "//out/sdk/packages/${sdk_type_for_app}/linux"
-  }
-
   _abs_path = get_path_info("./", "abspath")
   _hap_out_dir = "${target_out_dir}/${target_name}"
   if (defined(invoker.hap_out_dir)) {
@@ -312,7 +306,6 @@ template("ohos_app") {
 
   compile_app(target_name) {
     build_mode = _js_build_mode
-    ohos_sdk_home = _ohos_sdk_home
     cwd = _abs_path
     deps = [
       ":$_module_info_target",
@@ -345,6 +338,14 @@ template("ohos_app") {
     }
     if (defined(invoker.module_libs_dir)) {
       module_libs_dir = invoker.module_libs_dir
+    }
+    if (defined(invoker.sdk_home)) {
+      sdk_home = invoker.sdk_home
+    } else {
+      sdk_home = "//out/sdk/packages/ohos-sdk/linux"
+    }
+    if (defined(invoker.sdk_type_name)) {
+      sdk_type_name = invoker.sdk_type_name
     }
   }
 }
