@@ -165,51 +165,6 @@ echo "prebuilts_download start"
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
 
-if [ "X${BUILD_ARKUIX}" == "XYES" ];then
-  exit 0
-fi
-
-# llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
-llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
-llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
-llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
-llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
-
-# copy libcxx-ndk library outside c++
-function copy_inside_cxx(){
-libcxx_dir="$1/libcxx-ndk/lib"
-for file in `ls ${libcxx_dir}`
-do
-    if [ ! -d "${libcxx_dir}/${file}/c++" ];then
-        `mkdir -p ${libcxx_dir}/c++`
-        `cp -r ${libcxx_dir}/${file}/* ${libcxx_dir}/c++`
-        `mv ${libcxx_dir}/c++ ${libcxx_dir}/${file}/c++`
-    fi
-done
-}
-if [[ -d "${llvm_dir}/libcxx-ndk" ]]; then
-    copy_inside_cxx ${llvm_dir}
-fi
-
-if [[ -d "${llvm_dir_win}/libcxx-ndk" ]]; then
-    copy_inside_cxx ${llvm_dir_win}
-fi
-
-if [[ -d "${llvm_dir_mac_x86}/libcxx-ndk" ]]; then
-    copy_inside_cxx ${llvm_dir_mac_x86}
-fi
-
-if [[ -d "${llvm_dir_mac_arm64}/libcxx-ndk" ]]; then
-    copy_inside_cxx ${llvm_dir_mac_arm64}
-fi
-
-if [[ -e "${llvm_dir}/llvm_ndk" ]];then
-  rm -rf "${llvm_dir}/llvm_ndk"
-fi
-mkdir -p "${llvm_dir}/llvm_ndk"
-cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
-cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
-
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
 elif [[ "${host_platform}" == "darwin" ]]; then
@@ -219,6 +174,41 @@ prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin
 prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
 $prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography json5\=\=0.9.6
 
+# llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
+llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
+llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
+llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
+llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
+llvm_dir_list=($llvm_dir $llvm_dir_win $llvm_dir_mac_x86 $llvm_dir_mac_arm64)
+
+# copy libcxx-ndk library outside c++
+function copy_inside_cxx(){
+for i in ${llvm_dir_list[@]}
+do
+    libcxx_dir="${i}/libcxx-ndk/lib"
+    if [[ -d "${i}/libcxx-ndk" ]]; then
+        for file in `ls ${libcxx_dir}`
+        do
+            if [ ! -d "${libcxx_dir}/${file}/c++" ];then
+                `mkdir -p ${libcxx_dir}/c++`
+                `cp -r ${libcxx_dir}/${file}/* ${libcxx_dir}/c++`
+                `mv ${libcxx_dir}/c++ ${libcxx_dir}/${file}/c++`
+            fi
+        done
+    fi
+done
+}
+
+function update_llvm_ndk(){
+if [[ -e "${llvm_dir}/llvm_ndk" ]];then
+  rm -rf "${llvm_dir}/llvm_ndk"
+fi
+mkdir -p "${llvm_dir}/llvm_ndk"
+cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
+cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
+}
+
+function change_rustlib_name(){
 rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
 for file in `find $rust_dir -path $rust_dir/x86_64-unknown-linux-gnu -prune -o -name "lib*.*"`
 do
@@ -251,4 +241,16 @@ do
     fi
     mv $file "$dir_name/$newfile_name"
 done
+}
+
+if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
+    copy_inside_cxx
+    echo "======copy inside cxx finished!======"
+    if [[ "${host_platform}" == "linux" ]]; then
+        update_llvm_ndk
+        echo "======update llvm ndk finished!======"
+        change_rustlib_name
+        echo "======change rustlib name finished!======"
+    fi
+fi
 echo -e "\n"
