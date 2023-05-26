@@ -76,10 +76,13 @@ def _prepare_ramdisk(ramdisk_path):
         os.makedirs(_path, exist_ok=True)
     os.symlink('bin/init', os.path.join(ramdisk_path, 'init'))
 
-def _prepare_eng_ststem(eng_system_path):
+def _prepare_eng_ststem(eng_system_path, build_variant):
+    print(eng_system_path)
     if os.path.exists(eng_system_path):
         shutil.rmtree(eng_system_path)
     os.makedirs(eng_system_path)
+    if build_variant == "user":
+        return 
     _dir_list_first = ['bin', 'etc']
     for _dir_name in _dir_list_first:
         _path = os.path.join(eng_system_path, _dir_name)
@@ -114,7 +117,6 @@ def _prepare_eng_ststem(eng_system_path):
         if(os.path.exists(dest_file)):
             os.remove(dest_file)
         shutil.copy(sources_file,dest_file)
-    
 
 
 def _make_image(args):
@@ -163,8 +165,8 @@ def main(argv):
         os.remove(args.output_image_path)
     if args.image_name == 'userdata':
         _prepare_userdata(args.input_path)
-    elif args.image_name == 'eng_system' and args.build_variant == 'root':
-        _prepare_eng_ststem(args.input_path)
+    elif args.image_name == 'eng_system':
+        _prepare_eng_ststem(args.input_path, args.build_variant)
     if os.path.isdir(args.input_path):
         _make_image(args)
         _dep_files = []
