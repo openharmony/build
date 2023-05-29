@@ -39,7 +39,9 @@ config("runtime_library") {
   }
 }
 
-configs += [ "//build/config/security:executable_config" ]
+config("executable_config") {
+  configs = [ "//build/config/security:executable_config" ]
+}
 
 config("x11") {
   libs = [

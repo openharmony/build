@@ -128,10 +128,8 @@ config("stack_protector_ret_strong_config") {
 
 #-fPIC or fpic
 config("pic_config") {
-  if (use_pic) {
-    cflags += [ "-fPIC" ]
-    ldflags += [ "fPIC" ]
-  }
+  cflags = [ "-fPIC" ]
+  ldflags = [ "-fPIC" ]
 }
 
 #-Wl,-z,noexecstack.

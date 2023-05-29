@@ -320,7 +320,9 @@ config("compiler") {
   }
 
   if (is_linux || is_android || is_ohos) {
-    configs += [ "//build/config/security:pic_config" ]
+    if (use_pic) {
+      configs += [ "//build/config/security:pic_config" ]
+    }
 
     if (!is_clang) {
       # Use pipes for communicating between sub-processes. Faster.
