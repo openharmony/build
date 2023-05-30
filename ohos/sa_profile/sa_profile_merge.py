@@ -66,7 +66,7 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
         json_sa_part = read_json_file(json_part)
         json_process = json_sa_part.get('process')
         if json_process in data:
-            raise Exception("sa have xml and json file")
+            raise Exception("sa have xml and json file, process name is" + json_process)
     depfiles.extend(xml_all_sa_input_files)
     depfiles.extend(json_all_sa_input_files)
     return [xml_all_sa_input_files, json_all_sa_input_files]
