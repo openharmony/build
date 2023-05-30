@@ -215,7 +215,8 @@ def main():
             if required_include_dir is True and external_module_desc_info.get(
                     'type') == 'so':
                 include_dir = external_module_desc_info.get('header_base')
-                include_dirs.append(include_dir)
+                if include_dir:
+                    include_dirs.append(include_dir)
 
             # sdk prebuilt
             if external_module_desc_info['prebuilt_enable']:

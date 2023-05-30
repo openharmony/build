@@ -122,6 +122,8 @@ def check_part_deps(args, part_pattern, path_parts_info, depfiles:list):
     third_party_info.reverse()
     for dep in args.deps:
         dep_path = get_path_from_label(dep)
+        if dep_path.find('third_party/rust/crates') != -1:
+            continue
         if dep_path.find('third_party') != -1:
             dep_part = get_dep_part(dep_path, third_party_info)
             tips_info = "WARNING: {} depend part {}, need set part deps {} info to".format(
