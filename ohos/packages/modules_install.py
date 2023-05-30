@@ -115,7 +115,13 @@ def copy_modules(system_install_info, install_modules_info_file,
             if not os.path.exists(dest_dir):
                 os.makedirs(dest_dir)
             if os.path.isdir(source):
-                shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
+                flag = True
+                for filename in os.listdir(source):
+                    if filename.endswith('.hap'):
+                        flag = False
+                        shutil.copy(os.path.join(source, filename), os.path.join(platform_installed_path, os.path.dirname(dest), filename))
+                if flag:
+                    shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
             else:
                 shutil.copy(source, os.path.join(platform_installed_path, dest))
 
