@@ -159,6 +159,10 @@ declare_args() {
 }
 
 declare_args() {
+  ohos_skip_parse_external_deps = false
+}
+
+declare_args() {
   load_test_config = true
 }
 
