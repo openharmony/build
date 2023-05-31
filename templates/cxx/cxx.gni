@@ -319,36 +319,38 @@ template("ohos_executable") {
 
     if (defined(invoker.external_deps) && invoker.external_deps != [] &&
         !build_cross_platform_version) {
-      component_override_map = rebase_path(
-              "${root_build_dir}/build_configs/component_override_map.json")
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path(parts_src_flag_file, root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-        "--component-override-map",
-        component_override_map,
-      ]
-      if (is_use_sdk) {
-        arguments += [ "--use-sdk" ]
-      }
-      handler_result = exec_script(external_deps_script, arguments, "string")
-      if (handler_result != "") {
-        print(handler_result)
+      if (!ohos_skip_parse_external_deps) {
+        component_override_map = rebase_path(
+                "${root_build_dir}/build_configs/component_override_map.json")
+        external_deps_script =
+            rebase_path("//build/templates/common/external_deps_handler.py")
+        arguments = [ "--external-deps" ]
+        arguments += invoker.external_deps
+        arguments += [
+          "--parts-src-flag-file",
+          rebase_path(parts_src_flag_file, root_build_dir),
+          "--external-deps-temp-file",
+          rebase_path(external_deps_temp_file, root_build_dir),
+          "--sdk-base-dir",
+          rebase_path("${innersdk_base_dir}", root_build_dir),
+          "--sdk-dir-name",
+          "${innersdk_dir_name}",
+          "--current-toolchain",
+          current_toolchain,
+          "--innerkits-adapter-info-file",
+          rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+          "--component-override-map",
+          component_override_map,
+        ]
+        if (is_use_sdk) {
+          arguments += [ "--use-sdk" ]
+        }
+        handler_result = exec_script(external_deps_script, arguments, "string")
+        if (handler_result != "") {
+          print(handler_result)
+        }
       }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
@@ -815,37 +817,39 @@ template("ohos_shared_library") {
     }
     if (defined(invoker.external_deps) && invoker.external_deps != [] &&
         !build_cross_platform_version) {
-      component_override_map = rebase_path(
-              "${root_build_dir}/build_configs/component_override_map.json")
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path(parts_src_flag_file, root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-        "--component-override-map",
-        component_override_map,
-      ]
-      if (is_use_sdk) {
-        arguments += [ "--use-sdk" ]
-      }
+      if (!ohos_skip_parse_external_deps) {
+        component_override_map = rebase_path(
+                "${root_build_dir}/build_configs/component_override_map.json")
+        external_deps_script =
+            rebase_path("//build/templates/common/external_deps_handler.py")
+        arguments = [ "--external-deps" ]
+        arguments += invoker.external_deps
+        arguments += [
+          "--parts-src-flag-file",
+          rebase_path(parts_src_flag_file, root_build_dir),
+          "--external-deps-temp-file",
+          rebase_path(external_deps_temp_file, root_build_dir),
+          "--sdk-base-dir",
+          rebase_path("${innersdk_base_dir}", root_build_dir),
+          "--sdk-dir-name",
+          "${innersdk_dir_name}",
+          "--current-toolchain",
+          current_toolchain,
+          "--innerkits-adapter-info-file",
+          rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+          "--component-override-map",
+          component_override_map,
+        ]
+        if (is_use_sdk) {
+          arguments += [ "--use-sdk" ]
+        }
 
-      handler_result = exec_script(external_deps_script, arguments, "string")
-      if (handler_result != "") {
-        print(handler_result)
+        handler_result = exec_script(external_deps_script, arguments, "string")
+        if (handler_result != "") {
+          print(handler_result)
+        }
       }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
@@ -1127,37 +1131,39 @@ template("ohos_static_library") {
     }
     if (defined(invoker.external_deps) && invoker.external_deps != [] &&
         !build_cross_platform_version) {
-      component_override_map = rebase_path(
-              "${root_build_dir}/build_configs/component_override_map.json")
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path(parts_src_flag_file, root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-        "--component-override-map",
-        component_override_map,
-      ]
-      if (is_use_sdk) {
-        arguments += [ "--use-sdk" ]
-      }
+      if (!ohos_skip_parse_external_deps) {
+        component_override_map = rebase_path(
+                "${root_build_dir}/build_configs/component_override_map.json")
+        external_deps_script =
+            rebase_path("//build/templates/common/external_deps_handler.py")
+        arguments = [ "--external-deps" ]
+        arguments += invoker.external_deps
+        arguments += [
+          "--parts-src-flag-file",
+          rebase_path(parts_src_flag_file, root_build_dir),
+          "--external-deps-temp-file",
+          rebase_path(external_deps_temp_file, root_build_dir),
+          "--sdk-base-dir",
+          rebase_path("${innersdk_base_dir}", root_build_dir),
+          "--sdk-dir-name",
+          "${innersdk_dir_name}",
+          "--current-toolchain",
+          current_toolchain,
+          "--innerkits-adapter-info-file",
+          rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+          "--component-override-map",
+          component_override_map,
+        ]
+        if (is_use_sdk) {
+          arguments += [ "--use-sdk" ]
+        }
 
-      handler_result = exec_script(external_deps_script, arguments, "string")
-      if (handler_result != "") {
-        print(handler_result)
+        handler_result = exec_script(external_deps_script, arguments, "string")
+        if (handler_result != "") {
+          print(handler_result)
+        }
       }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
@@ -1379,37 +1385,39 @@ template("ohos_source_set") {
     }
     if (defined(invoker.external_deps) && invoker.external_deps != [] &&
         !build_cross_platform_version) {
-      component_override_map = rebase_path(
-              "${root_build_dir}/build_configs/component_override_map.json")
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path(parts_src_flag_file, root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-        "--component-override-map",
-        component_override_map,
-      ]
-      if (is_use_sdk) {
-        arguments += [ "--use-sdk" ]
-      }
+      if (!ohos_skip_parse_external_deps) {
+        component_override_map = rebase_path(
+                "${root_build_dir}/build_configs/component_override_map.json")
+        external_deps_script =
+            rebase_path("//build/templates/common/external_deps_handler.py")
+        arguments = [ "--external-deps" ]
+        arguments += invoker.external_deps
+        arguments += [
+          "--parts-src-flag-file",
+          rebase_path(parts_src_flag_file, root_build_dir),
+          "--external-deps-temp-file",
+          rebase_path(external_deps_temp_file, root_build_dir),
+          "--sdk-base-dir",
+          rebase_path("${innersdk_base_dir}", root_build_dir),
+          "--sdk-dir-name",
+          "${innersdk_dir_name}",
+          "--current-toolchain",
+          current_toolchain,
+          "--innerkits-adapter-info-file",
+          rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
+          "--component-override-map",
+          component_override_map,
+        ]
+        if (is_use_sdk) {
+          arguments += [ "--use-sdk" ]
+        }
 
-      handler_result = exec_script(external_deps_script, arguments, "string")
-      if (handler_result != "") {
-        print(handler_result)
+        handler_result = exec_script(external_deps_script, arguments, "string")
+        if (handler_result != "") {
+          print(handler_result)
+        }
       }
 
       external_deps_info = read_file(external_deps_temp_file, "json")
