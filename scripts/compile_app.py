@@ -192,7 +192,6 @@ def main(args):
     with open(os.path.join(cwd, 'local.properties'), 'w') as f:
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
-        # f.write(f'{options.sdk_type_name}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
 
     proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE,

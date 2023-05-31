@@ -199,7 +199,6 @@ if (defined(build_cross_platform_version) && build_cross_platform_version) {
 # support changing the ohpm registry and sdk type
 declare_args() {
   ohpm_registry = ""
-  sdk_type_for_app = "ohos-sdk"
 }
 
 # build target type
