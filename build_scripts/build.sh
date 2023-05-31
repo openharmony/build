@@ -60,10 +60,12 @@ case $(uname -s) in
     Darwin)
         HOST_DIR="darwin-x86"
         HOST_OS="mac"
+        NODE_PLATFORM="darwin-x64"
         ;;
     Linux)
         HOST_DIR="linux-x86"
         HOST_OS="linux"
+        NODE_PLATFORM="linux-x64"
         ;;
     *)
         echo "Unsupported host platform: $(uname -s)"
@@ -87,11 +89,11 @@ fi
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
 # set nodejs and ohpm
-export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v14.21.1-linux-x64/bin:$PATH
-export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v14.21.1-linux-x64
+EXPECTED_NODE_VERSION="14.21.1"
+export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
+export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
 echo "Current node version is $(node -v)"
-EXPECTED_NODE_VERSION="14.21.1"
 NODE_VERSION=$(node -v)
 if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
   echo "Node.js version mismatch. Expected $EXPECTED_NODE_VERSION but found $NODE_VERSION" >&2
@@ -114,7 +116,6 @@ function init_ohpm() {
   chmod +x ${OHPM_HOME}/bin/init
   echo "init ohpm"
   ${OHPM_HOME}/bin/init
-  export PATH=${OHPM_HOME}/bin:$PATH
   echo "ohpm version is $(ohpm -v)"
   ohpm config set registry https://repo.harmonyos.com/ohpm/
   ohpm config set strict_ssl false
