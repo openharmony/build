@@ -124,15 +124,18 @@ template("_ohos_test") {
   # copy fuzz config file
   if (defined(invoker.fuzz_config_file)) {
     fuzz_config_file = invoker.fuzz_config_file
-    script = "//build/ohos/testfwk/fuzz_config_file_copy.py"
-    _arguments = []
-    _arguments += [
-      "--fuzz-config-file-path",
-      rebase_path(fuzz_config_file, root_build_dir),
-      "--fuzz-config-file-output-path",
-      rebase_path(root_out_dir + "/tests/res", root_build_dir),
-    ]
-    exec_script(script, _arguments)
+    action("${target_name}_copy_fuzz_config_file") {
+      script = "//build/ohos/testfwk/fuzz_config_file_copy.py"
+      inputs = [ fuzz_config_file ]
+      args = []
+      args += [
+        "--fuzz-config-file-path",
+        rebase_path(fuzz_config_file, root_build_dir),
+        "--fuzz-config-file-output-path",
+        rebase_path(root_out_dir + "/tests/res", root_build_dir),
+      ]
+      outputs = [ "$target_out_dir/${target_name}_result.txt" ]
+    }
   }
 
   _has_sources = defined(invoker.sources) && invoker.sources != []
@@ -154,6 +157,9 @@ template("_ohos_test") {
       deps = []
     }
     deps += [ ":${testcase_target_name}_resource_copy" ]
+    if (defined(invoker.fuzz_config_file)) {
+      deps += [ ":${target_name}_copy_fuzz_config_file" ]
+    }
 
     subsystem_name = "tests"
     part_name = invoker.test_type
