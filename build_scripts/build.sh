@@ -93,14 +93,13 @@ EXPECTED_NODE_VERSION="14.21.1"
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
 export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
-echo "Current node version is $(node -v)"
+echo "Current Node.js version is $(node -v)"
 NODE_VERSION=$(node -v)
 if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
   echo "Node.js version mismatch. Expected $EXPECTED_NODE_VERSION but found $NODE_VERSION" >&2
   exit 1
 fi
 echo "Node.js version check passed"
-echo "Current npm version is $(npm -v)"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
