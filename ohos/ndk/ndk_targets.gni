@@ -74,6 +74,8 @@ _ndk_library_targets = [
   "//third_party/openSLES:libOpenSLES_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_header",
+  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:libpurgeable_memory_ndk",
+  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:purgeable_memory_header",
 ]
 
 _ndk_base_libs = [
