@@ -54,7 +54,7 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-57fd63-0530_sp2",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-57fd63-0530_sp3",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -193,7 +193,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp2/linux/clang_linux-x86_64-57fd63-0530_sp2.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp3/linux/clang_linux-x86_64-57fd63-0530_sp3.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -289,7 +289,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp2/linux/clang_linux-x86_64-57fd63-0530_sp2.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp3/linux/clang_linux-x86_64-57fd63-0530_sp3.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
