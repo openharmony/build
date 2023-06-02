@@ -19,6 +19,7 @@
 import os
 import sys
 import shutil
+import stat
 import re
 import tempfile
 import argparse
@@ -50,7 +51,9 @@ def gen_doc(args):
             value = value.replace('\\', '\\\\')
             contents = re.sub(key, value, contents)
 
-        with open(doxygen_file.name, 'w') as file:
+        with os.fdopen(os.open(doxygen_file.name, 
+                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 
+                       'w', encoding='utf-8') as file:
             file.write(contents)
 
         old_cwd = os.getcwd()

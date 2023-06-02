@@ -53,8 +53,9 @@ def main():
     args = parser.parse_args()
 
     src = args.src_dir
-    assert os.path.exists(src), \
-        'NDK build directory not exist, please confirm NDK build result.'
+
+    if not os.path.exists(src):
+        raise Exception('NDK build directory not exist, please confirm NDK build result.')
 
     dest = args.dest_dir
     if not os.path.exists(dest):

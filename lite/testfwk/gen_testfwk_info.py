@@ -18,6 +18,7 @@
 import argparse
 import json
 import os
+import stat
 
 part_infos = "part_infos"
 subsystem_infos = "subsystem_infos"
@@ -29,7 +30,10 @@ def create_testfwk_info_file(component_info_file, abs_fold, file_name):
     file_path = os.path.join(abs_fold, file_name)
     data = get_testfwk_info(component_info_file)
     dict_product = json.dumps(data)
-    with open(file_path, 'w') as testfwk_info_file:
+
+    with os.fdopen(os.open(file_path, 
+                           os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 
+                   'w', encoding='utf-8') as testfwk_info_file:
         json.dump(json.loads(dict_product), testfwk_info_file)
         testfwk_info_file.close()
     return file_path

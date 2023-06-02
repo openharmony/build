@@ -171,7 +171,7 @@ def copy_testcase_resources(resource_infos):
         if not os.path.exists(src_file):
             print("warning: testcase resource {} doesn't exist.".format(
                 src_file))
-            return
+            return 0
         dest_file = resource_info.get('dest')
         dest_dir = os.path.dirname(dest_file)
         if os.path.isdir(src_file):
@@ -207,7 +207,8 @@ def main():
                                              args.part_build_out_path,
                                              args.resource_output_path)
     write_json_file(args.output_file, resources_list)
-    copy_testcase_resources(resources_list) 
+    copy_testcase_resources(resources_list)
+    return 0
 
 
 if __name__ == '__main__':

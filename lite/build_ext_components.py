@@ -59,7 +59,7 @@ def main():
 
     if args.enable:
         if args.enable[0] == 'false':
-            return
+            return 0
 
     if args.path:
         curr_dir = os.getcwd()

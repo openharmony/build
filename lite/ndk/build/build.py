@@ -85,6 +85,7 @@ def main():
         print("=== clean working ===\n")
         exec_command(clean_cmd, log_path)
         print("clean success!")
+    return 0
 
 
 if __name__ == '__main__':

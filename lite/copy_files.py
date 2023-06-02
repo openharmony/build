@@ -24,6 +24,7 @@ from utils import makedirs
 
 
 def copytree(src, dst, symlinks=False, ignore=None):
+    src = os.path.normpath(src)
     for item in os.listdir(src):
         if '.git' in item or '.repo' in item:
             continue
@@ -65,8 +66,8 @@ def main():
         return 0
 
     source_dir = args.src
-    assert os.path.exists(source_dir)
-
+    if not os.path.exists(source_dir):
+        raise Exception(f'{source_dir} is not exist!')
     copytree(source_dir, out_dir)
 
     return 0
