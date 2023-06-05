@@ -17,11 +17,13 @@
 
 
 import os
+import sys
 import platform
 
-from resources.global_var import CURRENT_OHOS_ROOT
-from resources.global_var import BUILD_CONFIG_FILE
-from resources.global_var import ROOT_CONFIG_FILE
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from .global_var import CURRENT_OHOS_ROOT
+from .global_var import BUILD_CONFIG_FILE
+from .global_var import ROOT_CONFIG_FILE
 from exceptions.ohos_exception import OHOSException
 from helper.singleton import Singleton
 from util.io_util import IoUtil

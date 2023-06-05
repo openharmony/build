@@ -23,8 +23,10 @@ import shutil
 import argparse
 sys.path.append(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__)))))
-from lite.hb_internal.common import utils
-from lite.hb_internal.common.config import Config
+from hb.resources.config import Config
+from hb.util.log_util import LogUtil
+from hb.util.system_util import SystemUtil
+from hb.util.io_util import IoUtil
 
 
 class Packer():
@@ -46,7 +48,7 @@ class Packer():
         src_path = self.config.out_path
         libs = [lib for lib in os.listdir(src_path) if self.is_lib(lib)]
         target_path = os.path.join(src_path, 'usr', 'lib')
-        utils.makedirs(target_path, exist_ok=True)
+        os.makedirs(target_path, exist_ok=True)
 
         for lib in libs:
             source_file = os.path.join(src_path, lib)
@@ -67,8 +69,9 @@ class Packer():
         fs_path = os.path.join(self.config.out_path,
                                self.fs_cfg.get('fs_dir_name', 'rootfs'))
         exist_ok, with_rm = self.is_incr(self.fs_cfg.get('fs_incr', None))
-
-        utils.makedirs(fs_path, exist_ok=exist_ok, with_rm=with_rm)
+        if with_rm and os.path.exists(fs_path):
+            shutil.rmtree(fs_path)
+        os.makedirs(fs_path, exist_ok=exist_ok)
         self.replace_items[r'${fs_dir}'] = fs_path
 
         for fs_dir in self.fs_cfg.get('fs_dirs', []):
@@ -82,7 +85,7 @@ class Packer():
             target_path = self.fs_dirs_replace(target_dir, fs_path)
 
             if source_dir == '' or not os.path.exists(source_path):
-                utils.makedirs(target_path)
+                os.makedirs(target_path, exist_ok=True)
                 target_mode_tuple = (target_path, fs_dir.get('dir_mode', 755))
                 self.chmod_dirs.append(target_mode_tuple)
                 continue
@@ -102,14 +105,14 @@ class Packer():
 
         def copy_file_process(source_path, target_path):
             if not os.path.isdir(target_path):
-                utils.makedirs(target_path)
+                os.makedirs(target_path)
                 self.chmod_dirs.append((target_path, dir_mode))
             tfile = os.path.join(target_path, os.path.basename(source_path))
             try:
                 shutil.copy(sfile, tfile, follow_symlinks=False)
                 self.chmod_dirs.append((tfile, file_mode))
             except FileExistsError:
-                utils.hb_warning(f'Target file: {tfile} already exists!')
+                LogUtil.hb_warning(f'Target file: {tfile} already exists!')
 
         if os.path.isfile(spath):
             sfile = spath
@@ -183,7 +186,7 @@ class Packer():
         for cmd in fs_make_cmd:
             cmd, _ = self.replace(cmd)
             cmd = cmd.split(' ')
-            utils.exec_command(cmd, log_path=log_path)
+            SystemUtil.exec_command(cmd, log_path=log_path)
 
     def fs_tear_down(self):
         while len(self.chmod_dirs):
@@ -209,14 +212,14 @@ class Packer():
     def fs_make(self, cmd_args):
         fs_cfg_path = os.path.join(self.config.product_path, 'fs.yml')
         if not os.path.isfile(fs_cfg_path):
-            utils.hb_info(f'{fs_cfg_path} not found, stop packing fs. '
+            LogUtil.hb_info(f'{fs_cfg_path} not found, stop packing fs. '
                           'If the product does not need to be packaged, ignore it.')
             return
         if self.config.fs_attr is None:
-            utils.hb_info('component compiling, no need to pack fs')
+            LogUtil.hb_info('component compiling, no need to pack fs')
             return
 
-        fs_cfg_list = utils.read_yaml_file(fs_cfg_path)
+        fs_cfg_list = IoUtil.read_yaml_file(fs_cfg_path)
         for fs_cfg in fs_cfg_list:
             self.fs_cfg = self.fs_attr_process(fs_cfg)
             if self.fs_cfg.get('fs_dir_name', None) is None:

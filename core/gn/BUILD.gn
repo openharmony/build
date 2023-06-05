@@ -17,9 +17,8 @@ print("root_gen_dir=$root_gen_dir")
 print("current_toolchain=$current_toolchain")
 print("host_toolchain=$host_toolchain")
 
-# run loader
-import("//build/core/gn/loader.gni")
 import("//build/ohos_var.gni")
+
 # gn target defined
 if (product_name == "ohos-sdk") {
   group("build_ohos_sdk") {
