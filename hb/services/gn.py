@@ -78,18 +78,8 @@ class Gn(BuildFileGeneratorInterface):
 
     @throw_exception
     def _regist_gn_path(self):
-        config_data = IoUtil.read_json_file(os.path.join(
-            self.config.root_path, 'build/prebuilts_download_config.json'))
-        copy_config_list = config_data[os.uname().sysname.lower(
-        )][os.uname().machine.lower()]['copy_config']
-
-        gn_path = ''
-        for config in copy_config_list:
-            if config['unzip_filename'] == 'gn':
-                gn_path = os.path.join(
-                    self.config.root_path, config['unzip_dir'], 'gn')
-                break
-
+        gn_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/gn'
+                .format(sys.platform))
         if os.path.exists(gn_path):
             self.exec = gn_path
         else:
