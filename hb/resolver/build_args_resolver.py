@@ -231,7 +231,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             os.environ['CCACHE_BASEDIR'] = config.root_path
             ccache_max_size = os.environ.get('CCACHE_MAXSIZE')
             if not ccache_max_size:
-                ccache_max_size = '50G'
+                ccache_max_size = '100G'
 
             cmd = ['ccache', '-M', ccache_max_size]
 

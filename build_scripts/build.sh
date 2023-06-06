@@ -137,7 +137,7 @@ function build_sdk() {
         fi
         pushd ${ROOT_PATH}
         echo "building the latest ohos-sdk..."
-        ./build.py --product-name ohos-sdk
+        ./build.py --product-name ohos-sdk --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true --gn-args sdk_platform=linux
         if [[ "$?" -ne 0 ]]; then
           echo "ohos-sdk build failed!"
           exit 1
@@ -166,7 +166,7 @@ function build_sdk() {
         fi
         popd
 }
-if [[ ! -d "${SOURCE_ROOT_DIR}/out/sdk/packages/ohos-sdk/linux" && " ${@} " =~ " --prebuilt-sdk " ]]; then
+if [[ ! -d "${SOURCE_ROOT_DIR}/out/sdk/packages/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* ]]; then
   echo "start build ohos-sdk"
   build_sdk
   if [[ "$?" -ne 0 ]]; then
