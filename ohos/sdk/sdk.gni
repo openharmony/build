@@ -46,13 +46,21 @@ if (host_cpu == "arm64") {
   arch = "x64"
 }
 
-if (host_os == "mac") {
+if (sdk_platform == "default") {
+  if (host_os == "mac") {
+    sdk_systems = [ sdk_system_darwin ]
+  } else {
+    sdk_systems = [
+      sdk_system_windows,
+      sdk_system_linux,
+    ]
+  }
+} else if (sdk_platform == "mac") {
   sdk_systems = [ sdk_system_darwin ]
-} else {
-  sdk_systems = [
-    sdk_system_windows,
-    sdk_system_linux,
-  ]
+} else if (sdk_platform == "win") {
+  sdk_systems = [ sdk_system_windows ]
+} else if (sdk_platform == "linux") {
+  sdk_systems = [ sdk_system_linux ]
 }
 
 template("copy_and_archive") {
