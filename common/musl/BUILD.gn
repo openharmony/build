@@ -69,6 +69,7 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
   install_images = [
     "system",
     "updater",
+    "ramdisk",
   ]
   part_name = "common"
 }
