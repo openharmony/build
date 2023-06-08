@@ -180,7 +180,7 @@ declare_args() {
 }
 
 declare_args() {
-  is_use_check_deps = false
+  is_use_check_deps = true
 }
 
 declare_args() {

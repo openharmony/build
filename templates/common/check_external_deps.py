@@ -29,13 +29,20 @@ def check_parts_deps(args, external_part_name, parts_deps_info):
     if args.part_name in _part_allow_set:
         return
 
+    compile_standard_allow_file = args.compile_standard_allow_file
+    compile_standard_allow_info = read_json_file(compile_standard_allow_file)
+    added_self_part_allowa_list = compile_standard_allow_info.get("external_deps_added_self_part_module")
+    bundle_not_add_allowa_list = compile_standard_allow_info.get("external_deps_bundle_not_add")
     if external_part_name == args.part_name:
-        message = "WARNING: {} in target {} is dependency within part {}, Need to used deps".format(
+        message = "{} in target {} is dependency within part {}, Need to used deps".format(
             external_part_name, args.target_path, args.part_name)
-        print(f"[0/0] {message}")
-        return
+        if args.target_path in added_self_part_allowa_list:
+            print(f"[0/0] WARNING: {message}")
+            return
+        else:
+            raise Exception(message)
 
-    _tips_info = "WARNING: {} depend part {}, need set part deps info to".format(
+    _tips_info = "{} depend part {}, need set part deps info to".format(
         args.target_path, external_part_name)
 
     part_deps_info = parts_deps_info.get(args.part_name)
@@ -48,7 +55,10 @@ def check_parts_deps(args, external_part_name, parts_deps_info):
         _warning_info = ""
 
     if _warning_info != "":
-        print(f"[0/0] {_warning_info}")
+        if args.target_path in bundle_not_add_allowa_list:
+            print(f"[0/0] WARNING: {_warning_info}")
+        else:
+            raise Exception(_warning_info)
 
     return
 

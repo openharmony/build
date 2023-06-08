@@ -23,7 +23,7 @@ from scripts.util.file_utils import read_json_file
 def _read_lite_component_configs(file):
     subsystem_name = os.path.basename(file)[:-5]
     configs = {}
-    configs['subsystem_name'] = subsystem_name
+    configs['subsystem'] = subsystem_name
     with open(file, 'rb') as fin:
         data = json.load(fin)
         components = data.get('components')
@@ -63,7 +63,7 @@ def parse_lite_subsystem_config(lite_components_dir, output_dir,
             if file[-5:] == '.json':
                 configs = _read_lite_component_configs(os.path.join(
                     root, file))
-                subsystem_name = configs.get('subsystem_name')
+                subsystem_name = configs.get('subsystem')
                 ohos_build = os.path.join(
                     output_dir, '{}/ohos.build'.format(subsystem_name))
                 os.makedirs(os.path.dirname(ohos_build), exist_ok=True)
