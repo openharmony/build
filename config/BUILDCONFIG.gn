@@ -335,6 +335,11 @@ declare_args() {
 }
 
 declare_args() {
+  # Profile build. Enabling official builds automatically sets is_profile to false.
+  is_profile = false
+}
+
+declare_args() {
   # Enable mini debug info, it will add .gnu_debugdata
   # section in each stripped sofile
 
