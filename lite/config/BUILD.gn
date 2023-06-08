@@ -74,7 +74,8 @@ config("common") {
 }
 
 config("security") {
-  defines = [ "_FORTIFY_SOURCE=2" ]
+  # Need to support fortify ability first in musl libc, so disable the option temporarily
+  # defines = [ "_FORTIFY_SOURCE=2" ]
 
   cflags = [ "-fstack-protector-all" ]
   cflags_cc = cflags
