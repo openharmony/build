@@ -244,9 +244,11 @@ template("ohos_rust_shared_library") {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
     }
-    module_output_extension = dylib_extension
+
     if (defined(invoker.output_extension)) {
       module_output_extension = "." + invoker.output_extension
+    } else {
+      module_output_extension = dylib_extension
     }
 
     if (defined(invoker.rustc_lints)) {
