@@ -12,6 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 set -e
+
+script_path=$(cd $(dirname $0);pwd)
+code_dir=$(dirname ${script_path})
+
+if [[ " ${@} " =~ " --tool-repo " ]]; then
+    # prebuilts.sh should be a symbolic link to a prebuilts_download.sh created by oneself.
+    ${code_dir}/prebuilts.sh $@
+    exit 0
+fi
 while [ $# -gt 0 ]; do
   case "$1" in
     -skip-ssl|--skip-ssl) # wget、npm skip ssl check, which will allow
@@ -27,7 +36,7 @@ while [ $# -gt 0 ]; do
     --enable-symlink)     # enable symlink while copying node_modules
     ENABLE_SYMLINK=YES
     ;;
-    --build-arkuix)     # enable symlink while copying node_modules
+    --build-arkuix)
     BUILD_ARKUIX=YES
     ;;
     --tool-repo)
@@ -159,8 +168,6 @@ fi
 
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
-script_path=$(cd $(dirname $0);pwd)
-code_dir=$(dirname ${script_path})
 echo "prebuilts_download start"
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
