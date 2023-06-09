@@ -78,6 +78,8 @@ _ndk_library_targets = [
   "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:purgeable_memory_header",
   "//foundation/distributeddatamgr/relational_store/interfaces/ndk:native_rdb_ndk_header",
   "//foundation/distributeddatamgr/relational_store/interfaces/ndk:libnative_rdb_ndk",
+  "//drivers/external_device_manager/interfaces/ddk/usb:libusb_ndk",
+  "//drivers/external_device_manager/interfaces/ddk/usb:usb_header",
 ]
 
 _ndk_base_libs = [
