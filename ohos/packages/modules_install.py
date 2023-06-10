@@ -253,7 +253,6 @@ def main():
     depfiles.extend([item for item in depfiles if item not in sa_files])
     build_utils.write_depfile(args.depfile, args.install_modules_info_file,
                               depfiles)
-                              
     return 0
 
 
