@@ -45,7 +45,7 @@ class Outputs:
         self.platforms_build = os.path.join(output_dir, 'platforms.build')
         self.systemcapability_json = os.path.join(
             output_dir, 'SystemCapability.json')
-
+        self.compile_standard_whitelist_json = os.path.join(output_dir, 'compile_standard_whitelist.json')
 
 class Dirs:
 

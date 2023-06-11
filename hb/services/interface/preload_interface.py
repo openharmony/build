@@ -55,6 +55,7 @@ class PreloadInterface(ServiceInterface):
         self._generate_platforms_build()
         self._generate_subsystem_config_json()
         self._generate_systemcapability_json()
+        self._generate_compile_standard_whitelist_json()
 
     @abstractmethod
     def __post_init__(self):

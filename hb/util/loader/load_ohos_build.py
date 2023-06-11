@@ -370,8 +370,8 @@ class LoadBuildConfig(object):
 
     def __init__(self, source_root_dir, subsystem_build_info,
                  config_output_dir, variant_toolchains, subsystem_name,
-                 target_arch, ignored_subsystems,
-                 exclusion_modules_config_file, load_test_config, overrided_components):
+                 target_arch, ignored_subsystems, exclusion_modules_config_file,
+                 load_test_config, overrided_components, bundle_subsystem_allow_list):
         self._source_root_dir = source_root_dir
         self._build_info = subsystem_build_info
         self._config_output_relpath = config_output_dir
@@ -392,6 +392,7 @@ class LoadBuildConfig(object):
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._load_test_config = load_test_config
         self._overrided_components = overrided_components
+        self._bundle_subsystem_allow_list = bundle_subsystem_allow_list
 
     @throw_exception
     def _parsing_config(self, parts_config):
@@ -468,9 +469,20 @@ class LoadBuildConfig(object):
                     "subsystem name config incorrect in '{}'.".format(
                         _build_file), "2014")
             if _subsystem_name != self._subsystem_name:
-                print("warning: subsystem name config incorrect in '{}', build file subsystem name is {},"
-                      "configured subsystem name is {}.".format(
+                is_allow = False
+                for file_path in self._bundle_subsystem_allow_list:
+                    if _build_file.endswith(file_path):
+                        is_allow = True
+                        break
+                if is_allow:
+                    print("warning: subsystem name config incorrect in '{}', build file subsystem name is {},"
+                        "configured subsystem name is {}.".format(
                         _build_file, _subsystem_name, self._subsystem_name))
+                else:
+                    raise OHOSException("subsystem name config incorrect in '{}', build file subsystem name is {},"
+                        "configured subsystem name is {}.".format(
+                        _build_file, _subsystem_name, self._subsystem_name), 2014)
+
             subsystem_name = _subsystem_name
             _curr_parts_info = _parts_config.get('parts')
             for _pname in _curr_parts_info.keys():
@@ -586,8 +598,10 @@ class LoadBuildConfig(object):
             key: value for key, value in self._parts_deps.items() if save_part == key}
 
 
-def compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
-                                    part_subsystem_component_info, config_path):
+def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info, 
+                                    part_subsystem_component_info, config_path, subsystem_components_list):
+    name = ""
+    message = ""
     for component in components_name:
         if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
             continue
@@ -596,9 +610,15 @@ def compare_subsystem_and_component(subsystem_name,components_name, subsystem_co
                 continue
             if subsystem_name == component['component']:
                 continue
-            print("Warning: find subsystem {} failed, please check it in {}.".format(subsystem_name, config_path))
+            name = subsystem_name
+            message = "find subsystem {} failed, please check it in {}.".format(subsystem_name, config_path)
         else:
-            print("Warning: find component {} failed, please check it in {}.".format(component['component'], config_path))
+            name = component['component']
+            message = "find component {} failed, please check it in {}.".format(component['component'], config_path)
+        if name in subsystem_components_list:
+            print(f"Warning: {message}")
+        else:
+            raise Exception(message)
 
 
 def check_subsystem_and_component(parts_info_output_path):
@@ -608,9 +628,14 @@ def check_subsystem_and_component(parts_info_output_path):
                                        "part_subsystem.json")
     part_subsystem_component_info = read_json_file(part_subsystem_file)
 
-    subsystem_compoents_whitelist_file = os.path.join(config.root_path, 
+    subsystem_compoents_whitelist_file = os.path.join(config.root_path,
                                                       "build/subsystem_compoents_whitelist.json")
     subsystem_compoents_whitelist_info = read_json_file(subsystem_compoents_whitelist_file)
+
+    compile_standard_whitelist_file = os.path.join(config.root_path, "out/preloader", config.product,
+                                                   "compile_standard_whitelist.json")
+    compile_standard_whitelist_info = read_json_file(compile_standard_whitelist_file)
+    subsystem_components_list = compile_standard_whitelist_info.get("subsystem_components", [])
 
     if os.path.isfile(config_path):
         info = read_json_file(config_path)
@@ -621,8 +646,8 @@ def check_subsystem_and_component(parts_info_output_path):
             if subsystem_name is None or components_name is None:
                 print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(config_path))
                 continue
-            compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info, 
-                                            part_subsystem_component_info, config_path)
+            compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info,
+                                            part_subsystem_component_info, config_path, subsystem_components_list)
 
 
 def _output_parts_info(parts_config_dict, config_output_path):
@@ -769,6 +794,7 @@ def get_parts_info(source_root_dir,
                    exclusion_modules_config_file,
                    load_test_config,
                    overrided_components,
+                   bundle_subsystem_allow_list,
                    build_xts=False):
     """parts info,
     get info from build config file.
@@ -794,7 +820,7 @@ def get_parts_info(source_root_dir,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
                                        load_test_config,
-                                       overrided_components)
+                                       overrided_components, bundle_subsystem_allow_list)
         # xts subsystem special handling, device_attest and
         # device_attest_lite parts need to be compiled into the version image, other parts are not
         if subsystem_name == 'xts' and build_xts is False:

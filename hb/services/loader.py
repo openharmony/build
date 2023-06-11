@@ -76,6 +76,11 @@ class OHOSLoader(LoadInterface):
         self.example_subsystem_file = os.path.join(
             self.config.root_path, 'build', 'subsystem_config_example.json')
 
+        compile_standard_allow_file = os.path.join(
+            self.config.root_path, 'out/preloader', self.config.product, 'compile_standard_whitelist.json')
+        compile_standard_allow_info = read_json_file(compile_standard_allow_file)
+        bundle_subsystem_allow_list = compile_standard_allow_info.get("bundle_subsystem_error", [])
+
         # check config args
         self._check_args()
 
@@ -120,6 +125,7 @@ class OHOSLoader(LoadInterface):
             self.exclusion_modules_config_file,
             self.load_test_config,
             overrided_components,
+            bundle_subsystem_allow_list,
             self.build_xts)
         self.parts_targets = self.parts_config_info.get('parts_targets')
         self.phony_targets = self.parts_config_info.get('phony_target')
