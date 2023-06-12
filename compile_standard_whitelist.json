@@ -1,5 +1,7 @@
 {
     "bundle_subsystem_error": [
+        "device/board/bearpi/bearpi_hm_micro/app/bundle.json",
+        "device/board/chipsea/cst85_wblink/ohos.build",
         "device/board/hihope/rk3568/ohos.build",
         "device/board/hisilicon/hispark_taurus/linux/ohos.build",
         "device/board/hisilicon/hispark_taurus/ohos.build",
@@ -27,7 +29,12 @@
         "third_party/wayland_standard/bundle.json",
         "third_party/weex-loader/bundle.json",
         "third_party/wpa_supplicant/wpa_supplicant-2.9_standard/bundle.json",
-        "vendor/hihope/rk3568/ohos.build"
+        "vendor/hihope/rk3568/ohos.build",
+        "vendor/hihope/rk3568_mini_system/ohos.build",
+        "vendor/hisilicon/hispark_taurus_standard/ohos.build",
+        "vendor/kaihong/khdvk_3566b/bundle.json",
+        "vendor/openvalley/niobeu4/ohos.build",
+        "vendor/unionman/unionpi_tiger/ohos.build"
     ],
     "subsystem_components": [],
     "gn_part_or_subsystem_error": [
@@ -1310,6 +1317,7 @@
         "//arkcompiler/ets_frontend/merge_abc:assembly_proto_static",
         "//arkcompiler/ets_frontend/merge_abc:merge_abc",
         "//arkcompiler/ets_frontend/ts2panda/ts2abc:ts2abc",
+        "//arkcompiler/ets_runtime:libark_jsruntime_set",
         "//arkcompiler/ets_runtime:libark_jsruntime_test_set",
         "//base/account/os_account/frameworks/appaccount/extension:authentication_extension",
         "//base/account/os_account/frameworks/appaccount/native:app_account_innerkits",
@@ -1926,6 +1934,8 @@
         "//developtools/profiler/device/plugins/ftrace_plugin/tools/device_kernel_version/default/event_parsers:ftrace_event_parsers",
         "//developtools/profiler/device/plugins/ftrace_plugin:ftrace_plugin_source",
         "//developtools/profiler/device/plugins/hidump_plugin:hidumpplugin_source",
+        "//developtools/profiler/device/plugins/hiebpf_plugin:hiebpfplugin_source",
+        "//developtools/profiler/device/plugins/hiebpf_plugin/tools:ebpf_converter",
         "//developtools/profiler/device/plugins/hilog_plugin:hilogplugin_source",
         "//developtools/profiler/device/plugins/hiperf_plugin:hiperfplugin_source",
         "//developtools/profiler/device/plugins/hisysevent_plugin:hisyseventplugin_source",
@@ -1944,6 +1954,7 @@
         "//developtools/profiler/device/services/ipc:protoencoder_plugin",
         "//developtools/profiler/device/services/shared_memory:shared_memory_source",
         "//developtools/profiler/hidebug/frameworks/native:libhidebug_init_source",
+        "//developtools/profiler/hiebpf:hiebpf_source_common",
         "//developtools/profiler/proto_encoder/test:proto_example_source",
         "//developtools/profiler/proto_encoder:proto_encoder_source",
         "//developtools/profiler/protos/services:plugin_service_proto",
@@ -1958,6 +1969,7 @@
         "//developtools/profiler/protos/types/plugins/ftrace_data/default:ftrace_plugin_config_cpp_standard",
         "//developtools/profiler/protos/types/plugins/hidump_data:hidump_data_cpp",
         "//developtools/profiler/protos/types/plugins/hidump_data:hidump_plugin_config_cpp_standard",
+        "//developtools/profiler/protos/types/plugins/hiebpf_data:hiebpf_data_cpp",
         "//developtools/profiler/protos/types/plugins/hiebpf_data:hiebpf_data_cpp_standard",
         "//developtools/profiler/protos/types/plugins/hilog_data:hilog_data_cpp",
         "//developtools/profiler/protos/types/plugins/hilog_data:hilog_plugin_config_cpp_standard",
@@ -2797,6 +2809,7 @@
         "//third_party/libnl:libnl_share",
         "//third_party/libpng:libpng_static",
         "//third_party/libsnd:sndfile",
+        "//third_party/libbpf:libbpf",
         "//third_party/libusb:libusb",
         "//third_party/libwebsockets:websockets",
         "//third_party/mindspore/mindspore-src/source/mindspore/ccsrc/plugin/device/cpu/kernel/nnacl:nnacl_obj",
