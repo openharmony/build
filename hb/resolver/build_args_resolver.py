@@ -510,6 +510,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         target_generator = build_module.target_generator
         if target_arg.arg_value == 'debug':
             target_generator.regist_arg('is_debug', True)
+        elif target_arg.arg_value == 'profile':
+            target_generator.regist_arg('is_profile', True)
         # For historical reasons, this value must be debug
         target_generator.regist_arg('ohos_build_type', 'debug')
 
