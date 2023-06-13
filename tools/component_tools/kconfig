@@ -242,13 +242,13 @@ config feature$$hiviewdfx$$hilog_native
         string "feature"
         default ""
         depends on hiviewdfx$$hilog_native
-config hiviewdfx$$hichecker_native
-    bool "hichecker_native"
+config hiviewdfx$$hichecker
+    bool "hichecker"
     default n
-config feature$$hiviewdfx$$hichecker_native
+config feature$$hiviewdfx$$hichecker
         string "feature"
         default ""
-        depends on hiviewdfx$$hichecker_native
+        depends on hiviewdfx$$hichecker
 config hiviewdfx$$hisysevent_native
     bool "hisysevent_native"
     default n
