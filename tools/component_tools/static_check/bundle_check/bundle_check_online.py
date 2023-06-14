@@ -40,6 +40,8 @@ class BundleCheckOnline:
             diff_dict[file_path] = []
             diff_list = diff[file_path]
             for i in diff_list:
+                if '/third_party_' in file_path and 'name' in i[1]:
+                    continue
                 ret = BundleCheckOnline.check_diff_by_line(i[1])
                 if not ret:
                     continue
