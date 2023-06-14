@@ -23,7 +23,8 @@ from mkimage import mkimages
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
-from scripts.util import build_utils  # noqa: E402
+from scripts.util import build_utils
+from build_scripts.build import find_top  # noqa: E402
 
 
 def _prepare_userdata(userdata_path):
@@ -99,8 +100,8 @@ def _prepare_eng_ststem(eng_system_path, build_variant):
     if os.path.exists(_target_policy_path):
         shutil.rmtree(_target_policy_path)
     os.makedirs(_target_policy_path, exist_ok=True)
-
-    copy_eng_system_config = '../../build/ohos/images/mkimage/root_image.json'
+    root_path = find_top()
+    copy_eng_system_config = os.path.join(root_path, "build/ohos/images/mkimage/root_image.json")
     with open(copy_eng_system_config, 'rb') as input_f:
         default_build_args = json.load(input_f)
     for arg in default_build_args.values():
