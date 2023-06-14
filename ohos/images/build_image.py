@@ -108,7 +108,8 @@ def _prepare_eng_ststem(eng_system_path, build_variant):
         dest_file = arg.get('dest_file')
         if(os.path.exists(dest_file)):
             os.remove(dest_file)
-        shutil.copy(sources_file, dest_file)
+        if(os.path.exists(sources_file)):
+            shutil.copy(sources_file, dest_file)
 
 
 def _make_image(args):
