@@ -80,6 +80,8 @@ _ndk_library_targets = [
   "//foundation/distributeddatamgr/relational_store/interfaces/ndk:libnative_rdb_ndk",
   "//drivers/external_device_manager/interfaces/ddk/usb:libusb_ndk",
   "//drivers/external_device_manager/interfaces/ddk/usb:usb_header",
+  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:libvulkan_ndk",
+  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:vulkan_header",
 ]
 
 _ndk_base_libs = [
