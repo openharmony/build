@@ -287,6 +287,7 @@ def main():
                         help='npm download source')
     parser.add_argument('--host-cpu', help='host cpu', required=True)
     parser.add_argument('--host-platform', help='host platform', required=True)
+    parser.add_argument('--config-file', help='prebuilts download config file')
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if os.path.exists(os.path.join(args.code_dir, "prebuilts/clang")):
@@ -299,6 +300,8 @@ def main():
     tool_repo = args.tool_repo
     if args.build_arkuix:
         config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
+    elif args.config_file:
+        config_file = args.config_file
     else:
         config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
