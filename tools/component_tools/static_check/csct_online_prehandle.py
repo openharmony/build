@@ -98,7 +98,7 @@ def __diff_match_start_linenum(control_block, line):
 def __diff_match_code_line(control_block, line):
     diff_dict = control_block["diff_dict"]
     pattern1 = "[\ +-](.*)"
-    pattern2 = "([\ +])?(.*)"
+    pattern2 = "([\ +-])?(.*)"
     if control_block["match_flag"] is False or re.match(pattern1, line) is None:
         return False
 
