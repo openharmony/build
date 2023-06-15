@@ -40,9 +40,7 @@ config("runtime_library") {
 }
 
 config("executable_config") {
-  cflags = [ "-fPIE" ]
-  asmflags = [ "-fPIE" ]
-  ldflags = [ "-pie" ]
+  configs = [ "//build/config/security:executable_config" ]
 }
 
 config("x11") {
