@@ -13,6 +13,8 @@ sbin,                       00750,      0,          2000,       0
 system/bin,                 00751,      0,          2000,       0
 vendor/bin,                 00751,      0,          2000,       0
 vendor,                     00755,      0,          2000,       0
+eng_system,                 00777,      0,          2000,       0
+eng_chipset,                00777,      0,          2000,       0
 sys_prod,                   00755,      0,          2000,       0
 chip_prod,                  00755,      0,          2000,       0
 system/etc/init,            00500,      0,          0,          0

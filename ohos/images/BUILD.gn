@@ -26,6 +26,8 @@ group("make_images") {
     ]
     foreach(_platform, target_platform_list) {
       deps += [
+        ":${_platform}_eng_chipset_image",
+        ":${_platform}_eng_system_image",
         ":${_platform}_sys_prod_image",
         ":${_platform}_system_image",
         ":${_platform}_updater_ramdisk_image",
@@ -39,6 +41,32 @@ group("make_images") {
     deps += [ ":chip_prod_image" ]
   } else {
     deps += [ "//build/ohos/packages:packer" ]
+  }
+}
+
+group("eng_system_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_eng_system_image" ]
+  }
+}
+
+group("eng_chipset_image") {
+  deps = []
+  if (is_standard_system) {
+    deps += [
+      "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+      "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+    ]
+  }
+  foreach(_platform, target_platform_list) {
+    deps += [ ":${_platform}_eng_chipset_image" ]
   }
 }
 
@@ -175,6 +203,8 @@ foreach(_platform, target_platform_list) {
     "sys_prod",
     "chip_prod",
     "updater_ramdisk",
+    "eng_system",
+    "eng_chipset",
   ]
   if (enable_ramdisk) {
     image_list += [ "ramdisk" ]
@@ -234,6 +264,8 @@ foreach(_platform, target_platform_list) {
         rebase_path(output_image_file, root_build_dir),
         "--target-cpu",
         target_cpu,
+        "--build-variant",
+        build_variant,
         "--build-image-tools-path",
       ]
       args += rebase_path(build_image_tools_path, root_build_dir)
