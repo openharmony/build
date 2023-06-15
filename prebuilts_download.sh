@@ -16,10 +16,15 @@ set -e
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 
-if [[ " ${@} " =~ " --tool-repo " ]]; then
+if [[ "${@}" =~ "--tool-repo" ]]; then
     # prebuilts.sh should be a symbolic link to a prebuilts_download.sh created by oneself.
-    ${code_dir}/prebuilts.sh $@
-    exit 0
+    set +e
+    bash ${code_dir}/prebuilts.sh $@
+    if [[ "$?" -ne 0 ]]; then
+        set -e
+    else
+        exit 0
+    fi
 fi
 while [ $# -gt 0 ]; do
   case "$1" in
