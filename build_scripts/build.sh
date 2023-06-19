@@ -108,9 +108,11 @@ function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
   cd ${TOOLS_INSTALL_DIR}
   commandlineVersion=2.0.1.0
-  echo "download oh-command-line-tools"
-  wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/a6/v3/cXARnGbKTt-4sPEi3GcnJA/ohcommandline-tools-linux-2.0.0.1.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20230512T075353Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=C82B51F3C9F107AB460EC26392E25B2E20EF1A6CAD10A26929769B21B8C8D5B6 -O ohcommandline-tools-linux.zip
-  unzip ohcommandline-tools-linux.zip
+  if [[ ! -f "${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
+    echo "download oh-command-line-tools"
+    wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/a6/v3/cXARnGbKTt-4sPEi3GcnJA/ohcommandline-tools-linux-2.0.0.1.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20230512T075353Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=C82B51F3C9F107AB460EC26392E25B2E20EF1A6CAD10A26929769B21B8C8D5B6 -O ohcommandline-tools-linux.zip
+    unzip ohcommandline-tools-linux.zip
+  fi
   OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
   chmod +x ${OHPM_HOME}/bin/init
   echo "init ohpm"
@@ -120,13 +122,12 @@ function init_ohpm() {
   ohpm config set strict_ssl false
   cd ${SOURCE_ROOT_DIR}
 }
-if [[ ! -f "${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
-  echo "start set ohpm"
-  init_ohpm
-  if [[ "$?" -ne 0 ]]; then
-    echo "ohpm init failed!"
-    exit 1
-  fi
+
+echo "start set ohpm"
+init_ohpm
+if [[ "$?" -ne 0 ]]; then
+  echo "ohpm init failed!"
+  exit 1
 fi
 
 function build_sdk() {
