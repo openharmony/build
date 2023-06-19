@@ -102,6 +102,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             target_generator.regist_arg('enable_ng_build', True)
             target_generator.regist_arg('is_component_build', False)
             target_generator.regist_arg('use_musl', False)
+            target_generator.regist_arg('is_use_check_deps', False)
             if len(build_module.args_dict['build_target'].arg_value) == 0:
                 build_module.args_dict['build_target'].arg_value = [
                     'arkui_targets']
