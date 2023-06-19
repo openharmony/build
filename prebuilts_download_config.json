@@ -42,6 +42,13 @@
   ],
   "file_handle_config": [
     {
+      "src":"/prebuilts/build-tools/common/nodejs",
+      "dest":"/prebuilts/build-tools/common/nodejs",
+      "rename": "true",
+      "symlink_src":"/node-v14.21.1-linux-x64",
+      "symlink_dest":"/current"
+    },
+    {
       "src": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi",
       "tmp": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2",
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
@@ -121,11 +128,6 @@
   ],
   "linux": {
     "node_config": [
-      {
-        "unzip_dir": "prebuilts/build-tools/common/nodejs",
-        "file_path": "/nodejs/v12.18.4/node-v12.18.4-linux-x64.tar.gz",
-        "unzip_filename": "node-v12.18.4-linux-x64"
-      },
       {
         "unzip_dir": "prebuilts/build-tools/common/nodejs",
         "file_path": "/nodejs/v14.21.1/node-v14.21.1-linux-x64.tar.gz",
@@ -374,11 +376,6 @@
   },
   "darwin": {
     "node_config": [
-      {
-        "unzip_dir": "prebuilts/build-tools/common/nodejs",
-        "file_path": "/nodejs/v12.18.4/node-v12.18.4-darwin-x64.tar.gz",
-        "unzip_filename": "node-v12.18.4-darwin-x64"
-      },
       {
         "unzip_dir": "prebuilts/build-tools/common/nodejs",
         "file_path": "/nodejs/v14.21.1/node-v14.21.1-darwin-x64.tar.gz",

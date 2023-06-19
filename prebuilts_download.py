@@ -220,7 +220,7 @@ def _node_modules_copy(config, code_dir, enable_symlink):
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
-def _file_handle(config, code_dir):
+def _file_handle(config, code_dir, host_platform):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
         dest_dir = code_dir + config_info.get('dest')
@@ -238,10 +238,14 @@ def _file_handle(config, code_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(tmp_dir, dest_dir)
             elif rename:
-                if os.path.exists(dest_dir):
+                if os.path.exists(dest_dir) and dest_dir != src_dir:
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
                 if symlink_src and symlink_dest:
+                    if os.path.exists(dest_dir + symlink_dest):
+                        os.remove(dest_dir + symlink_dest)
+                    if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
+                        symlink_src = symlink_src.replace('linux', 'darwin')
                     os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
@@ -333,7 +337,7 @@ def main():
         with args.progress:
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
-    _file_handle(file_handle_config, args.code_dir)
+    _file_handle(file_handle_config, args.code_dir, args.host_platform)
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
     if install_config:
         _install(install_config, args.code_dir)
