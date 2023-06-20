@@ -24,4 +24,8 @@ declare_args() {
   config_ohos_aafwk_ams_task_size = 2048
 
   config_ohos_aafwk_aafwk_lite_task_stack_size = 12288
+
+  enable_ohos_aafwk_multi_tasks_feature = false
+
+  config_ohos_aafwk_ability_list_capacity = 16
 }
