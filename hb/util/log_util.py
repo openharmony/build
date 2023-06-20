@@ -68,8 +68,7 @@ class LogUtil(metaclass=NoInstance):
 
     @staticmethod
     def write_log(log_path, msg, level):
-        if not os.path.exists(os.path.dirname(log_path)):
-            os.makedirs(os.path.dirname(log_path), mode=755)
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
         with open(log_path, 'at', encoding='utf-8') as log_file:
             for line in str(msg).splitlines():
                 sys.stderr.write(LogUtil.message(level, line))
