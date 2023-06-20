@@ -273,7 +273,7 @@ class OHOSPreloader(PreloadInterface):
         return subsystem_info
 
     def _get_compile_standard_whitelist_info(self) -> dict:
-        allow_info_file = "out/product_ext/{}/compile_standard_whitelist.json".format(self.config.product)
+        allow_info_file = "out/products_ext/{}/compile_standard_whitelist.json".format(self.config.product)
         allow_info_file = os.path.join(self._dirs.source_root_dir, allow_info_file)
         if not os.path.exists(allow_info_file):
             allow_info_file = os.path.join(self._dirs.source_root_dir, "build/compile_standard_whitelist.json")
