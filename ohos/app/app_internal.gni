@@ -336,8 +336,8 @@ template("compile_js_assets") {
     deps += [
       "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap($host_toolchain)",
       "//arkcompiler/ets_frontend/ts2panda:ark_ts2abc_build($host_toolchain)",
-      "//developtools/ace_ets2bundle:ets_loader_node_modules",
-      "//developtools/ace_js2bundle:ace_loader_node_modules",
+      "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+      "//developtools/ace_js2bundle:ace_loader_ark_hap",
     ]
     _ace_loader_home =
         get_label_info("//developtools/ace_js2bundle:ace_loader_node_modules",
