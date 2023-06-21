@@ -63,7 +63,7 @@ def _get_post_process_modules_info(post_process_modules_info_files, depfiles):
 def copy_modules(system_install_info, install_modules_info_file,
                  modules_info_file, module_list_file,
                  post_process_modules_info_files, platform_installed_path,
-                 additional_system_files, depfiles):
+                 host_toolchain, additional_system_files, depfiles):
     output_result = []
     dest_list = []
     symlink_dest = []
@@ -96,6 +96,9 @@ def copy_modules(system_install_info, install_modules_info_file,
         if module_info.get('type') == 'none':
             continue
         # copy module lib
+        label = module_info.get('label')
+        if label and host_toolchain in label:
+            continue
         source = module_info.get('source')
         dests = module_info.get('dest')
         # check source
@@ -159,6 +162,7 @@ def main():
     parser.add_argument('--merged-sa-profile', required=True)
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--system-image-zipfile', required=True)
+    parser.add_argument('--host-toolchain', required=True)
     parser.add_argument(
         '--additional-system-files',
         action='append',
@@ -244,8 +248,8 @@ def main():
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
                  args.post_process_modules_info_files,
-                 args.platform_installed_path, additional_system_files,
-                 depfiles)
+                 args.platform_installed_path, args.host_toolchain,
+                 additional_system_files, depfiles)
 
     if os.path.exists(args.system_image_zipfile):
         os.unlink(args.system_image_zipfile)
