@@ -89,7 +89,7 @@ def build_run_sloadf2fs(args):
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libuuid_path
 
     oldcwd = os.getcwd();
-    os.chdir("./clang_x64/thirdparty/f2fs_tools/")
+    os.chdir("./clang_x64/thirdparty/f2fs-tools/")
     os.chdir(oldcwd);
 
     sloadf2fs_opts = ""
