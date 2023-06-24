@@ -33,6 +33,7 @@ def parse_args(args):
     parser.add_argument('--sdk-home', help='sdk home')
     parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
     parser.add_argument('--build-level', default='project', help='module or project')
+    parser.add_argument('--assemble-type', default='assembleApp', help='assemble type')
     parser.add_argument('--output-file', help='output file')
     parser.add_argument('--build-profile', help='build profile file')
     parser.add_argument('--system-lib-module-info-list', nargs='+', help='system lib module info list')
@@ -90,31 +91,31 @@ def make_env(build_profile, cwd, ohpm_registry):
     os.chdir(cur_dir)
 
 
-def gen_signed_hap_path_json(build_profile, cwd, options):
+def gen_unsigned_hap_path_json(build_profile, cwd, options):
     '''
-    Generate signed_hap_path_list
+    Generate unsigned_hap_path_list
     :param build_profile: module compilation information file
     :param cwd: app project directory
     :return: signed_hap_path_json
     '''
-    signed_hap_path_json = {}
-    signed_hap_path_list = []
+    unsigned_hap_path_json = {}
+    unsigned_hap_path_list = []
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
             src_path = module.get('srcPath')
             if options.test_hap:
-                signed_hap_path = os.path.join(
+                unsigned_hap_path = os.path.join(
                     cwd, src_path, 'build/default/outputs/ohosTest')
             else:
-                signed_hap_path = os.path.join(
+                unsigned_hap_path = os.path.join(
                     cwd, src_path, 'build/default/outputs/default')
             hap_file = build_utils.find_in_directory(
-                signed_hap_path, '*-signed.hap')
-            signed_hap_path_list.extend(hap_file)
-        signed_hap_path_json['signed_hap_path_list'] = signed_hap_path_list
-    return signed_hap_path_json
+                unsigned_hap_path, '*-unsigned.hap')
+            unsigned_hap_path_list.extend(hap_file)
+        unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
+    return unsigned_hap_path_json
 
 
 def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
@@ -137,25 +138,6 @@ def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
             shutil.copyfile(lib_path, dest)
 
 
-def copy_signed_hap(signed_hap_path_json, hap_out_dir, hap_name):
-    '''
-    Copy the signed hap package to the specified directory
-    :param signed_hap_path_json: signed hap package path
-    :param hap_out_dir: hap output directory
-    :param hap_name: hap name
-    :return: None
-    '''
-    if not os.path.exists(hap_out_dir):
-        os.makedirs(hap_out_dir, exist_ok=True)
-    signed_hap_path_list = file_utils.read_json_file(signed_hap_path_json)
-    for signed_hap_path in signed_hap_path_list.get('signed_hap_path_list'):
-        output_hap_name = hap_name + '-' + os.path.basename(signed_hap_path)
-        if len(signed_hap_path_list.get('signed_hap_path_list')) == 1 and hap_name:
-            output_hap_name = hap_name + '.hap'
-        output_hap = os.path.join(hap_out_dir, output_hap_name)
-        shutil.copyfile(signed_hap_path, output_hap)
-
-
 def main(args):
     options = parse_args(args)
     cwd = os.path.abspath(options.cwd)
@@ -171,7 +153,7 @@ def main(args):
     # add arkui-x to PATH
     os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
 
-    # generate signed_hap_path_list and run ohpm install
+    # generate unsigned_hap_path_list and run ohpm install
     make_env(options.build_profile, cwd, options.ohpm_registry)
 
     if options.test_hap:
@@ -179,7 +161,7 @@ def main(args):
                f'module={options.test_module}@ohosTest', 'assembleHap']
     else:
         cmd = ['bash', './hvigorw', 'clean', '--mode',
-               options.build_level, '-p', 'product=default', 'assembleApp']
+               options.build_level, '-p', 'product=default', options.assemble_type]
     if options.enable_debug:
         cmd.extend(['-p', 'debuggable=true'])
     else:
@@ -200,11 +182,9 @@ def main(args):
     if proc.returncode != 0:
         raise Exception('Hvigor build failed: {}'.format(stderr.decode()))
 
-    signed_hap_path_json = gen_signed_hap_path_json(
+    unsigned_hap_path_json = gen_unsigned_hap_path_json(
         options.build_profile, cwd, options)
-    file_utils.write_json_file(options.output_file, signed_hap_path_json)
-
-    copy_signed_hap(options.output_file, options.hap_out_dir, options.hap_name)
+    file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
 
 if __name__ == '__main__':

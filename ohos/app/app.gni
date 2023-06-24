@@ -200,8 +200,8 @@ template("ohos_resources") {
 template("ohos_app") {
   forward_variables_from(invoker, [ "testonly" ])
 
-  signed_hap_path_list =
-      "${target_out_dir}/${target_name}/signed_hap_path_list.json"
+  _unsigned_hap_path_list =
+      "${target_out_dir}/${target_name}/unsigned_hap_path_list.json"
 
   _abs_path = get_path_info("./", "abspath")
   _hap_out_dir = "${target_out_dir}/${target_name}"
@@ -304,31 +304,18 @@ template("ohos_app") {
     module_source_dir = get_label_info(":${_main_target_name}", "dir")
   }
 
-  compile_app(target_name) {
+  _compile_app_target = "${target_name}_compile_app"
+  compile_app(_compile_app_target) {
     build_mode = _js_build_mode
     cwd = _abs_path
-    deps = [
-      ":$_module_info_target",
-      ":$_notice_target",
-    ]
+    unsigned_hap_path_list = _unsigned_hap_path_list
+    deps = [ ":$_notice_target" ]
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
     if (defined(invoker.system_lib_deps)) {
       system_lib_deps = _system_lib_deps
       deps += _system_lib_deps
-    }
-    hap_out_dir = _hap_out_dir
-    hap_name = _hap_name
-    install_module_info = {
-      module_def = get_label_info(":$target_name", "label_with_toolchain")
-      module_info_file =
-          rebase_path(get_label_info(module_def, "target_out_dir"),
-                      root_build_dir) + "/${target_name}_module_info.json"
-      toolchain = current_toolchain
-      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
-      part_name = _part_name
-      subsystem_name = _subsystem_name
     }
     if (defined(invoker.test_hap)) {
       test_hap = invoker.test_hap
@@ -346,6 +333,32 @@ template("ohos_app") {
     }
     if (defined(invoker.sdk_type_name)) {
       sdk_type_name = invoker.sdk_type_name
+    }
+    if (defined(invoker.assemble_type)) {
+      assemble_type = invoker.assemble_type
+    }
+    if (defined(invoker.build_level)) {
+      build_level = invoker.build_level
+    }
+  }
+  app_sign(target_name) {
+    certificate_profile = invoker.certificate_profile
+    unsigned_hap_path_list = _unsigned_hap_path_list
+    deps = [
+      ":$_compile_app_target",
+      ":$_module_info_target",
+    ]
+    hap_out_dir = _hap_out_dir
+    hap_name = _hap_name
+    install_module_info = {
+      module_def = get_label_info(":$target_name", "label_with_toolchain")
+      module_info_file =
+          rebase_path(get_label_info(module_def, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      toolchain = current_toolchain
+      toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+      part_name = _part_name
+      subsystem_name = _subsystem_name
     }
   }
 }

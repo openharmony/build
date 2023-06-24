@@ -418,6 +418,94 @@ template("compile_js_assets") {
   }
 }
 
+template("app_sign") {
+  forward_variables_from(invoker, [ "testonly" ])
+  action(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "private_key_path",
+                             "signature_algorithm",
+                             "certificate_profile",
+                             "keystore_password",
+                             "key_alias",
+                             "certificate_file",
+                             "keystore_path",
+                             "unsigned_hap_path_list",
+                             "hap_out_dir",
+                             "hap_name",
+                             "install_module_info",
+                           ])
+    script = "//build/scripts/app_sign.py"
+    _private_key_path = default_hap_private_key_path
+    if (defined(private_key_path)) {
+      _private_key_path = private_key_path
+    }
+    _key_alias = default_key_alias
+    if (defined(key_alias)) {
+      _key_alias = key_alias
+    }
+    _signature_algorithm = default_signature_algorithm
+    if (defined(signature_algorithm)) {
+      _signature_algorithm = signature_algorithm
+    }
+    _keystore_path = default_keystore_path
+    if (defined(keystore_path)) {
+      _keystore_path = keystore_path
+    }
+    _certificate_file = default_hap_certificate_file
+    if (defined(certificate_file)) {
+      _certificate_file = certificate_file
+    }
+    _keystore_password = default_keystore_password
+    if (defined(keystore_password)) {
+      _keystore_password = keystore_password
+    }
+    if (defined(certificate_profile)) {
+      _certificate_profile = certificate_profile
+    }
+
+    inputs = [
+      hapsigner,
+      certificate_profile,
+      _keystore_path,
+      _certificate_file,
+    ]
+
+    outputs = [ "${target_out_dir}/${target_name}.stamp" ]
+
+    args = [
+      "--keyPwd",
+      _private_key_path,
+      "--sign-algo",
+      _signature_algorithm,
+      "--profileFile",
+      rebase_path(_certificate_profile, root_build_dir),
+      "--keyalias",
+      _key_alias,
+      "--keystoreFile",
+      rebase_path(_keystore_path, root_build_dir),
+      "--keystorePwd",
+      _keystore_password,
+      "--certificate-file",
+      rebase_path(_certificate_file, root_build_dir),
+      "--hapsigner",
+      rebase_path(hapsigner, root_build_dir),
+      "--unsigned-hap-path-list",
+      rebase_path(unsigned_hap_path_list, root_build_dir),
+      "--hap-out-dir",
+      rebase_path(hap_out_dir, root_build_dir),
+      "--hap-name",
+      hap_name,
+    ]
+    if (defined(install_module_info)) {
+      metadata = {
+        install_modules = [ install_module_info ]
+      }
+    }
+  }
+}
+
 template("compile_app") {
   forward_variables_from(invoker, [ "testonly" ])
   nodejs_version = "v14.21.1"
@@ -436,8 +524,9 @@ template("compile_app") {
                              "app_profile",
                              "hap_profile",
                              "build_level",
+                             "assemble_type",
                              "sdk_home",
-                             "signed_hap_path_list",
+                             "unsigned_hap_path_list",
                              "system_lib_deps",
                              "hap_out_dir",
                              "hap_name",
@@ -448,10 +537,7 @@ template("compile_app") {
                              "sdk_type_name",
                            ])
     script = "//build/scripts/compile_app.py"
-    outputs = [
-      signed_hap_path_list,
-      "${target_out_dir}/${target_name}.stamp",
-    ]
+    outputs = [ unsigned_hap_path_list ]
 
     args = [
       "--nodejs",
@@ -463,13 +549,9 @@ template("compile_app") {
       "--sdk-home",
       rebase_path(sdk_home),
       "--output-file",
-      rebase_path(signed_hap_path_list, root_build_dir),
+      rebase_path(unsigned_hap_path_list, root_build_dir),
       "--ohpm-registry",
       ohpm_registry,
-      "--hap-out-dir",
-      rebase_path(hap_out_dir, root_build_dir),
-      "--hap-name",
-      hap_name,
     ]
 
     if (defined(build_mode) && build_mode == "debug") {
@@ -490,6 +572,18 @@ template("compile_app") {
       args += [
         "--module-libs-dir",
         module_libs_dir,
+      ]
+    }
+    if (defined(build_level) && build_level != "") {
+      args += [
+        "--build-level",
+        build_level,
+      ]
+    }
+    if (defined(assemble_type) && assemble_type != "") {
+      args += [
+        "--assemble-type",
+        assemble_type,
       ]
     }
     if (defined(system_lib_deps)) {

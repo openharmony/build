@@ -42,6 +42,7 @@ def parse_args(args):
     parser.add_argument('--profileSigned', help='')
     parser.add_argument('--inForm', help='')
     parser.add_argument('--certificate-file', help='')
+    parser.add_argument('--hap-name', help='')
     options = parser.parse_args(args)
     return options
 
@@ -78,10 +79,12 @@ def main(args):
             os.makedirs(options.hap_out_dir, exist_ok=True)
         unsigned_hap_path_list = file_utils.read_json_file(options.unsigned_hap_path_list)
         for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
-            signed_hap_path = unsigned_hap_path.replace('unsigned.hap', 'signed.hap')
-            signed_hap_path = os.path.basename(signed_hap_path)
-            signed_hap_path = os.path.join(options.hap_out_dir, signed_hap_path)
-            sign_app(options, unsigned_hap_path, signed_hap_path)
+            signed_hap_path = unsigned_hap_path.replace('unsigned', 'signed')
+            output_hap_name = f'{options.hap_name}-{os.path.basename(signed_hap_path)}'
+            if len(unsigned_hap_path_list.get('unsigned_hap_path_list')) == 1 and options.hap_name:
+                output_hap_name = f'{options.hap_name}.hap'
+            output_hap = os.path.join(options.hap_out_dir, output_hap_name)
+            sign_app(options, unsigned_hap_path, output_hap)
 
 
 if __name__ == '__main__':
