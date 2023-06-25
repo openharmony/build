@@ -55,6 +55,12 @@ declare_args() {
   # sys_prod package dir
   sys_prod_base_dir = "sys_prod"
 
+  # eng_system package dir
+  eng_system_base_dir = "eng_system"
+
+  # eng_chipset package dir
+  eng_chipset_base_dir = "eng_chipset"
+
   # chip_prod package dir
   chip_prod_base_dir = "chip_prod"
 
@@ -114,6 +120,9 @@ declare_args() {
 
   # Build ohos sdk compatibility jar
   build_bc_sdk = false
+
+  # Which OS the generated SDK works on. possible values: 'win/mac/linux/default'
+  sdk_platform = "default"
 }
 
 declare_args() {
@@ -121,7 +130,7 @@ declare_args() {
   build_ohos_ndk = false
 
   # Which OS the generated NDK works on. possible values: 'win/mac/linux/default'
-  ndk_system = "default"
+  ndk_platform = "default"
 
   # Whether to archive or not, set to false in debug to save ndk build time.
   archive_ndk = true
@@ -159,6 +168,10 @@ declare_args() {
 }
 
 declare_args() {
+  ohos_skip_parse_external_deps = false
+}
+
+declare_args() {
   load_test_config = true
 }
 
@@ -173,7 +186,7 @@ declare_args() {
 }
 
 declare_args() {
-  is_use_check_deps = false
+  is_use_check_deps = true
 }
 
 declare_args() {
@@ -196,10 +209,9 @@ if (defined(build_cross_platform_version) && build_cross_platform_version) {
   use_new_skia = true
 }
 
-# support changing the npm registry and sdk type
+# support changing the ohpm registry and sdk type
 declare_args() {
-  npm_registry = ""
-  sdk_type_for_app = "ohos-sdk"
+  ohpm_registry = ""
 }
 
 # build target type
@@ -268,14 +280,10 @@ if (host_os == "mac") {
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
 hap_packing_tool =
     "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
-nodejs_version = "v12.18.4"
-if (host_os == "mac") {
-  nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
-  npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"
-} else {
-  nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
-  npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/npm"
-}
+
+nodejs = "//prebuilts/build-tools/common/nodejs/current/bin/node"
+npm = "//prebuilts/build-tools/common/nodejs/current/bin/npm"
+
 default_key_alias = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
 default_hap_private_key_path = "123456"

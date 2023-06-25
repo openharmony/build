@@ -36,6 +36,7 @@ def parse_args():
     parser.add_argument('--deps', nargs='*', required=False)
     parser.add_argument('--external-deps', nargs='*', required=False)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--compile-standard-allow-file', required=True)
     args = parser.parse_args()
 
     return args

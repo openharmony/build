@@ -1,0 +1,151 @@
+# Copyright (c) 2020 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/lite/config/subsystem/aafwk/path.gni")
+import("//build/lite/ndk/ndk.gni")
+
+if (ohos_build_ndk_target_host == "linux-x86_64" &&
+    ohos_build_compiler == "gcc") {
+  copy("compiler") {
+    sources = [
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/arm-linux-musleabi",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/arm-linux-ohoseabi",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/bin",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/host_bin",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/lib",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/libexec",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/runtime_musl",
+      "//prebuilts/gcc/linux-x86/arm/arm-linux-ohoseabi-gcc/target",
+    ]
+    outputs = [ "$ndk_linux_toolchains_out_dir/{{source_file_part}}" ]
+  }
+}
+
+if (ohos_build_compiler == "clang") {
+  copy("compiler") {
+    sources = [
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/NOTICE",
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/bin",
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/include",
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/lib",
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/libexec",
+      "//prebuilts/clang/ohos/$ohos_build_ndk_target_host/llvm/share",
+    ]
+    if (ohos_build_ndk_target_host == "linux-x86_64") {
+      outputs = [ "$ndk_linux_toolchains_out_dir/{{source_file_part}}" ]
+    } else if (ohos_build_ndk_target_host == "windows-x86_64") {
+      outputs = [ "$ndk_windows_toolchains_out_dir/{{source_file_part}}" ]
+    }
+  }
+}
+
+ndk_toolchains("build_script") {
+  src_type = "file"
+  src_dir = [
+    "//build/lite/ndk/build/BUILD.gn",
+    "//build/lite/ndk/build/build.py",
+    "//build/lite/ndk/README.md",
+    "//build/lite/ndk/build/.gn",
+  ]
+  dest_dir = [
+    "$root_out_dir/ndk",
+    "$root_out_dir/ndk",
+    "$root_out_dir/ndk",
+    "$root_out_dir/ndk/build",
+  ]
+}
+
+ndk_toolchains("source") {
+  src_dir = [
+    "//build/lite/ndk/sample",
+    "//build/lite/ndk/build/config",
+    "//build/lite/ndk/build/toolchain",
+  ]
+  dest_dir = [
+    "$root_out_dir/ndk/sample",
+    "$root_out_dir/ndk/build/config",
+    "$root_out_dir/ndk/build/toolchain",
+  ]
+  if (ohos_build_compiler == "clang") {
+    src_dir += [
+      "$root_out_dir/sysroot/usr/lib",
+      "$root_out_dir/sysroot/usr/include",
+    ]
+    dest_dir += [
+      "$root_out_dir/ndk/sysroot/usr/lib",
+      "$root_out_dir/ndk/sysroot/usr/include",
+    ]
+  }
+  if (host_os == "win") {
+    src_dir += [ "//prebuilts/build-tools/win-x86/bin" ]
+  } else {
+    src_dir += [ "//prebuilts/build-tools/linux-x86/bin" ]
+  }
+  dest_dir += [ "$root_out_dir/ndk/prebuilts/build-tools/bin" ]
+}
+
+group("ndk_build") {
+  deps = [
+    ":build_script",
+    ":source",
+    "//base/startup/bootstrap_lite/services:bootstrap_lite_ndk",
+    "//base/startup/syspara_lite/frameworks/parameter:parameter_notes",
+    "//base/update/sys_installer_lite/frameworks:update_api",
+    "//build/lite/config/subsystem/hiviewdfx:hilog_ndk",
+    "//commonlibrary/utils_lite:native_api",
+  ]
+  if (ohos_kernel_type != "liteos_m") {
+    deps += [
+      "${aafwk_lite_path}/frameworks/ability_lite:ability_notes",
+      "${appexecfwk_lite_path}/frameworks/bundle_lite:bundle_notes",
+      "//base/security/permission_lite/interfaces/kits:permission_notes",
+      "//base/sensors/sensor_lite/interfaces/kits/native:sensors_api",
+      "//base/startup/init_lite/interfaces/kits/token:token_notes",
+      "//build/lite/config/component/cJSON:cjson_ndk",
+      "//drivers/hdf_core/adapter/khdf/liteos/ndk:hdf_api",
+      "//foundation/arkui/ui_lite:ui_lite_ndk",
+      "//foundation/graphic/graphic_utils_lite:graphic_utils_lite_ndk",
+      "//foundation/graphic/graphic_utils_lite:lite_graphic_hals_ndk",
+      "//foundation/graphic/surface_lite:surface_lite_ndk",
+      "//foundation/multimedia/media_lite/services:media_ndk",
+      "//foundation/systemabilitymgr/samgr_lite:samgr_lite_ndk",
+      "//foundation/window/window_manager_lite:window_manager_lite_ndk",
+      "//third_party/mbedtls:mbedtls_ndk",
+      "//third_party/wpa_supplicant/wpa_supplicant-2.9:wpa_supplicant",
+    ]
+  } else {
+    deps += [
+      "$ohos_vendor_adapter_dir/hals/communication/wifi_lite/wifiservice:wifiservice_ndk",
+      "//base/hiviewdfx/hilog_lite/frameworks/mini:hilog_lite_ndk",
+      "//base/iothardware/peripheral:iothardware_ndk",
+    ]
+  }
+}
+
+action("ndk") {
+  if (ohos_build_ndk) {
+    deps = [ "doc" ]
+    script = "//build/lite//ndk/archive_ndk.py"
+    depfile = "${target_gen_dir}/${target_name}.d"
+    ndk_name = "$ohos_build_ndk_target_host-$ohos_build_compiler-$ohos_build_ndk_version"
+    args = [
+      "--src_dir",
+      rebase_path("$root_build_dir/ndk"),
+      "--name",
+      ndk_name,
+      "--dest_dir",
+      rebase_path("$root_build_dir/packages/ndk"),
+    ]
+    outputs = [ "$root_build_dir/packages/ndk/$ndk_name.zip" ]
+  }
+}

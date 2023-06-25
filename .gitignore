@@ -1,7 +1,6 @@
 *.pyc
 **/__pycache__
 .idea/
-lite/
 .vscode/
 build_scripts/rundocker.sh
 tags

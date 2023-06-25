@@ -63,7 +63,7 @@ def _get_post_process_modules_info(post_process_modules_info_files, depfiles):
 def copy_modules(system_install_info, install_modules_info_file,
                  modules_info_file, module_list_file,
                  post_process_modules_info_files, platform_installed_path,
-                 additional_system_files, depfiles):
+                 host_toolchain, additional_system_files, depfiles):
     output_result = []
     dest_list = []
     symlink_dest = []
@@ -96,6 +96,9 @@ def copy_modules(system_install_info, install_modules_info_file,
         if module_info.get('type') == 'none':
             continue
         # copy module lib
+        label = module_info.get('label')
+        if label and host_toolchain in label:
+            continue
         source = module_info.get('source')
         dests = module_info.get('dest')
         # check source
@@ -115,8 +118,14 @@ def copy_modules(system_install_info, install_modules_info_file,
             if not os.path.exists(dest_dir):
                 os.makedirs(dest_dir)
             if os.path.isdir(source):
-                shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
-            elif os.path.isfile(source):
+                flag = True
+                for filename in os.listdir(source):
+                    if filename.endswith('.hap'):
+                        flag = False
+                        shutil.copy(os.path.join(source, filename), os.path.join(platform_installed_path, os.path.dirname(dest), filename))
+                if flag:
+                    shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
+            else:
                 shutil.copy(source, os.path.join(platform_installed_path, dest))
 
         # add symlink
@@ -153,6 +162,7 @@ def main():
     parser.add_argument('--merged-sa-profile', required=True)
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--system-image-zipfile', required=True)
+    parser.add_argument('--host-toolchain', required=True)
     parser.add_argument(
         '--additional-system-files',
         action='append',
@@ -192,6 +202,18 @@ def main():
         shutil.rmtree(vendor_install_base_dir)
         print('remove vendor dir...')
 
+    eng_system_install_base_dir = os.path.join(args.platform_installed_path,
+                                           'eng_system')
+    if os.path.exists(eng_system_install_base_dir):
+        shutil.rmtree(eng_system_install_base_dir)
+        print('remove eng_system dir...')
+
+    eng_chipset_install_base_dir = os.path.join(args.platform_installed_path,
+                                           'eng_chipset')
+    if os.path.exists(eng_chipset_install_base_dir):
+        shutil.rmtree(eng_chipset_install_base_dir)
+        print('remove eng_chipset dir...')
+
     sys_prod_install_base_dir = os.path.join(args.platform_installed_path,
                                            'sys_prod')
     if os.path.exists(sys_prod_install_base_dir):
@@ -226,8 +248,8 @@ def main():
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
                  args.post_process_modules_info_files,
-                 args.platform_installed_path, additional_system_files,
-                 depfiles)
+                 args.platform_installed_path, args.host_toolchain,
+                 additional_system_files, depfiles)
 
     if os.path.exists(args.system_image_zipfile):
         os.unlink(args.system_image_zipfile)
@@ -235,7 +257,6 @@ def main():
     depfiles.extend([item for item in depfiles if item not in sa_files])
     build_utils.write_depfile(args.depfile, args.install_modules_info_file,
                               depfiles)
-
     return 0
 
 

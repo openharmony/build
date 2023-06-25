@@ -99,8 +99,10 @@ class BuildArgsResolver(ArgsResolverInterface):
             target_generator = build_module.target_generator
             target_generator.regist_arg('is_cross_platform_build', True)
             target_generator.regist_arg('build_cross_platform_version', True)
+            target_generator.regist_arg('enable_ng_build', True)
             target_generator.regist_arg('is_component_build', False)
             target_generator.regist_arg('use_musl', False)
+            target_generator.regist_arg('is_use_check_deps', False)
             if len(build_module.args_dict['build_target'].arg_value) == 0:
                 build_module.args_dict['build_target'].arg_value = [
                     'arkui_targets']
@@ -231,7 +233,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             os.environ['CCACHE_BASEDIR'] = config.root_path
             ccache_max_size = os.environ.get('CCACHE_MAXSIZE')
             if not ccache_max_size:
-                ccache_max_size = '50G'
+                ccache_max_size = '100G'
 
             cmd = ['ccache', '-M', ccache_max_size]
 
@@ -509,6 +511,8 @@ class BuildArgsResolver(ArgsResolverInterface):
         target_generator = build_module.target_generator
         if target_arg.arg_value == 'debug':
             target_generator.regist_arg('is_debug', True)
+        elif target_arg.arg_value == 'profile':
+            target_generator.regist_arg('is_profile', True)
         # For historical reasons, this value must be debug
         target_generator.regist_arg('ohos_build_type', 'debug')
 

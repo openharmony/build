@@ -35,6 +35,7 @@ group("tests") {
   if (is_system_component) {
     deps += [ "//build/rust/tests/test_idl" ]
   }
+  deps += [ ":original_libstd.so" ]
 }
 
 group("ohos_rust_xxxtest_tests") {
@@ -87,4 +88,24 @@ ohos_static_library("cxx_cppdeps") {
   } else {
     defines += [ "CXX_RS_EXPORT=__attribute__((visibility(\"default\")))" ]
   }
+}
+
+ohos_prebuilt_shared_library("original_libstd.so") {
+  if (current_cpu == "arm64") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd.dylib.so"
+    output = "libstd-37747be394d9d22c.so"
+  } else if (current_cpu == "arm") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/arm-linux-ohos/lib/libstd.dylib.so"
+    output = "libstd-a4ed09c4b860e683.so"
+  } else if (current_cpu == "x86_64" || current_cpu == "x64") {
+    source =
+        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-c244726431624c96.so"
+    output = "libstd-c244726431624c96.so"
+  }
+  enable_strip = true
+  install_images = [
+    "system",
+    "updater",
+  ]
+  part_name = "common"
 }

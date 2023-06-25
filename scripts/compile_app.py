@@ -28,81 +28,96 @@ def parse_args(args):
     parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
 
-    parser.add_argument('--npm', help='')
-    parser.add_argument('--nodejs', help='')
-    parser.add_argument('--cwd', help='')
-    parser.add_argument('--app-profile', help='')
-    parser.add_argument('--hap-profile', help='')
-    parser.add_argument('--ohos-sdk-home', help='')
-    parser.add_argument('--enable-debug', action='store_true', help='')
-    parser.add_argument('--build-level', default='module', help='')
-    parser.add_argument('--output-file', help='')
-    parser.add_argument('--build-profile', help='')
-    parser.add_argument('--system-lib-module-info-list', nargs='+', help='')
-    parser.add_argument('--ohos-app-abi', help='')
-    parser.add_argument('--npm-registry', help='', nargs='?')
+    parser.add_argument('--nodejs', help='nodejs path')
+    parser.add_argument('--cwd', help='app project directory')
+    parser.add_argument('--sdk-home', help='sdk home')
+    parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
+    parser.add_argument('--build-level', default='project', help='module or project')
+    parser.add_argument('--output-file', help='output file')
+    parser.add_argument('--build-profile', help='build profile file')
+    parser.add_argument('--system-lib-module-info-list', nargs='+', help='system lib module info list')
+    parser.add_argument('--ohos-app-abi', help='ohos app abi')
+    parser.add_argument('--ohpm-registry', help='ohpm registry', nargs='?')
+    parser.add_argument('--hap-out-dir', help='hap out dir')
+    parser.add_argument('--hap-name', help='hap name')
+    parser.add_argument('--test-hap', help='build ohosTest if enable', action='store_true')
+    parser.add_argument('--test-module', help='specify the module within ohosTest', default='entry')
+    parser.add_argument('--module-libs-dir', help='', default='entry')
+    parser.add_argument('--sdk-type-name', help='sdk type name', nargs='+', default=['sdk.dir'])
 
     options = parser.parse_args(args)
     return options
 
 
-def make_env(build_profile, cwd, npm, npm_registry):
+def make_env(build_profile, cwd, ohpm_registry):
     '''
-    Set up the application compilation environment and run "npm install"
+    Set up the application compilation environment and run "ohpm install"
     :param build_profile: module compilation information file
     :param cwd: app project directory
-    :param npm: npm path
-    :param npm_registry: npm registry
+    :param ohpm_registry: ohpm registry
     :return: None
     '''
     cur_dir = os.getcwd()
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
-        npm_install_cmd = [os.path.abspath(npm), 'install']
-        if npm_registry:
-            npm_registry_list = npm_registry.split(',')
-            for registry in npm_registry_list:
-                npm_install_cmd.append('--registry=' + registry)
+        ohpm_install_cmd = ['ohpm', 'install']
+        if ohpm_registry:
+            ohpm_install_cmd.append('--registry=' + ohpm_registry)
         os.chdir(cwd)
-        subprocess.run(npm_install_cmd)
+        if os.path.exists(os.path.join(cwd, 'oh_modules')):
+            shutil.rmtree(os.path.join(cwd, 'oh_modules'))
+        subprocess.run(['ohpm', 'config', 'set', 'strict_ssl', 'false'])
+        subprocess.run(['chmod', '+x', 'hvigorw'])
+        if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
+            subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
+
+        proc = subprocess.Popen(ohpm_install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc.communicate()
+        if proc.returncode != 0:
+            raise Exception('ohpm install failed. {}'.format(proc.stderr.read().decode('utf-8')))
+
         for module in modules_list:
             src_path = module.get('srcPath')
-            npm_install_path = os.path.join(cwd, src_path)
-            os.chdir(npm_install_path)
-            subprocess.run(npm_install_cmd)
+            ohpm_install_path = os.path.join(cwd, src_path)
+            os.chdir(ohpm_install_path)
+            if os.path.exists(os.path.join(ohpm_install_path, 'oh_modules')):
+                shutil.rmtree(os.path.join(ohpm_install_path, 'oh_modules'))
+            proc = subprocess.Popen(ohpm_install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            proc.communicate()
+            if proc.returncode != 0:
+                raise Exception('ohpm install module failed. {}'.format(proc.stderr.read().decode('utf-8')))
     os.chdir(cur_dir)
 
 
-def gen_unsigned_hap_path_json(build_profile, cwd):
+def gen_signed_hap_path_json(build_profile, cwd, options):
     '''
-    Generate unsigned_hap_path_list
+    Generate signed_hap_path_list
     :param build_profile: module compilation information file
     :param cwd: app project directory
-    :return: unsigned_hap_path_json
+    :return: signed_hap_path_json
     '''
-    unsigned_hap_path_json = {}
-    unsigned_hap_path_list = []
+    signed_hap_path_json = {}
+    signed_hap_path_list = []
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
             src_path = module.get('srcPath')
-            unsigned_hap_path = os.path.join(
-                cwd, src_path, 'build/default/outputs/default')
+            if options.test_hap:
+                signed_hap_path = os.path.join(
+                    cwd, src_path, 'build/default/outputs/ohosTest')
+            else:
+                signed_hap_path = os.path.join(
+                    cwd, src_path, 'build/default/outputs/default')
             hap_file = build_utils.find_in_directory(
-                unsigned_hap_path, '*unsigned.hap')
-            unsigned_hap_path_list.extend(hap_file)
-        unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
-    return unsigned_hap_path_json
+                signed_hap_path, '*-signed.hap')
+            signed_hap_path_list.extend(hap_file)
+        signed_hap_path_json['signed_hap_path_list'] = signed_hap_path_list
+    return signed_hap_path_json
 
 
-def app_compile(options, cmd, my_cwd):
-    my_env = {'OHOS_SDK_HOME': options.ohos_sdk_home}
-    build_utils.check_output(cmd, cwd=my_cwd, env=my_env)
-
-
-def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi):
+def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
     '''
     Obtain the output location of system library .so by reading the module compilation information file,
     and copy it to the app project directory
@@ -116,10 +131,29 @@ def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi):
         lib_path = lib_info.get('source')
         if os.path.exists(lib_path):
             lib_name = os.path.basename(lib_path)
-            dest = os.path.join(cwd, 'entry/libs', ohos_app_abi, lib_name)
+            dest = os.path.join(cwd, f'{module_libs_dir}/libs', ohos_app_abi, lib_name)
             if not os.path.exists(os.path.dirname(dest)):
                 os.makedirs(os.path.dirname(dest), exist_ok=True)
             shutil.copyfile(lib_path, dest)
+
+
+def copy_signed_hap(signed_hap_path_json, hap_out_dir, hap_name):
+    '''
+    Copy the signed hap package to the specified directory
+    :param signed_hap_path_json: signed hap package path
+    :param hap_out_dir: hap output directory
+    :param hap_name: hap name
+    :return: None
+    '''
+    if not os.path.exists(hap_out_dir):
+        os.makedirs(hap_out_dir, exist_ok=True)
+    signed_hap_path_list = file_utils.read_json_file(signed_hap_path_json)
+    for signed_hap_path in signed_hap_path_list.get('signed_hap_path_list'):
+        output_hap_name = hap_name + '-' + os.path.basename(signed_hap_path)
+        if len(signed_hap_path_list.get('signed_hap_path_list')) == 1 and hap_name:
+            output_hap_name = hap_name + '.hap'
+        output_hap = os.path.join(hap_out_dir, output_hap_name)
+        shutil.copyfile(signed_hap_path, output_hap)
 
 
 def main(args):
@@ -129,40 +163,48 @@ def main(args):
     # copy system lib deps to app libs dir
     if options.system_lib_module_info_list:
         copy_libs(cwd, options.system_lib_module_info_list,
-                  options.ohos_app_abi)
+                  options.ohos_app_abi, options.module_libs_dir)
 
     os.environ['PATH'] = '{}:{}'.format(os.path.dirname(
         os.path.abspath(options.nodejs)), os.environ.get('PATH'))
 
-    # generate unsigned_hap_path_list and run npm install
-    make_env(options.build_profile, cwd, options.npm, options.npm_registry)
+    # add arkui-x to PATH
+    os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
 
-    depfiles = build_utils.get_all_files(cwd)
+    # generate signed_hap_path_list and run ohpm install
+    make_env(options.build_profile, cwd, options.ohpm_registry)
 
-    cmd = [os.path.abspath(options.nodejs),
-           './node_modules/@ohos/hvigor/bin/hvigor.js']
-    cmd.extend(['clean', 'assembleApp', '--mode'])
-    cmd.extend([options.build_level])
-    cmd.extend(['-p'])
-    if options.enable_debug:
-        cmd.extend(['debuggable=true'])
+    if options.test_hap:
+        cmd = ['bash', './hvigorw', 'clean', '--mode', 'module', '-p',
+               f'module={options.test_module}@ohosTest', 'assembleHap']
     else:
-        cmd.extend(['debuggable=false'])
+        cmd = ['bash', './hvigorw', 'clean', '--mode',
+               options.build_level, '-p', 'product=default', 'assembleApp']
+    if options.enable_debug:
+        cmd.extend(['-p', 'debuggable=true'])
+    else:
+        cmd.extend(['-p', 'debuggable=false'])
 
-    outputs = options.output_file
-    build_utils.call_and_write_depfile_if_stale(
-        lambda: app_compile(options, cmd, cwd),
-        options,
-        depfile_deps=depfiles,
-        input_paths=depfiles,
-        output_paths=(outputs),
-        input_strings=cmd,
-        force=False,
-        add_pydeps=False
-    )
-    unsigned_hap_path_json = gen_unsigned_hap_path_json(
-        options.build_profile, cwd)
-    file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
+    sdk_dir = options.sdk_home
+    nodejs_dir = os.path.abspath(
+        os.path.dirname(os.path.dirname(options.nodejs)))
+
+    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
+        for sdk_type in options.sdk_type_name:
+            f.write(f'{sdk_type}={sdk_dir}\n')
+        f.write(f'nodejs.dir={nodejs_dir}\n')
+
+    proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
+    stdout, stderr = proc.communicate()
+    if proc.returncode != 0:
+        raise Exception('Hvigor build failed: {}'.format(stderr.decode()))
+
+    signed_hap_path_json = gen_signed_hap_path_json(
+        options.build_profile, cwd, options)
+    file_utils.write_json_file(options.output_file, signed_hap_path_json)
+
+    copy_signed_hap(options.output_file, options.hap_out_dir, options.hap_name)
 
 
 if __name__ == '__main__':

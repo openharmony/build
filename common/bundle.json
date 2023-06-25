@@ -15,6 +15,22 @@
         "//build/rust:default",
         "//third_party/f2fs-tools:f2fs-tools_host_toolchain"
       ],
+      "inner_api": [
+        {
+          "name": "//build/rust:libstd.dylib.so",
+          "header": {
+            "header_base": [],
+            "header_files": []
+          }
+        },
+        {
+          "name": "//build/rust:libtest.dylib.so",
+          "header": {
+            "header_files": [],
+            "header_base": []
+          }
+        }
+      ],
       "test": [
         "//build/rust/tests:tests"
       ]

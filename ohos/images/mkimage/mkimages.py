@@ -21,6 +21,12 @@ import shutil
 import tempfile
 
 
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))))))
+from build_scripts.build import find_top
+
+
 def run_cmd(cmd):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
@@ -113,19 +119,22 @@ def mk_images(args):
     if len(args) != 4:
         print("mk_images need 4 args!!!")
         sys.exit(1)
+    root_path = find_top()
+    config_json = os.path.join(root_path, "ohos_config.json")
     config = {}
-    with open("../../ohos_config.json") as f:
+    with open(config_json, 'rb') as f:
         config = json.load(f)
     src_dir = args[0]
     config_file = args[1]
     device = args[2]
     is_sparse = args[3]
     mkfs_tools, mk_configs, _ = load_config(config_file)
-    if "system.img" in device:
+    image_name = device.split("/")[-1]
+    if image_name == "system.img":   
         mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
-    elif "ramdisk.img" == device:
+    elif image_name == "ramdisk.img":
         mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)
-    elif "updater_ramdisk.img" == device:
+    elif image_name == "updater_ramdisk.img":
         if config.get('component_type', '') == 'system_component':
             return
         mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse)

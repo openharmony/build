@@ -17,12 +17,14 @@ import sys
 import os
 import shutil
 import argparse
+import json
 from mkimage import mkimages
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
-from scripts.util import build_utils  # noqa: E402
+from scripts.util import build_utils
+from build_scripts.build import find_top  # noqa: E402
 
 
 def _prepare_userdata(userdata_path):
@@ -38,7 +40,7 @@ def _prepare_root(system_path, target_cpu):
     os.makedirs(root_dir, exist_ok=True)
     _dir_list = [
         'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data',
-        'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod', 'module_update'
+        'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod', 'module_update', 'eng_system', 'eng_chipset'
     ]
     for _dir_name in _dir_list:
         os.makedirs(os.path.join(root_dir, _dir_name), exist_ok=True)
@@ -76,6 +78,41 @@ def _prepare_ramdisk(ramdisk_path):
     os.symlink('bin/init', os.path.join(ramdisk_path, 'init'))
 
 
+def _prepare_eng_ststem(eng_system_path, build_variant):
+    if os.path.exists(eng_system_path):
+        shutil.rmtree(eng_system_path)
+    os.makedirs(eng_system_path)
+    if build_variant == "user":
+        return 
+    _dir_list_first = ['etc', 'bin']
+    for _dir_name in _dir_list_first:
+        _path = os.path.join(eng_system_path, _dir_name)
+        if os.path.exists(_path):
+            shutil.rmtree(_path)
+        os.makedirs(_path, exist_ok=True)
+    _dir_list_second = ['param', 'init', 'selinux']
+    for _dir_name in _dir_list_second:
+        _path = os.path.join(eng_system_path, 'etc', _dir_name)
+        if os.path.exists(_path):
+            shutil.rmtree(_path)
+        os.makedirs(_path, exist_ok=True)
+    _target_policy_path = os.path.join(eng_system_path, 'etc', 'selinux', 'targeted', 'policy')
+    if os.path.exists(_target_policy_path):
+        shutil.rmtree(_target_policy_path)
+    os.makedirs(_target_policy_path, exist_ok=True)
+    root_path = find_top()
+    copy_eng_system_config = os.path.join(root_path, "build/ohos/images/mkimage/root_image.json")
+    with open(copy_eng_system_config, 'rb') as input_f:
+        default_build_args = json.load(input_f)
+    for arg in default_build_args.values():
+        sources_file = arg.get('source_file')
+        dest_file = arg.get('dest_file')
+        if(os.path.exists(dest_file)):
+            os.remove(dest_file)
+        if(os.path.exists(sources_file)):
+            shutil.copy(sources_file, dest_file)
+
+
 def _make_image(args):
     if args.image_name == 'system':
         _prepare_root(args.input_path, args.target_cpu)
@@ -105,6 +142,7 @@ def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--image-name', required=True)
+    parser.add_argument('--build-variant', required=True)
     parser.add_argument('--image-config-file', required=True)
     parser.add_argument('--device-image-config-file', required=True)
     parser.add_argument('--input-path', required=True)
@@ -121,6 +159,8 @@ def main(argv):
         os.remove(args.output_image_path)
     if args.image_name == 'userdata':
         _prepare_userdata(args.input_path)
+    elif args.image_name == 'eng_system':
+        _prepare_eng_ststem(args.input_path, args.build_variant)
     if os.path.isdir(args.input_path):
         _make_image(args)
         _dep_files = []

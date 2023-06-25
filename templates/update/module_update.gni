@@ -182,7 +182,7 @@ template("ohos_module_package") {
     deps = [
       ":module_config_inner",
       "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
-      "//third_party/e2fsprogs/resize:resize2fs($host_toolchain)",
+      "//third_party/e2fsprogs:resize2fs($host_toolchain)",
     ]
     if (defined(invoker.etc) && etc != []) {
       deps += [ ":${package_name}_etc" ]
@@ -205,7 +205,7 @@ template("ohos_module_package") {
         "$output_dir/module_package/sign_img_output/module.img"
     build_image_tools_path = [
       "//${root_build_dir}/clang_x64/thirdparty/e2fsprogs",
-      "//${root_build_dir}/clang_x64/thirdparty/f2fs_tools",
+      "//${root_build_dir}/clang_x64/thirdparty/f2fs-tools",
       "//third_party/e2fsprogs/prebuilt/host/bin",
       "//build/ohos/images/mkimage",
       "//base/startup/hvb/tools",

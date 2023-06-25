@@ -39,6 +39,7 @@ class OHOSPreloader(PreloadInterface):
         self._subsystem_info = {}
         self._all_parts = {}
         self._build_vars = {}
+        self._compile_standard_whitelist_info = {}
 
     def __post_init__(self):
         self._dirs = Dirs(self._config)
@@ -51,6 +52,7 @@ class OHOSPreloader(PreloadInterface):
         self._target_cpu = self._build_vars.get('target_cpu')
         self._toolchain_label = self._build_vars.get('product_toolchain_label')
         self._subsystem_info = self._get_org_subsystem_info()
+        self._compile_standard_whitelist_info = self._get_compile_standard_whitelist_info()
 
 # generate method
 
@@ -243,6 +245,18 @@ class OHOSPreloader(PreloadInterface):
         LogUtil.hb_info(
             'generated system capability info to {}/systemcapability.json'.format(self._dirs.preloader_output_dir))
 
+    '''Description: generate compile_standard_whitelist info  to "out/preloader/product_name/compile_standard_whitelist.json"
+    @parameter:none
+    @return :none
+    '''
+
+    def _generate_compile_standard_whitelist_json(self):
+        IoUtil.dump_json_file(
+            self._outputs.compile_standard_whitelist_json, self._compile_standard_whitelist_info)
+        LogUtil.hb_info(
+            'generated compile_standard_whitelist info to {}/compile_standard_whitelist.json'
+            .format(self._dirs.preloader_output_dir))
+
 # get method
 
     def _get_org_subsystem_info(self) -> dict:
@@ -257,3 +271,12 @@ class OHOSPreloader(PreloadInterface):
                 self._dirs.lite_components_dir, ohos_build_output_dir,
                 self._dirs.source_root_dir, self._dirs.subsystem_config_json)
         return subsystem_info
+
+    def _get_compile_standard_whitelist_info(self) -> dict:
+        allow_info_file = "out/products_ext/{}/compile_standard_whitelist.json".format(self.config.product)
+        allow_info_file = os.path.join(self._dirs.source_root_dir, allow_info_file)
+        if not os.path.exists(allow_info_file):
+            allow_info_file = os.path.join(self._dirs.source_root_dir, "build/compile_standard_whitelist.json")
+        
+        allow_info = IoUtil.read_json_file(allow_info_file)
+        return allow_info

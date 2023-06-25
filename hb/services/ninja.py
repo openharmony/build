@@ -17,6 +17,7 @@
 #
 
 import os
+import sys
 
 from exceptions.ohos_exception import OHOSException
 from services.interface.build_executor_interface import BuildExecutorInterface
@@ -70,18 +71,8 @@ class Ninja(BuildExecutorInterface):
         """find ninja executable
         :raise OHOSException: when can't find the ninja excutable
         """
-        config_data = IoUtil.read_json_file(os.path.join(
-            self.config.root_path, 'build/prebuilts_download_config.json'))
-        copy_config_list = config_data[os.uname().sysname.lower(
-        )][os.uname().machine.lower()]['copy_config']
-
-        ninja_path = ''
-        for config in copy_config_list:
-            if config['unzip_filename'] == 'ninja':
-                ninja_path = os.path.join(
-                    self.config.root_path, config['unzip_dir'], 'ninja')
-                break
-
+        ninja_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/ninja'
+                .format(sys.platform))
         if os.path.exists(ninja_path):
             self.exec = ninja_path
         else:

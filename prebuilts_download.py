@@ -220,7 +220,7 @@ def _node_modules_copy(config, code_dir, enable_symlink):
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
-def _file_handle(config, code_dir):
+def _file_handle(config, code_dir, host_platform):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
         dest_dir = code_dir + config_info.get('dest')
@@ -238,10 +238,14 @@ def _file_handle(config, code_dir):
                     shutil.rmtree(dest_dir)
                 shutil.move(tmp_dir, dest_dir)
             elif rename:
-                if os.path.exists(dest_dir):
+                if os.path.exists(dest_dir) and dest_dir != src_dir:
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
                 if symlink_src and symlink_dest:
+                    if os.path.exists(dest_dir + symlink_dest):
+                        os.remove(dest_dir + symlink_dest)
+                    if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
+                        symlink_src = symlink_src.replace('linux', 'darwin')
                     os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
@@ -287,6 +291,7 @@ def main():
                         help='npm download source')
     parser.add_argument('--host-cpu', help='host cpu', required=True)
     parser.add_argument('--host-platform', help='host platform', required=True)
+    parser.add_argument('--config-file', help='prebuilts download config file')
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if os.path.exists(os.path.join(args.code_dir, "prebuilts/clang")):
@@ -299,6 +304,8 @@ def main():
     tool_repo = args.tool_repo
     if args.build_arkuix:
         config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
+    elif args.config_file:
+        config_file = args.config_file
     else:
         config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
     config_info = read_json_file(config_file)
@@ -330,7 +337,7 @@ def main():
         with args.progress:
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
-    _file_handle(file_handle_config, args.code_dir)
+    _file_handle(file_handle_config, args.code_dir, args.host_platform)
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
     if install_config:
         _install(install_config, args.code_dir)

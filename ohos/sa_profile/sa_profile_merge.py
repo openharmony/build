@@ -19,8 +19,7 @@ import sys
 import shutil
 import xml.etree.ElementTree as ET
 
-from sa_info_process.merge_sa_info import SAInfoMerger
-from sa_info_process.json_merge_sa_info import JsonSAInfoMerger
+from sa_info_process.merge_sa_info import JsonSAInfoMerger
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -41,7 +40,6 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
                 _install_info.get('install_info_file'))
 
     depfiles.extend(install_info_file_list)
-    xml_all_sa_input_files = []
     json_all_sa_input_files = []
     for _install_info_file in install_info_file_list:
         _install_info = read_json_file(_install_info_file)
@@ -51,34 +49,25 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
         sa_info_files = _install_info.get('sa_info_files')
         for part_sa_info_files in sa_info_files:
             if str(part_sa_info_files).endswith(".xml"):
-                xml_all_sa_input_files += [part_sa_info_files]
+                parser = ET.XMLParser()
+                tree = ET.parse(part_sa_info_files, parser)
+                root = tree.getroot()
+                process_nodes = root.findall('process')
+                process_name = process_nodes[0].text.strip()
+                raise Exception("Please use profile in json format, processname: "
+                    + process_name)
             elif str(part_sa_info_files).endswith(".json"):
                 json_all_sa_input_files += [part_sa_info_files]
-    data = set()
-    for xml_part in xml_all_sa_input_files:
-        parser = ET.XMLParser()
-        tree = ET.parse(xml_part, parser)
-        root = tree.getroot()
-        process_nodes = root.findall('process')
-        process_name = process_nodes[0].text.strip()
-        data.add(process_name)
-    for json_part in json_all_sa_input_files:
-        json_sa_part = read_json_file(json_part)
-        json_process = json_sa_part.get('process')
-        if json_process in data:
-            raise Exception("sa have xml and json file")
-    depfiles.extend(xml_all_sa_input_files)
     depfiles.extend(json_all_sa_input_files)
-    return [xml_all_sa_input_files, json_all_sa_input_files]
+    return json_all_sa_input_files
 
 
-def _sa_profile_merge(xml_sa_input_files, json_sa_input_files, no_src_subsystem_sa_zipfile,
+def _sa_profile_merge(json_sa_input_files, no_src_subsystem_sa_zipfile,
                       merge_out_dir, merged_zipfile, target_cpu):
     with build_utils.temp_dir() as tmp:
         build_utils.extract_all(no_src_subsystem_sa_zipfile, tmp)
         for root, _, files in os.walk(tmp):
             for sa_file in files:
-                xml_sa_input_files.append(os.path.join(root, sa_file))
                 json_sa_input_files.append(os.path.join(root, sa_file))
 
         if not os.path.exists(merge_out_dir):
@@ -86,17 +75,12 @@ def _sa_profile_merge(xml_sa_input_files, json_sa_input_files, no_src_subsystem_
 
         is_64bit_arch = target_cpu not in ["arm", "x86"]
         # call merge tool
-        xml_merge_tool = SAInfoMerger(is_64bit_arch)
         json_merge_tool = JsonSAInfoMerger()
-        xml_result_file_list = xml_merge_tool.merge(sorted(xml_sa_input_files),
-                                            merge_out_dir)
         json_result_file_list = json_merge_tool.merge(sorted(json_sa_input_files),
                                             merge_out_dir)
-        result_file_list = []
-        result_file_list = xml_result_file_list + json_result_file_list
     build_utils.zip_dir(merged_zipfile, merge_out_dir)
     shutil.rmtree(merge_out_dir)
-    return result_file_list
+    return json_result_file_list
 
 
 def _generate_install_info(sa_result_file_list, sa_info_install_dest_dir,
@@ -128,11 +112,11 @@ def main():
     args = parser.parse_args()
 
     depfiles = []
-    [xml_src_subsystem_file_list, json_src_subsystem_file_list] = _get_src_sa_info(args.src_sa_install_info_file,
+    json_src_subsystem_file_list = _get_src_sa_info(args.src_sa_install_info_file,
                                                depfiles)
     no_src_sa_profile_zip = args.no_src_sa_install_info_file
 
-    result_file_list = _sa_profile_merge(xml_src_subsystem_file_list, json_src_subsystem_file_list,
+    result_file_list = _sa_profile_merge(json_src_subsystem_file_list,
                                          no_src_sa_profile_zip,
                                          args.sa_output_dir,
                                          args.merged_sa_profile,

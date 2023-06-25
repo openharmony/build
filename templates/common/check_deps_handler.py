@@ -24,13 +24,13 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def check_third_party_deps(part_name, dep_part, parts_deps_info, _tips_info):
+def check_third_party_deps(args, dep_part, parts_deps_info, _tips_info, third_deps_allow_list):
     """check whether the three-party dependency is in the part declaration"""
-    if part_name == dep_part:
+    if args.part_name == dep_part:
         return
-    part_deps_info = parts_deps_info.get(part_name)
+    part_deps_info = parts_deps_info.get(args.part_name)
     if not part_deps_info:
-        _warning_info = f"{_tips_info} {part_name}."
+        _warning_info = f"{_tips_info} {args.part_name}."
     elif not part_deps_info.get('third_party') or \
         not dep_part in part_deps_info.get('third_party'):
         _warning_info = f"{_tips_info} {part_deps_info.get('build_config_file')}."
@@ -38,7 +38,10 @@ def check_third_party_deps(part_name, dep_part, parts_deps_info, _tips_info):
         _warning_info = ""
 
     if _warning_info != "":
-        print(f"[0/0] {_warning_info}")
+        if args.target_path in third_deps_allow_list:
+            print(f"[0/0] WARNING: {_warning_info}")
+        else:
+            raise Exception(_warning_info)
 
     return
 
@@ -110,7 +113,9 @@ def get_dep_part(dep_path, third_part_info):
     return ""
 
 
-def check_part_deps(args, part_pattern, path_parts_info, depfiles:list):
+def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_info, depfiles:list):
+    deps_allow_list = compile_standard_allow_info.get("deps_added_external_part_module")
+    third_deps_allow_list = compile_standard_allow_info.get("third_deps_bundle_not_add")
     parts_deps_file = 'build_configs/parts_info/parts_deps.json'
     parts_deps_info = read_json_file(parts_deps_file)
     if parts_deps_info is None:
@@ -122,11 +127,13 @@ def check_part_deps(args, part_pattern, path_parts_info, depfiles:list):
     third_party_info.reverse()
     for dep in args.deps:
         dep_path = get_path_from_label(dep)
+        if dep_path.find('third_party/rust/crates') != -1:
+            continue
         if dep_path.find('third_party') != -1:
             dep_part = get_dep_part(dep_path, third_party_info)
-            tips_info = "WARNING: {} depend part {}, need set part deps {} info to".format(
+            tips_info = "{} depend part {}, need set part deps {} info to".format(
                 args.target_path, dep, dep_part)
-            check_third_party_deps(args.part_name, dep_part, parts_deps_info, tips_info)
+            check_third_party_deps(args, dep_part, parts_deps_info, tips_info, third_deps_allow_list)
             continue
 
         match_flag = False
@@ -135,26 +142,37 @@ def check_part_deps(args, part_pattern, path_parts_info, depfiles:list):
                 match_flag = True
                 break
         if match_flag is False:
-            message = "WARNING:deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!".format(
+            message = "deps validation part_name: '{}', target: '{}', dep: '{}' failed!!!".format(
                 args.part_name, args.target_path, dep)
-            print(f"[0/0] {message}")
+            if args.target_path in deps_allow_list:
+                print(f"[0/0] WARNING:{message}")
+            else:
+                raise Exception(message)
 
 
 def check(args):
     depfiles = []
-    if args.part_name.find('test') != -1:
+    # ignore test related parts
+    test_allow_set = {'benchmark', 'performance', 'security', 'reliability'}
+    if args.part_name.find('test') != -1 or args.part_name in test_allow_set:
         return depfiles
 
+    compile_standard_allow_file = args.compile_standard_allow_file
+    compile_standard_allow_info = read_json_file(compile_standard_allow_file)
     parts_path_info, path_parts_info = load_part_info(depfiles)
 
     part_pattern = get_part_pattern(args.part_name, parts_path_info, path_parts_info, depfiles)
     if not part_pattern:
+        gn_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error")
         message = "part_name: '{}' path is not exist, please check target: '{}'".format(
             args.part_name, args.target_path)
-        print(f"[0/0] {message}")
-        return depfiles
+        if args.target_path in gn_allow_list:
+            print(f"[0/0] {message}")
+            return depfiles
+        else:
+            raise Exception(message)
 
-    check_part_deps(args, part_pattern, path_parts_info, depfiles)
+    check_part_deps(args, part_pattern, path_parts_info,compile_standard_allow_info, depfiles)
 
     return depfiles
 

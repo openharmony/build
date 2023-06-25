@@ -23,6 +23,8 @@ template("check_target") {
     script = "//build/templates/common/check_build_target.py"
     depfile = "${target_gen_dir}/$target_name.d"
     outputs = [ "${target_out_dir}/${target_name}.txt" ]
+    _compile_standard_allow_file =
+        "$preloader_output_dir/compile_standard_whitelist.json"
     args = [
       "--part-name",
       part_name,
@@ -34,6 +36,8 @@ template("check_target") {
       rebase_path(depfile, root_build_dir),
       "--output",
       rebase_path(outputs[0], root_build_dir),
+      "--compile-standard-allow-file",
+      rebase_path(_compile_standard_allow_file, root_build_dir),
     ]
 
     if (defined(invoker.skip_check_subsystem) &&

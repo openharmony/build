@@ -17,18 +17,25 @@ import sys
 import os
 import argparse
 import shutil
+import subprocess
+import multiprocessing
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 
+def copytree(source, destination):
+    shutil.copytree(source, destination, dirs_exist_ok=True)
 
 def copy_file(fuzz_config_file_path, fuzz_config_file_output_path):
     if not os.path.exists(fuzz_config_file_path):
         raise Exception("fuzz_config_file_path '{}' doesn't exist.".format(fuzz_config_file_path))
-    target_file_path = os.path.join(fuzz_config_file_output_path, os.path.basename(fuzz_config_file_path))
-    if os.path.exists(target_file_path):
-        shutil.rmtree(target_file_path)
-    shutil.copytree(fuzz_config_file_path, target_file_path)
+    target_file_path = os.path.join(fuzz_config_file_output_path, os.path.basename(fuzz_config_file_path))   
+    try:
+        p = multiprocessing.Process(target=copytree, args=(fuzz_config_file_path, target_file_path))
+        p.start()
+        p.join()
+    except:
+        subprocess.call(["cp", "-rf", fuzz_config_file_path, fuzz_config_file_output_path])
 
 
 def main():

@@ -1,5 +1,5 @@
 {
-  "developertest": {
+  "testfwk": {
     "project": "hmf/test/testfwk/developer_test",
     "path": "test/testfwk/developer_test",
     "name": "developer_test",

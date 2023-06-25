@@ -418,100 +418,13 @@ template("compile_js_assets") {
   }
 }
 
-template("app_sign") {
-  forward_variables_from(invoker, [ "testonly" ])
-  action(target_name) {
-    forward_variables_from(invoker,
-                           [
-                             "deps",
-                             "private_key_path",
-                             "signature_algorithm",
-                             "certificate_profile",
-                             "keystore_path",
-                             "keystore_password",
-                             "key_alias",
-                             "certificate_file",
-                             "unsigned_hap_path_list",
-                             "hap_out_dir",
-                             "install_module_info",
-                           ])
-    script = "//build/scripts/app_sign.py"
-    _private_key_path = default_hap_private_key_path
-    if (defined(private_key_path)) {
-      _private_key_path = private_key_path
-    }
-    _signature_algorithm = default_signature_algorithm
-    if (defined(signature_algorithm)) {
-      _signature_algorithm = signature_algorithm
-    }
-    _key_alias = default_key_alias
-    if (defined(key_alias)) {
-      _key_alias = key_alias
-    }
-    _keystore_path = default_keystore_path
-    if (defined(keystore_path)) {
-      _keystore_path = keystore_path
-    }
-    _keystore_password = default_keystore_password
-    if (defined(keystore_password)) {
-      _keystore_password = keystore_password
-    }
-    _certificate_file = default_hap_certificate_file
-    if (defined(certificate_file)) {
-      _certificate_file = certificate_file
-    }
-    if (defined(certificate_profile)) {
-      _certificate_profile = certificate_profile
-    }
-
-    inputs = [
-      hapsigner,
-      certificate_profile,
-      _keystore_path,
-      _certificate_file,
-    ]
-
-    outputs = [ "${target_out_dir}/${target_name}.stamp" ]
-
-    args = [
-      "--keyPwd",
-      _private_key_path,
-      "--sign-algo",
-      _signature_algorithm,
-      "--profileFile",
-      rebase_path(_certificate_profile, root_build_dir),
-      "--keyalias",
-      _key_alias,
-      "--keystoreFile",
-      rebase_path(_keystore_path, root_build_dir),
-      "--keystorePwd",
-      _keystore_password,
-      "--certificate-file",
-      rebase_path(_certificate_file, root_build_dir),
-      "--hapsigner",
-      rebase_path(hapsigner, root_build_dir),
-      "--unsigned-hap-path-list",
-      rebase_path(unsigned_hap_path_list, root_build_dir),
-      "--hap-out-dir",
-      rebase_path(hap_out_dir, root_build_dir),
-    ]
-    if (defined(install_module_info)) {
-      metadata = {
-        install_modules = [ install_module_info ]
-      }
-    }
-  }
-}
-
 template("compile_app") {
   forward_variables_from(invoker, [ "testonly" ])
   nodejs_version = "v14.21.1"
   if (host_os == "mac") {
     _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
-    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/npm"
   } else {
     _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
-    _npm = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/npm"
   }
   action(target_name) {
     forward_variables_from(invoker,
@@ -523,41 +436,62 @@ template("compile_app") {
                              "app_profile",
                              "hap_profile",
                              "build_level",
-                             "ohos_sdk_home",
-                             "unsigned_hap_path_list",
+                             "sdk_home",
+                             "signed_hap_path_list",
                              "system_lib_deps",
+                             "hap_out_dir",
+                             "hap_name",
+                             "install_module_info",
+                             "test_hap",
+                             "test_module",
+                             "module_libs_dir",
+                             "sdk_type_name",
                            ])
     script = "//build/scripts/compile_app.py"
-    outputs = [ unsigned_hap_path_list ]
+    outputs = [
+      signed_hap_path_list,
+      "${target_out_dir}/${target_name}.stamp",
+    ]
 
     args = [
-      "--npm",
-      rebase_path(_npm, root_build_dir),
       "--nodejs",
       rebase_path(_nodejs, root_build_dir),
       "--cwd",
       rebase_path(cwd, root_build_dir),
       "--build-profile",
       rebase_path(build_profile, root_build_dir),
-      "--ohos-sdk-home",
-      rebase_path(ohos_sdk_home),
+      "--sdk-home",
+      rebase_path(sdk_home),
       "--output-file",
-      rebase_path(unsigned_hap_path_list, root_build_dir),
-      "--npm-registry",
-      npm_registry,
+      rebase_path(signed_hap_path_list, root_build_dir),
+      "--ohpm-registry",
+      ohpm_registry,
+      "--hap-out-dir",
+      rebase_path(hap_out_dir, root_build_dir),
+      "--hap-name",
+      hap_name,
     ]
-
-    if (defined(app_profile) && app_profile) {
-      args += [
-        "--app-profile",
-        rebase_path(app_profile, root_build_dir),
-      ]
-    }
 
     if (defined(build_mode) && build_mode == "debug") {
       args += [ "--enable-debug" ]
     }
 
+    if (defined(test_hap) && test_hap) {
+      args += [ "--test-hap" ]
+    }
+
+    if (defined(test_module) && test_module != "") {
+      args += [
+        "--test-module",
+        test_module,
+      ]
+    }
+    if (defined(module_libs_dir) && module_libs_dir != "") {
+      args += [
+        "--module-libs-dir",
+        module_libs_dir,
+      ]
+    }
     if (defined(system_lib_deps)) {
       args += [ "--system-lib-module-info-list" ]
       foreach(_lib_deps, system_lib_deps) {
@@ -573,6 +507,15 @@ template("compile_app") {
           "--ohos-app-abi",
           ohos_app_abi,
         ]
+      }
+    }
+    if (defined(sdk_type_name) && sdk_type_name != []) {
+      args += [ "--sdk-type-name" ]
+      args += sdk_type_name
+    }
+    if (defined(install_module_info)) {
+      metadata = {
+        install_modules = [ install_module_info ]
       }
     }
   }

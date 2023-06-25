@@ -47,10 +47,6 @@
     "path": "foundation/appexecfwk",
     "name": "appexecfwk"
   },
-  "aafwk": {
-    "path": "foundation/ability",
-    "name": "ability"
-  },
   "ability": {
     "path": "foundation/ability",
     "name": "ability"
@@ -155,9 +151,9 @@
     "path": "test/ostest/wukong",
     "name": "wukong"
   },
-  "arkXtest": {
-    "path": "test/testfwk/arkxtest",
-    "name": "arkXtest"
+  "testfwk": {
+    "path": "test/testfwk",
+    "name": "testfwk"
   },
   "distributedhardware": {
     "path": "foundation/distributedhardware",
@@ -194,10 +190,6 @@
   "barrierfree": {
     "path": "foundation/barrierfree/accessibility",
     "name": "accessibility"
-  },
-  "securec": {
-    "path": "third_party/bounds_checking_function",
-    "name": "securec"
   },
   "customization": {
     "path": "base/customization",

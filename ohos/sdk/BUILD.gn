@@ -197,6 +197,8 @@ action("check_sdk_completeness") {
     rebase_path("${product_output_dir}/${product_name}", root_build_dir),
     product_name,
     sdk_version,
+    "--sdk-platform",
+    sdk_platform,
   ]
 }
 

@@ -74,7 +74,7 @@ template("rust_target") {
     _rustflags += invoker.rustflags
   }
 
-  _public_deps = [ "//build/rust:libstd.dylib.so" ]
+  _public_deps = []
   if (defined(invoker.public_deps)) {
     _public_deps += invoker.public_deps
   }
@@ -163,10 +163,15 @@ template("ohos_rust_executable") {
     if (!defined(deps)) {
       deps = []
     }
-    deps += [
-      "//build/rust:libstd.dylib.so",
-      "//build/rust:libtest.dylib.so",
+    _external_deps = [
+      "common:libstd.dylib.so",
+      "common:libtest.dylib.so",
     ]
+    if (defined(external_deps)) {
+      external_deps += _external_deps
+    } else {
+      external_deps = _external_deps
+    }
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }
@@ -239,9 +244,11 @@ template("ohos_rust_shared_library") {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
     }
-    module_output_extension = dylib_extension
+
     if (defined(invoker.output_extension)) {
       module_output_extension = "." + invoker.output_extension
+    } else {
+      module_output_extension = dylib_extension
     }
 
     if (defined(invoker.rustc_lints)) {
@@ -389,10 +396,15 @@ template("ohos_rust_shared_ffi") {
     if (!defined(deps)) {
       deps = []
     }
-    deps += [
-      "//build/rust:libstd.dylib.so",
-      "//build/rust:libtest.dylib.so",
+    _external_deps = [
+      "common:libstd.dylib.so",
+      "common:libtest.dylib.so",
     ]
+    if (defined(external_deps)) {
+      external_deps += _external_deps
+    } else {
+      external_deps = _external_deps
+    }
 
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
@@ -466,10 +478,15 @@ template("ohos_rust_static_ffi") {
     if (!defined(deps)) {
       deps = []
     }
-    deps += [
-      "//build/rust:libstd.dylib.so",
-      "//build/rust:libtest.dylib.so",
+    _external_deps = [
+      "common:libstd.dylib.so",
+      "common:libtest.dylib.so",
     ]
+    if (defined(external_deps)) {
+      external_deps += _external_deps
+    } else {
+      external_deps = _external_deps
+    }
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }

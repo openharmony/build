@@ -312,7 +312,7 @@ is_wearable_product = "${target_platform}" == "wearable"
 
 is_intellitv_product = "${target_platform}" == "intellitv"
 
-if (target_os == "ohos" && target_cpu == "x86_64") {
+if (target_os == "ohos" && target_cpu == "x86_64" || device_company == "emulator") {
   is_emulator = true
 }
 
@@ -332,6 +332,11 @@ if (host_os == "linux") {
 declare_args() {
   # Debug build. Enabling official builds automatically sets is_debug to false.
   is_debug = false
+}
+
+declare_args() {
+  # Profile build. Enabling official builds automatically sets is_profile to false.
+  is_profile = false
 }
 
 declare_args() {

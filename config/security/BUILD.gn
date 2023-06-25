@@ -125,3 +125,27 @@ config("stack_protector_ret_strong_config") {
     }
   }
 }
+
+#-fPIC or fpic
+config("pic_config") {
+  cflags = [ "-fPIC" ]
+  ldflags = [ "-fPIC" ]
+}
+
+#-Wl,-z,noexecstack.
+#-Wl,-z,now.
+#-Wl,-z,relro.
+config("-Wl-z_config") {
+  ldflags = [
+    "-Wl,-z,noexecstack",
+    "-Wl,-z,now",
+    "-Wl,-z,relro",
+  ]
+}
+
+#pie
+config("executable_config") {
+  cflags = [ "-fPIE" ]
+  asmflags = [ "-fPIE" ]
+  ldflags = [ "-pie" ]
+}
