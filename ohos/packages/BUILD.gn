@@ -234,6 +234,7 @@ foreach(_platform, target_platform_list) {
   system_module_info_list = "${current_platform_dir}/system_module_info.json"
   system_modules_list = "${current_platform_dir}/system_modules_list.txt"
   _system_image_zipfile = "${current_platform_dir}/system.zip"
+  _host_toolchain = "$host_toolchain"
 
   action_with_pydeps("${_platform}_install_modules") {
     script = "//build/ohos/packages/modules_install.py"
@@ -280,6 +281,8 @@ foreach(_platform, target_platform_list) {
       rebase_path("$current_platform_dir/system", root_build_dir),
       "--system-image-zipfile",
       rebase_path(_system_image_zipfile, root_build_dir),
+      "--host-toolchain",
+      _host_toolchain,
     ]
 
     _additional_system_files = []
