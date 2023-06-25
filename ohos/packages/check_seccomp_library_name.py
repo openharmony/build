@@ -53,7 +53,7 @@ def collect_cfg_services_name(cfg_dir):
 
 def collect_seccomp_services_name(lib_dir):
     services_name = set()
-    name_allow_list = ['system', 'app']
+    name_allow_list = ['system', 'app', 'renderer']
     if not os.path.exists(lib_dir):
         return services_name
     for file in os.listdir(lib_dir):
