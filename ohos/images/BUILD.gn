@@ -184,7 +184,7 @@ group("updater_image") {
 
 build_image_tools_path = [
   "//out/${device_name}/clang_x64/thirdparty/e2fsprogs",
-  "//out/${device_name}/clang_x64/thirdparty/f2fs_tools",
+  "//out/${device_name}/clang_x64/thirdparty/f2fs-tools",
   "//third_party/e2fsprogs/prebuilt/host/bin",
   "//build/ohos/images/mkimage",
 ]
