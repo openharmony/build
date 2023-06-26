@@ -106,4 +106,4 @@ class BundleCheckTools:
         '''
         @func: 检查 bundle.json 第一个 name 字段命名规则。
         '''
-        return re.match(r'^@[a-z]+/([a-z_]{1,63})$', name)
+        return re.match(r'^@[a-z]+/([a-z][a-z0-9_]{1,62})$', name)
