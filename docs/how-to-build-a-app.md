@@ -35,18 +35,19 @@
 | **module_install_dir** | 安装到system中的位置，默认安装在system/app目录下。|
 | **js_build_mode** | 可选，用于配置HAP是“release”还是“debug”模型编译，默认“release”。|
 | **install_enable** | 是否安装到镜像，默认为true |
-| **module_install_dir** | 模块安装目录，默认为system/app/ |
 | **hap_out_dir** | 单个应用中所有hap的输出目录，默认为"${target_out_dir}/${target_name}" |
 | **test_hap** | 对应用中的HAP测试ohosTest进行编译, 默认为false |
 | **test_module** | 编译的测试用例ohosTest所在的模块名，与**test_hap**共同使用，默认为entry |
-| **sdk_home** | 用于指定sdk的所在路径, 默认为"//out/sdk/packages/linux" |
+| **sdk_home** | 用于指定sdk的所在路径, 默认为"//out/sdk/packages/ohos-sdk/linux" |
 | **sdk_type_name** | 用于指定sdk类型, 默认为["sdk.dir"] |
+| **build_level** | 用于指定应用的编译级别，默认为"project", 可以指定为"module" |
+| **assemble_type** | 用于指定应用产物类型，默认为"AssembleApp", 可以指定为"AssembleHap" |
 
 
 
 ### 操作步骤
 
-1. 将开发完成的应用example放到applications/standard/目录下。
+1. 将开发完成的应用example放到应用归档目录下，例如目录"applications/standard"。
 
 2. 配置gn脚本applications/standard/example/BUILD.gn，简单示例如下：
    ```
@@ -55,8 +56,9 @@
    ohos_app("example") {
      part_name = "prebuilt_hap"   # 必选
      subsystem_name = "applications"  # 必选
-     system_lib_deps = [ "//applications/standard/MyApplication8/telephony_data:tel_telephony_data_test" ] # 依赖系统库
-     module_libs_dir = "entry"
+     certificate_profile = "./signature/example.p7b"  # 必选
+     system_lib_deps = [ "//applications/standard/MyApplication8/telephony_data:tel_telephony_data_test" ] # 依赖系统库，需要时添加
+     module_libs_dir = "entry"  # 使用system_lib_deps时指定
    }
    ```
 
@@ -109,15 +111,38 @@
    └── resources.index
    ```
 
-6. 注意事项：
-xts应用须使用ohos_js_app_suite模板，该模板是对ohos_app的封装，支持参数与ohos_app相同，差异点在于**hap_out_dir**默认在"out/{product_name}/suites/{xts_type}/testcases/"下。模板使用示例如下：
+### 注意事项：
+1. xts应用须使用ohos_js_app_suite模板，该模板是对ohos_app的封装，支持参数与ohos_app相同，差异点在于**hap_out_dir**默认在"out/{product_name}/suites/{xts_type}/testcases/"下。模板使用示例如下：
    ```
-   import("test/xts/tool/build/suite.gni")
+   import("//test/xts/tool/build/suite.gni")
 
    ohos_js_app_suite("test_example") {
      hap_name = "test_example"
      testonly = true
+     certificate_profile = "./signatrue/test_example.p7b"
      subsystem_name = "common"
      part_name = subsystem_name
    }
    ```
+
+2. 如果使用应用提供的ohosTest测试Hap编译功能，需要单独创建测试hap的目标并使能test_hap字段，同时指定对应的test_module, 例如：
+   ```
+   import("//build/ohos.gni")
+   
+   ohos_hap("example") {
+    hap_name = "example"
+    certificate_profile = "./signatrue/example.p7b"
+    subsystem_name = "common"
+    part_name = subsystem_name
+   }
+
+   ohos_hap("test_example") {
+    hap_name = "test_example"
+    certificate_profile = "./signatrue/example.p7b"
+    test_hap = true
+    test_module = "entry"
+    subsystem_name = "common"
+    part_name = subsystem_name
+   }
+   ```
+   上面的模板将会编译出example.hap和test_example.hap，其中test_example.hap是由entry/ohosTest中的源码编译产生。

@@ -103,6 +103,7 @@ echo "Node.js version check passed"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
+npm config set package-lock false
 
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
@@ -121,6 +122,9 @@ function init_ohpm() {
   ohpm config set registry https://repo.harmonyos.com/ohpm/
   ohpm config set strict_ssl false
   cd ${SOURCE_ROOT_DIR}
+  if [[ -d "~/.hvigor" ]]; then
+    rm -rf ~/.hvigor
+  fi
 }
 
 echo "start set ohpm"
