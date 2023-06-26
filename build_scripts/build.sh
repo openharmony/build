@@ -123,11 +123,13 @@ function init_ohpm() {
   cd ${SOURCE_ROOT_DIR}
 }
 
-echo "start set ohpm"
-init_ohpm
-if [[ "$?" -ne 0 ]]; then
-  echo "ohpm init failed!"
-  exit 1
+if [[ "$*" != *ohos-sdk* ]]; then
+  echo "start set ohpm"
+  init_ohpm
+  if [[ "$?" -ne 0 ]]; then
+    echo "ohpm init failed!"
+    exit 1
+  fi
 fi
 
 function build_sdk() {
