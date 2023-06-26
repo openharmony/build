@@ -112,6 +112,41 @@ template("ohos_prebuilt_shared_library") {
     invoker.stable = false
   }
 
+  # auto set auto_relative_install_dir by innerapi_tags
+  if (defined(invoker.innerapi_tags)) {
+    is_chipsetsdk = false
+    is_platformsdk = false
+    is_passthrough = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk*" ])) {
+      is_chipsetsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk*" ])) {
+      is_platformsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "passthrough*" ])) {
+      is_passthrough = true
+    }
+
+    if (is_chipsetsdk && is_platformsdk) {
+      auto_relative_install_dir = "chipset-pub-sdk"
+    } else if (is_chipsetsdk) {
+      auto_relative_install_dir = "chipset-sdk"
+    } else if (is_platformsdk) {
+      auto_relative_install_dir = "platformsdk"
+    }
+    if (is_passthrough) {
+      auto_relative_install_dir = chipset_passthrough_dir
+    }
+
+    is_ndk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
+      is_ndk = true
+    }
+    if (is_ndk) {
+      auto_relative_install_dir = "ndk"
+    }
+  }
+
   deps_info = []
   foreach(dep, invoker.deps) {
     info = {
@@ -152,8 +187,8 @@ template("ohos_prebuilt_shared_library") {
                              # For generate_module_info
                              "install_images",
                              "module_install_dir",
-                             "relative_install_dir",
                              "symlink_target_name",
+                             "innerapi_tags",
 
                              # Open source license related
                              "license_file",
@@ -170,6 +205,14 @@ template("ohos_prebuilt_shared_library") {
     }
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
+    }
+
+    # update relative_install_dir if auto_relative_install_dir defined
+    if (defined(auto_relative_install_dir)) {
+      relative_install_dir = auto_relative_install_dir
+    }
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
     }
     if (!defined(public_configs)) {
       public_configs = []

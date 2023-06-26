@@ -64,6 +64,9 @@ declare_args() {
   # chip_prod package dir
   chip_prod_base_dir = "chip_prod"
 
+  # chipset passthrough libraries dir
+  chipset_passthrough_dir = "chipsetsdk"
+
   # check sdk interface
   sdk_interface_check = true
 
