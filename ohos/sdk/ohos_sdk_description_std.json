@@ -734,6 +734,15 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//ide/tools/previewer:copy_ide_library",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
         "install_dir":"previewer/common/bin/",
         "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
