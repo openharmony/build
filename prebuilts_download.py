@@ -77,25 +77,38 @@ def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_p
 
 
 def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path, progress):
-    # download files
-    download_buffer_size = 32768
-    progress.console.log('Requesting {}'.format(url))
-    try:
-        response = urlopen(url)
-    except urllib.error.HTTPError as e:
-        progress.console.log("Failed to open {}, HTTPError: {}".format(url, e.code), style='red')
-    progress.update(task_id, total=int(response.info()["Content-length"]))
-    with open(local_file, "wb") as dest_file:
-        progress.start_task(task_id)
-        for data in iter(partial(response.read, download_buffer_size), b""):
-            dest_file.write(data)
-            progress.update(task_id, advance=len(data))
-    progress.console.log("Downloaded {}".format(local_file))
+    retry_times = 0
+    max_retry_times = 3
+    while retry_times < max_retry_times:
+        # download files
+        download_buffer_size = 32768
+        progress.console.log('Requesting {}'.format(url))
+        try:
+            response = urlopen(url)
+        except urllib.error.HTTPError as e:
+            progress.console.log("Failed to open {}, HTTPError: {}".format(url, e.code), style='red')
+        progress.update(task_id, total=int(response.info()["Content-length"]))
+        with open(local_file, "wb") as dest_file:
+            progress.start_task(task_id)
+            for data in iter(partial(response.read, download_buffer_size), b""):
+                dest_file.write(data)
+                progress.update(task_id, advance=len(data))
+        progress.console.log("Downloaded {}".format(local_file))
 
-    # decompressing files
-    progress.console.log("Decompressing {}".format(local_file))
-    _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
-    progress.console.log("Decompressed {}".format(local_file))
+        if os.path.exists(local_file):
+            if _check_sha256(url, local_file):
+                # decompressing files
+                progress.console.log("Decompressing {}".format(local_file))
+                _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
+                progress.console.log("Decompressed {}".format(local_file))
+                break
+            else:
+                os.remove(local_file)
+        retry_times += 1
+    if retry_times == max_retry_times:
+        print('{}, download failed with three times retry, please check network status. Prebuilts download exit.'.format(local_file))
+        # todo, merge with copy_url_disable_rich
+        sys.exit(1)
 
 
 def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path):
@@ -161,18 +174,19 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                         task = pool.submit(_uncompress, args, local_file, code_dir, 
                                            unzip_dir, unzip_filename, args.mark_file_path)
                         tasks[task] = os.path.basename(huaweicloud_url)
+                        continue
                     else:
                         os.remove(local_file)
+                filename = huaweicloud_url.split("/")[-1]
+                if not args.disable_rich:
+                    task_id = args.progress.add_task("download", filename=filename, start=False)
+                    task = pool.submit(_copy_url, args, task_id, huaweicloud_url, local_file, code_dir,
+                                    unzip_dir, unzip_filename, args.mark_file_path, args.progress)
+                    tasks[task] = os.path.basename(huaweicloud_url)
                 else:
-                    filename = huaweicloud_url.split("/")[-1]
-                    if not args.disable_rich:
-                        task_id = args.progress.add_task("download", filename=filename, start=False)
-                        task = pool.submit(_copy_url, args, task_id, huaweicloud_url, local_file, code_dir,
-                                        unzip_dir, unzip_filename, args.mark_file_path, args.progress)
-                        tasks[task] = os.path.basename(huaweicloud_url)
-                    else:
-                        task = pool.submit(_copy_url_disable_rich, args, huaweicloud_url, local_file, code_dir,
-                                           unzip_dir, unzip_filename, args.mark_file_path)
+                    task = pool.submit(_copy_url_disable_rich, args, huaweicloud_url, local_file, code_dir,
+                                        unzip_dir, unzip_filename, args.mark_file_path)
+
         for task in as_completed(tasks):
             if not args.disable_rich:
                 args.progress.console.log('{}, download and decompress completed'.format(tasks.get(task)),
@@ -294,8 +308,6 @@ def main():
     parser.add_argument('--config-file', help='prebuilts download config file')
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists(os.path.join(args.code_dir, "prebuilts/clang")):
-        shutil.rmtree(os.path.join(args.code_dir, "prebuilts/clang"))
     if args.skip_ssl:
         ssl._create_default_https_context = ssl._create_unverified_context
 
