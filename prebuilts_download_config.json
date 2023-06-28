@@ -5,6 +5,7 @@
     "developtools/ace_js2bundle/ace-loader",
     "third_party/jsframework",
     "arkcompiler/ets_frontend/ts2panda",
+    "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools"
   ],
   "node_modules_copy": [
@@ -16,6 +17,11 @@
     {
       "src": "arkcompiler/ets_frontend/ts2panda/node_modules",
       "dest": "prebuilts/build-tools/common/ts2abc/node_modules",
+      "use_symlink": "True"
+    },
+    {
+      "src": "arkcompiler/ets_frontend/legacy_bin/api8/node_modules",
+      "dest": "prebuilts/build-tools/common/ts2abc/legacy/node_modules",
       "use_symlink": "True"
     },
     {

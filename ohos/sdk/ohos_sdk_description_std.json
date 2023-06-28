@@ -276,6 +276,48 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:js_node_modules_ts2abc_linux",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:js_node_modules_ts2abc_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:js_node_modules_ts2abc_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ets_node_modules_ts2abc_linux",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ets_node_modules_ts2abc_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac",
+        "module_label": "//arkcompiler/ets_frontend/ts2panda:ets_node_modules_ts2abc_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
@@ -402,6 +444,27 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_linux",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/bin/ark/build-mac/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_linux",
         "target_os": [
@@ -481,6 +544,27 @@
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_mac",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_linux",
+        "target_os": [
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_win",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
+        "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_mac",
         "target_os": [
             "darwin"
         ]
