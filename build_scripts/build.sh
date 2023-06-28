@@ -156,9 +156,9 @@ function build_sdk() {
             for i in $(ls); do
                     unzip $i
             done
-            for f in $(find . -name package.json); do
+            for f in $(find . -name npm-install.js); do
                     pushd $(dirname $f)
-                    npm install
+                    node npm-install.js
                     popd
             done
             api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
