@@ -491,11 +491,15 @@ template("ohos_shared_library") {
   if (defined(invoker.innerapi_tags)) {
     is_chipsetsdk = false
     is_platformsdk = false
+    is_passthrough = false
     foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk*" ])) {
       is_chipsetsdk = true
     }
     foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk*" ])) {
       is_platformsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "passthrough*" ])) {
+      is_passthrough = true
     }
 
     if (is_chipsetsdk && is_platformsdk) {
@@ -504,6 +508,9 @@ template("ohos_shared_library") {
       auto_relative_install_dir = "chipset-sdk"
     } else if (is_platformsdk) {
       auto_relative_install_dir = "platformsdk"
+    }
+    if (is_passthrough) {
+      auto_relative_install_dir = chipset_passthrough_dir
     }
 
     is_ndk = false
@@ -661,6 +668,8 @@ template("ohos_shared_library") {
           "chipsetsdk_indirect",
           "platformsdk",
           "platformsdk_indirect",
+          "passthrough",
+          "passthrough_indirect",
         ]
         foreach(tag, filter_exclude(invoker.innerapi_tags, valid_tags)) {
           if (tag != "") {
