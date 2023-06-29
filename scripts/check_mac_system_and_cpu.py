@@ -43,6 +43,8 @@ def check_m1_cpu():
         host_cpu = res[2].strip().decode().split("brand_string:")[-1]
         if "M1" in host_cpu:
             print("host cpu is m1")
+        elif "M2" in host_cpu:
+            print("host cpu is m2")
 
     return 0
 
