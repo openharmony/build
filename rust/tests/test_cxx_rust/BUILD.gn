@@ -27,7 +27,7 @@ ohos_static_library("test_cxx_rust_staticlib") {
   ]
   deps = [
     ":test_cxx_rust_gen",
-    "//build/rust/tests:cxx_cppdeps",
+    "//third_party/rust/crates/cxx:cxx_cppdeps",
   ]
 }
 

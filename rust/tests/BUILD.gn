@@ -74,22 +74,6 @@ group("cxx_test_host_and_target") {
   ]
 }
 
-ohos_static_library("cxx_cppdeps") {
-  part_name = "common"
-  subsystem_name = "common"
-  defines = [ "RUST_CXX_NO_EXCEPTIONS" ]
-  sources = [
-    "//third_party/rust/crates/cxx/include/cxx.h",
-    "//third_party/rust/crates/cxx/src/cxx.cc",
-  ]
-  deps = [ "//third_party/rust/crates/cxx:lib" ]
-  if (is_win) {
-    defines += [ "CXX_RS_EXPORT=__declspec(dllexport)" ]
-  } else {
-    defines += [ "CXX_RS_EXPORT=__attribute__((visibility(\"default\")))" ]
-  }
-}
-
 ohos_prebuilt_shared_library("original_libstd.so") {
   if (current_cpu == "arm64") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd.dylib.so"

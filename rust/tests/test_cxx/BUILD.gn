@@ -29,6 +29,6 @@ ohos_executable("test_cxx_exe") {
   deps = [
     ":test_cxx_examp_rust",
     ":test_cxx_exe_gen",
-    "//build/rust/tests:cxx_cppdeps",
+    "//third_party/rust/crates/cxx:cxx_cppdeps",
   ]
 }
