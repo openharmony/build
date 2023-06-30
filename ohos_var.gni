@@ -206,7 +206,7 @@ declare_args() {
 }
 
 declare_args() {
-  is_opensource = false
+  is_opensource = true
 }
 
 # Upgrade Skia version
