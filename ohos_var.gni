@@ -205,6 +205,10 @@ declare_args() {
   bitcode_marker = false
 }
 
+declare_args() {
+  is_opensource = false
+}
+
 # Upgrade Skia version
 if (defined(build_cross_platform_version) && build_cross_platform_version) {
   use_new_skia = false
