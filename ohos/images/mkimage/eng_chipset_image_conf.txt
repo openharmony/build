@@ -2,4 +2,4 @@
 12582912
 --fs_type=ext4
 --dac_config ../../build/ohos/images/mkimage/dac.txt
---file_context obj/base/security/selinux/file_contexts.bin
+--file_context obj/base/security/selinux_adapter/file_contexts.bin
