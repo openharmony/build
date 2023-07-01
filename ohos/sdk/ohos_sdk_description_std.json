@@ -747,7 +747,8 @@
         "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
