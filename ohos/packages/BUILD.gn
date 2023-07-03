@@ -367,7 +367,8 @@ foreach(_platform, target_platform_list) {
     deps = [ ":${_platform}_install_modules" ]
 
     # result is not used in script
-    process_validate_result = "${current_platform_dir}/critical_cfg_validate_result.txt"
+    process_validate_result =
+        "${current_platform_dir}/critical_cfg_validate_result.txt"
 
     # ext_critical_proc_conf_path defined in config.json in vendor warehouse
     if (ext_critical_proc_conf_path != "") {
