@@ -21,6 +21,7 @@ import contextlib
 # Store the hash table of the services that need to validate
 CFG_HASH = {}
 
+
 class CfgValidateError(Exception):
     def __init__(self, name, reason):
         super().__init__()
@@ -79,7 +80,8 @@ class ProcessItem:
 def print_cfg_hash():
     global CFG_HASH
     for i in CFG_HASH.items():
-        print("Name: {}\ncritical: {}\ngiven critical: {}\n".format(i[0], i[1].critical, i[1].related_item.critical), end="")
+        print("Name: {}\ncritical: {}\n".format(i[0], i[1].critical), end="")
+        print("given critical: {}\n".format(i[1].related_item.critical), end="")
         print("Cfg location: {}\n".format(i[1].loc))
         print("")
 
