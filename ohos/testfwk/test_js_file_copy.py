@@ -59,10 +59,7 @@ def write_list_file(dest_path, name_list):
 
 
 def get_hap_json(target_name, test_output_dir):
-    if not os.path.exists(test_output_dir):
-        os.makedirs(test_output_dir, exist_ok=True)
-    else:
-        return
+    os.makedirs(test_output_dir, exist_ok=True)
     json_file = os.path.join(test_output_dir, target_name + ".json")
     json_info_data = {"driver": {
        "type": "JSUnitTest"
