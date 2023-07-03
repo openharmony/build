@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -91,7 +91,7 @@ def validate_cfg_file(process_path):
     with open(process_path) as fp:
         data = json.load(fp)
         if "critical_reboot_process_list" not in data:
-            print("Error: {}is not a valid whitelist, it has not a wanted field name".format(process_path))
+            print("Error: {} format invalid, field 'critical_reboot_process_list' is required".format(process_path))
             raise CfgValidateError("Customization Error", "cfgs check not pass")
 
         for i in data["critical_reboot_process_list"]:
@@ -110,7 +110,7 @@ def validate_cfg_file(process_path):
     if CFG_HASH:
         # The remaining services in CFG_HASH do not pass the validation
         for i in CFG_HASH.items():
-            print("Error: some services are not authenticated. Listed as follow:")
+            print("Error: some services do not match with whitelist critical configuration. Listed as follow:")
             print_cfg_hash()
 
             raise CfgValidateError("Customization Error", "cfgs check not pass")
