@@ -80,9 +80,9 @@ class ProcessItem:
 def print_cfg_hash():
     global CFG_HASH
     for i in CFG_HASH.items():
+        print("Cfg location: {}\n".format(i[1].loc), end="")
         print("Name: {}\ncritical: {}\n".format(i[0], i[1].critical), end="")
-        print("given critical: {}\n".format(i[1].related_item.critical), end="")
-        print("Cfg location: {}\n".format(i[1].loc))
+        print("Whitelist-allowed critical: {}\n".format(i[1].related_item.critical))
         print("")
 
 
@@ -109,11 +109,12 @@ def validate_cfg_file(process_path):
 
     if CFG_HASH:
         # The remaining services in CFG_HASH do not pass the validation
-        for i in CFG_HASH.items():
-            print("Error: some services do not match with whitelist critical configuration. Listed as follow:")
-            print_cfg_hash()
+        print("Error: some services do not match with critical whitelist({}).".format(process_path), end="")
+        print(" Directly enable critical or modify enabled critical services are prohibited!", end="")
+        print(" Misconfigured services listed as follow:")
+        print_cfg_hash()
 
-            raise CfgValidateError("Customization Error", "cfgs check not pass")
+        raise CfgValidateError("Customization Error", "cfgs check not pass")
     return
 
 
