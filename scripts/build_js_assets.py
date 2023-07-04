@@ -47,7 +47,6 @@ def parse_args(args):
                       action='store_true',
                       default=False,
                       help='whether to transform ets to ark bytecode')
-    parser.add_option('--ark-ts2abc-dir', help='path to ark ts2abc dir')
     parser.add_option('--ark-es2abc-dir', help='path to ark es2abc dir')
     parser.add_option('--ace-loader-home', help='path to ace-loader dir.')
     parser.add_option('--ets-loader-home', help='path to ets-loader dir.')
@@ -193,9 +192,6 @@ def main(args):
     if not options.js_assets_dir and not options.ets_assets_dir:
         with ZipFile(options.output, 'w') as file:
             return
-
-    if options.ark_ts2abc_dir:
-        depfiles.extend(build_utils.get_all_files(options.ark_ts2abc_dir))
 
     if options.ark_es2abc_dir:
         depfiles.extend(build_utils.get_all_files(options.ark_es2abc_dir))

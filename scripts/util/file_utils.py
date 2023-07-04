@@ -17,7 +17,17 @@ import json
 import os
 import subprocess
 import hashlib
+import platform
 
+
+def find_top():
+    cur_dir = os.getcwd()
+    while cur_dir != "/":
+        build_config_file = os.path.join(
+            cur_dir, 'build/config/BUILDCONFIG.gn')
+        if os.path.exists(build_config_file):
+            return cur_dir
+        cur_dir = os.path.dirname(cur_dir)
 
 # Read json file data
 def read_json_file(input_file):
@@ -87,6 +97,9 @@ def __check_changes(output_file, content):
 
 # Write file data
 def write_file(output_file, content):
+    code_dir = find_top()
+    os_name= platform.system().lower()
+    gn_exe = os.path.join(code_dir, f'prebuilts/build-tools/{os_name}-x86/bin/gn')
     file_dir = os.path.dirname(os.path.abspath(output_file))
     if not os.path.exists(file_dir):
         os.makedirs(file_dir, exist_ok=True)
@@ -95,6 +108,6 @@ def write_file(output_file, content):
         output_f.write(content)
     if output_file.endswith('.gni') or output_file.endswith('.gn'):
         # Call gn format to make the output gn file prettier.
-        cmd = ['gn', 'format']
+        cmd = [gn_exe, 'format']
         cmd.append(output_file)
         subprocess.check_output(cmd)

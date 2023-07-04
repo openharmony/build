@@ -198,7 +198,8 @@ template("ohos_module_package") {
     }
 
     dac_config = "//build/ohos/images/mkimage/dac.txt"
-    file_context = "$root_build_dir/obj/base/security/selinux/file_contexts.bin"
+    file_context =
+        "$root_build_dir/obj/base/security/selinux_adapter/file_contexts.bin"
     image_input_path = "$output_dir/module_package/img_input"
     output_image_file = "$output_dir/module_package/img_output/module.img"
     output_sign_image_file =
