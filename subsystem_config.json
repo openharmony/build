@@ -202,5 +202,9 @@
   "thirdparty": {
     "path": "third_party",
     "name": "thirdparty"
+  },
+  "ide": {
+    "path": "ide",
+    "name": "ide"
   }
 }
