@@ -68,26 +68,33 @@ def make_env(build_profile, cwd, ohpm_registry):
         os.chdir(cwd)
         if os.path.exists(os.path.join(cwd, 'oh_modules')):
             shutil.rmtree(os.path.join(cwd, 'oh_modules'))
-        subprocess.run(['ohpm', 'config', 'set', 'strict_ssl', 'false'])
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
 
-        proc = subprocess.Popen(ohpm_install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        proc.communicate()
-        if proc.returncode != 0:
-            raise Exception('ohpm install failed. {}'.format(proc.stderr.read().decode('utf-8')))
+        proc = subprocess.Popen(ohpm_install_cmd,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                encoding='utf-8')
+        stdout, stderr = proc.communicate()
+        if proc.returncode:
+            raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
+                proc.returncode, stderr))
 
         for module in modules_list:
             src_path = module.get('srcPath')
             ohpm_install_path = os.path.join(cwd, src_path)
-            os.chdir(ohpm_install_path)
             if os.path.exists(os.path.join(ohpm_install_path, 'oh_modules')):
                 shutil.rmtree(os.path.join(ohpm_install_path, 'oh_modules'))
-            proc = subprocess.Popen(ohpm_install_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            proc.communicate()
-            if proc.returncode != 0:
-                raise Exception('ohpm install module failed. {}'.format(proc.stderr.read().decode('utf-8')))
+            proc = subprocess.Popen(ohpm_install_cmd,
+                                    cwd=ohpm_install_path,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    encoding='utf-8')
+            stdout, stderr = proc.communicate()
+            if proc.returncode:
+                raise Exception('ReturnCode:{}. ohpm install module failed. {}'.format(
+                    proc.returncode, stderr))
     os.chdir(cur_dir)
 
 
@@ -96,7 +103,7 @@ def gen_unsigned_hap_path_json(build_profile, cwd, options):
     Generate unsigned_hap_path_list
     :param build_profile: module compilation information file
     :param cwd: app project directory
-    :return: signed_hap_path_json
+    :return: None
     '''
     unsigned_hap_path_json = {}
     unsigned_hap_path_list = []
@@ -115,7 +122,7 @@ def gen_unsigned_hap_path_json(build_profile, cwd, options):
                 unsigned_hap_path, '*-unsigned.hap')
             unsigned_hap_path_list.extend(hap_file)
         unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
-    return unsigned_hap_path_json
+    file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
 
 def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
@@ -138,6 +145,43 @@ def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
             shutil.copyfile(lib_path, dest)
 
 
+def hvigor_build(cwd, options):
+    '''
+    Run hvigorw to build the app or hap
+    :param cwd: app project directory
+    :param options: command line parameters
+    :return: None
+    '''
+    if options.test_hap:
+        cmd = ['bash', './hvigorw', '--mode', 'module', '-p',
+               f'module={options.test_module}@ohosTest', 'assembleHap']
+    else:
+        cmd = ['bash', './hvigorw', '--mode',
+               options.build_level, '-p', 'product=default', options.assemble_type]
+    if options.enable_debug:
+        cmd.extend(['-p', 'debuggable=true'])
+    else:
+        cmd.extend(['-p', 'debuggable=false'])
+
+    sdk_dir = options.sdk_home
+    nodejs_dir = os.path.abspath(
+        os.path.dirname(os.path.dirname(options.nodejs)))
+
+    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
+        for sdk_type in options.sdk_type_name:
+            f.write(f'{sdk_type}={sdk_dir}\n')
+        f.write(f'nodejs.dir={nodejs_dir}\n')
+    subprocess.run(['bash', './hvigorw', 'clean'], cwd=cwd)
+    proc = subprocess.Popen(cmd, 
+                            cwd=cwd, 
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            encoding='utf-8')
+    stdout, stderr = proc.communicate()
+    if proc.returncode:
+        raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
+
+
 def main(args):
     options = parse_args(args)
     cwd = os.path.abspath(options.cwd)
@@ -156,36 +200,12 @@ def main(args):
     # generate unsigned_hap_path_list and run ohpm install
     make_env(options.build_profile, cwd, options.ohpm_registry)
 
-    if options.test_hap:
-        cmd = ['bash', './hvigorw', 'clean', '--mode', 'module', '-p',
-               f'module={options.test_module}@ohosTest', 'assembleHap']
-    else:
-        cmd = ['bash', './hvigorw', 'clean', '--mode',
-               options.build_level, '-p', 'product=default', options.assemble_type]
-    if options.enable_debug:
-        cmd.extend(['-p', 'debuggable=true'])
-    else:
-        cmd.extend(['-p', 'debuggable=false'])
+    # invoke hvigor to build hap or app
+    hvigor_build(cwd, options)
 
-    sdk_dir = options.sdk_home
-    nodejs_dir = os.path.abspath(
-        os.path.dirname(os.path.dirname(options.nodejs)))
-
-    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
-        for sdk_type in options.sdk_type_name:
-            f.write(f'{sdk_type}={sdk_dir}\n')
-        f.write(f'nodejs.dir={nodejs_dir}\n')
-
-    proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE,
-                        stderr=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    if proc.returncode != 0:
-        raise Exception('Hvigor build failed: {}'.format(stderr.decode()))
-
-    unsigned_hap_path_json = gen_unsigned_hap_path_json(
-        options.build_profile, cwd, options)
-    file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
-
+    # generate a json file to record the path of all unsigned haps, and When signing hap later, 
+    # this json file will serve as input to provide path information for each unsigned hap.
+    gen_unsigned_hap_path_json(options.build_profile, cwd, options)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
