@@ -19,7 +19,7 @@ code_dir=$(dirname ${script_path})
 if [[ "${@}" =~ "--tool-repo" && -f "${code_dir}/prebuilts.sh" ]]; then
     # prebuilts.sh should be a symbolic link to a prebuilts_download.sh created by oneself.
     bash ${code_dir}/prebuilts.sh $@
-fi
+else
 while [ $# -gt 0 ]; do
   case "$1" in
     -skip-ssl|--skip-ssl) # wget、npm skip ssl check, which will allow
@@ -264,3 +264,4 @@ if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
     fi
 fi
 echo -e "\n"
+fi
