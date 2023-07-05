@@ -54,28 +54,28 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-57fd63-0530_sp3",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -96,22 +96,22 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-57fd63-0530_sp1",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-d1aa60-0630",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk",
       "rename": "true"
     },
@@ -185,22 +185,22 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/windows/clang_windows-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/clang_windows-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/windows/libcxx-ndk_windows-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/libcxx-ndk_windows-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp3/linux/clang_linux-x86_64-57fd63-0530_sp3.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/linux/clang_linux-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/linux/libcxx-ndk_linux-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/linux/libcxx-ndk_linux-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -281,22 +281,22 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/windows/clang_windows-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/clang_windows-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/windows/libcxx-ndk_windows-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/libcxx-ndk_windows-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp3/linux/clang_linux-x86_64-57fd63-0530_sp3.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/linux/clang_linux-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/linux/libcxx-ndk_linux-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/linux/libcxx-ndk_linux-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -413,12 +413,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/darwin/clang_darwin-arm64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/darwin/clang_darwin-arm64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/darwin/libcxx-ndk_darwin-arm64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/darwin/libcxx-ndk_darwin-arm64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -469,12 +469,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/darwin/clang_darwin-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/darwin/clang_darwin-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-57fd63_sp1/darwin/libcxx-ndk_darwin-x86_64-57fd63-0530_sp1.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/darwin/libcxx-ndk_darwin-x86_64-d1aa60-0630.tar.bz2",
           "unzip_filename": "libcxx-ndk"
         },
         {
