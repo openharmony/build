@@ -104,6 +104,11 @@ if (defined(product_build_config.ext_root_proc_conf_path)) {
 } else {
   ext_root_proc_conf_path = ""
 }
+if (defined(product_build_config.ext_critical_proc_conf_path)) {
+  ext_critical_proc_conf_path = product_build_config.ext_critical_proc_conf_path
+} else {
+  ext_critical_proc_conf_path = ""
+}
 if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = product_build_config.enable_ramdisk
 } else {
