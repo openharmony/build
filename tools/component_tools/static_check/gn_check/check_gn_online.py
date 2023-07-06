@@ -21,7 +21,7 @@ import xml.etree.ElementTree as ET
 
 class CheckGnOnline(object):
     TARGET_NAME = ('ohos_shared_library',
-                   'ohos_static_library', 'ohos_executable_library',
+                   'ohos_static_library', 'ohos_executable',
                    'ohos_source_set',
                    'ohos_copy',
                    'ohos_group',

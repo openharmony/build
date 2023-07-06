@@ -29,7 +29,7 @@ class CheckGn(object):
     COLUMNS_NAME_FOR_ALL = ['子系统', '部件', '文件', '定位', '违反规则', '错误说明']
     SCRIPT_PATH = 'build/tools/component_tools/static_check/gn_check'
     TARGET_NAME = ('ohos_shared_library',
-                   'ohos_static_library', 'ohos_executable_library',
+                   'ohos_static_library', 'ohos_executable',
                    'ohos_source_set',
                    'ohos_copy',
                    'ohos_group',
