@@ -31,6 +31,7 @@
         "third_party/weex-loader/bundle.json",
         "third_party/wpa_supplicant/wpa_supplicant-2.9_standard/bundle.json",
         "vendor/hihope/rk3568/ohos.build",
+        "vendor/hihope/ipcamera/ohos.build",
         "vendor/hihope/rk3568_mini_system/ohos.build",
         "vendor/hisilicon/hispark_phoenix/ohos.build",
         "vendor/hisilicon/hispark_taurus_standard/ohos.build",
@@ -167,7 +168,8 @@
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater",
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_supplicant",
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_updater",
-        "//vendor/hihope/rk3568/bluetooth:libbt_vendor"
+        "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
+        "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "deps_added_external_part_module": [
         "//applications/standard/settings/napi/settings:settings",
@@ -2079,7 +2081,8 @@
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client",
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater",
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_updater",
-        "//vendor/hihope/rk3568/bluetooth:libbt_vendor"
+        "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
+        "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "third_deps_bundle_not_add": [
         "//arkcompiler/ets_runtime:libark_jsruntime_test_set",
