@@ -71,10 +71,6 @@ def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_p
         cmd = 'tar -xvf {} -C {};echo 0 > {}'.format(src_file, dest_dir, mark_file_path)
     _run_cmd(cmd)
 
-    # npm install
-    if os.path.basename(unzip_dir) == 'nodejs':
-        _npm_install(args, code_dir, unzip_dir, unzip_filename)
-
 
 def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path, progress):
     retry_times = 0
@@ -158,9 +154,6 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                     args.progress.console.log('{}, Sha256 markword check OK.'.format(huaweicloud_url), style='green')
                 else:
                     print('{}, Sha256 markword check OK.'.format(huaweicloud_url))
-                if _is_system_component():
-                   if os.path.basename(abs_unzip_dir) == 'nodejs':
-                        _npm_install(args, code_dir, unzip_dir, unzip_filename)
             else:
                 _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/*.' + unzip_filename + '.mark')
                 _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/' + unzip_filename)
@@ -194,15 +187,17 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
             else:
                 print('{}, download and decompress completed'.format(tasks.get(task)))
 
-def _npm_install(args, code_dir, unzip_dir, unzip_filename):
+def _npm_install(args):
     procs = []
     skip_ssl_cmd = ''
     unsafe_perm_cmd = ''
-    os.environ['PATH'] = '{}/{}/{}/bin:{}'.format(code_dir, unzip_dir, unzip_filename, os.environ.get('PATH'))
+    node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
+    os.environ['PATH'] = '{}/{}:{}'.format(args.code_dir, node_path, os.environ.get('PATH'))
+    print('start npm install, please wait.')
     for install_info in args.npm_install_config:
-        full_code_path = os.path.join(code_dir, install_info)
+        full_code_path = os.path.join(args.code_dir, install_info)
         if os.path.exists(full_code_path):
-            npm = '{}/{}/{}/bin/npm'.format(code_dir, unzip_dir, unzip_filename)
+            npm = os.path.join(args.code_dir, node_path, 'npm')
             if args.skip_ssl:
                 skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
             if args.unsafe_perm:
@@ -350,6 +345,7 @@ def main():
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
     _file_handle(file_handle_config, args.code_dir, args.host_platform)
+    _npm_install(args)
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
     if install_config:
         _install(install_config, args.code_dir)
