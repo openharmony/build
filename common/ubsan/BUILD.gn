@@ -46,6 +46,10 @@ if (is_ohos) {
       "system",
       "updater",
     ]
+    innerapi_tags = [
+      "platformsdk",
+      "chipsetsdk_indirect",
+    ]
     part_name = "common"
   }
 }
