@@ -31,12 +31,12 @@ def check_parts_deps(args, external_part_name, parts_deps_info):
 
     compile_standard_allow_file = args.compile_standard_allow_file
     compile_standard_allow_info = read_json_file(compile_standard_allow_file)
-    added_self_part_allowa_list = compile_standard_allow_info.get("external_deps_added_self_part_module")
-    bundle_not_add_allowa_list = compile_standard_allow_info.get("external_deps_bundle_not_add")
+    added_self_part_allow_list = compile_standard_allow_info.get("external_deps_added_self_part_module", [])
+    bundle_not_add_allow_list = compile_standard_allow_info.get("external_deps_bundle_not_add", [])
     if external_part_name == args.part_name:
         message = "{} in target {} is dependency within part {}, Need to used deps".format(
             external_part_name, args.target_path, args.part_name)
-        if args.target_path in added_self_part_allowa_list:
+        if args.target_path in added_self_part_allow_list:
             print(f"[0/0] WARNING: {message}")
             return
         else:
@@ -55,7 +55,7 @@ def check_parts_deps(args, external_part_name, parts_deps_info):
         _warning_info = ""
 
     if _warning_info != "":
-        if args.target_path in bundle_not_add_allowa_list:
+        if args.target_path in bundle_not_add_allow_list:
             print(f"[0/0] WARNING: {_warning_info}")
         else:
             raise Exception(_warning_info)

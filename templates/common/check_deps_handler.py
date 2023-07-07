@@ -114,8 +114,8 @@ def get_dep_part(dep_path, third_part_info):
 
 
 def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_info, depfiles:list):
-    deps_allow_list = compile_standard_allow_info.get("deps_added_external_part_module")
-    third_deps_allow_list = compile_standard_allow_info.get("third_deps_bundle_not_add")
+    deps_allow_list = compile_standard_allow_info.get("deps_added_external_part_module", [])
+    third_deps_allow_list = compile_standard_allow_info.get("third_deps_bundle_not_add", [])
     parts_deps_file = 'build_configs/parts_info/parts_deps.json'
     parts_deps_info = read_json_file(parts_deps_file)
     if parts_deps_info is None:
@@ -163,7 +163,7 @@ def check(args):
 
     part_pattern = get_part_pattern(args.part_name, parts_path_info, path_parts_info, depfiles)
     if not part_pattern:
-        gn_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error")
+        gn_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error", [])
         message = "part_name: '{}' path is not exist, please check target: '{}'".format(
             args.part_name, args.target_path)
         if args.target_path in gn_allow_list:
