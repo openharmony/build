@@ -345,6 +345,11 @@ declare_args() {
 }
 
 declare_args() {
+  # The runtime mode ("debug", "profile", "release")
+  runtime_mode = "debug"
+}
+
+declare_args() {
   # Enable mini debug info, it will add .gnu_debugdata
   # section in each stripped sofile
 
