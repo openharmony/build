@@ -74,6 +74,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/av_codec/interfaces/kits/c/avdemuxer:native_media_avdemuxer_header",
   "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:libnative_media_avsource",
   "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:native_media_avsource_header",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/avscreen_capture:libnative_avscreen_capture",
+  "//foundation/multimedia/player_framework/interfaces/kits/c/avscreen_capture:native_avscreen_capture_header",
   "//foundation/multimedia/audio_framework/interfaces/kits/c:libohaudio_ndk",
   "//foundation/multimedia/audio_framework/interfaces/kits/c:ohaudio_header",
   "//foundation/multimedia/image_framework/interfaces/kits/native:libpixelmap_ndk",
