@@ -65,6 +65,7 @@ def _prepare_updater(updater_path):
     os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
     os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
     os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
+    os.symlink('/lib', os.path.join(updater_path, 'vendor/lib'))
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
 
