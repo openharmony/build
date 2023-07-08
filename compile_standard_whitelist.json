@@ -2602,6 +2602,7 @@
         "//foundation/arkui/ace_engine/frameworks/core/components/text_field:ace_core_components_text_field_ohos",
         "//foundation/arkui/ace_engine/frameworks/core/components/text_field:ace_core_components_text_field_windows",
         "//foundation/arkui/ace_engine/frameworks/core/components/text_overlay:ace_core_components_text_overlay_for_web_ohos",
+        "//foundation/arkui/ace_engine/frameworks/core/components/text_overlay:ace_core_components_text_overlay_ohos",
         "//foundation/arkui/ace_engine/frameworks/core/components/text_overlay:ace_core_components_text_overlay_linux",
         "//foundation/arkui/ace_engine/frameworks/core/components/text_overlay:ace_core_components_text_overlay_mac",
         "//foundation/arkui/ace_engine/frameworks/core/components/text_overlay:ace_core_components_text_overlay_windows",
