@@ -299,9 +299,7 @@ if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
         change_rustlib_name
         echo "======change rustlib name finished!======"
     fi
+    create_lldb_mi
 fi
 echo -e "\n"
-
-create_lldb_mi
-
 fi
