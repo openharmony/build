@@ -30,6 +30,12 @@ template("ohos_hisysevent_install_info") {
     _deps += invoker.deps
   }
 
+  if (is_system_component) {
+    config_install_dir = "${system_base_dir}/etc/hiview"
+  } else {
+    config_install_dir = "${vendor_base_dir}/etc/hiview"
+  }
+
   action_with_pydeps(target_name) {
     deps = _deps
     script = "//build/ohos/hisysevent/hisysevent_process.py"
@@ -44,7 +50,7 @@ template("ohos_hisysevent_install_info") {
       "--system-install-info-file",
       rebase_path(system_install_info_file, root_build_dir),
       "--config-install-dest-dir",
-      "${system_base_dir}/etc/hiview",
+      config_install_dir,
       "--hisysevent-install-info-file",
       rebase_path(hisysevent_install_info_file, root_build_dir),
       "--depfile",
