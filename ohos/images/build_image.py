@@ -53,7 +53,7 @@ def _prepare_root(system_path, target_cpu):
     os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
 
 
-def _prepare_updater(updater_path):
+def _prepare_updater(updater_path, target_cpu):
     _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64', 'vendor']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
@@ -63,8 +63,11 @@ def _prepare_updater(updater_path):
     os.symlink('bin/init', os.path.join(updater_path, 'init'))
     os.symlink('/bin', os.path.join(updater_path, 'system/bin'))
     os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
-    os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
-    os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
+    if target_cpu == 'arm64':
+        os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
+        os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
+    else:
+        os.symlink('/lib', os.path.join(updater_path, 'vendor/lib'))
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
 
@@ -117,9 +120,9 @@ def _make_image(args):
     if args.image_name == 'system':
         _prepare_root(args.input_path, args.target_cpu)
     elif args.image_name == 'updater':
-        _prepare_updater(args.input_path)
+        _prepare_updater(args.input_path, args.target_cpu)
     elif args.image_name == 'updater_ramdisk':
-        _prepare_updater(args.input_path)
+        _prepare_updater(args.input_path, args.target_cpu)
     elif args.image_name == 'ramdisk':
         _prepare_ramdisk(args.input_path)
     image_type = "raw"
