@@ -54,7 +54,7 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-d1aa60-0630",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-d1aa60-0630_sp1",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -185,7 +185,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/clang_windows-x86_64-d1aa60-0630.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60_sp1/windows/clang_windows-x86_64-d1aa60-0630_sp1.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
@@ -281,7 +281,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60/windows/clang_windows-x86_64-d1aa60-0630.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-d1aa60_sp1/windows/clang_windows-x86_64-d1aa60-0630_sp1.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
