@@ -84,6 +84,8 @@ _ndk_library_targets = [
   "//foundation/multimedia/image_framework/interfaces/kits/native:image_ndk_header",
   "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_receiver_ndk",
   "//foundation/multimedia/image_framework/interfaces/kits/native:image_receiver_ndk_header",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_source_ndk",
+  "//foundation/multimedia/image_framework/interfaces/kits/native:image_source_ndk_header",
   "//third_party/openSLES:sles_header",
   "//third_party/openSLES:libOpenSLES_ndk",
   "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
