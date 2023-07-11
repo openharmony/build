@@ -701,6 +701,15 @@
         ]
     },
     {
+        "install_dir": "previewer/liteWearable/config",
+        "module_label": "//foundation/arkui/ui_lite/ext/ide:copy_previewer_fonts_lite_full",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
         "install_dir":"previewer/common/bin/",
         "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
