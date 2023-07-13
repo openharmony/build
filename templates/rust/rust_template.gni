@@ -42,6 +42,8 @@ clippyOhosLints = [
   "clippy::unusual-byte-groupings",
   "-A",
   "clippy::upper-case-acronyms",
+  "-A",
+  "clippy::let_and_return",
 ]
 clippyVendorLints = [
   "-A",
