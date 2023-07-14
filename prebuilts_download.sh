@@ -176,12 +176,12 @@ python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $np
 echo "prebuilts_download end"
 
 if [[ "${host_platform}" == "linux" ]]; then
-    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
+    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.10.2/bin/pip3.10
 elif [[ "${host_platform}" == "darwin" ]]; then
-    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9
+    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.10.2/bin/pip3.10
 fi
-prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.9.2/bin/python3.9"
-prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.9.2/bin/pip3.9"
+prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.10.2/bin/python3.10"
+prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.10.2/bin/pip3.10"
 $prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url pyyaml requests prompt_toolkit\=\=1.0.14 kconfiglib\>\=14.1.0 asn1crypto cryptography json5\=\=0.9.6
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
