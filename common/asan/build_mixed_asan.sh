@@ -14,7 +14,7 @@
 
 TOPDIR=$(realpath "$(dirname ${BASH_SOURCE[0]})/../../../")
 
-PATH="${TOPDIR}/prebuilts/build-tools/linux-x86/bin/:${TOPDIR}/prebuilts/python/linux-x86/3.9.2/bin/:${PATH}"
+PATH="${TOPDIR}/prebuilts/build-tools/linux-x86/bin/:${TOPDIR}/prebuilts/python/linux-x86/current/bin/:${PATH}"
 
 command -v jq &>/dev/null || { echo >&2 "jq command not found, please install by: apt install -y jq"; exit 1; }
 command -v ninja &>/dev/null || { echo >&2 "ninja command not found, please install by: apt install -y ninja-build"; exit 1; }

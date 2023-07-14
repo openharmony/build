@@ -49,6 +49,20 @@
       "symlink_dest":"/current"
     },
     {
+      "src":"/prebuilts/python/linux-x86",
+      "dest":"/prebuilts/python/linux-x86",
+      "rename": "true",
+      "symlink_src":"/3.9.2",
+      "symlink_dest":"/current"
+    },
+    {
+      "src":"/prebuilts/python/darwin-x86",
+      "dest":"/prebuilts/python/darwin-x86",
+      "rename": "true",
+      "symlink_src":"/3.9.2",
+      "symlink_dest":"/current"
+    },
+    {
       "src": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi",
       "tmp": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2",
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
