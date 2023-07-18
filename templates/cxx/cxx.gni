@@ -670,6 +670,7 @@ template("ohos_shared_library") {
           "platformsdk_indirect",
           "passthrough",
           "passthrough_indirect",
+          "sasdk",
         ]
         foreach(tag, filter_exclude(invoker.innerapi_tags, valid_tags)) {
           if (tag != "") {
