@@ -52,10 +52,10 @@ def  merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
             overlay_path = subsystem_config_overlay['subsystem'][subsystem]['path']
             for path in overlay_path:
                 if path.find("vendor") != -1 or path.find("device") != -1:
-                    subsystem_configs['subsystem'][subsystem]['path'] +=\
-						subsystem_config_overlay['subsystem'][subsystem]['path']
-                    subsystem_configs['subsystem'][subsystem]['build_files'] +=\
-						subsystem_config_overlay['subsystem'][subsystem]['build_files']
+                    subsystem_configs['subsystem'][subsystem]['path'] += \
+                        subsystem_config_overlay['subsystem'][subsystem]['path']
+                    subsystem_configs['subsystem'][subsystem]['build_files'] += \
+                        subsystem_config_overlay['subsystem'][subsystem]['build_files']
                 else:
                     continue
         else:

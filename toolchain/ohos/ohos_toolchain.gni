@@ -82,7 +82,7 @@ template("ohos_clang_toolchain") {
     # absolute path.
     loadable_module_extension = ".so"
     rust_abi_target = invoker.rust_abi_target
-    if (rust_abi_target == "arm-linux-ohos") {
+    if (rust_abi_target == "armv7-linux-ohos") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
     } else if (rust_abi_target == "aarch64-linux-ohos") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"

@@ -92,15 +92,6 @@ def npm_install(target_dir):
         if filename.endswith(".zip"):
             os.system(f"unzip {filename}")
 
-    package_dirs = []
-    for root, dirs, files in os.walk(sdk_dir):
-        if "package.json" in files:
-            package_dirs.append(root)
-    for package_dir in package_dirs:
-        os.chdir(package_dir)
-        subprocess.run(["npm", "install"])
-
-    os.chdir(sdk_dir)
     p1 = subprocess.Popen(
         ["grep", "apiVersion", "toolchains/oh-uni-package.json"], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["awk", "{print $2}"],
@@ -123,17 +114,14 @@ def npm_install(target_dir):
         if os.path.isdir(dirname):
             subprocess.run(['mkdir', '-p', api_version])
             subprocess.run(['mv', dirname, api_version])
-            subprocess.run(['mkdir', dirname])
-            subprocess.run(
-                ['ln', '-s', f'../{api_version}/{dirname}', f'{dirname}/{sdk_version}'])
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--branch', default='master', help='OHOS branch name')
-    parser.add_argument('--product-name', default='ohos-sdk', help='OHOS product name')
+    parser.add_argument('--product-name', default='ohos-sdk-full', help='OHOS product name')
     args = parser.parse_args()
-    default_save_path = os.path.join(find_top(), 'out/sdk/packages')
+    default_save_path = os.path.join(find_top(), 'prebuilts')
     if not os.path.exists(default_save_path):
         os.makedirs(default_save_path)
     print(default_save_path)

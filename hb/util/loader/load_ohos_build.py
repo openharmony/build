@@ -598,7 +598,7 @@ class LoadBuildConfig(object):
             key: value for key, value in self._parts_deps.items() if save_part == key}
 
 
-def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info, 
+def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
                                     part_subsystem_component_info, config_path, subsystem_components_list):
     name = ""
     message = ""

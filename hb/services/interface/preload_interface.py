@@ -104,3 +104,7 @@ class PreloadInterface(ServiceInterface):
     @abstractmethod
     def _generate_systemcapability_json(self):
         pass
+
+    @abstractmethod
+    def _generate_compile_standard_whitelist_json(self):
+        pass

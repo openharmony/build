@@ -34,7 +34,7 @@ def check(args):
 
     compile_standard_allow_file = args.compile_standard_allow_file
     compile_standard_allow_info = read_json_file(compile_standard_allow_file)
-    bundle_file_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error")
+    bundle_file_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error", [])
     part_subsystem_info_file = 'build_configs/parts_info/part_subsystem.json'
     data = read_json_file(part_subsystem_info_file)
     if data is None:

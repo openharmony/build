@@ -49,6 +49,20 @@
       "symlink_dest":"/current"
     },
     {
+      "src":"/prebuilts/python/linux-x86",
+      "dest":"/prebuilts/python/linux-x86",
+      "rename": "true",
+      "symlink_src":"/3.10.2",
+      "symlink_dest":"/current"
+    },
+    {
+      "src":"/prebuilts/python/darwin-x86",
+      "dest":"/prebuilts/python/darwin-x86",
+      "rename": "true",
+      "symlink_src":"/3.10.2",
+      "symlink_dest":"/current"
+    },
+    {
       "src": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi",
       "tmp": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2",
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
@@ -158,7 +172,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230107.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -215,7 +229,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -254,7 +268,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230107.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -311,7 +325,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.9.2/linux/python-linux-x86-3.9.2_20200510.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -326,23 +340,23 @@
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-1.67.0-dev-x86_64-unknown-linux-gnu_20230112.tar",
+          "file_path": "/openharmony/compiler/rust/rust-1.68.0-dev-x86_64-unknown-linux-gnu-norpath.tar.gz",
           "unzip_filename": "rustc"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-aarch64-linux-ohos_20230112.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-aarch64-linux-ohos-norpath_20230706.tar.gz",
           "unzip_filename": "rustc-aarch64-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.67.0-dev-arm-linux-ohos_20230112.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-armv7-linux-ohos-norpath.tar.gz",
           "unzip_filename": "rustc-arm-std"
         }
       ],
       "install": [
         {
-          "install_dir":"prebuilts/rustc/rust-1.67.0-dev-x86_64-unknown-linux-gnu",
+          "install_dir":"prebuilts/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
           "script":"install.sh",
           "args": [
             {
@@ -352,7 +366,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-1.67.0-dev-aarch64-linux-ohos",
+          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-aarch64-linux-ohos",
           "script":"install.sh",
           "args": [
             {
@@ -362,7 +376,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-1.67.0-dev-arm-linux-ohos",
+          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-armv7-linux-ohos",
           "script":"install.sh",
           "args": [
             {
@@ -433,7 +447,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.9.2/darwin/python-darwin-x86-3.9.2_202205071615.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "darwin-x86"
         }
       ]
@@ -479,7 +493,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.9.2/darwin/python-darwin-x86-3.9.2_202205071615.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "darwin-x86"
         }
       ]
