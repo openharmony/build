@@ -1,6 +1,6 @@
 {
   "parts": {
-    "xts_acts": {
+    "acts": {
       "module_list": [
         "//test/xts/acts/build_lite:acts"
       ]

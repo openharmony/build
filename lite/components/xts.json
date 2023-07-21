@@ -1,7 +1,7 @@
 {
   "components": [
     {
-      "component": "xts_acts",
+      "component": "acts",
       "description": "",
       "optional": "true",
       "dirs": [

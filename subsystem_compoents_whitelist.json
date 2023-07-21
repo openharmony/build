@@ -1,6 +1,6 @@
 {
   "developer_test": "xts",
-  "xts_acts": "xts",
+  "acts": "xts",
   "xts_hats": "xts",
   "xts_dcts": "xts",
   "xts_hits": "xts",
