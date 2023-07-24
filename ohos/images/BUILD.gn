@@ -215,9 +215,7 @@ foreach(_platform, target_platform_list) {
       depfile = "$target_gen_dir/$target_name.d"
       deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
       if (!asan_detector) {
-        deps += [
-          "//build/ohos/packages:process_field_validate",
-        ]
+        deps += [ "//build/ohos/packages:process_field_validate" ]
         if (build_seccomp) {
           deps += [ "//build/ohos/packages:check_seccomp_filter_name" ]
         }
