@@ -125,6 +125,8 @@ def copy_modules(system_install_info, install_modules_info_file,
                         shutil.copy(os.path.join(source, filename), os.path.join(platform_installed_path, os.path.dirname(dest), filename))
                 if flag:
                     shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
+                else:
+                    shutil.rmtree(dest_dir, ignore_errors=True)
             else:
                 shutil.copy(source, os.path.join(platform_installed_path, dest))
 
