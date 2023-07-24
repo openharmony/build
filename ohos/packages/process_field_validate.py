@@ -225,16 +225,9 @@ def container_validate(process_path, list_name, item_container):
                 item_container.get(temp_item.name).record_related_item(temp_item)
 
 
-def validate_cfg_file(process_path, critical_process_path, result_path):
-    """
-    Load the process list file
-    For each item in the list, find out whether there is a CfgItem needs validation in HASH
-    """
+def check_container(critical_process_path):
     global PRIVILEGE_HASH
     global CRITICAL_HASH
-    container_validate(process_path, "high_privilege_process_list", PRIVILEGE_HASH)
-    container_validate(critical_process_path, "critical_reboot_process_list", CRITICAL_HASH)
-
     if PRIVILEGE_HASH:
         # The remaining services in HASH do not pass the high-privilege validation
         print("Error: some services are not authenticated. Listed as follow:")
@@ -244,13 +237,35 @@ def validate_cfg_file(process_path, critical_process_path, result_path):
 
     if CRITICAL_HASH:
         # The remaining services in HASH do not pass the critical validation
-        print("Error: some services do not match with critical whitelist({}).".format(process_path), end="")
+        print("Error: some services do not match with critical whitelist({}).".format(critical_process_path), end="")
         print(" Directly enable critical or modify enabled critical services are prohibited!", end="")
         print(" Misconfigured services listed as follow:")
         print_critical_hash()
 
         raise CfgValidateError("Customization Error", "cfgs check not pass")
     return
+
+
+
+def validate_cfg_file(privilege_process_path, critical_process_path, result_path):
+    """
+    Load the process list file
+    For each item in the list, find out whether there is a CfgItem needs validation in HASH
+    """
+    global PRIVILEGE_HASH
+    global CRITICAL_HASH
+    if not os.path.exists(privilege_process_path):
+        print("High-privilege process check skipped: file [{}] not exist".format(privilege_process_path))
+        PRIVILEGE_HASH.clear()
+    else:
+        container_validate(privilege_process_path, "high_privilege_process_list", PRIVILEGE_HASH)
+    if not os.path.exists(critical_process_path):
+        print("Critical-reboot process check skipped: file [{}] not exist".format(critical_process_path))
+        CRITICAL_HASH.clear()
+    else:
+        container_validate(critical_process_path, "critical_reboot_process_list", CRITICAL_HASH)
+
+    check_container(critical_process_path)
 
 
 def handle_services(filename, field):
@@ -283,7 +298,11 @@ def parse_cfg_file(filename):
     Load the cfg file in JSON format
     """
     with open(filename) as fp:
-        data = json.load(fp)
+        try:
+            data = json.load(fp)
+        except:
+            print("\nError: loading cfg file {} failed.\n".format(filename))
+            raise CfgValidateError("Customization Error", "cfgs check not pass")
         if "services" not in data:
             return
         for field in data['services']:
@@ -304,23 +323,17 @@ def main():
 
     sys_cfg_folder = opts[0][1]
     if not os.path.exists(sys_cfg_folder):
-        print("High-privilege process check skipped: file [{}] not exist".format(sys_cfg_folder))
+        print("Process field check skipped: file [{}] not exist".format(sys_cfg_folder))
         return
 
     vendor_cfg_folder = opts[1][1]
     if not os.path.exists(vendor_cfg_folder):
-        print("High-privilege process check skipped: file [{}] not exist".format(vendor_cfg_folder))
+        print("Process field check skipped: file [{}] not exist".format(vendor_cfg_folder))
         return
 
     privilege_process_path = opts[2][1]
-    if not os.path.exists(privilege_process_path):
-        print("High-privilege process check skipped: file [{}] not exist".format(process_path))
-        return
 
     critical_process_path = opts[3][1]
-    if not os.path.exists(critical_process_path):
-        print("High-privilege process check skipped: file [{}] not exist".format(process_path))
-        return
 
     iterate_cfg_folder(sys_cfg_folder)
     iterate_cfg_folder(vendor_cfg_folder)
