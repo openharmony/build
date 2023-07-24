@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2022-2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,7 +19,8 @@ import sys
 import contextlib
 
 # Store the hash table of the services that need to validate
-CFG_HASH = {}
+PRIVILEGE_HASH = {}
+CRITICAL_HASH = {}
 
 
 class CfgValidateError(Exception):
@@ -34,21 +35,25 @@ class CfgValidateError(Exception):
 
 class CfgItem:
     """
-    CfgItem is the value of CFG_HASH, representing the permissions of a service read from a cfg file
+    CfgItem is the value of HASH, representing the interesetd field of a service read from a cfg file
     """
 
     def __init__(self):
         self.uid = ""
         self.gid = []
         self.need_verified = False
+        self.enabled_critical = False
         self.loc = ""
+        self.critical = []
         self.related_item = ProcessItem()
 
     def __init__(self, loc):
         self.uid = ""
         self.gid = []
         self.need_verified = False
+        self.enabled_critical = False
         self.loc = loc
+        self.critical = []
         self.related_item = ProcessItem()
 
     @classmethod
@@ -59,6 +64,10 @@ class CfgItem:
     def _is_need_verified_gid(self, gid):
         # To enable gid-root validate, change it to "return gid == "root""
         return False
+
+    @classmethod
+    def _is_need_verified_critical(self, critical):
+        return critical[0] == 1
 
     def set_uid(self, uid):
         """
@@ -77,6 +86,11 @@ class CfgItem:
         if CfgItem._is_need_verified_gid(gid) and gid not in self.gid:
             self.gid.append(gid)
             self.need_verified = True
+
+    def set_critical(self, critical):
+        if CfgItem._is_need_verified_critical(critical):
+            self.critical = critical
+            self.enabled_critical = True
 
     def handle_socket(self, socket):
         """
@@ -114,6 +128,7 @@ class ProcessItem:
         self.name = ""
         self.uid = ""
         self.gid = []
+        self.critical = []
 
     def __init__(self, process_item=None):
         """
@@ -123,6 +138,7 @@ class ProcessItem:
             self.name = ""
             self.uid = ""
             self.gid = []
+            self.critical = []
             return
 
         self.name = process_item["name"]
@@ -139,12 +155,19 @@ class ProcessItem:
                 self.gid = process_item["gid"]
         else:
             self.gid = []
+        if "critical" in process_item:
+            self.critical = process_item["critical"]
+        else:
+            self.critical = []
 
     def verify(self, cfg_item):
         """
         Returns whether the corresponding CFG (cfg_item) has passed the verification
         """
-        return self._verify_uid(cfg_item.uid) and self._verify_gid(cfg_item.gid)
+        if cfg_item.need_verified:
+            return self._verify_uid(cfg_item.uid) and self._verify_gid(cfg_item.gid)
+        if cfg_item.enabled_critical:
+            return self.critical == cfg_item.critical
 
     def _verify_uid(self, uid):
         return not ((uid == "root" or uid == "system") and (uid != self.uid))
@@ -153,9 +176,9 @@ class ProcessItem:
         return not ("root" in gid and "root" not in self.gid)
 
 
-def print_cfg_hash():
-    global CFG_HASH
-    for i in CFG_HASH.items():
+def print_privilege_hash():
+    global PRIVILEGE_HASH
+    for i in PRIVILEGE_HASH.items():
         print("Name: {}\nuid: {}\ngiven uid: {}\ngid: ".format(i[0], i[1].uid, i[1].related_item.uid), end="")
 
         for gid in i[1].gid:
@@ -170,45 +193,69 @@ def print_cfg_hash():
         print("")
 
 
-def validate_cfg_file(process_path, result_path):
-    """
-    Load the process list file
-    For each item in the list, find out whether there is a CfgItem needs validation in CFG_HASH
-    """
-    global CFG_HASH
+def print_critical_hash():
+    global CRITICAL_HASH
+    for i in CRITICAL_HASH.items():
+        print("Cfg location: {}\n".format(i[1].loc), end="")
+        print("Name: {}\ncritical: {}\n".format(i[0], i[1].critical), end="")
+        print("Whitelist-allowed critical: {}\n".format(i[1].related_item.critical))
+        print("")
+
+
+def container_validate(process_path, list_name, item_container):
     with open(process_path) as fp:
         data = json.load(fp)
-        if "high_privilege_process_list" not in data:
+        if list_name not in data:
             print("Error: {}is not a valid whilelist, it has not a wanted field name".format(process_path))
             raise CfgValidateError("Customization Error", "cfgs check not pass")
 
-        for i in data["high_privilege_process_list"]:
-            if i["name"] not in CFG_HASH :
-                # no CfgItem in CFG_HASH meet the item in process list
+        for i in data[list_name]:
+            if i["name"] not in item_container :
+                # no CfgItem in HASH meet the item in process list
                 continue
 
             temp_item = ProcessItem(i)
-            if temp_item.name not in CFG_HASH:
+            if temp_item.name not in item_container:
                 continue
 
-            if temp_item.verify(CFG_HASH.get(temp_item.name)):
-                # Permission check is passed, remove the corresponding service from CFG_HASH
-                CFG_HASH.pop(temp_item.name)
+            if temp_item.verify(item_container.get(temp_item.name)):
+                # Process field check passed, remove the corresponding service from HASH
+                item_container.pop(temp_item.name)
             else:
-                CFG_HASH.get(temp_item.name).record_related_item(temp_item)
+                item_container.get(temp_item.name).record_related_item(temp_item)
 
-    if CFG_HASH:
-        # The remaining services in CFG_HASH do not pass the validation
-        for i in CFG_HASH.items():
-            print("Error: some services are not authenticated. Listed as follow:")
-            print_cfg_hash()
 
-            raise CfgValidateError("Customization Error", "cfgs check not pass")
+def validate_cfg_file(process_path, critical_process_path, result_path):
+    """
+    Load the process list file
+    For each item in the list, find out whether there is a CfgItem needs validation in HASH
+    """
+    global PRIVILEGE_HASH
+    global CRITICAL_HASH
+    container_validate(process_path, "high_privilege_process_list", PRIVILEGE_HASH)
+    container_validate(critical_process_path, "critical_reboot_process_list", CRITICAL_HASH)
+
+    if PRIVILEGE_HASH:
+        # The remaining services in HASH do not pass the high-privilege validation
+        print("Error: some services are not authenticated. Listed as follow:")
+        print_privilege_hash()
+
+        raise CfgValidateError("Customization Error", "cfgs check not pass")
+
+    if CRITICAL_HASH:
+        # The remaining services in HASH do not pass the critical validation
+        print("Error: some services do not match with critical whitelist({}).".format(process_path), end="")
+        print(" Directly enable critical or modify enabled critical services are prohibited!", end="")
+        print(" Misconfigured services listed as follow:")
+        print_critical_hash()
+
+        raise CfgValidateError("Customization Error", "cfgs check not pass")
     return
 
 
 def handle_services(filename, field):
-    global CFG_HASH
+    global PRIVILEGE_HASH
+    global CRITICAL_HASH
     cfg_item = CfgItem(filename)
     key = field['name']
     if "uid" in field:
@@ -221,9 +268,14 @@ def handle_services(filename, field):
                 cfg_item.append_gid(item)
     if "socket" in field:
         cfg_item.handle_socket(field["socket"])
+    if "critical" in field:
+        cfg_item.set_critical(field["critical"])
     if cfg_item.need_verified:
-        # Services that need to check permissions are added to CFG_HASH
-        CFG_HASH[key] = cfg_item
+        # Services that need to check permissions are added to HASH
+        PRIVILEGE_HASH[key] = cfg_item
+    if cfg_item.enabled_critical:
+        # Services that need to check critical are added to HASH
+        CRITICAL_HASH[key] = cfg_item
 
 
 def parse_cfg_file(filename):
@@ -248,7 +300,7 @@ def iterate_cfg_folder(cfg_dir):
 
 def main():
     opts, args = getopt.getopt(sys.argv[1:], '', ['sys-cfg-folder=', 'vendor-cfg-folder=', \
-        'high-privilege-process-list-path=', 'result-path='])
+        'high-privilege-process-list-path=', 'critical-reboot-process-list-path=', 'result-path='])
 
     sys_cfg_folder = opts[0][1]
     if not os.path.exists(sys_cfg_folder):
@@ -260,14 +312,19 @@ def main():
         print("High-privilege process check skipped: file [{}] not exist".format(vendor_cfg_folder))
         return
 
-    process_path = opts[2][1]
-    if not os.path.exists(process_path):
+    privilege_process_path = opts[2][1]
+    if not os.path.exists(privilege_process_path):
+        print("High-privilege process check skipped: file [{}] not exist".format(process_path))
+        return
+
+    critical_process_path = opts[3][1]
+    if not os.path.exists(critical_process_path):
         print("High-privilege process check skipped: file [{}] not exist".format(process_path))
         return
 
     iterate_cfg_folder(sys_cfg_folder)
     iterate_cfg_folder(vendor_cfg_folder)
-    validate_cfg_file(process_path, None)
+    validate_cfg_file(privilege_process_path, critical_process_path, None)
 
     return
 
