@@ -164,9 +164,9 @@ class ProcessItem:
         """
         Returns whether the corresponding CFG (cfg_item) has passed the verification
         """
-        if cfg_item.need_verified:
+        if self.uid or self.gid:
             return self._verify_uid(cfg_item.uid) and self._verify_gid(cfg_item.gid)
-        if cfg_item.enabled_critical:
+        if self.critical:
             return self.critical == cfg_item.critical
         return False
 
