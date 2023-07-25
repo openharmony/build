@@ -47,6 +47,11 @@ group("ohos") {
         # Step 3: Read OS subsystems profile.
         subsystem_parts_info = {
         }
+
+        print("root_build_dir: ,subsystem_name:")
+        print(root_build_dir)
+        print(subsystem_name)
+
         subsystem_parts_info = read_file(
                 "${root_build_dir}/build_configs/mini_adapter/${subsystem_name}.json",
                 "json")
