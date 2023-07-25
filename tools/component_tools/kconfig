@@ -436,13 +436,6 @@ config feature$$notification$$eventhandler
         depends on notification$$eventhandler
 endmenu
 menu "communication"
-config communication$$ipc_js
-    bool "ipc_js"
-    default n
-config feature$$communication$$ipc_js
-        string "feature"
-        default ""
-        depends on communication$$ipc_js
 config communication$$ipc
     bool "ipc"
     default n
