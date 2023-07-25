@@ -32,6 +32,9 @@ group("ohos") {
     # Step 1: Read product configuration profile.
     product_cfg = read_file("${product_config_path}/config.json", "json")
 
+    print("product_config_path:")
+    print(product_config_path)
+
     parts_targets_info = read_file(
             "${root_build_dir}/build_configs/parts_info/parts_modules_info.json",
             "json")
@@ -55,6 +58,11 @@ group("ohos") {
           component_found = false
 
           foreach(part_name, subsystem_parts_info.parts) {
+
+            print("product_configed_component.component,part:")
+            print(product_configed_component.component)
+            print(part_name)
+
             if (product_configed_component.component == part_name) {
               component_found = true
             }
