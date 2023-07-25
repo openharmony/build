@@ -168,6 +168,7 @@ class ProcessItem:
             return self._verify_uid(cfg_item.uid) and self._verify_gid(cfg_item.gid)
         if cfg_item.enabled_critical:
             return self.critical == cfg_item.critical
+        return False
 
     def _verify_uid(self, uid):
         return not ((uid == "root" or uid == "system") and (uid != self.uid))
@@ -300,9 +301,8 @@ def parse_cfg_file(filename):
     with open(filename) as fp:
         try:
             data = json.load(fp)
-        except:
-            print("\nError: loading cfg file {} failed.\n".format(filename))
-            raise CfgValidateError("Customization Error", "cfgs check not pass")
+        except json.decoder.JSONDecodeError:
+            print("\nError: loading cfg file {} failed. Cfg file not in JSON format!\n".format(filename))
         if "services" not in data:
             return
         for field in data['services']:
