@@ -346,15 +346,14 @@ foreach(_platform, target_platform_list) {
     if (ext_root_proc_conf_path != "") {
       _privilege_whitelist = ext_root_proc_conf_path
     } else {
-      _privilege_whitelist =
-          "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
+      _privilege_whitelist = "//vendor/${product_company}/${product_name}/security_config/high_privilege_process_list.json"
     }
+
     # ext_critical_proc_conf_path defined in config.json in vendor warehouse
     if (ext_critical_proc_conf_path != "") {
       _critical_whitelist = ext_critical_proc_conf_path
     } else {
-      _critical_whitelist =
-          "//vendor/${product_company}/${product_name}/security_config/critical_reboot_process_list.json"
+      _critical_whitelist = "//vendor/${product_company}/${product_name}/security_config/critical_reboot_process_list.json"
     }
     _system_cfg_folder = "${current_platform_dir}/system/etc/init"
 
