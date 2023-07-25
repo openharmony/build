@@ -1,31 +1,6 @@
 {
   "components": [
     {
-      "component": "acts",
-      "description": "",
-      "optional": "true",
-      "dirs": [
-        "test/xts/acts/build_lite"
-      ],
-      "targets": [
-        "//test/xts/acts/build_lite:acts"
-      ],
-      "rom": "",
-      "ram": "",
-      "output": [],
-      "adapted_kernel": [
-        "liteos_a",
-        "liteos_m",
-        "linux"
-      ],
-      "features": [],
-      "deps": {
-        "components": [
-          "xts_xdevice"
-        ]
-      }
-    },
-    {
       "component": "xts_tools",
       "description": "",
       "optional": "true",
@@ -134,27 +109,6 @@
       "ram": "",
       "output": [],
       "adapted_kernel": [
-        "liteos_a",
-        "linux"
-      ],
-      "features": [],
-      "deps": {}
-    },
-    {
-      "component": "device_attest_lite",
-      "description": "",
-      "optional": "true",
-      "dirs": [
-        "test/xts/device_attest_lite"
-      ],
-      "targets": [
-        "//test/xts/device_attest_lite:device_atTest_lite"
-      ],
-      "rom": "",
-      "ram": "",
-      "output": [],
-      "adapted_kernel": [
-        "liteos_m",
         "liteos_a",
         "linux"
       ],

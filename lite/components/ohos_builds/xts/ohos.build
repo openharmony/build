@@ -1,10 +1,5 @@
 {
   "parts": {
-    "acts": {
-      "module_list": [
-        "//test/xts/acts/build_lite:acts"
-      ]
-    },
     "xts_hits": {
       "module_list": [
         "//test/xts/huawei_proprietary/hits/build_lite:hits"
@@ -29,11 +24,6 @@
       "module_list": [
         "//test/testfwk/xdevice:xdevice"
       ]
-    },
-    "device_attest_lite": {
-        "module_list":[
-            "//test/xts/device_attest_lite:device_atTest_lite"
-        ]
     }
   },
   "subsystem_name": "xts"
