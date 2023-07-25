@@ -605,7 +605,9 @@ def compare_subsystem_and_component(subsystem_name, components_name, subsystem_c
     for component in components_name:
         if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
             continue
-        if component['component'] in list(part_subsystem_component_info.keys()):
+        overrided_components_name = '{}_{}'.format(component['component'], 'override')
+        if component['component'] in list(part_subsystem_component_info.keys()) \
+            or overrided_components_name in list(part_subsystem_component_info.keys()):
             if subsystem_name in list(part_subsystem_component_info.values()):
                 continue
             if subsystem_name == component['component']:
