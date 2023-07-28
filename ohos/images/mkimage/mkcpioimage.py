@@ -108,7 +108,7 @@ def build_run_cpio(args):
     if args.device == "ramdisk.img":
         output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
     elif args.device == "updater_ramdisk.img":
-        if not judge_updater_binary_available(args.src_dir) or
+        if not judge_updater_binary_available(args.src_dir) or\
            not judge_updater_available(args.src_dir):
             sys.exit(1)
         output_path = os.path.join("%s/../images" % os.getcwd(), "updater.img")
