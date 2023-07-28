@@ -623,7 +623,7 @@ def compare_subsystem_and_component(subsystem_name, components_name, subsystem_c
             raise Exception(message)
 
 
-def check_subsystem_and_component(parts_info_output_path):
+def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
     config = Config()
     config_path = os.path.join(config.product_config_path, 'config.json')
     part_subsystem_file = os.path.join(parts_info_output_path,
@@ -648,11 +648,12 @@ def check_subsystem_and_component(parts_info_output_path):
             if subsystem_name is None or components_name is None:
                 print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(config_path))
                 continue
-            compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info,
-                                            part_subsystem_component_info, config_path, subsystem_components_list)
+            if not skip_partlist_check:
+                compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info,
+                                                part_subsystem_component_info, config_path, subsystem_components_list)
 
 
-def _output_parts_info(parts_config_dict, config_output_path):
+def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_check):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
     # parts_info.json
     if 'parts_info' in parts_config_dict:
@@ -673,7 +674,7 @@ def _output_parts_info(parts_config_dict, config_output_path):
         LogUtil.hb_info(
             "generate part-subsystem of parts-info to '{}'".format(_part_subsystem_file))
 
-    check_subsystem_and_component(parts_info_output_path)
+    check_subsystem_and_component(parts_info_output_path, skip_partlist_check)
 
     # subsystem_parts.json
     if 'subsystem_parts' in parts_config_dict:
@@ -797,6 +798,7 @@ def get_parts_info(source_root_dir,
                    load_test_config,
                    overrided_components,
                    bundle_subsystem_allow_list,
+                   skip_partlist_check,
                    build_xts=False):
     """parts info,
     get info from build config file.
@@ -821,8 +823,8 @@ def get_parts_info(source_root_dir,
                                        variant_toolchains, subsystem_name,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
-                                       load_test_config,
-                                       overrided_components, bundle_subsystem_allow_list)
+                                       load_test_config, overrided_components,
+                                       bundle_subsystem_allow_list)
         # xts subsystem special handling, device_attest and
         # device_attest_lite parts need to be compiled into the version image, other parts are not
         if subsystem_name == 'xts' and build_xts is False:
@@ -864,7 +866,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['parts_modules_info'] = _parts_modules_info
     parts_config_dict['parts_deps'] = _parts_deps
     _output_parts_info(parts_config_dict,
-                       os.path.join(source_root_dir, config_output_relpath))
+                       os.path.join(source_root_dir, config_output_relpath), skip_partlist_check)
     parts_config_dict['syscap_info'] = system_syscap
     LogUtil.hb_info('all parts scan completed')
     return parts_config_dict
