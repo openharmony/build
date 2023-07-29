@@ -9,6 +9,8 @@
     "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools"
   ],
+  "uninstalled_tools": [
+  ],
   "node_modules_copy": [
     {
       "src": "third_party/jsframework/node_modules",
