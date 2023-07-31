@@ -20,6 +20,7 @@ import sys
 import argparse
 import subprocess
 import filecmp
+from judge_updater_img import judge_updater_img_available
 
 
 def args_parse(args):
@@ -57,49 +58,6 @@ def get_dir_list(input_path, dir_list):
         dir_list.append(input_path)
 
 
-def get_needed_lib(file_path):
-    cmd = " ".join(["readelf", "-d", file_path])
-    res = run_cmd(cmd)
-    if res[1] != 0:
-        print("error run readelf -d %s, errno: %s" % (file_path, str(res)))
-        print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
-                        res[2].decode(), res[3].decode()]))
-        sys.exit(1)
-    needed_lib_name = set()
-    lib_info = res[2].decode().split()
-    for i, val in enumerate(lib_info):
-        if val == "(NEEDED)" and lib_info[i+3].startswith("[") and lib_info[i+3].endswith("]"):
-            needed_lib_name.add(lib_info[i+3][1:-1]) #... (NEEDED) Shared library: [libc++.so] ...
-    return needed_lib_name
-
-
-def judge_updater_binary_available(updater_root_path):
-    updater_binary_path = os.path.join(updater_root_path, "bin", "updater_binary")
-    updater_binary_needed_lib = get_needed_lib(updater_binary_path)
-    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so', 'libbegetutil.z.so'}
-    extra_lib = updater_binary_needed_lib - updater_binary_lib_scope
-    if len(extra_lib) != 0:
-        print("error not allow updater_binary to depend new dynamic library: %s" % (" ".join(extra_lib)))
-        return False
-    return True
-
-
-def judge_updater_available(updater_root_path):
-    updater_path = os.path.join(updater_root_path, "bin", "updater") 
-    updater_needed_lib = get_needed_lib(updater_path)
-    all_lib_path = [os.path.join(updater_root_path, "lib64"), os.path.join(updater_root_path, "lib")]
-    all_lib_name = set()
-    for path in all_lib_path:
-        for root,dirs,files in os.walk(path):
-            for file in files:
-                all_lib_name.add(file)
-    extra_lib = updater_needed_lib - all_lib_name
-    if len(extra_lib) != 0:
-        print("error: not allow updater to depend dynamic library which not exist in updater.img: %s" % (" ".join(extra_lib)))
-        return False
-    return True
-
-
 def build_run_cpio(args):
     work_dir = os.getcwd()
     os.chdir(args.src_dir)
@@ -108,8 +66,7 @@ def build_run_cpio(args):
     if args.device == "ramdisk.img":
         output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
     elif args.device == "updater_ramdisk.img":
-        if not judge_updater_binary_available(args.src_dir) or\
-           not judge_updater_available(args.src_dir):
+        if not judge_updater_img_available(os.getcwd()):
             sys.exit(1)
         output_path = os.path.join("%s/../images" % os.getcwd(), "updater.img")
     else:
