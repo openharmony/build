@@ -44,7 +44,9 @@ group("ohos") {
         # Step 3: Read OS subsystems profile.
         subsystem_parts_info = {
         }
-
+        print("root_build_dir: ,subsystem_name:")
+        print(root_build_dir)
+        print(subsystem_name)
         subsystem_parts_info = read_file(
                 "${root_build_dir}/build_configs/mini_adapter/${subsystem_name}.json",
                 "json")
@@ -56,11 +58,6 @@ group("ohos") {
           component_found = false
 
           foreach(part_name, subsystem_parts_info.parts) {
-
-            print("product_configed_component.component,part:")
-            print(product_configed_component.component)
-            print(part_name)
-
             if (product_configed_component.component == part_name) {
               component_found = true
             }
