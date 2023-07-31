@@ -31,8 +31,7 @@ group("ohos") {
   if (ohos_build_target == "") {
     # Step 1: Read product configuration profile.
     product_cfg = read_file("${product_config_path}/config.json", "json")
-    print("product_config_path:")
-    print(product_config_path)
+
     parts_targets_info = read_file(
             "${root_build_dir}/build_configs/parts_info/parts_modules_info.json",
             "json")
@@ -45,9 +44,7 @@ group("ohos") {
         # Step 3: Read OS subsystems profile.
         subsystem_parts_info = {
         }
-        print("root_build_dir: ,subsystem_name:")
-        print(root_build_dir)
-        print(subsystem_name)
+
         subsystem_parts_info = read_file(
                 "${root_build_dir}/build_configs/mini_adapter/${subsystem_name}.json",
                 "json")
