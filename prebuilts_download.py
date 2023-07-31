@@ -351,5 +351,10 @@ def main():
     if install_config:
         _install(install_config, args.code_dir)
 
+    # delete uninstalled tools
+    uninstalled_tools = config_info.get('uninstalled_tools')
+    for tool_path in uninstalled_tools:
+        subprocess.run(['rm', '-rf', tool_path])
+
 if __name__ == '__main__':
     sys.exit(main())
