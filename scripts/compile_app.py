@@ -67,7 +67,7 @@ def make_env(build_profile, cwd, ohpm_registry):
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
         os.chdir(cwd)
         if os.path.exists(os.path.join(cwd, 'oh_modules')):
-            shutil.rmtree(os.path.join(cwd, 'oh_modules'))
+            subprocess.run(['rm', '-rf', 'oh_modules'])
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
@@ -85,7 +85,7 @@ def make_env(build_profile, cwd, ohpm_registry):
             src_path = module.get('srcPath')
             ohpm_install_path = os.path.join(cwd, src_path)
             if os.path.exists(os.path.join(ohpm_install_path, 'oh_modules')):
-                shutil.rmtree(os.path.join(ohpm_install_path, 'oh_modules'))
+                subprocess.run(['rm', '-rf', os.path.join(ohpm_install_path, 'oh_modules')])
             proc = subprocess.Popen(ohpm_install_cmd,
                                     cwd=ohpm_install_path,
                                     stdout=subprocess.PIPE,
@@ -162,7 +162,7 @@ def hvigor_build(cwd, options):
         cmd.extend(['-p', 'debuggable=true'])
     else:
         cmd.extend(['-p', 'debuggable=false'])
-
+    cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(options.nodejs)))
@@ -171,7 +171,7 @@ def hvigor_build(cwd, options):
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
-    subprocess.run(['bash', './hvigorw', 'clean'], cwd=cwd)
+    subprocess.run(['bash', './hvigorw', 'clean', '--no-daemon'], cwd=cwd)
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
                             stdout=subprocess.PIPE,

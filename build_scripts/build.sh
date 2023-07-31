@@ -103,7 +103,8 @@ echo "Node.js version check passed"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
-npm config set package-lock false
+npm config set lockfile false
+cat $HOME/.npmrc | grep 'lockfile=false' || echo 'lockfile=false' >> $HOME/.npmrc
 
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
@@ -121,10 +122,18 @@ function init_ohpm() {
   echo "ohpm version is $(ohpm -v)"
   ohpm config set registry https://repo.harmonyos.com/ohpm/
   ohpm config set strict_ssl false
+  ohpm config set log_level debug
   cd ${SOURCE_ROOT_DIR}
-  if [[ -d "~/.hvigor" ]]; then
-    rm -rf ~/.hvigor
+  if [[ -d "$HOME/.hvigor" ]]; then
+    echo "remove $HOME/.hvigor"
+    rm -rf $HOME/.hvigor/daemon $HOME/.hvigor/wrapper
   fi
+  mkdir -p $HOME/.hvigor/wrapper/tools
+  echo '{"dependencies": {"pnpm": "7.30.0"}}' > $HOME/.hvigor/wrapper/tools/package.json
+  pushd $HOME/.hvigor/wrapper/tools
+    echo "install pnpm"
+    npm install
+  popd
 }
 
 if [[ "$*" != *ohos-sdk* ]]; then
