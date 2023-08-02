@@ -29,10 +29,10 @@ def get_needed_lib(file_path):
     cmd = " ".join(["readelf", "-d", file_path])
     res = run_cmd(cmd)
     if res[1] != 0:
-        print("error run readelf -d %s, errno: %s" % (file_path, str(res)))
+        print("error run readelf -d %s" % file_path)
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
-        sys.exit(1)
+        return []
     needed_lib_name = []
     lib_info = res[2].decode().split()
     for i, val in enumerate(lib_info):
