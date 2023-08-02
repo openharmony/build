@@ -982,6 +982,8 @@
         "//base/notification/distributed_notification_service/test/bechmarktest/notification_publish_test:Benchmark_Publish_Test",
         "//base/notification/distributed_notification_service/test/bechmarktest/notification_services_test:Benchmark_Notification_Servece_Test",
         "//base/powermgr/battery_manager/charger:charger",
+        "//base/location/frameworks/native:locator_sdk",
+        "//base/location/services/location_gnss/gnss:lbsservice_gnss",
         "//base/security/device_security_level/oem_property/common:oem_common_obj",
         "//base/security/device_security_level/services/common:service_common_obj",
         "//base/security/huks/frameworks/crypto_lite/cipher:cipher_shared",
