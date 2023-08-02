@@ -274,12 +274,6 @@ openjdk_package_names = [
   "javax.*",
 ]
 
-if (host_os == "mac") {
-  restool = "//prebuilts/build-tools/common/restool/darwin-x86/restool"
-} else {
-  restool = "//prebuilts/build-tools/common/restool/restool"
-}
-
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
 hap_packing_tool =
     "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"

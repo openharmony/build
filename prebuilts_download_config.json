@@ -10,6 +10,7 @@
     "interface/sdk-js/build-tools"
   ],
   "uninstalled_tools": [
+    "prebuilts/build-tools/common/restool"
   ],
   "node_modules_copy": [
     {
@@ -154,11 +155,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
           "unzip_filename": "linux"
@@ -249,11 +245,6 @@
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
         {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
@@ -402,11 +393,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
           "unzip_filename": "darwin"
@@ -457,11 +443,6 @@
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
         {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
