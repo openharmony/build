@@ -37,7 +37,6 @@ template("merge_profile") {
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
-      restool,
       hap_profile,
     ]
     args = [
@@ -99,7 +98,7 @@ template("compile_resources") {
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
-      restool,
+      restool_path,
       hap_profile,
     ]
     args = [
