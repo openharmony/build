@@ -748,6 +748,16 @@ class BuildArgsResolver(ArgsResolverInterface):
                 deps_guard(config.out_path)
 
     @staticmethod
+    def resolve_skip_partlist_check(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--skip-partlist-check' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
+        loader = build_module.loader
+        loader.regist_arg("skip_partlist_check", target_arg.arg_value)
+
+    @staticmethod
     def resolve_clean_args(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--clean-args' arg
         :param target_arg: arg object which is used to get arg value.
