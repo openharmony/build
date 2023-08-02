@@ -20,7 +20,7 @@ import sys
 import argparse
 import subprocess
 import filecmp
-from judge_updater_img import judge_updater_img_available
+from judge_updater_image import judge_updater_img_available
 
 
 def args_parse(args):
