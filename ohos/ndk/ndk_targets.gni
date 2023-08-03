@@ -98,6 +98,8 @@ _ndk_library_targets = [
   "//drivers/external_device_manager/interfaces/ddk/usb:usb_header",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:libvulkan_ndk",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:vulkan_header",
+  "//foundation/resourceschedule/ffrt/interfaces/kits:libffrt_ndk",
+  "//foundation/resourceschedule/ffrt/interfaces/kits:ffrt_header",
 ]
 
 _ndk_base_libs = [
