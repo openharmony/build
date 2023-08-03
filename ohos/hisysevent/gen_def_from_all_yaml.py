@@ -72,6 +72,7 @@ _INVALID_EVENT_TYPE_DEF = "invalid definition type for event type"
 _INVALID_EVENT_LEVEL_DEF = "invalid definition type for event level"
 _INVALID_EVENT_DESC_DEF = "invalid definition type for event desc"
 _INVALID_EVENT_TAG_DEF = "invalid definition type for event tag"
+_INVALID_EVENT_PRESERVE_DEF = "invalid definition type for event preserve"
 _INVALID_EVENT_PARAM_DEF = "invalid definition type for event param"
 _INVALID_PARAM_TYPE_DEF = "invalid definition type for param type"
 _INVALID_PARAM_ARRSIZE_DEF = "invalid definition type for param arrsize"
@@ -195,6 +196,8 @@ _WARNING_MAP = {
         "The definition type of the event <<%s>> desc must be string.",
     _INVALID_EVENT_TAG_DEF :
         "The definition type of the event <<%s>> tag must be string.",
+    _INVALID_EVENT_PRESERVE_DEF :
+        "The definition type of the event <<%s>> preserve must be bool.",
     _INVALID_EVENT_PARAM_DEF :
         "The definition type of the event <<%s>> param <<%s>> "\
         "must be dictionary.",
@@ -504,8 +507,18 @@ def _check_event_tag(event_name, event_base):
     return check_res
 
 
+def _check_event_preserve(event_name, event_base):
+    if not "preserve" in event_base:
+        return True
+    event_preserve = event_base["preserve"]
+    if not isinstance(event_preserve, bool):
+        _build_warning_info(_INVALID_EVENT_PRESERVE_DEF, event_name)
+        return False
+    return True
+
+
 def _check_base_key(event_name, event_base):
-    key_list = ["type", "level", "tag", "desc"]
+    key_list = ["type", "level", "tag", "desc", "preserve"]
     for base_key in event_base.keys():
         if not base_key in key_list:
             _build_warning_info(_INVALID_EVENT_BASE_KEY,
@@ -530,6 +543,8 @@ def _check_event_base(event_name, event_def):
     if not _check_event_desc(event_name, event_base):
         check_res = False
     if not _check_event_tag(event_name, event_base):
+        check_res = False
+    if not _check_event_preserve(event_name, event_base):
         check_res = False
     if not _check_base_key(event_name, event_base):
         check_res = False
