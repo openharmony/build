@@ -171,15 +171,26 @@ def hvigor_build(cwd, options):
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
-    subprocess.run(['bash', './hvigorw', 'clean', '--no-daemon'], cwd=cwd)
+    print("[0/0] Hvigor clean start")
+    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'], cwd=cwd)
+    print("[0/0] Hvigor build start")
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             encoding='utf-8')
     stdout, stderr = proc.communicate()
-    if proc.returncode:
+    for line in stdout.splitlines():
+        print(f"[1/1] Hvigor info: {line}")
+    for line in stderr.splitlines():
+        print(f"[2/2] Hvigor warning: {line}")
+    os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
+    with open(os.path.join(cwd, 'build', 'build.log'), 'w') as f:
+        f.write(f'{stdout}\n')
+        f.write(f'{stderr}\n')
+    if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
         raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
+    print("[0/0] Hvigor build end")
 
 
 def main(args):
