@@ -35,9 +35,9 @@ system/etc/init.cfg,        00500,      0,          0,          0
 system/etc/init.usb.cfg,    00500,      0,          0,          0
 system/etc/param/*,         00500,      0,          0,          0
 system/etc/param/ohos_const/*,00500,    0,          0,          0
-system/bin/cups/backend/*   00750,      3823,       3824,       0
-system/bin/cups/daemon/*    00750,      3823,       3824,       0
-system/bin/cups/filter/*    00750,      3823,       3824,       0
+system/bin/cups/backend/*,  00750,      3823,       3824,       0
+system/bin/cups/daemon/*,   00750,      3823,       3824,       0
+system/bin/cups/filter/*,   00750,      3823,       3824,       0
 system/lib/ld-musl-arm.so.1,00755,      0,          2000,       0
 system/lib/ld-musl-aarch64.so.1,00755,      0,          2000,       0
 system/lib/ld-musl-x86_64.so.1,00755,      0,          2000,       0
