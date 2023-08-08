@@ -48,7 +48,7 @@ def judge_updater_binary_available(updater_root_path):
                                 'librestorecon.z.so', 'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
     extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
     if len(extra_lib) != 0:
-        print("error not allow updater_binary to depend new dynamic library: %s" % (" ".join(extra_lib)))
+        print("Reason:  not allow updater_binary to depend dynamic library: %s" % (" ".join(extra_lib)))
         return False
     return True
 
@@ -78,7 +78,8 @@ def judge_updater_available(updater_root_path):
     lib_chain = ["updater"]
     available_libs = set()
     if not judge_lib_available("updater", lib_chain, available_libs, lib_to_path):
-        print("error not allow updater to depend dynamic library which not exist in updater.img: %s" % ("->".join(lib_chain)))
+        print("Reason:  not allow updater to depend dynamic library which not exist in updater.img.  %s" % ("->".join(lib_chain)))
+        print("Solution:  add updater in install_images field when compiling %s" % lib_chain[-1])
         return False
     return True
 
