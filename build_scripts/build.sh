@@ -103,7 +103,8 @@ echo "Node.js version check passed"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
-npm config set package-lock false
+npm config set lockfile false
+cat $HOME/.npmrc | grep 'lockfile=false' || echo 'lockfile=false' >> $HOME/.npmrc
 
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
@@ -121,10 +122,18 @@ function init_ohpm() {
   echo "ohpm version is $(ohpm -v)"
   ohpm config set registry https://repo.harmonyos.com/ohpm/
   ohpm config set strict_ssl false
+  ohpm config set log_level debug
   cd ${SOURCE_ROOT_DIR}
-  if [[ -d "~/.hvigor" ]]; then
-    rm -rf ~/.hvigor
+  if [[ -d "$HOME/.hvigor" ]]; then
+    echo "remove $HOME/.hvigor"
+    rm -rf $HOME/.hvigor/daemon $HOME/.hvigor/wrapper
   fi
+  mkdir -p $HOME/.hvigor/wrapper/tools
+  echo '{"dependencies": {"pnpm": "7.30.0"}}' > $HOME/.hvigor/wrapper/tools/package.json
+  pushd $HOME/.hvigor/wrapper/tools
+    echo "install pnpm"
+    npm install
+  popd
 }
 
 if [[ "$*" != *ohos-sdk* ]]; then
@@ -152,28 +161,26 @@ function build_sdk() {
 
         if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
             pushd ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux
-            ls -d */ | xargs rm -rf
-            for i in $(ls); do
-                    unzip $i
-            done
-            for f in $(find . -name npm-install.js); do
-                    pushd $(dirname $f)
-                    node npm-install.js
-                    popd
-            done
-            api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
-            sdk_version=$(grep version toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g')
-            for i in $(ls -d */); do
-                    mkdir -p $api_version
+            mv ${ROOT_PATH}/out/sdk/ohos-sdk/linux/* .
+            echo "extracting ohos-sdk package..."
+            unzip -q "$(find . -name "native-linux*.zip")"
+            api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="10"
+            mkdir -p $api_version
+            for i in */; do
+                if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
                     mv $i $api_version
-                    mkdir $i
-                    ln -s ../$api_version/$i $i/$sdk_version
+                fi
             done
             popd
         fi
+        if [ -d "${ROOT_PATH}/prebuilts/ohos-sdk/linux" ]; then
+            rm -rf ${ROOT_PATH}/prebuilts/ohos-sdk/linux
+        fi
+        mkdir -p ${ROOT_PATH}/prebuilts/ohos-sdk/
+        cp -af ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ${ROOT_PATH}/prebuilts/ohos-sdk/
         popd
 }
-if [[ ! -d "${SOURCE_ROOT_DIR}/out/sdk/packages/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* ]]; then
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo "start build ohos-sdk"
   build_sdk
   if [[ "$?" -ne 0 ]]; then

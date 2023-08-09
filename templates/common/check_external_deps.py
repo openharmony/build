@@ -25,7 +25,7 @@ from scripts.util.file_utils import read_json_file # noqa: E402
 
 def check_parts_deps(args, external_part_name, parts_deps_info):
     # Ignore part dependency checks for test related parts
-    _part_allow_set = {'unittest', 'moduletest', 'systemtest', 'fuzztest', 'distributedtest', 'test'}
+    _part_allow_set = {'unittest', 'moduletest', 'systemtest', 'fuzztest', 'benchmark', 'distributedtest', 'test'}
     if args.part_name in _part_allow_set:
         return
 

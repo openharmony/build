@@ -37,7 +37,6 @@ template("merge_profile") {
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
-      restool,
       hap_profile,
     ]
     args = [
@@ -99,7 +98,7 @@ template("compile_resources") {
     _rebased_metadata = rebase_path(meta_data, root_build_dir)
     inputs = [
       meta_data,
-      restool,
+      restool_path,
       hap_profile,
     ]
     args = [
@@ -337,6 +336,7 @@ template("compile_js_assets") {
       "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap($host_toolchain)",
       "//developtools/ace_ets2bundle:ets_loader_ark_hap",
       "//developtools/ace_js2bundle:ace_loader_ark_hap",
+      "//third_party/weex-loader:weex_loader_ark_hap",
     ]
     _ace_loader_home =
         get_label_info("//developtools/ace_js2bundle:ace_loader_node_modules",

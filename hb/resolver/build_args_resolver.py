@@ -95,7 +95,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 build_module.args_dict['build_target'].arg_value = [
                     'build_ohos_sdk']
             build_module.args_dict['target_cpu'].arg_value = 'arm64'
-        elif target_arg.arg_value == 'arkui-cross':
+        elif target_arg.arg_value == 'arkui-x':
             target_generator = build_module.target_generator
             target_generator.regist_arg('is_cross_platform_build', True)
             target_generator.regist_arg('build_cross_platform_version', True)
@@ -746,6 +746,16 @@ class BuildArgsResolver(ArgsResolverInterface):
                     config.root_path, "developtools/integration_verification/tools/deps_guard"))
                 from deps_guard import deps_guard
                 deps_guard(config.out_path)
+
+    @staticmethod
+    def resolve_skip_partlist_check(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--skip-partlist-check' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: load.
+        """
+        loader = build_module.loader
+        loader.regist_arg("skip_partlist_check", target_arg.arg_value)
 
     @staticmethod
     def resolve_clean_args(target_arg: Arg, build_module: BuildModuleInterface):

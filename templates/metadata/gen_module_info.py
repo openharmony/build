@@ -191,6 +191,11 @@ def main():
         module_source = args.module_source
         if module_source.startswith("//"):
             module_source = module_source[2:]
+    elif args.type == "app" and not args.suffix:
+        source_file_name = ""
+        alt_source_file_name = ""
+        module_source = args.install_name
+        module_alt_source == ""
     else:
         source_file_name, alt_source_file_name = get_source_name(
             args.type, args.install_name, args.prefix_override, args.suffix,

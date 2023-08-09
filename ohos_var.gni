@@ -210,11 +210,7 @@ declare_args() {
 }
 
 # Upgrade Skia version
-if (defined(build_cross_platform_version) && build_cross_platform_version) {
-  use_new_skia = false
-} else {
-  use_new_skia = true
-}
+use_new_skia = true
 
 # support changing the ohpm registry and sdk type
 declare_args() {
@@ -277,12 +273,6 @@ openjdk_package_names = [
   "java.*",
   "javax.*",
 ]
-
-if (host_os == "mac") {
-  restool = "//prebuilts/build-tools/common/restool/darwin-x86/restool"
-} else {
-  restool = "//prebuilts/build-tools/common/restool/restool"
-}
 
 hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
 hap_packing_tool =

@@ -1,1 +1,1 @@
-{"multimodalinput":"multimodalinput_service", "ai":"distributedprofile", "sensors":"miscdevice", "hicollie":"hicollie_native", "hilog_override":"hilog_native_override", "hiviewdfx_hilog_native_override":"hilog_native_override"}
+{"multimodalinput":"multimodalinput_service", "ai":"distributedprofile", "sensors":"miscdevice", "hilog_native":"hilog", "hiviewdfx_hilog_native":"hilog", "hicollie":"hicollie_native", "hilog_native_override":"hilog_override", "hiviewdfx_hilog_native_override":"hilog_override"}

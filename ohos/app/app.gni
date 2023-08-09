@@ -329,7 +329,7 @@ template("ohos_app") {
     if (defined(invoker.sdk_home)) {
       sdk_home = invoker.sdk_home
     } else {
-      sdk_home = "//out/sdk/packages/ohos-sdk/linux"
+      sdk_home = "//prebuilts/ohos-sdk/linux"
     }
     if (defined(invoker.sdk_type_name)) {
       sdk_type_name = invoker.sdk_type_name
