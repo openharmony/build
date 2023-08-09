@@ -20,6 +20,7 @@ import sys
 import argparse
 import subprocess
 import filecmp
+from judge_updater_image import judge_updater_img_available
 
 
 def args_parse(args):
@@ -65,6 +66,8 @@ def build_run_cpio(args):
     if args.device == "ramdisk.img":
         output_path = os.path.join("%s/../images" % os.getcwd(), args.device)
     elif args.device == "updater_ramdisk.img":
+        if not judge_updater_img_available(os.getcwd()):
+            sys.exit(1)
         output_path = os.path.join("%s/../images" % os.getcwd(), "updater.img")
     else:
         output_path = os.path.join(work_dir, args.device)
