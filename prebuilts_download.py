@@ -189,7 +189,6 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
 
 def _npm_install(args):
     procs = []
-    unsafe_perm_cmd = ''
     node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
     os.environ['PATH'] = '{}/{}:{}'.format(args.code_dir, node_path, os.environ.get('PATH'))
     npm = os.path.join(args.code_dir, node_path, 'npm')
@@ -201,11 +200,13 @@ def _npm_install(args):
     print('start npm install, please wait.')
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(args.code_dir, install_info)
+        basename = os.path.basename(full_code_path)
+        npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
         if os.path.exists(full_code_path):
+            cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.unsafe_perm:
-                unsafe_perm_cmd = '--unsafe-perm;'
-            cmd = 'cd {};{} install --registry {} {}'.format(full_code_path, npm, args.npm_registry, unsafe_perm_cmd)
-            proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                cmd.append('--unsafe-perm')
+            proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
             procs.append(proc)
