@@ -72,7 +72,7 @@ def extract_file(filename):
     target_dir = os.path.dirname(filename)
 
     if not os.path.exists(target_dir):
-        os.makedirs(target_dir)
+        os.makedirs(target_dir, exist_ok=True)
     with tarfile.open(filename, "r:gz") as tar:
         tar.extractall(target_dir)
 
@@ -123,7 +123,7 @@ def main():
     args = parser.parse_args()
     default_save_path = os.path.join(find_top(), 'prebuilts')
     if not os.path.exists(default_save_path):
-        os.makedirs(default_save_path)
+        os.makedirs(default_save_path, exist_ok=True)
     print(default_save_path)
     try:
         now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')

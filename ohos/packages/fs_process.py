@@ -105,7 +105,7 @@ class Packer():
 
         def copy_file_process(source_path, target_path):
             if not os.path.isdir(target_path):
-                os.makedirs(target_path)
+                os.makedirs(target_path, exist_ok=True)
                 self.chmod_dirs.append((target_path, dir_mode))
             tfile = os.path.join(target_path, os.path.basename(source_path))
             try:

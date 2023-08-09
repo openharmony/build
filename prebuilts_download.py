@@ -148,7 +148,7 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
             bin_file = parse_dict.get('bin_file')
             abs_unzip_dir = os.path.join(code_dir, unzip_dir)
             if not os.path.exists(abs_unzip_dir):
-                os.makedirs(abs_unzip_dir)
+                os.makedirs(abs_unzip_dir, exist_ok=True)
             if _check_sha256_by_mark(args, huaweicloud_url, code_dir, unzip_dir, unzip_filename):
                 if not args.disable_rich:
                     args.progress.console.log('{}, Sha256 markword check OK.'.format(huaweicloud_url), style='green')
@@ -225,7 +225,7 @@ def _node_modules_copy(config, code_dir, enable_symlink):
         if os.path.exists(os.path.dirname(dest_dir)):
             shutil.rmtree(os.path.dirname(dest_dir))
         if use_symlink == 'True' and enable_symlink == True:
-            os.makedirs(os.path.dirname(dest_dir))
+            os.makedirs(os.path.dirname(dest_dir), exist_ok=True)
             os.symlink(src_dir, dest_dir)
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
@@ -327,7 +327,7 @@ def main():
 
     args.bin_dir = os.path.join(args.code_dir, config_info.get('prebuilts_download_dir'))
     if not os.path.exists(args.bin_dir):
-        os.makedirs(args.bin_dir)
+        os.makedirs(args.bin_dir, exist_ok=True)
     copy_config = config_info.get(host_platform).get(host_cpu).get('copy_config')
     node_config = config_info.get(host_platform).get('node_config')
     copy_config.extend(node_config)

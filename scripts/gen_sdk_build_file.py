@@ -123,7 +123,7 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
 
         module_sdk_out_dir = os.path.join(sdk_out_dir, module_name)
         if not os.path.exists(module_sdk_out_dir):
-            os.makedirs(module_sdk_out_dir)
+            os.makedirs(module_sdk_out_dir, exist_ok=True)
         if module_type == "maple":
             pass
         else:
@@ -144,7 +144,7 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
                                             header_file)
             header_file_dest_dir = os.path.dirname(header_file_dest)
             if not os.path.exists(header_file_dest_dir):
-                os.makedirs(header_file_dest_dir)
+                os.makedirs(header_file_dest_dir, exist_ok=True)
 
             shutil.copy(rel_h_file, header_file_dest)
 

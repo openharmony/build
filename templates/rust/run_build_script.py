@@ -67,7 +67,7 @@ def run_build_script(args, env, tempdir):
             output_path = os.path.join(args.out_dir, generated_file)
             out_dir = os.path.dirname(output_path)
             if not os.path.exists(out_dir):
-                os.makedirs(out_dir)
+                os.makedirs(out_dir, exist_ok=True)
             with os.fdopen(os.open(input_path,
                                    os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
                            'rb') as inputs:

@@ -141,7 +141,7 @@ def create_hap(options, signed_hap):
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
             hap_lib_path = os.path.join(lib_path, options.ohos_app_abi)
-            os.makedirs(hap_lib_path)
+            os.makedirs(hap_lib_path, exist_ok=True)
             for dso in sorted(options.dso):
                 shutil.copy(dso, hap_lib_path)
             packing_cmd.extend(['--lib-path', lib_path])

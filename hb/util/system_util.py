@@ -37,7 +37,7 @@ class SystemUtil(metaclass=NoInstance):
         if '' in cmd:
             cmd.remove('')
         if not os.path.exists(os.path.dirname(log_path)):
-            os.makedirs(os.path.dirname(log_path))
+            os.makedirs(os.path.dirname(log_path), exist_ok=True)
         with open(log_path, 'at', encoding='utf-8') as log_file:
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,

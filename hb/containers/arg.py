@@ -316,7 +316,7 @@ class Arg():
                 'You are trying to read args file, but there is no corresponding module "{}" args file'
                 .format(module_type.name.lower()), "0018")
         if not os.path.exists(CURRENT_ARGS_DIR):
-            os.makedirs(CURRENT_ARGS_DIR)
+            os.makedirs(CURRENT_ARGS_DIR, exist_ok=True)
         if not os.path.exists(args_file_path):
             IoUtil.copy_file(src=default_file_path, dst=args_file_path)
         return IoUtil.read_json_file(args_file_path)

@@ -75,7 +75,7 @@ class InterfaceMgr:
                                       'check.txt')
             file_dir = os.path.dirname(os.path.abspath(check_file))
             if not os.path.exists(file_dir):
-                os.makedirs(file_dir)
+                os.makedirs(file_dir, exist_ok=True)
 
             # sort check file content
             check_content.sort()
