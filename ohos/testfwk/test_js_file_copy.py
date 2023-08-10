@@ -35,7 +35,7 @@ def copy_file(suite_path, template_path, target_path):
 
     if os.path.exists(target_path):
         shutil.rmtree(target_path)
-    os.makedirs(target_path)
+    os.makedirs(target_path, exist_ok=True)
     shutil.copytree(template_path, os.path.join(target_path, "src"))
 
     js_dest_path = os.path.join(target_path,

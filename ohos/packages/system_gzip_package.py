@@ -36,7 +36,7 @@ def merge_image_files(src_image_path, dest_image_path):
             dir_relpath = os.path.relpath(src_dir, src_image_path)
             dest_dir_path = os.path.join(dest_image_path, dir_relpath)
             if not os.path.exists(dest_dir_path):
-                os.makedirs(dest_dir_path)
+                os.makedirs(dest_dir_path, exist_ok=True)
 
         for file_name in files:
             src_file_path = os.path.join(root, file_name)
@@ -44,7 +44,7 @@ def merge_image_files(src_image_path, dest_image_path):
             dest_file_path = os.path.join(dest_image_path, file_relpath)
             if not os.path.exists(dest_file_path):
                 if not os.path.exists(os.path.dirname(dest_file_path)):
-                    os.makedirs(os.path.dirname(dest_file_path))
+                    os.makedirs(os.path.dirname(dest_file_path), exist_ok=True)
                 shutil.copy2(src_file_path, dest_file_path)
 
 

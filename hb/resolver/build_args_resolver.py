@@ -211,7 +211,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 ccache_base = os.environ.get('HOME')
             ccache_base = os.path.join(ccache_base, ccache_local_dir)
             if not os.path.exists(ccache_base):
-                os.makedirs(ccache_base)
+                os.makedirs(ccache_base, exist_ok=True)
 
             ccache_log_suffix = os.environ.get('CCACHE_LOG_SUFFIX')
             if ccache_log_suffix:

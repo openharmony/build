@@ -57,11 +57,11 @@ def compile_resources(options):
         gen_dir = os.path.join(os.path.dirname(options.output_header_file), "gen")
         gen_dir = os.path.abspath(gen_dir)
         header_dir = os.path.join(build, 'header')
-        os.makedirs(res_dir)
+        os.makedirs(res_dir, exist_ok=True)
         if os.path.exists(gen_dir):
             shutil.rmtree(gen_dir)
-        os.makedirs(gen_dir)
-        os.makedirs(header_dir)
+        os.makedirs(gen_dir, exist_ok=True)
+        os.makedirs(header_dir, exist_ok=True)
 
         cmd = [options.restool_path]
         for directory in options.resources_dir:

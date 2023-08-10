@@ -116,7 +116,7 @@ def copy_modules(system_install_info, install_modules_info_file,
             elif os.path.isdir(source):
                 dest_dir = os.path.join(platform_installed_path, dest)
             if not os.path.exists(dest_dir):
-                os.makedirs(dest_dir)
+                os.makedirs(dest_dir, exist_ok=True)
             if os.path.isdir(source):
                 is_hvigor_hap = False
                 for filename in os.listdir(source):
@@ -194,7 +194,7 @@ def main():
     if os.path.exists(system_install_base_dir):
         shutil.rmtree(system_install_base_dir)
         print('remove system dir...')
-    os.makedirs(system_install_base_dir)
+    os.makedirs(system_install_base_dir, exist_ok=True)
 
     vendor_install_base_dir = os.path.join(args.platform_installed_path,
                                            'vendor')

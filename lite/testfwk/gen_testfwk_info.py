@@ -26,7 +26,7 @@ subsystem_infos = "subsystem_infos"
 
 def create_testfwk_info_file(component_info_file, abs_fold, file_name):
     if not os.path.exists(abs_fold):
-        os.makedirs(abs_fold)
+        os.makedirs(abs_fold, exist_ok=True)
     file_path = os.path.join(abs_fold, file_name)
     data = get_testfwk_info(component_info_file)
     dict_product = json.dumps(data)

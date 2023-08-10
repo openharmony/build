@@ -30,7 +30,7 @@ from build_scripts.build import find_top  # noqa: E402
 def _prepare_userdata(userdata_path):
     if os.path.exists(userdata_path):
         shutil.rmtree(userdata_path)
-    os.makedirs(userdata_path)
+    os.makedirs(userdata_path, exist_ok=True)
 
 
 def _prepare_root(system_path, target_cpu):
@@ -84,7 +84,7 @@ def _prepare_ramdisk(ramdisk_path):
 def _prepare_eng_ststem(eng_system_path, build_variant):
     if os.path.exists(eng_system_path):
         shutil.rmtree(eng_system_path)
-    os.makedirs(eng_system_path)
+    os.makedirs(eng_system_path, exist_ok=True)
     if build_variant == "user":
         return 
     _dir_list_first = ['etc', 'bin']

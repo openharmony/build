@@ -90,7 +90,7 @@ def check_output(cmd, **kwargs):
 
 def makedirs(path, exist_ok=True):
     try:
-        os.makedirs(path)
+        os.makedirs(path, exist_ok=True)
     except OSError:
         if not os.path.isdir(path):
             raise Exception("{} makedirs failed".format(path))

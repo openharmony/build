@@ -53,7 +53,7 @@ def temp_dir():
 
 def make_directory(dir_path):
     try:
-        os.makedirs(dir_path)
+        os.makedirs(dir_path, exist_ok=True)
     except OSError:
         pass
 
