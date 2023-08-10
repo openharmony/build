@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding: utf-8
 # Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +21,7 @@ import subprocess
 def run_cmd(cmd):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
-    sout, serr = res.communicate()
+    sout, serr = res.communicate(timeout=60)
 
     return res.pid, res.returncode, sout, serr
 
@@ -36,16 +37,17 @@ def get_needed_lib(file_path):
     needed_lib_name = []
     lib_info = res[2].decode().split()
     for i, val in enumerate(lib_info):
-        if val == "(NEEDED)" and lib_info[i+3].startswith("[") and lib_info[i+3].endswith("]"):
-            needed_lib_name.append(lib_info[i+3][1:-1]) #... (NEEDED) Shared library: [libc++.so] ...
+        # lib_info : ... (NEEDED) Shared library: [libc++.so] ...
+        if val == "(NEEDED)" and lib_info[i + 3].startswith("[") and lib_info[i + 3].endswith("]"):
+            needed_lib_name.append(lib_info[i + 3][1 : -1])
     return needed_lib_name
 
 
 def judge_updater_binary_available(updater_root_path):
     updater_binary_path = os.path.join(updater_root_path, "bin", "updater_binary")
     updater_binary_needed_lib = get_needed_lib(updater_binary_path)
-    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so',
-                                'librestorecon.z.so', 'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
+    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so',
+                                'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
     extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
     if len(extra_lib) != 0:
         print("Reason:  not allow updater_binary to depend dynamic library: %s" % (" ".join(extra_lib)))
@@ -71,14 +73,15 @@ def judge_lib_available(lib_name, lib_chain, available_libs, lib_to_path):
 def judge_updater_available(updater_root_path):
     lib_to_path = dict()
     for path in [os.path.join(updater_root_path, "lib64"), os.path.join(updater_root_path, "lib")]:
-        for root,dirs,files in os.walk(path):
+        for root, dirs, files in os.walk(path):
             for file in files:
                 lib_to_path[file] = os.path.join(root, file)
     lib_to_path["updater"] = os.path.join(updater_root_path, "bin", "updater")
     lib_chain = ["updater"]
     available_libs = set()
     if not judge_lib_available("updater", lib_chain, available_libs, lib_to_path):
-        print("Reason:  not allow updater to depend dynamic library which not exist in updater.img.  %s" % ("->".join(lib_chain)))
+        print("Reason:  not allow updater to depend dynamic library which not exist in updater.img. %s"\
+              % ("->".join(lib_chain)))
         print("Solution:  add updater in install_images field when compiling %s" % lib_chain[-1])
         return False
     return True
