@@ -86,7 +86,7 @@ def npm_install(target_dir):
 
     sdk_dir = os.path.join(target_dir, "ohos-sdk/linux")
     os.chdir(sdk_dir)
-    os.system("ls -d */ | xargs rm -rf")
+    subprocess.run(['ls', '-d', '*/', '|', 'xargs', 'rm', '-rf'])
 
     for filename in os.listdir(sdk_dir):
         if filename.endswith(".zip"):
@@ -161,8 +161,7 @@ def main():
                 break
 
             if product['obsPath'] and os.path.exists(default_save_path):
-                download_url = 'http://download.ci.openharmony.cn/' + \
-                    product['obsPath']
+                download_url = 'http://download.ci.openharmony.cn/{}'.format(product['obsPath'])
                 save_path2 = default_save_path
 
             try:

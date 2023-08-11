@@ -12,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
+set -e
+
 cp ./docs/docker/Dockerfile ./build/build_scripts/
 
 sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
