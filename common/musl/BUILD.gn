@@ -42,7 +42,8 @@ ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
     "updater",
     "ramdisk",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
   module_install_dir = "lib"
 }
 
@@ -54,7 +55,8 @@ ohos_prebuilt_shared_library("musl-libc.so") {
     "updater",
     "ramdisk",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
@@ -71,7 +73,8 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
     "updater",
     "ramdisk",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_prebuilt_shared_library("musl-libcxx.so") {
@@ -89,5 +92,6 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     "system",
     "updater",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }

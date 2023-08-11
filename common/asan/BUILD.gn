@@ -29,21 +29,25 @@ ohos_prebuilt_shared_library("libclang_rt.asan.so") {
     "ramdisk",
     "updater",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_prebuilt_etc("asan.options") {
   source = "asan.options"
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_prebuilt_etc("asan.cfg") {
   source = "asan.cfg"
   module_install_dir = "etc/init/"
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_shared_library("asan_helper") {
   sources = [ "asan_helper.c" ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }

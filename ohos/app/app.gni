@@ -251,8 +251,8 @@ template("ohos_app") {
     _subsystem_name = invoker.subsystem_name
     _part_name = _subsystem_name
   } else {
-    _subsystem_name = "common"
-    _part_name = _subsystem_name
+    _subsystem_name = "build"
+    _part_name = "build_framework"
   }
 
   assert(_subsystem_name != "")  # Mark as used
@@ -436,8 +436,8 @@ template("ohos_hap") {
     _subsystem_name = invoker.subsystem_name
     _part_name = _subsystem_name
   } else {
-    _subsystem_name = "common"
-    _part_name = _subsystem_name
+    _subsystem_name = "build"
+    _part_name = "build_framework"
   }
 
   assert(_subsystem_name != "")  # Mark as used
