@@ -1,14 +1,31 @@
 {
+  "name": "@ohos/build_framework",
+  "description": "build framework",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+      "destPath": "build"
+  },
+ "dirs": {},
+ "scripts": {},
   "component": {
-    "name": "common",
-    "description": "common component set",
-    "subsystem": "common",
-    "features": [
-      "common_feature_verify"
+    "name": "build_framework",
+    "description": "build_framework component set",
+    "subsystem": "build",
+    "features": [],
+    "adapted_system_type": [
+      "standard",
+      "small",
+      "mini"
     ],
     "rom": "",
     "ram": "",
-    "deps": {},
+    "deps": {
+      "third_party": [
+        "f2fs-tools"
+      ]
+    },
     "build": {
       "sub_component": [
         "//build/common:common_packages",

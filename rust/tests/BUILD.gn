@@ -91,5 +91,6 @@ ohos_prebuilt_shared_library("original_libstd.so") {
     "system",
     "updater",
   ]
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
