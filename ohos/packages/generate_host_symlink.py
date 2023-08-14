@@ -16,6 +16,7 @@
 import sys
 import argparse
 import os
+import subprocess
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -42,7 +43,7 @@ def _do_symlink(all_host_parts_info, output_file, root_build_dir):
                         symlink_dest_dir = os.path.dirname(source_file)
                         symlink_dest_file = os.path.join(root_build_dir, symlink_dest_dir, name)
                         if not os.path.exists(symlink_dest_file):
-                            os.system("ln -sf " + str(source_file) + " " + str(symlink_dest_file))
+                            subprocess.run(['ln', '-sf', str(source_file), str(symlink_dest_file)])
                             output_result[symlink_dest_file] = str(source_file)
     write_json_file(output_file, output_result)
 

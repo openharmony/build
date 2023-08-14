@@ -38,6 +38,9 @@ def parse_cfg_file(file_name):
             return services_name
         for field in data['services']:
             services_name.add(field['name'])
+            if "path" in field and len(field['path']) == 2 and field['path'][0] == "/system/bin/sa_main":
+                if field['path'][1].endswith('.xml'):
+                    raise ValidateError('cfg error,please use json file replace xml process name: ' + field['name'])
     return services_name
 
 

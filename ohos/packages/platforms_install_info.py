@@ -52,7 +52,7 @@ def main():
                                          args.target_platform_subsystem)
     platform_out_dir = os.path.dirname(args.system_install_info_file)
     if not os.path.exists(platform_out_dir):
-        os.makedirs(platform_out_dir)
+        os.makedirs(platform_out_dir, exist_ok=True)
     write_json_file(args.system_install_info_file, curr_subsystem_list)
     return 0
 

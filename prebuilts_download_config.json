@@ -5,8 +5,12 @@
     "developtools/ace_js2bundle/ace-loader",
     "third_party/jsframework",
     "third_party/parse5/packages/parse5",
+    "third_party/weex-loader",
     "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools"
+  ],
+  "uninstalled_tools": [
+    "prebuilts/build-tools/common/restool"
   ],
   "node_modules_copy": [
     {
@@ -151,11 +155,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
           "unzip_filename": "linux"
@@ -172,7 +171,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230107.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -247,11 +246,6 @@
     "x86_64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
           "unzip_filename": "linux"
@@ -268,7 +262,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools",
-          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230107.tar.gz",
+          "file_path": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
           "unzip_filename": "ark_js_prebuilts"
         }
       ],
@@ -399,11 +393,6 @@
     "arm64": {
       "copy_config": [
         {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
-        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
           "unzip_filename": "darwin"
@@ -454,11 +443,6 @@
     },
     "x86_64": {
       "copy_config": [
-        {
-          "unzip_dir": "prebuilts/build-tools/common",
-          "file_path": "/openharmony/compiler/restool/2.007/restool-2.007.tar.gz",
-          "unzip_filename": "restool"
-        },
         {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",

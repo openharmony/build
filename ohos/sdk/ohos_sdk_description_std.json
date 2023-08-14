@@ -165,6 +165,15 @@
         ]
     },
     {
+        "install_dir": "js/build-tools/ace-loader/lib/",
+        "module_label": "//third_party/weex-loader:weex_loader",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
     	"install_dir": "js/build-tools/ace-loader/bin/ark/",
 	    "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc",
 	    "target_os": [

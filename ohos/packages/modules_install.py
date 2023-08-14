@@ -116,17 +116,17 @@ def copy_modules(system_install_info, install_modules_info_file,
             elif os.path.isdir(source):
                 dest_dir = os.path.join(platform_installed_path, dest)
             if not os.path.exists(dest_dir):
-                os.makedirs(dest_dir)
+                os.makedirs(dest_dir, exist_ok=True)
             if os.path.isdir(source):
-                flag = True
+                is_hvigor_hap = False
                 for filename in os.listdir(source):
                     if filename.endswith('.hap'):
-                        flag = False
-                        shutil.copy(os.path.join(source, filename), os.path.join(platform_installed_path, os.path.dirname(dest), filename))
-                if flag:
+                        is_hvigor_hap = True
+                        shutil.copy2(os.path.join(source, filename), os.path.join(platform_installed_path, dest, filename))
+                if not is_hvigor_hap:
                     shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
             else:
-                shutil.copy(source, os.path.join(platform_installed_path, dest))
+                shutil.copy2(source, os.path.join(platform_installed_path, dest))
 
         # add symlink
         if 'symlink' in module_info:
@@ -194,7 +194,7 @@ def main():
     if os.path.exists(system_install_base_dir):
         shutil.rmtree(system_install_base_dir)
         print('remove system dir...')
-    os.makedirs(system_install_base_dir)
+    os.makedirs(system_install_base_dir, exist_ok=True)
 
     vendor_install_base_dir = os.path.join(args.platform_installed_path,
                                            'vendor')

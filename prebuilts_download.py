@@ -148,16 +148,16 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
             bin_file = parse_dict.get('bin_file')
             abs_unzip_dir = os.path.join(code_dir, unzip_dir)
             if not os.path.exists(abs_unzip_dir):
-                os.makedirs(abs_unzip_dir)
+                os.makedirs(abs_unzip_dir, exist_ok=True)
             if _check_sha256_by_mark(args, huaweicloud_url, code_dir, unzip_dir, unzip_filename):
                 if not args.disable_rich:
                     args.progress.console.log('{}, Sha256 markword check OK.'.format(huaweicloud_url), style='green')
                 else:
                     print('{}, Sha256 markword check OK.'.format(huaweicloud_url))
             else:
-                _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/*.' + unzip_filename + '.mark')
-                _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/' + unzip_filename)
-                local_file = os.path.join(bin_dir, md5_huaweicloud_url + '.' + bin_file)
+                _run_cmd(('rm -rf {}/{}/*.{}.mark').format(code_dir, unzip_dir, unzip_filename))
+                _run_cmd(('rm -rf {}/{}/{}').format(code_dir, unzip_dir, unzip_filename))
+                local_file = os.path.join(bin_dir, '{}.{}'.format(md5_huaweicloud_url, bin_file))
                 if os.path.exists(local_file):
                     if _check_sha256(huaweicloud_url, local_file):
                         if not args.disable_rich:
@@ -189,7 +189,6 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
 
 def _npm_install(args):
     procs = []
-    unsafe_perm_cmd = ''
     node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
     os.environ['PATH'] = '{}/{}:{}'.format(args.code_dir, node_path, os.environ.get('PATH'))
     npm = os.path.join(args.code_dir, node_path, 'npm')
@@ -201,11 +200,13 @@ def _npm_install(args):
     print('start npm install, please wait.')
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(args.code_dir, install_info)
+        basename = os.path.basename(full_code_path)
+        npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
         if os.path.exists(full_code_path):
+            cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.unsafe_perm:
-                unsafe_perm_cmd = '--unsafe-perm;'
-            cmd = 'cd {};{} install --registry {} {}'.format(full_code_path, npm, args.npm_registry, unsafe_perm_cmd)
-            proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                cmd.append('--unsafe-perm')
+            proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
             procs.append(proc)
@@ -225,7 +226,7 @@ def _node_modules_copy(config, code_dir, enable_symlink):
         if os.path.exists(os.path.dirname(dest_dir)):
             shutil.rmtree(os.path.dirname(dest_dir))
         if use_symlink == 'True' and enable_symlink == True:
-            os.makedirs(os.path.dirname(dest_dir))
+            os.makedirs(os.path.dirname(dest_dir), exist_ok=True)
             os.symlink(src_dir, dest_dir)
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
@@ -278,15 +279,15 @@ def _import_rich_module():
 
 def _install(config, code_dir):
     for config_info in config:
-        install_dir = code_dir + '/' + config_info.get('install_dir')
+        install_dir = '{}/{}'.format(code_dir, config_info.get('install_dir'))
         script = config_info.get('script')
         cmd = '{}/{}'.format(install_dir, script)
         args = config_info.get('args')
         for arg in args:
             for key in arg.keys():
-                cmd = cmd + ' --' + key + '=' + arg[key]
-        dest_dir = code_dir + '/' + config_info.get('destdir')
-        cmd = cmd + ' --destdir=' + dest_dir
+                cmd = '{} --{}={}'.format(cmd, key, arg[key])
+        dest_dir = '{}/{}'.format(code_dir, config_info.get('destdir'))
+        cmd = '{} --destdir={}'.format(cmd, dest_dir)
         _run_cmd(cmd)
 
 def main():
@@ -327,7 +328,7 @@ def main():
 
     args.bin_dir = os.path.join(args.code_dir, config_info.get('prebuilts_download_dir'))
     if not os.path.exists(args.bin_dir):
-        os.makedirs(args.bin_dir)
+        os.makedirs(args.bin_dir, exist_ok=True)
     copy_config = config_info.get(host_platform).get(host_cpu).get('copy_config')
     node_config = config_info.get(host_platform).get('node_config')
     copy_config.extend(node_config)
@@ -350,6 +351,11 @@ def main():
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
     if install_config:
         _install(install_config, args.code_dir)
+
+    # delete uninstalled tools
+    uninstalled_tools = config_info.get('uninstalled_tools')
+    for tool_path in uninstalled_tools:
+        subprocess.run(['rm', '-rf', tool_path])
 
 if __name__ == '__main__':
     sys.exit(main())

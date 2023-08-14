@@ -1,8 +1,8 @@
 {
   "developer_test": "xts",
   "acts": "xts",
-  "xts_hats": "xts",
-  "xts_dcts": "xts",
+  "hats": "xts",
+  "dcts": "xts",
   "xts_hits": "xts",
   "tools": "xts",
   "device_attest_lite": "xts"

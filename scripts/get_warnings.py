@@ -92,7 +92,7 @@ def _parse(in_name, out_name, prj_dir):
 
 def _get_warn(log_file, warn_file, prj_dir):
     if not os.path.exists(os.path.dirname(warn_file)):
-        os.makedirs(os.path.dirname(warn_file))
+        os.makedirs(os.path.dirname(warn_file), exist_ok=True)
     if os.path.exists(warn_file):
         os.remove(warn_file)
     temp_out_file = os.path.join(os.path.dirname(warn_file),

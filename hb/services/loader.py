@@ -54,6 +54,7 @@ class OHOSLoader(LoadInterface):
         self.load_test_config = ""
         self.subsystem_configs = ""
         self._subsystem_info = ""
+        self.skip_partlist_check = ""
 
     def __post_init__(self):
         self.source_root_dir = self.config.root_path + '/'
@@ -92,6 +93,7 @@ class OHOSLoader(LoadInterface):
         self.build_xts = self.args_dict.get('build_xts')
         self.ignore_api_check = self.args_dict.get('ignore_api_check')
         self.load_test_config = self.args_dict.get('load_test_config')
+        self.skip_partlist_check = self.args_dict.get('skip_partlist_check')
         self.subsystem_configs = subsystem_scan.scan(self.subsystem_config_file,
                                                      self.example_subsystem_file,
                                                      self.source_root_dir)
@@ -126,6 +128,7 @@ class OHOSLoader(LoadInterface):
             self.load_test_config,
             overrided_components,
             bundle_subsystem_allow_list,
+            self.skip_partlist_check,
             self.build_xts)
         self.parts_targets = self.parts_config_info.get('parts_targets')
         self.phony_targets = self.parts_config_info.get('phony_target')
@@ -315,9 +318,8 @@ class OHOSLoader(LoadInterface):
             os.mkdir(os.path.join(system_etc_path, "param/"))
         target_syscap_for_init_file = os.path.join(
             system_etc_path, "param/syscap.para")
-        file = open(target_syscap_for_init_file, "w")
-        file.writelines(target_syscap_for_init_list)
-        file.close()
+        with open(target_syscap_for_init_file, "w") as file:
+            file.writelines(target_syscap_for_init_list)
         LogUtil.hb_info("generate target syscap for init list to '{}'".format(
             target_syscap_for_init_file))
 
@@ -794,6 +796,7 @@ class OHOSLoader(LoadInterface):
         args.append('os_level={}'.format(self.os_level))
         args.append('ignore_api_check={}'.format(self.ignore_api_check))
         args.append('scalable_build={}'.format(self.scalable_build))
+        args.append('skip_partlist_check={}'.format(self.skip_partlist_check))
         LogUtil.write_log(self.config.log_path,
                           'loader args:{}'.format(args), 'info')
 

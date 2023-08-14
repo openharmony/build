@@ -76,10 +76,9 @@ class CheckGn(object):
         for gn_file in self.all_gn_files:
             if not gn_file.endswith('.gn'):
                 continue
-            file = open(gn_file, errors='ignore')
-            targets_ret = GnCommon.find_paragraph_iter(
-                target_pattern, file.read())
-            file.close()
+            with open(gn_file, errors='ignore') as file:
+                targets_ret = GnCommon.find_paragraph_iter(
+                    target_pattern, file.read())
             target = list()  # 每个文件中的target
             for target_ret in targets_ret:
                 target.append(target_ret.group())

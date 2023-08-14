@@ -131,7 +131,7 @@ def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
         else:
             build_dir = os.path.abspath(os.path.join(options.manifest_file_path, 'ets', src_path))
         if not os.path.exists(build_dir):
-            os.makedirs(build_dir)
+            os.makedirs(build_dir, exist_ok=True)
         manifest = os.path.join(build_dir, 'manifest.json')
 
         # Determine abilityType according to config.json

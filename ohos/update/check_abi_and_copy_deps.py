@@ -226,7 +226,7 @@ def main():
         print("copy_list: '{}'".format(str(copy_element)))
         output = get_copy_output_path(copy_element[0], parent_output)
         if not os.path.exists(output):
-            os.makedirs(output)
+            os.makedirs(output, exist_ok=True)
         if isinstance(copy_element[1], list):
             for file in copy_element[1]:
                 shutil.copy(file, output)
