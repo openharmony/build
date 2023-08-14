@@ -54,8 +54,7 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
                 root = tree.getroot()
                 process_nodes = root.findall('process')
                 process_name = process_nodes[0].text.strip()
-                raise Exception("Please use profile in json format, processname: "
-                    + process_name)
+                raise Exception('Please use profile in json format, processname: {}'.format(process_name))
             elif str(part_sa_info_files).endswith(".json"):
                 json_all_sa_input_files += [part_sa_info_files]
     depfiles.extend(json_all_sa_input_files)

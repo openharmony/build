@@ -155,9 +155,9 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                 else:
                     print('{}, Sha256 markword check OK.'.format(huaweicloud_url))
             else:
-                _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/*.' + unzip_filename + '.mark')
-                _run_cmd('rm -rf ' + code_dir + '/' + unzip_dir + '/' + unzip_filename)
-                local_file = os.path.join(bin_dir, md5_huaweicloud_url + '.' + bin_file)
+                _run_cmd(('rm -rf {}/{}/*.{}.mark').format(code_dir, unzip_dir, unzip_filename))
+                _run_cmd(('rm -rf {}/{}/{}').format(code_dir, unzip_dir, unzip_filename))
+                local_file = os.path.join(bin_dir, '{}.{}'.format(md5_huaweicloud_url, bin_file))
                 if os.path.exists(local_file):
                     if _check_sha256(huaweicloud_url, local_file):
                         if not args.disable_rich:
@@ -279,15 +279,15 @@ def _import_rich_module():
 
 def _install(config, code_dir):
     for config_info in config:
-        install_dir = code_dir + '/' + config_info.get('install_dir')
+        install_dir = '{}/{}'.format(code_dir, config_info.get('install_dir'))
         script = config_info.get('script')
         cmd = '{}/{}'.format(install_dir, script)
         args = config_info.get('args')
         for arg in args:
             for key in arg.keys():
-                cmd = cmd + ' --' + key + '=' + arg[key]
-        dest_dir = code_dir + '/' + config_info.get('destdir')
-        cmd = cmd + ' --destdir=' + dest_dir
+                cmd = '{} --{}={}'.format(cmd, key, arg[key])
+        dest_dir = '{}/{}'.format(code_dir, config_info.get('destdir'))
+        cmd = '{} --destdir={}'.format(cmd, dest_dir)
         _run_cmd(cmd)
 
 def main():

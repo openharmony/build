@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 TOPDIR=$(realpath "$(dirname ${BASH_SOURCE[0]})/../../../")
 
 PATH="${TOPDIR}/prebuilts/build-tools/linux-x86/bin/:${TOPDIR}/prebuilts/python/linux-x86/current/bin/:${PATH}"
@@ -141,7 +143,7 @@ make_mixed_asan_img() {
     test -f system/etc/selinux/config && sed -i 's,enforcing,permissive,g' $_
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/\1\/asan\/\2/g' system/etc/ld-musl-namespace-*.ini
-    if [ $asan_in_data = true ]; then
+    if [ "$asan_in_data" = true ]; then
         for d in data/asan/*; do ln -snf /$d ${d#data/asan/}/asan; done
     else
         mkdir -p system/asan/ && cp -a "$asan_dir"/system/{lib*,bin} $_
@@ -172,7 +174,7 @@ make_mixed_asan_img() {
     fi
 
     # restore dac.txt
-    if [ $asan_in_data != true ]; then
+    if [ "$asan_in_data" != true ]; then
         mv "${TOPDIR}"/build/ohos/images/mkimage/dac.txt.bak "${TOPDIR}"/build/ohos/images/mkimage/dac.txt
     fi
 

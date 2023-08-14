@@ -34,9 +34,9 @@ def part_size_compare(module_info_list, part_name, part_size):
             sta_size = re.findall(r"\d+", standard_part['part_size'])
             rea_size = re.findall(r"\d+", part_size)
             if int(sta_size[0]) >= int(rea_size[0]):
-                conform_str = ("part_name: " + part_name).ljust(55) + \
-                              ("actual_size: " + part_size).ljust(25) + \
-                              ("standard_size: " + standard_part['part_size']).ljust(25) + \
+                conform_str = ('part_name: {}'.format(part_name)).ljust(55) + \
+                              ('actual_size: {}'.format(part_size)).ljust(25) + \
+                              ('standard_size: {}'.format(standard_part['part_size'])).ljust(25) + \
                                " 'rom' conform to the rules"
                 LogUtil.hb_info(conform_str)
                 part_info_dict = {}
@@ -48,9 +48,9 @@ def part_size_compare(module_info_list, part_name, part_size):
                 part_info_list.append(part_info_dict)
 
             elif int(sta_size[0]) < int(rea_size[0]):
-                out_of_standard_str = ("part_name: " + part_name).ljust(55) + \
-                                      ("actual_size: " + part_size).ljust(25) + \
-                                      ("standard_size: " + standard_part['part_size']).ljust(25) + \
+                out_of_standard_str = ('part_name: {}'.format(part_name)).ljust(55) + \
+                                      ('actual_size: {}'.format(part_size)).ljust(25) + \
+                                      ('standard_size: {}'.format(standard_part['part_size'])).ljust(25) + \
                                        " 'rom' out of standard"
                 LogUtil.hb_info(out_of_standard_str)
                 part_info_dict = {}
@@ -62,8 +62,8 @@ def part_size_compare(module_info_list, part_name, part_size):
                 part_info_list.append(part_info_dict)
         else:
             if standard_part['part_name'] == part_name and standard_part['part_size'] == 'None':
-                not_yet_standard_str = ("part_name: " + part_name).ljust(55) + \
-                                       ("actual_size: " + part_size).ljust(50) + \
+                not_yet_standard_str = ('part_name: {}'.format(part_name)).ljust(55) + \
+                                       ('actual_size: {}'.format(part_size)).ljust(50) + \
                                         "This part does not set standard 'rom' size".ljust(25)
                 LogUtil.hb_info(not_yet_standard_str)
                 part_info_dict = {}
