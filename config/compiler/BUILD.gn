@@ -942,6 +942,7 @@ config("default_warnings") {
         "-Wno-error=unused-but-set-parameter",
         "-Wno-error=option-ignored",
         "-mno-outline-atomics",
+        "-Wno-deprecated-declarations",
       ]
     }
     if (use_musl) {
