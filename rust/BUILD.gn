@@ -35,7 +35,8 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
     "updater",
   ]
   output = "libstd.dylib.so"
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
 
 ohos_prebuilt_shared_library("libtest.dylib.so") {
@@ -55,5 +56,6 @@ ohos_prebuilt_shared_library("libtest.dylib.so") {
   ]
   enable_strip = true
   output = "libtest.dylib.so"
-  part_name = "common"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }

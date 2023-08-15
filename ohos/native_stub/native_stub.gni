@@ -118,8 +118,8 @@ template("ohos_native_stub_library") {
     subsystem_name = invoker.subsystem_name
     part_name = subsystem_name
   } else {
-    subsystem_name = "common"
-    part_name = subsystem_name
+    subsystem_name = "build"
+    part_name = "build_framework"
   }
 
   ohos_module_name = target_name

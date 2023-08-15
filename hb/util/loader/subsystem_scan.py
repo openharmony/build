@@ -21,7 +21,7 @@ from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
 from util.log_util import LogUtil
 
-_default_subsystem = {"common": "build/common"}
+_default_subsystem = {"build": "build/common"}
 
 
 @throw_exception

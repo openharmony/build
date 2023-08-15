@@ -49,7 +49,7 @@ template("_ohos_subsystem_sdk") {
   assert(invoker.variant != "")
   assert(invoker.origin_name != "")
 
-  part_name = "common"
+  part_name = "build_framework"
   if (defined(invoker.part_name)) {
     part_name = invoker.part_name
   }
