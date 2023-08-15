@@ -829,10 +829,10 @@ def get_parts_info(source_root_dir,
         # device_attest_lite parts need to be compiled into the version image, other parts are not
         if subsystem_name == 'xts' and build_xts is False:
             xts_device_attest_name = {}
-            if 'device_attest' in build_loader.parts_modules_info():
-                xts_device_attest_name = 'device_attest'
-            elif 'device_attest_lite' in build_loader.parts_modules_info():
+            if 'device_attest_lite' in build_loader.parts_modules_info():
                 xts_device_attest_name = 'device_attest_lite'
+            elif 'device_attest' in build_loader.parts_modules_info():
+                xts_device_attest_name = 'device_attest'
             else:
                 continue
             build_loader.parts_info_filter(xts_device_attest_name)
