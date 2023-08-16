@@ -918,13 +918,13 @@ endmenu
 menu "settingsdata"
 endmenu
 menu "wpa_supplicant-2.9"
-config wpa_supplicant-2.9$$wpa_supplicant
-    bool "wpa_supplicant"
+config wpa_supplicant-2.9$$wpa_supplicant-2.9
+    bool "wpa_supplicant-2.9"
     default n
-config feature$$wpa_supplicant-2.9$$wpa_supplicant
+config feature$$wpa_supplicant-2.9$$wpa_supplicant-2.9
         string "feature"
         default ""
-        depends on wpa_supplicant-2.9$$wpa_supplicant
+        depends on wpa_supplicant-2.9$$wpa_supplicant-2.9
 endmenu
 menu "xts"
 config xts$$wearable_tests
