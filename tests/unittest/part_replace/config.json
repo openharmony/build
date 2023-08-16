@@ -77,7 +77,7 @@
       ]
     },
     {
-      "subsystem": "wpa_supplicant-2.9",
+      "subsystem": "thirdparty",
       "components": [
         {
           "component": "wpa_supplicant",
