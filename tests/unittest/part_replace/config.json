@@ -77,10 +77,10 @@
       ]
     },
     {
-      "subsystem": "wpa_supplicant-2.9",
+      "subsystem": "thirdparty",
       "components": [
         {
-          "component": "wpa_supplicant-2.9",
+          "component": "wpa_supplicant",
           "features": [
             "wpa_supplicant_driver_nl80211 = true"
           ]
