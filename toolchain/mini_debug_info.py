@@ -20,6 +20,7 @@ import sys
 import argparse
 import os
 import platform
+import subprocess
 
 
 def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
@@ -40,12 +41,9 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
 
     cmd_list = []
 
-    gen_symbols_cmd = llvm_nm_path + " -D " + binary_path + \
-        " --format=posix --defined-only | awk \'{ print $1}\' | sort > " + dynsyms_path
-    gen_func_symbols_cmd = llvm_nm_path + " " + binary_path + \
-        " --format=posix --defined-only | awk \'{ if ($2 == \"t\" || $2== \"T\" || $2 == \"d\" ) print $1}\' | sort > " + funcsysms_path
-    gen_keep_symbols_cmd = "comm -13 " + dynsyms_path + \
-        " " + funcsysms_path + " > " + keep_path
+    gen_symbols_cmd = llvm_nm_path + " -D " + binary_path + " --format=posix --defined-only"
+    gen_func_symbols_cmd = llvm_nm_path + " " + binary_path + " --format=posix --defined-only"
+    gen_keep_symbols_cmd = "comm -13 " + dynsyms_path + " " + funcsysms_path
     gen_keep_debug_cmd = llvm_objcopy_path + \
         " --only-keep-debug " + binary_path + " " + debug_path
     gen_mini_debug_cmd = llvm_objcopy_path + " -S --remove-section .gbd_index --remove-section .comment --keep-symbols=" + \
@@ -54,9 +52,49 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
     gen_stripped_binary = llvm_objcopy_path + " --add-section .gnu_debugdata=" + \
         mini_debug_path + ".xz " + stripped_binary_path
 
-    cmd_list.append(gen_symbols_cmd)
-    cmd_list.append(gen_func_symbols_cmd)
-    cmd_list.append(gen_keep_symbols_cmd)
+
+    tmp_file = '{}.tmp'.format(dynsyms_path)
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        subprocess.run(gen_symbols_cmd.split(), stdout = output_file)
+
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+        lines = output_file.readlines()
+        sort_lines = []
+        for line in lines:
+            columns = line.strip().split()
+            if columns:
+                sort_lines.append(columns[0])
+        sort_lines.sort()
+
+    with os.fdopen(os.open(dynsyms_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        for item in sort_lines:
+            output_file.write(''.join(item))
+    os.remove(tmp_file)
+
+
+    tmp_file = '{}.tmp'.format(funcsysms_path)
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        subprocess.run(gen_symbols_cmd.split(), stdout = output_file)
+
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+        lines = output_file.readlines()
+        sort_lines = []
+        for line in lines:
+            columns = line.strip().split()
+            if len(columns) > 2 and ('t' in columns[1] or 'T' in columns[1] or 'd' in columns[1]):
+                sort_lines.append(columns[0])
+        sort_lines.sort()
+
+    with os.fdopen(os.open(funcsysms_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        for item in sort_lines:
+            output_file.write(''.join(item))
+    os.remove(tmp_file)
+
+
+    with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        subprocess.run(gen_keep_symbols_cmd.split(), stdout = output_file)
+
+
     cmd_list.append(gen_keep_debug_cmd)
     cmd_list.append(gen_mini_debug_cmd)
     cmd_list.append(compress_debuginfo)
@@ -65,7 +103,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
     # execute each cmd to generate temporary file
     # which .gnu_debugdata section depends on
     for cmd in cmd_list:
-        os.system(cmd)
+        subprocess.call(cmd.split(), shell=False)
 
     # remove temporary file
     os.remove(dynsyms_path)
