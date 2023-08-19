@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # Copyright (c) 2021 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,7 @@ userhome=~
 if [[ "$result1" != "" ]]
 then
     sed -i "s@/root/.bashrc@"$userhome"/.bashrc@g" ./build/build_scripts/Dockerfile
-elif [ [$result2 != ""] ]
+elif [[ "$result2" != "" ]]
 then
     sed -i "s@/root/.bashrc@"$userhome"/.zshrc@g" ./build/build_scripts/Dockerfile
 else
@@ -65,12 +65,12 @@ while true
 do
     read -p "Will modify /etc/apt/sources.list, Backup to /etc/apt/sources.list.bak(y/n):" sign_value
 
-    if [[ $sign_value == "n" ]]
+    if [[ "$sign_value" == "n" ]]
     then
         sed -i -e "s|$archive||" ./build/build_scripts/Dockerfile
         sed -i -e "s|$security||" ./build/build_scripts/Dockerfile
         break
-    elif [[ $sign_value == "y" || $sign_value == "" ]]
+    elif [[ "$sign_value" == "y" || $sign_value == "" ]]
     then
         sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
         break

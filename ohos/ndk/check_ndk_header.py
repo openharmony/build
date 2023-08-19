@@ -44,7 +44,7 @@ def check_ndk_header(headers, output):
         command = cmd_list + [file]
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if result.returncode != 0:
-            with open(r'Error.txt','a', encoding='utf-8') as fs:
+            with open(r'Error.txt', 'a', encoding='utf-8') as fs:
                 fs.write(f'Error: {result.stderr.decode()}')
     
     build_utils.touch(output)
