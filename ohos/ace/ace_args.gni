@@ -13,4 +13,6 @@
 
 declare_args() {
   is_experiment_build = false
+  ace_engine_feature_enable_accessibility = false
+  ace_engine_feature_enable_web = false
 }
