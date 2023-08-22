@@ -36,16 +36,18 @@ def parse_args(args):
                       help='prefix string of directory in archive zipfile')
     parser.add_option('--notice-file', help='path to notice file')
     parser.add_option('--record-path', help='path to md5.stamp file')
+    parser.add_option('--platform', help='os platform')
 
     options, _ = parser.parse_args(args)
     return options
 
 
-def do_archive(output, directory, prefix, compress_fn):
+def do_archive(output, directory, prefix, compress_fn, filter_file_name):
     files = []
     for root, _, filenames in os.walk(directory):
         for f in filenames:
-            files.extend([os.path.join(root, f)])
+            if f not in filter_file_name:
+                files.extend([os.path.join(root, f)])
     with zipfile.ZipFile(output, 'a') as outfile:
         for f in files:
             compress = compress_fn(f) if compress_fn else None
@@ -60,12 +62,12 @@ def do_archive(output, directory, prefix, compress_fn):
 
 
 def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
-                compress_fn, notice):
+                compress_fn, notice, filter_file_name):
     # Create an empty zipfile first, then add stuff to it.
     with zipfile.ZipFile(output, 'w') as outfile:
         pass
     for directory in [os_irrelevant_dir, os_specific_dir]:
-        do_archive(output, directory, prefix, compress_fn)
+        do_archive(output, directory, prefix, compress_fn, filter_file_name)
 
     with zipfile.ZipFile(output, 'a') as zip_file:
         compress = compress_fn(notice) if compress_fn else None
@@ -79,11 +81,25 @@ def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
                                      compress=compress)
 
 
+def file_filter(os_irrelevant_dir):
+    filter_file_name = []
+    target_dir = os.path.join(os_irrelevant_dir, 'sysroot/usr/include/linux')
+    filter_file_path =  build_utils.find_in_directory(target_dir, '*[A-Z].h')
+    for file_path in filter_file_path:
+        file_name = os.path.basename(file_path)
+        if os.path.exists(os.path.join(os.path.dirname(file_path), file_name.lower())):
+            filter_file_name.append(file_name)
+    return filter_file_name
+
+
 def main(args):
     options = parse_args(args)
 
     os_irrelevant_dir = options.os_irrelevant_dir
     os_specific_dir = options.os_specific_dir
+    filter_file_name = []
+    if options.platform == 'windows':
+        filter_file_name = file_filter(os_irrelevant_dir)
     depfile_deps = set(
         build_utils.get_all_files(os_irrelevant_dir) +
         build_utils.get_all_files(os_specific_dir))
@@ -91,7 +107,7 @@ def main(args):
 
     build_utils.call_and_write_depfile_if_stale(lambda: archive_ndk(
         options.output, os_irrelevant_dir, os_specific_dir, options.prefix,
-        lambda _: True, options.notice_file),
+        lambda _: True, options.notice_file, filter_file_name),
                                            options,
                                            depfile_deps=depfile_deps,
                                            input_paths=depfile_deps,
