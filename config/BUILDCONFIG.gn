@@ -394,6 +394,13 @@ declare_args() {
   is_component_build = true
 }
 
+declare_args() {
+  enable_adlt = false
+  adlt_exe = ""
+  allowed_lib_list = ""
+  adlt_lib_name = ""
+}
+
 assert(!(is_debug && is_official_build), "Can't do official debug builds")
 
 # ==============================================================================
