@@ -215,7 +215,11 @@ def _npm_install(args):
     for proc in procs:
         out, err = proc.communicate()
         if proc.returncode:
-            raise Exception(err.decode())
+            for error_info in err.decode().split('\n'):
+                if error_info.endswith('debug.log'):
+                    log_path = error_info.split()[-1]
+                    subprocess.Popen(['cat', log_path])
+            raise Exception("npm install error")
 
 
 def _node_modules_copy(config, code_dir, enable_symlink):
