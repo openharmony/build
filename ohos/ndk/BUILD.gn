@@ -247,6 +247,8 @@ action_with_pydeps("archive_windows_ndk") {
     rebase_path(
         "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
         root_build_dir),
+    "--platform",
+    "windows",
   ]
   outputs = [ _output ]
 }
