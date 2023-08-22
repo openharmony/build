@@ -577,6 +577,15 @@ class LoadBuildConfig(object):
     def parts_info_filter(self, save_part):
         if save_part is None:
             raise Exception
+        print("[kemin] get_parts_info _parts_variants {}".format(self._parts_variants));
+        print("[kemin] get_parts_info _part_list {}".format(self._part_list));
+        print("[kemin] get_parts_info _part_targets_label {}".format(self._part_targets_label));
+        print("[kemin] get_parts_info _parts_info_dict {}".format(self._parts_info_dict));
+        print("[kemin] get_parts_info _phony_targets {}".format(self._phony_targets));
+        print("[kemin] get_parts_info _parts_path_dict {}".format(self._parts_path_dict));
+        print("[kemin] get_parts_info _part_hisysevent_config {}".format(self._part_hisysevent_config));
+        print("[kemin] get_parts_info _parts_module_list {}".format(self._parts_module_list));
+        print("[kemin] get_parts_info _parts_deps {} ==========================".format(self._parts_deps));
         for key in list(self._parts_variants.keys()):
             if key not in save_part:
                 del self._parts_variants[key]
@@ -604,6 +613,15 @@ class LoadBuildConfig(object):
         for key in list(self._parts_deps.keys()):
             if key not in save_part:
                 del self._parts_deps[key]
+        print("[kemin] get_parts_info _parts_variants {}".format(self._parts_variants));
+        print("[kemin] get_parts_info _part_list {}".format(self._part_list));
+        print("[kemin] get_parts_info _part_targets_label {}".format(self._part_targets_label));
+        print("[kemin] get_parts_info _parts_info_dict {}".format(self._parts_info_dict));
+        print("[kemin] get_parts_info _phony_targets {}".format(self._phony_targets));
+        print("[kemin] get_parts_info _parts_path_dict {}".format(self._parts_path_dict));
+        print("[kemin] get_parts_info _part_hisysevent_config {}".format(self._part_hisysevent_config));
+        print("[kemin] get_parts_info _parts_module_list {}".format(self._parts_module_list));
+        print("[kemin] get_parts_info _parts_deps {}".format(self._parts_deps));
 
 
 def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
