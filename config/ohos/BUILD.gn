@@ -115,3 +115,10 @@ config("default_orderfile_instrumentation") {
     }
   }
 }
+
+config("adlt_config") {
+  ldflags = [
+    "-Wl,--emit-relocs",
+    "-Wl,--no-relax",
+  ]
+}
