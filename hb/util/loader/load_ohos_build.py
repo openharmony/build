@@ -577,33 +577,24 @@ class LoadBuildConfig(object):
     def parts_info_filter(self, save_part):
         if save_part is None:
             raise Exception
-        for key in list(self._parts_variants.keys()):
-            if key not in save_part:
-                del self._parts_variants[key]
-        for key in list(self._part_list.keys()):
-            if key not in save_part:
-                del self._part_list[key]
-        for key in list(self._part_targets_label.keys()):
-            if key not in save_part:
-                del self._part_targets_label[key]
-        for key in list(self._parts_info_dict.keys()):
-            if key not in save_part:
-                del self._parts_info_dict[key]
-        for key in list(self._phony_targets.keys()):
-            if key not in save_part:
-                del self._phony_targets[key]
-        for key in list(self._parts_path_dict.keys()):
-            if key not in save_part:
-                del self._parts_path_dict[key]
-        for key in list(self._part_hisysevent_config.keys()):
-            if key not in save_part:
-                del self._part_hisysevent_config[key]
-        for key in list(self._parts_module_list.keys()):
-            if key not in save_part:
-                del self._parts_module_list[key]
-        for key in list(self._parts_deps.keys()):
-            if key not in save_part:
-                del self._parts_deps[key]
+        self._parts_variants = {
+            key: value for key, value in self._parts_variants.items() if key in save_part}
+        self._part_list = {
+            key: value for key, value in self._part_list.items() if key in save_part}
+        self._part_targets_label = {
+            key: value for key, value in self._part_targets_label.items() if key in save_part}
+        self._parts_info_dict = {
+            key: value for key, value in self._parts_info_dict.items() if key in save_part}
+        self._phony_targets = {
+            key: value for key, value in self._phony_targets.items() if key in save_part}
+        self._parts_path_dict = {
+            key: value for key, value in self._parts_path_dict.items() if key in save_part}
+        self._part_hisysevent_config = {
+            key: value for key, value in self._part_hisysevent_config.items() if key in save_part}
+        self._parts_module_list = {
+            key: value for key, value in self._parts_module_list.items() if key in save_part}
+        self._parts_deps = {
+            key: value for key, value in self._parts_deps.items() if key in save_part}
 
 
 def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
