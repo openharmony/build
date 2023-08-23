@@ -578,24 +578,23 @@ class LoadBuildConfig(object):
         if save_part is None:
             raise Exception
         self._parts_variants = {
-            key: value for key, value in self._parts_variants.items() if save_part == key}
-        self._part_list = {key: value for key,
-                           value in self._part_list.items() if save_part == key}
+            key: value for key, value in self._parts_variants.items() if key in save_part}
+        self._part_list = {
+            key: value for key, value in self._part_list.items() if key in save_part}
         self._part_targets_label = {
-            key: value for key, value in self._part_targets_label.items() if save_part == key}
+            key: value for key, value in self._part_targets_label.items() if key in save_part}
         self._parts_info_dict = {
-            key: value for key, value in self._parts_info_dict.items() if save_part == key}
+            key: value for key, value in self._parts_info_dict.items() if key in save_part}
         self._phony_targets = {
-            key: value for key, value in self._phony_targets.items() if save_part == key}
+            key: value for key, value in self._phony_targets.items() if key in save_part}
         self._parts_path_dict = {
-            key: value for key, value in self._parts_path_dict.items() if save_part == key}
-        for key, value in self._part_hisysevent_config.items():
-            if save_part == key:
-                self._part_hisysevent_config = {key: value}
+            key: value for key, value in self._parts_path_dict.items() if key in save_part}
+        self._part_hisysevent_config = {
+            key: value for key, value in self._part_hisysevent_config.items() if key in save_part}
         self._parts_module_list = {
-            key: value for key, value in self._parts_module_list.items() if save_part == key}
+            key: value for key, value in self._parts_module_list.items() if key in save_part}
         self._parts_deps = {
-            key: value for key, value in self._parts_deps.items() if save_part == key}
+            key: value for key, value in self._parts_deps.items() if key in save_part}
 
 
 def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
@@ -826,15 +825,11 @@ def get_parts_info(source_root_dir,
                                        load_test_config, overrided_components,
                                        bundle_subsystem_allow_list)
         # xts subsystem special handling, device_attest and
-        # device_attest_lite parts need to be compiled into the version image, other parts are not
+        # device_attest_lite parts need to be compiled into the version image, other parts are not.
+        # parts_modules_info needs to be parse before filting.
         if subsystem_name == 'xts' and build_xts is False:
-            xts_device_attest_name = {}
-            if 'device_attest_lite' in build_loader.parts_modules_info():
-                xts_device_attest_name = 'device_attest_lite'
-            elif 'device_attest' in build_loader.parts_modules_info():
-                xts_device_attest_name = 'device_attest'
-            else:
-                continue
+            xts_device_attest_name = ['device_attest_lite', 'device_attest']
+            build_loader.parse()
             build_loader.parts_info_filter(xts_device_attest_name)
         _parts_variants = build_loader.parts_variants()
         parts_variants.update(_parts_variants)
