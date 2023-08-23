@@ -599,33 +599,33 @@ class LoadBuildConfig(object):
 
 
 def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
-                                    part_subsystem_component_info, config_path, subsystem_components_list):
+                                    part_subsystem_component_info, parts_config_path, subsystem_components_list):
     name = ""
     message = ""
-    for component in components_name:
-        if component['component'] in list(subsystem_compoents_whitelist_info.keys()):
-            continue
-        overrided_components_name = '{}_{}'.format(component['component'], 'override')
-        if component['component'] in list(part_subsystem_component_info.keys()) \
-            or overrided_components_name in list(part_subsystem_component_info.keys()):
-            if subsystem_name in list(part_subsystem_component_info.values()):
-                continue
-            if subsystem_name == component['component']:
-                continue
-            name = subsystem_name
-            message = "find subsystem {} failed, please check it in {}.".format(subsystem_name, config_path)
-        else:
-            name = component['component']
-            message = "find component {} failed, please check it in {}.".format(component['component'], config_path)
-        if name in subsystem_components_list:
-            print(f"Warning: {message}")
-        else:
-            raise Exception(message)
+    if components_name in list(subsystem_compoents_whitelist_info.keys()):
+        return
+    overrided_components_name = '{}_{}'.format(components_name, 'override')
+    if components_name in list(part_subsystem_component_info.keys()) \
+        or overrided_components_name in list(part_subsystem_component_info.keys()):
+        if subsystem_name in list(part_subsystem_component_info.values()):
+            return
+        if subsystem_name == components_name:
+            return
+        name = subsystem_name
+        message = "find subsystem {} failed, please check it in {}.".format(subsystem_name, parts_config_path)
+    else:
+        name = components_name
+        message = "find component {} failed, please check it in {}.".format(components_name, parts_config_path)
+    if name in subsystem_components_list:
+        print(f"Warning: {message}")
+    else:
+        raise Exception(message)
 
 
 def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
     config = Config()
-    config_path = os.path.join(config.product_config_path, 'config.json')
+    parts_config_path = os.path.join(config.root_path, "out/preloader", config.product,
+                                     "parts.json")
     part_subsystem_file = os.path.join(parts_info_output_path,
                                        "part_subsystem.json")
     part_subsystem_component_info = read_json_file(part_subsystem_file)
@@ -639,18 +639,21 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
     compile_standard_whitelist_info = read_json_file(compile_standard_whitelist_file)
     subsystem_components_list = compile_standard_whitelist_info.get("subsystem_components", [])
 
-    if os.path.isfile(config_path):
-        info = read_json_file(config_path)
-        subsystems_info = info['subsystems']
-        for subsystems_name in iter(subsystems_info):
-            subsystem_name = subsystems_name.get('subsystem')
-            components_name = subsystems_name.get('components')
+    if os.path.isfile(parts_config_path):
+        parts_config_info = read_json_file(parts_config_path)
+        parts_info = parts_config_info.get("parts")
+        
+        for subsystem_part in parts_info:
+            subsystem_part_list = subsystem_part.split(':')
+            subsystem_name = subsystem_part_list[0]
+            components_name = subsystem_part_list[1]
+
             if subsystem_name is None or components_name is None:
-                print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(config_path))
+                print("Warning: subsystem_name or components_name is empty, please check it in {}.".format(parts_config_path))
                 continue
             if not skip_partlist_check:
-                compare_subsystem_and_component(subsystem_name,components_name, subsystem_compoents_whitelist_info,
-                                                part_subsystem_component_info, config_path, subsystem_components_list)
+                compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
+                                                part_subsystem_component_info, parts_config_path, subsystem_components_list)
 
 
 def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_check):
