@@ -405,8 +405,6 @@
         "//applications/standard/settings/napi/settings:settings",
         "//base/hiviewdfx/faultloggerd/test/performancetest:test_dumpcatcher_performance",
         "//base/hiviewdfx/faultloggerd/tools/crasher_cpp:crasher_cpp",
-        "//base/location/frameworks/native:locator_sdk",
-        "//base/location/services/location_gnss/gnss:lbsservice_gnss",
         "//base/security/device_security_level/oem_property/common:oem_common_obj",
         "//base/security/device_security_level/services/common:service_common_obj",
         "//base/security/huks/frameworks/crypto_lite/cipher:cipher_shared",
