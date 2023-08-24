@@ -3,7 +3,7 @@
   "acts": "xts",
   "hats": "xts",
   "dcts": "xts",
-  "xts_hits": "xts",
+  "hits": "xts",
   "tools": "xts",
   "device_attest_lite": "xts"
 }
