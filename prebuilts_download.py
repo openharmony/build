@@ -215,11 +215,8 @@ def _npm_install(args):
     for proc in procs:
         out, err = proc.communicate()
         if proc.returncode:
-            for error_info in err.decode().split('\n'):
-                if error_info.endswith('debug.log'):
-                    log_path = error_info.split()[-1]
-                    subprocess.Popen(['cat', log_path])
-            raise Exception("npm install error")
+            return False, err.decode()
+    return True, None
 
 
 def _node_modules_copy(config, code_dir, enable_symlink):
@@ -351,7 +348,21 @@ def main():
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
     _file_handle(file_handle_config, args.code_dir, args.host_platform)
-    _npm_install(args)
+    retry_times = 0
+    max_retry_times = 2
+    while retry_times <= max_retry_times:
+        print('npm install try times:', retry_times + 1)
+        result, error = _npm_install(args)
+        if result:
+            break
+        elif retry_times == max_retry_times:
+            for error_info in error.split('\n'):
+                if error_info.endswith('debug.log'):
+                    log_path = error_info.split()[-1]
+                    cmd = ['cat', log_path]
+                    subprocess.Popen(cmd)
+                    raise Exception("npm install error with three times, prebuilts download exit")
+        retry_times += 1
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
     if install_config:
         _install(install_config, args.code_dir)
