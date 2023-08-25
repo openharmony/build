@@ -71,7 +71,7 @@ def build_run_mkf2fs(args):
     if args.casefold:
         mkf2fs_opts += " -O casefold -C utf8 "
 
-    mkf2fs_cmd += ("mkfs.f2fs -d1 -f -O encrypt -O quota " +
+    mkf2fs_cmd += ("mkfs.f2fs -d1 -f -O encrypt -O quota -O sb_checksum" +
                    " -O verity -w 4096 -R 0:0 " + mkf2fs_opts +
                    " " + args.device)
 
