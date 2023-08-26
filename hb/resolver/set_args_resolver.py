@@ -111,7 +111,7 @@ class SetArgsResolver(ArgsResolverInterface):
         Arg.write_args_file(target_arg.arg_name,
                             product_info.get('name'), ModuleType.BUILD)
         Arg.write_args_file(target_arg.arg_name,
-                            product_info.get('name'), ModuleType.SET)
+                            f"{product_info.get('name')}@{product_info.get('company')}", ModuleType.SET)
 
     @staticmethod
     def resolve_set_parameter(target_arg: Arg, set_module: SetModuleInterface):
