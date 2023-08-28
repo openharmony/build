@@ -49,17 +49,17 @@ def  merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
 
     for subsystem in overlay_info:
         if subsystem in subsystem_info:
-            overlay_path = subsystem_config_overlay['subsystem'][subsystem]['path']
+            overlay_path = subsystem_config_overlay.get('subsystem').get(subsystem)['path']
             for path in overlay_path:
-                if path.find("vendor") != -1 or path.find("device") != -1:
-                    subsystem_configs['subsystem'][subsystem]['path'] += \
-                        subsystem_config_overlay['subsystem'][subsystem]['path']
-                    subsystem_configs['subsystem'][subsystem]['build_files'] += \
-                        subsystem_config_overlay['subsystem'][subsystem]['build_files']
-                else:
+                if not (path.find("vendor") != -1 or path.find("device") != -1):
                     continue
+                else:
+                    subsystem_configs.get('subsystem').get(subsystem)['path'] += \
+                        subsystem_config_overlay.get('subsystem').get(subsystem)['path']
+                    subsystem_configs.get('subsystem').get(subsystem)['build_files'] += \
+                        subsystem_config_overlay.get('subsystem').get(subsystem)['build_files']
         else:
-            subsystem_configs.setdefault(subsystem, subsystem_config_overlay[subsystem])
+            subsystem_configs[key].setdefault(subsystem, subsystem_config_overlay[key][subsystem])
 
 def get_subsystem_info(subsystem_config_file, example_subsystem_file,
                        source_root_dir, config_output_path, os_level):
