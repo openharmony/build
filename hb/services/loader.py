@@ -94,9 +94,6 @@ class OHOSLoader(LoadInterface):
         self.ignore_api_check = self.args_dict.get('ignore_api_check')
         self.load_test_config = self.args_dict.get('load_test_config')
         self.skip_partlist_check = self.args_dict.get('skip_partlist_check')
-        self.subsystem_configs = subsystem_scan.scan(self.subsystem_config_file,
-                                                     self.example_subsystem_file,
-                                                     self.source_root_dir)
 
         self._subsystem_info = subsystem_info.get_subsystem_info(
             self.subsystem_config_file,
