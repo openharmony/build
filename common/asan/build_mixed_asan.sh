@@ -237,9 +237,6 @@ collect_all_artifacts() {
     cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
     cp -al ../../{exe,lib}.unstripped images/unstripped/nonasan/
     cp system/lib*/libc++.so images/unstripped/nonasan/lib.unstripped/
-    # asan log resolve scripts
-    cp "${TOPDIR}"/build/common/asan/{symbolize,resolve_asan_log}.sh images/
-    chmod +x images/*.sh
     # mixed asan images
     mv system*.img vendor*.img images/
 }
