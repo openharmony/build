@@ -425,7 +425,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             loader.regist_arg("ignore_api_check", target_arg.arg_value)
         else:
             loader.regist_arg("ignore_api_check", [
-                              'xts', 'common', 'developertest'])
+                              'xts', 'common', 'testfwk'])
 
     @staticmethod
     def resolve_load_test_config(target_arg: Arg, build_module: BuildModuleInterface):
