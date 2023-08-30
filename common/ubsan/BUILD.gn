@@ -50,7 +50,7 @@ if (is_ohos) {
     ]
     innerapi_tags = [
       "platformsdk",
-      "chipsetsdk_indirect",
+      "chipsetsdk",
     ]
     subsystem_name = "build"
     part_name = "build_framework"
