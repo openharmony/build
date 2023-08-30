@@ -24,11 +24,6 @@ from scripts.util.file_utils import read_json_file # noqa: E402
 
 
 def check_parts_deps(args, external_part_name, parts_deps_info):
-    # Ignore part dependency checks for test related parts
-    _part_allow_set = {'unittest', 'moduletest', 'systemtest', 'fuzztest', 'benchmark', 'distributedtest', 'test'}
-    if args.part_name in _part_allow_set:
-        return
-
     compile_standard_allow_file = args.compile_standard_allow_file
     compile_standard_allow_info = read_json_file(compile_standard_allow_file)
     added_self_part_allow_list = compile_standard_allow_info.get("external_deps_added_self_part_module", [])
