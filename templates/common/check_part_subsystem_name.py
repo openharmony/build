@@ -25,11 +25,9 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 
 def check(args):
     depfiles = []
-    # ignore test related parts/subsystems
-    part_allow_set = {'test', 'libc-test', 'libc-test-lib', 'developer_test', 'bmssystemtestability'}
-    subsystem_allow_set = {'tests'}
-
-    if args.subsystem_name in subsystem_allow_set or args.part_name in part_allow_set:
+    # ignore test related parts
+    part_allow_set = {'libc-test', 'libc-test-lib'}
+    if args.part_name in part_allow_set:
         return depfiles
 
     compile_standard_allow_file = args.compile_standard_allow_file
