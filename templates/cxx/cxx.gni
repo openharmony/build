@@ -33,6 +33,7 @@ template("ohos_executable") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
 
+  _test_target = defined(invoker.testonly) && invoker.testonly
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -49,7 +50,7 @@ template("ohos_executable") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       skip_check_subsystem = true
     }
   } else if (defined(invoker.subsystem_name)) {
@@ -62,7 +63,7 @@ template("ohos_executable") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
-  if (is_use_check_deps) {
+  if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
@@ -127,7 +128,6 @@ template("ohos_executable") {
     forward_variables_from(invoker, [ "sanitize" ])
   }
 
-  _test_target = defined(invoker.testonly) && invoker.testonly
   if (!_test_target) {
     _main_target_name = target_name
     _notice_target = "${_main_target_name}__notice"
@@ -268,7 +268,7 @@ template("ohos_executable") {
     if (!defined(deps)) {
       deps = []
     }
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
     if (!_ohos_test && !skip_gen_module_info) {
@@ -441,6 +441,7 @@ template("ohos_shared_library") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
 
+  _test_target = defined(invoker.testonly) && invoker.testonly
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -457,7 +458,7 @@ template("ohos_shared_library") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       skip_check_subsystem = true
     }
   } else if (defined(invoker.subsystem_name)) {
@@ -470,7 +471,7 @@ template("ohos_shared_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
-  if (is_use_check_deps) {
+  if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
@@ -563,7 +564,6 @@ template("ohos_shared_library") {
     forward_variables_from(invoker, [ "sanitize" ])
   }
 
-  _test_target = defined(invoker.testonly) && invoker.testonly
   if (!_test_target) {
     _notice_target = "${target_name}__notice"
     _main_target_name = target_name
@@ -787,7 +787,7 @@ template("ohos_shared_library") {
     if (!defined(deps)) {
       deps = []
     }
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
@@ -969,6 +969,7 @@ template("ohos_shared_library") {
 }
 
 template("ohos_static_library") {
+  _test_target = defined(invoker.testonly) && invoker.testonly
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -985,7 +986,7 @@ template("ohos_static_library") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       skip_check_subsystem = true
     }
   } else if (defined(invoker.subsystem_name)) {
@@ -998,7 +999,7 @@ template("ohos_static_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
-  if (is_use_check_deps) {
+  if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
@@ -1050,7 +1051,6 @@ template("ohos_static_library") {
     forward_variables_from(invoker, [ "sanitize" ])
   }
 
-  _test_target = defined(invoker.testonly) && invoker.testonly
   if (!_test_target) {
     _notice_target = "${target_name}__notice"
     _main_target_name = target_name
@@ -1127,7 +1127,7 @@ template("ohos_static_library") {
     if (!defined(deps)) {
       deps = []
     }
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
     if (!_test_target) {
@@ -1223,6 +1223,7 @@ template("ohos_static_library") {
 }
 
 template("ohos_source_set") {
+  _test_target = defined(invoker.testonly) && invoker.testonly
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -1239,7 +1240,7 @@ template("ohos_source_set") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       skip_check_subsystem = true
     }
   } else if (defined(invoker.subsystem_name)) {
@@ -1252,7 +1253,7 @@ template("ohos_source_set") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
-  if (is_use_check_deps) {
+  if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
@@ -1304,7 +1305,6 @@ template("ohos_source_set") {
     forward_variables_from(invoker, [ "sanitize" ])
   }
 
-  _test_target = defined(invoker.testonly) && invoker.testonly
   if (!_test_target) {
     _main_target_name = target_name
     _notice_target = "${_main_target_name}__notice"
@@ -1380,7 +1380,7 @@ template("ohos_source_set") {
     if (!defined(deps)) {
       deps = []
     }
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
     if (!_test_target) {

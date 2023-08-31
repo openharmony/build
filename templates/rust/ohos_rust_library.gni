@@ -21,6 +21,7 @@ import("//build/templates/metadata/module_info.gni")
 template("ohos_rust_library") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
+  _test_target = defined(invoker.testonly) && invoker.testonly
   if (defined(invoker.subsystem_name) && defined(invoker.part_name)) {
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -37,7 +38,7 @@ template("ohos_rust_library") {
     get_subsystem_script = "//build/templates/common/get_subsystem_name.py"
     subsystem_name =
         exec_script(get_subsystem_script, _arguments, "trim string")
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       skip_check_subsystem = true
     }
   } else if (defined(invoker.subsystem_name)) {
@@ -49,7 +50,7 @@ template("ohos_rust_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
-  if (is_use_check_deps) {
+  if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
@@ -97,7 +98,6 @@ template("ohos_rust_library") {
     output_dir = "${root_out_dir}"
   }
 
-  _test_target = defined(invoker.testonly) && invoker.testonly
   if (!_test_target) {
     _notice_target = "${target_name}__notice"
     _main_target_name = target_name
@@ -228,7 +228,7 @@ template("ohos_rust_library") {
     if (!defined(deps)) {
       deps = []
     }
-    if (is_use_check_deps) {
+    if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
