@@ -227,7 +227,8 @@ def main():
     else:
         depfiles += build_utils.get_all_files(notice_dir)
     # Copy notice of static targets to notice_root_dir
-    copy_static_library_notices(args, depfiles)
+    if args.static_library_notice_dir:
+        copy_static_library_notices(args, depfiles)
 
     zipfiles = glob.glob('{}/**/*.zip'.format(notice_dir), recursive=True)
 
