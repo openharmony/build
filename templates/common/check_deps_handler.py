@@ -153,8 +153,8 @@ def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_
 def check(args):
     depfiles = []
     # ignore test related parts
-    test_allow_set = {'benchmark', 'performance', 'security', 'reliability'}
-    if args.part_name.find('test') != -1 or args.part_name in test_allow_set:
+    part_allow_set = {'libc-test', 'libc-test-lib'}
+    if args.part_name in part_allow_set:
         return depfiles
 
     compile_standard_allow_file = args.compile_standard_allow_file
