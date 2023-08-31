@@ -342,7 +342,17 @@ template("ohos_app") {
     }
   }
   app_sign(target_name) {
-    certificate_profile = invoker.certificate_profile
+    forward_variables_from(invoker,
+                           [
+                             "private_key_path",
+                             "signature_algorithm",
+                             "certificate_profile",
+                             "keystore_path",
+                             "keystore_password",
+                             "key_alias",
+                             "certificate_file",
+                             "compatible_version",
+                           ])
     unsigned_hap_path_list = _unsigned_hap_path_list
     deps = [
       ":$_compile_app_target",
