@@ -346,6 +346,11 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-armv7-linux-ohos-norpath.tar.gz",
           "unzip_filename": "rustc-arm-std"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-x86_64-unknown-linux-ohos.tar.gz",
+          "unzip_filename": "rustc-x86_64-std"
         }
       ],
       "install": [
@@ -371,6 +376,16 @@
         },
         {
           "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-armv7-linux-ohos",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/linux-x86_64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-x86_64-unknown-linux-ohos",
           "script":"install.sh",
           "args": [
             {
