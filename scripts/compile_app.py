@@ -45,6 +45,7 @@ def parse_args(args):
     parser.add_argument('--test-module', help='specify the module within ohosTest', default='entry')
     parser.add_argument('--module-libs-dir', help='', default='entry')
     parser.add_argument('--sdk-type-name', help='sdk type name', nargs='+', default=['sdk.dir'])
+    parser.add_argument('--build-modules', help='build modules', nargs='+', default=[])
 
     options = parser.parse_args(args)
     return options
@@ -155,6 +156,9 @@ def hvigor_build(cwd, options):
     if options.test_hap:
         cmd = ['bash', './hvigorw', '--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap']
+    elif options.build_modules:
+        cmd = ['bash', './hvigorw', 'assembleHap', '--mode',
+               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)]
     else:
         cmd = ['bash', './hvigorw', '--mode',
                options.build_level, '-p', 'product=default', options.assemble_type]
