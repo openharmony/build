@@ -532,6 +532,7 @@ template("compile_app") {
                              "test_module",
                              "module_libs_dir",
                              "sdk_type_name",
+                             "build_modules",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [ unsigned_hap_path_list ]
@@ -603,6 +604,10 @@ template("compile_app") {
     if (defined(sdk_type_name) && sdk_type_name != []) {
       args += [ "--sdk-type-name" ]
       args += sdk_type_name
+    }
+    if (defined(build_modules) && build_modules != []) {
+      args += [ "--build-modules" ]
+      args += build_modules
     }
     if (defined(install_module_info)) {
       metadata = {
