@@ -24,6 +24,7 @@ import glob
 import json
 import re
 import shutil
+import subprocess
 
 # Rust path
 RUST_PATH = '//third_party/rust/'
@@ -424,13 +425,12 @@ class Crate(object):
         return normal_output_list + other_output_list
 
     def has_used_out_dir(self):
-        """Returns true if env!("OUT_DIR") is found."""
-        cmd = 'grep -rl --exclude build.rs --include \\*.rs \'env!("OUT_DIR")\' * > /dev/null'
+        '''Returns true if env!('OUT_DIR') is found.'''
+        cmd = ['grep', '-rl', '--exclude', 'build.rs', '--include', '*.rs', "env!('OUT_DIR')", '*']
         if self.cargo_dir:
-            cmd = 'grep -rl --exclude '
-            cmd += os.path.join(self.cargo_dir, 'build.rs')
-            cmd += ' --include \\*.rs \'env!("OUT_DIR")\' * > /dev/null'
-        return 0 == os.system(cmd)
+            cmd = ['grep', '-rl', '--exclude', os.path.join(self.cargo_dir, 'build.rs'), '--include', \
+            '*.rs', "env!('OUT_DIR')", '*']
+        return subprocess.call(cmd, shell=False) == 0
 
     def copy_out_files(self):
         """Copy build.rs output files to ./out and set up build_script_outputs."""
@@ -768,7 +768,7 @@ class Runner(object):
         self.args = args
         self.dry_run = not args.run
         self.skip_cargo = args.skipcargo
-        self.cargo_path = './cargo'  # path to cargo
+        self.cargo_path = ['./cargo']  # path to cargo
         self.crates = list()         # all crates
         self.error_infos = ''        # all error infos
         self.test_error_infos = ''   # all test error infos
@@ -788,7 +788,7 @@ class Runner(object):
     def set_cargo_path(self):
         """Find cargo in the --cargo_bin and set cargo path"""
         if self.args.cargo_bin:
-            self.cargo_path = os.path.join(self.args.cargo_bin, 'cargo')
+            self.cargo_path = [os.path.join(self.args.cargo_bin, 'cargo')]
             if os.path.isfile(self.cargo_path):
                 print('INFO: using cargo in ' + self.args.cargo_bin)
                 return
@@ -844,20 +844,20 @@ class Runner(object):
         return self
 
     def deal_cargo_cmd(self, cargo_out):
-        cargo_cmd_v_flag = ' -vv ' if self.args.vv else ' -v '
-        cargo_cmd_target_dir = ' --target-dir ' + TARGET_TEMP
-        cargo_cmd_redir = ' >> ' + cargo_out + ' 2>&1'
+        cargo_cmd_v_flag = ['-vv'] if self.args.vv else ['-v']
+        cargo_cmd_target_dir = ['--target-dir', TARGET_TEMP]
+        cargo_cmd_redir = ['>>', cargo_out, '2>&1']
         for cargo in self.cargo:
-            cargo_cmd = self.cargo_path + cargo_cmd_v_flag
-            features = ''
+            cargo_cmd = [self.cargo_path] + cargo_cmd_v_flag
+            features = []
             if cargo != 'clean':
                 if self.args.features is not None:
-                    features = ' --no-default-features'
+                    features.append(' --no-default-features')
                 if self.args.features:
-                    features += ' --features ' + self.args.features
-            cargo_cmd += cargo + features + cargo_cmd_target_dir + cargo_cmd_redir
+                    features += [' --features ', self.args.features]
+            cargo_cmd += [cargo] + features + cargo_cmd_target_dir + cargo_cmd_redir
             if self.args.rustflags and cargo != 'clean':
-                cargo_cmd = 'RUSTFLAGS="' + self.args.rustflags + '" ' + cargo_cmd
+                cargo_cmd = ['RUSTFLAGS="' + self.args.rustflags] + cargo_cmd
             self.run_cargo_cmd(cargo_cmd, cargo_out)
 
     def run_cargo_cmd(self, cargo_cmd, cargo_out):
@@ -865,9 +865,9 @@ class Runner(object):
             print('Dry-run skip:', cargo_cmd)
         else:
             with open(cargo_out, 'a') as file:
-                file.write('### Running: ' + cargo_cmd + '\n')
-            ret = os.system(cargo_cmd)
-            if ret != 0:
+                file.write('### Running: ' + ''.join(cargo_cmd) + '\n')
+            ret = subprocess.run(cargo_cmd, shell=False)
+            if ret.returncode != 0:
                 print('ERROR: There was an error while running cargo.' +
                       ' See the cargo.out file for details.')
 

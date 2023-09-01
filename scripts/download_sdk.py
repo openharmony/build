@@ -89,8 +89,8 @@ def npm_install(target_dir):
     subprocess.run(['ls', '-d', '*/', '|', 'xargs', 'rm', '-rf'])
 
     for filename in os.listdir(sdk_dir):
-        if filename.endswith(".zip"):
-            os.system(f"unzip {filename}")
+        if filename.endswith('.zip'):
+            subprocess.run(['unzip', filename])
 
     p1 = subprocess.Popen(
         ["grep", "apiVersion", "toolchains/oh-uni-package.json"], stdout=subprocess.PIPE)
