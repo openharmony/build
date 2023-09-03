@@ -576,15 +576,6 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/deps",
-        "module_label": "//developtools/ace_ets2bundle:ets_loader_deps",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "ets/build-tools/ets-loader",
         "module_label": "//developtools/ace_ets2bundle:ets_loader",
         "target_os": [
