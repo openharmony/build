@@ -17,7 +17,7 @@ declare_args() {
   api_version = "10"
 
   # Release type, optional values: Betax, RCx...
-  release_type = "Release"
+  release_type = "Beta3"
   meta_version = "3.0.0"
   platform_version = "4.0.0"
 }
