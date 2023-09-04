@@ -230,18 +230,14 @@ template("package_app") {
     if (defined(sign_hap_py_path)) {
       if (defined(compatible_version)) {
         _sign_compatible_version = compatible_version
-        print("INFO: Set para compatible_version for remote sign app, ",
-              target_name,
-              " value is ",
-              _sign_compatible_version)
         args += [
           "--sign_compatible_version",
           _sign_compatible_version,
         ]
       } else {
+        _target_label = get_label_info(target_name, "label_no_toolchain")
         print(
-            "warning: Please set compatible_version for remote sign app!!! target_name: ",
-            target_name)
+            "warning: Please set compatible_version in ${_target_label} for remote sign")
       }
     }
     args += [
@@ -432,8 +428,13 @@ template("app_sign") {
                              "hap_out_dir",
                              "hap_name",
                              "install_module_info",
+                             "compatible_version",
                            ])
-    script = "//build/scripts/app_sign.py"
+    _sign_hap_py_path = "//build/scripts/app_sign.py"
+    if (defined(sign_hap_py_path) && defined(compatible_version)) {
+      _sign_hap_py_path = sign_hap_py_path
+    }
+    script = _sign_hap_py_path
     _private_key_path = default_hap_private_key_path
     if (defined(private_key_path)) {
       _private_key_path = private_key_path
@@ -495,6 +496,21 @@ template("app_sign") {
       "--hap-name",
       hap_name,
     ]
+
+    if (defined(sign_hap_py_path)) {
+      if (defined(compatible_version)) {
+        _sign_compatible_version = compatible_version
+        args += [
+          "--compatible_version",
+          _sign_compatible_version,
+        ]
+      } else {
+        _target_label = get_label_info(target_name, "label_no_toolchain")
+        print(
+            "warning: Please set compatible_version in ${_target_label} for remote sign")
+      }
+    }
+
     if (defined(install_module_info)) {
       metadata = {
         install_modules = [ install_module_info ]
