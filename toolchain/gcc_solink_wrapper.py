@@ -15,6 +15,7 @@ import os
 import subprocess
 import sys
 import shutil
+import json
 
 import wrapper_utils
 
@@ -91,6 +92,21 @@ def reformat_rsp_file(rspfile):
         fo.write(" ".join(result))
 
 
+def get_install_dest_dir(args):
+    file_list = os.listdir(args.target_out_dir)
+    target_name = args.target_name
+    match_file = f'{target_name}_module_info.json'
+    if not f'{target_name}_module_info.json' in file_list:
+        return None
+    with open(os.path.join(args.target_out_dir, match_file), "r") as f:
+        module_info = json.load(f)
+        dest_dirs = module_info.get("dest")
+        for dest_dir in dest_dirs:
+            if dest_dir.startswith("system"):
+                return dest_dir
+        return None
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--readelf',
@@ -126,6 +142,9 @@ def main():
                         action='store_true',
                         default=False,
                         help='Add .gnu_debugdata section for stripped sofile')
+    parser.add_argument('--target-name', help='')
+    parser.add_argument('--target-out-dir', help='')
+    parser.add_argument('--allowed-lib-list', help='')
     args = parser.parse_args()
 
     if args.sofile.endswith(".dll"):
@@ -160,9 +179,25 @@ def main():
 
     # Finally, strip the linked shared object file (if desired).
     if args.strip:
+        strip_option = []
+        strip_command = [args.strip, '-o', args.output]
+
+        #ADLT so should not be stripped
+        if args.target_out_dir and os.path.exists(args.target_out_dir):
+            install_dest = get_install_dest_dir(args)
+        else:
+            install_dest = None
+        if install_dest:
+            with open(args.allowed_lib_list, 'r') as f:
+                lines = f.readlines()
+            lines = [line.strip()[1:] for line in lines]
+            if install_dest in lines:
+                strip_option.extend(['-S'])
+        strip_command.extend(strip_option)
+
+        strip_command.append(args.sofile)
         result = subprocess.call(
-            wrapper_utils.command_to_run(
-                [args.strip, '-o', args.output, args.sofile]))
+            wrapper_utils.command_to_run(strip_command))
     if args.libfile:
         libfile_name = os.path.basename(args.libfile)
         sofile_output_dir = os.path.dirname(args.sofile)

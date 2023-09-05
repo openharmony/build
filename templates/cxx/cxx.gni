@@ -761,6 +761,92 @@ template("ohos_shared_library") {
       }
     }
 
+    # check whether to add adlt configs
+    install_enable = true
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+    if (install_enable && enable_adlt && is_standard_system &&
+        target_toolchain == "${current_toolchain}" && is_ohos) {
+      inputs_args = []
+      if (target_cpu == "arm64" || target_cpu == "x86_64") {
+        module_type = "lib64"
+      } else if (target_cpu == "arm" || target_cpu == "x86") {
+        module_type = "lib"
+      } else {
+        assert(false, "Unsupported target_cpu: $target_cpu")
+      }
+      inputs_args += [
+        "--type",
+        module_type,
+        "--system-base-dir",
+        system_base_dir,
+      ]
+
+      module_install_name = target_name
+      if (defined(invoker.output_name)) {
+        module_install_name = invoker.output_name
+      }
+      inputs_args += [
+        "--install-name",
+        module_install_name,
+      ]
+
+      module_install_images = [ "system" ]
+      if (defined(invoker.install_images)) {
+        module_install_images = []
+        module_install_images += invoker.install_images
+      }
+      inputs_args += [ "--install-images" ]
+      inputs_args += module_install_images
+
+      if (defined(invoker.module_install_dir) &&
+          invoker.module_install_dir != "") {
+        inputs_args += [
+          "--module-install-dir",
+          invoker.module_install_dir,
+        ]
+      }
+      if (defined(invoker.relative_install_dir)) {
+        relative_install_dir = invoker.relative_install_dir
+      }
+      if (defined(auto_relative_install_dir)) {
+        relative_install_dir = auto_relative_install_dir
+      }
+      if (defined(relative_install_dir) && relative_install_dir != "") {
+        inputs_args += [
+          "--relative-install-dir",
+          relative_install_dir,
+        ]
+      }
+
+      module_output_extension = shlib_extension
+      if (defined(invoker.output_extension)) {
+        module_output_extension = "." + invoker.output_extension
+      }
+      if (module_output_extension != "") {
+        inputs_args += [
+          "--suffix",
+          module_output_extension,
+        ]
+      }
+
+      if (defined(invoker.output_prefix_override) &&
+          invoker.output_prefix_override) {
+        inputs_args += [ "--prefix-override" ]
+      }
+      inputs_args += [
+        "--allowed-lib-list",
+        rebase_path(allowed_lib_list),
+      ]
+      result = exec_script("//build/ohos/images/get_module_install_dest.py",
+                           inputs_args,
+                           "string")
+      if (result == "") {
+        configs += [ "//build/config/ohos:adlt_config" ]
+      }
+    }
+
     if (!defined(output_name)) {
       output_name = target_name
     }
