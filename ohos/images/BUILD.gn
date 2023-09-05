@@ -209,11 +209,45 @@ foreach(_platform, target_platform_list) {
   if (enable_ramdisk) {
     image_list += [ "ramdisk" ]
   }
+  if (enable_adlt) {
+    action("execute_adlt") {
+      if (target_cpu == "arm64" || target_cpu == "x86_64") {
+        module_type = "lib64"
+      } else if (target_cpu == "arm" || target_cpu == "x86") {
+        module_type = "lib"
+      } else {
+        assert(false, "Unsupported target_cpu: $target_cpu")
+      }
+      script = "//build/ohos/images/adlt_wrapper.py"
+      args = [
+        "--allowed-lib-list",
+        rebase_path(allowed_lib_list),
+        "--output-file",
+        rebase_path(
+            "${current_platform_dir}/system/${module_type}/${adlt_lib_name}"),
+        "--adlt-exe",
+        rebase_path(adlt_exe),
+        "--adlt-root-dir",
+        rebase_path("${current_platform_dir}"),
+      ]
+      deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
+      inputs = [
+        allowed_lib_list,
+        adlt_exe,
+      ]
+      outputs =
+          [ "${current_platform_dir}/system/${module_type}/${adlt_lib_name}" ]
+    }
+  }
+
   foreach(_image_name, image_list) {
     action_with_pydeps("${_platform}_${_image_name}_image") {
       script = "//build/ohos/images/build_image.py"
       depfile = "$target_gen_dir/$target_name.d"
       deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
+      if (enable_adlt && _image_name == "system") {
+        deps += [ ":execute_adlt" ]
+      }
       if (!asan_detector) {
         deps += [ "//build/ohos/packages:process_field_validate" ]
         if (build_seccomp) {
