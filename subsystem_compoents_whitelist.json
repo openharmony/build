@@ -29,5 +29,7 @@
   "device_qemu-arm-linux": "device_qemu-arm-linux",
   "product_qemu-arm-linux-min": "product_qemu-arm-linux-min",
   "device_arm64": "device_arm64",
-  "product_system_arm64_default": "product_system_arm64_default"
+  "product_system_arm64_default": "product_system_arm64_default",
+  "device_arkui-x": "device_arkui-x",
+  "product_arkui-x": "product_arkui-x"
 }
