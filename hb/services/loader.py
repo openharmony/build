@@ -316,7 +316,7 @@ class OHOSLoader(LoadInterface):
         target_syscap_for_init_file = os.path.join(
             system_etc_path, "param/syscap.para")
         with open(target_syscap_for_init_file, "w") as file:
-            file.writelines(target_syscap_for_init_list)
+            file.writelines(sorted(target_syscap_for_init_list))
         LogUtil.hb_info("generate target syscap for init list to '{}'".format(
             target_syscap_for_init_file))
 
