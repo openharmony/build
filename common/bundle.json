@@ -21,11 +21,7 @@
     ],
     "rom": "",
     "ram": "",
-    "deps": {
-      "third_party": [
-        "f2fs-tools"
-      ]
-    },
+    "deps": {},
     "build": {
       "sub_component": [
         "//build/common:common_packages",
