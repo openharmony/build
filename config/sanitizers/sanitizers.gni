@@ -103,6 +103,10 @@ declare_args() {
   # Default value when unset and use_sanitizer_coverage=true:
   #     trace-pc-guard,indirect-calls
   sanitizer_coverage_flags = ""
+
+  # The global switch of cfi. Disable it to improve compiling efficiency while
+  # being vulnerable to cfi attack.
+  use_cfi = true
 }
 
 is_v8_host_toolchain =
@@ -269,7 +273,7 @@ template("ohos_sanitizer_config") {
       if (_debug) {
         _mode = "debug"
       }
-      _cfi = defined(sanitize.cfi) && sanitize.cfi && !is_asan
+      _cfi = use_cfi && defined(sanitize.cfi) && sanitize.cfi && !is_asan
       if (_cfi) {
         if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
           configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]
