@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import os
-import sys
 import subprocess
 
 
@@ -30,7 +29,7 @@ def get_needed_lib(file_path):
     cmd = " ".join(["readelf", "-d", file_path])
     res = run_cmd(cmd)
     if res[1] != 0:
-        print("error run readelf -d %s" % file_path)
+        print("error run readelf -d {}".format(file_path))
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
         return []
@@ -46,11 +45,15 @@ def get_needed_lib(file_path):
 def judge_updater_binary_available(updater_root_path):
     updater_binary_path = os.path.join(updater_root_path, "bin", "updater_binary")
     updater_binary_needed_lib = get_needed_lib(updater_binary_path)
+    # The ASAN version does not set restriction
+    for lib_name in updater_binary_needed_lib:
+        if lib_name.endswith('asan.so'):
+            return True
     updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so',
                                 'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
     extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
     if len(extra_lib) != 0:
-        print("Reason:  not allow updater_binary to depend dynamic library: %s" % (" ".join(extra_lib)))
+        print("Reason:  not allow updater_binary to depend dynamic library: {}".format(" ".join(extra_lib)))
         return False
     return True
 
@@ -62,10 +65,11 @@ def judge_lib_available(lib_name, lib_chain, available_libs, lib_to_path):
     if lib_path is None:
         return False
     for next_lib in get_needed_lib(lib_path):
-        lib_chain.append(next_lib)
-        if not judge_lib_available(next_lib, lib_chain, available_libs, lib_to_path):
-            return False
-        lib_chain.remove(next_lib)
+        if next_lib not in lib_chain:
+            lib_chain.append(next_lib)
+            if not judge_lib_available(next_lib, lib_chain, available_libs, lib_to_path):
+                return False
+            lib_chain.remove(next_lib)
     available_libs.add(lib_name)
     return True
 
@@ -80,9 +84,9 @@ def judge_updater_available(updater_root_path):
     lib_chain = ["updater"]
     available_libs = set()
     if not judge_lib_available("updater", lib_chain, available_libs, lib_to_path):
-        print("Reason:  not allow updater to depend dynamic library which not exist in updater.img. %s"\
-              % ("->".join(lib_chain)))
-        print("Solution:  add updater in install_images field when compiling %s" % lib_chain[-1])
+        print("Reason:  not allow updater to depend dynamic library which not exist in updater.img. {}"\
+              .format("->".join(lib_chain)))
+        print("Solution:  add updater in install_images field when compiling {}".format(lib_chain[-1]))
         return False
     return True
 
