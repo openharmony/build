@@ -147,8 +147,14 @@ class BuildArgsResolver(ArgsResolverInterface):
         config = Config()
         build_executor = build_module.target_compiler
         target_list = []
+        test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
         if len(target_arg.arg_value):
             target_list = target_arg.arg_value
+            for target_name in target_list:
+                if target_name.endswith('make_test') or target_name.split(':')[-1] in test_target_list:
+                    target_generator = build_module.target_generator
+                    target_generator.regist_arg('use_thin_lto', False)
+                    break
         else:
             if os.getcwd() == CURRENT_OHOS_ROOT:
                 target_list = ['images']
@@ -280,6 +286,8 @@ class BuildArgsResolver(ArgsResolverInterface):
             else:
                 build_executor.regist_arg(
                     'build_target', ['make_all', 'make_test'])
+            target_generator = build_module.target_generator
+            target_generator.regist_arg('use_thin_lto', False)
 
     @staticmethod
     @throw_exception
