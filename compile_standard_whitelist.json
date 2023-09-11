@@ -774,6 +774,7 @@
         "//third_party/vk-gl-cts/modules/gles3:libdeqp-gles3",
         "//third_party/vk-gl-cts/modules/glshared:deqp-gl-shared_source",
         "//third_party/vk-gl-cts/modules/glshared:libdeqp-gl-shared",
-        "//third_party/vulkan-loader/openharmony:vulkan_loader"
+        "//third_party/vulkan-loader/openharmony:vulkan_loader",
+        "//third_party/rust/crates/rust-openssl/openssl-sys:lib"
     ]
 }
