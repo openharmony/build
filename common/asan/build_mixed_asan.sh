@@ -57,7 +57,19 @@ while test $# -gt 0; do
     shift
 done
 
-set -e -- "${args[@]}"
+extra_args=(
+    --build-variant ${build_variant}
+    --disable-package-image
+    --disable-part-of-post-build output_part_rom_status
+    --disable-part-of-post-build get_warning_list
+    --disable-part-of-post-build compute_overlap_rate
+    --gn-args asan_detector=true
+    --gn-args skip_generate_module_list_file=true
+    --gn-args enable_notice_collection=false
+    # --gn-args enable_lto_O0=true
+    # --gn-args load_test_config=false
+)
+set -e -- "${extra_args[@]}" "${args[@]}"
 
 # build both asan and nonasan images
 start_time=$(date +%s)
@@ -68,13 +80,13 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --build-variant ${build_variant}
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true
 step1_time=$(date +%s)
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
-${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --build-variant ${build_variant}
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false
 step2_time=$(date +%s)
 
 
