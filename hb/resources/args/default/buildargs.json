@@ -306,6 +306,22 @@
     "resolve_function": "resolve_fast_rebuild",
     "testFunction": "testFastRebuild"
   },
+  "root_perf_main": {
+    "arg_name": "--root-perf-main",
+    "argDefault": "main",
+    "arg_help": "Default:root. Help:different kinds of root packages",
+    "arg_phase": "targetGenerate",
+    "arg_type": "str",
+    "arg_attribute": {
+        "optional": [
+          "root",
+          "main",
+          "root_main"
+        ]
+      },
+    "resolve_function": "resolve_root_perf_main",
+    "testFunction": "testResolveRootPerfMain"
+  },
   "keep_ninja_going": {
     "arg_name": "--keep-ninja-going",
     "argDefault": false,
