@@ -185,6 +185,7 @@ declare_args() {
 
 declare_args() {
   build_variant = "root"
+  root_perf_main = "main"
   device_type = "default"
 }
 
