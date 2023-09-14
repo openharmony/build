@@ -557,10 +557,13 @@ config("compiler") {
       (current_toolchain == default_toolchain ||
        ((is_ohos || is_android) && defined(ohoa_secondary_abi_toolchain) &&
         current_toolchain == ohos_secondary_abi_toolchain))) {
-    assert(use_lld || target_os == "chromeos",
+    assert(use_lld || target_os == "chromeos" || target_os == "ohos",
            "gold plugin only supported with ChromeOS")
 
-    cflags += [ "-flto=thin" ]
+    cflags += [
+      "-flto=thin",
+      "-fsplit-lto-unit",
+    ]
 
     if (thin_lto_enable_optimizations) {
       lto_opt_level = 2
