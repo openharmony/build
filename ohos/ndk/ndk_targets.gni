@@ -40,6 +40,8 @@ _ndk_library_targets = [
   "//third_party/node:node_header",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/EGL:libEGL_ndk",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/EGL:EGL_header",
+  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES2:libGLESv2_ndk",
+  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES2:GLES2_header",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES3:libGLESv3_ndk",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES3:GLES3_header",
   "//foundation/graphic/graphic_2d/interfaces/kits/ndk/KHR:KHR_header",
