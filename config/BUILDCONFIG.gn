@@ -109,6 +109,19 @@ if (defined(product_build_config.ext_critical_proc_conf_path)) {
 } else {
   ext_critical_proc_conf_path = ""
 }
+if (defined(product_build_config.ext_sanitizer_check_list_path)) {
+  ext_sanitizer_check_list_path =
+      product_build_config.ext_sanitizer_check_list_path
+} else {
+  joint_check_list_path = "//vendor/${product_company}/${product_name}/security_config/sanitizer_check_list.gni"
+  sanitize_list_exist =
+      exec_script(rebase_path("//build/scripts/check_file_exist.py"),
+                  [ rebase_path("${joint_check_list_path}") ],
+                  "string")
+  if (sanitize_list_exist != "") {
+    ext_sanitizer_check_list_path = joint_check_list_path
+  }
+}
 if (defined(product_build_config.enable_ramdisk)) {
   enable_ramdisk = product_build_config.enable_ramdisk
 } else {
@@ -317,7 +330,8 @@ is_wearable_product = "${target_platform}" == "wearable"
 
 is_intellitv_product = "${target_platform}" == "intellitv"
 
-if (target_os == "ohos" && target_cpu == "x86_64" || device_company == "emulator") {
+if ((target_os == "ohos" && target_cpu == "x86_64") ||
+    device_company == "emulator") {
   is_emulator = true
 }
 

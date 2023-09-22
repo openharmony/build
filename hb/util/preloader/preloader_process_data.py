@@ -229,6 +229,11 @@ class Product():
                     self._dirs.source_root_dir, config.get('ext_critical_proc_conf_path'))
                 if os.path.exists(ext_critical_proc_conf_path):
                     build_vars['ext_critical_proc_conf_path'] = ext_critical_proc_conf_path
+            if 'ext_sanitizer_check_list_path' in config:
+                ext_sanitizer_check_list_path = os.path.join(
+                    self._dirs.source_root_dir, config.get('ext_sanitizer_check_list_path'))
+                if os.path.exists(ext_sanitizer_check_list_path):
+                    build_vars['ext_sanitizer_check_list_path'] = ext_sanitizer_check_list_path
             if 'enable_ramdisk' in config:
                 build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
             if 'enable_absystem' in config:
