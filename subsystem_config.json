@@ -206,5 +206,9 @@
   "ide": {
     "path": "ide",
     "name": "ide"
+  },
+  "advertising": {
+    "path": "domains/cloud",
+    "name": "advertising"
   }
 }
