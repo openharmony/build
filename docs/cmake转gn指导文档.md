@@ -165,7 +165,7 @@ ohos_shared_library("helloworld") {
   cflags_cc = []
   ldflags = []
   configs = []
-  deps = []  # 部件内模块依赖
+  deps = []                  # 部件内模块依赖
 
   # 跨部件模块依赖定义，
   # 定义格式为 "部件名:模块名称"
@@ -180,7 +180,7 @@ ohos_shared_library("helloworld") {
   relative_install_dir = ""  # 可选，模块安装相对路径，相对于/system/lib64或/system/lib；如果有module_install_dir配置时，该配置不生效
   install_images = []        # 可选，缺省值system，指定模块安装到那个分区镜像中，可以指定多个
 
-  part_name = "" # 必选，所属部件名称
+  part_name = ""             # 必选，所属部件名称
 }
 ```
 

@@ -1,8 +1,8 @@
 # 编译构建规范
 ## gn构建规范
 ### 规则
-1. 在声明编译模块时，应使用OpenHarmony提供的高级模板，如ohos_excutable，ohos_shared_library，ohos_static_library等。
-2. 在所有编译模块中需要指定**part_name**和**subsystem_name**，都不应使用**output_dir**来指定编译产物的目录，
+1. 在声明编译模块时，应使用OpenHarmony提供的高级模板，如编译C++代码相关的ohos_excutable，ohos_shared_library，ohos_static_library模板等。
+2. 在所有编译模块中需要指定**subsystem_name**和**part_name**，都不应使用**output_dir**来指定编译产物的目录，
 3. 模块之间建立依赖应避免使用public_deps，因为public_deps会通过依赖传递隐式配置，导致依赖模块引入多余配置而出现编译问题。
     ```
     # This target can include files from "c" but not from
@@ -40,9 +40,7 @@
 3. 声明编译目标或者配置要关注其可见性，使用visibility来对可见范围进行限制。部件内模块若不对外提供接口，应将visibility字段设置为所在部件目录内。三方部件内模块可以将可见范围进一步扩大。visibility的使用有如下几种形式：
    ```
    config("common") {
-    visibility = [
-
-    ]
+    visibility = []
    }
 
    ohos_shared_library("test_shared_library") {

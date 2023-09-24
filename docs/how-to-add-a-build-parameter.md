@@ -13,23 +13,14 @@
     ```
 
     PRE_BUILD                   # 编译预处理相关参数，如--full-compilation，--log-level
-
     PRE_LOAD                    # preloader前置设置参数
-
     LOAD                        # loader前置设置参数，如--scalable-build，--build-xts
-
     PRE_TARGET_GENERATE         # gn前置设置参数，如--gn-args
-
     TARGET_GENERATE             # gn阶段参数
-
     POST_TARGET_GENERATE        # gn后置设置参数
-
     PRE_TARGET_COMPILATION      # ninja前置设置参数，如--ninja-arg
-    
     TARGET_COMPILATION          # ninja阶段参数
-
     POST_TARGET_COMPILATION     # ninja后置设置参数，如--generate-ninja-trace
-
     POST_BUILD                  # 编译后处理参数，如--clean-args
     ```
 
