@@ -89,15 +89,15 @@ js或ets代码，ace编译后放置在assets/js/default目录下，stage模型�
    import("//build/ohos.gni") # 引用ohos.gni
 
    ohos_hap("example") {
-     hap_profile = "./src/main/config.json" # config.json
+     hap_profile = "./src/main/config.json"            # config.json
      js_assets = ["./src/main/js/default"]
      raw_assets = ["./raw_assets"]
      resources = ["./src/main/resources"]
      shared_libraries = [
-       "//third_party/libpng:libpng", # native库
+       "//third_party/libpng:libpng",                  # native库
      ]
      certificate_profile = "../signature/systemui.p7b" # Cer文件
-     hap_name = "SystemUI-NavigationBar" # 名字
+     hap_name = "SystemUI-NavigationBar"               # 名字
      part_name = "prebuilt_hap"
      subsystem_name = "applications"
    }
@@ -111,7 +111,7 @@ js或ets代码，ace编译后放置在assets/js/default目录下，stage模型�
        "prebuilt_hap": {
          "module_list": [
            ...
-           "//applications/standard/example:example" # 添加编译目标
+           "//applications/standard/example:example"   # 添加编译目标
          ]
        }
      }
