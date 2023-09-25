@@ -150,6 +150,7 @@ template("ohos_executable") {
     ohos_module_name = target_name
     _module_info_target = "${target_name}_info"
     generate_module_info(_module_info_target) {
+      forward_variables_from(invoker, [ "testonly" ])
       module_name = ohos_module_name
       module_type = "bin"
 
@@ -587,6 +588,7 @@ template("ohos_shared_library") {
     ohos_module_name = target_name
     _module_info_target = "${target_name}_info"
     generate_module_info(_module_info_target) {
+      forward_variables_from(invoker, [ "testonly" ])
       module_name = ohos_module_name
       module_type = "lib"
       module_source_dir = "$root_out_dir"
