@@ -317,8 +317,7 @@ template("ohos_executable") {
       ]
     }
 
-    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
-        !build_cross_platform_version) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       if (!ohos_skip_parse_external_deps) {
@@ -346,6 +345,9 @@ template("ohos_executable") {
         ]
         if (is_use_sdk) {
           arguments += [ "--use-sdk" ]
+        }
+        if (is_arkui_x) {
+          arguments += [ "--is-arkui-x" ]
         }
         handler_result = exec_script(external_deps_script, arguments, "string")
         if (handler_result != "") {
@@ -912,8 +914,7 @@ template("ohos_shared_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
-        !build_cross_platform_version) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       if (!ohos_skip_parse_external_deps) {
@@ -941,6 +942,9 @@ template("ohos_shared_library") {
         ]
         if (is_use_sdk) {
           arguments += [ "--use-sdk" ]
+        }
+        if (is_arkui_x) {
+          arguments += [ "--is-arkui-x" ]
         }
 
         handler_result = exec_script(external_deps_script, arguments, "string")
@@ -1226,8 +1230,7 @@ template("ohos_static_library") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
-        !build_cross_platform_version) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       if (!ohos_skip_parse_external_deps) {
@@ -1255,6 +1258,9 @@ template("ohos_static_library") {
         ]
         if (is_use_sdk) {
           arguments += [ "--use-sdk" ]
+        }
+        if (is_arkui_x) {
+          arguments += [ "--is-arkui-x" ]
         }
 
         handler_result = exec_script(external_deps_script, arguments, "string")
@@ -1480,8 +1486,7 @@ template("ohos_source_set") {
     if (!defined(include_dirs)) {
       include_dirs = []
     }
-    if (defined(invoker.external_deps) && invoker.external_deps != [] &&
-        !build_cross_platform_version) {
+    if (defined(invoker.external_deps) && invoker.external_deps != []) {
       external_deps_temp_file =
           "$target_gen_dir/${part_name}__${target_name}_external_deps_temp.json"
       if (!ohos_skip_parse_external_deps) {
@@ -1509,6 +1514,9 @@ template("ohos_source_set") {
         ]
         if (is_use_sdk) {
           arguments += [ "--use-sdk" ]
+        }
+        if (is_arkui_x) {
+          arguments += [ "--is-arkui-x" ]
         }
 
         handler_result = exec_script(external_deps_script, arguments, "string")
