@@ -78,7 +78,7 @@ def _prepare_ramdisk(ramdisk_path):
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('bin/init', os.path.join(ramdisk_path, 'init'))
+    os.symlink('bin/init_early', os.path.join(ramdisk_path, 'init'))
 
 
 def _prepare_eng_ststem(eng_system_path, build_variant):
