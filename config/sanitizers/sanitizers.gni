@@ -5,6 +5,10 @@
 import("//build/config/coverage/coverage.gni")
 import("//build/toolchain/toolchain.gni")
 
+if (!build_xts && defined(ext_sanitizer_check_list_path)) {
+  import("${ext_sanitizer_check_list_path}")
+}
+
 declare_args() {
   # Compile for Address Sanitizer to find memory bugs.
   is_asan = false
@@ -338,5 +342,58 @@ template("ohos_sanitizer_config") {
       }
       configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }
+  }
+}
+
+template("ohos_sanitizer_check") {
+  config(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "sanitize",
+                             "build_name",
+                             "part_name",
+                           ])
+    need_check_cfi = false
+    need_check_intsan = false
+    foreach(component_name, enable_cfi_part_list) {
+      if (part_name == component_name) {
+        need_check_cfi = true
+      }
+    }
+    foreach(component_name, enable_intsan_part_list) {
+      if (part_name == component_name) {
+        need_check_intsan = true
+      }
+    }
+    foreach(cfi_target, bypass_cfi_target_list) {
+      if (build_name == cfi_target) {
+        need_check_cfi = false
+      }
+    }
+    foreach(intsan_target, bypass_intsan_target_list) {
+      if (build_name == intsan_target) {
+        need_check_intsan = false
+      }
+    }
+
+    if (need_check_cfi) {
+      assert(
+          defined(sanitize) && defined(sanitize.cfi) && sanitize.cfi == true &&
+              defined(sanitize.cfi_cross_dso) &&
+              sanitize.cfi_cross_dso == true && defined(sanitize.debug) &&
+              sanitize.debug == false && !defined(sanitize.blocklist),
+          "Build targets in ${part_name} should fully enable cfi(cfi, cfi_cross_dso, !debug). For local debug, try to build with '--gn-args allow_sanitize_debug=true' to bypass sanitize check. If this target ${build_name} cannot enable cfi, add the target to ${ext_sanitizer_check_list_path} in bypass_cfi_target_list.")
+    }
+    if (need_check_intsan) {
+      assert(
+          defined(sanitize) && defined(sanitize.integer_overflow) &&
+              sanitize.integer_overflow,
+          "Build targets in ${part_name} should enable intsan. For local debug, try to build with '--gn-args allow_sanitize_debug=true' to bypass sanitize check. If this target ${build_name} cannot enable intsan, add the target to ${ext_sanitizer_check_list_path} in bypass_intsan_target_list.")
+    }
+    not_needed([
+                 "sanitize",
+                 "build_name",
+                 "part_name",
+               ])
   }
 }
