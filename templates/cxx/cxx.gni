@@ -19,6 +19,11 @@ import("//build/ohos_var.gni")
 import("//build/templates/common/check_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
+declare_args() {
+  # Compile with no sanitize check, for local debug only
+  allow_sanitize_debug = false
+}
+
 default_opt_configs = [
   "//build/config/compiler:default_symbols",
   "//build/config/compiler:default_optimization",
@@ -121,6 +126,14 @@ template("ohos_executable") {
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
     forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
+  if (!allow_sanitize_debug && !build_xts &&
+      defined(ext_sanitizer_check_list_path)) {
+    build_name = "${target_name}"
+    ohos_sanitizer_check("${target_name}_sanitizer_check") {
+      forward_variables_from(invoker, [ "sanitize" ])
+    }
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -558,6 +571,14 @@ template("ohos_shared_library") {
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
     forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
+  if (!allow_sanitize_debug && !build_xts &&
+      defined(ext_sanitizer_check_list_path)) {
+    build_name = "${target_name}"
+    ohos_sanitizer_check("${target_name}_sanitizer_check") {
+      forward_variables_from(invoker, [ "sanitize" ])
+    }
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
@@ -1135,6 +1156,14 @@ template("ohos_static_library") {
     forward_variables_from(invoker, [ "auto_var_init" ])
   }
 
+  if (!allow_sanitize_debug && !build_xts &&
+      defined(ext_sanitizer_check_list_path)) {
+    build_name = "${target_name}"
+    ohos_sanitizer_check("${target_name}_sanitizer_check") {
+      forward_variables_from(invoker, [ "sanitize" ])
+    }
+  }
+
   _sanitize_config_target = "${target_name}__sanitizer_config"
   ohos_sanitizer_config(_sanitize_config_target) {
     forward_variables_from(invoker, [ "sanitize" ])
@@ -1387,6 +1416,14 @@ template("ohos_source_set") {
   _security_config_target = "${target_name}__security_config"
   ohos_security_config(_security_config_target) {
     forward_variables_from(invoker, [ "auto_var_init" ])
+  }
+
+  if (!allow_sanitize_debug && !build_xts &&
+      defined(ext_sanitizer_check_list_path)) {
+    build_name = "${target_name}"
+    ohos_sanitizer_check("${target_name}_sanitizer_check") {
+      forward_variables_from(invoker, [ "sanitize" ])
+    }
   }
 
   _sanitize_config_target = "${target_name}__sanitizer_config"
