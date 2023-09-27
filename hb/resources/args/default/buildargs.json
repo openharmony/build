@@ -389,6 +389,16 @@
     "resolve_function": "resolve_archive_image",
     "testFunction": "testArchiveImage"
   },
+  "patch": {
+    "arg_name": "--patch",
+    "argDefault": false,
+    "arg_help": "Default:False. Help: Apply patches as per configuration in patch.yml, and handle rollback if needed.",
+    "arg_phase": "prebuild",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_patch",
+    "testFunction": "testPatch"
+  },
   "rom_size_statistics": {
     "arg_name": "--rom-size-statistics",
     "argDefault": false,
