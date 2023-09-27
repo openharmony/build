@@ -38,6 +38,7 @@ from util.system_util import SystemUtil
 from util.type_check_util import TypeCheckUtil
 from util.component_util import ComponentUtil
 from util.product_util import ProductUtil
+from util.prebuild.patch_process import Patch
 from util.post_build.part_rom_statistics import output_part_rom_status
 
 
@@ -627,6 +628,17 @@ class BuildArgsResolver(ArgsResolverInterface):
             else:
                 LogUtil.hb_info(
                     '"--archive-image" option not work, cause the currently compiled product is not a standard product')
+
+    @staticmethod
+    def resolve_patch(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--patch' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation
+        """
+        if target_arg.arg_value:
+            patch_obj = Patch()
+            patch_obj.patch_make()
 
     @staticmethod
     def resolve_rom_size_statistics(target_arg: Arg, build_module: BuildModuleInterface):
