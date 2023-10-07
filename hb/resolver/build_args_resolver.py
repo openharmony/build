@@ -533,6 +533,16 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         target_generator = build_module.target_generator
         target_generator.regist_arg('root_perf_main', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_runtime_mode(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--runtime-mode' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: targetGenerate.
+        """
+        target_generator = build_module.target_generator
+        target_generator.regist_arg('runtime_mode', target_arg.arg_value)
         
     @staticmethod
     def resolve_keep_ninja_going(target_arg: Arg, build_module: BuildModuleInterface):
