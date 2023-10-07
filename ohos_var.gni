@@ -213,9 +213,10 @@ declare_args() {
 # Upgrade Skia version
 use_new_skia = true
 
-# support changing the ohpm registry and sdk type
+# support changing the ohpm registry and using hvigor cache
 declare_args() {
   ohpm_registry = ""
+  use_hvigor_cache = false
 }
 
 # build target type
