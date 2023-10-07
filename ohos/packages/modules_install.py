@@ -120,7 +120,7 @@ def copy_modules(system_install_info, install_modules_info_file,
             if os.path.isdir(source):
                 is_hvigor_hap = False
                 for filename in os.listdir(source):
-                    if filename.endswith('.hap'):
+                    if filename.endswith('.hap') or filename.endswith('.hsp'):
                         is_hvigor_hap = True
                         shutil.copy2(os.path.join(source, filename), os.path.join(platform_installed_path, dest, filename))
                 if not is_hvigor_hap:
