@@ -128,7 +128,7 @@ def main():
     try:
         now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         last_hour = (datetime.datetime.now() +
-                     datetime.timedelta(hours=-12)).strftime('%Y%m%d%H%M%S')
+                     datetime.timedelta(hours=-72)).strftime('%Y%m%d%H%M%S')
 
         url = "http://ci.openharmony.cn/api/ci-backend/ci-portal/v1/dailybuilds"
         myobj = {"pageNum": 1,
