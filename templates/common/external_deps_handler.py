@@ -116,6 +116,7 @@ def main():
     parser.add_argument('--external-deps-temp-file', required=True)
     parser.add_argument('--use-sdk', dest='use_sdk', action='store_true')
     parser.set_defaults(use_sdk=False)
+    parser.add_argument('--is-arkui-x', dest='is_arkui_x', action='store_true')
     parser.add_argument('--current-toolchain', required=False, default='')
     parser.add_argument('--component-override-map', default='', required=False)
     parser.add_argument(
@@ -196,6 +197,9 @@ def main():
         is_external_part_valid = external_part_name in parts_src_flag \
             or external_part_name in auto_install_parts
 
+        if not is_external_part_valid and args.is_arkui_x:
+            continue
+
         if not use_sdk and is_external_part_valid:
             external_module_desc_info = _get_external_module_info(
                 all_kits_info_dict, external_part_name, external_module_name,
@@ -244,8 +248,7 @@ def main():
                 ]
 
     result = {}
-    if deps:
-        result['deps'] = deps
+    result['deps'] = deps
     if libs:
         result['libs'] = libs
     if include_dirs:
