@@ -625,6 +625,9 @@ template("compile_app") {
       args += [ "--build-modules" ]
       args += build_modules
     }
+    if (use_hvigor_cache) {
+      args += [ "--use-hvigor-cache" ]
+    }
     if (defined(install_module_info)) {
       metadata = {
         install_modules = [ install_module_info ]
