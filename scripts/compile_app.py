@@ -46,6 +46,7 @@ def parse_args(args):
     parser.add_argument('--module-libs-dir', help='', default='entry')
     parser.add_argument('--sdk-type-name', help='sdk type name', nargs='+', default=['sdk.dir'])
     parser.add_argument('--build-modules', help='build modules', nargs='+', default=[])
+    parser.add_argument('--use-hvigor-cache', help='use hvigor cache', action='store_true')
 
     options = parser.parse_args(args)
     return options
@@ -166,6 +167,10 @@ def hvigor_build(cwd, options):
         cmd.extend(['-p', 'debuggable=true'])
     else:
         cmd.extend(['-p', 'debuggable=false'])
+    if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
+        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
+        os.makedirs(hvigor_cache_dir, exist_ok=True)
+        cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
     cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
