@@ -218,6 +218,11 @@ declare_args() {
   ohpm_registry = ""
 }
 
+# enhance some optimizations
+declare_args() {
+  enhanced_opt = true
+}
+
 # build target type
 target_type = "${target_os}-${target_cpu}"
 
