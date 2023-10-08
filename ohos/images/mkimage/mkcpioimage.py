@@ -132,9 +132,6 @@ def build_run_chmod(args):
 def main(args):
     args = args_parse(args)
     print("Make cpio image!")
-    config = {}
-    with open("../../ohos_config.json") as f:
-        config = json.load(f)
     build_run_cpio(args)
     build_run_chmod(args)
 
