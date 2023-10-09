@@ -44,6 +44,10 @@ import("//build/ohos_var.gni")
 #   subsystem_name = "subsystem_examples"
 # }
 
+declare_args() {
+  check_innerkits_path = ""
+}
+
 template("_ohos_subsystem_sdk") {
   assert(defined(invoker.sdk_libs), "sdk_libs is required.")
   assert(invoker.variant != "")
@@ -62,136 +66,157 @@ template("_ohos_subsystem_sdk") {
   sdk_manifest = []
   _deps = []
   _libs_deps = []
+  if (check_innerkits_path != "") {
+    allow_list_info = read_file(rebase_path(check_innerkits_path), "json")
+  }
   foreach(sdk_lib, invoker.sdk_libs) {
-    lib_label = get_label_info(sdk_lib.name, "label_with_toolchain")
-    _libs_deps += [ lib_label ]
+    no_toolchain_deps_label = get_label_info(sdk_lib.name, "label_no_toolchain")
+    if (check_innerkits_path == "" ||
+        filter_include(allow_list_info.allow_list_name,
+                       [ no_toolchain_deps_label ]) != []) {
+      lib_label = get_label_info(sdk_lib.name, "label_with_toolchain")
+      _libs_deps += [ lib_label ]
 
-    lib_type = "so"
-    if (defined(sdk_lib.type)) {
-      lib_type = sdk_lib.type
+      lib_type = "so"
+      if (defined(sdk_lib.type)) {
+        lib_type = sdk_lib.type
+      }
+
+      module_out_dir = get_label_info(lib_label, "target_out_dir")
+      module_name = get_label_info(lib_label, "name")
+      module_info_file = "${module_out_dir}/${module_name}_module_info.json"
+
+      lib_header_files = []
+      lib_header_base = "interfaces/innerkits/${module_name}/include/"
+
+      if (defined(sdk_lib.headers)) {
+        if (defined(sdk_lib.header_base)) {
+          lib_header_base = sdk_lib.header_base
+        }
+        foreach(file, sdk_lib.headers) {
+          lib_header_files += [ string_replace(file, lib_header_base, "") ]
+        }
+      } else if (defined(sdk_lib.header)) {
+        header = {
+        }
+        header = sdk_lib.header
+        if (defined(header.header_base)) {
+          lib_header_base = header.header_base
+        }
+        lib_header_files = header.header_files
+      }
+
+      lib_prebuilt_enable = false
+      lib_prebuilt_source = ""
+      if (defined(sdk_lib.prebuilt_source)) {
+        lib_prebuilt_enable = true
+        lib_prebuilt_source = sdk_lib.prebuilt_source
+      }
+
+      sdk_manifest += [
+        {
+          label = lib_label
+          name = module_name
+          type = lib_type
+          header_files = lib_header_files
+          header_base = rebase_path(lib_header_base, "$root_build_dir")
+          source_info = rebase_path(module_info_file, "$root_build_dir")
+          prebuilt_enable = lib_prebuilt_enable
+          prebuilt_source = lib_prebuilt_source
+          subsystem_name = subsystem_name
+          part_name = part_name
+          origin_name = invoker.origin_name
+          current_toolchain = current_toolchain
+          current_toolchain_dir = rebase_path(root_out_dir, root_build_dir)
+        },
+      ]
     }
-
-    module_out_dir = get_label_info(lib_label, "target_out_dir")
-    module_name = get_label_info(lib_label, "name")
-    module_info_file = "${module_out_dir}/${module_name}_module_info.json"
-
-    lib_header_files = []
-    lib_header_base = "interfaces/innerkits/${module_name}/include/"
-
-    if (defined(sdk_lib.headers)) {
-      if (defined(sdk_lib.header_base)) {
-        lib_header_base = sdk_lib.header_base
-      }
-      foreach(file, sdk_lib.headers) {
-        lib_header_files += [ string_replace(file, lib_header_base, "") ]
-      }
-    } else if (defined(sdk_lib.header)) {
-      header = {
-      }
-      header = sdk_lib.header
-      if (defined(header.header_base)) {
-        lib_header_base = header.header_base
-      }
-      lib_header_files = header.header_files
-    }
-
-    lib_prebuilt_enable = false
-    lib_prebuilt_source = ""
-    if (defined(sdk_lib.prebuilt_source)) {
-      lib_prebuilt_enable = true
-      lib_prebuilt_source = sdk_lib.prebuilt_source
-    }
-
-    sdk_manifest += [
-      {
-        label = lib_label
-        name = module_name
-        type = lib_type
-        header_files = lib_header_files
-        header_base = rebase_path(lib_header_base, "$root_build_dir")
-        source_info = rebase_path(module_info_file, "$root_build_dir")
-        prebuilt_enable = lib_prebuilt_enable
-        prebuilt_source = lib_prebuilt_source
-        subsystem_name = subsystem_name
-        part_name = part_name
-        origin_name = invoker.origin_name
-        current_toolchain = current_toolchain
-        current_toolchain_dir = rebase_path(root_out_dir, root_build_dir)
-      },
-    ]
   }
   _deps += _libs_deps
 
-  subsystem_sdk_desc_file = "${target_out_dir}/${subsystem_name}_sdk_desc.json"
-  write_file(subsystem_sdk_desc_file, sdk_manifest, "json")
+  if (_deps != []) {
+    not_needed([ "no_toolchain_deps_label" ])
 
-  if (check_innersdk_interface && !gen_innersdk_interface_signature) {
-    kits_check_remove("${part_name}_innerkit_remove_check_so") {
-      subsystem_name = part_name
-      if (invoker.variant != "phone") {
-        subsystem_name = invoker.origin_name
-      }
-      sign_file_root_dir = "//interface/innersdk/native"
-      sdk_libs_name = []
-      foreach(_sdk_lib, sdk_manifest) {
-        if (_sdk_lib.type == "so") {
-          sdk_libs_name += [ _sdk_lib.name ]
-        }
-      }
-      output_file = "${target_gen_dir}/innerkit_remove_check_so"
-      sdk_type = "so"
-    }
-    _deps += [ ":${part_name}_innerkit_remove_check_so" ]
-  }
-
-  # gen sdk install modules
-  sdk_install_moudles_file =
-      "${target_gen_dir}/${subsystem_name}_sdk_install_modules.json"
-  generated_file("${subsystem_name}_sdk_info") {
-    outputs = [ sdk_install_moudles_file ]
-    data_keys = [ "install_modules" ]
-    output_conversion = "json"
-    deps = _libs_deps
-  }
-
-  sdk_out_dir = "${root_build_dir}/${innersdk_build_out_dir}/"
-  sdk_build_file = "${sdk_out_dir}/${subsystem_name}/BUILD.gn"
-  sdk_info_file = "${sdk_out_dir}/${subsystem_name}/sdk_info.json"
-
-  action_with_pydeps(target_name) {
-    deps = _deps
-    deps += [ ":${subsystem_name}_sdk_info" ]
-    script = "//build/scripts/gen_sdk_build_file.py"
-    sources = [ subsystem_sdk_desc_file ]
-    outputs = [
-      sdk_build_file,
-      sdk_info_file,
-    ]
-    args = [
-      "--input-file",
-      rebase_path(subsystem_sdk_desc_file, root_build_dir),
-      "--sdk-out-dir",
-      rebase_path("${sdk_out_dir}/${subsystem_name}", root_build_dir),
-      "--output-build-file",
-      rebase_path(sdk_build_file, root_build_dir),
-      "--sdk-info-file",
-      rebase_path(sdk_info_file, root_build_dir),
-    ]
+    subsystem_sdk_desc_file =
+        "${target_out_dir}/${subsystem_name}_sdk_desc.json"
+    write_file(subsystem_sdk_desc_file, sdk_manifest, "json")
 
     if (check_innersdk_interface && !gen_innersdk_interface_signature) {
-      innersdk_interface_checkfile_dir = "//interface/innersdk/native"
-      args += [
-        "--signature-file-check-dir",
-        rebase_path(innersdk_interface_checkfile_dir, root_build_dir),
+      kits_check_remove("${part_name}_innerkit_remove_check_so") {
+        subsystem_name = part_name
+        if (invoker.variant != "phone") {
+          subsystem_name = invoker.origin_name
+        }
+        sign_file_root_dir = "//interface/innersdk/native"
+        sdk_libs_name = []
+        foreach(_sdk_lib, sdk_manifest) {
+          if (_sdk_lib.type == "so") {
+            sdk_libs_name += [ _sdk_lib.name ]
+          }
+        }
+        output_file = "${target_gen_dir}/innerkit_remove_check_so"
+        sdk_type = "so"
+      }
+      _deps += [ ":${part_name}_innerkit_remove_check_so" ]
+    }
+
+    # gen sdk install modules
+    sdk_install_moudles_file =
+        "${target_gen_dir}/${subsystem_name}_sdk_install_modules.json"
+    generated_file("${subsystem_name}_sdk_info") {
+      outputs = [ sdk_install_moudles_file ]
+      data_keys = [ "install_modules" ]
+      output_conversion = "json"
+      deps = _libs_deps
+    }
+
+    sdk_out_dir = "${root_build_dir}/${innersdk_build_out_dir}/"
+    sdk_build_file = "${sdk_out_dir}/${subsystem_name}/BUILD.gn"
+    sdk_info_file = "${sdk_out_dir}/${subsystem_name}/sdk_info.json"
+
+    action_with_pydeps(target_name) {
+      deps = _deps
+      deps += [ ":${subsystem_name}_sdk_info" ]
+      script = "//build/scripts/gen_sdk_build_file.py"
+      sources = [ subsystem_sdk_desc_file ]
+      outputs = [
+        sdk_build_file,
+        sdk_info_file,
       ]
-    } else if (gen_innersdk_interface_signature) {
-      args += [
-        "--generate-sig",
-        "--signature-file-gen-dir",
-        rebase_path(
-            "${root_build_dir}/innersdk_interface/native/${subsystem_name}",
-            root_build_dir),
+      args = [
+        "--input-file",
+        rebase_path(subsystem_sdk_desc_file, root_build_dir),
+        "--sdk-out-dir",
+        rebase_path("${sdk_out_dir}/${subsystem_name}", root_build_dir),
+        "--output-build-file",
+        rebase_path(sdk_build_file, root_build_dir),
+        "--sdk-info-file",
+        rebase_path(sdk_info_file, root_build_dir),
       ]
+
+      if (check_innersdk_interface && !gen_innersdk_interface_signature) {
+        innersdk_interface_checkfile_dir = "//interface/innersdk/native"
+        args += [
+          "--signature-file-check-dir",
+          rebase_path(innersdk_interface_checkfile_dir, root_build_dir),
+        ]
+      } else if (gen_innersdk_interface_signature) {
+        args += [
+          "--generate-sig",
+          "--signature-file-gen-dir",
+          rebase_path(
+              "${root_build_dir}/innersdk_interface/native/${subsystem_name}",
+              root_build_dir),
+        ]
+      }
+    }
+  } else {
+    group(target_name) {
+      not_needed(invoker, "*")
+      not_needed([
+                   "subsystem_name",
+                   "sdk_manifest",
+                 ])
     }
   }
 }

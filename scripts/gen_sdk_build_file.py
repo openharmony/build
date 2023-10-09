@@ -84,7 +84,6 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
             format(input_file))
 
     build_file_content = 'import("//build/ohos.gni")\n'
-    build_file_content += 'import("//build/config/ohos/rules.gni")\n'
     sdk_info = {}
     # interface check
     interface_mgr = InterfaceMgr()
