@@ -234,8 +234,12 @@ is_system_component =
 
 parts_src_flag_file = "$root_build_dir/build_configs/parts_src_flag.json"
 
-innersdk_dir_name = "sdk/${target_type}"
-innersdk_base_dir = "//${innersdk_dir_name}"
+declare_args() {
+  innersdk_dir_name = "sdk/${target_type}"
+}
+declare_args() {
+  innersdk_base_dir = "//${innersdk_dir_name}"
+}
 
 # Compile and generate output directory
 innersdk_build_out_dir = "innerkits/${target_type}"
