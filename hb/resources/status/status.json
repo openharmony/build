@@ -79,6 +79,18 @@
         "code": "0019",
         "solution": "Please run command 'hb set' to init OHOS development environment"
     },
+    "0020": {
+        "code": "0020",
+        "solution": "Patch configuration file is missing. Please ensure the file exists at the specified path in 'patch.yml'."
+    },
+    "0021": {
+        "code": "0021",
+        "solution": "Source path for the patch is invalid or does not exist. Please verify the source path specified in the patch configuration."
+    },
+    "0022": {
+        "code": "0022",
+        "solution": "Patch file specified does not exist. Please verify the patch paths specified in the patch configuration are correct and the patch files exist."
+    },
     "1000": {
         "code": "1000",
         "solution": "Unknown solution method for preload phase"
