@@ -120,7 +120,7 @@ def mk_images(args):
         print("mk_images need 4 args!!!")
         sys.exit(1)
     root_path = find_top()
-    config_json = os.path.join(root_path, "ohos_config.json")
+    config_json = os.path.join(root_path, "out/ohos_config.json")
     config = {}
     with open(config_json, 'rb') as f:
         config = json.load(f)
