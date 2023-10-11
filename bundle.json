@@ -2,7 +2,7 @@
     "name": "@ohos/build_framework",
     "description": "Compilation and building framework and scripts",
     "homePage":"https://gitee.com/openharmony",
-    "version": "4.0.2",
+    "version": "1.1",
     "license": "Apache License 2.0",
     "repository":"https://gitee.com/openharmony/build",
     "supplier": "Organization: OpenHarmony",
