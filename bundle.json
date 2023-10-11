@@ -1,0 +1,44 @@
+{
+    "name": "@ohos/build_framework",
+    "description": "Compilation and building framework and scripts",
+    "homePage":"https://gitee.com/openharmony",
+    "version": "4.0.2",
+    "license": "Apache License 2.0",
+    "repository":"https://gitee.com/openharmony/build",
+    "supplier": "Organization: OpenHarmony",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "build"
+    },
+    "dirs": {},
+    "scripts": {
+    	"install": "cd ${DEP_BUNDLE_BASE} && ln -snf build/build_scripts/build.py build.py && ln -snf build/build_scripts/build.sh build.sh && ln -snf build/core/gn/dotfile.gn .gn"
+    },
+    "readmePath": {
+        "zh": "README_zh.md"
+    },
+    "component": {
+        "name": "build_framework",
+        "subsystem": "build",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": ["mini", "small", "standard"],
+        "rom": "0KB",
+        "ram": "0KB",
+        "deps": {
+            "components": [],
+            "third_party": [
+                "musl",
+                "markupsafe",
+                "jinja2",
+                "e2fsprogs",
+                "f2fs-tools"
+            ]
+        },
+        "build": {
+            "sub_component": [],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
