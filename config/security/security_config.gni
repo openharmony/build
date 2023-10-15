@@ -16,6 +16,7 @@ declare_args() {
   # Enable the config that variables are automatically initialized by default.
   enable_auto_var_init = false
   support_stack_protector_ret = false
+  support_branch_protector_pac_ret = false
 }
 
 using_security_flag = enable_auto_var_init
@@ -35,6 +36,11 @@ if (target_cpu == "arm64" && res == 1 && is_ohos && is_standard_system &&
   support_stack_protector_ret = true
 } else {
   support_stack_protector_ret = false
+}
+
+# pac_ret is supported in armv8.
+if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw) {
+  support_branch_protector_pac_ret = true
 }
 
 assert(
