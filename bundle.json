@@ -30,14 +30,14 @@
     "rom": "0KB",
     "ram": "0KB",
     "deps": {
-    "components": [],
-    "third_party": [
-      "musl",
-      "markupsafe",
-      "jinja2",
-      "e2fsprogs",
-      "f2fs-tools"
-	]
+      "components": [],
+        "third_party": [
+        "musl",
+        "markupsafe",
+        "jinja2",
+        "e2fsprogs",
+        "f2fs-tools"
+      ]
     },
     "build": {
       "sub_component": [
