@@ -11,11 +11,11 @@
       "destPath": "build"
   },
  "readmePath":{
- 	"zh": "README_zh.md"
+      "zh": "README_zh.md"
  },
  "dirs": {},
  "scripts": {
- 	"install": "cd ${DEP_BUNDLE_BASE} && ln -snf build/build_scripts/build.py build.py && ln -snf build/build_scripts/build.sh build.sh && ln -snf build/core/gn/dotfile.gn .gn"
+      "install": "cd ${DEP_BUNDLE_BASE} && ln -snf build/build_scripts/build.py build.py && ln -snf build/build_scripts/build.sh build.sh && ln -snf build/core/gn/dotfile.gn .gn"
  },
   "component": {
     "name": "build_framework",
