@@ -188,6 +188,8 @@ ohos_exec_script_config = {
     "//third_party/skia/third_party/externals/swiftshader/third_party/SPIRV-Tools/build_overrides/build.gni",
     "//third_party/spirv-tools/build_overrides/build.gni",
     "//third_party/toybox/BUILD.gn",
+    "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/BUILD.gn",
+    "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/wpa_vendor_ext.gni",
     "//build_plugins/config/aosp/config.gni",
     "//build_plugins/sdk/BUILD.gn",
     "//build_plugins/toolchain/ios/BUILD.gn",
