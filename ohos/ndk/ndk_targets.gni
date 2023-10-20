@@ -15,103 +15,104 @@ import("//build/ohos_var.gni")
 
 # ndk library, ndk header configuration
 _ndk_library_targets = [
-  "//third_party/zlib:libz_ndk",
-  "//third_party/zlib:zlib_header",
-  "//base/global/resource_management/interfaces/native/resource:librawfile_ndk",
-  "//base/global/resource_management/interfaces/native/resource:rawfile_header",
-  "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_header",
-  "//base/hiviewdfx/hiappevent/interfaces/native/kits:libhiappevent_ndk",
-  "//base/hiviewdfx/hilog/interfaces/native/kits:hilog_header",
-  "//base/hiviewdfx/hilog/interfaces/native/kits:libhilog_ndk",
-  "//base/hiviewdfx/hitrace/interfaces/native/kits:hitrace_header",
-  "//base/hiviewdfx/hitrace/interfaces/native/kits:libhitrace_ndk",
-  "//base/security/huks/interfaces/kits/c:libhuks_ndk",
-  "//base/security/huks/interfaces/kits/c:huks_header",
-  "//base/startup/init/interfaces/kits/syscap:libdeviceinfo_ndk",
-  "//base/startup/init/interfaces/kits/syscap:deviceinfo_header",
-  "//third_party/mindspore/interfaces/kits/c:mindspore_header",
-  "//third_party/mindspore/interfaces/kits/c:mindspore_lib",
-  "//foundation/arkui/ace_engine/interfaces/native:ace_header",
-  "//foundation/arkui/ace_engine/interfaces/native:libace_ndk",
-  "//foundation/arkui/napi:libnapi_ndk",
-  "//foundation/arkui/napi:napi_header",
-  "//foundation/bundlemanager/bundle_framework/interfaces/kits/native/bundle:bundle_header",
-  "//foundation/bundlemanager/bundle_framework/interfaces/kits/native/bundle:libbundle_ndk",
-  "//third_party/node:node_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/EGL:libEGL_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/EGL:EGL_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES2:libGLESv2_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES2:GLES2_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES3:libGLESv3_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/GLES3:GLES3_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/KHR:KHR_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_window:libnative_window_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_window:native_window_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_buffer:libnative_buffer_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_buffer:native_buffer_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_image:libnative_image_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_image:native_image_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_vsync:libnative_vsync_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_vsync:native_vsync_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_drawing:libnative_drawing_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/native_drawing:native_drawing_header",
-  "//third_party/libuv:libuv_ndk",
-  "//third_party/libuv:libuv_header",
-  "//third_party/libuv:libuv_uv_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_decoder:libnative_media_adec",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_decoder:native_media_adec_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_encoder:libnative_media_aenc",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/audio_encoder:native_media_aenc_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/core:libnative_media_core",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/core:native_media_core_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/video_decoder:libnative_media_vdec",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/video_decoder:native_media_vdec_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/video_encoder:libnative_media_venc",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/video_encoder:native_media_venc_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/codec_base:libnative_media_codecbase",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/codec_base:native_media_codecbase_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avmuxer:libnative_media_avmuxer",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avmuxer:native_media_avmuxer_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avdemuxer:libnative_media_avdemuxer",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avdemuxer:native_media_avdemuxer_header",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:libnative_media_avsource",
-  "//foundation/multimedia/av_codec/interfaces/kits/c/avsource:native_media_avsource_header",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/avscreen_capture:libnative_avscreen_capture",
-  "//foundation/multimedia/player_framework/interfaces/kits/c/avscreen_capture:native_avscreen_capture_header",
-  "//foundation/multimedia/audio_framework/interfaces/kits/c:libohaudio_ndk",
-  "//foundation/multimedia/audio_framework/interfaces/kits/c:ohaudio_header",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:libpixelmap_ndk",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:image_header",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_ndk",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:image_ndk_header",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_receiver_ndk",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:image_receiver_ndk_header",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:libimage_source_ndk",
-  "//foundation/multimedia/image_framework/interfaces/kits/native:image_source_ndk_header",
-  "//third_party/openSLES:sles_header",
-  "//third_party/openSLES:libOpenSLES_ndk",
-  "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_ndk",
-  "//foundation/ai/neural_network_runtime/interfaces/kits/c:libneural_network_runtime_header",
-  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:libpurgeable_memory_ndk",
-  "//commonlibrary/memory_utils/libpurgeablemem/interfaces/kits/c:purgeable_memory_header",
-  "//foundation/distributeddatamgr/relational_store/interfaces/ndk:native_rdb_ndk_header",
-  "//foundation/distributeddatamgr/relational_store/interfaces/ndk:libnative_rdb_ndk",
-  "//drivers/external_device_manager/interfaces/ddk/usb:libusb_ndk",
-  "//drivers/external_device_manager/interfaces/ddk/usb:usb_header",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:libvulkan_ndk",
-  "//foundation/graphic/graphic_2d/interfaces/kits/ndk/vulkan:vulkan_header",
-  "//foundation/resourceschedule/ffrt/interfaces/kits:libffrt_ndk",
-  "//foundation/resourceschedule/ffrt/interfaces/kits:ffrt_header",
+  "//interface/sdk_c/third_party/zlib:libz_ndk",
+  "//interface/sdk_c/third_party/zlib:zlib_header",
+  "//interface/sdk_c/global/resource_management:librawfile_ndk",
+  "//interface/sdk_c/global/resource_management:rawfile_header",
+  "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_header",
+  "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_ndk",
+  "//interface/sdk_c/hiviewdfx/hilog:hilog_header",
+  "//interface/sdk_c/hiviewdfx/hilog:libhilog_ndk",
+  "//interface/sdk_c/hiviewdfx/hitrace:hitrace_header",
+  "//interface/sdk_c/hiviewdfx/hitrace:libhitrace_ndk",
+  "//interface/sdk_c/security/huks:libhuks_ndk",
+  "//interface/sdk_c/security/huks:huks_header",
+  "//interface/sdk_c/startup/init/syscap:libdeviceinfo_ndk",
+  "//interface/sdk_c/startup/init/syscap:deviceinfo_header",
+  "//interface/sdk_c/third_party/mindspore/kits:mindspore_header",
+  "//interface/sdk_c/third_party/mindspore/kits:mindspore_lib",
+  "//interface/sdk_c/arkui/ace_engine/native:ace_header",
+  "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
+  "//interface/sdk_c/arkui/napi:libnapi_ndk",
+  "//interface/sdk_c/arkui/napi:napi_header",
+  "//interface/sdk_c/bundlemanager/bundle_framework/bundle:bundle_header",
+  "//interface/sdk_c/bundlemanager/bundle_framework/bundle:libbundle_ndk",
+  "//interface/sdk_c/third_party/node:node_header",
+  "//interface/sdk_c/graphic/graphic_2d/EGL:libEGL_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/EGL:EGL_header",
+  "//interface/sdk_c/graphic/graphic_2d/GLES2:libGLESv2_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/GLES2:GLES2_header",
+  "//interface/sdk_c/graphic/graphic_2d/GLES3:libGLESv3_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/GLES3:GLES3_header",
+  "//interface/sdk_c/graphic/graphic_2d/KHR:KHR_header",
+  "//interface/sdk_c/graphic/graphic_2d/native_window:libnative_window_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/native_window:native_window_header",
+  "//interface/sdk_c/graphic/graphic_2d/native_buffer:libnative_buffer_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/native_buffer:native_buffer_header",
+  "//interface/sdk_c/graphic/graphic_2d/native_image:libnative_image_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/native_image:native_image_header",
+  "//interface/sdk_c/graphic/graphic_2d/native_vsync:libnative_vsync_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/native_vsync:native_vsync_header",
+  "//interface/sdk_c/graphic/graphic_2d/native_drawing:libnative_drawing_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/native_drawing:native_drawing_header",
+  "//interface/sdk_c/third_party/libuv:libuv_ndk",
+  "//interface/sdk_c/third_party/libuv:libuv_header",
+  "//interface/sdk_c/third_party/libuv:libuv_uv_header",
+  "//interface/sdk_c/multimedia/av_codec/audio_decoder:libnative_media_adec",
+  "//interface/sdk_c/multimedia/av_codec/audio_decoder:native_media_adec_header",
+  "//interface/sdk_c/multimedia/av_codec/audio_encoder:libnative_media_aenc",
+  "//interface/sdk_c/multimedia/av_codec/audio_encoder:native_media_aenc_header",
+  "//interface/sdk_c/multimedia/av_codec/core:libnative_media_core",
+  "//interface/sdk_c/multimedia/av_codec/core:native_media_core_header",
+  "//interface/sdk_c/multimedia/av_codec/video_decoder:libnative_media_vdec",
+  "//interface/sdk_c/multimedia/av_codec/video_decoder:native_media_vdec_header",
+  "//interface/sdk_c/multimedia/av_codec/video_encoder:libnative_media_venc",
+  "//interface/sdk_c/multimedia/av_codec/video_encoder:native_media_venc_header",
+  "//interface/sdk_c/multimedia/av_codec/codec_base:libnative_media_codecbase",
+  "//interface/sdk_c/multimedia/av_codec/codec_base:native_media_codecbase_header",
+  "//interface/sdk_c/multimedia/av_codec/avmuxer:libnative_media_avmuxer",
+  "//interface/sdk_c/multimedia/av_codec/avmuxer:native_media_avmuxer_header",
+  "//interface/sdk_c/multimedia/av_codec/avdemuxer:libnative_media_avdemuxer",
+  "//interface/sdk_c/multimedia/av_codec/avdemuxer:native_media_avdemuxer_header",
+  "//interface/sdk_c/multimedia/av_codec/avsource:libnative_media_avsource",
+  "//interface/sdk_c/multimedia/av_codec/avsource:native_media_avsource_header",
+  "//interface/sdk_c/multimedia/player_framework/avscreen_capture:libnative_avscreen_capture",
+  "//interface/sdk_c/multimedia/player_framework/avscreen_capture:native_avscreen_capture_header",
+  "//interface/sdk_c/multimedia/audio_framework:libohaudio_ndk",
+  "//interface/sdk_c/multimedia/audio_framework:ohaudio_header",
+  "//interface/sdk_c/multimedia/image_framework:libpixelmap_ndk",
+  "//interface/sdk_c/multimedia/image_framework:image_header",
+  "//interface/sdk_c/multimedia/image_framework:libimage_ndk",
+  "//interface/sdk_c/multimedia/image_framework:image_ndk_header",
+  "//interface/sdk_c/multimedia/image_framework:libimage_receiver_ndk",
+  "//interface/sdk_c/multimedia/image_framework:image_receiver_ndk_header",
+  "//interface/sdk_c/multimedia/image_framework:libimage_source_ndk",
+  "//interface/sdk_c/multimedia/image_framework:image_source_ndk_header",
+  "//interface/sdk_c/third_party/openSLES:sles_header",
+  "//interface/sdk_c/third_party/openSLES:libOpenSLES_ndk",
+  "//interface/sdk_c/ai/neural_network_runtime:libneural_network_runtime_ndk",
+  "//interface/sdk_c/ai/neural_network_runtime:libneural_network_runtime_header",
+  "//interface/sdk_c/commonlibrary/memory_utils/libpurgeablemem:libpurgeable_memory_ndk",
+  "//interface/sdk_c/commonlibrary/memory_utils/libpurgeablemem:purgeable_memory_header",
+  "//interface/sdk_c/distributeddatamgr/relational_store:native_rdb_ndk_header",
+  "//interface/sdk_c/distributeddatamgr/relational_store:libnative_rdb_ndk",
+  "//interface/sdk_c/drivers/external_device_manager/usb:libusb_ndk",
+  "//interface/sdk_c/drivers/external_device_manager/usb:usb_header",
+  "//interface/sdk_c/graphic/graphic_2d/vulkan:libvulkan_ndk",
+  "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header",
+  "//interface/sdk_c/resourceschedule/ffrt:libffrt_ndk",
+  "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
 ]
 
 _ndk_base_libs = [
-  "//third_party/musl/ndk_script/adapter:libc_ndk",
-  "//third_party/musl/ndk_script:musl_ndk_libs_arm32",
-  "//third_party/musl/ndk_script:musl_ndk_libs_aarch64",
-  "//third_party/musl/ndk_script:musl_ndk_libs_x86_64",
-  "//third_party/musl/ndk_script:ndk_toolchain",
+  "//interface/sdk_c/third_party/musl/ndk_script/adapter:libc_ndk",
+  "//interface/sdk_c/third_party/musl/ndk_script:musl_ndk_libs_arm32",
+  "//interface/sdk_c/third_party/musl/ndk_script:musl_ndk_libs_aarch64",
+  "//interface/sdk_c/third_party/musl/ndk_script:musl_ndk_libs_x86_64",
+  "//interface/sdk_c/third_party/musl/ndk_script:ndk_toolchain",
 ]
-_ndk_sysroot_uapi = [ "//third_party/musl/ndk_script:musl_sysroot" ]
+_ndk_sysroot_uapi =
+    [ "//interface/sdk_c/third_party/musl/ndk_script:musl_sysroot" ]
 
 _ndk_cmake = [
   "//prebuilts/cmake/darwin-x86:darwin_cmake_copy",
@@ -134,26 +135,32 @@ _parse_args += _ndk_targets_list
 all_ndk_targets_list = exec_script(_parse_script, _parse_args, "list lines")
 
 if (ndk_platform == "win") {
-  all_ndk_targets_list += [ "//third_party/musl/ndk_script:windows_x86_64" ]
+  all_ndk_targets_list +=
+      [ "//interface/sdk_c/third_party/musl/ndk_script:windows_x86_64" ]
 } else if (ndk_platform == "mac") {
   if (host_cpu == "arm64") {
-    all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]
+    all_ndk_targets_list +=
+        [ "//interface/sdk_c/third_party/musl/ndk_script:darwin_arm64" ]
   } else {
-    all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+    all_ndk_targets_list +=
+        [ "//interface/sdk_c/third_party/musl/ndk_script:darwin_x86_64" ]
   }
 } else if (ndk_platform == "linux") {
-  all_ndk_targets_list += [ "//third_party/musl/ndk_script:linux_x86_64" ]
+  all_ndk_targets_list +=
+      [ "//interface/sdk_c/third_party/musl/ndk_script:linux_x86_64" ]
 } else if (ndk_platform == "default") {
   if (host_os == "mac") {
     if (host_cpu == "arm64") {
-      all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_arm64" ]
+      all_ndk_targets_list +=
+          [ "//interface/sdk_c/third_party/musl/ndk_script:darwin_arm64" ]
     } else {
-      all_ndk_targets_list += [ "//third_party/musl/ndk_script:darwin_x86_64" ]
+      all_ndk_targets_list +=
+          [ "//interface/sdk_c/third_party/musl/ndk_script:darwin_x86_64" ]
     }
   } else {
     all_ndk_targets_list += [
-      "//third_party/musl/ndk_script:windows_x86_64",
-      "//third_party/musl/ndk_script:linux_x86_64",
+      "//interface/sdk_c/third_party/musl/ndk_script:windows_x86_64",
+      "//interface/sdk_c/third_party/musl/ndk_script:linux_x86_64",
     ]
   }
 }
