@@ -94,6 +94,7 @@ _ndk_library_targets = [
   "//interface/sdk_c/ai/neural_network_runtime:libneural_network_runtime_header",
   "//interface/sdk_c/commonlibrary/memory_utils/libpurgeablemem:libpurgeable_memory_ndk",
   "//interface/sdk_c/commonlibrary/memory_utils/libpurgeablemem:purgeable_memory_header",
+  "//interface/sdk_c/distributeddatamgr/relational_store:data_ndk_header",
   "//interface/sdk_c/distributeddatamgr/relational_store:native_rdb_ndk_header",
   "//interface/sdk_c/distributeddatamgr/relational_store:libnative_rdb_ndk",
   "//interface/sdk_c/drivers/external_device_manager/usb:libusb_ndk",
