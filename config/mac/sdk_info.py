@@ -99,5 +99,8 @@ if __name__ == '__main__':
     value = settings[key]
     if isinstance(value, bytes):
       value = value.decode()
-    value = '"%s"' % value
-    print('%s=%s' % (key, value))
+    if key != 'xcode_version_int':
+        value = '"%s"' % value
+        print('%s=%s' % (key, value))
+    else:
+        print('%s=%d' % (key, value))
