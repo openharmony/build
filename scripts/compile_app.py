@@ -181,7 +181,10 @@ def hvigor_build(cwd, options):
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
     print("[0/0] Hvigor clean start")
-    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'], cwd=cwd)
+    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
+                   cwd=cwd,
+                   stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL)
     print("[0/0] Hvigor build start")
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
