@@ -708,6 +708,7 @@ template("ohos_shared_library") {
                              "output_dir",
                              "install_enable",
                              "version_script",
+                             "exported_symbols_list",
                              "license_file",
                              "license_as_sources",
                              "use_exceptions",
@@ -773,6 +774,16 @@ template("ohos_shared_library") {
       _version_script = rebase_path(invoker.version_script, root_build_dir)
       inputs += [ invoker.version_script ]
       ldflags += [ "-Wl,--version-script=${_version_script}" ]
+    }
+
+    if (target_os == "ios" && defined(invoker.exported_symbols_list)) {
+      _exported_symbols_list =
+          rebase_path(invoker.exported_symbols_list, root_build_dir)
+      inputs += [ invoker.exported_symbols_list ]
+      ldflags += [
+        "-exported_symbols_list",
+        "${_exported_symbols_list}",
+      ]
     }
 
     if (!defined(ldflags)) {
