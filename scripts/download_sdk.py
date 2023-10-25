@@ -165,6 +165,7 @@ def main():
                 save_path2 = default_save_path
 
             try:
+                download_url = 'http://download.ci.openharmony.cn/version/Release_Version/OpenHarmony_4.0.10.12/20231024_113005/version-Release_Version-OpenHarmony_4.0.10.12-20231024_113005-ohos-sdk-full_4.0-release.tar.gz'
                 download(download_url, savepath=save_path2)
                 print(download_url, "done")
             except BaseException:
