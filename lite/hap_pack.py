@@ -30,7 +30,7 @@ def cmd_popen(cmd):
     proc.wait()
     ret_code = proc.returncode
     if ret_code != 0:
-        print("hap warning: {} failed, return code is {}".format(
+        raise Exception("hap warning: {} failed, return code is {}".format(
             cmd, ret_code))
 
 
