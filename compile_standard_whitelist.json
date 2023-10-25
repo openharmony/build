@@ -45,6 +45,7 @@
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump",
         "//arkcompiler/runtime_core/static_core/runtime:libarkruntime_set_static",
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_frontend_static",
+        "//arkcompiler/ets_frontend/ets2panda:libes2panda_public_frontend_static",
         "//arkcompiler/ets_frontend/ets2panda/aot:es2panda",
         "//arkcompiler/ets_runtime:libark_js_intl_set",
         "//arkcompiler/ets_runtime:libark_jsruntime",
