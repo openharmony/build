@@ -57,6 +57,9 @@ ohos_prebuilt_shared_library("musl-libc.so") {
   ]
   subsystem_name = "build"
   part_name = "build_framework"
+  innerapi_tags = [
+    "chipsetsdk"
+  ]
 }
 
 ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
@@ -94,4 +97,7 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
   ]
   subsystem_name = "build"
   part_name = "build_framework"
+  innerapi_tags = [
+    "chipsetsdk"
+  ]
 }
