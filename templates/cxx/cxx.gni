@@ -673,10 +673,6 @@ template("ohos_shared_library") {
         module_install_dir = invoker.module_install_dir
       }
 
-      if (defined(invoker.relative_install_dir)) {
-        relative_install_dir = invoker.relative_install_dir
-      }
-
       if (defined(invoker.symlink_target_name)) {
         symlink_target_name = invoker.symlink_target_name
       }
@@ -689,6 +685,10 @@ template("ohos_shared_library") {
       # update relative_install_dir if auto_relative_install_dir defined
       if (defined(auto_relative_install_dir)) {
         relative_install_dir = auto_relative_install_dir
+      }
+
+      if (defined(invoker.relative_install_dir)) {
+        relative_install_dir = invoker.relative_install_dir
       }
 
       # Passing shlib_type and innerapi_tags to generate_module_info
