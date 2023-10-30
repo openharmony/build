@@ -203,7 +203,6 @@
         "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/rdb:rdb",
         "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb:native_rdb",
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/cameraoperator/client/test/sample:dcamera_client_demo",
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/animation/window_animation_manager:windowanimationmanager_napi",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture_video",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_video",
