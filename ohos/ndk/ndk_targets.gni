@@ -78,6 +78,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/multimedia/av_codec/avsource:native_media_avsource_header",
   "//interface/sdk_c/multimedia/player_framework/avscreen_capture:libnative_avscreen_capture",
   "//interface/sdk_c/multimedia/player_framework/avscreen_capture:native_avscreen_capture_header",
+  "//interface/sdk_c/multimedia/player_framework/avplayer:libavplayer",
+  "//interface/sdk_c/multimedia/player_framework/avplayer:avplayer_header",
   "//interface/sdk_c/multimedia/audio_framework:libohaudio_ndk",
   "//interface/sdk_c/multimedia/audio_framework:ohaudio_header",
   "//interface/sdk_c/multimedia/image_framework:libpixelmap_ndk",
