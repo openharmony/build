@@ -589,7 +589,6 @@
         "//third_party/flutter/build/skia:ace_fontmgr_windows",
         "//third_party/flutter/build/skia:ace_xml",
         "//third_party/flutter/build/skia:skia_shared",
-        "//third_party/freetype:freetype_static",
         "//third_party/glslang/OGLCompilersDLL:libdeqp_OGLCompiler",
         "//third_party/glslang/SPIRV:SPIRV_source",
         "//third_party/glslang/SPIRV:libdeqp_spirv",
