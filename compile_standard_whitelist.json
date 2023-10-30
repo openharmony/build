@@ -602,6 +602,7 @@
         "//third_party/glslang/hlsl:libdeqp_hlsl",
         "//third_party/libcoap:libcoap",
         "//third_party/libusb:libusb",
+        "//third_party/libunwind:libunwind",
         "//third_party/spirv-tools/source/link:libdeqp_spirvtools-link",
         "//third_party/spirv-tools/source/lint:libdeqp_spirvtools-lint",
         "//third_party/spirv-tools/source/opt:libdeqp_spirvtools-opt",
