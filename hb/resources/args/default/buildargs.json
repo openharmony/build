@@ -306,6 +306,22 @@
     "resolve_function": "resolve_fast_rebuild",
     "testFunction": "testFastRebuild"
   },
+  "runtime_mode": {
+    "arg_name": "--runtime-mode",
+    "argDefault": "release",
+    "arg_help": "Default:release. Help:runtime mode",
+    "arg_phase": "targetGenerate",
+    "arg_type": "str",
+    "arg_attribute": {
+        "optional": [
+          "release",
+          "debug",
+          "profile"
+        ]
+      },
+    "resolve_function": "resolve_runtime_mode",
+    "testFunction": "testResolveRuntimeMode"
+  },
   "keep_ninja_going": {
     "arg_name": "--keep-ninja-going",
     "argDefault": false,
