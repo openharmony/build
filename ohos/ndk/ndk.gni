@@ -22,6 +22,7 @@ declare_args() {
   version_script_suffix = ".map.txt"
   ndk_signature_save_dir = "//interface/sdk-native"
   ndk_zip_prefix = "native"
+  enable_ndk_doxygen = true
 }
 
 ndk_os_irrelevant_out_dir = "$root_out_dir/${sdk_native}/os-irrelevant"
