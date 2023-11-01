@@ -21,6 +21,19 @@ ohos_sdk_description_file = "//build/ohos/sdk/ohos_sdk_description_std.json"
 if (defined(ext_sdk_config_file) && ext_sdk_config_file != "") {
   ohos_sdk_description_file = ext_sdk_config_file
 }
+if (sdk_for_hap_build) {
+  hap_build_sdk_config_parser =
+      "//build/ohos/sdk/generate_hap_build_sdk_config.py"
+  hap_build_sdk_description_file = "//out/sdk/ohos_sdk_description_hap.json"
+  hap_build_sdk_args = [
+    "--sdk-description-file",
+    rebase_path(ohos_sdk_description_file, root_build_dir),
+    "--output-hap-build-sdk-desc-file",
+    rebase_path(hap_build_sdk_description_file, root_build_dir),
+  ]
+  exec_script(hap_build_sdk_config_parser, hap_build_sdk_args)
+  ohos_sdk_description_file = hap_build_sdk_description_file
+}
 
 if (sdk_build_public) {
   public_sdk_config_parser = "//build/ohos/sdk/parse_public_sdk.py"
@@ -237,7 +250,7 @@ group("ohos_sdk") {
 group("ohos_sdk_verify") {
   deps = []
 
-  if (sdk_check_flag == true) {
+  if (sdk_check_flag) {
     deps += [ ":check_sdk_completeness" ]
   }
 }
