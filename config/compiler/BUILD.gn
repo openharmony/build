@@ -24,7 +24,9 @@ if (is_ohos) {
 if (is_mac) {
   import("//build/config/mac/symbols.gni")
 }
-
+if (is_mac || is_ios) {
+  import("//build/config/mac/mac_sdk.gni")
+}
 declare_args() {
   # Default to warnings as errors for default workflow, where we catch
   # warnings with known toolchains. Allow overriding this e.g. for Chromium
@@ -928,26 +930,6 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
-    if (build_cross_platform_version) {
-      cflags += [
-        "-Wno-error=implicit-int-float-conversion",
-        "-Wno-error=implicit-fallthrough",
-        "-Wno-error=sign-compare",
-        "-Wno-error=c99-designator",
-        "-Wno-error=anon-enum-enum-conversion",
-        "-Wno-error=sizeof-array-div",
-        "-Wno-error=deprecated-copy",
-        "-Wno-error=return-stack-address",
-        "-Wno-error=reserved-identifier",
-        "-Wno-error=suggest-destructor-override",
-        "-Wno-error=suggest-override",
-        "-Wno-error=unused-but-set-variable",
-        "-Wno-error=unused-but-set-parameter",
-        "-Wno-error=option-ignored",
-        "-mno-outline-atomics",
-        "-Wno-deprecated-declarations",
-      ]
-    }
     if (use_musl) {
       cflags += [
         "-Wno-error=c99-designator",
@@ -1069,6 +1051,9 @@ config("chromium_code") {
   }
 
   configs = [ ":default_warnings" ]
+  if (is_arkui_x) {
+    configs += [ "//build_plugins/config:arkui_x_warning" ]
+  }
 }
 
 config("no_chromium_code") {
