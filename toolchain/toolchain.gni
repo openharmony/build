@@ -21,6 +21,11 @@ declare_args() {
   # with the version of clang shipped with Xcode).
   use_xcode_clang = false
 
+  # Compile with Android SDK version of clang instead of hermetic version shipped
+  # with the build. Used on Android to ship official builds (as they are built
+  # with the version of clang shipped with Android SDK).
+  use_android_clang = false
+
   # Used for binary size analysis.
   # Currently disabled on LLD because of a bug (fixed upstream).
   # See https://crbug.com/716209.
