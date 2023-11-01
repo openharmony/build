@@ -115,6 +115,10 @@
     "path": "foundation/multimedia",
     "name": "multimedia"
   },
+  "castplus": {
+    "path": "foundation/CastEngine",
+    "name": "castplus"
+  },
   "multimodalinput": {
     "path": "foundation/multimodalinput",
     "name": "multimodalinput"
