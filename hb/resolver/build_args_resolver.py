@@ -835,6 +835,11 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     # PlaceHolder
     @staticmethod
+    def resolve_build_only_load(target_arg: Arg, build_module: BuildModuleInterface):
+        return
+
+    # PlaceHolder
+    @staticmethod
     def resolve_build_only_gn(target_arg: Arg, build_module: BuildModuleInterface):
         return
 

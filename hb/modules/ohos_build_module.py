@@ -88,7 +88,7 @@ class OHOSBuildModule(BuildModuleInterface):
 
     def _target_generate(self):
         self._run_phase(BuildPhase.TARGET_GENERATE)
-        if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get("fast_rebuild").arg_value:
+        if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("fast_rebuild").arg_value:
             self.target_generator.run()
 
     def _post_target_generate(self):
@@ -99,7 +99,7 @@ class OHOSBuildModule(BuildModuleInterface):
 
     def _target_compilation(self):
         self._run_phase(BuildPhase.TARGET_COMPILATION)
-        if self.args_dict.get('build_only_gn', None) and not self.args_dict.get("build_only_gn").arg_value:
+        if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("build_only_gn").arg_value:
             self.target_compiler.run()
 
     def _post_target_compilation(self):
