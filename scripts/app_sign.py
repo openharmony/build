@@ -82,7 +82,10 @@ def main(args):
             signed_hap_path = unsigned_hap_path.replace('unsigned', 'signed')
             output_hap_name = f'{options.hap_name}-{os.path.basename(signed_hap_path)}'
             if len(unsigned_hap_path_list.get('unsigned_hap_path_list')) == 1 and options.hap_name:
-                output_hap_name = f'{options.hap_name}.hap'
+                if unsigned_hap_path_list.get('unsigned_hap_path_list')[0].endswith('.hsp'):
+                    output_hap_name = f'{options.hap_name}.hsp'
+                else:
+                    output_hap_name = f'{options.hap_name}.hap'
             output_hap = os.path.join(options.hap_out_dir, output_hap_name)
             sign_app(options, unsigned_hap_path, output_hap)
 

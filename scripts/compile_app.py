@@ -122,7 +122,10 @@ def gen_unsigned_hap_path_json(build_profile, cwd, options):
                     cwd, src_path, 'build/default/outputs/default')
             hap_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hap')
+            hsp_file = build_utils.find_in_directory(
+                unsigned_hap_path, '*-unsigned.hsp')
             unsigned_hap_path_list.extend(hap_file)
+            unsigned_hap_path_list.extend(hsp_file)
         unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
     file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
