@@ -151,6 +151,7 @@ Use hb to start the compilation and construction task flow as follows:
                                     Deprecated, please do not use this option
             --fast-rebuild          Default:False. Help:You can use it to skip prepare, preloader, gn_gen steps so we can enable it only when there is no change for gn related script
             --keep-ninja-going      Default:False. Help:When you need to debug one specific target, you can use this option to keep ninja going to skip some possible error until 1000000 jobs fail
+            --build-only-load       Default:False. Help:Stop build until load phase ends
             --build-only-gn         Default:False. Help:Stop build until gn phase ends
             --build-variant {user,root}
                                     Default:'root'. Help:specifies device operating mode

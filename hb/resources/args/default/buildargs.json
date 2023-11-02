@@ -348,6 +348,16 @@
     "resolve_function": "resolve_keep_ninja_going",
     "testFunction": "testKeepNinjaGoing"
   },
+  "build_only_load": {
+    "arg_name": "--build-only-load",
+    "argDefault": false,
+    "arg_help": "Default:False. Help:Stop build until load phase ends",
+    "arg_phase": "targetCompilation",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_build_only_load",
+    "testFunction": "testBuildOnlyLoad"
+  },
   "build_only_gn": {
     "arg_name": "--build-only-gn",
     "argDefault": false,
