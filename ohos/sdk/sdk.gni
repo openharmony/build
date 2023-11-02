@@ -28,7 +28,10 @@ sdk_system_darwin = "darwin"
 ohos_sdk_out_dir = "$product_output_dir/${product_name}"
 ohos_sdk_copy_dir = "$root_build_dir/${product_name}"
 
-sdk_check_flag = true
+declare_args() {
+  sdk_check_flag = true
+  sdk_for_hap_build = false
+}
 
 sdk_toolchains = {
   linux = "//build/toolchain/linux:clang_x64"

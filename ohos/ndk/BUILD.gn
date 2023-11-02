@@ -89,10 +89,13 @@ group("ohos_ndk") {
 }
 
 group("ndk_doxygen") {
-  deps = [
-    ":create_docs_portal_and_archive",
-    ":generate_ndk_docs",
-  ]
+  deps = []
+  if (enable_ndk_doxygen) {
+    deps += [
+      ":create_docs_portal_and_archive",
+      ":generate_ndk_docs",
+    ]
+  }
 }
 
 # doxygen always generates index.html

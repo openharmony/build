@@ -146,39 +146,34 @@ if [[ "$*" != *ohos-sdk* ]]; then
 fi
 
 function build_sdk() {
-        ROOT_PATH=${SOURCE_ROOT_DIR}
-        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
-                echo "ohos-sdk exists."
-                return 0
-        fi
-        pushd ${ROOT_PATH}
-        echo "building the latest ohos-sdk..."
-        ./build.py --product-name ohos-sdk --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true --gn-args sdk_platform=linux
-        if [[ "$?" -ne 0 ]]; then
-          echo "ohos-sdk build failed!"
-          exit 1
-        fi
+    ROOT_PATH=${SOURCE_ROOT_DIR}
+    SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
 
-        if [ -d ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ]; then
-            pushd ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux
-            mv ${ROOT_PATH}/out/sdk/ohos-sdk/linux/* .
-            echo "extracting ohos-sdk package..."
-            unzip -q "$(find . -name "native-linux*.zip")"
-            api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="10"
-            mkdir -p $api_version
-            for i in */; do
-                if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
-                    mv $i $api_version
-                fi
-            done
-            popd
-        fi
-        if [ -d "${ROOT_PATH}/prebuilts/ohos-sdk/linux" ]; then
-            rm -rf ${ROOT_PATH}/prebuilts/ohos-sdk/linux
-        fi
-        mkdir -p ${ROOT_PATH}/prebuilts/ohos-sdk/
-        cp -af ${ROOT_PATH}/out/sdk/packages/ohos-sdk/linux ${ROOT_PATH}/prebuilts/ohos-sdk/
-        popd
+    pushd ${ROOT_PATH}
+      echo "building the latest ohos-sdk..."
+      ./build.py --product-name ohos-sdk --load-test-config=false --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true sdk_platform=linux ndk_platform=linux use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true
+      if [[ "$?" -ne 0 ]]; then
+        echo "ohos-sdk build failed! You can try to use '--no-prebuilt-sdk' to skip the build of ohos-sdk."
+        exit 1
+      fi
+      if [ -d "${ROOT_PATH}/prebuilts/ohos-sdk/linux" ]; then
+          rm -rf ${ROOT_PATH}/prebuilts/ohos-sdk/linux
+      fi
+      mkdir -p ${SDK_PREBUILTS_PATH}
+      mv ${ROOT_PATH}/out/sdk/ohos-sdk/linux ${SDK_PREBUILTS_PATH}/
+      mkdir -p ${SDK_PREBUILTS_PATH}/linux/native
+      mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
+      mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
+      pushd ${SDK_PREBUILTS_PATH}/linux
+        api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="11"
+        mkdir -p $api_version
+        for i in */; do
+            if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
+                mv $i $api_version
+            fi
+        done
+      popd
+    popd
 }
 if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo "start build ohos-sdk"
