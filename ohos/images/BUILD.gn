@@ -39,6 +39,8 @@ group("make_images") {
       }
     }
     deps += [ ":chip_prod_image" ]
+
+    # deps += [ ":mk_vendor_delm_img" ]
   } else {
     deps += [ "//build/ohos/packages:packer" ]
   }
@@ -354,5 +356,40 @@ foreach(_platform, target_platform_list) {
         args += [ "--sparse-image" ]
       }
     }
+  }
+
+  action("mk_vendor_delm_img") {
+    script = "//build/ohos/images/mkimage/mkvendor_delm.py"
+    device_name = "packages/phone/images/vendor_delm.img"
+    build_image_tool_path = [
+      "$root_build_dir/clang_x64/thirdparty/f2fs-tools",
+      "$root_build_dir/clang_x64/thirdparty/e2fsprogs",
+      "//third_party/e2fsprogs/prebuilt/host/bin",
+    ]
+    config_file_path = "//build/ohos/images/mkimage/vendor_delm.txt"
+    mkextimage_tools_path = "//build/ohos/images/mkimage/mkextimage.py"
+
+    src_dir = "packages/phone/vendor_delm"
+    args = [
+      "--src-dir",
+      src_dir,
+      "--device-name",
+      device_name,
+      "--config-file-path",
+      rebase_path(config_file_path, root_build_dir),
+      "--mkextimage-tools-path",
+      rebase_path(mkextimage_tools_path, root_build_dir),
+      "--build-image-tools-path",
+    ]
+    args += rebase_path(build_image_tool_path, root_build_dir)
+    if (is_standard_system) {
+      deps = [
+        "//base/security/selinux_adapter:build_contexts",
+        "//device/board/hihope/rk3568/kernel:kotest",
+        "//third_party/e2fsprogs:e2fsprogs_host_toolchain",
+        "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+      ]
+    }
+    outputs = [ "$root_out_dir/packages/phone/images/vendor_delm.img" ]
   }
 }
