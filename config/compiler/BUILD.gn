@@ -278,10 +278,6 @@ config("compiler") {
     # in debug builds. Technically, these can never be null in
     # well-defined C/C++ and Clang can optimize such checks away in
     # release builds, but they may be used in asserts in debug builds.
-    cflags_cc += [
-      "-Wno-undefined-bool-conversion",
-      "-Wno-tautological-undefined-compare",
-    ]
   }
 
   if (is_posix && !is_mac) {
@@ -862,22 +858,18 @@ config("default_warnings") {
   # Suppress warnings about ABI changes on ARM (Clang doesn't give this
   # warning).
   if (current_cpu == "arm" && !is_clang) {
-    cflags += [ "-Wno-psabi" ]
   }
 
   if (!is_clang) {
     cflags_cc += [
       # See comment for -Wno-c++11-narrowing.
-      "-Wno-narrowing",
     ]
 
     # -Wunused-local-typedefs is broken in gcc,
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63872
-    cflags += [ "-Wno-unused-local-typedefs" ]
 
     # Don't warn about "maybe" uninitialized. Clang doesn't include this
     # in -Wall but gcc does, and it gives false positives.
-    cflags += [ "-Wno-maybe-uninitialized" ]
     cflags += [ "-Wno-deprecated-declarations" ]
 
     # GCC assumes 'this' is never nullptr and optimizes away code
@@ -892,7 +884,6 @@ config("default_warnings") {
     # backslash ended comment line is followed by a new line of
     # comments
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61638
-    cflags += [ "-Wno-comments" ]
   }
 
   # Common Clang and GCC warning setup.
@@ -907,16 +898,13 @@ config("default_warnings") {
   if (is_mingw) {
     cflags += [
       "-Wno-error=c99-designator",
-      "-Wno-error=anon-enum-enum-conversion",
       "-Wno-error=implicit-fallthrough",
-      "-Wno-error=sizeof-array-div",
       "-Wno-error=reorder-init-list",
       "-Wno-error=range-loop-construct",
       "-Wno-error=deprecated-copy",
       "-Wno-error=implicit-int-float-conversion",
       "-Wno-error=inconsistent-dllimport",
       "-Wno-error=unknown-warning-option",
-      "-Wno-error=abstract-final-class",
       "-Wno-error=sign-compare",
     ]
   }
@@ -933,21 +921,16 @@ config("default_warnings") {
     if (use_musl) {
       cflags += [
         "-Wno-error=c99-designator",
-        "-Wno-error=anon-enum-enum-conversion",
         "-Wno-error=implicit-fallthrough",
-        "-Wno-error=sizeof-array-div",
         "-Wno-error=reorder-init-list",
         "-Wno-error=range-loop-construct",
         "-Wno-error=deprecated-copy",
         "-Wno-error=implicit-int-float-conversion",
         "-Wno-error=inconsistent-dllimport",
         "-Wno-error=unknown-warning-option",
-        "-Wno-error=abstract-final-class",
         "-Wno-error=sign-compare",
         "-Wno-error=int-in-bool-context",
-        "-Wno-error=xor-used-as-pow",
         "-Wno-error=return-stack-address",
-        "-Wno-error=dangling-gsl",
         "-Wno-unused-but-set-variable",
         "-Wno-deprecated-declarations",
         "-Wno-unused-but-set-parameter",
@@ -959,11 +942,9 @@ config("default_warnings") {
     # use_xcode_clang only refers to the iOS toolchain, host binaries use
     # chromium's clang always.
     if (!is_nacl) {
-      cflags += [ "-Wno-undefined-var-template" ]
       if (current_toolchain == host_toolchain || !use_xcode_clang ||
           xcode_version_int >= 930) {
         cflags += [
-          "-Wno-nonportable-include-path",
           "-Wno-user-defined-warnings",
           "-Wno-unused-lambda-capture",
         ]
@@ -1088,7 +1069,6 @@ config("no_chromium_code") {
     cflags += [
       # Lots of third-party libraries have unused variables. Instead of
       # suppressing them individually, we just blanket suppress them here.
-      "-Wno-unused-variable",
     ]
   }
 
@@ -1240,7 +1220,6 @@ config("no_size_t_to_int_warning") {
 config("no_shorten_64_warnings") {
   if (current_cpu == "x64" || current_cpu == "arm64") {
     if (is_clang) {
-      cflags = [ "-Wno-shorten-64-to-32" ]
     } else {
       if (is_win) {
         # MSVC does not have an explicit warning equivalent to
@@ -1260,7 +1239,6 @@ config("no_shorten_64_warnings") {
 config("no_incompatible_pointer_warnings") {
   cflags = []
   if (is_clang) {
-    cflags += [ "-Wno-incompatible-pointer-types" ]
   } else if (is_chromeos && current_cpu == "arm") {
     cflags += [ "-w" ]
   }
