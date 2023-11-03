@@ -346,7 +346,7 @@ declare_args() {
 
 declare_args() {
   # The runtime mode ("debug", "profile", "release")
-  runtime_mode = "debug"
+  runtime_mode = "release"
 }
 
 declare_args() {
