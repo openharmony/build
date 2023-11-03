@@ -49,7 +49,7 @@ def judge_updater_binary_available(updater_root_path):
     for lib_name in updater_binary_needed_lib:
         if lib_name.endswith('asan.so'):
             return True
-    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so',
+    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so', 'libssl_openssl.z.so',
                                 'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
     extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
     if len(extra_lib) != 0:
