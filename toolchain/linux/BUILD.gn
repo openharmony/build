@@ -5,7 +5,7 @@
 import("//build/config/sysroot.gni")
 import("//build/toolchain/gcc_toolchain.gni")
 
-if (!build_cross_platform_version) {
+if (!is_arkui_x) {
   import("//build/rust/rustc_toolchain.gni")
 }
 
@@ -100,7 +100,7 @@ clang_toolchain("clang_x64") {
     current_os = "linux"
   }
   shlib_extension = ".so"
-  if (!build_cross_platform_version) {
+  if (!is_arkui_x) {
     rust_abi_target = "x86_64-unknown-linux-gnu"
   }
 }

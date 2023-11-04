@@ -29,7 +29,7 @@ import("//build/templates/common/ohos_templates.gni")
 
 # import prebuilt templates
 import("//build/templates/cxx/prebuilt.gni")
-if (build_cross_platform_version) {
+if (is_arkui_x) {
   import("//build_plugins/templates/java/rules.gni")
 } else {
   import("//build/templates/bpf/ohos_bpf.gni")
