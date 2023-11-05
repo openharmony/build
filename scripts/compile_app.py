@@ -52,7 +52,7 @@ def parse_args(args):
     return options
 
 
-def make_env(build_profile, cwd, ohpm_registry):
+def make_env(build_profile, cwd, ohpm_registry, options):
     '''
     Set up the application compilation environment and run "ohpm install"
     :param build_profile: module compilation information file
@@ -67,9 +67,11 @@ def make_env(build_profile, cwd, ohpm_registry):
         ohpm_install_cmd = ['ohpm', 'install']
         if ohpm_registry:
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
+        env = {
+            'PATH': f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}",
+            'NODE_HOME': os.path.dirname(os.path.abspath(options.nodejs)),
+        }
         os.chdir(cwd)
-        if os.path.exists(os.path.join(cwd, 'oh_modules')):
-            subprocess.run(['rm', '-rf', 'oh_modules'])
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
@@ -77,6 +79,7 @@ def make_env(build_profile, cwd, ohpm_registry):
         proc = subprocess.Popen(ohpm_install_cmd,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
+                                env=env,
                                 encoding='utf-8')
         stdout, stderr = proc.communicate()
         if proc.returncode:
@@ -86,12 +89,11 @@ def make_env(build_profile, cwd, ohpm_registry):
         for module in modules_list:
             src_path = module.get('srcPath')
             ohpm_install_path = os.path.join(cwd, src_path)
-            if os.path.exists(os.path.join(ohpm_install_path, 'oh_modules')):
-                subprocess.run(['rm', '-rf', os.path.join(ohpm_install_path, 'oh_modules')])
             proc = subprocess.Popen(ohpm_install_cmd,
                                     cwd=ohpm_install_path,
                                     stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE,
+                                    env=env,
                                     encoding='utf-8')
             stdout, stderr = proc.communicate()
             if proc.returncode:
@@ -224,7 +226,7 @@ def main(args):
     os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
 
     # generate unsigned_hap_path_list and run ohpm install
-    make_env(options.build_profile, cwd, options.ohpm_registry)
+    make_env(options.build_profile, cwd, options.ohpm_registry, options)
 
     # invoke hvigor to build hap or app
     hvigor_build(cwd, options)
