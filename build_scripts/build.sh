@@ -108,22 +108,21 @@ cat $HOME/.npmrc | grep 'lockfile=false' || echo 'lockfile=false' >> $HOME/.npmr
 
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
-  cd ${TOOLS_INSTALL_DIR}
-  #command_line_version=2.0.1.0
-  if [[ ! -f "${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
-    echo "download oh-command-line-tools"
-    wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/a6/v3/cXARnGbKTt-4sPEi3GcnJA/ohcommandline-tools-linux-2.0.0.1.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20230512T075353Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=C82B51F3C9F107AB460EC26392E25B2E20EF1A6CAD10A26929769B21B8C8D5B6 -O ohcommandline-tools-linux.zip
-    unzip ohcommandline-tools-linux.zip
-  fi
-  OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
-  chmod +x ${OHPM_HOME}/bin/init
-  echo "init ohpm"
-  ${OHPM_HOME}/bin/init
-  echo "ohpm version is $(ohpm -v)"
-  ohpm config set registry https://repo.harmonyos.com/ohpm/
-  ohpm config set strict_ssl false
-  ohpm config set log_level debug
-  cd ${SOURCE_ROOT_DIR}
+  pushd ${TOOLS_INSTALL_DIR}
+    if [[ ! -f "${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
+      echo "download oh-command-line-tools"
+      wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/68/v3/r-5H8I7LT9mBjSFpSOY0Sg/ohcommandline-tools-linux-2.1.0.6.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20231027T004601Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=A4D5E1A29C1C6962CA65592C3EB03ED363CE664CBE6C5974094064B67C34325E -O ohcommandline-tools-linux.zip
+      unzip ohcommandline-tools-linux.zip
+    fi
+    OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
+    chmod +x ${OHPM_HOME}/bin/init
+    echo "init ohpm"
+    ${OHPM_HOME}/bin/init
+    echo "ohpm version is $(ohpm -v)"
+    ohpm config set registry https://repo.harmonyos.com/ohpm/
+    ohpm config set strict_ssl false
+    ohpm config set log_level debug
+  popd
   if [[ -d "$HOME/.hvigor" ]]; then
     echo "remove $HOME/.hvigor"
     rm -rf $HOME/.hvigor/daemon $HOME/.hvigor/wrapper
