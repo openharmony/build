@@ -328,6 +328,12 @@ class Config(metaclass=Singleton):
         return _built_in_product_path
 
     @property
+    def built_in_product_path_for_llvm(self):
+        _built_in_product_path_for_llvm = os.path.join(self.root_path,
+                                              'toolchain/llvm-project/llvm_products')
+        return _built_in_product_path_for_llvm
+
+    @property
     def build_tools_path(self):
         try:
             tools_path = IoUtil.read_json_file(
@@ -360,6 +366,8 @@ class Config(metaclass=Singleton):
     def clang_path(self):
         repo_clang_path = os.path.join('prebuilts', 'clang', 'ohos',
                                        'linux-x86_64', 'llvm')
+        if not os.path.exists(repo_clang_path):
+            repo_clang_path = os.path.join('out', 'llvm-install')
         # clang exist
         if os.path.isdir(repo_clang_path):
             return f'//{repo_clang_path}'

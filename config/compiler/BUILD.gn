@@ -316,7 +316,7 @@ config("compiler") {
       ]
     }
 
-    if (!is_nacl) {
+    if (!is_nacl && !is_llvm_build) {
       cflags += [ "-funwind-tables" ]
     }
   }
@@ -738,6 +738,8 @@ config("compiler_cpu_abi") {
         ]
       }
       ldflags += [ "-march=$arm_arch" ]
+    } else if (current_cpu == "mipsel" && is_legacy) {
+      cflags += [ "-mnan=legacy" ]
     }
   }
 
