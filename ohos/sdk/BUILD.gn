@@ -222,6 +222,9 @@ action_with_pydeps("add_notice_file") {
     "--skip-pattern",
     "native",
   ]
+  if (host_os == "mac" && enable_sign) {
+    args += [ "--enable-sign" ]
+  }
 
   inputs = [ sdk_notice_txt ]
   outputs = [ _output ]
