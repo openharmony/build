@@ -642,8 +642,10 @@ group("package_testcase") {
 
 group("build_all_test_pkg") {
   testonly = true
-  deps = [
-    "$root_build_dir/build_configs:parts_test",
-    "//test/testfwk/developer_test:make_temp_test",
-  ]
+  if (!is_llvm_build) {
+    deps = [
+      "$root_build_dir/build_configs:parts_test",
+      "//test/testfwk/developer_test:make_temp_test",
+    ]
+  }
 }

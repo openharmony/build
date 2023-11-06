@@ -32,5 +32,8 @@
   "product_system_arm64_default": "product_system_arm64_default",
   "device_arkui-x": "device_arkui-x",
   "product_arkui-x": "product_arkui-x",
-  "product_hispark_pegasus_mini_system": "product_hispark_pegasus_mini_system"
+  "product_hispark_pegasus_mini_system": "product_hispark_pegasus_mini_system",
+  "device_llvm_build": "device_llvm_build",
+  "product_llvm_build": "product_llvm_build",
+  "product_llvm_build_lite": "product_llvm_build_lite"
 }

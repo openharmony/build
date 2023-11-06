@@ -79,6 +79,8 @@ template("generate_module_info") {
       module_type = "lib64"
     } else if (target_cpu == "arm" || target_cpu == "x86") {
       module_type = "lib"
+    } else if (target_cpu == "riscv64" || target_cpu == "mipsel") {
+      module_type = "lib"
     } else {
       assert(false, "Error: unsupported target cpu name.")
     }

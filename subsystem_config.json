@@ -206,5 +206,9 @@
   "advertising": {
     "path": "domains/advertising",
     "name": "advertising"
+  },
+  "llvmproject": {
+    "path": "toolchain/llvm-project",
+    "name": "llvmproject"
   }
 }
