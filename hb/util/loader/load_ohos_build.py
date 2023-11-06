@@ -46,9 +46,9 @@ ohos_inner_kits("{0}_inner_kits") {{
   sdk_libs = [
 {1}
   ]
-  part_name = "{0}"
-  origin_name = "{2}"
-  variant = "{3}"
+  part_name = "{2}"
+  origin_name = "{3}"
+  variant = "{4}"
 }}"""
 
 SYSTEM_KITS_TEMPLATE = """
@@ -108,7 +108,7 @@ class PartObject(object):
     """"part object info, description part variant."""
 
     def __init__(self, part_name, variant_name, part_config, toolchain,
-                 subsystem_name, target_arch):
+                 subsystem_name, target_arch, overrided_components):
         self._origin_name = part_name
         if variant_name != 'phone':
             _real_name = '{}_{}'.format(part_name, variant_name)
@@ -123,6 +123,7 @@ class PartObject(object):
         self._kits = []
         self._target_arch = target_arch
         self._system_capabilities = []
+        self._overrided_components = overrided_components
         self._parsing_config(self._part_name, part_config, subsystem_name)
 
     @classmethod
@@ -156,6 +157,20 @@ class PartObject(object):
             lib_config.append('      }')
         return lib_config
 
+    def _overrided_part_name(self):
+        overrided_components = self._overrided_components
+        full_part_name = f"{self._subsystem_name}:{self._origin_name}"
+        overrided_map = overrided_components.get(full_part_name)
+        if overrided_map:
+            # origin_name is same as part_name in variant phone
+            overrided_origin_name = overrided_map.get("partName")
+            overrided_part_name = overrided_origin_name
+        else:
+            overrided_part_name = self._part_name
+            overrided_origin_name = self._origin_name
+
+        return overrided_part_name, overrided_origin_name
+
     @throw_exception
     def _parsing_inner_kits(self, part_name, inner_kits_info, build_gn_content,
                             target_arch):
@@ -166,10 +181,13 @@ class PartObject(object):
                 self._parsing_kits_lib(inner_kits_lib, True))
             inner_kits_libs_gn.append('    },')
 
+        overrided_part_name, overrided_origin_name = self._overrided_part_name()
+
         inner_kits_libs_gn_line = '\n'.join(inner_kits_libs_gn)
         inner_kits_def = INNER_KITS_TEMPLATE.format(part_name,
                                                     inner_kits_libs_gn_line,
-                                                    self._origin_name,
+                                                    overrided_part_name,
+                                                    overrided_origin_name,
                                                     self._variant_name)
         build_gn_content.append(inner_kits_def)
         # output inner kits info to resolve external deps
@@ -414,7 +432,7 @@ class LoadBuildConfig(object):
                 if toolchain is None:
                     continue
                 part_obj = PartObject(part_name, variant, value, toolchain,
-                                      self._subsystem_name, self._target_arch)
+                                      self._subsystem_name, self._target_arch, self._overrided_components)
                 real_part_name = part_obj.part_name()
                 self._part_list[real_part_name] = part_obj
 
