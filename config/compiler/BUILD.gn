@@ -857,13 +857,9 @@ config("default_warnings") {
 
   # Suppress warnings about ABI changes on ARM (Clang doesn't give this
   # warning).
-  if (current_cpu == "arm" && !is_clang) {
-  }
 
   if (!is_clang) {
-    cflags_cc += [
-      # See comment for -Wno-c++11-narrowing.
-    ]
+
 
     # -Wunused-local-typedefs is broken in gcc,
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63872
@@ -1065,12 +1061,7 @@ config("no_chromium_code") {
     }
   }
 
-  if (is_clang) {
-    cflags += [
-      # Lots of third-party libraries have unused variables. Instead of
-      # suppressing them individually, we just blanket suppress them here.
-    ]
-  }
+
 
   configs = [ ":default_warnings" ]
 }
@@ -1219,14 +1210,11 @@ config("no_size_t_to_int_warning") {
 # config to disable them.
 config("no_shorten_64_warnings") {
   if (current_cpu == "x64" || current_cpu == "arm64") {
-    if (is_clang) {
-    } else {
-      if (is_win) {
-        # MSVC does not have an explicit warning equivalent to
-        # -Wshorten-64-to-32 but 4267 warns for size_t -> int
-        # on 64-bit builds, so is the closest.
-        cflags = [ "/wd4267" ]
-      }
+    if (is_win) {
+      # MSVC does not have an explicit warning equivalent to
+      # -Wshorten-64-to-32 but 4267 warns for size_t -> int
+      # on 64-bit builds, so is the closest.
+      cflags = [ "/wd4267" ]
     }
   }
 }
@@ -1238,8 +1226,7 @@ config("no_shorten_64_warnings") {
 # the gcc 4.9 toolchains.
 config("no_incompatible_pointer_warnings") {
   cflags = []
-  if (is_clang) {
-  } else if (is_chromeos && current_cpu == "arm") {
+  if (is_chromeos && current_cpu == "arm") {
     cflags += [ "-w" ]
   }
 }
