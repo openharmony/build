@@ -273,12 +273,6 @@ config("compiler") {
     }
   }
 
-  if (is_clang && is_debug) {
-    # Allow comparing the address of references and 'this' against 0
-    # in debug builds. Technically, these can never be null in
-    # well-defined C/C++ and Clang can optimize such checks away in
-    # release builds, but they may be used in asserts in debug builds.
-  }
 
   if (is_posix && !is_mac) {
     if (enable_profiling) {
@@ -855,11 +849,7 @@ config("default_warnings") {
     cflags += [ "-Wunguarded-availability" ]
   }
 
-  # Suppress warnings about ABI changes on ARM (Clang doesn't give this
-  # warning).
-
   if (!is_clang) {
-
 
     # -Wunused-local-typedefs is broken in gcc,
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63872
