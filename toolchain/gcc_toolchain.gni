@@ -12,7 +12,7 @@ import("//build/toolchain/cc_wrapper.gni")
 import("//build/toolchain/clang_static_analyzer.gni")
 import("//build/toolchain/toolchain.gni")
 
-if (!build_cross_platform_version) {
+if (!is_arkui_x) {
   import("//build/rust/rustc_toolchain.gni")
 }
 
@@ -206,7 +206,7 @@ template("gcc_toolchain") {
       default_executable_extension = ""
     }
 
-    if (!build_cross_platform_version) {
+    if (!is_arkui_x) {
       if (defined(invoker.dylib_extension)) {
         default_dylib_extension = invoker.dylib_extension
       } else {
@@ -578,7 +578,7 @@ template("gcc_toolchain") {
       description = copy_description
     }
 
-    if (!build_cross_platform_version) {
+    if (!is_arkui_x) {
       cc_command_args = ""
       if (defined(invoker.cc_command_args)) {
         cc_command_args = invoker.cc_command_args

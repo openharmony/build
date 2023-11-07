@@ -295,7 +295,6 @@ declare_args() {
 
   # build for cross platform
   is_arkui_x = false
-  build_cross_platform_version = false
 }
 
 declare_args() {

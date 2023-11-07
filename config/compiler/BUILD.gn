@@ -925,7 +925,7 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
-    if (build_cross_platform_version) {
+    if (is_arkui_x) {
       cflags += [
         "-Wno-error=implicit-int-float-conversion",
         "-Wno-error=implicit-fallthrough",
@@ -1011,7 +1011,7 @@ config("chromium_code") {
     }
   } else {
     cflags = [ "-Wall" ]
-    if (treat_warnings_as_errors && !build_cross_platform_version) {
+    if (treat_warnings_as_errors && !is_arkui_x) {
       cflags += [ "-Werror" ]
 
       # The compiler driver can sometimes (rarely) emit warnings before calling
