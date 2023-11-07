@@ -20,7 +20,6 @@ ohos_exec_script_config = {
     "//arkcompiler/toolchain/build/test.gni",
     "//arkcompiler/toolchain/build/third_party_gn/musl/BUILD.gn",
     "//arkcompiler/toolchain/build/third_party_gn/openssl/BUILD.gn",
-    "//arkcompiler/runtime_core/static_core/libpandabase/BUILD.gn",
     "//base/hiviewdfx/hiview/BUILD.gn",
     "//base/security/access_token/access_token.gni",
     "//base/security/selinux_adapter/BUILD.gn",
