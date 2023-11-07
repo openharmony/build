@@ -105,6 +105,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header",
   "//interface/sdk_c/resourceschedule/ffrt:libffrt_ndk",
   "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
+  "//interface/sdk_c/network/netmanager:libnetconn_ndk",
+  "//interface/sdk_c/network/netmanager:netconn_header",
 ]
 
 _ndk_base_libs = [
