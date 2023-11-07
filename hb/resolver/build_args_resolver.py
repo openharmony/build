@@ -192,6 +192,17 @@ class BuildArgsResolver(ArgsResolverInterface):
                 os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
 
     @staticmethod
+    def resolve_log_mode(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--log-mode' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        if target_arg.arg_value:
+            config = Config()
+            config.log_mode = target_arg.arg_value
+
+    @staticmethod
     def resolve_ccache(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--ccache' arg
         :param target_arg: arg object which is used to get arg value.

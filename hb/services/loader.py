@@ -302,7 +302,7 @@ class OHOSLoader(LoadInterface):
             system_etc_path, "SystemCapability.json")
         write_json_file(syscap_info_json, syscap_info_dict)
         LogUtil.hb_info(
-            "generate syscap info file to '{}'".format(syscap_info_json))
+            "generate syscap info file to '{}'".format(syscap_info_json), mode=self.config.log_mode)
         target_syscap_with_part_name_list.sort(
             key=lambda syscap: syscap['component'])
         syscap_info_with_part_name_file = os.path.join(
@@ -310,7 +310,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(syscap_info_with_part_name_file, {
             'components': target_syscap_with_part_name_list})
         LogUtil.hb_info("generate syscap info with part name list to '{}'".format(
-            syscap_info_with_part_name_file))
+            syscap_info_with_part_name_file), mode=self.config.log_mode)
         if not os.path.exists(os.path.join(system_etc_path, "param/")):
             os.mkdir(os.path.join(system_etc_path, "param/"))
         target_syscap_for_init_file = os.path.join(
@@ -318,7 +318,7 @@ class OHOSLoader(LoadInterface):
         with open(target_syscap_for_init_file, "w") as file:
             file.writelines(sorted(target_syscap_for_init_list))
         LogUtil.hb_info("generate target syscap for init list to '{}'".format(
-            target_syscap_for_init_file))
+            target_syscap_for_init_file), mode=self.config.log_mode)
 
     '''Description: output infos for testfwk into a json file. \
         (/out/${product_name}/build_configs/infos_for_testfwk.json)
@@ -341,7 +341,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(infos_for_testfwk_file,
                         _output_infos, check_changes=True)
         LogUtil.hb_info("generate infos for testfwk to '{}'".format(
-            infos_for_testfwk_file))
+            infos_for_testfwk_file), mode=self.config.log_mode)
 
     '''Description: output all target platform parts into a json file \
         (/out/${product_name}/build_configs/target_platforms_parts.json)
@@ -356,7 +356,7 @@ class OHOSLoader(LoadInterface):
                         self.target_platform_parts,
                         check_changes=True)
         LogUtil.hb_info("generate target platform parts to '{}'".format(
-            target_platform_parts_file))
+            target_platform_parts_file), mode=self.config.log_mode)
 
     '''Description: Generate parts differences in different platforms, using phone as base. \
         (/out/${product_name}/build_configs/parts_different_info.json)
@@ -372,7 +372,7 @@ class OHOSLoader(LoadInterface):
                         parts_different_info,
                         check_changes=True)
         LogUtil.hb_info("generate part different info to '{}'".format(
-            parts_different_info_file))
+            parts_different_info_file), mode=self.config.log_mode)
 
     '''Description: output platforms list into a gni file. \
         (/out/${product_name}/build_configs/platforms_list.gni)
@@ -391,7 +391,7 @@ class OHOSLoader(LoadInterface):
         _gni_file_content.append(']')
         write_file(platforms_list_gni_file, '\n'.join(_gni_file_content))
         LogUtil.hb_info("generate platforms list to '{}'".format(
-            platforms_list_gni_file))
+            platforms_list_gni_file), mode=self.config.log_mode)
 
     '''Description: output auto install part into a json file. \
         (/out/${product_name}/build_configs/auto_install_parts.json)
@@ -410,7 +410,7 @@ class OHOSLoader(LoadInterface):
             self.config_output_dir, "auto_install_parts.json")
         write_json_file(auto_install_list_file, auto_install_part_list)
         LogUtil.hb_info("generate auto install part to '{}'".format(
-            auto_install_list_file))
+            auto_install_list_file), mode=self.config.log_mode)
 
     '''Description: output src flag into a json file. \
         (/out/${product_name}/build_configs/parts_src_flag.json)
@@ -425,7 +425,8 @@ class OHOSLoader(LoadInterface):
                         self._get_parts_src_list(),
                         check_changes=True)
         LogUtil.hb_info(
-            "generated parts src flag to '{}/subsystem_info/parts_src_flag.json'".format(self.config_output_dir))
+            "generated parts src flag to '{}/subsystem_info/parts_src_flag.json'".format(
+                self.config_output_dir), mode=self.config.log_mode)
 
     '''Description: output build target list into a json file.\
         (/out/${product_name}/build_configs/required_parts_targets_list.json)
@@ -439,7 +440,7 @@ class OHOSLoader(LoadInterface):
         write_json_file(build_targets_list_file,
                         list(self.required_parts_targets.values()))
         LogUtil.hb_info("generate build targets list file to '{}'".format(
-            build_targets_list_file))
+            build_targets_list_file), mode=self.config.log_mode)
 
     '''Description: output build target info into a json file. \
         (/out/${product_name}/build_configs/required_parts_targets.json)
@@ -452,7 +453,7 @@ class OHOSLoader(LoadInterface):
                                                "required_parts_targets.json")
         write_json_file(build_targets_info_file, self.required_parts_targets)
         LogUtil.hb_info("generate required parts targets to '{}'".format(
-            build_targets_info_file))
+            build_targets_info_file), mode=self.config.log_mode)
 
     '''Description: output platforms part by src into a json file. \
         (/out/${product_name}/build_configs/platforms_parts_by_src.json)
@@ -469,7 +470,7 @@ class OHOSLoader(LoadInterface):
                         platforms_parts_by_src,
                         check_changes=True)
         LogUtil.hb_info("generated platforms parts by src to '{}'".format(
-            platforms_parts_by_src_file))
+            platforms_parts_by_src_file), mode=self.config.log_mode)
 
     '''Description: output system configs info into 4 files:[
         (/out/${product_name}/build_configs/subsystem_info/parts_list.gni),
@@ -535,7 +536,7 @@ class OHOSLoader(LoadInterface):
                             check_changes=True)
             LogUtil.hb_info(
                 "generated system capabilities to '{}/{}_system_capabilities.json'".format(
-                    self.config_output_dir, platform))
+                    self.config_output_dir, platform), mode=self.config.log_mode)
 
     '''Description: output system configs info into three json files:[
         (/out/${product_name}/build_configs/subsystem_info/subsystem_build_config.json),
@@ -550,13 +551,13 @@ class OHOSLoader(LoadInterface):
         # The function has been implemented in module util/loader/subsystem_info.py
         LogUtil.hb_info(
             "generated subsystem build config to '{}/subsystem_info/subsystem_build_config.json'".format(
-                self.config_output_dir))
+                self.config_output_dir), mode=self.config.log_mode)
         LogUtil.hb_info(
             "generated src subsystem info to '{}/subsystem_info/src_subsystem_info.json'".format(
-                self.config_output_dir))
+                self.config_output_dir), mode=self.config.log_mode)
         LogUtil.hb_info(
             "generated no src subsystem info to '{}/subsystem_info/no_src_subsystem_info.json'".format(
-                self.config_output_dir))
+                self.config_output_dir), mode=self.config.log_mode)
 
 # get method
     @throw_exception

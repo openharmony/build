@@ -65,16 +65,14 @@ class Ninja(BuildExecutorInterface):
                 "info",
             )
 
-        try:
-            log_filter = os.getenv("LOG_FILTER", "True") == "True"
-            SystemUtil.exec_command(
-                ninja_cmd,
-                self.config.log_path,
-                exec_env=ninja_env.allenv,
-                log_filter=log_filter,
-            )
-        except OHOSException:
-            raise OHOSException('ninja phase failed', '4000')
+        log_filter = os.getenv("LOG_FILTER", "True") == "True"
+        SystemUtil.exec_command(
+            ninja_cmd,
+            self.config.log_path,
+            exec_env=ninja_env.allenv,
+            log_filter=log_filter,
+            log_mode=self.config.log_mode
+        )
 
     def _convert_args(self) -> list:
         """convert all registed args into a list

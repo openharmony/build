@@ -47,36 +47,50 @@ def throw_exception(func):
             return func(*args, **kwargs)
         except OHOSException and Exception as exception:
             _code = ''
+            _type = ''
+            _desc = ''
             _solution = ''
 
             if isinstance(exception, OHOSException):
                 _code = exception._code
+                _type = exception.get_type()
+                _desc = exception.get_desc()
                 _solution = exception.get_solution()
             else:
                 _code = '0000'
-                _solution = 'no solution'
+                _type = 'UNKNOWN ERROR TYPE'
+                _desc = 'NO DESCRIPTION'
+                _solution = 'NO SOLUTION'
 
-            _print_formatted_tracebak(_code, str(exception), _solution)
+            _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
             exit(-1)
     return wrapper
 
 
-def _print_formatted_tracebak(_code, _exception, _solution):
+def _print_formatted_tracebak(_code, _exception, _type, _desc, _solution):
     _log_path = ''
     if IoUtil.read_json_file(ROOT_CONFIG_FILE).get('out_path') is not None:
         _log_path = os.path.join(IoUtil.read_json_file(
             ROOT_CONFIG_FILE).get('out_path'), 'build.log')
     else:
         _log_path = os.path.join(CURRENT_OHOS_ROOT, 'out', 'build.log')
+    if isinstance(_solution, list):
+        _solution = '\n\t\t'.join(str(elem) for elem in _solution)
     LogUtil.write_log(_log_path, traceback.format_exc() + '\n', 'error')
     LogUtil.write_log(_log_path,
-                      'Code:      {}'
+                      'Code:        {}'
                       '\n'
                       '\n'
-                      'Reason:    {}'
+                      'Reason:      {}'
                       '\n'
                       '\n'
-                      'Solution:  {}'
+                      'Error Type:  {}'
                       '\n'
                       '\n'
-                      .format(_code, _exception, _solution), 'error')
+                      'Description: {}'
+                      '\n'
+                      '\n'
+                      'Solution:    {}'
+                      '\n'
+                      '\n'
+                      .format(_code, _exception, _type, _desc, _solution), 'error')

@@ -19,6 +19,8 @@
 
 import sys
 import os
+import time
+import threading
 from enum import Enum
 
 from containers.status import throw_exception
@@ -162,20 +164,37 @@ class Gn(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_gn_gen_cmd(self, **kwargs):
-        gn_gen_cmd = [self.exec, 'gen',
+        gn_gen_cmd = [self.exec, 'gen', '--json=gn_log.json',
                       '--args={}'.format(' '.join(self._convert_args())),
                       self.config.out_path] + self._convert_flags()
         if self.config.os_level == 'mini' or self.config.os_level == 'small':
             gn_gen_cmd.append(f'--script-executable={sys.executable}')
-        try:
-            LogUtil.write_log(self.config.log_path, 'Excuting gn command: {} {} --args="{}" {}'.format(
-                self.exec, 'gen',
-                ' '.join(self._convert_args()).replace('"', "\\\""),
-                ' '.join(gn_gen_cmd[3:])),
-                'info')
+        LogUtil.write_log(self.config.log_path, 'Excuting gn command: {} {} --args="{}" {}'.format(
+            self.exec, 'gen',
+            ' '.join(self._convert_args()).replace('"', "\\\""),
+            ' '.join(gn_gen_cmd[3:])),
+            'info')
+        if self.config.log_mode == 'silent':
+            def loading_animation(done_event):
+                frames = ["|", "/", "-", "\\"]
+                circle_times = 0
+                while not done_event.is_set():
+                    sys.stdout.write("\r" + "[OHOS INFO] GN parsing... " + frames[circle_times % len(frames)])
+                    sys.stdout.flush()
+                    time.sleep(0.1)
+                    circle_times += 1
+
+            def task(done_event):
+                SystemUtil.exec_command(gn_gen_cmd, self.config.log_path, log_mode=self.config.log_mode)
+                done_event.set()
+                sys.stdout.write("\n" + "[OHOS INFO] GN parsing Done\n")
+            done_event = threading.Event()
+            animation_thread = threading.Thread(target=loading_animation, args=(done_event,))
+            animation_thread.start()
+            task(done_event)
+            animation_thread.join()
+        else:
             SystemUtil.exec_command(gn_gen_cmd, self.config.log_path)
-        except OHOSException:
-            raise OHOSException('GN phase failed', '3000')
 
     '''Description: Execute 'gn path' command using registed args
     @parameter: kwargs TBD
