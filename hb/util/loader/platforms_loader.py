@@ -16,6 +16,7 @@
 import sys
 import os
 from util.log_util import LogUtil
+from resources.config import Config
 from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 from containers.status import throw_exception
@@ -192,7 +193,7 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
                                   platforms_info_output_dir, "all_parts.json")
     write_json_file(all_parts_file, all_parts)
     LogUtil.hb_info(
-        "generate all parts of platforms info to '{}'".format(all_parts_file))
+        "generate all parts of platforms info to '{}'".format(all_parts_file), mode=Config.log_mode)
 
     # variant to toolchain and toolchain to variant
     toolchain_to_variant_dict = platform_loader.platforms_toolchain()
@@ -204,7 +205,7 @@ def get_platforms_info(platforms_config_file, source_root_dir, root_build_dir,
                     toolchain_to_variant_dict,
                     check_changes=True)
     LogUtil.hb_info("generate toolchain to variant of platforms info to '{}'".format(
-        toolchain_variant_info_file))
+        toolchain_variant_info_file), mode=Config.log_mode)
 
     result = {}
     result['all_parts'] = all_parts
