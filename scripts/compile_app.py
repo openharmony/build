@@ -82,6 +82,8 @@ def make_env(build_profile, cwd, ohpm_registry, options):
                                 env=env,
                                 encoding='utf-8')
         stdout, stderr = proc.communicate()
+        print(f"[0/0] {stdout}")
+        print(f"[0/0] {stderr}")
         if proc.returncode:
             raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
                 proc.returncode, stderr))
@@ -96,6 +98,8 @@ def make_env(build_profile, cwd, ohpm_registry, options):
                                     env=env,
                                     encoding='utf-8')
             stdout, stderr = proc.communicate()
+            print(f"[0/0] {stdout}")
+            print(f"[0/0] {stderr}")
             if proc.returncode:
                 raise Exception('ReturnCode:{}. ohpm install module failed. {}'.format(
                     proc.returncode, stderr))
