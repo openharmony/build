@@ -614,31 +614,36 @@ config("sanitizer_trap_all_flags") {
 
 # By default, cfi is in release mode
 config("cfi_config_release") {
-  _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
+  if (!is_mingw && !is_mac) {
+    _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
 
-  configs = [ "//build/config/gcc:symbol_visibility_default" ]
-  cflags = [
-    "-flto",
-    "-fsanitize=cfi",
-    "-fsanitize-blacklist=" + rebase_path(_cfi_blocklist_path, root_build_dir),
-  ]
+    configs = [ "//build/config/gcc:symbol_visibility_default" ]
+    cflags = [
+      "-flto",
+      "-fsanitize=cfi",
+      "-fsanitize-blacklist=" +
+          rebase_path(_cfi_blocklist_path, root_build_dir),
+    ]
 
-  # Remove some platforms because version-script is only meaningful for elf platform that support shared libraries.
-  # Add a cfi version script to ensure cfi related symbols can be exported.
-  if (!is_mac && !is_win && !is_mingw) {
-    _cfi_version_script =
-        rebase_path("//build/config/sanitizers/cfi.versionscript")
-    ldflags = [ "-Wl,--version-script=${_cfi_version_script}" ]
+    # Remove some platforms because version-script is only meaningful for elf platform that support shared libraries.
+    # Add a cfi version script to ensure cfi related symbols can be exported.
+    if (!is_win) {
+      _cfi_version_script =
+          rebase_path("//build/config/sanitizers/cfi.versionscript")
+      ldflags = [ "-Wl,--version-script=${_cfi_version_script}" ]
+    }
   }
 }
 
 # Debug mode, add no-trap and recover options over release mode
 config("cfi_config_debug") {
-  configs = [ ":cfi_config_release" ]
-  cflags = [
-    "-fno-sanitize-trap=cfi",
-    "-fsanitize-recover=cfi,undefined",
-  ]
+  if (!is_mingw && !is_mac) {
+    configs = [ ":cfi_config_release" ]
+    cflags = [
+      "-fno-sanitize-trap=cfi",
+      "-fsanitize-recover=cfi,undefined",
+    ]
+  }
 }
 
 config("cfi_cross_dso_release") {
