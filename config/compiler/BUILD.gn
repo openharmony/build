@@ -783,14 +783,6 @@ config("compiler_arm_thumb") {
   }
 }
 
-config("compiler_arm") {
-  if (current_cpu == "arm" && is_chromeos) {
-    # arm is normally the default mode for clang, but on chromeos a wrapper
-    # is used to pass -mthumb, and therefore change the default.
-    cflags = [ "-marm" ]
-  }
-}
-
 # runtime_library -------------------------------------------------------------
 #
 # Sets the runtime library and associated options.
@@ -850,12 +842,6 @@ config("default_warnings") {
   }
 
   if (!is_clang) {
-
-    # -Wunused-local-typedefs is broken in gcc,
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63872
-
-    # Don't warn about "maybe" uninitialized. Clang doesn't include this
-    # in -Wall but gcc does, and it gives false positives.
     cflags += [ "-Wno-deprecated-declarations" ]
 
     # GCC assumes 'this' is never nullptr and optimizes away code
@@ -865,11 +851,6 @@ config("default_warnings") {
     # [1] https://gcc.gnu.org/gcc-6/porting_to.html#this-cannot-be-null
     # [2] https://crbug.com/784492#c13
     cflags += [ "-fno-delete-null-pointer-checks" ]
-
-    # -Wcomment gives too many false positives in the case a
-    # backslash ended comment line is followed by a new line of
-    # comments
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=61638
   }
 
   # Common Clang and GCC warning setup.
@@ -1023,51 +1004,6 @@ config("chromium_code") {
   }
 }
 
-config("no_chromium_code") {
-  cflags = []
-  cflags_cc = []
-  defines = []
-
-  if (is_win) {
-    cflags += [
-      "/W3",  # Warning level 3.
-      "/wd4800",  # Disable warning when forcing value to bool.
-      "/wd4267",  # size_t to int.
-      "/wd4996",  # Deprecated function warning.
-    ]
-    defines += [
-      "_CRT_NONSTDC_NO_WARNINGS",
-      "_CRT_NONSTDC_NO_DEPRECATE",
-    ]
-  } else {
-    # GCC may emit unsuppressible warnings so don't add -Werror for no chromium
-    # code. crbug.com/589724
-    if (treat_warnings_as_errors && is_clang) {
-      cflags += [ "-Werror" ]
-      ldflags = [ "-Werror" ]
-    }
-    if (is_clang && !is_nacl) {
-      cflags += [ "-Wall" ]
-    }
-  }
-
-
-
-  configs = [ ":default_warnings" ]
-}
-
-# noshadowing -----------------------------------------------------------------
-#
-# Allows turning -Wshadow on.
-
-config("noshadowing") {
-  # This flag has to be disabled for nacl because the nacl compiler is too
-  # strict about shadowing.
-  if (is_clang && !is_nacl) {
-    cflags = [ "-Wshadow" ]
-  }
-}
-
 # rtti ------------------------------------------------------------------------
 #
 # Allows turning Run-Time Type Identification on or off.
@@ -1158,66 +1094,6 @@ config("no_exceptions") {
   } else {
     cflags_cc = [ "-fno-exceptions" ]
     cflags_objcc = cflags_cc
-  }
-}
-
-# Warnings ---------------------------------------------------------------------
-
-# This will generate warnings when using Clang if code generates exit-time
-# destructors, which will slow down closing the program.
-config("wexit_time_destructors") {
-  if (is_clang) {
-    cflags = [ "-Wexit-time-destructors" ]
-  }
-}
-
-# On Windows compiling on x64, VC will issue a warning when converting
-# size_t to int because it will truncate the value. Our code should not have
-# these warnings and one should use a static_cast or a checked_cast for the
-# conversion depending on the case. However, a lot of code still needs to be
-# fixed. Apply this config to such targets to disable the warning.
-#
-# Note that this can be applied regardless of platform and architecture to
-# clean up the call sites. This will only apply the flag when necessary.
-#
-# This config is just an alias to no_shorten_64_warnings and will
-# suppress a superset of warning 4267 and any 64-bit -> 32-bit implicit
-# conversions. Having both for a time means not having to go through and
-# update all references to no_size_t_to_int_warning throughout the codebase
-# atomically.
-#
-# Any new warning suppressions should use the no_shorten_64_warnings
-# config below and not this.
-config("no_size_t_to_int_warning") {
-  configs = [ ":no_shorten_64_warnings" ]
-}
-
-# As part of re-enabling -Wconversion (see issue 588506) some code
-# will continue to generate warnings.
-# The first warning to be enabled will be -Wshorten-64-to-32.
-#
-# Code that currently generates warnings for this can include this
-# config to disable them.
-config("no_shorten_64_warnings") {
-  if (current_cpu == "x64" || current_cpu == "arm64") {
-    if (is_win) {
-      # MSVC does not have an explicit warning equivalent to
-      # -Wshorten-64-to-32 but 4267 warns for size_t -> int
-      # on 64-bit builds, so is the closest.
-      cflags = [ "/wd4267" ]
-    }
-  }
-}
-
-# Some code presumes that pointers to structures/objects are compatible
-# regardless of whether what they point to is already known to be valid.
-# gcc 4.9 and earlier had no way of suppressing this warning without
-# suppressing the rest of them.  Here we centralize the identification of
-# the gcc 4.9 toolchains.
-config("no_incompatible_pointer_warnings") {
-  cflags = []
-  if (is_chromeos && current_cpu == "arm") {
-    cflags += [ "-w" ]
   }
 }
 
@@ -1354,27 +1230,6 @@ config("optimize") {
   ldflags = common_optimize_on_ldflags
 }
 
-# Same config as 'optimize' but without the WPO flag.
-config("optimize_no_wpo") {
-  if (is_win) {
-    # Favor size over speed, /O1 must be before the common flags. The GYP
-    # build also specifies /Os and /GF but these are implied by /O1.
-    cflags = [ "/O1" ] + common_optimize_on_cflags + [ "/Oi" ]
-  } else if (optimize_for_size && !is_nacl) {
-    # Favor size over speed.
-    if (is_clang) {
-      cflags = [ "-Oz" ] + common_optimize_on_cflags
-    } else {
-      cflags = [ "-Os" ] + common_optimize_on_cflags
-    }
-  } else if (optimize_for_fuzzing) {
-    cflags = [ "-O0" ] + common_optimize_on_cflags
-  } else {
-    cflags = [ "-O2" ] + common_optimize_on_cflags
-  }
-  ldflags = common_optimize_on_ldflags
-}
-
 # Turn off optimizations.
 config("no_optimize") {
   if (is_win) {
@@ -1397,48 +1252,6 @@ config("no_optimize") {
     # On ohos_full_debug mode, we close all optimization
     cflags = [ "-O0" ]
     ldflags = []
-  }
-}
-
-# Turns up the optimization level. On Windows, this implies whole program
-# optimization and link-time code generation which is very expensive and should
-# be used sparingly.
-config("optimize_max") {
-  if (is_nacl && is_nacl_irt) {
-    # The NaCl IRT is a special case and always wants its own config.
-    # Various components do:
-    #   if (!is_debug) {
-    #     configs -= [ "//build/config/compiler:default_optimization" ]
-    #     configs += [ "//build/config/compiler:optimize_max" ]
-    #   }
-    # So this config has to have the selection logic just like
-    # "default_optimization", below.
-    configs = [ "//build/config/nacl:irt_optimize" ]
-  } else {
-    ldflags = common_optimize_on_ldflags
-    if (is_win) {
-      # Favor speed over size, /O2 must be before the common flags. The GYP
-      # build also specifies /Ot, /Oi, and /GF, but these are implied by /O2.
-      cflags = [ "/O2" ] + common_optimize_on_cflags
-
-      if (is_official_build) {
-        if (!is_clang) {
-          cflags += [
-            "/GL",  # Whole program optimization.
-
-            # Disable Warning 4702 ("Unreachable code") for the WPO/PGO builds.
-            # Probably anything that this would catch that wouldn't be caught
-            # in a normal build isn't going to actually be a bug, so the
-            # incremental value of C4702 for PGO builds is likely very small.
-            "/wd4702",
-          ]
-        }
-      }
-    } else if (optimize_for_fuzzing) {
-      cflags = [ "-O0" ] + common_optimize_on_cflags
-    } else {
-      cflags = [ "-O2" ] + common_optimize_on_cflags
-    }
   }
 }
 
@@ -1741,16 +1554,6 @@ config("strip_debug") {
     ldflags = []
   }
   ldflags += [ "-Wl,--strip-debug" ]
-}
-
-if (is_mac) {
-  # On Mac and iOS, this enables support for ARC (automatic ref-counting).
-  # See http://clang.llvm.org/docs/AutomaticReferenceCounting.html.
-  config("enable_arc") {
-    common_flags = [ "-fobjc-arc" ]
-    cflags_objc = common_flags
-    cflags_objcc = common_flags
-  }
 }
 
 config("no_common") {
