@@ -686,7 +686,7 @@ template("ohos_shared_library") {
       if (defined(auto_relative_install_dir)) {
         relative_install_dir = auto_relative_install_dir
       }
-
+      # update relative_install_dir if relative_install_dir defined in BUILD.gn
       if (defined(invoker.relative_install_dir)) {
         relative_install_dir = invoker.relative_install_dir
       }
