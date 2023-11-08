@@ -32,6 +32,7 @@ def main():
     parser.add_argument('--sdk-archive-dir', default=None)
     parser.add_argument('--output', required=True)
     parser.add_argument('--skip-pattern', required=True)
+    parser.add_argument('--enable-sign', action='store_true')
 
     options = parser.parse_args()
 
@@ -57,6 +58,8 @@ def main():
             zip_file.writestr(zip_info,
                               notice.read(),
                               compress_type=zipfile.ZIP_STORED)
+        if options.enable_sign:
+            code_sign(archive)
     build_utils.touch(options.output)
 
     build_utils.write_depfile(options.depfile,
