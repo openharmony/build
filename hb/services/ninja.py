@@ -22,7 +22,7 @@ import sys
 from exceptions.ohos_exception import OHOSException
 from services.interface.build_executor_interface import BuildExecutorInterface
 from resources.config import Config
-from util.system_util import SystemUtil
+from util.system_util import SystemUtil, ExecEnviron
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 
@@ -45,9 +45,33 @@ class Ninja(BuildExecutorInterface):
                      '-C', self.config.out_path] + self._convert_args()
         LogUtil.write_log(self.config.log_path,
                           'Excuting ninja command: {}'.format(' '.join(ninja_cmd)), 'info')
+
+        ninja_env = ExecEnviron()
+        ninja_env_allowlist = IoUtil.read_json_file(
+            os.path.join(
+                self.config.root_path,
+                "out/preloader",
+                self.config.product,
+                "compile_env_allowlist.json",
+            )
+        ).get("ninja")
+
+        if ninja_env_allowlist:
+            ninja_env.initenv()
+            ninja_env.allow(ninja_env_allowlist)
+            LogUtil.write_log(
+                self.config.log_path,
+                f"run ninja with environ {ninja_env.allkeys}",
+                "info",
+            )
+
         try:
             SystemUtil.exec_command(
-                ninja_cmd, self.config.log_path, log_filter=True)
+                ninja_cmd,
+                self.config.log_path,
+                exec_env=ninja_env.allenv,
+                log_filter=True,
+            )
         except OHOSException:
             raise OHOSException('ninja phase failed', '4000')
 
