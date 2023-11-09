@@ -50,6 +50,8 @@ template("merge_profile") {
       rebase_path(generated_profile, root_build_dir),
       "--release-type",
       release_type,
+      "--api-version",
+      api_version,
     ]
     outputs = [ generated_profile ]
   }
