@@ -898,6 +898,7 @@ config("default_warnings") {
         "-Wno-error=sign-compare",
         "-Wno-error=int-in-bool-context",
         "-Wno-error=return-stack-address",
+        "-Wno-error=dangling-gsl",
         "-Wno-unused-but-set-variable",
         "-Wno-deprecated-declarations",
         "-Wno-unused-but-set-parameter",
