@@ -40,6 +40,7 @@ class OHOSPreloader(PreloadInterface):
         self._all_parts = {}
         self._build_vars = {}
         self._compile_standard_whitelist_info = {}
+        self._compile_env_allowlist_info = {}
 
     def __post_init__(self):
         self._dirs = Dirs(self._config)
@@ -53,6 +54,7 @@ class OHOSPreloader(PreloadInterface):
         self._toolchain_label = self._build_vars.get('product_toolchain_label')
         self._subsystem_info = self._get_org_subsystem_info()
         self._compile_standard_whitelist_info = self._get_compile_standard_whitelist_info()
+        self._compile_env_allowlist_info = self._get_compile_env_allowlist_info()
 
 # generate method
 
@@ -257,6 +259,16 @@ class OHOSPreloader(PreloadInterface):
             'generated compile_standard_whitelist info to {}/compile_standard_whitelist.json'
             .format(self._dirs.preloader_output_dir))
 
+    def _generate_compile_env_allowlist_json(self):
+        IoUtil.dump_json_file(
+            self._outputs.compile_env_allowlist_json, self._compile_env_allowlist_info
+        )
+        LogUtil.hb_info(
+            "generated compile_env_allowlist info to {}/compile_env_allowlist.json".format(
+                self._dirs.preloader_output_dir
+            )
+        )
+
 # get method
 
     def _get_org_subsystem_info(self) -> dict:
@@ -280,3 +292,21 @@ class OHOSPreloader(PreloadInterface):
         
         allow_info = IoUtil.read_json_file(allow_info_file)
         return allow_info
+
+    def _get_compile_env_allowlist_info(self) -> dict:
+        allow_env_file = os.path.join(
+            self._dirs.source_root_dir,
+            "out/products_ext/{}/compile_env_allowlist.json".format(
+                self.config.product
+            ),
+        )
+        if not os.path.exists(allow_env_file):
+            allow_env_file = os.path.join(
+                self._dirs.source_root_dir, "build/compile_env_allowlist.json"
+            )
+
+        if not os.path.exists(allow_env_file):
+            return {}
+
+        allow_env = IoUtil.read_json_file(allow_env_file)
+        return allow_env
