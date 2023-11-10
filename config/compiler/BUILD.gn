@@ -889,6 +889,7 @@ config("default_warnings") {
       cflags += [
         "-Wno-error=c99-designator",
         "-Wno-error=anon-enum-enum-conversion",
+        "-Wno-error=sizeof-array-div",
         "-Wno-error=implicit-fallthrough",
         "-Wno-error=reorder-init-list",
         "-Wno-error=range-loop-construct",
