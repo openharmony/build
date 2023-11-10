@@ -38,7 +38,7 @@ if (product_name == "ohos-sdk") {
       ":make_inner_kits",
       ":packages",
     ]
-    if (is_standard_system) {
+    if (is_standard_system && !is_llvm_build) {
       # Lite system uses different packaging scheme, which is called in hb.
       # So skip images for lite system since it's the mkimage
       # action for standard system.
@@ -46,8 +46,10 @@ if (product_name == "ohos-sdk") {
     }
   }
 
-  group("images") {
-    deps = [ "//build/ohos/images:make_images" ]
+  if (!is_llvm_build) {
+    group("images") {
+      deps = [ "//build/ohos/images:make_images" ]
+    }
   }
 
   group("packages") {
@@ -60,10 +62,12 @@ if (product_name == "ohos-sdk") {
 
   group("build_all_test_pkg") {
     testonly = true
-    deps = [
-      "$root_build_dir/build_configs:parts_test",
-      "//test/testfwk/developer_test:make_temp_test",
-    ]
+    if (!is_llvm_build) {
+      deps = [
+        "$root_build_dir/build_configs:parts_test",
+        "//test/testfwk/developer_test:make_temp_test",
+      ]
+    }
   }
 
   group("make_test") {

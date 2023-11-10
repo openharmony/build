@@ -22,6 +22,8 @@ declare_args() {
     bpf_arch = "x86_64"
   } else if (current_cpu == "mipsel") {
     bpf_arch = "mipsel"
+  } else if (current_cpu == "riscv64") {
+    bpf_arch = "riscv64"
   }
 }
 

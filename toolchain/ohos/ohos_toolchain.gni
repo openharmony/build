@@ -54,8 +54,15 @@ template("ohos_clang_toolchain") {
       abi_target = "x86_64-linux-ohos"
     }
 
-    clang_rt_dir =
-        rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
+    if (is_legacy) {
+      clang_rt_dir =
+          rebase_path("${clang_lib_base_path}/${abi_target}/nanlegacy",
+                      root_build_dir)
+    } else {
+      clang_rt_dir =
+          rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
+    }
+
     solink_libs_section_prefix = "${ohos_libc_dir}/crti.o"
     solink_libs_section_prefix += " ${clang_rt_dir}/clang_rt.crtbegin.o"
     solink_libs_section_postfix = "${ohos_libc_dir}/crtn.o"
