@@ -188,6 +188,8 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
                 module_name, json.dumps(sdk_mplts, sort_keys=True,
                                         indent=2), sdk_jar_path[0])
             build_file_content = add_dynamic_deps(build_file_content, bc)
+        elif module_type == 'rlib':
+            pass
         else:
             raise Exception(
                 'The type of sdk module configuration is not supported.')

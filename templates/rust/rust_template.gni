@@ -191,6 +191,9 @@ template("ohos_rust_executable") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
+        _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
         _rustflags += clippyVendorLints
@@ -270,6 +273,9 @@ template("ohos_rust_shared_library") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
+        _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
         _rustflags += clippyVendorLints
@@ -341,6 +347,9 @@ template("ohos_rust_static_library") {
       if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
@@ -425,6 +434,9 @@ template("ohos_rust_shared_ffi") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
+        _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
         _rustflags += clippyVendorLints
@@ -505,6 +517,9 @@ template("ohos_rust_static_ffi") {
       if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
@@ -858,6 +873,9 @@ template("ohos_rust_proc_macro") {
       if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
+        _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints

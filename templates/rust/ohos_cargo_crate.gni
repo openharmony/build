@@ -99,6 +99,9 @@ template("ohos_cargo_crate") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
         _rustflags += allowAllLints
+      } else if (source_dir_begin == "vendor" &&
+                 file_path_split[3] == "open_source") {
+        _rustflags += allowAllLints
       } else if (source_dir_begin == "vendor") {
         _rustflags += rustcVendorLints
         _rustflags += clippyVendorLints
