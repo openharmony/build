@@ -10,7 +10,9 @@
         "arm",
         "arm64",
         "x86_64",
-        "x64"
+        "x64",
+        "mipsel",
+        "riscv64"
       ]
     },
     "resolve_function": "resolve_target_cpu",

@@ -36,6 +36,8 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
     host_cpu = platform.uname().machine.lower()
     llvm_dir_path = os.path.join(
         root_path, 'prebuilts/clang/ohos', host_platform + '-' + host_cpu, 'llvm/bin')
+    if not os.path.exists(llvm_dir_path):
+        llvm_dir_path = os.path.join(root_path, 'out/llvm-install/bin')
     llvm_nm_path = os.path.join(llvm_dir_path, "llvm-nm")
     llvm_objcopy_path = os.path.join(llvm_dir_path, "llvm-objcopy")
 
