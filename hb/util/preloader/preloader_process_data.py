@@ -46,6 +46,7 @@ class Outputs:
         self.systemcapability_json = os.path.join(
             output_dir, 'SystemCapability.json')
         self.compile_standard_whitelist_json = os.path.join(output_dir, 'compile_standard_whitelist.json')
+        self.compile_env_allowlist_json = os.path.join(output_dir, 'compile_env_allowlist.json')
 
 class Dirs:
 

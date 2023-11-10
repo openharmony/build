@@ -31,7 +31,7 @@ from containers.status import throw_exception
 class SystemUtil(metaclass=NoInstance):
 
     @staticmethod
-    def exec_command(cmd: list, log_path='out/build.log', **kwargs):
+    def exec_command(cmd: list, log_path='out/build.log', exec_env=None, **kwargs):
         useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
         is_log_filter = kwargs.pop('log_filter', False)
         if '' in cmd:
@@ -44,6 +44,7 @@ class SystemUtil(metaclass=NoInstance):
                                        stderr=subprocess.STDOUT,
                                        encoding='utf-8',
                                        errors='ignore',
+                                       env=exec_env,
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
                 if is_log_filter:
@@ -70,3 +71,26 @@ class SystemUtil(metaclass=NoInstance):
         if time_type == 'datetime':
             return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         return datetime.now().replace(microsecond=0)
+
+
+class ExecEnviron:
+    def __init__(self):
+        self._env = None
+
+    @property
+    def allenv(self):
+        return self._env
+
+    @property
+    def allkeys(self):
+        if self._env is None:
+            return []
+        return list(self._env.keys())
+
+    def initenv(self):
+        self._env = os.environ.copy()
+
+    def allow(self, allowed_vars):
+        if self._env is not None:
+            allowed_env = {k: v for k, v in self._env.items() if k in allowed_vars}
+            self._env = allowed_env

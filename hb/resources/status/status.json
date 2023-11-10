@@ -185,7 +185,7 @@
     },
     "4000": {
         "code": "4000",
-        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\t\t  7. check if any environment variables required by the building process are not set in build/compile_env_allowlist.json\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
     },
     "4001": {
         "code": "4001",
