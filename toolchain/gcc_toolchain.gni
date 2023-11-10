@@ -615,7 +615,7 @@ template("gcc_toolchain") {
       tool("rust_rlib") {
         rlibname =
             "{{target_output_name}}{{output_extension}}"  # e.g. "libfoo.rlib".
-        outfile = "{{target_out_dir}}/$rlibname"
+        outfile = "{{output_dir}}/$rlibname"
         depfile = "$outfile.d"
         rspfile = "$outfile.rsp"
         rspfile_content = "{{rustdeps}} {{externs}}"
