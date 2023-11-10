@@ -273,7 +273,6 @@ config("compiler") {
     }
   }
 
-
   if (is_posix && !is_mac) {
     if (enable_profiling) {
       if (!is_debug) {
