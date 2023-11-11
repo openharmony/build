@@ -133,6 +133,12 @@ function init_ohpm() {
     echo "install pnpm"
     npm install
   popd
+  mkdir -p $HOME/.ohpm
+  echo '{"devDependencies":{"@ohos/hypium":"1.0.6"}}' > $HOME/.ohpm/oh-package.json5
+  pushd $HOME/.ohpm
+    echo "install hypium"
+    ohpm install
+  popd
 }
 
 if [[ "$*" != *ohos-sdk* ]]; then
