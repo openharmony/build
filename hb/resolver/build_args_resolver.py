@@ -97,8 +97,6 @@ class BuildArgsResolver(ArgsResolverInterface):
             build_module.args_dict['target_cpu'].arg_value = 'arm64'
         elif target_arg.arg_value == 'arkui-x':
             target_generator = build_module.target_generator
-            target_generator.regist_arg('is_cross_platform_build', True)
-            target_generator.regist_arg('build_cross_platform_version', True)
             target_generator.regist_arg('is_arkui_x', True)
             target_generator.regist_arg('enable_ng_build', True)
             target_generator.regist_arg('is_component_build', False)
