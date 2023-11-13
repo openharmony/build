@@ -1,12 +1,4 @@
 {
     "ninja": [
-        "PATH",
-        "SHELL",
-        "USE_CCACHE",
-        "CCACHE_EXEC",
-        "CCACHE_DIR",
-        "CCACHE_UMASK",
-        "CCACHE_LOGFILE",
-        "CCACHE_BASEDIR"
     ]
 }
