@@ -133,7 +133,7 @@ def hap_signing(args):
         signing_cmd = [
             'java', '-jar', signtool_path, 'sign-app', '-mode', 'localsign',
             '-profileSigned', '1', '-keystorePwd', '123456',
-            '-keyPwd', '123456', '-inForm', 'zip'
+            '-keyPwd', '123456', '-inForm', 'zip', '-signcode', '0'
         ]
         cmd_dict = {
             '-keyAlias': args.privatekey,
