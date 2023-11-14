@@ -33,7 +33,9 @@ declare_args() {
   sdk_for_hap_build = false
 }
 
-enable_sign = false
+declare_args() {
+  enable_sign = false
+}
 
 sdk_toolchains = {
   linux = "//build/toolchain/linux:clang_x64"
@@ -114,10 +116,6 @@ template("copy_and_archive") {
         "--zip-prefix-path",
         invoker.zip_prefix_path,
       ]
-    }
-
-    if (host_os == "mac" && enable_sign) {
-      args += [ "--enable-sign" ]
     }
   }
 }
