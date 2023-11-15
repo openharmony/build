@@ -66,11 +66,12 @@ class Ninja(BuildExecutorInterface):
             )
 
         try:
+            log_filter = os.getenv("LOG_FILTER", "True") == "True"
             SystemUtil.exec_command(
                 ninja_cmd,
                 self.config.log_path,
                 exec_env=ninja_env.allenv,
-                log_filter=True,
+                log_filter=log_filter,
             )
         except OHOSException:
             raise OHOSException('ninja phase failed', '4000')
