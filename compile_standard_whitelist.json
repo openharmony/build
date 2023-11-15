@@ -5,7 +5,8 @@
         "device/board/hisilicon/hispark_taurus/ohos.build",
         "device/qemu/arm_virt/linux/ohos.build",
         "third_party/flutter/glfw/bundle.json",
-        "vendor/hihope/rk3568/ohos.build"
+        "vendor/hihope/rk3568/ohos.build",
+        "vendor/hihope/ipcamera/ohos.build"
     ],
     "subsystem_components": [],
     "gn_part_or_subsystem_error": [
@@ -37,7 +38,8 @@
         "//foundation/arkui/napi/sample/native_module_systemtest:systemtestnapi",
         "//ide/tools/previewer:lite_previewer",
         "//third_party/iptables/extensions:libext",
-        "//vendor/hihope/rk3568/bluetooth:libbt_vendor"
+        "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
+        "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "deps_added_external_part_module": [
         "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler",
@@ -441,7 +443,8 @@
         "//test/xts/acts/hiviewdfx/utils/native:utilskit",
         "//test/xts/hats/hdf/display/composer/common:disp_dev_hdi_test",
         "//third_party/libfuse:libfuse",
-        "//vendor/hihope/rk3568/bluetooth:libbt_vendor"
+        "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
+        "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "third_deps_bundle_not_add": [
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
