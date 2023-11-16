@@ -30,7 +30,9 @@ ohos_sdk_copy_dir = "$root_build_dir/${product_name}"
 
 sdk_check_flag = true
 
-enable_sign = false
+declare_args() {
+  enable_sign = false
+}
 
 sdk_toolchains = {
   linux = "//build/toolchain/linux:clang_x64"
@@ -111,10 +113,6 @@ template("copy_and_archive") {
         "--zip-prefix-path",
         invoker.zip_prefix_path,
       ]
-    }
-
-    if (host_os == "mac" && enable_sign) {
-      args += [ "--enable-sign" ]
     }
   }
 }
