@@ -18,7 +18,6 @@ import sys
 import os
 import shutil
 import zipfile
-import subprocess
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -36,15 +35,6 @@ def get_source_from_module_info_file(module_info_file):
     return source, notice
 
 
-def code_sign(source, is_zip_file=False):
-    if is_zip_file:
-        proc = subprocess.Popen(['xcrun', 'notarytool', 'submit', source, '--keychain-profile', '"ohos-sdk"', '--wait'])
-    else:
-        sign = os.getenv('SIGN')
-        proc = subprocess.Popen(['codesign', '--sign', sign, '--timestamp', '--options=runtime', source])
-    proc.communicate(timeout=60)
-
-
 def do_copy_and_stamp(copy_infos, options, depfile_deps):
     notice_tuples = []
     for cp_info in copy_infos:
@@ -56,17 +46,12 @@ def do_copy_and_stamp(copy_infos, options, depfile_deps):
             if os.listdir(source):
                 files = build_utils.get_all_files(source)
                 if files:
-                    if options.enable_sign:
-                        for file in files:
-                            code_sign(file)
                     shutil.copytree(source, dest, dirs_exist_ok=True)
                     depfile_deps.update(build_utils.get_all_files(source))
                 else:
                     # Skip empty directories.
                     depfile_deps.add(source)
         else:
-            if options.enable_sign:
-                code_sign(source)
             dest_dir = os.path.dirname(dest)
             os.makedirs(dest_dir, exist_ok=True)
             shutil.copy2(source, dest)
@@ -111,7 +96,6 @@ def main():
     parser.add_argument('--zip-prefix-path', default=None)
     parser.add_argument('--notice-output-archive', required=True)
     parser.add_argument('--sdk-output-archive', required=True)
-    parser.add_argument('--enable-sign', action='store_true')
 
     options = parser.parse_args()
 

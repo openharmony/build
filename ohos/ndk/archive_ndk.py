@@ -17,7 +17,6 @@ import optparse
 import os
 import sys
 import zipfile
-import subprocess
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util import build_utils  # noqa: E402
@@ -38,22 +37,12 @@ def parse_args(args):
     parser.add_option('--notice-file', help='path to notice file')
     parser.add_option('--record-path', help='path to md5.stamp file')
     parser.add_option('--platform', help='os platform')
-    parser.add_option('--enable-sign', action='store_true')
 
     options, _ = parser.parse_args(args)
     return options
 
 
-def code_sign(source, is_zip_file=False):
-    if is_zip_file:
-        proc = subprocess.Popen(['xcrun', 'notarytool', 'submit', source, '--keychain-profile', '"ohos-sdk"', '--wait'])
-    else:
-        sign = os.getenv('SIGN')
-        proc = subprocess.Popen(['codesign', '--sign', sign, '--timestamp', '--options=runtime', source])
-    proc.communicate(timeout=60)
-
-
-def do_archive(output, directory, prefix, compress_fn, filter_file_name, enable_sign):
+def do_archive(output, directory, prefix, compress_fn, filter_file_name):
     files = []
     for root, _, filenames in os.walk(directory):
         for f in filenames:
@@ -61,8 +50,6 @@ def do_archive(output, directory, prefix, compress_fn, filter_file_name, enable_
                 files.extend([os.path.join(root, f)])
     with zipfile.ZipFile(output, 'a') as outfile:
         for f in files:
-            if enable_sign:
-                code_sign(file)
             compress = compress_fn(f) if compress_fn else None
             if prefix:
                 zip_path = os.path.join(prefix, os.path.relpath(f, directory))
@@ -75,12 +62,12 @@ def do_archive(output, directory, prefix, compress_fn, filter_file_name, enable_
 
 
 def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
-                compress_fn, notice, filter_file_name, enable_sign):
+                compress_fn, notice, filter_file_name):
     # Create an empty zipfile first, then add stuff to it.
     with zipfile.ZipFile(output, 'w') as outfile:
         pass
     for directory in [os_irrelevant_dir, os_specific_dir]:
-        do_archive(output, directory, prefix, compress_fn, filter_file_name, enable_sign)
+        do_archive(output, directory, prefix, compress_fn, filter_file_name)
 
     with zipfile.ZipFile(output, 'a') as zip_file:
         compress = compress_fn(notice) if compress_fn else None
@@ -92,8 +79,6 @@ def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
                                      zip_path,
                                      src_path=notice,
                                      compress=compress)
-    if enable_sign:
-        code_sign(output, True)
 
 
 def file_filter(os_irrelevant_dir):
@@ -122,7 +107,7 @@ def main(args):
 
     build_utils.call_and_write_depfile_if_stale(lambda: archive_ndk(
         options.output, os_irrelevant_dir, os_specific_dir, options.prefix,
-        lambda _: True, options.notice_file, filter_file_name, options.enable_sign),
+        lambda _: True, options.notice_file, filter_file_name),
                                            options,
                                            depfile_deps=depfile_deps,
                                            input_paths=depfile_deps,
