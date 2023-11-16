@@ -183,6 +183,9 @@ action("check_sdk_completeness") {
     ":ohos_sdk",
     "//build/ohos/ndk:ohos_ndk",
   ]
+  if (host_os == "mac" && enable_sign) {
+    deps += [ ":sign_sdk" ]
+  }
 
   script = "//build/ohos/sdk/check_sdk_completeness.py"
   _verify_result = "${target_out_dir}/check_sdk_completeness.txt"
@@ -225,6 +228,19 @@ action_with_pydeps("add_notice_file") {
 
   inputs = [ sdk_notice_txt ]
   outputs = [ _output ]
+}
+
+action("sign_sdk") {
+  deps = [
+    ":ohos_sdk",
+    "//build/ohos/ndk:ohos_ndk",
+  ]
+  script = "//build/scripts/sign_sdk.py"
+  args = [
+    "--sdk-out-dir",
+    rebase_path(ohos_sdk_out_dir, root_build_dir),
+  ]
+  outputs = [ "$target_out_dir/$target_name.stamp" ]
 }
 
 group("ohos_sdk") {
