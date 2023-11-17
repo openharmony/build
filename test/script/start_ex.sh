@@ -1,20 +1,14 @@
 #!/bin/bash
 
-remove_out(){
-  pushd out
-  rm -rf ./*
-  popd
-}
-
 generate_build_option_report() {
     build_option_example_file=$1
-    pytest -vs --html ../out/build_option_report.html $build_option_example_file
+    pytest -vs --html ../out/build_option_report.html ../example/$build_option_example_file
     pkill -f '/pyd.py --root /root/.pycache --start'
 }
 
 generate_gn_template_report() {
     gn_template_example_file=$1
-    pytest -vs --html ../out/gn_template_report.html $gn_template_example_file
+    pytest -vs --html ../out/gn_template_report.html ../example/$gn_template_example_file
 }
 
 start() {
