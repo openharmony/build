@@ -13,15 +13,11 @@ generate_gn_template_report() {
 
 start() {
     if [[ $# -eq 2 && $1 == 'test_build_option.py' && $2 == 'test_gn_template.py' ]]; then
-      remove_out
       generate_build_option_report "$1"
-      remove_out
       generate_gn_template_report "$2"
     elif [[ $# -eq 1 && $1 == 'test_build_option.py' ]]; then
-      remove_out
       generate_build_option_report "$1"
     elif [[ $# -eq 1 && $1 == 'test_gn_template.py' ]]; then
-      remove_out
       generate_gn_template_report "$1"
     else
       echo "args wrong"
