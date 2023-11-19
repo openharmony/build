@@ -88,6 +88,7 @@ config("runtime_library") {
     rebase_path(libclang_rt_file),
     "c",
     rebase_path(libcxxabi_file),
+    rebase_path(libgwp_asan_file),
   ]
 
   if (current_cpu == "arm" && arm_version == 6) {
