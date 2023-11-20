@@ -84,6 +84,10 @@ declare_args() {
   is_llvm_build = false
 }
 
+declare_args() {
+  rustc_codecheck = false
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
