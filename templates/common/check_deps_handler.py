@@ -153,7 +153,7 @@ def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_
 def check(args):
     depfiles = []
     # ignore test related parts
-    part_allow_set = {'libc-test', 'libc-test-lib'}
+    part_allow_set = {'libc-test', 'libc-test-lib', 'libc-gtest-lib'}
     if args.part_name in part_allow_set:
         return depfiles
 
