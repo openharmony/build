@@ -103,7 +103,7 @@ echo "Node.js version check passed"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
-npm config set lockfile true
+npm config set lockfile false
 cat $HOME/.npmrc | grep 'lockfile=false' || echo 'lockfile=false' >> $HOME/.npmrc
 
 function init_ohpm() {
