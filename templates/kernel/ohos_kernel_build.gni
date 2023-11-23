@@ -19,7 +19,7 @@ template("ohos_build_ko") {
     sources = invoker.sources
     sources_name = get_path_info(sources, "name")
     source_path_info = get_path_info(sources[0], "dir")
-    ko_out_dir = "$root_out_dir/packages/phone/vendor_delm"
+    ko_out_dir = "$root_out_dir/packages/phone/chip_ckm"
     script = "//build/templates/kernel/make_ko.sh"
     args = [
       rebase_path(source_path_info, root_out_dir),
@@ -30,6 +30,9 @@ template("ohos_build_ko") {
       _arch,
     ]
     args += sources_name
+    if (is_standard_system && _device_name == "rk3568") {
+      deps = [ "//device/board/hihope/rk3568/kernel:kernel" ]
+    }
     outputs = [ "$ko_out_dir/${_target_ko_name}.ko" ]
   }
 }

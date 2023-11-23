@@ -39,7 +39,7 @@ def _prepare_root(system_path, target_cpu):
         shutil.rmtree(root_dir)
     os.makedirs(root_dir, exist_ok=True)
     _dir_list = [
-        'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data',
+        'config', 'dev', 'proc', 'sys', 'updater', 'system', 'vendor', 'data', 'chip_ckm',
         'storage', 'mnt', 'tmp', 'sys_prod', 'chip_prod', 'module_update', 'eng_system', 'eng_chipset'
     ]
     for _dir_name in _dir_list:

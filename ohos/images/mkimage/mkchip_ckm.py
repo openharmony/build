@@ -18,11 +18,9 @@ import argparse
 import subprocess
 import os
 
-FS_TYPE = "ext4"
-BLOCKSIZE = 4096
 
 def args_parse(argv):
-    parser = argparse.ArgumentParser(description='mkvendor_delm.py')
+    parser = argparse.ArgumentParser(description='mkchip_ckm.py')
 
     parser.add_argument("--config-file-path", help="The source file for sload.")
     parser.add_argument("--src-dir", help="The source file for sload.")
@@ -33,12 +31,14 @@ def args_parse(argv):
     args = parser.parse_known_args(argv)[0]
     return args
 
+
 def run_cmd(cmd):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
 
     return res.pid, res.returncode, sout, serr
+
 
 def make_vendor_package(args):
     src_dir = args.src_dir
@@ -59,6 +59,7 @@ def make_vendor_package(args):
         print("pid " + str(res[0]) + " ret " + str(res[1]) + "\n" +
                 res[2].decode() + res[3].decode())
         sys.exit(2)
+
 
 def build(args):
     args = args_parse(args)
