@@ -27,12 +27,16 @@ obj_list=""
 for item in "${after_args[@]}"
 do
   obj_list+="$item.o"
-  obj_list+="_"
+  obj_list+="&"
 done
 
 pushd ${SOURCE_FILE_DIR}
-cp ${PROJECT_DIR}/device/board/hihope/rk3568/kernel/ko_build/ko_make_template/Makefile .
+cp ${PROJECT_DIR}/build/templates/kernel/Makefile .
+cp ${PROJECT_DIR}/out/kernel/OBJ/linux-5.10/certs/signing_key.pem .
+export PATH=${PROJECT_DIR}/out/kernel/OBJ/linux-5.10/scripts/:$PATH
+
 make PROJECTDIR=${PROJECT_DIR} DEVICENAME=${DEVICE_NAME} DEVICEARCH=${DEVICE_ARCH} TARGETKONAME=${TARGET_KO_NAME} OBJLIST=${obj_list}
+sign-file sha512 signing_key.pem signing_key.pem *.ko
 if [ -d "${OUT_DIR}" ]; then
     echo "The ko build out dir exist"
 else
@@ -42,4 +46,5 @@ fi
 cp -f *.ko ${OUT_DIR}
 make clean
 rm -f Makefile
+rm -rf signing_key.pem
 exit 0

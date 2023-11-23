@@ -1,4 +1,4 @@
-/vendor_delm
+/chip_ckm
 33554432
 --fs_type=ext4
 --dac_config ../../build/ohos/images/mkimage/dac.txt
