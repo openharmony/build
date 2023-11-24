@@ -27,15 +27,6 @@ config("clang_cpu_arch") {
   asmflags = cflags
 }
 
-config("clang_language_c") {
-  cflags_c = [ "-std=c99" ]
-}
-
-config("clang_werror") {
-  cflags = [ "-Werror" ]
-  cflags_cc = cflags
-}
-
 config("clang_common") {
   defines = [ "_XOPEN_SOURCE=700" ]
   cflags = [
@@ -68,12 +59,6 @@ config("clang_security") {
 config("clang_exceptions") {
   cflags_cc = [ "-fexceptions" ]
   cflags_objcc = cflags_cc
-}
-
-config("clang_no_exceptions") {
-  cflags_cc = [ "-fno-exceptions" ]
-  cflags_objcc = cflags_cc
-  ldflags = cflags_cc
 }
 
 config("clang_stack_protector") {
