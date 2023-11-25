@@ -23,6 +23,10 @@
     "path": "base/useriam",
     "name": "useriam"
   },
+  "accesscontrol": {
+    "path": "base/accesscontrol",
+    "name": "accesscontrol"
+  },
   "startup": {
     "path": "base/startup",
     "name": "startup"
