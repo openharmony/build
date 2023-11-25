@@ -369,6 +369,7 @@
         "//test/xts/acts/arkui/ace_napi_test/entry/src/main/cpp:napitest",
         "//test/xts/acts/multimedia/image/image_js_standard/imagePixelMapNDK/entry/src/main/cpp:ImagePixelMapNDKTest",
         "//test/xts/acts/multimedia/image/image_js_standard/imageReceiverNDK/entry/src/main/cpp:ImageReceiverNDKTest",
+        "//test/xts/acts/multimedia/image/image_js_standard/imageColorSpaceTransfer/entry/src/main/cpp:ImageColorSpaceTransferTest",
         "//test/xts/acts/multimedia/image/image_js_standard/image_ndk_test/entry/src/main/cpp:imagePixelmap"
     ],
     "external_deps_bundle_not_add": [
