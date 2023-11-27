@@ -117,6 +117,20 @@ template("rust_target") {
       "proc_macro",
     ]
   }
+
+  if (is_asan) {
+    if (use_hwasan) {
+      _rustflags += [
+        "-Clink-arg=-fsanitize=hwaddress",
+        "-Clink-arg=-shared-libasan",
+      ]
+    } else {
+      _rustflags += [
+        "-Clink-arg=-fsanitize=address",
+        "-Clink-arg=-shared-libasan",
+      ]
+    }
+  }
   target(invoker.target_type, "${target_name}") {
     forward_variables_from(invoker,
                            "*",

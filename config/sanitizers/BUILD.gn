@@ -61,7 +61,11 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     _clang_rt_dso_path = "windows/clang_rt.asan_dynamic-x86_64.dll"
   } else if (is_ohos) {
     if (target_cpu == "arm64") {
-      _clang_rt_dso_path = "aarch64-linux-ohos/libclang_rt.asan.so"
+      if (use_hwasan) {
+        _clang_rt_dso_path = "aarch64-linux-ohos/libclang_rt.hwasan.so"
+      } else {
+        _clang_rt_dso_path = "aarch64-linux-ohos/libclang_rt.asan.so"
+      }
     } else if (target_cpu == "arm") {
       _clang_rt_dso_path = "arm-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "x86_64") {
@@ -263,7 +267,7 @@ config("common_sanitizer_flags") {
 
 config("asan_flags") {
   cflags = []
-  if (is_asan && !is_mingw) {
+  if (is_asan && !is_mingw && !use_hwasan) {
     cflags += [ "-fsanitize=address" ]
     if (!is_mac) {
       cflags += [ "-fsanitize-address-use-after-scope" ]
@@ -278,6 +282,18 @@ config("asan_flags") {
       ]
     }
     cflags += [ "-fsanitize-recover=address" ]
+  }
+}
+
+config("hwasan_flags") {
+  cflags = []
+  if (is_asan && use_hwasan && !is_mingw && current_cpu == "arm64") {
+    cflags += [
+      "-fsanitize=hwaddress",
+      "-fno-emulated-tls",
+      "-mllvm",
+      "-hwasan-globals=0",
+    ]
   }
 }
 
@@ -537,6 +553,7 @@ all_sanitizer_configs = [
   ":coverage_flags",
   ":default_sanitizer_ldflags",
   ":asan_flags",
+  ":hwasan_flags",
   ":cfi_flags",
   ":lsan_flags",
   ":msan_flags",
