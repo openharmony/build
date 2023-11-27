@@ -151,6 +151,18 @@ if(OHOS_ENABLE_ASAN STREQUAL ON)
 		list(APPEND OHOS_C_COMPILER_FLAGS -fsanitize-blacklist="${OHOS_ASAN_BLACKLIST}")
 	endif()
 endif()
+
+if (OHOS_ENABLE_HWASAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
+    list(APPEND OHOS_C_COMPILER_FLAGS
+	    -shared-libasan
+	    -fsanitize=hwaddress
+	    -fno-emulated-tls
+	    -fno-omit-frame-pointer)
+    if (DEFINED OHOS_ASAN_BLACKLIST)
+	    list(APPEND OHOS_C_COMPILER_FLAGS -fsanitize-blacklist="${OHOS_ASAN_BLACKLIST}")
+    endif()
+endif()
+
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the common c++ flags
