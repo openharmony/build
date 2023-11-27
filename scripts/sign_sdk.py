@@ -45,8 +45,18 @@ def sign_sdk(zipfile, sign_list):
         subprocess.call(cmd4)
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
-        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', '"ohos-sdk"', '--wait']
-        subprocess.call(cmd6)
+        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', 'ohos-sdk', '--wait']
+        process_res = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        sign_cmd_output, sign_cmd_err = process_res.communicate()
+        sign_cmd_output = sign_cmd_output.decode()
+        sign_cmd_err = sign_cmd_err.decode()
+        print("process_res.returncode:", process_res.returncode)
+        if process_res.returncode != 0:
+            print("sign_cmd_output:{}".format(sign_cmd_output))
+            print("sign_cmd_err:{}".format(sign_cmd_err))
+            raise Exception("file:{} sign failed!".format(zipfile))
+        else:
+            print("file:{} sign success!".format(zipfile))
 
 
 def main(args):
