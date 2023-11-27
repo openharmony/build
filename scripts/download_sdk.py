@@ -130,7 +130,7 @@ def main():
         last_hour = (datetime.datetime.now() +
                      datetime.timedelta(hours=-12)).strftime('%Y%m%d%H%M%S')
 
-        url = "http://ci.openharmony.cn/api/ci-backend/ci-portal/v1/dailybuilds"
+        url = "http://ci.openharmony.cn/api/daily_build/build/tasks"
         myobj = {"pageNum": 1,
                  "pageSize": 1000,
                  "startTime": "",
@@ -145,12 +145,12 @@ def main():
                  "testResult": ""}
         myobj["startTime"] = str(last_hour)
         myobj["endTime"] = str(now_time)
-        x = requests.post(url, data=myobj)
+        x = requests.post(url, json=myobj)
         data = json.loads(x.text)
     except BaseException:
         Exception("Unable to establish connection with ci.openharmony.cn")
 
-    products_list = data['result']['dailyBuildVos']
+    products_list = data['data']['dailyBuildVos']
     for product in products_list:
         product_name = product['component']
         if product_name == args.product_name:
