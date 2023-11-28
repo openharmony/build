@@ -1,7 +1,26 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+#
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 import codecs
+import sys
 import time
 import os
+import json
 import logging.config
 from logging import FileHandler
 
@@ -25,7 +44,7 @@ class SafeFileHandler(FileHandler):
             if self.check_base_filename():
                 self.build_base_filename()
             FileHandler.emit(self, record)
-        except(KeyboardInterrupt, SystemExit):
+        except (KeyboardInterrupt, SystemExit):
             raise
         except:
             self.handleError(record)
@@ -58,21 +77,20 @@ class SafeFileHandler(FileHandler):
             self.stream = open(self.baseFilename, self.mode, encoding=self.encoding)
 
 
-def getLogger(className, level="info"):
+def get_logger(class_name, level="info"):
     formate = "%(asctime)s -%(levelname)s - %(name)s - %(message)s"
-    # formate = "[%(asctime)s] %(levelname)s %(funcName)s [%(process)d]-[%(threadName)s:%(thread)d] [%(name)s:%(lineno)s] %(message)s"
     formatter = logging.Formatter(formate)
-    log_path = os.path.join(os.getcwd(), "log")
+    log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "log")
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    tfrHandler = SafeFileHandler(os.path.join(log_path, className + ".log"))
-    tfrHandler.setFormatter(formatter)
+    tfr_handler = SafeFileHandler(os.path.join(log_path, class_name + ".log"))
+    tfr_handler.setFormatter(formatter)
 
     sh = logging.StreamHandler()
     sh.setFormatter(formatter)
 
-    logger = logging.getLogger(className)
-    logger.addHandler(tfrHandler)
+    logger = logging.getLogger(class_name)
+    logger.addHandler(tfr_handler)
     logger.addHandler(sh)
 
     if level == 'info':
@@ -80,3 +98,13 @@ def getLogger(className, level="info"):
     elif level == 'error':
         logger.setLevel(logging.ERROR)
     return logger
+
+
+def parse_json():
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_example.json")
+    try:
+        with open(config_path, "r", encoding="utf-8") as json_file:
+            data = json.load(json_file)
+            return data
+    except Exception as e:
+        print(e)

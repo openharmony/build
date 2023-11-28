@@ -1,0 +1,63 @@
+{
+  "name": "@ohos/build_framework",
+  "description": "build framework",
+  "version": "3.1",
+  "license": "Apache License 2.0",
+  "publishAs": "code-segment",
+  "segment": {
+      "destPath": "build"
+  },
+ "dirs": {},
+ "scripts": {},
+  "component": {
+    "name": "build_framework",
+    "description": "build_framework component set",
+    "subsystem": "build",
+    "features": [],
+    "adapted_system_type": [
+      "standard",
+      "small",
+      "mini"
+    ],
+    "rom": "",
+    "ram": "",
+    "deps": {},
+    "build": {
+      "sub_component": [
+        "//build/common:common_packages",
+        "//build/rust:default",
+        "//third_party/f2fs-tools:f2fs-tools_host_toolchain",
+        "//build/test/test_example_template/MyApplication3:MyApplication3",
+        "//build/test/test_example_template/test_ohos_shared_library:test_ohos_shared_library",
+        "//build/test/test_example_template/test_ohos_static_library:test_ohos_static_library",
+        "//build/test/test_example_template/test_ohos_executable:test_ohos_executable",
+        "//build/test/test_example_template/test_ohos_source_set:test_ohos_source_set",
+        "//build/test/test_example_template/test_ohos_prebuilt_executable:test_ohos_prebuilt_executable",
+        "//build/test/test_example_template/test_ohos_prebuilt_shared_library:test_ohos_prebuilt_shared_library",
+        "//build/test/test_example_template/test_ohos_prebuilt_static_library:test_ohos_prebuilt_static_library",
+        "//build/test/test_example_template/test_ohos_sa_profile:test_ohos_sa_profile",
+        "//build/test/test_example_template/test_ohos_prebuilt_etc:test_ohos_prebuilt_etc"
+      ],
+      "inner_api": [
+        {
+          "name": "//build/rust:libstd.dylib.so",
+          "header": {
+            "header_base": [],
+            "header_files": []
+          }
+        },
+        {
+          "name": "//build/rust:libtest.dylib.so",
+          "header": {
+            "header_files": [],
+            "header_base": []
+          }
+        }
+      ],
+      "test": [
+        "//build/rust/tests:tests"
+      ]
+    }
+  }
+}
+

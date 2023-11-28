@@ -1,0 +1,1 @@
+double add_test(double a, double b);

@@ -1,0 +1,19 @@
+import("//build/ohos.gni")
+
+config("hello_config") {
+    include_dirs = [ "./include" ]
+}
+
+ohos_shared_library("test_ohos_shared_library_output_dir") {
+    configs = [ ":hello_config" ]
+    sources = [ "./src/hello.cpp" ]
+    part_name = "build_framework"
+    subsystem_name = "build"
+    testonly  = false
+    output_name = "test_ohos_shared_library_output_res"
+    output_extension = "test_ohos_shared_library_output_res"
+    # output_dir = "/out/rk3568/build/hudaxia"
+    install_enable = false   # 内设默认值true
+    module_install_dir = "/hudaxia"
+    relative_install_dir = "/huerxia"
+}

@@ -1,0 +1,12 @@
+import("//build/ohos.gni")
+
+config("hello_config") {
+    include_dirs = [ "./include" ]
+}
+
+ohos_source_set("test_ohos_source_set") {
+    configs = [ ":hello_config" ]
+    sources = [ "./src/main.cpp" ]
+    part_name = "build_framework"
+    subsystem_name = "build"
+}
