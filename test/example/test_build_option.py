@@ -1,35 +1,45 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+#
+# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 import os
 import re
 import sys
 import subprocess
 import time
 import copy
-import threading
 import queue
 import select
-import configparser
+import pty
 from datetime import datetime, timedelta
 import pytest
-from mylogger import getLogger
+from mylogger import get_logger, parse_json
 
-sys.path.append(os.path.join(os.getcwd(), "mylogger.py"))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "mylogger.py"))
+Log = get_logger("build_option")
 
-Log = getLogger("build_option")
+current_file_path = os.path.abspath(__file__)
+script_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 print = Log.info
 logger = Log.error
 
-lock = threading.Lock()
-
-try:
-    config_path = os.path.join(os.getcwd(), "build_option.ini")
-    config = configparser.ConfigParser()
-    config.read(config_path)
-except Exception as e:
-    logger("build_option.ini error")
-    logger(e)
+config = parse_json()
+if not config:
+    logger("config file: build_example.json not exist")
     sys.exit(0)
 
 
@@ -59,56 +69,91 @@ class TestBuildOption:
              }
 
     try:
-        LOG_PATH = config.get("build_option", "log_path")
-        CMD = config.get("build_option", "common_cmd")
-        NINJIA_CMD = config.get("build_option", "ninjia_cmd")
-        TIMEOUT = int(config.get("build_option", "exec_timeout"))
-        TIME_OVER = int(config.get("build_option", "file_time_intever"))
-        COMMAND_TYPE = config.get("build_option", "cmd_type")
+        LOG_PATH = script_path + config.get("build_option").get("log_path")
+        CMD = script_path + config.get("build_option").get("common_cmd")
+        NINJIA_CMD = script_path + config.get("build_option").get("ninjia_cmd")
+        TIMEOUT = int(config.get("build_option").get("exec_timeout"))
+        TIME_OVER = int(config.get("build_option").get("file_time_intever"))
+        COMMAND_TYPE = config.get("build_option").get("cmd_type")
+        PTYFLAG = True if config.get("build_option").get("ptyflag").lower() == "true" else False
+        select_timeout = float(config.get("build_option").get("select_timeout"))
         print("TIMEOUT:{}".format(TIMEOUT))
         print("COMMAND_TYPE:{}".format(COMMAND_TYPE))
         print("TIME_OVER:{}".format(TIME_OVER))
+        print("PTYFLAG:{}".format(PTYFLAG))
+        print("select_timeout:{}".format(select_timeout))
     except Exception as e:
-        logger("build_option.ini error")
+        logger("build_example.json has error")
         logger(e)
-        sys.exit(0)
+        raise e
 
-    # ==========================================================================
-    # =================================common method===============================
-    # ==========================================================================
-
-    @staticmethod
-    def exec_command_select(cmd, shell_flag=False, timeout=60):
+    def exec_command_select(self, cmd, shell_flag=False, timeout=60, ptyflag=False):
         out_queue = queue.Queue()
         print("select_exec cmd is :{}".format(" ".join(cmd)))
-        try:
-            proc = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                encoding="utf-8",
-                universal_newlines=True,
-                shell=shell_flag,
-                errors='ignore'
-            )
-            start_time = time.time()
-            while True:
-                if timeout and time.time() - start_time > timeout:
-                    raise Exception("exec cmd time out,select")
-                with lock:
-                    ready_to_read, _, _ = select.select([proc.stdout, proc.stderr], [], [], 0.1)
+        if not ptyflag:
+            try:
+                proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    encoding="utf-8",
+                    universal_newlines=True,
+                    shell=shell_flag,
+                    errors='ignore'
+                )
+                start_time = time.time()
+                while True:
+                    if timeout and time.time() - start_time > timeout:
+                        raise Exception("exec cmd time out,select")
+                    ready_to_read, _, _ = select.select([proc.stdout, proc.stderr], [], [], self.select_timeout)
                     for stream in ready_to_read:
                         output = stream.readline().strip()
                         if output:
                             out_queue.put(output)
-                if proc.poll() is not None:
-                    break
-            returncode = proc.wait()
-            out_res = list(out_queue.queue)
-            return out_res, returncode
-        except Exception as e:
-            logger("An error occurred: {}".format(e))
-            raise Exception(e)
+                    if proc.poll() is not None:
+                        break
+                returncode = proc.wait()
+                out_res = list(out_queue.queue)
+                return out_res, returncode
+            except Exception as e:
+                logger("An error occurred: {}".format(e))
+                raise Exception(e)
+        else:
+            try:
+                master, slave = pty.openpty()
+                proc = subprocess.Popen(
+                    cmd,
+                    stdin=slave,
+                    stdout=slave,
+                    stderr=slave,
+                    encoding="utf-8",
+                    universal_newlines=True,
+                    shell=shell_flag,
+                    errors='ignore'
+                )
+                start_time = time.time()
+                incomplete_line = ""
+                while True:
+                    if timeout and time.time() - start_time > timeout:
+                        raise Exception("exec cmd time out,select")
+                    ready_to_read, _, _ = select.select([master, ], [], [], self.select_timeout)
+                    for stream in ready_to_read:
+                        output_bytes = os.read(stream, 1024)
+                        output = output_bytes.decode('utf-8')
+                        lines = (incomplete_line + output).split("\n")
+                        for line in lines[:-1]:
+                            line = line.strip()
+                            if line:
+                                out_queue.put(line)
+                        incomplete_line = lines[-1]
+                    if proc.poll() is not None:
+                        break
+                returncode = proc.wait()
+                out_res = list(out_queue.queue)
+                return out_res, returncode
+            except Exception as e:
+                logger("An error occurred: {}".format(e))
+                raise Exception(e)
 
     @staticmethod
     def exec_command_communicate(cmd, shell_flag=False, timeout=60):
@@ -130,9 +175,9 @@ class TestBuildOption:
             logger("An error occurred: {}".format(e))
             raise Exception("exec cmd time out,communicate")
 
-    def exec_command(self, cmd, shell_flag, timeout=TIMEOUT):
+    def exec_command(self, cmd, shell_flag, ptyflag=PTYFLAG, timeout=TIMEOUT):
         if TestBuildOption.COMMAND_TYPE == "select":
-            return self.exec_command_select(cmd, shell_flag=shell_flag, timeout=timeout)
+            return self.exec_command_select(cmd, shell_flag=shell_flag, timeout=timeout, ptyflag=ptyflag)
         else:
             return self.exec_command_communicate(cmd, shell_flag=shell_flag, timeout=timeout)
 
@@ -142,7 +187,7 @@ class TestBuildOption:
             for flag_name, value in flag_res.items():
                 re_match = re.search(value["pattern"], line)
                 if re_match:
-                    print("【{}】:{}\n".format(line_count, line))  # 输出命令终端的显示
+                    print("【match success {}】:{}\n".format(line_count, line))  # 输出命令终端的显示
                     if len(re_match.groups()) > 0:
                         if isinstance(flag_res[flag_name]["flag"], bool):
                             flag_res[flag_name]["flag"] = [re_match.group(1)]
@@ -155,9 +200,10 @@ class TestBuildOption:
         return flag_res
 
     @staticmethod
-    def check_flags(flags, expect_dict=None, returncode=None):
+    def check_flags(flags, expect_dict=None, returncode=0):
         new_dict = copy.deepcopy(flags)
-        if returncode is not None and returncode != 0:
+        if returncode != 0:
+            logger("returncode != 0")
             return 1
         if expect_dict:
             error_count = 0
@@ -166,6 +212,7 @@ class TestBuildOption:
                 if k in new_dict and new_dict[k]["flag"] != expect_dict[k]:
                     error_count += 1
             if error_count != 0:
+                logger("【actual_result】:{}\n".format(new_dict))
                 return 1
         check_li = [item for item in flags.values() if not item["flag"]]
         print("【expect_result】:{}\n".format(expect_dict))
@@ -187,23 +234,25 @@ class TestBuildOption:
                 return False
         return True
 
-    # ==========================================================================
-    # ========================match result by re=======================
-    # ==========================================================================
-
-    def get_match_result(self, cmd, para_type, para_value, shell_flag):
-        cmd_res, returncode = self.exec_command(cmd, shell_flag)
+    def get_match_result(self, cmd, para_type, para_value, shell_flag, ptyflag=PTYFLAG):
+        cmd_res, returncode = self.exec_command(cmd, shell_flag, ptyflag=ptyflag)
         before_flags, expect_dict = self.get_match_flags(para_type, para_value)
         flag_res = self.resolve_res(cmd_res, before_flags)
         result = self.check_flags(flag_res, expect_dict, returncode)
         if result == 1:
             self.print_error_line(cmd_res)
+        else:
+            self.print_error_line(cmd_res, is_success=True)
         return result
 
     @staticmethod
-    def print_error_line(cmd_res):
-        for ind, line in enumerate(cmd_res):
-            logger("【{}】:{}".format(ind, line))
+    def print_error_line(cmd_res, is_success=False):
+        if is_success:
+            for ind, line in enumerate(cmd_res):
+                print("【{}】:{}".format(ind, line))
+        else:
+            for ind, line in enumerate(cmd_res):
+                logger("【{}】:{}".format(ind, line))
 
     def get_match_flags(self, para_type, para_value):
         method_name = "get_{}_flags".format(para_type)
@@ -214,21 +263,20 @@ class TestBuildOption:
         else:
             print("self have no method")
 
-    def get_common_spec_result(self, option, cmd, shell_flag, para_type=None):
+    def get_common_spec_result(self, option, cmd, shell_flag, para_type=None, ptyflag=PTYFLAG):
         if not para_type:
             flag_res, expect_dict = self.get_common_flags(option, check_file=True)
         else:
             flag_res, expect_dict = self.get_match_flags(para_type, option)
-        cmd_res, returncode = self.exec_command(cmd, shell_flag)
+        cmd_res, returncode = self.exec_command(cmd, shell_flag, ptyflag=ptyflag)
         resolve_result = self.resolve_res(cmd_res, flag_res)
         result = self.check_flags(resolve_result, expect_dict, returncode)
         if result == 1:
             self.print_error_line(cmd_res)
+        else:
+            self.print_error_line(cmd_res, is_success=True)
         return resolve_result, result, cmd_res
 
-    ##############################################################################################
-    # logic code
-    ##############################################################################################
     @staticmethod
     def get_build_only_gn_flags(para_value):
         flags = copy.deepcopy(TestBuildOption.FLAGS)
@@ -273,6 +321,11 @@ class TestBuildOption:
     def get_enable_pycache_flags(para_value):
         flags = copy.deepcopy(TestBuildOption.FLAGS)
         expect_dict = {}
+        if para_value.lower() == "true":
+            expect_dict["pycache"] = True
+        else:
+            expect_dict["pycache"] = False
+        flags["pycache"] = {"pattern": r"Starting pycache daemon at", "flag": False}
         flags["os_level"] = {"pattern": r"loader args.*os_level=([a-zA-Z]+)\'", "flag": False}
         flags["root_dir"] = {"pattern": r"""loader args.*source_root_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
         flags["gn_dir"] = {"pattern": r"""loader args.*gn_root_out_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
@@ -598,9 +651,6 @@ class TestBuildOption:
 
         return file_flag
 
-    ##############################################################################################
-    # test example
-    ##############################################################################################
     @pytest.mark.parametrize('cpu_para', ['arm', 'arm64', 'x86_64'])
     def test_target_cpu(self, cpu_para):
         """
@@ -946,7 +996,7 @@ class TestBuildOption:
         cmd = self.CMD.format('--rom-size-statistics', rom_option).split(" ")
         shell_flag = False
 
-        resolve_result, result, _ = self.get_common_spec_result(rom_option, cmd, shell_flag)
+        resolve_result, result, _ = self.get_common_spec_result(rom_option, cmd, shell_flag, ptyflag=True)
 
         if result != 0:
             assert result == 0, "rom_size_statistics para {} failed".format(rom_option)
@@ -1099,7 +1149,7 @@ class TestBuildOption:
             pycache_dir = os.environ.get('HOME')
         pycache_config = os.path.join(pycache_dir, '.pycache', '.config')
         resolve_result, result, _ = self.get_common_spec_result(enable_pycache, cmd, shell_flag,
-                                                                para_type="enable_pycache")
+                                                                para_type="enable_pycache", ptyflag=True)
         if result != 0:
             assert result == 0, "enable pycache para {} failed".format(enable_pycache)
         else:
@@ -1110,3 +1160,4 @@ class TestBuildOption:
                 assert result == 0 and check_file_flag, "enable pycache para {} failed".format(enable_pycache)
             else:
                 assert result == 0 and not check_file_flag, "enable pycache para {} failed".format(enable_pycache)
+

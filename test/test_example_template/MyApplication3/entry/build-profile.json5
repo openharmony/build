@@ -1,0 +1,25 @@
+{
+  "apiType": 'stageMode',
+  "buildOption": {
+    "externalNativeOptions": {
+      "path": "./src/main/cpp/CMakeLists.txt",
+      "arguments": "",
+      "abiFilters": [
+        "armeabi-v7a"
+      ],
+      "cppFlags": "",
+    },
+    "napiLibFilterOption": {
+      "enableOverride": true,
+    }
+  },
+  "targets": [
+    {
+      "name": "default",
+      "runtimeOS": "OpenHarmony"
+    },
+    {
+      "name": "ohosTest",
+    }
+  ]
+}
