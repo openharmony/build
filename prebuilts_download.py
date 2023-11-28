@@ -196,7 +196,9 @@ def _npm_install(args):
         skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
         _run_cmd(skip_ssl_cmd)
     npm_clean_cmd = '{} cache clean -f'.format(npm)
+    npm_package_lock_cmd = '{} config set package-lock false'.format(npm)
     _run_cmd(npm_clean_cmd)
+    _run_cmd(npm_package_lock_cmd)
     print('start npm install, please wait.')
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(args.code_dir, install_info)
