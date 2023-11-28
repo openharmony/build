@@ -10,7 +10,6 @@
     ],
     "subsystem_components": [],
     "gn_part_or_subsystem_error": [
-        "//applications/standard/settings/napi/settings:settings",
         "//arkcompiler/ets_runtime:libark_jsruntime_test",
         "//arkcompiler/toolchain/tooling/test:debugger_entry",
         "//arkcompiler/toolchain/tooling/test:jsdebugtest",
@@ -373,7 +372,6 @@
         "//test/xts/acts/multimedia/image/image_js_standard/image_ndk_test/entry/src/main/cpp:imagePixelmap"
     ],
     "external_deps_bundle_not_add": [
-        "//applications/standard/settings/napi/settings:settings",
         "//arkcompiler/toolchain/tooling/test:jsdebugtest",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
         "//base/hiviewdfx/faultloggerd/tools/crasher_cpp:crasher_cpp",
