@@ -23,6 +23,16 @@ import platform
 import subprocess
 
 
+def gen_symbols(tmp_file, sort_lines, symbols_path):
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        for item in sort_lines:
+            output_file.write('{}\n'.format(item))
+
+    with os.fdopen(os.open(symbols_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        cmd = 'sort {}'.format(tmp_file)
+        subprocess.run(cmd.split(), stdout=output_file)
+
+
 def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
     # temporary file path
     dynsyms_path = stripped_binary_path + ".dynsyms"
@@ -55,42 +65,40 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path):
         mini_debug_path + ".xz " + stripped_binary_path
 
 
-    tmp_file = '{}.tmp'.format(dynsyms_path)
-    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    tmp_file1 = '{}.tmp1'.format(dynsyms_path)
+    tmp_file2 = '{}.tmp2'.format(dynsyms_path)
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
         subprocess.run(gen_symbols_cmd.split(), stdout = output_file)
 
-    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
         sort_lines = []
         for line in lines:
             columns = line.strip().split()
             if columns:
                 sort_lines.append(columns[0])
-        sort_lines.sort()
 
-    with os.fdopen(os.open(dynsyms_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        for item in sort_lines:
-            output_file.write(''.join(item))
-    os.remove(tmp_file)
+    gen_symbols(tmp_file2, sort_lines, dynsyms_path)
+    os.remove(tmp_file1)
+    os.remove(tmp_file2)
 
 
-    tmp_file = '{}.tmp'.format(funcsysms_path)
-    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        subprocess.run(gen_symbols_cmd.split(), stdout = output_file)
+    tmp_file1 = '{}.tmp1'.format(funcsysms_path)
+    tmp_file2 = '{}.tmp2'.format(funcsysms_path)
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+        subprocess.run(gen_func_symbols_cmd.split(), stdout = output_file)
 
-    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
         sort_lines = []
         for line in lines:
             columns = line.strip().split()
             if len(columns) > 2 and ('t' in columns[1] or 'T' in columns[1] or 'd' in columns[1]):
                 sort_lines.append(columns[0])
-        sort_lines.sort()
 
-    with os.fdopen(os.open(funcsysms_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        for item in sort_lines:
-            output_file.write(''.join(item))
-    os.remove(tmp_file)
+    gen_symbols(tmp_file2, sort_lines, funcsysms_path)
+    os.remove(tmp_file1)
+    os.remove(tmp_file2)
 
 
     with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
