@@ -27,7 +27,8 @@
     "result_build_file": "/out/rk3568/build/build_framework/",
     "result_rust_file": "/out/rk3568/obj/build/rust/tests/",
     "result_obj_file": "/out/rk3568/obj/build/test/test_example_template/",
-    "rust_path": "build/rust/tests/"
+    "rust_path": "build/rust/tests/",
+    "test_build": "/build/test/example/test_build.json"
   },
   "performance": {
     "exclude": [
@@ -35,18 +36,20 @@
     ],
     "performance_exec_timeout": 7200,
     "performance_top_count": 30,
-    "performance_overflow": 10,
+    "performance_overflow": 60,
     "performance_select_timeout": 0,
     "performance_script_path": "/build/test/example/performance_test.py",
     "performance_script_data": [
       {
         "performance_cmd": "/build.sh --product-name rk3568 --gn-flags=--time",
         "output_path": "/out/test_report/performance_report_rk3568.html",
+        "report_title": "Rk3568 Performance Analysis Report",
         "ptyflag": "False"
       },
       {
         "performance_cmd": "/build.sh --product-name wifiiot_hispark_pegasus --gn-flags=--time",
         "output_path": "/out/test_report/performance_report_wifiiot.html",
+        "report_title": "Wifiiot Performance Analysis Report",
         "ptyflag": "False"
       }
     ]
