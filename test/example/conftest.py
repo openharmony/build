@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 import platform
 import sys
 
@@ -31,9 +32,19 @@ def pytest_html_report_title(report):
 def pytest_metadata(metadata):
     metadata.clear()
 
-    metadata['System Name'] = platform.system()
-    metadata['System Architecture Information'] = platform.machine()
     metadata['Python Version'] = sys.version
+    metadata['Cpu Count'] = os.cpu_count()
+    metadata["System Info"] = platform.platform()
+
+    disk_info = os.statvfs('/')
+    total_disk = round(float(disk_info.f_frsize * disk_info.f_blocks) / (1024 ** 3), 4)
+    metadata["Disk Size"] = "{} GB".format(total_disk)
+
+    with open('/proc/meminfo', 'r') as f:
+        lines = f.readlines()
+    total_memory_line = [line for line in lines if line.startswith('MemTotal')]
+    total_memory = round(float(total_memory_line[0].split()[1]) / (1024 ** 2), 4) if total_memory_line else " "
+    metadata["Totla Memory"] = "{} GB".format(total_memory)
 
 
 def pytest_html_results_table_header(cells):
@@ -56,3 +67,4 @@ def pytest_runtest_makereport(item, call):
         report.description = str(item.function.__doc__)
     else:
         report.description = "this is description info"
+
