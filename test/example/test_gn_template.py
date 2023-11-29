@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 #
 # Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +20,7 @@ import os
 import sys
 import inspect
 import pytest
+import json
 
 from mylogger import get_logger, parse_json
 
@@ -69,8 +69,9 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, shell_flag=False,
     """
     Execute the cmd command to return the terminal output value
     """
+    write_bundle_json(res_def_name, cmd_path)
     cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
-    print(cmd)
+    proc = None
     try:
         proc = subprocess.Popen(
             cmd,
@@ -100,7 +101,76 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, shell_flag=False,
         logger("An error occurred: {}".format(e))
 
 
+def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=600):
+    """
+    Execute the cmd command to return the terminal output value
+    """
+    write_bundle_json(res_def_name, cmd_path)
+    cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            encoding="utf-8",
+            universal_newlines=True,
+            shell=shell_flag
+        )
+        out, error = proc.communicate(timeout=timeout)
+        out_res = out.splitlines() + error.splitlines()
+        print(f"*******************returncode:{proc.returncode}*********************")
+        if proc.returncode != 0:
+            for row in enumerate(out_res):
+                print(row)
+            if c in out_res:
+                print('*****************test succeed************************')
+                return True
+            else:
+                print(f"{res_def_name} faile")
+                return False
+        else:
+            for row in enumerate(out_res):
+                logger(row)
+            return False
+    except Exception as e:
+        logger("An error occurred: {}".format(e))
+
+def write_bundle_json(res_def_name, cmd_path):
+    """
+    write bundle.json
+    """
+    config_path = CURRENT_OHOS_ROOT + "/test/example/test_build.json"
+    with open(config_path, "r", encoding="utf-8") as json_file:
+        data = json.load(json_file)
+        res = (data.get("component").get("build").get("sub_component"))
+        res.append("//{}:{}".format(cmd_path, res_def_name))
+        data["component"]["build"]["sub_component"] = res
+    config_res = CURRENT_OHOS_ROOT + "/build/common/bundle.json"
+    with open(config_res, "w", encoding="utf-8") as json_file:
+        json.dump(data, json_file, indent=4, ensure_ascii=False)
+
+
 class TestModuleBuild:
+
+    def test_ohos_shared_library_output_dir(self):
+        """
+        ...
+        """
+        res_def_name = inspect.currentframe().f_code.co_name
+        c = "[OHOS INFO] output_dir is not allowed to be defined."
+        cmd_path = template_source_path + res_def_name
+        result = exec_command_out_put(cmd_path, res_def_name, c)
+        assert result, "build test_ohos_shared_library_output_dir failed"
+
+    def test_ohos_shared_library_testonly(self):
+        """
+        ...
+        """
+        c = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
+        res_def_name = inspect.currentframe().f_code.co_name
+        cmd_path = template_source_path + res_def_name
+        result = exec_command_out_put(cmd_path, res_def_name, c)
+        assert result, "build test_ohos_shared_library_testonly failed"
 
     def test_ohos_shared_library(self):
         """
@@ -112,104 +182,24 @@ class TestModuleBuild:
         result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, "build test_ohos_shared_library failed"
 
-    '''
-
-    def test_ohos_shared_library_output_dir(self):
-        """
-        定义编译产物路径,内部默认 不生效
-        """
-        shell_flag = False
-        timeout = 600
-        res_def_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + res_def_name
-        cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
-        print(cmd)
-        try:
-            proc = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                encoding="utf-8",
-                universal_newlines=True,
-                shell=shell_flag
-            )
-            out, error = proc.communicate(timeout=timeout)
-            out_res = out.splitlines() + error.splitlines()
-            print(f"*******************returncode:{proc.returncode}*********************")
-            if proc.returncode != 0:
-                flag = False
-                c = "[OHOS INFO] output_dir is not allowed to be defined."
-                if c in out_res:
-                    flag = True
-                assert flag == False, "build test_ohos_shared_library_output_dir failed"
-            else:
-                for row in enumerate(out_res):
-                    logger(row)
-                assert proc.returncode == 0, "build test_ohos_shared_library_output_dir failed"
-        except Exception as e:
-            logger("An error occurred: {}".format(e))
-
-
-    def test_ohos_shared_library_testonly(self):
-        """
-        调试模式，默认false，true不生效
-        """
-        shell_flag = False
-        timeout = 600
-        res_def_name = "test_ohos_shared_library_output_dir"
-        cmd_path = template_source_path + res_def_name
-        cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
-        print(cmd)
-        try:
-            proc = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                encoding="utf-8",
-                universal_newlines=True,
-                shell=shell_flag
-            )
-            out, error = proc.communicate(timeout=timeout)
-            out_res = out.splitlines() + error.splitlines()
-            print(f"*******************returncode:{proc.returncode}*********************")
-                # a = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
-                # for error_res in list_res:
-                #     if error_res in out_res:
-                #         continue
-                #     else:
-                #         assert proc.returncode == 0, "build test_ohos_shared_library failed"
-            if proc.returncode != 0:
-                flag = False
-                c = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
-                if c in out_res:
-                    flag = True
-                assert flag, "build test_ohos_shared_library failed"
-            else:
-                for row in enumerate(out_res):
-                    logger(row)
-                assert proc.returncode == 0, "build test_ohos_shared_library failed"
-        except Exception as e:
-            logger("An error occurred: {}".format(e))
-    '''
-
     def test_ohos_shared_library_output_name(self):
         """
-        看护输出文件name
+        ...
         """
-        function_name = "test_ohos_shared_library_output_dir"
-        cmd_path = template_source_path + function_name
-        res_path = build_res_path + "lib{}.{}".format(function_name, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        res_def_name = inspect.currentframe().f_code.co_name
+        cmd_path = template_source_path + res_def_name
+        res_path = build_res_path + "lib{}.{}".format(res_def_name, res_def_name)
+        result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, " ohos_shared_library  template output_name and output_extension invalid"
 
     def test_ohos_shared_library_output_extension(self):
         """
-        看护输出格式
+        ...
         """
-        function_name = "test_ohos_shared_library_output_dir"
-        cmd_path = template_source_path + function_name
-        res_path = build_res_path + "lib{}.{}".format(function_name, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        res_def_name = "test_ohos_shared_library_output_name"
+        cmd_path = template_source_path + res_def_name
+        res_path = build_res_path + "lib{}.{}".format(res_def_name, res_def_name)
+        result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, " ohos_shared_library  template output_name and output_extension invalid"
 
     def test_ohos_shared_library_install_enable(self):
@@ -235,9 +225,9 @@ class TestModuleBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        common_res_def = template_source_path + function_name
+        cmd_path = template_source_path + function_name
         res_path = result_path + function_name + "/src/" + function_name + "/hello.o"
-        result = exec_command_communicate(common_res_def, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_static_library failed"
 
     def test_ohos_source_set(self):
@@ -245,9 +235,9 @@ class TestModuleBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        common_res_def = template_source_path + function_name
+        cmd_path = template_source_path + function_name
         res_path = result_path + function_name + "/src/" + function_name + "/main.o"
-        result = exec_command_communicate(common_res_def, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_source_set failed"
 
     def test_ohos_executable(self):
