@@ -19,6 +19,7 @@
   "location_network" :"location",
   "location_passive" :"location",
   "thirdparty_bounds_checking_function": "securec",
+  "settings_standard": "settingsnapi",
   "startup_l2": "startup",
   "device_attest": "xts",
   "device_sdk": "device_sdk",
