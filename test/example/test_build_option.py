@@ -18,6 +18,7 @@
 
 import os
 import re
+import shutil
 import sys
 import subprocess
 import time
@@ -77,6 +78,7 @@ class TestBuildOption:
         COMMAND_TYPE = config.get("build_option").get("cmd_type")
         PTYFLAG = True if config.get("build_option").get("ptyflag").lower() == "true" else False
         select_timeout = float(config.get("build_option").get("select_timeout"))
+        exclude = config.get("build_option").get("exclude")
         print("TIMEOUT:{}".format(TIMEOUT))
         print("COMMAND_TYPE:{}".format(COMMAND_TYPE))
         print("TIME_OVER:{}".format(TIME_OVER))
@@ -176,6 +178,18 @@ class TestBuildOption:
             raise Exception("exec cmd time out,communicate")
 
     def exec_command(self, cmd, shell_flag, ptyflag=PTYFLAG, timeout=TIMEOUT):
+        out_dir = os.path.join(script_path, "out")
+        try:
+            if os.path.exists(out_dir):
+                for tmp_dir in os.listdir(out_dir):
+                    if tmp_dir not in self.exclude:
+                        if os.path.isdir(os.path.join(out_dir, tmp_dir)):
+                            shutil.rmtree(os.path.join(out_dir, tmp_dir))
+                        else:
+                            os.remove(os.path.join(out_dir, tmp_dir))
+        except Exception as e:
+            logger(e)
+
         if TestBuildOption.COMMAND_TYPE == "select":
             return self.exec_command_select(cmd, shell_flag=shell_flag, timeout=timeout, ptyflag=ptyflag)
         else:
