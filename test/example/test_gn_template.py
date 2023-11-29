@@ -13,8 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+import shutil
 import subprocess
 import os
 import sys
@@ -35,16 +34,39 @@ if not config:
     sys.exit(0)
 
 CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-build_sh_path = os.path.join(CURRENT_OHOS_ROOT, 'build.sh')
+BUILD_SH_PATH = os.path.join(CURRENT_OHOS_ROOT, 'build.sh')
 
-template_source_path = config.get("template_source_path")
-result_build_file = config.get("result_build_file")
-build_res_path = CURRENT_OHOS_ROOT + result_build_file
-result_obj_file = config.get("result_obj_file")
-result_path = CURRENT_OHOS_ROOT + result_obj_file
-rust_path = config.get("rust_path")
-result_rust_file = config.get("result_rust_file")
-rust_result_idl_path = CURRENT_OHOS_ROOT + result_rust_file
+TEMPLATE_SOURCE_PATH = config.get("template_source_path")
+RESULT_BUILT_FILE = config.get("result_build_file")
+BUILD_RES_PATH = CURRENT_OHOS_ROOT + RESULT_BUILT_FILE
+RESULT_OBJ_FILE = config.get("result_obj_file")
+result_path = CURRENT_OHOS_ROOT + RESULT_OBJ_FILE
+RESULT_PATH = config.get("rust_path")
+RESULT_RUST_FILE = config.get("result_rust_file")
+RUST_RESULT_IDL_PATH = CURRENT_OHOS_ROOT + RESULT_RUST_FILE
+EXCLUDE_LIST = config.get("exclude")
+TEST_BUILD = config.get("test_build")
+CONFIG_PATH = CURRENT_OHOS_ROOT + TEST_BUILD
+
+
+def remove_dir():
+    """
+    ...
+    """
+    out_dir = os.path.join(CURRENT_OHOS_ROOT, "out")
+    try:
+        if os.path.exists(out_dir):
+            for tmp_dir in os.listdir(out_dir):
+                if tmp_dir not in EXCLUDE_LIST:
+                    if os.path.isdir(os.path.join(out_dir, tmp_dir)):
+                        shutil.rmtree(os.path.join(out_dir, tmp_dir))
+                    else:
+                        os.remove(os.path.join(out_dir, tmp_dir))
+    except Exception as e:
+        logger("out file is not exist")
+
+
+remove_dir()
 
 
 @pytest.fixture()
@@ -69,9 +91,9 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, shell_flag=False,
     """
     Execute the cmd command to return the terminal output value
     """
+
     write_bundle_json(res_def_name, cmd_path)
-    cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
-    proc = None
+    cmd = [BUILD_SH_PATH, '--product-name', 'rk3568', '--build-target', cmd_path]
     try:
         proc = subprocess.Popen(
             cmd,
@@ -105,8 +127,9 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
     """
     Execute the cmd command to return the terminal output value
     """
+
     write_bundle_json(res_def_name, cmd_path)
-    cmd = [build_sh_path, '--product-name', 'rk3568', '--build-target', cmd_path]
+    cmd = [BUILD_SH_PATH, '--product-name', 'rk3568', '--build-target', cmd_path]
     try:
         proc = subprocess.Popen(
             cmd,
@@ -122,6 +145,7 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
         if proc.returncode != 0:
             for row in enumerate(out_res):
                 print(row)
+            # print(out_res)
             if c in out_res:
                 print('*****************test succeed************************')
                 return True
@@ -135,12 +159,13 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
     except Exception as e:
         logger("An error occurred: {}".format(e))
 
+
 def write_bundle_json(res_def_name, cmd_path):
     """
     write bundle.json
     """
-    config_path = CURRENT_OHOS_ROOT + "/test/example/test_build.json"
-    with open(config_path, "r", encoding="utf-8") as json_file:
+
+    with open(CONFIG_PATH, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
         res = (data.get("component").get("build").get("sub_component"))
         res.append("//{}:{}".format(cmd_path, res_def_name))
@@ -158,7 +183,7 @@ class TestModuleBuild:
         """
         res_def_name = inspect.currentframe().f_code.co_name
         c = "[OHOS INFO] output_dir is not allowed to be defined."
-        cmd_path = template_source_path + res_def_name
+        cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
         result = exec_command_out_put(cmd_path, res_def_name, c)
         assert result, "build test_ohos_shared_library_output_dir failed"
 
@@ -168,7 +193,7 @@ class TestModuleBuild:
         """
         c = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
         res_def_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + res_def_name
+        cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
         result = exec_command_out_put(cmd_path, res_def_name, c)
         assert result, "build test_ohos_shared_library_testonly failed"
 
@@ -177,8 +202,8 @@ class TestModuleBuild:
         ...
         """
         res_def_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + res_def_name
-        res_path = build_res_path + "/libtest_ohos_shared_library.z.so"
+        cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
+        res_path = BUILD_RES_PATH + "/libtest_ohos_shared_library.z.so"
         result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, "build test_ohos_shared_library failed"
 
@@ -187,8 +212,8 @@ class TestModuleBuild:
         ...
         """
         res_def_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + res_def_name
-        res_path = build_res_path + "lib{}.{}".format(res_def_name, res_def_name)
+        cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
+        res_path = BUILD_RES_PATH + "lib{}.{}".format(res_def_name, res_def_name)
         result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, " ohos_shared_library  template output_name and output_extension invalid"
 
@@ -197,8 +222,8 @@ class TestModuleBuild:
         ...
         """
         res_def_name = "test_ohos_shared_library_output_name"
-        cmd_path = template_source_path + res_def_name
-        res_path = build_res_path + "lib{}.{}".format(res_def_name, res_def_name)
+        cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
+        res_path = BUILD_RES_PATH + "lib{}.{}".format(res_def_name, res_def_name)
         result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, " ohos_shared_library  template output_name and output_extension invalid"
 
@@ -225,7 +250,7 @@ class TestModuleBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + function_name
+        cmd_path = TEMPLATE_SOURCE_PATH + function_name
         res_path = result_path + function_name + "/src/" + function_name + "/hello.o"
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_static_library failed"
@@ -235,7 +260,7 @@ class TestModuleBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + function_name
+        cmd_path = TEMPLATE_SOURCE_PATH + function_name
         res_path = result_path + function_name + "/src/" + function_name + "/main.o"
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_source_set failed"
@@ -245,8 +270,8 @@ class TestModuleBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        common_res_def = template_source_path + function_name
-        res_path = build_res_path + function_name
+        common_res_def = TEMPLATE_SOURCE_PATH + function_name
+        res_path = BUILD_RES_PATH + function_name
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_executable failed"
 
@@ -258,7 +283,7 @@ class TestPrecompiledBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_common = template_source_path + function_name
+        cmd_common = TEMPLATE_SOURCE_PATH + function_name
         res_path = result_path + function_name + "/test_ohos_prebuilt_executable.stamp"
         result = exec_command_communicate(cmd_common, res_path, function_name)
         assert result, "build test_ohos_prebuilt_executable failed"
@@ -268,7 +293,7 @@ class TestPrecompiledBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        common_res_def = template_source_path + function_name
+        common_res_def = TEMPLATE_SOURCE_PATH + function_name
         res_path = result_path + function_name + "/test_ohos_prebuilt_shared_library.stamp"
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_prebuilt_shared_library failed"
@@ -278,7 +303,7 @@ class TestPrecompiledBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        common_res_def = template_source_path + function_name
+        common_res_def = TEMPLATE_SOURCE_PATH + function_name
         res_path = result_path + function_name + "/test_ohos_prebuilt_static_library.stamp"
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_prebuilt_static_library failed"
@@ -292,7 +317,7 @@ class TestHapBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         example_name = 'MyApplication3'
-        common_res_def = template_source_path + example_name
+        common_res_def = TEMPLATE_SOURCE_PATH + example_name
         res_path = result_path + function_name + "/" + function_name + "/{}.hap".format(function_name)
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_app failed"
@@ -305,7 +330,7 @@ class OtherPrebuilt:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + function_name
+        cmd_path = TEMPLATE_SOURCE_PATH + function_name
         profile_result_path = result_path + function_name
         result = exec_command_communicate(cmd_path, profile_result_path, function_name)
         assert result, "build test_ohos_sa_profile failed"
@@ -315,7 +340,7 @@ class OtherPrebuilt:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = template_source_path + function_name
+        cmd_path = TEMPLATE_SOURCE_PATH + function_name
         rebuilt_result_path = result_path + function_name
         result = exec_command_communicate(cmd_path, rebuilt_result_path, function_name)
         assert result, "build test_ohos_prebuilt_etc failed"
@@ -328,8 +353,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_bin_cargo_crate failed"
 
@@ -338,8 +363,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_bin_crate failed"
 
@@ -348,8 +373,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "/test_bindgen_test/test_for_extern_c:test_extern_c"
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + "/test_bindgen_test/test_for_extern_c:test_extern_c"
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_extern_c failed"
 
@@ -358,8 +383,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "/test_bindgen_test/test_for_h:bindgen_test_for_h"
-        res_path = os.path.join(build_res_path, 'bindgen_test_for_h')
+        cmd_path = RESULT_PATH + "/test_bindgen_test/test_for_h:bindgen_test_for_h"
+        res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test_for_h')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build bindgen_test_for_h failed"
 
@@ -368,8 +393,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "/test_bindgen_test/test_for_hello_world:bindgen_test"
-        res_path = os.path.join(build_res_path, 'bindgen_test')
+        cmd_path = RESULT_PATH + "/test_bindgen_test/test_for_hello_world:bindgen_test"
+        res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_for_hello_world failed"
 
@@ -378,8 +403,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "/test_bindgen_test/test_for_hpp:bindgen_test_hpp"
-        res_path = os.path.join(build_res_path, 'bindgen_test_hpp')
+        cmd_path = RESULT_PATH + "/test_bindgen_test/test_for_hpp:bindgen_test_hpp"
+        res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test_hpp')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build bindgen_test_hpp failed"
 
@@ -388,8 +413,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_cdylib_crate failed"
 
@@ -398,8 +423,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "test_cxx" + ":" + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + "test_cxx" + ":" + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_cxx_exe failed"
 
@@ -408,8 +433,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
 
         assert result, "build test_cxx_rust failed"
@@ -419,8 +444,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_cxx_rust failed"
 
@@ -429,8 +454,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + "/test_idl"
-        res_path = os.path.join(rust_result_idl_path, function_name, 'test_idl.stamp')
+        cmd_path = RESULT_PATH + "/test_idl"
+        res_path = os.path.join(RUST_RESULT_IDL_PATH, function_name, 'test_idl.stamp')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_idl failed"
 
@@ -439,8 +464,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name + ':' + 'test_rlib_crate_associated_bin'
-        res_path = os.path.join(build_res_path, 'test_rlib_crate_associated_bin')
+        cmd_path = RESULT_PATH + function_name + ':' + 'test_rlib_crate_associated_bin'
+        res_path = os.path.join(BUILD_RES_PATH, 'test_rlib_crate_associated_bin')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_rlib_cargo_crate failed"
 
@@ -449,8 +474,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_rlib_crate failed"
 
@@ -459,8 +484,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, 'libtest_rust_st_add.dylib.so')
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, 'libtest_rust_st_add.dylib.so')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_rust_st failed"
 
@@ -469,8 +494,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, 'libtest_rust_ut_add.dylib.so')
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, 'libtest_rust_ut_add.dylib.so')
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_rust_ut failed"
 
@@ -479,8 +504,8 @@ class TestRustBuild:
         ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_static_link failed"
 
@@ -489,7 +514,7 @@ class TestRustBuild:
          ...
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = rust_path + function_name
-        res_path = os.path.join(build_res_path, function_name)
+        cmd_path = RESULT_PATH + function_name
+        res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_staticlib_crate failed"
