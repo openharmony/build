@@ -11,4 +11,5 @@ ohos_shared_library("test_ohos_shared_library_output_name") {
     subsystem_name = "build"
     output_name = "test_ohos_shared_library_output_name"
     output_extension = "test_ohos_shared_library_output_name"
+    module_install_dir = "/test_ohos_shared_library_output_name"
 }
