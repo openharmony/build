@@ -15,6 +15,8 @@ import("//build/ohos_var.gni")
 
 # ndk library, ndk header configuration
 _ndk_library_targets = [
+  "//interface/sdk_c/sensors/miscdevice/vibrator:lib_vibrator_ndk",
+  "//interface/sdk_c/sensors/miscdevice/vibrator:ndk_vibrator_header",
   "//interface/sdk_c/third_party/zlib:libz_ndk",
   "//interface/sdk_c/third_party/zlib:zlib_header",
   "//interface/sdk_c/global/resource_management:librawfile_ndk",
