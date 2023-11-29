@@ -262,7 +262,7 @@ template("ohos_module_package") {
     script = "//base/update/packaging_tools/build_module_package.py"
     deps = [
       ":module_config_outer",
-      "//base/update/packaging_tools/zipalign:zipalign",
+      "//base/update/sys_installer/tools/zipalign:zipalign",
     ]
     if (defined(invoker.img_public_key)) {
       deps += [ ":pub_key_outer" ]
