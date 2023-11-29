@@ -205,7 +205,7 @@ def _npm_install(args):
         basename = os.path.basename(full_code_path)
         npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
         if os.path.exists(full_code_path):
-            cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
+            cmd = [npm, 'install', '--registry', args.npm_registry, '--no-cache']
             if args.unsafe_perm:
                 cmd.append('--unsafe-perm')
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
