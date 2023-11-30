@@ -94,7 +94,6 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_
     if not rust == "rust":
         write_bundle_json(res_def_name, cmd_path)
     cmd = [BUILD_SH_PATH, '--product-name', 'rk3568', '--build-target', cmd_path]
-    print(f'#################################cmd:{cmd}#########################################')
     try:
         proc = subprocess.Popen(
             cmd,
@@ -146,7 +145,6 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
         if proc.returncode != 0:
             for row in enumerate(out_res):
                 print(row)
-            # print(out_res)
             if c in out_res:
                 print('*****************test succeed************************')
                 return True
@@ -221,7 +219,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_dir(self):
         """
-        ...
+        test output dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         c = "[OHOS INFO] output_dir is not allowed to be defined."
@@ -231,7 +229,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_testonly(self):
         """
-        ...
+        test testonly
         """
         c = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
         res_def_name = inspect.currentframe().f_code.co_name
@@ -241,7 +239,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library(self):
         """
-        ...
+        test shared library
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -251,7 +249,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_name(self):
         """
-        ...
+        test output name
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -261,7 +259,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_extension(self):
         """
-        ...
+        test extension
         """
         res_def_name = "test_ohos_shared_library_output_name"
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -271,7 +269,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_module_install_dir(self):
         """
-        ...
+        test module install dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -279,6 +277,9 @@ class TestModuleBuild:
         assert result, " test_ohos_shared_library_module_install_dir fail"
 
     def test_ohos_shared_library_relative_install_dir(self):
+        """
+        test relative install dir
+        """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
         result = exec_command_isntall_dir(cmd_path, res_def_name)
@@ -286,7 +287,7 @@ class TestModuleBuild:
 
     def test_ohos_static_library(self):
         """
-        ...
+        test static library
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -296,7 +297,7 @@ class TestModuleBuild:
 
     def test_ohos_source_set(self):
         """
-        ...
+        test source set
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -306,7 +307,7 @@ class TestModuleBuild:
 
     def test_ohos_executable(self):
         """
-        ...
+        test ohos executable
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -319,7 +320,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_executable(self):
         """
-        ...
+        test prebuilt executable
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_common = TEMPLATE_SOURCE_PATH + function_name
@@ -329,7 +330,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_shared_library(self):
         """
-        ...
+        test _prebuilt shared library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -339,7 +340,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_static_library(self):
         """
-        ...
+        test prebuilt static library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -352,13 +353,12 @@ class TestHapBuild:
 
     def test_ohos_app(self):
         """
-        ...
+        test ohos app
         """
-        function_name = inspect.currentframe().f_code.co_name
         example_name = 'MyApplication3'
         common_res_def = TEMPLATE_SOURCE_PATH + example_name
-        res_path = RESULT_PATH + function_name + "/" + function_name + "/{}.hap".format(function_name)
-        result = exec_command_communicate(common_res_def, res_path, function_name)
+        res_path = RESULT_PATH + example_name + "/" + example_name + "/{}.hap".format(example_name)
+        result = exec_command_communicate(common_res_def, res_path, example_name)
         assert result, "build test_ohos_app failed"
 
 
