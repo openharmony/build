@@ -14,18 +14,18 @@
  */
 
 #include <iostream>
+
+static const ip_idx = 1;
+
 using namespace std;
 
 long fact(int);
 
 long fact(int ip)
 {
-    if (ip == 1)
-    {
-        return 1;
-    }
-    else
-    {
-        return ip * fact(ip - 1);
+    if (ip == ip_idx) {
+        return ip;
+    } else {
+        return ip * fact(ip - ip_idx);
     }
 }
