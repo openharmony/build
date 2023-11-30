@@ -14,7 +14,7 @@
 import("//build/ohos.gni")
 
 config("hello_config") {
-    include_dirs = [ "./include" ]
+  include_dirs = [ "./include" ]
 }
 
 ohos_shared_library("test_ohos_shared_library_relative_install_dir") {
@@ -24,4 +24,3 @@ ohos_shared_library("test_ohos_shared_library_relative_install_dir") {
   subsystem_name = "build"
   relative_install_dir = "/test_ohos_shared_library_relative_install_dir"
 }
-
