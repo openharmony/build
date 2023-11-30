@@ -35,16 +35,18 @@ def pytest_metadata(metadata):
     metadata['Python Version'] = sys.version
     metadata['Cpu Count'] = os.cpu_count()
     metadata["System Info"] = platform.platform()
+    try:
+        disk_info = os.statvfs('/')
+        total_disk = round(float(disk_info.f_frsize * disk_info.f_blocks) / (1024 ** 3), 4)
+        metadata["Disk Size"] = "{} GB".format(total_disk)
 
-    disk_info = os.statvfs('/')
-    total_disk = round(float(disk_info.f_frsize * disk_info.f_blocks) / (1024 ** 3), 4)
-    metadata["Disk Size"] = "{} GB".format(total_disk)
-
-    with open('/proc/meminfo', 'r') as f:
-        lines = f.readlines()
-    total_memory_line = [line for line in lines if line.startswith('MemTotal')]
-    total_memory = round(float(total_memory_line[0].split()[1]) / (1024 ** 2), 4) if total_memory_line else " "
-    metadata["Totla Memory"] = "{} GB".format(total_memory)
+        with open('/proc/meminfo', 'r') as f:
+            lines = f.readlines()
+        total_memory_line = [line for line in lines if line.startswith('MemTotal')]
+        total_memory = round(float(total_memory_line[0].split()[1]) / (1024 ** 2), 4) if total_memory_line else " "
+        metadata["Totla Memory"] = "{} GB".format(total_memory)
+    except Exception as e:
+        print(e)
 
 
 def pytest_html_results_table_header(cells):
