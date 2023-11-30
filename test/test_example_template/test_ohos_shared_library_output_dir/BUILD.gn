@@ -26,4 +26,3 @@ ohos_shared_library("test_ohos_shared_library_output_dir") {
   output_dir = "/out/rk3568/build/test_output_dir"
   install_enable = false
 }
-

@@ -17,4 +17,3 @@ ohos_prebuilt_etc("test_ohos_prebuilt_etc") {
   source = "./src/adder.cpp"
   part_name = "build_framework"
 }
-
