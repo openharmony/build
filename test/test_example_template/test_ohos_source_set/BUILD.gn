@@ -18,8 +18,8 @@ config("hello_config") {
 }
 
 ohos_source_set("test_ohos_source_set") {
-    configs = [ ":hello_config" ]
-    sources = [ "./src/adder.cpp" ]
-    part_name = "build_framework"
-    subsystem_name = "build"
+  configs = [ ":hello_config" ]
+  sources = [ "./src/adder.cpp" ]
+  part_name = "build_framework"
+  subsystem_name = "build"
 }
