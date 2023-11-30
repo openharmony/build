@@ -303,7 +303,7 @@ class TestModuleBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + function_name + "/src/" + function_name + "/main.o"
+        res_path = RESULT_PATH + function_name + "/src/" + function_name + "/adder.o"
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_source_set failed"
 
