@@ -1,3 +1,4 @@
+
 # Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
 import("//build/ohos.gni")
 
 config("hello_config") {
-    include_dirs = [ "./include" ]
+  include_dirs = [ "./include" ]
 }
 
 ohos_shared_library("test_ohos_shared_library_testonly") {
@@ -22,7 +23,6 @@ ohos_shared_library("test_ohos_shared_library_testonly") {
   sources = [ "./src/hello.cpp" ]
   part_name = "build_framework"
   subsystem_name = "build"
-  testonly  = true
-  install_enable = false   # 内设默认值true
-
+  testonly = true
+  install_enable = false
 }

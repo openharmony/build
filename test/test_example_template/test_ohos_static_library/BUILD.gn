@@ -14,9 +14,8 @@
 import("//build/ohos.gni")
 
 config("hello_config") {
-    include_dirs = [ "./include" ]
+  include_dirs = [ "./include" ]
 }
-
 
 ohos_static_library("test_ohos_static_library") {
   configs = [ ":hello_config" ]

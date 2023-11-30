@@ -14,7 +14,7 @@
 import("//build/ohos.gni")
 
 config("hello_config") {
-    include_dirs = [ "./include" ]
+  include_dirs = [ "./include" ]
 }
 
 ohos_source_set("test_ohos_source_set") {
