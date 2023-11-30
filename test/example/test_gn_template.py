@@ -51,7 +51,7 @@ CONFIG_PATH = CURRENT_OHOS_ROOT + TEST_BUILD
 
 def remove_dir():
     """
-    ...
+    del out dir
     """
     out_dir = os.path.join(CURRENT_OHOS_ROOT, "out")
     try:
@@ -87,13 +87,14 @@ def init_build_env():
                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def exec_command_communicate(cmd_path, res_path, res_def_name, shell_flag=False, timeout=600):
+def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_flag=False, timeout=600):
     """
     Execute the cmd command to return the terminal output value
     """
-
-    write_bundle_json(res_def_name, cmd_path)
+    if not rust == "rust":
+        write_bundle_json(res_def_name, cmd_path)
     cmd = [BUILD_SH_PATH, '--product-name', 'rk3568', '--build-target', cmd_path]
+    print(f'#################################cmd:{cmd}#########################################')
     try:
         proc = subprocess.Popen(
             cmd,
@@ -365,7 +366,7 @@ class OtherPrebuilt:
 
     def test_ohos_sa_profile(self):
         """
-        ...
+        test ohos_sa_profile
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -375,7 +376,7 @@ class OtherPrebuilt:
 
     def test_ohos_prebuilt_etc(self):
         """
-        ...
+        test ohos_prebuilt_etc
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -388,171 +389,171 @@ class TestRustBuild:
 
     def test_bin_cargo_crate(self):
         """
-        ...
+        test_bin_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_bin_cargo_crate failed"
 
     def test_bin_crate(self):
         """
-        ...
+        test_bin_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_bin_crate failed"
 
     def test_extern_c(self):
         """
-        ...
+        test_extern_c
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = RUST_PATH + "/test_bindgen_test/test_for_extern_c:test_extern_c"
+        cmd_path = RUST_PATH + "test_bindgen_test/test_for_extern_c:test_extern_c"
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_extern_c failed"
 
     def test_for_h(self):
         """
-        ...
+        test_for_h
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = RUST_PATH + "/test_bindgen_test/test_for_h:bindgen_test_for_h"
+        cmd_path = RUST_PATH + "test_bindgen_test/test_for_h:bindgen_test_for_h"
         res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test_for_h')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build bindgen_test_for_h failed"
 
     def test_for_hello_world(self):
         """
-        ...
+        test_for_hello_world
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = RUST_PATH + "/test_bindgen_test/test_for_hello_world:bindgen_test"
+        cmd_path = RUST_PATH + "test_bindgen_test/test_for_hello_world:bindgen_test"
         res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_for_hello_world failed"
 
     def test_for_hpp(self):
         """
-        ...
+        test_for_hpp
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = RUST_PATH + "/test_bindgen_test/test_for_hpp:bindgen_test_hpp"
+        cmd_path = RUST_PATH + "test_bindgen_test/test_for_hpp:bindgen_test_hpp"
         res_path = os.path.join(BUILD_RES_PATH, 'bindgen_test_hpp')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build bindgen_test_hpp failed"
 
     def test_cdylib_crate(self):
         """
-        ...
+        test_cdylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_cdylib_crate failed"
 
     def test_cxx_exe(self):
         """
-        ...
+        test_cxx_exe
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_cxx" + ":" + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_cxx_exe failed"
 
     def test_cxx_rust(self):
         """
-        ...
+        test_cxx_rust
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
 
         assert result, "build test_cxx_rust failed"
 
     def test_dylib_crate(self):
         """
-        ...
+        test_dylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_cxx_rust failed"
 
     def test_idl(self):
         """
-        ...
+        test_idl
         """
         function_name = inspect.currentframe().f_code.co_name
-        cmd_path = RUST_PATH + "/test_idl"
+        cmd_path = RUST_PATH + "test_idl"
         res_path = os.path.join(RUST_RESULT_IDL_PATH, function_name, 'test_idl.stamp')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_idl failed"
 
     def test_rlib_cargo_crate(self):
         """
-        ...
+        test_rlib_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name + ':' + 'test_rlib_crate_associated_bin'
         res_path = os.path.join(BUILD_RES_PATH, 'test_rlib_crate_associated_bin')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_rlib_cargo_crate failed"
 
     def test_rlib_crate(self):
         """
-        ...
+        test_rlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_rlib_crate failed"
 
     def test_rust_st(self):
         """
-        ...
+        test_rust_st
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, 'libtest_rust_st_add.dylib.so')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_rust_st failed"
 
     def test_rust_ut(self):
         """
-        ...
+        test_rust_ut
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, 'libtest_rust_ut_add.dylib.so')
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_rust_ut failed"
 
     def test_static_link(self):
         """
-        ...
+        test_static_link
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_static_link failed"
 
     def test_staticlib_crate(self):
         """
-         ...
+        test_staticlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
         res_path = os.path.join(BUILD_RES_PATH, function_name)
-        result = exec_command_communicate(cmd_path, res_path, function_name)
+        result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_staticlib_crate failed"
