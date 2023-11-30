@@ -20,9 +20,9 @@ static const uint32_t ip_idx = 1;
 
 using namespace std;
 
-uint32_t fact(int);
+static uint32_t fact(int);
 
-uint32_t fact(uint32_t ip)
+static uint32_t fact(uint32_t ip)
 {
     if (ip == ip_idx) {
         return ip;
