@@ -15,6 +15,6 @@
 #ifndef INCLUDE_HELLO_H
 #define INCLUDE_HELLO_H
 
-long fact(int);
+uint32_t fact(int);
 
 #endif  //  INCLUDE_HELLO_H
