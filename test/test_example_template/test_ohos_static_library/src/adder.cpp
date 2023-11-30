@@ -13,5 +13,42 @@
  * limitations under the License.
  */
 
+#include <iostream>
 
-long fact(int);
+static const uint32_t ip_ida = 10;
+static const uint32_t ip_idb = 20;
+static const uint32_t ip_idc = 30;
+
+using namespace std;
+
+class Adder
+{
+public:
+    Adder(int i = 0)
+    {
+        total = i;
+    }
+    void addNum(int number)
+    {
+        total += number;
+    }
+    int getTotal()
+    {
+        return total;
+    }
+
+private:
+    int total;
+}
+
+int main()
+{
+    Adder a;
+
+    a.addNum(ip_ida);
+    a.addNum(ip_idb);
+    a.addNum(ip_idc);
+
+    cout << "Total " << a.getTotal() << endl;
+    return 0;
+}

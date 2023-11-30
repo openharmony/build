@@ -15,35 +15,40 @@
 
 #include <iostream>
 
+static const uint32_t ip_ida = 10;
+static const uint32_t ip_idb = 20;
+static const uint32_t ip_idc = 30;
+
 using namespace std;
 
 class Adder
 {
 public:
-   Adder(int i = 0)
-   {
-      total = i;
-   }
-   void addNum(int number)
-   {
-      total += number;
-   }
-   int getTotal()
-   {
-      return total;
-   };
+    Adder(int i = 0)
+    {
+        total = i;
+    }
+    void addNum(int number)
+    {
+        total += number;
+    }
+    int getTotal()
+    {
+        return total;
+    }
 
 private:
-   int total;
-};
+    int total;
+}
+
 int main()
 {
-   Adder a;
+    Adder a;
 
-   a.addNum(10);
-   a.addNum(20);
-   a.addNum(30);
+    a.addNum(ip_ida);
+    a.addNum(ip_idb);
+    a.addNum(ip_idc);
 
-   cout << "Total " << a.getTotal() << endl;
-   return 0;
+    cout << "Total " << a.getTotal() << endl;
+    return 0;
 }

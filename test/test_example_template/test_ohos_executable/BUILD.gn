@@ -20,7 +20,7 @@ config("hello_config") {
 
 ohos_executable("test_ohos_executable") {
     configs = [ ":hello_config" ]
-    sources = [ "./src/main.cpp" ]
+    sources = [ "./src/adder.cpp" ]
     part_name = "build_framework"
     subsystem_name = "build"
 }
