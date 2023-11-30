@@ -21,10 +21,9 @@ static const uint32_t ip_idc = 30;
 
 using namespace std;
 
-class Adder
-{
+class Adder {
 public:
-    Adder(int i = 0)
+    explicit Adder(int i = 0 ) 
     {
         total = i;
     }
