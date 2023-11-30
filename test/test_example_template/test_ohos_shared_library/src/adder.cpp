@@ -20,9 +20,7 @@ static const uint32_t ip_idb = 20;
 static const uint32_t ip_idc = 30;
 
 using namespace std;
-
 class Adder {
-
 public:
     explicit Adder(int i = 0 )
     {
@@ -36,19 +34,15 @@ public:
     {
         return total;
     }
-
 private:
     int total;
 }
-
 int main()
 {
     Adder a;
-
     a.addNum(ip_ida);
     a.addNum(ip_idb);
     a.addNum(ip_idc);
-
     cout << "Total " << a.getTotal() << endl;
     return 0;
 }
