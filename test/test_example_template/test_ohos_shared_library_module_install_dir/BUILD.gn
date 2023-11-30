@@ -25,5 +25,3 @@ ohos_shared_library("test_ohos_shared_library_module_install_dir") {
   module_install_dir = "/test_ohos_shared_library_module_install_dir"
   relative_install_dir = "/test_ohos_shared_library_relative_install_dir"
 }
-
-

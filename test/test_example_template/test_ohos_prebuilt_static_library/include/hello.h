@@ -14,7 +14,6 @@
  */
 #ifndef INCLUDE_HELLO_H
 #define INCLUDE_HELLO_H
-namespace {
-    uint32_t fact(int);
-}
+
+static uint32_t fact(int);
 #endif  //  INCLUDE_HELLO_H
