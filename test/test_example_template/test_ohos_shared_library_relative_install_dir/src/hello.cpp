@@ -14,14 +14,15 @@
  */
 
 #include <iostream>
+#include "hello.h"
 
-static const ip_idx = 1;
+static const uint32_t ip_idx = 1;
 
 using namespace std;
 
-long fact(int);
+uint32_t fact(int);
 
-long fact(int ip)
+uint32_t fact(uint32_t ip)
 {
     if (ip == ip_idx) {
         return ip;
