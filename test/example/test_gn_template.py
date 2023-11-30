@@ -13,6 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
 import shutil
 import subprocess
 import os
@@ -362,7 +364,7 @@ class TestHapBuild:
         assert result, "build test_ohos_app failed"
 
 
-class OtherPrebuilt:
+class TestOtherPrebuilt:
 
     def test_ohos_sa_profile(self):
         """
