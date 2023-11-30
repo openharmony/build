@@ -559,3 +559,17 @@ class TestRustBuild:
         res_path = os.path.join(BUILD_RES_PATH, function_name)
         result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_staticlib_crate failed"
+
+
+def write_initial_bundle_json():
+    """
+    write initial bundle.json
+    """
+    with open(CONFIG_PATH, "r", encoding="utf-8") as json_file:
+        data = json.load(json_file)
+    config_res = CURRENT_OHOS_ROOT + "/build/common/bundle.json"
+    with open(config_res, "w", encoding="utf-8") as json_file:
+        json.dump(data, json_file, indent=4, ensure_ascii=False)
+
+
+write_initial_bundle_json()
