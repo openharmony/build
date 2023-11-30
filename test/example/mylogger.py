@@ -37,41 +37,40 @@ class SafeFileHandler(FileHandler):
         self.mode = mode
         self.encoding = encoding
         self.suffix = suffix
-        self.suffix_time = current_time
+        self.suftime = current_time
 
     def emit(self, record):
         try:
-            if self.check_base_filename():
-                self.build_base_filename()
+            if self.parse_file_name():
+                self.gen_file_name()
             FileHandler.emit(self, record)
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except:
+        except Exception as e:
+            print(e)
             self.handleError(record)
 
-    def check_base_filename(self):
+    def parse_file_name(self):
         time_tuple = time.localtime()
 
-        if self.suffix_time != time.strftime(self.suffix, time_tuple) or not os.path.exists(
-                os.path.abspath(self.filename) + '.' + self.suffix_time):
+        if self.suftime != time.strftime(self.suffix, time_tuple) or not os.path.exists(
+                os.path.abspath(self.filename) + '.' + self.suftime):
             return 1
         else:
             return 0
 
-    def build_base_filename(self):
+    def gen_file_name(self):
         if self.stream:
             self.stream.close()
             self.stream = None
 
-        if self.suffix_time != "":
-            index = self.baseFilename.find("." + self.suffix_time)
+        if self.suftime != "":
+            index = self.baseFilename.find("." + self.suftime)
             if index == -1:
                 index = self.baseFilename.rfind(".")
             self.baseFilename = self.baseFilename[:index]
 
-        current_time_tuple = time.localtime()
-        self.suffix_time = time.strftime(self.suffix, current_time_tuple)
-        self.baseFilename = os.path.abspath(self.filename) + "." + self.suffix_time
+        cur_time = time.localtime()
+        self.suftime = time.strftime(self.suffix, cur_time)
+        self.baseFilename = os.path.abspath(self.filename) + "." + self.suftime
 
         if not self.delay:
             self.stream = open(self.baseFilename, self.mode, encoding=self.encoding)
@@ -108,3 +107,4 @@ def parse_json():
             return data
     except Exception as e:
         print(e)
+
