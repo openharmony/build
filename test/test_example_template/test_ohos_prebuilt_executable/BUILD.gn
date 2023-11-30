@@ -1,7 +1,7 @@
 import("//build/ohos.gni")
 
 ohos_prebuilt_executable("test_ohos_prebuilt_executable") {
-    source =  "./src/main.cpp" 
+    source =  "./src/main.cpp"
     part_name = "build_framework"
     subsystem_name = "build"
 }

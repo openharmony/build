@@ -1,5 +1,6 @@
 import("//build/ohos.gni")
+
 ohos_prebuilt_etc("test_ohos_prebuilt_etc") {
-  source = "./src/main.cpp"
-  part_name = "build_framework"
+    source = "./src/main.cpp"
+    part_name = "build_framework"
 }

@@ -1,9 +1,9 @@
 import("//build/ohos.gni")
 
 ohos_app("MyApplication3") {
-  subsystem_name = "build"
-  part_name = "build_framework"
-  system_lib_deps = [ "./hello_world:hello_world" ]
-  certificate_profile = "./signature/auto_ohos_default_MyApplication3_com.example.myapplication.p7b"
-  module_libs_dir = "entry"
+    subsystem_name = "build"
+    part_name = "build_framework"
+    system_lib_deps = [ "./hello_world:hello_world" ]
+    certificate_profile = "./signature/auto_ohos_default_MyApplication3_com.example.myapplication.p7b"
+    module_libs_dir = "entry"
 }
