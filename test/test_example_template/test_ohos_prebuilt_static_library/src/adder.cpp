@@ -36,7 +36,7 @@ public:
     }
 private:
     int total;
-}
+};
 int main()
 {
     Adder a;
