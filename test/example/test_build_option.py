@@ -130,9 +130,9 @@ class TestBuildOption:
                 returncode = proc.wait()
                 out_res = list(out_queue.queue)
                 return out_res, returncode
-            except Exception as e:
-                log_error("An error occurred: {}".format(e))
-                raise Exception(e)
+            except Exception as err:
+                log_error("An error occurred: {}".format(err))
+                raise Exception(err)
         else:
             try:
                 master, slave = pty.openpty()
@@ -273,8 +273,6 @@ class TestBuildOption:
             method = self.__getattribute__(method_name)
             flags, expect_dict = method(para_value)
             return flags, expect_dict
-        else:
-            log_info("self have no method")
 
     def get_common_spec_result(self, option, cmd, para_type=None, ptyflag=PTYFLAG):
         if not para_type:
@@ -605,7 +603,7 @@ class TestBuildOption:
         flags = copy.deepcopy(TestBuildOption.FLAGS)
         expect_dict = {}
         if para_value.lower() == "true":
-            flags["ninja"]["pattern"] = r"Excuting ninja command.*-k1000000.*"
+            flags.setdefault("ninja", {}).setdefault("pattern", r"Excuting ninja command.*-k1000000.*")
 
         return flags, expect_dict
 
@@ -1071,7 +1069,6 @@ class TestBuildOption:
         else:
             root_dir = resolve_result["root_dir"]["flag"][0]
             json_path = os.path.join(root_dir, "out", "hb_args")
-            # json_path = "../../../out/hb_args"
             json_file_li = [file for file in os.listdir(json_path) if os.path.splitext(file)[-1] == ".json"]
             log_info("test_clean_args, json_file_li:{}".format(json_file_li))
             if clean_option.lower() == "false":
