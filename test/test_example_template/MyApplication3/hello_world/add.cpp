@@ -15,7 +15,7 @@
 
 #include "add.h"
 
-static double add_test(double a, double b)
+double add_test(double a, double b)
 {
     return a + b;
 }

@@ -109,8 +109,8 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_
         out_res = out.splitlines() + error.splitlines()
         print(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode == 0:
-            for row in enumerate(out_res):
-                print(row)
+            for row, data in enumerate(out_res):
+                print("【{}】:{}".format(row, data))
             if os.path.exists(res_path):
                 print('*****************test succeed************************')
                 return True
@@ -118,8 +118,8 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_
                 print(f"{res_def_name} is not exist")
                 return False
         else:
-            for row in enumerate(out_res):
-                logger(row)
+            for row, data in enumerate(out_res):
+                logger("【{}】:{}".format(row, data))
             return False
     except Exception as e:
         logger("An error occurred: {}".format(e))
@@ -145,8 +145,8 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
         out_res = out.splitlines() + error.splitlines()
         print(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode != 0:
-            for row in enumerate(out_res):
-                print(row)
+            for row, data in enumerate(out_res):
+                print("【{}】:{}".format(row, data))
             if c in out_res:
                 print('*****************test succeed************************')
                 return True
@@ -154,8 +154,8 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
                 print(f"{res_def_name} faile")
                 return False
         else:
-            for row in enumerate(out_res):
-                logger(row)
+            for row, data in enumerate(out_res):
+                logger("【{}】:{}".format(row, data))
             return False
     except Exception as e:
         logger("An error occurred: {}".format(e))
@@ -181,8 +181,8 @@ def exec_command_isntall_dir(cmd_path, res_def_name, shell_flag=False, timeout=6
         out_res = out.splitlines() + error.splitlines()
         print(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode == 0:
-            for row in enumerate(out_res):
-                print(row)
+            for row, data in enumerate(out_res):
+                print("【{}】:{}".format(row, data))
             config_path = RESULT_PATH + res_def_name + "/{}_module_info.json".format(res_def_name)
             with open(config_path, "r", encoding="utf-8") as json_file:
                 data = json.load(json_file)
@@ -195,8 +195,8 @@ def exec_command_isntall_dir(cmd_path, res_def_name, shell_flag=False, timeout=6
                 print(f"{res_def_name} is not exist")
                 return False
         else:
-            for row in enumerate(out_res):
-                logger(row)
+            for row, data in enumerate(out_res):
+                logger("【{}】:{}".format(row, data))
             return False
     except Exception as e:
         logger("An error occurred: {}".format(e))
