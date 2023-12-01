@@ -27,7 +27,7 @@ from mylogger import get_logger, parse_json
 
 sys.path.append(os.path.join(os.getcwd(), "mylogger.py"))
 Log = get_logger("build_gn")
-log_info = Log.info()
+log_info = Log.info
 log_error = Log.error
 
 config = parse_json().get("gn_template")
@@ -50,6 +50,7 @@ EXCLUDE_LIST = config.get("exclude")
 TEST_BUILD = config.get("test_build")
 CONFIG_PATH = CURRENT_OHOS_ROOT + TEST_BUILD
 TIME_OUT = config.get("time_out")
+
 
 def remove_dir():
     """
@@ -235,7 +236,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_dir(self):
         """
-        Description: test output dir
+        test output dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         error_log = "[OHOS INFO] output_dir is not allowed to be defined."
@@ -245,7 +246,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_testonly(self):
         """
-        Description: test testonly
+        test testonly
         """
         error_log = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
         res_def_name = inspect.currentframe().f_code.co_name
@@ -255,7 +256,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library(self):
         """
-        Description: test shared library
+        test shared library
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -265,7 +266,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_name(self):
         """
-        Description: test output name
+        test output name
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -275,7 +276,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_extension(self):
         """
-        Description: test extension
+        test extension
         """
         res_def_name = "test_ohos_shared_library_output_name"
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -285,7 +286,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_module_install_dir(self):
         """
-        Description: test module install dir
+        test module install dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -294,7 +295,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_relative_install_dir(self):
         """
-        Description: test relative install dir
+        test relative install dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -303,7 +304,7 @@ class TestModuleBuild:
 
     def test_ohos_static_library(self):
         """
-        Description: test static library
+        test static library
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -313,7 +314,7 @@ class TestModuleBuild:
 
     def test_ohos_source_set(self):
         """
-        Description: test source set
+        test source set
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -323,7 +324,7 @@ class TestModuleBuild:
 
     def test_ohos_executable(self):
         """
-        Description: test ohos executable
+        test ohos executable
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -336,7 +337,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_executable(self):
         """
-        Description: test prebuilt executable
+        test prebuilt executable
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_common = TEMPLATE_SOURCE_PATH + function_name
@@ -346,7 +347,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_shared_library(self):
         """
-        Description: test _prebuilt shared library
+        test _prebuilt shared library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -356,7 +357,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_static_library(self):
         """
-        Description: test prebuilt static library
+        test prebuilt static library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -369,7 +370,7 @@ class TestOtherPrebuilt:
 
     def test_ohos_sa_profile(self):
         """
-        Description: test ohos_sa_profile
+        test ohos_sa_profile
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -379,7 +380,7 @@ class TestOtherPrebuilt:
 
     def test_ohos_prebuilt_etc(self):
         """
-        Description: test ohos_prebuilt_etc
+        test ohos_prebuilt_etc
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -392,7 +393,7 @@ class TestRustBuild:
 
     def test_bin_cargo_crate(self):
         """
-        Description: test bin_cargo_crate
+        test bin_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -402,7 +403,7 @@ class TestRustBuild:
 
     def test_bin_crate(self):
         """
-        Description: test bin_crate
+        test bin_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -412,7 +413,7 @@ class TestRustBuild:
 
     def test_extern_c(self):
         """
-        Description: test extern_c
+        test extern_c
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_extern_c:test_extern_c"
@@ -422,7 +423,7 @@ class TestRustBuild:
 
     def test_for_h(self):
         """
-        Description: test for_h
+        test for_h
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_h:bindgen_test_for_h"
@@ -432,7 +433,7 @@ class TestRustBuild:
 
     def test_for_hello_world(self):
         """
-        Description: test for_hello_world
+        test for_hello_world
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_hello_world:bindgen_test"
@@ -442,7 +443,7 @@ class TestRustBuild:
 
     def test_for_hpp(self):
         """
-        Description: test for_hpp
+        test for_hpp
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_hpp:bindgen_test_hpp"
@@ -452,7 +453,7 @@ class TestRustBuild:
 
     def test_cdylib_crate(self):
         """
-        Description: test cdylib_crate
+        test cdylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -462,7 +463,7 @@ class TestRustBuild:
 
     def test_cxx_exe(self):
         """
-        Description: test cxx_exe
+        test cxx_exe
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_cxx" + ":" + function_name
@@ -472,7 +473,7 @@ class TestRustBuild:
 
     def test_cxx_rust(self):
         """
-        Description: test cxx_rust
+        test cxx_rust
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -483,7 +484,7 @@ class TestRustBuild:
 
     def test_dylib_crate(self):
         """
-        Description: test dylib_crate
+        test dylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -493,7 +494,7 @@ class TestRustBuild:
 
     def test_idl(self):
         """
-        Description: test test_idl
+        test test_idl
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_idl"
@@ -503,7 +504,7 @@ class TestRustBuild:
 
     def test_rlib_cargo_crate(self):
         """
-        Description: test rlib_cargo_crate
+        test rlib_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name + ':' + 'test_rlib_crate_associated_bin'
@@ -513,7 +514,7 @@ class TestRustBuild:
 
     def test_rlib_crate(self):
         """
-        Description: test rlib_crate
+        test rlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -523,7 +524,7 @@ class TestRustBuild:
 
     def test_rust_st(self):
         """
-        Description: test rust_st
+        test rust_st
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -533,7 +534,7 @@ class TestRustBuild:
 
     def test_rust_ut(self):
         """
-        Description: test rust_ut
+        test rust_ut
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -543,7 +544,7 @@ class TestRustBuild:
 
     def test_static_link(self):
         """
-        Description: test static_link
+        test static_link
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -553,7 +554,7 @@ class TestRustBuild:
 
     def test_staticlib_crate(self):
         """
-        Description: test staticlib_crate
+        test staticlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
