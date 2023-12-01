@@ -28,7 +28,8 @@
     "result_rust_file": "/out/rk3568/obj/build/rust/tests/",
     "result_obj_file": "/out/rk3568/obj/build/test/test_example_template/",
     "rust_path": "build/rust/tests/",
-    "test_build": "/build/test/example/test_build.json"
+    "test_build": "/build/test/example/test_build.json",
+    "time_out": 600
   },
   "performance": {
     "exclude": [
