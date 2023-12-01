@@ -247,7 +247,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.16.5_b/linux/cmake-linux-x86-3.16.5.tar.gz",
           "unzip_filename": "linux"
         },
         {
@@ -269,7 +269,7 @@
       "linux_copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.16.5_b/windows/cmake-windows-x86-3.16.5.tar.gz",
           "unzip_filename": "windows-x86"
         },
         {
@@ -409,7 +409,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.16.5_b/darwin/cmake-darwin-x86-3.16.5.tar.gz",
           "unzip_filename": "darwin"
         },
         {
@@ -460,7 +460,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.16.5_b/darwin/cmake-darwin-x86-3.16.5.tar.gz",
           "unzip_filename": "darwin"
         },
         {
