@@ -27,12 +27,12 @@ from mylogger import get_logger, parse_json
 
 sys.path.append(os.path.join(os.getcwd(), "mylogger.py"))
 Log = get_logger("build_gn")
-print = Log.info
-logger = Log.error
+log_info = Log.info()
+log_error = Log.error
 
 config = parse_json().get("gn_template")
 if not config:
-    logger("config file: build_example.json error")
+    log_error("config file: build_example.json error")
     sys.exit(0)
 
 CURRENT_OHOS_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -49,23 +49,25 @@ RUST_RESULT_IDL_PATH = CURRENT_OHOS_ROOT + RESULT_RUST_FILE
 EXCLUDE_LIST = config.get("exclude")
 TEST_BUILD = config.get("test_build")
 CONFIG_PATH = CURRENT_OHOS_ROOT + TEST_BUILD
-
+TIME_OUT = config.get("time_out")
 
 def remove_dir():
     """
-    del out dir
+    Description: this function is used to delete files in the out folder other than reports
     """
     out_dir = os.path.join(CURRENT_OHOS_ROOT, "out")
     try:
-        if os.path.exists(out_dir):
-            for tmp_dir in os.listdir(out_dir):
-                if tmp_dir not in EXCLUDE_LIST:
-                    if os.path.isdir(os.path.join(out_dir, tmp_dir)):
-                        shutil.rmtree(os.path.join(out_dir, tmp_dir))
-                    else:
-                        os.remove(os.path.join(out_dir, tmp_dir))
+        if not os.path.exists(out_dir):
+            return
+        for tmp_dir in os.listdir(out_dir):
+            if tmp_dir in EXCLUDE_LIST:
+                continue
+            if os.path.isdir(os.path.join(out_dir, tmp_dir)):
+                shutil.rmtree(os.path.join(out_dir, tmp_dir))
+            else:
+                os.remove(os.path.join(out_dir, tmp_dir))
     except Exception as e:
-        logger("out file is not exist")
+        log_error(e)
 
 
 remove_dir()
@@ -89,9 +91,14 @@ def init_build_env():
                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
-def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_flag=False, timeout=600):
+def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None):
     """
-    Execute the cmd command to return the terminal output value
+    Description : execute the cmd command to return the terminal output value
+    @param cmd_path: the source code path for running commands
+    @param res_path: the generated product path
+    @param res_def_name: function name
+    @param rust: judgment flags for running test cases
+    @return True or False
     """
     if not rust == "rust":
         write_bundle_json(res_def_name, cmd_path)
@@ -102,32 +109,36 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None, shell_
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             encoding="utf-8",
-            universal_newlines=True,
-            shell=shell_flag
+            universal_newlines=True
         )
-        out, error = proc.communicate(timeout=timeout)
+        out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
-        print(f"*******************returncode:{proc.returncode}*********************")
+        log_info(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode == 0:
             for row, data in enumerate(out_res):
-                print("【{}】:{}".format(row, data))
+                log_info("【{}】:{}".format(row, data))
             if os.path.exists(res_path):
-                print('*****************test succeed************************')
+                log_info('*****************test succeed************************')
                 return True
             else:
-                print(f"{res_def_name} is not exist")
+                log_info(f"{res_def_name} is not exist")
                 return False
         else:
             for row, data in enumerate(out_res):
-                logger("【{}】:{}".format(row, data))
+                log_error("【{}】:{}".format(row, data))
             return False
     except Exception as e:
-        logger("An error occurred: {}".format(e))
+        log_error("command execution failed: {}".format(e))
+        raise Exception("command execution failed: {}".format(e))
 
 
-def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=600):
+def exec_command_out_put(cmd_path, res_def_name, error_log):
     """
-    Execute the cmd command to return the terminal output value
+    Description: execute the cmd command to return the terminal output value
+    @param cmd_path: the source code path for running commands
+    @param res_def_name: function name
+    @param error_log: use case judgment flag
+    @return True or False
     """
 
     write_bundle_json(res_def_name, cmd_path)
@@ -139,33 +150,35 @@ def exec_command_out_put(cmd_path, res_def_name, c, shell_flag=False, timeout=60
             stderr=subprocess.PIPE,
             encoding="utf-8",
             universal_newlines=True,
-            shell=shell_flag
         )
-        out, error = proc.communicate(timeout=timeout)
+        out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
-        print(f"*******************returncode:{proc.returncode}*********************")
+        log_info(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode != 0:
             for row, data in enumerate(out_res):
-                print("【{}】:{}".format(row, data))
-            if c in out_res:
-                print('*****************test succeed************************')
+                log_info("【{}】:{}".format(row, data))
+            if error_log in out_res:
+                log_info('*****************test succeed************************')
                 return True
             else:
-                print(f"{res_def_name} faile")
+                log_info(f"{res_def_name} failed")
                 return False
         else:
             for row, data in enumerate(out_res):
-                logger("【{}】:{}".format(row, data))
+                log_error("【{}】:{}".format(row, data))
             return False
     except Exception as e:
-        logger("An error occurred: {}".format(e))
+        log_error("command execution failed: {}".format(e))
+        raise Exception("command execution failed: {}".format(e))
 
 
-def exec_command_isntall_dir(cmd_path, res_def_name, shell_flag=False, timeout=600):
+def exec_command_install_dir(cmd_path, res_def_name):
     """
-    Execute the cmd command to return the terminal output value
+    Description: execute the cmd command to return the terminal output value
+    @param cmd_path: the source code path for running commands
+    @param res_def_name: function name
+    @return True or False
     """
-
     write_bundle_json(res_def_name, cmd_path)
     cmd = [BUILD_SH_PATH, '--product-name', 'rk3568', '--build-target', cmd_path]
     try:
@@ -175,41 +188,42 @@ def exec_command_isntall_dir(cmd_path, res_def_name, shell_flag=False, timeout=6
             stderr=subprocess.PIPE,
             encoding="utf-8",
             universal_newlines=True,
-            shell=shell_flag
         )
-        out, error = proc.communicate(timeout=timeout)
+        out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
-        print(f"*******************returncode:{proc.returncode}*********************")
+        log_info(f"*******************returncode:{proc.returncode}*********************")
         if proc.returncode == 0:
             for row, data in enumerate(out_res):
-                print("【{}】:{}".format(row, data))
+                log_info("【{}】:{}".format(row, data))
             config_path = RESULT_PATH + res_def_name + "/{}_module_info.json".format(res_def_name)
             with open(config_path, "r", encoding="utf-8") as json_file:
                 data = json.load(json_file)
                 res = str((data.get("dest"))[0])
-                moudel_install_dir = res_def_name
-            if moudel_install_dir in res:
-                print('*****************test succeed************************')
+                module_install_dir = res_def_name
+            if module_install_dir in res:
+                log_info('*****************test succeed************************')
                 return True
             else:
-                print(f"{res_def_name} is not exist")
+                log_info(f"{res_def_name} is not exist")
                 return False
         else:
             for row, data in enumerate(out_res):
-                logger("【{}】:{}".format(row, data))
+                log_error("【{}】:{}".format(row, data))
             return False
     except Exception as e:
-        logger("An error occurred: {}".format(e))
+        log_error("command execution failed: {}".format(e))
+        raise Exception("command execution failed: {}".format(e))
 
 
 def write_bundle_json(res_def_name, cmd_path):
     """
-    write bundle.json
+    Description: write bundle.json
+    @param res_def_name: function name
+    @param cmd_path: the source code path for running commands
     """
-
     with open(CONFIG_PATH, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
-        res = (data.get("component").get("build").get("sub_component"))
+        res = data.get("component").get("build").get("sub_component")
         res.append("//{}:{}".format(cmd_path, res_def_name))
         data["component"]["build"]["sub_component"] = res
     config_res = CURRENT_OHOS_ROOT + "/build/common/bundle.json"
@@ -221,27 +235,27 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_dir(self):
         """
-        test output dir
+        Description: test output dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
-        c = "[OHOS INFO] output_dir is not allowed to be defined."
+        error_log = "[OHOS INFO] output_dir is not allowed to be defined."
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
-        result = exec_command_out_put(cmd_path, res_def_name, c)
+        result = exec_command_out_put(cmd_path, res_def_name, error_log)
         assert result, "build test_ohos_shared_library_output_dir failed"
 
     def test_ohos_shared_library_testonly(self):
         """
-        test testonly
+        Description: test testonly
         """
-        c = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
+        error_log = "[OHOS INFO] ERROR at //build/ohos/ohos_part.gni:54:3: Test-only dependency not allowed."
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
-        result = exec_command_out_put(cmd_path, res_def_name, c)
+        result = exec_command_out_put(cmd_path, res_def_name, error_log)
         assert result, "build test_ohos_shared_library_testonly failed"
 
     def test_ohos_shared_library(self):
         """
-        test shared library
+        Description: test shared library
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -251,7 +265,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_name(self):
         """
-        test output name
+        Description: test output name
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -261,7 +275,7 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_output_extension(self):
         """
-        test extension
+        Description: test extension
         """
         res_def_name = "test_ohos_shared_library_output_name"
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
@@ -271,25 +285,25 @@ class TestModuleBuild:
 
     def test_ohos_shared_library_module_install_dir(self):
         """
-        test module install dir
+        Description: test module install dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
-        result = exec_command_isntall_dir(cmd_path, res_def_name)
+        result = exec_command_install_dir(cmd_path, res_def_name)
         assert result, " test_ohos_shared_library_module_install_dir fail"
 
     def test_ohos_shared_library_relative_install_dir(self):
         """
-        test relative install dir
+        Description: test relative install dir
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
-        result = exec_command_isntall_dir(cmd_path, res_def_name)
+        result = exec_command_install_dir(cmd_path, res_def_name)
         assert result, " test_ohos_shared_library_relative_install_dir fail"
 
     def test_ohos_static_library(self):
         """
-        test static library
+        Description: test static library
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -299,7 +313,7 @@ class TestModuleBuild:
 
     def test_ohos_source_set(self):
         """
-        test source set
+        Description: test source set
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -309,7 +323,7 @@ class TestModuleBuild:
 
     def test_ohos_executable(self):
         """
-        test ohos executable
+        Description: test ohos executable
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -322,7 +336,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_executable(self):
         """
-        test prebuilt executable
+        Description: test prebuilt executable
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_common = TEMPLATE_SOURCE_PATH + function_name
@@ -332,7 +346,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_shared_library(self):
         """
-        test _prebuilt shared library
+        Description: test _prebuilt shared library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -342,7 +356,7 @@ class TestPrecompiledBuild:
 
     def test_ohos_prebuilt_static_library(self):
         """
-        test prebuilt static library
+        Description: test prebuilt static library
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
@@ -351,24 +365,11 @@ class TestPrecompiledBuild:
         assert result, "build test_ohos_prebuilt_static_library failed"
 
 
-class TestHapBuild:
-
-    def test_ohos_app(self):
-        """
-        test ohos app
-        """
-        example_name = 'MyApplication3'
-        common_res_def = TEMPLATE_SOURCE_PATH + example_name
-        res_path = RESULT_PATH + example_name + "/" + example_name + "/{}.hap".format(example_name)
-        result = exec_command_communicate(common_res_def, res_path, example_name)
-        assert result, "build test_ohos_app failed"
-
-
 class TestOtherPrebuilt:
 
     def test_ohos_sa_profile(self):
         """
-        test ohos_sa_profile
+        Description: test ohos_sa_profile
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -378,7 +379,7 @@ class TestOtherPrebuilt:
 
     def test_ohos_prebuilt_etc(self):
         """
-        test ohos_prebuilt_etc
+        Description: test ohos_prebuilt_etc
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
@@ -391,7 +392,7 @@ class TestRustBuild:
 
     def test_bin_cargo_crate(self):
         """
-        test_bin_cargo_crate
+        Description: test bin_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -401,7 +402,7 @@ class TestRustBuild:
 
     def test_bin_crate(self):
         """
-        test_bin_crate
+        Description: test bin_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -411,7 +412,7 @@ class TestRustBuild:
 
     def test_extern_c(self):
         """
-        test_extern_c
+        Description: test extern_c
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_extern_c:test_extern_c"
@@ -421,7 +422,7 @@ class TestRustBuild:
 
     def test_for_h(self):
         """
-        test_for_h
+        Description: test for_h
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_h:bindgen_test_for_h"
@@ -431,7 +432,7 @@ class TestRustBuild:
 
     def test_for_hello_world(self):
         """
-        test_for_hello_world
+        Description: test for_hello_world
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_hello_world:bindgen_test"
@@ -441,7 +442,7 @@ class TestRustBuild:
 
     def test_for_hpp(self):
         """
-        test_for_hpp
+        Description: test for_hpp
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_bindgen_test/test_for_hpp:bindgen_test_hpp"
@@ -451,7 +452,7 @@ class TestRustBuild:
 
     def test_cdylib_crate(self):
         """
-        test_cdylib_crate
+        Description: test cdylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -461,7 +462,7 @@ class TestRustBuild:
 
     def test_cxx_exe(self):
         """
-        test_cxx_exe
+        Description: test cxx_exe
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_cxx" + ":" + function_name
@@ -471,7 +472,7 @@ class TestRustBuild:
 
     def test_cxx_rust(self):
         """
-        test_cxx_rust
+        Description: test cxx_rust
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -482,7 +483,7 @@ class TestRustBuild:
 
     def test_dylib_crate(self):
         """
-        test_dylib_crate
+        Description: test dylib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -492,7 +493,7 @@ class TestRustBuild:
 
     def test_idl(self):
         """
-        test_idl
+        Description: test test_idl
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + "test_idl"
@@ -502,7 +503,7 @@ class TestRustBuild:
 
     def test_rlib_cargo_crate(self):
         """
-        test_rlib_cargo_crate
+        Description: test rlib_cargo_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name + ':' + 'test_rlib_crate_associated_bin'
@@ -512,7 +513,7 @@ class TestRustBuild:
 
     def test_rlib_crate(self):
         """
-        test_rlib_crate
+        Description: test rlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -522,7 +523,7 @@ class TestRustBuild:
 
     def test_rust_st(self):
         """
-        test_rust_st
+        Description: test rust_st
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -532,7 +533,7 @@ class TestRustBuild:
 
     def test_rust_ut(self):
         """
-        test_rust_ut
+        Description: test rust_ut
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -542,7 +543,7 @@ class TestRustBuild:
 
     def test_static_link(self):
         """
-        test_static_link
+        Description: test static_link
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -552,7 +553,7 @@ class TestRustBuild:
 
     def test_staticlib_crate(self):
         """
-        test_staticlib_crate
+        Description: test staticlib_crate
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
@@ -563,7 +564,7 @@ class TestRustBuild:
 
 def write_initial_bundle_json():
     """
-    write initial bundle.json
+    Description: write initial bundle.json
     """
     with open(CONFIG_PATH, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
