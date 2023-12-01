@@ -24,18 +24,18 @@ class Adder {
 public:
     explicit Adder(int i = 0)
     {
-        total = i;
+        total_res = i;
     }
-    void addNum(int number)
+    void addNum(int number_res)
     {
-        total += number;
+        total_res += number_res;
     }
     int getTotal()
     {
-        return total;
+        return total_res;
     }
 private:
-    int total;
+    int total_res;
 };
 int main()
 {

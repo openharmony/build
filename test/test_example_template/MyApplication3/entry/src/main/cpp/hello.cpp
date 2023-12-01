@@ -24,22 +24,23 @@ static napi_value Add(napi_env env, napi_callback_info info)
 
     napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
 
-    napi_valuetype valuetype0;
-    napi_typeof(env, args[0], &valuetype0);
+    napi_valuetype valuerestype0;
+    napi_typeof(env, args[0], &valuerestype0);
 
-    napi_valuetype valuetype1;
-    napi_typeof(env, args[1], &valuetype1);
+    napi_valuetype valuerestype1;
+    napi_typeof(env, args[1], &valuerestype1);
 
-    double value0;
-    napi_get_value_double(env, args[0], &value0);
+    double valueres0;
+    napi_get_value_double(env, args[0], &valueres0);
 
-    double value1;
-    napi_get_value_double(env, args[1], &value1);
+    double valueres1;
+    napi_get_value_double(env, args[1], &valueres1);
 
-    napi_value sum;
-    napi_create_double(env, add_test(value0, value1), &sum);
+    napi_value sumres;
+    double temp = add_test(valueres0, valueres1);
+    napi_create_double(env, temp, &sumres);
 
-    return sum;
+    return sumres;
 }
 
 EXTERN_C_START
