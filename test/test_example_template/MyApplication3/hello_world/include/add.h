@@ -16,6 +16,6 @@
 #ifndef HELLO_WORLD_ADD_H
 #define HELLO_WORLD_ADD_H
 
-static double add_test(double a, double b);
+double add_test(double a, double b);
 
 #endif  //  HELLO_WORLD_ADD_H
