@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-#ifndef BUILD_HELLO_WORLD_ADD_H
-#define BUILD_HELLO_WORLD_ADD_H
+#ifndef HELLO_WORLD_ADD_H
+#define HELLO_WORLD_ADD_H
 
-double add_test(double a, double b);
+static double add_test(double a, double b);
 
-#endif  //  BUILD_HELLO_WORLD_ADD_H
+#endif  //  HELLO_WORLD_ADD_H
