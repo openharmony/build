@@ -48,11 +48,12 @@ def main(args):
 
     outputs = [options.outputs]
 
+    es2abc_path = os.path.join(options.es2abc, 'es2abc')
     build_utils.call_and_write_depfile_if_stale(
         lambda: gen_abc(options),
         options,
         depfile_deps=([options.es2abc]),
-        input_paths=(options.sources + [options.es2abc]),
+        input_paths=(options.sources + [es2abc_path]),
         output_paths=(outputs),
         input_strings=args,
         force=False,
