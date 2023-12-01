@@ -14,12 +14,12 @@
 import("//build/ohos.gni")
 
 config("hello_config") {
-  include_dirs = [ "./include" ]
+  include_dirs = [ "../include" ]
 }
 
 ohos_shared_library("test_ohos_shared_library_output_name") {
   configs = [ ":hello_config" ]
-  sources = [ "./src/hello.cpp" ]
+  sources = [ "../src/hello.cpp" ]
   part_name = "build_framework"
   subsystem_name = "build"
   output_name = "test_ohos_shared_library_output_name"
