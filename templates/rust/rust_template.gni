@@ -165,15 +165,6 @@ template("ohos_rust_executable") {
     if (!defined(deps)) {
       deps = []
     }
-    _external_deps = [
-      "build_framework:libstd.dylib.so",
-      "build_framework:libtest.dylib.so",
-    ]
-    if (defined(external_deps)) {
-      external_deps += _external_deps
-    } else {
-      external_deps = _external_deps
-    }
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
     }
@@ -407,15 +398,6 @@ template("ohos_rust_shared_ffi") {
     if (!defined(deps)) {
       deps = []
     }
-    _external_deps = [
-      "build_framework:libstd.dylib.so",
-      "build_framework:libtest.dylib.so",
-    ]
-    if (defined(external_deps)) {
-      external_deps += _external_deps
-    } else {
-      external_deps = _external_deps
-    }
 
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
@@ -491,15 +473,6 @@ template("ohos_rust_static_ffi") {
     }
     if (!defined(deps)) {
       deps = []
-    }
-    _external_deps = [
-      "build_framework:libstd.dylib.so",
-      "build_framework:libtest.dylib.so",
-    ]
-    if (defined(external_deps)) {
-      external_deps += _external_deps
-    } else {
-      external_deps = _external_deps
     }
     if (defined(invoker.rustc_lints)) {
       rustc_lints = invoker.rustc_lints
