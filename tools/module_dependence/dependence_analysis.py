@@ -20,13 +20,13 @@ import glob
 from file_utils import read_json_file
 
 
-def _get_external_deps_file_list(search_path):
+def _get_external_deps_file_list(search_path: str):
     search_str = "{}/**/*{}".format(search_path, "_external_deps_temp.json")
     external_deps_file_list = glob.glob(search_str, recursive=True)
     return external_deps_file_list
 
 
-def _read_external_deps_info(build_out_dir):
+def _read_external_deps_info(build_out_dir: str):
     ext_deps_file_list = _get_external_deps_file_list(
         os.path.join(build_out_dir, 'gen'))
     ext_deps_file_dict = {}
@@ -47,14 +47,14 @@ def _read_external_deps_info(build_out_dir):
     return ext_deps_file_dict
 
 
-def _parse_module_name(name_str):
+def _parse_module_name(name_str: str):
     split_result = name_str.split('__')
     part_name = split_result[0]
     module_name = split_result[1]
     return part_name, module_name
 
 
-def _read_module_deps_info(module_deps_files_path):
+def _read_module_deps_info(module_deps_files_path: str):
     deps_files = os.listdir(module_deps_files_path)
     deps_data = {}
     for _filename in deps_files:
@@ -71,7 +71,7 @@ def _read_module_deps_info(module_deps_files_path):
     return deps_data
 
 
-def _merge_external_deps_label(deps_data, external_deps_data):
+def _merge_external_deps_label(deps_data: dict, external_deps_data: dict):
     for _module_alias, _info in deps_data.items():
         external_deps = _info.get('external_deps')
         if not external_deps:
@@ -85,7 +85,7 @@ def _merge_external_deps_label(deps_data, external_deps_data):
     return deps_data
 
 
-def get_all_deps_data(module_deps_files_path):
+def get_all_deps_data(module_deps_files_path: str):
     deps_data = _read_module_deps_info(module_deps_files_path)
     build_out_dir = os.path.dirname(module_deps_files_path)
     external_deps_data = _read_external_deps_info(build_out_dir)

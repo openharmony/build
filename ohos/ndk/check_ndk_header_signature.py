@@ -47,7 +47,7 @@ def parse_args(args):
     return options
 
 
-def header_signature(output, headers, root_build_dir, saved, generated, check):
+def header_signature(output: str, headers: list, root_build_dir: str, saved: str, generated: str, check: bool):
     signature = []
     mgr = InterfaceMgr()
 

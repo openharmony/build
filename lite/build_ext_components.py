@@ -25,7 +25,7 @@ from shutil import copyfile
 from datetime import datetime
 
 
-def cmd_exec(command, temp_file, error_log_path):
+def cmd_exec(command: str, temp_file: str, error_log_path: str):
     start_time = datetime.now().replace(microsecond=0)
     cmd = shlex.split(command)
 

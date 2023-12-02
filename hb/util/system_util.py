@@ -64,7 +64,7 @@ class SystemUtil(metaclass=NoInstance):
             LogUtil.get_failed_log(log_path)
 
     @staticmethod
-    def get_current_time(time_type='default'):
+    def get_current_time(time_type: str='default'):
         if time_type == 'timestamp':
             return int(datetime.utcnow().timestamp() * 1000)
         if time_type == 'datetime':
@@ -89,7 +89,7 @@ class ExecEnviron:
     def initenv(self):
         self._env = os.environ.copy()
 
-    def allow(self, allowed_vars):
+    def allow(self, allowed_vars: list):
         if self._env is not None:
             allowed_env = {k: v for k, v in self._env.items() if k in allowed_vars}
             self._env = allowed_env

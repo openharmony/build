@@ -42,7 +42,7 @@ def parse_args(args):
     return options
 
 
-def do_archive(output, directory, prefix, compress_fn, filter_file_name):
+def do_archive(output: str, directory: str, prefix: str, compress_fn, filter_file_name: list):
     files = []
     for root, _, filenames in os.walk(directory):
         for f in filenames:
@@ -61,8 +61,8 @@ def do_archive(output, directory, prefix, compress_fn, filter_file_name):
                                          compress=compress)
 
 
-def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
-                compress_fn, notice, filter_file_name):
+def archive_ndk(output: str, os_irrelevant_dir: str, os_specific_dir: str, prefix: str,
+                compress_fn, notice: str, filter_file_name: list):
     # Create an empty zipfile first, then add stuff to it.
     with zipfile.ZipFile(output, 'w') as outfile:
         pass
@@ -81,7 +81,7 @@ def archive_ndk(output, os_irrelevant_dir, os_specific_dir, prefix,
                                      compress=compress)
 
 
-def file_filter(os_irrelevant_dir):
+def file_filter(os_irrelevant_dir: str):
     filter_file_name = []
     target_dir = os.path.join(os_irrelevant_dir, 'sysroot/usr/include/linux')
     filter_file_path =  build_utils.find_in_directory(target_dir, '*[A-Z].h')

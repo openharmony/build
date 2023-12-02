@@ -18,7 +18,7 @@ import sys
 import subprocess
 
 
-def summary_ccache_new(ccache_log):
+def summary_ccache_new(ccache_log: str):
     hit_dir_num = 0
     hit_pre_num = 0
     mis_num = 0

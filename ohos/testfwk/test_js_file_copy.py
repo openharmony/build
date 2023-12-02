@@ -25,7 +25,7 @@ from scripts.util.file_utils import write_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
 
-def copy_file(suite_path, template_path, target_path):
+def copy_file(suite_path: str, template_path: str, target_path: str):
     file_list = []
     name_list = []
     template_path = os.path.join(template_path, "src")
@@ -51,14 +51,14 @@ def copy_file(suite_path, template_path, target_path):
     write_list_file(js_dest_path, name_list)
 
 
-def write_list_file(dest_path, name_list):
+def write_list_file(dest_path: str, name_list: list):
     with open(os.path.join(dest_path, "List.test.js"), 'a') \
         as list_data:
         for name in name_list:
             list_data.write("require('./%s')\n" % name)
 
 
-def get_hap_json(target_name, test_output_dir):
+def get_hap_json(target_name: str, test_output_dir: str):
     os.makedirs(test_output_dir, exist_ok=True)
     json_file = os.path.join(test_output_dir, target_name + ".json")
     json_info_data = {"driver": {

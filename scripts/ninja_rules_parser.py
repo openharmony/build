@@ -21,7 +21,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, read_file, write_file  # noqa: E402 E501
 
 
-def _read_subninja_build(build_dir, subninja_build_file):
+def _read_subninja_build(build_dir: str, subninja_build_file: str):
     subninja_build_file = os.path.join(build_dir, subninja_build_file)
     if not os.path.exists(subninja_build_file):
         raise Exception("file '{}' doesn't exist.".format(subninja_build_file))
@@ -49,7 +49,7 @@ def _read_subninja_build(build_dir, subninja_build_file):
     return None
 
 
-def _parse_target_label(build_label_list, toolchain_name):
+def _parse_target_label(build_label_list: list, toolchain_name: str):
     phony_targets_dict = {}
     for build_label in build_label_list:
         target_filename = os.path.basename(build_label)
@@ -66,7 +66,7 @@ def _parse_target_label(build_label_list, toolchain_name):
     return phony_targets_dict
 
 
-def _read_toolchain_ninja(build_dir, toolchain_ninja_file, toolchain_name):
+def _read_toolchain_ninja(build_dir: str, toolchain_ninja_file: str, toolchain_name: str):
     if not os.path.exists(toolchain_ninja_file):
         raise Exception(
             "file '{}' doesn't exist.".format(toolchain_ninja_file))
@@ -94,7 +94,7 @@ def _read_toolchain_ninja(build_dir, toolchain_ninja_file, toolchain_name):
     return build_phony_targets
 
 
-def _read_variants_toolchain_info(variants_toolchain_info_file):
+def _read_variants_toolchain_info(variants_toolchain_info_file: str):
     if not os.path.exists(variants_toolchain_info_file):
         raise Exception(
             "file '{}' doesn't exist.".format(variants_toolchain_info_file))
@@ -106,7 +106,7 @@ def _read_variants_toolchain_info(variants_toolchain_info_file):
     return platform_toolchain
 
 
-def _read_build_ninja(build_ninja_file):
+def _read_build_ninja(build_ninja_file: str):
     if not os.path.exists(build_ninja_file):
         raise Exception("file '{}' doesn't exist.".format(build_ninja_file))
     ninja_targets = read_file(build_ninja_file)
@@ -115,8 +115,8 @@ def _read_build_ninja(build_ninja_file):
     return ninja_targets
 
 
-def generate_phony_targets(build_dir, toolchain_ninja_file, platform,
-                           toolchain_name, default_targets_name):
+def generate_phony_targets(build_dir: str, toolchain_ninja_file: str, platform: str,
+                           toolchain_name: str, default_targets_name: str):
     build_phony_targets = _read_toolchain_ninja(build_dir,
                                                 toolchain_ninja_file,
                                                 toolchain_name)
@@ -136,7 +136,7 @@ def generate_phony_targets(build_dir, toolchain_ninja_file, platform,
     return build_file
 
 
-def _update_build_ninja(build_dir, include_files):
+def _update_build_ninja(build_dir: str, include_files: str):
     try:
         ninja_build_file = os.path.join(build_dir, 'build.ninja')
         if not os.path.exists(ninja_build_file):
@@ -159,7 +159,7 @@ def _update_build_ninja(build_dir, include_files):
         raise
 
 
-def update(build_dir, variants_toolchain_info_file):
+def update(build_dir: str, variants_toolchain_info_file: str):
     variants_toolchain_info_file = os.path.join(build_dir,
                                                 variants_toolchain_info_file)
     platform_toolchain = _read_variants_toolchain_info(

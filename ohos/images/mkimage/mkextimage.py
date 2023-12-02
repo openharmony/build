@@ -47,7 +47,7 @@ def args_parse(argv):
     return args
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
@@ -120,7 +120,6 @@ def build_run_e2fsdroid(args):
 
 def build(args):
     args = args_parse(args)
-
     res = build_run_mke2fs(args)
     if res != 0:
         print("error run mke2fs errno: " + str(res))

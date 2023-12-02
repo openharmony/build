@@ -25,7 +25,7 @@ class TypeCheckUtil(metaclass=NoInstance):
     @staticmethod
     def check_arg_type(arg_object, target_class):
         if not isinstance(arg_object, target_class):
-            raise OHOSException(f'type error')
+            raise  (f'type error')
 
     @staticmethod
     def is_bool_type(value):

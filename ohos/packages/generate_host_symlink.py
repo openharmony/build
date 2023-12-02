@@ -24,7 +24,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def _do_symlink(all_host_parts_info, output_file, root_build_dir):
+def _do_symlink(all_host_parts_info: str, output_file: str, root_build_dir: str):
     output_result = {}
     for part_info in all_host_parts_info:
         part_info_file = part_info.get('part_info_file')

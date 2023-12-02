@@ -29,7 +29,7 @@ from exceptions.ohos_exception import OHOSException
 class IoUtil(metaclass=NoInstance):
 
     @staticmethod
-    def read_json_file(input_file) -> dict:
+    def read_json_file(input_file: str) -> dict:
         if not os.path.isfile(input_file):
             raise OHOSException(f'{input_file} not found', '0008')
 
@@ -38,12 +38,12 @@ class IoUtil(metaclass=NoInstance):
             return data
 
     @staticmethod
-    def dump_json_file(dump_file, json_data):
+    def dump_json_file(dump_file: str, json_data: dict or list):
         with open(dump_file, 'wt', encoding='utf-8') as json_file:
             json.dump(json_data, json_file, ensure_ascii=False, indent=2)
 
     @staticmethod
-    def read_file(file_path):
+    def read_file(file_path: str):
         if not os.path.exists(file_path):
             raise OHOSException(
                 "file '{}' doesn't exist.".format(file_path), '0009')
@@ -53,7 +53,7 @@ class IoUtil(metaclass=NoInstance):
         return data
 
     @staticmethod
-    def read_yaml_file(input_file):
+    def read_yaml_file(input_file: str):
         if not os.path.isfile(input_file):
             raise OHOSException(f'{input_file} not found', '0010')
 
@@ -70,5 +70,5 @@ class IoUtil(metaclass=NoInstance):
                     raise OHOSException(f'{input_file} load failed', '0011')
 
     @staticmethod
-    def copy_file(src, dst):
+    def copy_file(src: str, dst: str):
         return shutil.copy(src, dst)

@@ -27,7 +27,7 @@ sys.path.append(
 from build_scripts.build import find_top
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
@@ -35,7 +35,7 @@ def run_cmd(cmd):
     return res.pid, res.returncode, sout, serr
 
 
-def build_rootdir(src_dir):
+def build_rootdir(src_dir: str):
     tmp_dir = tempfile.mkdtemp(prefix="tmp")
     index = src_dir.rfind('/')
     root_dir = "%sroot" % src_dir[:index + 1]
@@ -49,7 +49,7 @@ def build_rootdir(src_dir):
     return tmp_dir
 
 
-def load_config(config_file):
+def load_config(config_file: str):
     mk_configs = []
     with open(config_file, "r") as file:
         for line in file:
@@ -73,7 +73,7 @@ def load_config(config_file):
     return mkfs_tools, mk_configs, fs_type
 
 
-def verify_ret(res):
+def verify_ret(res: list):
     if res[1]:
         print(" ".join(["pid ", str(res[0]), " ret ", str(res[1]), "\n",
                         res[2].decode(), res[3].decode()]))
@@ -81,7 +81,7 @@ def verify_ret(res):
         sys.exit(2)
 
 
-def sparse_img2simg(is_sparse, device):
+def sparse_img2simg(is_sparse: str, device: str):
     # we don't support sparse in mktools.
     if "sparse" in is_sparse:
         tmp_device = "%s.tmp" % device
@@ -89,7 +89,7 @@ def sparse_img2simg(is_sparse, device):
         os.rename(tmp_device, device)
 
 
-def mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
+def mk_system_img(mkfs_tools: str, mk_configs: str, device: str, src_dir: str, is_sparse: str):
     src_dir = build_rootdir(src_dir)
     mk_configs = " ".join([src_dir, device, mk_configs])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
@@ -99,7 +99,7 @@ def mk_system_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
         shutil.rmtree(src_dir)
 
 
-def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
+def mk_ramdisk_img(mkfs_tools: str, mk_configs: str, device: str, src_dir: str, is_sparse: str):
     # get ramdisk sieze frome ramdisk_image_conf.txt
     ramdisk_size = mk_configs.split(" ")[1]
     mk_configs = \
@@ -108,7 +108,7 @@ def mk_ramdisk_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
     verify_ret(res)
 
 
-def mk_other_img(mkfs_tools, mk_configs, device, src_dir, is_sparse):
+def mk_other_img(mkfs_tools: str, mk_configs: str, device: str, src_dir: str, is_sparse: str):
     mk_configs = " ".join([src_dir, device, mk_configs])
     res = run_cmd(" ".join([mkfs_tools, mk_configs]))
     verify_ret(res)

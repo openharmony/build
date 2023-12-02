@@ -25,7 +25,7 @@ from scripts.util.file_utils import write_json_file # noqa: E402
 from scripts.util import build_utils # noqa: E402
 
 
-def copy_dir(src, dest):
+def copy_dir(src: str, dest: str):
     if not os.path.exists(src):
         raise Exception("src dir '{}' doesn't exist.".format(src))
     if not os.path.exists(dest):
@@ -47,8 +47,8 @@ def copy_dir(src, dest):
     return 0
 
 
-def _resources_with_xml_v1(root, testcase_target_name, test_resource_path,
-                           part_build_out_path, resource_output_path):
+def _resources_with_xml_v1(root, testcase_target_name: str, test_resource_path: str,
+                           part_build_out_path: str, resource_output_path: str):
     _out_resources_list = []
     for target in root:
         if target.attrib.get('name') != testcase_target_name:
@@ -93,13 +93,13 @@ def _resources_with_xml_v1(root, testcase_target_name, test_resource_path,
     return _out_resources_list
 
 
-def _parse_res_value(value):
+def _parse_res_value(value: str):
     res_file = value.split('->')[0].strip()
     return res_file
 
 
-def _resources_with_xml_v2(root, testcase_target_name, test_resource_path,
-                           part_build_out_path, resource_output_path):
+def _resources_with_xml_v2(root, testcase_target_name: str, test_resource_path: str,
+                           part_build_out_path: str, resource_output_path: str):
     _out_resources_list = []
     for target in root:
         if target.attrib.get('name') != testcase_target_name:
@@ -137,9 +137,9 @@ def _resources_with_xml_v2(root, testcase_target_name, test_resource_path,
     return _out_resources_list
 
 
-def find_testcase_resources(resource_config_file, testcase_target_name,
-                            test_resource_path, part_build_out_path,
-                            resource_output_path):
+def find_testcase_resources(resource_config_file: str, testcase_target_name: str,
+                            test_resource_path: str, part_build_out_path: str,
+                            resource_output_path: str):
     if not os.path.exists(resource_config_file):
         return []
     tree = ET.parse(resource_config_file)
@@ -165,7 +165,7 @@ def find_testcase_resources(resource_config_file, testcase_target_name,
     return _resources_list
 
 
-def copy_testcase_resources(resource_infos):
+def copy_testcase_resources(resource_infos: dict):
     for resource_info in resource_infos:
         src_file = resource_info.get('src')
         if not os.path.exists(src_file):

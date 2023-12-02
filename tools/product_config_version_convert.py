@@ -52,7 +52,7 @@ def merge_files(args):
     readjson(new_file_name, device)
 
 
-def readjson(path, device):
+def readjson(path: str, device: str):
     subsystems_list = list()
     config_dic = {}
     with open(path, 'r+', encoding='utf-8') as f:
@@ -93,7 +93,7 @@ def readjson(path, device):
         f.truncate()
 
 
-def merge(dict1, dict2): 
+def merge(dict1: dict, dict2: dict): 
     res = {**dict1, **dict2} 
     return res 
 

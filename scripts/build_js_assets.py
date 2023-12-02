@@ -61,7 +61,7 @@ def parse_args(args):
     return options
 
 
-def make_my_env(options, js2abc):
+def make_my_env(options, js2abc: bool):
     out_dir = os.path.abspath(os.path.dirname(options.output))
     gen_dir = os.path.join(out_dir, "gen")
     assets_dir = os.path.join(out_dir, "assets")
@@ -82,7 +82,7 @@ def make_my_env(options, js2abc):
     return my_env
 
 
-def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_path):
+def make_manifest_data(config: dict, options, js2abc: bool, asset_index: int, assets_cnt: int, src_path: str):
     data = dict()
     data['appID'] = config['app']['bundleName']
     if options.app_profile:
@@ -111,7 +111,7 @@ def make_manifest_data(config, options, js2abc, asset_index, assets_cnt, src_pat
     return data
 
 
-def build_ace(cmd, options, js2abc, loader_home, assets_dir, assets_name):
+def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str, assets_name: str):
     my_env = make_my_env(options, js2abc)
     gen_dir = my_env.get("aceModuleBuild")
     assets_cnt = len(assets_dir)

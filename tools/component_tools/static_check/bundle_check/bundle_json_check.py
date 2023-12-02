@@ -315,7 +315,7 @@ class BundleJson(object):
         return bundle_error_component
 
         # component name
-    def _check_component_name(self, component, component_line, bundle_error_component):
+    def _check_component_name(self, component: dict, component_line: int, bundle_error_component: list):
         if 'name' not in component:
             bundle_error = dict(line=component_line,
                                 contents='"component"',
@@ -333,8 +333,8 @@ class BundleJson(object):
                     bundle_error_component.append(bundle_error)
         
         # component subsystem
-    def _check_component_subsystem(self, component, component_line,
-                                   bundle_error_component):
+    def _check_component_subsystem(self, component: dict, component_line: int,
+                                   bundle_error_component: list):
         if 'subsystem' not in component:
             bundle_error = dict(line=component_line,
                                 contents="component",
@@ -351,7 +351,7 @@ class BundleJson(object):
                 bundle_error_component.append(bundle_error)
 
         # component syscap 可选且可以为空
-    def _check_component_syscap(self, component, bundle_error_component):
+    def _check_component_syscap(self, component: dict, bundle_error_component: list):
         if 'syscap' not in component:
             pass
         elif component['syscap']:
@@ -372,7 +372,7 @@ class BundleJson(object):
                 bundle_error_component.append(bundle_error)
 
         # component adapted_system_type
-    def _check_component_ast(self, component, component_line, bundle_error_component):
+    def _check_component_ast(self, component: dict, component_line: int, bundle_error_component: list):
         if 'adapted_system_type' not in component:
             bundle_error = dict(line=component_line, contents='"component"',
                                 description=BCWarnInfo.COMPONENT_AST_NO_FIELD)
@@ -402,7 +402,7 @@ class BundleJson(object):
         return
 
         # component rom
-    def _check_component_rom(self, component, component_line, bundle_error_component):
+    def _check_component_rom(self, component: dict, component_line: int, bundle_error_component: list):
         if 'rom' not in component:
             bundle_error = dict(line=component_line, contents='"component:rom"',
                                 description=BCWarnInfo.COMPONENT_ROM_NO_FIELD)
@@ -426,7 +426,7 @@ class BundleJson(object):
                     bundle_error_component.append(bundle_error)
             
         # component ram
-    def _check_component_ram(self, component, component_line, bundle_error_component):
+    def _check_component_ram(self, component: dict, component_line: int, bundle_error_component: list):
         if 'ram' not in component:
             bundle_error = dict(line=component_line, contents='"component:ram"',
                                 description=BCWarnInfo.COMPONENT_RAM_NO_FIELD)
@@ -450,7 +450,7 @@ class BundleJson(object):
                     bundle_error_component.append(bundle_error)
 
         # component deps
-    def _check_component_deps(self, component, component_line, bundle_error_component):
+    def _check_component_deps(self, component: dict, component_line: int, bundle_error_component: list):
         if 'deps' not in component:
             bundle_error = dict(line=component_line, contents='"component:deps"',
                                 description=BCWarnInfo.COMPONENT_DEPS_NO_FIELD)

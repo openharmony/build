@@ -18,7 +18,7 @@ import sys
 import subprocess
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()

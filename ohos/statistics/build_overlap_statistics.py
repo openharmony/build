@@ -20,14 +20,14 @@ import argparse
 import json
 
 
-def is_combine_jars(contents):
+def is_combine_jars(contents: dict):
     if contents.get('deps_info').get('combine_target'):
         return True
     else:
         return False
 
 
-def get_sources_file(build_config):
+def get_sources_file(build_config: str):
     if not fnmatch.fnmatch(build_config, "*java*.build_config"):
         return None
     with open(build_config, 'r') as config_f:
@@ -37,7 +37,7 @@ def get_sources_file(build_config):
         return contents.get('deps_info').get('java_sources_file')
 
 
-def read_file(sources_file):
+def read_file(sources_file: str):
     contents = []
     if not os.path.exists(sources_file):
         return []
@@ -46,7 +46,7 @@ def read_file(sources_file):
     return contents
 
 
-def get_subsystem_paths(file, root_dir):
+def get_subsystem_paths(file: str, root_dir: str):
     paths = {
         'common': 'build',
         'thirdparty': 'third_party',
@@ -67,7 +67,7 @@ def overlap_rate_key(element):
     return element['overlap_rate']
 
 
-def compute_overlap_rate_by_subsystem(options, paths, program_language):
+def compute_overlap_rate_by_subsystem(options, paths: str, program_language: str):
     objs = []
     if program_language == 'c':
         pattern = '*.o'

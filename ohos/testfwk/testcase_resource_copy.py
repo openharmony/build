@@ -26,7 +26,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def copy_dir(src, dest):
+def copy_dir(src: str, dest: str):
     if not os.path.exists(src):
         raise Exception("src dir '{}' doesn't exist.".format(src))
     if not os.path.exists(dest):
@@ -51,8 +51,8 @@ def copy_dir(src, dest):
     return result_files
 
 
-def _resources_with_xml_v1(root, testcase_target_name, test_resource_path,
-                           part_build_out_path, resource_output_path):
+def _resources_with_xml_v1(root, testcase_target_name: str, test_resource_path: str,
+                           part_build_out_path: str, resource_output_path: str):
     _out_resources_list = []
     for target in root:
         if target.attrib.get('name') != testcase_target_name:
@@ -102,8 +102,8 @@ def _parse_res_value(value):
     return res_file
 
 
-def _resources_with_xml_v2(root, testcase_target_name, test_resource_path,
-                           part_build_out_path, resource_output_path):
+def _resources_with_xml_v2(root, testcase_target_name: str, test_resource_path: str,
+                           part_build_out_path: str, resource_output_path: str):
     _out_resources_list = []
     for target in root:
         if target.attrib.get('name') != testcase_target_name:
@@ -141,9 +141,9 @@ def _resources_with_xml_v2(root, testcase_target_name, test_resource_path,
     return _out_resources_list
 
 
-def find_testcase_resources(resource_config_file, testcase_target_name,
-                            test_resource_path, part_build_out_path,
-                            resource_output_path):
+def find_testcase_resources(resource_config_file: str, testcase_target_name: str,
+                            test_resource_path: str, part_build_out_path: str,
+                            resource_output_path: str):
     if not os.path.exists(resource_config_file):
         return []
     tree = ET.parse(resource_config_file)
@@ -169,7 +169,7 @@ def find_testcase_resources(resource_config_file, testcase_target_name,
     return _resources_list
 
 
-def copy_testcase_resources(resource_infos):
+def copy_testcase_resources(resource_infos: list):
     result_dest_list = []
     for resource_info in resource_infos:
         src_file = resource_info.get('src')
@@ -192,7 +192,7 @@ def copy_testcase_resources(resource_infos):
     return result_dest_list
 
 
-def _get_subsystem_name(part_name):
+def _get_subsystem_name(part_name: str):
     subsystem_parts_file = 'build_configs/parts_info/subsystem_parts.json'
     subsystem_parts_info = read_json_file(subsystem_parts_file)
     if subsystem_parts_info is None:
@@ -203,7 +203,7 @@ def _get_subsystem_name(part_name):
     return None
 
 
-def _get_subsystem_path(part_name):
+def _get_subsystem_path(part_name: str):
     subsystem_name = _get_subsystem_name(part_name)
     if subsystem_name is None:
         return None
@@ -222,14 +222,14 @@ def _get_subsystem_path(part_name):
     return subsystem_paths
 
 
-def _parse_module_out_path(module_out_path):
+def _parse_module_out_path(module_out_path: str):
     split_re = module_out_path.split('/', 1)
     part_name = split_re[0]
     module_name = split_re[1]
     return part_name, module_name
 
 
-def _find_resource_config_file(config_file_name, subsystem_path, module_name):
+def _find_resource_config_file(config_file_name: str, subsystem_path: str, module_name: str):
     resource_config_file = os.path.join('../../', subsystem_path,
                                         'test/resource', module_name,
                                         config_file_name)
@@ -247,7 +247,7 @@ def _find_resource_config_file(config_file_name, subsystem_path, module_name):
     return resource_config_file
 
 
-def _get_res_config_file(module_out_path):
+def _get_res_config_file(module_out_path: str):
     part_name, module_name = _parse_module_out_path(module_out_path)
     subsystem_paths = _get_subsystem_path(part_name)
     resource_config_files = []
@@ -263,8 +263,8 @@ def _get_res_config_file(module_out_path):
     return resource_config_files
 
 
-def _get_resources_list(resource_config_file, testcase_target_name,
-                        part_build_out_path, resource_output_path):
+def _get_resources_list(resource_config_file: str, testcase_target_name: str,
+                        part_build_out_path: str, resource_output_path: str):
     if not os.path.exists(resource_config_file):
         raise Exception(
             "testcase '{}' resource_config_file config incorrect.".format(
@@ -278,8 +278,8 @@ def _get_resources_list(resource_config_file, testcase_target_name,
     return resources_list
 
 
-def _get_resources_list_auto_match(module_out_path, testcase_target_name,
-                                   part_build_out_path, resource_output_path):
+def _get_resources_list_auto_match(module_out_path: str, testcase_target_name: str,
+                                   part_build_out_path: str, resource_output_path: str):
     resource_config_files = _get_res_config_file(module_out_path)
     all_resources_list = []
     for resource_config_file in resource_config_files:

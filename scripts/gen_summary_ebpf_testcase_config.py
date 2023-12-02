@@ -29,7 +29,7 @@ import sys
 import json
 
 
-def summary_subsystem_config_file(testcase_dir, summary_file):
+def summary_subsystem_config_file(testcase_dir: str, summary_file: str):
     if testcase_dir == ' ':
         return
 

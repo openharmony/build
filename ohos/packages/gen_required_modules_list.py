@@ -24,7 +24,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def read_install_info(system_installed_info_file, depfiles):
+def read_install_info(system_installed_info_file: str, depfiles: list):
     install_module_dict = {}
     parts_list = _read_file_content(system_installed_info_file)
     if parts_list is None:
@@ -51,7 +51,7 @@ def read_install_info(system_installed_info_file, depfiles):
     return install_module_dict
 
 
-def _read_file_content(input_file):
+def _read_file_content(input_file: str):
     if not os.path.exists(input_file):
         raise Exception("file '{}' does not exist.".format(input_file))
     data = read_json_file(input_file)
@@ -60,7 +60,7 @@ def _read_file_content(input_file):
     return data
 
 
-def _read_file_and_get_content(input_file, get_arrt_name=None):
+def _read_file_and_get_content(input_file: str, get_arrt_name=None):
     data = _read_file_content(input_file)
     result = []
     for info in data:

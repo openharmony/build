@@ -27,7 +27,7 @@ class GNException(Exception):
     pass
 
 
-def ToGNString(value, allow_dicts=True):
+def ToGNString(value: str, allow_dicts: bool=True):
     """Returns a stringified GN equivalent of the Python value.
 
     allow_dicts indicates if this function will allow converting dictionaries
@@ -67,7 +67,7 @@ def ToGNString(value, allow_dicts=True):
     raise GNException("Unsupported type when printing to GN.")
 
 
-def FromGNString(input_string):
+def FromGNString(input_string: str):
     """Converts the input string from a GN serialized value to Python values.
 
     For details on supported types see GNValueParser.Parse() below.
@@ -108,7 +108,7 @@ def FromGNString(input_string):
     return parser.Parse()
 
 
-def FromGNArgs(input_string):
+def FromGNArgs(input_string: str):
     """Converts a string with a bunch of gn arg assignments into a Python dict.
 
     Given a whitespace-separated list of
@@ -129,7 +129,7 @@ def FromGNArgs(input_string):
     return parser.ParseArgs()
 
 
-def UnescapeGNString(value):
+def UnescapeGNString(value: list):
     """Given a string with GN escaping, returns the unescaped string.
 
     Be careful not to feed with input from a Python parsing function like
@@ -154,7 +154,7 @@ def UnescapeGNString(value):
     return result
 
 
-def _IsDigitOrMinus(char):
+def _IsDigitOrMinus(char: str):
     return char in "-0123456789"
 
 
@@ -167,7 +167,7 @@ class GNValueParser(object):
     functions directly. All functions throw GNException on invalid input.
     """
 
-    def __init__(self, string):
+    def __init__(self, string: str):
         self.input = string
         self.cur = 0
 

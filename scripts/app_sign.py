@@ -47,7 +47,7 @@ def parse_args(args):
     return options
 
 
-def sign_app(options, unsigned_hap_path, signed_hap_path):
+def sign_app(options, unsigned_hap_path: str, signed_hap_path: str):
     cmd = ['java', '-jar', options.hapsigner, 'sign-app']
     cmd.extend(['-mode', 'localsign'])
     cmd.extend(['-signAlg', options.sign_algo])
