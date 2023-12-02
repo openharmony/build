@@ -30,7 +30,7 @@ module_dict = {}
 component_nodes = {}
 
 
-def draw_deps_pictrue_by_gn(output_path):
+def draw_deps_pictrue_by_gn(output_path: str):
     graph = Digraph('deps_graph')
     for node_name in component_nodes:
         graph.node(name=node_name, color='red')
@@ -65,7 +65,7 @@ def merge_module():
                 pass
 
 
-def read_build_gn_file(file_path):
+def read_build_gn_file(file_path: str):
     with open(file_path, 'r') as file:
         file_data = file.read()
         pattern = re.compile(r'ohos_shared_library.*?\}', re.DOTALL)
@@ -82,7 +82,7 @@ def read_build_gn_file(file_path):
         
 
 
-def _colletct_build_gn_path(root_path):
+def _colletct_build_gn_path(root_path: str):
     for file in os.listdir(root_path):
         file_path = os.path.join(root_path, file)
         if file == 'BUILD.gn':
@@ -91,7 +91,7 @@ def _colletct_build_gn_path(root_path):
             _colletct_build_gn_path(file_path)    
 
 
-def collect_build_gn_path(root_path):
+def collect_build_gn_path(root_path: str):
     for file in os.listdir(root_path):
         file_path = os.path.join(root_path, file)
         if file != 'out' and os.path.isdir(file_path):

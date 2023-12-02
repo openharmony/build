@@ -17,7 +17,7 @@ import os
 import subprocess
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate(timeout=60)
@@ -25,7 +25,7 @@ def run_cmd(cmd):
     return res.pid, res.returncode, sout, serr
 
 
-def get_needed_lib(file_path):
+def get_needed_lib(file_path: str):
     cmd = " ".join(["readelf", "-d", file_path])
     res = run_cmd(cmd)
     if res[1] != 0:
@@ -42,7 +42,7 @@ def get_needed_lib(file_path):
     return needed_lib_name
 
 
-def judge_updater_binary_available(updater_root_path):
+def judge_updater_binary_available(updater_root_path: str):
     updater_binary_path = os.path.join(updater_root_path, "bin", "updater_binary")
     updater_binary_needed_lib = get_needed_lib(updater_binary_path)
     # The ASAN version does not set restriction
@@ -58,7 +58,7 @@ def judge_updater_binary_available(updater_root_path):
     return True
 
 
-def judge_lib_available(lib_name, lib_chain, available_libs, lib_to_path):
+def judge_lib_available(lib_name: str, lib_chain: list, available_libs: list, lib_to_path: dict):
     if lib_name in available_libs:
         return True
     lib_path = lib_to_path.get(lib_name)
@@ -74,7 +74,7 @@ def judge_lib_available(lib_name, lib_chain, available_libs, lib_to_path):
     return True
 
 
-def judge_updater_available(updater_root_path):
+def judge_updater_available(updater_root_path: str):
     lib_to_path = dict()
     for path in [os.path.join(updater_root_path, "lib64"), os.path.join(updater_root_path, "lib")]:
         for root, dirs, files in os.walk(path):
@@ -91,6 +91,6 @@ def judge_updater_available(updater_root_path):
     return True
 
 
-def judge_updater_img_available(updater_root_path):
+def judge_updater_img_available(updater_root_path: str):
     return judge_updater_binary_available(updater_root_path) and\
            judge_updater_available(updater_root_path)

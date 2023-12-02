@@ -32,7 +32,7 @@ def parse_args(args):
     options = parser.parse_args(args)
     return options
 
-def bpf_compile(options, cmd):
+def bpf_compile(options, cmd: str):
     my_env = None
     for f in options.input_file:
         cmd.extend(['-c', f])

@@ -15,8 +15,8 @@ import sys
 from util import build_utils
 
 
-def copy_tree(src,
-              dest,
+def copy_tree(src: str,
+              dest: str,
               follow_all_symlinks=False,
               follow_outside_symlinks=False):
     """copy src/* to dest/
@@ -41,11 +41,11 @@ def copy_tree(src,
                          follow_outside_symlinks=follow_outside_symlinks)
 
 
-def _do_copy_tree(items,
-                  src,
-                  dest,
-                  follow_all_symlinks=False,
-                  follow_outside_symlinks=False):
+def _do_copy_tree(items: list,
+                  src: str,
+                  dest: str,
+                  follow_all_symlinks: bool=False,
+                  follow_outside_symlinks: bool=False):
     os.makedirs(dest, exist_ok=True)
     for item in items:
         srcname = os.path.join(src, item.name)
@@ -102,11 +102,11 @@ def _do_copy_tree(items,
     return dest
 
 
-def copy_file(f,
-              dest,
-              deps,
-              follow_all_symlinks=False,
-              follow_outside_symlinks=False):
+def copy_file(f: str,
+              dest: str,
+              deps: list,
+              follow_all_symlinks: bool=False,
+              follow_outside_symlinks: bool=False):
     """Copy file or directory and update deps."""
     if os.path.isdir(f):
         copy_tree(f,
@@ -131,7 +131,7 @@ def copy_file(f,
         shutil.copy(f, dest)
 
 
-def do_copy(options, deps):
+def do_copy(options, deps: list):
     """Copy files or directories given in options.files and update deps."""
     files = list(
         itertools.chain.from_iterable(
@@ -150,7 +150,7 @@ def do_copy(options, deps):
                   follow_outside_symlinks=options.follow_outside_symlinks)
 
 
-def do_renaming(options, deps):
+def do_renaming(options, deps: list):
     """Copy and rename files given in options.renaming_sources
     and update deps.
     """

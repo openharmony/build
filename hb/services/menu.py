@@ -135,12 +135,12 @@ class Menu(MenuInterface):
         product_key = f'{product[0]}@{product[1]}'
         return product_path_dict.get(product_key)
 
-    def _list_promt(self, name, message, choices, **kwargs):
+    def _list_promt(self, name: str, message: str, choices: list, **kwargs):
         questions = self._get_questions('list', name, message, choices)
 
         return self._prompt(questions=questions, **kwargs)
 
-    def _get_questions(self, promt_type, name, message, choices):
+    def _get_questions(self, promt_type: str, name: str, message: str, choices: list):
         questions = [{
             'type': promt_type,
             'qmark': 'OHOS',
@@ -151,7 +151,7 @@ class Menu(MenuInterface):
 
         return questions
 
-    def _prompt(self, questions, answers=None, **kwargs):
+    def _prompt(self, questions: list, answers=None, **kwargs):
         if isinstance(questions, dict):
             questions = [questions]
         answers = answers or {}
@@ -229,7 +229,7 @@ class Menu(MenuInterface):
                 return {}
         return answers
 
-    def _question(self, message, **kwargs):
+    def _question(self, message: str, **kwargs):
         if 'choices' not in kwargs:
             raise OHOSException("You must choose one platform.")
 
@@ -309,7 +309,7 @@ class Menu(MenuInterface):
 
 
 class InquirerControl(TokenListControl):
-    def __init__(self, choices, **kwargs):
+    def __init__(self, choices: list, **kwargs):
         self.selected_option_index = 0
         self.answered = False
         self.choices = choices
@@ -317,7 +317,7 @@ class InquirerControl(TokenListControl):
         super(InquirerControl, self).__init__(self._get_choice_tokens,
                                               **kwargs)
 
-    def _init_choices(self, choices, default=None):
+    def _init_choices(self, choices: list, default=None):
         # helper to convert from question format to internal format
         self.choices = []  # list (name, value, disabled)
         searching_first_choice = True
@@ -345,7 +345,7 @@ class InquirerControl(TokenListControl):
         tokens = []
         token = Token
 
-        def append(index, choice):
+        def append(index: int, choice: list):
             selected = (index == self.selected_option_index)
 
             @_if_mousedown
@@ -385,7 +385,7 @@ class InquirerControl(TokenListControl):
         return self.choices[self.selected_option_index]
 
 
-def _get_style(style_type):
+def _get_style(style_type: str):
     style = importlib.import_module('prompt_toolkit.styles')
     token = importlib.import_module('prompt_toolkit.token')
     if style_type == 'terminal':

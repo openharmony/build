@@ -22,7 +22,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_src_parts(system_install_info_file):
+def get_src_parts(system_install_info_file: str):
     parts_list = read_json_file(system_install_info_file)
     if parts_list is None:
         raise Exception("read file '{}' failed.".format(system_install_info_file))
@@ -38,7 +38,7 @@ def get_src_parts(system_install_info_file):
     return src_parts_info
 
 
-def get_sa_install_info(sa_info_file, src_parts_info):
+def get_sa_install_info(sa_info_file: str, src_parts_info: list):
     sa_infos = read_json_file(sa_info_file)
     if sa_infos is None:
         raise Exception("read file '{}' failed.".format(sa_info_file))

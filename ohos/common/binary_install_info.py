@@ -24,8 +24,8 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def binary_install_subsystem(dist_parts_info_file,
-                             parts_src_installed_info_file):
+def binary_install_subsystem(dist_parts_info_file: str,
+                             parts_src_installed_info_file: str):
     # These subsystem have  binary install packages
     if not os.path.exists(dist_parts_info_file):
         print("dist subsystem info file [{}] no exist.".format(
@@ -51,7 +51,7 @@ def binary_install_subsystem(dist_parts_info_file,
     return required_subsystem
 
 
-def output_installed_info(binary_subsystem_info, required_parts):
+def output_installed_info(binary_subsystem_info: str, required_parts: list):
     write_json_file(binary_subsystem_info, required_parts)
 
 

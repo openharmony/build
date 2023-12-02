@@ -58,7 +58,7 @@ def check_keys(keys):
                 .format(key))
 
 
-def get_sdk_type(path_name):
+def get_sdk_type(path_name: str):
     p = pathlib.Path(path_name)
     if path_name.startswith('/'):
         top_dir = p.parts[1]
@@ -67,7 +67,7 @@ def get_sdk_type(path_name):
     return top_dir
 
 
-def add_target(item, target, sdk_systems):
+def add_target(item: dict, target: str, sdk_systems: list):
     for _os in sdk_systems:
         if _os == 'linux' or _os == 'Linux':
             item.get('targets').get('linux').add_target('"%s",' % target)
@@ -77,7 +77,7 @@ def add_target(item, target, sdk_systems):
             item.get('targets').get('darwin').add_target('"%s",' % target)
 
 
-def write_sdk_build_gni(sdk_targets, build_only_targets, gni):
+def write_sdk_build_gni(sdk_targets: list, build_only_targets: list, gni: str):
     template = Template(
         """#Generated code, DONOT modify it.
             ohos_sdk_modules = {
@@ -114,7 +114,7 @@ def write_sdk_build_gni(sdk_targets, build_only_targets, gni):
     write_file(gni, contents)
 
 
-def get_build_gn(label):
+def get_build_gn(label: str):
     match = re.search(r"(.*?):(.*?)", label)
     if match:
         gn = '{}/BUILD.gn'.format(match.group(1))
@@ -126,7 +126,7 @@ def get_build_gn(label):
         raise Exception("failed to get BUILD.gn of {}".format(label))
 
 
-def variant_to_product(variant, options):
+def variant_to_product(variant: dict, options: dict):
     relations = read_json_file(options.variant_to_product)
     if variant in relations.keys():
         return relations.get(variant)
@@ -135,7 +135,7 @@ def variant_to_product(variant, options):
             variant, options.variant_to_product))
 
 
-def expand_platform_targets(options, label, install_dir):
+def expand_platform_targets(options, label: str, install_dir: str):
     base = options.base_platform
     platforms = options.platforms
     variant = list(set(platforms) - set([base]))

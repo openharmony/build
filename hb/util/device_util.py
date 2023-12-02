@@ -29,13 +29,13 @@ class DeviceUtil():
         return os.path.basename(cwd_pardir) == 'device'
 
     @staticmethod
-    def is_kernel(kernel_path):
+    def is_kernel(kernel_path: str):
         return os.path.isdir(kernel_path) and\
             'config.gni' in os.listdir(kernel_path)
 
     @staticmethod
     @throw_exception
-    def get_device_path(board_path, kernel_type, kernel_version):
+    def get_device_path(board_path: str, kernel_type: str, kernel_version: str):
         for kernel_config, kernel_path in DeviceUtil.get_kernel_config(board_path):
             if DeviceUtil.match_kernel(kernel_config, kernel_type, kernel_version):
                 return kernel_path
@@ -44,7 +44,7 @@ class DeviceUtil():
                             f'in {board_path}', "0004")
 
     @staticmethod
-    def get_kernel_config(board_path):
+    def get_kernel_config(board_path: str):
         DeviceUtil.check_path(board_path)
         for kernel in os.listdir(board_path):
             kernel_path = os.path.join(board_path, kernel)
@@ -56,7 +56,7 @@ class DeviceUtil():
                 yield kernel_config, kernel_path
 
     @staticmethod
-    def match_kernel(config, kernel, version):
+    def match_kernel(config: str, kernel: str, version: str):
         kernel_pattern = r'kernel_type ?= ?"{}"'.format(kernel)
         version_pattern = r'kernel_version ?= ?"{}"'.format(version)
 
@@ -67,7 +67,7 @@ class DeviceUtil():
 
     @staticmethod
     @throw_exception
-    def get_kernel_info(config):
+    def get_kernel_info(config: str):
         kernel_pattern = r'kernel_type ?= ?"(\w+)"'
         version_pattern = r'kernel_version ?= ?"([a-zA-Z0-9._]*)"'
 
@@ -83,14 +83,14 @@ class DeviceUtil():
 
     @staticmethod
     @throw_exception
-    def check_path(path):
+    def check_path(path: str):
         if os.path.isdir(path) or os.path.isfile(path):
             return
         raise OHOSException(f'invalid path: {path}', '0006')
 
     @staticmethod
     @throw_exception
-    def get_compiler(config_path):
+    def get_compiler(config_path: str):
         config = os.path.join(config_path, 'config.gni')
         if not os.path.isfile(config):
             return ''

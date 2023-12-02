@@ -24,7 +24,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def get_platform_parts(current_platform, platforms_parts_file):
+def get_platform_parts(current_platform: str, platforms_parts_file: str):
     all_platforms_parts = read_json_file(platforms_parts_file)
     if all_platforms_parts is None:
         raise Exception("read file '{}' failed.".format(all_platforms_parts))
@@ -32,7 +32,7 @@ def get_platform_parts(current_platform, platforms_parts_file):
     return platform_parts
 
 
-def platform_parts(all_parts_info_file, current_platform_parts):
+def platform_parts(all_parts_info_file: str, current_platform_parts: dict):
     _parts_list = []
     all_parts_info = read_json_file(all_parts_info_file)
     if all_parts_info is None:

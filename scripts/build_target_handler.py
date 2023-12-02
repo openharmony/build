@@ -22,7 +22,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file  # noqa E402
 
 
-def _read_parts_variants(build_configs_dir):
+def _read_parts_variants(build_configs_dir: str):
     parts_variants_file = os.path.join(build_configs_dir, 'parts_info',
                                        'parts_variants.json')
     if not os.path.exists(parts_variants_file):
@@ -33,7 +33,7 @@ def _read_parts_variants(build_configs_dir):
     return parts_variants
 
 
-def get_build_target(build_dir, build_targets, target_platform):
+def get_build_target(build_dir: str, build_targets: list, target_platform: str):
     if not target_platform or target_platform == 'all':
         target_platform = 'phone'
     real_targets = []

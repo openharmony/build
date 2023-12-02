@@ -19,7 +19,7 @@ import re
 
 
 class Module():
-    def __init__(self, module_name, subsystem_name, part_name, deps, external_deps, raw_data):
+    def __init__(self, module_name: str, subsystem_name: str, part_name: str, deps: set, external_deps: set, raw_data):
         self._module_name = module_name
         self._subsystem_name = subsystem_name
         self._part_name = part_name
@@ -125,7 +125,7 @@ class Module():
 
 
 class Node():
-    def __init__(self, component_name):
+    def __init__(self, component_name: str):
         self._components_name = component_name
         self._modules = {}
         self._deps = set()

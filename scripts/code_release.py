@@ -29,7 +29,7 @@ RELEASE_FILENAME = 'README.OpenSource'
 scan_dir_list = ['third_party', 'kernel', 'device', 'drivers']
 
 
-def _copy_opensource_file(opensource_config_file, top_dir, package_dir):
+def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir: str):
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
@@ -51,7 +51,7 @@ def _copy_opensource_file(opensource_config_file, top_dir, package_dir):
     return True
 
 
-def _parse_opensource_file(opensource_config_file):
+def _parse_opensource_file(opensource_config_file: str):
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
@@ -69,7 +69,7 @@ def _parse_opensource_file(opensource_config_file):
     return result
 
 
-def _scan_and_package_code_release(scan_dir, top_dir, package_dir):
+def _scan_and_package_code_release(scan_dir: str, top_dir: str, package_dir: str):
     file_dir_names = os.listdir(scan_dir)
     for file_dir_name in file_dir_names:
         file_dir_path = os.path.join(scan_dir, file_dir_name)
@@ -80,7 +80,7 @@ def _scan_and_package_code_release(scan_dir, top_dir, package_dir):
                 _copy_opensource_file(file_dir_path, top_dir, package_dir)
 
 
-def _tar_opensource_package_file(options, package_dir):
+def _tar_opensource_package_file(options, package_dir: str):
     result = -1
     if os.path.exists(package_dir):
         try:

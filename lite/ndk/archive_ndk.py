@@ -23,7 +23,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir))
 from utils import makedirs # noqa: E402
 
 
-def make_archive(source, destination):
+def make_archive(source: str, destination: str):
     base = os.path.basename(destination)
     fields = base.split('.')
     name = fields[0] + '.' + fields[1] + '.' + fields[2]

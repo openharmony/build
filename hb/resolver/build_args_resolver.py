@@ -161,9 +161,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 target_list = ['images']
             elif ComponentUtil.is_in_component_dir(os.getcwd()) and \
                     ComponentUtil.is_component_in_product(
-                    ComponentUtil.get_component_name(os.getcwd()), Config().product):
+                    ComponentUtil.get_component_name(os.getcwd()), config.product):
                 component_name = ComponentUtil.get_component_name(os.getcwd())
-                LogUtil.write_log(Config().log_path, 'In the component "{}" directory,'
+                LogUtil.write_log(config.log_path, 'In the component "{}" directory,'
                                   'this compilation will compile only this component'.format(
                                       component_name),
                                   'warning')
@@ -174,7 +174,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 component_name = os.path.basename(
                     os.getcwd()) if component_name == '' else component_name
                 raise OHOSException('There is no target component "{}" for the current product "{}"'
-                                    .format(component_name, Config().product), "4001")
+                                    .format(component_name, config.product), "4001")
         build_executor.regist_arg('build_target', target_list)
 
     @staticmethod

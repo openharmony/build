@@ -22,7 +22,7 @@ from scripts.util.file_utils import write_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
 
-def copy_files(source_files, output_dir):
+def copy_files(source_files: str, output_dir: str):
     output_files = []
     for src_file in source_files:
         if not os.path.exists(src_file):

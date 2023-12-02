@@ -26,7 +26,7 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 target_data_dict = dict()
 
 
-def get_value_from_file(file, target, key, must=True):
+def get_value_from_file(file: str, target: list, key: str, must: bool=True):
     target_name = target[0]
     target_out_dir = target[1]
     file_path = os.path.join(target_out_dir, target_name + "_" + file + ".json")
@@ -48,7 +48,7 @@ def get_value_from_file(file, target, key, must=True):
     return target_data.get(key)
 
 
-def get_valid_deps(module_deps, finish_list):
+def get_valid_deps(module_deps: list, finish_list: list):
     already_check = []
     valid_list = []
     while len(module_deps) > 0:
@@ -80,7 +80,7 @@ def get_valid_deps(module_deps, finish_list):
     return valid_list
 
 
-def check_debug_info(check_file, readelf):
+def check_debug_info(check_file: str, readelf: str):
     out = subprocess.Popen([readelf, "-S", check_file], shell=False, stdout=subprocess.PIPE)
     infos = out.stdout.read().splitlines()
     for info in infos:
@@ -91,7 +91,8 @@ def check_debug_info(check_file, readelf):
     return False
 
 
-def do_check(target_out_dir, target_name, stripped_dir, readelf, abidiff, abidw, abi_dumps_path):
+def do_check(target_out_dir: str, target_name: str, stripped_dir: str, readelf: str,
+             abidiff: str, abidw: str, abi_dumps_path: str):
     element = (target_name, target_out_dir)
     prebuilt = get_value_from_file("deps_data", element, "prebuilt")
     if prebuilt:
@@ -124,7 +125,7 @@ def do_check(target_out_dir, target_name, stripped_dir, readelf, abidiff, abidw,
         raise Exception("ABI info in " + out_file + " and " + base_file + " are different!")
 
 
-def get_copy_source_path(element):
+def get_copy_source_path(element: list):
     prebuilt = get_value_from_file("deps_data", element, "prebuilt")
     if prebuilt:
         source = get_value_from_file("deps_data", element, "output_path")
@@ -133,7 +134,7 @@ def get_copy_source_path(element):
     return (element, source)
 
 
-def traverse_and_check(check_list, readelf, abidiff, abidw, abi_dumps_path):
+def traverse_and_check(check_list: list, readelf: str, abidiff: str, abidw: str, abi_dumps_path: str):
     copy_list = []
     finish_list = []
     loop_count = 0
@@ -179,7 +180,7 @@ def traverse_and_check(check_list, readelf, abidiff, abidw, abi_dumps_path):
     return copy_list
 
 
-def get_copy_output_path(element, parent_output):
+def get_copy_output_path(element: list, parent_output: str):
     output_path = parent_output
     target_type = get_value_from_file("deps_data", element, "type")
     if target_type == "etc":

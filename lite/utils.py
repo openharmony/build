@@ -24,13 +24,13 @@ import sys
 import json
 
 
-def encode(data, encoding='utf-8'):
+def encode(data, encoding: str='utf-8'):
     if sys.version_info.major == 2:
         return data.encode(encoding)
     return data
 
 
-def decode(data, encoding='utf-8'):
+def decode(data, encoding: str='utf-8'):
     if sys.version_info.major == 2:
         return data.decode(encoding)
     return data
@@ -42,7 +42,7 @@ def remove_path(path):
 
 
 # Read json file data
-def read_json_file(input_file):
+def read_json_file(input_file: str):
     if not os.path.exists(input_file):
         print('file [{}] no exist.'.format(input_file))
         return None
@@ -52,7 +52,7 @@ def read_json_file(input_file):
     return data
 
 
-def exec_command(cmd, log_path='out/build.log', **kwargs):
+def exec_command(cmd: str, log_path: str='out/build.log', **kwargs):
     with open(log_path, 'at', encoding='utf-8') as log_file:
         process = subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
@@ -75,7 +75,7 @@ def exec_command(cmd, log_path='out/build.log', **kwargs):
         raise Exception("{} failed, return code is {}".format(cmd, ret_code))
 
 
-def check_output(cmd, **kwargs):
+def check_output(cmd: str, **kwargs):
     try:
         ret = subprocess.check_output(cmd,
                                       stderr=subprocess.STDOUT,
@@ -88,7 +88,7 @@ def check_output(cmd, **kwargs):
     return ret
 
 
-def makedirs(path, exist_ok=True):
+def makedirs(path: str, exist_ok: bool=True):
     try:
         os.makedirs(path, exist_ok=True)
     except OSError:
