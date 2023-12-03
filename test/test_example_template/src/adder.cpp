@@ -26,7 +26,7 @@ public:
     {
         totalRes = i;
     }
-    void addNum(int numberRes)
+    void AddNum(int numberRes)
     {
         totalRes += numberRes;
     }
