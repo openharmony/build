@@ -40,9 +40,9 @@ private:
 int main()
 {
     Adder a;
-    a.addNum(ip_ida);
-    a.addNum(ip_idb);
-    a.addNum(ip_idc);
+    a.AddNum(ip_ida);
+    a.AddNum(ip_idb);
+    a.AddNum(ip_idc);
     cout << "Total " << a.GetTotal() << endl;
     return 0;
 }
