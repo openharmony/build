@@ -24,18 +24,18 @@ class Adder {
 public:
     explicit Adder(int i = 0)
     {
-        total_res = i;
+        totalRes = i;
     }
-    void addNum(int number_res)
+    void addNum(int numberRes)
     {
-        total_res += number_res;
+        totalRes += numberRes;
     }
-    int getTotal()
+    int GetTotal()
     {
-        return total_res;
+        return totalRes;
     }
 private:
-    int total_res;
+    int totalRes;
 };
 int main()
 {
@@ -43,6 +43,6 @@ int main()
     a.addNum(ip_ida);
     a.addNum(ip_idb);
     a.addNum(ip_idc);
-    cout << "Total " << a.getTotal() << endl;
+    cout << "Total " << a.GetTotal() << endl;
     return 0;
 }
