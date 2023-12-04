@@ -196,7 +196,7 @@ def _npm_install(args):
         skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
         _run_cmd(skip_ssl_cmd)
     npm_clean_cmd = '{} cache clean -f'.format(npm)
-    npm_package_lock_cmd = '{} config set package-lock false'.format(npm)
+    npm_package_lock_cmd = '{} config set package-lock true'.format(npm)
     _run_cmd(npm_clean_cmd)
     _run_cmd(npm_package_lock_cmd)
     print('start npm install, please wait.')
@@ -205,7 +205,7 @@ def _npm_install(args):
         basename = os.path.basename(full_code_path)
         npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
         if os.path.exists(full_code_path):
-            cmd = [npm, 'install', '--registry', args.npm_registry, '--no-cache']
+            cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.unsafe_perm:
                 cmd.append('--unsafe-perm')
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
