@@ -188,7 +188,6 @@ def _hwcloud_download(args, config, bin_dir, code_dir):
                 print('{}, download and decompress completed'.format(tasks.get(task)))
 
 def _npm_install(args):
-    procs = []
     node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
     os.environ['PATH'] = '{}/{}:{}'.format(args.code_dir, node_path, os.environ.get('PATH'))
     npm = os.path.join(args.code_dir, node_path, 'npm')
@@ -211,13 +210,11 @@ def _npm_install(args):
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
-            procs.append(proc)
+            out, err = proc.communicate()
+            if proc.returncode:
+                return False, err.decode()
         else:
             raise Exception("{} not exist, it shouldn't happen, pls check...".format(full_code_path))
-    for proc in procs:
-        out, err = proc.communicate()
-        if proc.returncode:
-            return False, err.decode()
     return True, None
 
 
