@@ -13,7 +13,6 @@
 
 import("//build/ohos.gni")
 
-
 ohos_shared_library("test_ohos_shared_library_output_dir") {
   sources = [ "../src/hello.cpp" ]
   part_name = "build_framework"
