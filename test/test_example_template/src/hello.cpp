@@ -14,7 +14,6 @@
  */
 
 #include <iostream>
-#include "hello.h"
 
 static const uint32_t ip_idx = 1;
 
