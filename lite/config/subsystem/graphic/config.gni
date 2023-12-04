@@ -17,4 +17,5 @@ declare_args() {
   enable_graphic_font = false
   enable_graphic_dualcore = false
   enable_video_component = false
+  enable_canvas_extend = false
 }
