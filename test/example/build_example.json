@@ -1,0 +1,58 @@
+{
+  "build_product": {
+    "product_path": "/out/test_report"
+  },
+  "build_option": {
+    "exclude": [
+      "test_report"
+    ],
+    "log_path": "/out/hispark_pegasus/wifiiot_hispark_pegasus/build.log",
+    "common_cmd": "/build.sh  --product-name wifiiot_hispark_pegasus {0} {1} --no-prebuilt-sdk",
+    "ninjia_cmd": "/build.sh --product-name wifiiot_hispark_pegasus --ninja-args={0} --no-prebuilt-sdk",
+    "exec_timeout": 1800,
+    "select_timeout": 0,
+    "ptyflag": "False",
+    "file_time_intever": 1,
+    "cmd_type": "select",
+    "option_report_path": "/out/test_report/test_build_option.html",
+    "option_script_path": "/build/test/example/test_build_option.py"
+  },
+  "gn_template": {
+    "exclude": [
+      "test_report"
+    ],
+    "gn_template_report_path": "/out/test_report/test_gn_template.html",
+    "gn_template_script_path": "/build/test/example/test_gn_template.py",
+    "template_source_path": "build/test/test_example_template/",
+    "result_build_file": "/out/rk3568/build/build_framework/",
+    "result_rust_file": "/out/rk3568/obj/build/rust/tests/",
+    "result_obj_file": "/out/rk3568/obj/build/test/test_example_template/",
+    "rust_path": "build/rust/tests/",
+    "test_build": "/build/test/example/test_build.json",
+    "time_out": 600
+  },
+  "performance": {
+    "exclude": [
+      "test_report"
+    ],
+    "performance_exec_timeout": 7200,
+    "performance_top_count": 30,
+    "performance_overflow": 60,
+    "performance_select_timeout": 0,
+    "performance_script_path": "/build/test/example/performance_test.py",
+    "performance_script_data": [
+      {
+        "performance_cmd": "/build.sh --product-name rk3568 --gn-flags=--time",
+        "output_path": "/out/test_report/performance_report_rk3568.html",
+        "report_title": "Rk3568 Performance Analysis Report",
+        "ptyflag": "False"
+      },
+      {
+        "performance_cmd": "/build.sh --product-name wifiiot_hispark_pegasus --gn-flags=--time",
+        "output_path": "/out/test_report/performance_report_wifiiot.html",
+        "report_title": "Wifiiot Performance Analysis Report",
+        "ptyflag": "False"
+      }
+    ]
+  }
+}
