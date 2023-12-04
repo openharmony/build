@@ -13,7 +13,6 @@
 
 import("//build/ohos.gni")
 
-
 ohos_source_set("test_ohos_source_set") {
   sources = [ "../src/adder.cpp" ]
   part_name = "build_framework"
