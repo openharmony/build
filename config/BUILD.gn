@@ -339,7 +339,7 @@ config("shared_library_config") {
 }
 
 config("predefined_macro") {
-  if (enable_predefined_macro == false) {
+  if (enable_predefined_macro) {
     defines = []
     if (is_ohos) {
       defines += [ "__OHOS__" ]
