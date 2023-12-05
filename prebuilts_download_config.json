@@ -7,7 +7,9 @@
     "third_party/parse5/packages/parse5",
     "third_party/weex-loader",
     "arkcompiler/ets_frontend/legacy_bin/api8",
-    "interface/sdk-js/build-tools"
+    "interface/sdk-js/build-tools",
+    "third_party/typescript",
+    "arkcompiler/ets_frontend/arkguard"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
