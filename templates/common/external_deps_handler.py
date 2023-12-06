@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_toolchain(current_variant, external_part_variants, platform_toolchain, current_toolchain):
+def get_toolchain(current_variant: str, external_part_variants: str, platform_toolchain: str, current_toolchain: str):
     if current_variant == 'phone':
         toolchain = platform_toolchain.get(current_variant)
         required_include_dir = False
@@ -38,8 +38,8 @@ def get_toolchain(current_variant, external_part_variants, platform_toolchain, c
     return toolchain, required_include_dir
 
 
-def _get_external_module_info(parts_inner_kits_info, external_part_name,
-                              external_module_name, adapted_part_name):
+def _get_external_module_info(parts_inner_kits_info: dict, external_part_name: str,
+                              external_module_name: str, adapted_part_name: str) -> dict:
     _inner_kits_info_dict = parts_inner_kits_info.get(external_part_name)
     if _inner_kits_info_dict is None:
         raise Exception(
@@ -65,8 +65,8 @@ def _get_external_module_info(parts_inner_kits_info, external_part_name,
     return external_module_desc_info
 
 
-def _get_external_module_from_sdk(sdk_base_dir, external_part_name,
-                                  external_module_name, adapted_part_name):
+def _get_external_module_from_sdk(sdk_base_dir: str, external_part_name: str,
+                                  external_module_name: str, adapted_part_name: str):
     _sdk_info_file = os.path.join(sdk_base_dir, external_part_name,
                                   "sdk_info.json")
     subsystem_sdk_info = read_json_file(_sdk_info_file)
@@ -97,7 +97,7 @@ def _get_external_module_from_sdk(sdk_base_dir, external_part_name,
     return sdk_module_info, _adapted
 
 
-def _get_inner_kits_adapter_info(innerkits_adapter_info_file):
+def _get_inner_kits_adapter_info(innerkits_adapter_info_file: str) -> dict:
     _parts_compatibility = {}
     if os.path.exists(innerkits_adapter_info_file):
         inner_kits_adapter_info = read_json_file(innerkits_adapter_info_file)
@@ -107,7 +107,7 @@ def _get_inner_kits_adapter_info(innerkits_adapter_info_file):
     return _parts_compatibility
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--external-deps', nargs='*', required=True)
     parser.add_argument('--parts-src-flag-file', required=True)

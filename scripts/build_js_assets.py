@@ -61,7 +61,7 @@ def parse_args(args):
     return options
 
 
-def make_my_env(options, js2abc: bool):
+def make_my_env(options, js2abc: bool) -> dict:
     out_dir = os.path.abspath(os.path.dirname(options.output))
     gen_dir = os.path.join(out_dir, "gen")
     assets_dir = os.path.join(out_dir, "assets")
@@ -82,7 +82,7 @@ def make_my_env(options, js2abc: bool):
     return my_env
 
 
-def make_manifest_data(config: dict, options, js2abc: bool, asset_index: int, assets_cnt: int, src_path: str):
+def make_manifest_data(config: dict, options, js2abc: bool, asset_index: int, assets_cnt: int, src_path: str) -> dict:
     data = dict()
     data['appID'] = config['app']['bundleName']
     if options.app_profile:
@@ -172,7 +172,7 @@ def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str
         build_utils.zip_dir(options.output, gen_dir, zip_prefix_path='assets/js/')
 
 
-def get_all_js_sources(base):
+def get_all_js_sources(base) -> list:
     sources = []
     for root, _, files in os.walk(base):
         for file in files:

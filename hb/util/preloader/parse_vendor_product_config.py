@@ -27,7 +27,7 @@ def get_features(features):
             continue
         match = feat.index("=")
         if match <= 0:
-            print("Warning: invalid feature [{}}]".format(feat))
+            print("Warning: invalid feature [{}]".format(feat))
             continue
         key = feat[:match].strip()
         val = feat[match + 1:].strip().strip('"')

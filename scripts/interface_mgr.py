@@ -39,7 +39,7 @@ class InterfaceMgr:
                 return ""
         return str(hash_value)
 
-    def get_header_files(self, file_dir: str):
+    def get_header_files(self, file_dir: str) -> list:
         h_files = []
         for path, _, files in os.walk(file_dir):
             for file in files:

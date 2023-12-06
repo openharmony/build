@@ -29,7 +29,7 @@ def usage():
     return
 
 
-def get_fill_cnt(inputfile: str, blocksize: int):
+def get_fill_cnt(inputfile: str, blocksize: int) -> int:
     flags = os.O_WRONLY
     modes = stat.S_IWUSR | stat.S_IRUSR
     size = os.path.getsize(inputfile)
@@ -43,7 +43,7 @@ def get_fill_cnt(inputfile: str, blocksize: int):
     return fill_cnt
 
 
-def get_gap_blocksize(length: int, size: int):
+def get_gap_blocksize(length: int, size: int) -> int:
     if length < size:
         cnt = 2
     elif length < (size * 2):
@@ -53,7 +53,7 @@ def get_gap_blocksize(length: int, size: int):
     return cnt
 
 
-def get_block_cnt(inputfile: str, blocksize: int):
+def get_block_cnt(inputfile: str, blocksize: int) -> int:
     size = os.path.getsize(inputfile)
     if blocksize != 0:
         totalblocks = size / blocksize
@@ -114,7 +114,7 @@ def unsparse(sparseimagefile: str, imagefile: str):
     return
 
 
-def is_empty_block(buff, size: int):
+def is_empty_block(buff: list, size: int) -> bool:
     ind = 0
     while (ind < size):
         if buff[ind] != 0:
@@ -123,7 +123,7 @@ def is_empty_block(buff, size: int):
     return True
 
 
-def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int):
+def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int) -> int:
     temp_file = imagefile + ".tempfile"
     ind = 0
     start = -1

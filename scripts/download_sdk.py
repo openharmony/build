@@ -26,7 +26,17 @@ import argparse
 from urllib.request import urlretrieve
 
 
-def reporthook(data_download: int, data_size: int, total_size: int):
+def find_top():
+    cur_dir = os.getcwd()
+    while cur_dir != "/":
+        build_scripts = os.path.join(
+            cur_dir, 'build/config/BUILDCONFIG.gn')
+        if os.path.exists(build_scripts):
+            return cur_dir
+        cur_dir = os.path.dirname(cur_dir)
+
+
+def reporthook(data_download, data_size, total_size):
     '''
     display the progress of download
     :param data_download: data downloaded
@@ -42,7 +52,7 @@ def reporthook(data_download: int, data_size: int, total_size: int):
         sys.stdout.flush()
 
 
-def download(download_url: str, savepath: str):
+def download(download_url, savepath):
     filename = os.path.basename(download_url)
 
     if not os.path.isfile(os.path.join(savepath, filename)):
@@ -57,7 +67,7 @@ def download(download_url: str, savepath: str):
     print('File size = %.2f Mb' % (filesize/1024/1024))
 
 
-def extract_file(filename: str):
+def extract_file(filename):
 
     target_dir = os.path.dirname(filename)
 
@@ -72,7 +82,7 @@ def extract_file(filename: str):
         os.remove(os.path.join(target_dir, "manifest_tag.xml"))
 
 
-def npm_install(target_dir: str):
+def npm_install(target_dir):
 
     sdk_dir = os.path.join(target_dir, "ohos-sdk/linux")
     os.chdir(sdk_dir)
@@ -106,39 +116,33 @@ def npm_install(target_dir: str):
             subprocess.run(['mv', dirname, api_version])
 
 
-def get_url_and_obj(args):
-    url = "http://ci.openharmony.cn/api/daily_build/build/tasks"
-    myobj = {"pageNum": 1,
-                "pageSize": 1000,
-                "startTime": "",
-                "endTime": "",
-                "projectName": "openharmony",
-                "branch": args.branch,
-                "component": "",
-                "deviceLevel": "",
-                "hardwareBoard": "",
-                "buildStatus": "success",
-                "buildFailReason": "",
-                "testResult": ""}
-    return url, myobj
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--branch', default='master', help='OHOS branch name')
     parser.add_argument('--product-name', default='ohos-sdk-full', help='OHOS product name')
     args = parser.parse_args()
-    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'util'))
-    from file_utils import find_top
     default_save_path = os.path.join(find_top(), 'prebuilts')
     if not os.path.exists(default_save_path):
         os.makedirs(default_save_path, exist_ok=True)
-
+    print(default_save_path)
     try:
         now_time = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         last_hour = (datetime.datetime.now() +
                      datetime.timedelta(hours=-72)).strftime('%Y%m%d%H%M%S')
-        url, myobj = get_url_and_obj(args)
+
+        url = "http://ci.openharmony.cn/api/daily_build/build/tasks"
+        myobj = {"pageNum": 1,
+                 "pageSize": 1000,
+                 "startTime": "",
+                 "endTime": "",
+                 "projectName": "openharmony",
+                 "branch": args.branch,
+                 "component": "",
+                 "deviceLevel": "",
+                 "hardwareBoard": "",
+                 "buildStatus": "success",
+                 "buildFailReason": "",
+                 "testResult": ""}
         myobj["startTime"] = str(last_hour)
         myobj["endTime"] = str(now_time)
         x = requests.post(url, json=myobj)
@@ -155,6 +159,7 @@ def main():
                     os.path.join(default_save_path, product_name)))
                 print("Download canceled!")
                 break
+
             if product['obsPath'] and os.path.exists(default_save_path):
                 download_url = 'http://download.ci.openharmony.cn/{}'.format(product['obsPath'])
                 save_path2 = default_save_path
@@ -163,9 +168,11 @@ def main():
                 download(download_url, savepath=save_path2)
                 print(download_url, "done")
             except BaseException:
+
                 # remove the incomplete downloaded files
                 if os.path.exists(os.path.join(save_path2, os.path.basename(download_url))):
-                    os.remove(os.path.join(save_path2, os.path.basename(download_url)))
+                    os.remove(os.path.join(
+                        save_path2, os.path.basename(download_url)))
                 Exception("Unable to download {}".format(download_url))
 
             extract_file(os.path.join(

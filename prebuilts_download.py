@@ -35,14 +35,14 @@ def _run_cmd(cmd: str):
     sout, serr = res.communicate()
     return sout.rstrip().decode('utf-8'), serr, res.returncode
 
-def _check_sha256(check_url: str, local_file: str):
+def _check_sha256(check_url: str, local_file: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     local_sha256_cmd = 'sha256sum ' + local_file + "|cut -d ' ' -f1"
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     local_sha256, err, returncode = _run_cmd(local_sha256_cmd)
     return check_sha256 == local_sha256
 
-def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str):
+def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     mark_file_dir = os.path.join(code_dir, unzip_dir)
@@ -51,7 +51,7 @@ def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, u
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
 
-def _config_parse(config: str, tool_repo: str):
+def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict = dict()
     parse_dict['unzip_dir'] = config.get('unzip_dir')
     parse_dict['huaweicloud_url'] = tool_repo + config.get('file_path')
@@ -72,7 +72,7 @@ def _uncompress(args, src_file: str, code_dir: str, unzip_dir: str, unzip_filena
     _run_cmd(cmd)
 
 
-def _copy_url(args, task_id, url: str, local_file: str, code_dir: str, unzip_dir: str,
+def _copy_url(args, task_id: int, url: str, local_file: str, code_dir: str, unzip_dir: str,
               unzip_filename: str, mark_file_path: str, progress):
     retry_times = 0
     max_retry_times = 3
@@ -127,14 +127,14 @@ def _copy_url_disable_rich(args, url: str, local_file: str, code_dir: str, unzip
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     print("Decompressed {}".format(local_file))
 
-def _is_system_component():
+def _is_system_component() -> bool:
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if pathlib.Path(root_dir + "/interface/sdk-js").exists() or pathlib.Path(root_dir + "/foundation/arkui").exists() or pathlib.Path(root_dir + "/arkcompiler").exists():
         return True
     else:
         return False
 
-def _hwcloud_download(args, config: list, bin_dir: str, code_dir: str):
+def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     try:
         cnt = cpu_count()
     except:
@@ -220,7 +220,7 @@ def _npm_install(args):
     return True, None
 
 
-def _node_modules_copy(config: list, code_dir: str, enable_symlink: bool):
+def _node_modules_copy(config: dict, code_dir: str, enable_symlink: bool):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
@@ -233,7 +233,7 @@ def _node_modules_copy(config: list, code_dir: str, enable_symlink: bool):
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
-def _file_handle(config: list, code_dir: str, host_platform: str):
+def _file_handle(config: dict, code_dir: str, host_platform: str):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
         dest_dir = code_dir + config_info.get('dest')
@@ -279,7 +279,7 @@ def _import_rich_module():
     return progress
 
 
-def _install(config: list, code_dir: str):
+def _install(config: dict, code_dir: str):
     for config_info in config:
         install_dir = '{}/{}'.format(code_dir, config_info.get('install_dir'))
         script = config_info.get('script')
