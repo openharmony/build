@@ -27,15 +27,6 @@ config("gcc_cpu_arch") {
   asmflags = cflags
 }
 
-config("gcc_language_c") {
-  cflags_c = [ "-std=c99" ]
-}
-
-config("gcc_werror") {
-  cflags = [ "-Werror" ]
-  cflags_cc = cflags
-}
-
 config("gcc_common") {
   defines = [ "_XOPEN_SOURCE=700" ]
   cflags = [
@@ -70,12 +61,6 @@ config("gcc_exceptions") {
   cflags_objcc = cflags_cc
 }
 
-config("gcc_no_exceptions") {
-  cflags_cc = [ "-fno-exceptions" ]
-  cflags_objcc = cflags_cc
-  ldflags = cflags_cc
-}
-
 config("gcc_stack_protector") {
   cflags = [ "-fstack-protector-all" ]
   cflags_cc = cflags
@@ -93,19 +78,6 @@ config("gcc_shared_library_config") {
 
 config("gcc_pie_executable_config") {
   ldflags = [ "-pie" ]
-}
-
-config("ohos_gcc") {
-  if (ohos_kernel_type == "linux") {
-    defines = [
-      "_LIBCPP_HAS_MUSL_LIBC",
-      "__BUILD_LINUX_WITH_CLANG",
-    ]
-  }
-  ldflags = [
-    "-fuse-ld=lld",
-    "--rtlib=compiler-rt",
-  ]
 }
 
 config("gcc_opt") {
