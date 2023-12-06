@@ -46,7 +46,7 @@ def _merge_txt_file(ohos_notice: str, a_notice: str, output_notice: str):
         os.remove(ohos_notice)
 
 
-def main():
+def main() -> int:
     """notice file merge."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--ohos-notice', required=True)

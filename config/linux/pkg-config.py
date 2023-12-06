@@ -41,7 +41,7 @@ from optparse import OptionParser
 # depending on the return value of pkg-config for the given package.
 
 
-def SetConfigPath(options):
+def SetConfigPath(options: OptionParser) -> str:
   """Set the PKG_CONFIG_LIBDIR environment variable.
 
   This takes into account any sysroot and architecture specification from the
@@ -63,7 +63,7 @@ def SetConfigPath(options):
   return libdir
 
 
-def GetPkgConfigPrefixToStrip(options, args):
+def GetPkgConfigPrefixToStrip(options: OptionParser, args) -> str:
   """Returns the prefix from pkg-config where packages are installed.
 
   This returned prefix is the one that should be stripped from the beginning of
@@ -84,7 +84,7 @@ def GetPkgConfigPrefixToStrip(options, args):
   return prefix
 
 
-def MatchesAnyRegexp(flag, list_of_regexps):
+def MatchesAnyRegexp(flag: bool, list_of_regexps: list) -> bool:
   """Returns true if the first argument matches any regular expression in the
   given list."""
   for regexp in list_of_regexps:
@@ -93,7 +93,7 @@ def MatchesAnyRegexp(flag, list_of_regexps):
   return False
 
 
-def RewritePath(path, strip_prefix, sysroot):
+def RewritePath(path: str, strip_prefix: str, sysroot: str) -> str:
   """Rewrites a path by stripping the prefix and prepending the sysroot."""
   if os.path.isabs(path) and not path.startswith(sysroot):
     if path.startswith(strip_prefix):
@@ -104,7 +104,7 @@ def RewritePath(path, strip_prefix, sysroot):
     return path
 
 
-def main():
+def main() -> int:
   # If this is run on non-Linux platforms, just return nothing and indicate
   # success. This allows us to "kind of emulate" a Linux build from other
   # platforms.

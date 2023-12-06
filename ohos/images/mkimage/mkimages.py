@@ -35,7 +35,7 @@ def run_cmd(cmd: str):
     return res.pid, res.returncode, sout, serr
 
 
-def build_rootdir(src_dir: str):
+def build_rootdir(src_dir: str) -> str:
     tmp_dir = tempfile.mkdtemp(prefix="tmp")
     index = src_dir.rfind('/')
     root_dir = "%sroot" % src_dir[:index + 1]
@@ -49,7 +49,7 @@ def build_rootdir(src_dir: str):
     return tmp_dir
 
 
-def load_config(config_file: str):
+def load_config(config_file: str) -> list:
     mk_configs = []
     with open(config_file, "r") as file:
         for line in file:

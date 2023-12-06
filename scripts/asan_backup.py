@@ -22,7 +22,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def _get_toolchain_name(toolchain_label: str):
+def _get_toolchain_name(toolchain_label: str) -> str:
     return toolchain_label.split(':')[1]
 
 

@@ -58,13 +58,13 @@ def check_header_files(checkfile_dir: str, subsystem_sdk_dir: str, subsystem_nam
                         module_name)
 
 
-def get_build_config_from_label(label: str, current_toolchain_dir: str):
+def get_build_config_from_label(label: str, current_toolchain_dir: str) -> str:
     build_config = label.replace('//', 'gen/').replace(':', '/')
     bc_file = '{}/{}.build_config'.format(current_toolchain_dir, build_config)
     return bc_file
 
 
-def add_dynamic_deps(output: str, build_config: str):
+def add_dynamic_deps(output: str, build_config: str) -> str:
     external_deps = build_utils.expand_file_args(
         ['@FileArg({}:deps_info:external_deps)'.format(build_config)])
     if external_deps[0] != '[  ]':

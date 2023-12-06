@@ -29,7 +29,7 @@ RELEASE_FILENAME = 'README.OpenSource'
 scan_dir_list = ['third_party', 'kernel', 'device', 'drivers']
 
 
-def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir: str):
+def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir: str) -> bool:
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
@@ -51,7 +51,7 @@ def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir
     return True
 
 
-def _parse_opensource_file(opensource_config_file: str):
+def _parse_opensource_file(opensource_config_file: str) -> bool:
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
@@ -80,7 +80,7 @@ def _scan_and_package_code_release(scan_dir: str, top_dir: str, package_dir: str
                 _copy_opensource_file(file_dir_path, top_dir, package_dir)
 
 
-def _tar_opensource_package_file(options, package_dir: str):
+def _tar_opensource_package_file(options, package_dir: str) -> int:
     result = -1
     if os.path.exists(package_dir):
         try:
@@ -92,7 +92,7 @@ def _tar_opensource_package_file(options, package_dir: str):
     return result
 
 
-def main(args):
+def main(args) -> int:
     """generate open source packages to release."""
     parser = optparse.OptionParser()
     build_utils.add_depfile_option(parser)

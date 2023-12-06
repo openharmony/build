@@ -314,15 +314,15 @@ def _exit_sys():
     sys.exit(1)
 
 
-def _is_valid_length(content: str, len_min: int, len_max: int):
+def _is_valid_length(content: str, len_min: int, len_max: int) -> bool:
     return len(content) >= len_min and len(content) <= len_max
 
 
-def _is_valid_header(content: str):
+def _is_valid_header(content: str) -> bool:
     return len(content) == 0 or (content[0] >= 'A' and content[0] <= 'Z')
 
 
-def _is_invalid_char(ch):
+def _is_invalid_char(ch) -> bool:
     return (ch >= 'A' and ch <= 'Z') or (ch >= '0' and ch <= '9') or ch == '_'
 
 
@@ -333,7 +333,7 @@ def _check_invalid_char(content: str):
     return None
 
 
-def _check_domain_duplicate(domain: str):
+def _check_domain_duplicate(domain: str) -> bool:
     if domain in _domain_dict:
         _build_warning_info(_DUPLICATE_DOMAIN, (domain, _domain_dict[domain]))
         return False
@@ -342,7 +342,7 @@ def _check_domain_duplicate(domain: str):
         return True
 
 
-def _check_event_domain(yaml_info: dict):
+def _check_event_domain(yaml_info: dict) -> bool:
     if not "domain" in yaml_info:
         _build_warning_info(_INVALID_DOMAIN_NUMBER, ())
         return False
@@ -366,7 +366,7 @@ def _check_event_domain(yaml_info: dict):
     return check_res
 
 
-def _check_yaml_format(yaml_info):
+def _check_yaml_format(yaml_info) -> bool:
     if not yaml_info:
         _build_warning_info(_INVALID_YAML, ("The yaml file is empty"))
         return False
@@ -377,7 +377,7 @@ def _check_yaml_format(yaml_info):
     return True
 
 
-def _check_event_name(domain: str, event_name: str):
+def _check_event_name(domain: str, event_name: str) -> bool:
     check_res = True
     if not _is_valid_length(event_name, 1, 32):
         _build_warning_info(_INVALID_EVENT_LENGTH,
@@ -397,7 +397,7 @@ def _check_event_name(domain: str, event_name: str):
     return check_res
 
 
-def _check_event_type(event_name: str, event_base: dict):
+def _check_event_type(event_name: str, event_base: dict) -> bool:
     if not "type" in event_base:
         _build_warning_info(_MISSING_EVENT_TYPE, (event_name))
         return False
@@ -413,7 +413,7 @@ def _check_event_type(event_name: str, event_base: dict):
     return True
 
 
-def _check_event_level(event_name: str, event_base: dict):
+def _check_event_level(event_name: str, event_base: dict) -> bool:
     if not "level" in event_base:
         _build_warning_info(_MISSING_EVENT_LEVEL, (event_name))
         return False
@@ -429,7 +429,7 @@ def _check_event_level(event_name: str, event_base: dict):
     return True
 
 
-def _check_event_desc(event_name: str, event_base: dict):
+def _check_event_desc(event_name: str, event_base: dict) -> bool:
     if not "desc" in event_base:
         _build_warning_info(_MISSING_EVENT_DESC, (event_name))
         return False
@@ -456,7 +456,7 @@ def _check_tag_char(event_tag: list):
     return None
 
 
-def _check_tag_name(event_name: str, event_base: dict, tag_name: str):
+def _check_tag_name(event_name: str, event_base: dict, tag_name: str) -> bool:
     check_res = True
     if tag_name.lower() == event_name.lower():
         _build_deprecated_info(_DEPRECATED_TAG_NAME,
@@ -484,7 +484,7 @@ def _get_duplicate_tag(tag_list: list):
     return None
 
 
-def _check_event_tag(event_name: str, event_base: dict):
+def _check_event_tag(event_name: str, event_base: dict) -> bool:
     if not "tag" in event_base:
         return True
     event_tag = event_base["tag"]
@@ -507,7 +507,7 @@ def _check_event_tag(event_name: str, event_base: dict):
     return check_res
 
 
-def _check_event_preserve(event_name: str, event_base: dict):
+def _check_event_preserve(event_name: str, event_base: dict) -> bool:
     if not "preserve" in event_base:
         return True
     event_preserve = event_base["preserve"]
@@ -517,7 +517,7 @@ def _check_event_preserve(event_name: str, event_base: dict):
     return True
 
 
-def _check_base_key(event_name: str, event_base: dict):
+def _check_base_key(event_name: str, event_base: dict) -> bool:
     key_list = ["type", "level", "tag", "desc", "preserve"]
     for base_key in event_base.keys():
         if not base_key in key_list:
@@ -527,7 +527,7 @@ def _check_base_key(event_name: str, event_base: dict):
     return True
 
 
-def _check_event_base(event_name: str, event_def: str):
+def _check_event_base(event_name: str, event_def: str) -> bool:
     if not "__BASE" in event_def:
         _build_warning_info(_MISSING_EVENT_BASE, (event_name))
         return False
@@ -551,7 +551,7 @@ def _check_event_base(event_name: str, event_def: str):
     return check_res
 
 
-def _check_param_name(event_name: str, name: str):
+def _check_param_name(event_name: str, name: str) -> bool:
     check_res = True
     if not _is_valid_length(name, 1, 32):
         _build_warning_info(_INVALID_EVENT_PARAM_LEN,
@@ -571,7 +571,7 @@ def _check_param_name(event_name: str, name: str):
     return check_res
 
 
-def _check_param_type(event_name: str, param_name: str, param_info: dict):
+def _check_param_type(event_name: str, param_name: str, param_info: dict) -> bool:
     if not "type" in param_info:
         _build_warning_info(_MISSING_EVENT_PARAM_TYPE,
             (event_name, param_name))
@@ -590,7 +590,7 @@ def _check_param_type(event_name: str, param_name: str, param_info: dict):
     return True
 
 
-def _check_param_arrsize(event_name: str, param_name: str, param_info: dict):
+def _check_param_arrsize(event_name: str, param_name: str, param_info: dict) -> bool:
     if not "arrsize" in param_info:
         return True
     arrsize = param_info["arrsize"]
@@ -605,7 +605,7 @@ def _check_param_arrsize(event_name: str, param_name: str, param_info: dict):
     return True
 
 
-def _check_param_desc(event_name: str, param_name: str, param_info: dict):
+def _check_param_desc(event_name: str, param_name: str, param_info: dict) -> bool:
     if not "desc" in param_info:
         _build_warning_info(_MISSING_EVENT_PARAM_DESC,
             (event_name, param_name))
@@ -627,7 +627,7 @@ def _check_param_desc(event_name: str, param_name: str, param_info: dict):
         return check_res
 
 
-def _check_param_key(event_name: str, param_name: str, param_info: dict):
+def _check_param_key(event_name: str, param_name: str, param_info: dict) -> bool:
     key_list = ["type", "arrsize", "desc"]
     for key in param_info.keys():
         if not key in key_list:
@@ -637,7 +637,7 @@ def _check_param_key(event_name: str, param_name: str, param_info: dict):
     return True
 
 
-def _check_param_info(event_name: str, param_name: str, param_info: dict):
+def _check_param_info(event_name: str, param_name: str, param_info: dict) -> bool:
     check_res = True
     if not _check_param_type(event_name, param_name, param_info):
         check_res = False
@@ -650,7 +650,7 @@ def _check_param_info(event_name: str, param_name: str, param_info: dict):
     return check_res
 
 
-def _check_event_param(event_name: str, event_def: str):
+def _check_event_param(event_name: str, event_def: str) -> bool:
     sub_num = (0, 1)["__BASE" in event_def]
     check_res = True
     if not _is_valid_length(event_def, 0 + sub_num, 128 + sub_num):
@@ -673,7 +673,7 @@ def _check_event_param(event_name: str, event_def: str):
     return check_res
 
 
-def _check_event_def(event_name: str, event_def: str):
+def _check_event_def(event_name: str, event_def: str) -> bool:
     check_res = True
     if not _check_event_base(event_name, event_def):
         check_res = False
@@ -682,7 +682,7 @@ def _check_event_def(event_name: str, event_def: str):
     return check_res
 
 
-def _check_event_info(domain: str, event_info: list):
+def _check_event_info(domain: str, event_info: list) -> bool:
     event_name = event_info[0]
     event_def = event_info[1]
     check_res = True
@@ -696,7 +696,7 @@ def _check_event_info(domain: str, event_info: list):
     return check_res
 
 
-def _check_events_info(domain: str, yaml_info: str):
+def _check_events_info(domain: str, yaml_info: str) -> bool:
     event_num = len(yaml_info)
     if not (event_num >= 1 and event_num <= 4096):
         _build_warning_info(_INVALID_EVENT_NUMBER, (event_num))
@@ -708,7 +708,7 @@ def _check_events_info(domain: str, yaml_info: str):
     return check_res
 
 
-def merge_hisysevent_config(yaml_list: str, output_path: str):
+def merge_hisysevent_config(yaml_list: str, output_path: str) -> str:
     if (len(output_path) == 0):
         present_path = os.path.dirname(os.path.abspath(__file__))
         output_path = present_path
@@ -752,7 +752,7 @@ def merge_hisysevent_config(yaml_list: str, output_path: str):
     return hisysevent_def_file
 
 
-def main(argv):
+def main(argv) -> int:
     parser = argparse.ArgumentParser(description='yaml list')
     parser.add_argument("--yaml-list", nargs='+', required=True)
     parser.add_argument("--def-path", required=True)
