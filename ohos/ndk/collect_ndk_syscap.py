@@ -25,7 +25,7 @@ from scripts.util import build_utils  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402, E501
 
 
-def _get_system_capability(targets_build_config):
+def _get_system_capability(targets_build_config: list):
     _syscap_info = {}
     _syscap_config = {}
     for _bc_file in targets_build_config:

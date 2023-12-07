@@ -46,7 +46,7 @@ def args_parse(args):
     return args
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
@@ -88,9 +88,9 @@ def build_run_sloadf2fs(args):
     libuuid_path = os.path.realpath("./clang_x64/thirdparty/e2fsprogs/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libuuid_path
 
-    oldcwd = os.getcwd();
+    oldcwd = os.getcwd()
     os.chdir("./clang_x64/thirdparty/f2fs-tools/")
-    os.chdir(oldcwd);
+    os.chdir(oldcwd)
 
     sloadf2fs_opts = ""
     sloadf2fs_cmd = ""

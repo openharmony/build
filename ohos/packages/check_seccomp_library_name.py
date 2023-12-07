@@ -27,7 +27,7 @@ class ValidateError(Exception):
         super().__init__(msg)
 
 
-def parse_cfg_file(file_name):
+def parse_cfg_file(file_name: str):
     """
     Load the cfg file in JSON format
     """
@@ -44,7 +44,7 @@ def parse_cfg_file(file_name):
     return services_name
 
 
-def collect_cfg_services_name(cfg_dir):
+def collect_cfg_services_name(cfg_dir: str):
     services_name = set()
     if not os.path.exists(cfg_dir):
         return services_name
@@ -54,7 +54,7 @@ def collect_cfg_services_name(cfg_dir):
     return services_name
 
 
-def collect_seccomp_services_name(lib_dir):
+def collect_seccomp_services_name(lib_dir: str):
     services_name = set()
     name_allow_list = ['system', 'app', 'renderer', 'nwebspawn']
     if not os.path.exists(lib_dir):
@@ -72,7 +72,7 @@ def collect_seccomp_services_name(lib_dir):
     return services_name
 
 
-def check_seccomp_services_name(servces_name, seccomp_services_name):
+def check_seccomp_services_name(servces_name: str, seccomp_services_name: str):
     for name in seccomp_services_name:
         if name not in servces_name:
             raise ValidateError('service name  {} not in cfg, please check the name used for seccomp'.format(name))

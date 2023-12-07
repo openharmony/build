@@ -22,10 +22,10 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 
 
 # read subsystem module, generate subsystem install list and deps list.
-def gen_output_file(part_name, origin_part_name, all_modules_file,
-                    sdk_modules_info_file, install_modules_file,
-                    dep_modules_file, output_host_file,
-                    current_toolchain, host_toolchain):
+def gen_output_file(part_name: str, origin_part_name: str, all_modules_file: str,
+                    sdk_modules_info_file: str, install_modules_file: str,
+                    dep_modules_file: str, output_host_file: str,
+                    current_toolchain: str, host_toolchain: str):
     # read subsystem module info
     all_module_info = read_json_file(all_modules_file)
     if all_module_info is None:

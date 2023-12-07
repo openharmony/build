@@ -24,7 +24,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_src_parts(system_install_info_file):
+def get_src_parts(system_install_info_file: str):
     parts_info_list = read_json_file(system_install_info_file)
     if parts_info_list is None:
         raise Exception(
@@ -39,7 +39,7 @@ def get_src_parts(system_install_info_file):
     return src_parts_info
 
 
-def _collect_testcase(resources_dir, parts_info, output_base_dir):
+def _collect_testcase(resources_dir: str, parts_info: dict, output_base_dir: str):
     for part_name, part_info in parts_info.items():
         origin_part_name = part_info.get('origin_part_name')
         if part_info.get('variant_name') != 'phone':
@@ -60,12 +60,12 @@ def _collect_testcase(resources_dir, parts_info, output_base_dir):
         shutil.copytree(_variant_dir, dest_dir)
 
 
-def collect_testcase(resources_dir_list, parts_info, output_base_dir):
+def collect_testcase(resources_dir_list: list, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_testcase(resources_dir, parts_info, output_base_dir)
 
 
-def _collect_test_mlf(resources_dir, parts_info, output_base_dir):
+def _collect_test_mlf(resources_dir: str, parts_info: dict, output_base_dir: str):
     for part_name, part_info in parts_info.items():
         origin_part_name = part_info.get('origin_part_name')
         if part_info.get('variant_name') != 'phone':
@@ -86,12 +86,12 @@ def _collect_test_mlf(resources_dir, parts_info, output_base_dir):
         shutil.copytree(_variant_dir, dest_dir)
 
 
-def collect_test_mlf(resources_dir_list, parts_info, output_base_dir):
+def collect_test_mlf(resources_dir_list: list, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_test_mlf(resources_dir, parts_info, output_base_dir)
 
 
-def _collect_libs_symbols(resources_dir, parts_info, package_output_base_dir):
+def _collect_libs_symbols(resources_dir: str, parts_info: dict, package_output_base_dir: str):
     for part_name, part_info in parts_info.items():
         origin_part_name = part_info.get('origin_part_name')
         if part_info.get('variant_name') != 'phone':
@@ -117,12 +117,12 @@ def _collect_libs_symbols(resources_dir, parts_info, package_output_base_dir):
         shutil.copytree(_variant_dir, dest_dir)
 
 
-def collect_libs_symbols(resources_dir_list, parts_info, output_base_dir):
+def collect_libs_symbols(resources_dir_list: list, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_libs_symbols(resources_dir, parts_info, output_base_dir)
 
 
-def _collect_libs_java(resources_dir, parts_info, output_base_dir):
+def _collect_libs_java(resources_dir: str, parts_info: dict, output_base_dir: str):
     parts_libs_java_path = {}
     for part_name, part_info in parts_info.items():
         origin_part_name = part_info.get('origin_part_name')
@@ -145,12 +145,12 @@ def _collect_libs_java(resources_dir, parts_info, output_base_dir):
     write_json_file(_libs_java_path_info_file, parts_libs_java_path)
 
 
-def collect_libs_java(resources_dir_list, parts_info, output_base_dir):
+def collect_libs_java(resources_dir_list: str, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_libs_java(resources_dir, parts_info, output_base_dir)
 
 
-def _collect_kits_modules(resources_dir, parts_info, output_base_dir):
+def _collect_kits_modules(resources_dir: str, parts_info: dict, output_base_dir: str):
     parts_modules_path = {}
     for part_name, part_info in parts_info.items():
         part_modules_dir = os.path.join(resources_dir, part_name)
@@ -163,18 +163,18 @@ def _collect_kits_modules(resources_dir, parts_info, output_base_dir):
     write_json_file(_modules_path_info_file, parts_modules_path)
 
 
-def collect_kits_modules(resources_dir_list, parts_info, output_base_dir):
+def collect_kits_modules(resources_dir_list: list, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_kits_modules(resources_dir, parts_info, output_base_dir)
 
 
-def collect_innerkits_modules(resources_dir_list, parts_info, output_base_dir):
+def collect_innerkits_modules(resources_dir_list: list, parts_info: dict, output_base_dir: str):
     for resources_dir in resources_dir_list:
         _collect_kits_modules(resources_dir, parts_info, output_base_dir)
 
 
-def collect_resources(collect_type, resources_dir_list, parts_info,
-                      output_base_dir):
+def collect_resources(collect_type: str, resources_dir_list: list, parts_info: dict,
+                      output_base_dir: str):
     if collect_type == 'libs_symbols':
         collect_libs_symbols(resources_dir_list, parts_info, output_base_dir)
     elif collect_type == 'module_list_files':

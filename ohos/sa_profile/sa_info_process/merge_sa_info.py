@@ -57,10 +57,10 @@ class JsonSAInfoMerger(object):
         self.process_sas_dict = {}
         self.output_filelist = []
 
-    def __add_to_output_filelist(self, infile):
+    def __add_to_output_filelist(self, infile: str):
         self.output_filelist.append(os.path.join(self.output_dir, infile))
 
-    def __parse_json_file(self, file):
+    def __parse_json_file(self, file: str):
         with open(file, 'r') as json_files:
             data = json.load(json_files)
             _format = 'one and only one {} tag is expected, actually {} is found'
@@ -86,7 +86,7 @@ class JsonSAInfoMerger(object):
             raise json_err.BadFormatJsonError('systemability must have name and libpath', file)
         sa_info_collector.add_systemability_info(sys_value)
 
-    def __merge(self, sa_info_filelist, path_merges):
+    def __merge(self, sa_info_filelist: list, path_merges: str):
         """
         merge the json files of sa_info_filelist
         :param sa_info_filelist : input_files

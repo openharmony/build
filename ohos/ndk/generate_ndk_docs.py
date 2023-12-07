@@ -43,7 +43,7 @@ def parse_args(args):
     return options
 
 
-def generate_ndk_docs(options, html_output_dir):
+def generate_ndk_docs(options, html_output_dir: str):
     contents = None
     with tempfile.NamedTemporaryFile(
             suffix=os.path.basename(options.doxygen_file)) as doxygen_file:

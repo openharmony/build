@@ -38,7 +38,7 @@ advanced:
 @Date 2022/01/14
 """
 
-def find_files(path, name):
+def find_files(path: str, name: str):
     ret, files, folders = [], [], [path]
     for folder in folders:
         for file in os.listdir(folder):
@@ -54,7 +54,7 @@ def find_files(path, name):
     return ret
 
 
-def read_component_from_ohos_build(file):
+def read_component_from_ohos_build(file: str):
     ret = {"subsystem": "", "components": []}
     with open(file, "rb") as f:
         data = json.load(f)
@@ -64,7 +64,7 @@ def read_component_from_ohos_build(file):
     return ret
 
 
-def read_component_from_bundle_json(file):
+def read_component_from_bundle_json(file: str):
     ret = {"subsystem": "", "components": []}
     with open(file, "rb") as f:
         data = json.load(f)
@@ -73,7 +73,7 @@ def read_component_from_bundle_json(file):
     return ret
 
 
-def find_component_in_path(subsys, path):
+def find_component_in_path(subsys: str, path: str):
     ret = set()
     if not os.path.exists(path):
         return []
@@ -91,7 +91,7 @@ def find_component_in_path(subsys, path):
     return ret
 
 
-def update_components(subsys_file):
+def update_components(subsys_file: str):
     ret = {"subsystems": []}
     with open(subsys_file, "rb") as f:
         data = json.load(f)

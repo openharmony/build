@@ -21,7 +21,7 @@ import file_utils
 import dependence_analysis
 
 
-def gen_module_deps(deps_data):
+def gen_module_deps(deps_data: dict):
     part_allowlist = ['unittest', 'moduletest', 'systemtest']
     label_to_alias = {}
     for _module_alias, _info in deps_data.items():
@@ -50,7 +50,7 @@ def gen_module_deps(deps_data):
     return modeule_deps_data
 
 
-def run(deps_files_path, output_path):
+def run(deps_files_path: str, output_path: str):
     all_deps_data = dependence_analysis.get_all_deps_data(deps_files_path)
     all_deps_data_file = os.path.join(output_path, 'all_deps_data.json')
     file_utils.write_json_file(all_deps_data_file, all_deps_data)

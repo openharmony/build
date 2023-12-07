@@ -27,8 +27,8 @@ def get_allowlist():
     return ['hilog_java']
 
 
-def get_kits_signature_list(sign_file_root_dir, subsystem_name,
-                            sign_file_name):
+def get_kits_signature_list(sign_file_root_dir: str, subsystem_name: str,
+                            sign_file_name: str):
     kits_signature_list = []
     subsystem_sign_file_dir = os.path.join(sign_file_root_dir, subsystem_name)
     if not os.path.exists(subsystem_sign_file_dir):
@@ -42,7 +42,7 @@ def get_kits_signature_list(sign_file_root_dir, subsystem_name,
     return kits_signature_list
 
 
-def check_remove(sign_file_root_dir, subsystem_name, kit_list, kit_type):
+def check_remove(sign_file_root_dir: str, subsystem_name: str, kit_list: list, kit_type: str):
     if not os.path.exists(sign_file_root_dir):
         return True
 

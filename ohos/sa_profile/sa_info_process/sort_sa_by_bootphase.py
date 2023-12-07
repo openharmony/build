@@ -54,7 +54,7 @@ class SARearrangement(object):
         self.systemability_nodes = []
         self.sa_nodes_count = 0
 
-    def __parse_json_file(self, source_file):
+    def __parse_json_file(self, source_file: str):
         with open(source_file, "r", encoding="utf-8") as file:
             data = json.load(file)
         self.systemability_nodes = data['systemability']
@@ -64,7 +64,7 @@ class SARearrangement(object):
         except IndexError:
             pass
 
-    def __rearrange_systemability_node_strict(self, source_file, dest_file):
+    def __rearrange_systemability_node_strict(self, source_file: str, dest_file: str):
         rearranged_name = self.rearranged_systemabilities
         final_systemability = []
         for name in rearranged_name:
@@ -78,8 +78,8 @@ class SARearrangement(object):
             json.dump(data, json_files, indent=4, ensure_ascii=False)
 
     @classmethod
-    def __detect_invalid_dependency(self, dependency_checkers, ordered_sa_names,
-                                    sa_deps_dict):
+    def __detect_invalid_dependency(self, dependency_checkers, ordered_sa_names: str,
+                                    sa_deps_dict: dict):
         """
         Iterate over the dependency tree, to detect whether there
         exists circular dependency and other kinds bad dependency
@@ -99,7 +99,7 @@ class SARearrangement(object):
             for checker in dependency_checkers:
                 checker(systemability, dependency)
 
-        def check_depend(cur_systemability, deps_count, dependencies, depend_path):
+        def check_depend(cur_systemability: str, deps_count: int, dependencies: list, depend_path: list):
             if deps_visit_cnt.get(cur_systemability) < deps_count:
                 index = deps_visit_cnt.get(cur_systemability)
                 cur_dependency = dependencies[index]
@@ -140,33 +140,33 @@ class SARearrangement(object):
         """
         Extract info like dependencies and bootphase from a systemability node
         """
-        def validate_creation(creation):
+        def validate_creation(creation: bool):
             _format = ("In tag {} only a boolean value is expected, " +
                        "but actually is '{}'")
             if str(creation) not in {"true", "false", "True", "False"}:
                 raise json_err.BadFormatJsonError(_format.format("run-on-create", creation),
                                         self.file_in_process)
 
-        def validate_bootphase(bootphase, nodename):
+        def validate_bootphase(bootphase, nodename: str):
             _format = ("In systemability: {}, The bootphase '{}' is not supported " +
                 "please check yourself")
             if self.policy.bootphase_categories.get(bootphase) is None:
                 raise json_err.NotSupportedBootphaseError(_format.format(nodename, bootphase))
 
-        def validate_systemability_name(nodename):
+        def validate_systemability_name(nodename: str):
             if nodename < 1 or nodename > 16777215:
                 _format = ("name's value should be [1-16777215], but actually is {}")
                 raise json_err.BadFormatJsonError(_format.format(nodename),
                                         self.file_in_process)
 
-        def check_nodes_constraints_one(systemability_node, tag):
+        def check_nodes_constraints_one(systemability_node: dict, tag: str):
             _format = ("The tag {} should exist, but it does not exist")
             if tag not in systemability_node:
                 raise json_err.BadFormatJsonError(_format.format(tag), self.file_in_process)
             tags_nodes = systemability_node[tag]
             return tags_nodes
 
-        def check_nodes_constraints_two(systemability_node, tag):
+        def check_nodes_constraints_two(systemability_node: dict, tag: str):
             if tag not in systemability_node or systemability_node[tag] == '':
                 return ""
             tags_nodes = systemability_node[tag]
@@ -204,7 +204,7 @@ class SARearrangement(object):
                 deps.append(depend_node)
 
     def __sort_systemability_by_bootphase_priority(self):
-        def check_index(systemabilities, dependency, idx_self):
+        def check_index(systemabilities: list, dependency, idx_self: int):
             try:
                 idx_dep = systemabilities.index(dependency)
                 # if the dependency is behind, then exchange the order
@@ -215,7 +215,7 @@ class SARearrangement(object):
             except ValueError:
                 pass  # ignore different category of dependencies
 
-        def inner_category_sort(systemabilities):
+        def inner_category_sort(systemabilities: list):
             """
             Sort dependencies with same bootphase category, preserve the
             original order in source file
@@ -240,7 +240,7 @@ class SARearrangement(object):
             inner_category_sort(salist)
             self.rearranged_systemabilities += salist
 
-    def __detect_invert_dependency(self, systemability, depend):
+    def __detect_invert_dependency(self, systemability: list, depend):
         """
         Detect invert dependency: systemability with high boot priority depends
         on systemability with low ones, e.g. a systemability named 'sa1' with
@@ -262,7 +262,7 @@ class SARearrangement(object):
             raise json_err.InvertDependencyError(
                 _format.format(systemability, depend))
 
-    def __detect_creation_dependency(self, systemability, depend):
+    def __detect_creation_dependency(self, systemability: list, depend):
         """
         Detect dependency related to configuration on <run-on-create>:
         if a sa with <run-on-create> set to 'true' depending on a sa
@@ -275,7 +275,7 @@ class SARearrangement(object):
         if self_creation is True and dep_creation is False:
             raise json_err.RunOnCreateDependencyError(_format.format(systemability, depend))
 
-    def sort(self, source_file, dest_file):
+    def sort(self, source_file: str, dest_file: str):
         self.file_in_process = source_file
         dependency_checkers = []
         dependency_checkers.append(self.__detect_invert_dependency)

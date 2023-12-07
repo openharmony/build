@@ -26,7 +26,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def _get_src_parts(system_install_info_file):
+def _get_src_parts(system_install_info_file: str):
     parts_list = read_json_file(system_install_info_file)
     if parts_list is None:
         raise Exception(
@@ -40,8 +40,8 @@ def _get_src_parts(system_install_info_file):
     return src_part_list
 
 
-def _get_all_config_files(hisysevent_config_info, src_part_list,
-                          source_root_dir, gn_root_build_dir):
+def _get_all_config_files(hisysevent_config_info: dict, src_part_list: list,
+                          source_root_dir: str, gn_root_build_dir: str):
     hisysevent_config_files = []
     for origin_part_name in src_part_list:
         _config_files = hisysevent_config_info.get(origin_part_name, [])
@@ -57,8 +57,8 @@ def _get_all_config_files(hisysevent_config_info, src_part_list,
     return hisysevent_config_files
 
 
-def _get_install_info(hisysevent_config_files, output_path,
-                      config_install_dest_dir):
+def _get_install_info(hisysevent_config_files: str, output_path: str,
+                      config_install_dest_dir: str):
     install_info_list = []
     if hisysevent_config_files:
         hisysevent_merge_result_file = merge_hisysevent_config(

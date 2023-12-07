@@ -24,7 +24,7 @@ from scripts.util.file_utils import write_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
 
-def copy_file(target_base_dir, source_files, output_dir):
+def copy_file(target_base_dir: str, source_files: str, output_dir: str) -> list:
     output_files = []
     for src_file in source_files:
         if not os.path.exists(src_file):

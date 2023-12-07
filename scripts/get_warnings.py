@@ -29,11 +29,11 @@ import re
 import subprocess
 
 
-def _do_uniq(infile, outfile):
+def _do_uniq(infile: str, outfile: str):
     subprocess.call(['sort', '-u', infile, '-o', outfile], shell=False)
 
 
-def _pick_line(line_info):
+def _pick_line(line_info) -> bool:
     result = False
     parser_keys = [
         ": Warning", ": warning", "warning:", "Warning:", "WARNING:"
@@ -45,7 +45,7 @@ def _pick_line(line_info):
     return result
 
 
-def _parse(in_name, out_name, prj_dir):
+def _parse(in_name: str, out_name: str, prj_dir: str) -> bool:
     if not os.path.exists(in_name):
         print("warning: build log file {} is not exists.".format(in_name))
         return False
@@ -90,7 +90,7 @@ def _parse(in_name, out_name, prj_dir):
     return True
 
 
-def _get_warn(log_file, warn_file, prj_dir):
+def _get_warn(log_file: str, warn_file: str, prj_dir: str):
     if not os.path.exists(os.path.dirname(warn_file)):
         os.makedirs(os.path.dirname(warn_file), exist_ok=True)
     if os.path.exists(warn_file):
@@ -105,7 +105,7 @@ def _get_warn(log_file, warn_file, prj_dir):
         os.remove(temp_out_file)
 
 
-def main(argv):
+def main(argv) -> int:
     """parse warning info from build log."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--build-log-file', help='log file', required=True)

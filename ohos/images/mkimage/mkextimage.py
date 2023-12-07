@@ -47,7 +47,7 @@ def args_parse(argv):
     return args
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
@@ -55,7 +55,7 @@ def run_cmd(cmd):
     return res.pid, res.returncode, sout, serr
 
 
-def build_run_mke2fs(args):
+def build_run_mke2fs(args) -> int:
     mke2fs_opts = ""
     mke2fs_cmd = ""
     is_data = False
@@ -91,7 +91,7 @@ def build_run_mke2fs(args):
     return res[1]
 
 
-def build_run_e2fsdroid(args):
+def build_run_e2fsdroid(args) -> int:
     libselinux_path = os.path.realpath("./clang_x64/thirdparty/selinux/")
     libpcre2_path = os.path.realpath("./clang_x64/thirdparty/pcre2/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libpcre2_path
@@ -120,7 +120,6 @@ def build_run_e2fsdroid(args):
 
 def build(args):
     args = args_parse(args)
-
     res = build_run_mke2fs(args)
     if res != 0:
         print("error run mke2fs errno: " + str(res))

@@ -38,7 +38,7 @@ ALL_NDK_TEMPLATES_NAMES = [
 ]
 
 
-def remove_comment(file):
+def remove_comment(file: str):
     contents = []
     with open(file, 'r') as in_file:
         for line in in_file:
@@ -52,7 +52,7 @@ def remove_comment(file):
     return contents
 
 
-def do_dos2unix(in_file, out_file):
+def do_dos2unix(in_file: str, out_file: str):
     contents = ''
     with open(in_file, 'r+b') as fin:
         contents = fin.read()
@@ -64,7 +64,7 @@ def do_dos2unix(in_file, out_file):
         fout.write(contents)
 
 
-def do_gn_format(gn_file, org_file):
+def do_gn_format(gn_file: str, org_file: str):
     cmd = ['gn', 'format', gn_file]
     child = subprocess.Popen(cmd)
     child.communicate()
@@ -74,7 +74,7 @@ def do_gn_format(gn_file, org_file):
             .format(org_file))
 
 
-def get_ndk_targets(file, options):
+def get_ndk_targets(file: str, options):
     ndk_targets = []
     with build_utils.temp_dir() as tmp:
         gn_file = os.path.join(tmp, os.path.basename(file))

@@ -32,7 +32,7 @@ product_name = ""
 sdk_version = ""
 
 
-def parse_sdk_check_list(sdk_check_list):
+def parse_sdk_check_list(sdk_check_list: list):
     sdk_check_files = []
     sdk_check_directories = []
     sdk_delivery_list = read_json_file(sdk_check_list)
@@ -61,7 +61,7 @@ def parse_sdk_check_list(sdk_check_list):
     return sdk_check_files, sdk_check_directories
 
 
-def add_files_to_sdk_package(sdk_package_directory, compressed_file):
+def add_files_to_sdk_package(sdk_package_directory: dict, compressed_file: str):
     archive_file = os.path.join(sdk_package_directory, compressed_file)
     is_zipfile = zipfile.is_zipfile(archive_file)
     if is_zipfile: 
@@ -118,7 +118,7 @@ def get_all_sdk_package_list():
     return sdk_package_list
 
 
-def get_redundant_set(sdk_check_list):
+def get_redundant_set(sdk_check_list: list):
     outside_the_list_set = set()
     sdk_check_files, sdk_check_directories = parse_sdk_check_list(sdk_check_list)
     sdk_list_set = set(sdk_check_files)
@@ -132,7 +132,7 @@ def get_redundant_set(sdk_check_list):
     return outside_the_list_set
 
 
-def get_unpacked_directories(sdk_check_list):
+def get_unpacked_directories(sdk_check_list: list):
     sdk_check_directories = parse_sdk_check_list(sdk_check_list)[1]
     sdk_check_directories_set = set(sdk_check_directories)
     for directory in sdk_check_directories: 
@@ -144,7 +144,7 @@ def get_unpacked_directories(sdk_check_list):
     return sdk_check_directories_set
 
 
-def get_missing_set(sdk_check_list):
+def get_missing_set(sdk_check_list: list):
     sdk_list_set = set(parse_sdk_check_list(sdk_check_list)[0])
     sym_intersection = sdk_package_set.symmetric_difference(sdk_list_set)
     missing_set = sdk_list_set.intersection(sym_intersection)
@@ -156,7 +156,7 @@ def get_missing_set(sdk_check_list):
     return missing_set
 
 
-def output_the_verification_result(sdk_check_list):
+def output_the_verification_result(sdk_check_list: list):
     sdk_package_missing_set = get_missing_set(sdk_check_list)
     sdk_package_redundant_set = get_redundant_set(sdk_check_list)
 

@@ -19,7 +19,7 @@ import sys
 import argparse
 
 
-def read_json_file(input_file):
+def read_json_file(input_file: str):
     if not os.path.exists(input_file):
         print("file '{}' doesn't exist.".format(input_file))
         return None
@@ -34,7 +34,7 @@ def read_json_file(input_file):
     return data
 
 
-def write_json_file(output_file, content):
+def write_json_file(output_file: str, content):
     file_dir = os.path.dirname(os.path.abspath(output_file))
     if not os.path.exists(file_dir):
         os.makedirs(file_dir, exist_ok=True)
@@ -42,7 +42,7 @@ def write_json_file(output_file, content):
         json.dump(content, output_f, indent=2)
 
 
-def get_wrong_used_deps(parts_path_file, deps_files):
+def get_wrong_used_deps(parts_path_file: str, deps_files: str):
 
     print("Start check deps!")
     part_path_data = read_json_file(parts_path_file)

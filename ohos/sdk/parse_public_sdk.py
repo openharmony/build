@@ -33,7 +33,7 @@ API_GEN_PATH = os.path.join(OUTPATH, "build-tools/api")
 DEL_TARGET = ["//interface/sdk-js:bundle_api"]
 
 
-def copy_sdk_interface(source_root):
+def copy_sdk_interface(source_root: str):
     source = os.path.join(source_root, INTERFACE_PATH)
     dest = os.path.join(source_root, OUTPATH)
     if os.path.exists(dest):
@@ -41,7 +41,7 @@ def copy_sdk_interface(source_root):
     shutil.copytree(source, dest)
 
 
-def replace_sdk_api_dir(source_root):
+def replace_sdk_api_dir(source_root: str):
     dest = os.path.join(source_root, API_PATH)
     if os.path.exists:
         shutil.rmtree(dest)
@@ -49,7 +49,7 @@ def replace_sdk_api_dir(source_root):
     shutil.copytree(source, dest)
 
 
-def remove_system_api_method(source_root, nodejs):
+def remove_system_api_method(source_root: str, nodejs: str):
     tool = os.path.join(source_root, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
     nodejs = os.path.abspath(nodejs)
@@ -59,7 +59,7 @@ def remove_system_api_method(source_root, nodejs):
                         stdout=subprocess.PIPE)
     p.wait()
 
-def regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file):
+def regenerate_sdk_description_file(source_root: str, sdk_description_file: str, output_pub_sdk_desc_file: str):
     info_list = read_json_file(sdk_description_file)
     public_info_list = []
     for info in info_list:
@@ -73,7 +73,7 @@ def regenerate_sdk_description_file(source_root, sdk_description_file, output_pu
     write_json_file(output_pub_sdk_desc_file, public_info_list)
 
 
-def parse_step(sdk_description_file, source_root, nodejs, output_pub_sdk_desc_file):
+def parse_step(sdk_description_file: str, source_root: str, nodejs: str, output_pub_sdk_desc_file: str):
     copy_sdk_interface(source_root)
     remove_system_api_method(source_root, nodejs)
     replace_sdk_api_dir(source_root)

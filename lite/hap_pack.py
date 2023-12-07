@@ -25,7 +25,7 @@ import shutil
 import zipfile
 
 
-def cmd_popen(cmd):
+def cmd_popen(cmd: str):
     proc = subprocess.Popen(cmd)
     proc.wait()
     ret_code = proc.returncode

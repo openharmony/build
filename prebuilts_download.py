@@ -29,20 +29,20 @@ from urllib.request import urlopen
 import urllib.error
 from scripts.util.file_utils import read_json_file
 
-def _run_cmd(cmd):
+def _run_cmd(cmd: str):
     res = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
     return sout.rstrip().decode('utf-8'), serr, res.returncode
 
-def _check_sha256(check_url, local_file):
+def _check_sha256(check_url: str, local_file: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     local_sha256_cmd = 'sha256sum ' + local_file + "|cut -d ' ' -f1"
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     local_sha256, err, returncode = _run_cmd(local_sha256_cmd)
     return check_sha256 == local_sha256
 
-def _check_sha256_by_mark(args, check_url, code_dir, unzip_dir, unzip_filename):
+def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     mark_file_dir = os.path.join(code_dir, unzip_dir)
@@ -51,7 +51,7 @@ def _check_sha256_by_mark(args, check_url, code_dir, unzip_dir, unzip_filename):
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
 
-def _config_parse(config, tool_repo):
+def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict = dict()
     parse_dict['unzip_dir'] = config.get('unzip_dir')
     parse_dict['huaweicloud_url'] = tool_repo + config.get('file_path')
@@ -61,7 +61,7 @@ def _config_parse(config, tool_repo):
     parse_dict['bin_file'] = os.path.basename(parse_dict.get('huaweicloud_url'))
     return parse_dict
 
-def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_path):
+def _uncompress(args, src_file: str, code_dir: str, unzip_dir: str, unzip_filename: str, mark_file_path: str):
     dest_dir = os.path.join(code_dir, unzip_dir)
     if src_file[-3:] == 'zip':
         cmd = 'unzip -o {} -d {};echo 0 > {}'.format(src_file, dest_dir, mark_file_path)
@@ -72,7 +72,8 @@ def _uncompress(args, src_file, code_dir, unzip_dir, unzip_filename, mark_file_p
     _run_cmd(cmd)
 
 
-def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path, progress):
+def _copy_url(args, task_id: int, url: str, local_file: str, code_dir: str, unzip_dir: str,
+              unzip_filename: str, mark_file_path: str, progress):
     retry_times = 0
     max_retry_times = 3
     while retry_times < max_retry_times:
@@ -107,7 +108,8 @@ def _copy_url(args, task_id, url, local_file, code_dir, unzip_dir, unzip_filenam
         sys.exit(1)
 
 
-def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path):
+def _copy_url_disable_rich(args, url: str, local_file: str, code_dir: str, unzip_dir: str,
+                           unzip_filename: str, mark_file_path: str):
     # download files
     download_buffer_size = 32768
     print('Requesting {}, please wait'.format(url))
@@ -125,14 +127,14 @@ def _copy_url_disable_rich(args, url, local_file, code_dir, unzip_dir, unzip_fil
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     print("Decompressed {}".format(local_file))
 
-def _is_system_component():
+def _is_system_component() -> bool:
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if pathlib.Path(root_dir + "/interface/sdk-js").exists() or pathlib.Path(root_dir + "/foundation/arkui").exists() or pathlib.Path(root_dir + "/arkcompiler").exists():
         return True
     else:
         return False
 
-def _hwcloud_download(args, config, bin_dir, code_dir):
+def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     try:
         cnt = cpu_count()
     except:
@@ -218,7 +220,7 @@ def _npm_install(args):
     return True, None
 
 
-def _node_modules_copy(config, code_dir, enable_symlink):
+def _node_modules_copy(config: dict, code_dir: str, enable_symlink: bool):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
@@ -231,7 +233,7 @@ def _node_modules_copy(config, code_dir, enable_symlink):
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
-def _file_handle(config, code_dir, host_platform):
+def _file_handle(config: dict, code_dir: str, host_platform: str):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
         dest_dir = code_dir + config_info.get('dest')
@@ -277,7 +279,7 @@ def _import_rich_module():
     return progress
 
 
-def _install(config, code_dir):
+def _install(config: dict, code_dir: str):
     for config_info in config:
         install_dir = '{}/{}'.format(code_dir, config_info.get('install_dir'))
         script = config_info.get('script')

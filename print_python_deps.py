@@ -61,7 +61,7 @@ def _normalize_command_line(options):
     return ' '.join(pipes.quote(x) for x in args)
 
 
-def _find_python_in_directory(directory):
+def _find_python_in_directory(directory: dict):
     """Returns an iterable of all non-test python files in the given directory."""
     for root, _dirnames, filenames in os.walk(directory):
         for filename in filenames:

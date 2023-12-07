@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def check(args):
+def check(args) -> list:
     depfiles = []
     # ignore test related parts
     part_allow_set = {'libc-test', 'libc-test-lib'}

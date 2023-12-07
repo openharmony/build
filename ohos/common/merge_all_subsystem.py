@@ -24,7 +24,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def merge_subsystem(src_install_info_file, binary_install_info_file):
+def merge_subsystem(src_install_info_file: str, binary_install_info_file: str):
     src_install_info = read_json_file(src_install_info_file)
     if src_install_info is None:
         raise Exception("read src install info file '{}' failed.".format(

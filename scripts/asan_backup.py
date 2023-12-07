@@ -22,11 +22,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def _get_toolchain_name(toolchain_label):
+def _get_toolchain_name(toolchain_label: str) -> str:
     return toolchain_label.split(':')[1]
 
 
-def _remove_unstripped_dir(toolchain_info_file):
+def _remove_unstripped_dir(toolchain_info_file: str):
     data = read_json_file(toolchain_info_file)
     if data is None:
         raise Exception("read file '{}' failed.".format(toolchain_info_file))
