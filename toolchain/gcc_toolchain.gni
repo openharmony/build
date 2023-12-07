@@ -382,6 +382,12 @@ template("gcc_toolchain") {
       strip_switch = ""
       if (defined(invoker.strip)) {
         strip_switch = "--strip=${invoker.strip} "
+        if (current_cpu == "arm" && is_standard_system) {
+          strip_debug_whitelist =
+              rebase_path("//build/toolchain/strip_debug_whitelist.txt",
+                          root_build_dir)
+          strip_switch += "--strip-debug-whitelist=${strip_debug_whitelist} "
+        }
       }
       adlt_switch = ""
       if (enable_adlt && allowed_lib_list != "") {
