@@ -48,7 +48,7 @@ XML_ESCAPE_TABLE = {
 }
 
 
-def copy_static_library_notices(options, depfiles):
+def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []
     for file in build_utils.get_all_files(options.static_library_notice_dir):
@@ -85,11 +85,11 @@ def copy_static_library_notices(options, depfiles):
             shutil.copyfile("{}.json".format(file), "{}.json".format(dest))
 
 
-def write_file(file, string):
+def write_file(file: str, string: str):
     print(string, file=file)
 
 
-def compute_hash(file):
+def compute_hash(file: str):
     sha256 = hashlib.sha256()
     with open(file, 'rb') as file_fd:
         for line in file_fd:
@@ -97,12 +97,12 @@ def compute_hash(file):
     return sha256.hexdigest()
 
 
-def get_entity(text):
+def get_entity(text: str):
     return "".join(XML_ESCAPE_TABLE.get(c, c) for c in text)
 
 
-def generate_txt_notice_files(file_hash, input_dir, output_filename,
-                              notice_title):
+def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: str,
+                              notice_title: str):
     with open(output_filename, "w") as output_file:
         write_file(output_file, notice_title)
         for value in file_hash:
@@ -132,8 +132,8 @@ def generate_txt_notice_files(file_hash, input_dir, output_filename,
                 write_file(output_file, temp_file_hd.read())
 
 
-def generate_xml_notice_files(files_with_same_hash, input_dir,
-                              output_filename):
+def generate_xml_notice_files(files_with_same_hash: dict, input_dir: str,
+                              output_filename: str):
     id_table = {}
     for file_key in files_with_same_hash.keys():
         for filename in files_with_same_hash[file_key]:
@@ -176,13 +176,13 @@ def generate_xml_notice_files(files_with_same_hash, input_dir,
         write_file(output_file, "</licenses>")
 
 
-def compress_file_to_gz(src_file_name, gz_file_name):
+def compress_file_to_gz(src_file_name: str, gz_file_name: str):
     with open(src_file_name, mode='rb') as src_file_fd:
         with gzip.open(gz_file_name, mode='wb') as gz_file_fd:
             gz_file_fd.writelines(src_file_fd)
 
 
-def handle_zipfile_notices(zip_file):
+def handle_zipfile_notices(zip_file: str):
     notice_file = '{}.txt'.format(zip_file[:-4])
     with build_utils.temp_dir() as tmp_dir:
         build_utils.extract_all(zip_file, tmp_dir, no_clobber=False)
@@ -247,7 +247,7 @@ def main():
         output_paths=(outputs))
 
 
-def do_merge_notice(args, zipfiles, txt_files):
+def do_merge_notice(args, zipfiles: str, txt_files: str):
     notice_dir = args.notice_root_dir
     notice_txt = args.output_notice_txt
     notice_gz = args.output_notice_gz

@@ -16,7 +16,7 @@ import sys
 # "iphoneos" or "macosx" generally).
 
 
-def SplitVersion(version):
+def SplitVersion(version: str or bytes):
   """Splits the Xcode version to 3 values.
 
   >>> list(SplitVersion('8.2.1.1'))
@@ -32,7 +32,7 @@ def SplitVersion(version):
   return itertools.islice(itertools.chain(version, itertools.repeat('0')), 0, 3)
 
 
-def FormatVersion(version):
+def FormatVersion(version: str or bytes):
   """Converts Xcode version to a format required for DTXcode in Info.plist
 
   >>> FormatVersion('8.2.1')
@@ -46,7 +46,7 @@ def FormatVersion(version):
   return ('%2s%s%s' % (major, minor, patch)).replace(' ', '0')
 
 
-def FillXcodeVersion(settings):
+def FillXcodeVersion(settings: dict):
   """Fills the Xcode version and build number into |settings|."""
   lines = subprocess.check_output(['xcodebuild', '-version']).splitlines()
   settings['xcode_version'] = FormatVersion(lines[0].split()[-1])
@@ -54,13 +54,13 @@ def FillXcodeVersion(settings):
   settings['xcode_build'] = lines[-1].split()[-1]
 
 
-def FillMachineOSBuild(settings):
+def FillMachineOSBuild(settings: dict):
   """Fills OS build number into |settings|."""
   settings['machine_os_build'] = subprocess.check_output(
       ['sw_vers', '-buildVersion']).strip()
 
 
-def FillSDKPathAndVersion(settings, platform, xcode_version):
+def FillSDKPathAndVersion(settings: dict, platform: str, xcode_version: str or bytes):
   """Fills the SDK path and version for |platform| into |settings|."""
   settings['sdk_path'] = subprocess.check_output([
       'xcrun', '-sdk', platform, '--show-sdk-path']).strip()

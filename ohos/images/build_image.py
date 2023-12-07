@@ -27,13 +27,13 @@ from scripts.util import build_utils
 from build_scripts.build import find_top  # noqa: E402
 
 
-def _prepare_userdata(userdata_path):
+def _prepare_userdata(userdata_path: str):
     if os.path.exists(userdata_path):
         shutil.rmtree(userdata_path)
     os.makedirs(userdata_path, exist_ok=True)
 
 
-def _prepare_root(system_path, target_cpu):
+def _prepare_root(system_path: str, target_cpu: str):
     root_dir = os.path.join(os.path.dirname(system_path), 'root')
     if os.path.exists(root_dir):
         shutil.rmtree(root_dir)
@@ -53,7 +53,7 @@ def _prepare_root(system_path, target_cpu):
     os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
 
 
-def _prepare_updater(updater_path, target_cpu):
+def _prepare_updater(updater_path: str, target_cpu: str):
     _dir_list = ['dev', 'proc', 'sys', 'system', 'tmp', 'lib', 'lib64', 'vendor']
     for _dir_name in _dir_list:
         _path = os.path.join(updater_path, _dir_name)
@@ -71,7 +71,7 @@ def _prepare_updater(updater_path, target_cpu):
     os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
 
-def _prepare_ramdisk(ramdisk_path):
+def _prepare_ramdisk(ramdisk_path: str):
     _dir_list = ['bin', 'dev', 'etc', 'lib', 'proc', 'sys', 'system', 'usr', 'mnt', 'storage']
     for _dir_name in _dir_list:
         _path = os.path.join(ramdisk_path, _dir_name)
@@ -81,7 +81,7 @@ def _prepare_ramdisk(ramdisk_path):
     os.symlink('bin/init_early', os.path.join(ramdisk_path, 'init'))
 
 
-def _prepare_eng_ststem(eng_system_path, build_variant):
+def _prepare_eng_ststem(eng_system_path: str, build_variant: str):
     if os.path.exists(eng_system_path):
         shutil.rmtree(eng_system_path)
     os.makedirs(eng_system_path, exist_ok=True)

@@ -25,7 +25,7 @@ from scripts.util.file_utils import read_json_file, write_json_file, write_file 
 from scripts.util import build_utils  # noqa: E402
 
 
-def _get_modules_info(system_install_info, depfiles):
+def _get_modules_info(system_install_info: dict, depfiles: list):
     modules_info_dict = {}
     for subsystem_info in system_install_info:
         part_name = subsystem_info.get('part_name')
@@ -48,7 +48,7 @@ def _get_modules_info(system_install_info, depfiles):
     return modules_info_dict
 
 
-def _get_post_process_modules_info(post_process_modules_info_files, depfiles):
+def _get_post_process_modules_info(post_process_modules_info_files: list, depfiles: list):
     modules_info_list = []
     for _modules_info_file in post_process_modules_info_files:
         _modules_info = read_json_file(_modules_info_file)
@@ -60,10 +60,10 @@ def _get_post_process_modules_info(post_process_modules_info_files, depfiles):
     return modules_info_list
 
 
-def copy_modules(system_install_info, install_modules_info_file,
-                 modules_info_file, module_list_file,
-                 post_process_modules_info_files, platform_installed_path,
-                 host_toolchain, additional_system_files, depfiles):
+def copy_modules(system_install_info: dict, install_modules_info_file: str,
+                 modules_info_file: str, module_list_file: str,
+                 post_process_modules_info_files: list, platform_installed_path: str,
+                 host_toolchain, additional_system_files: dict, depfiles: list):
     output_result = []
     dest_list = []
     symlink_dest = []

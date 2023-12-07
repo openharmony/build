@@ -29,7 +29,7 @@ def usage():
     return
 
 
-def get_fill_cnt(inputfile, blocksize):
+def get_fill_cnt(inputfile: str, blocksize: int) -> int:
     flags = os.O_WRONLY
     modes = stat.S_IWUSR | stat.S_IRUSR
     size = os.path.getsize(inputfile)
@@ -43,7 +43,7 @@ def get_fill_cnt(inputfile, blocksize):
     return fill_cnt
 
 
-def get_gap_blocksize(length, size):
+def get_gap_blocksize(length: int, size: int) -> int:
     if length < size:
         cnt = 2
     elif length < (size * 2):
@@ -53,7 +53,7 @@ def get_gap_blocksize(length, size):
     return cnt
 
 
-def get_block_cnt(inputfile, blocksize):
+def get_block_cnt(inputfile: str, blocksize: int) -> int:
     size = os.path.getsize(inputfile)
     if blocksize != 0:
         totalblocks = size / blocksize
@@ -64,7 +64,7 @@ def get_block_cnt(inputfile, blocksize):
     return totalblocks
 
 
-def get_crc_value(inputfile, blocksize):
+def get_crc_value(inputfile: str, blocksize: int):
     totalblocks = get_block_cnt(inputfile, blocksize)
     with open(inputfile, 'rb') as indata:
         ind = 0
@@ -75,7 +75,7 @@ def get_crc_value(inputfile, blocksize):
     return md5.hexdigest()
 
 
-def unsparse(sparseimagefile, imagefile):
+def unsparse(sparseimagefile: str, imagefile: str):
     with open(sparseimagefile, 'r') as header:
         magic_mumber = header.readline()
         version = header.readline()
@@ -114,7 +114,7 @@ def unsparse(sparseimagefile, imagefile):
     return
 
 
-def is_empty_block(buff, size):
+def is_empty_block(buff: list, size: int) -> bool:
     ind = 0
     while (ind < size):
         if buff[ind] != 0:
@@ -123,7 +123,7 @@ def is_empty_block(buff, size):
     return True
 
 
-def get_raw_datafile(imagefile, blockid, total_blocks, blocksize):
+def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int) -> int:
     temp_file = imagefile + ".tempfile"
     ind = 0
     start = -1
@@ -156,7 +156,7 @@ def get_raw_datafile(imagefile, blockid, total_blocks, blocksize):
     return table_numbers
 
 
-def sparse(imagefile, sparseimagefile):
+def sparse(imagefile: str, sparseimagefile: str):
     temp_file = imagefile + ".tempfile"
     magic_number = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     version = 1.0

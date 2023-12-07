@@ -27,7 +27,7 @@ class GNException(Exception):
     pass
 
 
-def ToGNString(value, allow_dicts=True):
+def ToGNString(value: str, allow_dicts: bool=True) -> str:
     """Returns a stringified GN equivalent of the Python value.
 
     allow_dicts indicates if this function will allow converting dictionaries
@@ -67,7 +67,7 @@ def ToGNString(value, allow_dicts=True):
     raise GNException("Unsupported type when printing to GN.")
 
 
-def FromGNString(input_string):
+def FromGNString(input_string: str) -> dict:
     """Converts the input string from a GN serialized value to Python values.
 
     For details on supported types see GNValueParser.Parse() below.
@@ -108,7 +108,7 @@ def FromGNString(input_string):
     return parser.Parse()
 
 
-def FromGNArgs(input_string):
+def FromGNArgs(input_string: str) -> dict:
     """Converts a string with a bunch of gn arg assignments into a Python dict.
 
     Given a whitespace-separated list of
@@ -129,7 +129,7 @@ def FromGNArgs(input_string):
     return parser.ParseArgs()
 
 
-def UnescapeGNString(value):
+def UnescapeGNString(value: list) -> str:
     """Given a string with GN escaping, returns the unescaped string.
 
     Be careful not to feed with input from a Python parsing function like
@@ -154,7 +154,7 @@ def UnescapeGNString(value):
     return result
 
 
-def _IsDigitOrMinus(char):
+def _IsDigitOrMinus(char: str):
     return char in "-0123456789"
 
 
@@ -167,11 +167,11 @@ class GNValueParser(object):
     functions directly. All functions throw GNException on invalid input.
     """
 
-    def __init__(self, string):
+    def __init__(self, string: str):
         self.input = string
         self.cur = 0
 
-    def IsDone(self):
+    def IsDone(self) -> bool:
         return self.cur == len(self.input)
 
     def ConsumeWhitespace(self):
@@ -203,7 +203,7 @@ class GNValueParser(object):
                               self.input[self.cur:])
         return result
 
-    def ParseArgs(self):
+    def ParseArgs(self) -> dict:
         """Converts a whitespace-separated list of ident=literals to a dict.
 
         See additional usage notes on FromGNArgs, above.
@@ -244,7 +244,7 @@ class GNValueParser(object):
         else:
             raise GNException("Unexpected token: " + self.input[self.cur:])
 
-    def _ParseIdent(self):
+    def _ParseIdent(self) -> str:
         ident = ''
 
         next_char = self.input[self.cur]
@@ -262,7 +262,7 @@ class GNValueParser(object):
 
         return ident
 
-    def ParseNumber(self):
+    def ParseNumber(self) -> int:
         self.ConsumeWhitespace()
         if self.IsDone():
             raise GNException('Expected number but got nothing.')
@@ -280,7 +280,7 @@ class GNValueParser(object):
             raise GNException("Not a valid number.")
         return int(number_string)
 
-    def ParseString(self):
+    def ParseString(self) -> str:
         self.ConsumeWhitespace()
         if self.IsDone():
             raise GNException('Expected string but got nothing.')
@@ -345,7 +345,7 @@ class GNValueParser(object):
 
         raise GNException("Unterminated list:\n  " + self.input)
 
-    def _ConstantFollows(self, constant):
+    def _ConstantFollows(self, constant) -> bool:
         """Returns true if the given constant follows immediately at the
         current location in the input. If it does, the text is consumed and
         the function returns true. Otherwise, returns false and the current

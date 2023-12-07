@@ -153,7 +153,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_device_info(product_json):
+    def get_device_info(product_json: str):
         info = IoUtil.read_json_file(product_json)
         config = Config()
         version = info.get('version', '3.0')
@@ -194,7 +194,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_all_components(product_json):
+    def get_all_components(product_json: str):
         if not os.path.isfile(product_json):
             raise OHOSException(f'features {product_json} not found')
 
@@ -222,7 +222,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_features(product_json):
+    def get_features(product_json: str):
         if not os.path.isfile(product_json):
             raise OHOSException(f'features {product_json} not found')
 
@@ -267,7 +267,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_features_dict(product_json):
+    def get_features_dict(product_json: str):
         all_parts = ProductUtil.get_all_components(product_json)
         features_dict = {}
         for part, value in all_parts.items():
@@ -283,7 +283,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_components(product_json, subsystems):
+    def get_components(product_json: str, subsystems: str):
         if not os.path.isfile(product_json):
             raise OHOSException(f'{product_json} not found')
 
@@ -302,7 +302,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_product_info(product_name, company=None):
+    def get_product_info(product_name: str, company=None):
         for product_info in ProductUtil.get_products():
             cur_company = product_info['company']
             cur_product = product_info['name']
@@ -317,7 +317,7 @@ class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
     @throw_exception
-    def get_compiler(config_path):
+    def get_compiler(config_path: str):
         config = os.path.join(config_path, 'config.gni')
         if not os.path.isfile(config):
             return ''
@@ -331,7 +331,7 @@ class ProductUtil(metaclass=NoInstance):
         return compiler_list[0]
 
     @staticmethod
-    def get_vendor_parts_list(config):
+    def get_vendor_parts_list(config: dict):
         return _transform(config).get('parts')
 
     @staticmethod
@@ -339,7 +339,7 @@ class ProductUtil(metaclass=NoInstance):
         pass
 
 
-def _transform(config):
+def _transform(config: dict):
     subsystems = config.get('subsystems')
     if subsystems:
         config.pop('subsystems')
@@ -348,7 +348,7 @@ def _transform(config):
     return config
 
 
-def _from_ss_to_parts(subsystems):
+def _from_ss_to_parts(subsystems: dict):
     parts = dict()
     for subsystem in subsystems:
         ss_name = subsystem.get('subsystem')
@@ -378,7 +378,7 @@ def _from_ss_to_parts(subsystems):
     return parts
 
 
-def get_features(features):
+def get_features(features: dict):
     feats = {}
     for feat in features:
         if not feat:
@@ -403,7 +403,7 @@ def get_features(features):
     return pairs
 
 
-def get_syscap(syscap):
+def get_syscap(syscap: dict):
     feats = {}
     for feat in syscap:
         if not feat:
@@ -427,7 +427,7 @@ def get_syscap(syscap):
     return pairs
 
 
-def get_exclusion_modules(exclusions):
+def get_exclusion_modules(exclusions: str):
     pairs = dict()
     pairs['exclusions'] = exclusions
     return pairs

@@ -19,7 +19,7 @@ import subprocess
 import logging
 
 
-def csct_online(pr_list):
+def csct_online(pr_list: list):
     """
     pr_list: pull request list, example: https://xxxxx/pulls/1410;https://xxxxx/pulls/250
     return: status: True or False

@@ -19,12 +19,12 @@ import os
 import shutil
 
 
-def create_dest_file(dest_dir):
+def create_dest_file(dest_dir: str):
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir, exist_ok=True)
 
 
-def get_file_name(target_name, opensource_name):
+def get_file_name(target_name: str, opensource_name: str):
     file_name = ''
     if not opensource_name.strip():
         file_name = '{}.txt'.format(target_name)
@@ -33,10 +33,10 @@ def get_file_name(target_name, opensource_name):
     return file_name
 
 
-def merge_multi_notices(notice_root_dir,
-                        module_notices,
-                        target_name,
-                        opensource_name):
+def merge_multi_notices(notice_root_dir: str,
+                        module_notices: str,
+                        target_name: str,
+                        opensource_name: str):
 
     dest_file = os.path.join(notice_root_dir,
         get_file_name(target_name, opensource_name))
@@ -50,10 +50,10 @@ def merge_multi_notices(notice_root_dir,
                 dest_notice.write(u'\n\n')
 
 
-def copy_notice_file(root_out_dir,
-                     module_notices,
-                     target_name,
-                     opensource_name):
+def copy_notice_file(root_out_dir: str,
+                     module_notices: str,
+                     target_name: str,
+                     opensource_name: str):
     nf_dest_dir = os.path.join(root_out_dir, 'NOTICE_FILE/system')
     create_dest_file(nf_dest_dir)
 

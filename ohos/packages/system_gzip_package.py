@@ -25,7 +25,7 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 
 
-def merge_image_files(src_image_path, dest_image_path):
+def merge_image_files(src_image_path: str, dest_image_path: str):
     if not os.path.exists(src_image_path):
         raise Exception(
             "source image path {} does not exist.".format(src_image_path))
@@ -48,7 +48,7 @@ def merge_image_files(src_image_path, dest_image_path):
                 shutil.copy2(src_file_path, dest_file_path)
 
 
-def compress_image_files(package_dir, output_file, additional_files):
+def compress_image_files(package_dir: str, output_file: str, additional_files: list):
     # Compress the image folder
     files = [package_dir] + additional_files
     with tarfile.open(output_file, "w:gz") as tar:

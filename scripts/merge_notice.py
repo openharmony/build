@@ -19,7 +19,7 @@ import argparse
 import shutil
 
 
-def _merge_txt_file(ohos_notice, a_notice, output_notice):
+def _merge_txt_file(ohos_notice: str, a_notice: str, output_notice: str):
     if not os.path.exists(ohos_notice):
         print("Warning, can not find the ohos notice file: {}.".format(
             ohos_notice))
@@ -46,7 +46,7 @@ def _merge_txt_file(ohos_notice, a_notice, output_notice):
         os.remove(ohos_notice)
 
 
-def main():
+def main() -> int:
     """notice file merge."""
     parser = argparse.ArgumentParser()
     parser.add_argument('--ohos-notice', required=True)

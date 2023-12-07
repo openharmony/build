@@ -57,7 +57,7 @@ class CfgItem:
         self.related_item = ProcessItem()
 
     @classmethod
-    def _is_need_verified_uid(self, uid):
+    def _is_need_verified_uid(self, uid: str):
         return uid == "root" or uid == "system"
 
     @classmethod
@@ -66,7 +66,7 @@ class CfgItem:
         return False
 
     @classmethod
-    def _is_need_verified_critical(self, critical):
+    def _is_need_verified_critical(self, critical: list):
         return critical[0] == 1
 
     def set_uid(self, uid):
@@ -87,12 +87,12 @@ class CfgItem:
             self.gid.append(gid)
             self.need_verified = True
 
-    def set_critical(self, critical):
+    def set_critical(self, critical: bool):
         if CfgItem._is_need_verified_critical(critical):
             self.critical = critical
             self.enabled_critical = True
 
-    def handle_socket(self, socket):
+    def handle_socket(self, socket: dict):
         """
         Validate possible field "socket" in the field "services"
         """
@@ -203,7 +203,7 @@ def print_critical_hash():
         print("")
 
 
-def container_validate(process_path, list_name, item_container):
+def container_validate(process_path: str, list_name: str, item_container: list):
     with open(process_path) as fp:
         data = json.load(fp)
         if list_name not in data:
@@ -226,7 +226,7 @@ def container_validate(process_path, list_name, item_container):
                 item_container.get(temp_item.name).record_related_item(temp_item)
 
 
-def check_container(critical_process_path):
+def check_container(critical_process_path: str):
     global PRIVILEGE_HASH
     global CRITICAL_HASH
     if PRIVILEGE_HASH:
@@ -248,7 +248,7 @@ def check_container(critical_process_path):
 
 
 
-def validate_cfg_file(privilege_process_path, critical_process_path, result_path):
+def validate_cfg_file(privilege_process_path: str, critical_process_path: str, result_path: str):
     """
     Load the process list file
     For each item in the list, find out whether there is a CfgItem needs validation in HASH
@@ -269,7 +269,7 @@ def validate_cfg_file(privilege_process_path, critical_process_path, result_path
     check_container(critical_process_path)
 
 
-def handle_services(filename, field):
+def handle_services(filename: str, field: str):
     global PRIVILEGE_HASH
     global CRITICAL_HASH
     cfg_item = CfgItem(filename)
@@ -294,7 +294,7 @@ def handle_services(filename, field):
         CRITICAL_HASH[key] = cfg_item
 
 
-def parse_cfg_file(filename):
+def parse_cfg_file(filename: str):
     """
     Load the cfg file in JSON format
     """
@@ -310,7 +310,7 @@ def parse_cfg_file(filename):
     return
 
 
-def iterate_cfg_folder(cfg_dir):
+def iterate_cfg_folder(cfg_dir: str):
     for file in os.listdir(cfg_dir):
         if file.endswith(".cfg"):
             parse_cfg_file("{}/{}".format(cfg_dir, file))

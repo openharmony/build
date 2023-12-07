@@ -25,7 +25,7 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 
 
-def get_java_sources_file(build_config):
+def get_java_sources_file(build_config: str):
     with open(build_config, 'r') as file:
         data = json.load(file)
         return data.get('deps_info').get('java_sources_file')

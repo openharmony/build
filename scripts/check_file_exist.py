@@ -17,7 +17,7 @@ import os
 import sys
 
 
-def check_exist(filepath):
+def check_exist(filepath: str) -> int:
     if os.path.exists(filepath):
         print(filepath + " exists")
     return 0

@@ -23,7 +23,7 @@ import json
 from util import build_utils  # noqa: E402
 
 
-def sign_hap(options, unsigned_hap_path, signed_hap_path):
+def sign_hap(options, unsigned_hap_path: str, signed_hap_path: str):
     cmd = ['python3', options.sign_hap_py_path]
     cmd.extend(['--hapsigner', options.hapsigner])
     cmd.extend(['--sign-algo', options.sign_algo])
@@ -47,7 +47,7 @@ def sign_hap(options, unsigned_hap_path, signed_hap_path):
         raise Exception("Failed to sign hap {}.".format(options.sign_hap_py_path))
 
 
-def add_resources(packaged_resources, package_dir, packing_cmd):
+def add_resources(packaged_resources: list, package_dir: str, packing_cmd: list):
     if packaged_resources:
         build_utils.extract_all(packaged_resources,
                                 package_dir,
@@ -60,7 +60,7 @@ def add_resources(packaged_resources, package_dir, packing_cmd):
                 packing_cmd.extend(['--resources-path', resources_path])
 
 
-def add_assets(options, package_dir, packing_cmd):
+def add_assets(options, package_dir: str, packing_cmd: list):
     packaged_js_assets, assets = options.packaged_js_assets, options.assets
     if options.app_profile:
         assets_dir = os.path.join(package_dir, 'ets')
@@ -103,7 +103,7 @@ def get_ark_toolchain_version(options):
     return build_utils.check_output(cmd).strip('\n')
 
 
-def tweak_hap_profile(options, package_dir):
+def tweak_hap_profile(options, package_dir: str):
     config_name = 'config.json'
     if options.app_profile:
         config_name = 'module.json'
@@ -122,7 +122,7 @@ def tweak_hap_profile(options, package_dir):
     build_utils.write_json(config, hap_profile)
 
 
-def create_hap(options, signed_hap):
+def create_hap(options, signed_hap: str):
     with build_utils.temp_dir() as package_dir, tempfile.NamedTemporaryFile(
             suffix='.hap') as output:
         packing_cmd = ['java', '-jar', options.hap_packing_tool]

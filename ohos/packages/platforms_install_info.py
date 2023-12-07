@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def subsystem_list(all_subsystem_info_file, curr_subsystem_name_list_file):
+def subsystem_list(all_subsystem_info_file: str, curr_subsystem_name_list_file: str):
     curr_subsystem_list = []
     all_subsystem_info = read_json_file(all_subsystem_info_file)
     if all_subsystem_info is None:

@@ -23,7 +23,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def sa_info_process(sa_profile_infos_file, toolchain_platform):
+def sa_info_process(sa_profile_infos_file: str, toolchain_platform: dict):
     sa_profile_infos = read_json_file(sa_profile_infos_file)
     if sa_profile_infos is None:
         raise Exception("read file '{}' failed.".format(sa_profile_infos))
