@@ -20,6 +20,7 @@ import shutil
 
 from resources.global_var import CURRENT_OHOS_ROOT
 from util.log_util import LogUtil
+from resources.config import Config
 
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(CURRENT_OHOS_ROOT, 'third_party'))
@@ -89,7 +90,7 @@ def gen_targets_gn(parts_targets, config_output_dir):
     write_file(parts_list_gni_file,
                PARTS_LIST_GNI_TEMPLATE.format(parts_list_content))
     LogUtil.hb_info(
-        "generate part list gni file to '{}/parts_list.gni'".format(config_output_dir))
+        "generate part list gni file to '{}/parts_list.gni'".format(config_output_dir), mode=Config.log_mode)
 
     inner_kits_gni_file = os.path.join(config_output_dir,
                                        'inner_kits_list.gni')
@@ -100,7 +101,8 @@ def gen_targets_gn(parts_targets, config_output_dir):
     write_file(inner_kits_gni_file,
                INNER_KITS_GNI_TEMPLATE.format(inner_kits_content))
     LogUtil.hb_info(
-        "generate inner kits gni file to '{}/inner_kits_list.gni'".format(config_output_dir))
+        "generate inner kits gni file to '{}/inner_kits_list.gni'".format(
+          config_output_dir), mode=Config.log_mode)
 
     system_list_gni_file = os.path.join(config_output_dir,
                                         'system_kits_list.gni')
@@ -111,7 +113,8 @@ def gen_targets_gn(parts_targets, config_output_dir):
     write_file(system_list_gni_file,
                SYSTEM_KITS_GNI_TEMPLATE.format(system_kits_content))
     LogUtil.hb_info(
-        "generate system list gni file to '{}/system_kits_list.gni'".format(config_output_dir))
+        "generate system list gni file to '{}/system_kits_list.gni'".format(
+          config_output_dir), mode=Config.log_mode)
 
     parts_test_gni_file = os.path.join(config_output_dir,
                                        'parts_test_list.gni')
@@ -122,12 +125,13 @@ def gen_targets_gn(parts_targets, config_output_dir):
     write_file(parts_test_gni_file,
                PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
     LogUtil.hb_info(
-        "generate parts test gni file to '{}/parts_test_list.gni'".format(config_output_dir))
+        "generate parts test gni file to '{}/parts_test_list.gni'".format(
+          config_output_dir), mode=Config.log_mode)
 
     build_gn_file = os.path.join(config_output_dir, 'BUILD.gn')
     shutil.copyfile(gn_file_template, build_gn_file)
     LogUtil.hb_info(
-        "generate build gn file to '{}/BUILD.gn'".format(config_output_dir))
+        "generate build gn file to '{}/BUILD.gn'".format(config_output_dir), mode=Config.log_mode)
 
 
 def gen_phony_targets(variant_phony_targets, config_output_dir):
@@ -151,7 +155,8 @@ def gen_phony_targets(variant_phony_targets, config_output_dir):
                                     'BUILD.gn')
     write_file(phony_build_file, '\n'.join(phony_build_content))
     LogUtil.hb_info(
-        "generate phony target build file to '{}/phony_targets/BUILD.gn'".format(config_output_dir))
+        "generate phony target build file to '{}/phony_targets/BUILD.gn'".format(
+          config_output_dir), mode=Config.log_mode)
 
 
 def gen_stub_targets(parts_kits_info, platform_stubs, config_output_dir):
@@ -211,7 +216,8 @@ def gen_stub_targets(parts_kits_info, platform_stubs, config_output_dir):
                 sources_list_files=',\n'.join(dist_stub))
             write_file(gn_file, gn_contents)
             LogUtil.hb_info(
-                "generated platform stub to '{}/{}-stub/BUILD.gn'".format(config_output_dir, platform))
+                "generated platform stub to '{}/{}-stub/BUILD.gn'".format(
+                  config_output_dir, platform), mode=Config.log_mode)
 
         else:
             gni_contents.append('zframework_stub_exists = false')
@@ -219,4 +225,4 @@ def gen_stub_targets(parts_kits_info, platform_stubs, config_output_dir):
         write_file(gni_file, '\n'.join(gni_contents))
         LogUtil.hb_info(
             "generated platform zframework stub to '{}/subsystem_info/{}-stub/zframework_stub_exists.gni'".format(
-                config_output_dir, platform))
+                config_output_dir, platform), mode=Config.log_mode)

@@ -157,7 +157,9 @@
     },
     "3000": {
         "code": "3000",
-        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+        "type": "UNKNOWN",
+        "description": "An unknown error occurred while executing 'gn gen'.",
+        "solution": "There is no solution available. You can check the 'gn_error.log' in the output directory for more information"
     },
     "3001": {
         "code": "3001",
@@ -165,7 +167,10 @@
     },
     "3002": {
         "code": "3002",
-        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+        "type": "GN build error: Syntax error",
+        "pattern": "ERROR at .* Unexpected token",
+        "description": "Syntax error. There is a syntax error in the code.",
+        "solution": "Please check the BUILD.gn or .gni file for syntax errors."
     },
     "3003": {
         "code": "3003",
@@ -183,12 +188,217 @@
         "code": "3006",
         "solution": "Please use '=' to connect argument and value."
     },
+    "3007": {
+        "code": "3007",
+        "type": "GN build error: No such file or directory",
+        "pattern": "ERROR at .* No such file or directory",
+        "description": "GN build error. The GN build system cannot find the file.",
+        "solution": "Please check whether the file exists."
+    },
+    "3008": {
+        "code": "3008",
+        "type": "GN build error: Unable to load",
+        "pattern": "ERROR at .* Unable to load .*",
+        "description": "GN build error. The GN build system cannot find the BUILD.gn file.",
+        "solution": "Please check whether the BUILD.gn file exists and the path is correct."
+    },
+    "3009": {
+        "code": "3009",
+        "type": "GN build error: Unresolved import",
+        "pattern": "ERROR at .* Unresolved import: .*",
+        "description": "GN build error. The GN build system cannot find the import file.",
+        "solution": "Please check whether the import file exists and the path is correct."
+    },
+    "3010": {
+        "code": "3010",
+        "type": "GN build error: Unknown variable reference",
+        "pattern": "ERROR at .* Unknown variable reference: .*",
+        "description": "GN build error. The GN build system cannot find the variable.",
+        "solution": "Please check whether the variable is defined."
+    },
+    "3011": {
+        "code": "3011",
+        "type": "GN build error: Unknown function",
+        "pattern": "ERROR at .* Unknown function: .*",
+        "description": "GN build error. The GN build system cannot find the function.",
+        "solution": "Please check whether the function is defined."
+    },
+    "3012": {
+        "code": "3012",
+        "type": "GN build error: Unknown label",
+        "pattern": "ERROR at .* Unknown label: .*",
+        "description": "GN build error. The GN build system cannot find the label.",
+        "solution": "Please check whether the label is defined."
+    },
+    "3013": {
+        "code": "3013",
+        "type": "GN build error: Duplicate build argument declaration",
+        "pattern": "ERROR at .* Duplicate build argument declaration .*",
+        "description": "GN build error. The build argument was declared multiple times.",
+        "solution": "Please ensure that a variable is declared only once within the same scope."
+    },
+    "3014": {
+        "code": "3014",
+        "type": "GN build error: Unresolved dependencies",
+        "pattern": "ERROR at .* Unresolved dependencies:.*",
+        "description": "GN build error. The GN build system cannot find the dependencies.",
+        "solution": "Please check whether the dependencies are defined."
+    },
     "4000": {
         "code": "4000",
-        "solution": "Please check the compile log at out/{compiling product}/build.log, If you could analyze build logs. \n\t\tOr you can try the following steps to solve this problem:\n\t\t  1. cd to OHOS root path\n\t\t  2. run 'hb clean --all' or 'rm -rf out build/resources/args/*.json'.\n\t\t  3. repo sync\n\t\t  4. repo forall -c 'git lfs pull'\n\t\t  5. bash build/prebuilts_download.sh\n\t\t  6. rebuild your product or component\n\t\t  7. check if any environment variables required by the building process are not set in build/compile_env_allowlist.json\n\n\t\tIf you still cannot solve this problem, you could post this problem on: \n\t\t  https://gitee.com/openharmony/build/issues"
+        "type": "Ninja build error",
+        "description": "An unknown error occurred while executing 'ninja -C'.",
+        "solution": "no solution"
     },
     "4001": {
         "code": "4001",
         "solution": "You could run cmd 'hb tool --desc' to show what components or module this product have,\n\t\tand if you execute 'hb build' in a directory, it will build the component corresponding \n\t\tto the current directory by default but for building whole product."
+    },
+    "4002": {
+        "code": "4002",
+        "type": "syntax_error",
+        "pattern": "error: expected identifier or .* before .*",
+        "description": "Syntax error. There is a syntax error in the code.",
+        "solution": ["Check for any missing or misplaced identifiers or parentheses. Make sure that all parentheses are properly closed and that all variables and functions are declared correctly."]
+    },
+    "4003": {
+        "code": "4003",
+        "type": "syntax_error",
+        "pattern": "error: expected .* before .*",
+        "description": "Syntax error. There is a syntax error in the code.",
+        "solution": [
+        "Check for spelling errors, missing semicolons, mismatched parentheses, etc."
+        ]
+    },
+    "4004": {
+        "code": "4004",
+        "type": "missing_semicolon_error",
+        "pattern": "error: expected ';' before .*",
+        "description": "Missing semicolon error. A semicolon is missing in a function or struct definition.",
+        "solution": [
+        "Check if there is a missing semicolon in the function or struct definition."
+        ]
+    },
+    "4005": {
+        "code": "4005",
+        "type": "undeclared_variable_error",
+        "pattern": "error: .*undeclared.*first use in this function",
+        "description": "Undeclared variable error. A variable is used before it is declared.",
+        "solution": [
+        "Make sure the variable is declared before use.",
+        "Make sure the variable name is spelled correctly."
+        ]
+    },
+    "4006": {
+        "code": "4006",
+        "type": "conflicting_types_error",
+        "pattern": "error: conflicting types for .*",
+        "description": "Conflicting types error. The function's prototype does not match its definition.",
+        "solution": [
+        "Make sure the function's prototype matches its definition.",
+        "Make sure the function name and argument names are spelled correctly.",
+        "Make sure the argument types match the function prototype."
+        ]
+    },
+    "4007": {
+        "code": "4007",
+        "type": "invalid_conversion_error",
+        "pattern": "error: invalid conversion from .* to .*",
+        "description": "Invalid conversion error. An invalid type conversion is attempted.",
+        "solution": [
+        "Make sure to use the correct type when performing type conversion.",
+        "Make sure the types match for the operation being performed."
+        ]
+    },
+    "4008": {
+        "code": "4008",
+        "type": "divide_by_zero_error",
+        "pattern": "error: division by zero",
+        "description": "Divide by zero error. An attempt is made to divide by zero.",
+        "solution": [
+        "Make sure the divisor is not zero.",
+        "Make sure the divisor is not a variable that could be zero."
+        ]
+    },
+    "4009": {
+        "code": "4009",
+        "type": "floating_point_error",
+        "pattern": "error: floating-point value.*",
+        "description": "Floating-point error. An error occurs during a floating point operation.",
+        "solution": [
+        "Make sure the values being used are valid floating point numbers.",
+        "Make sure the operation being performed is valid for floating point numbers."
+        ]
+    },
+    "4010": {
+        "code": "4010",
+        "type": "uninitialized_variable_error",
+        "pattern": "error: .* is used uninitialized in this function",
+        "description": "Uninitialized variable error. A variable is used before it is initialized.",
+        "solution": [
+        "Make sure the variable is initialized before use.",
+        "Make sure the variable name is spelled correctly."
+        ]
+    },
+    "4011": {
+        "code": "4011",
+        "type": "stack_overflow_error",
+        "pattern": "error: stack overflow",
+        "description": "Stack overflow error. The program exceeds the maximum stack size.",
+        "solution": [
+        "Increase the maximum stack size.",
+        "Make sure the program is not using an excessive amount of stack space."
+        ]
+    },
+    "4012": {
+        "code": "4012",
+        "type": "out_of_bounds_error",
+        "pattern": "error: subscript.*out of range",
+        "description": "Out of bounds error. An attempt is made to access an array element outside the bounds of the array.",
+        "solution": [
+        "Make sure the array index is within the bounds of the array.",
+        "Make sure the array is not being accessed with a negative index."
+        ]
+    },
+    "4013": {
+        "code": "4013",
+        "type": "null_pointer_error",
+        "pattern": "error: (dereferencing|accessing) pointer to (null|a null pointer)",
+        "description": "Null pointer error. An attempt is made to dereference or access a null pointer.",
+        "solution": [
+        "Make sure the pointer is not null before dereferencing or accessing it.",
+        "Make sure the pointer is initialized before use."
+        ]
+    },
+    "4014": {
+        "code": "4014",
+        "type": "undefined_reference_error",
+        "pattern": "undefined reference to .*",
+        "description": "Undefined reference error. The linker cannot find the definition of a function.",
+        "solution": [
+        "Make sure the required library or object file is linked correctly.",
+        "Make sure the function name is spelled correctly.",
+        "Make sure the function is defined and compiled correctly."
+        ]
+    },
+    "4015": {
+        "code": "4015",
+        "type": "ninja build error: unknown target",
+        "pattern": "ninja: error: unknown target.*",
+        "description": "Ninja build error. The ninja build system cannot parse the build file.",
+        "solution": [
+        "Please check that the target name is correct.",
+        "Please check that the BUILD.gn file including the target, is exists and valid.",
+        "Please check that the target belongs to a component and that component is in the product configuration."
+        ]
+    },
+    "4016": {
+        "code": "4016",
+        "type": "ninja build error: missing and no known rule to make it",
+        "pattern": "ninja: error: .* missing and no known rule to make it.*",
+        "description": "Ninja build error. The ninja build system cannot find the target.",
+        "solution": [
+            "Please check the target file is exists."
+        ]
     }
 }

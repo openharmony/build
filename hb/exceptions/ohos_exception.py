@@ -33,3 +33,17 @@ class OHOSException(Exception):
             if not self._code in status_file.keys():
                 return 'UNKNOWN REASON'
             return status_file[str(self._code)]['solution']
+
+    def get_type(self) -> str:
+        with open(STATUS_FILE, "r") as data:
+            status_file = json.load(data)
+            if not self._code in status_file.keys():
+                return 'UNKNOWN ERROR TYPE'
+            return status_file[str(self._code)]['type']
+
+    def get_desc(self) -> str:
+        with open(STATUS_FILE, "r") as data:
+            status_file = json.load(data)
+            if not self._code in status_file.keys():
+                return 'NO DESCRIPTION'
+            return status_file[str(self._code)]['description']

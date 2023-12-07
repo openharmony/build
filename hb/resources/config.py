@@ -60,6 +60,7 @@ class Config(metaclass=Singleton):
         self._subsystem_config_json = ""
         self._subsystem_config_overlay_json = ""
         self._support_cpu = ""
+        self._log_mode = ""
         self.fs_attr = set()
         self.platform = platform.system()
         self.__post__init()
@@ -298,6 +299,15 @@ class Config(metaclass=Singleton):
     @property
     def support_cpu(self):
         return self._support_cpu
+
+    @property
+    def log_mode(self):
+        return self._log_mode
+
+    @log_mode.setter
+    def log_mode(self, value):
+        self._log_mode = value
+        self.config_update('log_mode', self._log_mode)
 
     @support_cpu.setter
     def support_cpu(self, value):

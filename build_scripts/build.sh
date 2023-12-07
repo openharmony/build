@@ -14,45 +14,48 @@
 
 set -e
 set +e
-echo "++++++++++++++++++++++++++++++++++++++++"
+echo -e "\n\033[32m\t*********Welcome to OpenHarmony!*********\033[0m\n"
+echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 function check_shell_environment() {
   case $(uname -s) in 
     Linux)
           shell_result=$(/bin/sh -c 'echo ${BASH_VERSION}')
           if [ -n "${shell_result}" ]; then
-            echo "The system shell is bash ${shell_result}"
+            echo -e "\033[32mSystem shell: bash ${shell_result}\033[0m"
           else
             echo -e "\033[33m Your system shell isn't bash, we recommend you to use bash, because some commands may not be supported in other shells, such as pushd and shopt are not supported in dash. \n You can follow these tips to modify the system shell to bash on Ubuntu: \033[0m"
             echo -e "\033[33m [1]:Open the Terminal tool and execute the following command: sudo dpkg-reconfigure dash \n [2]:Enter the password and select <no>  \033[0m"
           fi
           ;;
     Darwin)
-          echo "Darwin system is not supported yet"
+          echo -e "\033[31m[OHOS ERROR] Darwin system is not supported yet\033[0m"
           ;;
     *)
-          echo "Unsupported this system: $(uname -s)"
+          echo -e "\033[31m[OHOS ERROR] Unsupported this system: $(uname -s)\033[0m"
           exit 1
   esac
 }
 
 check_shell_environment 
 
-echo "++++++++++++++++++++++++++++++++++++++++"
-date +%F' '%H:%M:%S
-echo $@
+echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo -e "\033[32mCurrent time: $(date +%F' '%H:%M:%S)\033[0m"
+echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo -e "\033[32mBuild args: $@\033[0m"
+echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 export SOURCE_ROOT_DIR=$(cd $(dirname $0);pwd)
 
 while [[ ! -f "${SOURCE_ROOT_DIR}/.gn" ]]; do
     SOURCE_ROOT_DIR="$(dirname "${SOURCE_ROOT_DIR}")"
     if [[ "${SOURCE_ROOT_DIR}" == "/" ]]; then
-        echo "Cannot find source tree containing $(pwd)"
+        echo -e "\033[31m[OHOS ERROR] Cannot find source tree containing $(pwd)\033[0m"
         exit 1
     fi
 done
 
 if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
-  echo "Error: SOURCE_ROOT_DIR cannot be empty."
+  echo -e "\033[31m[OHOS ERROR] SOURCE_ROOT_DIR cannot be empty.\033[0m"
   exit 1
 fi
 
@@ -68,7 +71,7 @@ case $(uname -s) in
         NODE_PLATFORM="linux-x64"
         ;;
     *)
-        echo "Unsupported host platform: $(uname -s)"
+        echo "\033[31m[OHOS ERROR] Unsupported host platform: $(uname -s)\033[0m"
         RET=1
         exit $RET
 esac
@@ -78,7 +81,7 @@ PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/current/
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
-  echo -e "\033[33m Please execute the build/prebuilts_download.sh \033[0m"
+  echo -e "\033[31m[OHOS ERROR] Please execute the build/prebuilts_download.sh \033[0m"
   exit 1
 else
   if [[ ! -f "${PYTHON}" ]]; then
@@ -93,72 +96,73 @@ EXPECTED_NODE_VERSION="14.21.1"
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
 export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
-echo "Current Node.js version is $(node -v)"
+echo "[OHOS INFO] Current Node.js version is $(node -v)"
 NODE_VERSION=$(node -v)
 if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
-  echo "Node.js version mismatch. Expected $EXPECTED_NODE_VERSION but found $NODE_VERSION" >&2
+  echo -e "\033[31m[OHOS ERROR] Node.js version mismatch. Expected $EXPECTED_NODE_VERSION but found $NODE_VERSION\033[0m" >&2
   exit 1
 fi
-echo "Node.js version check passed"
+echo -e "\033[32m[OHOS INFO] Node.js version check passed!\033[0m"
 npm config set registry https://repo.huaweicloud.com/repository/npm/
 npm config set @ohos:registry https://repo.harmonyos.com/npm/
 npm config set strict-ssl false
 npm config set lockfile false
-cat $HOME/.npmrc | grep 'lockfile=false' || echo 'lockfile=false' >> $HOME/.npmrc
+cat $HOME/.npmrc | grep 'lockfile=false' > /dev/null || echo 'lockfile=false' >> $HOME/.npmrc > /dev/null
 
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
-  pushd ${TOOLS_INSTALL_DIR}
+  pushd ${TOOLS_INSTALL_DIR} > /dev/null
     if [[ ! -f "${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
-      echo "download oh-command-line-tools"
+      echo "[OHOS INFO] download oh-command-line-tools"
       wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/68/v3/r-5H8I7LT9mBjSFpSOY0Sg/ohcommandline-tools-linux-2.1.0.6.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20231027T004601Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=A4D5E1A29C1C6962CA65592C3EB03ED363CE664CBE6C5974094064B67C34325E -O ohcommandline-tools-linux.zip
       unzip ohcommandline-tools-linux.zip
     fi
     OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
     chmod +x ${OHPM_HOME}/bin/init
-    echo "init ohpm"
-    ${OHPM_HOME}/bin/init
-    echo "ohpm version is $(ohpm -v)"
+    ${OHPM_HOME}/bin/init > /dev/null
+    echo "[OHOS INFO] Current ohpm version is $(ohpm -v)"
     ohpm config set registry https://repo.harmonyos.com/ohpm/
     ohpm config set strict_ssl false
     ohpm config set log_level debug
-  popd
+  popd > /dev/null
   if [[ -d "$HOME/.hvigor" ]]; then
-    echo "remove $HOME/.hvigor"
     rm -rf $HOME/.hvigor/daemon $HOME/.hvigor/wrapper
   fi
   mkdir -p $HOME/.hvigor/wrapper/tools
   echo '{"dependencies": {"pnpm": "7.30.0"}}' > $HOME/.hvigor/wrapper/tools/package.json
-  pushd $HOME/.hvigor/wrapper/tools
-    echo "install pnpm"
-    npm install
-  popd
+  pushd $HOME/.hvigor/wrapper/tools > /dev/null
+    echo "[OHOS INFO] installing pnpm..."
+    npm install --silent > /dev/null
+  popd > /dev/null
   mkdir -p $HOME/.ohpm
   echo '{"devDependencies":{"@ohos/hypium":"1.0.6"}}' > $HOME/.ohpm/oh-package.json5
-  pushd $HOME/.ohpm
-    echo "install hypium"
-    ohpm install
-  popd
+  pushd $HOME/.ohpm > /dev/null
+    echo "[OHOS INFO] installing hypium..."
+    ohpm install > /dev/null
+  popd > /dev/null
 }
 
 if [[ "$*" != *ohos-sdk* ]]; then
-  echo "start set ohpm"
+  echo "[OHOS INFO] Ohpm initialization started..."
   init_ohpm
   if [[ "$?" -ne 0 ]]; then
-    echo "ohpm init failed!"
+    echo -e "\033[31m[OHOS ERROR] ohpm initialization failed!\033[0m"
     exit 1
   fi
+  echo -e "\033[32m[OHOS INFO] ohpm initialization successful!\033[0m"
 fi
+echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
 
+echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
 function build_sdk() {
     ROOT_PATH=${SOURCE_ROOT_DIR}
     SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
 
-    pushd ${ROOT_PATH}
-      echo "building the latest ohos-sdk..."
+    pushd ${ROOT_PATH} > /dev/null
+      echo -e "[OHOS INFO] building the latest ohos-sdk..."
       ./build.py --product-name ohos-sdk --load-test-config=false --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true sdk_platform=linux ndk_platform=linux use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true
       if [[ "$?" -ne 0 ]]; then
-        echo "ohos-sdk build failed! You can try to use '--no-prebuilt-sdk' to skip the build of ohos-sdk."
+        echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed! You can try to use '--no-prebuilt-sdk' to skip the build of ohos-sdk.\033[0m"
         exit 1
       fi
       if [ -d "${ROOT_PATH}/prebuilts/ohos-sdk/linux" ]; then
@@ -169,7 +173,7 @@ function build_sdk() {
       mkdir -p ${SDK_PREBUILTS_PATH}/linux/native
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
-      pushd ${SDK_PREBUILTS_PATH}/linux
+      pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
         api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="11"
         mkdir -p $api_version
         for i in */; do
@@ -177,14 +181,14 @@ function build_sdk() {
                 mv $i $api_version
             fi
         done
-      popd
-    popd
+      popd > /dev/null
+    popd > /dev/null
 }
 if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
-  echo "start build ohos-sdk"
+  echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
   build_sdk
   if [[ "$?" -ne 0 ]]; then
-    echo "ohos-sdk build failed, please remove the out/sdk directory and try again!"
+    echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed, please remove the out/sdk directory and try again!\033[0m"
     exit 1
   fi
 fi

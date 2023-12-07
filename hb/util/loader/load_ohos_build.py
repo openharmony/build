@@ -673,7 +673,8 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
                                                 part_subsystem_component_info, parts_config_path, subsystem_components_list)
 
 
-def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_check):
+def _output_parts_info(parts_config_dict,
+                       config_output_path, skip_partlist_check):
     parts_info_output_path = os.path.join(config_output_path, "parts_info")
     # parts_info.json
     if 'parts_info' in parts_config_dict:
@@ -681,7 +682,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
         parts_info_file = os.path.join(parts_info_output_path,
                                        "parts_info.json")
         write_json_file(parts_info_file, parts_info)
-        LogUtil.hb_info("generate parts info to '{}'".format(parts_info_file))
+        LogUtil.hb_info("generate parts info to '{}'".format(parts_info_file), mode=Config.log_mode)
         _part_subsystem_dict = {}
         for key, value in parts_info.items():
             for _info in value:
@@ -692,7 +693,8 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                             "part_subsystem.json")
         write_json_file(_part_subsystem_file, _part_subsystem_dict)
         LogUtil.hb_info(
-            "generate part-subsystem of parts-info to '{}'".format(_part_subsystem_file))
+            "generate part-subsystem of parts-info to '{}'".format(
+                _part_subsystem_file), mode=Config.log_mode)
 
     check_subsystem_and_component(parts_info_output_path, skip_partlist_check)
 
@@ -703,7 +705,8 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                             "subsystem_parts.json")
         write_json_file(subsystem_parts_file, subsystem_parts)
         LogUtil.hb_info(
-            "generate ubsystem-parts of parts-info to '{}'".format(subsystem_parts_file))
+            "generate ubsystem-parts of parts-info to '{}'".format(
+                subsystem_parts_file), mode=Config.log_mode)
 
         # adapter mini system
         for _sub_name, _p_list in subsystem_parts.items():
@@ -714,7 +717,8 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                                  '{}.json'.format(_sub_name))
             write_json_file(_sub_info_output_file, _output_info)
         LogUtil.hb_info(
-            "generate mini adapter info to '{}/mini_adapter/'".format(config_output_path))
+            "generate mini adapter info to '{}/mini_adapter/'".format(
+                config_output_path), mode=Config.log_mode)
 
     # parts_variants.json
     if 'parts_variants' in parts_config_dict:
@@ -723,7 +727,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                                 "parts_variants.json")
         write_json_file(parts_variants_info_file, parts_variants)
         LogUtil.hb_info("generate parts variants info to '{}'".format(
-            parts_variants_info_file))
+            parts_variants_info_file), mode=Config.log_mode)
 
     # inner_kits_info.json
     if 'parts_inner_kits_info' in parts_config_dict:
@@ -732,7 +736,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                                   "inner_kits_info.json")
         write_json_file(parts_inner_kits_info_file, parts_inner_kits_info)
         LogUtil.hb_info("generate parts inner kits info to '{}'".format(
-            parts_inner_kits_info_file))
+            parts_inner_kits_info_file), mode=Config.log_mode)
 
     # parts_targets.json
     if 'parts_targets' in parts_config_dict:
@@ -741,7 +745,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                                "parts_targets.json")
         write_json_file(parts_targets_info_file, parts_targets)
         LogUtil.hb_info("generate parts targets info to '{}'".format(
-            parts_targets_info_file))
+            parts_targets_info_file), mode=Config.log_mode)
 
     # phony_targets.json
     if 'phony_target' in parts_config_dict:
@@ -750,7 +754,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                               "phony_target.json")
         write_json_file(phony_target_info_file, phony_target)
         LogUtil.hb_info("generate phony targets info to '{}'".format(
-            phony_target_info_file))
+            phony_target_info_file), mode=Config.log_mode)
 
     # paths_path_info.json
     if 'parts_path_info' in parts_config_dict:
@@ -759,7 +763,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                             'parts_path_info.json')
         write_json_file(parts_path_info_file, parts_path_info)
         LogUtil.hb_info(
-            "generate parts path info to '{}'".format(parts_path_info_file))
+            "generate parts path info to '{}'".format(parts_path_info_file), mode=Config.log_mode)
         path_to_parts = {}
         for _key, _val in parts_path_info.items():
             _p_list = path_to_parts.get(_val, [])
@@ -769,7 +773,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                           'path_to_parts.json')
         write_json_file(path_to_parts_file, path_to_parts)
         LogUtil.hb_info(
-            "generate path to parts to '{}'".format(path_to_parts_file))
+            "generate path to parts to '{}'".format(path_to_parts_file), mode=Config.log_mode)
 
     # hisysevent_config
     if 'hisysevent_config' in parts_config_dict:
@@ -778,7 +782,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                             'hisysevent_configs.json')
         write_json_file(hisysevent_info_file, hisysevent_config)
         LogUtil.hb_info(
-            "generate hisysevent info to '{}'".format(hisysevent_info_file))
+            "generate hisysevent info to '{}'".format(hisysevent_info_file), mode=Config.log_mode)
 
     # _parts_modules_info
     if 'parts_modules_info' in parts_config_dict:
@@ -796,7 +800,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                                'parts_modules_info.json')
         write_json_file(parts_modules_info_file, _output_info)
         LogUtil.hb_info("generate parts modules info to '{}'".format(
-            parts_modules_info_file))
+            parts_modules_info_file), mode=Config.log_mode)
 
     # parts_deps
     if 'parts_deps' in parts_config_dict:
@@ -805,7 +809,7 @@ def _output_parts_info(parts_config_dict, config_output_path, skip_partlist_chec
                                             'parts_deps.json')
         write_json_file(parts_deps_info_file, parts_deps_info)
         LogUtil.hb_info(
-            "generate parts deps info to '{}'".format(parts_deps_info_file))
+            "generate parts deps info to '{}'".format(parts_deps_info_file), mode=Config.log_mode)
 
 
 def get_parts_info(source_root_dir,
@@ -868,7 +872,8 @@ def get_parts_info(source_root_dir,
         _parts_deps.update(build_loader.parts_deps())
         system_syscap.extend(build_loader.parse_syscap_info())
     LogUtil.hb_info(
-        "generate all parts build gn file to '{}/{}'".format(source_root_dir, config_output_relpath))
+        "generate all parts build gn file to '{}/{}'".format(
+            source_root_dir, config_output_relpath), mode=Config.log_mode)
     parts_config_dict = {}
     parts_config_dict['parts_info'] = parts_info
     parts_config_dict['subsystem_parts'] = subsystem_parts
