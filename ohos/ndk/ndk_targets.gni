@@ -113,6 +113,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
   "//interface/sdk_c/network/netmanager:libnet_connection",
   "//interface/sdk_c/network/netmanager:netconn_header",
+  "//interface/sdk_c/sensors/sensor:libsensor_ndk",
+  "//interface/sdk_c/sensors/sensor:sensor_ndk_header",
 ]
 
 _ndk_base_libs = [
