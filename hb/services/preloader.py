@@ -74,7 +74,8 @@ class OHOSPreloader(PreloadInterface):
         platform_config = {'version': 2, 'platforms': {'phone': config}}
         IoUtil.dump_json_file(self._outputs.platforms_build, platform_config)
         LogUtil.hb_info(
-            'generated platforms build info to {}/platforms.build'.format(self._dirs.preloader_output_dir))
+            'generated platforms build info to {}/platforms.build'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate build gnargs prop info to "out/preloader/{product_name}/build_gnargs.prop"
     @parameter:none
@@ -103,7 +104,8 @@ class OHOSPreloader(PreloadInterface):
                                os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as fobj:
             fobj.write('\n'.join(attr_list))
         LogUtil.hb_info(
-            'generated build gnargs prop info to {}/build_gnargs.prop'.format(self._dirs.preloader_output_dir))
+            'generated build gnargs prop info to {}/build_gnargs.prop'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate features to "out/preloader/{product_name}/features.json"
     @parameter:none
@@ -126,7 +128,8 @@ class OHOSPreloader(PreloadInterface):
         }
         IoUtil.dump_json_file(self._outputs.features_json, parts_feature_info)
         LogUtil.hb_info(
-            'generated features info to {}/features.json'.format(self._dirs.preloader_output_dir))
+            'generated features info to {}/features.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate syscap to "out/preloader/product_name/syscap.json"
     @parameter:none
@@ -147,7 +150,8 @@ class OHOSPreloader(PreloadInterface):
         }
         IoUtil.dump_json_file(self._outputs.syscap_json, parts_syscap_info)
         LogUtil.hb_info(
-            'generated syscap info to {}/syscap.json'.format(self._dirs.preloader_output_dir))
+            'generated syscap info to {}/syscap.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate exclusion modules info to "out/preloader/product_name/exclusion_modules.json"
     @parameter:none
@@ -164,7 +168,8 @@ class OHOSPreloader(PreloadInterface):
                 exclusions.update(pair)
         IoUtil.dump_json_file(self._outputs.exclusion_modules_json, exclusions)
         LogUtil.hb_info(
-            'generated exclusion modules info to {}/exclusion_modules.json'.format(self._dirs.preloader_output_dir))
+            'generated exclusion modules info to {}/exclusion_modules.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate build config info to "out/preloader/product_name/build_config.json"
     @parameter:none
@@ -175,7 +180,8 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(
             self._outputs.build_config_json, self._build_vars)
         LogUtil.hb_info(
-            'generated build config info to {}/build_config.json'.format(self._dirs.preloader_output_dir))
+            'generated build config info to {}/build_config.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate build prop info to "out/preloader/product_name/build.prop"
     @parameter:none
@@ -190,7 +196,8 @@ class OHOSPreloader(PreloadInterface):
                                os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as fobj:
             fobj.write('\n'.join(build_vars_list))
         LogUtil.hb_info(
-            'generated build prop info to {}/build.prop'.format(self._dirs.preloader_output_dir))
+            'generated build prop info to {}/build.prop'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate parts to "out/preloader/product_name/parts.json"
     @parameter:none
@@ -201,7 +208,8 @@ class OHOSPreloader(PreloadInterface):
         parts_info = {"parts": sorted(list(self._all_parts.keys()))}
         IoUtil.dump_json_file(self._outputs.parts_json, parts_info)
         LogUtil.hb_info(
-            'generated product parts info to {}/parts.json'.format(self._dirs.preloader_output_dir))
+            'generated product parts info to {}/parts.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate parts config to "out/preloader/product_name/parts_config.json"
     @parameter:none
@@ -218,7 +226,8 @@ class OHOSPreloader(PreloadInterface):
             parts_config[part] = True
         IoUtil.dump_json_file(self._outputs.parts_config_json, parts_config)
         LogUtil.hb_info(
-            'generated parts config info to {}/parts_config.json'.format(self._dirs.preloader_output_dir))
+            'generated parts config info to {}/parts_config.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate subsystem config info to "out/preloader/product_name/subsystem_config.json"
     @parameter:none
@@ -234,7 +243,8 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(
             self._outputs.subsystem_config_json, self._subsystem_info)
         LogUtil.hb_info(
-            'generated subsystem config info to {}/subsystem_config.json'.format(self._dirs.preloader_output_dir))
+            'generated subsystem config info to {}/subsystem_config.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate systemcapability_json to "out/preloader/product_name/systemcapability.json"
     @parameter:none
@@ -245,7 +255,8 @@ class OHOSPreloader(PreloadInterface):
         IoUtil.dump_json_file(
             self._outputs.systemcapability_json, self._product._syscap_info)
         LogUtil.hb_info(
-            'generated system capability info to {}/systemcapability.json'.format(self._dirs.preloader_output_dir))
+            'generated system capability info to {}/systemcapability.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     '''Description: generate compile_standard_whitelist info  to "out/preloader/product_name/compile_standard_whitelist.json"
     @parameter:none
@@ -257,7 +268,7 @@ class OHOSPreloader(PreloadInterface):
             self._outputs.compile_standard_whitelist_json, self._compile_standard_whitelist_info)
         LogUtil.hb_info(
             'generated compile_standard_whitelist info to {}/compile_standard_whitelist.json'
-            .format(self._dirs.preloader_output_dir))
+            .format(self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
     def _generate_compile_env_allowlist_json(self):
         IoUtil.dump_json_file(

@@ -55,6 +55,21 @@
     "resolve_function": "resolve_rename_last_log",
     "testFunction": "testRenameLastLog"
   },
+  "log_mode": {
+    "arg_name": "--log-mode",
+    "argDefault": "normal",
+    "arg_help": "Default:'normal'. Help:You can use this option to determine whether to use single-line refresh log mode",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "optional": [
+        "normal",
+        "silent"
+      ]
+    },
+    "resolve_function": "resolve_log_mode",
+    "testFunction": "testLogMode"
+  },
   "ccache": {
     "arg_name": "--ccache",
     "argDefault": true,
