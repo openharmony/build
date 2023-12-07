@@ -346,6 +346,7 @@ def main():
         with args.progress:
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
+    print('download finished')
     _file_handle(file_handle_config, args.code_dir, args.host_platform)
     retry_times = 0
     max_retry_times = 2
