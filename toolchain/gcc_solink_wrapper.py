@@ -120,6 +120,9 @@ def main():
     parser.add_argument('--strip',
                         help='The strip binary to run',
                         metavar='PATH')
+    parser.add_argument('--strip-debug-whitelist',
+                        help='The strip debug whitelist, lines of which are names of shared objects with .symtab kept.',
+                        metavar='PATH')
     parser.add_argument('--sofile',
                         required=True,
                         help='Shared object file produced by linking command',
@@ -193,6 +196,12 @@ def main():
             lines = [line.strip()[1:] for line in lines]
             if install_dest in lines:
                 strip_option.extend(['-S'])
+        if args.strip_debug_whitelist:
+            with open(args.strip_debug_whitelist, 'r') as whitelist:
+                for strip_debug_sofile in whitelist.readlines():
+                    if args.sofile.endswith(strip_debug_sofile.strip()):
+                        strip_option.extend(['--strip-debug', '-R', '.comment'])
+                        break
         strip_command.extend(strip_option)
 
         strip_command.append(args.sofile)
