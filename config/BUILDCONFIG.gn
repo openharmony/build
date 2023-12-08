@@ -717,6 +717,7 @@ if (is_standard_system) {
     "//build/config/sanitizers:default_sanitizer_flags",
     "//build/config/security:default_security_configs",
     "//build/config/rust:rust_config",
+    "//build/config:predefined_macro",
   ]
 
   if (is_ohos) {

@@ -20,6 +20,7 @@ declare_args() {
   # of the current object. For iterator- and thread-heavy code, this can
   # significantly slow execution.
   enable_iterator_debugging = true
+  enable_predefined_macro = false
 }
 
 # ==============================================
@@ -335,4 +336,46 @@ config("shared_library_config") {
     configs += [ "//third_party/instrumented_libraries:locally_built_ldflags" ]
   }
   configs += [ "//build/config/sanitizers:link_shared_library" ]
+}
+
+config("predefined_macro") {
+  if (enable_predefined_macro) {
+    defines = []
+    if (is_ohos) {
+      defines += [ "__OHOS__" ]
+    }
+    if (is_mac) {
+      defines += [ "__MAC__" ]
+    }
+    if (is_linux) {
+      defines += [ "__LINUX__" ]
+    }
+    if (is_nacl) {
+      defines += [ "__NACL__" ]
+    }
+    if (is_win) {
+      defines += [ "__WINDOWS__" ]
+    }
+    if (is_mingw) {
+      defines += [ "___MINGW32__" ]
+    }
+    if (is_android) {
+      defines += [ "__ANDROID__" ]
+    }
+    if (is_ios) {
+      defines += [ "__IOS__" ]
+    }
+    if (current_cpu == "x86") {
+      defines += [ "__x86_32__" ]
+    }
+    if (current_cpu == "x86_64") {
+      defines += [ "__x86_64__" ]
+    }
+    if (current_cpu == "arm") {
+      defines += [ "__arm32__" ]
+    }
+    if (current_cpu == "arm64") {
+      defines += [ "__arm64__" ]
+    }
+  }
 }
