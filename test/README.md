@@ -2,7 +2,7 @@
 
 ## 整体目录结构
 
-![IMG_256](./media/image1.png)
+![IMG_256](./media/content.png)
 
 测试框架所在路径为root_path/build/test目录下（root_path为项目根路径）
 
@@ -54,16 +54,16 @@
 ### 3.附录
 3.1 **pytest命令各参数介绍**
 
-   pytest -vs --html option_report_path  option_script_path
+   pytest -vs --html $root_path\$option_report_path  $root_path\$option_script_path
 
       -vs 生成详细报告
-      --html option_report_path
+      --html $root_path $option_report_path
       在对应路径下生成html文件，其中包括asset目录和对应的html文件，注意：asset和html文件必须在同路径
-      option_script_path pytest要执行的测试用例文件
+      $root_path\$option_script_path pytest要执行的测试用例文件
 
 3.2 **build_example.json文件介绍**
 
-   ![](./media/image2.png)
+   ![](./media/config.png)
 
 ## 4.FAQ
 
@@ -73,17 +73,17 @@
 
 example/test_build_option.py::TestBuildOption::test_strict_mode\[True\]测试用例失败，测试结果如下
 
-![](./media/image3.png)
+![](./media/strict_mod.png)
 
 ###### Error
 
-![](./media/image4.png)
+![](./media/strict_mod_err.png)
 
 ###### 问题原因:
 
 源码 build/hb/services/interface/preload_interface.py第32行_preloader_outputs方法未实现，代码片段如下
 
-![](./media/image5.png)
+![](./media/strict_mod_source.png)
 
 ### 4.2 Build_option 中\--scalable-build=True参数构建失败
 
@@ -91,11 +91,11 @@ example/test_build_option.py::TestBuildOption::test_strict_mode\[True\]测试用
 
 example/test_build_option.py::TestBuildOption::test_scalable_build\[True\]测试用例失败，测试结果如下
 
-![](./media/image6.png)
+![](./media/scalable_build.png)
 
 ###### Error:
 
-![](./media/image7.png)
+![](./media/scalable_build_err.png)
 
 ###### 问题原因
 
@@ -115,7 +115,7 @@ example/test_build_option.py::TestBuildOption::test_scalable_build\[True\]测试
 
 代码片段如下
 
-![](./media/image8.png)
+![](./media/scalable_build_source.png)
 
 
 ### 4.3 Build_option 中\--rom-size-statistics=True参数构建失败
@@ -124,14 +124,14 @@ example/test_build_option.py::TestBuildOption::test_scalable_build\[True\]测试
 
 example/test_build_option.py::TestBuildOption::test_rom_size_statistics\[True\]测试用例失败，测试结果如下
 
-![IMG_256](./media/image9.png)
+![IMG_256](./media/rom_size_statistics.png)
 
 ###### 问题原因
 
 源码build/hb/util/post_build/part_rom_statistics.py中read_ohos_config函数中ohos_config.json的绝对路径不正确，没有找到这个文件，导致build
 error，代码片段如下
 
-![IMG_256](./media/image10.png)
+![IMG_256](./media/rom_size_statistics_source.png)
 
 ###### 修改建议
 
