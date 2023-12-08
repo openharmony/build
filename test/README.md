@@ -54,12 +54,12 @@
 ### 3.附录
 3.1 **pytest命令各参数介绍**
 
-   pytest -vs --html $root_path\$option_report_path  $root_path\$option_script_path
+   pytest -vs --html option_report_path  option_script_path
 
       -vs 生成详细报告
-      --html $root_path $option_report_path
+      --html option_report_path
       在对应路径下生成html文件，其中包括asset目录和对应的html文件，注意：asset和html文件必须在同路径
-      $root_path\$option_script_path pytest要执行的测试用例文件
+      option_script_path pytest要执行的测试用例文件
 
 3.2 **build_example.json文件介绍**
 
