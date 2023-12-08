@@ -26,7 +26,7 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 def check(args) -> list:
     depfiles = []
     # ignore test related parts
-    part_allow_set = {'libc-test', 'libc-test-lib'}
+    part_allow_set = {'libc-test', 'libc-test-lib', 'libc-gtest-lib'}
     if args.part_name in part_allow_set:
         return depfiles
 
