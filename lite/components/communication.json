@@ -165,6 +165,27 @@
         ],
         "third_party": []
       }
+    },
+    {
+      "component": "ipc",
+      "description": "ipc",
+      "optional": "true",
+      "dirs": [
+        "foundation/communication/ipc"
+      ],
+      "targets": [
+        "//foundation/communication/ipc:ipc_components"
+      ],
+      "rom": "",
+      "ram": "",
+      "output": [ ],
+      "adapted_kernel": [ "liteos_a","linux" ],
+      "features": [],
+      "deps": {
+        "components": [
+        ],
+        "third_party": []
+      }
     }
   ]
 }
