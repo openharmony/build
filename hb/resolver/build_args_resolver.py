@@ -159,11 +159,11 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_generator.regist_arg('use_thin_lto', False)
                     target_list.append(target_name)
                 elif target_name.startswith('TDD'):
-                    for target in target_name.split(','):
-                        new_target = '{}_test'.format(target[target.index('_')+1:])
-                        for item in target_data:
+                    for item in target_data:
                             if item['parts'] == target_name:
+                                new_target = '{}_test'.format(target_list[item['parts']])
                                 target_list.append(new_target)
+                                break
                 else:
                     target_list.append(target_name)
         else:
