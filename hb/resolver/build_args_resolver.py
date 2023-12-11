@@ -149,13 +149,23 @@ class BuildArgsResolver(ArgsResolverInterface):
         build_executor = build_module.target_compiler
         target_list = []
         test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
+        DEFAULT_TEST_PART = os.path.join(
+            CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
+        target_data = IoUtil.read_json_file(DEFAULT_TEST_PART)
         if len(target_arg.arg_value):
-            target_list = target_arg.arg_value
-            for target_name in target_list:
+            for target_name in target_arg.arg_value:
                 if target_name.endswith('make_test') or target_name.split(':')[-1] in test_target_list:
                     target_generator = build_module.target_generator
                     target_generator.regist_arg('use_thin_lto', False)
-                    break
+                    target_list.append(target_name)
+                elif target_name.startswith('TDD'):
+                    for target in target_name.split(','):
+                        new_target = '{}_test'.format(target[target.index('_')+1:])
+                        for item in target_data:
+                            if item['parts'] == target_name:
+                                target_list.append(new_target)
+                else:
+                    target_list.append(target_name)
         else:
             if os.getcwd() == CURRENT_OHOS_ROOT:
                 target_list = ['images']
