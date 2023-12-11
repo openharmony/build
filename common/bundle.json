@@ -8,7 +8,18 @@
     ],
     "rom": "",
     "ram": "",
-    "deps": {},
+    "deps": {
+      "components": [
+        "hisysevent",
+        "bounds_checking_function",
+        "config_policy"
+      ],
+      "third_party": [
+        "icu",
+        "zlib",
+        "openssl"
+      ]
+    },
     "build": {
       "sub_component": [
         "//build/common:common_packages",
