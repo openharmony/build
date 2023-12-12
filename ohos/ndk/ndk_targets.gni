@@ -33,6 +33,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/startup/init/syscap:deviceinfo_header",
   "//interface/sdk_c/third_party/mindspore/kits:mindspore_header",
   "//interface/sdk_c/third_party/mindspore/kits:mindspore_lib",
+  "//interface/sdk_c/web/webview/interfaces/native:web_header",
+  "//interface/sdk_c/web/webview/interfaces/native:libohweb",
   "//interface/sdk_c/arkui/ace_engine/native:ace_header",
   "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
   "//interface/sdk_c/arkui/napi:libnapi_ndk",
