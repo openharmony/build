@@ -41,20 +41,34 @@ others 其余均为gn测试用例
 测试用例脚本启动前，先调用start_env.sh完成框架运行所需模块
 
 ### 启动
+
 start_ex.sh option 只执行构建选项测试用例
+
 start_ex.sh template 只执行构建模板测试用例
+
 start_ex.sh performance 只执行性能测试
-start_ex.sh all  先执行构建选项测试用例，再执行性能测试，其次再执行构建模板测试用例【顺序不能变】\
+
+start_ex.sh all  先执行构建选项测试用例，再执行性能测试，其次再执行构建模板测试用例【顺序不能变】
+
+
 生成的报告对应在path_to_ohos_root/out/test_report目录下
 
 ### 附录
+
 **pytest命令各参数介绍**
 
 pytest -vs --html option_report_path  option_script_path
 
--vs 生成详细报告
---html option_report_path 在option_report_path路径下生成html文件，其中包括asset目录和对应的html文件，注意：asset和html文件必须在同路径
-option_script_path pytest要执行的测试用例文件
+-vs:生成详细报告
+
+--html option_report_path:在option_report_path路径下生成html文件，其中包括asset目录和对应的html文件，注意：asset和html文件必须在同路径
+
+option_script_path:pytest要执行的测试用例文件
+
+
+
+
+
 
 
 
