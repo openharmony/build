@@ -149,9 +149,6 @@ class BuildArgsResolver(ArgsResolverInterface):
         build_executor = build_module.target_compiler
         target_list = []
         test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
-        DEFAULT_TEST_PART = os.path.join(
-            CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
-        target_data = IoUtil.read_json_file(DEFAULT_TEST_PART)
         if len(target_arg.arg_value):
             for target_name in target_arg.arg_value:
                 if target_name.endswith('make_test') or target_name.split(':')[-1] in test_target_list:
@@ -159,11 +156,17 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_generator.regist_arg('use_thin_lto', False)
                     target_list.append(target_name)
                 elif target_name.startswith('TDD'):
-                    for item in target_data:
-                            if item['parts'] == target_name:
-                                new_target = '{}_test'.format(target_list[item['parts']])
+                    tdd_parts_json_file = os.path.join(
+                        CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
+                    target_data = IoUtil.read_json_file(tdd_parts_json_file)
+                    for target in target_name.split(','):
+                        for item in target_data:
+                            if item['parts'] == target[target.index('_')+1:]:
+                                new_target = '{}_test'.format(target[target.index('_')+1:])
                                 target_list.append(new_target)
                                 break
+                        else:
+                            target_list.append(target[target.index('_')+1:])
                 else:
                     target_list.append(target_name)
         else:
