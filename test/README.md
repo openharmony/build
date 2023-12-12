@@ -43,7 +43,7 @@
 测试用例脚本启动前，先调用start_env.sh完成框架运行所需模块
 
 ### 2.启动
-其他脚本调用start_ex.sh启动脚本时，按需传参:
+其他脚本调用start_ex.sh启动脚本时，按照需求传入相应参数:
 
       1、start_ex.sh option 只执行构建选项测试用例
       2、start_ex.sh template 只执行构建模板测试用例
@@ -107,7 +107,7 @@ example/test_build_option.py::TestBuildOption::test_scalable_build\[True\]测试
         
         "target_cpu": "arm",
         
-        "toolchain": "//build/toolchain/ohos:ohos_clang_arm",
+        "toolchain": "build/toolchain/ohos:ohos_clang_arm",
         
         "parts_config": "parts.json"
         
@@ -128,8 +128,7 @@ example/test_build_option.py::TestBuildOption::test_rom_size_statistics\[True\]�
 
 ###### 问题原因
 
-源码build/hb/util/post_build/part_rom_statistics.py中read_ohos_config函数中ohos_config.json的绝对路径不正确，没有找到这个文件，导致build
-error，代码片段如下
+源码build/hb/util/post_build/part_rom_statistics.py中read_ohos_config函数中ohos_config.json的绝对路径不正确，没有找到这个文件，导致error，代码片段如下
 
 ![IMG_256](./media/rom_size_statistics_source.png)
 
