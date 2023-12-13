@@ -23,3 +23,6 @@ root = "//build/core/gn"
 script_executable = "/usr/bin/env"
 
 exec_script_whitelist = ohos_exec_script_config.exec_script_allowlist
+
+# Enable OpenHarmony components for gn.
+ohos_components_support = true
