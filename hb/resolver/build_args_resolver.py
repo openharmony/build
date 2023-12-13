@@ -161,7 +161,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)
                     for target in target_name.split(','):
                         for item in target_data:
-                            if item['parts'] == target[target.index('_') + 1:]:
+                            if item['parts'] == target['build_target']:
                                 new_target = item['build_target']
                                 target_list.append(new_target)
                                 break
