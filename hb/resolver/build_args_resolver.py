@@ -166,7 +166,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                                 target_list.append(new_target)
                                 break
                         else:
-                            target_list = ['make_test']
+                            target_list = ['build_all_test_pkg']
                             target_generator = build_module.target_generator
                             target_generator.regist_arg('use_thin_lto', False)
                             break
