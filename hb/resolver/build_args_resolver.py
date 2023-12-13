@@ -162,7 +162,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     for target in target_name.split(','):
                         for item in target_data:
                             if item['parts'] == target[target.index('_') + 1:]:
-                                new_target = '{}_test'.format(target[target.index('_') + 1:])
+                                new_target = item['buildTarget']
                                 target_list.append(new_target)
                                 break
                         else:
