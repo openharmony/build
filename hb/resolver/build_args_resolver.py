@@ -161,12 +161,15 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)
                     for target in target_name.split(','):
                         for item in target_data:
-                            if item['parts'] == target[target.index('_')+1:]:
-                                new_target = '{}_test'.format(target[target.index('_')+1:])
+                            if item['parts'] == target[target.index('_') + 1:]:
+                                new_target = '{}_test'.format(target[target.index('_') + 1:])
                                 target_list.append(new_target)
                                 break
                         else:
-                            target_list.append(target[target.index('_')+1:])
+                            target_list = ['build_all_test_pkg']
+                            target_generator = build_module.target_generator
+                            target_generator.regist_arg('use_thin_lto', False)
+                            break
                 else:
                     target_list.append(target_name)
         else:
