@@ -162,7 +162,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     for target in target_name.split(','):
                         for item in target_data:
                             if item['parts'] == target[target.index('_') + 1:]:
-                                new_target = item['buildTarget']
+                                new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
                                 target_list.append(new_target)
                                 break
                         else:
