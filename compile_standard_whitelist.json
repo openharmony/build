@@ -36,7 +36,6 @@
         "//device/soc/rockchip/rk3568/hardware/omx_il/libOMXPlugin:libOMX_Pluginhw",
         "//foundation/arkui/napi/sample/native_module_systemtest:systemtestnapi",
         "//ide/tools/previewer:lite_previewer",
-        "//third_party/iptables/extensions:libext",
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
         "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
@@ -325,9 +324,7 @@
         "//third_party/flutter/build/skia:ace_fontmgr_standard",
         "//third_party/flutter/build/skia:skia_shared",
         "//third_party/vk-gl-cts/framework/platform/ohos/rosen_context:rosen_context",
-        "//third_party/vk-gl-cts/framework/platform:libdeqp_ohos_platform",
-        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa",
-        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_updater"
+        "//third_party/vk-gl-cts/framework/platform:libdeqp_ohos_platform"
     ],
     "external_deps_added_self_part_module": [
         "//build/rust/tests/test_bin_crate:test_bin_crate",
