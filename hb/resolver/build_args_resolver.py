@@ -162,10 +162,14 @@ class BuildArgsResolver(ArgsResolverInterface):
                         CURRENT_OHOS_ROOT, 'manifest/matrix_product.csv')
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)
                     csv_data = IoUtil.read_json_file(tdd_manifest_csv_file)
-                    dayu200_data = len(csv_data['dayu200'].unique())
-                    for row in csv_data:
-                        if row[dayu200_data-1] == 'Y'
+                    target_set = set()
+                    for csv_row in csv_data:
+                        if csv_row ['dayu200_tdd'] == 'Y':
+                            csv_filename = csv_row['repoistory']
+                            target_set.add(csv_filename)
                     for target in target_name.split(','):
+                        if target not in target_set:
+                            continue
                         for item in target_data:
                             if item['parts'] == target[target.index('_') + 1:]:
                                 new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
