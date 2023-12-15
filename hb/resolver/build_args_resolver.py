@@ -158,7 +158,13 @@ class BuildArgsResolver(ArgsResolverInterface):
                 elif target_name.startswith('TDD'):
                     tdd_parts_json_file = os.path.join(
                         CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
+                    tdd_manifest_csv_file = os.path.join(
+                        CURRENT_OHOS_ROOT, 'manifest/matrix_product.csv')
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)
+                    csv_data = IoUtil.read_json_file(tdd_manifest_csv_file)
+                    dayu200_data = len(csv_data['dayu200'].unique())
+                    for row in csv_data:
+                        if row[dayu200_data-1] == 'Y'
                     for target in target_name.split(','):
                         for item in target_data:
                             if item['parts'] == target[target.index('_') + 1:]:

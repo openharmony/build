@@ -21,6 +21,7 @@ import json
 import importlib
 import re
 import shutil
+import csv
 
 from helper.noInstance import NoInstance
 from exceptions.ohos_exception import OHOSException
@@ -72,3 +73,12 @@ class IoUtil(metaclass=NoInstance):
     @staticmethod
     def copy_file(src: str, dst: str):
         return shutil.copy(src, dst)
+    
+    @staticmethod
+    def read_csv_file(input_file):
+        if not os.path.isfile(input_file):
+            raise OHOSException(f'{input_file} not found', '0012')
+
+        with open(input_file, 'r') as input_f:
+            data = csv.DictReader(input_f)
+            return data
