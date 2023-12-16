@@ -171,11 +171,11 @@ class BuildArgsResolver(ArgsResolverInterface):
                                 new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
                                 target_list.append(new_target)
                                 break
-                    else:
-                        target_list = ['build/ohos/packages:build_all_test_pkg']
-                        target_generator = build_module.target_generator
-                        target_generator.regist_arg('use_thin_lto', False)
-                        break
+                        else:
+                            target_list = ['build/ohos/packages:build_all_test_pkg']
+                            target_generator = build_module.target_generator
+                            target_generator.regist_arg('use_thin_lto', False)
+                            break
                 else:
                     target_list.append(target_name)
         else:
@@ -198,7 +198,6 @@ class BuildArgsResolver(ArgsResolverInterface):
                 raise OHOSException('There is no target component "{}" for the current product "{}"'
                                     .format(component_name, Config().product), "4001")
         build_executor.regist_arg('build_target', target_list)
-        print("=====================================target_list===========", target_list)
 
     @staticmethod
     def resolve_rename_last_log(target_arg: Arg, build_module: BuildModuleInterface):
