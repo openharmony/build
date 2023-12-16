@@ -186,8 +186,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                                 break
                         else:
                             target_list = ['build/ohos/packages:build_all_test_pkg']
-                            target_generator = build_module.target_generator
-                            target_generator.regist_arg('use_thin_lto', False)
+                            build_module.target_generator.regist_arg('use_thin_lto', False)
                             break
                 else:
                     target_list.append(target_name)
@@ -195,8 +194,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             if os.getcwd() == CURRENT_OHOS_ROOT:
                 target_list = ['images']
             elif ComponentUtil.is_in_component_dir(os.getcwd()) and \
-                    ComponentUtil.is_component_in_product(
-                    ComponentUtil.get_component_name(os.getcwd()), Config().product):
+                    ComponentUtil.is_component_in_product(ComponentUtil.get_component_name(os.getcwd()), Config().product):
                 component_name = ComponentUtil.get_component_name(os.getcwd())
                 LogUtil.write_log(Config().log_path, 'In the component "{}" directory,'
                                   'this compilation will compile only this component'.format(
