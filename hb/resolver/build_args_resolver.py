@@ -160,26 +160,22 @@ class BuildArgsResolver(ArgsResolverInterface):
                         CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
                     tdd_manifest_csv_file = os.path.join(
                         CURRENT_OHOS_ROOT, 'manifest/matrix_product.csv')
-                    target_data = IoUtil.read_json_file(tdd_parts_json_file)
-                    csv_data = IoUtil.read_json_file(tdd_manifest_csv_file)
-                    target_set = set()
-                    for csv_row in csv_data:
-                        if csv_row ['dayu200_tdd'] == 'Y':
-                            csv_filename = csv_row['repoistory']
-                            target_set.add(csv_filename)
-                    for target in target_name.split(','):
-                        if target not in target_set:
+                    target_data = IoUtil.read_json_file(tdd_parts_json_file)    
+                    target_set_data = IoUtil.read_csv_file(tdd_manifest_csv_file)
+                    target_name_data = target_name[len('TDD'):]
+                    for target in target_name_data.split(','):
+                        if target not in target_set_data:
                             continue
                         for item in target_data:
                             if item['parts'] == target[target.index('_') + 1:]:
                                 new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
                                 target_list.append(new_target)
                                 break
-                        else:
-                            target_list = ['build/ohos/packages:build_all_test_pkg']
-                            target_generator = build_module.target_generator
-                            target_generator.regist_arg('use_thin_lto', False)
-                            break
+                    else:
+                        target_list = ['build/ohos/packages:build_all_test_pkg']
+                        target_generator = build_module.target_generator
+                        target_generator.regist_arg('use_thin_lto', False)
+                        break
                 else:
                     target_list.append(target_name)
         else:
@@ -202,6 +198,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 raise OHOSException('There is no target component "{}" for the current product "{}"'
                                     .format(component_name, Config().product), "4001")
         build_executor.regist_arg('build_target', target_list)
+        print("=====================================target_list===========", target_list)
 
     @staticmethod
     def resolve_rename_last_log(target_arg: Arg, build_module: BuildModuleInterface):
