@@ -73,18 +73,3 @@ class IoUtil(metaclass=NoInstance):
     @staticmethod
     def copy_file(src: str, dst: str):
         return shutil.copy(src, dst)
-    
-    @staticmethod
-    def read_csv_file(input_file):
-        if not os.path.isfile(input_file):
-            raise OHOSException(f'{input_file} not found', '0012')
-
-        with open(input_file, 'r') as input_f:
-            data = list(csv.DictReader(input_f))
-        
-        target_set = set()
-        for csv_row in data:
-            if csv_row['dayu200_tdd'] == 'Y':
-                csv_filename = csv_row['repoistory']
-                target_set.add(csv_filename)
-                return target_set
