@@ -80,5 +80,11 @@ class IoUtil(metaclass=NoInstance):
             raise OHOSException(f'{input_file} not found', '0012')
 
         with open(input_file, 'r') as input_f:
-            data = csv.DictReader(input_f)
-            return data
+            data = list(csv.DictReader(input_f))
+        
+        target_set = set()
+        for csv_row in data:
+            if csv_row['dayu200_tdd'] == 'Y':
+                csv_filename = csv_row['repoistory']
+                target_set.add(csv_filename)
+                return target_set
