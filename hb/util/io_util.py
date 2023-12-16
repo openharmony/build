@@ -21,7 +21,6 @@ import json
 import importlib
 import re
 import shutil
-import csv
 
 from helper.noInstance import NoInstance
 from exceptions.ohos_exception import OHOSException
