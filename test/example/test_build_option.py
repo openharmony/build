@@ -114,7 +114,8 @@ class TestBuildOption:
                     stderr=subprocess.PIPE,
                     encoding="utf-8",
                     universal_newlines=True,
-                    errors='ignore'
+                    errors='ignore',
+                    cwd=script_path
                 )
                 start_time = time.time()
                 while True:
@@ -143,7 +144,8 @@ class TestBuildOption:
                     stderr=slave,
                     encoding="utf-8",
                     universal_newlines=True,
-                    errors='ignore'
+                    errors='ignore',
+                    cwd=script_path
                 )
                 start_time = time.time()
                 incomplete_line = ""
@@ -179,7 +181,8 @@ class TestBuildOption:
                 stderr=subprocess.PIPE,
                 encoding="utf-8",
                 universal_newlines=True,
-                errors='ignore'
+                errors='ignore',
+                cwd=script_path
             )
             out, err = proc.communicate(timeout=timeout)
             out_res = out.splitlines() + err.splitlines()
@@ -340,7 +343,7 @@ class TestBuildOption:
         flags["os_level"] = {"pattern": r"loader args.*os_level=([a-zA-Z]+)\'", "flag": False}
         flags["root_dir"] = {"pattern": r"""loader args.*source_root_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
         flags["gn_dir"] = {"pattern": r"""loader args.*gn_root_out_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
-        flags["start_end_time"] = {"pattern": r"^(\d+-\d+-\d+ \d+:\d+:\d+)$", "flag": False}
+        flags["start_end_time"] = {"pattern": r"(\d+-\d+-\d+ \d+:\d+:\d+)", "flag": False}
         flags["cost_time"] = {"pattern": r"Cost time:.*(\d+:\d+:\d+)", "flag": False}
         return flags, expect_dict
 
@@ -615,7 +618,7 @@ class TestBuildOption:
             flags["os_level"] = {"pattern": r"loader args.*os_level=([a-zA-Z]+)\'", "flag": False}
             flags["root_dir"] = {"pattern": r"""loader args.*source_root_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
             flags["gn_dir"] = {"pattern": r"""loader args.*gn_root_out_dir="([a-zA-Z\d/\\_]+)""""", "flag": False}
-            flags["start_end_time"] = {"pattern": r"^(\d+-\d+-\d+ \d+:\d+:\d+)$", "flag": False}
+            flags["start_end_time"] = {"pattern": r"(\d+-\d+-\d+ \d+:\d+:\d+)", "flag": False}
             flags["cost_time"] = {"pattern": r"Cost time:.*(\d+:\d+:\d+)", "flag": False}
         return flags, expect_dict
 
@@ -624,7 +627,7 @@ class TestBuildOption:
         root_dir = resolve_result["root_dir"]["flag"][0]
         gn_dir = resolve_result["gn_dir"]["flag"][0]
         start_time_str = resolve_result["start_end_time"]["flag"][0]
-        end_time_str = resolve_result["start_end_time"]["flag"][1]
+        end_time_str = resolve_result["start_end_time"]["flag"][-1]
 
         start_time = datetime.strptime(start_time_str, "%Y-%m-%d %H:%M:%S")
         end_time = datetime.strptime(end_time_str, "%Y-%m-%d %H:%M:%S")
@@ -641,20 +644,22 @@ class TestBuildOption:
             log_info("all file {} not exist".format(file_list))
             return True
         file_timestamp_li = {tmp_file: int(os.stat(tmp_file).st_mtime) for tmp_file in file_list_new}
-        log_info("start_timestamp:{}".format(start_timestamp))
-        log_info("end_timestamp:{}".format(end_timestamp))
 
         cost_time_str = resolve_result["cost_time"]["flag"][0]
         cost_time = datetime.strptime(cost_time_str, "%H:%M:%S")
         cost_time_int = timedelta(hours=cost_time.hour, minutes=cost_time.minute, seconds=cost_time.second)
-        log_info("log_cost_time:{}".format(cost_time_int))
-
+        total_seconds = int(cost_time_int.total_seconds())
+        new_start_timestamp = end_timestamp - total_seconds
+        log_info("log_cost_time:{}s".format(total_seconds))
+        log_info("start_timestamp:{}".format(start_timestamp))
+        log_info("new_start_timestamp:{}".format(new_start_timestamp))
+        log_info("end_timestamp:{}".format(end_timestamp))
         file_flag = False
         file_tmp_flag_li = []
 
         for file_tmp, file_timestamp in file_timestamp_li.items():
             log_info("{}:{}".format(file_tmp, file_timestamp))
-            file_tmp_flag = start_timestamp + time_over <= file_timestamp <= end_timestamp + time_over
+            file_tmp_flag = new_start_timestamp + time_over <= file_timestamp <= end_timestamp + time_over
             file_tmp_flag_li.append(file_tmp_flag)
 
         if all(file_tmp_flag_li):
