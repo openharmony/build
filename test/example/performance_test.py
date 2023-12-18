@@ -43,7 +43,7 @@ script_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os
 config = parse_json()
 if not config:
     log_error("config file: build_example.json not exist")
-    sys.exit(0)
+    raise FileNotFoundError("config file: build_example.json not exist")
 
 
 class PerformanceAnalyse:
@@ -58,8 +58,8 @@ class PerformanceAnalyse:
         log_info("top_count:{}".format(top_count))
         log_info("overflow:{} sec".format(overflow))
     except Exception as e:
-        log_error("config file:build_example.json has error".format(e))
-        sys.exit(0)
+        log_error("config file:build_example.json has error:{}".format(e))
+        raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
 
     def __init__(self, performance_cmd, output_path, report_title, ptyflag=False):
         self.performance_cmd = script_path + performance_cmd
@@ -393,7 +393,9 @@ class PerformanceAnalyse:
                     stderr=slave,
                     encoding="utf-8",
                     universal_newlines=True,
-                    errors='ignore'
+                    errors='ignore',
+                    cwd=script_path
+
                 )
                 start_time = time.time()
                 incomplete_line = ""
@@ -431,7 +433,8 @@ class PerformanceAnalyse:
                     stderr=subprocess.PIPE,
                     encoding="utf-8",
                     universal_newlines=True,
-                    errors='ignore'
+                    errors='ignore',
+                    cwd=script_path
                 )
 
                 while True:
@@ -487,9 +490,9 @@ class PerformanceAnalyse:
 
                 for key, value in self.during_time_dic.items():
                     if re.search(value.get("start_pattern"), output):
-                        self.during_time_dic[key]["start_time"] = int(time_stamp)
+                        self.during_time_dic.get(key)["start_time"] = int(time_stamp)
                     if re.search(value["end_pattern"], output):
-                        self.during_time_dic[key]["end_time"] = int(time_stamp)
+                        self.during_time_dic.get(key)["end_time"] = int(time_stamp)
 
                 if re.search(self.gn_exec_flag, output):
                     gn_exec_start = line_count
