@@ -172,7 +172,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 elif target_name.startswith('TDD'):
                     tdd_parts_json_file = os.path.join(
                         CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
-                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifest/matrix_product.csv')
+                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)    
                     repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
                     target_name = target_name[len('TDD'):]
