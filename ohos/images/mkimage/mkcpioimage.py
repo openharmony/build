@@ -34,7 +34,7 @@ def args_parse(args):
     return args
 
 
-def run_cmd(cmd, dir_list=None):
+def run_cmd(cmd: str, dir_list=None):
     res = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                            stdin=subprocess.PIPE,
                            stderr=subprocess.PIPE)
@@ -47,7 +47,7 @@ def run_cmd(cmd, dir_list=None):
     return res.pid, res.returncode, sout, serr
 
 
-def get_dir_list(input_path, dir_list):
+def get_dir_list(input_path: str, dir_list: list):
     if os.path.isdir(input_path) and not os.path.islink(input_path):
         dir_list.append(input_path)
         tem_list = os.listdir(input_path)

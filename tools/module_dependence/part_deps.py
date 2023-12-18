@@ -21,7 +21,7 @@ import file_utils
 import dependence_analysis
 
 
-def gen_part_dependence(deps_data):
+def gen_part_dependence(deps_data: dict):
     part_allowlist = ['unittest', 'moduletest', 'systemtest']
     label_to_alias = {}
     for _module_alias, _info in deps_data.items():
@@ -56,7 +56,7 @@ def gen_part_dependence(deps_data):
     return part_deps_data
 
 
-def _drawing_part_deps(part_deps_data, output_path):
+def _drawing_part_deps(part_deps_data: dict, output_path: str):
     from pyecharts.charts import Graph
     from pyecharts import options as opts
     from pyecharts.globals import CurrentConfig
@@ -114,7 +114,7 @@ def _drawing_part_deps(part_deps_data, output_path):
     )
 
 
-def run(deps_files_path, output_path, is_graph):
+def run(deps_files_path: str, output_path: str, is_graph: bool):
     all_deps_data = dependence_analysis.get_all_deps_data(deps_files_path)
     all_deps_data_file = os.path.join(output_path, 'all_deps_data.json')
     file_utils.write_json_file(all_deps_data_file, all_deps_data)

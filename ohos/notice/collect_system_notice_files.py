@@ -25,7 +25,7 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 
 
-def collect_notice_files(options, dest_dir, depfiles):
+def collect_notice_files(options, dest_dir: str, depfiles: str):
     subsystem_info_files = []
     with open(options.install_info_file, 'r') as file:
         install_info = json.load(file)

@@ -50,21 +50,21 @@ ohos_maple_java_prebuilt("%s") {
 
 # check sdk header file signature,
 # skip check if file dir not exist
-def check_header_files(checkfile_dir, subsystem_sdk_dir, subsystem_name,
-                       module_name, interface_mgr):
+def check_header_files(checkfile_dir: str, subsystem_sdk_dir: str, subsystem_name: str,
+                       module_name: str, interface_mgr):
     if checkfile_dir is None or not os.path.exists(checkfile_dir):
         return
     interface_mgr.check(checkfile_dir, subsystem_sdk_dir, subsystem_name,
                         module_name)
 
 
-def get_build_config_from_label(label, current_toolchain_dir):
+def get_build_config_from_label(label: str, current_toolchain_dir: str) -> str:
     build_config = label.replace('//', 'gen/').replace(':', '/')
     bc_file = '{}/{}.build_config'.format(current_toolchain_dir, build_config)
     return bc_file
 
 
-def add_dynamic_deps(output, build_config):
+def add_dynamic_deps(output: str, build_config: str) -> str:
     external_deps = build_utils.expand_file_args(
         ['@FileArg({}:deps_info:external_deps)'.format(build_config)])
     if external_deps[0] != '[  ]':
@@ -75,8 +75,8 @@ def add_dynamic_deps(output, build_config):
 
 # Copy the SDK module to the sdk output directory,
 # and generate the prebuilt template to BUILD.gn file.
-def gen_build_file(input_file, sdk_out_dir, generate_sig,
-                   signature_file_check_dir):
+def gen_build_file(input_file: str, sdk_out_dir: str, generate_sig: bool,
+                   signature_file_check_dir: str):
     data = read_json_file(input_file)
     if data is None:
         raise Exception(
@@ -203,9 +203,9 @@ def gen_build_file(input_file, sdk_out_dir, generate_sig,
     return build_file_content, sdk_info
 
 
-def generate_sdk(input_file, sdk_out_dir, output_build_file, sdk_info_file,
-                 generate_sig, signature_file_check_dir,
-                 signature_file_gen_dir):
+def generate_sdk(input_file: str, sdk_out_dir: str, output_build_file: str, sdk_info_file: str,
+                 generate_sig: str, signature_file_check_dir: str,
+                 signature_file_gen_dir: str):
     build_file_content, sdk_info = gen_build_file(input_file, sdk_out_dir,
                                                   generate_sig,
                                                   signature_file_check_dir)

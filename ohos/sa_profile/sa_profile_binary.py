@@ -25,7 +25,7 @@ from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def get_no_src_parts(system_install_info_file):
+def get_no_src_parts(system_install_info_file: str):
     install_parts_info = read_json_file(system_install_info_file)
     if install_parts_info is None:
         raise Exception("read no src subsystem info file failed.")
@@ -44,8 +44,8 @@ def get_no_src_parts(system_install_info_file):
     return parts_name_list
 
 
-def generate_binary_sa_archive(parts_list, sa_profile_archive_info_file,
-                               sa_output_dir, depfiles):
+def generate_binary_sa_archive(parts_list: list, sa_profile_archive_info_file: str,
+                               sa_output_dir: str, depfiles: list):
     if not os.path.exists(sa_output_dir):
         os.makedirs(sa_output_dir, exist_ok=True)
     sa_tuples = []

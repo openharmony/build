@@ -92,7 +92,7 @@ class BundleCheckOnline:
         return ""
 
 
-def _check_line_name(value):
+def _check_line_name(value: str):
     if not value: # value empty
         return BCWarnInfo.NAME_EMPTY
     if value.startswith('//') and ':' in value: # exclude inner_kits:name

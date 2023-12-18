@@ -24,8 +24,8 @@ from scripts.util import build_utils  # noqa: E402
 from scripts.util import file_utils  # noqa: E402
 
 
-def archive_files(system_image_zipfile, additional_files, output_dir,
-                  output_file):
+def archive_files(system_image_zipfile: str, additional_files: list, output_dir: str,
+                  output_file: str):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 

@@ -24,7 +24,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def check_third_party_deps(args, dep_part, parts_deps_info, _tips_info, third_deps_allow_list):
+def check_third_party_deps(args, dep_part: str, parts_deps_info: dict, _tips_info: dict, third_deps_allow_list: list):
     """check whether the three-party dependency is in the part declaration"""
     if args.part_name == dep_part:
         return
@@ -46,7 +46,7 @@ def check_third_party_deps(args, dep_part, parts_deps_info, _tips_info, third_de
     return
 
 
-def load_part_info(depfiles:list):
+def load_part_info(depfiles: list):
     """load part path info from parts_info"""
     # load parts path info file
     parts_path_file = 'build_configs/parts_info/parts_path_info.json'
@@ -65,12 +65,12 @@ def load_part_info(depfiles:list):
     return parts_path_info, path_parts_info
 
 
-def get_path_from_label(label):
+def get_path_from_label(label: str):
     """get part path from target label, the format is //path:module"""
     return label.lstrip('//').split(':')[0]
 
 
-def get_path_from_module_list(cur_part_name, depfiles:list):
+def get_path_from_module_list(cur_part_name: str, depfiles:list) -> str:
     parts_module_lists = []
     parts_modules_file = "build_configs/parts_info/parts_modules_info.json"
     parts_modules_info = read_json_file(parts_modules_file)
@@ -87,7 +87,7 @@ def get_path_from_module_list(cur_part_name, depfiles:list):
     return parts_path
 
 
-def get_part_pattern(cur_part_name, parts_path_info, path_parts_info, depfiles:list):
+def get_part_pattern(cur_part_name: str, parts_path_info: dict, path_parts_info: dict, depfiles: list) -> list:
     """get all part path from part info"""
     part_pattern = []
     part_path = parts_path_info.get(cur_part_name)
@@ -103,7 +103,7 @@ def get_part_pattern(cur_part_name, parts_path_info, path_parts_info, depfiles:l
     return part_pattern
 
 
-def get_dep_part(dep_path, third_part_info):
+def get_dep_part(dep_path: str, third_part_info: dict) -> str:
     """gets the part by the longest path match"""
     for part_info in third_part_info:
         path = part_info[0]
@@ -113,7 +113,7 @@ def get_dep_part(dep_path, third_part_info):
     return ""
 
 
-def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_info, depfiles:list):
+def check_part_deps(args, part_pattern: str, path_parts_info: dict, compile_standard_allow_info: dict, depfiles: list):
     deps_allow_list = compile_standard_allow_info.get("deps_added_external_part_module", [])
     third_deps_allow_list = compile_standard_allow_info.get("third_deps_bundle_not_add", [])
     parts_deps_file = 'build_configs/parts_info/parts_deps.json'
@@ -150,10 +150,10 @@ def check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_
                 raise Exception(message)
 
 
-def check(args):
+def check(args) -> list:
     depfiles = []
     # ignore test related parts
-    part_allow_set = {'libc-test', 'libc-test-lib'}
+    part_allow_set = {'libc-test', 'libc-test-lib', 'libc-gtest-lib'}
     if args.part_name in part_allow_set:
         return depfiles
 

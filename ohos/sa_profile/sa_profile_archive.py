@@ -25,7 +25,7 @@ from scripts.util.file_utils import write_json_file, read_json_file  # noqa: E40
 from scripts.util import build_utils  # noqa: E402
 
 
-def _get_src_sa_info(src_sa_install_info_file, depfiles):
+def _get_src_sa_info(src_sa_install_info_file: str, depfiles: list):
     src_sa_install_info = read_json_file(src_sa_install_info_file)
     if src_sa_install_info is None:
         raise Exception("read src_sa_install_info_file failed.")
@@ -57,8 +57,8 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
     return all_sa_info_files_dict
 
 
-def _file_archive(all_sa_info_files_dict, archive_output_dir,
-                  archive_info_file, depfiles):
+def _file_archive(all_sa_info_files_dict: dict, archive_output_dir: str,
+                  archive_info_file: str, depfiles: list):
     info_dict = {}
     _info_file_dir = os.path.dirname(archive_info_file)
     _relative_path = os.path.relpath(_info_file_dir, archive_output_dir)

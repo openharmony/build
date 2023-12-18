@@ -29,7 +29,7 @@ from scripts.util.file_utils import write_json_file, \
 from scripts.util import build_utils  # noqa: E402
 
 
-def _get_src_sa_info(src_sa_install_info_file, depfiles):
+def _get_src_sa_info(src_sa_install_info_file: str, depfiles: list):
     src_sa_install_info = read_json_file(src_sa_install_info_file)
     if src_sa_install_info is None:
         raise Exception("read src_sa_install_info_file failed.")
@@ -61,8 +61,8 @@ def _get_src_sa_info(src_sa_install_info_file, depfiles):
     return json_all_sa_input_files
 
 
-def _sa_profile_merge(json_sa_input_files, no_src_subsystem_sa_zipfile,
-                      merge_out_dir, merged_zipfile, target_cpu):
+def _sa_profile_merge(json_sa_input_files: str, no_src_subsystem_sa_zipfile: str,
+                      merge_out_dir: str, merged_zipfile: str, target_cpu: str):
     with build_utils.temp_dir() as tmp:
         build_utils.extract_all(no_src_subsystem_sa_zipfile, tmp)
         for root, _, files in os.walk(tmp):
@@ -82,8 +82,8 @@ def _sa_profile_merge(json_sa_input_files, no_src_subsystem_sa_zipfile,
     return json_result_file_list
 
 
-def _generate_install_info(sa_result_file_list, sa_info_install_dest_dir,
-                           sa_install_info_file):
+def _generate_install_info(sa_result_file_list: list, sa_info_install_dest_dir: str,
+                           sa_install_info_file: str):
     module_install_info_list = []
     for _sa_file in sa_result_file_list:
         _install_dest = os.path.join(sa_info_install_dest_dir,

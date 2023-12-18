@@ -1,0 +1,2 @@
+libark_jsruntime.so
+libace_napi.z.so

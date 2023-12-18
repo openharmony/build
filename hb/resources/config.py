@@ -60,6 +60,7 @@ class Config(metaclass=Singleton):
         self._subsystem_config_json = ""
         self._subsystem_config_overlay_json = ""
         self._support_cpu = ""
+        self._log_mode = ""
         self.fs_attr = set()
         self.platform = platform.system()
         self.__post__init()
@@ -98,7 +99,7 @@ class Config(metaclass=Singleton):
         return self._component_type
 
     @component_type.setter
-    def component_type(self, value):
+    def component_type(self, value: str):
         self._component_type = value
         self.config_update('component_type', self._component_type)
 
@@ -107,7 +108,7 @@ class Config(metaclass=Singleton):
         return self._target_os
 
     @target_os.setter
-    def target_os(self, value):
+    def target_os(self, value: str):
         self._target_os = value
         self.config_update('target_os', self._target_os)
 
@@ -116,7 +117,7 @@ class Config(metaclass=Singleton):
         return self._target_cpu
 
     @target_cpu.setter
-    def target_cpu(self, value):
+    def target_cpu(self, value: str):
         self._target_cpu = value
         self.config_update('target_cpu', self._target_cpu)
 
@@ -125,7 +126,7 @@ class Config(metaclass=Singleton):
         return self._version
 
     @version.setter
-    def version(self, value):
+    def version(self, value: str):
         self._version = value
         self.config_update('version', self._version)
 
@@ -134,7 +135,7 @@ class Config(metaclass=Singleton):
         return self._compile_config
 
     @compile_config.setter
-    def compile_config(self, value):
+    def compile_config(self, value: str):
         self._compile_config = value
         self.config_update('compile_config', self._compile_config)
 
@@ -143,7 +144,7 @@ class Config(metaclass=Singleton):
         return self._os_level
 
     @os_level.setter
-    def os_level(self, value):
+    def os_level(self, value: str):
         self._os_level = value
         self.config_update('os_level', self._os_level)
 
@@ -152,7 +153,7 @@ class Config(metaclass=Singleton):
         return self._product_json
 
     @product_json.setter
-    def product_json(self, value):
+    def product_json(self, value: str):
         self._product_json = value
         self.config_update('product_json', self._product_json)
 
@@ -165,7 +166,7 @@ class Config(metaclass=Singleton):
         return self._root_path
 
     @root_path.setter
-    def root_path(self, value):
+    def root_path(self, value: str):
         self._root_path = os.path.abspath(value)
         self.config_update('root_path', self._root_path)
 
@@ -176,7 +177,7 @@ class Config(metaclass=Singleton):
         return self._board
 
     @board.setter
-    def board(self, value):
+    def board(self, value: str):
         self._board = value
         self.config_update('board', self._board)
 
@@ -187,7 +188,7 @@ class Config(metaclass=Singleton):
         return self._device_company
 
     @device_company.setter
-    def device_company(self, value):
+    def device_company(self, value: str):
         self._device_company = value
         self.config_update('device_company', self._device_company)
 
@@ -196,7 +197,7 @@ class Config(metaclass=Singleton):
         return self._kernel
 
     @kernel.setter
-    def kernel(self, value):
+    def kernel(self, value: str):
         self._kernel = value
         self.config_update('kernel', self._kernel)
 
@@ -207,7 +208,7 @@ class Config(metaclass=Singleton):
         return self._product
 
     @product.setter
-    def product(self, value):
+    def product(self, value: str):
         self._product = value
         self.config_update('product', self._product)
 
@@ -218,7 +219,7 @@ class Config(metaclass=Singleton):
         return self._product_path
 
     @product_path.setter
-    def product_path(self, value):
+    def product_path(self, value: str):
         self._product_path = value
         self.config_update('product_path', self._product_path)
 
@@ -233,7 +234,7 @@ class Config(metaclass=Singleton):
         return self._device_path
 
     @device_path.setter
-    def device_path(self, value):
+    def device_path(self, value: str):
         self._device_path = value
         self.config_update('device_path', self._device_path)
 
@@ -253,7 +254,7 @@ class Config(metaclass=Singleton):
         return self._out_path
 
     @out_path.setter
-    def out_path(self, value):
+    def out_path(self, value: str):
         self._out_path = value
         self.config_update('out_path', self._out_path)
 
@@ -262,7 +263,7 @@ class Config(metaclass=Singleton):
         return self._device_config_path
 
     @device_config_path.setter
-    def device_config_path(self, value):
+    def device_config_path(self, value: str):
         self._device_config_path = value
         self.config_update('device_config_path', self._device_config_path)
 
@@ -271,7 +272,7 @@ class Config(metaclass=Singleton):
         return self._product_config_path
 
     @product_config_path.setter
-    def product_config_path(self, value):
+    def product_config_path(self, value: str):
         self._product_config_path = value
         self.config_update('product_config_path', self._product_config_path)
 
@@ -280,7 +281,7 @@ class Config(metaclass=Singleton):
         return self._subsystem_config_json
 
     @subsystem_config_json.setter
-    def subsystem_config_json(self, value):
+    def subsystem_config_json(self, value: str):
         self._subsystem_config_json = value
         self.config_update('subsystem_config_json',
                            self._subsystem_config_json)
@@ -290,7 +291,7 @@ class Config(metaclass=Singleton):
         return self._subsystem_config_overlay_json
 
     @subsystem_config_overlay_json.setter
-    def subsystem_config_overlay_json(self, value):
+    def subsystem_config_overlay_json(self, value: str):
         self._subsystem_config_overlay_json = value
         self.config_update('subsystem_config_overlay_json',
                            self._subsystem_config_overlay_json)
@@ -299,8 +300,17 @@ class Config(metaclass=Singleton):
     def support_cpu(self):
         return self._support_cpu
 
+    @property
+    def log_mode(self):
+        return self._log_mode
+
+    @log_mode.setter
+    def log_mode(self, value):
+        self._log_mode = value
+        self.config_update('log_mode', self._log_mode)
+
     @support_cpu.setter
-    def support_cpu(self, value):
+    def support_cpu(self, value: str):
         self._support_cpu = value
         self.config_update('support_cpu', self._support_cpu)
 
@@ -381,11 +391,11 @@ class Config(metaclass=Singleton):
         return self._patch_cache
 
     @patch_cache.setter
-    def patch_cache(self, value):
+    def patch_cache(self, value: str):
         self._patch_cache = value
         self.config_update('patch_cache', self._patch_cache)
 
-    def config_update(self, key, value):
+    def config_update(self, key: str, value: str):
         config_content = IoUtil.read_json_file(self.config_json)
         config_content[key] = value
         IoUtil.dump_json_file(self.config_json, config_content)

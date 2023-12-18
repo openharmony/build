@@ -52,7 +52,7 @@ def parse_args(args):
     return options
 
 
-def make_env(build_profile, cwd, ohpm_registry, options):
+def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     '''
     Set up the application compilation environment and run "ohpm install"
     :param build_profile: module compilation information file
@@ -106,7 +106,7 @@ def make_env(build_profile, cwd, ohpm_registry, options):
     os.chdir(cur_dir)
 
 
-def gen_unsigned_hap_path_json(build_profile, cwd, options):
+def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
     '''
     Generate unsigned_hap_path_list
     :param build_profile: module compilation information file
@@ -136,7 +136,7 @@ def gen_unsigned_hap_path_json(build_profile, cwd, options):
     file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
 
-def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
+def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, module_libs_dir: str):
     '''
     Obtain the output location of system library .so by reading the module compilation information file,
     and copy it to the app project directory
@@ -156,7 +156,7 @@ def copy_libs(cwd, system_lib_module_info_list, ohos_app_abi, module_libs_dir):
             shutil.copyfile(lib_path, dest)
 
 
-def hvigor_build(cwd, options):
+def hvigor_build(cwd: str, options):
     '''
     Run hvigorw to build the app or hap
     :param cwd: app project directory

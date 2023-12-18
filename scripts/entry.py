@@ -20,7 +20,7 @@ import optparse
 import subprocess
 
 
-def check_output(cmd, **kwargs):
+def check_output(cmd: str, **kwargs):
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT,
@@ -33,7 +33,7 @@ def check_output(cmd, **kwargs):
     return process.returncode
 
 
-def warning(msg):
+def warning(msg: str):
     print(f'\033[93m{msg}\033[0m')
 
 

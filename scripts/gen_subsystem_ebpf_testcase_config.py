@@ -32,7 +32,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import write_json_file   # noqa: E402, E501
 
 
-def get_testcase_dest_list(src_testcase_list, testcase_collect_path):
+def get_testcase_dest_list(src_testcase_list: list, testcase_collect_path: str):
     dest_list = []
     for testcase in src_testcase_list:
         file_name = os.path.basename(testcase)
@@ -40,10 +40,10 @@ def get_testcase_dest_list(src_testcase_list, testcase_collect_path):
     return dest_list
 
 
-def write_testcase_config_file(subsystem_name,
-                               config_file,
-                               testcase_list,
-                               testcase_collect_path):
+def write_testcase_config_file(subsystem_name: str,
+                               config_file: str,
+                               testcase_list: list,
+                               testcase_collect_path: str):
     dest_list = get_testcase_dest_list(testcase_list, testcase_collect_path)
 
     data = {

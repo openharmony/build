@@ -29,7 +29,7 @@ def _get_label_name(label):
     return re.split('[:|()]', label)[1]
 
 
-def _read_notice_info_file(subsystem_notice_info_dir, platform_base_dir):
+def _read_notice_info_file(subsystem_notice_info_dir: str, platform_base_dir: str):
     subsystem_notice_info_list = []
     subsystem_notice_files = []
     _file_list = os.listdir(subsystem_notice_info_dir)
@@ -52,8 +52,8 @@ def _read_notice_info_file(subsystem_notice_info_dir, platform_base_dir):
     return subsystem_notice_info_list, subsystem_notice_files
 
 
-def get_notice_info(system_install_info_file, notice_info_dir,
-                    platform_base_dir):
+def get_notice_info(system_install_info_file: str, notice_info_dir: str,
+                    platform_base_dir: str):
     system_install_info = read_json_file(system_install_info_file)
     if system_install_info is None:
         raise Exception(

@@ -113,6 +113,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
   "//interface/sdk_c/network/netmanager:libnet_connection",
   "//interface/sdk_c/network/netmanager:netconn_header",
+  "//interface/sdk_c/sensors/sensor:libsensor_ndk",
+  "//interface/sdk_c/sensors/sensor:sensor_ndk_header",
 ]
 
 _ndk_base_libs = [
@@ -131,6 +133,15 @@ _ndk_cmake = [
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
   "//build/ohos/ndk:ndk_cmake_files",
 ]
+
+if (host_os == "mac") {
+  _ndk_cmake += [ "//build/ohos/ndk:copy_darwin_ohos_cmake" ]
+} else {
+  _ndk_cmake += [
+    "//build/ohos/ndk:copy_linux_ohos_cmake",
+    "//build/ohos/ndk:copy_windows_ohos_cmake",
+  ]
+}
 
 _ndk_targets_list =
     _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake

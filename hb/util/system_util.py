@@ -31,9 +31,11 @@ from containers.status import throw_exception
 class SystemUtil(metaclass=NoInstance):
 
     @staticmethod
-    def exec_command(cmd: list, log_path='out/build.log', exec_env=None, **kwargs):
+    def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
         useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
         is_log_filter = kwargs.pop('log_filter', False)
+        if log_mode == 'silent':
+            is_log_filter = True
         if '' in cmd:
             cmd.remove('')
         if not os.path.exists(os.path.dirname(log_path)):
@@ -47,25 +49,22 @@ class SystemUtil(metaclass=NoInstance):
                                        env=exec_env,
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
+                log_file.write(line)
                 if is_log_filter:
                     info = re.findall(useful_info_pattern, line)
                     if len(info):
-                        LogUtil.hb_info(info[0])
+                        LogUtil.hb_info(info[0], mode=log_mode)
                 else:
                     LogUtil.hb_info(line)
-                log_file.write(line)
 
         process.wait()
         ret_code = process.returncode
 
         if ret_code != 0:
-            if is_log_filter:
-                LogUtil.get_failed_log(log_path)
-            raise OHOSException(
-                'Please check build log in {}'.format(log_path))
+            LogUtil.get_failed_log(log_path)
 
     @staticmethod
-    def get_current_time(time_type='default'):
+    def get_current_time(time_type: str='default'):
         if time_type == 'timestamp':
             return int(datetime.utcnow().timestamp() * 1000)
         if time_type == 'datetime':
@@ -90,7 +89,7 @@ class ExecEnviron:
     def initenv(self):
         self._env = os.environ.copy()
 
-    def allow(self, allowed_vars):
+    def allow(self, allowed_vars: list):
         if self._env is not None:
             allowed_env = {k: v for k, v in self._env.items() if k in allowed_vars}
             self._env = allowed_env

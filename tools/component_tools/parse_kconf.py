@@ -32,7 +32,7 @@ PROPERTY = "property"
 KCONF_PREFIX = "CONFIG_"
 
 
-def read_full_component(path):
+def read_full_component(path: str):
     data = {}
     with open(path, "rb") as f:
         data = json.load(f)
@@ -45,14 +45,14 @@ def read_full_component(path):
     return component_subsys_dict
 
 
-def read_deps_info(path):
+def read_deps_info(path: str):
     data = {}
     with open(path, "rb") as f:
         data = json.load(f)
     return data
 
 
-def merge(component_subsys_dict, component_deps_dict, subsys_conf):
+def merge(component_subsys_dict: dict, component_deps_dict: dict, subsys_conf: dict):
     config_component_list = []
     for _, components in subsys_conf.items():
         for component, _ in components.items():
@@ -75,11 +75,11 @@ def merge(component_subsys_dict, component_deps_dict, subsys_conf):
                     config_component_list.append(dep)
 
 
-def is_valid_line(line):
+def is_valid_line(line: str):
     return line.startswith(KCONF_PREFIX)
 
 
-def handle_config_feature(items, arr, line):
+def handle_config_feature(items: dict, arr: list, line: str):
     items[TYPE] = FEATRUE
     items[SUBSYS] = arr[1]
     items[COMPONENT] = arr[2].split("=")[0]
@@ -90,20 +90,20 @@ def handle_config_feature(items, arr, line):
         items[FEATRUES] = features.split(",")
 
 
-def handle_config_component(items, arr, line):
+def handle_config_component(items: dict, arr: list, line: str):
     items[TYPE] = COMPONENT
     items[SUBSYS] = arr[0].split("_", 1)[1]
     items[COMPONENT] = arr[1].split("=")[0]
     items[VALUE] = line.split("=", 1)[1]
 
 
-def handle_config_property(items, arr, line):
+def handle_config_property(items: dict, arr: list, line: str):
     items[PROPERTY] = arr[1].split("=")[0]
     items[TYPE] = PROPERTY
     items[VALUE] = line.split("=", 1)[1].strip("\"")
 
 
-def read_line_item(line):
+def read_line_item(line: str):
     line = line.strip()
     items = {
         TYPE: None,
@@ -123,7 +123,7 @@ def read_line_item(line):
     return items
 
 
-def read(kconf):
+def read(kconf: str):
     result, subsys_conf = {}, {}
     with open(kconf, "r") as f:
         for line in f.readlines():
@@ -146,7 +146,7 @@ def read(kconf):
     return result
 
 
-def generate_config_with_full_deps(deps_path, base_product_path, config_path, out):
+def generate_config_with_full_deps(deps_path: str, base_product_path: str, config_path: str, out: str):
     kconf = read(config_path)
     subsys_conf = kconf.get(SUBSYS_LIST)
     component_subsys_dict = read_full_component(base_product_path)

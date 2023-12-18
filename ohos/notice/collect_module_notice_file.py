@@ -33,11 +33,11 @@ LICENSE_CANDIDATES = [
 ]
 
 
-def is_top_dir(current_dir):
+def is_top_dir(current_dir: str):
     return os.path.exists(os.path.join(current_dir, '.gn'))
 
 
-def find_license_recursively(current_dir, default_license):
+def find_license_recursively(current_dir: str, default_license: str):
     if is_top_dir(current_dir):
         return default_license
     for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
@@ -48,7 +48,7 @@ def find_license_recursively(current_dir, default_license):
                                     default_license)
 
 
-def find_opensource_recursively(current_dir):
+def find_opensource_recursively(current_dir: str):
     if is_top_dir(current_dir):
         return None
     candidate = os.path.join(current_dir, README_FILE_NAME)
@@ -57,7 +57,7 @@ def find_opensource_recursively(current_dir):
     return find_opensource_recursively(os.path.dirname(current_dir))
 
 
-def get_license_from_readme(readme_path):
+def get_license_from_readme(readme_path: str):
     contents = read_json_file(readme_path)
     if contents is None:
         raise Exception("Error: failed to read {}.".format(readme_path))
@@ -78,7 +78,7 @@ def get_license_from_readme(readme_path):
     return os.path.join(os.path.dirname(readme_path), notice_file), notice_name, notice_version
 
 
-def do_collect_notice_files(options, depfiles):
+def do_collect_notice_files(options, depfiles: str):
     module_notice_info_list = []
     module_notice_info = {}
     notice_file = options.license_file
