@@ -18,7 +18,7 @@ import sys
 import os
 
 
-def is_exists(filename, type):
+def is_exists(filename: str, type: str) -> bool:
     result = False
     if type == 'file':
         result = os.path.exists(filename) and os.path.isfile(filename)

@@ -22,14 +22,14 @@ import importlib
 import subprocess
 
 
-def search(findir, target):
-    for root, dirs, files in os.walk(findir):
+def search(findir: str, target: str) -> str or bool:
+    for root, _, files in os.walk(findir):
         if target in files:
             return root
     return False
 
 
-def find_top():
+def find_top() -> str:
     cur_dir = os.getcwd()
     while cur_dir != "/":
         build_config_file = os.path.join(
@@ -39,7 +39,7 @@ def find_top():
         cur_dir = os.path.dirname(cur_dir)
 
 
-def get_python():
+def get_python() -> str:
     topdir = find_top()
     python_base_dir = os.path.join(topdir, 'prebuilts/python')
     if os.path.exists(python_base_dir):
@@ -50,7 +50,7 @@ def get_python():
         sys.exit()
 
 
-def check_output(cmd, **kwargs):
+def check_output(cmd: str, **kwargs) -> str:
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT,
@@ -66,7 +66,7 @@ def check_output(cmd, **kwargs):
     return ret_code
 
 
-def build(path, args_list):
+def build(path: str, args_list: list) -> str:
     python_executable = get_python()
     cmd = [python_executable, 'build/hb/main.py', 'build'] + args_list
     return check_output(cmd, cwd=path)

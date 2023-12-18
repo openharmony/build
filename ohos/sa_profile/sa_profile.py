@@ -23,8 +23,8 @@ sys.path.append(
 from scripts.util.file_utils import write_json_file  # noqa: E402
 
 
-def _generate_info_file(part_name, target_label, sa_info_files,
-                        out_info_file):
+def _generate_info_file(part_name: str, target_label: str, sa_info_files: str,
+                        out_info_file: str):
     info = {
         'part_name': part_name,
         'label': target_label,

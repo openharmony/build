@@ -45,7 +45,7 @@ def parse_args(args):
     return options, paths
 
 
-def idl_compile(options, paths, cmd):
+def idl_compile(options, paths: list, cmd: str):
     my_env = None
     ld_library = os.path.dirname(options.libcxx_path)
     if 'LD_LIBRARY_PATH' in os.environ:

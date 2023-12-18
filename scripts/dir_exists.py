@@ -10,12 +10,12 @@ import os.path
 import sys
 
 
-def main():
+def main() -> int:
     sys.stdout.write(_is_dir(sys.argv[1]))
     return 0
 
 
-def _is_dir(dir_name):
+def _is_dir(dir_name) -> str:
     return str(os.path.isdir(dir_name))
 
 

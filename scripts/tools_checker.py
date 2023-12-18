@@ -19,17 +19,7 @@ import subprocess
 import json
 
 
-def find_top():
-    cur_dir = os.getcwd()
-    while cur_dir != "/":
-        build_scripts = os.path.join(
-            cur_dir, 'build/scripts/build_package_list.json')
-        if os.path.exists(build_scripts):
-            return cur_dir
-        cur_dir = os.path.dirname(cur_dir)
-
-
-def run_command(cmd, verbose=None):
+def run_command(cmd: list[str], verbose=None):
     """Execute command `cmd`
     :param cmd: Command to be executed.
     :param verbose: Whether echo runtime infomation and output of command `cmd`.
@@ -45,7 +35,7 @@ def run_command(cmd, verbose=None):
     return output, p.returncode
 
 
-def package_installed(pkg_name):
+def package_installed(pkg_name: str):
     """Check whether package `pkg_name` is installed or not.
     Got package `pkg_name` installation state by executing `dpkg -s pkg_name`.
     :param pkg_name: Package name to check.
@@ -56,7 +46,7 @@ def package_installed(pkg_name):
     return r
 
 
-def check_build_requried_packages(host_version, check=True):
+def check_build_requried_packages(host_version: str, check: bool=True):
     """Check whether packages required by build process installed or not.
     By parsing file `REPO_ROOT/build/scripts/build_package_list.json`.
     Example content: `{"18.04":{"dep_package":["pkg1","pkg2",...]}, "20.04":{...}, "22.04":{...}}`
@@ -67,6 +57,8 @@ def check_build_requried_packages(host_version, check=True):
     :return install_package_list: Packages installed.
     :return uninstall_package_list: Packages missing.
     """
+    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'util'))
+    from file_utils import find_top
     cur_dir = find_top()
     build_package_json = os.path.join(
         cur_dir, 'build/scripts/build_package_list.json')

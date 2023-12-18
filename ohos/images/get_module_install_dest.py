@@ -19,7 +19,7 @@ import os
 import sys
 
 
-def get_source_name(module_type, name, prefix_override, suffix):
+def get_source_name(module_type: str, name: str, prefix_override: str, suffix: str):
     """generate source file name by type"""
     if (module_type == 'lib' or module_type == 'lib64') and not prefix_override:
         if not name.startswith('lib'):
@@ -32,7 +32,7 @@ def get_source_name(module_type, name, prefix_override, suffix):
     return name, alias
 
 
-def gen_install_dests(system_base_dir, source_file_name, install_images, module_install_dir, relative_install_dir, module_type):
+def gen_install_dests(system_base_dir: str, source_file_name: str, install_images: list, module_install_dir: str, relative_install_dir: str, module_type: str):
     """generate module install dir by user config"""
     dest = ''
     _install_dir = ''

@@ -63,77 +63,77 @@ class LoadInterface(ServiceInterface):
         self._generate_syscap_files()
 
     @abstractmethod
-    def __post_init__():
+    def __post_init__(self):
         pass
 
     @abstractmethod
-    def _execute_loader_args_display():
+    def _execute_loader_args_display(self):
         pass
 
     @abstractmethod
-    def _check_parts_config_info():
+    def _check_parts_config_info(self):
         pass
 
     @abstractmethod
-    def _generate_subsystem_configs():
+    def _generate_subsystem_configs(self):
         pass
 
     @abstractmethod
-    def _generate_target_platform_parts():
+    def _generate_target_platform_parts(self):
         pass
 
     @abstractmethod
-    def _generate_system_capabilities():
+    def _generate_system_capabilities(self):
         pass
 
     @abstractmethod
-    def _generate_stub_targets():
+    def _generate_stub_targets(self):
         pass
 
     @abstractmethod
-    def _generate_platforms_part_by_src():
+    def _generate_platforms_part_by_src(self):
         pass
 
     @abstractmethod
-    def _generate_target_gn():
+    def _generate_target_gn(self):
         pass
 
     @abstractmethod
-    def _generate_phony_targets_build_file():
+    def _generate_phony_targets_build_file(self):
         pass
 
     @abstractmethod
-    def _generate_required_parts_targets():
+    def _generate_required_parts_targets(self):
         pass
 
     @abstractmethod
-    def _generate_required_parts_targets_list():
+    def _generate_required_parts_targets_list(self):
         pass
 
     @abstractmethod
-    def _generate_src_flag():
+    def _generate_src_flag(self):
         pass
 
     @abstractmethod
-    def _generate_auto_install_part():
+    def _generate_auto_install_part(self):
         pass
 
     @abstractmethod
-    def _generate_platforms_list():
+    def _generate_platforms_list(self):
         pass
 
     @abstractmethod
-    def _generate_part_different_info():
+    def _generate_part_different_info(self):
         pass
 
     @abstractmethod
-    def _generate_infos_for_testfwk():
+    def _generate_infos_for_testfwk(self):
         pass
 
     @abstractmethod
-    def _check_product_part_feature():
+    def _check_product_part_feature(self):
         pass
 
     @abstractmethod
-    def _generate_syscap_files():
+    def _generate_syscap_files(self):
         pass

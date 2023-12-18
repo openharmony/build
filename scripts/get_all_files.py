@@ -21,7 +21,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import write_file  # noqa E402
 
 
-def main():
+def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--base-dir', required=True)
     parser.add_argument('--sub-dir-list', nargs='+', required=False)

@@ -21,6 +21,7 @@ import re
 import sys
 import stat
 import subprocess
+import csv
 
 from datetime import datetime
 from distutils.spawn import find_executable
@@ -40,6 +41,7 @@ from util.component_util import ComponentUtil
 from util.product_util import ProductUtil
 from util.prebuild.patch_process import Patch
 from util.post_build.part_rom_statistics import output_part_rom_status
+from util.post_gn.check_compilation_parameters import check_compilation_parameters
 
 
 class BuildArgsResolver(ArgsResolverInterface):
@@ -136,6 +138,19 @@ class BuildArgsResolver(ArgsResolverInterface):
             config.target_os = target_arg.arg_value
 
     @staticmethod
+    def get_tdd_repository(input_file):
+        if not os.path.isfile(input_file):
+            raise OHOSException(f'{input_file} not found')
+        
+        target_set = set()
+        with open(input_file, 'r') as input_f:
+            data = csv.DictReader(input_f)
+            for csv_row in data:
+                if csv_row['dayu200_tdd'] == 'Y':
+                    target_set.add(csv_row['repoistory'])
+        return target_set      
+
+    @staticmethod
     @throw_exception
     def resolve_build_target(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--build-target' arg.
@@ -149,12 +164,33 @@ class BuildArgsResolver(ArgsResolverInterface):
         target_list = []
         test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
         if len(target_arg.arg_value):
-            target_list = target_arg.arg_value
-            for target_name in target_list:
+            for target_name in target_arg.arg_value:
                 if target_name.endswith('make_test') or target_name.split(':')[-1] in test_target_list:
                     target_generator = build_module.target_generator
                     target_generator.regist_arg('use_thin_lto', False)
-                    break
+                    target_list.append(target_name)
+                elif target_name.startswith('TDD'):
+                    tdd_parts_json_file = os.path.join(
+                        CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
+                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
+                    target_data = IoUtil.read_json_file(tdd_parts_json_file)    
+                    repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
+                    target_name = target_name[len('TDD'):]
+                    for target in target_name.split(','):
+                        if target not in repository_set:
+                            continue
+                        for item in target_data:
+                            if item['name'] == target:
+                                new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
+                                target_list.append(new_target)
+                                break
+                        else:
+                            target_list = ['build/ohos/packages:build_all_test_pkg']
+                            target_generator = build_module.target_generator
+                            target_generator.regist_arg('use_thin_lto', False)
+                            break
+                else:
+                    target_list.append(target_name)
         else:
             if os.getcwd() == CURRENT_OHOS_ROOT:
                 target_list = ['images']
@@ -190,6 +226,17 @@ class BuildArgsResolver(ArgsResolverInterface):
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
                 os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
+
+    @staticmethod
+    def resolve_log_mode(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--log-mode' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        if target_arg.arg_value:
+            config = Config()
+            config.log_mode = target_arg.arg_value
 
     @staticmethod
     def resolve_ccache(target_arg: Arg, build_module: BuildModuleInterface):
@@ -543,6 +590,16 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         target_generator = build_module.target_generator
         target_generator.regist_arg('runtime_mode', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_check_compilation_parameters(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--check-compilation-parameters' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetGenerate.
+        """
+        if target_arg.arg_value:
+            check_compilation_parameters(CURRENT_OHOS_ROOT)
         
     @staticmethod
     def resolve_keep_ninja_going(target_arg: Arg, build_module: BuildModuleInterface):

@@ -33,34 +33,34 @@ FEATURE_STR = 'config feature$$%s\n\
         depends on %s\n'
 
 
-def create_config(name, comment):
+def create_config(name: str, comment: str):
     return KCONFIG_STR.format(name, comment)
 
-def create_property(name, comment):
+def create_property(name: str, comment: str):
     return PROPERTIES_STR.format(name, comment)
 
-def create_menu(name):
+def create_menu(name: str):
     return KMENU_STR.format(name)
 
 def end_menu():
     return "endmenu\n"
 
-def create_feature(name):
+def create_feature(name: str):
     return FEATURE_STR % (name, name)
 
-def read_json(file):
+def read_json(file: str):
     data = {}
     with open(file, "rb") as f:
         data = json.load(f)
     return data
 
-def write_kconfig(result, outdir):
+def write_kconfig(result: str, outdir: str):
     outpath = os.path.join(outdir, "kconfig")
     with open(outpath, "w") as f:
         f.writelines(result)
     print("output file in: ", os.path.abspath(outpath))
 
-def gen_kconfig(config_path, outdir):
+def gen_kconfig(config_path: str, outdir: str):
     data = read_json(config_path)
     subsystems = data.get("subsystems")
     result = 'mainmenu "Subsystem Component Kconfig Configuration"\n'

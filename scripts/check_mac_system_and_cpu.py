@@ -18,7 +18,7 @@ import sys
 import subprocess
 
 
-def run_cmd(cmd):
+def run_cmd(cmd: str):
     res = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
@@ -26,7 +26,7 @@ def run_cmd(cmd):
     return res.pid, res.returncode, sout, serr
 
 
-def check_darwin_system():
+def check_darwin_system() -> int:
     check_system_cmd = "uname -s"
     res = run_cmd(check_system_cmd)
     if res[1] == 0 and res[2] != "":
@@ -36,7 +36,7 @@ def check_darwin_system():
     return 0
 
 
-def check_m1_cpu():
+def check_m1_cpu() -> int:
     check_host_cpu_cmd = "sysctl machdep.cpu.brand_string"
     res = run_cmd(check_host_cpu_cmd)
     if res[1] == 0 and res[2] != "":

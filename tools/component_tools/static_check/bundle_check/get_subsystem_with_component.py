@@ -67,7 +67,7 @@ def get_subsystem_components(ohos_path: str):
     return subsystem_item
 
 
-def get_subsystem_components_modified(ohos_root) -> dict:
+def get_subsystem_components_modified(ohos_root: str) -> dict:
     ret = dict()
 
     subsystem_info = get_subsystem_components(ohos_root)

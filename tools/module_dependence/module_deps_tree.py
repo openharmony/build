@@ -22,7 +22,7 @@ from pyecharts.charts import Tree
 from pyecharts.globals import CurrentConfig
 
 
-def read_json_file(input_file):
+def read_json_file(input_file: str):
     if not os.path.exists(input_file):
         print("file '{}' doesn't exist.".format(input_file))
         return None
@@ -44,13 +44,13 @@ class ModuleTree:
         self.isroot = True
         self.module_count = {}
 
-    def parse_part_module_name(self, node_name):
+    def parse_part_module_name(self, node_name: str):
         split_result = node_name.split(':')
         part_name = split_result[0]
         module_name = split_result[1]
         return part_name, module_name
 
-    def get_label_color(self, node_name):
+    def get_label_color(self, node_name: str):
         if self.module_count.get(node_name, 'no_module') == 'no_module':
             self.module_count[node_name] = 1
             label_opt = opts.LabelOpts(color='#000000',
@@ -65,7 +65,7 @@ class ModuleTree:
                                        font_size=16)
         return label_opt
 
-    def node_tree(self, node_name):
+    def node_tree(self, node_name: str):
         if node_name not in self.data:
             part_name, module_name = self.parse_part_module_name(node_name)
             new_part_name = self.inner_kits_adapter.get(
@@ -94,7 +94,7 @@ class ModuleTree:
             tree_data = {"name": node_name}
         return tree_data
 
-    def color_tree(self, tree_data):
+    def color_tree(self, tree_data: dict):
         color_tree_data = {}
         queue = [tree_data]
         while len(queue) > 0:
@@ -106,7 +106,7 @@ class ModuleTree:
                 queue.extend(children)
         return tree_data
 
-    def graph_tree(self, tree_data):
+    def graph_tree(self, tree_data: dict):
         children = tree_data.get("children", "no_children")
         if children != "no_children":
             for index, value in enumerate(children):
@@ -118,7 +118,7 @@ class ModuleTree:
             return opts.TreeItem(name=tree_data["name"],
                                  label_opts=tree_data["label_opt"])
 
-    def get_node_tree(self, node_name):
+    def get_node_tree(self, node_name: str):
         self.isroot = True
         tree_data = self.node_tree(node_name)
         self.module_count = {}

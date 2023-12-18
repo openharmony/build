@@ -22,7 +22,7 @@ import argparse
 class InterfaceMgr:
     __max_buf = 1024 * 1024
 
-    def get_file_sha256(self, filename):
+    def get_file_sha256(self, filename: str):
         hash_value = None
         if os.path.isfile(filename):
             sha256obj = hashlib.sha256()
@@ -39,7 +39,7 @@ class InterfaceMgr:
                 return ""
         return str(hash_value)
 
-    def get_header_files(self, file_dir):
+    def get_header_files(self, file_dir: str) -> list:
         h_files = []
         for path, _, files in os.walk(file_dir):
             for file in files:
@@ -49,8 +49,8 @@ class InterfaceMgr:
                     h_files.append(x_file)
         return h_files
 
-    def gen_sig_file_by_subsystem(self, subsystem_sdk_out_dir,
-                                  sig_file_gen_dir):
+    def gen_sig_file_by_subsystem(self, subsystem_sdk_out_dir: str,
+                                  sig_file_gen_dir: str):
         if not os.path.exists(subsystem_sdk_out_dir) or not os.path.isdir(
                 subsystem_sdk_out_dir):
             raise Exception(
@@ -83,7 +83,7 @@ class InterfaceMgr:
                 output_file.write('\n'.join(check_content))
                 output_file.flush()
 
-    def _gen_checkfile(self, check_file_dir, target_type_dir, target_type):
+    def _gen_checkfile(self, check_file_dir: str, target_type_dir: str, target_type: str):
         subsystem_list = os.listdir(target_type_dir)
         for subsystem_name in subsystem_list:
             subsystem_dir = os.path.join(target_type_dir, subsystem_name)
@@ -113,8 +113,8 @@ class InterfaceMgr:
 
             self._gen_checkfile(check_file_dir, target_type_dir, target_type)
 
-    def check(self, check_file_dir, subsystem_sdk_dir, subsystem_name,
-              module_name):
+    def check(self, check_file_dir: str, subsystem_sdk_dir: str, subsystem_name: str,
+              module_name: str):
         check_file = os.path.join(check_file_dir, subsystem_name, module_name,
                                   'check.txt')
         if not os.path.isfile(check_file):

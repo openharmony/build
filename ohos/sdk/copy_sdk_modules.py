@@ -26,7 +26,7 @@ from scripts.util import build_utils  # noqa: E402
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
-def get_source_from_module_info_file(module_info_file):
+def get_source_from_module_info_file(module_info_file: str):
     data = read_json_file(module_info_file)
     if data is None:
         raise Exception("read file '{}' failed.".format(module_info_file))
@@ -35,7 +35,7 @@ def get_source_from_module_info_file(module_info_file):
     return source, notice
 
 
-def do_copy_and_stamp(copy_infos, options, depfile_deps):
+def do_copy_and_stamp(copy_infos: dict, options, depfile_deps: list):
     notice_tuples = []
     for cp_info in copy_infos:
         source = cp_info.get('source')

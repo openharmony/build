@@ -20,9 +20,9 @@ import sys
 import shutil
 
 
-def get_hap_module_info(build_target_name, module_name,
-                            testcases_dir, subsystem_name,
-                            part_name, project_path):
+def get_hap_module_info(build_target_name: str, module_name: str,
+                            testcases_dir: str, subsystem_name: str,
+                            part_name: str, project_path: str):
     if not build_target_name or not module_name:
         raise ValueError(
             'Ethire build_target_name or module_name is invalid')
@@ -37,8 +37,8 @@ def get_hap_module_info(build_target_name, module_name,
             json.dump(module_info_data, out_file)
 
 
-def get_hap_json_info(project_path, build_target_name,
-                      archive_testfile, test_type, module_out_path):
+def get_hap_json_info(project_path: str, build_target_name: str,
+                      archive_testfile: str, test_type: str, module_out_path: str):
     json_dir = os.path.dirname(archive_testfile)
     prefix_dir = os.path.join(test_type, module_out_path)
     if os.path.exists(os.path.join(project_path, "Test.json")):
@@ -73,7 +73,7 @@ def get_hap_json_info(project_path, build_target_name,
                 json_file.write(json_str)
 
 
-def copy_hap_case(final_hap_path, archive_testfile):
+def copy_hap_case(final_hap_path: str, archive_testfile: str):
     archive_testfile_dir = os.path.dirname(archive_testfile)
     shutil.copy2(final_hap_path, archive_testfile_dir)
     shutil.copy2(final_hap_path + ".md5.stamp", archive_testfile_dir)

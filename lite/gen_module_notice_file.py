@@ -25,11 +25,11 @@ from utils import encode
 from utils import decode
 
 
-def is_top_dir(src_path):
+def is_top_dir(src_path: str):
     return os.path.exists(os.path.join(src_path, '.gn'))
 
 
-def find_config_parent_file(src_dir, target_cfg):
+def find_config_parent_file(src_dir: str, target_cfg: str):
     if (not os.path.isdir(src_dir)) or is_top_dir(src_dir):
         return ''
     for file in os.listdir(src_dir):
@@ -40,8 +40,8 @@ def find_config_parent_file(src_dir, target_cfg):
     return find_config_parent_file(os.path.dirname(src_dir), target_cfg)
 
 
-def get_notice_file_name(readme_file_path, copyright_file,
-                         module_relative_src_path):
+def get_notice_file_name(readme_file_path: str, copyright_file: str,
+                         module_relative_src_path: str):
     if not os.path.exists(readme_file_path) or os.path.isdir(readme_file_path):
         return '', '', '', ''
 
@@ -71,7 +71,7 @@ def get_notice_file_name(readme_file_path, copyright_file,
     return license_file_path, license_name, software_name, copyright_file_path
 
 
-def get_opensource_config_file(module_source_dir, root_out_dir, target_cfg):
+def get_opensource_config_file(module_source_dir: str, root_out_dir: str, target_cfg: str):
     config_file = ''
 
     expect_file = os.path.join(module_source_dir, target_cfg)
@@ -87,8 +87,8 @@ def get_opensource_config_file(module_source_dir, root_out_dir, target_cfg):
     return config_file
 
 
-def get_notice_file(module_source_dir, root_out_dir,
-                    module_relative_source_dir):
+def get_notice_file(module_source_dir: str, root_out_dir: str,
+                    module_relative_source_dir: str):
     cfg_file = get_opensource_config_file(module_source_dir, root_out_dir,
                                           'README.OpenSource')
     copyright_file = get_opensource_config_file(module_source_dir,
@@ -103,7 +103,7 @@ def get_notice_file(module_source_dir, root_out_dir,
                                 module_relative_source_dir)
 
 
-def get_notice_file_dest_path(root_out_dir, target_name):
+def get_notice_file_dest_path(root_out_dir: str, target_name: str):
     nf_dest_list = []
     nf_dest_dir = os.path.join(root_out_dir, 'NOTICE_FILE', target_name)
 
@@ -117,13 +117,13 @@ def get_notice_file_dest_path(root_out_dir, target_name):
     return nf_dest_list
 
 
-def create_dest_file(filename):
+def create_dest_file(filename: str):
     dir_name = os.path.dirname(filename)
     if not os.path.exists(dir_name):
         makedirs(dir_name)
 
 
-def gen_license(target_path, nf_dict, nf_src, cp_src):
+def gen_license(target_path: str, nf_dict: str, nf_src: str, cp_src: str):
     target_license_path = os.path.join(target_path, 'NOTICE')
     makedirs(target_path)
 
@@ -141,8 +141,8 @@ def gen_license(target_path, nf_dict, nf_src, cp_src):
             encode(nf_dict["license_content"])))
 
 
-def generate_notice_file(root_out_dir, module_source_dir,
-                         module_relative_source_dir, target_name):
+def generate_notice_file(root_out_dir: str, module_source_dir: str,
+                         module_relative_source_dir: str, target_name: str):
     nf_src = ''
     nf_dict = {
         "software": '',

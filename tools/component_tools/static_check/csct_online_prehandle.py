@@ -21,7 +21,7 @@ import subprocess
 import logging
 
 
-def add2dict(diff_dict, path, line_num: str, content):
+def add2dict(diff_dict: dict, path: str, line_num: str, content):
     key = path
     value = [line_num, content]
 
@@ -34,7 +34,7 @@ def add2dict(diff_dict, path, line_num: str, content):
     diff_dict.update({key: value_list})
 
 
-def __diff_match_file_start(control_block, line):
+def __diff_match_file_start(control_block: dict, line: str):
     pattern = "diff --git"
     if not line.startswith(pattern):
         return False
@@ -48,7 +48,7 @@ def __diff_match_file_start(control_block, line):
     return True
 
 
-def __diff_match_is_newfile(control_block, line):
+def __diff_match_is_newfile(control_block: dict, line: str):
     pattern = "new file"
     if not line.startswith(pattern):
         return False
@@ -57,7 +57,7 @@ def __diff_match_is_newfile(control_block, line):
     return True
 
 
-def __diff_match_filename_with_minus(control_block, line):
+def __diff_match_filename_with_minus(control_block: dict, line: str):
     pattern = "---\ (a/)?.*"
     if re.match(pattern, line) is None:
         return False
@@ -66,7 +66,7 @@ def __diff_match_filename_with_minus(control_block, line):
     return True
 
 
-def __diff_match_filename_with_plus(control_block, line):
+def __diff_match_filename_with_plus(control_block: dict, line: str):
     pattern = "\+\+\+\ b/(.*)"
     if re.match(pattern, line) is None:
         return False
@@ -85,7 +85,7 @@ def __diff_match_filename_with_plus(control_block, line):
     return True
 
 
-def __diff_match_start_linenum(control_block, line):
+def __diff_match_start_linenum(control_block: dict, line: str):
     pattern = "@@\ -[0-9]+,[0-9]+\ \+([0-9]+)(,[0-9]+)?\ @@.*"
     if control_block["match_flag"] is False or re.match(pattern, line) is None:
         return False
@@ -95,7 +95,7 @@ def __diff_match_start_linenum(control_block, line):
     return True
 
 
-def __diff_match_code_line(control_block, line):
+def __diff_match_code_line(control_block: dict, line: str):
     diff_dict = control_block["diff_dict"]
     pattern1 = "[\ +-](.*)"
     pattern2 = "([\ +-])?(.*)"
@@ -115,7 +115,7 @@ def __diff_match_code_line(control_block, line):
     return True
 
 
-def strip_diff(diff_dict, pull_request_url, gitee_pr_diff):
+def strip_diff(diff_dict: dict, pull_request_url: str, gitee_pr_diff: str):
     control_block = {
         "line_num": 0,
         "fullpath": "",
@@ -141,7 +141,7 @@ def strip_diff(diff_dict, pull_request_url, gitee_pr_diff):
                 break
 
 
-def get_diff_by_repo_pr_num(repo_url, pr_num):
+def get_diff_by_repo_pr_num(repo_url: str, pr_num: int):
     diff_url = "%spulls/%s.diff" % (repo_url, str(pr_num))
     cmd = "curl -L -s " + diff_url
     gitee_pr_diff = ""

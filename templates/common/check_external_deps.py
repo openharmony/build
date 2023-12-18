@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file # noqa: E402
 
 
-def check_parts_deps(args, external_part_name, parts_deps_info):
+def check_parts_deps(args, external_part_name: str, parts_deps_info: dict):
     compile_standard_allow_file = args.compile_standard_allow_file
     compile_standard_allow_info = read_json_file(compile_standard_allow_file)
     added_self_part_allow_list = compile_standard_allow_info.get("external_deps_added_self_part_module", [])
@@ -58,7 +58,7 @@ def check_parts_deps(args, external_part_name, parts_deps_info):
     return
 
 
-def check(args):
+def check(args) -> list:
     depfiles = []
     if len(args.external_deps) == 0:
         return depfiles

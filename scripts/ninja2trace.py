@@ -63,7 +63,7 @@ class NinjaToTrace(object):
                                 reverse=True)
         return True
 
-    def save_durations(self, duration_file):
+    def save_durations(self, duration_file: str):
         total_time = 0
         with open(duration_file, 'w') as file:
             for item in self.durations:
@@ -73,7 +73,7 @@ class NinjaToTrace(object):
                                              duration))
             file.write('total time: {} ms'.format(total_time))
 
-    def trans_to_trace_json(self, dest_file_name):
+    def trans_to_trace_json(self, dest_file_name: str):
         counter = CountingTheTid()
         tracelist = list()
         for storingdataline in self.datalist:
