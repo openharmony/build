@@ -172,7 +172,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 elif target_name.startswith('TDD'):
                     tdd_parts_json_file = os.path.join(
                         CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
-                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, 'manifest/matrix_product.csv')
+                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifest/matrix_product.csv')
                     target_data = IoUtil.read_json_file(tdd_parts_json_file)    
                     repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
                     target_name = target_name[len('TDD'):]
@@ -186,7 +186,8 @@ class BuildArgsResolver(ArgsResolverInterface):
                                 break
                         else:
                             target_list = ['build/ohos/packages:build_all_test_pkg']
-                            build_module.target_generator.regist_arg('use_thin_lto', False)
+                            target_generator = build_module.target_generator
+                            target_generator.regist_arg('use_thin_lto', False)
                             break
                 else:
                     target_list.append(target_name)
@@ -194,7 +195,8 @@ class BuildArgsResolver(ArgsResolverInterface):
             if os.getcwd() == CURRENT_OHOS_ROOT:
                 target_list = ['images']
             elif ComponentUtil.is_in_component_dir(os.getcwd()) and \
-                    ComponentUtil.is_component_in_product(ComponentUtil.get_component_name(os.getcwd()), Config().product):
+                    ComponentUtil.is_component_in_product(
+                    ComponentUtil.get_component_name(os.getcwd()), Config().product):
                 component_name = ComponentUtil.get_component_name(os.getcwd())
                 LogUtil.write_log(Config().log_path, 'In the component "{}" directory,'
                                   'this compilation will compile only this component'.format(
