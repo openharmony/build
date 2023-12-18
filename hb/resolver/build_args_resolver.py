@@ -21,6 +21,7 @@ import re
 import sys
 import stat
 import subprocess
+import csv
 
 from datetime import datetime
 from distutils.spawn import find_executable
@@ -137,6 +138,19 @@ class BuildArgsResolver(ArgsResolverInterface):
             config.target_os = target_arg.arg_value
 
     @staticmethod
+    def get_tdd_repository(input_file):
+        if not os.path.isfile(input_file):
+            raise OHOSException(f'{input_file} not found')
+        
+        target_set = set()
+        with open(input_file, 'r') as input_f:
+            data = csv.DictReader(input_f)
+            for csv_row in data:
+                if csv_row['dayu200_tdd'] == 'Y':
+                    target_set.add(csv_row['repoistory'])
+        return target_set      
+
+    @staticmethod
     @throw_exception
     def resolve_build_target(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--build-target' arg.
@@ -158,10 +172,15 @@ class BuildArgsResolver(ArgsResolverInterface):
                 elif target_name.startswith('TDD'):
                     tdd_parts_json_file = os.path.join(
                         CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
-                    target_data = IoUtil.read_json_file(tdd_parts_json_file)
+                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
+                    target_data = IoUtil.read_json_file(tdd_parts_json_file)    
+                    repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
+                    target_name = target_name[len('TDD'):]
                     for target in target_name.split(','):
+                        if target not in repository_set:
+                            continue
                         for item in target_data:
-                            if item['parts'] == target[target.index('_') + 1:]:
+                            if item['name'] == target:
                                 new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
                                 target_list.append(new_target)
                                 break
