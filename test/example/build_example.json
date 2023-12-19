@@ -12,7 +12,7 @@
     "exec_timeout": 1800,
     "select_timeout": 0,
     "ptyflag": "False",
-    "file_time_intever": 1,
+    "file_time_intever": 2,
     "cmd_type": "select",
     "option_report_path": "/out/test_report/test_build_option.html",
     "option_script_path": "/build/test/example/test_build_option.py"
@@ -42,7 +42,7 @@
     "performance_script_path": "/build/test/example/performance_test.py",
     "performance_script_data": [
       {
-        "performance_cmd": "/build.sh --product-name rk3568 --gn-flags=--time",
+        "performance_cmd": "/build.sh --product-name rk3568 --build-target  build/rust/tests/test_bin_cargo_crate:test_bin_cargo_crate --gn-flags=--time",
         "output_path": "/out/test_report/performance_report_rk3568.html",
         "report_title": "Rk3568 Performance Analysis Report",
         "ptyflag": "False"
@@ -56,3 +56,4 @@
     ]
   }
 }
+

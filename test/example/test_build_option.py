@@ -659,7 +659,7 @@ class TestBuildOption:
 
         for file_tmp, file_timestamp in file_timestamp_li.items():
             log_info("{}:{}".format(file_tmp, file_timestamp))
-            file_tmp_flag = new_start_timestamp + time_over <= file_timestamp <= end_timestamp + time_over
+            file_tmp_flag = new_start_timestamp - time_over <= file_timestamp <= end_timestamp + time_over
             file_tmp_flag_li.append(file_tmp_flag)
 
         if all(file_tmp_flag_li):
