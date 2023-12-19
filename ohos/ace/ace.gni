@@ -39,7 +39,8 @@ template("gen_js_obj") {
           "//third_party/flutter/engine/flutter/sky/tools/objcopy_pc_mac.py"
     } else if (target_cpu == "x86_64") {
       script = "//third_party/flutter/engine/flutter/sky/tools/objcopy.py"
-    } else if (target_cpu == "arm" || target_cpu == "arm64") {
+    } else if (target_cpu == "arm" || target_cpu == "arm64" ||
+               target_cpu == "riscv64") {
       script = "//third_party/flutter/engine/flutter/sky/tools/objcopy.py"
     }
 

@@ -162,6 +162,8 @@ template("ohos_ndk_library") {
       _ndk_shlib_directory = "aarch64-linux-ohos"
     } else if (_toolchain == "//build/toolchain/ohos:ohos_clang_x86_64") {
       _ndk_shlib_directory = "x86_64-linux-ohos"
+    } else if (_toolchain == "//build/toolchain/ohos:ohos_clang_riscv64") {
+      _ndk_shlib_directory = "riscv64-linux-ohos"
     }
 
     assert(defined(_ndk_shlib_directory))
