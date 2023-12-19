@@ -203,6 +203,7 @@
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture_video",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_video",
+        "//foundation/multimedia/player_framework/interfaces/inner_api/native:media_client",
         "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/rust:audio_rust_ipc",
         "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/rust:audio_rust_sa",
         "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/rust:listen_rust_ipc",
