@@ -355,7 +355,7 @@ if (is_asan) {
       deps = [ ":${_platform}_install_modules" ]
       print("restore_first_stage_artifact_${_platform}")
 
-      if (current_cpu == "arm64") {
+      if (current_cpu == "arm64" || current_cpu == "riscv64") {
         module_type = "lib64"
       } else if (current_cpu == "arm") {
         module_type = "lib"

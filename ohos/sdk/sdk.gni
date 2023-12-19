@@ -40,6 +40,8 @@ sdk_toolchains = {
 
 if (host_cpu == "arm64") {
   arch = "arm64"
+} else if (host_cpu == "riscv64") {
+  arch = "riscv64"
 } else {
   arch = "x64"
 }
