@@ -105,7 +105,7 @@ class PerformanceAnalyse:
                        "start_time": 0,
                        "end_time": 0
                        },
-            "Ninjia": {"start_pattern": re.compile(r"Excuting ninja command"),
+            "Ninjia": {"start_pattern": re.compile(r"Done\. Made \d+ targets from \d+ files in (\d+)ms"),
                        "end_pattern": re.compile(r"ccache_dir ="),
                        "start_time": 0,
                        "end_time": 0
