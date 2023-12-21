@@ -78,7 +78,9 @@ template("ohos_copy") {
                                "testonly",
                                "license_as_sources",
                                "license_file",
+                               "sources",
                              ])
+      source_list = sources
       module_name = _main_target_name
       module_source_dir = get_label_info(":${_main_target_name}", "dir")
     }

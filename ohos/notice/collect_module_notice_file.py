@@ -134,12 +134,29 @@ def main(args):
     parser.add_argument('--license-file', required=False)
     parser.add_argument('--default-license', required=True)
     parser.add_argument('--output', action='append', required=False)
+    parser.add_argument('--sources', action='append', required=False)
+    parser.add_argument('--sdk-install-info-file', required=False)
+    parser.add_argument('--label', required=False)
+    parser.add_argument('--sdk-notice-dir', required=False)
     parser.add_argument('--module-source-dir',
                         help='source directory of this module',
                         required=True)
 
     options = parser.parse_args()
     depfiles = []
+
+    if options.sdk_install_info_file:
+        install_dir = ''
+        sdk_install_info = read_json_file(options.sdk_install_info_file)
+        for item in sdk_install_info:
+            if options.label == item.get('label'):
+                install_dir = item.get('install_dir')
+                break
+        if options.sources and install_dir:
+            for src in options.sources:
+                extend_output = os.path.join(options.sdk_notice_dir, install_dir,
+                                             '{}.{}'.format(os.path.basename(src), 'txt'))
+                options.output.append(extend_output)
 
     do_collect_notice_files(options, depfiles)
     if options.license_file:
