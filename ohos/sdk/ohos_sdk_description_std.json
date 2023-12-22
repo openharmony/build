@@ -667,15 +667,6 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//arkcompiler/runtime_core/assembler:ark_asm",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "toolchains",
         "module_label": "//arkcompiler/runtime_core/disassembler:ark_disasm",
         "target_os": [
             "windows",
