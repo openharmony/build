@@ -148,7 +148,33 @@ class BuildArgsResolver(ArgsResolverInterface):
             for csv_row in data:
                 if csv_row['dayu200_tdd'] == 'Y':
                     target_set.add(csv_row['repoistory'])
-        return target_set      
+        return target_set
+
+    @staticmethod
+    def get_tdd_build_target(build_target_arg, build_module: BuildModuleInterface):
+        parts_file = os.path.join(CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
+        tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
+        parts_data = IoUtil.read_json_file(parts_file)
+        repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
+        config = Config()
+        prefix = 'out/{}/build_configs/'.format(config.product)
+        target_name = build_target_arg[len('TDD'):]
+        build_targets = []
+        for target in target_name.split(','):
+            if target not in repository_set:
+                print('{} not find in csv!'.format(target))
+                continue
+            for item in parts_data:
+                if item['name'] == target:
+                    new_targets = [prefix + test_target for test_target in item['buildTarget'].split(',')]
+                    build_targets.extend(new_targets)
+                    break
+            else:
+                build_targets = ['build/ohos/packages:build_all_test_pkg']
+                target_generator = build_module.target_generator
+                target_generator.regist_arg('use_thin_lto', False)
+                break
+        return build_targets
 
     @staticmethod
     @throw_exception
@@ -170,25 +196,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_generator.regist_arg('use_thin_lto', False)
                     target_list.append(target_name)
                 elif target_name.startswith('TDD'):
-                    tdd_parts_json_file = os.path.join(
-                        CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
-                    tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
-                    target_data = IoUtil.read_json_file(tdd_parts_json_file)    
-                    repository_set = BuildArgsResolver.get_tdd_repository(tdd_manifest_file)
-                    target_name = target_name[len('TDD'):]
-                    for target in target_name.split(','):
-                        if target not in repository_set:
-                            continue
-                        for item in target_data:
-                            if item['name'] == target:
-                                new_target = os.path.join('out/{}/build_configs'.format(config.product), item['buildTarget'])
-                                target_list.append(new_target)
-                                break
-                        else:
-                            target_list = ['build/ohos/packages:build_all_test_pkg']
-                            target_generator = build_module.target_generator
-                            target_generator.regist_arg('use_thin_lto', False)
-                            break
+                    target_list.extend(BuildArgsResolver.get_tdd_build_target(target_name, build_module))
                 else:
                     target_list.append(target_name)
         else:
