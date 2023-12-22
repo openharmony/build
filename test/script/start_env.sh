@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2023 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -12,37 +12,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if ! command -v pytest &> /dev/null; then
-    echo "Installing pytest..."
-    python -m pip install  pytest -i https://repo.huaweicloud.com/repository/pypi/simple/
-else
-    echo "pytest is already installed."
-fi
+function install_pytest() {
+    if ! command -v pytest &> /dev/null; then
+        echo "Installing pytest..."
+        python -m pip install pytest "$@"
+    else
+        echo "pytest is already installed."
+    fi
+}
 
-if ! pip show pytest-html &> /dev/null; then
-    echo "Installing pytest-html..."
-    python -m pip install  pytest-html -i https://repo.huaweicloud.com/repository/pypi/simple/
-else
-    echo "pytest-html is already installed."
-fi
+function install_pytest_html() {
+    if ! pip show pytest-html &> /dev/null; then
+      echo "Installing pytest-html..."
+      python -m pip install pytest-html "$@"
+    else
+        echo "pytest-html is already installed."
+    fi
+}
 
-if ! pip show pytest-xdist &> /dev/null; then
-    echo "Installing pytest-xdist..."
-    python -m pip install  pytest-xdist -i https://repo.huaweicloud.com/repository/pypi/simple/
-else
-    echo "pytest-xdist is already installed."
-fi
+function install_pytest_metadata() {
+    if ! pip show pytest-metadata &> /dev/null; then
+        echo "Installing pytest-metadata..."
+        python -m pip install pytest-metadata "$@"
+    else
+        echo "pytest-metadata is already installed."
+    fi
+}
 
-if ! pip show pytest-metadata &> /dev/null; then
-    echo "Installing pytest-metadata..."
-    python -m pip install  pytest-metadata -i https://repo.huaweicloud.com/repository/pypi/simple/
-else
-    echo "pytest-metadata is already installed."
-fi
+function install_py() {
+    if ! pip show py &> /dev/null; then
+        echo "Installing py..."
+        python -m pip install py "$@"
+    else
+        echo "py is already installed."
+    fi
+}
 
-if ! pip show py &> /dev/null; then
-    echo "Installing py..."
-    python -m pip install  py -i https://repo.huaweicloud.com/repository/pypi/simple/
-else
-    echo "py is already installed."
-fi
+function install() {
+    install_pytest "$@"
+    install_pytest_html "$@"
+    install_pytest_metadata "$@"
+    install_py "$@"
+}
+
+function start() {
+    if [[ $# -eq 2 && $1 == "-i" ]]; then
+        install "$@"
+    elif [[ $# -eq 0 ]]; then
+        install "$@"
+    else
+        echo "args wrong"
+    fi
+}
+
+start "$@"
