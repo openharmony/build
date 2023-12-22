@@ -80,13 +80,13 @@ if [ -d out.a ]; then
     fi
     mv out.a out
 fi
-${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=true --gn-args asan_detector=true --gn-args use_thin_lto=false --gn-args ohos_extra_cppflags="-fno-lto" --keep-ninja-going --gn-args ohos_extra_cxxflags="-fno-whole-program-vtables" --gn-args ohos_extra_cflags="-fno-whole-program-vtables"
 step1_time=$(date +%s)
 mv out out.a
 if [ -d out.n ]; then
     mv out.n out
 fi
-${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false
+${no_build+echo skip} ./build.sh "$@" --gn-args is_asan=false --gn-args asan_detector=true
 step2_time=$(date +%s)
 
 
