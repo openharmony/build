@@ -110,7 +110,8 @@ def exec_command_communicate(cmd_path, res_path, res_def_name, rust=None):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             encoding="utf-8",
-            universal_newlines=True
+            universal_newlines=True,
+            cwd=CURRENT_OHOS_ROOT
         )
         out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
@@ -151,6 +152,7 @@ def exec_command_out_put(cmd_path, res_def_name, error_log):
             stderr=subprocess.PIPE,
             encoding="utf-8",
             universal_newlines=True,
+            cwd=CURRENT_OHOS_ROOT
         )
         out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
@@ -189,6 +191,7 @@ def exec_command_install_dir(cmd_path, res_def_name):
             stderr=subprocess.PIPE,
             encoding="utf-8",
             universal_newlines=True,
+            cwd=CURRENT_OHOS_ROOT
         )
         out, error = proc.communicate(timeout=TIME_OUT)
         out_res = out.splitlines() + error.splitlines()
@@ -308,7 +311,7 @@ class TestModuleBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH  + "/src/" + function_name + "/hello.o"
+        res_path = RESULT_PATH + "/src/" + function_name + "/hello.o"
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_static_library failed"
 
@@ -575,3 +578,4 @@ def write_initial_bundle_json():
 
 
 write_initial_bundle_json()
+
