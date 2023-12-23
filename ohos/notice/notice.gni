@@ -50,6 +50,7 @@ template("collect_notice") {
                                "testonly",
                                "module_type",
                                "outputs",
+                               "source_list",
 
                                # Some license file are generated in gn gen.
                                # Such notices should not be used as sources.
@@ -97,6 +98,28 @@ template("collect_notice") {
           "--output",
           rebase_path(o, root_build_dir),
         ]
+      }
+
+      if (build_ohos_sdk && defined(module_name)) {
+        import("//build/ohos/sdk/sdk.gni")
+        if (defined(source_list)) {
+          foreach(s, source_list) {
+            args += [
+              "--sources",
+              rebase_path(s, root_build_dir),
+            ]
+          }
+        }
+        args += [
+          "--sdk-install-info-file",
+          rebase_path(generated_sdk_module_install_paths, root_out_dir),
+          "--label",
+          get_label_info(":${module_name}", "label_no_toolchain"),
+          "--sdk-notice-dir",
+          rebase_path(sdk_notice_dir, root_build_dir),
+        ]
+      } else {
+        not_needed([ "source_list" ])
       }
 
       if (defined(license_file)) {
