@@ -175,6 +175,24 @@
     },
     {
         "install_dir": "js/build-tools/ace-loader/lib/",
+        "module_label": "//third_party/weex-loader:scripter",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/lib/",
+        "module_label": "//third_party/weex-loader:styler",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/ace-loader/lib/",
         "module_label": "//third_party/parse5:parse5",
         "target_os": [
             "windows",
