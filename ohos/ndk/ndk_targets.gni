@@ -27,6 +27,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/hiviewdfx/hilog:libhilog_ndk",
   "//interface/sdk_c/hiviewdfx/hitrace:hitrace_header",
   "//interface/sdk_c/hiviewdfx/hitrace:libhitrace_ndk",
+  "//interface/sdk_c/network/netstack/net_websocket:libnet_websocket",
+  "//interface/sdk_c/network/netstack/net_websocket:websocket_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
   "//interface/sdk_c/startup/init/syscap:libdeviceinfo_ndk",
