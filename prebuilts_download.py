@@ -29,27 +29,52 @@ from urllib.request import urlopen
 import urllib.error
 from scripts.util.file_utils import read_json_file
 
+
 def _run_cmd(cmd: str):
     res = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
     return sout.rstrip().decode('utf-8'), serr, res.returncode
 
+
 def _check_sha256(check_url: str, local_file: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     local_sha256_cmd = 'sha256sum ' + local_file + "|cut -d ' ' -f1"
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     local_sha256, err, returncode = _run_cmd(local_sha256_cmd)
+    if check_sha256 is None and returncode != 0:
+        print('remote file {}.sha256 is not found'.format(check_url))
+        check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
     return check_sha256 == local_sha256
+
 
 def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
+    if check_sha256 is None and returncode != 0:
+        print('remote file {}.sha256 is not found'.format(check_url))
+        check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
+    if check_sha256 is None:
+        return False
     mark_file_dir = os.path.join(code_dir, unzip_dir)
     mark_file_name = check_sha256 + '.' + unzip_filename + '.mark'
     mark_file_path = os.path.join(mark_file_dir, mark_file_name)
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
+
+
+def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
+    sha_sums256 = 'SHASUMS256.txt'
+    sha_sums256_path = os.path.join(os.path.dirname(check_url), sha_sums256)
+    file_name = os.path.basename(check_url)
+    cmd = 'curl -s -k ' + sha_sums256_path
+    data_sha_sums256, err, returncode = _run_cmd(cmd)
+    check_sha256 = None
+    for line in data_sha_sums256.split('\n'):
+        if file_name in line:
+            check_sha256 = line.split(' ')[0]
+    return check_sha256
+
 
 def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict = dict()
@@ -60,6 +85,7 @@ def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict['md5_huaweicloud_url'], err, returncode = _run_cmd(md5_huaweicloud_url_cmd)
     parse_dict['bin_file'] = os.path.basename(parse_dict.get('huaweicloud_url'))
     return parse_dict
+
 
 def _uncompress(args, src_file: str, code_dir: str, unzip_dir: str, unzip_filename: str, mark_file_path: str):
     dest_dir = os.path.join(code_dir, unzip_dir)
