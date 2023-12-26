@@ -17,9 +17,10 @@ import os
 import sys
 import subprocess
 import json
+from typing import List
 
 
-def run_command(cmd: list[str], verbose=None):
+def run_command(cmd: List[str], verbose=None):
     """Execute command `cmd`
     :param cmd: Command to be executed.
     :param verbose: Whether echo runtime infomation and output of command `cmd`.
