@@ -213,12 +213,6 @@ declare_args() {
 # Upgrade Skia version
 use_new_skia = true
 
-if (defined(build_cross_platform_version) && build_cross_platform_version) {
-  use_rosen_drawing = false
-} else {
-  use_rosen_drawing = true
-}
-
 # support changing the ohpm registry and using hvigor cache
 declare_args() {
   ohpm_registry = ""
