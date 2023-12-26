@@ -684,6 +684,15 @@
         ]
     },
     {
+        "install_dir": "ets/kits",
+        "module_label": "//interface/sdk-js:bundle_kits",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//arkcompiler/runtime_core/disassembler:ark_disasm",
         "target_os": [
