@@ -116,6 +116,7 @@ set(CMAKE_ASM_COMPILER_TARGET ${OHOS_LLVM})
 
 # Export configurable variables for the try_compile() command.
 set(CMAKE_TRY_COMPILE_PLATFORM_VARIABLES
+  OHOS_SDK_NATIVE
   OHOS_TOOLCHAIN
   OHOS_ARCH
   OHOS_PLATFORM)
