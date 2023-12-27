@@ -587,7 +587,7 @@ config("sanitizer_trap_all_flags") {
 
 # By default, cfi is in release mode
 config("cfi_config_release") {
-  if (!is_mingw && !is_mac) {
+  if (is_ohos) {
     _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist.txt"
 
     configs = [ "//build/config/gcc:symbol_visibility_default" ]
@@ -610,7 +610,7 @@ config("cfi_config_release") {
 
 # Debug mode, add no-trap and recover options over release mode
 config("cfi_config_debug") {
-  if (!is_mingw && !is_mac) {
+  if (is_ohos) {
     configs = [ ":cfi_config_release" ]
     cflags = [
       "-fno-sanitize-trap=cfi",
