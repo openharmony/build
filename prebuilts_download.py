@@ -40,22 +40,22 @@ def _check_sha256(check_url: str, local_file: str) -> bool:
     local_sha256_cmd = 'sha256sum ' + local_file + "|cut -d ' ' -f1"
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
     local_sha256, err, returncode = _run_cmd(local_sha256_cmd)
-    if check_sha256 is None and returncode != 0:
-        print('remote file {}.sha256 is not found'.format(check_url))
+    if check_sha256 != local_sha256:
+        print('remote file {}.sha256 is not found, begin check SHASUMS256.txt'.format(check_url))
         check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
     return check_sha256 == local_sha256
 
 def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
-    if check_sha256 is None and returncode != 0:
-        print('remote file {}.sha256 is not found'.format(check_url))
-        check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
-    if check_sha256 is None:
-        return False
     mark_file_dir = os.path.join(code_dir, unzip_dir)
     mark_file_name = check_sha256 + '.' + unzip_filename + '.mark'
     mark_file_path = os.path.join(mark_file_dir, mark_file_name)
+    if not os.path.exists(mark_file_path):
+        print('remote file {}.sha256 is not found, begin check SHASUMS256.txt'.format(check_url))
+        check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
+        mark_file_name = check_sha256 + '.' + unzip_filename + '.mark'
+        mark_file_path = os.path.join(mark_file_dir, mark_file_name)
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
 
