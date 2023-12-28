@@ -633,6 +633,9 @@ template("compile_app") {
     if (use_hvigor_cache) {
       args += [ "--use-hvigor-cache" ]
     }
+    if (use_hvigor_obfuscation) {
+      args += [ "--use-hvigor-obfuscation" ]
+    }
     if (defined(install_module_info)) {
       metadata = {
         install_modules = [ install_module_info ]
