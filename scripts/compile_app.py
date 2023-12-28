@@ -47,6 +47,7 @@ def parse_args(args):
     parser.add_argument('--sdk-type-name', help='sdk type name', nargs='+', default=['sdk.dir'])
     parser.add_argument('--build-modules', help='build modules', nargs='+', default=[])
     parser.add_argument('--use-hvigor-cache', help='use hvigor cache', action='store_true')
+    parser.add_argument('--use-hvigor-obfuscation', help='use hvigor obfuscation', action='store_true')
 
     options = parser.parse_args(args)
     return options
@@ -180,6 +181,10 @@ def hvigor_build(cwd: str, options):
         hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
+    if options.use_hvigor_obfuscation:
+        cmd.extend(['-p', 'hvigor_obfuscation=true'])
+    else:
+        cmd.extend(['-p', 'hvigor_obfuscation=false'])
     cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
