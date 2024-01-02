@@ -30,6 +30,9 @@
 #elif defined (__aarch64__)
 #define ASAN_LINKER "/lib/ld-musl-aarch64-asan.so.1"
 #define LIB "/lib64/"
+#elif defined (__riscv) && __riscv_xlen == 64
+#define ASAN_LINKER "/lib/ld-musl-riscv64-asan.so.1"
+#define LIB "/lib64/"
 #else
 #error "unsupported arch"
 #endif
