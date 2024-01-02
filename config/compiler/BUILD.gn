@@ -223,7 +223,8 @@ config("compiler") {
   ]
 
   if (is_ohos && is_standard_system && is_clang &&
-      (target_cpu == "arm" || target_cpu == "arm64")) {
+      (target_cpu == "arm" || target_cpu == "arm64" ||
+       target_cpu == "riscv64")) {
     ldflags += [ "-Wl,--pack-dyn-relocs=android+relr" ]
   }
 
@@ -624,6 +625,19 @@ config("compiler") {
     if (current_cpu == "arm") {
       ldflags += [ "-march=$arm_arch" ]
     }
+  } else if (current_cpu == "riscv64") {
+    if (is_clang && !is_ohos && !is_nacl) {
+      cflags += [ "--target=riscv64-linux-gnu" ]
+      ldflags += [ "--target=riscv64-linux-gnu" ]
+    }
+    cflags += [
+      "-march=rv64imafdc",
+      "-mabi=lp64d",
+      "-mno-relax",
+    ]
+    if (is_clang && is_ohos) {
+      ldflags += [ "-Wl,--hash-style=gnu" ]
+    }
   }
 
   if (compiler_timing) {
@@ -727,6 +741,18 @@ config("compiler_cpu_abi") {
         ]
       }
       ldflags += [ "-march=$arm_arch" ]
+    } else if (current_cpu == "riscv64") {
+      if (is_clang && !is_android && !is_ohos && !is_nacl) {
+        cflags += [ "--target=riscv64-linux-gnu" ]
+        ldflags += [ "--target=riscv64-linux-gnu" ]
+      }
+      if (is_clang && (is_android || is_ohos)) {
+        ldflags += [ "-Wl,--hash-style=gnu" ]
+      }
+      if (!is_android) {
+        cflags += [ "-march=rv64imafdc" ]
+      }
+      ldflags += [ "-march=rv64imafdc" ]
     } else if (current_cpu == "mipsel" && is_legacy) {
       cflags += [ "-mnan=legacy" ]
     }
@@ -929,6 +955,13 @@ config("default_warnings") {
         # recognize.
         cflags += [ "-Wno-enum-compare-switch" ]
       }
+    }
+    if (current_cpu == "riscv64") {
+      cflags += [
+        "-Wno-gnu-folding-constant",
+        "-Wno-error=non-c-typedef-for-linkage",
+        "-Wno-extern-c-compat",
+      ]
     }
   }
 }

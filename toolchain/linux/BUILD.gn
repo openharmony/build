@@ -25,6 +25,14 @@ clang_toolchain("clang_arm64") {
   }
 }
 
+clang_toolchain("clang_riscv64") {
+  toolprefix = "riscv64-unknown-linux-gnu-"
+  toolchain_args = {
+    current_cpu = "riscv64"
+    current_os = "linux"
+  }
+}
+
 gcc_toolchain("arm64") {
   toolprefix = "aarch64-linux-gnu-"
 
@@ -56,6 +64,24 @@ gcc_toolchain("arm") {
 
   toolchain_args = {
     current_cpu = "arm"
+    current_os = "linux"
+    is_clang = false
+  }
+}
+
+gcc_toolchain("riscv64") {
+  toolprefix = "riscv64-unknown-linux-gnu-"
+
+  cc = "${toolprefix}gcc"
+  cxx = "${toolprefix}g++"
+
+  ar = "${toolprefix}ar"
+  ld = cxx
+  readelf = "${toolprefix}readelf"
+  nm = "${toolprefix}nm"
+
+  toolchain_args = {
+    current_cpu = "riscv64"
     current_os = "linux"
     is_clang = false
   }
