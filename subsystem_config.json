@@ -215,6 +215,10 @@
     "path": "domains/advertising",
     "name": "advertising"
   },
+  "tee": {
+    "path": "base/tee",
+    "name": "tee"
+  },
   "llvmproject": {
     "path": "toolchain/llvm-project",
     "name": "llvmproject"
