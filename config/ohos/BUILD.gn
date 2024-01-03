@@ -73,7 +73,7 @@ config("runtime_library") {
   libs = []
 
   # arm builds of libc++ starting in NDK r12 depend on unwind.
-  if (current_cpu == "arm") {
+  if (current_cpu == "arm" || current_cpu == "riscv64") {
     libs += [ "unwind" ]
   }
 
@@ -82,6 +82,9 @@ config("runtime_library") {
     "-L" + rebase_path("${clang_base_path}/lib/clang/12.0.1/lib/${abi_target}",
                        root_build_dir),
   ]
+  if (current_cpu == "riscv64") {
+    ldflags += [ "-Wl,--dynamic-linker,/lib/ld-musl-${musl_arch}.so.1" ]
+  }
 
   libs += [
     rebase_path(libclang_rt_file),

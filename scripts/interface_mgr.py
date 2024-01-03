@@ -97,7 +97,7 @@ class InterfaceMgr:
             raise Exception(
                 'sdk base dir [{}] does not exist.'.format(sdk_base_dir))
 
-        target_type_allowlist = ['ohos-arm64']
+        target_type_allowlist = ['ohos-arm64', 'ohos-riscv64']
         target_types = os.listdir(sdk_base_dir)
         for target_type in target_types:
             target_type_dir = os.path.join(sdk_base_dir, target_type)

@@ -17,33 +17,61 @@ import("//build/ohos.gni")
 
 group("musl_install") {
   deps = [
-    ":ld-musl-arm.so.1",
     ":musl-libc.so",
     ":musl-libcxx.so",
     ":musl_ld_path_etc_cfg",
     "//third_party/musl:musl_libs",
   ]
+
+  if (target_cpu == "riscv64") {
+    deps += [ ":ld-musl-riscv64.so.1" ]
+  } else {
+    deps += [ ":ld-musl-arm.so.1" ]
+  }
 }
 
-ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
-  deps = [ "//third_party/musl:soft_create_linker" ]
-  if (is_asan) {
-    asan = "-asan"
-  } else {
-    asan = ""
-  }
+if (target_cpu == "riscv64") {
+  ohos_prebuilt_shared_library("ld-musl-riscv64.so.1") {
+    deps = [ "//third_party/musl:soft_create_linker" ]
+    if (is_asan) {
+      asan = "-asan"
+    } else {
+      asan = ""
+    }
 
-  _muls_linker_so =
-      "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
-  source = _muls_linker_so
-  install_enable = true
-  install_images = [
-    "system",
-    "updater",
-    "ramdisk",
-  ]
-  part_name = "common"
-  module_install_dir = "lib"
+    _muls_linker_so =
+        "${root_out_dir}/common/common/libc/ld-musl-${musl_arch}${asan}.so.1"
+    source = _muls_linker_so
+    install_enable = true
+    install_images = [
+      "system",
+      "updater",
+      "ramdisk",
+    ]
+    part_name = "common"
+    module_install_dir = "lib"
+  }
+} else {
+  ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
+    deps = [ "//third_party/musl:soft_create_linker" ]
+    if (is_asan) {
+      asan = "-asan"
+    } else {
+      asan = ""
+    }
+
+    _musl_linker_so =
+        "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
+    source = _musl_linker_so
+    install_enable = true
+    install_images = [
+      "system",
+      "updater",
+      "ramdisk",
+    ]
+    part_name = "common"
+    module_install_dir = "lib"
+  }
 }
 
 ohos_prebuilt_shared_library("musl-libc.so") {
@@ -60,6 +88,8 @@ ohos_prebuilt_shared_library("musl-libc.so") {
 ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
   if (target_cpu == "arm") {
     source = "ld-musl-arm.path"
+  } else if (target_cpu == "riscv64") {
+    source = "ld-musl-riscv64.path"
   } else {
     source = "ld-musl-aarch64.path"
   }
@@ -81,6 +111,8 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     source = "${clang_base_path}/lib/aarch64-linux-ohos/c++/libc++.so"
   } else if (target_cpu == "x86_64") {
     source = "${clang_base_path}/lib/x86_64-linux-ohos/c++/libc++.so"
+  } else if (target_cpu == "riscv64") {
+    source = "${clang_base_path}/lib/riscv64-linux-ohos/c++/libc++.so"
   } else {
     source = ""
   }

@@ -46,7 +46,7 @@ def _prepare_root(system_path, target_cpu):
     os.symlink('/system/bin/init', os.path.join(root_dir, 'init'))
     os.symlink('/system/etc', os.path.join(root_dir, 'etc'))
     os.symlink('/vendor', os.path.join(root_dir, 'chipset'))
-    if target_cpu == 'arm64':
+    if target_cpu == 'arm64' or target_cpu == 'riscv64':
         os.symlink('/system/lib64', os.path.join(root_dir, 'lib64'))
     os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
 
