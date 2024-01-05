@@ -36,22 +36,20 @@ def check_darwin_system() -> int:
     return 0
 
 
-def check_m1_cpu() -> int:
+def check_cpu() -> int:
     check_host_cpu_cmd = "sysctl machdep.cpu.brand_string"
     res = run_cmd(check_host_cpu_cmd)
     if res[1] == 0 and res[2] != "":
         host_cpu = res[2].strip().decode().split("brand_string:")[-1]
-        if "M1" in host_cpu:
-            print("host cpu is m1")
-        elif "M2" in host_cpu:
-            print("host cpu is m2")
+        if "M" in host_cpu:
+            print("host cpu is arm64")
 
     return 0
 
 
 def main():
     if sys.argv[1] == "cpu":
-        check_m1_cpu()
+        check_cpu()
     elif sys.argv[1] == "system":
         check_darwin_system()
     else:
