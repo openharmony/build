@@ -30,6 +30,8 @@ API_MODIFY_DIR = os.path.join(OUTPATH, "build-tools")
 API_MODIFY_TOOL = os.path.join(API_MODIFY_DIR, "delete_systemapi_plugin.js")
 API_PATH = os.path.join(OUTPATH, "api")
 API_GEN_PATH = os.path.join(OUTPATH, "build-tools/api")
+KITS_PATH = os.path.join(OUTPATH, "kits")
+KITS_GEN_PATH = os.path.join(OUTPATH, "build-tools/kits")
 DEL_TARGET = ["//interface/sdk-js:bundle_api"]
 
 
@@ -46,6 +48,14 @@ def replace_sdk_api_dir(source_root: str):
     if os.path.exists:
         shutil.rmtree(dest)
     source = os.path.join(source_root, API_GEN_PATH)
+    shutil.copytree(source, dest)
+
+
+def replace_sdk_kits_dir(source_root: str):
+    dest = os.path.join(source_root, KITS_PATH)
+    if os.path.exists:
+        shutil.rmtree(dest)
+    source = os.path.join(source_root, KITS_GEN_PATH)
     shutil.copytree(source, dest)
 
 
@@ -77,6 +87,7 @@ def parse_step(sdk_description_file: str, source_root: str, nodejs: str, output_
     copy_sdk_interface(source_root)
     remove_system_api_method(source_root, nodejs)
     replace_sdk_api_dir(source_root)
+    replace_sdk_kits_dir(source_root)
     regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file)
 
 
