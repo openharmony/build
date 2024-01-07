@@ -443,7 +443,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9b52c9/darwin/clang_darwin-arm64-9b52c9-20240105.tar.bz2",
+          "file_path": "/openharmony/compiler/clang/15.0.4-9b52c9_sp1/darwin/clang_darwin-arm64-9b52c9-20240105_sp1.tar.bz2",
           "unzip_filename": "llvm"
         },
         {
