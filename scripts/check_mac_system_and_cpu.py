@@ -40,7 +40,7 @@ def check_cpu() -> int:
     check_host_cpu_cmd = "sysctl machdep.cpu.brand_string"
     res = run_cmd(check_host_cpu_cmd)
     if res[1] == 0 and res[2] != "":
-        host_cpu = res[2].strip().decode().split("brand_string:")[-1]
+        host_cpu = res[2].strip().decode().split()[-1]
         if "M" in host_cpu:
             print("host cpu is arm64")
 
