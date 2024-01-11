@@ -143,6 +143,9 @@ template("_ohos_test") {
     _c_sources_file = "$target_gen_dir/$target_name.sources"
     write_file(_c_sources_file, rebase_path(invoker.sources, root_build_dir))
   }
+  write_file("$test_output_dir/${target_name}_path.txt",
+             get_label_info(":$target_name", "dir"),
+             "string")
 
   ohos_executable(target_name) {
     forward_variables_from(invoker,
