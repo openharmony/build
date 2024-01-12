@@ -224,6 +224,8 @@ class PartObject(object):
                         format(part_name), "2014")
                 info['header_base'] = header_base
                 info['header_files'] = header.get('header_files')
+                if header.get('visibility') is not None:
+                    info['visibility'] = header.get('visibility')
             _libs_info[lib_name] = info
         self._inner_kits_info = _libs_info
 
