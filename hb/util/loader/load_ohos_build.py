@@ -198,6 +198,9 @@ class PartObject(object):
             lib_name = label.split(':')[1]
             info['label'] = label
             info['name'] = lib_name
+            vis = inner_kits_lib.get('visibility')
+            if vis is not None:
+                info['visibility'] = vis
             lib_type = inner_kits_lib.get('type')
             if lib_type is None:
                 lib_type = 'so'
@@ -224,8 +227,6 @@ class PartObject(object):
                         format(part_name), "2014")
                 info['header_base'] = header_base
                 info['header_files'] = header.get('header_files')
-                if header.get('visibility') is not None:
-                    info['visibility'] = header.get('visibility')
             _libs_info[lib_name] = info
         self._inner_kits_info = _libs_info
 
