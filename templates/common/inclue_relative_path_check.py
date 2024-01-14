@@ -36,7 +36,6 @@ class Analyzer:
                 path_info[component] = path
         for component in components:
             if component['component'] in path_info.keys():
-                # need_scan_path_list.append(project + os.sep + path_info[component['component']])
                 component['scan_path'] = project + '/' + path_info[component['component']]
             else:
                 component['scan_path'] = ''
@@ -48,13 +47,7 @@ class Analyzer:
             config_json = json.load(r)
         if "inherit" in config_json.keys():
             inherit = config_json['inherit']
-            for json_name in inherit:
-                with open(project + os.sep + json_name, 'r', encoding='utf-8') as r:
-                    inherit_file = json.load(r)
-                for subsystem in inherit_file['subsystems']:
-                    for component in subsystem['components']:
-                        component['subsystem'] = subsystem['subsystem']
-                        components.append(component)
+            cls.get_components_from_inherit_attr(components, inherit, project)
         for subsystem in config_json['subsystems']:
             for component in subsystem['components']:
                 if component not in components:
@@ -63,13 +56,23 @@ class Analyzer:
         return components
 
     @classmethod
+    def get_components_from_inherit_attr(cls, components, inherit, project):
+        for json_name in inherit:
+            with open(project + os.sep + json_name, 'r', encoding='utf-8') as r:
+                inherit_file = json.load(r)
+            for subsystem in inherit_file['subsystems']:
+                for component in subsystem['components']:
+                    component['subsystem'] = subsystem['subsystem']
+                    components.append(component)
+
+    @classmethod
     def check(cls, include):
         if include is not None and './' in include.group():
             return True
         return False
 
     @classmethod
-    def scan_files(cls, components, project_path):
+    def scan_files(cls, components, proj_path):
         results = []
         for component in components:
             if not component.__contains__('scan_path') or component['scan_path'].strip() == '':
@@ -80,9 +83,9 @@ class Analyzer:
             files.extend(glob.glob(os.path.join(component['scan_path'], '**', '*.h'), recursive=True))
             for file in files:
                 try:
-                    cls.scan_each_file(component, file, project_path, results)
-                except:
-                    print("scan file {} with error:".format(file))
+                    cls.scan_each_file(component, file, proj_path, results)
+                except UnicodeDecodeError as e:
+                    print("scan file {} with unicode decode error: {}".format(file, e))
         return results
 
     @classmethod
@@ -97,7 +100,6 @@ class Analyzer:
                     result = {'line_num': line_num, 'file_path': file.replace(project_path, "/"),
                               'include_cmd': include.group(), 'component': component['component'],
                               'subsystem': component['subsystem']}
-                    # result[f"{file}"] = {"行数": line_num, "路径": file, "包含指令": include.group()}
                     results.append(result)
 
     @classmethod
@@ -138,8 +140,8 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    config_path = args.config_path
-    project_path = args.project_path
-    xml_path = args.xml_path
-    output_path = args.output_path
-    Analyzer.analysis(config_path, project_path, xml_path, output_path)
+    local_config_path = args.config_path
+    local_project_path = args.project_path
+    local_xml_path = args.xml_path
+    local_output_path = args.output_path
+    Analyzer.analysis(local_config_path, local_project_path, local_xml_path, local_output_path)
