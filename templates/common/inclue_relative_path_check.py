@@ -19,8 +19,10 @@ import os
 import re
 import glob
 import os.path
-import pandas as pd
 import csv
+
+import pandas as pd
+
 
 
 class Analyzer:
