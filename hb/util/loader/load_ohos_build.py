@@ -198,9 +198,8 @@ class PartObject(object):
             lib_name = label.split(':')[1]
             info['label'] = label
             info['name'] = lib_name
-            vis = inner_kits_lib.get('visibility')
-            if vis is not None:
-                info['visibility'] = vis
+            if inner_kits_lib.get('visibility') is not None:
+                info['visibility'] = inner_kits_lib.get('visibility')
             lib_type = inner_kits_lib.get('type')
             if lib_type is None:
                 lib_type = 'so'
