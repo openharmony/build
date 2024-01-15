@@ -41,8 +41,12 @@ def check_cpu() -> int:
     res = run_cmd(check_host_cpu_cmd)
     if res[1] == 0 and res[2] != "":
         host_cpu = res[2].strip().decode().split("brand_string:")[-1]
-        if "M" in host_cpu:
-            print("host cpu is arm64")
+        if "M1" in host_cpu:
+            print("host cpu is M1")
+        elif "M2" in host_cpu:
+            print("host cpu is M2")
+        elif "M3" in host_cpu:
+            print("host cpu is M3")
 
     return 0
 
