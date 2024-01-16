@@ -154,6 +154,24 @@ ohos_ndk_copy("ndk_cmake_files") {
   sources = [ "./cmake" ]
 }
 
+action("cmake_patch") {
+  if (host_os == "mac") {
+    deps = [ "//prebuilts/cmake/darwin-x86:darwin_cmake_copy" ]
+  } else {
+    deps = [
+      "//prebuilts/cmake/linux-x86:linux_cmake_copy",
+      "//prebuilts/cmake/windows-x86:windows_cmake_copy",
+    ]
+  }
+  script = "//build/ohos/ndk/cmake_patch.sh"
+  args = [
+    rebase_path("$ndk_linux_tools_out_dir/cmake/share/cmake-3.16/Modules"),
+    rebase_path("$ndk_windows_tools_out_dir/cmake/share/cmake-3.16/Modules"),
+    rebase_path("$ndk_darwin_tools_out_dir/cmake/share/cmake-3.16/Modules"),
+  ]
+  outputs = [ "${target_out_dir}/${target_name}.stamp" ]
+}
+
 action_with_pydeps("merge_ndk_notice") {
   deps = [ ":all_ndk_targets" ]
   script = "//build/ohos/notice/merge_notice_files.py"

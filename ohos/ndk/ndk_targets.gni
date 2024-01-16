@@ -116,6 +116,7 @@ _ndk_cmake = [
   "//prebuilts/cmake/linux-x86:linux_cmake_copy",
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
   "//build/ohos/ndk:ndk_cmake_files",
+  "//build/ohos/ndk:cmake_patch",
 ]
 
 _ndk_targets_list =
