@@ -674,6 +674,47 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
                 compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
                                                 part_subsystem_component_info, parts_config_path, subsystem_components_list)
 
+def _output_all_components_info(parts_config_dict, parts_info_output_path):
+    if 'parts_inner_kits_info' not in parts_config_dict:
+        return
+    parts_inner_kits_info = parts_config_dict.get('parts_inner_kits_info')
+    if 'parts_info' not in parts_config_dict:
+        return
+    parts_info = parts_config_dict.get('parts_info')
+    if 'parts_path_info' not in parts_config_dict:
+        return
+    parts_path_info = parts_config_dict.get('parts_path_info')
+
+    components = {}
+
+    for name, val in parts_inner_kits_info.items():
+        component = {}
+        component["innerapis"] = []
+        component["variants"] = []
+        if name in parts_path_info:
+            component["path"] = parts_path_info[name]
+        else:
+            print("Warning: component %s has no path info." % name)
+
+        if name in parts_info:
+            for item in parts_info[name]:
+                component["subsystem"] = item.get("subsystem_name")
+                break
+        else:
+            print("Warning: component %s has no subsystem info." % name)
+
+        if val:
+            for k, v in val.items():
+                innerapi = {"name": k, "label": v["label"]}
+                if "visibility" in v:
+                    innerapi["visibility"] = v["visibility"]
+                component["innerapis"].append(innerapi)
+
+        components[name] = component
+
+    _component_file = os.path.join(parts_info_output_path,
+                                        "components.json")
+    write_json_file(_component_file, components)
 
 def _output_parts_info(parts_config_dict,
                        config_output_path, skip_partlist_check):
@@ -813,6 +854,7 @@ def _output_parts_info(parts_config_dict,
         LogUtil.hb_info(
             "generate parts deps info to '{}'".format(parts_deps_info_file), mode=Config.log_mode)
 
+    _output_all_components_info(parts_config_dict, parts_info_output_path)
 
 def get_parts_info(source_root_dir,
                    config_output_relpath,
