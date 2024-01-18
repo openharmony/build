@@ -151,6 +151,13 @@ template("unittest") {
     if (defined(invoker.public_deps)) {
       public_deps = invoker.public_deps
     }
+    if (defined(invoker.external_deps)) {
+      external_deps = invoker.external_deps
+    }
+    if (defined(invoker.public_external_deps)) {
+      public_external_deps = invoker.public_external_deps
+    }
+
     if (defined(invoker.defines)) {
       defines = invoker.defines
     }
@@ -180,52 +187,6 @@ template("unittest") {
         "-pthread",
       ]
     }
-
-    if (defined(invoker.external_deps) && invoker.external_deps != []) {
-      innersdk_dir_name = "sdk/${target_os}-${target_cpu}"
-      innersdk_base_dir = "//${innersdk_dir_name}"
-
-      component_override_map = rebase_path(
-              "${root_build_dir}/build_configs/component_override_map.json")
-      external_deps_script =
-          rebase_path("//build/templates/common/external_deps_handler.py")
-      external_deps_temp_file = "$target_gen_dir/${_part_name}__${target_name}_external_deps_temp.json"
-      arguments = [ "--external-deps" ]
-      arguments += invoker.external_deps
-      arguments += [
-        "--parts-src-flag-file",
-        rebase_path("$root_build_dir/build_configs/parts_src_flag.json",
-                    root_build_dir),
-        "--external-deps-temp-file",
-        rebase_path(external_deps_temp_file, root_build_dir),
-        "--sdk-base-dir",
-        rebase_path("${innersdk_base_dir}", root_build_dir),
-        "--sdk-dir-name",
-        "${innersdk_dir_name}",
-        "--current-toolchain",
-        current_toolchain,
-        "--innerkits-adapter-info-file",
-        rebase_path("//build/ohos/inner_kits_adapter.json", root_build_dir),
-        "--component-override-map",
-        component_override_map,
-      ]
-
-      handler_result = exec_script(external_deps_script, arguments, "string")
-      if (handler_result != "") {
-        print(handler_result)
-      }
-
-      external_deps_info = read_file(external_deps_temp_file, "json")
-      if (defined(external_deps_info.deps)) {
-        deps += external_deps_info.deps
-      }
-      if (defined(external_deps_info.libs)) {
-        libs += external_deps_info.libs
-      }
-      if (defined(external_deps_info.include_dirs)) {
-        include_dirs += external_deps_info.include_dirs
-      }
-    }
   }
 }
 
@@ -253,6 +214,12 @@ template("moduletest") {
     ldflags = []
     if (defined(invoker.ldflags)) {
       ldflags += invoker.ldflags
+    }
+    if (defined(invoker.external_deps)) {
+      external_deps = invoker.external_deps
+    }
+    if (defined(invoker.public_external_deps)) {
+      public_external_deps = invoker.public_external_deps
     }
     if (ohos_build_compiler != "clang") {
       ldflags += [ "-lstdc++" ]
@@ -307,6 +274,13 @@ template("fuzztest") {
     ldflags = []
     if (defined(invoker.ldflags)) {
       ldflags += invoker.ldflags
+    }
+
+    if (defined(invoker.external_deps)) {
+      external_deps = invoker.external_deps
+    }
+    if (defined(invoker.public_external_deps)) {
+      public_external_deps = invoker.public_external_deps
     }
     if (ohos_build_compiler != "clang") {
       ldflags += [ "-lstdc++" ]
