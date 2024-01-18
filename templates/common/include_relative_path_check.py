@@ -19,6 +19,7 @@ import os
 import re
 import glob
 import os.path
+import stat
 
 
 class Analyzer:
@@ -120,7 +121,9 @@ class Analyzer:
         print("scan:")
         print([item['scan_path'] for item in components], project_path)
         result = cls.scan_files(components, project_path)
-        with open(output_path, "w", encoding="utf-8") as f:
+        flags = os.O_WRONLY | os.O_CREAT
+        modes = stat.S_IWUSR | stat.S_IRUSR
+        with os.fdopen(os.open(output_path, flags, modes), 'w') as f:
             for ele in result:
                 items = ele['subsystem'], ele['component'], ele['file_path'], str(ele['line_num']), ele['include_cmd']
                 f.write(" ".join(items) + "\n")
@@ -128,12 +131,12 @@ class Analyzer:
 def get_args():
     parser = argparse.ArgumentParser(
         description=f"common_template.\n")
-    parser.add_argument("-c", "--config_path", required=False, type=str,
-                        help="path of config_file", default="/data01/source/master/vendor/hihope/rk3568/config.json")
+    parser.add_argument("-c", "--config_path", required=True, type=str,
+                        help="path of config_file", default="")
     parser.add_argument("-p", "--project_path", type=str, required=False,
-                        help="root path of openharmony. eg: -p ~/openharmony", default="/data01/source/master")
-    parser.add_argument("-x", "--xml_path", type=str, required=False,
-                        help="path of ohos.xml", default="/data01/source/master/.repo/manifests/ohos/ohos.xml")
+                        help="root path of openharmony. eg: -p ~/openharmony", default="./")
+    parser.add_argument("-x", "--xml_path", type=str, required=True,
+                        help="path of ohos.xml", default="")
     parser.add_argument("-o", "--output_path", required=False, type=str,
         default="include_relative_path.list", help="name of output_json")
     return parser.parse_args()
