@@ -40,8 +40,7 @@ if (target_cpu == "arm64" && res == 1 && is_ohos && is_standard_system &&
 }
 
 # pac_ret is supported in armv8.
-if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw &&
-    use_pac_ret) {
+if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw && use_pac_ret) {
   support_branch_protector_pac_ret = true
 }
 
