@@ -928,7 +928,7 @@ template("ohos_shared_library") {
         cflags_cc += [
           "-nostdinc++",
           "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/libcxx-ohos/include/c++/v1",
+                  "${toolchains_dir}/${host_platform_dir}/llvm_ndk/include/libcxx-ohos/include/c++/v1",
                   root_build_dir),
         ]
         ldflags += [
