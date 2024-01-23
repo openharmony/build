@@ -680,7 +680,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 data += line
             with os.fdopen(os.open(ohos_para_file_path,
                                    os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-                           'r', encoding='utf-8') as ohos_para_file:
+                           'w', encoding='utf-8') as ohos_para_file:
                 ohos_para_file.write(data)
 
     @staticmethod
