@@ -178,7 +178,7 @@ template("ohos_prebuilt_shared_library") {
                            [
                              "testonly",
                              "visibility",
-
+                             "public_external_deps",
                              "deps",
                              "public_configs",
                              "subsystem_name",
@@ -239,6 +239,7 @@ template("ohos_prebuilt_static_library") {
                              "visibility",
 
                              "deps",
+                             "public_external_deps",
                              "public_configs",
                              "subsystem_name",
                              "part_name",
