@@ -40,6 +40,7 @@ declare_args() {
   ohos_build_target = ""
   ohos_build_compiler_dir = ""
   ohos_kernel_type = ""
+  ohos_kernel_path = ""
   ohos_kernel_is_prebuilt = false
   use_board_toolchain = true
 
@@ -68,6 +69,15 @@ if (product_config_path != "") {
   ohos_kernel_type = product_config.kernel_type
   if (defined(product_config.kernel_is_prebuilt)) {
     ohos_kernel_is_prebuilt = product_config.kernel_is_prebuilt
+  }
+
+  # support config kernel liteos_m path
+  if (ohos_kernel_type == "liteos_m") {
+    if (defined(product_config.kernel_path)) {
+      ohos_kernel_path = product_config.kernel_path
+    } else {
+      ohos_kernel_path = "//kernel/liteos_m"
+    }
   }
 
   # To be deleted, and will use board config.
