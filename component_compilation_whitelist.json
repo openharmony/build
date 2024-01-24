@@ -225,6 +225,7 @@
         "//third_party/skia:skvm_jit",
         "//foundation/ai/neural_network_runtime/frameworks:libneural_network_runtime",
         "//foundation/ai/neural_network_runtime/frameworks:libneural_network_core",
+        "//foundation/ai/neural_network_runtime/frameworks/native/neural_network_core:libneural_network_core",
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/idl:faultlogger_service_ohos_common",
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/idl:faultlogger_service_ohos_common_with_cfi",
         "//foundation/communication/dsoftbus/tests/sdk/frame/fuzztest/softbusclientstub_fuzzer:softbus_client_static"
@@ -7097,6 +7098,9 @@
             "//third_party/openssl/include/"
         ],
         "//foundation/ai/neural_network_runtime/frameworks:libneural_network_core": [
+            "//third_party/mindspore/mindspore-src/source/mindspore/lite/mindir/include/"
+        ],
+        "//foundation/ai/neural_network_runtime/frameworks/native/neural_network_core:libneural_network_core": [
             "//third_party/mindspore/mindspore-src/source/mindspore/lite/mindir/include/"
         ],
         "//drivers/peripheral/wlan/hal:wifi_hal": [
