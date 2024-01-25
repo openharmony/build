@@ -85,9 +85,9 @@ group("ohos") {
                   if (_p_info.part_name ==
                       product_configed_component.component) {
                     foreach(component_target, _p_info.module_list) {
-                      if (product_configed_component.component == "liteos_m") {
+                      if (ohos_kernel_type == "liteos_m") {
                         if (component_target !=
-                            "//kernel/liteos_m:build_kernel_image") {
+                            "${ohos_kernel_path}:build_kernel_image") {
                           deps += [ component_target ]
                         }
                       } else if (product_configed_component.component ==
