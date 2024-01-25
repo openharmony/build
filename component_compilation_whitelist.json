@@ -13460,6 +13460,12 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/application_context/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app/application_state_change_callback/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app/environment_callback/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/context/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
