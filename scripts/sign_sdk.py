@@ -16,7 +16,6 @@
 
 import subprocess
 import argparse
-import queue
 import os
 import sys
 
@@ -51,7 +50,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', '"ohos-sdk"', '--wait']
 
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        sign_results.put((cmd6, process))
+        sign_results.append((cmd6, process))
 
 
 def main(args):
@@ -59,11 +58,10 @@ def main(args):
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
     os.chdir(darwin_sdk_dir)
     sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
-    sign_results = queue.Queue()
+    sign_results = []
     for file in os.listdir('.'):
         sign_sdk(file, sign_list, sign_results)
-    for q in sign_results:
-        cmd, process = q.get()
+    for cmd, process in sign_results:
         stdout, stderr = process.communicate()
         if process.returncode:
             print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
