@@ -145,8 +145,13 @@ class BuildArgsResolver(ArgsResolverInterface):
         target_set = set()
         with open(input_file, 'r') as input_f:
             data = csv.DictReader(input_f)
+            tdd_col_name = "dayu200_tdd"
+            for col_name in data.fieldnames:
+                if col_name.startswith(tdd_col_name):
+                    tdd_col_name = col_name
+                    break
             for csv_row in data:
-                if csv_row['dayu200_tdd'] == 'Y':
+                if csv_row[tdd_col_name] == 'Y':
                     target_set.add(csv_row['repoistory'])
         return target_set
 
