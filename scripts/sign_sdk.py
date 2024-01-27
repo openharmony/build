@@ -62,10 +62,13 @@ def main(args):
     for file in os.listdir('.'):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
-        stdout, stderr = process.communicate()
-        if process.returncode:
-            print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
-            raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
+        try:
+            stdout, stderr = process.communicate()
+            if process.returncode:
+                print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
+                raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
+        except Exception as e:
+            raise TimeoutError(r"run xcrun cmd timeout")
 
 
 if __name__ == '__main__':
