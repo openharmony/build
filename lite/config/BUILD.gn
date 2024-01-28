@@ -18,10 +18,6 @@ config("cpu_arch") {
   asmflags = cflags
 }
 
-config("gtest_feature_cpp") {
-  cflags_cc = [ "-std=c++17" ]
-}
-
 config("language_c") {
   cflags_c = [ "-std=c99" ]
 }
