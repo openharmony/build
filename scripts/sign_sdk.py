@@ -35,12 +35,16 @@ def sign_sdk(zipfile, sign_list, sign_results):
         dir_name = zipfile.split('-')[0]
         cmd1 = ['unzip', "-q", zipfile]
         subprocess.call(cmd1)
+        need_sign_files = []
         for root, dirs, files in os.walk(dir_name):
             for file in files:
                 file = os.path.join(root, file)
-                if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') or file.split('/')[-2] == 'bin':
-                    cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
-                    subprocess.call(cmd2)
+                need_sign_files.append(file)
+        
+        for file in need_sign_files:
+            if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') or file.split('/')[-2] == 'bin':
+                cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
+                subprocess.call(cmd2)
         cmd3 = ['rm', zipfile]
         subprocess.call(cmd3)
         cmd4 = ['zip', '-rq', zipfile, dir_name]
