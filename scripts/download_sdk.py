@@ -22,6 +22,7 @@ import sys
 import tarfile
 import subprocess
 import argparse
+import shutil
 
 from urllib.request import urlretrieve
 
@@ -82,44 +83,34 @@ def extract_file(filename):
         os.remove(os.path.join(target_dir, "manifest_tag.xml"))
 
 
-def npm_install(target_dir):
+def npm_install(target_dir, args):
 
-    sdk_dir = os.path.join(target_dir, "ohos-sdk/linux")
-    os.chdir(sdk_dir)
-    subprocess.run(['ls', '-d', '*/', '|', 'xargs', 'rm', '-rf'])
+    sdk_zip_file_dir = os.path.join(target_dir, "ohos-sdk/linux")
+    sdk_unzip_dir = os.path.join(sdk_zip_file_dir, args.api_version)
 
-    for filename in os.listdir(sdk_dir):
+    if os.path.exists(sdk_unzip_dir):
+        shutil.rmtree(sdk_unzip_dir)
+    os.makedirs(sdk_unzip_dir, exist_ok=True)
+    os.chdir(sdk_zip_file_dir)
+    for filename in os.listdir(sdk_zip_file_dir):
         if filename.endswith('.zip'):
-            subprocess.run(['unzip', filename])
+            subprocess.run(['mv', filename, sdk_unzip_dir])
 
-    p1 = subprocess.Popen(
-        ["grep", "apiVersion", "toolchains/oh-uni-package.json"], stdout=subprocess.PIPE)
-    p2 = subprocess.Popen(["awk", "{print $2}"],
-                          stdin=p1.stdout, stdout=subprocess.PIPE)
-    p3 = subprocess.Popen(["sed", "-r", "s/\",?//g"],
-                          stdin=p2.stdout, stdout=subprocess.PIPE)
-    output = p3.communicate(timeout=5)[0]
-    api_version = output.decode("utf-8").strip()
-
-    p4 = subprocess.Popen(
-        ["grep", "version", "toolchains/oh-uni-package.json"], stdout=subprocess.PIPE)
-    p5 = subprocess.Popen(["awk", "{print $2}"],
-                          stdin=p4.stdout, stdout=subprocess.PIPE)
-    p6 = subprocess.Popen(["sed", "-r", "s/\",?//g"],
-                          stdin=p5.stdout, stdout=subprocess.PIPE)
-    output = p6.communicate(timeout=5)[0]
-    sdk_version = output.decode("utf-8").strip()
-
-    for dirname in os.listdir("."):
-        if os.path.isdir(dirname):
-            subprocess.run(['mkdir', '-p', api_version])
-            subprocess.run(['mv', dirname, api_version])
-
+    procs = []
+    os.chdir(sdk_unzip_dir)
+    for filename in os.listdir(sdk_unzip_dir):
+        if filename.endswith('.zip'):
+            cmd = ['unzip', filename]
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            procs.append(proc)
+    for proc in procs:
+        out, error = proc.communicate(timeout=60)
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--branch', default='master', help='OHOS branch name')
     parser.add_argument('--product-name', default='ohos-sdk-full', help='OHOS product name')
+    parser.add_argument('--api-version', default='10', help='OHOS sdk api version')
     args = parser.parse_args()
     default_save_path = os.path.join(find_top(), 'prebuilts')
     if not os.path.exists(default_save_path):
@@ -155,9 +146,8 @@ def main():
         product_name = product['component']
         if product_name == args.product_name:
             if os.path.exists(os.path.join(default_save_path, product_name)):
-                print('{} already exists. Please backup or delete it first!'.format(
+                print('{} already exists. Please backup or delete it first! Download canceled!'.format(
                     os.path.join(default_save_path, product_name)))
-                print("Download canceled!")
                 break
 
             if product['obsPath'] and os.path.exists(default_save_path):
@@ -177,7 +167,7 @@ def main():
 
             extract_file(os.path.join(
                 save_path2, os.path.basename(download_url)))
-            npm_install(save_path2)
+            npm_install(save_path2, args)
             break
 
 
