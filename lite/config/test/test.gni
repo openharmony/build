@@ -167,6 +167,8 @@ template("unittest") {
     if (defined(invoker.configs)) {
       configs += invoker.configs
     }
+    configs -= [ "//build/lite/config:language_cpp" ]
+    configs += [ "//build/lite/config:gtest_feature_cpp" ]
     if (defined(invoker.output_extension)) {
       output_extension = invoker.output_extension
     }
@@ -230,6 +232,8 @@ template("moduletest") {
         "-pthread",
       ]
     }
+    configs -= [ "//build/lite/config:language_cpp" ]
+    configs += [ "//build/lite/config:gtest_feature_cpp" ]
   }
 }
 
@@ -287,5 +291,7 @@ template("fuzztest") {
     }
     _fuzztest_output_dir = "$root_build_dir/fuzztest"
     rebase_path(_fuzztest_output_dir, root_build_dir)
+    configs -= [ "//build/lite/config:language_cpp" ]
+    configs += [ "//build/lite/config:gtest_feature_cpp" ]
   }
 }
