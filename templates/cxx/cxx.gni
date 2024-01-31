@@ -273,11 +273,16 @@ template("ohos_executable") {
     # Enable branch protection.
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
+        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
+        foreach(config, configs) {
+          if (config == "//build/config/security:stack_protector_ret_strong_config") {
+            configs -= [ "//build/config/security:stack_protector_ret_strong_config" ]
+          }
+        }
         if (support_branch_protector_pac_ret) {
-          # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
           cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_ret_all_config" ]
         }
       }
 
@@ -761,11 +766,16 @@ template("ohos_shared_library") {
     # Enable branch protection.
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
+        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
+        foreach(config, configs) {
+          if (config == "//build/config/security:stack_protector_ret_strong_config") {
+            configs -= [ "//build/config/security:stack_protector_ret_strong_config" ]
+          }
+        }
         if (support_branch_protector_pac_ret) {
-          # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
           cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_ret_all_config" ]
         }
       }
 
@@ -1206,11 +1216,16 @@ template("ohos_static_library") {
     # Enable branch protection.
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
+        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
+        foreach(config, configs) {
+          if (config == "//build/config/security:stack_protector_ret_strong_config") {
+            configs -= [ "//build/config/security:stack_protector_ret_strong_config" ]
+          }
+        }
         if (support_branch_protector_pac_ret) {
-          # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
           cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_ret_all_config" ]
         }
       }
 
@@ -1448,11 +1463,16 @@ template("ohos_source_set") {
     # Enable branch protection.
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
+        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
+        foreach(config, configs) {
+          if (config == "//build/config/security:stack_protector_ret_strong_config") {
+            configs -= [ "//build/config/security:stack_protector_ret_strong_config" ]
+          }
+        }
         if (support_branch_protector_pac_ret) {
-          # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
           cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+        } else {
+          configs += [ "//build/config/security:stack_protector_ret_all_config" ]
         }
       }
 
