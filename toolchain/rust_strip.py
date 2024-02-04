@@ -20,7 +20,7 @@ import subprocess
 import sys
 
 
-def do_strip(strip, output, unstripped_file, mini_debug):
+def do_strip(strip, output, unstripped_file, mini_debug, clang_base_dir):
     if strip:
         result = subprocess.call(
             [strip, '-o', output, unstripped_file])
@@ -32,7 +32,7 @@ def do_strip(strip, output, unstripped_file, mini_debug):
         ohos_root_path = os.path.join(os.path.dirname(__file__), '../..')
         result = subprocess.call(
             ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', output,
-            '--root-path', ohos_root_path])
+            '--root-path', ohos_root_path, '--clang-base-dir', clang_base_dir])
 
     return result
 
@@ -55,9 +55,10 @@ def main():
                         action='store_true',
                         default=False,
                         help='Add .gnu_debugdata section for stripped sofile')
+    parser.add_argument('--clang-base-dir', help='')
     args = parser.parse_args()
 
-    return do_strip(args.strip, args.output, args.unstripped_file, args.mini_debug)
+    return do_strip(args.strip, args.output, args.unstripped_file, args.mini_debug, args.clang_base_dir)
 
 
 if __name__ == "__main__":

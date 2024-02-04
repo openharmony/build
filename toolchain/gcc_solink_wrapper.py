@@ -148,6 +148,7 @@ def main():
     parser.add_argument('--target-name', help='')
     parser.add_argument('--target-out-dir', help='')
     parser.add_argument('--allowed-lib-list', help='')
+    parser.add_argument('--clang-base-dir', help='')
     args = parser.parse_args()
 
     if args.sofile.endswith(".dll"):
@@ -221,7 +222,7 @@ def main():
         result = subprocess.call(
             wrapper_utils.command_to_run(
                 ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
-                '--root-path', ohos_root_path]))
+                '--root-path', ohos_root_path, '--clang-base-dir', args.clang_base_dir]))
 
     return result
 

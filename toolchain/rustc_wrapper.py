@@ -108,6 +108,7 @@ def main():
                         action='store_true',
                         default=False,
                         help='Add .gnu_debugdata section for stripped sofile')
+    parser.add_argument('--clang-base-dir', help='')
 
     parser.add_argument('args', metavar='ARG', nargs='+')
 
@@ -117,7 +118,8 @@ def main():
     if result != 0:
         return result
     if args.strip:
-        result = rust_strip.do_strip(args.strip, args.output, args.unstripped_file, args.mini_debug)
+        result = rust_strip.do_strip(args.strip, args.output, args.unstripped_file, args.mini_debug,
+            args.clang_base_dir)
     return result
 
 
