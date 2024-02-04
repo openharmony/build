@@ -239,7 +239,7 @@ template("ohos_rust_library") {
         cflags_cc += [
           "-nostdinc++",
           "-I" + rebase_path(
-                  "//prebuilts/clang/ohos/${host_platform_dir}/llvm_ndk/include/c++/v1",
+                  "${}toolchains_dir/${host_platform_dir}/llvm_ndk/include/c++/v1",
                   root_build_dir),
         ]
         ldflags += [
