@@ -4,9 +4,12 @@
 
 import("//build/toolchain/toolchain.gni")
 
+declare_args() {
+  toolchains_dir = "//prebuilts/clang/ohos"
+}
 if (!is_llvm_build) {
-  default_clang_base_path = "//prebuilts/clang/ohos/${host_platform_dir}/llvm"
-  clang_lib_path = "//prebuilts/clang/ohos/${host_platform_dir}/llvm/lib/clang/${clang_version}/lib"
+  default_clang_base_path = "${toolchains_dir}/${host_platform_dir}/llvm"
+  clang_lib_path = "${toolchains_dir}/${host_platform_dir}/llvm/lib/clang/${clang_version}/lib"
 } else {
   default_clang_base_path = "//out/llvm-install"
   clang_lib_path = "//out/llvm-install/lib/clang/${clang_version}/lib"
@@ -22,5 +25,5 @@ declare_args() {
 
   clang_lib_base_path = clang_lib_path
 
-  clang_stl_path = "//prebuilts/clang/ohos/${host_platform_dir}/libcxx-ndk/lib"
+  clang_stl_path = "${toolchains_dir}/${host_platform_dir}/libcxx-ndk/lib"
 }
