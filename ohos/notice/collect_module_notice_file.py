@@ -81,7 +81,7 @@ def get_license_from_readme(readme_path: str):
 def do_collect_notice_files(options, depfiles: str):
     module_notice_info_list = []
     module_notice_info = {}
-    notice_file = options.license_file # None
+    notice_file = options.license_file
     if notice_file:
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
