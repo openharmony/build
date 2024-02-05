@@ -51,7 +51,10 @@ XML_ESCAPE_TABLE = {
 def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []
-    for file in build_utils.get_all_files(options.static_library_notice_dir):
+    # 如果同名的话只取第一个，所以可能会造成notice与模块不一致的情况，应该加上 .sort()
+    files = build_utils.get_all_files(options.static_library_notice_dir)
+    files.sort()
+    for file in files:
         if os.stat(file).st_size == 0:
             continue
         if not file.endswith('.a.txt'):
@@ -138,7 +141,6 @@ def generate_xml_notice_files(files_with_same_hash: dict, input_dir: str,
     for file_key in files_with_same_hash.keys():
         for filename in files_with_same_hash[file_key]:
             id_table[filename] = file_key
-
     with open(output_filename, "w") as output_file:
         write_file(output_file, '<?xml version="1.0" encoding="utf-8"?>')
         write_file(output_file, "<licenses>")
@@ -234,7 +236,7 @@ def main():
 
     txt_files = glob.glob('{}/**/*.txt'.format(notice_dir), recursive=True)
     txt_files += glob.glob('{}/**/*.txt.?'.format(notice_dir), recursive=True)
-
+    
     outputs = [args.output_notice_txt, args.output_notice_gz]
     if args.notice_module_info:
         outputs.append(args.notice_module_info)
@@ -297,7 +299,6 @@ def do_merge_notice(args, zipfiles: str, txt_files: str):
         ]
         module_install_info_list.append(module_install_info)
         write_json_file(args.notice_module_info, module_install_info_list)
-
 
 if __name__ == "__main__":
     main()
