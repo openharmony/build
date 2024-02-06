@@ -45,14 +45,14 @@ def make_vendor_package(args):
     device_name = args.device_name
     mkextimage_tools_path = args.mkextimage_tools_path
     config_file_path = args.config_file_path
-    mk_configs = []
+    mk_configs_raw = []
     with open(args.config_file_path, 'r') as f:
         for line in f:
             line = line.strip()
             if not line or line.startswith('#'):
                 continue
-            mk_configs.append(line)
-    mk_configs = " ".join(mk_configs)
+            mk_configs_raw.append(line)
+    mk_configs = " ".join(mk_configs_raw)
     mk_configs = " ".join([src_dir, device_name, mk_configs])
     res = run_cmd(" ".join([mkextimage_tools_path, mk_configs]))
     if res[1]:
