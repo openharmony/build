@@ -45,6 +45,8 @@
         "//drivers/interface/display/composer/v1_0:display_composer_idl_headers",
         "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1",
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+        "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0",
+        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
         "//drivers/interface/face_auth/v1_1:face_auth_idl_headers",
@@ -238,7 +240,7 @@
         "//third_party/cups-filters:cupsfilters",
         "//third_party/cups-filters:imagetoraster",
         "//third_party/cups-filters:pdftoraster",
-		"//third_party/ffmpeg:libohosffmpeg",
+        "//third_party/ffmpeg:libohosffmpeg",
         "//third_party/gptfdisk:sgdisk",
         "//third_party/libdrm:libdrm",
         "//third_party/lz4:liblz4_static",
@@ -303,6 +305,10 @@
         "//drivers/interface/display/composer/v1_1:libdisplay_composer_proxy_1.1": [
             "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
             "//drivers/interface/display/composer/v1_0:libdisplay_composer_proxy_1.0"
+        ],
+        "//drivers/interface/display/composer/v1_1:libdisplay_composer_stub_1.1": [
+            "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
+            "//drivers/interface/display/composer/v1_0:libdisplay_composer_stub_1.0"
         ],
         "//drivers/interface/display/composer/v1_1:libdisplay_composer_stub_1.1": [
             "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
@@ -2680,7 +2686,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2698,7 +2722,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_proxy_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/display/graphic/common/v1_0:libdisplay_commontype_stub_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_stub_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -15827,6 +15869,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/display/graphic/common/v1_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/distributed_audio/audio/v1_0:hdi_gen": [
@@ -30364,6 +30409,9 @@
         "//drivers/interface/display/graphic/common/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/display/graphic/common/v1_1:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/distributed_audio/audio/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -33129,7 +33177,7 @@
         "//foundation/bundlemanager/ecological_rule_manager/services:ecologicalrulemgr_service": [
             "//commonlibrary/c_utils/base:utils_config"
         ],
-		"//foundation/CastEngine/castengine_wifi_display/services/protocol/rtp:sharing_rtp": [
+        "//foundation/CastEngine/castengine_wifi_display/services/protocol/rtp:sharing_rtp": [
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//foundation/communication/bluetooth_service/services/bluetooth/hardware:bluetooth_hdi_adapter": [
@@ -35570,6 +35618,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/display/graphic/common/v1_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/distributed_audio/audio/v1_0/": [
