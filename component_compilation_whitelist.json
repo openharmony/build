@@ -625,6 +625,12 @@
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/llvm/include/",
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/build/include/"
         ],
+        "//arkcompiler/ets_runtime:libark_jsruntime_arm_set": [
+            "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/llvm/include/",
+            "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/include/",
+            "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/llvm/include/",
+            "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/build/include/"
+        ],
         "//arkcompiler/ets_runtime:libark_jsruntime_test": [
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/llvm/include/",
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/include/",
@@ -14060,10 +14066,16 @@
         "//arkcompiler/ets_runtime:libark_js_intl_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
+        "//arkcompiler/ets_runtime:libark_js_intl_arm_set": [
+            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
+        ],
         "//arkcompiler/ets_runtime:libark_jsruntime": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_set": [
+            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
+        ],
+        "//arkcompiler/ets_runtime:libark_jsruntime_arm_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_static": [
