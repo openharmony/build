@@ -68,7 +68,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     tmp_file1 = '{}.tmp1'.format(dynsyms_path)
     tmp_file2 = '{}.tmp2'.format(dynsyms_path)
     with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        subprocess.run(gen_symbols_cmd.split(), stdout = output_file)
+        subprocess.run(gen_symbols_cmd.split(), stdout=output_file)
 
     with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
@@ -86,7 +86,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     tmp_file1 = '{}.tmp1'.format(funcsysms_path)
     tmp_file2 = '{}.tmp2'.format(funcsysms_path)
     with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        subprocess.run(gen_func_symbols_cmd.split(), stdout = output_file)
+        subprocess.run(gen_func_symbols_cmd.split(), stdout=output_file)
 
     with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
@@ -102,7 +102,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
 
 
     with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
-        subprocess.run(gen_keep_symbols_cmd.split(), stdout = output_file)
+        subprocess.run(gen_keep_symbols_cmd.split(), stdout=output_file)
 
 
     cmd_list.append(gen_keep_debug_cmd)
