@@ -67,7 +67,7 @@ _ndk_library_targets = [
   "//interface/sdk_c/third_party/libuv:libuv_ndk",
   "//interface/sdk_c/third_party/libuv:libuv_header",
   "//interface/sdk_c/third_party/libuv:libuv_uv_header",
-  "//interface/sdk_c/third_party/icu4c:icu_header",
+  "//interface/sdk_c/third_party/icu4c:libicu_ndk",
   "//interface/sdk_c/third_party/icu4c:icu_header",
   "//interface/sdk_c/third_party/icu4c:icu_unicode_header",
   "//interface/sdk_c/multimedia/av_codec/audio_decoder:libnative_media_adec",
