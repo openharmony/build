@@ -34,7 +34,7 @@ def cmd_exec(command: str, temp_file: str, error_log_path: str):
                             stderr=subprocess.PIPE,
                             encoding='utf-8')
 
-    out, err = proc.communicate(timeout=60)
+    out, err = proc.communicate(timeout=500)
     ret_code = proc.returncode
     if ret_code != 0:
         temp_file.close()
