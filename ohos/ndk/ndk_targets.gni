@@ -130,6 +130,10 @@ _ndk_library_targets = [
   "//interface/sdk_c/network/netmanager:netconn_header",
   "//interface/sdk_c/sensors/sensor:libsensor_ndk",
   "//interface/sdk_c/sensors/sensor:sensor_ndk_header",
+  "//interface/sdk_c/filemanagement/fileio:libohfileio",
+  "//interface/sdk_c/filemanagement/fileio:oh_fileio_header",
+  "//interface/sdk_c/filemanagement/environment:libohenvironment",
+  "//interface/sdk_c/filemanagement/environment:oh_environment_header",
 ]
 
 _ndk_base_libs = [
