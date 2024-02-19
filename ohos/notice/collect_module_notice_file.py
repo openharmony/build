@@ -120,19 +120,19 @@ def do_collect_notice_files(options, depfiles: str):
             notice_files = notice_file.split(',')
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
+
 def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
-    with open(r"/mnt/data/l30055739/ohos_master8/collect_module_notice.txt", "a+", encoding="utf-8") as f:
-        for notice_file in notice_files:
-            notice_file = notice_file.strip()
-            if options.module_source_dir not in notice_file:
-                notice_file = os.path.join(options.module_source_dir, notice_file)
-            if os.path.exists(notice_file):
-                shutil.copy(notice_file, output)
-                write_json_file(notice_info_json, module_notice_info_list)
-            else:
-                build_utils.touch(output)
-                build_utils.touch(notice_info_json)
-            depfiles.append(notice_file)
+    for notice_file in notice_files:
+        notice_file = notice_file.strip()
+        if options.module_source_dir not in notice_file:
+            notice_file = os.path.join(options.module_source_dir, notice_file)
+        if os.path.exists(notice_file):
+            shutil.copy(notice_file, output)
+            write_json_file(notice_info_json, module_notice_info_list)
+        else:
+            build_utils.touch(output)
+            build_utils.touch(notice_info_json)
+        depfiles.append(notice_file)
 
 
 def main(args):
