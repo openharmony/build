@@ -35707,6 +35707,9 @@
         "//drivers/interface/nnrt/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
+        "//drivers/interface/nnrt/v2_1/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
         "//drivers/interface/partitionslot/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
