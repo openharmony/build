@@ -192,6 +192,8 @@ build_image_tools_path = [
   "//build/ohos/images/mkimage",
 ]
 
+base_dir = "//build/ohos/images/mkimage"
+
 foreach(_platform, target_platform_list) {
   current_platform = _platform
   current_platform_dir = "${product_output_dir}/$current_platform"
@@ -258,11 +260,25 @@ foreach(_platform, target_platform_list) {
         }
       }
 
-      image_config_file =
-          "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
+      base_path = base_dir
       if (is_debug) {
-        image_config_file =
-            "//build/ohos/images/mkimage/debug/${_image_name}_image_conf.txt"
+        base_path = "${base_dir}/debug"
+      }
+      image_config_file = "${base_path}/${_image_name}_image_conf.txt"
+      if (asan_detector) {
+        image_config_file_asan =
+            "${base_path}/asan/${_image_name}_image_conf.txt"
+
+        # Check if asan image file exists
+        _file_exists_script = "//build/ohos/file_exists.py"
+        _process_args = [
+          "--filename",
+          rebase_path(image_config_file_asan, root_build_dir),
+        ]
+        _result = exec_script(_file_exists_script, _process_args, "string")
+        if (_result == "True") {
+          image_config_file = image_config_file_asan
+        }
       }
       device_image_config_file =
           "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
@@ -320,8 +336,7 @@ foreach(_platform, target_platform_list) {
       depfile = "$target_gen_dir/$target_name.d"
       deps = [ "//build/ohos/packages:${_platform}_install_modules" ]
 
-      image_config_file =
-          "//build/ohos/images/mkimage/${_image_name}_image_conf.txt"
+      image_config_file = "${base_dir}/${_image_name}_image_conf.txt"
       device_image_config_file =
           "${product_output_dir}/imagesconf/${_image_name}_image_conf.txt"
       image_input_path = "${current_platform_dir}/${_image_name}/${_product}"

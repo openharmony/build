@@ -72,8 +72,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
     for value in modules_info_dict.values():
         module_info = read_json_file(value)
         if not module_info:
-            raise Exception(
-                "read module install info file '{}' error.".format(value))
+            raise Exception("read module install info file '{}' error.".format(value))
         install = module_info.get('install_enable')
         if not install:
             continue
@@ -122,7 +121,8 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                 for filename in os.listdir(source):
                     if filename.endswith('.hap') or filename.endswith('.hsp'):
                         is_hvigor_hap = True
-                        shutil.copy2(os.path.join(source, filename), os.path.join(platform_installed_path, dest, filename))
+                        shutil.copy2(os.path.join(source, filename),
+                                     os.path.join(platform_installed_path, dest, filename))
                 if not is_hvigor_hap:
                     shutil.copytree(source, os.path.join(platform_installed_path, dest), dirs_exist_ok=True)
             else:

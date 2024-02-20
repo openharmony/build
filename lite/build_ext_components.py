@@ -30,17 +30,17 @@ def cmd_exec(command: str, temp_file: str, error_log_path: str):
     cmd = shlex.split(command)
 
     proc = subprocess.Popen(cmd,
-                            stdout=temp_file,
-                            stderr=temp_file,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
                             encoding='utf-8')
 
-    proc.wait()
+    out, err = proc.communicate(timeout=500)
     ret_code = proc.returncode
     if ret_code != 0:
         temp_file.close()
         copyfile(temp_file.name, error_log_path)
         os.remove(temp_file.name)
-        return ret_code
+        raise Exception("{}".format(out))
 
     end_time = datetime.now().replace(microsecond=0)
     temp_file.write(f'cmd:{command}\ncost time:{end_time-start_time}\n')
