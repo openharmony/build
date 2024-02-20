@@ -1,0 +1,6 @@
+/data
+4404019200
+--fs_type=f2fs
+--dac_config ../../build/ohos/images/mkimage/dac.txt
+--file_context obj/base/security/selinux_adapter/file_contexts.bin
+--prjquota

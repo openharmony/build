@@ -79,6 +79,7 @@ def main():
                         action='store_true',
                         default=False,
                         help='Add .gnu_debugdata section for stripped sofile')
+    parser.add_argument('--clang-base-dir', help='')
     args = parser.parse_args()
 
     # Work-around for gold being slow-by-default. http://crbug.com/632230
@@ -109,7 +110,7 @@ def main():
         result = subprocess.call(
             wrapper_utils.command_to_run(
                 ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
-                '--root-path', ohos_root_path]))
+                '--root-path', ohos_root_path, '--clang-base-dir', args.clang_base_dir]))
 
     return result
 
