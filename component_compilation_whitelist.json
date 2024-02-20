@@ -25224,6 +25224,12 @@
         "//foundation/resourceschedule/resource_schedule_service/ressched/services:resschedsvc_static": [
             "//third_party/libxml2:xml2"
         ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/services:socperf_server": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/services:socperf_server_static": [
+            "//third_party/libxml2:xml2"
+        ],
         "//foundation/resourceschedule/resource_schedule_service/ressched/test/fuzztest/ressched_fuzzer:ResSchedFuzzTest": [
             "//third_party/libxml2:xml2"
         ],
@@ -25237,6 +25243,21 @@
             "//third_party/libxml2:xml2"
         ],
         "//foundation/resourceschedule/soc_perf/test/unittest:SocPerfServerTest": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfServerTest_resource_copy": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfSubMockTest": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfSubMockTest_resource_copy": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfSubTest": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfSubTest_resource_copy": [
             "//third_party/libxml2:xml2"
         ],
         "//foundation/resourceschedule/soc_perf/test/unittest:SocPerfServerTest_resource_copy": [
