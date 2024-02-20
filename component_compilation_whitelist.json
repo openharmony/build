@@ -309,6 +309,9 @@
             "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
             "//drivers/interface/display/composer/v1_0:libdisplay_composer_stub_1.0"
         ],
+        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1":[
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0"
+         ],
         "//drivers/interface/face_auth/v1_1:libface_auth_proxy_1.1": [
             "//drivers/interface/face_auth/v1_0:libface_auth_proxy_1.0"
         ],
