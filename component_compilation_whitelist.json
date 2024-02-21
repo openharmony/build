@@ -211,6 +211,7 @@
         "//third_party/icu/icu4c:shared_icuuc",
         "//third_party/skia:android_utils",
         "//third_party/skia:fontmgr_ohos",
+        "//third_party/skia:fontmgr_symbol_load",
         "//third_party/skia:gif",
         "//third_party/skia:gpu",
         "//third_party/skia:gpu_shared",
@@ -10869,6 +10870,9 @@
             "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
         ],
         "//third_party/skia:fontmgr_ohos": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//third_party/skia:fontmgr_symbol_load": [
             "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
         ],
         "//third_party/skia:fontmgr_win": [
@@ -35248,6 +35252,10 @@
             "//third_party/bounds_checking_function:libsec_shared",
             "//base/global/system_resources:ohos_fonts",
             "//base/startup/init/interfaces/innerkits:libbegetutil"
+        ],
+        "//third_party/skia:fontmgr_symbol_load": [
+            "//third_party/jsoncpp:jsoncpp_static",
+            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//third_party/skia:gpu": [
             "//foundation/graphic/graphic_2d:libgl"
