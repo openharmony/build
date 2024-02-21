@@ -14185,7 +14185,22 @@
         "//arkcompiler/runtime_core/disassembler/tests:gen_column-number5_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_column-number6_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/runtime_core/disassembler/tests:gen_line-number1_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number2_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number3_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number4_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number5_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/runtime_core/disassembler/tests:gen_module-indirect-export_abc": [
@@ -28011,7 +28026,22 @@
         "//arkcompiler/runtime_core/disassembler/tests:gen_column-number5_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_column-number6_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/runtime_core/disassembler/tests:gen_line-number1_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number2_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number3_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number4_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/runtime_core/disassembler/tests:gen_line-number5_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/runtime_core/disassembler/tests:gen_module-indirect-export_abc": [
