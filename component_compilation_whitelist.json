@@ -588,6 +588,9 @@
         "//arkcompiler/ets_runtime/ecmascript/compiler/codegen/maple/maple_me:libmplme": [
             "//third_party/bounds_checking_function/include/"
         ],
+        "//arkcompiler/ets_runtime/ecmascript/compiler/codegen/maple/maple_pgo:libmplpgo": [
+            "//third_party/bounds_checking_function/include/"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/compiler/codegen/maple/maple_phase:libmplphase": [
             "//third_party/bounds_checking_function/include/"
         ],
@@ -888,6 +891,9 @@
             "//third_party/lzma/C/"
         ],
         "//base/hiviewdfx/faultloggerd/services:faultloggerd": [
+            "//commonlibrary/c_utils/base/include/"
+        ],
+        "//base/hiviewdfx/faultloggerd/services:faultloggerd_fuzzer_src": [
             "//commonlibrary/c_utils/base/include/"
         ],
         "//base/hiviewdfx/hiappevent/frameworks/js/napi:hiappevent_v9": [
@@ -6625,6 +6631,12 @@
         "//foundation/arkui/ace_engine/frameworks/core/components_v2/water_flow:ace_core_components_water_flow_v2_ohos_ng": [
             "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/",
             "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/core/interfaces/native/svg:ace_core_interfaces_native_svg_ohos": [
+            "//third_party/skia/"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/core/interfaces/native/svg:ace_core_interfaces_native_svg_ohos_ng": [
+            "//third_party/skia/"
         ],
         "//foundation/arkui/ace_engine/frameworks/core/pipeline_ng:ace_core_pipeline_ng_ohos": [
             "//foundation/window/window_manager/",
@@ -24364,6 +24376,9 @@
         "//foundation/multimedia/av_codec/test/nativedemo:av_codec_demo": [
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
+        "//foundation/multimedia/av_codec/test/unittest/audio_capture_test:audio_capture_module_unit_test": [
+            "//foundation/multimedia/media_foundation/src/capi:capi_packages"
+        ],
         "//foundation/multimedia/av_codec/test/unittest/audio_test:av_audio_capi_unit_test": [
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
@@ -28706,6 +28721,11 @@
             "//third_party/zlib:libz"
         ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/service:faultlogger_service": [
+            "//third_party/bounds_checking_function:libsec_shared",
+            "//third_party/jsoncpp:jsoncpp",
+            "//third_party/zlib:libz"
+        ],
+        "//base/hiviewdfx/hiview/plugins/faultlogger/service:faultlogger_service_fuzz_src": [
             "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/jsoncpp:jsoncpp",
             "//third_party/zlib:libz"
