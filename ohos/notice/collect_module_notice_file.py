@@ -148,7 +148,7 @@ def write_notice_to_output(notice_file, output):
     if license_content not in output_file_content:
         with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
                        'a', encoding='utf-8') as testfwk_info_file:
-            testfwk_info_file.write(f"{content}\n")
+            testfwk_info_file.write(f"{license_content}\n")
             testfwk_info_file.close()
 
 
