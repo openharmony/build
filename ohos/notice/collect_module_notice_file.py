@@ -127,12 +127,26 @@ def write_file_content(notice_files, options, output, notice_info_json, module_n
         if options.module_source_dir not in notice_file:
             notice_file = os.path.join(options.module_source_dir, notice_file)
         if os.path.exists(notice_file):
-            shutil.copy(notice_file, output)
+            if not os.path.exists(output):
+                build_utils.touch(output)
+            write_notice_to_output(notice_file, output)
             write_json_file(notice_info_json, module_notice_info_list)
         else:
             build_utils.touch(output)
             build_utils.touch(notice_info_json)
         depfiles.append(notice_file)
+
+
+def write_notice_to_output(notice_file, output):
+    notice_data_flow = open(notice_file, "r+", encoding="utf-8")
+    license_content = notice_data_flow.read()
+    notice_data_flow.close()
+    output_data_flow = open(output, "r+", encoding="utf-8")
+    output_file_content = output_data_flow.read()
+    output_data_flow.close()
+    if license_content not in output_file_content:
+        with open(output, "a+", encoding="utf-8") as out:
+            out.write(f"{license_content}\n\n")
 
 
 def main(args):
