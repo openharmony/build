@@ -123,6 +123,7 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
   } else {
     source = ""
   }
+  deps = [ ":musl-libcxx_unstripped_copy" ]
   install_images = [
     "system",
     "updater",
@@ -132,4 +133,19 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
   part_name = "build_framework"
   innerapi_tags = [ "chipsetsdk" ]
   relative_install_dir = ""
+}
+
+copy("musl-libcxx_unstripped_copy") {
+  if (target_cpu == "arm") {
+    sources = [ "${clang_base_path}/lib/arm-linux-ohos/libc++.so" ]
+  } else if (target_cpu == "arm64") {
+    sources = [ "${clang_base_path}/lib/aarch64-linux-ohos/libc++.so" ]
+  } else if (target_cpu == "x86_64") {
+    sources = [ "${clang_base_path}/lib/x86_64-linux-ohos/libc++.so" ]
+  } else if (target_cpu == "riscv64") {
+    sources = [ "${clang_base_path}/lib/riscv64-linux-ohos/libc++.so" ]
+  } else {
+    sources = [ "" ]
+  }
+  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
