@@ -61,7 +61,7 @@
         "//drivers/interface/location/geofence/v1_0:location_geofence_idl_headers",
         "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers",
         "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers",
-        "//drivers/interface/nnrt/v2_0:nnrt_idl_headers",
+        "//drivers/interface/nnrt/v2_1:nnrt_idl_headers",
         "//drivers/interface/partitionslot/v1_0:partitionslot_idl_headers",
         "//drivers/interface/pin_auth/v1_1:pin_auth_idl_headers",
         "//drivers/interface/power/v1_1:power_idl_headers",
@@ -3618,6 +3618,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/nnrt/v2_0:nnrt_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/nnrt/v2_1:libnnrt_proxy_2.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/nnrt/v2_1:libnnrt_stub_2.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/nnrt/v2_1:nnrt_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/nnrt/v2_1:nnrt_idl_headers_2.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -15992,6 +16028,9 @@
         "//drivers/interface/nnrt/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/nnrt/v2_1:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/partitionslot/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -25264,6 +25303,9 @@
         "//foundation/resourceschedule/resource_schedule_service/soc_perf/services:socperf_server_static": [
             "//third_party/libxml2:xml2"
         ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfServerTest": [
+            "//third_party/libxml2:xml2"
+        ],
         "//foundation/resourceschedule/resource_schedule_service/ressched/test/fuzztest/ressched_fuzzer:ResSchedFuzzTest": [
             "//third_party/libxml2:xml2"
         ],
@@ -25276,9 +25318,9 @@
         "//foundation/resourceschedule/soc_perf/services:socperf_server_static": [
             "//third_party/libxml2:xml2"
         ],
-        "//foundation/resourceschedule/soc_perf/test/unittest:SocPerfServerTest": [
-            "//third_party/libxml2:xml2"
-        ],
+      "//foundation/resourceschedule/soc_perf/test/unittest:SocPerfServerTest": [
+        "//third_party/libxml2:xml2"
+      ],
         "//foundation/resourceschedule/resource_schedule_service/soc_perf/test/unittest:SocPerfServerTest_resource_copy": [
             "//third_party/libxml2:xml2"
         ],
@@ -25373,7 +25415,7 @@
         ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite/mindir:mindir_lib": [
             "//third_party/flatbuffers:flatbuffers_install_action",
-            "//drivers/interface/nnrt/v2_0:nnrt_idl_headers"
+            "//drivers/interface/nnrt/v2_1:nnrt_idl_headers"
         ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_lib": [
             "//third_party/flatbuffers:flatbuffers_install_action",
@@ -30401,6 +30443,15 @@
         "//drivers/external_device_manager/frameworks/js/napi/driver_extension_context:gen_driver_extension_context_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//drivers/external_device_manager/services/native/driver_extension_manager/src/bus_extension/usb:driver_extension_usb_bus": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
+        "//drivers/external_device_manager/services/native/driver_extension_manager/src/driver_controller:driver_extension_controller": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
+        "//drivers/external_device_manager/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
         "//drivers/external_device_manager/test/unittest/device_manager_js_test:DeviceManagerJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
@@ -30523,6 +30574,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/nnrt/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/nnrt/v2_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/partitionslot/v1_0:hdi_gen": [
@@ -34799,6 +34853,12 @@
             "//third_party/libxml2:xml2"
         ],
         "//foundation/resourceschedule/resource_schedule_service/ressched/services:resschedsvc_static": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/services:socperf_server": [
+            "//third_party/libxml2:xml2"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/soc_perf/services:socperf_server_static": [
             "//third_party/libxml2:xml2"
         ],
         "//foundation/resourceschedule/soc_perf/services:socperf_server": [
