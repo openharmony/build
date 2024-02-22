@@ -145,8 +145,10 @@ def write_notice_to_output(notice_file, output):
     output_file_content = output_data_flow.read()
     output_data_flow.close()
     if license_content not in output_file_content:
-        with open(output, "a+", encoding="utf-8") as out:
-            out.write(f"{license_content}\n\n")
+        fd = os.open(output, os.O_WRONLY | os.O_APPEND | os.O_CREAT)
+        file = os.fdopen(fd, "a")
+        file.write(f"{license_content}\n")
+        file.close()
 
 
 def main(args):
