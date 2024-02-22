@@ -17,6 +17,7 @@ import sys
 import argparse
 import os
 import shutil
+import stat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
@@ -145,10 +146,10 @@ def write_notice_to_output(notice_file, output):
     output_file_content = output_data_flow.read()
     output_data_flow.close()
     if license_content not in output_file_content:
-        fd = os.open(output, os.O_WRONLY | os.O_APPEND | os.O_CREAT)
-        file = os.fdopen(fd, "a")
-        file.write(f"{license_content}\n")
-        file.close()
+        with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                       'a', encoding='utf-8') as testfwk_info_file:
+            testfwk_info_file.write(f"{content}\n")
+            testfwk_info_file.close()
 
 
 def main(args):
