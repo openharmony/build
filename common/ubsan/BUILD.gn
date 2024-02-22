@@ -37,6 +37,7 @@ if (is_ohos) {
       "system",
       "updater",
     ]
+    deps = [ ":ubsan_standalone_unstripped_copy" ]
     innerapi_tags = [
       "platformsdk",
       "chipsetsdk",
@@ -52,6 +53,7 @@ if (is_ohos) {
       "system",
       "updater",
     ]
+    deps = [ ":ubsan_minimal_unstripped_copy" ]
     innerapi_tags = [
       "platformsdk",
       "chipsetsdk",
@@ -59,4 +61,16 @@ if (is_ohos) {
     subsystem_name = "build"
     part_name = "build_framework"
   }
+}
+
+copy("ubsan_standalone_unstripped_copy") {
+  sources =
+      [ "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_standalone.so" ]
+  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
+}
+
+copy("ubsan_minimal_unstripped_copy") {
+  sources =
+      [ "${clang_lib_base_path}/${abi_target}/libclang_rt.ubsan_minimal.so" ]
+  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
