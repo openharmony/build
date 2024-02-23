@@ -32,8 +32,12 @@
 _cc_wrapper = ""
 _ccache_exec = getenv("CCACHE_EXEC")
 _use_ccache = getenv("USE_CCACHE")
+_xcache_exec = getenv("XCACHE_EXEC")
+_use_xcache = getenv("USE_XCACHE")
 if (_use_ccache == "1" && _ccache_exec != "") {
   _cc_wrapper = rebase_path(_ccache_exec)
+} else if (_use_xcache == "1" && _xcache_exec != "") {
+  _cc_wrapper = rebase_path(_xcache_exec)
 }
 
 declare_args() {

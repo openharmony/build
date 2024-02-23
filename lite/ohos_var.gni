@@ -46,6 +46,7 @@ declare_args() {
 
   # hb set it to true if ccache installed.
   ohos_build_enable_ccache = false
+  ohos_build_enable_xcache = false
 
   # Current toolchain cc command. E.g. "/data/user1/riscv32/bin/riscv32-unknown-elf-gcc".
   ohos_current_cc_command = ""
