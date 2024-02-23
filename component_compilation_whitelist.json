@@ -1323,6 +1323,12 @@
         "//base/security/security_component_manager/frameworks:libsecurity_component_framework": [
             "//third_party/json/include/"
         ],
+        "//base/security/security_component_manager/frameworks:security_component_enhance_adapter_src_set": [
+            "//third_party/json/include/"
+        ],
+        "//base/security/security_component_manager/frameworks:security_component_framework_src_set": [
+            "//third_party/json/include/"
+        ],
         "//base/security/security_component_manager/interfaces/inner_api/security_component:libsecurity_component_sdk": [
             "//third_party/json/include/"
         ],
@@ -1902,6 +1908,10 @@
             "//third_party/node/src/"
         ],
         "//commonlibrary/ets_utils/js_util_module/container:vector_static": [
+            "//third_party/node/src/"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/json:json_static": [
+            "//third_party/icu/icu4c/source/common/",
             "//third_party/node/src/"
         ],
         "//commonlibrary/ets_utils/js_util_module/util:util_static": [
@@ -14209,19 +14219,19 @@
         "//arkcompiler/ets_runtime:es2abc_gen_builtins_d_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//arkcompiler/ets_runtime:libark_js_intl_set": [
+        "//arkcompiler/ets_runtime:libark_js_intl_arm_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
-        "//arkcompiler/ets_runtime:libark_js_intl_arm_set": [
+        "//arkcompiler/ets_runtime:libark_js_intl_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
         ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_set": [
+        "//arkcompiler/ets_runtime:libark_jsruntime_arm_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_arm_set": [
+        "//arkcompiler/ets_runtime:libark_jsruntime_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_static": [
@@ -15766,6 +15776,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//commonlibrary/ets_utils/js_util_module/container:gen_vector_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/json:gen_json_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//commonlibrary/ets_utils/js_util_module/util/test:test_util_unittest": [
@@ -28871,6 +28884,9 @@
         "//base/inputmethod/imf/frameworks/js/napi/inputmethodlist:gen_inputmethodlist_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/inputmethod/imf/services/adapter/settings_data_provider:settings_data_static": [
+            "//third_party/cJSON:cjson"
+        ],
         "//base/inputmethod/imf/services/dialog:input_method_choose_dialog_resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
@@ -28890,6 +28906,15 @@
             "//developtools/ace_js2bundle:ace_loader_ark_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
+        "//base/inputmethod/imf/services/json:imf_json_static": [
+            "//third_party/cJSON:cjson"
+        ],
+        "//base/inputmethod/imf/services:inputmethod_service": [
+            "//third_party/cJSON:cjson"
+        ],
+        "//base/inputmethod/imf/test/unittest/cpp_test/common:inputmethod_tdd_util": [
+            "//third_party/cJSON:cjson"
         ],
         "//base/inputmethod/imf/test/unittest/napi_test/src:GetInputMethodJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
@@ -29904,6 +29929,15 @@
         ],
         "//commonlibrary/ets_utils/js_util_module/container:gen_vector_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/json:gen_json_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/json:json_static": [
+            "//third_party/icu/icu4c:icu_config",
+            "//foundation/arkui/napi:ace_napi_config",
+            "//third_party/bounds_checking_function:libsec_shared",
+            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_util_module/util:gen_util_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -33799,6 +33833,7 @@
             "//third_party/mbedtls:mbedtls_shared"
         ],
         "//foundation/distributedhardware/device_manager/services/service:devicemanagerservice": [
+            "//third_party/openssl:libcrypto_shared",
             "//third_party/mbedtls:mbedtls_shared"
         ],
         "//foundation/distributedhardware/device_manager/utils:devicemanagerutils": [
@@ -35679,6 +35714,11 @@
             "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//commonlibrary/ets_utils/js_util_module/container/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//foundation/arkui/ace_engine/ace_config.gni",
+            "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/json/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/ace_config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
