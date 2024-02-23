@@ -23900,12 +23900,12 @@
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface/test/unittest:surface_buffer_impl_test": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
             "//third_party/skia:skia_ohos"
@@ -29741,18 +29741,22 @@
             "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//base/usb/usb_manager/interfaces/innerkits:usbsrv_client": [
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+            "//third_party/cJSON:cjson"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+            "//third_party/cJSON:cjson"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usbmanager": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+            "//third_party/cJSON:cjson"
         ],
         "//base/usb/usb_manager/services:usbservice": [
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+            "//third_party/cJSON:cjson"
         ],
         "//base/useriam/pin_auth/frameworks:pinauth_framework_source_set": [
             "//third_party/openssl:libcrypto_shared"
@@ -29925,7 +29929,7 @@
         "//developtools/global_resource_tool:restool": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/jsoncpp:jsoncpp_static",
-	        "//third_party/cJSON:cjson_static",
+	    "//third_party/cJSON:cjson_static",
             "//third_party/libpng:libpng_static"
         ],
         "//developtools/hdc/test:hdc_daemon": [
