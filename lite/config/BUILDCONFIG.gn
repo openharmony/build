@@ -51,9 +51,12 @@ if (host_os == "win") {
   toolchain_cmd_suffix = ".exe"
 }
 
-# enable ccache if ccache installed.
+# enable ccache if ccache is installed,
+# or enable xcache if xcache is installed.
 if (ohos_build_enable_ccache) {
   compile_prefix = "ccache "
+} else if (ohos_build_enable_xcache) {
+  compile_prefix = "opt/buildtools/nextbuild/xcache "
 } else {
   compile_prefix = ""
 }
