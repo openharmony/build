@@ -361,6 +361,12 @@
         "//drivers/interface/ril/v1_2:ril_idl_headers_1.2": [
             "//drivers/interface/ril/v1_1:ril_idl_headers_1.1"
         ],
+        "//drivers/interface/user_auth/v1_3:libuser_auth_proxy_1.3": [
+            "//drivers/interface/user_auth/v1_2:libuser_auth_proxy_1.2"
+        ],
+        "//drivers/interface/user_auth/v1_3:libuser_auth_stub_1.3": [
+            "//drivers/interface/user_auth/v1_2:libuser_auth_stub_1.2"
+        ],
         "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2": [
             "//drivers/interface/vibrator/v1_1:libvibrator_proxy_1.1"
         ],
@@ -1032,6 +1038,9 @@
         ],
         "//base/msdp/device_status/tools/vdev:vdevadm": [
             "//third_party/json/include/"
+        ],
+        "//base/notification/common_event_service/frameworks/core:cesfwk_core": [
+            "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
         "//base/notification/common_event_service/frameworks/extension:static_subscriber_extension": [
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/",
@@ -2697,25 +2706,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2733,7 +2724,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_proxy_1.1": [
+        "//drivers/interface/display/graphic/common/v1_0:libdisplay_commontype_stub_1.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2742,7 +2733,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/display/graphic/common/v1_0:libdisplay_commontype_stub_1.0": [
+        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_proxy_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4086,6 +4095,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/usb/v1_0:usb_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/user_auth/v1_2:libuser_auth_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/user_auth/v1_2:libuser_auth_stub_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/user_auth/v1_2:user_auth_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/user_auth/v1_2:user_auth_idl_headers_1.2": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -12376,6 +12421,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_constructor_number:gen_pgo_constructor_number_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_elimination_loadconstoffset:gen_pgo_elimination_loadconstoffset_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_forof_array:gen_pgo_forof_array_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -16065,6 +16113,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/usb/v1_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/user_auth/v1_2:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/user_auth/v1_3:hdi_gen": [
@@ -23841,15 +23892,20 @@
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:debug_layer_test2": [
             "//third_party/EGL:libEGL"
         ],
+        "//foundation/graphic/graphic_2d/frameworks/surface/test/unittest:consumer_surface_test": [
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
+        ],
         "//foundation/graphic/graphic_2d/frameworks/surface/test/unittest:metadata_helper_test": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface/test/unittest:surface_buffer_impl_test": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
             "//third_party/skia:skia_ohos"
@@ -26363,6 +26419,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_constructor_number:gen_pgo_constructor_number_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_elimination_loadconstoffset:gen_pgo_elimination_loadconstoffset_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_forof_array:gen_pgo_forof_array_abc": [
@@ -29866,6 +29925,7 @@
         "//developtools/global_resource_tool:restool": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/jsoncpp:jsoncpp_static",
+	        "//third_party/cJSON:cjson_static",
             "//third_party/libpng:libpng_static"
         ],
         "//developtools/hdc/test:hdc_daemon": [
@@ -30613,6 +30673,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/usb/v1_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/user_auth/v1_2:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/user_auth/v1_3:hdi_gen": [
@@ -35848,6 +35911,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/usb/v1_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/user_auth/v1_2/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/user_auth/v1_3/": [
