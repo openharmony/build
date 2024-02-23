@@ -23899,11 +23899,13 @@
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface/test/unittest:surface_buffer_impl_test": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
             "//third_party/skia:skia_ohos"
