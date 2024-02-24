@@ -17,6 +17,7 @@ import sys
 import argparse
 import os
 import shutil
+import stat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
@@ -127,12 +128,28 @@ def write_file_content(notice_files, options, output, notice_info_json, module_n
         if options.module_source_dir not in notice_file:
             notice_file = os.path.join(options.module_source_dir, notice_file)
         if os.path.exists(notice_file):
-            shutil.copy(notice_file, output)
+            if not os.path.exists(output):
+                build_utils.touch(output)
+            write_notice_to_output(notice_file, output)
             write_json_file(notice_info_json, module_notice_info_list)
         else:
             build_utils.touch(output)
             build_utils.touch(notice_info_json)
         depfiles.append(notice_file)
+
+
+def write_notice_to_output(notice_file, output):
+    notice_data_flow = open(notice_file, "r+", encoding="utf-8")
+    license_content = notice_data_flow.read()
+    notice_data_flow.close()
+    output_data_flow = open(output, "r+", encoding="utf-8")
+    output_file_content = output_data_flow.read()
+    output_data_flow.close()
+    if license_content not in output_file_content:
+        with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                       'a', encoding='utf-8') as testfwk_info_file:
+            testfwk_info_file.write(f"{license_content}\n")
+            testfwk_info_file.close()
 
 
 def main(args):
