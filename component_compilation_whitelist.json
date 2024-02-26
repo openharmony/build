@@ -16690,6 +16690,9 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/embeddable_ui_ability_context:gen_embeddable_ui_ability_context_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/embedded_ui_extension_ability:gen_embedded_ui_extension_ability_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/extension_ability:gen_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -17200,6 +17203,9 @@
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:gen_obj_js_mock_system_plugin": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:shape": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -23775,6 +23781,26 @@
         ],
         "//foundation/filemanagement/app_file_service/interfaces/api/js/napi/backup_ext:gen_backup_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+            "//developtools/ace_js2bundle:ace_loader_ark_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//foundation/filemanagement/app_file_service/test/unittest/resource/bundle_dependencies/fileShareA:fileShareA_ets_resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
@@ -30542,13 +30568,16 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//drivers/external_device_manager/services/native/driver_extension_manager/src/bus_extension/usb:driver_extension_usb_bus": [
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+	    "//third_party/cJSON:cjson"
         ],
         "//drivers/external_device_manager/services/native/driver_extension_manager/src/driver_controller:driver_extension_controller": [
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+	    "//third_party/cJSON:cjson"
         ],
         "//drivers/external_device_manager/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager": [
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/jsoncpp:jsoncpp",
+	    "//third_party/cJSON:cjson"
         ],
         "//drivers/external_device_manager/test/unittest/device_manager_js_test:DeviceManagerJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
@@ -30941,6 +30970,9 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/embeddable_ui_ability_context:gen_embeddable_ui_ability_context_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/embedded_ui_extension_ability:gen_embedded_ui_extension_ability_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/extension_ability:gen_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -31313,6 +31345,9 @@
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:gen_obj_js_mock_system_plugin": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:shape": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -33953,6 +33988,10 @@
         "//foundation/filemanagement/app_file_service/services/backup_sa:backup_sa": [
             "//third_party/jsoncpp:jsoncpp"
         ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
         "//foundation/filemanagement/app_file_service/test/unittest/resource/bundle_dependencies/fileShareA:fileShareA_ets_resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
@@ -36331,6 +36370,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/embeddable_ui_ability_context/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/embedded_ui_extension_ability/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/extension_ability/": [
