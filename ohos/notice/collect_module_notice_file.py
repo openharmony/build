@@ -139,10 +139,10 @@ def write_file_content(notice_files, options, output, notice_info_json, module_n
 
 
 def write_notice_to_output(notice_file, output):
-    notice_data_flow = open(notice_file, "r+", encoding="utf-8")
+    notice_data_flow = open(notice_file, "r+", encoding="utf-8", errors="ignore")
     license_content = notice_data_flow.read()
     notice_data_flow.close()
-    output_data_flow = open(output, "r+", encoding="utf-8")
+    output_data_flow = open(output, "r+", encoding="utf-8", errors="ignore")
     output_file_content = output_data_flow.read()
     output_data_flow.close()
     if license_content not in output_file_content:
