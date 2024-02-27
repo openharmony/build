@@ -11390,7 +11390,9 @@
         "//third_party/vixl:vixl_public_config",
         "//third_party/weex-loader:weex_loader_ark_hap",
         "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client",
-        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater"
+        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater",
+        "//third_party/zlib:libz",
+        "//third_party/zlib:shared_libz"
     ],
     "deps_not_lib": {
         "//applications/standard/applications_auth_widget:auth_widget": [
@@ -15612,7 +15614,8 @@
             "//drivers/peripheral/input/udriver:hdi_input_udriver"
         ],
         "//base/update/updateservice/services/engine:updateservice": [
-            "//third_party/curl:curl"
+            "//third_party/curl:curl",
+            "//third_party/glib:glib_packages"
         ],
         "//base/usb/usb_manager/frameworks/dialog/dialog_ui/usb_right_dialog:dialog_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -24199,15 +24202,20 @@
         "//foundation/graphic/graphic_3d/lume/LumeRender:lume_render_src": [
             "//foundation/graphic/graphic_2d:libgl"
         ],
+        "//foundation/graphic/graphic_surface/surface/test/unittest:consumer_surface_test": [
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
+        ],
         "//foundation/graphic/graphic_surface/surface/test/unittest:metadata_helper_test": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/graphic/graphic_surface/surface/test/unittest:surface_buffer_impl_test": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
         ],
         "//foundation/graphic/graphic_surface/surface:surface": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
         ],
         "//foundation/multimedia/audio_framework/frameworks/js/napi/audiomanager/test/unittest/audio_manager_test:AudioManagerJsUnitTest": [
             "//developtools/packing_tool:packing_tool",
@@ -25736,7 +25744,8 @@
         ],
         "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler": [
             "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//third_party/icu/icu4c:shared_icuuc",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
         ],
         "//arkcompiler/ets_runtime/ecmascript/compiler:ark_stub_compiler": [
             "//third_party/icu/icu4c:shared_icui18n",
@@ -25745,11 +25754,17 @@
         "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
+        "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer_set": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/debugger/tests:gen_base/index_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/debugger/tests:gen_patch/index_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/js_vm:ark_js_vm": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
         ],
         "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests:gen_base/index_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -25792,7 +25807,8 @@
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
             "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//third_party/icu/icu4c:shared_icuuc",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_array_size_test_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -28080,17 +28096,26 @@
         "//arkcompiler/ets_runtime:es2abc_gen_builtins_d_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime:libark_js_intl_set": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
+        ],
         "//arkcompiler/ets_runtime:libark_jsruntime": [
             "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//third_party/icu/icu4c:shared_icuuc",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
+        ],
+        "//arkcompiler/ets_runtime:libark_jsruntime_set": [
+            "//third_party/zlib:shared_libz",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_test": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_test_set": [
             "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//third_party/icu/icu4c:shared_icuuc",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog_windows"
         ],
         "//arkcompiler/runtime_core/arkplatform:arkplatform_static": [
             "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
@@ -29576,6 +29601,12 @@
         "//base/theme/wallpaper_mgr/frameworks/js/napi/wallpaperextensionability:gen_wallpaper_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/time/time_service/services:time_system_ability": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
+        "//base/time/time_service/services:time_system_ability_static": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
         "//base/time/time_service/test/unittest/js_test/nopermission/acl:TimeTestNoAclPermission__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
@@ -29764,8 +29795,11 @@
             "//third_party/bounds_checking_function:libsec_static"
         ],
         "//base/update/updateservice/services/engine:updateservice": [
+            "//base/update/updater/services/fs_manager:libfsmanager",
             "//third_party/cJSON:cjson",
             "//third_party/curl:curl",
+            "//third_party/glib:glib_packages",
+            "//third_party/jsoncpp:jsoncpp",
             "//third_party/libxml2:libxml2",
             "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared",
@@ -33868,12 +33902,15 @@
             "//third_party/mbedtls:mbedtls_shared"
         ],
         "//foundation/distributedhardware/device_manager/services/service:devicemanagerservice": [
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/mbedtls:mbedtls_shared"
+            "//third_party/mbedtls:mbedtls_shared",
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/distributedhardware/device_manager/utils:devicemanagerutils": [
             "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared"
+        ],
+        "//foundation/distributedhardware/distributed_audio/audiohandler:distributed_audio_handler": [
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_audio/services/audiomanager/servicesink:distributed_audio_sink": [
             "//third_party/cJSON:cjson"
