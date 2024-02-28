@@ -24199,15 +24199,20 @@
         "//foundation/graphic/graphic_3d/lume/LumeRender:lume_render_src": [
             "//foundation/graphic/graphic_2d:libgl"
         ],
+        "//foundation/graphic/graphic_surface/surface/test/unittest:consumer_surface_test": [
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1"
+        ],
         "//foundation/graphic/graphic_surface/surface/test/unittest:metadata_helper_test": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/graphic/graphic_surface/surface/test/unittest:surface_buffer_impl_test": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
+	    "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/graphic/graphic_surface/surface:surface": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
+	    "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/js/napi/audiomanager/test/unittest/audio_manager_test:AudioManagerJsUnitTest": [
             "//developtools/packing_tool:packing_tool",
@@ -33874,6 +33879,9 @@
         "//foundation/distributedhardware/device_manager/utils:devicemanagerutils": [
             "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared"
+        ],
+        "//foundation/distributedhardware/distributed_audio/audiohandler:distributed_audio_handler": [
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_audio/services/audiomanager/servicesink:distributed_audio_sink": [
             "//third_party/cJSON:cjson"
