@@ -140,6 +140,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/environment:oh_environment_header",
   "//interface/sdk_c/filemanagement/file_uri:libohfileuri",
   "//interface/sdk_c/filemanagement/file_uri:oh_file_uri_header",
+  "//interface/sdk_c/filemanagement/fileshare:libohfileshare",
+  "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
 ]
 
 _ndk_base_libs = [
