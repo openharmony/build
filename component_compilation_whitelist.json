@@ -17210,6 +17210,9 @@
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:ark_modifier": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/arkui/ace_engine/frameworks/bridge/js_frontend/engine/jsi:gen_strip_native_min_abc": [
             "//third_party/jsframework:gen_snapshot",
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -31355,6 +31358,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:ark_modifier": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/js_frontend/engine/jsi:gen_strip_native_min_abc": [
