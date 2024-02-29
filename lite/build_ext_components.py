@@ -40,7 +40,7 @@ def cmd_exec(command: str, temp_file: str, error_log_path: str):
         temp_file.close()
         copyfile(temp_file.name, error_log_path)
         os.remove(temp_file.name)
-        raise Exception("{}".format(out))
+        raise Exception("{}".format(err))
 
     end_time = datetime.now().replace(microsecond=0)
     temp_file.write(f'cmd:{command}\ncost time:{end_time-start_time}\n')
