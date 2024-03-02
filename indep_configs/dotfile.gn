@@ -11,10 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# import("//build/core/gn/ohos_exec_script_allowlist.gni")
-
 # The location of the build configuration file.
-buildconfig = "//build/indep_configs/BUILDCONFIG.gn"
+buildconfig = "//build/config/BUILDCONFIG.gn"
 
 # The source root location.
 root = "//out/build_configs"
@@ -22,5 +20,4 @@ root = "//out/build_configs"
 # The executable used to execute scripts in action and exec_script.
 script_executable = "/usr/bin/env"
 
-ohos_components_support = true
 # exec_script_whitelist = ohos_exec_script_config.exec_script_allowlist
