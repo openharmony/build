@@ -19,7 +19,7 @@
 import os
 import subprocess
 
-from containers.arg import Arg
+from containers.arg import Arg, ModuleType
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from modules.interface.env_module_interface import EnvModuleInterface
 from resources.global_var import ENV_SETUP_FILE, ROOT_CONFIG_FILE, BUILD_CONFIG_FILE
@@ -86,3 +86,20 @@ class EnvArgsResolver(ArgsResolverInterface):
                 subprocess.run('bash {}'.format(ENV_SETUP_FILE))
             else:
                 raise OHOSException("There is no {} file", "0000")
+
+    @staticmethod
+    def resolve_target_cpu(target_arg: Arg, env_module: EnvModuleInterface):
+        pass
+
+    @staticmethod
+    def resolve_target_os(target_arg: Arg, env_module: EnvModuleInterface):
+        pass
+
+    @staticmethod
+    def resolve_part(target_arg: Arg, env_module: EnvModuleInterface):
+        pass
+
+    @staticmethod
+    def resolve_clean(target_arg: Arg, env_module: EnvModuleInterface):
+        if target_arg.arg_value:
+            Arg.clean_args_file_by_type(ModuleType.ENV)

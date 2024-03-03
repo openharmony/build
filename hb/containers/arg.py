@@ -32,6 +32,18 @@ from resources.global_var import DEFAULT_ENV_ARGS
 from resources.global_var import CURRENT_ENV_ARGS
 from resources.global_var import DEFAULT_TOOL_ARGS
 from resources.global_var import CURRENT_TOOL_ARGS
+from resources.global_var import DEFAULT_INDEP_BUILD_ARGS
+from resources.global_var import CURRENT_INDEP_BUILD_ARGS
+from resources.global_var import DEFAULT_INSTALL_ARGS
+from resources.global_var import CURRENT_INSTALL_ARGS
+from resources.global_var import DEFAULT_PACKAGE_ARGS
+from resources.global_var import CURRENT_PACKAGE_ARGS
+from resources.global_var import DEFAULT_PUBLISH_ARGS
+from resources.global_var import CURRENT_PUBLISH_ARGS
+from resources.global_var import DEFAULT_UPDATE_ARGS
+from resources.global_var import CURRENT_UPDATE_ARGS
+from resources.global_var import DEFAULT_PUSH_ARGS
+from resources.global_var import CURRENT_PUSH_ARGS
 from resources.global_var import ARGS_DIR
 from exceptions.ohos_exception import OHOSException
 from util.log_util import LogUtil
@@ -48,7 +60,12 @@ class ModuleType(Enum):
     ENV = 2
     CLEAN = 3
     TOOL = 4
-
+    INDEP_BUILD = 5
+    INSTALL = 6
+    PACKAGE = 7
+    PUBLISH = 8
+    UPDATE = 9
+    PUSH = 10
 
 class ArgType():
 
@@ -283,6 +300,18 @@ class Arg():
             args_file_path = CURRENT_ENV_ARGS
         elif module_type == ModuleType.TOOL:
             args_file_path = CURRENT_TOOL_ARGS
+        elif module_type == ModuleType.INDEP_BUILD:
+            args_file_path = CURRENT_INDEP_BUILD_ARGS
+        elif module_type == ModuleType.INSTALL:
+            args_file_path = CURRENT_INSTALL_ARGS
+        elif module_type == ModuleType.PACKAGE:
+            args_file_path = CURRENT_PACKAGE_ARGS
+        elif module_type == ModuleType.PUBLISH:
+            args_file_path = CURRENT_PUBLISH_ARGS
+        elif module_type == ModuleType.UPDATE:
+            args_file_path = CURRENT_UPDATE_ARGS
+        elif module_type == ModuleType.PUSH:
+            args_file_path = CURRENT_PUSH_ARGS
         else:
             raise OHOSException(
                 'You are trying to write args file, but there is no corresponding module "{}" args file'
@@ -311,6 +340,24 @@ class Arg():
         elif module_type == ModuleType.TOOL:
             args_file_path = CURRENT_TOOL_ARGS
             default_file_path = DEFAULT_TOOL_ARGS
+        elif module_type == ModuleType.INDEP_BUILD:
+            args_file_path = CURRENT_INDEP_BUILD_ARGS
+            default_file_path = DEFAULT_INDEP_BUILD_ARGS
+        elif module_type == ModuleType.INSTALL:
+            args_file_path = CURRENT_INSTALL_ARGS
+            default_file_path = DEFAULT_INSTALL_ARGS
+        elif module_type == ModuleType.PACKAGE:
+            args_file_path = CURRENT_PACKAGE_ARGS
+            default_file_path = DEFAULT_PACKAGE_ARGS
+        elif module_type == ModuleType.PUBLISH:
+            args_file_path = CURRENT_PUBLISH_ARGS
+            default_file_path = DEFAULT_PUBLISH_ARGS
+        elif module_type == ModuleType.UPDATE:
+            args_file_path = CURRENT_UPDATE_ARGS
+            default_file_path = DEFAULT_UPDATE_ARGS
+        elif module_type == ModuleType.PUSH:
+            args_file_path = CURRENT_PUSH_ARGS
+            default_file_path = DEFAULT_PUSH_ARGS
         else:
             raise OHOSException(
                 'You are trying to read args file, but there is no corresponding module "{}" args file'
@@ -327,3 +374,22 @@ class Arg():
             for file in os.listdir(CURRENT_ARGS_DIR):
                 if file.endswith('.json') and os.path.exists(os.path.join(CURRENT_ARGS_DIR, file)):
                     os.remove(os.path.join(CURRENT_ARGS_DIR, file))
+
+    @staticmethod
+    def clean_args_file_by_type(module_type: ModuleType):
+        args_file_path = ''
+        if module_type == ModuleType.INSTALL:
+            args_file_path = CURRENT_INSTALL_ARGS
+        elif module_type == ModuleType.PACKAGE:
+            args_file_path = CURRENT_PACKAGE_ARGS
+        elif module_type == ModuleType.UPDATE:
+            args_file_path = CURRENT_UPDATE_ARGS
+        elif module_type == ModuleType.ENV:
+            args_file_path = CURRENT_ENV_ARGS
+        elif module_type == ModuleType.INDEP_BUILD:
+            args_file_path = CURRENT_INDEP_BUILD_ARGS
+        elif module_type == ModuleType.PUSH:
+            args_file_path = CURRENT_PUSH_ARGS
+        if os.path.exists(args_file_path):
+            os.remove(args_file_path)
+        
