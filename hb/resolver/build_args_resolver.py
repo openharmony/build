@@ -301,26 +301,6 @@ class BuildArgsResolver(ArgsResolverInterface):
             SystemUtil.exec_command(cmd, log_path=config.log_path)
 
     @staticmethod
-    def resolve_xcache(target_arg: Arg, build_module: BuildModuleInterface):
-        """resolve '--xcache' arg
-        :param target_arg: arg object which is used to get arg value.
-        :param build_module [maybe unused]: build module object which is used to get other services.
-        :phase: prebuild.
-        """
-        if target_arg.arg_value:
-            config = Config()
-            xcache_path = "/opt/buildtools/nextbuild/xcache"
-            if not os.path.exists(xcache_path):
-                LogUtil.hb_warning('Failed to find xcache, xcache disabled.')
-                return
-            else:
-                target_generator = build_module.target_generator
-                target_generator.regist_arg(
-                    'ohos_build_enable_xcache', target_arg.arg_value)
-                os.environ['XCACHE_EXEC'] = xcache_path
-                os.environ['USE_XCACHE'] = '1'
-
-    @staticmethod
     def resolve_pycache(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--enable-pycache' arg
         :param target_arg: arg object which is used to get arg value.
