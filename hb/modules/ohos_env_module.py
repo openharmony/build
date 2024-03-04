@@ -37,12 +37,7 @@ class OHOSEnvModule(EnvModuleInterface):
                 'OHOSEnvModule has not been instantiated', '0000')
 
     def env_check(self):
-        if not self.args_dict['indep_build'].arg_value:
-            self.args_resolver.resolve_arg(self.args_dict['check'], self)
+        self.args_resolver.resolve_arg(self.args_dict['check'], self)
 
     def env_install(self):
-        if not self.args_dict['indep_build'].arg_value:
-            self.args_resolver.resolve_arg(self.args_dict['install'], self)
-
-    def clean(self):
-        self.args_resolver.resolve_arg(self.args_dict['clean'],self)
+        self.args_resolver.resolve_arg(self.args_dict['install'], self)
