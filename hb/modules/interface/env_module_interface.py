@@ -34,11 +34,6 @@ class EnvModuleInterface(ModuleInterface):
     def env_install(self):
         pass
 
-    @abstractmethod
-    def clean(self):
-        pass
-
     def run(self):
         self.env_check()
         self.env_install()
-        self.clean()
