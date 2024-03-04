@@ -1,0 +1,25 @@
+{
+    "part": {
+        "arg_name": "--part",
+        "argDefault": "",
+        "arg_help": "Default:''. Help:specify component name, run 'hb update {part_name} or hb update --part {part_name}' ",
+        "arg_phase": "prebuild",
+        "arg_type": "str",
+        "arg_attribute": {
+        },
+        "resolve_function": "resolve_part",
+        "testFunction": ""
+      },
+      "global": {
+        "arg_name": "--global",
+        "argDefault": false,
+        "arg_help": "Default:false. Help:global update, run 'hb update {part_name} --global'",
+        "arg_phase": "prebuild",
+        "arg_type": "bool",
+        "arg_attribute": {
+          "abbreviation": "-g"
+        },
+        "resolve_function": "resolve_global",
+        "testFunction": ""
+      }
+}
