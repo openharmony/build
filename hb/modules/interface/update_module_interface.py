@@ -17,28 +17,22 @@
 #
 
 from abc import abstractmethod
+from exceptions.ohos_exception import OHOSException
 from modules.interface.module_interface import ModuleInterface
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 
 
-class EnvModuleInterface(ModuleInterface):
+class UpdateModuleInterface(ModuleInterface):
 
     def __init__(self, args_dict: dict, args_resolver: ArgsResolverInterface):
         super().__init__(args_dict, args_resolver)
 
     @abstractmethod
-    def env_check(self):
-        pass
-
-    @abstractmethod
-    def env_install(self):
-        pass
-
-    @abstractmethod
-    def clean(self):
+    def _update(self):
         pass
 
     def run(self):
-        self.env_check()
-        self.env_install()
-        self.clean()
+        try:
+            self._update()
+        except OHOSException as exception:
+            raise exception
