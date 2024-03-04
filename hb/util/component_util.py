@@ -19,7 +19,6 @@ import os
 import re
 
 from resources.global_var import CURRENT_OHOS_ROOT
-from resources.global_var import COMPONENTS_PATH_DIR
 from exceptions.ohos_exception import OHOSException
 from util.io_util import IoUtil
 from containers.status import throw_exception
@@ -49,15 +48,6 @@ class ComponentUtil():
             return data['component']['name']
 
         return ''
-
-    @staticmethod
-    def get_component(path: str) -> str:
-        found_bundle_file, bundle_path = _recurrent_search_bundle_file(path)
-        if found_bundle_file:
-            data = IoUtil.read_json_file(bundle_path)
-            return data['component']['name'] , os.path.dirname(bundle_path)
-
-        return '' , ''
 
     @staticmethod
     @throw_exception
@@ -90,10 +80,6 @@ class ComponentUtil():
         raise OHOSException('You are trying to compile a module {} which do not exists in {} while compiling {}'.format(
             module_name, component_name, out_path), "4001")
 
-    @staticmethod
-    def search_bundle_file(component_name: str):
-        all_bundle_path = get_all_bundle_path(CURRENT_OHOS_ROOT)
-        return all_bundle_path.get(component_name)
 
 def _recurrent_search_bundle_file(path: str):
     cur_dir = path
@@ -104,24 +90,3 @@ def _recurrent_search_bundle_file(path: str):
             return True, bundle_json
         cur_dir = os.path.dirname(cur_dir)
     return False, ''
-
-def get_all_bundle_path(path):
-    if os.path.exists(COMPONENTS_PATH_DIR):
-        return IoUtil.read_json_file(COMPONENTS_PATH_DIR)
-    bundles_path = {}
-    for root, dirnames, filenames in os.walk(path):
-        if root == os.path.join(path, "out") or root == os.path.join(path, ".repo"):
-            continue
-        for filename in filenames:
-            if filename == "bundle.json":
-                bundle_json = os.path.join(root, filename)
-                data = IoUtil.read_json_file(bundle_json)
-                bundles_path = process_bundle_path(bundle_json, bundles_path, data)
-    IoUtil.dump_json_file(COMPONENTS_PATH_DIR, bundles_path)
-    return bundles_path
-
-
-def process_bundle_path(bundle_json, bundles_path, data):
-    if data.get("component") and data.get("component").get("name"):
-        bundles_path[data["component"]["name"]] = os.path.dirname(bundle_json)
-    return bundles_path

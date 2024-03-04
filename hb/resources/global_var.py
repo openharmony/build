@@ -38,24 +38,6 @@ DEFAULT_ENV_ARGS = os.path.join(
 DEFAULT_TOOL_ARGS = os.path.join(
     CURRENT_HB_DIR, 'resources/args/default/toolargs.json')
 
-DEFAULT_INDEP_BUILD_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/indepbuildargs.json')
-
-DEFAULT_INSTALL_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/installargs.json')
-
-DEFAULT_PACKAGE_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/packageargs.json')
-
-DEFAULT_PUBLISH_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/publishargs.json')
-
-DEFAULT_UPDATE_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/updateargs.json')
-
-DEFAULT_PUSH_ARGS = os.path.join(
-    CURRENT_HB_DIR, 'resources/args/default/pushargs.json')
-
 CURRENT_ARGS_DIR = os.path.join(CURRENT_OHOS_ROOT, 'out/hb_args')
 CURRENT_BUILD_ARGS = os.path.join(
     CURRENT_ARGS_DIR, 'buildargs.json')
@@ -67,18 +49,6 @@ CURRENT_ENV_ARGS = os.path.join(
     CURRENT_ARGS_DIR, 'envargs.json')
 CURRENT_TOOL_ARGS = os.path.join(
     CURRENT_ARGS_DIR, 'toolargs.json')
-CURRENT_INDEP_BUILD_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'indepbuildargs.json')
-CURRENT_INSTALL_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'installargs.json')
-CURRENT_PACKAGE_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'packageargs.json')
-CURRENT_PUBLISH_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'publishargs.json')
-CURRENT_UPDATE_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'updateargs.json')
-CURRENT_PUSH_ARGS = os.path.join(
-    CURRENT_ARGS_DIR, 'pushargs.json')
 
 BUILD_CONFIG_FILE = os.path.join(
     CURRENT_HB_DIR, 'resources/config/config.json')
@@ -87,5 +57,3 @@ STATUS_FILE = os.path.join(CURRENT_HB_DIR, 'resources/status/status.json')
 
 ENV_SETUP_FILE = os.path.join(
     CURRENT_BUILD_DIR, 'build_scripts', 'env_setup.sh')
-
-COMPONENTS_PATH_DIR = os.path.join(CURRENT_OHOS_ROOT, 'out/components_path.json')
