@@ -24710,7 +24710,17 @@
             "//third_party/skia:skcms",
             "//third_party/skia:skia_ohos"
         ],
+        "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils": [
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+        ],
+        "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils_static": [
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+        ],
+        "//foundation/multimedia/image_framework/interfaces/innerkits:image_static": [
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+        ],
         "//foundation/multimedia/image_framework/interfaces/innerkits:image_native": [
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/multimedia/image_framework/interfaces/kits/js/common:image": [
@@ -24723,7 +24733,8 @@
             "//third_party/skia:skia_ohos",
             "//drivers/interface/codec/image/v1_0:image_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
-            "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
+            "//drivers/interface/display/composer/v1_0:display_composer_idl_headers",
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
         "//foundation/multimedia/image_framework/plugins/common/libs/image/libjpegplugin:jpegplugin": [
             "//third_party/skia:skcms",
