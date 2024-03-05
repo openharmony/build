@@ -33652,6 +33652,9 @@
         "//foundation/communication/wifi/wifi/utils:wifi_utils": [
             "//third_party/jsoncpp:jsoncpp"
         ],
+        "//foundation/deviceprofile/device_info_manager/services/core:distributed_device_profile_svr": [
+            "//third_party/cJSON:cjson"
+        ],
         "//foundation/distributeddatamgr/data_object/frameworks/jskitsimpl/test/unittest/src:ObjectStoreJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
