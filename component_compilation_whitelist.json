@@ -23785,6 +23785,46 @@
         "//foundation/filemanagement/app_file_service/interfaces/api/js/napi/backup_ext:gen_backup_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/nopermission:FileShareTestNoPermission": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/nopermission:FileShareTestNoPermission__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/nopermission:FileShareTestNoPermission__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+            "//developtools/ace_js2bundle:ace_loader_ark_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/nopermission:FileShareTestNoPermission__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/permission:FileShareTestPermission": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/permission:FileShareTestPermission__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/permission:FileShareTestPermission__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+            "//developtools/ace_js2bundle:ace_loader_ark_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/permission:FileShareTestPermission__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
         "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
@@ -34004,6 +34044,14 @@
         ],
         "//foundation/filemanagement/app_file_service/services/backup_sa:backup_sa": [
             "//third_party/jsoncpp:jsoncpp"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/nopermission:FileShareTestNoPermission__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/filemanagement/app_file_service/test/unittest/js_file_permission_test/permission:FileShareTestPermission__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//foundation/filemanagement/app_file_service/test/unittest/js_file_uri_test:FileUriTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
