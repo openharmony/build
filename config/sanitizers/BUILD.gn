@@ -633,6 +633,12 @@ config("cfi_cross_dso_release") {
   ]
 }
 
+# Disable cfi nvcall
+config("cfi_no_nvcall") {
+  cflags = [ "-fno-sanitize=cfi-nvcall" ]
+  ldflags = [ "-fno-sanitize=cfi-nvcall" ]
+}
+
 config("cfi_cross_dso_debug") {
   configs = [ ":cfi_cross_dso_release" ]
   cflags = [
