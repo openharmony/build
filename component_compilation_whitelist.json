@@ -15736,6 +15736,12 @@
         "//commonlibrary/ets_utils/js_sys_module/timer:timer_static": [
             "//foundation/arkui/napi:ace_container_scope_static"
         ],
+        "//commonlibrary/ets_utils/js_sys_module/test:test_process_unittest": [
+            "//third_party/icu/icu4c:static_icuuc"
+        ],
+        "//commonlibrary/ets_utils/js_sys_module/test:test_process_unittest_resource_copy": [
+            "//third_party/icu/icu4c:static_icuuc"
+        ],
         "//commonlibrary/ets_utils/js_util_module/container:gen_arraylist_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
