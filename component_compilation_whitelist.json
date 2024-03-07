@@ -33910,25 +33910,26 @@
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/cameraoperator/client/test/sample:dcamera_client_demo": [
             "//foundation/multimedia/camera_framework/frameworks/native/camera:camera_framework",
             "//foundation/distributedhardware/distributed_hardware_fwk/utils:distributedhardwareutils",
-            "//third_party/cJSON:cjson",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/cameraoperator/client:distributed_camera_client": [
+            "//third_party/cJSON:cjson",
             "//third_party/jsoncpp:jsoncpp_public_config"
         ],
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/cameraoperator/handler:distributed_camera_handler": [
-            "//third_party/cJSON:cjson",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/sinkservice:distributed_camera_sink": [
-            "//third_party/cJSON:cjson",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_camera/services/cameraservice/sourceservice:distributed_camera_source": [
-            "//third_party/cJSON:cjson",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/cJSON:cjson"
+        ],
+        "//foundation/distributedhardware/distributed_camera/services/channel:distributed_camera_channel": [
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributedhardware/distributed_camera/services/data_process:distributed_camera_data_process": [
+            "//third_party/cJSON:cjson",
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//foundation/distributedhardware/distributed_hardware_fwk/application:DHardware_UI": [
