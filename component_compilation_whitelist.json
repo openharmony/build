@@ -75,6 +75,7 @@
         "//drivers/interface/user_auth/v1_3:user_auth_idl_headers",
         "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
         "//drivers/interface/wlan/v1_2:wlan_idl_headers",
+        "//drivers/interface/wlan/v1_3:wlan_idl_headers",
         "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client",
         "//drivers/peripheral/input/udriver:hdi_input_udriver",
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_target",
@@ -4357,6 +4358,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/wlan/v1_2:wlan_idl_headers_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/v1_3:libwlan_proxy_1.3": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/v1_3:libwlan_stub_1.3": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/v1_3:wlan_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/v1_3:wlan_idl_headers_1.3": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -16152,6 +16189,9 @@
         "//drivers/interface/wlan/v1_2:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/wlan/v1_3:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/wlan/wpa/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -16625,7 +16665,8 @@
             "//drivers/interface/vibrator/v1_2:vibrator_idl_headers"
         ],
         "//drivers/peripheral/wlan/hdi_service/service_extend:libwlan_service_extend": [
-            "//drivers/interface/wlan/v1_2:wlan_idl_headers"
+            "//drivers/interface/wlan/v1_2:wlan_idl_headers",
+            "//drivers/interface/wlan/v1_3:wlan_idl_headers"
         ],
         "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
             "//third_party/glib:glib_packages"
@@ -36038,6 +36079,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/wlan/v1_2/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/wlan/v1_3/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/wlan/wpa/v1_0/": [
