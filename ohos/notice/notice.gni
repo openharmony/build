@@ -62,7 +62,8 @@ template("collect_notice") {
       if (!defined(outputs)) {
         outputs = []
         if (defined(module_type) &&
-            (module_type == "static_library" || module_type == "source_set" || module_type == "rust_library")) {
+            (module_type == "static_library" || module_type == "source_set" ||
+             module_type == "rust_library")) {
           _current_toolchain = get_label_info(current_toolchain, "name")
           _notice_subdir = "$_current_toolchain/${invoker.subsystem_name}/${invoker.part_name}"
 
