@@ -30,7 +30,9 @@ LICENSE_CANDIDATES = [
     'NOTICE',
     'Notice',
     'COPYRIGHT',
-    'Copyright'
+    'Copyright',
+    'COPYING',
+    'Copying'
 ]
 
 
