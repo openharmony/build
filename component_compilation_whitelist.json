@@ -25626,6 +25626,9 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:gen_start_cfg": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//test/testfwk/arkxtest/testserver/src:test_server_interface": [
+            "//foundation/ability/idl_tool:idl"
         ]
     },
     "target_absolute_deps_other": {
@@ -35635,6 +35638,9 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:gen_start_cfg": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//test/testfwk/arkxtest/testserver/src:test_server_interface": [
+            "//foundation/ability/idl_tool:idl"
         ]
     },
     "import_other": {
@@ -36981,6 +36987,9 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf/": [
             "//drivers/hdf_core/adapter/uhdf2/hcs/hcs.gni"
+        ],
+        "//test/testfwk/arkxtest/testserver/src/": [
+            "//foundation/ability/idl_tool/idl_config.gni"
         ]
     }
 }
