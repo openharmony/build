@@ -33698,6 +33698,9 @@
         "//foundation/communication/wifi/wifi/utils:wifi_utils": [
             "//third_party/jsoncpp:jsoncpp"
         ],
+        "//foundation/deviceprofile/device_info_manager/common:distributed_device_profile_common": [
+            "//third_party/cJSON:cjson"
+        ],
         "//foundation/deviceprofile/device_info_manager/services/core:distributed_device_profile_svr": [
             "//third_party/cJSON:cjson"
         ],
