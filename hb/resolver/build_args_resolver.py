@@ -647,31 +647,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :param build_module [maybe unused]: build module object which is used to get other services.
         :phase: postTargetCompilation.
         """
-        config = Config()
-        ohos_para_data = []
-        ohos_para_file_path = os.path.join(
-            config.out_path, 'packages/phone/system/etc/param/ohos.para')
-        if not os.path.exists(ohos_para_file_path):
-            return
-        with open(ohos_para_file_path, 'r', encoding='utf-8') as ohos_para_file:
-            for line in ohos_para_file:
-                ohos_para_data.append(line)
-        for i, line in enumerate(ohos_para_data):
-            if ohos_para_data[i].__contains__('const.secure'):
-                if target_arg.arg_value == 'user':
-                    ohos_para_data[i] = 'const.secure=1\n'
-                else:
-                    ohos_para_data[i] = 'const.secure=0\n'
-            if ohos_para_data[i].__contains__('const.debuggable'):
-                if target_arg.arg_value == 'user':
-                    ohos_para_data[i] = 'const.debuggable=0\n'
-                else:
-                    ohos_para_data[i] = 'const.debuggable=1\n'
-        data = ''
-        for line in ohos_para_data:
-            data += line
-        with os.fdopen(os.open(ohos_para_file_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as ohos_para_file:
-            ohos_para_file.write(data)
+        pass
 
     @staticmethod
     def resolve_device_type(target_arg: Arg, build_module: BuildModuleInterface):
