@@ -244,6 +244,7 @@ template("ohos_executable") {
                              "crate_type",
                              "stack_protector_ret",
                              "branch_protector_ret",
+                             "branch_protector_frt",
                            ])
     output_dir = output_dir
 
@@ -271,6 +272,8 @@ template("ohos_executable") {
     }
 
     # Enable branch protection.
+    pac_ret = false
+    bti = false
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
         # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
@@ -282,7 +285,7 @@ template("ohos_executable") {
           }
         }
         if (support_branch_protector_pac_ret) {
-          cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+          pac_ret = true
         } else {
           configs +=
               [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -313,6 +316,21 @@ template("ohos_executable") {
           }
         }
       }
+    }
+
+    if (defined(invoker.branch_protector_frt)) {
+      if (invoker.branch_protector_frt == "bti" &&
+          support_branch_protector_bti) {
+        bti = true
+      }
+    }
+
+    if (bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+    } else if (bti && !pac_ret) {
+      cflags += [ "-mbranch-protection=bti" ]
+    } else if (!bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
     }
 
     if (!defined(deps)) {
@@ -731,6 +749,7 @@ template("ohos_shared_library") {
                              "sanitize",
                              "stack_protector_ret",
                              "branch_protector_ret",
+                             "branch_protector_frt",
                            ])
     output_dir = output_dir
 
@@ -767,6 +786,8 @@ template("ohos_shared_library") {
     }
 
     # Enable branch protection.
+    pac_ret = false
+    bti = false
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
         # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
@@ -778,7 +799,7 @@ template("ohos_shared_library") {
           }
         }
         if (support_branch_protector_pac_ret) {
-          cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+          pac_ret = true
         } else {
           configs +=
               [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -809,6 +830,21 @@ template("ohos_shared_library") {
           }
         }
       }
+    }
+
+    if (defined(invoker.branch_protector_frt)) {
+      if (invoker.branch_protector_frt == "bti" &&
+          support_branch_protector_bti) {
+        bti = true
+      }
+    }
+
+    if (bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+    } else if (bti && !pac_ret) {
+      cflags += [ "-mbranch-protection=bti" ]
+    } else if (!bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
     }
 
     # check whether to add adlt configs
@@ -1192,6 +1228,7 @@ template("ohos_static_library") {
                              "sanitize",
                              "stack_protector_ret",
                              "branch_protector_ret",
+                             "branch_protector_frt",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs
@@ -1220,6 +1257,8 @@ template("ohos_static_library") {
     }
 
     # Enable branch protection.
+    pac_ret = false
+    bti = false
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
         # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
@@ -1231,7 +1270,7 @@ template("ohos_static_library") {
           }
         }
         if (support_branch_protector_pac_ret) {
-          cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+          pac_ret = true
         } else {
           configs +=
               [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -1262,6 +1301,21 @@ template("ohos_static_library") {
           }
         }
       }
+    }
+
+    if (defined(invoker.branch_protector_frt)) {
+      if (invoker.branch_protector_frt == "bti" &&
+          support_branch_protector_bti) {
+        bti = true
+      }
+    }
+
+    if (bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+    } else if (bti && !pac_ret) {
+      cflags += [ "-mbranch-protection=bti" ]
+    } else if (!bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
     }
 
     if (defined(invoker.no_default_deps)) {
@@ -1444,6 +1498,7 @@ template("ohos_source_set") {
                              "sanitize",
                              "stack_protector_ret",
                              "branch_protector_ret",
+                             "branch_protector_frt",
                            ])
     if (defined(invoker.configs)) {
       configs += invoker.configs
@@ -1470,6 +1525,8 @@ template("ohos_source_set") {
     }
 
     # Enable branch protection.
+    pac_ret = false
+    bti = false
     if (defined(invoker.branch_protector_ret)) {
       if (invoker.branch_protector_ret == "pac_ret") {
         # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
@@ -1481,7 +1538,7 @@ template("ohos_source_set") {
           }
         }
         if (support_branch_protector_pac_ret) {
-          cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+          pac_ret = true
         } else {
           configs +=
               [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -1512,6 +1569,21 @@ template("ohos_source_set") {
           }
         }
       }
+    }
+
+    if (defined(invoker.branch_protector_frt)) {
+      if (invoker.branch_protector_frt == "bti" &&
+          support_branch_protector_bti) {
+        bti = true
+      }
+    }
+
+    if (bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+    } else if (bti && !pac_ret) {
+      cflags += [ "-mbranch-protection=bti" ]
+    } else if (!bti && pac_ret) {
+      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
     }
 
     if (defined(invoker.no_default_deps)) {
