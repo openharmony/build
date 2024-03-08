@@ -69,6 +69,10 @@ declare_args() {
 }
 
 declare_args() {
+  ohos_indep_compiler_enable = false
+}
+
+declare_args() {
   preloader_output_dir = "//out/preloader/${product_name}"
 }
 
@@ -91,10 +95,12 @@ declare_args() {
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
-global_parts_info =
+if (!ohos_indep_compiler_enable) {
+  global_parts_info =
     read_file("${preloader_output_dir}/parts_config.json", "json")
+}
 
-if (!is_llvm_build) {
+if (!is_llvm_build && !ohos_indep_compiler_enable) {
   napi_white_list = read_file(
           "//developtools/integration_verification/tools/deps_guard/rules/NO-Depends-On-NAPI/whitelist.json",
           "json")
@@ -211,6 +217,11 @@ declare_args() {
   is_mini_system = false
   is_small_system = false
   is_standard_system = false
+}
+
+if (ohos_indep_compiler_enable) {
+  is_standard_system = true
+  is_legacy = false
 }
 
 if (is_mini_system) {

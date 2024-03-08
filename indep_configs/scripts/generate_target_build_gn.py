@@ -18,45 +18,27 @@ import json
 import os
 import time
 import stat
+import utils
 
 
-def get_args():
+def _get_args():
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument(
         "-p",
-        "--input-path",
+        "--input_path",
         default=r"./",
         type=str,
         help="Path of source code",
     )
     parser.add_argument(
         "-rp",
-        "--root-path",
+        "--root_path",
         default=r"./",
         type=str,
         help="Path of root",
     )
     args = parser.parse_args()
     return args
-
-
-def timer(func):
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        print(' {} runtime is：{}'.format(os.path.basename(__file__), end_time - start_time))
-        return result
-    return wrapper
-
-
-def _get_json(file_path):
-    try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        print(f"can not find file: {file_path}.")
-    return data
 
 
 def _judge_type(element, deps_list: list):
@@ -99,7 +81,7 @@ def _get_src_part_name(src_bundle_paths):
     _path = ''
     _bundle_path = ''
     for src_bundle_path, v_path in src_bundle_paths.items():
-        src_bundle_json = _get_json(src_bundle_path)
+        src_bundle_json = utils.get_json(src_bundle_path)
         part_name = src_bundle_json['component']['name']
         if part_name.endswith('lite'):
             pass
@@ -110,19 +92,18 @@ def _get_src_part_name(src_bundle_paths):
     return _bundle_path, _path
 
 
-@timer
 def main():
-    args = get_args()
+    args = _get_args()
     source_code_path = args.input_path
     deps_list = list()
     bundle_paths = _get_bundle_path(source_code_path)
     _bundle_path, dir_path = _get_src_part_name(bundle_paths)
-    bundle_json = _get_json(_bundle_path)
+    bundle_json = utils.get_json(_bundle_path)
     build_data = bundle_json["component"]["build"]
     for ele in build_data.keys():
         if ele not in ['inner_kits', 'test', 'innerapis']:
             _judge_type(build_data[ele], deps_list)
-    output_path = os.path.join(args.root_path, 'out', 'build_configs')
+    output_path = os.path.join(args.root_path, 'out')
     _output_build_gn(deps_list, output_path)
 
 

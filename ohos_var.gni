@@ -193,6 +193,10 @@ declare_args() {
   is_use_check_deps = true
 }
 
+if (ohos_indep_compiler_enable) {
+  is_use_check_deps = false
+}
+
 declare_args() {
   if (is_mac || is_ios) {
     enable_bitcode = false
