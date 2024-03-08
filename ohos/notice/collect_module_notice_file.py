@@ -17,6 +17,7 @@ import sys
 import argparse
 import os
 import shutil
+import stat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
@@ -92,7 +93,9 @@ def do_collect_notice_files(options, depfiles: str):
     if notice_file is None:
         readme_path = os.path.join(options.module_source_dir,
                                    README_FILE_NAME)
-        if os.path.exists(readme_path):
+        if not os.path.exists(readme_path):
+            readme_path = find_opensource_recursively(os.path.abspath(options.module_source_dir))
+        if readme_path is not None:
             depfiles.append(readme_path)
             notice_file_info = get_license_from_readme(readme_path)
             notice_file = notice_file_info[0]
@@ -116,13 +119,39 @@ def do_collect_notice_files(options, depfiles: str):
             notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
-            if os.path.exists(notice_file):
-                shutil.copy(notice_file, output)
-                write_json_file(notice_info_json, module_notice_info_list)
-            else:
+            
+            notice_files = notice_file.split(',')
+            write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
+
+
+def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
+    for notice_file in notice_files:
+        notice_file = notice_file.strip()
+        if options.module_source_dir not in notice_file:
+            notice_file = os.path.join(options.module_source_dir, notice_file)
+        if os.path.exists(notice_file):
+            if not os.path.exists(output):
                 build_utils.touch(output)
-                build_utils.touch(notice_info_json)
+            write_notice_to_output(notice_file, output)
+            write_json_file(notice_info_json, module_notice_info_list)
+        else:
+            build_utils.touch(output)
+            build_utils.touch(notice_info_json)
         depfiles.append(notice_file)
+
+
+def write_notice_to_output(notice_file, output):
+    notice_data_flow = open(notice_file, "r+", encoding="utf-8", errors="ignore")
+    license_content = notice_data_flow.read()
+    notice_data_flow.close()
+    output_data_flow = open(output, "r+", encoding="utf-8", errors="ignore")
+    output_file_content = output_data_flow.read()
+    output_data_flow.close()
+    if license_content not in output_file_content:
+        with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                       'a', encoding='utf-8') as testfwk_info_file:
+            testfwk_info_file.write(f"{license_content}\n")
+            testfwk_info_file.close()
 
 
 def main(args):
