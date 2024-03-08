@@ -108,8 +108,12 @@ template("ohos_rust_library") {
                                "license_as_sources",
                                "license_file",
                              ])
+      module_type = "rust_library"
 
       module_name = _main_target_name
+      if (defined(invoker.crate_name)) {
+        module_name = invoker.crate_name
+      }
       module_source_dir = get_label_info(":${_main_target_name}", "dir")
     }
   }
