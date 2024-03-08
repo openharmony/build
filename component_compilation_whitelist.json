@@ -5036,6 +5036,7 @@
             "//foundation/ability/form_fwk/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:ui_extension": [
+            "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage/",
             "//foundation/window/window_manager/interfaces/kits/napi/extension_window/",
             "//foundation/window/window_manager/wm/include/"
         ],
@@ -25523,6 +25524,9 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
         ],
+        "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage:gen_embeddable_window_stage_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/window/window_manager/interfaces/kits/napi/extension_window:gen_extension_window_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -35120,6 +35124,9 @@
         "//foundation/window/window_manager/interfaces/kits/napi/common:dm_napi_common": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
+        "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage:gen_embeddable_window_stage_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/window/window_manager/interfaces/kits/napi/extension_window:gen_extension_window_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -36924,6 +36931,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/resourceschedule/work_scheduler/interfaces/kits/js/napi/work_scheduler_extension_context/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/window/window_manager/interfaces/kits/napi/extension_window/": [
