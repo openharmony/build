@@ -44,8 +44,8 @@ sed -i '/pip3 install six/i pip3 install testresources' ./build/build_scripts/Do
 sed -i "s@\t@@g" ./build/build_scripts/Dockerfile
 sed -i "s@\\\@@g" ./build/build_scripts/Dockerfile
 
-result1=$(echo $SHELL | grep "bash")
-result2=$(echo $SHELL | grep "zsh")
+result1=$(echo $SHELL | grep "bash" || true)
+result2=$(echo $SHELL | grep "zsh" || true)
 
 userhome=~
 if [[ "$result1" != "" ]]
