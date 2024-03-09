@@ -232,7 +232,8 @@ group("common_deps") {
     public_deps += []
   }
 
-  if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
+  if (use_musl && current_toolchain != host_toolchain && !is_mingw &&
+      !ohos_indep_compiler_enable) {
     public_deps += [ "//third_party/musl:soft_shared_libs" ]
   }
 }

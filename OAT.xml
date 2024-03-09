@@ -145,6 +145,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="toolchain/mac/linker_driver.py" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="toolchain/ohos/BUILD.gn" desc="keep the chromium src copyright"/>
 				<filteritem type="filepath" name="toolchain/ohos/ohos_toolchain.gni" desc="keep the chromium src copyright"/>
+				<filteritem type="filepath" name="indep_configs/mapping/gni/third_party/musl/musl_config.gni" desc="keep the chromium src copyright"/>
 			</filefilter>
 		</filefilterlist>
 	
