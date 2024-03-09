@@ -10,6 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import("//build/lite/lite_target_list.gni")
 import("//build/lite/ndk/ndk.gni")
 
 # gn version >= 1714 required.
@@ -29,94 +30,18 @@ group("prebuilts") {
 group("ohos") {
   deps = []
   if (ohos_build_target == "") {
-    # Step 1: Read product configuration profile.
-    product_cfg = read_file("${product_config_path}/config.json", "json")
-
-    parts_targets_info = read_file(
-            "${root_build_dir}/build_configs/parts_info/parts_modules_info.json",
-            "json")
-
-    # Step 2: Loop subsystems configured by product.
-    foreach(product_configed_subsystem, product_cfg.subsystems) {
-      subsystem_name = product_configed_subsystem.subsystem
-
-      if (build_xts || (!build_xts && subsystem_name != "xts")) {
-        # Step 3: Read OS subsystems profile.
-        subsystem_parts_info = {
-        }
-        subsystem_parts_info = read_file(
-                "${root_build_dir}/build_configs/mini_adapter/${subsystem_name}.json",
-                "json")
-
-        # Step 4: Loop components configured by product.
-        foreach(product_configed_component,
-                product_configed_subsystem.components) {
-          # Step 5: Check whether the component configured by product is exist.
-          component_found = false
-
-          foreach(part_name, subsystem_parts_info.parts) {
-            if (product_configed_component.component == part_name) {
-              component_found = true
-            }
-          }
-
-          assert(
-              component_found,
-              "Component \"${product_configed_component.component}\" not found" + ", please check your product configuration.")
-
-          # Step 6: Loop OS components and check validity of product configuration.
-          foreach(part_name, subsystem_parts_info.parts) {
-            kernel_valid = true
-
-            # Step 6.1: Skip component which not configured by product.
-            if (part_name == product_configed_component.component) {
-              # Step 6.1.1: Loop OS components adapted kernel type.
-
-              assert(
-                  kernel_valid,
-                  "Invalid component configed, ${subsystem_name}:${product_configed_component.component} " + "not available for kernel: ${product_cfg.kernel_type}!")
-
-              # Step 6.1.2: Add valid component for compiling.
-              # Skip kernel target for userspace only scenario.
-              if (!ohos_build_userspace_only ||
-                  (ohos_build_userspace_only && subsystem_name != "kernel" &&
-                   subsystem_name != "vendor")) {
-                foreach(_p_info, parts_targets_info.parts) {
-                  if (_p_info.part_name ==
-                      product_configed_component.component) {
-                    foreach(component_target, _p_info.module_list) {
-                      if (ohos_kernel_type == "liteos_m") {
-                        if (component_target !=
-                            "${ohos_kernel_path}:build_kernel_image") {
-                          deps += [ component_target ]
-                        }
-                      } else if (product_configed_component.component ==
-                                 "uniproton") {
-                        if (component_target !=
-                            "//kernel/uniproton:build_kernel_image") {
-                          deps += [ component_target ]
-                        }
-                      } else {
-                        deps += [ component_target ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+    remove_target_list = []
+    if (!ohos_build_userspace_only ||
+        (ohos_build_userspace_only && subsystem_name != "kernel" &&
+         subsystem_name != "vendor")) {
+      if (ohos_kernel_type == "liteos_m") {
+        remove_target_list = [ "${ohos_kernel_path}:build_kernel_image" ]
+      } else if (product_configed_component.component == "uniproton") {
+        remove_target_list = [ "//kernel/uniproton:build_kernel_image" ]
       }
     }
-
-    # Skip device target for userspace only scenario.
-    if (!ohos_build_userspace_only) {
-      # Step 7: Add device and product target by default.
-      # liteos_m kernel organise device build targets, but not by default.
-      if (product_cfg.kernel_type != "liteos_m") {
-        deps += [ "${device_path}/../" ]
-      }
-    }
+    build_target_list = filter_exclude(lite_target_list, remove_target_list)
+    deps += build_target_list
   } else {
     deps += string_split(ohos_build_target, "&&")
   }
