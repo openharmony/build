@@ -1,8 +1,0 @@
-{
-    "gni_mapping_file":{
-        "//third_party/musl/musl_config.gni": "//build/indep_configs/gni/third_party/musl/musl_config.gni"
-    },
-    "single_component_path":{
-        "startup_init": "base/startup/init"
-    }
-}

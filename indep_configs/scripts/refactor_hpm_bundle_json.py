@@ -18,9 +18,10 @@ import json
 import os
 import time
 import stat
+import utils
 
 
-def get_args():
+def _get_args():
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument(
         "-p",
@@ -40,26 +41,6 @@ def get_args():
     return args
 
 
-def timer(func):
-    def wrapper(*args, **kwargs):
-        start_time = time.time()
-        result = func(*args, **kwargs)
-        end_time = time.time()
-        print(' {} runtime is：{}'.format(os.path.basename(__file__), end_time - start_time))
-        return result
-
-    return wrapper
-
-
-def _get_json(file_path) -> dict:
-    try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-    except FileNotFoundError:
-        print(f"can not find file: {file_path}.")
-    return data
-
-
 def _scan_dir_to_get_info(bundle_path):
     dirs_info = dict()
     file_list = list()
@@ -75,23 +56,22 @@ def _scan_dir_to_get_info(bundle_path):
     return dirs_info
 
 
-def out_bundle_json(bundle_json, file_name):
+def _out_bundle_json(bundle_json, file_name):
     flags = os.O_WRONLY | os.O_CREAT
     modes = stat.S_IWUSR | stat.S_IRUSR
     with os.fdopen(os.open(file_name, flags, modes), 'w') as f:
         json.dump(bundle_json, f, indent=2)
 
 
-@timer
 def main():
-    args = get_args()
+    args = _get_args()
     hpmcache_path = args.input_path
     dependences_file = os.path.join(hpmcache_path, 'dependences.json')
-    dependences_json = _get_json(dependences_file)
+    dependences_json = utils.get_json(dependences_file)
     for part_name, part_info in dependences_json.items():
         part_path = part_info['installPath']
         bundle_path = os.path.join(hpmcache_path, part_path[1:], 'bundle.json')
-        bundle_json = _get_json(bundle_path)
+        bundle_json = utils.get_json(bundle_path)
         dirs_info = _scan_dir_to_get_info(os.path.join(hpmcache_path, part_path[1:]))
         bundle_json.update({"dirs": dirs_info})
         out_bundle_json(bundle_json, bundle_path)
