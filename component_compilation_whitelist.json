@@ -12447,6 +12447,9 @@
         "//arkcompiler/ets_runtime/test/aottest/ordinaryhasinstance:gen_ordinaryhasinstance_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_builtins:gen_pgo_builtins_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26535,6 +26538,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/ordinaryhasinstance:gen_ordinaryhasinstance_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_builtins:gen_pgo_builtins_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
