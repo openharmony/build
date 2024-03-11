@@ -18,6 +18,7 @@ declare_args() {
   support_stack_protector_ret = false
   support_branch_protector_pac_ret = false
   use_pac_ret = true
+  support_branch_protector_bti = false
 }
 
 using_security_flag = enable_auto_var_init
@@ -40,9 +41,12 @@ if (target_cpu == "arm64" && res == 1 && is_ohos && is_standard_system &&
 }
 
 # pac_ret is supported in armv8.
-if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw &&
-    use_pac_ret) {
-  support_branch_protector_pac_ret = true
+# bti is supported in armv8.5
+if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw) {
+  if (use_pac_ret) {
+    support_branch_protector_pac_ret = true
+  }
+  support_branch_protector_bti = true
 }
 
 assert(
