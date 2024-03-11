@@ -20,29 +20,12 @@ if [ -n "$3" ]; then
 fi
 rm -rf out
 rm -rf .gn
-rm -rf binarys
-
-kernel_path="kernel/linux/patches"
-if [ -d "$kernel_path" ]; then
-    echo "kernel_path already exist."
-else
-    echo "kernel_path not exist."
-    mkdir -p kernel/linux
-    ln -s $1/binarys/kernel/linux/innerapis/patches kernel/linux/patches
-fi
 
 mkdir -p out/$VARIANTS
 mkdir -p out/preloader
 mkdir -p out/$VARIANTS/build_configs/parts_info
 cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/build_configs
-
-mkdir -p out/$VARIANTS/obj/binarys/third_party/musl/usr/include/arm-linux-ohos
-mkdir -p out/$VARIANTS/obj/binarys/third_party/musl/usr/lib/arm-linux-ohos
-cp -rf $1/binarys/third_party/musl/innerapis/includes/* out/$VARIANTS/obj/binarys/third_party/musl/usr/include/arm-linux-ohos
-cp -rf $1/binarys/third_party/musl/innerapis/libs/* out/$VARIANTS/obj/binarys/third_party/musl/usr/lib/arm-linux-ohos
-
 ln -s build/indep_configs/dotfile.gn .gn
-ln -s $1/binarys binarys
 
 export SOURCE_ROOT_DIR="$PWD"
 

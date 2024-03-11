@@ -50,3 +50,10 @@ class InstallArgsResolver(ArgsResolverInterface):
     def resolve_local(target_arg: Arg, install_module: InstallModuleInterface):
         if target_arg.arg_value:
             install_module.hpm.regist_flag('local', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_variant(target_arg: Arg, install_module: InstallModuleInterface):
+        if target_arg.arg_value:
+            install_module.hpm.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value))
+        else:
+            install_module.hpm.regist_flag('defaultDeps', ComponentUtil.get_default_deps("default"))
