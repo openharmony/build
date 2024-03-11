@@ -17,6 +17,7 @@ import argparse
 import json
 import os
 import time
+import shutil
 import stat
 import utils
 
@@ -76,8 +77,52 @@ def _get_src_bundle_path(source_code_path):
     return bundle_paths
 
 
-def _gen_components_info(components_json, bundle_path, part_name):
-    bundle_json = utils.get_json(bundle_path)
+def _symlink_src2dest(src_dir, dest_dir):
+    if os.path.exists(dest_dir) and os.path.islink(dest_dir):
+        os.unlink(dest_dir)
+    if os.path.exists(dest_dir) and dest_dir != src_dir:
+        if os.path.isdir(dest_dir):
+            shutil.rmtree(dest_dir)
+        else:
+            os.remove(dest_dir)
+    os.symlink(src_dir, dest_dir)
+
+
+def _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name):
+    path = bundle_json["segment"]["destPath"]
+    link_path = os.path.join("binarys", path)
+    if not os.path.isdir(link_path):
+        try:
+            os.remove(link_path)
+        except FileNotFoundError:
+            pass
+        os.makedirs(link_path, exist_ok=True)
+    real_path = hpm_cache_path + dependences_json[part_name]['installPath']
+    _symlink_src2dest(real_path, link_path)
+
+
+def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
+    musl_real_path = hpm_cache_path + dependences_json["musl"]['installPath']
+    musl_include_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/include/arm-linux-ohos")
+    musl_lib_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/lib/arm-linux-ohos")
+    os.makedirs(musl_include_link_path, exist_ok=True)
+    os.makedirs(musl_lib_link_path, exist_ok=True)
+    _symlink_src2dest(musl_real_path + os.sep + "innerapis/includes", musl_include_link_path)
+    _symlink_src2dest(musl_real_path + os.sep + "innerapis/libs", musl_lib_link_path)
+
+    kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']
+    kernel_link_path = os.path.join("kernel/linux/patches")
+    if not os.path.isdir(kernel_link_path):
+        try:
+            os.remove(kernel_link_path)
+        except FileNotFoundError:
+            pass
+        os.makedirs(kernel_link_path, exist_ok=True)
+    os.makedirs(kernel_link_path, exist_ok=True)
+    _symlink_src2dest(kernel_real_path + os.sep + "innerapis/patches", kernel_link_path)
+
+
+def _gen_components_info(components_json, bundle_json, part_name):
     subsystem = bundle_json["component"]["subsystem"]
     path = bundle_json["segment"]["destPath"]
     try:
@@ -124,12 +169,14 @@ def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, r
     components_json = dict()
     src_bundle_paths = _get_src_bundle_path(source_code_path)
     src_part_name, src_bundle_path = _get_src_part_name(src_bundle_paths)
-    components_json = _gen_components_info(components_json, src_bundle_path, src_part_name)
+    components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name)
     components_json = _gen_components_info(components_json,
-        os.path.join(root_path, "build", "bundle.json"), "build_framework")
+        utils.get_json(os.path.join(root_path, "build", "bundle.json")), "build_framework")
     for part_name in part_name_list:
         bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
-        components_json = _gen_components_info(components_json, bundle_path, part_name)
+        bundle_json = utils.get_json(bundle_path)
+        components_json = _gen_components_info(components_json, bundle_json, part_name)
+        _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
 
     return components_json
 
@@ -169,6 +216,7 @@ def main():
         hpm_cache_path, root_path, dependences_json)
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
+    _link_kernel_binarys(variants, hpm_cache_path, dependences_json)
 
 
 if __name__ == '__main__':

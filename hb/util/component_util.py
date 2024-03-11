@@ -60,6 +60,13 @@ class ComponentUtil():
         return '' , ''
 
     @staticmethod
+    def get_default_deps(variant: str) -> str:
+        default_deps_path = os.path.join(
+            CURRENT_OHOS_ROOT, 'build', 'indep_configs', 'variants', variant, 'default_deps.json')
+
+        return default_deps_path
+
+    @staticmethod
     @throw_exception
     def get_component_module_full_name(out_path: str, component_name: str, module_name: str) -> str:
         root_path = os.path.join(out_path, "build_configs")
