@@ -25553,6 +25553,9 @@
         "//foundation/window/window_manager/resources/abc/pip/interface:gen_pip_video_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+	"//foundation/window/window_manager/resources/abc/pip/interface:gen_pip_content_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//test/testfwk/arkxtest/uitest:gen_uitest_exporter_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -35149,6 +35152,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/window/window_manager/resources/abc/pip/interface:gen_pip_video_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/window/window_manager/resources/abc/pip/interface:gen_pip_content_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/window/window_manager/snapshot:libsnapshot_util": [
