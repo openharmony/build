@@ -14374,6 +14374,9 @@
         "//arkcompiler/ets_runtime:libark_jsruntime_test_set": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
         ],
+        "//arkcompiler/runtime_core/abc2program/tests:gen_HelloWorld_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/runtime_core/bytecode_optimizer/tests:gen_codegenTryCatch_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28296,6 +28299,9 @@
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc"
         ],
+        "//arkcompiler/runtime_core/abc2program/tests:gen_HelloWorld_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/runtime_core/arkplatform:arkplatform_static": [
             "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
         ],
@@ -35829,6 +35835,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//arkcompiler/ets_runtime/test/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//arkcompiler/runtime_core/abc2program/tests/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//arkcompiler/runtime_core/bytecode_optimizer/tests/": [
