@@ -330,7 +330,7 @@ template("ohos_executable") {
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
     } else if (!bti && pac_ret) {
-      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
+      cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
 
     if (!defined(deps)) {
@@ -844,7 +844,7 @@ template("ohos_shared_library") {
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
     } else if (!bti && pac_ret) {
-      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
+      cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
 
     # check whether to add adlt configs
@@ -1315,7 +1315,7 @@ template("ohos_static_library") {
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
     } else if (!bti && pac_ret) {
-      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
+      cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
 
     if (defined(invoker.no_default_deps)) {
@@ -1583,7 +1583,7 @@ template("ohos_source_set") {
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
     } else if (!bti && pac_ret) {
-      cflags += [ "-mbranch-protection=pac_ret+b-key" ]
+      cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
 
     if (defined(invoker.no_default_deps)) {
