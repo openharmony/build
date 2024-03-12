@@ -33,5 +33,20 @@
           },
         "resolve_function": "resolve_local",
         "testFunction": ""
+    },
+    "variant": {
+        "arg_name": "--variant",
+        "argDefault": "",
+        "arg_help": "Default:''. Help:install product variant, run 'hb install --variant {variant_name}'",
+        "arg_phase": "prebuild",
+        "arg_type": "str",
+        "arg_attribute": {
+            "abbreviation": "-v",
+            "optional": [
+              "default"
+            ]
+        },
+        "resolve_function": "resolve_variant",
+        "testFunction": ""
     }
 }
