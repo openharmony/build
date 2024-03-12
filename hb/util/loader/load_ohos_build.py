@@ -121,6 +121,7 @@ class PartObject(object):
         self._feature_list = []
         self._toolchain = toolchain
         self._inner_kits_info = {}
+        self._components_info = {}
         self._kits = []
         self._target_arch = target_arch
         self._system_capabilities = []
@@ -172,11 +173,36 @@ class PartObject(object):
 
         return overrided_part_name, overrided_origin_name
 
+    def _parsing_base_info(self, inner_kits_lib, part_name):
+        info = {'part_name': part_name}
+        label = inner_kits_lib.get('name')
+        lib_name = label.split(':')[1]
+        info['label'] = label
+        info['name'] = lib_name
+        if inner_kits_lib.get('visibility') is not None:
+            info['visibility'] = inner_kits_lib.get('visibility')
+        lib_type = inner_kits_lib.get('type')
+        if lib_type is None:
+            lib_type = 'so'
+        info['type'] = lib_type
+        prebuilt = inner_kits_lib.get('prebuilt_enable')
+        if prebuilt:
+            info['prebuilt_enable'] = prebuilt
+            prebuilt_source_libs = inner_kits_lib.get('prebuilt_source')
+            prebuilt_source = prebuilt_source_libs.get(target_arch)
+            info['prebuilt_source'] = prebuilt_source
+        else:
+            info['prebuilt_enable'] = False
+        return info, lib_name, lib_type
+
     @throw_exception
     def _parsing_inner_kits(self, part_name, inner_kits_info, build_gn_content,
                             target_arch):
         inner_kits_libs_gn = []
         for inner_kits_lib in inner_kits_info:
+            header = inner_kits_lib.get('header')
+            if header is None:
+                continue
             inner_kits_libs_gn.append('    {')
             inner_kits_libs_gn.extend(
                 self._parsing_kits_lib(inner_kits_lib, True))
@@ -194,32 +220,13 @@ class PartObject(object):
         # output inner kits info to resolve external deps
         _libs_info = {}
         for inner_kits_lib in inner_kits_info:
-            info = {'part_name': part_name}
-            label = inner_kits_lib.get('name')
-            lib_name = label.split(':')[1]
-            info['label'] = label
-            info['name'] = lib_name
-            if inner_kits_lib.get('visibility') is not None:
-                info['visibility'] = inner_kits_lib.get('visibility')
-            lib_type = inner_kits_lib.get('type')
-            if lib_type is None:
-                lib_type = 'so'
-            info['type'] = lib_type
-            prebuilt = inner_kits_lib.get('prebuilt_enable')
-            if prebuilt:
-                info['prebuilt_enable'] = prebuilt
-                prebuilt_source_libs = inner_kits_lib.get('prebuilt_source')
-                prebuilt_source = prebuilt_source_libs.get(target_arch)
-                info['prebuilt_source'] = prebuilt_source
-            else:
-                info['prebuilt_enable'] = False
+            info, lib_name, lib_type = self._parsing_base_info(inner_kits_lib, part_name)
+            self._components_info[lib_name] = info
             # header files
+            header = inner_kits_lib.get('header')
+            if header is None:
+                continue
             if lib_type == 'so':
-                header = inner_kits_lib.get('header')
-                if header is None:
-                    raise OHOSException(
-                        "header not configuration, part_name = '{}'".format(
-                            part_name), "2014")
                 header_base = header.get('header_base')
                 if header_base is None:
                     raise OHOSException(
@@ -320,6 +327,10 @@ class PartObject(object):
     def part_inner_kits(self):
         """part inner kits."""
         return self._inner_kits_info
+
+    def part_component_info(self):
+        """part component info."""
+        return self._components_info
 
     def part_kits(self):
         """part kits."""
@@ -550,6 +561,15 @@ class LoadBuildConfig(object):
                 part_obj.part_name()] = part_obj.part_inner_kits()
         return _parts_inner_kits
 
+    def parts_component_info(self):
+        """parts component info."""
+        self.parse()
+        _parts_component_info = {}
+        for part_obj in self._part_list.values():
+            _parts_component_info[
+                part_obj.part_name()] = part_obj.part_component_info()
+        return _parts_component_info
+
     def parts_build_targets(self):
         """parts build target label."""
         self.parse()
@@ -679,9 +699,9 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
 
 
 def _output_all_components_info(parts_config_dict, parts_info_output_path):
-    if 'parts_inner_kits_info' not in parts_config_dict:
+    if 'parts_component_info' not in parts_config_dict:
         return
-    parts_inner_kits_info = parts_config_dict.get('parts_inner_kits_info')
+    parts_component_info = parts_config_dict.get('parts_component_info')
     if 'parts_info' not in parts_config_dict:
         return
     parts_info = parts_config_dict.get('parts_info')
@@ -691,7 +711,7 @@ def _output_all_components_info(parts_config_dict, parts_info_output_path):
 
     components = {}
 
-    for name, val in parts_inner_kits_info.items():
+    for name, val in parts_component_info.items():
         component = {}
         component["innerapis"] = []
         component["variants"] = []
@@ -863,6 +883,7 @@ def get_parts_info(source_root_dir,
     """
     parts_variants = {}
     parts_inner_kits_info = {}
+    parts_component_info = {}
     parts_kits_info = {}
     parts_targets = {}
     parts_info = {}
@@ -894,6 +915,8 @@ def get_parts_info(source_root_dir,
         parts_variants.update(_parts_variants)
         _inner_kits_info = build_loader.parts_inner_kits_info()
         parts_inner_kits_info.update(_inner_kits_info)
+        _parts_component_info = build_loader.parts_component_info()
+        parts_component_info.update(_parts_component_info)
         parts_kits_info.update(build_loader.parts_kits_info())
         _parts_targets = build_loader.parts_build_targets()
         parts_targets.update(_parts_targets)
@@ -913,6 +936,7 @@ def get_parts_info(source_root_dir,
     parts_config_dict['subsystem_parts'] = subsystem_parts
     parts_config_dict['parts_variants'] = parts_variants
     parts_config_dict['parts_inner_kits_info'] = parts_inner_kits_info
+    parts_config_dict['parts_component_info'] = parts_component_info
     parts_config_dict['parts_kits_info'] = parts_kits_info
     parts_config_dict['parts_targets'] = parts_targets
     parts_config_dict['phony_target'] = _phony_target
