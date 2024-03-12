@@ -85,3 +85,11 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "hb build <part_name>": no part_name . ')
+
+    @staticmethod
+    def resolve_variant(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        build_executor = indep_build_module.hpm
+        if target_arg.arg_value:
+            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value))
+        else:
+            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("default"))
