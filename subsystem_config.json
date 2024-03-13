@@ -151,9 +151,9 @@
     "path": "test/xts",
     "name": "xts"
   },
-  "wukong": {
-    "path": "test/ostest/wukong",
-    "name": "wukong"
+  "ostest": {
+    "path": "test/ostest",
+    "name": "ostest"
   },
   "testfwk": {
     "path": "test/testfwk",
