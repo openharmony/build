@@ -42,6 +42,7 @@
         "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
         "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0",
         "//drivers/interface/display/buffer/v1_1:display_buffer_idl_headers_1.1",
+        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2",
         "//drivers/interface/display/composer/v1_0:display_composer_idl_headers",
         "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1",
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
@@ -305,6 +306,15 @@
             "//drivers/interface/camera/sequenceable/buffer_producer:libbuffer_producer_sequenceable_1.0",
             "//drivers/interface/camera/sequenceable/map_data:libmap_data_sequenceable_1.0",
             "//drivers/interface/camera/v1_2:libcamera_stub_1.2"
+        ],
+        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2": [
+            "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0"
+        ],
+        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_proxy_1.2": [
+            "//drivers/interface/display/buffer/v1_0:libdisplay_buffer_proxy_1.0"
+        ],
+        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_stub_1.2": [
+            "//drivers/interface/display/buffer/v1_0:libdisplay_buffer_stub_1.0"
         ],
         "//drivers/interface/display/composer/v1_0:libdisplay_composer_proxy_1.0": [
             "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable"
@@ -2680,6 +2690,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/display/buffer/v1_1:libdisplay_buffer_stub_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_stub_1.2": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -16148,6 +16194,9 @@
         "//drivers/interface/display/buffer/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+	"//drivers/interface/display/buffer/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/display/composer/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -16514,7 +16563,8 @@
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers"
         ],
         "//drivers/peripheral/display/buffer/hdi_service:libmapper_service_1.0": [
-            "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers"
+            "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
+            "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2"
         ],
         "//drivers/peripheral/display/buffer/hdi_service:libmetadata_service_1.1": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0",
@@ -30832,6 +30882,9 @@
         "//drivers/interface/display/buffer/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+	"//drivers/interface/display/buffer/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/display/composer/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -36120,6 +36173,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/display/buffer/v1_1/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+	"//drivers/interface/display/buffer/v1_2/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/display/composer/v1_0/": [
