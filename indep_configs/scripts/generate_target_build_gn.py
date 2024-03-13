@@ -52,6 +52,12 @@ def _judge_type(element, deps_list: list):
         deps_list.append(element)
 
 
+def _inner_kits_name(inner_kits_list, deps_list):
+    if inner_kits_list:
+        for k in inner_kits_list:
+            deps_list.append(k['name'])
+
+
 def _output_build_gn(deps_list, output_path):
     file_name = os.path.join(output_path, 'BUILD.gn')
     flags = os.O_WRONLY | os.O_CREAT
@@ -101,8 +107,11 @@ def main():
     bundle_json = utils.get_json(_bundle_path)
     build_data = bundle_json["component"]["build"]
     for ele in build_data.keys():
-        if ele not in ['inner_kits', 'test', 'innerapis']:
+        if ele not in ['inner_kits', 'test', 'inner_api']:
             _judge_type(build_data[ele], deps_list)
+        elif ele in ['inner_kits', 'inner_api']:
+            inner_kits_list = build_data[ele]
+            _inner_kits_name(inner_kits_list, deps_list)
     output_path = os.path.join(args.root_path, 'out')
     _output_build_gn(deps_list, output_path)
 
