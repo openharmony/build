@@ -240,7 +240,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "" CACHE STRING "Flags for release variant builds.")
 set(CMAKE_CXX_FLAGS_RELEASE "${OHOS_RELEASE_COMPILER_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
 
 # set the cmake global asmflags
-set(CMAKE_ASM_FLAGS "" CACHE STRING "Flags for all build types.")
+set(CMAKE_ASM_FLAGS "-mrelax-relocations=no" CACHE STRING "Flags for all build types.")
 set(CMAKE_ASM_FLAGS "${OHOS_ASM_COMPILER_FLAGS} ${CMAKE_ASM_FLAGS} -D__MUSL__")
 
 set(CMAKE_ASM_FLAGS_DEBUG "" CACHE STRING "Flags for debug variant builds.")
