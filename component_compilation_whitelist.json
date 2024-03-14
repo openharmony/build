@@ -351,11 +351,23 @@
         "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_stub_1.1": [
             "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_stub_1.0"
         ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_proxy_1.2": [
+            "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_proxy_1.1"
+        ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_stub_1.2": [
+            "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_stub_1.1"
+        ],
         "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_proxy_1.1": [
             "//drivers/interface/intelligent_voice/trigger/v1_0:libintell_voice_trigger_proxy_1.0"
         ],
         "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_stub_1.1": [
             "//drivers/interface/intelligent_voice/trigger/v1_0:libintell_voice_trigger_stub_1.0"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_proxy_1.2": [
+            "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_proxy_1.1"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_stub_1.2": [
+            "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_stub_1.1"
         ],
         "//drivers/interface/motion/v1_1:libmotion_proxy_1.1": [
             "//drivers/interface/motion/v1_0:libmotion_proxy_1.0"
@@ -3338,6 +3350,42 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:intell_voice_engine_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:intell_voice_engine_idl_headers_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_stub_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
@@ -3402,6 +3450,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_stub_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:intell_voice_trigger_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:intell_voice_trigger_idl_headers_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_stub_1.2": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -16202,10 +16286,16 @@
         "//drivers/interface/intelligent_voice/engine/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/intelligent_voice/trigger/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/intelligent_voice/trigger/v1_1:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/light/v1_0:hdi_gen": [
@@ -30889,10 +30979,16 @@
         "//drivers/interface/intelligent_voice/engine/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/intelligent_voice/engine/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/intelligent_voice/trigger/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/intelligent_voice/trigger/v1_1:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/light/v1_0:hdi_gen": [
@@ -36182,10 +36278,16 @@
         "//drivers/interface/intelligent_voice/engine/v1_1/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
+        "//drivers/interface/intelligent_voice/engine/v1_2/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
         "//drivers/interface/intelligent_voice/trigger/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/intelligent_voice/trigger/v1_1/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/intelligent_voice/trigger/v1_2/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/light/v1_0/": [
