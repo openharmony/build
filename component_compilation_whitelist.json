@@ -13695,6 +13695,12 @@
         "//arkcompiler/ets_runtime/test/moduletest/yieldstar:gen_yieldstar_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/moduletest/sendableclassuseimport:gen_sendableclassuseimport_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedic:gen_sharedic_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/perform/string:gen_string_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27621,6 +27627,12 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/yieldstar:gen_yieldstar_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sendableclassuseimport:gen_sendableclassuseimport_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedic:gen_sharedic_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/perform/string:gen_string_abc": [
