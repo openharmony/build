@@ -29549,6 +29549,12 @@
         "//base/startup/appspawn:appspawn_server": [
             "//third_party/selinux:libselinux"
         ],
+        "//base/startup/appspawn/service/hnp:hnp": [
+            "//third_party/cJSON:cjson"
+        ],
+        "//base/startup/appspawn/service/hnp:hnpcli": [
+            "//third_party/cJSON:cjson"
+        ],
         "//base/startup/init/device_info:deviceinfoservice": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
