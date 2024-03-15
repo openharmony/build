@@ -5216,7 +5216,8 @@
             "//base/global/resource_management/interfaces/inner_api/include/",
             "//base/global/i18n/frameworks/intl/include/",
             "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/"
+            "//third_party/json/include/",
+            "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/src/EGL/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_connect_callback_stub": [
             "//base/notification/eventhandler/interfaces/inner_api/",
