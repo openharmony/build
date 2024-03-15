@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Copyright (c) 2024 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -845,7 +845,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 sys.path.append(os.path.join(
                     config.root_path, "developtools/integration_verification/tools/deps_guard"))
                 from deps_guard import deps_guard
-                deps_guard(config.out_path)
+                deps_guard(config.out_path, config.target_cpu)
 
     @staticmethod
     def resolve_skip_partlist_check(target_arg: Arg, build_module: BuildModuleInterface):
