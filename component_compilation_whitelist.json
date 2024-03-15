@@ -12471,6 +12471,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Pow:gen_builtinMathPow_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Sign:gen_builtinMathSign_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Sin:gen_builtinMathSin_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26757,6 +26760,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Pow:gen_builtinMathPow_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Sign:gen_builtinMathSign_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Sin:gen_builtinMathSin_abc": [
