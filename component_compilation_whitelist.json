@@ -25839,6 +25839,26 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
         ],
+        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/kits/test/unittest/systemload_jsunittest:SystemloadJsTest": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/kits/test/unittest/systemload_jsunittest:SystemloadJsTest__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/kits/test/unittest/systemload_jsunittest:SystemloadJsTest__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/kits/test/unittest/systemload_jsunittest:SystemloadJsTest__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+            "//developtools/ace_js2bundle:ace_loader_ark_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
         "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage:gen_embeddable_window_stage_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -35506,6 +35526,10 @@
         ],
         "//foundation/resourceschedule/work_scheduler/interfaces/kits/js/napi/work_scheduler_extension_context:gen_work_scheduler_extension_context_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/kits/test/unittest/systemload_jsunittest:SystemloadJsTest__resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//foundation/resourceschedule/work_scheduler/interfaces/test/unittest/work_scheduler_jsunittest:WorkSchedulerJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
