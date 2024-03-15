@@ -144,12 +144,12 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_pack_cmd(self, **kwargs):
-        hpm_pack_cmd = [self.exec, "pack" ] + self._convert_flags()
+        hpm_pack_cmd = [self.exec, "pack", "-t" ] + self._convert_flags()
         SystemUtil.exec_command(hpm_pack_cmd)
    
     @throw_exception
     def _execute_hpm_publish_cmd(self, **kwargs):
-        hpm_publish_cmd = [self.exec, "publish" ] + self._convert_flags()
+        hpm_publish_cmd = [self.exec, "publish", "-t" ] + self._convert_flags()
         SystemUtil.exec_command(hpm_publish_cmd)
 
     @throw_exception
