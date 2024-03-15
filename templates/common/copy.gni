@@ -149,6 +149,7 @@ template("ohos_copy") {
                                "visibility",
                                "public_configs",
                                "public_external_deps",
+                               "external_deps",
                                "sources",
                                "outputs",
                              ])
@@ -189,6 +190,7 @@ template("ohos_copy") {
                                "visibility",
                                "public_configs",
                                "public_external_deps",
+                               "external_deps",
                                "sources",
                                "outputs",
                              ])
