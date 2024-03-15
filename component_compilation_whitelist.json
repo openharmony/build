@@ -13570,6 +13570,9 @@
         "//arkcompiler/ets_runtime/test/moduletest/localelowercase:gen_localelowercase_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/moduletest/mapget:gen_mapget_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/moduletest/memleakobjectcreate:gen_memleakobjectcreate_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27613,6 +27616,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/moduleUseCjs:gen_cjsWithoutExports_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/mapget:gen_mapget_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/moduleUseCjs:gen_moduleUseCjs_abc": [
