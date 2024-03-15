@@ -148,6 +148,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/file_uri:oh_file_uri_header",
   "//interface/sdk_c/filemanagement/fileshare:libohfileshare",
   "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
+  "//interface/sdk_c/multimodalinput/kits/c:libohinput_ndk",
+  "//interface/sdk_c/multimodalinput/kits/c:ohinput_header",
 ]
 
 _ndk_base_libs = [
