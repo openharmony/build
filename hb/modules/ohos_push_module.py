@@ -57,7 +57,7 @@ class OHOSPushModule(PushModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('hb push failed')
+            LogUtil.hb_info('hb push success')
 
     def _run_phase(self):
         if self.args_dict['list_targets'].arg_value:

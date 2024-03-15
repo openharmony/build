@@ -57,7 +57,7 @@ class OHOSUpdateModule(UpdateModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('hb update failed')
+            LogUtil.hb_info('hb update success')
 
     def _run_phase(self):
         for arg in self.args_dict.values():

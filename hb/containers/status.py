@@ -62,7 +62,7 @@ def throw_exception(func):
                 _desc = 'NO DESCRIPTION'
                 _solution = 'NO SOLUTION'
 
-            _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
+            #_print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
             exit(-1)
     return wrapper
 
