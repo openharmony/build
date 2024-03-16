@@ -15821,17 +15821,20 @@
             "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//base/usb/usb_manager/interfaces/innerkits:usbsrv_client": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usbmanager": [
             "//drivers/interface/usb/v1_0:usb_idl_headers",
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//base/usb/usb_manager/test/fuzztest:UsbMgrFuzzTest": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension:gen_user_auth_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -23435,10 +23438,12 @@
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient:net_conn_parcel"
         ],
         "//foundation/communication/netmanager_ext/services/networksharemanager:net_tether_manager": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//foundation/communication/netmanager_ext/services/networksharemanager:net_tether_manager_static": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//foundation/communication/netmanager_ext/test/ethernetmanager/unittest/ethernet_manager_test:ethernet_manager_test": [
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient:net_conn_parcel"
@@ -23447,7 +23452,8 @@
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient:net_conn_parcel"
         ],
         "//foundation/communication/netmanager_ext/test/networksharemanager/unittest/networkshare_manager_test:networkshare_manager_test": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
+            "//drivers/interface/usb/v1_1:usb_idl_headers"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_ap:wifi_ap_service": [
             "//third_party/libxml2:xml2"
