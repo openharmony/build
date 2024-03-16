@@ -57,7 +57,7 @@ class OHOSPackageModule(PackageModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('hb package failed')
+            LogUtil.hb_info('hb package success')
 
     def _run_phase(self):
         for arg in self.args_dict.values():

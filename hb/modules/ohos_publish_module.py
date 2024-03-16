@@ -57,7 +57,7 @@ class OHOSPublishModule(PublishModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('hb publish failed')
+            LogUtil.hb_info('hb publish success')
 
     def _run_phase(self):
         for arg in self.args_dict.values():
