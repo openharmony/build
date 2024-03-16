@@ -15821,13 +15821,13 @@
             "//developtools/global_resource_tool:restool_id_defined"
         ],
         "//base/usb/usb_manager/interfaces/innerkits:usbsrv_client": [
-            "//drivers/interface/usb/v1_0:usb_idl_headers",
-            "//drivers/interface/usb/v1_1:usb_idl_headers"
+            "//drivers/interface/usb/v1_0:usb_idl_headers"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
             "//drivers/interface/usb/v1_0:usb_idl_headers"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usbmanager": [
+            "//drivers/interface/usb/v1_0:usb_idl_headers",
             "//drivers/interface/usb/v1_0:usb_idl_headers"
         ],
         "//base/usb/usb_manager/test/fuzztest:UsbMgrFuzzTest": [
