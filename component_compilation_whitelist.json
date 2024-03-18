@@ -16902,6 +16902,9 @@
         "//drivers/peripheral/intelligent_voice/hdi_service/engine:intell_voice_engine_manager_service_1.1": [
             "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers"
         ],
+        "//drivers/peripheral/intelligent_voice/hdi_service/engine:intell_voice_engine_manager_service_1.2": [
+            "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers"
+        ],
         "//drivers/peripheral/intelligent_voice/hdi_service/trigger:intell_voice_trigger_manager_service_1.1": [
             "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers"
         ],
