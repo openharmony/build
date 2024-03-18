@@ -73,6 +73,7 @@
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/user_auth/v1_3:user_auth_idl_headers",
+        "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
         "//drivers/interface/vibrator/v1_3:vibrator_idl_headers",
         "//drivers/interface/wlan/v1_2:wlan_idl_headers",
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
@@ -16816,13 +16817,16 @@
             "//drivers/interface/user_auth/v1_3:user_auth_idl_headers"
         ],
         "//drivers/peripheral/vibrator/hdi_impl:libhdi_vibrator_impl": [
+            "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_3:vibrator_idl_headers"
         ],
         "//drivers/peripheral/vibrator/hdi_service:libvibrator_interface_service_1.2": [
+            "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_3:vibrator_idl_headers"
         ],
         "//drivers/peripheral/wlan/hdi_service/service_extend:libwlan_service_extend": [
-            "//drivers/interface/wlan/v1_2:wlan_idl_headers"
+            "//drivers/interface/wlan/v1_2:wlan_idl_headers",
+            "//drivers/interface/wlan/v1_3:wlan_idl_headers"
         ],
         "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
             "//third_party/glib:glib_packages"
