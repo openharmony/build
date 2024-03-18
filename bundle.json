@@ -30,8 +30,12 @@
     "rom": "0KB",
     "ram": "0KB",
     "deps": {
-      "components": [],
-        "third_party": [
+      "components": [
+        "selinux_adapter",
+        "selinux",
+        "cJSON"
+      ],
+      "third_party": [
         "musl",
         "markupsafe",
         "jinja2",
