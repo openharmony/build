@@ -50,7 +50,7 @@ def judge_updater_binary_available(updater_root_path: str) -> bool:
         if lib_name.endswith('asan.so'):
             return True
     updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so', 'libssl_openssl.z.so',
-                                'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
+                                'libcrypto_openssl.z.so', 'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so'}
     extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
     if len(extra_lib) != 0:
         print("Reason:  not allow updater_binary to depend dynamic library: {}".format(" ".join(extra_lib)))
