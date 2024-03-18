@@ -102,9 +102,15 @@
         "//third_party/cups:third_party_cups",
         "//third_party/curl:curl",
         "//third_party/e2fsprogs:blkid",
+        "//third_party/e2fsprogs:e2fsck",
+        "//third_party/e2fsprogs:e2fsdroid",
         "//third_party/e2fsprogs:e2fsprogs",
+        "//third_party/e2fsprogs:mke2fs",
+        "//third_party/e2fsprogs:resize2fs",
         "//third_party/exfatprogs:exfatprogs",
         "//third_party/f2fs-tools:f2fs-tools",
+        "//third_party/f2fs-tools/fsck:fsck.f2fs",
+        "//third_party/f2fs-tools/mkfs:mkfs.f2fs",
         "//third_party/flatbuffers:flatbuffers_install_action",
         "//third_party/glib:glib_packages",
         "//third_party/gptfdisk:sgdisk",
@@ -125,6 +131,7 @@
         "//third_party/libinput/patch:apply_patch",
         "//third_party/libpng:png_static",
         "//third_party/libunwind:unwind_source_arm",
+        "//third_party/libunwind:libunwind",
         "//third_party/libxml2:xml2",
         "//third_party/mbedtls:mbedtls",
         "//third_party/mindspore:mindir",
@@ -15589,8 +15596,15 @@
             "//base/security/selinux_adapter:libselinux_parameter_static"
         ],
         "//base/startup/init/services:startup_init": [
+            "//third_party/e2fsprogs:blkid",
+            "//third_party/e2fsprogs:e2fsck",
+            "//third_party/e2fsprogs:e2fsdroid",
             "//third_party/e2fsprogs:e2fsprogs",
-            "//third_party/f2fs-tools:f2fs-tools"
+            "//third_party/e2fsprogs:mke2fs",
+            "//third_party/e2fsprogs:resize2fs",
+            "//third_party/f2fs-tools:f2fs-tools",
+            "//third_party/f2fs-tools/fsck:fsck.f2fs",
+            "//third_party/f2fs-tools/mkfs:mkfs.f2fs"
         ],
         "//base/telephony/core_service/frameworks/js/network_search:radio": [
             "//third_party/node:node_header"
