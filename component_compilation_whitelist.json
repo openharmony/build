@@ -35,6 +35,7 @@
         "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen",
         "//drivers/interface/audio/effect/v1_0:effect_idl_headers",
         "//drivers/interface/audio/v2_0:audio_idl_headers",
+	"//drivers/interface/audio/v3_0:audio_idl_headers",
         "//drivers/interface/battery/v2_0:battery_idl_headers",
         "//drivers/interface/bluetooth/hci/v1_0:bluetooth_hci_idl_headers",
         "//drivers/interface/codec/image/v1_0:image_idl_headers",
@@ -2281,7 +2282,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+	"//drivers/interface/audio/v3_0:audio_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/audio/v2_0:audio_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+	"//drivers/interface/audio/v3_0:audio_idl_headers_3.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2299,7 +2318,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+	"//drivers/interface/audio/v3_0:libaudio_proxy_3.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/audio/v2_0:libaudio_stub_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+	"//drivers/interface/audio/v3_0:libaudio_stub_3.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -16317,6 +16354,9 @@
         "//drivers/interface/audio/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+	"//drivers/interface/audio/v3_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/battery/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -16526,28 +16566,38 @@
         ],
         "//drivers/peripheral/audio/hdi_service/pathselect:audio_path_select": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/primary:audio_manager_service_2.0": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
         ],
+	"//drivers/peripheral/audio/hdi_service/primary:audio_manager_service_3.0": [
+            "//drivers/interface/audio/v3_0:audio_idl_headers"
+        ],
         "//drivers/peripheral/audio/hdi_service/primary:audio_primary_driver": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/primary_impl:audio_primary_impl_vendor": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/supportlibs:audio_capture_adapter": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/supportlibs:audio_render_adapter": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/test/benchmarktest:hdf_audio_benchmark_test": [
             "//drivers/interface/audio/v2_0:audio_idl_headers",
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
             "//drivers/interface/audio/effect/v1_0:effect_idl_headers"
         ],
         "//drivers/peripheral/audio/test/unittest/common:audio_ut_common_test": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/battery/interfaces/hdi_service:libbattery_interface_service_2.0": [
             "//drivers/interface/battery/v2_0:battery_idl_headers"
@@ -24813,21 +24863,27 @@
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:audio_renderer_sink": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:fast_audio_renderer_sink": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:multichannel_audio_renderer_sink": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:offload_audio_renderer_sink": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/source:audio_capturer_source": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/source:fast_audio_capturer_source": [
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/opensles:libsl": [
             "//third_party/openSLES:libSLES"
@@ -24835,6 +24891,7 @@
         "//foundation/multimedia/audio_framework/services/audio_policy:audio_policy_service": [
             "//third_party/libxml2:xml2",
             "//drivers/interface/audio/v2_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/services/audio_service:audio_client": [
             "//third_party/libxml2:xml2"
@@ -31106,6 +31163,9 @@
         "//drivers/interface/audio/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+	"//drivers/interface/audio/v3_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/battery/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -36400,6 +36460,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/audio/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+	"//drivers/interface/audio/v3_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/battery/v2_0/": [
