@@ -8793,6 +8793,24 @@
             "//third_party/flutter/engine/",
             "//third_party/flutter/txt/src/"
         ],
+        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos": [
+            "//foundation/multimedia/image_framework/interfaces/kits/js/common/include/",
+            "//foundation/multimedia/image_framework/interfaces/kits/native/include/",
+            "//foundation/multimedia/image_framework/interfaces/innerkits/include/mdkKits/",
+            "//third_party/flutter/engine/",
+            "//third_party/bounds_checking_function/include/",
+            "//third_party/flutter/txt/src/",
+            "//third_party/skia/third_party/externals/harfbuzz/src/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos_ng": [
+            "//foundation/multimedia/image_framework/interfaces/kits/js/common/include/",
+            "//foundation/multimedia/image_framework/interfaces/kits/native/include/",
+            "//foundation/multimedia/image_framework/interfaces/innerkits/include/mdkKits/",
+            "//third_party/flutter/engine/",
+            "//third_party/bounds_checking_function/include/",
+            "//third_party/flutter/txt/src/",
+            "//third_party/skia/third_party/externals/harfbuzz/src/"
+        ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_drawing": [
             "//third_party/flutter/engine/",
             "//third_party/bounds_checking_function/include/",
@@ -34756,6 +34774,12 @@
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_txt": [
             "//third_party/skia:skia_ohos"
         ],
+        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos": [
+            "//third_party/bounds_checking_function:libsec_static"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos_ng": [
+            "//third_party/bounds_checking_function:libsec_static"
+        ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_new": [
             "//third_party/bounds_checking_function:libsec_static"
         ],
@@ -37322,6 +37346,9 @@
             "//third_party/skia/modules/skunicode/skunicode.gni"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/": [
+            "//foundation/arkui/ace_engine/ace_config.gni"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/skia_effectChain/": [
