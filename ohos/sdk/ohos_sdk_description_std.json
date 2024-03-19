@@ -693,6 +693,15 @@
         ]
     },
     {
+        "install_dir": "ets/arkts",
+        "module_label": "//interface/sdk-js:bundle_arkts",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//arkcompiler/runtime_core/disassembler:ark_disasm",
         "target_os": [
