@@ -31,8 +31,6 @@ _ndk_library_targets = [
   "//interface/sdk_c/hiviewdfx/hitrace:libhitrace_ndk",
   "//interface/sdk_c/network/netstack/net_websocket:libnet_websocket",
   "//interface/sdk_c/network/netstack/net_websocket:websocket_header",
-  "//interface/sdk_c/network/netssl:libnet_ssl_ndk",
-  "//interface/sdk_c/network/netssl:net_ssl_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
   "//interface/sdk_c/security/asset:libasset_ndk",
@@ -148,8 +146,6 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/file_uri:oh_file_uri_header",
   "//interface/sdk_c/filemanagement/fileshare:libohfileshare",
   "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
-  "//interface/sdk_c/multimodalinput/kits/c:libohinput_ndk",
-  "//interface/sdk_c/multimodalinput/kits/c:ohinput_header",
 ]
 
 _ndk_base_libs = [
@@ -179,8 +175,18 @@ if (host_os == "mac") {
   ]
 }
 
+_ndk_ninja = []
+if (host_os == "mac"){
+  _ndk_ninja += [ "//prebuilts/build-tools/darwin-x86/bin:darwin_ninja_copy" ]
+} else {
+  _ndk_ninja += [
+    "//prebuilts/build-tools/linux-x86/bin:linux_ninja_copy",
+    "//prebuilts/build-tools/windows-x86/bin:windows_ninja_copy",
+  ]
+}
+
 _ndk_targets_list =
-    _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake
+    _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake + _ndk_ninja
 
 _parse_script = "//build/ohos/ndk/parse_ndk_targets.py"
 _parse_args = [
