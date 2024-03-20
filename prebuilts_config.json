@@ -1,0 +1,274 @@
+{
+  "npm": [
+    {
+      "name": "@ohos/hpm-cli",
+      "download": {
+        "version": "1.6.1",
+        "package_path": "",
+        "package_lock_path": "", 
+        "download_dir": ".prebuilts_cache/hpm",
+        "symlink": "prebuilts/hpm/node_modules"
+      }
+    }
+  ],
+  "tar": [
+    {
+      "name": "nodejs",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "",
+          "version": "v14.21.1",
+          "url": "nodejs/v14.21.1/node-v14.21.1-linux-x64.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/common/nodejs",
+          "symlink": "prebuilts/build-tools/common/nodejs/node-v14.21.1-linux-x64",
+          "type": "dir"
+        },
+        {
+          "target_os": "linux",
+          "target_cpu": "",
+          "version": "v16.20.2",
+          "url": "nodejs/v16.20.2/node-v16.20.2-linux-x64.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/common/nodejs",
+          "symlink": "prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64",
+          "type": "dir"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "",
+          "version": "v14.21.1",
+          "url": "nodejs/v14.21.1/node-v14.21.1-darwin-x64.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/common/nodejs",
+          "symlink": "prebuilts/build-tools/common/nodejs/node-v14.21.1-darwin-x86",
+          "type": "dir"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "",
+          "version": "v16.20.2",
+          "url": "nodejs/v16.20.2/node-v116.20.2-darwin-x64.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/common/nodejs",
+          "symlink": "prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x86",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "gn",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "20240219",
+          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
+          "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
+          "type": "file"
+        },
+        {
+          "target_os": "linux",
+          "target_cpu": "arm64",
+          "version": "20240219",
+          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
+          "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
+          "type": "file"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "x86_64",
+          "version": "20240115",
+          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
+          "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
+          "type": "file"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "arm64",
+          "version": "20240115",
+          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
+          "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
+          "type": "file"
+        }
+      ]
+    },
+    {
+      "name": "ninja",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
+          "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
+          "type": "file"
+        },
+        {
+          "target_os": "linux",
+          "target_cpu": "arm64",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
+          "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
+          "type": "file"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "x86_64",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/ninja",
+          "symlink": "prebuilts/build-tools/darwin-x86/bin/ninja",
+          "type": "file"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "arm64",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/ninja",
+          "symlink": "prebuilts/build-tools/darwin-x86/bin/ninja",
+          "type": "file"
+        }
+      ]
+    },
+    {
+      "name": "llvm",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "arm64",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/linux/clang_linux-x86_64-666b9b-20240218.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/linux-x86_64/llvm",
+          "symlink": "prebuilts/clang/ohos/linux-x86_64/llvm",
+          "type": "dir",
+          "copy_src":"lib/clang/15.0.4",
+          "copy_dest":"lib/clang/current"
+        },
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/linux/clang_linux-x86_64-666b9b-20240218.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/linux-x86_64/llvm",
+          "symlink": "prebuilts/clang/ohos/linux-x86_64/llvm",
+          "type": "dir",
+          "copy_src":"lib/clang/15.0.4",
+          "copy_dest":"lib/clang/current"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "arm64",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/darwin_x86/clang_darwin-x86_64-666b9b-20240218.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/darwin-x86_64/llvm",
+          "symlink": "prebuilts/clang/ohos/darwin-x86_64/llvm",
+          "type": "dir",
+          "copy_src":"lib/clang/15.0.4",
+          "copy_dest":"lib/clang/current"
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "x86_64",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/darwin_x86/clang_darwin-x86_64-666b9b-20240218.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/darwin-x86_64/llvm",
+          "symlink": "prebuilts/clang/ohos/darwin-x86_64/llvm",
+          "type": "dir",
+          "copy_src":"lib/clang/15.0.4",
+          "copy_dest":"lib/clang/current"
+        }
+      ]
+    },
+    {
+      "name": "python",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "arm64",
+          "version": "20230604",
+          "url": "openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
+          "download_dir": ".prebuilts_cache/python/linux-x86",
+          "symlink": "prebuilts/python/linux-x86",
+          "type": "dir",
+          "copy_src": "3.10.2",
+          "copy_dest": "current",
+          "pip_install": [
+            "pyyaml",
+            "requests",
+            "prompt_toolkit==1.0.14",
+            "asn1crypto",
+            "cryptography",
+            "json5==0.9.6"
+          ]
+        },
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "20230604",
+          "url": "openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
+          "download_dir": ".prebuilts_cache/python/linux-x86",
+          "symlink": "prebuilts/python/linux-x86",
+          "type": "dir",
+          "copy_src": "3.10.2",
+          "copy_dest": "current",
+          "pip_install": [
+            "pyyaml",
+            "requests",
+            "prompt_toolkit==1.0.14",
+            "asn1crypto",
+            "cryptography",
+            "json5==0.9.6"
+          ]
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "arm64",
+          "version": "20230604",
+          "url": "openharmony/compiler/python/3.10.2/linux/python_darwin-x86-3.10.2_20230604.tar.gz",
+          "download_dir": ".prebuilts_cache/python/darwin-x86",
+          "symlink": "prebuilts/python/darwin-x86",
+          "type": "dir",
+          "copy_src": "3.10.2",
+          "copy_dest": "current",
+          "pip_install": [
+            "pyyaml",
+            "requests",
+            "prompt_toolkit==1.0.14",
+            "asn1crypto",
+            "cryptography",
+            "json5==0.9.6"
+          ]
+        },
+        {
+          "target_os": "darwin",
+          "target_cpu": "x86_64",
+          "version": "20230604",
+          "url": "openharmony/compiler/python/3.10.2/linux/python_darwin-x86-3.10.2_20230604.tar.gz",
+          "download_dir": ".prebuilts_cache/python/darwin-x86",
+          "symlink": "prebuilts/python/darwin-x86",
+          "type": "dir",
+          "copy_src": "3.10.2",
+          "copy_dest": "current",
+          "pip_install": [
+            "pyyaml",
+            "requests",
+            "prompt_toolkit==1.0.14",
+            "asn1crypto",
+            "cryptography",
+            "json5==0.9.6"
+          ]
+        }
+      ]
+    }
+  ]
+}
