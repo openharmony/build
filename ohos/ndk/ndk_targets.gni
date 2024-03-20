@@ -33,6 +33,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/network/netssl:net_ssl_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
+  "//interface/sdk_c/security/asset:libasset_ndk",
+  "//interface/sdk_c/security/asset:asset_header",
   "//interface/sdk_c/startup/init/syscap:libdeviceinfo_ndk",
   "//interface/sdk_c/startup/init/syscap:deviceinfo_header",
   "//interface/sdk_c/third_party/mindspore/kits:mindspore_header",
