@@ -43,7 +43,7 @@ def is_top_dir(current_dir: str):
 def find_license_recursively(current_dir: str, default_license: str):
     if is_top_dir(current_dir):
         return default_license
-    for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
+    for file in LICENSE_CANDIDATES:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)
@@ -175,6 +175,8 @@ def main(args):
 
     options = parser.parse_args()
     depfiles = []
+    with open(r"/mnt/data/l30055739/ohos_master12/collect_module_notice_file.txt", "a+", encoding="utf-8") as f:
+        f.write(f"---------collect_module_notice_file-----options:{options}-------------\n")
 
     if options.sdk_install_info_file:
         install_dir = ''
