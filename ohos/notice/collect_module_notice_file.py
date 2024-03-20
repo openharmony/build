@@ -175,8 +175,6 @@ def main(args):
 
     options = parser.parse_args()
     depfiles = []
-    with open(r"/mnt/data/l30055739/ohos_master12/collect_module_notice_file.txt", "a+", encoding="utf-8") as f:
-        f.write(f"---------collect_module_notice_file-----options:{options}-------------\n")
 
     if options.sdk_install_info_file:
         install_dir = ''
