@@ -388,7 +388,6 @@ def main():
     uninstalled_tools = config_info.get('uninstalled_tools')
     for tool_path in uninstalled_tools:
         subprocess.run(['rm', '-rf', tool_path])
-    print(subprocess.Popen("ls -alh ../prebuilts/cmake/linux-x86/bin", shell=True))
 
 if __name__ == '__main__':
     sys.exit(main())
