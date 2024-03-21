@@ -16565,7 +16565,7 @@
             "//drivers/interface/audio/v2_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/pathselect:audio_path_select": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/primary:audio_manager_service_2.0": [
@@ -16575,28 +16575,28 @@
             "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/primary:audio_primary_driver": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/primary_impl:audio_primary_impl_vendor": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/supportlibs:audio_capture_adapter": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/hdi_service/supportlibs:audio_render_adapter": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/audio/test/benchmarktest:hdf_audio_benchmark_test": [
             "//drivers/interface/audio/v2_0:audio_idl_headers",
-	    "//drivers/interface/audio/v3_0:audio_idl_headers"
+	    "//drivers/interface/audio/v3_0:audio_idl_headers",
             "//drivers/interface/audio/effect/v1_0:effect_idl_headers"
         ],
         "//drivers/peripheral/audio/test/unittest/common:audio_ut_common_test": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//drivers/peripheral/battery/interfaces/hdi_service:libbattery_interface_service_2.0": [
@@ -24862,27 +24862,27 @@
             "//drivers/interface/audio/v2_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:audio_renderer_sink": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:fast_audio_renderer_sink": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:multichannel_audio_renderer_sink": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/sink:offload_audio_renderer_sink": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/source:audio_capturer_source": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/hdiadapter/source:fast_audio_capturer_source": [
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/opensles:libsl": [
@@ -24890,7 +24890,7 @@
         ],
         "//foundation/multimedia/audio_framework/services/audio_policy:audio_policy_service": [
             "//third_party/libxml2:xml2",
-            "//drivers/interface/audio/v2_0:audio_idl_headers"
+            "//drivers/interface/audio/v2_0:audio_idl_headers",
 	    "//drivers/interface/audio/v3_0:audio_idl_headers"
         ],
         "//foundation/multimedia/audio_framework/services/audio_service:audio_client": [
