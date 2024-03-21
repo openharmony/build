@@ -31,6 +31,8 @@ from util.system_util import SystemUtil
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 from util.component_util import ComponentUtil
+from resources.global_var import CURRENT_OHOS_ROOT
+
 
 class CMDTYPE(Enum):
     BUILD = 1
@@ -38,6 +40,7 @@ class CMDTYPE(Enum):
     PACKAGE = 3
     PUBLISH = 4
     UPDATE = 5
+
 
 class Hpm(BuildFileGeneratorInterface):
 
@@ -74,6 +77,10 @@ class Hpm(BuildFileGeneratorInterface):
         hpm_path = shutil.which("hpm")
         if os.path.exists(hpm_path):
             self.exec = hpm_path
+        elif os.path.exists(os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
+            self.exec = os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")
+        elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
+            self.exec = os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")
         else:
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
@@ -111,7 +118,7 @@ class Hpm(BuildFileGeneratorInterface):
 
         for key, value in self.flags_dict.items():
             # 部件参数无需参数名
-            if key == "part_name": 
+            if key == "part_name":
                 flags_list.append(str(value))
             else:
                 if value == '':
@@ -121,39 +128,35 @@ class Hpm(BuildFileGeneratorInterface):
 
         return flags_list
 
-    
-    def _check_parts_validity(self, components:list):
+    def _check_parts_validity(self, components: list):
         illegal_components = []
         for component in components:
             if not ComponentUtil.search_bundle_file(component):
                 illegal_components.append(component)
         if illegal_components:
-             raise OHOSException('ERROR argument "--parts": Invalid parts "{}". '.format(illegal_components))
+            raise OHOSException('ERROR argument "--parts": Invalid parts "{}". '.format(illegal_components))
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        hpm_build_cmd = [self.exec, "build" ]  + self._convert_flags()
+        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
         SystemUtil.exec_command(hpm_build_cmd)
-        
-
 
     @throw_exception
     def _execute_hpm_install_cmd(self, **kwargs):
-        hpm_install_cmd = [self.exec, "install" ] + self._convert_flags()
+        hpm_install_cmd = [self.exec, "install"] + self._convert_flags()
         SystemUtil.exec_command(hpm_install_cmd)
 
     @throw_exception
     def _execute_hpm_pack_cmd(self, **kwargs):
-        hpm_pack_cmd = [self.exec, "pack", "-t" ] + self._convert_flags()
+        hpm_pack_cmd = [self.exec, "pack", "-t"] + self._convert_flags()
         SystemUtil.exec_command(hpm_pack_cmd)
-   
+
     @throw_exception
     def _execute_hpm_publish_cmd(self, **kwargs):
-        hpm_publish_cmd = [self.exec, "publish", "-t" ] + self._convert_flags()
+        hpm_publish_cmd = [self.exec, "publish", "-t"] + self._convert_flags()
         SystemUtil.exec_command(hpm_publish_cmd)
 
     @throw_exception
     def _execute_hpm_update_cmd(self, **kwargs):
-        hpm_update_cmd = [self.exec, "update" ] + self._convert_flags()
+        hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
         SystemUtil.exec_command(hpm_update_cmd)
-   

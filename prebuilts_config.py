@@ -28,7 +28,7 @@ import socket
 def _run_cmd(cmd):
     res = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
-    sout, serr = res.communicate(timeout=5)
+    sout, serr = res.communicate(timeout=10000)
     return sout.rstrip().decode('utf-8'), serr, res.returncode
 
 
@@ -92,6 +92,7 @@ def symlink_src2dest(src_dir, dest_dir):
     print("symlink {} ---> {}".format(src_dir, dest_dir))
     os.symlink(src_dir, dest_dir)
 
+
 def install_hpm(code_path, download_dir, symlink_dir, home_path):
     content = """\
     package-lock=true
@@ -106,8 +107,7 @@ def install_hpm(code_path, download_dir, symlink_dir, home_path):
         [npm_path, 'install', '@ohos/hpm-cli', '--registry', 'https://repo.huaweicloud.com/repository/npm/', '--prefix',
          download_dir])
     symlink_src2dest(os.path.join(download_dir, 'node_modules'), symlink_dir)
-    new_path = os.path.join(download_dir, 'node_modules', '.bin')
-    os.environ['PATH'] += os.pathsep + new_path
+
 
 def process_npm(npm_dict, args):
     code_path = args.code_path
@@ -119,9 +119,9 @@ def process_npm(npm_dict, args):
     hash_value = \
         subprocess.run(['sha256sum', package_lock_path], capture_output=True, text=True).stdout.strip().split(' ')[0]
     download_dir = os.path.join(home_path, npm_download.get('download_dir'))
-    if os.path.exists(os.path.join(download_dir, hash_value)):
-        return
     download_dir = os.path.join(download_dir, hash_value)
+    if os.path.exists(download_dir):
+        return
     if '@ohos/hpm-cli' == name:
         symlink = os.path.join(code_path, npm_download.get('symlink'))
         install_hpm(code_path, os.path.join(home_path, download_dir), os.path.join(code_path, symlink), home_path)
