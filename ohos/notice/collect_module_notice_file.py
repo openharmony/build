@@ -129,7 +129,7 @@ def do_collect_notice_files(options, depfiles: str):
 def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
     for notice_file in notice_files:
         notice_file = notice_file.strip()
-        if options.module_source_dir not in notice_file:
+        if not os.path.join(notice_file):
             notice_file = os.path.join(options.module_source_dir, notice_file)
         if os.path.exists(notice_file):
             if not os.path.exists(output):
