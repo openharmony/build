@@ -183,11 +183,14 @@ action("verify_sdk_notice_file") {
 }
 
 group("ohos_sdk_pre") {
-  deps = [
-    ":generate_sdk_notice",
-    ":verify_sdk_notice_file",
-    "${generated_files_dir}:generated_ohos_sdk",
-  ]
+  deps = []
+  if (enable_notice_collection) {
+    deps += [
+      ":generate_sdk_notice",
+      ":verify_sdk_notice_file",
+    ]
+  }
+  deps += [ "${generated_files_dir}:generated_ohos_sdk" ]
 }
 
 sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
@@ -257,10 +260,11 @@ action("sign_sdk") {
 }
 
 group("ohos_sdk") {
-  deps = [
-    ":add_notice_file",
-    ":ohos_sdk_pre",
-  ]
+  deps = []
+  if (enable_notice_collection) {
+    deps += [ ":add_notice_file" ]
+  }
+  deps += [ ":ohos_sdk_pre" ]
 }
 
 group("ohos_sdk_verify") {
