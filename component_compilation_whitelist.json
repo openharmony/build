@@ -12498,6 +12498,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Max:gen_builtinMathMax_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Clz32:gen_builtinMathClz32_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26793,6 +26796,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Max:gen_builtinMathMax_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Clz32:gen_builtinMathClz32_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
