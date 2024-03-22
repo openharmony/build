@@ -12516,6 +12516,15 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Fround:gen_builtinMathFround_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Imul:gen_builtinMathImul_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26829,6 +26838,15 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Fround:gen_builtinMathFround_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Imul:gen_builtinMathImul_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
