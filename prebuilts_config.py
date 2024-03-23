@@ -165,9 +165,20 @@ def download_url(url, folder_path):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     try:
-        print("download {}".format(url))
-        urllib.request.urlretrieve(url, file_path)
-        print("{} downloaded successfully".format(url))
+        print("Downloading {}".format(url))
+        with urllib.request.urlopen(url) as response, open(file_path, 'wb') as out_file:
+            total_size = int(response.headers['Content-Length'])
+            chunk_size = 16 * 1024
+            downloaded_size = 0
+            while True:
+                chunk = response.read(chunk_size)
+                if not chunk:
+                    break
+                out_file.write(chunk)
+                downloaded_size += len(chunk)
+                progress = downloaded_size / total_size * 50
+                print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2), end='', flush=True)
+        print("\n{} downloaded successfully".format(url))
     except urllib.error.URLError as e:
         print("Error:", e.reason)
     except socket.timeout:
