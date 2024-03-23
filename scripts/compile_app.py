@@ -183,7 +183,7 @@ def hvigor_build(cwd: str, options):
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
     if not options.hvigor_obfuscation:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
-    cmd.extend(['-c','hvigorWorkSingleton=true','--no-daemon'])
+    cmd.extend(['-c', 'hvigorWorkSingleton=true', '--no-daemon'])
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(options.nodejs)))
