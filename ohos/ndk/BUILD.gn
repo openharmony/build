@@ -74,11 +74,20 @@ group("all_ndk_targets") {
   deps = [ ":_collect_ndk_syscap" ]
 }
 
+group("ndk_notice") {
+  deps = []
+  if (enable_notice_collection) {
+    deps += [
+      ":merge_ndk_notice",
+      ":verify_ndk_notice_file",
+    ]
+  }
+}
+
 ndk_targets = [
   ":ndk_doxygen",
   ":all_ndk_targets",
-  ":merge_ndk_notice",
-  ":verify_ndk_notice_file",
+  ":ndk_notice",
 ]
 
 group("ohos_ndk") {

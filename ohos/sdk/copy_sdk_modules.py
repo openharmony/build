@@ -69,16 +69,14 @@ def do_copy_and_stamp(copy_infos: dict, options, depfile_deps: list):
                     install_dir, '{}{}'.format(os.path.basename(source),
                                                suffix))
             notice_tuples.append((notice_dest, notice))
-    build_utils.zip_dir(options.sdk_output_archive,
-                        options.archive_dir,
-                        compress_fn=lambda _: zipfile.ZIP_DEFLATED,
-                        zip_prefix_path=options.zip_prefix_path)
-    with zipfile.ZipFile(options.notice_output_archive, 'w') as outfile:
-        for zip_path, fs_path in notice_tuples:
-            build_utils.add_to_zip_hermetic(outfile,
-                                            zip_path,
-                                            src_path=fs_path)
-
+    if (options.enable_archive_sdk):
+        build_utils.zip_dir(options.sdk_output_archive,
+                            options.archive_dir,
+                            compress_fn=lambda _: zipfile.ZIP_DEFLATED,
+                            zip_prefix_path=options.zip_prefix_path)
+        with zipfile.ZipFile(options.notice_output_archive, 'w') as outfile:
+            for zip_path, fs_path in notice_tuples:
+                build_utils.add_to_zip_hermetic(outfile, zip_path, src_path=fs_path)
     build_utils.write_depfile(options.depfile,
                               options.sdk_output_archive,
                               depfile_deps,
@@ -96,6 +94,7 @@ def main():
     parser.add_argument('--zip-prefix-path', default=None)
     parser.add_argument('--notice-output-archive', required=True)
     parser.add_argument('--sdk-output-archive', required=True)
+    parser.add_argument('--enable-archive-sdk', help='archive sdk')
 
     options = parser.parse_args()
 
