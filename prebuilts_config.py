@@ -169,20 +169,24 @@ def download_url(url, folder_path):
             total_size = int(response.headers['Content-Length'])
             chunk_size = 16 * 1024
             downloaded_size = 0
-        while True:
-            chunk = response.read(chunk_size)
-            if not chunk:
-                break
-            out_file.write(chunk)
-            downloaded_size += len(chunk)
-            progress = downloaded_size / total_size * 50
-            print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
-                  end='', flush=True)
+            print_process(chunk_size, downloaded_size, out_file, response, total_size)
         print("\n{} downloaded successfully".format(url))
     except urllib.error.URLError as e:
         print("Error:", e.reason)
     except socket.timeout:
         print("Timeout error: Connection timed out")
+
+
+def print_process(chunk_size, downloaded_size, out_file, response, total_size):
+    while True:
+        chunk = response.read(chunk_size)
+        if not chunk:
+            break
+        out_file.write(chunk)
+        downloaded_size += len(chunk)
+        progress = downloaded_size / total_size * 50
+        print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
+              end='', flush=True)
 
 
 def extract_compress_files(source_file, destination_folder):
