@@ -45,6 +45,7 @@
         "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2",
         "//drivers/interface/display/composer/v1_0:display_composer_idl_headers",
         "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1",
+        "//drivers/interface/display/composer/v1_2:display_composer_idl_headers_1.2",
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0",
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
@@ -348,6 +349,16 @@
         "//drivers/interface/display/composer/v1_2:display_composer_idl_headers_1.2": [
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers_1.0",
             "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1"
+        ],
+        "//drivers/interface/display/composer/v1_2:libdisplay_composer_proxy_1.2": [
+            "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
+            "//drivers/interface/display/composer/v1_0:libdisplay_composer_proxy_1.0",
+            "//drivers/interface/display/composer/v1_1:libdisplay_composer_proxy_1.1"
+        ],
+        "//drivers/interface/display/composer/v1_2:libdisplay_composer_stub_1.2": [
+            "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
+            "//drivers/interface/display/composer/v1_0:libdisplay_composer_stub_1.0",
+            "//drivers/interface/display/composer/v1_1:libdisplay_composer_stub_1.1"
         ],
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1":[
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0"
@@ -4967,7 +4978,7 @@
             "//drivers/interface/display/buffer/",
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
-        "//drivers/peripheral/display/composer/hdi_service:libdisplay_composer_service_1.1": [
+        "//drivers/peripheral/display/composer/hdi_service:libdisplay_composer_service_1.2": [
             "//drivers/interface/display/composer/"
         ],
         "//drivers/peripheral/display/composer/vdi_base:display_composer_vdi_impl_default": [
@@ -24643,6 +24654,7 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/composer:libcomposer": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
+            "//drivers/interface/display/composer/v1_2:display_composer_idl_headers_1.2",
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
             "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1"
         ],
