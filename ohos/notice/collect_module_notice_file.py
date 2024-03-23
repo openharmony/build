@@ -43,7 +43,7 @@ def is_top_dir(current_dir: str):
 def find_license_recursively(current_dir: str, default_license: str):
     if is_top_dir(current_dir):
         return default_license
-    for file in LICENSE_CANDIDATES:
+    for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)

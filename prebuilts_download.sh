@@ -174,10 +174,6 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
 fi
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
-echo "-------------------------"
-ls "$code_dir/prebuilts/cmake/linux-x86/bin/"
-echo "----------download packages:----------"
-ls "$code_dir/../openharmony_prebuilts/"
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.10.2/bin/pip3.10
