@@ -120,8 +120,6 @@ def process_npm(npm_dict, args):
         subprocess.run(['sha256sum', package_lock_path], capture_output=True, text=True).stdout.strip().split(' ')[0]
     download_dir = os.path.join(home_path, npm_download.get('download_dir'))
     download_dir = os.path.join(download_dir, hash_value)
-    if os.path.exists(download_dir):
-        return
     if '@ohos/hpm-cli' == name:
         symlink = os.path.join(code_path, npm_download.get('symlink'))
         install_hpm(code_path, os.path.join(home_path, download_dir), os.path.join(code_path, symlink), home_path)
@@ -166,18 +164,20 @@ def download_url(url, folder_path):
         os.makedirs(folder_path)
     try:
         print("Downloading {}".format(url))
-        with urllib.request.urlopen(url) as response, open(file_path, 'wb') as out_file:
+        with urllib.request.urlopen(url) as response, os.fdopen(
+                os.open(file_path, os.O_WRONLY | os.O_CREAT, mode=0o640), 'wb') as out_file:
             total_size = int(response.headers['Content-Length'])
             chunk_size = 16 * 1024
             downloaded_size = 0
-            while True:
-                chunk = response.read(chunk_size)
-                if not chunk:
-                    break
-                out_file.write(chunk)
-                downloaded_size += len(chunk)
-                progress = downloaded_size / total_size * 50
-                print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2), end='', flush=True)
+        while True:
+            chunk = response.read(chunk_size)
+            if not chunk:
+                break
+            out_file.write(chunk)
+            downloaded_size += len(chunk)
+            progress = downloaded_size / total_size * 50
+            print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
+                  end='', flush=True)
         print("\n{} downloaded successfully".format(url))
     except urllib.error.URLError as e:
         print("Error:", e.reason)
@@ -246,8 +246,6 @@ def process_tar(tar_dict, args):
             url = os.path.join(args.repo_https, one_type.get('url'))
             download_dir = os.path.join(home_path, one_type.get('download_dir'))
             download_url(url, download_dir)
-            if os.path.exists(os.path.join(download_dir, version)) and 'rustc' not in tar_name:
-                return
             extract_compress_files(os.path.join(download_dir, url.split('/')[-1]),
                                    os.path.join(download_dir, version))
             if tar_name == 'python':
