@@ -8,3 +8,4 @@
 ../../scripts/util/md5_check.py
 ../../scripts/util/pycache.py
 modules_install.py
+rules/categorized_libraries_utils.py
