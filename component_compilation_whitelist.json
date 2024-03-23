@@ -17243,6 +17243,7 @@
             "//drivers/interface/vibrator/v1_3:vibrator_idl_headers"
         ],
         "//drivers/peripheral/vibrator/hdi_service:libvibrator_interface_service_1.3": [
+            "//drivers/interface/vibrator/v1_1:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_3:vibrator_idl_headers"
         ],
