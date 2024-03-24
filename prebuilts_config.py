@@ -189,9 +189,12 @@ def print_process(chunk_size, downloaded_size, out_file, response, total_size):
             break
         out_file.write(chunk)
         downloaded_size += len(chunk)
-        progress = downloaded_size / total_size * 50
-        print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
-              end='', flush=True)
+        if total_size != 0:
+            progress = downloaded_size / total_size * 50
+            print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
+                  end='', flush=True)
+        else:
+            print("\r[Error] Total size is zero, unable to calculate progress.", end='', flush=True)
 
 
 def extract_compress_files(source_file, destination_folder):
