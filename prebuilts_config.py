@@ -72,23 +72,25 @@ def copy_file(src, dest):
 
 
 def copy_folder(src, dest):
-    if os.path.exists(dest) and os.path.islink(dest):
-        os.unlink(dest)
     if os.path.exists(dest):
-        shutil.rmtree(dest)
+        if os.path.islink(dest):
+            os.unlink(dest)
+        else:
+            shutil.rmtree(dest)
     shutil.copytree(src, dest)
 
 
 def symlink_src2dest(src_dir, dest_dir):
-    if os.path.exists(dest_dir) and os.path.islink(dest_dir):
-        os.unlink(dest_dir)
-    if os.path.exists(dest_dir) and dest_dir != src_dir:
-        if os.path.isdir(dest_dir):
+    if os.path.exists(dest_dir):
+        if os.path.islink(dest_dir):
+            os.unlink(dest_dir)
+        elif os.path.isdir(dest_dir):
             shutil.rmtree(dest_dir)
         else:
             os.remove(dest_dir)
-    if not os.path.exists(dest_dir):
+    else:
         os.makedirs(os.path.dirname(dest_dir), exist_ok=True)
+
     print("symlink {} ---> {}".format(src_dir, dest_dir))
     os.symlink(src_dir, dest_dir)
 
@@ -118,38 +120,41 @@ def process_npm(npm_dict, args):
     package_lock_path = os.path.join(code_path, npm_download.get('package_lock_path'))
     hash_value = \
         subprocess.run(['sha256sum', package_lock_path], capture_output=True, text=True).stdout.strip().split(' ')[0]
-    download_dir = os.path.join(home_path, npm_download.get('download_dir'))
-    download_dir = os.path.join(download_dir, hash_value)
+    download_dir = os.path.join(home_path, npm_download.get('download_dir'), hash_value)
+
     if '@ohos/hpm-cli' == name:
         symlink = os.path.join(code_path, npm_download.get('symlink'))
         install_hpm(code_path, os.path.join(home_path, download_dir), os.path.join(code_path, symlink), home_path)
         return
+
     copy_file(package_path, download_dir)
     copy_file(package_lock_path, download_dir)
-    if (os.path.exists(os.path.join(os.path.dirname(package_path), "npm-install.js"))
-            and not os.path.exists(os.path.join(download_dir, "npm-install.js"))):
-        shutil.copyfile(os.path.join(os.path.dirname(package_path), "npm-install.js"),
-                        os.path.join(download_dir, "npm-install.js"))
+
+    if not os.path.exists(os.path.join(download_dir, "npm-install.js")):
+        npm_install_script = os.path.join(os.path.dirname(package_path), "npm-install.js")
+        if os.path.exists(npm_install_script):
+            shutil.copyfile(npm_install_script, os.path.join(download_dir, "npm-install.js"))
+
     npm_install(download_dir)
+
     if name == 'legacy_bin':
-        symlink = npm_download.get('symlink')
-        for link in symlink:
+        for link in npm_download.get('symlink', []):
             symlink_src2dest(os.path.join(download_dir, "node_modules"), os.path.join(code_path, link))
         return
+
     symlink = os.path.join(code_path, npm_download.get('symlink'))
+
     if name in ['parse5']:
         copy_folder(os.path.join(download_dir, "node_modules"), symlink)
         return
+
     copy_folder(os.path.join(download_dir, "node_modules"), symlink)
-    copy = npm_download.get('copy')
-    if copy:
-        for one_copy in copy:
-            copy_folder(os.path.join(code_path, one_copy['src']), os.path.join(code_path, one_copy['dest']))
-    copy_ext = npm_download.get('copy_ext')
-    if copy_ext:
-        for one_copy_ext in copy_ext:
-            copy_folder(os.path.join(code_path, one_copy_ext['src']),
-                        os.path.join(code_path, one_copy_ext['dest']))
+
+    for copy_entry in npm_download.get('copy', []):
+        copy_folder(os.path.join(code_path, copy_entry['src']), os.path.join(code_path, copy_entry['dest']))
+
+    for copy_ext_entry in npm_download.get('copy_ext', []):
+        copy_folder(os.path.join(code_path, copy_ext_entry['src']), os.path.join(code_path, copy_ext_entry['dest']))
 
 
 def download_url(url, folder_path):
@@ -169,24 +174,20 @@ def download_url(url, folder_path):
             total_size = int(response.headers['Content-Length'])
             chunk_size = 16 * 1024
             downloaded_size = 0
-            print_process(chunk_size, downloaded_size, out_file, response, total_size)
+        while True:
+            chunk = response.read(chunk_size)
+            if not chunk:
+                break
+            out_file.write(chunk)
+            downloaded_size += len(chunk)
+            progress = downloaded_size / total_size * 50
+            print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
+                  end='', flush=True)
         print("\n{} downloaded successfully".format(url))
     except urllib.error.URLError as e:
         print("Error:", e.reason)
     except socket.timeout:
         print("Timeout error: Connection timed out")
-
-
-def print_process(chunk_size, downloaded_size, out_file, response, total_size):
-    while True:
-        chunk = response.read(chunk_size)
-        if not chunk:
-            break
-        out_file.write(chunk)
-        downloaded_size += len(chunk)
-        progress = downloaded_size / total_size * 50
-        print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
-              end='', flush=True)
 
 
 def extract_compress_files(source_file, destination_folder):
