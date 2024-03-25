@@ -184,8 +184,9 @@ def hvigor_build(cwd: str, options):
     if not options.hvigor_obfuscation:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
     cmd.extend(['--no-daemon'])
-    cmd.extend(['-c', 'hvigorWorkSingleton=true'])
     sdk_dir = options.sdk_home
+    env = os.environ.copy()
+    env['CI'] = 'true'
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(options.nodejs)))
 
@@ -194,13 +195,15 @@ def hvigor_build(cwd: str, options):
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
     print("[0/0] Hvigor clean start")
-    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon', '-c', 'hvigorWorkSingleton=true'],
+    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
                    cwd=cwd,
+                   env=env,
                    stdout=subprocess.DEVNULL,
                    stderr=subprocess.DEVNULL)
     print("[0/0] Hvigor build start")
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
+                            env=env,
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             encoding='utf-8')
