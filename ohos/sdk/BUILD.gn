@@ -184,7 +184,7 @@ action("verify_sdk_notice_file") {
 
 group("ohos_sdk_pre") {
   deps = []
-  if (enable_notice_collection) {
+  if (enable_process_notice) {
     deps += [
       ":generate_sdk_notice",
       ":verify_sdk_notice_file",
@@ -261,7 +261,7 @@ action("sign_sdk") {
 
 group("ohos_sdk") {
   deps = []
-  if (enable_notice_collection) {
+  if (enable_process_notice) {
     deps += [ ":add_notice_file" ]
   }
   deps += [ ":ohos_sdk_pre" ]
