@@ -31,6 +31,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/hiviewdfx/hitrace:libhitrace_ndk",
   "//interface/sdk_c/network/netstack/net_websocket:libnet_websocket",
   "//interface/sdk_c/network/netstack/net_websocket:websocket_header",
+  "//interface/sdk_c/network/netssl:libnet_ssl_ndk",
+  "//interface/sdk_c/network/netssl:net_ssl_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
   "//interface/sdk_c/security/asset:libasset_ndk",
@@ -146,6 +148,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/file_uri:oh_file_uri_header",
   "//interface/sdk_c/filemanagement/fileshare:libohfileshare",
   "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
+  "//interface/sdk_c/multimodalinput/kits/c:libohinput_ndk",
+  "//interface/sdk_c/multimodalinput/kits/c:ohinput_header",
 ]
 
 _ndk_base_libs = [

@@ -344,7 +344,9 @@ template("ohos_ndk_copy") {
       "--stamp",
       rebase_path("$target_gen_dir/$target_name.stamp", root_build_dir),
     ]
-
+    if (!_clear_dest) {
+      args -= [ "--clear" ]
+    }
     if (defined(invoker.args)) {
       args += invoker.args
     }
