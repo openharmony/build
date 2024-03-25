@@ -17279,8 +17279,14 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/test_runner:gen_test_runner_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task_executor:gen_startup_task_executor_abc": [
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_config_entry:gen_startup_config_entry_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_listener:gen_startup_listener_abc": [
+          "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task:gen_startup_task_abc": [
+          "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/auto_fill_extension_ability:gen_auto_fill_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -31773,8 +31779,14 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/test_runner:gen_test_runner_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task_executor:gen_startup_task_executor_abc": [
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_config_entry:gen_startup_config_entry_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_listener:gen_startup_listener_abc": [
+          "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task:gen_startup_task_abc": [
+          "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/auto_fill_extension_ability:gen_auto_fill_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -37251,8 +37263,14 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/test_runner/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task_executor/": [
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_config_entry/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_listener/": [
+          "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/app_startup/startup_task/": [
+          "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/auto_fill_extension_ability/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
