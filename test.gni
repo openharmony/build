@@ -551,6 +551,16 @@ template("ohos_js_stage_test") {
   }
   _build_part_boolean = true
 
+  if (defined(invoker.module_out_path)) {
+    _test_output_dir =
+        "$root_out_dir/tests/${invoker.test_type}/${invoker.module_out_path}"
+  } else {
+    _test_output_dir = "$root_out_dir/tests/${invoker.test_type}"
+  }
+  write_file("$_test_output_dir/${target_name}_path.txt",
+             get_label_info(":$target_name", "dir"),
+             "string")
+
   # generate module list file in gn stage
   if (!skip_generate_module_list_file) {
     _gen_module_list_script = "//build/ohos/testfwk/gen_module_list_files.py"
@@ -565,8 +575,6 @@ template("ohos_js_stage_test") {
       _test_type,
     ]
 
-    _test_output_dir =
-        "$root_out_dir/tests/${invoker.test_type}/${invoker.module_out_path}"
     _module_list_file = "$root_out_dir/module_list_files/${invoker.module_out_path}/$target_name.mlf"
 
     _arguments += [
