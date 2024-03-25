@@ -299,7 +299,6 @@ template("ohos_ndk_copy") {
     _clear_dest = false
   }
 
-
   copy_ex(target_name) {
     forward_variables_from(invoker,
                            [
