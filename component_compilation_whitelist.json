@@ -16973,6 +16973,9 @@
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2"
         ],
+        "//drivers/peripheral/display/buffer/hdi_service:libmapper_service_1.2": [
+            "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2"
+        ],
         "//drivers/peripheral/display/buffer/hdi_service:libmetadata_service_1.1": [
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0",
             "//drivers/interface/display/buffer/v1_1:display_buffer_idl_headers_1.1"
