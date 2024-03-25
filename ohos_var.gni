@@ -185,6 +185,7 @@ declare_args() {
 
 declare_args() {
   enable_archive_sdk = true
+  enable_process_notice = true
 }
 
 declare_args() {

@@ -76,7 +76,7 @@ group("all_ndk_targets") {
 
 group("ndk_notice") {
   deps = []
-  if (enable_notice_collection) {
+  if (enable_process_notice) {
     deps += [
       ":merge_ndk_notice",
       ":verify_ndk_notice_file",
