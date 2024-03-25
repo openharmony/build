@@ -109,6 +109,11 @@ def install_hpm(code_path, download_dir, symlink_dir, home_path):
         [npm_path, 'install', '@ohos/hpm-cli', '--registry', 'https://repo.huaweicloud.com/repository/npm/', '--prefix',
          download_dir])
     symlink_src2dest(os.path.join(download_dir, 'node_modules'), symlink_dir)
+    bashrc_path = os.path.join(home_path, ".bashrc")
+    new_path = os.path.join(download_dir, 'node_modules', '.bin')
+    with open(bashrc_path, "a") as bashrc_file:
+        bashrc_file.write(f"export PATH=$PATH:{new_path}\n")
+    subprocess.run(["source", bashrc_path], shell=True)
 
 
 def process_npm(npm_dict, args):
