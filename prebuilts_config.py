@@ -105,15 +105,22 @@ def install_hpm(code_path, download_dir, symlink_dir, home_path):
     with os.fdopen(os.open(os.path.join(home_path, '.npmrc'), os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as f:
         f.write(content)
     npm_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin/npm")
+    print("-------------------start install hpm-------------------")
+    try:
+        subprocess.run(['node', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError:
+        print("未检测到 Node.js, 建议您先安装node")
+        choice = input("是否继续安装? (yes/no): ")
+        if choice.lower() != 'yes':
+            print("退出程序。")
+            sys.exit()
+        else:
+            node_bin_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin")
+            os.environ['PATH'] = f"{node_bin_path}:{os.environ['PATH']}"
     subprocess.run(
         [npm_path, 'install', '@ohos/hpm-cli', '--registry', 'https://repo.huaweicloud.com/repository/npm/', '--prefix',
          download_dir])
     symlink_src2dest(os.path.join(download_dir, 'node_modules'), symlink_dir)
-    bashrc_path = os.path.join(home_path, ".bashrc")
-    new_path = os.path.join(download_dir, 'node_modules', '.bin')
-    with open(bashrc_path, "a") as bashrc_file:
-        bashrc_file.write(f"export PATH=$PATH:{new_path}\n")
-    subprocess.run(["source", bashrc_path], shell=True)
 
 
 def process_npm(npm_dict, args):
