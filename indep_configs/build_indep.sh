@@ -49,5 +49,5 @@ prebuilts/build-tools/linux-x86/bin/ninja -C out/$VARIANTS
 endtime=`date +'%Y-%m-%d %H:%M:%S'`
 start_seconds=$(date --date="$starttime" +%s);
 end_seconds=$(date --date="$endtime" +%s);
-echo "本次运行时间： "$((end_seconds-start_seconds))"s"
+echo "This run time is： "$((end_seconds-start_seconds))"s"
 exit 0
