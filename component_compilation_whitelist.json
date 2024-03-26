@@ -27668,6 +27668,15 @@
         "//arkcompiler/ets_runtime/test/aottest/xor:gen_xor_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedarray:gen_sharedarray_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedmap:gen_sharedmap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedset:gen_sharedset_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/deopttest/arithmetic:gen_arithmetic_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28392,6 +28401,15 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedic:gen_sharedic_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedarray:gen_sharedarray_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedmap:gen_sharedmap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedset:gen_sharedset_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/perform/string:gen_string_abc": [
