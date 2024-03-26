@@ -115,6 +115,7 @@ def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str
     my_env = make_my_env(options, js2abc)
     gen_dir = my_env.get("aceModuleBuild")
     assets_cnt = len(assets_dir)
+    use_compile_cache = os.environ.get("USE_COMPILE_CACHE", "false").lower() == "true"
     for asset_index in range(assets_cnt):
         ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
         my_env["aceModuleRoot"] = ability_dir
@@ -163,6 +164,8 @@ def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str
         if not options.app_profile:
             my_env["aceManifestPath"] = manifest
             my_env["aceModuleBuild"] = os.path.join(gen_dir, src_path)
+
+        enable_compile_cache(asset_index, assets_cnt, my_env, use_compile_cache)
         build_utils.check_output(cmd, cwd=loader_home, env=my_env)
 
     if options.app_profile:
@@ -170,6 +173,13 @@ def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str
         build_utils.zip_dir(options.output, gen_dir)
     else:
         build_utils.zip_dir(options.output, gen_dir, zip_prefix_path='assets/js/')
+
+
+def enable_compile_cache(asset_index: int, assets_cnt: int, env: dict, use_compile_cache: bool):
+    if use_compile_cache:
+        env["useCompileCache"] = "true"
+        if assets_cnt > 1 and asset_index == assets_cnt - 1:
+            env["addTestRunner"] = "true"
 
 
 def get_all_js_sources(base) -> list:

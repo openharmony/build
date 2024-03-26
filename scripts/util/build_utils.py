@@ -224,11 +224,22 @@ def check_output(args,
     if not cwd:
         cwd = os.getcwd()
 
-    child = subprocess.Popen(args,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE,
-                             cwd=cwd,
-                             env=env)
+    cache_exec = None
+    if env and env.pop("useCompileCache", False):
+        cache_exec = os.environ.get("COMPILE_CACHE_EXEC")
+    if cache_exec:
+        execute_args = [cache_exec, "--cwd", cwd]
+        execute_args.extend(args)
+        execute_args.extend(["--build-env"] + [f"{k}={v}" for k, v in env.items() if k != "addTestRunner"])
+        if env.pop("addTestRunner", False):
+            execute_args.append("--add-test-runner")
+        subprocess.Popen(execute_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    else:
+        child = subprocess.Popen(args,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE,
+                                cwd=cwd,
+                                env=env)
     stdout, stderr = child.communicate()
 
     if stdout_filter is not None:
