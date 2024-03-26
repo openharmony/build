@@ -167,7 +167,7 @@ declare_args() {
 }
 
 declare_args() {
-  skip_generate_module_list_file = false
+  skip_generate_module_list_file = true
 }
 
 declare_args() {
