@@ -15026,6 +15026,18 @@
         "//arkcompiler/toolchain/tooling/test:gen_variable_second_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/toolchain/tooling/test:gen_branch_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_common_func_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_watch_variable_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_smart_stepInto_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
         ],
@@ -29421,6 +29433,18 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/toolchain/tooling/test:gen_variable_second_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_branch_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_common_func_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_watch_variable_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/toolchain/tooling/test:gen_smart_stepInto_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger": [
