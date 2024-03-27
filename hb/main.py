@@ -87,7 +87,7 @@ class Main():
         prebuilts_cache_path = os.path.join(user_home, '.prebuilts_cache', 'hpm', 'node_modules', '.bin')
         nodejs_bin_path = os.path.join(CURRENT_OHOS_ROOT, 'prebuilts', 'build-tools', 'common', 'nodejs', 'current',
                                        'bin')
-        os.environ['PATH'] = os.pathsep + prebuilts_cache_path + os.pathsep + nodejs_bin_path + os.pathsep + os.environ['PATH']
+        os.environ['PATH'] = prebuilts_cache_path + os.pathsep + nodejs_bin_path + os.pathsep + os.environ['PATH']
 
     def _init_build_module(self) -> BuildModuleInterface:
         args_dict = Arg.parse_all_args(ModuleType.BUILD)
