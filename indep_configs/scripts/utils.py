@@ -19,6 +19,7 @@ import stat
 
 
 def get_json(file_path):
+    data = {}
     try:
         with open(file_path, 'r') as f:
             data = json.load(f)
