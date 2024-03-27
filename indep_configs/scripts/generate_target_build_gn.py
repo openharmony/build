@@ -68,7 +68,7 @@ def _output_build_gn(deps_list, output_path):
         f.write('group("default") {\n')
         f.write('    deps = [\n')
         for i in deps_list:
-            f.write('        \"' + i + '\",\n')
+            f.write(f"        \"{i}\",\n")
         f.write('    ]\n')
         f.write('}\n')
 
