@@ -25167,6 +25167,9 @@
         "//foundation/multimedia/audio_framework/services/audio_service:audio_client": [
             "//third_party/libxml2:xml2"
         ],
+        "//foundation/multimedia/audio_framework/services/audio_service:audio_process_service": [
+            "//drivers/interface/audio/effect/v1_0:effect_idl_headers"
+        ],
         "//foundation/multimedia/audio_framework/services/audio_service:audio_service": [
             "//third_party/libxml2:xml2",
             "//drivers/interface/audio/effect/v1_0:effect_idl_headers"
