@@ -122,7 +122,7 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
     _symlink_src2dest(kernel_real_path + os.sep + "innerapis/patches", kernel_link_path)
 
 
-def _gen_components_info(components_json, bundle_json, part_name):
+def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list):
     subsystem = bundle_json["component"]["subsystem"]
     path = bundle_json["segment"]["destPath"]
     try:
@@ -134,6 +134,8 @@ def _gen_components_info(components_json, bundle_json, part_name):
         innerapi_name = i["name"].split(':')[-1]
         if part_name == 'musl':
             innerapi_label = os.path.join("//binarys", path) + ":" + innerapi_name
+        elif part_name in src_build_name_list:
+            innerapi_label = i['name']
         else:
             innerapi_label = os.path.join("//binarys", path, "innerapis", innerapi_name) + ":" + innerapi_name
         innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
@@ -169,13 +171,16 @@ def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, r
     components_json = dict()
     src_bundle_paths = _get_src_bundle_path(source_code_path)
     src_part_name, src_bundle_path = _get_src_part_name(src_bundle_paths)
-    components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name)
+    src_build_name_list = [src_part_name, 'build_framework']
+    components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
+                                           src_build_name_list)
     components_json = _gen_components_info(components_json,
-        utils.get_json(os.path.join(root_path, "build", "bundle.json")), "build_framework")
+                                           utils.get_json(os.path.join(root_path, "build", "bundle.json")),
+                                           "build_framework", src_build_name_list)
     for part_name in part_name_list:
         bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
         bundle_json = utils.get_json(bundle_path)
-        components_json = _gen_components_info(components_json, bundle_json, part_name)
+        components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list)
         _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
 
     return components_json
@@ -188,12 +193,13 @@ def _out_components_json(components_json, output_path):
     with os.fdopen(os.open(file_name, flags, modes), 'w') as f:
         json.dump(components_json, f, indent=4)
 
+
 def _generate_platforms_list(output_path):
     platforms_list_gni_file = os.path.join(output_path, "platforms_list.gni")
     platforms_list = ['phone']
     platforms_list_strings = ' "," '.join(platforms_list)
     gni_file_content = [f'target_platform_list = [ "{platforms_list_strings}" ]',
-                         f'kits_platform_list  = [ "{platforms_list_strings}" ]']
+                        f'kits_platform_list  = [ "{platforms_list_strings}" ]']
     flags = os.O_WRONLY | os.O_CREAT
     modes = stat.S_IWUSR | stat.S_IRUSR
     with os.fdopen(os.open(platforms_list_gni_file, flags, modes), 'w') as f:
@@ -213,7 +219,7 @@ def main():
     part_name_list = dependences_json.keys()
 
     components_json = _components_info_handler(part_name_list, source_code_path,
-        hpm_cache_path, root_path, dependences_json)
+                                               hpm_cache_path, root_path, dependences_json)
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
     _link_kernel_binarys(variants, hpm_cache_path, dependences_json)

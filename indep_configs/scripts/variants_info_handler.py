@@ -56,7 +56,7 @@ def _gen_syscap_para_info(variants_path, syscap_out_path):
             for k, v in syscap_value.items():
                 f.write(f'{k}={str(v).lower()}' + '\n')
     except Exception as e:
-        print(f"{file_path}: \n {e}")
+        print(f"{out_path}: \n {e}")
     return syscap_json
 
 

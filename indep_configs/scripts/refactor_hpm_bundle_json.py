@@ -45,7 +45,9 @@ def _scan_dir_to_get_info(bundle_path):
     dirs_info = dict()
     file_list = list()
     for entry in os.scandir(bundle_path):
-        if entry.is_dir():
+        if entry.name == 'bundle.json':
+            pass
+        elif entry.is_dir():
             dirs_info.update({entry.name: [f"{entry.name}/*"]})
         elif entry.is_file():
 
@@ -74,7 +76,7 @@ def main():
         bundle_json = utils.get_json(bundle_path)
         dirs_info = _scan_dir_to_get_info(os.path.join(hpmcache_path, part_path[1:]))
         bundle_json.update({"dirs": dirs_info})
-        out_bundle_json(bundle_json, bundle_path)
+        _out_bundle_json(bundle_json, bundle_path)
 
 
 if __name__ == '__main__':
