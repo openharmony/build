@@ -61,6 +61,9 @@
         "//drivers/interface/location/agnss/v1_0:location_agnss_idl_headers",
         "//drivers/interface/location/geofence/v1_0:location_geofence_idl_headers",
         "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers",
+        "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers",
+        "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers",
+        "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers",
         "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers",
         "//drivers/interface/nnrt/v2_1:nnrt_idl_headers",
         "//drivers/interface/partitionslot/v1_0:partitionslot_idl_headers",
@@ -84,6 +87,9 @@
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
         "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client",
         "//drivers/peripheral/input/udriver:hdi_input_udriver",
+        "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_1.0",
+        "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_1.0",
+        "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_1.0",
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_target",
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock",
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock",
@@ -3745,6 +3751,114 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/gnss/v2_0:liblocation_gnss_stub_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/gnss/v2_0:liblocation_gnss_proxy_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/agnss/v2_0:liblocation_agnss_stub_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/agnss/v2_0:liblocation_agnss_proxy_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/geofence/v2_0:liblocation_geofence_stub_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/location/geofence/v2_0:liblocation_geofence_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -16703,6 +16817,15 @@
         "//drivers/interface/location/gnss/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/location/gnss/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/location/agnss/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/location/geofence/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/memorytracker/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -17171,13 +17294,22 @@
             "//drivers/interface/light/v1_0:light_idl_headers"
         ],
         "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_1.0": [
-            "//drivers/interface/location/agnss/v1_0:location_agnss_idl_headers"
+            "//drivers/interface/location/agnss/v1_0:location_agnss_idl_headers",
+            "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers"
         ],
         "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_1.0": [
-            "//drivers/interface/location/geofence/v1_0:location_geofence_idl_headers"
+            "//drivers/interface/location/geofence/v1_0:location_geofence_idl_headers",
+            "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers"
         ],
         "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_1.0": [
-            "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers"
+            "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers",
+            "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers"
+        ],
+        "//drivers/interface/location/geofence/v2_0:liblocation_geofence_proxy_2.0": [
+            "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers"
+        ],
+        "//drivers/interface/location/geofence/v2_0:liblocation_geofence_stub_2.0": [
+            "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers"
         ],
         "//drivers/peripheral/memorytracker/hdi_service:libmemory_tracker_interface_service_1.0": [
             "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers"
@@ -31625,6 +31757,15 @@
         "//drivers/interface/location/gnss/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/location/gnss/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/location/agnss/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/location/geofence/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/memorytracker/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -37959,6 +38100,15 @@
         ],
         "//test/testfwk/arkxtest/testserver/src/": [
             "//foundation/ability/idl_tool/idl_config.gni"
+        ],
+        "//drivers/interface/location/gnss/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/location/agnss/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/location/geofence/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ]
     }
 }
