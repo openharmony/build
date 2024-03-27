@@ -106,6 +106,8 @@ lockfile=false
         os.truncate(f.fileno(), 0)
         f.write(content)
     npm_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin/npm")
+    node_bin_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin")
+    os.environ['PATH'] = f"{node_bin_path}:{os.environ['PATH']}"
     subprocess.run(
         [npm_path, 'install', '@ohos/hpm-cli', '--registry', 'https://repo.huaweicloud.com/repository/npm/', '--prefix',
          download_dir])
