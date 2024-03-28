@@ -12145,6 +12145,9 @@
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_array_test_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_builtins_test_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_call_test_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26591,6 +26594,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_array_test_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_builtins_test_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_call_test_abc": [
