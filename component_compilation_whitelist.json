@@ -12830,6 +12830,9 @@
         "//arkcompiler/ets_runtime/test/aottest/inc:gen_inc_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/induction_variable:gen_induction_variable_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/inline:gen_inline_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27194,6 +27197,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/inc:gen_inc_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/induction_variable:gen_induction_variable_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/inline:gen_inline_abc": [
