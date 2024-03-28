@@ -97,12 +97,13 @@ def symlink_src2dest(src_dir, dest_dir):
 
 def install_hpm(code_path, download_dir, symlink_dir, home_path):
     content = """\
-    package-lock=true
-    registry=http://repo.huaweicloud.com/repository/npm
-    strict-ssl=false
-    lockfile=false
-    """
+package-lock=true
+registry=http://repo.huaweicloud.com/repository/npm
+strict-ssl=false
+lockfile=false
+"""
     with os.fdopen(os.open(os.path.join(home_path, '.npmrc'), os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as f:
+        os.truncate(f.fileno(), 0)
         f.write(content)
     npm_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin/npm")
     node_bin_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin")

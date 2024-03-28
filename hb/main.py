@@ -19,6 +19,7 @@
 
 import os
 import sys
+import subprocess
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -28,6 +29,7 @@ sys.path.append(
 from containers.arg import Arg, ModuleType
 from containers.status import throw_exception
 from resources.global_var import ARGS_DIR
+from resources.global_var import CURRENT_OHOS_ROOT
 from exceptions.ohos_exception import OHOSException
 
 from services.preloader import OHOSPreloader
@@ -80,6 +82,13 @@ from util.log_util import LogUtil
 
 class Main():
 
+    def _set_path(self):
+        user_home = os.path.expanduser("~")
+        prebuilts_cache_path = os.path.join(user_home, '.prebuilts_cache', 'hpm', 'node_modules', '.bin')
+        nodejs_bin_path = os.path.join(CURRENT_OHOS_ROOT, 'prebuilts', 'build-tools', 'common', 'nodejs', 'current',
+                                       'bin')
+        os.environ['PATH'] = prebuilts_cache_path + os.pathsep + nodejs_bin_path + os.pathsep + os.environ['PATH']
+
     def _init_build_module(self) -> BuildModuleInterface:
         args_dict = Arg.parse_all_args(ModuleType.BUILD)
 
@@ -96,6 +105,10 @@ class Main():
         build_args_resolver = BuildArgsResolver(args_dict)
 
         return OHOSBuildModule(args_dict, build_args_resolver, preloader, loader, generate_ninja, ninja)
+    
+    def _init_hb_init_module(self):
+        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build','prebuilts_config.sh')])
+        sys.exit()
 
     def _init_set_module(self) -> SetModuleInterface:
         Arg.clean_args_file()
@@ -123,6 +136,7 @@ class Main():
         return OHOSToolModule(args_dict, tool_args_resolever, generate_ninja)
 
     def _init_indep_build_module(self) -> IndepBuildModuleInterface:
+        self._set_path()
         Arg.clean_args_file_by_type(ModuleType.INDEP_BUILD)
         args_dict = Arg.parse_all_args(ModuleType.INDEP_BUILD)
         hpm = Hpm()
@@ -136,6 +150,7 @@ class Main():
         return env_args_dict.get("indep_build").get("argDefault")
 
     def _init_install_module(self) -> InstallModuleInterface:
+        self._set_path()
         Arg.clean_args_file_by_type(ModuleType.INSTALL)
         args_dict = Arg.parse_all_args(ModuleType.INSTALL)
         hpm = Hpm()
@@ -143,6 +158,7 @@ class Main():
         return OHOSInstallModule(args_dict, install_args_resolver, hpm)
 
     def _init_package_module(self) -> PackageModuleInterface:
+        self._set_path()
         Arg.clean_args_file_by_type(ModuleType.PACKAGE)
         args_dict = Arg.parse_all_args(ModuleType.PACKAGE)
         hpm = Hpm()
@@ -150,12 +166,14 @@ class Main():
         return OHOSPackageModule(args_dict, package_args_resolver, hpm)
 
     def _init_publish_module(self) -> PublishModuleInterface:
+        self._set_path()
         args_dict = Arg.parse_all_args(ModuleType.PUBLISH)
         hpm = Hpm()
         publish_args_resolver = PublishArgsResolver(args_dict)
         return OHOSPublishModule(args_dict, publish_args_resolver, hpm)
 
     def _init_update_module(self) -> UpdateModuleInterface:
+        self._set_path()
         Arg.clean_args_file_by_type(ModuleType.UPDATE)
         args_dict = Arg.parse_all_args(ModuleType.UPDATE)
         hpm = Hpm()
@@ -174,6 +192,7 @@ class Main():
         main = Main()
         module_initializers = {
             'build': main._init_indep_build_module if main._is_indep_build() else main._init_build_module,
+            'init': main._init_hb_init_module,
             'indep_build': main._init_indep_build_module,
             'set': main._init_set_module,
             'env': main._init_env_module,
