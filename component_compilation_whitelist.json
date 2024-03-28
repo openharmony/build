@@ -37887,9 +37887,7 @@
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
         ],
         "//foundation/multimedia/av_session/avvolumecomponent/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
-            "//foundation/arkui/ace_engine/adapter/preview/build/config.gni",
-            "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/test/": [
             "//commonlibrary/memory_utils/purgeable_mem_config.gni"
