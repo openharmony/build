@@ -138,10 +138,3 @@ done
 
 copy_inside_cxx
 echo "======copy inside cxx finished!======"
-if [[ "${target_os}" == "linux" ]]; then
-    update_llvm_ndk
-    echo "======update llvm ndk finished!======"
-    change_rustlib_name
-    echo "======change rustlib name finished!======"
-fi
-create_lldb_mi
