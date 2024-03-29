@@ -959,6 +959,15 @@
         ]
     },
     {
+        "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:appStartupSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
