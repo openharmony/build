@@ -110,7 +110,7 @@ lockfile=false
     os.environ['PATH'] = f"{node_bin_path}:{os.environ['PATH']}"
     subprocess.run(
         [npm_path, 'install', '@ohos/hpm-cli', '--registry', 'https://repo.huaweicloud.com/repository/npm/', '--prefix',
-         download_dir])
+         download_dir], stderr=subprocess.DEVNULL)
     symlink_src2dest(os.path.join(download_dir, 'node_modules'), symlink_dir)
 
 
