@@ -12169,6 +12169,9 @@
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_vehicle_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_typedarray_length_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/quick_fix:quick_fix": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
             "//arkcompiler/runtime_core/libpandabase:libarkbase_static"
@@ -26624,6 +26627,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_vehicle_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:gen_typedarray_length_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/add:gen_add_abc": [
