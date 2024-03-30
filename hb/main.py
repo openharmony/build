@@ -202,7 +202,9 @@ class Main():
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
         with open(os.path.join(default, "build_configs", "component_mapping.json"), 'r') as r:
-            part_path = json.load(r).get("single_component_path").get("startup_init")
+            single_component_path = json.load(r).get("single_component_path")
+        if single_component_path:
+            part_path = next(iter(single_component_path.values()))
         with open(os.path.join(CURRENT_OHOS_ROOT, part_path, "bundle.json"), 'r') as r:
             bundle = json.load(r)
         push_list = bundle.get("deployment")
