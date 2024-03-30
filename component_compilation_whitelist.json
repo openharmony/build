@@ -12536,6 +12536,33 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Get:gen_builtinMapGet_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/GetSize:gen_builtinMapGetSize_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Has:gen_builtinMapHas_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Keys:gen_builtinMapKeys_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Has:gen_builtinSetHas_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Values:gen_builtinSetValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -26906,6 +26933,33 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Get:gen_builtinMapGet_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/GetSize:gen_builtinMapGetSize_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Has:gen_builtinMapHas_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Keys:gen_builtinMapKeys_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Has:gen_builtinSetHas_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Values:gen_builtinSetValues_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
