@@ -25352,6 +25352,9 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
@@ -35575,6 +35578,9 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest__resources__compile_resources": [
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
@@ -37897,6 +37903,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/adapter/preview/build/config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
+        ],
+        "//foundation/multimedia/av_session/avvolumecomponent/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/test/": [
             "//commonlibrary/memory_utils/purgeable_mem_config.gni"
