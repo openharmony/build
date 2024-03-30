@@ -17920,6 +17920,9 @@
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:shape": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:uicontext": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -32374,6 +32377,9 @@
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:shape": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:uicontext": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend:x_node": [
