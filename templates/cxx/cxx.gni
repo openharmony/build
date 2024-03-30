@@ -68,6 +68,10 @@ template("ohos_executable") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  if (defined(is_arkui_x) && is_arkui_x && defined(invoker.external_deps)) {
+    invoker.external_deps = []
+  }
+
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
@@ -491,6 +495,10 @@ template("ohos_shared_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (defined(is_arkui_x) && is_arkui_x && defined(invoker.external_deps)) {
+    invoker.external_deps = []
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
@@ -1135,6 +1143,10 @@ template("ohos_static_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  if (defined(is_arkui_x) && is_arkui_x && defined(invoker.external_deps)) {
+    invoker.external_deps = []
+  }
+
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
@@ -1403,6 +1415,10 @@ template("ohos_source_set") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  if (defined(is_arkui_x) && is_arkui_x && defined(invoker.external_deps)) {
+    invoker.external_deps = []
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
