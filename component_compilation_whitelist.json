@@ -51,6 +51,7 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
         "//drivers/interface/face_auth/v1_1:face_auth_idl_headers",
         "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2",
         "//drivers/interface/huks/v1_0:huks_idl_headers",
@@ -3071,7 +3072,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3089,7 +3108,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_proxy_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_audio/audioext/v1_0:libdaudioext_stub_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4991,6 +5028,9 @@
             "//third_party/cJSON/"
         ],
         "//drivers/peripheral/distributed_audio/hdi_service/audio_ext/v1_0:libdaudio_manager_daudio_ext_service_1.0": [
+            "//third_party/cJSON/"
+        ],
+        "//drivers/peripheral/distributed_audio/hdi_service/audio_ext/v1_0:libdaudio_manager_daudio_ext_service_2.0": [
             "//third_party/cJSON/"
         ],
         "//drivers/peripheral/distributed_audio/hdi_service/common:libdaudio_hdf_utils": [
@@ -11654,6 +11694,7 @@
         "//drivers/interface/display/v1_0:libdisplay_gralloc",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
         "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0",
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:ability_business_error",
         "//foundation/ability/ability_runtime/frameworks/native/ability:ability_context_public_config",
@@ -16669,6 +16710,9 @@
         "//drivers/interface/distributed_audio/audioext/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -17101,7 +17145,8 @@
         ],
         "//drivers/peripheral/distributed_audio:distributed_audio_entry": [
             "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
-            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target"
+            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+            "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target"
         ],
         "//drivers/peripheral/face_auth/hdi_service:libface_auth_interface_service_1.1": [
             "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
@@ -31613,6 +31658,9 @@
         "//drivers/interface/distributed_audio/audioext/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -31830,7 +31878,8 @@
         ],
         "//drivers/peripheral/distributed_audio:distributed_audio_entry": [
             "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
-            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target"
+            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+            "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target"
         ],
         "//drivers/peripheral/distributed_camera/hdi_service/test/sample:dcamera_hdf_demo": [
             "//third_party/jsoncpp:jsoncpp"
@@ -36953,6 +37002,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/distributed_audio/audioext/v1_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/distributed_audio/audioext/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/distributed_camera/v1_0/": [
