@@ -119,6 +119,15 @@ class Main():
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:
+        if sys.argv[2] == 'sshkey':
+            if sys.argv[3] in ['-h', '-help', 'h', 'help']:
+                print('Please use the command "hb env sshkey" like this: hb env sshkey your_invitationcode')
+                sys.exit()
+            self._set_path()
+            subprocess.run(['hpm', 'config', 'set', 'loginUser', str(sys.argv[3])])
+            subprocess.run(['hpm', 'gen-keys'])
+            key_path = os.path.join(os.path.expanduser("~"), '.hpm', 'key', 'publicKey_' + sys.argv[3] + '.pem')
+            print(f'Please add the content of {key_path} to https://repo.harmonyos.com/#/cn/profile/sshkeys')
         args_dict = Arg.parse_all_args(ModuleType.ENV)
         env_args_resolver = EnvArgsResolver(args_dict)
         return OHOSEnvModule(args_dict, env_args_resolver)
