@@ -184,10 +184,6 @@ declare_args() {
 }
 
 declare_args() {
-  enable_archive_sdk = true
-}
-
-declare_args() {
   build_variant = "root"
   root_perf_main = "main"
   device_type = "default"
