@@ -167,6 +167,7 @@ fi
 
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
+echo "prebuilts_download start"
 if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
