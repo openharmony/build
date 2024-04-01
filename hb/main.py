@@ -128,6 +128,7 @@ class Main():
             subprocess.run(['hpm', 'gen-keys'])
             key_path = os.path.join(os.path.expanduser("~"), '.hpm', 'key', 'publicKey_' + sys.argv[3] + '.pem')
             print(f'Please add the content of {key_path} to https://repo.harmonyos.com/#/cn/profile/sshkeys')
+            sys.exit()
         args_dict = Arg.parse_all_args(ModuleType.ENV)
         env_args_resolver = EnvArgsResolver(args_dict)
         return OHOSEnvModule(args_dict, env_args_resolver)
