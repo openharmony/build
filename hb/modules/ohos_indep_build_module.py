@@ -56,7 +56,8 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('{} build success')
+            LogUtil.hb_info('{} build success'.format(
+                self.args_dict.get('part').arg_value))
 
     def _run_phase(self):
         for arg in self.args_dict.values():
