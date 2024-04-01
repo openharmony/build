@@ -43,6 +43,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/third_party/mindspore/kits:mindspore_lib",
   "//interface/sdk_c/web/webview/interfaces/native:web_header",
   "//interface/sdk_c/web/webview/interfaces/native:libohweb",
+  "//interface/sdk_c/BasicServicesKit:libos_account_ndk",
+  "//interface/sdk_c/BasicServicesKit:os_account_ndk_header",
   "//interface/sdk_c/arkui/ace_engine/native:ace_header",
   "//interface/sdk_c/arkui/ace_engine/native:arkui_header",
   "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
