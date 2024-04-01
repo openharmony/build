@@ -78,6 +78,7 @@ template("copy_and_archive") {
   assert(defined(invoker.sdk_type))
   assert(defined(invoker.sdk_modules_desc_file))
   forward_variables_from(invoker, [ "testonly" ])
+
   action_with_pydeps(target_name) {
     deps = []
     if (defined(invoker.deps)) {
@@ -117,9 +118,6 @@ template("copy_and_archive") {
         "--zip-prefix-path",
         invoker.zip_prefix_path,
       ]
-    }
-    if (enable_archive_sdk) {
-      args += [ "--enable-archive-sdk=${enable_archive_sdk}" ]
     }
   }
 }
