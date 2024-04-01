@@ -78,6 +78,7 @@ from modules.ohos_push_module import OHOSPushModule
 
 from helper.separator import Separator
 from util.log_util import LogUtil
+from util.system_util import SystemUtil
 
 
 class Main():
@@ -217,7 +218,9 @@ class Main():
 
         module = module_initializers[module_type]()
         try:
+            start_time = SystemUtil.get_current_time()
             module.run()
+            LogUtil.hb_info('Total cost time:  {}'.format(SystemUtil.get_current_time() - start_time))
         except KeyboardInterrupt:
             for file in os.listdir(ARGS_DIR):
                 if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
