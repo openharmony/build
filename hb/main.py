@@ -20,6 +20,7 @@
 import os
 import sys
 import subprocess
+import json
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -185,6 +186,35 @@ class Main():
         hdc = Hdc()
         update_args_resolver = PushArgsResolver(args_dict)
         return OHOSPushModule(args_dict, update_args_resolver, hdc)
+    
+    def _push_module(self):
+        check_hdc = subprocess.run(['hdc', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if check_hdc.returncode != 0:
+            print("Please make sure 'hdc' is installed and properly configured.")
+            sys.exit()
+        check_device = subprocess.run(['hdc', 'list', 'targets'], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                      text=True)
+        if check_device.stdout.strip() == "[Empty]":
+            print("Device is not connected.")
+            sys.exit()
+        else:
+            device = check_device.stdout.strip()
+        subprocess.run(["hdc", "-t", str(device), "shell", "mount", "-o", "rw,remount", "/"], check=True,
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
+        with open(os.path.join(default, "build_configs", "component_mapping.json"), 'r') as r:
+            single_component_path = json.load(r).get("single_component_path")
+        if single_component_path:
+            part_path = next(iter(single_component_path.values()))
+        with open(os.path.join(CURRENT_OHOS_ROOT, part_path, "bundle.json"), 'r') as r:
+            bundle = json.load(r)
+        push_list = bundle.get("deployment")
+        if push_list:
+            for one_push in push_list:
+                if one_push.get("src") and one_push.get("target"):
+                    subprocess.run(
+                        ["hdc", "-t", str(device), "file", "send", one_push.get("src"), one_push.get("target")],
+                        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
     @staticmethod
     @throw_exception
@@ -202,7 +232,7 @@ class Main():
             'package': main._init_package_module,
             'publish': main._init_publish_module,
             'update': main._init_update_module,
-            'push': main._init_push_module
+            'push': main._push_module
         }
 
         module_type = sys.argv[1]
