@@ -44,7 +44,7 @@ def check_cpu() -> int:
         host_cpu_list = ['M1', 'M2', 'M3']
         for host_cpu_num in host_cpu_list:
             if host_cpu_num in host_cpu:
-                print("host cpu is arm64")
+                print("host cpu is", host_cpu_num)
                 break
 
     return 0
