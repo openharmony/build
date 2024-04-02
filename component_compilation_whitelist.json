@@ -12632,6 +12632,12 @@
         "//arkcompiler/ets_runtime/test/aottest/bind:gen_bind_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/ArrayBuffer/IsView:gen_builtinArrayBufferIsView_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/DataView/Get:gen_builtinDataViewGet_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Exp:gen_builtinMathExp_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
