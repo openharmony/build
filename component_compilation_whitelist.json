@@ -17379,6 +17379,9 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/dataUriUtils:datauriutils_napi": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/ability/ability_runtime/frameworks/native/appkit:delegator_mgmt": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/dataUriUtils:gen_data_uri_utils_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -31959,6 +31962,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/dataUriUtils:datauriutils_napi": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/native/appkit:delegator_mgmt": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/dataUriUtils:gen_data_uri_utils_abc": [
