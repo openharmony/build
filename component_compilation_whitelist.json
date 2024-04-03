@@ -1458,10 +1458,14 @@
         "//base/startup/appspawn/interfaces/innerkits:appspawn_socket_client": [
             "//third_party/json/include/"
         ],
+        "//base/startup/appspawn/interfaces/innerkits_new/client:appspawn_client": [
+            "//third_party/cJSON/"
+        ],
         "//base/startup/appspawn/test/moduletest:AppSpawnTest": [
             "//commonlibrary/c_utils/base/include/",
             "//third_party/zlib/contrib/minizip/",
-            "//third_party/zlib/"
+            "//third_party/zlib/",
+            "//third_party/cJSON/"
         ],
         "//base/startup/appspawn:appspawn": [
             "//commonlibrary/c_utils/base/include/",
