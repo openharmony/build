@@ -106,10 +106,11 @@ lockfile=false
         os.truncate(f.fileno(), 0)
         f.write(content)
     try:
-        with os.fdopen(os.open(os.path.join(download_dir, 'package.json'), os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as f:
+        with os.fdopen(os.open(os.path.join(download_dir, 'package.json'), os.O_WRONLY | os.O_CREAT, mode=0o640),
+                       'w') as f:
             os.truncate(f.fileno(), 0)
             f.write('{}\n')
-    except:
+    except FileNotFoundError:
         print("Fail to create package.json")
     npm_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin/npm")
     node_bin_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin")
