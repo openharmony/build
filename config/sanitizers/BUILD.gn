@@ -639,6 +639,24 @@ config("cfi_no_nvcall") {
   ldflags = [ "-fno-sanitize=cfi-nvcall" ]
 }
 
+# Disable cfi all
+config("cfi_no_all") {
+  cflags = [ "-fno-sanitize=cfi" ]
+  ldflags = [ "-fno-sanitize=cfi" ]
+}
+
+# Enable cfi vcall
+config("cfi_vcall") {
+  cflags = [ "-fsanitize=cfi-vcall" ]
+  ldflags = [ "-fsanitize=cfi-vcall" ]
+}
+
+# Enable cfi icall
+config("cfi_icall") {
+  cflags = [ "-fsanitize=cfi-icall" ]
+  ldflags = [ "-fsanitize=cfi-icall" ]
+}
+
 config("cfi_cross_dso_debug") {
   configs = [ ":cfi_cross_dso_release" ]
   cflags = [
