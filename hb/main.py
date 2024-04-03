@@ -188,17 +188,22 @@ class Main():
         return OHOSPushModule(args_dict, update_args_resolver, hdc)
     
     def _push_module(self):
+        if sys.argv[2] in ['-h', '-help', 'h', 'help']:
+            print('Please use the command "hb push" like this: hb push component_name -t device_num')
+            sys.exit()
         check_hdc = subprocess.run(['hdc', '-v'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         if check_hdc.returncode != 0:
-            print("Please make sure 'hdc' is installed and properly configured.")
+            print("Error: Please make sure 'hdc' is installed and properly configured.")
             sys.exit()
         check_device = subprocess.run(['hdc', 'list', 'targets'], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                       text=True)
         if check_device.stdout.strip() == "[Empty]":
-            print("Device is not connected.")
+            print("Error: Device is not connected.")
             sys.exit()
-        else:
-            device = check_device.stdout.strip()
+        device = sys.argv[4]
+        if device not in device.stdout:
+            print("Error: Wrong device number")
+            sys.exit()
         subprocess.run(["hdc", "-t", str(device), "shell", "mount", "-o", "rw,remount", "/"], check=True,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
@@ -215,6 +220,8 @@ class Main():
                     subprocess.run(
                         ["hdc", "-t", str(device), "file", "send", one_push.get("src"), one_push.get("target")],
                         check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        print("hb push success!")
+        sys.exit()
 
     @staticmethod
     @throw_exception
