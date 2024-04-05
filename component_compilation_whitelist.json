@@ -53,8 +53,8 @@
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
         "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers",
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2",
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers",
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers",
         "//drivers/interface/huks/v1_0:huks_idl_headers",
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
@@ -377,21 +377,6 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1":[
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0"
          ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_proxy_1.1": [
-            "//drivers/interface/face_auth/v1_0:libface_auth_proxy_1.0"
-        ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_stub_1.1": [
-            "//drivers/interface/face_auth/v1_0:libface_auth_stub_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_proxy_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_proxy_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_stub_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_stub_1.0"
-        ],
         "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_proxy_1.1": [
             "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_proxy_1.0"
         ],
@@ -3317,7 +3302,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:face_auth_idl_headers": [
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3326,7 +3311,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:face_auth_idl_headers_1.0": [
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3335,7 +3320,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:libface_auth_proxy_1.0": [
+        "//drivers/interface/face_auth/v2_0:libface_auth_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3344,7 +3329,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:libface_auth_stub_1.0": [
+        "//drivers/interface/face_auth/v2_0:libface_auth_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3353,7 +3338,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers": [
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3362,7 +3347,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers_1.1": [
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3371,7 +3356,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_proxy_1.1": [
+        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3380,79 +3365,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_stub_1.2": [
+        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -17116,16 +17029,10 @@
         "//drivers/interface/drm/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_0:hdi_gen": [
+        "//drivers/interface/face_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_1:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:hdi_gen": [
+        "//drivers/interface/fingerprint_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/huks/v1_0:hdi_gen": [
@@ -17573,44 +17480,44 @@
             "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
             "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target"
         ],
-        "//drivers/peripheral/face_auth/hdi_service:libface_auth_interface_service_1.1": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/hdi_service:libface_auth_interface_service_2.0": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/common_fuzzer:libface_auth_interface_service_1.1_fuzzer": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/common_fuzzer:libface_auth_interface_service_2.0_fuzzer": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthhdi_fuzzer:FaceAuthHdiFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthallinoneexecutor_fuzzer:FaceAuthAllInOneExecutorFuzzTest": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthhdistub_fuzzer:FaceAuthHdiStubFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthallinoneexecutorstub_fuzzer:FaceAuthAllInOneExecutorStubFuzzTest": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthinterfaceservice_fuzzer:FaceAuthInterfaceServiceFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthinterfacestub_fuzzer:FaceAuthInterfaceStubFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_driver": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_interface_service_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_interface_service_2.0": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/common_fuzzer:libfingerprint_auth_interface_service_1.2_fuzzer": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/common_fuzzer:libfingerprint_auth_interface_service_2.0_fuzzer": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthhdi_fuzzer:FingerprintAuthHdiFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthallinoneexecutor_fuzzer:FingerprintAuthAllInOneExecutorFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintexecutorstub_fuzzer:FingerprintExecutorStubFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthallinoneexecutorstub_fuzzer:FingerprintAuthAllInOneExecutorStubFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintinterfaceservice_fuzzer:FingerprintInterfaceServiceFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfaceservice_fuzzer:FingerprintAuthInterfaceServiceFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintinterfacestub_fuzzer:FingerprintInterfaceStubFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfacestub_fuzzer:FingerprintAuthInterfaceStubFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
         "//drivers/peripheral/huks/hdi_service:libhuks_hdi_service_1.0": [
             "//drivers/interface/huks/v1_0:huks_idl_headers"
@@ -32196,16 +32103,10 @@
         "//drivers/interface/drm/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_0:hdi_gen": [
+        "//drivers/interface/face_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_1:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:hdi_gen": [
+        "//drivers/interface/fingerprint_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/huks/v1_0:hdi_gen": [
@@ -37577,16 +37478,10 @@
         "//drivers/interface/drm/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/face_auth/v1_0/": [
+        "//drivers/interface/face_auth/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/face_auth/v1_1/": [
-            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0/": [
-            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2/": [
+        "//drivers/interface/fingerprint_auth/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/huks/v1_0/": [
