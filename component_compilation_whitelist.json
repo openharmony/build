@@ -92,6 +92,9 @@
         "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_1.0",
         "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_1.0",
         "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_1.0",
+        "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_2.0",
+        "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_2.0",
+        "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_2.0",
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_target",
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock",
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock",
@@ -5253,6 +5256,12 @@
             "//drivers/peripheral/location/gnss/hdi_service/"
         ],
         "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_1.0": [
+            "//drivers/peripheral/location/gnss/hdi_service/"
+        ],
+        "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_2.0": [
+            "//drivers/peripheral/location/gnss/hdi_service/"
+        ],
+        "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_2.0": [
             "//drivers/peripheral/location/gnss/hdi_service/"
         ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartition_slot_service_1.0": [
@@ -17514,6 +17523,17 @@
         ],
         "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_1.0": [
             "//drivers/interface/location/gnss/v1_0:location_gnss_idl_headers",
+            "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers"
+        ],
+        "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_2.0": [
+            "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers",
+            "//drivers/peripheral/location/gnss/hdi_service/"
+        ],
+        "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_2.0": [
+            "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers",
+            "//drivers/peripheral/location/gnss/hdi_service/"
+        ],
+        "//drivers/peripheral/location/gnss/hdi_service:libgnss_interface_service_2.0": [
             "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers"
         ],
         "//drivers/interface/location/geofence/v2_0:liblocation_geofence_proxy_2.0": [
