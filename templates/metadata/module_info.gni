@@ -47,6 +47,7 @@ template("generate_module_info") {
                            "version_script",
                            "part_name",
                            "subsystem_name",
+                           "symlink_ext",
                          ])
 
   if (!defined(module_label)) {
@@ -222,6 +223,10 @@ template("generate_module_info") {
         "--version_script",
         version_script,
       ]
+    }
+    if (defined(symlink_ext)) {
+      args += [ "--symlink-ext" ]
+      args += symlink_ext
     }
     script = gen_script
     outputs = [ output_file ]

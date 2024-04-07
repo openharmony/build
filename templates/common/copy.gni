@@ -134,6 +134,10 @@ template("ohos_copy") {
         innerapi_tags = invoker.innerapi_tags
       }
 
+      if (defined(invoker.symlink_ext)) {
+        symlink_ext = invoker.symlink_ext
+      }
+
       notice = "$target_out_dir/$_main_target_name.notice.txt"
     }
     if (!skip_gen_module_info) {
