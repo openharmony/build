@@ -21,6 +21,7 @@ import os
 import sys
 import subprocess
 import json
+import time
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -99,16 +100,23 @@ class Main():
             ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, "")
             ohos_set_module.set_product()
 
+        start_time = time.time()
         preloader = OHOSPreloader()
         loader = OHOSLoader()
+        preloader_time = time.time()
         generate_ninja = Gn()
+        gn_time = time.time()
         ninja = Ninja()
+        end_time = time.time()
+        LogUtil.hb_info("The run time for preloader and loader is {}".format(preloader_time - start_time))
+        LogUtil.hb_info("The run time for GN is {}".format(gn_time - preloader_time))
+        LogUtil.hb_info("The run time for ninja is {}".format(end_time - gn_time))
         build_args_resolver = BuildArgsResolver(args_dict)
 
         return OHOSBuildModule(args_dict, build_args_resolver, preloader, loader, generate_ninja, ninja)
-    
+
     def _init_hb_init_module(self):
-        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build','prebuilts_config.sh')])
+        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build', 'prebuilts_config.sh')])
         sys.exit()
 
     def _init_set_module(self) -> SetModuleInterface:
@@ -186,7 +194,7 @@ class Main():
         hdc = Hdc()
         update_args_resolver = PushArgsResolver(args_dict)
         return OHOSPushModule(args_dict, update_args_resolver, hdc)
-    
+
     def _push_module(self):
         if sys.argv[2] in ['-h', '-help', 'h', 'help']:
             print('Please use the command "hb push" like this: hb push component_name -t device_num')
