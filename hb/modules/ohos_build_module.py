@@ -68,7 +68,6 @@ class OHOSBuildModule(BuildModuleInterface):
         else:
             LogUtil.hb_info('{} build success'.format(
                 self.args_dict.get('product_name').arg_value))
-            LogUtil.hb_info('Cost time:  {}'.format(self.build_time))
 
     def _prebuild(self):
         self._run_phase(BuildPhase.PRE_BUILD)
