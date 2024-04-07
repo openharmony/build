@@ -13410,6 +13410,9 @@
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+		"//arkcompiler/ets_runtime/test/aottest/sharedmodule:gen_sharedmodule_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/shl:gen_shl_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -14476,6 +14479,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+		"//arkcompiler/ets_runtime/test/moduletest/sharedmodule:gen_sharedmodule_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/spreadoperator:gen_spreadoperator_abc": [
@@ -27876,6 +27882,9 @@
         "//arkcompiler/ets_runtime/test/aottest/set:gen_set_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+		"//arkcompiler/ets_runtime/test/aottest/sharedmodule:gen_sharedmodule_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/setobjectwithproto:gen_setobjectwithproto_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28780,6 +28789,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/require:gen_require_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+		"//arkcompiler/ets_runtime/test/moduletest/sharedmodule:gen_sharedmodule_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sendablecontext:gen_sendablecontext_abc": [
