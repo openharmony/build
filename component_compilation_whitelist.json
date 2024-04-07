@@ -39,7 +39,7 @@
         "//drivers/interface/battery/v2_0:battery_idl_headers",
         "//drivers/interface/bluetooth/hci/v1_0:bluetooth_hci_idl_headers",
         "//drivers/interface/codec/image/v1_0:image_idl_headers",
-        "//drivers/interface/codec/v2_0:codec_idl_headers",
+        "//drivers/interface/codec/v3_0:codec_idl_headers",
         "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
         "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0",
         "//drivers/interface/display/buffer/v1_1:display_buffer_idl_headers_1.1",
@@ -2740,6 +2740,42 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/codec/v3_0:codec_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/codec/v3_0:codec_idl_headers_3.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/codec/v3_0:libcodec_proxy_3.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/codec/v3_0:libcodec_stub_3.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
@@ -5169,7 +5205,7 @@
             "//third_party/openssl/include/",
             "//third_party/cJSON/"
         ],
-        "//drivers/peripheral/codec/hal/idl_service:libcodec_component_manager_service_2.0": [
+        "//drivers/peripheral/codec/hal/idl_service:libcodec_component_manager_service_3.0": [
             "//third_party/openmax/api/1.1.2/"
         ],
         "//drivers/peripheral/codec/hal/idl_service:libcodec_driver": [
@@ -16931,6 +16967,9 @@
         "//drivers/interface/codec/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/codec/v3_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/display/buffer/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -17185,11 +17224,11 @@
         "//drivers/peripheral/camera/vdi_base/usb_camera/camera_config:generate_source": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
-        "//drivers/peripheral/codec/hal/idl_service:libcodec_component_manager_service_2.0": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+        "//drivers/peripheral/codec/hal/idl_service:libcodec_component_manager_service_3.0": [
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/hal/idl_service:libcodec_driver": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/hal/passthrough:libcodec_hdi_passthrough_impl": [
             "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client"
@@ -17213,7 +17252,7 @@
             "//drivers/interface/codec/image/v1_0:image_idl_headers"
         ],
         "//drivers/peripheral/codec/test/benchmarktest:hdf_codec_benchmark_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
         ],
@@ -17226,12 +17265,12 @@
             "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client"
         ],
         "//drivers/peripheral/codec/test/demo/idl:codec_idl_omx_decode": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
         ],
         "//drivers/peripheral/codec/test/demo/idl:codec_idl_omx_encode": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
         ],
@@ -17269,52 +17308,52 @@
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecallocatebufferhdi_fuzzer:CodecAllocateBufferHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codeccomponentroleenumhdi_fuzzer:CodecComponentRoleEnumHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codeccomponenttunnelrequesthdi_fuzzer:CodecComponentTunnelRequestHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codeccreatecomponenthdi_fuzzer:CodecCreateComponentHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecfreebufferhdi_fuzzer:CodecFreeBufferHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecgetcomponentcapabilitylisthdi_fuzzer:CodecGetComponentCapabilityListHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecgetconfighdi_fuzzer:CodecGetConfigHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecgetextensionIndexhdi_fuzzer:CodecGetExtensionIndexHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecgetparameterhdi_fuzzer:CodecGetParameterHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codechdi_fuzzer:CodecHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecsendcommandhdi_fuzzer:CodecSendCommandHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecsetcallbackshdi_fuzzer:CodecSetCallbacksHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecsetconfighdi_fuzzer:CodecSetConfigHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecsetparameterhdi_fuzzer:CodecSetParameterHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecusebufferhdi_fuzzer:CodecUseBufferHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/hdi_fuzzer/codecuseeglimagehdi_fuzzer:CodecUseEglImageHdiFuzzTest": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//drivers/peripheral/codec/test/fuzztest/image_fuzzer/imageallocateinbuffer_fuzzer:ImageAllocateInBufferFuzzTest": [
             "//drivers/interface/codec/image/v1_0:image_idl_headers"
@@ -17341,7 +17380,7 @@
             "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client"
         ],
         "//drivers/peripheral/codec/test/unittest/idl_omx:codec_idl_omx_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers"
         ],
@@ -25570,7 +25609,7 @@
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/services/engine/codec/video/hcodec:hcodec": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers"
+            "//drivers/interface/codec/v3_0:codec_idl_headers"
         ],
         "//foundation/multimedia/av_codec/test/fuzztest/demuxer_fuzzer:DemuxerFuzzTest": [
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
@@ -25656,35 +25695,35 @@
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/demo:hcodec_demo": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/helper:hcodec_test_helper": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hcodec_list_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hcodec_type_converter_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hdecoder_buffer_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hdecoder_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hencoder_buffer_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hencoder_unit_test": [
-            "//drivers/interface/codec/v2_0:codec_idl_headers",
+            "//drivers/interface/codec/v3_0:codec_idl_headers",
             "//foundation/multimedia/media_foundation/src/capi:capi_packages"
         ],
         "//foundation/multimedia/av_codec/test/unittest/video_test/video_perf_test:video_codec_demo": [
@@ -31978,6 +32017,9 @@
         "//drivers/interface/codec/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/codec/v3_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/display/buffer/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -37342,6 +37384,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/codec/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/codec/v3_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/display/buffer/v1_0/": [
