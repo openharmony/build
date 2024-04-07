@@ -32709,6 +32709,9 @@
         "//foundation/arkui/ace_engine/advanced_ui_component/chip/interfaces:gen_chip_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/chipgroup/interfaces:gen_chipgroup_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/arkui/ace_engine/advanced_ui_component/composelistitem/interfaces:gen_composelistitem_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -38052,6 +38055,9 @@
             "//foundation/ability/ability_runtime/ability_runtime.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/chip/interfaces/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/chipgroup/interfaces/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/composelistitem/interfaces/": [
