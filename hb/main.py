@@ -216,11 +216,12 @@ class Main():
         if module_type not in module_initializers:
             raise OHOSException(f'There is no such option {module_type}', '0018')
 
+        start_time = SystemUtil.get_current_time()
         module = module_initializers[module_type]()
         try:
-            start_time = SystemUtil.get_current_time()
             module.run()
-            LogUtil.hb_info('Total cost time:  {}'.format(SystemUtil.get_current_time() - start_time))
+            if module_type == 'build':
+                LogUtil.hb_info('Cost Time:  {}'.format(SystemUtil.get_current_time() - start_time))
         except KeyboardInterrupt:
             for file in os.listdir(ARGS_DIR):
                 if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
