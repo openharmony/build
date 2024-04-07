@@ -189,6 +189,7 @@ template("ohos_prebuilt_shared_library") {
                              "module_install_dir",
                              "symlink_target_name",
                              "innerapi_tags",
+                             "symlink_ext",
 
                              # Open source license related
                              "license_file",
