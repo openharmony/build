@@ -143,6 +143,8 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
         part_name = 'cJSON'
     if part_name == 'f2fs_tools':
         part_name = 'f2fs-tools'
+    if part_name == 'fsverity_utils':
+        part_name = 'fsverity-utils'
     one_component_dict = {part_name: {
         "innerapis": innerapi_value_list,
         "path": path,
