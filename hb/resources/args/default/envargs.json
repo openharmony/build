@@ -1,4 +1,16 @@
 {
+    "sshkey": {
+        "arg_name": "--sshkey",
+        "argDefault": "",
+        "arg_help": "Default:''. Help: set sshkey",
+        "arg_phase": "prebuild",
+        "arg_type": "str",
+        "arg_attribute": {
+            "abbreviation": "-s"
+        },
+        "resolve_function": "resolve_sshkey",
+        "testFunction": "testSshkey"
+    },
     "clean": {
         "arg_name": "--clean",
         "argDefault": false,
