@@ -25757,7 +25757,7 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumepanel_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest": [
@@ -36070,7 +36070,7 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumepanel_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest__resources__compile_resources": [
@@ -38411,7 +38411,7 @@
             "//foundation/arkui/ace_engine/adapter/preview/build/config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent/": [
+        "//foundation/multimedia/av_session/avvolumepanel/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/test/": [
