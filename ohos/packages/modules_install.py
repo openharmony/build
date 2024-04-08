@@ -143,6 +143,17 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                                                      symlink_dest_dir, name)
                     if not os.path.exists(symlink_dest_file):
                         os.symlink(symlink_src_file, symlink_dest_file)
+        if 'symlink_ext' in module_info:
+            symlink_ext = module_info.get('symlink_ext')
+            for dest in dests:
+                symlink_src_file = os.path.join(platform_installed_path, dest)
+                for name in symlink_ext:
+                    symlink_dest_file = os.path.join(platform_installed_path, dest.split('/')[0], name)
+                    relpath = os.path.relpath(os.path.dirname(symlink_src_file), os.path.dirname(symlink_dest_file))
+                    if not os.path.exists(os.path.dirname(symlink_dest_file)):
+                        os.makedirs(os.path.dirname(symlink_dest_file), exist_ok=True)
+                    if not os.path.exists(symlink_dest_file):
+                        os.symlink(os.path.join(relpath, os.path.basename(dest)), symlink_dest_file)
 
     # write install module info to file
     write_json_file(install_modules_info_file, modules_info_dict)
