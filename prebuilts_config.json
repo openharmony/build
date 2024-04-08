@@ -43,8 +43,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240219",
-          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "version": "20240315",
+          "url": "openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -52,8 +52,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240219",
-          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "version": "20240315",
+          "url": "openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -249,6 +249,78 @@
             "cryptography",
             "json5==0.9.6"
           ]
+        }
+      ]
+    },
+    {
+      "name": "rustc",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.68.0",
+          "url": "openharmony/compiler/rust/rust-1.68.0-dev-x86_64-unknown-linux-gnu-norpath.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-aarch64-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.68.0",
+          "url": "openharmony/compiler/rust/rust-std-1.68.0-dev-aarch64-linux-ohos-norpath_20230706.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-arm-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.68.0",
+          "url": "openharmony/compiler/rust/rust-std-1.68.0-dev-armv7-linux-ohos-norpath.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-x86_64-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.68.0",
+          "url": "openharmony/compiler/rust/rust-std-1.68.0-dev-x86_64-unknown-linux-ohos.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
         }
       ]
     }
