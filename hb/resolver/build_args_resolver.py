@@ -50,6 +50,13 @@ class BuildArgsResolver(ArgsResolverInterface):
         super().__init__(args_dict)
 
     @staticmethod
+    def rename_file(source_file, target_file):
+        try:
+            os.rename(source_file, target_file)
+        except OSError as rename_error:
+            LogUtil.hb_warning(rename_error)
+
+    @staticmethod
     def resolve_product(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--product-name' arg.
         :param target_arg: arg object which is used to get arg value.
@@ -233,10 +240,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             logfile = os.path.join(out_path, 'build.log')
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
-                if os.path.isfile(logfile):
-                    os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
-                else:
-                    LogUtil.hb_warning(logfile + ' Not Found')
+                rename_file(logfile, '{}/build.{}.log'.format(out_path, mtime))
 
     @staticmethod
     def resolve_log_mode(target_arg: Arg, build_module: BuildModuleInterface):
@@ -287,10 +291,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 oldfile = os.path.join(ccache_base, '{}.old'.format(logfile))
                 if os.path.exists(oldfile):
                     os.unlink(oldfile)
-                if os.path.isfile(logfile):
-                    os.rename(logfile, oldfile)
-                else:
-                    LogUtil.hb_warning(logfile + ' Not Found')
+                rename_file(logfile, oldfile)
 
             os.environ['CCACHE_EXEC'] = ccache_path
             os.environ['CCACHE_LOGFILE'] = logfile
