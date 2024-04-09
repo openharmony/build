@@ -53,7 +53,7 @@ class BuildArgsResolver(ArgsResolverInterface):
     def rename_file(source_file, target_file):
         try:
             os.rename(source_file, target_file)
-        except OSError as rename_error:
+        except FileNotFoundError as rename_error:
             LogUtil.hb_warning(rename_error)
 
     @staticmethod
