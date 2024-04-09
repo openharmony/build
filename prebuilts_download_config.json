@@ -138,7 +138,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/linux/cmake-linux-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-linux-x86-3.28.2.tar.gz",
           "unzip_filename": "linux"
         },
         {
@@ -148,7 +148,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0-20240320.tar.gz",
+          "unzip_filename": "ninja"
+        },
+	      {
+          "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/windows/ninja-windows-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -165,7 +170,7 @@
       "linux_copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5/windows/cmake-windows-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-windows-x86-3.28.2.tar.gz",
           "unzip_filename": "windows-x86"
         },
         {
@@ -224,7 +229,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5_b/linux/cmake-linux-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-linux-x86-3.28.2.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -234,7 +239,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0-20240320.tar.gz",
+          "unzip_filename": "ninja"
+        },
+	{
+          "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/windows/ninja-windows-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -251,7 +261,7 @@
       "linux_copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5_b/windows/cmake-windows-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-windows-x86-3.28.2.tar.gz",
           "unzip_filename": "windows-x86"
         },
         {
@@ -386,7 +396,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5_b/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-darwin-x86-3.28.2.tar.gz",
           "unzip_filename": "darwin-x86"
         },
         {
@@ -396,7 +406,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -432,7 +442,7 @@
       "copy_config": [
         {
           "unzip_dir": "prebuilts/cmake",
-          "file_path": "/openharmony/compiler/cmake/3.16.5_b/darwin/cmake-darwin-x86-3.16.5.tar.gz",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-darwin-x86-3.28.2.tar.gz",
           "unzip_filename": "darwin-x86"
         },
         {
@@ -442,7 +452,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
