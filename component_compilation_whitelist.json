@@ -73,6 +73,7 @@
         "//drivers/interface/power/v1_1:power_idl_headers",
         "//drivers/interface/ril/v1_1:ril_idl_headers",
         "//drivers/interface/ril/v1_2:ril_idl_headers_1.2",
+        "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
         "//drivers/interface/sensor/v2_0:sensor_idl_headers",
         "//drivers/interface/sensor/v2_1:sensor_idl_headers",
         "//drivers/interface/thermal/v1_1:thermal_idl_headers",
@@ -17675,6 +17676,9 @@
         ],
         "//drivers/peripheral/ril/interfaces/hdi_service:libril_service_1.2": [
             "//drivers/interface/ril/v1_2:ril_idl_headers_1.2"
+        ],
+        "//drivers/peripheral/ril/interfaces/hdi_service:libril_service_1.3": [
+            "//drivers/interface/ril/v1_3:ril_idl_headers_1.3"
         ],
         "//drivers/peripheral/sensor/hdi_impl:libhdi_sensor_impl": [
             "//drivers/interface/sensor/v2_0:sensor_idl_headers",
