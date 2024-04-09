@@ -163,6 +163,8 @@
         "//third_party/musl:musl_copy_inc_sys",
         "//third_party/musl:soft_static_libs",
         "//third_party/node:node_header",
+        "//third_party/noto-cjk:fonts_notocjk",
+        "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
         "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
@@ -12186,6 +12188,8 @@
         "//third_party/musl:soft_static_libs",
         "//third_party/nghttp2/lib:libnghttp2_shared",
         "//third_party/node:node_header",
+        "//third_party/noto-cjk:fonts_notocjk",
+        "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
         "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
@@ -26854,7 +26858,9 @@
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
         ],
         "//third_party/skia:fontmgr_ohos": [
-            "//base/global/system_resources:ohos_fonts"
+            "//base/global/system_resources:ohos_fonts",
+            "//third_party/noto-cjk:fonts_notocjk",
+            "//third_party/notofonts:fonts_notofonts"
         ],
         "//third_party/skia:gpu": [
             "//foundation/graphic/graphic_2d:libgl"
@@ -37141,6 +37147,8 @@
             "//third_party/jsoncpp:jsoncpp_static",
             "//third_party/bounds_checking_function:libsec_shared",
             "//base/global/system_resources:ohos_fonts",
+            "//third_party/noto-cjk:fonts_notocjk",
+            "//third_party/notofonts:fonts_notofonts",
             "//base/startup/init/interfaces/innerkits:libbegetutil"
         ],
         "//third_party/skia:fontmgr_symbol_load": [
