@@ -233,7 +233,10 @@ class BuildArgsResolver(ArgsResolverInterface):
             logfile = os.path.join(out_path, 'build.log')
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
-                os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
+                if os.path.isfile(logfile):
+                    os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
+                else:
+                    LogUtil.hb_warning(logfile + ' Not Found')
 
     @staticmethod
     def resolve_log_mode(target_arg: Arg, build_module: BuildModuleInterface):
@@ -284,7 +287,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                 oldfile = os.path.join(ccache_base, '{}.old'.format(logfile))
                 if os.path.exists(oldfile):
                     os.unlink(oldfile)
-                os.rename(logfile, oldfile)
+                if os.path.isfile(logfile):
+                    os.rename(logfile, oldfile)
+                else:
+                    LogUtil.hb_warning(logfile + ' Not Found')
 
             os.environ['CCACHE_EXEC'] = ccache_path
             os.environ['CCACHE_LOGFILE'] = logfile
