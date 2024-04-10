@@ -216,10 +216,13 @@ class Main():
         if check_device.stdout.strip() == "[Empty]":
             print("Error: Device is not connected.")
             sys.exit()
-        device = sys.argv[4]
-        if device not in check_device.stdout:
-            print("Error: Wrong device number")
-            sys.exit()
+        if len(check_device.stdout.strip().split('\n')) == 1:
+            device = check_device.stdout.strip()
+        else:
+            device = sys.argv[4]
+            if device not in check_device.stdout:
+                print("Error: Wrong device number")
+                sys.exit()
         subprocess.run(["hdc", "-t", str(device), "shell", "mount", "-o", "rw,remount", "/"], check=True,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
@@ -231,11 +234,11 @@ class Main():
         push_list = bundle.get("deployment")
         if push_list:
             if not isinstance(push_list, list):
-                print("Deployment value format error, should be in list format!")
+                print("Error: Deployment value format error, should be in list format!")
             for one_push in push_list:
                 if one_push.get("src") and one_push.get("target"):
                     if not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
-                        print("The path in src does not exist, please modify the src path!")
+                        print("Error: The path in src does not exist, please modify the src path!")
                     subprocess.run(
                         ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
                         one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
