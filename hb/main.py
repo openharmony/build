@@ -237,8 +237,8 @@ class Main():
                     if not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
                         print("The path in src does not exist, please modify the src path!")
                     subprocess.run(
-                        ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")), one_push.get("target")],
-                        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                        ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
+                        one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hb push success!")
         sys.exit()
 
