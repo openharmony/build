@@ -236,9 +236,9 @@ class Main():
             if not isinstance(push_list, list):
                 print("Error: Deployment value format error, should be in list format!")
             for one_push in push_list:
+                if one_push.get("src") and not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
+                    print("Error: The path in src does not exist, please modify the src path!")
                 if one_push.get("src") and one_push.get("target"):
-                    if not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
-                        print("Error: The path in src does not exist, please modify the src path!")
                     subprocess.run(
                         ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
                         one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
