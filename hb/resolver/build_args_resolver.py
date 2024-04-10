@@ -44,17 +44,16 @@ from util.post_build.part_rom_statistics import output_part_rom_status
 from util.post_gn.check_compilation_parameters import check_compilation_parameters
 
 
+def rename_file(source_file, target_file):
+    try:
+        os.rename(source_file, target_file)
+    except FileNotFoundError as rename_error:
+        LogUtil.hb_warning(rename_error)
+
 class BuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
         super().__init__(args_dict)
-
-    @staticmethod
-    def rename_file(source_file, target_file):
-        try:
-            os.rename(source_file, target_file)
-        except FileNotFoundError as rename_error:
-            LogUtil.hb_warning(rename_error)
 
     @staticmethod
     def resolve_product(target_arg: Arg, build_module: BuildModuleInterface):
