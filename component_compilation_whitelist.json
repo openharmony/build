@@ -12882,6 +12882,12 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/number/Constructor:gen_builtinNumberConstructor_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsIntN:gen_builtinBigIntAsIntN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsUintN:gen_builtinBigIntAsUintN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27406,6 +27412,12 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/number/Constructor:gen_builtinNumberConstructor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsIntN:gen_builtinBigIntAsIntN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsUintN:gen_builtinBigIntAsUintN_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
