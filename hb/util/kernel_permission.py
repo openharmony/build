@@ -24,9 +24,6 @@ from util.system_util import SystemUtil
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 
-sys.path.append('../../../')
-from scripts.kernel_permission_handle import check_json_file
-
 
 class KernelPermission():
 
@@ -113,6 +110,36 @@ class KernelPermission():
                         ]
             cmds.append(cmd)
         return cmds
+
+
+    @staticmethod
+    def check_json_file(file_path):
+        json_data = IoUtil.read_json_file(file_path)
+        if KernelPermission.check_json_content(json_data):
+            return True
+        else:
+            print("kernel_permission.json is invalid at file_path: {}".format(file_path))
+            return False
+
+
+    @staticmethod
+    def check_json_content(json_data):
+        if len(json_data) == 1 and "kernelpermission" in json_data:
+            json_data = json_data["kernelpermission"]
+            return KernelPermission.check_json_value(json_data)
+        else:
+            return False
+
+
+    @staticmethod
+    def check_json_value(json_data):
+        for key, value in json_data.items():
+                if not isinstance(value, (bool, str, list)):
+                    return False
+                if isinstance(value, list):
+                    if not all(isinstance(item, str) for item in value):
+                        return False
+        return True
 
 
 if __name__ == "__main__":
