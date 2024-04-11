@@ -72,7 +72,8 @@ def update_module_info(module_info, categorized_libraries):
 		lib_name = item[pos+1:]
 		dir_name = item[:pos]
 
-		if dir_name.endswith("chipset-sdk") or dir_name.endswith("platformsdk") or dir_name.endswith("chipset-pub-sdk"):
+		if dir_name.endswith("chipset-sdk") or dir_name.endswith("platformsdk") \
+		or dir_name.endswith("chipset-pub-sdk") or dir_name.endswith("ndk") or dir_name.endswith("chipsetsdk"):
 			dir_name = dir_name[:dir_name.rfind("/")]
 
 		dest.append(dir_name + "/" + categorized_libraries[label]["relative_install_dir"] + "/" + lib_name)
