@@ -26,7 +26,7 @@ from util.system_util import SystemUtil, ExecEnviron
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 
-from .kernel_permission import KernelPermission
+from util.kernel_permission import KernelPermission
 
 
 class Ninja(BuildExecutorInterface):

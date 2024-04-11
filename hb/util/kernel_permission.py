@@ -2,7 +2,7 @@
 # coding=utf-8
 
 #
-# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Copyright (c) 2024 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,18 +19,12 @@
 import os
 import sys
 
-sys.path.append(
-    os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__))))
-
-sys.path.append(
-    os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__)))))
-
 from exceptions.ohos_exception import OHOSException
 from util.system_util import SystemUtil
 from util.io_util import IoUtil
 from util.log_util import LogUtil
+
+sys.path.append('../../../')
 from scripts.kernel_permission_handle import check_json_file
 
 
