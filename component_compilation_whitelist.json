@@ -16623,6 +16623,9 @@
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension:gen_user_auth_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon:gen_user_auth_icon_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//base/web/webview/interfaces/kits/napi/js:gen_webview_export_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -31264,6 +31267,9 @@
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension:gen_user_auth_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon:gen_user_auth_icon_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//base/useriam/user_auth_framework/services/context:userauth_service_context": [
             "//third_party/openssl:libcrypto_shared"
         ],
@@ -37268,6 +37274,10 @@
         ],
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//base/web/webview/interfaces/kits/napi/js/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
