@@ -36252,6 +36252,9 @@
         "//foundation/multimedia/media_library/interfaces/kits/js:gen_photoaccesshelperinf_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
+        "//foundation/multimedia/media_library/interfaces/kits/js:gen_photopickercomponent_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/multimedia/media_library/interfaces/kits/js:medialibrary_nutils": [
             "//third_party/e2fsprogs:libext2_uuid"
         ],
