@@ -21,12 +21,13 @@ import sys
 
 def check_json_value(json_data):
     for key, value in json_data.items():
-            if not isinstance(value, (bool, str, list)):
+        if not isinstance(value, (bool, str, list)):
+            return False
+        if isinstance(value, list):
+            if not all(isinstance(item, str) for item in value):
                 return False
-            if isinstance(value, list):
-                if not all(isinstance(item, str) for item in value):
-                    return False
     return True
+
 
 def check_json_content(json_data):
     if len(json_data) == 1 and "kernelpermission" in json_data:
@@ -34,6 +35,7 @@ def check_json_content(json_data):
         return check_json_value(json_data)
     else:
         return False
+    
     
 def check_json_file(file_path):
     try:
