@@ -12417,6 +12417,9 @@
         "//arkcompiler/ets_runtime/ecmascript/napi/test:gen_termination_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:gen_heapdump_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
             "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
             "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
@@ -27009,6 +27012,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/napi/test:gen_termination_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:gen_heapdump_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
