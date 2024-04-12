@@ -60,15 +60,21 @@ class KernelPermission():
             'info')
         file_list = KernelPermission.scan_file(out_path)
         cmds = KernelPermission.gen_cmds(file_list, out_path, exec)
-        for cmd in cmds:
+        if cmds:
+            for cmd in cmds:
+                LogUtil.write_log(
+                    log_path,
+                    cmd,
+                    'info')
+                SystemUtil.exec_command(
+                    cmd,
+                    log_path
+                    )
+        else:
             LogUtil.write_log(
                 log_path,
-                cmd,
+                "There is no kernel permission json file,no need to run llvm-object cmd.",
                 'info')
-            SystemUtil.exec_command(
-                cmd,
-                log_path
-                )
 
 
     @staticmethod
