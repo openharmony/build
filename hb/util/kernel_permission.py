@@ -31,7 +31,7 @@ class KernelPermission():
     @staticmethod
     def run(out_path, root_path):
         log_path = os.path.join(out_path, 'build.log')
-        KernelPermission._execute_kernel_permission_cmd(log_path, out_path, root_path)
+        KernelPermission.execute_kernel_permission_cmd(log_path, out_path, root_path)
 
 
     @staticmethod
@@ -49,11 +49,11 @@ class KernelPermission():
 
 
     @staticmethod
-    def _execute_kernel_permission_cmd(log_path, out_path, root_path):
+    def execute_kernel_permission_cmd(log_path, out_path, root_path):
         """execute cmd
         llvm-object --add-section .kernelpermission=json_file xx/xx.so
         """
-        exec = KernelPermission._regist_llvm_objcopy_path(root_path)
+        exec = KernelPermission.regist_llvm_objcopy_path(root_path)
         LogUtil.write_log(
             log_path,
             "run kernel permission cmd",
@@ -72,7 +72,7 @@ class KernelPermission():
 
 
     @staticmethod
-    def _regist_llvm_objcopy_path(root_path):
+    def regist_llvm_objcopy_path(root_path):
         """find llvm_objcopy_path executable
         :raise OHOSException: when can't find the llvm_objcopy_path excutable
         """
@@ -94,7 +94,7 @@ class KernelPermission():
         cmd = []
         for info in file_list: 
             kernel_permission_file = os.path.join(out_path, info.get("kernel_permission_path"))
-            if not check_json_file(kernel_permission_file):
+            if not KernelPermission.check_json_file(kernel_permission_file):
                 raise OHOSException(
                     'kernel_permission json file {} error!'.format(kernel_permission_file), '0001')
             target_name = info.get("target_name")
