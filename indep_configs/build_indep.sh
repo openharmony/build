@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
 echo $1 $2
 VARIANTS="default"
 if [ -n "$3" ]; then
