@@ -5112,9 +5112,6 @@
         "//drivers/peripheral/vibrator/hal:hdi_vibrator": [
             "//third_party/bounds_checking_function/include/"
         ],
-        "//drivers/peripheral/wlan/chip/hdi_service:libchip_controller_chip_interface_service_1.0": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
-        ],
         "//drivers/peripheral/wlan/hal:wifi_hal": [
             "//third_party/bounds_checking_function/include/"
         ],
