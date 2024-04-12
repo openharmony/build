@@ -969,6 +969,15 @@
     },
     {
         "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:menuSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:insightIntentSchema_json",
         "target_os": [
             "linux",
