@@ -1474,6 +1474,9 @@
         "//base/startup/appspawn/interfaces/innerkits:appspawn_socket_client": [
             "//third_party/json/include/"
         ],
+        "//base/startup/appspawn/modules/sandbox:appspawn_sandbox": [
+            "//third_party/json/include/"
+        ],
         "//base/startup/appspawn/interfaces/innerkits_new/client:appspawn_client": [
             "//third_party/cJSON/"
         ],
@@ -30829,6 +30832,9 @@
             "//third_party/cJSON:cjson"
         ],
         "//base/startup/appspawn/service/hnp:hnpcli": [
+            "//third_party/cJSON:cjson"
+        ],
+        "//base/startup/appspawn/modules/sandbox:appspawn_sandbox": [
             "//third_party/cJSON:cjson"
         ],
         "//base/startup/init/device_info:deviceinfoservice": [
