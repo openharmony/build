@@ -26,8 +26,6 @@ from util.system_util import SystemUtil, ExecEnviron
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 
-from util.kernel_permission import KernelPermission
-
 
 class Ninja(BuildExecutorInterface):
 
@@ -75,9 +73,6 @@ class Ninja(BuildExecutorInterface):
             log_filter=log_filter,
             log_mode=self.config.log_mode
         )
-
-        # run llvm-object --add-section .kernelpermission=json_file xx/xx.so
-        KernelPermission.run(self.config.out_path, self.config.root_path)
 
     def _convert_args(self) -> list:
         """convert all registed args into a list
