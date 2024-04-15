@@ -53,12 +53,24 @@ class KernelPermission():
         """execute cmd
         llvm-object --add-section .kernelpermission=json_file xx/xx.so
         """
-        exec = KernelPermission.regist_llvm_objcopy_path(root_path)
+        print("begin run kernel permission cmd log_path:{}".format(log_path))
         LogUtil.write_log(
             log_path,
-            "run kernel permission cmd",
+            "begin run kernel permission cmd log_path:{}".format(log_path),
             'info')
+        
+        try:
+            exec = KernelPermission.regist_llvm_objcopy_path(root_path)
+        except OHOSException as e:
+            print("regist_llvm_objcopy_path failed")
+            LogUtil.write_log(
+                log_path,
+                "regist_llvm_objcopy_path failed:{}".format(e),
+                'warning')
+            return
+        
         file_list = KernelPermission.scan_file(out_path)
+        
         cmds = KernelPermission.gen_cmds(file_list, out_path, exec)
         if cmds:
             for cmd in cmds:
@@ -101,6 +113,7 @@ class KernelPermission():
         for info in file_list: 
             kernel_permission_file = os.path.join(out_path, info.get("kernel_permission_path"))
             if not KernelPermission.check_json_file(kernel_permission_file):
+                print('kernel_permission json file {} error!'.format(kernel_permission_file))
                 raise OHOSException(
                     'kernel_permission json file {} error!'.format(kernel_permission_file), '0001')
             target_name = info.get("target_name")
