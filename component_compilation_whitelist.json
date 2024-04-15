@@ -52,8 +52,9 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers",
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2",
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers",
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers",
         "//drivers/interface/huks/v1_0:huks_idl_headers",
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
@@ -73,6 +74,7 @@
         "//drivers/interface/power/v1_1:power_idl_headers",
         "//drivers/interface/ril/v1_1:ril_idl_headers",
         "//drivers/interface/ril/v1_2:ril_idl_headers_1.2",
+        "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
         "//drivers/interface/sensor/v2_0:sensor_idl_headers",
         "//drivers/interface/sensor/v2_1:sensor_idl_headers",
         "//drivers/interface/thermal/v1_1:thermal_idl_headers",
@@ -85,6 +87,7 @@
         "//drivers/interface/user_auth/v2_0:user_auth_idl_headers",
         "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
         "//drivers/interface/vibrator/v1_3:vibrator_idl_headers",
+        "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
         "//drivers/interface/wlan/v1_2:wlan_idl_headers",
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
         "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client",
@@ -162,6 +165,8 @@
         "//third_party/musl:musl_copy_inc_sys",
         "//third_party/musl:soft_static_libs",
         "//third_party/node:node_header",
+        "//third_party/noto-cjk:fonts_notocjk",
+        "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
         "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
@@ -374,21 +379,6 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1":[
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0"
          ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_proxy_1.1": [
-            "//drivers/interface/face_auth/v1_0:libface_auth_proxy_1.0"
-        ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_stub_1.1": [
-            "//drivers/interface/face_auth/v1_0:libface_auth_stub_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_proxy_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_proxy_1.0"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_stub_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_stub_1.0"
-        ],
         "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_proxy_1.1": [
             "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_proxy_1.0"
         ],
@@ -1482,6 +1472,9 @@
             "//third_party/node/src/"
         ],
         "//base/startup/appspawn/interfaces/innerkits:appspawn_socket_client": [
+            "//third_party/json/include/"
+        ],
+        "//base/startup/appspawn/modules/sandbox:appspawn_sandbox": [
             "//third_party/json/include/"
         ],
         "//base/startup/appspawn/interfaces/innerkits_new/client:appspawn_client": [
@@ -3179,7 +3172,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3197,7 +3208,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_proxy_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_audio/audioext/v1_0:libdaudioext_stub_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3278,7 +3307,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:face_auth_idl_headers": [
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3287,7 +3316,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:face_auth_idl_headers_1.0": [
+        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3296,7 +3325,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:libface_auth_proxy_1.0": [
+        "//drivers/interface/face_auth/v2_0:libface_auth_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3305,7 +3334,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_0:libface_auth_stub_1.0": [
+        "//drivers/interface/face_auth/v2_0:libface_auth_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3314,7 +3343,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers": [
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3323,7 +3352,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:face_auth_idl_headers_1.1": [
+        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3332,7 +3361,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_proxy_1.1": [
+        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3341,79 +3370,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/face_auth/v1_1:libface_auth_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:fingerprint_auth_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:libfingerprint_auth_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:libfingerprint_auth_stub_1.2": [
+        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_stub_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4996,6 +4953,42 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/wlan/chip/v1_0:chip_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/chip/v1_0:chip_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/chip/v1_0:libchip_proxy_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/wlan/chip/v1_0:libchip_stub_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/wlan/hostapd/v1_0:hostapd_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
@@ -5315,6 +5308,9 @@
             "//third_party/cJSON/"
         ],
         "//drivers/peripheral/distributed_audio/hdi_service/audio_ext/v1_0:libdaudio_manager_daudio_ext_service_1.0": [
+            "//third_party/cJSON/"
+        ],
+        "//drivers/peripheral/distributed_audio/hdi_service/audio_ext/v1_0:libdaudio_manager_daudio_ext_service_2.0": [
             "//third_party/cJSON/"
         ],
         "//drivers/peripheral/distributed_audio/hdi_service/common:libdaudio_hdf_utils": [
@@ -11984,6 +11980,7 @@
         "//drivers/interface/display/v1_0:libdisplay_gralloc",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
         "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0",
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:ability_business_error",
         "//foundation/ability/ability_runtime/frameworks/native/ability:ability_context_public_config",
@@ -12145,6 +12142,8 @@
         "//third_party/musl:soft_static_libs",
         "//third_party/nghttp2/lib:libnghttp2_shared",
         "//third_party/node:node_header",
+        "//third_party/noto-cjk:fonts_notocjk",
+        "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
         "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
@@ -12456,6 +12455,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/napi/test:gen_termination_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:gen_heapdump_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
@@ -16664,6 +16666,9 @@
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension:gen_user_auth_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon:gen_user_auth_icon_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//base/web/webview/interfaces/kits/napi/js:gen_webview_export_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -17062,22 +17067,19 @@
         "//drivers/interface/distributed_audio/audioext/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/drm/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_0:hdi_gen": [
+        "//drivers/interface/face_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_1:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:hdi_gen": [
+        "//drivers/interface/fingerprint_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/huks/v1_0:hdi_gen": [
@@ -17210,6 +17212,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/vibrator/v1_3:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/wlan/chip/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/wlan/hostapd/v1_0:hdi_gen": [
@@ -17522,46 +17527,47 @@
         ],
         "//drivers/peripheral/distributed_audio:distributed_audio_entry": [
             "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
-            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target"
+            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+            "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target"
         ],
-        "//drivers/peripheral/face_auth/hdi_service:libface_auth_interface_service_1.1": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/hdi_service:libface_auth_interface_service_2.0": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/common_fuzzer:libface_auth_interface_service_1.1_fuzzer": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/common_fuzzer:libface_auth_interface_service_2.0_fuzzer": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthhdi_fuzzer:FaceAuthHdiFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthallinoneexecutor_fuzzer:FaceAuthAllInOneExecutorFuzzTest": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
-        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthhdistub_fuzzer:FaceAuthHdiStubFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+        "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthallinoneexecutorstub_fuzzer:FaceAuthAllInOneExecutorStubFuzzTest": [
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthinterfaceservice_fuzzer:FaceAuthInterfaceServiceFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/face_auth/test/fuzztest/face_auth/faceauthinterfacestub_fuzzer:FaceAuthInterfaceStubFuzzTest": [
-            "//drivers/interface/face_auth/v1_1:face_auth_idl_headers"
+            "//drivers/interface/face_auth/v2_0:face_auth_idl_headers"
         ],
         "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_driver": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_interface_service_1.2": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/hdi_service:libfingerprint_auth_interface_service_2.0": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/common_fuzzer:libfingerprint_auth_interface_service_1.2_fuzzer": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/common_fuzzer:libfingerprint_auth_interface_service_2.0_fuzzer": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthhdi_fuzzer:FingerprintAuthHdiFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthallinoneexecutor_fuzzer:FingerprintAuthAllInOneExecutorFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintexecutorstub_fuzzer:FingerprintExecutorStubFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthallinoneexecutorstub_fuzzer:FingerprintAuthAllInOneExecutorStubFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintinterfaceservice_fuzzer:FingerprintInterfaceServiceFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfaceservice_fuzzer:FingerprintAuthInterfaceServiceFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintinterfacestub_fuzzer:FingerprintInterfaceStubFuzzTest": [
-            "//drivers/interface/fingerprint_auth/v1_2:fingerprint_auth_idl_headers_1.2"
+        "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfacestub_fuzzer:FingerprintAuthInterfaceStubFuzzTest": [
+            "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
         "//drivers/peripheral/huks/hdi_service:libhuks_hdi_service_1.0": [
             "//drivers/interface/huks/v1_0:huks_idl_headers"
@@ -17677,6 +17683,9 @@
         "//drivers/peripheral/ril/interfaces/hdi_service:libril_service_1.2": [
             "//drivers/interface/ril/v1_2:ril_idl_headers_1.2"
         ],
+        "//drivers/peripheral/ril/interfaces/hdi_service:libril_service_1.3": [
+            "//drivers/interface/ril/v1_3:ril_idl_headers_1.3"
+        ],
         "//drivers/peripheral/sensor/hdi_impl:libhdi_sensor_impl": [
             "//drivers/interface/sensor/v2_0:sensor_idl_headers",
             "//drivers/interface/sensor/v2_1:sensor_idl_headers"
@@ -17749,6 +17758,9 @@
             "//drivers/interface/vibrator/v1_1:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
             "//drivers/interface/vibrator/v1_3:vibrator_idl_headers"
+        ],
+        "//drivers/peripheral/wlan/chip/hdi_service:libchip_controller_chip_interface_service_1.0": [
+            "//drivers/interface/wlan/chip/v1_0:chip_idl_headers"
         ],
         "//drivers/peripheral/wlan/hdi_service/service_extend:libwlan_service_extend": [
             "//drivers/interface/wlan/v1_2:wlan_idl_headers",
@@ -25806,7 +25818,7 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+        "//foundation/multimedia/av_session/avvolumepanel:gen_avvolumepanel_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest": [
@@ -26809,7 +26821,9 @@
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
         ],
         "//third_party/skia:fontmgr_ohos": [
-            "//base/global/system_resources:ohos_fonts"
+            "//base/global/system_resources:ohos_fonts",
+            "//third_party/noto-cjk:fonts_notocjk",
+            "//third_party/notofonts:fonts_notofonts"
         ],
         "//third_party/skia:gpu": [
             "//foundation/graphic/graphic_2d:libgl"
@@ -27047,6 +27061,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/napi/test:gen_termination_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:gen_heapdump_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
@@ -28223,6 +28240,9 @@
         "//arkcompiler/ets_runtime/test/aottest/sharedset:gen_sharedset_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedtypedarray:gen_sharedtypedarray_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/deopttest/arithmetic:gen_arithmetic_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28965,6 +28985,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedset:gen_sharedset_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedtypedarray:gen_sharedtypedarray_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/perform/string:gen_string_abc": [
@@ -30811,6 +30834,9 @@
         "//base/startup/appspawn/service/hnp:hnpcli": [
             "//third_party/cJSON:cjson"
         ],
+        "//base/startup/appspawn/modules/sandbox:appspawn_sandbox": [
+            "//third_party/cJSON:cjson"
+        ],
         "//base/startup/init/device_info:deviceinfoservice": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
@@ -31294,6 +31320,9 @@
             "//third_party/openssl:libcrypto_shared"
         ],
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension:gen_user_auth_extension_ability_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon:gen_user_auth_icon_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//base/useriam/user_auth_framework/services/context:userauth_service_context": [
@@ -32130,22 +32159,19 @@
         "//drivers/interface/distributed_audio/audioext/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/drm/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_0:hdi_gen": [
+        "//drivers/interface/face_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/face_auth/v1_1:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0:hdi_gen": [
-            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2:hdi_gen": [
+        "//drivers/interface/fingerprint_auth/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/huks/v1_0:hdi_gen": [
@@ -32280,6 +32306,9 @@
         "//drivers/interface/vibrator/v1_3:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/wlan/chip/v1_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/wlan/hostapd/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -32365,7 +32394,8 @@
         ],
         "//drivers/peripheral/distributed_audio:distributed_audio_entry": [
             "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
-            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target"
+            "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
+            "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target"
         ],
         "//drivers/peripheral/distributed_camera/hdi_service/test/sample:dcamera_hdf_demo": [
             "//third_party/jsoncpp:jsoncpp"
@@ -36122,7 +36152,7 @@
         "//foundation/multimedia/av_session/avpicker:gen_avpickerparam_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent:gen_avvolumecomponent_abc": [
+        "//foundation/multimedia/av_session/avvolumepanel:gen_avvolumepanel_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/multimedia/av_session/frameworks/native/session/test/unittest/napi/avsession_controller_jsunittest:AVSessionControllerJsTest__resources__compile_resources": [
@@ -36285,6 +36315,9 @@
         ],
         "//foundation/multimedia/media_library/interfaces/kits/js:gen_photoaccesshelperinf_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/multimedia/media_library/interfaces/kits/js:gen_photopickercomponent_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/multimedia/media_library/interfaces/kits/js:medialibrary_nutils": [
             "//third_party/e2fsprogs:libext2_uuid"
@@ -37092,6 +37125,8 @@
             "//third_party/jsoncpp:jsoncpp_static",
             "//third_party/bounds_checking_function:libsec_shared",
             "//base/global/system_resources:ohos_fonts",
+            "//third_party/noto-cjk:fonts_notocjk",
+            "//third_party/notofonts:fonts_notofonts",
             "//base/startup/init/interfaces/innerkits:libbegetutil"
         ],
         "//third_party/skia:fontmgr_symbol_load": [
@@ -37301,6 +37336,10 @@
         "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/user_auth_extension/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
+        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//foundation/arkui/ace_engine/ace_config.gni"
+        ],
         "//base/web/webview/interfaces/kits/napi/js/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -37505,22 +37544,19 @@
         "//drivers/interface/distributed_audio/audioext/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
+        "//drivers/interface/distributed_audio/audioext/v2_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
         "//drivers/interface/distributed_camera/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/drm/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/face_auth/v1_0/": [
+        "//drivers/interface/face_auth/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/face_auth/v1_1/": [
-            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_0/": [
-            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
-        ],
-        "//drivers/interface/fingerprint_auth/v1_2/": [
+        "//drivers/interface/fingerprint_auth/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/huks/v1_0/": [
@@ -37644,6 +37680,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/vibrator/v1_3/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/wlan/chip/v1_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/wlan/hostapd/v1_0/": [
@@ -37942,6 +37981,12 @@
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni"
         ],
         "//drivers/peripheral/vibrator/test/unittest/hdi/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni"
+        ],
+        "//drivers/peripheral/wlan/chip/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni"
+        ],
+        "//drivers/peripheral/wlan/chip/hdi_service/": [
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni"
         ],
         "//drivers/peripheral/wlan/hdi_service/service_extend/": [
@@ -38466,7 +38511,7 @@
             "//foundation/arkui/ace_engine/adapter/preview/build/config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
         ],
-        "//foundation/multimedia/av_session/avvolumecomponent/": [
+        "//foundation/multimedia/av_session/avvolumepanel/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/test/": [

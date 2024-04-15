@@ -216,26 +216,32 @@ class Main():
         if check_device.stdout.strip() == "[Empty]":
             print("Error: Device is not connected.")
             sys.exit()
-        device = sys.argv[4]
-        if device not in device.stdout:
-            print("Error: Wrong device number")
-            sys.exit()
+        if len(check_device.stdout.strip().split('\n')) == 1:
+            device = check_device.stdout.strip()
+        else:
+            device = sys.argv[4]
+            if device not in check_device.stdout:
+                print("Error: Wrong device number")
+                sys.exit()
         subprocess.run(["hdc", "-t", str(device), "shell", "mount", "-o", "rw,remount", "/"], check=True,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
         with open(os.path.join(default, "build_configs", "component_mapping.json"), 'r') as r:
             single_component_path = json.load(r).get("single_component_path")
-        if single_component_path:
-            part_path = next(iter(single_component_path.values()))
+        part_path = next(iter(single_component_path.values()))
         with open(os.path.join(CURRENT_OHOS_ROOT, part_path, "bundle.json"), 'r') as r:
             bundle = json.load(r)
         push_list = bundle.get("deployment")
         if push_list:
+            if not isinstance(push_list, list):
+                print("Error: Deployment value format error, should be in list format!")
             for one_push in push_list:
+                if one_push.get("src") and not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
+                    print("Error: The path in src does not exist, please modify the src path!")
                 if one_push.get("src") and one_push.get("target"):
                     subprocess.run(
-                        ["hdc", "-t", str(device), "file", "send", one_push.get("src"), one_push.get("target")],
-                        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                        ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
+                        one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hb push success!")
         sys.exit()
 
