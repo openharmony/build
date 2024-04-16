@@ -48,6 +48,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
   "//interface/sdk_c/arkui/napi:libnapi_ndk",
   "//interface/sdk_c/arkui/napi:napi_header",
+  "//interface/sdk_c/arkui/window_manager:window_manager_header",
+  "//interface/sdk_c/arkui/window_manager:native_window_manager",
   "//interface/sdk_c/ark_runtime/jsvm:libjsvm_ndk",
   "//interface/sdk_c/ark_runtime/jsvm:jsvm_header",
   "//interface/sdk_c/bundlemanager/bundle_framework/bundle:bundle_header",
