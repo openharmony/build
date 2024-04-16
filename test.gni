@@ -78,7 +78,6 @@ template("_ohos_test") {
   if (defined(invoker.crate_type)) {
     _deps += [
       "//build/rust:libstd.dylib.so",
-      "//build/rust:libtest.dylib.so",
     ]
   }
 
