@@ -16,7 +16,6 @@ import("//build/ohos.gni")
 group("default") {
   deps = [
     ":libstd.dylib.so",
-    ":libtest.dylib.so",
   ]
 }
 
