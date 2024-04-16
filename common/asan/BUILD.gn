@@ -49,6 +49,18 @@ ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
   part_name = "build_framework"
 }
 
+ohos_prebuilt_shared_library("libclang_rt.tsan.so") {
+  enable_strip = true
+  source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so"
+  install_images = [
+    "system",
+    "ramdisk",
+    "updater",
+  ]
+  subsystem_name = "build"
+  part_name = "build_framework"
+}
+
 ohos_prebuilt_etc("asan.options") {
   source = "asan.options"
   subsystem_name = "build"
@@ -81,4 +93,10 @@ copy("asan_unstripped_copy") {
     sources = [ "" ]
   }
   outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
+}
+
+ohos_prebuilt_etc("tsan.options") {
+  source = "tsan.options"
+  subsystem_name = "build"
+  part_name = "build_framework"
 }
