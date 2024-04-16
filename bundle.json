@@ -31,16 +31,37 @@
     "ram": "0KB",
     "deps": {
       "components": [
-        "selinux_adapter",
+        "ace_engine",
+        "cJSON",
+        "c_utils",
+        "device_security_level",
+        "eventhandler",
+        "hdf_core",
+        "hilog",
+        "hilog_lite",
+        "hiview",
+        "huks",
+        "init",
+        "napi",
+        "ipc",
+        "rockchip_products",
         "selinux",
-        "cJSON"
+        "selinux_adapter"
       ],
       "third_party": [
+        "bounds_checking_function",
+        "e2fsprogs",
+        "f2fs-tools",
+        "googletest",
+        "jinja2",
+        "jsoncpp",
+        "libcoap",
+        "libdrm",
         "musl",
         "markupsafe",
-        "jinja2",
-        "e2fsprogs",
-        "f2fs-tools"
+        "mbedtls",
+        "openssl",
+        "samgr_lite"
       ]
     },
     "build": {
