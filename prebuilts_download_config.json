@@ -459,12 +459,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86/clang_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/clang_darwin-x86_64-c5b0b3-20240320.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86/libcxx-ndk_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/libcxx-ndk_darwin-x86_64-c5b0b3-20240320.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
