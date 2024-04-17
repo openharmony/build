@@ -135,7 +135,7 @@ def UnescapeGNString(value: list) -> str:
     Be careful not to feed with input from a Python parsing function like
     'ast' because it will do Python unescaping, which will be incorrect when
     fed into the GN unescaper."""
-    result = ''
+    result = []
     i = 0
     while i < len(value):
         if value[i] == '\\':
@@ -143,15 +143,15 @@ def UnescapeGNString(value: list) -> str:
                 next_char = value[i + 1]
                 if next_char in ('$', '"', '\\'):
                     # These are the escaped characters GN supports.
-                    result += next_char
+                    result.append(next_char)
                     i += 1
                 else:
                     # Any other backslash is a literal.
-                    result += '\\'
+                    result.append('\\')
         else:
-            result += value[i]
+            result.append(value[i])
         i += 1
-    return result
+    return ''.join(result)
 
 
 def _IsDigitOrMinus(char: str):
