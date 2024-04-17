@@ -192,6 +192,11 @@ if (defined(product_build_config.support_jsapi)) {
 if (defined(product_build_config.ext_sign_hap_py_path)) {
   sign_hap_py_path = product_build_config.ext_sign_hap_py_path
 }
+
+if (defined(product_build_config.global_ext_var_file)) {
+  import(product_build_config.global_ext_var_file)
+}
+
 if (target_os == "") {
   target_os = "ohos"
 }
