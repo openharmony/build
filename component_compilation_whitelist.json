@@ -13462,6 +13462,9 @@
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
 		"//arkcompiler/ets_runtime/test/aottest/sharedmodule:gen_sharedmodule_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -14531,6 +14534,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
 		"//arkcompiler/ets_runtime/test/moduletest/sharedmodule:gen_sharedmodule_abc": [
@@ -27964,6 +27970,9 @@
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/shl:gen_shl_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28877,6 +28886,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/spreadoperator:gen_spreadoperator_abc": [
