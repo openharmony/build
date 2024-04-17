@@ -17,6 +17,7 @@ import("//build/config/security/security_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/common/check_target.gni")
+import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
@@ -67,6 +68,12 @@ template("ohos_executable") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
@@ -363,6 +370,9 @@ template("ohos_executable") {
     if (!_ohos_test && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
+
+    deps += [ ":${_collect_target}" ]
+
     if (!defined(libs)) {
       libs = []
     }
@@ -371,6 +381,13 @@ template("ohos_executable") {
     }
     if (!defined(ldflags)) {
       ldflags = []
+    }
+
+    if (defined(visibility) && visibility != []) {
+      visibility += [ "//build/*" ]
+      if (defined(build_ext_path)) {
+        visibility += [ "${build_ext_path}/*" ]
+      }
     }
 
     if (defined(invoker.static_link) && invoker.static_link) {
@@ -512,6 +529,12 @@ template("ohos_shared_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
@@ -826,6 +849,13 @@ template("ohos_shared_library") {
       cflags = []
     }
 
+    if (defined(visibility) && visibility != []) {
+      visibility += [ "//build/*" ]
+      if (defined(build_ext_path)) {
+        visibility += [ "${build_ext_path}/*" ]
+      }
+    }
+
     # Enable branch protection.
     pac_ret = false
     bti = false
@@ -1016,6 +1046,8 @@ template("ohos_shared_library") {
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
+
+    deps += [ ":${_collect_target}" ]
     if (is_ohos) {
       if (defined(invoker.stl)) {
         cflags_cc += [
