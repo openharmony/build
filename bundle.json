@@ -56,13 +56,6 @@
             "header_base": [],
             "header_files": []
           }
-        },
-        {
-          "name": "//build/rust:libtest.dylib.so",
-          "header": {
-            "header_files": [],
-            "header_base": []
-          }
         }
       ],
       "test": [
