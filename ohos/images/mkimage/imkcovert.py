@@ -123,21 +123,15 @@ def is_empty_block(buff: list, size: int) -> bool:
     return True
 
 
-def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int) -> int:
-    temp_file = imagefile + ".tempfile"
+def process_block(inputrow, blocksize, outputtemp, blockid, total_blocks) -> int:
     ind = 0
     start = -1
     table_numbers = 0
-    flags = os.O_CREAT | os.O_RDWR
-    modes = stat.S_IWUSR | stat.S_IRUSR
-
-    inputrow = open(imagefile, 'rb')
-    outputtemp = os.fdopen(os.open(temp_file, flags, modes), 'wb')
     while (ind < total_blocks):
         indata = inputrow.read(blocksize)
         if len(indata) != blocksize:
             print("error Block", ind, len(indata))
-        if is_empty_block(indata, blocksize) == True:
+        if is_empty_block(indata, blocksize):
             if start != -1:
                 blockid.append([start, ind])
                 table_numbers += 1
@@ -151,8 +145,16 @@ def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int)
         blockid.append([start, ind])
         table_numbers += 1
         start = -1
-    inputrow.close()
-    outputtemp.close()
+    return table_numbers
+
+
+def get_raw_datafile(imagefile: str, blockid, total_blocks: int, blocksize: int) -> int:
+    temp_file = imagefile + ".tempfile"
+    flags = os.O_CREAT | os.O_RDWR
+    modes = stat.S_IWUSR | stat.S_IRUSR
+    table_numbers = 0
+    with open(imagefile, 'rb') as inputrow, os.fdopen(os.open(temp_file, flags, modes), 'wb') as outputtemp:
+        table_numbers = process_block(inputrow, blocksize, outputtemp, blockid, total_blocks)
     return table_numbers
 
 
