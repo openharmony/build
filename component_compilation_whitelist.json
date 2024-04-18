@@ -12918,6 +12918,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Delete:gen_builtinMapDelete_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -12934,6 +12937,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Values:gen_builtinTypedArrayValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Delete:gen_builtinSetDelete_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
@@ -27459,6 +27465,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Delete:gen_builtinMapDelete_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27475,6 +27484,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Values:gen_builtinTypedArrayValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Delete:gen_builtinSetDelete_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
