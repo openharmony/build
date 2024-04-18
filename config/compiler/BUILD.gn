@@ -694,8 +694,8 @@ config("compiler") {
     ]
 
     ldflags += [
-      "-Wl, -mllvm",
-      "-Wl, -enable-shrink-wrap-region-split=false",
+      "-Wl,-mllvm",
+      "-Wl,-enable-shrink-wrap-region-split=false",
     ]
   }
 }
