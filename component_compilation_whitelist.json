@@ -12880,6 +12880,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27389,6 +27392,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
