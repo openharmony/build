@@ -419,6 +419,7 @@ declare_args() {
 
 declare_args() {
   build_xts = false
+  precise_xts = false
 }
 
 declare_args() {
