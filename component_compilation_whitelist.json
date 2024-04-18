@@ -32867,6 +32867,9 @@
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces:gen_filter_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces:gen_fullscreenlaunchcomponent_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces:gen_gridobjectsortcomponent_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -38231,6 +38234,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces/": [
