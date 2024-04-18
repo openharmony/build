@@ -36,18 +36,20 @@ def merge_files(args):
         pass
     else:
         os.mkdir(path)
-    try:
-        with open(device_path, "r", encoding='utf-8') as device_read:
-            data_device_read = json.load(device_read)
 
-        with open(products_path, "r", encoding='utf-8') as products_read:
-            data_products_read = json.load(products_read)
+    with open(device_path, "r", encoding='utf-8') as device_read:
+        data_device_read = json.load(device_read)
 
-        data_all = merge(data_device_read , data_products_read)
-        new_json = json.dumps(data_all, indent=4)
+    with open(products_path, "r", encoding='utf-8') as products_read:
+        data_products_read = json.load(products_read)
 
-        with open(new_file_name, "w", encoding='utf-8') as new_write:
-            new_write.write(new_json)
+    data_all = merge(data_device_read , data_products_read)
+    new_json = json.dumps(data_all, indent=4)
+
+    flags = os.O_RDWR | os.O_CREAT
+    modes = stat.S_IWUSR | stat.S_IRUSR
+    with os.fdopen(os.open(new_file_name, flags, modes), "w") as new_write:
+        new_write.write(new_json)
     readjson(new_file_name, device)
 
 
@@ -67,7 +69,7 @@ def readjson(path: str, device: str):
                     features = []
                     for value_fea in value_sub.values():
                         for k, v in value_fea.items():
-                            fea = "{} = {}".format(k, v.lower())
+                            fea = "{} = {}".format(str(k), str(v).lower())
                             features.append(fea)
                     if substr[0] == str(key_sub).split(":")[0]:
                         components_list.append({"component":str(key_sub).split(":")[1], "features":features})
