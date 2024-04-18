@@ -13369,6 +13369,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -13427,6 +13430,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
@@ -27874,6 +27880,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27932,6 +27941,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
