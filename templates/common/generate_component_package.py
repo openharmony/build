@@ -20,6 +20,7 @@ import shutil
 import json
 import time
 import re
+import urllib.request
 
 
 def _get_args():
@@ -29,7 +30,10 @@ def _get_args():
     parser.add_argument("-rp", "--root_path", default=r"./", type=str,
                         help="path of root. default: ./", )
     parser.add_argument("-cl", "--components_list", default=r"", type=str,
-                        help="components_list ,default: none", )
+                        help="components_list , "
+                             "pass in the components' name, separated by commas , "
+                             "example: A,B,C . "
+                             "default: none", )
     parser.add_argument("-bt", "--build_type", default=0, type=int,
                         help="build_type ,default: 0", )
     parser.add_argument("-on", "--organization_name", default='', type=str,
@@ -156,7 +160,7 @@ def _copy_dir(src_path, target_path):
             path1 = os.path.join(target_path, file)
             _copy_dir(path, path1)
         else:
-            if not path.endswith(".h"):
+            if not (path.endswith(".h") or path.endswith(".hpp")):
                 continue
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
@@ -521,6 +525,21 @@ def _make_hpm_packages_dir(root_path):
     return hpm_packages_path
 
 
+def _get_component_check() -> list:
+    check_list = []
+    contents = urllib.request.urlopen("https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
+        encoding="utf-8")
+    _check_json = json.loads(contents)
+    try:
+        check_list.extend(_check_json["data"]["dep_list"])
+        check_list.extend(_check_json["data"]["indep_list"])
+    except Exception as e:
+        print("Call the component check API something wrong, plz check the API return..")
+    check_list = list(set(check_list))
+    check_list = sorted(check_list)
+    return check_list
+
+    
 def _del_exist_component_package(out_path):
     _component_package_path = os.path.join(out_path, 'component_package')
     if os.path.isdir(_component_package_path):
@@ -552,8 +571,11 @@ def generate_component_package(out_path, root_path, components_list=None, build_
 
     """
     start_time = time.time()
+    _check_list = _get_component_check()
     if components_list is None:
-        components_list = []
+        components_list = _check_list
+    else:
+        components_list = [component for component in components_list.split(",") if component in _check_list]
     part_subsystem = _get_part_subsystem(out_path)
     parts_path_info = _get_parts_path_info(out_path)
     components_json = _get_components_json(out_path)
