@@ -10143,6 +10143,11 @@
         "//foundation/multimedia/drm_framework/services/drm_service:drm_service": [
             "//foundation/arkui/napi/interfaces/kits/"
         ],
+        "//foundation/multimedia/image_effect/frameworks/native:image_effect_impl": [
+            "//foundation/multimedia/media_foundation/engine/include/",
+            "//third_party/skia/third_party/externals/oboe/samples/RhythmGame/third_party/",
+            "//drivers/peripheral/display/interfaces/include/"
+        ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter": [
             "//foundation/multimedia/utils/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
@@ -25922,6 +25927,12 @@
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/streamcapture_fuzzer:StreamCaptureFuzzTest": [
             "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client"
+        ],
+        "//foundation/multimedia/image_effect/frameworks/native:image_effect_impl": [
+            "//foundation/graphic/graphic_2d:libgl"
+        ],
+        "//foundation/multimedia/image_effect/test/unittest:image_effect_unittest": [
+            "//foundation/graphic/graphic_2d:libgl"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/egl_image:egl_image": [
             "//third_party/skia:skia_ohos",
