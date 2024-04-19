@@ -12880,6 +12880,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -13369,6 +13372,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -13429,6 +13435,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -13460,6 +13469,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
 		"//arkcompiler/ets_runtime/test/aottest/sharedmodule:gen_sharedmodule_abc": [
@@ -14531,6 +14543,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
 		"//arkcompiler/ets_runtime/test/moduletest/sharedmodule:gen_sharedmodule_abc": [
@@ -27379,6 +27394,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27868,6 +27886,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27928,6 +27949,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27962,6 +27986,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/shl:gen_shl_abc": [
@@ -28877,6 +28904,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/spreadoperator:gen_spreadoperator_abc": [
@@ -32841,6 +32871,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces:gen_filter_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces:gen_fullscreenlaunchcomponent_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces:gen_gridobjectsortcomponent_abc": [
@@ -38207,6 +38240,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces/": [

@@ -20,6 +20,7 @@ if (is_android) {
 }
 if (is_ohos) {
   import("//build/config/ohos/config.gni")
+  import("//build/ohos_var.gni")
 }
 if (is_mac) {
   import("//build/config/mac/symbols.gni")
@@ -679,6 +680,23 @@ config("compiler") {
   if (is_posix) {
     asmflags += cflags
     asmflags += cflags_c
+  }
+
+  # There are bugs in the opensource unwind table mechanism, More ShrinkWrap
+  # optmization will expose more error stack information casued by unwind
+  # table. Therefore, this option is temporary closed and waits for the unwind
+  # tbale mechanism to be improved before opening it agin.
+  if (is_clang && is_ohos && !is_opensource &&
+      (target_cpu == "arm" || target_cpu == "arm64")) {
+    cflags += [
+      "-mllvm",
+      "-enable-shrink-wrap-region-split=false",
+    ]
+
+    ldflags += [
+      "-Wl,-mllvm",
+      "-Wl,-enable-shrink-wrap-region-split=false",
+    ]
   }
 }
 

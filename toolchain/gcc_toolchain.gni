@@ -415,6 +415,9 @@ template("gcc_toolchain") {
 
       description = "SOLINK $sofile"
 
+      # Declares toolchain solink to be compiled as whole-archive by default.
+      toolchain_whole_archive = true
+
       # Use this for {{output_extension}} expansions unless a target manually
       # overrides it (in which case {{output_extension}} will be what the target
       # specifies).
