@@ -77,14 +77,18 @@ group("cxx_test_host_and_target") {
 ohos_prebuilt_shared_library("original_libstd.so") {
   if (current_cpu == "arm64") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd.dylib.so"
-    output = "libstd-37747be394d9d22c.so"
+    output = "libstd-1d8a25fe4d067db2.so"
   } else if (current_cpu == "arm") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/armv7-linux-ohos/lib/libstd.dylib.so"
-    output = "libstd-a4ed09c4b860e683.so"
+    output = "libstd-8b97a7db0dd650a6.so"
+  } else if ((current_cpu == "x86_64" || current_cpu == "x64") &&
+             current_os == "ohos") {
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/x86_64-unknown-linux-ohos/lib/libstd.dylib.so"
+    output = "libstd-b8e84dcd43899a47.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
-        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-b779f91b8eb0a330.so"
-    output = "libstd-c244726431624c96.so"
+        "//prebuilts/rustc/linux-x86_64/current/lib/libstd.b48452694034495f.so"
+    output = "libstd-b48452694034495f.so"
   }
   enable_strip = true
   install_images = [

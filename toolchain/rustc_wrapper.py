@@ -42,8 +42,9 @@ def exec_formatted_command(args):
     rustc_args = remaining_args[:ldflags_index]
     ldflags = remaining_args[ldflags_index + 1:rustenv_index]
     rustenv = remaining_args[rustenv_index + 1:]
-
-    rustc_args.extend(["-Clink-arg=%s" % arg for arg in ldflags])
+    for arg in ldflags:
+        if "cfi.versionscript" not in arg:
+            rustc_args.append("-Clink-arg=%s" % arg)
     rustc_args.insert(0, args.rustc)
 
     if args.rsp:
