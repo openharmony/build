@@ -46,7 +46,6 @@ class SystemUtil(metaclass=NoInstance):
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
                                        encoding='utf-8',
-                                       errors='ignore',
                                        env=exec_env,
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
