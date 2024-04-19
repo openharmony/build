@@ -17,6 +17,7 @@
 #
 
 import os
+import sys
 import re
 import subprocess
 
@@ -40,6 +41,8 @@ class SystemUtil(metaclass=NoInstance):
             cmd.remove('')
         if not os.path.exists(os.path.dirname(log_path)):
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        if sys.argv[1] == 'build' and len(sys.argv) == 5 and sys.argv[4] in ['-t', '-test']:
+            cmd.append(sys.argv[4])
         with open(log_path, 'at', encoding='utf-8') as log_file:
             LogUtil.hb_info("start run hpm command")
             process = subprocess.Popen(cmd,
