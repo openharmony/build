@@ -143,12 +143,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -229,12 +229,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -391,7 +391,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-darwin-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -437,7 +437,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-darwin-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -459,12 +459,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86/clang_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/clang_darwin-x86_64-c5b0b3-20240320.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86/libcxx-ndk_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/libcxx-ndk_darwin-x86_64-c5b0b3-20240320.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {

@@ -43,8 +43,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240315",
-          "url": "openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -52,8 +52,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240315",
-          "url": "openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -61,8 +61,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "x86_64",
-          "version": "20240115",
-          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
           "type": "file"
@@ -70,8 +70,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "arm64",
-          "version": "20240115",
-          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
           "type": "file"
@@ -85,8 +85,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "1.11.0",
-          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"
@@ -94,8 +94,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "1.11.0",
-          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"

@@ -29,6 +29,13 @@ group("common_packages") {
     deps += [ "asan:libclang_rt.hwasan.so" ]
   }
 
+  if (target_cpu == "arm64") {
+    deps += [
+      "asan:libclang_rt.tsan.so",
+      "asan:tsan.options",
+    ]
+  }
+
   if (is_asan) {
     deps += [
       "asan:asan.cfg",

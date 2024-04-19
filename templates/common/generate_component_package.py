@@ -51,7 +51,7 @@ def _check_label(public_deps, value):
         if i:
             label = i.get("label")
             if public_deps == label:
-                return label
+                return label.split(':')[-1]
             return ""
         return ""
 
@@ -65,7 +65,6 @@ def _get_public_external_deps(data, public_deps):
         _data = _check_label(public_deps, value)
         if _data:
             return key + ":" + _data
-        return ""
     return ""
 
 
@@ -215,6 +214,25 @@ def _copy_lib(args, json_data, module):
         return False
 
 
+def _dirs_handler(bundlejson_out):
+    dirs = dict()
+    dirs['./'] = []
+    directory = bundlejson_out
+    for filename in os.listdir(directory):
+        filepath = os.path.join(directory, filename)
+        if os.path.isfile(filepath):
+            dirs['./'].append(filename)
+        else:
+            dirs[filename] = [filename + "/*"]
+    delete_list = ['LICENSE', 'README.md', 'README_zh.md', 'README_en.md', 'bundle.json']
+    for delete_txt in delete_list:
+        if delete_txt in dirs['./']:
+            dirs['./'].remove(delete_txt)
+    if dirs['./'] == []:
+        del dirs['./']
+    return dirs
+
+
 def _copy_bundlejson(args):
     bundlejson_out = os.path.join(args.get("out_path"), "component_package", args.get("part_path"))
     print("bundlejson_out : ", bundlejson_out)
@@ -227,21 +245,7 @@ def _copy_bundlejson(args):
         bundle_data['publishAs'] = 'binary'
         bundle_data.update({'os': args.get('os')})
         bundle_data.update({'buildArch': args.get('buildArch')})
-        dirs = dict()
-        dirs['./'] = []
-        directory = bundlejson_out
-        for filename in os.listdir(directory):
-            filepath = os.path.join(directory, filename)
-            if os.path.isfile(filepath):
-                dirs['./'].append(filename)
-            else:
-                dirs[filename] = [filename + "/*"]
-        delete_list = ['LICENSE', 'README.md', 'README_zh.md', 'README_en.md', 'bundle.json']
-        for delete_txt in delete_list:
-            if delete_txt in dirs['./']:
-                dirs['./'].remove(delete_txt)
-        if dirs['./'] == []:
-            del dirs['./']
+        dirs = _dirs_handler(bundlejson_out)
         bundle_data['dirs'] = dirs
         bundle_data['version'] = str(bundle_data['version'])
         if bundle_data['version'] == '':
@@ -253,11 +257,13 @@ def _copy_bundlejson(args):
             b = match.group(2)
             suffix = match.group(3) if match.group(3) else ""
             bundle_data['version'] = f"{a}.{b}.0{suffix}"
-        if args.get('build_type') == 1:
+        if args.get('build_type') in [0, 1]:
             bundle_data['version'] += '-snapshot'
         if args.get('organization_name'):
             _name_pattern = r'@(.*.)/'
             bundle_data['name'] = re.sub(_name_pattern, '@' + args.get('organization_name') + '/', bundle_data['name'])
+        if bundle_data.get('scripts'):
+            bundle_data.update({'scripts': {}})
         if bundle_data.get('licensePath'):
             del bundle_data['licensePath']
         if bundle_data.get('readmePath'):
@@ -319,8 +325,12 @@ def _generate_configs(fp, module):
     fp.write('\nconfig("' + module + '_configs") {\n')
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
-    fp.write('    "includes"\n')
-    fp.write('  ]\n}\n')
+    fp.write('    "includes",\n')
+    if module == 'libunwind':
+        fp.write('    "includes/src",\n')
+        fp.write('    "includes/include",\n')
+        fp.write('    "includes/include/tdep-arm",\n')
+    fp.write('  ]\n')
     if module == 'libunwind':
         fp.write('  cflags = [\n')
         fp.write("""    "-D_GNU_SOURCE",
@@ -339,7 +349,8 @@ def _generate_configs(fp, module):
     "-Wno-shift-count-overflow",
     "-Wno-tautological-constant-out-of-range-compare",
     "-Wno-unused-function",\n""")
-        fp.write('  ]\n}\n')
+        fp.write('  ]\n')
+    fp.write('  }\n')
 
 
 def _generate_prebuilt_shared_library(fp, type, module):
@@ -349,7 +360,7 @@ def _generate_prebuilt_shared_library(fp, type, module):
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif type == 'etc':
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
-    elif type == 'shared_library':
+    else:
         fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
 
 
@@ -486,7 +497,7 @@ def _get_parts_path(json_data, part_name):
 
 def _hpm_pack(args):
     part_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"))
-    cmd = ['hpm,pack']
+    cmd = ['hpm', 'pack']
     try:
         subprocess.run(cmd, shell=False, cwd=part_path)
     except Exception as e:
@@ -528,6 +539,17 @@ def _get_component_check() -> list:
     check_list = sorted(check_list)
     return check_list
 
+    
+def _del_exist_component_package(out_path):
+    _component_package_path = os.path.join(out_path, 'component_package')
+    if os.path.isdir(_component_package_path):
+        try:
+            print('del dir component_package start..')
+            shutil.rmtree(_component_package_path)
+            print('del dir component_package end..')
+        except Exception as e:
+            print('del dir component_package FAILED')
+
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='',
                                os_arg='linux', build_arch_arg='x86'):
@@ -558,6 +580,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     parts_path_info = _get_parts_path_info(out_path)
     components_json = _get_components_json(out_path)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
+    # del component_package
+    _del_exist_component_package(out_path)
     for key, value in part_subsystem.items():
         part_name = key
         subsystem_name = value
