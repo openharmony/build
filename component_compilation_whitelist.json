@@ -38671,19 +38671,19 @@
         ]
     },
     "fuzzy_match": {
-        "deps_not_lib":[
+        "deps_not_lib": [
             "//drivers/interface",
             "//drivers/hdf_core",
             "//drivers/peripheral"
         ],
-        "deps_includes_absolute":[
+        "deps_includes_absolute": [
             "//drivers/hdf_core",
             "//drivers/peripheral"
         ],
-        "deps_component_absolute":[
+        "deps_component_absolute": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "deps_gni":[
+        "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ]
     }
