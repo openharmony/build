@@ -221,9 +221,12 @@ template("ohos_cargo_crate") {
 
       if (current_toolchain == host_toolchain) {
         _build_script_build_dir = "${root_out_dir}"
+      } else if (is_mingw) {
+        _build_script_build_dir = "${root_out_dir}/../clang_x64"
       } else {
         _build_script_build_dir = "${root_out_dir}/clang_x64"
       }
+
       if (is_standard_system) {
         _build_script_exe_dir =
             "${_build_script_build_dir}/${subsystem_name}/${part_name}"
@@ -284,31 +287,22 @@ template("ohos_cargo_crate") {
       }
     }
 
-    if (current_toolchain == host_toolchain) {
-      rust_target(build_script_name) {
-        target_type = "ohos_executable"
-        sources = invoker.build_sources
-        crate_root = invoker.build_root
-        if (defined(invoker.build_deps)) {
-          deps = invoker.build_deps
-        }
-        rustenv = _rustenv
-        forward_variables_from(invoker,
-                               [
-                                 "features",
-                                 "edition",
-                                 "rustflags",
-                               ])
+    rust_target(build_script_name) {
+      target_type = "ohos_executable"
+      sources = invoker.build_sources
+      crate_root = invoker.build_root
+      if (defined(invoker.build_deps)) {
+        deps = invoker.build_deps
       }
-    } else {
-      not_needed(invoker,
-                 [
-                   "build_root",
-                   "build_sources",
-                   "build_deps",
-                   "build_script_inputs",
-                   "build_script_outputs",
-                 ])
+      rustenv = _rustenv
+      forward_variables_from(invoker,
+                             [
+                               "features",
+                               "edition",
+                               "rustflags",
+                               "subsystem_name",
+                               "part_name",
+                             ])
     }
   }
 }
