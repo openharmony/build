@@ -13464,6 +13464,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_length:gen_pgo_length_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_loop_peeling:gen_pgo_loop_peeling_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_objectliteral_operation:gen_pgo_objectliteral_operation_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28015,6 +28018,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_length:gen_pgo_length_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_loop_peeling:gen_pgo_loop_peeling_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_objectliteral_operation:gen_pgo_objectliteral_operation_abc": [
