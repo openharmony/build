@@ -16387,7 +16387,7 @@
             "//third_party/glib:glib_packages"
         ],
         "//base/telephony/ril_adapter/services/hril:hril": [
-            "//drivers/interface/ril/v1_2:ril_idl_headers_1.2"
+            "//drivers/interface/ril/v1_3:ril_idl_headers_1.3"
         ],
         "//base/telephony/ril_adapter/test/fuzztest/callemergencynotice_fuzzer:CallEmergencyNoticeFuzzTest": [
             "//drivers/interface/ril/v1_1:ril_idl_headers"
