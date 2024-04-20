@@ -38749,5 +38749,22 @@
         "//drivers/interface/location/geofence/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ]
+    },
+    "fuzzy_match": {
+        "deps_not_lib": [
+            "//drivers/interface",
+            "//drivers/hdf_core",
+            "//drivers/peripheral"
+        ],
+        "deps_includes_absolute": [
+            "//drivers/hdf_core",
+            "//drivers/peripheral"
+        ],
+        "deps_component_absolute": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "deps_gni": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ]
     }
 }
