@@ -16866,6 +16866,9 @@
         "//commonlibrary/ets_utils/js_util_module/util:gen_util_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//commonlibrary/ets_utils/js_util_module/stream:gen_stream_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//developtools/ace_ets2bundle:install_arkguard_tsc": [
             "//arkcompiler/ets_frontend/arkguard:build_arkguard",
             "//third_party/typescript:build_typescript"
@@ -31580,6 +31583,9 @@
             "//third_party/openssl:libcrypto_shared",
             "//third_party/bounds_checking_function:libsec_shared"
         ],
+        "//commonlibrary/ets_utils/js_util_module/stream:gen_stream_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//commonlibrary/rust/ylong_http/ylong_http_client:ylong_http_client_inner": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
@@ -37505,6 +37511,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/ace_config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/stream/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//developtools/ace_ets2bundle/": [
             "//foundation/arkui/ace_engine/ace_config.gni",
