@@ -112,6 +112,8 @@ clippyOhosLints = [
   "clippy::upper-case-acronyms",
   "-A",
   "clippy::let_and_return",
+  "-A",
+  "clippy::unnecessary-cast",
 ]
 clippyVendorLints = [
   "-A",
