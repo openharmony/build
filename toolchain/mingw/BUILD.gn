@@ -43,11 +43,18 @@ template("mingw_toolchain") {
 
     executable_extension = ".exe"
     shlib_extension = ".dll"
+    dylib_extension = ".dll"
+    rlib_extension = ".rlib"
+    rust_abi_target = invoker.rust_abi_target
+    if (rust_abi_target == "x86_64-pc-windows-gnullvm") {
+      cc_command_args = "--target=${rust_abi_target} -Clinker=${_mingw_tool_prefix}/x86_64-w64-mingw32-clang -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-lc++ -Clink-arg=-v -Clink-arg=--target=${rust_abi_target}"
+    }
   }
 }
 
 mingw_toolchain("mingw_x86_64") {
   toolchain_root = "//prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw"
+  rust_abi_target = "x86_64-pc-windows-gnullvm"
   toolchain_args = {
     current_cpu = "x86_64"
     current_os = "mingw"
