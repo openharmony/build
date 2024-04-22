@@ -142,6 +142,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/drivers/external_device_manager/usb:usb_header",
   "//interface/sdk_c/drivers/external_device_manager/hid:libhid",
   "//interface/sdk_c/drivers/external_device_manager/hid:hid_header",
+  "//interface/sdk_c/drivers/external_device_manager/base:libddk_base",
+  "//interface/sdk_c/drivers/external_device_manager/base:ddk_header",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:libvulkan_ndk",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header",
   "//interface/sdk_c/resourceschedule/ffrt:libffrt_ndk",
