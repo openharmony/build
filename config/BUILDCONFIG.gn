@@ -98,10 +98,17 @@ product_build_config =
 global_parts_info =
   read_file("${preloader_output_dir}/parts_config.json", "json")
 
-if (!is_llvm_build && !ohos_indep_compiler_enable) {
-  napi_white_list = read_file(
-          "//developtools/integration_verification/tools/deps_guard/rules/NO-Depends-On-NAPI/whitelist.json",
-          "json")
+napi_white_list_path = "developtools/integration_verification/tools/deps_guard/rules/NO-Depends-On-NAPI"
+if (!is_llvm_build) {
+  if (!ohos_indep_compiler_enable) {
+    napi_white_list = read_file(
+            "//${napi_white_list_path}/whitelist.json",
+            "json")
+  } else if (ohos_indep_compiler_enable) {
+    napi_white_list = read_file(
+            "//build/indep_configs/mapping/config/${napi_white_list_path}/whitelist.json",
+            "json")
+  }
 }
 
 product_company = product_build_config.product_company
