@@ -56,11 +56,11 @@ def _is_innerkit(data, part, module):
 def _get_inner_kits_info(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/inner_kits_info.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_inner_kits_info parse json error--', e)
+    with open(json_path,"r") as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_inner_kits_info parse json error--', e)
     return jsondata
 
 
@@ -91,11 +91,11 @@ def _handle_two_layer_json(json_key, json_data, desc_list):
 def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_json_data parse json error--', e)
+    with open(json_path,"r") as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_json_data parse json error--', e)
     return jsondata
 
 
@@ -350,22 +350,22 @@ def _generate_component_package(args, innerkit_json):
 def _get_part_subsystem(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/part_subsystem.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_part_subsystem parse json error--', e)
+    with open(json_path,"r") as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_part_subsystem parse json error--', e)
     return jsondata
 
 
 def _get_parts_path_info(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/parts_path_info.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_parts_path_info parse json error--', e)
+    with open(json_path,"r") as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_parts_path_info parse json error--', e)
     return jsondata
 
 
