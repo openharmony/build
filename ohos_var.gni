@@ -257,6 +257,10 @@ declare_args() {
   innersdk_base_dir = "//${innersdk_dir_name}"
 }
 
+declare_args() {
+  purgeable_ashmem_enable = false
+}
+
 # Compile and generate output directory
 innersdk_build_out_dir = "innerkits/${target_type}"
 
