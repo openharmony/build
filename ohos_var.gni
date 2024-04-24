@@ -258,7 +258,7 @@ declare_args() {
 }
 
 declare_args() {
-  purgeable_ashmem_enable = false
+  ability_runtime_graphics = true
 }
 
 # Compile and generate output directory
