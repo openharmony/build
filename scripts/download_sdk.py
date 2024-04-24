@@ -48,8 +48,6 @@ def reporthook(data_download, data_size, total_size):
     progress = int(0)
     if progress != int(data_download * data_size * 1000 / total_size):
         progress = int(data_download * data_size * 1000 / total_size)
-        print("\rDownloading: %5.1f%%" %
-              (data_download * data_size * 100.0 / total_size), end="")
         sys.stdout.flush()
 
 
