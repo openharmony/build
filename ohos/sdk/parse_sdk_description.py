@@ -156,8 +156,18 @@ def expand_platform_targets(options, label: str, install_dir: str):
             for c in variant
         ]
     else:
-        return [label], [install_dir]
+        return [label], [install_dir]    
 
+def add_sdk_targets(sdk_type, sdk_targets):
+    sdk_targets.append({
+        'type': sdk_type,
+        'targets': {
+            'linux': SdkTargets('linux'),
+            'windows': SdkTargets('windows'),
+            'darwin': SdkTargets('darwin'),
+            'ohos': SdkTargets('ohos')
+        }
+    })
 
 def parse_description_file(options):
     data = read_json_file(options.sdk_description_file)
@@ -192,17 +202,11 @@ def parse_description_file(options):
         target_os = d.get('target_os')
 
         sdk_type = get_sdk_type(install_dir)
+
         if sdk_type not in sdk_types:
-            sdk_targets.append({
-                'type': sdk_type,
-                'targets': {
-                    'linux': SdkTargets('linux'),
-                    'windows': SdkTargets('windows'),
-                    'darwin': SdkTargets('darwin'),
-                    'ohos': SdkTargets('ohos')
-                }
-            })
+            add_sdk_targets(sdk_type, sdk_targets)
             sdk_types.append(sdk_type)
+
         for item in sdk_targets:
             if item['type'] == sdk_type:
                 for m in module_labels:
