@@ -75,6 +75,8 @@ def add_target(item: dict, target: str, sdk_systems: list):
             item.get('targets').get('windows').add_target('"%s",' % target)
         elif _os == 'darwin' or _os == 'Darwin':
             item.get('targets').get('darwin').add_target('"%s",' % target)
+        elif _os == 'ohos' or _os == 'Ohos':
+            item.get('targets').get('ohos').add_target('"%s",' % target)
 
 
 def write_sdk_build_gni(sdk_targets: list, build_only_targets: list, gni: str):
@@ -196,7 +198,8 @@ def parse_description_file(options):
                 'targets': {
                     'linux': SdkTargets('linux'),
                     'windows': SdkTargets('windows'),
-                    'darwin': SdkTargets('darwin')
+                    'darwin': SdkTargets('darwin'),
+                    'ohos': SdkTargets('ohos')
                 }
             })
             sdk_types.append(sdk_type)
