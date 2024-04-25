@@ -9375,8 +9375,8 @@
             "//foundation/barrierfree/accessibility/interfaces/innerkits/acfwk/include/",
             "//foundation/resourceschedule/memmgr/interface/innerkits/include/",
             "//foundation/resourceschedule/memmgr/services/memmgrservice/include/memory_level_manager/",
-            "//foundation/resourceschedule/memmgr_plugin/interface/innerkits/include/",
-            "//foundation/resourceschedule/memmgr_plugin/services/memmgrservice/include/memory_level_manager/"
+            "//foundation/resourceschedule/memmgr_override/interface/innerkits/include/",
+            "//foundation/resourceschedule/memmgr_override/services/memmgrservice/include/memory_level_manager/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:render_service": [
             "//commonlibrary/c_utils/base/include/"
