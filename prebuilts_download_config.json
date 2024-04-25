@@ -443,7 +443,7 @@
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rustc-nightly-aarch64-apple-darwin_20240419.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-nightly-aarch64-apple-darwin_20240419.tar.gz",
           "unzip_filename": "rustc"
         },
         {
