@@ -261,8 +261,8 @@ cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 }
 
 function change_rustlib_name(){
-rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
-for file in $(find "$rust_dir" -path "$rust_dir/x86_64-unknown-linux-gnu" -prune -o -name "lib*.*")
+rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib"
+for file in $(find $rust_dir/*ohos -name "lib*.*")
 do
     dir_name=${file%/*}
     file_name=${file##*/}

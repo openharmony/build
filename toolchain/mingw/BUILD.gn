@@ -47,7 +47,7 @@ template("mingw_toolchain") {
     rlib_extension = ".rlib"
     rust_abi_target = invoker.rust_abi_target
     if (rust_abi_target == "x86_64-pc-windows-gnullvm") {
-      cc_command_args = "--target=${rust_abi_target} -Clinker=${_mingw_tool_prefix}/x86_64-w64-mingw32-clang -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-lc++ -Clink-arg=-v -Clink-arg=--target=${rust_abi_target}"
+      cc_command_args = "--target=${rust_abi_target} -Clinker=${_mingw_tool_prefix}/x86_64-w64-mingw32-clang -Clink-arg=-Wl,-Bstatic -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-Wl,-Bstatic -Clink-arg=-lc++ -Clink-arg=-v -Clink-arg=--target=${rust_abi_target}"
     }
   }
 }
