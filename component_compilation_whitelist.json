@@ -273,6 +273,7 @@
         "//third_party/ffmpeg:libohosffmpeg",
         "//third_party/gptfdisk:sgdisk",
         "//third_party/libdrm:libdrm",
+        "//third_party/libexif:libexif",
         "//third_party/lz4:liblz4_static",
         "//third_party/opencl-headers:libcl",
         "//third_party/opencl-headers:opencl_headers",
