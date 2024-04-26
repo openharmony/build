@@ -61,7 +61,8 @@
         "markupsafe",
         "mbedtls",
         "openssl",
-        "samgr_lite"
+        "samgr_lite",
+        "libffi"
       ]
     },
     "build": {
