@@ -27076,6 +27076,9 @@
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icuuc"
         ],
+        "//arkcompiler/ets_runtime/compiler_service:compiler_interface": [
+            "//foundation/ability/idl_tool:idl"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler": [
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc"
@@ -37341,6 +37344,9 @@
         ],
         "//arkcompiler/ets_runtime/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//arkcompiler/ets_runtime/compiler_service/": [
+            "//foundation/ability/idl_tool/idl_config.gni"
         ],
         "//arkcompiler/ets_runtime/test/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
