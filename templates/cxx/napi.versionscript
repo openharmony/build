@@ -29,6 +29,7 @@
     OHOS_MEDIA_NativeGetThumbnail;
     CallOnAbilityResult;
     CallOnRequestPermissionsFromUserResult;
+    Hint2Type;
 
   local:
     *;
