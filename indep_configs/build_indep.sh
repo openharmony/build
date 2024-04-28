@@ -46,4 +46,7 @@ ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.
 prebuilts/build-tools/linux-x86/bin/gn gen --args="ohos_indep_compiler_enable=true product_name=\"$VARIANTS\"" -C out/$VARIANTS
 prebuilts/build-tools/linux-x86/bin/ninja -C out/$VARIANTS
 
+rm -rf .gn
+ln -s build/core/gn/dotfile.gn .gn
+
 exit 0
