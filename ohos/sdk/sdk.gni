@@ -24,6 +24,7 @@ generated_sdk_module_install_paths =
 sdk_system_windows = "windows"
 sdk_system_linux = "linux"
 sdk_system_darwin = "darwin"
+sdk_system_ohos = "ohos"
 
 ohos_sdk_out_dir = "$product_output_dir/${product_name}"
 ohos_sdk_copy_dir = "$root_build_dir/${product_name}"
@@ -40,6 +41,8 @@ declare_args() {
 sdk_toolchains = {
   linux = "//build/toolchain/linux:clang_x64"
   windows = "//build/toolchain/mingw:mingw_x86_64"
+  ohos = "//build/toolchain/ohos:ohos_clang_arm64"
+
   if (host_cpu == "arm64") {
     darwin = "//build/toolchain/mac:clang_arm64"
   } else {
@@ -62,6 +65,7 @@ if (sdk_platform == "default") {
     sdk_systems = [
       sdk_system_windows,
       sdk_system_linux,
+      sdk_system_ohos,
     ]
   }
 } else if (sdk_platform == "mac") {
@@ -70,6 +74,8 @@ if (sdk_platform == "default") {
   sdk_systems = [ sdk_system_windows ]
 } else if (sdk_platform == "linux") {
   sdk_systems = [ sdk_system_linux ]
+} else if (sdk_platform == "ohos") {
+  sdk_systems = [ sdk_system_ohos ]
 }
 
 if (use_current_sdk) {
@@ -265,6 +271,21 @@ template("make_darwin_sdk_modules") {
                            ])
     sdk_toolchain = sdk_toolchains.darwin
     sdk_system = sdk_system_darwin
+  }
+}
+
+template("make_ohos_sdk_modules") {
+  make_sdk_modules(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "testonly",
+                             "zipfile_name",
+                             "sdk_modules",
+                             "sdk_type",
+                             "deps",
+                           ])
+    sdk_toolchain = sdk_toolchains.ohos
+    sdk_system = sdk_system_ohos
   }
 }
 
