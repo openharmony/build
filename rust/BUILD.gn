@@ -19,15 +19,15 @@ group("default") {
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
   if (current_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libstd.dylib.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-unknown-linux-ohos/lib/libstd.dylib.so"
   } else if (current_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/armv7-linux-ohos/lib/libstd.dylib.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/armv7-unknown-linux-ohos/lib/libstd.dylib.so"
   } else if ((current_cpu == "x86_64" || current_cpu == "x64") &&
              current_os == "ohos") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/x86_64-unknown-linux-ohos/lib/libstd.dylib.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
-        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-b48452694034495f.so"
+        "//prebuilts/rustc/linux-x86_64/current/lib/libstd-ae85deb1fb5d0029.so"
   }
   enable_strip = true
   install_images = [
@@ -41,15 +41,15 @@ ohos_prebuilt_shared_library("libstd.dylib.so") {
 
 ohos_prebuilt_shared_library("libtest.dylib.so") {
   if (current_cpu == "arm64") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-linux-ohos/lib/libtest.dylib.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/aarch64-unknown-linux-ohos/lib/libtest.dylib.so"
   } else if (current_cpu == "arm") {
-    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/armv7-linux-ohos/lib/libtest.dylib.so"
+    source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/armv7-unknown-linux-ohos/lib/libtest.dylib.so"
   } else if ((current_cpu == "x86_64" || current_cpu == "x64") &&
              current_os == "ohos") {
     source = "//prebuilts/rustc/linux-x86_64/current/lib/rustlib/x86_64-unknown-linux-ohos/lib/libtest.dylib.so"
   } else if (current_cpu == "x86_64" || current_cpu == "x64") {
     source =
-        "//prebuilts/rustc/linux-x86_64/current/lib/libtest-fc3d9577ceef54da.so"
+        "//prebuilts/rustc/linux-x86_64/current/lib/libtest-2b256a68c269654b.so"
   } else {
     source = ""
   }
