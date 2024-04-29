@@ -260,49 +260,12 @@ cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
 cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 }
 
-function change_rustlib_name(){
-rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib"
-for file in $(find $rust_dir/*ohos -name "lib*.*")
-do
-    dir_name=${file%/*}
-    file_name=${file##*/}
-    file_prefix=$(echo "$file_name" | awk '{split($1, arr, "."); print arr[1]}')
-    file_prefix=$(echo "$file_prefix" | awk '{split($1, arr, "-"); print arr[1]}')
-    file_suffix=$(echo "$file_name" | awk '{split($1, arr, "."); print arr[2]}')
-    if [[ "$file_suffix" != "rlib" && "$file_suffix" != "so" || "$file_prefix" == "librustc_demangle" || "$file_prefix" == "libcfg_if" || "$file_prefix" == "libunwind" ]]
-    then
-        continue
-    fi
-    if [[ "$file_suffix" == "rlib" ]]
-    then
-        if [[ "$file_prefix" == "libstd" || "$file_prefix" == "libtest" ]]
-        then
-            newfile_name="$file_prefix.dylib.rlib"
-        else
-            newfile_name="$file_prefix.rlib"
-        fi
-    fi
-
-    if [[ "$file_suffix" == "so" ]]
-    then
-        newfile_name="$file_prefix.dylib.so"
-    fi
-    if [[ "$file_name" == "$newfile_name" ]]
-    then
-        continue
-    fi
-    mv $file "$dir_name/$newfile_name"
-done
-}
-
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
     copy_inside_cxx
     echo "======copy inside cxx finished!======"
     if [[ "${host_platform}" == "linux" ]]; then
         update_llvm_ndk
         echo "======update llvm ndk finished!======"
-        change_rustlib_name
-        echo "======change rustlib name finished!======"
     fi
     create_lldb_mi
 fi
