@@ -53,16 +53,14 @@ class KernelPermission():
         """execute cmd
         llvm-object --add-section .kernelpermission=json_file xx/xx.so
         """
-        print("begin run kernel permission cmd log_path:{}".format(log_path))
         LogUtil.write_log(
             log_path,
             "begin run kernel permission cmd log_path:{}".format(log_path),
             'info')
         
         try:
-            exec = KernelPermission.regist_llvm_objcopy_path(root_path)
+            llvm_tool = KernelPermission.regist_llvm_objcopy_path(root_path)
         except OHOSException as e:
-            print("regist_llvm_objcopy_path failed")
             LogUtil.write_log(
                 log_path,
                 "regist_llvm_objcopy_path failed:{}".format(e),
@@ -71,7 +69,7 @@ class KernelPermission():
         
         file_list = KernelPermission.scan_file(out_path)
         
-        cmds = KernelPermission.gen_cmds(file_list, out_path, exec)
+        cmds = KernelPermission.gen_cmds(file_list, out_path, llvm_tool)
         if cmds:
             for cmd in cmds:
                 LogUtil.write_log(
@@ -96,15 +94,14 @@ class KernelPermission():
         """
         llvm_objcopy_path = os.path.join(root_path, "prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-objcopy")
         if os.path.exists(llvm_objcopy_path):
-            exec = llvm_objcopy_path
-            return exec
+            return llvm_objcopy_path
         else:
             raise OHOSException(
-                'There is no gn executable file at {}'.format(llvm_objcopy_path), '0001')
+                'There is no llvm-object executable file at {}'.format(llvm_objcopy_path), '0001')
 
 
     @staticmethod
-    def gen_cmds(file_list, out_path, exec):
+    def gen_cmds(file_list, out_path, llvm_path):
         """generate cmd
         llvm-object --add-section .kernelpermission=json_file xx/xx.so
         """
@@ -113,16 +110,15 @@ class KernelPermission():
         for info in file_list: 
             kernel_permission_file = os.path.join(out_path, info.get("kernel_permission_path"))
             if not KernelPermission.check_json_file(kernel_permission_file):
-                print('kernel_permission json file {} error!'.format(kernel_permission_file))
                 raise OHOSException(
-                    'kernel_permission json file {} error!'.format(kernel_permission_file), '0001')
+                    'kernel_permission json file {} invalid!'.format(kernel_permission_file), '0001')
             target_name = info.get("target_name")
             module_info_file = os.path.join(out_path, info.get("module_info_file"))
             target_info = IoUtil.read_json_file(module_info_file)
             label_name = target_info.get("label_name")
             target_source = os.path.join(out_path, target_info.get("source"))
             if target_name == label_name:
-                cmd = [exec, 
+                cmd = [llvm_path, 
                         "--add-section", 
                         ".kernelpermission=" + kernel_permission_file,
                         target_source
@@ -153,11 +149,11 @@ class KernelPermission():
     @staticmethod
     def check_json_value(json_data):
         for key, value in json_data.items():
-                if not isinstance(value, (bool, str, list)):
+            if not isinstance(value, (bool, str, list)):
+                return False
+            if isinstance(value, list):
+                if not all(isinstance(item, str) for item in value):
                     return False
-                if isinstance(value, list):
-                    if not all(isinstance(item, str) for item in value):
-                        return False
         return True
 
 

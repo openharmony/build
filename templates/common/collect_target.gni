@@ -1,0 +1,49 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos_var.gni")
+
+template("collect_module_target") {
+  forward_variables_from(invoker,
+                         [
+                           "install_images",
+                           "module_label",
+                         ])
+
+  # do not collect build targets for host toolchains
+  if (current_toolchain == host_toolchain) {
+    group("${target_name}") {
+      not_needed([
+                   "module_label",
+                   "install_images",
+                 ])
+    }
+  } else {
+    if (defined(install_images)) {
+      module_install_images = []
+      module_install_images += install_images
+    } else {
+      module_install_images = [ "system" ]
+    }
+
+    group(target_name) {
+      metadata = {
+        collect_targets = []
+        foreach(image, module_install_images) {
+          # Add mapping between image name and target label
+          collect_targets += [ "${image}||${module_label}" ]
+        }
+      }
+    }
+  }
+}

@@ -45,6 +45,8 @@ def main():
     parser.add_argument('--api-version')
     parser.add_argument('--release-type')
     parser.add_argument('--meta-version')
+    parser.add_argument('--sdk-class')
+    parser.add_argument('--use-current-sdk', action='store_true')
 
     parser.add_argument('--output', required=True)
 
@@ -69,6 +71,9 @@ import("{{ generated_sdk_modules_gni }}")
 
     {% for os in sdk_systems %}
     make_{{ os }}_sdk_modules("{{ _sdk_type }}_{{ os }}") {
+      {% if use_current_sdk %}
+      sdk_class = "{{ sdk_class }}"
+      {% endif %}
       sdk_type = "{{ sdk_type }}"
       sdk_modules = {{ _sdk_type }}s.{{ os }}
       {% if release_type != "" %}
@@ -97,6 +102,15 @@ foreach(os, sdk_systems) {
       package_info_file =
           "$ohos_sdk_copy_dir/$os/{{ sdk_type }}/oh-uni-package.json"
     }
+    {% if use_current_sdk %}
+    # override for current sdk.
+    package_info_file =
+      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_version/{{ sdk_type }}/oh-uni-package.json"
+    {% if sdk_class != "base" %}
+    package_info_file =
+      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_version/{{ sdk_type }}/uni-package.json"
+    {% endif %}
+    {% endif %}
     package_info = {}
     package_info = {
       path = "{{ sdk_type }}"
@@ -143,7 +157,9 @@ group("generated_ohos_sdk") {
         api_version=options.api_version,
         release_type=options.release_type,
         meta_version=options.meta_version,
-        generated_sdk_modules_gni=options.generated_sdk_modules_gni)
+        generated_sdk_modules_gni=options.generated_sdk_modules_gni,
+        sdk_class=options.sdk_class,
+        use_current_sdk=options.use_current_sdk)
     write_file(options.output, contents)
 
 
