@@ -51,7 +51,7 @@ XML_ESCAPE_TABLE = {
 def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []
-    # 如果同名的话只取第一个，所以可能会造成notice与模块不一致的情况，应该加上 .sort()
+    # add sort method
     files = build_utils.get_all_files(options.static_library_notice_dir)
     files.sort()
     for file in files:

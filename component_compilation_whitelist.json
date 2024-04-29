@@ -50,6 +50,7 @@
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
         "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0",
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
+        "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0",
         "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_target",
         "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_target",
         "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_target",
@@ -273,6 +274,7 @@
         "//third_party/ffmpeg:libohosffmpeg",
         "//third_party/gptfdisk:sgdisk",
         "//third_party/libdrm:libdrm",
+        "//third_party/libexif:libexif",
         "//third_party/lz4:liblz4_static",
         "//third_party/opencl-headers:libcl",
         "//third_party/opencl-headers:opencl_headers",
@@ -9375,8 +9377,8 @@
             "//foundation/barrierfree/accessibility/interfaces/innerkits/acfwk/include/",
             "//foundation/resourceschedule/memmgr/interface/innerkits/include/",
             "//foundation/resourceschedule/memmgr/services/memmgrservice/include/memory_level_manager/",
-            "//foundation/resourceschedule/memmgr_plugin/interface/innerkits/include/",
-            "//foundation/resourceschedule/memmgr_plugin/services/memmgrservice/include/memory_level_manager/"
+            "//foundation/resourceschedule/memmgr_override/interface/innerkits/include/",
+            "//foundation/resourceschedule/memmgr_override/services/memmgrservice/include/memory_level_manager/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:render_service": [
             "//commonlibrary/c_utils/base/include/"
@@ -10142,6 +10144,11 @@
         ],
         "//foundation/multimedia/drm_framework/services/drm_service:drm_service": [
             "//foundation/arkui/napi/interfaces/kits/"
+        ],
+        "//foundation/multimedia/image_effect/frameworks/native:image_effect_impl": [
+            "//foundation/multimedia/media_foundation/engine/include/",
+            "//third_party/skia/third_party/externals/oboe/samples/RhythmGame/third_party/",
+            "//drivers/peripheral/display/interfaces/include/"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/pixelconverter:pixelconvertadapter": [
             "//foundation/multimedia/utils/include/",
@@ -12874,10 +12881,28 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Imul:gen_builtinMathImul_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/number/Constructor:gen_builtinNumberConstructor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsIntN:gen_builtinBigIntAsIntN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsUintN:gen_builtinBigIntAsUintN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/Constructor:gen_builtinBigIntConstructor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/Now:gen_builtinDateNow_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
@@ -12898,6 +12923,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Delete:gen_builtinMapDelete_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -12905,6 +12933,18 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Values:gen_builtinSetValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Entries:gen_builtinTypedArrayEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Keys:gen_builtinTypedArrayKeys_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Values:gen_builtinTypedArrayValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Delete:gen_builtinSetDelete_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
@@ -13369,6 +13409,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -13423,10 +13466,16 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_length:gen_pgo_length_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_loop_peeling:gen_pgo_loop_peeling_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_objectliteral_operation:gen_pgo_objectliteral_operation_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
@@ -13463,6 +13512,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
 		"//arkcompiler/ets_runtime/test/aottest/sharedmodule:gen_sharedmodule_abc": [
@@ -14534,6 +14586,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
 		"//arkcompiler/ets_runtime/test/moduletest/sharedmodule:gen_sharedmodule_abc": [
@@ -16340,7 +16395,7 @@
             "//third_party/glib:glib_packages"
         ],
         "//base/telephony/ril_adapter/services/hril:hril": [
-            "//drivers/interface/ril/v1_2:ril_idl_headers_1.2"
+            "//drivers/interface/ril/v1_3:ril_idl_headers_1.3"
         ],
         "//base/telephony/ril_adapter/test/fuzztest/callemergencynotice_fuzzer:CallEmergencyNoticeFuzzTest": [
             "//drivers/interface/ril/v1_1:ril_idl_headers"
@@ -16817,6 +16872,9 @@
             "//third_party/icu/icu4c:static_icuuc"
         ],
         "//commonlibrary/ets_utils/js_util_module/util:gen_util_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/stream:gen_stream_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//developtools/ace_ets2bundle:install_arkguard_tsc": [
@@ -25908,6 +25966,12 @@
         "//foundation/multimedia/camera_framework/test/fuzztest/streamcapture_fuzzer:StreamCaptureFuzzTest": [
             "//drivers/peripheral/display/hdi_service/gralloc/client:hdi_gralloc_client"
         ],
+        "//foundation/multimedia/image_effect/frameworks/native:image_effect_impl": [
+            "//foundation/graphic/graphic_2d:libgl"
+        ],
+        "//foundation/multimedia/image_effect/test/unittest:image_effect_unittest": [
+            "//foundation/graphic/graphic_2d:libgl"
+        ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/egl_image:egl_image": [
             "//third_party/skia:skia_ohos",
             "//foundation/graphic/graphic_2d:libgl"
@@ -25945,16 +26009,20 @@
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0"
         ],
         "//foundation/multimedia/image_framework/frameworks/innerkitsimpl/utils:image_utils_static": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0"
         ],
         "//foundation/multimedia/image_framework/interfaces/innerkits:image_static": [
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0"
         ],
         "//foundation/multimedia/image_framework/interfaces/innerkits:image_native": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/multimedia/image_framework/interfaces/kits/js/common:image": [
@@ -25968,7 +26036,8 @@
             "//drivers/interface/codec/image/v1_0:image_idl_headers",
             "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers",
             "//drivers/interface/display/composer/v1_0:display_composer_idl_headers",
-            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
+            "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers",
+            "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0"
         ],
         "//foundation/multimedia/image_framework/plugins/common/libs/image/libjpegplugin:jpegplugin": [
             "//third_party/skia:skcms",
@@ -27010,6 +27079,9 @@
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icuuc"
         ],
+        "//arkcompiler/ets_runtime/compiler_service:compiler_interface": [
+            "//foundation/ability/idl_tool:idl"
+        ],
         "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler": [
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc"
@@ -27376,10 +27448,28 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/math/Imul:gen_builtinMathImul_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/number/Constructor:gen_builtinNumberConstructor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsIntN:gen_builtinBigIntAsIntN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/AsUintN:gen_builtinBigIntAsUintN_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/bigint/Constructor:gen_builtinBigIntConstructor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsFinite:gen_builtinGlobalIsFinite_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/global/IsNan:gen_builtinGlobalIsNan_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/GetTime:gen_builtinDateGetTime_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/date/Now:gen_builtinDateNow_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Entries:gen_builtinMapEntries_abc": [
@@ -27400,6 +27490,9 @@
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Values:gen_builtinMapValues_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/map/Delete:gen_builtinMapDelete_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Entries:gen_builtinSetEntries_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27407,6 +27500,18 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Values:gen_builtinSetValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Entries:gen_builtinTypedArrayEntries_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Keys:gen_builtinTypedArrayKeys_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/typedarray/Values:gen_builtinTypedArrayValues_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/builtin_inlining/set/Delete:gen_builtinSetDelete_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/builtinmath:gen_builtinmath_abc": [
@@ -27871,6 +27976,9 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_call:gen_pgo_call_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_call_builtin_ctor:gen_pgo_call_builtin_ctor_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_call_deopt:gen_pgo_call_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -27925,10 +28033,16 @@
         "//arkcompiler/ets_runtime/test/aottest/pgo_length:gen_pgo_length_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_loop_peeling:gen_pgo_loop_peeling_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_objectliteral_operation:gen_pgo_objectliteral_operation_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_on_heap:gen_pgo_on_heap_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/pgo_store_deopt:gen_pgo_store_deopt_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/pgo_track_type:gen_pgo_track_type_abc": [
@@ -27968,6 +28082,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/shl:gen_shl_abc": [
@@ -28883,6 +29000,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/sharedcollectionsexception:gen_sharedcollectionsexception_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/sharedJSON:gen_sharedJSON_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/spreadoperator:gen_spreadoperator_abc": [
@@ -31485,6 +31605,9 @@
             "//third_party/openssl:libcrypto_shared",
             "//third_party/bounds_checking_function:libsec_shared"
         ],
+        "//commonlibrary/ets_utils/js_util_module/stream:gen_stream_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//commonlibrary/rust/ylong_http/ylong_http_client:ylong_http_client_inner": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
@@ -32847,6 +32970,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces:gen_filter_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces:gen_fullscreenlaunchcomponent_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces:gen_gridobjectsortcomponent_abc": [
@@ -37225,6 +37351,9 @@
         "//arkcompiler/ets_runtime/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
+        "//arkcompiler/ets_runtime/compiler_service/": [
+            "//foundation/ability/idl_tool/idl_config.gni"
+        ],
         "//arkcompiler/ets_runtime/test/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -37407,6 +37536,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/ace_config.gni",
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
+        ],
+        "//commonlibrary/ets_utils/js_util_module/stream/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//developtools/ace_ets2bundle/": [
             "//foundation/arkui/ace_engine/ace_config.gni",
@@ -38215,6 +38347,9 @@
         "//foundation/arkui/ace_engine/advanced_ui_component/filter/interfaces/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
+        "//foundation/arkui/ace_engine/advanced_ui_component/fullscreenlaunchcomponent/interfaces/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
         "//foundation/arkui/ace_engine/advanced_ui_component/gridobjectsortcomponent/interfaces/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -38638,6 +38773,23 @@
         ],
         "//drivers/interface/location/geofence/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ]
+    },
+    "fuzzy_match": {
+        "deps_not_lib": [
+            "//drivers/interface",
+            "//drivers/hdf_core",
+            "//drivers/peripheral"
+        ],
+        "deps_includes_absolute": [
+            "//drivers/hdf_core",
+            "//drivers/peripheral"
+        ],
+        "deps_component_absolute": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "deps_gni": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ]
     }
 }

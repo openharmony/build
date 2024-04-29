@@ -73,50 +73,50 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-c5b0b3-20240320",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-6d8873-20240416",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk",
       "rename": "true"
     }
@@ -143,12 +143,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -185,22 +185,22 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/windows/clang_windows-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/windows/clang_windows-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/windows/libcxx-ndk_windows-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/windows/libcxx-ndk_windows-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/linux/clang_linux-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/linux/clang_linux-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/linux/libcxx-ndk_linux-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/linux/libcxx-ndk_linux-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -229,12 +229,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-linux-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -271,22 +271,22 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/windows/clang_windows-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/windows/clang_windows-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/windows/libcxx-ndk_windows-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/windows/libcxx-ndk_windows-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/linux/clang_linux-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/linux/clang_linux-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/linux/libcxx-ndk_linux-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/linux/libcxx-ndk_linux-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -306,28 +306,33 @@
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-1.68.0-dev-x86_64-unknown-linux-gnu-norpath.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-nightly-x86_64-unknown-linux-gnu_20240419.tar.gz",
           "unzip_filename": "rustc"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-aarch64-linux-ohos-norpath_20230706.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-aarch64-linux-ohos_dylib_20240419.tar.gz",
           "unzip_filename": "rustc-aarch64-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-armv7-linux-ohos-norpath.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-armv7-linux-ohos_dylib_20240419.tar.gz",
           "unzip_filename": "rustc-arm-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/rust-std-1.68.0-dev-x86_64-unknown-linux-ohos.tar.gz",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-x86_64-unknown-linux-ohos_dylib_20240419.tar.gz",
           "unzip_filename": "rustc-x86_64-std"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-x86_64-pc-windows-gnullvm_20240419.tar.gz",
+          "unzip_filename": "rustc-x86_64-windows-std"
         }
       ],
       "install": [
         {
-          "install_dir":"prebuilts/rustc/rust-1.68.0-dev-x86_64-unknown-linux-gnu",
+          "install_dir":"prebuilts/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240419",
           "script":"install.sh",
           "args": [
             {
@@ -337,7 +342,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-aarch64-linux-ohos",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-aarch64-linux-ohos_dylib_20240419",
           "script":"install.sh",
           "args": [
             {
@@ -347,7 +352,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-armv7-linux-ohos",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-armv7-linux-ohos_dylib_20240419",
           "script":"install.sh",
           "args": [
             {
@@ -357,7 +362,17 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-1.68.0-dev-x86_64-unknown-linux-ohos",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-unknown-linux-ohos_dylib_20240419",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/linux-x86_64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-pc-windows-gnullvm_20240419",
           "script":"install.sh",
           "args": [
             {
@@ -391,7 +406,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-darwin-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -413,18 +428,50 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_arm64/clang_darwin-arm64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/darwin_arm64/clang_darwin-arm64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_arm64/libcxx-ndk_darwin-arm64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/darwin_arm64/libcxx-ndk_darwin-arm64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "darwin-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-nightly-aarch64-apple-darwin_20240419.tar.gz",
+          "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-aarch64-apple-darwin_20240419.tar.gz",
+          "unzip_filename": "rustc-aarch64-std"
+        }
+      ],
+      "install": [
+        {
+          "install_dir":"prebuilts/rustc/rust-nightly-aarch64-apple-darwin_20240419",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/darwin-aarch64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-nightly-aarch64-apple-darwin_20240419",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/darwin-aarch64/current"
         }
       ]
     },
@@ -437,7 +484,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240315/gn-darwin-x86-20240315.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -459,18 +506,50 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/clang_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/darwin_x86_64/clang_darwin-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-c5b0b3/darwin_x86_64/libcxx-ndk_darwin-x86_64-c5b0b3-20240320.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6d8873/darwin_x86_64/libcxx-ndk_darwin-x86_64-6d8873-20240416.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
           "unzip_filename": "darwin-x86"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-nightly-x86_64-apple-darwin_20240419.tar.gz",
+          "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/rustc",
+          "file_path": "/openharmony/compiler/rust/rust-std-nightly-x86_64-apple-darwin_20240419.tar.gz",
+          "unzip_filename": "rustc-x86_64-std"
+        }
+      ],
+      "install": [
+        {
+          "install_dir":"prebuilts/rustc/rust-nightly-x86_64-apple-darwin_20240419",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/darwin-x86_64/current"
+        },
+        {
+          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-apple-darwin_20240419",
+          "script":"install.sh",
+          "args": [
+            {
+              "prefix": "''"
+            }
+          ],
+          "destdir": "prebuilts/rustc/darwin-x86_64/current"
         }
       ]
     }

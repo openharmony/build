@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import("//build/config/python.gni")
+import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
@@ -122,6 +123,12 @@ template("ohos_native_stub_library") {
     part_name = "build_framework"
   }
 
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
+
   ohos_module_name = target_name
   _module_info_target = "${target_name}_info"
   generate_module_info(_module_info_target) {
@@ -178,7 +185,10 @@ template("ohos_native_stub_library") {
                              "libs",
                              "include_dirs",
                            ])
-    deps = [ ":$_native_stub_target" ]
+    deps = [
+      ":$_native_stub_target",
+      ":${_collect_target}",
+    ]
     if (!skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
@@ -186,6 +196,13 @@ template("ohos_native_stub_library") {
     output_dir = target_out_dir
     output_name = _output_name
     output_extension = _output_extension
+
+    if (defined(visibility) && visibility != []) {
+      visibility += [ "//build/*" ]
+      if (defined(build_ext_path)) {
+        visibility += [ "${build_ext_path}/*" ]
+      }
+    }
 
     install_module_info = {
       module_def = target_label

@@ -16,6 +16,7 @@ import("//build/config/python.gni")
 import("//build/ohos/kernel/kernel.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/templates/bpf/ohos_bpf_config.gni")
+import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 # Generate .o files from .c files
@@ -104,6 +105,12 @@ template("ohos_bpf") {
     notice = "$target_out_dir/$ohos_module_name.notice.txt"
   }
 
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
+
   _notice_target = "${target_name}__notice"
   _main_target_name = target_name
   collect_notice(_notice_target) {
@@ -135,6 +142,7 @@ template("ohos_bpf") {
     deps = [
       ":$_module_info_target",
       ":$_notice_target",
+      ":${_collect_target}",
       "//build/templates/bpf:gen_bpf_uapi",
     ]
     if (defined(invoker.deps)) {

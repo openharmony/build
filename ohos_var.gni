@@ -28,6 +28,7 @@ declare_args() {
 
 declare_args() {
   sdk_build_public = false
+  use_current_sdk = false
 }
 
 declare_args() {
