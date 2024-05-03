@@ -9152,6 +9152,9 @@
             "//foundation/filemanagement/dfs_service/services/distributedfiledaemon/include/ipc/",
             "//third_party/libuv/include/"
         ],
+        "//foundation/filemanagement/file_api/interfaces/kits/native:task_signal_native": [
+            "//foundation/filemanagement/dfs_service/services/distributedfiledaemon/include/ipc/"
+        ],
         "//foundation/filemanagement/storage_service/services/storage_daemon/crypto:libsdcrypto": [
             "//third_party/openssl/include/"
         ],
