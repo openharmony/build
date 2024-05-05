@@ -14480,6 +14480,9 @@
         "//arkcompiler/ets_runtime/test/moduletest/number:gen_number_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//arkcompiler/ets_runtime/test/moduletest/object:gen_object_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//arkcompiler/ets_runtime/test/moduletest/objectcloneproperties:gen_objectcloneproperties_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28886,6 +28889,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/number:gen_number_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/moduletest/object:gen_object_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/moduletest/objectcloneproperties:gen_objectcloneproperties_abc": [
