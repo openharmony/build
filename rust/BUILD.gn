@@ -15,6 +15,9 @@
 import("//build/ohos.gni")
 group("default") {
   deps = [ ":libstd.dylib.so" ]
+  if (build_variant == "root") {
+    deps += [ ":libtest.dylib.so" ]
+  }
 }
 
 ohos_prebuilt_shared_library("libstd.dylib.so") {
