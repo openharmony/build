@@ -258,7 +258,7 @@ if (!use_current_sdk) {
         deps += [
           ":archive_linux_ndk",
           ":archive_windows_ndk",
-          ":archive_windows_ndk",
+          ":archive_ohos_ndk",
         ]
       }
     } else if (ndk_platform == "win") {
