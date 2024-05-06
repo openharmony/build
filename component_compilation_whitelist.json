@@ -13521,9 +13521,6 @@
         "//arkcompiler/ets_runtime/test/aottest/poplexenv:gen_poplexenv_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-		"//arkcompiler/ets_runtime/test/aottest/privateproperty:gen_privateproperty_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
         "//arkcompiler/ets_runtime/test/aottest/proxy:gen_proxy_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
@@ -28091,9 +28088,6 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/poplexenv:gen_poplexenv_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//arkcompiler/ets_runtime/test/aottest/privateproperty:gen_privateproperty_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/proxy:gen_proxy_abc": [
