@@ -1,0 +1,155 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License
+
+import("//build/config/clang/clang.gni")
+import("//build/config/ohos/musl.gni")
+import("//build/ohos.gni")
+
+config("soft_musl_config") {
+  configs = [
+    "//build/config/compiler:compiler_cpu_abi",
+    "//build/config/coverage:default_coverage",
+  ]
+
+  musl_out_dir = get_label_info(musl_target, "target_out_dir")
+
+  include_dirs = [
+    "${musl_out_dir}/${musl_ported_dir}/arch/${musl_arch}",
+    "${musl_out_dir}/${musl_ported_dir}/arch/generic",
+    "${musl_out_dir}/${musl_ported_dir}/src/internal",
+    "${musl_out_dir}/${musl_ported_dir}/src/include",
+    "${musl_out_dir}/${musl_ported_dir}/src/gwp_asan",
+    "${musl_out_dir}/${musl_ported_dir}/src/hook",
+    "${musl_out_dir}/${musl_ported_dir}/src/network",
+    "${musl_out_dir}/${musl_ported_dir}/include",
+    "${musl_out_dir}/${musl_inc_out_dir}",
+  ]
+
+  cflags_basic = [
+    "--target=${musl_target_triple}",
+    "-Wall",
+    "-Wl,-z,relro,-z,now,-z,noexecstack",
+  ]
+
+  if (musl_arch == "arm") {
+    cflags_basic += [ "-mtp=cp15" ]
+  } else if (musl_arch == "aarch64") {
+  }
+
+  cflags_auto = [
+    "-D_XOPEN_SOURCE=700",
+    "-g",
+    "-pipe",
+    "-fno-omit-frame-pointer",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-Werror=implicit-function-declaration",
+    "-Werror=implicit-int",
+    "-Werror=pointer-sign",
+    "-Werror=pointer-arith",
+    "-Qunused-arguments",
+    "-Wno-int-conversion",
+  ]
+
+  if (is_llvm_build) {
+    cflags_auto += [
+      "-fno-unwind-tables",
+      "-fno-asynchronous-unwind-tables",
+    ]
+  } else {
+    cflags_auto += [
+      "-funwind-tables",
+      "-fasynchronous-unwind-tables",
+    ]
+  }
+
+  if (is_asan && use_hwasan) {
+    cflags_auto += [ "-DENABLE_HWASAN" ]
+  }
+
+  if (!is_asan && musl_arch != "mips") {
+    cflags_auto += [
+      "-DHOOK_ENABLE",
+      "-DOHOS_SOCKET_HOOK_ENABLE",
+    ]
+  }
+
+  if (!is_llvm_build && !is_asan && musl_arch != "mips") {
+    cflags_auto += [ "-DOHOS_FDTRACK_HOOK_ENABLE" ]
+  }
+
+  if (musl_arch == "mips" && is_legacy) {
+    cflags_auto += [ "-mnan=legacy" ]
+  }
+
+  if (use_pthread_cancel) {
+    cflags_auto += [ "-DFEATURE_PTHREAD_CANCEL" ]
+  }
+
+  cflags_auto += [ "-DRESERVE_SIGNAL_STACK" ]
+  cflags_auto += [ "-DDFX_SIGNAL_LIBC" ]
+
+  cflags_c99fse = [
+    "-std=c99",
+    "-nostdinc",
+    "-Wa,--noexecstack",
+  ]
+
+  cflags_all = cflags_basic + cflags_c99fse + cflags_auto
+
+  cflags = cflags_all
+
+  defines = [ "BROKEN_VFP_ASM" ]
+  if (is_standard_system) {
+    defines += [
+      "OHOS_DNS_PROXY_BY_NETSYS=1",
+      "OHOS_FWMARK_CLIENT_BY_NETSYS=1",
+      "OHOS_PERMISSION_INTERNET=1",
+      "OHOS_DISABLE_IPV6=0",
+    ]
+  }
+
+  if (!is_standard_system && defined(enable_musl_log)) {
+    if (enable_musl_log) {
+      defines += [ "ENABLE_MUSL_LOG" ]
+    }
+  }
+
+  if (use_gwp_asan) {
+    defines += [ "USE_GWP_ASAN" ]
+    if (!defined(libs)) {
+      libs = [ rebase_path(libgwp_asan_file) ]
+    } else {
+      libs += [ rebase_path(libgwp_asan_file) ]
+    }
+  }
+
+  dynamic_list = rebase_path("${musl_out_dir}/${musl_ported_dir}/dynamic.list")
+
+  ldflags = cflags_all
+  ldflags += [
+    "--target=${musl_target_triple}",
+    "-fuse-ld=lld",
+    "-Wl,--sort-section,alignment",
+    "-Wl,--sort-common",
+    "-Wl,--gc-sections",
+    "-Wl,--hash-style=both",
+    "-Wl,--no-undefined",
+    "-Wl,--dynamic-list=${dynamic_list}",
+    "-Wl,--build-id=md5",
+  ]
+  if (musl_arch == "mips") {
+    ldflags -= [ "-Wl,--hash-style=both" ]
+  }
+  asmflags = cflags
+}
