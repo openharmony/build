@@ -396,7 +396,11 @@ template("ohos_executable") {
       ldflags += [ "-static" ]
       if (is_ohos && use_musl) {
         import("//build/config/ohos/musl.gni")
-        deps += [ "//third_party/musl:soft_static_libs" ]
+        if (defined(external_deps)) {
+          external_deps += [ "musl:soft_libc_musl_static" ]
+        } else {
+          external_deps = [ "musl:soft_libc_musl_static" ]
+        }
       }
     } else if (is_ohos) {
       if (current_cpu == "arm" || current_cpu == "arm64" ||
