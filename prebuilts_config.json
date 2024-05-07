@@ -43,8 +43,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240416",
-          "url": "openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
+          "version": "20240506",
+          "url": "openharmony/compiler/gn/20240506/gn-linux-x86-20240506.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -52,8 +52,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240416",
-          "url": "openharmony/compiler/gn/20240416/gn-linux-x86-20240416.tar.gz",
+          "version": "20240506",
+          "url": "openharmony/compiler/gn/20240506/gn-linux-x86-20240506.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
