@@ -46,7 +46,8 @@
         "ipc",
         "rockchip_products",
         "selinux",
-        "selinux_adapter"
+        "selinux_adapter",
+        "libffi"
       ],
       "third_party": [
         "bounds_checking_function",
@@ -61,7 +62,8 @@
         "markupsafe",
         "mbedtls",
         "openssl",
-        "samgr_lite"
+        "samgr_lite",
+        "libffi"
       ]
     },
     "build": {
