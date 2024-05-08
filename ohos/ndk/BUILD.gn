@@ -15,150 +15,152 @@ import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
 import("//build/ohos/sdk/sdk.gni")
 
-package_info_name = "oh-uni-package"
-if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
-  ext_ndk_target = rebase_path(ext_ndk_config_file)
-  import(ext_ndk_target)
-  package_info_name = "uni-package"
-} else {
-  import("//build/ohos/ndk/ndk_targets.gni")
-}
-
-package_info_file = "$ndk_os_irrelevant_out_dir/$package_info_name.json"
-
-package_info = {
-  path = "native"
-  displayName = "Native"
-  version = current_ndk_version
-  if (release_type != "") {
-    releaseType = release_type
+if (!use_current_sdk) {
+  package_info_name = "oh-uni-package"
+  if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+    ext_ndk_target = rebase_path(ext_ndk_config_file)
+    import(ext_ndk_target)
+    package_info_name = "uni-package"
+  } else {
+    import("//build/ohos/ndk/ndk_targets.gni")
   }
-  if (meta_version != "") {
-    meta = {
-      metaVersion = meta_version
+
+  package_info_file = "$ndk_os_irrelevant_out_dir/$package_info_name.json"
+
+  package_info = {
+    path = "native"
+    displayName = "Native"
+    version = current_ndk_version
+    if (release_type != "") {
+      releaseType = release_type
+    }
+    if (meta_version != "") {
+      meta = {
+        metaVersion = meta_version
+      }
+    }
+    if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+      platformVersion = platform_version
+    }
+    apiVersion = api_version
+  }
+  write_file(package_info_file, package_info, "json")
+
+  action_with_pydeps("_collect_ndk_syscap") {
+    deps = all_ndk_targets_list
+    script = "//build/ohos/ndk/collect_ndk_syscap.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _ndk_syscap_desc_file =
+        "${ndk_os_irrelevant_out_dir}/ndk_system_capability.json"
+    _native_syscap_config_file =
+        "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
+    outputs = [ _ndk_syscap_desc_file ]
+    args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--system-capability-file",
+      rebase_path(_ndk_syscap_desc_file, root_build_dir),
+      "--system-capability-header-config",
+      rebase_path(_native_syscap_config_file, root_build_dir),
+      "--targets-build-config",
+    ]
+    foreach(_ndk_target, all_ndk_targets_list) {
+      _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
+                        get_label_info(_ndk_target, "name") + ".build_config"
+      args += [ rebase_path(_target_bc_file, root_build_dir) ]
     }
   }
-  if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
-    platformVersion = platform_version
-  }
-  apiVersion = api_version
-}
-write_file(package_info_file, package_info, "json")
 
-action_with_pydeps("_collect_ndk_syscap") {
-  deps = all_ndk_targets_list
-  script = "//build/ohos/ndk/collect_ndk_syscap.py"
-  depfile = "$target_gen_dir/$target_name.d"
-  _ndk_syscap_desc_file =
-      "${ndk_os_irrelevant_out_dir}/ndk_system_capability.json"
-  _native_syscap_config_file =
-      "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
-  outputs = [ _ndk_syscap_desc_file ]
-  args = [
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
-    "--system-capability-file",
-    rebase_path(_ndk_syscap_desc_file, root_build_dir),
-    "--system-capability-header-config",
-    rebase_path(_native_syscap_config_file, root_build_dir),
-    "--targets-build-config",
+  group("all_ndk_targets") {
+    deps = [ ":_collect_ndk_syscap" ]
+  }
+
+  group("ndk_notice") {
+    deps = []
+    if (enable_process_notice) {
+      deps += [
+        ":merge_ndk_notice",
+        ":verify_ndk_notice_file",
+      ]
+    }
+  }
+
+  ndk_targets = [
+    ":ndk_doxygen",
+    ":all_ndk_targets",
+    ":ndk_notice",
   ]
-  foreach(_ndk_target, all_ndk_targets_list) {
-    _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
-                      get_label_info(_ndk_target, "name") + ".build_config"
-    args += [ rebase_path(_target_bc_file, root_build_dir) ]
+
+  group("ohos_ndk") {
+    deps = ndk_targets
+    if (archive_ndk) {
+      deps += [ ":archive_ndk" ]
+    }
   }
-}
 
-group("all_ndk_targets") {
-  deps = [ ":_collect_ndk_syscap" ]
-}
+  group("ndk_doxygen") {
+    deps = []
+    if (enable_ndk_doxygen) {
+      deps += [
+        ":create_docs_portal_and_archive",
+        ":generate_ndk_docs",
+      ]
+    }
+  }
 
-group("ndk_notice") {
-  deps = []
-  if (enable_process_notice) {
-    deps += [
-      ":merge_ndk_notice",
-      ":verify_ndk_notice_file",
+  # doxygen always generates index.html
+  ndk_doxygen_output = "$ndk_docs_out_dir/html"
+  ndk_docs_portal = "$ndk_docs_out_dir/index.html"
+
+  action_with_pydeps("generate_ndk_docs") {
+    deps = [ ":all_ndk_targets" ]
+    script = "//build/ohos/ndk/generate_ndk_docs.py"
+    depfile = "$target_gen_dir/$target_name.d"
+
+    doxygen_file = "//build/ohos/ndk/Doxyfile"
+    inputs = [ doxygen_file ]
+
+    version = current_ndk_version
+    working_dir = "$ndk_headers_out_dir"
+
+    outputs = [ ndk_doxygen_output ]
+
+    args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--working-dir",
+      rebase_path(working_dir, root_build_dir),
+      "--version",
+      version,
+      "--output",
+      rebase_path(ndk_doxygen_output, root_build_dir),
+      "--doxygen-file",
+      rebase_path(doxygen_file, root_build_dir),
+      "--record-path",
+      rebase_path("$target_gen_dir/" +
+                      get_path_info(ndk_doxygen_output, "file") + ".md5.stamp",
+                  root_build_dir),
     ]
   }
-}
 
-ndk_targets = [
-  ":ndk_doxygen",
-  ":all_ndk_targets",
-  ":ndk_notice",
-]
-
-group("ohos_ndk") {
-  deps = ndk_targets
-  if (archive_ndk) {
-    deps += [ ":archive_ndk" ]
-  }
-}
-
-group("ndk_doxygen") {
-  deps = []
-  if (enable_ndk_doxygen) {
-    deps += [
-      ":create_docs_portal_and_archive",
-      ":generate_ndk_docs",
+  action_with_pydeps("create_docs_portal_and_archive") {
+    deps = [ ":generate_ndk_docs" ]
+    script = "//build/ohos/ndk/create_ndk_docs_portal.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--doxygen-output",
+      rebase_path(ndk_doxygen_output + "/index.html", root_build_dir),
+      "--record-path",
+      rebase_path("$target_gen_dir/" + get_path_info(ndk_docs_portal, "file") +
+                      ".md5.stamp",
+                  root_build_dir),
+      "--portal-path",
+      rebase_path(ndk_docs_portal, root_build_dir),
     ]
+    outputs = [ ndk_docs_portal ]
   }
-}
-
-# doxygen always generates index.html
-ndk_doxygen_output = "$ndk_docs_out_dir/html"
-ndk_docs_portal = "$ndk_docs_out_dir/index.html"
-
-action_with_pydeps("generate_ndk_docs") {
-  deps = [ ":all_ndk_targets" ]
-  script = "//build/ohos/ndk/generate_ndk_docs.py"
-  depfile = "$target_gen_dir/$target_name.d"
-
-  doxygen_file = "//build/ohos/ndk/Doxyfile"
-  inputs = [ doxygen_file ]
-
-  version = current_ndk_version
-  working_dir = "$ndk_headers_out_dir"
-
-  outputs = [ ndk_doxygen_output ]
-
-  args = [
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
-    "--working-dir",
-    rebase_path(working_dir, root_build_dir),
-    "--version",
-    version,
-    "--output",
-    rebase_path(ndk_doxygen_output, root_build_dir),
-    "--doxygen-file",
-    rebase_path(doxygen_file, root_build_dir),
-    "--record-path",
-    rebase_path("$target_gen_dir/" + get_path_info(ndk_doxygen_output, "file") +
-                    ".md5.stamp",
-                root_build_dir),
-  ]
-}
-
-action_with_pydeps("create_docs_portal_and_archive") {
-  deps = [ ":generate_ndk_docs" ]
-  script = "//build/ohos/ndk/create_ndk_docs_portal.py"
-  depfile = "$target_gen_dir/$target_name.d"
-  args = [
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
-    "--doxygen-output",
-    rebase_path(ndk_doxygen_output + "/index.html", root_build_dir),
-    "--record-path",
-    rebase_path("$target_gen_dir/" + get_path_info(ndk_docs_portal, "file") +
-                    ".md5.stamp",
-                root_build_dir),
-    "--portal-path",
-    rebase_path(ndk_docs_portal, root_build_dir),
-  ]
-  outputs = [ ndk_docs_portal ]
 }
 
 ohos_ndk_copy("ndk_cmake_files") {
@@ -170,18 +172,18 @@ if (host_os == "mac") {
   copy("copy_darwin_ohos_cmake") {
     deps = [ "//prebuilts/cmake/darwin-x86:darwin_cmake_copy" ]
     sources = [ "./OHOS.cmake" ]
-    outputs = [ "$ndk_darwin_tools_out_dir/cmake/share/cmake-3.16/Modules/Platform/{{source_file_part}}" ]
+    outputs = [ "$ndk_darwin_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
 } else {
   copy("copy_linux_ohos_cmake") {
     deps = [ "//prebuilts/cmake/linux-x86:linux_cmake_copy" ]
     sources = [ "./OHOS.cmake" ]
-    outputs = [ "$ndk_linux_tools_out_dir/cmake/share/cmake-3.16/Modules/Platform/{{source_file_part}}" ]
+    outputs = [ "$ndk_linux_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
   copy("copy_windows_ohos_cmake") {
     deps = [ "//prebuilts/cmake/windows-x86:windows_cmake_copy" ]
     sources = [ "./OHOS.cmake" ]
-    outputs = [ "$ndk_windows_tools_out_dir/cmake/share/cmake-3.16/Modules/Platform/{{source_file_part}}" ]
+    outputs = [ "$ndk_windows_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
 }
 
@@ -196,81 +198,184 @@ action("cmake_patch") {
   }
   script = "//build/ohos/ndk/cmake_patch.sh"
   args = [
-    rebase_path("$ndk_linux_tools_out_dir/cmake/share/cmake-3.16/Modules"),
-    rebase_path("$ndk_windows_tools_out_dir/cmake/share/cmake-3.16/Modules"),
-    rebase_path("$ndk_darwin_tools_out_dir/cmake/share/cmake-3.16/Modules"),
+    rebase_path("$ndk_linux_tools_out_dir/cmake/share/cmake-3.28/Modules"),
+    rebase_path("$ndk_windows_tools_out_dir/cmake/share/cmake-3.28/Modules"),
+    rebase_path("$ndk_darwin_tools_out_dir/cmake/share/cmake-3.28/Modules"),
   ]
   outputs = [ "${target_out_dir}/${target_name}.stamp" ]
 }
 
-action_with_pydeps("merge_ndk_notice") {
-  deps = [ ":all_ndk_targets" ]
-  script = "//build/ohos/notice/merge_notice_files.py"
-  depfile = "$target_gen_dir/$target_name.d"
+if (!use_current_sdk) {
+  action_with_pydeps("merge_ndk_notice") {
+    deps = [ ":all_ndk_targets" ]
+    script = "//build/ohos/notice/merge_notice_files.py"
+    depfile = "$target_gen_dir/$target_name.d"
 
-  outputs = [
-    ndk_notice_txt,
-    ndk_notice_gz,
-  ]
+    outputs = [
+      ndk_notice_txt,
+      ndk_notice_gz,
+    ]
 
-  args = [
-    "--image-name",
-    "ndk",
-    "--notice-root-dir",
-    rebase_path(ndk_notice_dir, root_build_dir),
-    "--output-notice-txt",
-    rebase_path(ndk_notice_txt, root_build_dir),
-    "--output-notice-gz",
-    rebase_path(ndk_notice_gz, root_build_dir),
-    "--notice-title",
-    "Notices for files and software contained in sdk-native in this directory:",
-    "--target-cpu",
-    target_cpu,
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
-  ]
-}
+    args = [
+      "--image-name",
+      "ndk",
+      "--notice-root-dir",
+      rebase_path(ndk_notice_dir, root_build_dir),
+      "--output-notice-txt",
+      rebase_path(ndk_notice_txt, root_build_dir),
+      "--output-notice-gz",
+      rebase_path(ndk_notice_gz, root_build_dir),
+      "--notice-title",
+      "Notices for files and software contained in sdk-native in this directory:",
+      "--target-cpu",
+      target_cpu,
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+    ]
+  }
 
-action("verify_ndk_notice_file") {
-  deps = [ ":merge_ndk_notice" ]
+  action("verify_ndk_notice_file") {
+    deps = [ ":merge_ndk_notice" ]
 
-  script = "//build/core/build_scripts/verify_notice.sh"
-  _verify_result = "${target_out_dir}/ndk_notice_verify_result.out"
+    script = "//build/core/build_scripts/verify_notice.sh"
+    _verify_result = "${target_out_dir}/ndk_notice_verify_result.out"
 
-  outputs = [ _verify_result ]
+    outputs = [ _verify_result ]
 
-  args = [
-    rebase_path(ndk_notice_txt, root_build_dir),
-    rebase_path(_verify_result, root_build_dir),
-    rebase_path(target_out_dir, root_build_dir),
-  ]
-}
+    args = [
+      rebase_path(ndk_notice_txt, root_build_dir),
+      rebase_path(_verify_result, root_build_dir),
+      rebase_path(target_out_dir, root_build_dir),
+    ]
+  }
 
-group("archive_ndk") {
-  deps = []
-  if (ndk_platform == "default") {
-    if (host_os == "mac") {
+  group("archive_ndk") {
+    deps = []
+    if (ndk_platform == "default") {
+      if (host_os == "mac") {
+        deps += [ ":archive_darwin_ndk" ]
+      } else {
+        deps += [
+          ":archive_linux_ndk",
+          ":archive_windows_ndk",
+          ":archive_windows_ndk",
+        ]
+      }
+    } else if (ndk_platform == "win") {
+      deps += [ ":archive_windows_ndk" ]
+    } else if (ndk_platform == "mac") {
       deps += [ ":archive_darwin_ndk" ]
-    } else {
-      deps += [
-        ":archive_linux_ndk",
-        ":archive_windows_ndk",
-      ]
+    } else if (ndk_platform == "linux") {
+      deps += [ ":archive_linux_ndk" ]
+    } else if (ndk_platform == "ohos") {
+      deps += [ ":archive_ohos_ndk" ]
     }
-  } else if (ndk_platform == "win") {
-    deps += [ ":archive_windows_ndk" ]
-  } else if (ndk_platform == "mac") {
-    deps += [ ":archive_darwin_ndk" ]
-  } else if (ndk_platform == "linux") {
-    deps += [ ":archive_linux_ndk" ]
+  }
+
+  action_with_pydeps("archive_windows_ndk") {
+    deps = ndk_targets
+    script = "//build/ohos/ndk/archive_ndk.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _output = "$ohos_sdk_out_dir/${windows_system}/${ndk_zip_prefix}-${windows_system}-${arch}-${current_ndk_version}"
+    if (release_type != "") {
+      _output += "-${release_type}.zip"
+    } else {
+      _output += ".zip"
+    }
+
+    args = [
+      "--os-irrelevant-dir",
+      rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+      "--output",
+      rebase_path(_output, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--os-specific-dir",
+      rebase_path("$ndk_windows_specific_out_dir", root_build_dir),
+      "--notice-file",
+      rebase_path(ndk_notice_txt, root_build_dir),
+      "--prefix",
+      ndk_zip_prefix,
+      "--record-path",
+      rebase_path(
+          "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+          root_build_dir),
+      "--platform",
+      "windows",
+    ]
+    outputs = [ _output ]
+  }
+
+  action_with_pydeps("archive_linux_ndk") {
+    deps = ndk_targets
+    script = "//build/ohos/ndk/archive_ndk.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _output = "$ohos_sdk_out_dir/${linux_system}/${ndk_zip_prefix}-${linux_system}-${arch}-${current_ndk_version}"
+    if (release_type != "") {
+      _output += "-${release_type}.zip"
+    } else {
+      _output += ".zip"
+    }
+
+    args = [
+      "--os-irrelevant-dir",
+      rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+      "--output",
+      rebase_path(_output, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--notice-file",
+      rebase_path(ndk_notice_txt, root_build_dir),
+      "--os-specific-dir",
+      rebase_path("$ndk_linux_specific_out_dir", root_build_dir),
+      "--prefix",
+      ndk_zip_prefix,
+      "--record-path",
+      rebase_path(
+          "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+          root_build_dir),
+    ]
+    outputs = [ _output ]
+  }
+
+  action_with_pydeps("archive_darwin_ndk") {
+    deps = ndk_targets
+    script = "//build/ohos/ndk/archive_ndk.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _output = "$ohos_sdk_out_dir/${darwin_system}/${ndk_zip_prefix}-${darwin_system}-${arch}-${current_ndk_version}"
+    if (release_type != "") {
+      _output += "-${release_type}.zip"
+    } else {
+      _output += ".zip"
+    }
+
+    args = [
+      "--os-irrelevant-dir",
+      rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+      "--output",
+      rebase_path(_output, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--notice-file",
+      rebase_path(ndk_notice_txt, root_build_dir),
+      "--os-specific-dir",
+      rebase_path("$ndk_darwin_specific_out_dir", root_build_dir),
+      "--prefix",
+      ndk_zip_prefix,
+      "--record-path",
+      rebase_path(
+          "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+          root_build_dir),
+    ]
+    outputs = [ _output ]
   }
 }
 
-action_with_pydeps("archive_windows_ndk") {
+action_with_pydeps("archive_ohos_ndk") {
   deps = ndk_targets
   script = "//build/ohos/ndk/archive_ndk.py"
   depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${windows_system}/${ndk_zip_prefix}-${windows_system}-${arch}-${current_ndk_version}"
+  _output = "$ohos_sdk_out_dir/${ohos_system}/${ndk_zip_prefix}-${ohos_system}-${arch}-${current_ndk_version}"
   if (release_type != "") {
     _output += "-${release_type}.zip"
   } else {
@@ -284,76 +389,10 @@ action_with_pydeps("archive_windows_ndk") {
     rebase_path(_output, root_build_dir),
     "--depfile",
     rebase_path(depfile, root_build_dir),
-    "--os-specific-dir",
-    rebase_path("$ndk_windows_specific_out_dir", root_build_dir),
-    "--notice-file",
-    rebase_path(ndk_notice_txt, root_build_dir),
-    "--prefix",
-    ndk_zip_prefix,
-    "--record-path",
-    rebase_path(
-        "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
-        root_build_dir),
-    "--platform",
-    "windows",
-  ]
-  outputs = [ _output ]
-}
-
-action_with_pydeps("archive_linux_ndk") {
-  deps = ndk_targets
-  script = "//build/ohos/ndk/archive_ndk.py"
-  depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${linux_system}/${ndk_zip_prefix}-${linux_system}-${arch}-${current_ndk_version}"
-  if (release_type != "") {
-    _output += "-${release_type}.zip"
-  } else {
-    _output += ".zip"
-  }
-
-  args = [
-    "--os-irrelevant-dir",
-    rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
-    "--output",
-    rebase_path(_output, root_build_dir),
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
     "--notice-file",
     rebase_path(ndk_notice_txt, root_build_dir),
     "--os-specific-dir",
-    rebase_path("$ndk_linux_specific_out_dir", root_build_dir),
-    "--prefix",
-    ndk_zip_prefix,
-    "--record-path",
-    rebase_path(
-        "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
-        root_build_dir),
-  ]
-  outputs = [ _output ]
-}
-
-action_with_pydeps("archive_darwin_ndk") {
-  deps = ndk_targets
-  script = "//build/ohos/ndk/archive_ndk.py"
-  depfile = "$target_gen_dir/$target_name.d"
-  _output = "$ohos_sdk_out_dir/${darwin_system}/${ndk_zip_prefix}-${darwin_system}-${arch}-${current_ndk_version}"
-  if (release_type != "") {
-    _output += "-${release_type}.zip"
-  } else {
-    _output += ".zip"
-  }
-
-  args = [
-    "--os-irrelevant-dir",
-    rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
-    "--output",
-    rebase_path(_output, root_build_dir),
-    "--depfile",
-    rebase_path(depfile, root_build_dir),
-    "--notice-file",
-    rebase_path(ndk_notice_txt, root_build_dir),
-    "--os-specific-dir",
-    rebase_path("$ndk_darwin_specific_out_dir", root_build_dir),
+    rebase_path("$ndk_ohos_specific_out_dir", root_build_dir),
     "--prefix",
     ndk_zip_prefix,
     "--record-path",

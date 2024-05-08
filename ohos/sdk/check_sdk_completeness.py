@@ -197,8 +197,9 @@ def main():
     sdk_platform = options.sdk_platform
 
     global sdk_package_set 
-    sdk_package_set = set(get_all_sdk_package_list())
-    output_the_verification_result(sdk_check_list)
+    if sdk_platform != 'ohos':
+        sdk_package_set = set(get_all_sdk_package_list())
+        output_the_verification_result(sdk_check_list)
 
 
 if __name__ == '__main__':

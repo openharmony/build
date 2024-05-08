@@ -17,4 +17,7 @@ ohos_rust_executable("test_bin_crate") {
   sources = [ "src/main.rs" ]
   rustenv = [ "RUSTENV_TEST=123" ]
   features = [ "std" ]
+  if (is_mingw) {
+    rust_static_link = true
+  }
 }
