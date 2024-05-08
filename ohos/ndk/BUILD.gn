@@ -257,7 +257,7 @@ if (!use_current_sdk) {
       } else {
         deps += [
           ":archive_linux_ndk",
-          ":archive_windows_ndk",
+          ":archive_ohos_ndk",
           ":archive_windows_ndk",
         ]
       }
