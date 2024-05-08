@@ -175,6 +175,11 @@ fi
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
 
+if [[ -d "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin" && ! -f "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin/x86_64-w64-mingw32-clang" ]];then
+    cp -rf "${code_dir}/build/x86_64-w64-mingw32-clang" "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin"
+    echo "add mingw clang_wrapper file"
+fi
+
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.10.2/bin/pip3.10
 elif [[ "${host_platform}" == "darwin" ]]; then
@@ -234,12 +239,12 @@ for i in ${llvm_dir_list[@]}
 do
     libcxx_dir="${i}/libcxx-ndk/lib"
     if [[ -d "${i}/libcxx-ndk" ]]; then
-        for file in `ls ${libcxx_dir}`
+        for file in $(ls ${libcxx_dir})
         do
             if [ ! -d "${libcxx_dir}/${file}/c++" ];then
-                `mkdir -p ${libcxx_dir}/c++`
-                `cp -r ${libcxx_dir}/${file}/* ${libcxx_dir}/c++`
-                `mv ${libcxx_dir}/c++ ${libcxx_dir}/${file}/c++`
+                $(mkdir -p ${libcxx_dir}/c++)
+                $(cp -r ${libcxx_dir}/${file}/* ${libcxx_dir}/c++)
+                $(mv ${libcxx_dir}/c++ ${libcxx_dir}/${file}/c++)
             fi
         done
     fi
@@ -255,49 +260,12 @@ cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
 cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 }
 
-function change_rustlib_name(){
-rust_dir="${code_dir}/prebuilts/rustc/linux-x86_64/current/lib/rustlib/"
-for file in `find $rust_dir -path $rust_dir/x86_64-unknown-linux-gnu -prune -o -name "lib*.*"`
-do
-    dir_name=${file%/*}
-    file_name=${file##*/}
-    file_prefix=`echo $file_name | awk '{split($1, arr, "."); print arr[1]}'`
-    file_prefix=`echo $file_prefix | awk '{split($1, arr, "-"); print arr[1]}'`
-    file_suffix=`echo $file_name | awk '{split($1, arr, "."); print arr[2]}'`
-    if [[ $file_suffix != "rlib" && $file_suffix != "so" || $file_prefix == "librustc_demangle" || $file_prefix == "libcfg_if" || $file_prefix == "libunwind" ]]
-    then
-        continue
-    fi
-    if [[ $file_suffix == "rlib" ]]
-    then
-        if [[ $file_prefix == "libstd" || $file_prefix == "libtest" ]]
-        then
-            newfile_name="$file_prefix.dylib.rlib"
-        else
-            newfile_name="$file_prefix.rlib"
-        fi
-    fi
-
-    if [[ $file_suffix == "so" ]]
-    then
-        newfile_name="$file_prefix.dylib.so"
-    fi
-    if [[ "$file_name" == "$newfile_name" ]]
-    then
-        continue
-    fi
-    mv $file "$dir_name/$newfile_name"
-done
-}
-
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
     copy_inside_cxx
     echo "======copy inside cxx finished!======"
     if [[ "${host_platform}" == "linux" ]]; then
         update_llvm_ndk
         echo "======update llvm ndk finished!======"
-        change_rustlib_name
-        echo "======change rustlib name finished!======"
     fi
     create_lldb_mi
 fi

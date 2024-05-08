@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
 echo $1 $2
-starttime=`date +'%Y-%m-%d %H:%M:%S'`
 VARIANTS="default"
 if [ -n "$3" ]; then
   VARIANTS=$3
@@ -46,8 +46,7 @@ ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.
 prebuilts/build-tools/linux-x86/bin/gn gen --args="ohos_indep_compiler_enable=true product_name=\"$VARIANTS\"" -C out/$VARIANTS
 prebuilts/build-tools/linux-x86/bin/ninja -C out/$VARIANTS
 
-endtime=`date +'%Y-%m-%d %H:%M:%S'`
-start_seconds=$(date --date="$starttime" +%s);
-end_seconds=$(date --date="$endtime" +%s);
-echo "This run time is： "$((end_seconds-start_seconds))"s"
+rm -rf .gn
+ln -s build/core/gn/dotfile.gn .gn
+
 exit 0

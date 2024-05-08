@@ -44,6 +44,12 @@ from util.post_build.part_rom_statistics import output_part_rom_status
 from util.post_gn.check_compilation_parameters import check_compilation_parameters
 
 
+def rename_file(source_file, target_file):
+    try:
+        os.rename(source_file, target_file)
+    except FileNotFoundError as rename_error:
+        LogUtil.hb_warning(rename_error)
+
 class BuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
@@ -233,7 +239,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             logfile = os.path.join(out_path, 'build.log')
             if os.path.exists(logfile):
                 mtime = os.stat(logfile).st_mtime
-                os.rename(logfile, '{}/build.{}.log'.format(out_path, mtime))
+                rename_file(logfile, '{}/build.{}.log'.format(out_path, mtime))
 
     @staticmethod
     def resolve_log_mode(target_arg: Arg, build_module: BuildModuleInterface):
@@ -284,7 +290,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 oldfile = os.path.join(ccache_base, '{}.old'.format(logfile))
                 if os.path.exists(oldfile):
                     os.unlink(oldfile)
-                os.rename(logfile, oldfile)
+                rename_file(logfile, oldfile)
 
             os.environ['CCACHE_EXEC'] = ccache_path
             os.environ['CCACHE_LOGFILE'] = logfile

@@ -123,6 +123,8 @@ class Hpm(BuildFileGeneratorInterface):
             else:
                 if value == '':
                     flags_list.append('--{}'.format(key))
+                elif key == 'path':
+                    flags_list.extend(['--{}'.format(key), '{}'.format(str(value))])
                 else:
                     flags_list.extend(['--{}'.format(key).lower(), '{}'.format(str(value)).lower()])
 

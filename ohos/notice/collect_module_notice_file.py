@@ -43,7 +43,7 @@ def is_top_dir(current_dir: str):
 def find_license_recursively(current_dir: str, default_license: str):
     if is_top_dir(current_dir):
         return default_license
-    for file in ['LICENSE', 'NOTICE', 'License', 'Copyright']:
+    for file in LICENSE_CANDIDATES:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)
@@ -129,7 +129,7 @@ def do_collect_notice_files(options, depfiles: str):
 def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
     for notice_file in notice_files:
         notice_file = notice_file.strip()
-        if not os.path.join(notice_file):
+        if not os.path.exists(notice_file):
             notice_file = os.path.join(options.module_source_dir, notice_file)
         if os.path.exists(notice_file):
             if not os.path.exists(output):

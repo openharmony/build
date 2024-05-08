@@ -164,6 +164,16 @@ if (OHOS_ENABLE_HWASAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
     endif()
 endif()
 
+if(OHOS_ENABLE_TSAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
+	list(APPEND OHOS_C_COMPILER_FLAGS
+		-shared-libsan
+		-fsanitize=thread
+		-fno-omit-frame-pointer)
+	if(DEFINED OHOS_TSAN_BLACKLIST)
+		list(APPEND OHOS_C_COMPILER_FLAGS -fsanitize-blacklist="${OHOS_TSAN_BLACKLIST}")
+	endif()
+endif()
+
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the common c++ flags
@@ -282,3 +292,4 @@ set(OHOS_AR "${TOOLCHAIN_BIN_PATH}/llvm-ar${HOST_SYSTEM_EXE_SUFFIX}")
 set(OHOS_RANLIB "${TOOLCHAIN_BIN_PATH}/llvm-ranlib${HOST_SYSTEM_EXE_SUFFIX}")
 set(CMAKE_AR                "${OHOS_AR}" CACHE FILEPATH "Archiver")
 set(CMAKE_RANLIB            "${OHOS_RANLIB}" CACHE FILEPATH "Ranlib")
+set(UNIX TRUE CACHE BOOL FROCE)
