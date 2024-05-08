@@ -73,6 +73,7 @@
         "//drivers/interface/partitionslot/v1_0:partitionslot_idl_headers",
         "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers",
         "//drivers/interface/power/v1_1:power_idl_headers",
+        "//drivers/interface/power/v1_2:power_idl_headers",
         "//drivers/interface/ril/v1_1:ril_idl_headers",
         "//drivers/interface/ril/v1_2:ril_idl_headers_1.2",
         "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
@@ -4363,6 +4364,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/power/v1_1:power_idl_headers_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/power/v1_2:libpower_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/power/v1_2:libpower_stub_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/power/v1_2:power_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/power/v1_2:power_idl_headers_1.2": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -17230,6 +17267,9 @@
         "//drivers/interface/power/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/power/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/ril/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -17739,10 +17779,12 @@
         ],
         "//drivers/peripheral/power/interfaces/hdi_service:libpower_interface_service_1.1": [
             "//third_party/libxml2:xml2",
-            "//drivers/interface/power/v1_1:power_idl_headers"
+            "//drivers/interface/power/v1_1:power_idl_headers",
+            "//drivers/interface/power/v1_2:power_idl_headers"
         ],
         "//drivers/peripheral/power/test/unittest:hdi_unittest_power_runninglock": [
-            "//drivers/interface/power/v1_1:power_idl_headers"
+            "//drivers/interface/power/v1_1:power_idl_headers",
+            "//drivers/interface/power/v1_2:power_idl_headers"
         ],
         "//drivers/peripheral/ril/interfaces/hdi_service:libril_service_1.2": [
             "//drivers/interface/ril/v1_2:ril_idl_headers_1.2"
@@ -32390,6 +32432,9 @@
         "//drivers/interface/power/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/power/v1_2:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/ril/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -37773,6 +37818,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/power/v1_1/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/power/v1_2/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/ril/v1_1/": [
