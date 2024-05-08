@@ -14,3 +14,4 @@ log_path=/dev/asanlog/tsan.log
 print_full_thread_history=1
 print_module_map=2
 print_suppressions=1
+stack_trace_format ="    #%n %p %F %L"
