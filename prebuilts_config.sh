@@ -37,43 +37,6 @@ llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
 llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
 llvm_dir_list=($llvm_dir $llvm_dir_win $llvm_dir_mac_x86 $llvm_dir_mac_arm64)
 
-function create_executable() {
-    exe_dir=$1
-    exe_name=$2
-    exe_path=$exe_dir/$exe_name
-
-    if [[ ! -d "$exe_dir" ]]; then
-        echo "Error: directory '$exe_dir' does not exist while creating $exe_name"
-        return 1
-    fi
-
-    if [[ ! -e "$exe_path" ]]; then
-        touch $exe_path
-        chmod 755 $exe_path
-        echo "Created $exe_path"
-    else
-        echo "Warning: '$exe_path' already exists, will not create it"
-    fi
-}
-
-function create_lldb_mi() {
-    if [[ "$target_os" == "linux" ]]; then
-        create_executable $llvm_dir/llvm/bin "lldb-mi"
-        create_executable $llvm_dir_win/llvm/bin "lldb-mi.exe"
-    elif [[ "$target_os" == "darwin" ]]; then
-        if [[ "$target_cpu" == "arm64" ]]; then
-            create_executable $llvm_dir_mac_arm64/llvm/bin "lldb-mi"
-        elif [[ "$target_cpu" == "x86_64" ]]; then
-            create_executable $llvm_dir_mac_x86/llvm/bin "lldb-mi"
-        else
-            echo "Error: unrecognized CPU '$target_cpu' for Darwin"
-            return 1
-        fi
-    else
-        echo "Error: unsupported host platform '$target_os'"
-    fi
-}
-
 # copy libcxx-ndk library outside c++
 function copy_inside_cxx(){
 for i in ${llvm_dir_list[@]}
