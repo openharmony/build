@@ -29,19 +29,21 @@ def _get_args():
                         help="path of out.", )
     parser.add_argument("-rp", "--root_path", default=r"./", type=str,
                         help="path of root. default: ./", )
-    parser.add_argument("-cl", "--components_list", default=r"", type=str,
+    parser.add_argument("-cl", "--components_list", default="", type=str,
                         help="components_list , "
                              "pass in the components' name, separated by commas , "
                              "example: A,B,C . "
                              "default: none", )
     parser.add_argument("-bt", "--build_type", default=0, type=int,
                         help="build_type ,default: 0", )
-    parser.add_argument("-on", "--organization_name", default='', type=str,
+    parser.add_argument("-on", "--organization_name", default='ohos', type=str,
                         help="organization_name ,default: '' ", )
     parser.add_argument("-os", "--os_arg", default=r"linux", type=str,
                         help="path of output file. default: linux", )
     parser.add_argument("-ba", "--build_arch", default=r"x86", type=str,
                         help="build_arch_arg. default: x86", )
+    parser.add_argument("-lt", "--local_test", default=0, type=int,
+                        help="local test ,default: not local , 0", )
     args = parser.parse_args()
     return args
 
@@ -79,10 +81,8 @@ def _is_innerkit(data, part, module):
     for i in part_data["innerapis"]:
         if i:
             module_list.append(i["name"])
-
     if module in module_list:
         return True
-
     return False
 
 
@@ -120,6 +120,7 @@ def _get_json_data(args, module):
     try:
         jsondata = json.load(f)
     except Exception as e:
+        print(json_path)
         print('--_get_json_data parse json error--')
     return jsondata
 
@@ -160,7 +161,7 @@ def _copy_dir(src_path, target_path):
             path1 = os.path.join(target_path, file)
             _copy_dir(path, path1)
         else:
-            if not (path.endswith(".h") or path.endswith(".hpp")):
+            if not (path.endswith(".h") or path.endswith(".hpp") or path.endswith(".in")):
                 continue
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
@@ -186,13 +187,13 @@ def _copy_includes(args, module, includes: list):
         os.makedirs(includes_out_dir)
     for include in includes:
         _sub_include = include.split(args.get("part_path") + '/')[-1]
-        splitInclude = include.split("//")[1]
-        realIncludePath = os.path.join(args.get("root_path"), splitInclude)
+        split_include = include.split("//")[1]
+        real_include_path = os.path.join(args.get("root_path"), split_include)
         if args.get('part_name') == 'libunwind':
             _out_dir = os.path.join(includes_out_dir, _sub_include)
-            _copy_dir(realIncludePath, _out_dir)
+            _copy_dir(real_include_path, _out_dir)
             continue
-        _copy_dir(realIncludePath, includes_out_dir)
+        _copy_dir(real_include_path, includes_out_dir)
     print("_copy_includes has done ")
 
 
@@ -233,44 +234,51 @@ def _dirs_handler(bundlejson_out):
     return dirs
 
 
-def _copy_bundlejson(args):
+def _copy_bundlejson(args, public_deps_list):
     bundlejson_out = os.path.join(args.get("out_path"), "component_package", args.get("part_path"))
     print("bundlejson_out : ", bundlejson_out)
     if not os.path.exists(bundlejson_out):
         os.makedirs(bundlejson_out)
     bundlejson = os.path.join(args.get("root_path"), args.get("part_path"), "bundle.json")
+    dependencies_dict = {}
+    for public_deps in public_deps_list:
+        _public_dep = '@' + args.get('organization_name') + '/' + public_deps.split(':')[0]
+        dependencies_dict.update({_public_dep: "*"})
     if os.path.isfile(bundlejson):
         with open(bundlejson, 'r') as f:
             bundle_data = json.load(f)
-        bundle_data['publishAs'] = 'binary'
-        bundle_data.update({'os': args.get('os')})
-        bundle_data.update({'buildArch': args.get('buildArch')})
-        dirs = _dirs_handler(bundlejson_out)
-        bundle_data['dirs'] = dirs
-        bundle_data['version'] = str(bundle_data['version'])
-        if bundle_data['version'] == '':
-            bundle_data['version'] = '1.0.0'
-        pattern = r'^(\d+)\.(\d+)(-[a-zA-Z]+)?$'  # 正则表达式匹配a.b[-后缀]格式的字符串
-        match = re.match(pattern, bundle_data['version'])
-        if match:
-            a = match.group(1)
-            b = match.group(2)
-            suffix = match.group(3) if match.group(3) else ""
-            bundle_data['version'] = f"{a}.{b}.0{suffix}"
-        if args.get('build_type') in [0, 1]:
-            bundle_data['version'] += '-snapshot'
-        if args.get('organization_name'):
-            _name_pattern = r'@(.*.)/'
-            bundle_data['name'] = re.sub(_name_pattern, '@' + args.get('organization_name') + '/', bundle_data['name'])
-        if bundle_data.get('scripts'):
-            bundle_data.update({'scripts': {}})
-        if bundle_data.get('licensePath'):
-            del bundle_data['licensePath']
-        if bundle_data.get('readmePath'):
-            del bundle_data['readmePath']
-        with os.fdopen(os.open(os.path.join(bundlejson_out, "bundle.json"), os.O_WRONLY | os.O_CREAT, mode=0o640), "w",
-                       encoding='utf-8') as fd:
-            json.dump(bundle_data, fd, indent=4, ensure_ascii=False)
+            bundle_data['publishAs'] = 'binary'
+            bundle_data.update({'os': args.get('os')})
+            bundle_data.update({'buildArch': args.get('buildArch')})
+            dirs = _dirs_handler(bundlejson_out)
+            bundle_data['dirs'] = dirs
+            bundle_data['version'] = str(bundle_data['version'])
+            if bundle_data['version'] == '':
+                bundle_data['version'] = '1.0.0'
+            pattern = r'^(\d+)\.(\d+)(-[a-zA-Z]+)?$'  # 正则表达式匹配a.b[-后缀]格式的字符串
+            match = re.match(pattern, bundle_data['version'])
+            if match:
+                a = match.group(1)
+                b = match.group(2)
+                suffix = match.group(3) if match.group(3) else ""
+                bundle_data['version'] = f"{a}.{b}.0{suffix}"
+            if args.get('build_type') in [0, 1]:
+                bundle_data['version'] += '-snapshot'
+            if args.get('organization_name'):
+                _name_pattern = r'@(.*.)/'
+                bundle_data['name'] = re.sub(_name_pattern, '@' + args.get('organization_name') + '/',
+                                             bundle_data['name'])
+            if bundle_data.get('scripts'):
+                bundle_data.update({'scripts': {}})
+            if bundle_data.get('licensePath'):
+                del bundle_data['licensePath']
+            if bundle_data.get('readmePath'):
+                del bundle_data['readmePath']
+            bundle_data['dependencies'] = dependencies_dict
+            with os.fdopen(os.open(os.path.join(bundlejson_out, "bundle.json"), os.O_WRONLY | os.O_CREAT, mode=0o640),
+                           "w",
+                           encoding='utf-8') as fd:
+                json.dump(bundle_data, fd, indent=4, ensure_ascii=False)
 
 
 def _copy_license(args):
@@ -285,11 +293,11 @@ def _copy_license(args):
         license_default = os.path.join(args.get("root_path"), "build", "LICENSE")
         shutil.copy(license_default, license_out)
         bundlejson_out = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), 'bundle.json')
-        tmp = []
         with open(bundlejson_out, 'r') as f:
             bundle_data = json.load(f)
             bundle_data.update({"license": "Apache License 2.0"})
-
+        if os.path.isfile(bundlejson_out):
+            os.remove(bundlejson_out)
         with os.fdopen(os.open(bundlejson_out, os.O_WRONLY | os.O_CREAT, mode=0o640), "w",
                        encoding='utf-8') as fd:
             json.dump(bundle_data, fd, indent=4, ensure_ascii=False)
@@ -312,7 +320,9 @@ def _copy_readme(args):
         shutil.copy(readme_en, readme_out_file)
     else:
         try:
-            os.mknod(readme_out_file)
+            fd = os.open(readme_out_file, os.O_WRONLY | os.O_CREAT, mode=0o640)
+            fp = os.fdopen(fd, 'w')
+            fp.write('READ.ME')
         except FileExistsError:
             pass
 
@@ -368,15 +378,17 @@ def _generate_public_configs(fp, module):
     fp.write('  public_configs = [":' + module + '_configs"]\n')
 
 
-def _generate_public_deps(fp, deps: list, components_json):
+def _generate_public_deps(fp, deps: list, components_json, public_deps_list: list):
     if not deps:
-        return
+        return public_deps_list
     fp.write('  public_external_deps = [\n')
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
         if len(public_external_deps) > 0:
             fp.write('    "' + public_external_deps + '",\n')
+            public_deps_list.append(public_external_deps)
     fp.write('  ]\n')
+    return public_deps_list
 
 
 def _generate_other(fp, args, json_data, module):
@@ -390,7 +402,7 @@ def _generate_end(fp):
     fp.write('}')
 
 
-def _generate_build_gn(args, module, json_data, deps: list, components_json):
+def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
@@ -399,22 +411,23 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json):
     _generate_configs(fp, module)
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
-    _generate_public_deps(fp, deps, components_json)
+    _list = _generate_public_deps(fp, deps, components_json, public_deps_list)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print("_generate_build_gn has done ")
     fp.close()
+    return _list
 
 
 def _parse_module_list(args):
     module_list = []
-    publicinfoPath = os.path.join(args.get("out_path"),
-                                  args.get("subsystem_name"), args.get("part_name"), "publicinfo")
-    print('publicinfoPath', publicinfoPath)
-    if os.path.exists(publicinfoPath) is False:
+    publicinfo_path = os.path.join(args.get("out_path"),
+                                   args.get("subsystem_name"), args.get("part_name"), "publicinfo")
+    print('publicinfo_path', publicinfo_path)
+    if os.path.exists(publicinfo_path) is False:
         return module_list
-    publicinfoDir = os.listdir(publicinfoPath)
-    for filename in publicinfoDir:
+    publicinfo_dir = os.listdir(publicinfo_path)
+    for filename in publicinfo_dir:
         if filename.endswith(".json"):
             module_name = filename.split(".json")[0]
             module_list.append(module_name)
@@ -434,6 +447,11 @@ def _lib_special_handler(part_name, module, args):
         blkid_out = os.path.join(args.get("out_path"), "thirdparty", "e2fsprogs")
         if os.path.isfile(blkid_file_path):
             shutil.copy(blkid_file_path, blkid_out)
+    if module == 'grpc_cpp_plugin':
+        blkid_file_path = os.path.join(args.get('out_path'), 'clang_x64', 'thirdparty', 'grpc', 'grpc_cpp_plugin')
+        blkid_out = os.path.join(args.get("out_path"), "thirdparty", "grpc")
+        if os.path.isfile(blkid_file_path):
+            shutil.copy(blkid_file_path, blkid_out)
 
 
 def _generate_component_package(args, components_json):
@@ -443,7 +461,9 @@ def _generate_component_package(args, components_json):
     if len(modules) == 0:
         return
     is_component_build = False
+    _public_deps_list = []
     for module in modules:
+        public_deps_list = []
         if _is_innerkit(components_json, args.get("part_name"), module) == False:
             continue
         json_data = _get_json_data(args, module)
@@ -455,9 +475,11 @@ def _generate_component_package(args, components_json):
         includes = _handle_includes_data(json_data)
         deps = _handle_deps_data(json_data)
         _copy_includes(args, module, includes)
-        _generate_build_gn(args, module, json_data, deps, components_json)
+        _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
+        if _list:
+            _public_deps_list.extend(_list)
     if is_component_build:
-        _copy_bundlejson(args)
+        _copy_bundlejson(args, _public_deps_list)
         _copy_license(args)
         _copy_readme(args)
         if args.get("build_type") in [0, 1]:
@@ -525,6 +547,17 @@ def _make_hpm_packages_dir(root_path):
     return hpm_packages_path
 
 
+def _del_exist_component_package(out_path):
+    _component_package_path = os.path.join(out_path, 'component_package')
+    if os.path.isdir(_component_package_path):
+        try:
+            print('del dir component_package start..')
+            shutil.rmtree(_component_package_path)
+            print('del dir component_package end..')
+        except Exception as e:
+            print('del dir component_package FAILED')
+
+
 def _get_component_check() -> list:
     check_list = []
     contents = urllib.request.urlopen("https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
@@ -539,20 +572,22 @@ def _get_component_check() -> list:
     check_list = sorted(check_list)
     return check_list
 
-    
-def _del_exist_component_package(out_path):
-    _component_package_path = os.path.join(out_path, 'component_package')
-    if os.path.isdir(_component_package_path):
-        try:
-            print('del dir component_package start..')
-            shutil.rmtree(_component_package_path)
-            print('del dir component_package end..')
-        except Exception as e:
-            print('del dir component_package FAILED')
+
+def _generate_component_package_handler(args, components_list, parts_path_info, part_name, components_json, part_path):
+    if not components_list:
+        part_path = _get_parts_path(parts_path_info, part_name)
+        if part_path is None:
+            return
+        _generate_component_package(args, components_json)
+    for component in components_list:
+        if part_name == component:
+            if part_path is None:
+                return
+            _generate_component_package(args, components_json)
 
 
-def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='',
-                               os_arg='linux', build_arch_arg='x86'):
+def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
+                               os_arg='linux', build_arch_arg='x86', local_test=0):
     """
 
     Args:
@@ -566,16 +601,21 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
-
+        local_test: 1 to open local test , 0 to close
     Returns:
 
     """
     start_time = time.time()
     _check_list = _get_component_check()
-    if components_list is None:
-        components_list = _check_list
+    print(components_list)
+    if not components_list:
+        components_list = []
+    elif local_test == 1 and components_list:
+        components_list = [component for component in components_list.split(",")]
     else:
         components_list = [component for component in components_list.split(",") if component in _check_list]
+        if not components_list:
+            sys.exit("stop for no target to pack..")
     part_subsystem = _get_part_subsystem(out_path)
     parts_path_info = _get_parts_path_info(out_path)
     components_json = _get_components_json(out_path)
@@ -585,16 +625,16 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     for key, value in part_subsystem.items():
         part_name = key
         subsystem_name = value
+        part_path = _get_parts_path(parts_path_info, part_name)
+        args = {"subsystem_name": subsystem_name, "part_name": part_name,
+                "out_path": out_path, "root_path": root_path, "part_path": part_path,
+                "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
+                "build_type": build_type, "organization_name": organization_name
+                }
         # components_list is NONE or part name in components_list
-        if (part_name in components_list) or (not components_list):
-            part_path = _get_parts_path(parts_path_info, part_name)
-            if part_path is None:
-                continue
-            args = {"subsystem_name": subsystem_name, "part_name": part_name,
-                    "out_path": out_path, "root_path": root_path, "part_path": part_path,
-                    "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
-                    "build_type": build_type, "organization_name": organization_name}
-            _generate_component_package(args, components_json)
+        _generate_component_package_handler(args, components_list, parts_path_info, part_name,
+                                            components_json,
+                                            part_path)
 
     end_time = time.time()
     run_time = end_time - start_time
@@ -610,7 +650,8 @@ def main():
                                build_type=py_args.build_type,
                                organization_name=py_args.organization_name,
                                os_arg=py_args.os_arg,
-                               build_arch_arg=py_args.build_arch)
+                               build_arch_arg=py_args.build_arch,
+                               local_test=py_args.local_test)
 
 
 if __name__ == '__main__':
