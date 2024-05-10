@@ -491,6 +491,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         :phase: load.
         """
         loader = build_module.loader
+        loader.regist_arg("build_xts", target_arg.arg_value)
         for gn_arg in build_module.args_dict['gn_args'].arg_value:
             if 'pr_path_list' in gn_arg:
                 build_module.args_dict['gn_args'].arg_value.append("precise_xts=true")
