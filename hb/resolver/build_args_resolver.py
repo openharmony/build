@@ -492,6 +492,16 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         loader = build_module.loader
         for gn_arg in build_module.args_dict['gn_args'].arg_value:
+            if 'pr_path_list' in gn_arg:
+                build_module.args_dict['gn_args'].arg_value.append("precise_xts=true")
+                config = Config()
+                variable, value = gn_arg.split('=')
+                pyd_start_cmd = [
+                    'python3',
+                    '{}/test/xts/acts/get_dependency.py'.format(config.root_path),
+                    value,
+                ]
+                subprocess.call(pyd_start_cmd)
             if 'build_xts' in gn_arg:
                 variable, value = gn_arg.split('=')
                 if str(value).lower() == 'false':
@@ -499,8 +509,6 @@ class BuildArgsResolver(ArgsResolverInterface):
                 elif str(value).lower() == 'true':
                     value = True
                 loader.regist_arg(variable, value)
-                return
-        loader.regist_arg("build_xts", target_arg.arg_value)
 
     @staticmethod
     def resolve_ignore_api_check(target_arg: Arg, build_module: BuildModuleInterface):
