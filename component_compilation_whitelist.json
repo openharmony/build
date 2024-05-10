@@ -36815,6 +36815,9 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
         ],
+        "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/listen_ability:listen_ability_interface": [
+            "//foundation/ability/idl_tool:idl"
+        ],
         "//foundation/resourceschedule/work_scheduler/utils/native:workschedutils": [
             "//third_party/jsoncpp:jsoncpp"
         ],
@@ -38750,6 +38753,9 @@
         ],
         "//foundation/resourceschedule/work_scheduler/interfaces/kits/js/napi/work_scheduler_extension_context/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
+        "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/listen_ability/": [
+            "//foundation/ability/idl_tool/idl_config.gni"
         ],
         "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
