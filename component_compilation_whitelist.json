@@ -38836,14 +38836,16 @@
         "deps_not_lib": [
             "//drivers/interface",
             "//drivers/hdf_core",
-            "//drivers/peripheral"
+            "//drivers/peripheral",
+            "//developtools/packing_tool"
         ],
         "deps_includes_absolute": [
             "//drivers/hdf_core",
             "//drivers/peripheral"
         ],
         "deps_component_absolute": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
+            "//arkcompiler/ets_frontend/es2panda:es2panda",
+            "//developtools/global_resource_tool:restool"
         ],
         "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
