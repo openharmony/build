@@ -3247,7 +3247,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_camera/v1_1:distributed_camera_provider_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_camera/v1_0:distributed_camera_provider_idl_headers_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_camera/v1_1:distributed_camera_provider_idl_headers_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3265,7 +3283,25 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/distributed_camera/v1_1:libdistributed_camera_provider_proxy_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/distributed_camera/v1_0:libdistributed_camera_provider_stub_1.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/distributed_camera/v1_1:libdistributed_camera_provider_stub_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -5356,6 +5392,9 @@
             "//third_party/cJSON/"
         ],
         "//drivers/peripheral/distributed_camera/hdi_service:libdistributed_camera_hdf_service_1.0": [
+            "//third_party/jsoncpp/include/"
+        ],
+        "//drivers/peripheral/distributed_camera/hdi_service:libdistributed_camera_hdf_service_1.1": [
             "//third_party/jsoncpp/include/"
         ],
         "//drivers/peripheral/input/hal:hdi_input": [
@@ -17172,6 +17211,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/distributed_camera/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/drm/v1_0:hdi_gen": [
@@ -32339,6 +32381,9 @@
         "//drivers/interface/distributed_camera/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/distributed_camera/v1_1:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/drm/v1_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -32578,6 +32623,9 @@
             "//third_party/jsoncpp:jsoncpp"
         ],
         "//drivers/peripheral/distributed_camera/hdi_service:libdistributed_camera_hdf_service_1.0": [
+            "//third_party/jsoncpp:jsoncpp"
+        ],
+        "//drivers/peripheral/distributed_camera/hdi_service:libdistributed_camera_hdf_service_1.1": [
             "//third_party/jsoncpp:jsoncpp"
         ],
         "//drivers/peripheral/distributed_camera/hdi_service:libdistributed_camera_host_config": [
@@ -37737,6 +37785,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/distributed_camera/v1_0/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/distributed_camera/v1_1/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/drm/v1_0/": [
