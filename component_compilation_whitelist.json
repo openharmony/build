@@ -38837,7 +38837,8 @@
             "//drivers/interface",
             "//drivers/hdf_core",
             "//drivers/peripheral",
-            "//developtools/packing_tool"
+            "//developtools/packing_tool",
+            "//arkcompiler/ets_frontend/es2panda"
         ],
         "deps_includes_absolute": [
             "//drivers/hdf_core",
