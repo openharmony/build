@@ -89,7 +89,7 @@ def _get_src_part_name(src_bundle_paths):
     for src_bundle_path, v_path in src_bundle_paths.items():
         src_bundle_json = utils.get_json(src_bundle_path)
         part_name = src_bundle_json['component']['name']
-        if part_name.endswith('lite'):
+        if part_name.endswith('_lite'):
             pass
         else:
             _name = part_name
