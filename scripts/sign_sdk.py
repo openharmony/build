@@ -18,6 +18,7 @@ import subprocess
 import argparse
 import os
 import sys
+import shlex
 
 
 def parse_args(args):
@@ -52,7 +53,8 @@ def sign_sdk(zipfile, sign_list, sign_results):
         subprocess.call(cmd4)
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
-        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', '"ohos-sdk"', '--no-s3-acceleration']
+        ohos_name = shlex.quote("ohos-sdk")
+        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
 
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
@@ -68,7 +70,7 @@ def main(args):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
         try:
-            stdout, stderr = process.communicate(timeout=500)
+            stdout, stderr = process.communicate(timeout=600)
             if process.returncode:
                 print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
                 raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
