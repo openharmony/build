@@ -179,11 +179,11 @@ fi
 if [ -f "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe" ];then
     rm -rf "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe"
 fi
-if [ -f "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja.exe" ];then
+if [ -f "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja" ];then
     rm -rf "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja"
 fi
 echo "remove ninja"
-ls "${code_dir}/prebuilts/cmake/" && ls "${code_dir}/prebuilts/cmake/linux-x86/"
+ls "${code_dir}/prebuilts/build-tools/linux-x86/bin/" && ./prebuilts/build-tools/linux-x86/bin/ninja --version
 echo "prebuilts_download end"
 
 if [[ -d "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin" && ! -f "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin/x86_64-w64-mingw32-clang" ]];then
