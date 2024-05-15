@@ -16,7 +16,6 @@
 import argparse
 import json
 import os
-import time
 import shutil
 import stat
 import utils
@@ -122,18 +121,17 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
     _symlink_src2dest(kernel_real_path + os.sep + "innerapis/patches", kernel_link_path)
 
 
-def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list):
+def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
     subsystem = bundle_json["component"]["subsystem"]
     path = bundle_json["segment"]["destPath"]
     try:
         component = bundle_json["component"]["build"]["inner_kits"]
     except KeyError:
-        if bundle_json["component"]["build"] == []:
+        if not bundle_json["component"]["build"]:
             bundle_json["component"]["build"] = {}
         if "inner_api" not in bundle_json["component"]["build"].keys():
             bundle_json["component"]["build"]["inner_api"] = []
         component = bundle_json["component"]["build"]["inner_api"]
-
     innerapi_value_list = list()
     for i in component:
         innerapi_name = i["name"].split(':')[-1]
@@ -144,12 +142,21 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
         else:
             innerapi_label = os.path.join("//binarys", path, "innerapis", innerapi_name) + ":" + innerapi_name
         innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
+        if innerapi_name in _part_toolchain_map_dict.keys():
+            _name = innerapi_name
+            innerapi_name = f"{innerapi_name}({_part_toolchain_map_dict[_name]['toolchain_value']})"
+            innerapi_label = os.path.join("//binarys", path, "innerapis",
+                                          _name,
+                                          _part_toolchain_map_dict[_name]['toolchain_key']) + ":" + innerapi_name
+            innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
     if part_name == 'f2fs_tools':
         part_name = 'f2fs-tools'
     if part_name == 'fsverity_utils':
         part_name = 'fsverity-utils'
+    if part_name == 'freebsd':
+        part_name = 'FreeBSD'
     one_component_dict = {part_name: {
         "innerapis": innerapi_value_list,
         "path": path,
@@ -174,21 +181,23 @@ def _get_src_part_name(src_bundle_paths):
     return _name, _path
 
 
-def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, root_path, dependences_json):
+def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, root_path, dependences_json,
+                             _part_toolchain_map_dict):
     components_json = dict()
     src_bundle_paths = _get_src_bundle_path(source_code_path)
     src_part_name, src_bundle_path = _get_src_part_name(src_bundle_paths)
     src_build_name_list = [src_part_name, 'build_framework']
     components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
-                                           src_build_name_list)
+                                           src_build_name_list, _part_toolchain_map_dict)
     components_json = _gen_components_info(components_json,
                                            utils.get_json(os.path.join(root_path, "build", "bundle.json")),
-                                           "build_framework", src_build_name_list)
+                                           "build_framework", src_build_name_list, _part_toolchain_map_dict)
     for part_name in part_name_list:
         if part_name:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
-            components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list)
+            components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,
+                                                   _part_toolchain_map_dict)
             _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
 
     return components_json
@@ -214,6 +223,29 @@ def _generate_platforms_list(output_path):
         f.write('\n'.join(gni_file_content))
 
 
+def _get_toolchain_json(_path):
+    toolchain_json = os.path.join(_path, 'build', 'indep_configs', 'variants', 'common', 'toolchain.json')
+    _json = utils.get_json(toolchain_json)
+    return _json
+
+
+def _get_all_have_toolchain_component(root_path, toolchain_json):
+    _toolchain_list = toolchain_json.keys()
+    binarys_path = os.path.join(root_path, 'binarys')
+    _part_toolchain_map_dict = dict()
+    for toolchain in _toolchain_list:
+        for root, dirs, files in os.walk(binarys_path, topdown=False, followlinks=True):
+            if toolchain in dirs:
+                _part_name = root.split(os.sep)[-1]
+                _part_toolchain_map_dict.update({
+                    _part_name: {
+                        'toolchain_key': toolchain,
+                        'toolchain_value': toolchain_json[toolchain]
+                    }
+                })
+    return _part_toolchain_map_dict
+
+
 def main():
     args = _get_args()
     source_code_path = args.source_code_path
@@ -224,10 +256,12 @@ def main():
     output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
     output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
     dependences_json = _get_dependence_json(hpm_cache_path)
+    toolchain_json = _get_toolchain_json(root_path)
     part_name_list = dependences_json.keys()
 
+    _part_toolchain_map_dict = _get_all_have_toolchain_component(root_path, toolchain_json)
     components_json = _components_info_handler(part_name_list, source_code_path,
-                                               hpm_cache_path, root_path, dependences_json)
+                                               hpm_cache_path, root_path, dependences_json, _part_toolchain_map_dict)
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
     _link_kernel_binarys(variants, hpm_cache_path, dependences_json)
