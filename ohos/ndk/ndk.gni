@@ -327,6 +327,10 @@ template("ohos_ndk_copy") {
     }
   }
   _deps += [ ":$_notice_target" ]
+  _clear_dest = true
+  if (defined(invoker.clear_dest) && !invoker.clear_dest) {
+    _clear_dest = false
+  }
 
   copy_ex(target_name) {
     forward_variables_from(invoker,
@@ -372,6 +376,9 @@ template("ohos_ndk_copy") {
       "--stamp",
       rebase_path("$target_gen_dir/$target_name.stamp", root_build_dir),
     ]
+    if (!_clear_dest) {
+      args -= [ "--clear" ]
+    }
     if (defined(invoker.args)) {
       args += invoker.args
     }
