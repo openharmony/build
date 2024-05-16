@@ -181,7 +181,9 @@ def hvigor_build(cwd: str, options):
         hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
-    if not options.hvigor_obfuscation:
+    if options.hvigor_obfuscation:
+        cmd.extend(['-p', 'buildMode=release'])
+    else:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
     cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
