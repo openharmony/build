@@ -170,7 +170,7 @@
         },
         {
           "unzip_dir": "prebuilts/mingw-w64/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/mingw-w64/11.0.1/clang-mingw-20240510.tar.gz",
+          "file_path": "/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz",
           "unzip_filename": "clang-mingw"
         },
         {
@@ -256,7 +256,7 @@
         },
         {
           "unzip_dir": "prebuilts/mingw-w64/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/mingw-w64/11.0.1/clang-mingw-20240510.tar.gz",
+          "file_path": "/openharmony/compiler/mingw-w64/7.0.0/clang-mingw.tar.gz",
           "unzip_filename": "clang-mingw"
         },
         {
