@@ -691,6 +691,8 @@
         "//third_party/vk-gl-cts/modules/gles3:deqp-gles3_source",
         "//third_party/vk-gl-cts/modules/gles3:libdeqp-gles3",
         "//third_party/vk-gl-cts/modules/glshared:deqp-gl-shared_source",
+        "//third_party/glslang:glslang_validator",
+        "//third_party/glslang:spirv-remap",
         "//third_party/vk-gl-cts/modules/glshared:libdeqp-gl-shared",
         "//third_party/rust/crates/rust-openssl/openssl-sys:lib"
     ]
