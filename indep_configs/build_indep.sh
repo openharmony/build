@@ -13,10 +13,11 @@
 # limitations under the License.
 
 set -e
-echo $1 $2
+echo $1 $2 $3
+TEST_FILTER=$3
 VARIANTS="default"
-if [ -n "$3" ]; then
-  VARIANTS=$3
+if [ -n "$4" ]; then
+  VARIANTS=$4
 fi
 rm -rf out
 rm -rf .gn
@@ -40,7 +41,7 @@ PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR}
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR}
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
 
 prebuilts/build-tools/linux-x86/bin/gn gen --args="ohos_indep_compiler_enable=true product_name=\"$VARIANTS\"" -C out/$VARIANTS

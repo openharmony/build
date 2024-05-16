@@ -24,18 +24,19 @@ import utils
 def _get_args():
     parser = argparse.ArgumentParser(add_help=True)
     parser.add_argument(
-        "-p",
-        "--input_path",
-        default=r"./",
-        type=str,
+        "-p", "--input_path",
+        default=r"./", type=str,
         help="Path of source code",
     )
     parser.add_argument(
-        "-rp",
-        "--root_path",
-        default=r"./",
-        type=str,
+        "-rp", "--root_path",
+        default=r"./", type=str,
         help="Path of root",
+    )
+    parser.add_argument(
+        "-t", "-test",
+        default=1, choices=[0, 1],
+        help="whether the target contains test type. default 1 , choices: 0 or 1 ",
     )
     args = parser.parse_args()
     return args
@@ -101,6 +102,11 @@ def _get_src_part_name(src_bundle_paths):
 def main():
     args = _get_args()
     source_code_path = args.input_path
+    _test_check = args.test
+    if _test_check:
+        _target_list = ['inner_kits', 'inner_api', 'test']
+    else:
+        _target_list = ['inner_kits', 'inner_api']
     deps_list = list()
     bundle_paths = _get_bundle_path(source_code_path)
     _bundle_path, dir_path = _get_src_part_name(bundle_paths)
@@ -109,7 +115,7 @@ def main():
     for ele in build_data.keys():
         if ele not in ['inner_kits', 'test', 'inner_api']:
             _judge_type(build_data[ele], deps_list)
-        elif ele in ['inner_kits', 'inner_api']:
+        elif ele in _target_list:
             inner_kits_list = build_data[ele]
             _inner_kits_name(inner_kits_list, deps_list)
     output_path = os.path.join(args.root_path, 'out')
