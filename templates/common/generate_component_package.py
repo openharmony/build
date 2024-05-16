@@ -183,6 +183,24 @@ def _copy_includes(args, module, includes: list):
         ]
     includes_out_dir = os.path.join(args.get("out_path"), "component_package",
                                     args.get("part_path"), "innerapis", module, "includes")
+    for i in args.get("toolchain_info").keys():
+        toolchain_includes_out_dir = os.path.join(args.get("out_path"), "component_package",
+                                                  args.get("part_path"), "innerapis", module, i, "includes")
+        toolchain_lib_out_dir = os.path.join(args.get("out_path"), "component_package",
+                                             args.get("part_path"), "innerapis", module, i, "libs")
+        if not os.path.exists(toolchain_includes_out_dir) and os.path.exists(toolchain_lib_out_dir):
+            os.makedirs(toolchain_includes_out_dir)
+        else:
+            continue
+        for include in includes:
+            _sub_include = include.split(args.get("part_path") + '/')[-1]
+            split_include = include.split("//")[1]
+            real_include_path = os.path.join(args.get("root_path"), split_include)
+            if args.get('part_name') == 'libunwind':
+                _out_dir = os.path.join(toolchain_includes_out_dir, _sub_include)
+                _copy_dir(real_include_path, _out_dir)
+                continue
+            _copy_dir(real_include_path, toolchain_includes_out_dir)
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
     for include in includes:
@@ -197,22 +215,58 @@ def _copy_includes(args, module, includes: list):
     print("_copy_includes has done ")
 
 
+def _copy_toolchain_lib(file_name, root, _name, lib_out_dir):
+    if not file_name.startswith('.') and file_name.startswith(_name):
+        if not os.path.exists(lib_out_dir):
+            os.makedirs(lib_out_dir)
+        file = os.path.join(root, file_name)
+        shutil.copy(file, lib_out_dir)
+
+
+def _toolchain_lib_handler(args, toolchain_path, _name, module, toolchain_name):
+    for root, dirs, files in os.walk(toolchain_path):
+        for file_name in files:
+            lib_out_dir = os.path.join(args.get("out_path"), "component_package",
+                                       args.get("part_path"), "innerapis", module, toolchain_name, "libs")
+            _copy_toolchain_lib(file_name, root, _name, lib_out_dir)
+
+
+def _toolchain_static_file_path_mapping(subsystem_name, args, i):
+    if subsystem_name == "thirdparty":
+        subsystem_name = "third_party"
+    toolchain_path = os.path.join(args.get("out_path"), i, 'obj', subsystem_name,
+                                  args.get("part_name"))
+    return toolchain_path
+
+
 def _copy_lib(args, json_data, module):
     so_path = ""
+    lib_status = False
+    subsystem_name = args.get("subsystem_name")
     if json_data.get('type') == 'static_library':
         so_path = _get_static_lib_path(args, json_data)
     else:
-        so_path = os.path.join(args.get("out_path"), args.get("subsystem_name"),
+        so_path = os.path.join(args.get("out_path"), subsystem_name,
                                args.get("part_name"), json_data.get('out_name'))
+    if args.get("toolchain_info").keys():
+        for i in args.get("toolchain_info").keys():
+            so_type = ''
+            toolchain_path = os.path.join(args.get("out_path"), i, subsystem_name,
+                                          args.get("part_name"))
+            _name = json_data.get('out_name').split('.')[0]
+            if json_data.get('type') == 'static_library':
+                _name = json_data.get('out_name')
+                toolchain_path = _toolchain_static_file_path_mapping(subsystem_name, args, i)
+            _toolchain_lib_handler(args, toolchain_path, _name, module, i)
+            lib_status = lib_status or True
     if os.path.isfile(so_path):
         lib_out_dir = os.path.join(args.get("out_path"), "component_package",
                                    args.get("part_path"), "innerapis", module, "libs")
         if not os.path.exists(lib_out_dir):
             os.makedirs(lib_out_dir)
         shutil.copy(so_path, lib_out_dir)
-        return True
-    else:
-        return False
+        lib_status = lib_status or True
+    return lib_status
 
 
 def _dirs_handler(bundlejson_out):
@@ -419,6 +473,46 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     return _list
 
 
+def _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file):
+    if os.path.isfile(gn_path) and file_name:
+        with open(gn_path, 'r') as f:
+            _gn = f.read()
+            pattern = r"libs/(.*.)"
+            toolchain_gn = re.sub(pattern, 'libs/' + file_name + '\"', _gn)
+        fd = os.open(toolchain_gn_file, os.O_WRONLY | os.O_CREAT, mode=0o640)
+        fp = os.fdopen(fd, 'w')
+        fp.write(toolchain_gn)
+        fp.close()
+
+
+def _get_toolchain_gn_file(lib_out_dir):
+    file_name = ''
+    try:
+        file_list = os.scandir(lib_out_dir)
+    except FileNotFoundError:
+        return file_name
+    for file in file_list:
+        if not file.name.startswith('.') and file.is_file():
+            file_name = file.name
+    return file_name
+
+
+def _toolchain_gn_copy(args, module):
+    gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
+                           "innerapis", module, "BUILD.gn")
+    for i in args.get("toolchain_info").keys():
+        lib_out_dir = os.path.join(args.get("out_path"), "component_package",
+                                   args.get("part_path"), "innerapis", module, i, "libs")
+        file_name = _get_toolchain_gn_file(lib_out_dir)
+        if not file_name:
+            continue
+        toolchain_gn_file = os.path.join(args.get("out_path"), "component_package",
+                                         args.get("part_path"), "innerapis", module, i, "BUILD.gn")
+        if not os.path.exists(toolchain_gn_file):
+            os.mknod(toolchain_gn_file)
+        _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file)
+
+
 def _parse_module_list(args):
     module_list = []
     publicinfo_path = os.path.join(args.get("out_path"),
@@ -478,13 +572,15 @@ def _generate_component_package(args, components_json):
         _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
         if _list:
             _public_deps_list.extend(_list)
+        _toolchain_gn_copy(args, module)
     if is_component_build:
         _copy_bundlejson(args, _public_deps_list)
         _copy_license(args)
         _copy_readme(args)
         if args.get("build_type") in [0, 1]:
-            _hpm_pack(args)
-            _copy_hpm_pack(args)
+            _hpm_status = _hpm_pack(args)
+            if _hpm_status:
+                _copy_hpm_pack(args)
 
 
 def _get_part_subsystem(out_path):
@@ -510,6 +606,17 @@ def _get_parts_path_info(out_path):
     return jsondata
 
 
+def _get_toolchain_info(root_path):
+    jsondata = ""
+    json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
+    f = open(json_path, 'r')
+    try:
+        jsondata = json.load(f)
+    except Exception as e:
+        print('--_get_toolchain_info parse json error--')
+    return jsondata
+
+
 def _get_parts_path(json_data, part_name):
     parts_path = None
     if json_data.get(part_name) is not None:
@@ -524,7 +631,9 @@ def _hpm_pack(args):
         subprocess.run(cmd, shell=False, cwd=part_path)
     except Exception as e:
         print("{} pack fail".format(args.get("part_name")))
+        return 0
     print("{} pack succ".format(args.get("part_name")))
+    return 1
 
 
 def _copy_hpm_pack(args):
@@ -573,17 +682,13 @@ def _get_component_check() -> list:
     return check_list
 
 
-def _generate_component_package_handler(args, components_list, parts_path_info, part_name, components_json, part_path):
-    if not components_list:
-        part_path = _get_parts_path(parts_path_info, part_name)
-        if part_path is None:
-            return
-        _generate_component_package(args, components_json)
-    for component in components_list:
-        if part_name == component:
-            if part_path is None:
-                return
-            _generate_component_package(args, components_json)
+def _package_interface(args, parts_path_info, part_name, subsystem_name, components_json):
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    args.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                 "part_path": part_path})
+    _generate_component_package(args, components_json)
 
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
@@ -616,25 +721,28 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         components_list = [component for component in components_list.split(",") if component in _check_list]
         if not components_list:
             sys.exit("stop for no target to pack..")
+    print('components_list', type(components_list), components_list)
     part_subsystem = _get_part_subsystem(out_path)
     parts_path_info = _get_parts_path_info(out_path)
     components_json = _get_components_json(out_path)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
+    toolchain_info = _get_toolchain_info(root_path)
     # del component_package
     _del_exist_component_package(out_path)
+    args = {"out_path": out_path, "root_path": root_path,
+            "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
+            "build_type": build_type, "organization_name": organization_name,
+            "toolchain_info": toolchain_info
+            }
     for key, value in part_subsystem.items():
         part_name = key
         subsystem_name = value
-        part_path = _get_parts_path(parts_path_info, part_name)
-        args = {"subsystem_name": subsystem_name, "part_name": part_name,
-                "out_path": out_path, "root_path": root_path, "part_path": part_path,
-                "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
-                "build_type": build_type, "organization_name": organization_name
-                }
         # components_list is NONE or part name in components_list
-        _generate_component_package_handler(args, components_list, parts_path_info, part_name,
-                                            components_json,
-                                            part_path)
+        if not components_list:
+            _package_interface(args, parts_path_info, part_name, subsystem_name, components_json)
+        for component in components_list:
+            if part_name == component:
+                _package_interface(args, parts_path_info, part_name, subsystem_name, components_json)
 
     end_time = time.time()
     run_time = end_time - start_time
