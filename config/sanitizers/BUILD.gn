@@ -147,9 +147,6 @@ config("default_sanitizer_ldflags") {
   if (is_posix && !is_mingw) {
     ldflags = []
     if (is_asan) {
-      if (!use_musl) {
-        ldflags += [ "-fsanitize=address" ]
-      }
       if (is_mac) {
         # https://crbug.com/708707
         ldflags += [ "-fno-sanitize-address-use-after-scope" ]
