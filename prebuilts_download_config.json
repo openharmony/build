@@ -153,7 +153,7 @@
         },
 	{
           "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240510.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240516.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -244,7 +244,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240510.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240516.tar.gz",
           "unzip_filename": "ninja"
         },
         {
