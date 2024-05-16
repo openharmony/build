@@ -1,4 +1,5 @@
 [
   "musl",
-  "linux"
+  "linux",
+  "googletest"
 ]

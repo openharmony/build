@@ -1,0 +1,17 @@
+allow_addr2line=1
+allocator_may_return_null=1
+allow_user_segv_handler=1
+halt_on_error=1
+abort_on_error=0
+atexit_sleep_ms=0
+detect_deadlocks=1
+second_deadlock_stack=1
+handle_abort=0
+handle_segv=0
+history_size=7
+log_exe_name=true
+log_path=/dev/asanlog/tsan.log
+print_full_thread_history=1
+print_module_map=2
+print_suppressions=1
+stack_trace_format=DEFAULT

@@ -128,7 +128,12 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
     try:
         component = bundle_json["component"]["build"]["inner_kits"]
     except KeyError:
+        if bundle_json["component"]["build"] == []:
+            bundle_json["component"]["build"] = {}
+        if "inner_api" not in bundle_json["component"]["build"].keys():
+            bundle_json["component"]["build"]["inner_api"] = []
         component = bundle_json["component"]["build"]["inner_api"]
+
     innerapi_value_list = list()
     for i in component:
         innerapi_name = i["name"].split(':')[-1]
@@ -143,6 +148,10 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
         part_name = 'cJSON'
     if part_name == 'f2fs_tools':
         part_name = 'f2fs-tools'
+    if part_name == 'fsverity_utils':
+        part_name = 'fsverity-utils'
+    if part_name == 'freebsd':
+        part_name = 'FreeBSD'
     one_component_dict = {part_name: {
         "innerapis": innerapi_value_list,
         "path": path,
@@ -159,7 +168,7 @@ def _get_src_part_name(src_bundle_paths):
     for src_bundle_path in src_bundle_paths:
         src_bundle_json = utils.get_json(src_bundle_path)
         part_name = src_bundle_json['component']['name']
-        if part_name.endswith('lite'):
+        if part_name.endswith('_lite'):
             pass
         else:
             _name = part_name
@@ -178,10 +187,11 @@ def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, r
                                            utils.get_json(os.path.join(root_path, "build", "bundle.json")),
                                            "build_framework", src_build_name_list)
     for part_name in part_name_list:
-        bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
-        bundle_json = utils.get_json(bundle_path)
-        components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list)
-        _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
+        if part_name:
+            bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
+            bundle_json = utils.get_json(bundle_path)
+            components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list)
+            _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
 
     return components_json
 
