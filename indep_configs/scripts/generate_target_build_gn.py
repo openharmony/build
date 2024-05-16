@@ -34,8 +34,8 @@ def _get_args():
         help="Path of root",
     )
     parser.add_argument(
-        "-t", "-test",
-        default=1, choices=[0, 1],
+        "-t", "--test",
+        default=1, type=int,
         help="whether the target contains test type. default 1 , choices: 0 or 1 ",
     )
     args = parser.parse_args()
