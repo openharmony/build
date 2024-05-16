@@ -157,6 +157,13 @@ def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, mo
             shutil.copyfile(lib_path, dest)
 
 
+def hvigor_obfuscation(options, cmd):
+    if options.hvigor_obfuscation:
+        cmd.extend(['-p', 'buildMode=release'])
+    else:
+        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+
+
 def hvigor_build(cwd: str, options):
     '''
     Run hvigorw to build the app or hap
@@ -181,10 +188,7 @@ def hvigor_build(cwd: str, options):
         hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
-    if options.hvigor_obfuscation:
-        cmd.extend(['-p', 'buildMode=release'])
-    else:
-        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+    hvigor_obfuscation(options, cmd)
     cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
     env = os.environ.copy()
