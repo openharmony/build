@@ -139,6 +139,10 @@ template("ohos_bpf") {
     args += rebase_path(_include_dirs, root_build_dir)
     args += [ "--input-file" ]
     args += rebase_path(sources, root_build_dir)
+    if (defined(invoker.defines)) {
+      args += [ "--defines" ]
+      args += invoker.defines
+    }
     deps = [
       ":$_module_info_target",
       ":$_notice_target",
