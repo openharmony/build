@@ -71,6 +71,7 @@ Note:If the text contains special characters, please escape them according to th
 				<filteritem type="filepath" name="common/musl/ld-musl-aarch64-asan.path" desc="configuration file, this format doesn't support adding license header"/>
 				<filteritem type="filepath" name="common/musl/ld-musl-arm-asan.path" desc="configuration file, this format doesn't support adding license header"/>
 				<filteritem type="filepath" name="common/asan/asan.options" desc="configuration file, this format doesn't support adding license header"/>
+				<filteritem type="filepath" name="common/asan/tsan.options" desc="configuration file, this format doesn't support adding license header"/>
 			</filefilter>
 			<filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies" >
 				<filteritem type="filepath" name="gn_helpers.py" desc="keep the chromium src copyright"/>

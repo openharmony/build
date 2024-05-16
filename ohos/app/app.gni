@@ -15,6 +15,7 @@ import("//build/config/python.gni")
 import("//build/ohos/app/app_internal.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
+import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 # Declare an OHOS AppScope target
@@ -258,6 +259,12 @@ template("ohos_app") {
   assert(_subsystem_name != "")  # Mark as used
   assert(_part_name != "")  # Mark as used
 
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
+
   _module_info_target = "${_main_target_name}_info"
   generate_module_info(_module_info_target) {
     module_name = _main_target_name
@@ -309,7 +316,10 @@ template("ohos_app") {
     build_mode = _js_build_mode
     cwd = _abs_path
     unsigned_hap_path_list = _unsigned_hap_path_list
-    deps = [ ":$_notice_target" ]
+    deps = [
+      ":${_collect_target}",
+      ":${_notice_target}",
+    ]
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
@@ -501,6 +511,12 @@ template("ohos_hap") {
     deps = [ ":$_metadata_target" ] + _deps
   }
 
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
+
   _notice_target = "${target_name}__notice"
   collect_notice(_notice_target) {
     forward_variables_from(invoker,
@@ -569,6 +585,7 @@ template("ohos_hap") {
       ":$_metadata_target",
       ":$_notice_target",
       ":$_resources_target",
+      ":${_collect_target}",
       "//developtools/packing_tool:packing_tool",
     ]
     if (!skip_gen_module_info) {

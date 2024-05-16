@@ -18,6 +18,7 @@ import subprocess
 import argparse
 import os
 import sys
+import shlex
 
 
 def parse_args(args):
@@ -27,26 +28,36 @@ def parse_args(args):
     return options
 
 
-def sign_sdk(zipfile, sign_list):
+def sign_sdk(zipfile, sign_list, sign_results):
     if zipfile.endswith('.zip'):
         sign = os.getenv('SIGN')
+        if not sign:
+            raise AttributeError(f"SIGN message not in env")
         dir_name = zipfile.split('-')[0]
-        cmd1 = ['unzip', zipfile]
+        cmd1 = ['unzip', "-q", zipfile]
         subprocess.call(cmd1)
+        need_sign_files = []
         for root, dirs, files in os.walk(dir_name):
             for file in files:
                 file = os.path.join(root, file)
-                if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') or file.split('/')[-2] == 'bin':
-                    cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
-                    subprocess.call(cmd2)
+                need_sign_files.append(file)
+        
+        for file in need_sign_files:
+            if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') \
+                    or file.split('/')[-2] == 'bin':
+                cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
+                subprocess.call(cmd2)
         cmd3 = ['rm', zipfile]
         subprocess.call(cmd3)
-        cmd4 = ['zip', '-r', zipfile, dir_name]
+        cmd4 = ['zip', '-rq', zipfile, dir_name]
         subprocess.call(cmd4)
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
-        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', '"ohos-sdk"', '--wait']
-        subprocess.call(cmd6)
+        ohos_name = shlex.quote("ohos-sdk")
+        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
+
+        process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        sign_results.append((cmd6, process))
 
 
 def main(args):
@@ -54,8 +65,17 @@ def main(args):
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
     os.chdir(darwin_sdk_dir)
     sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
+    sign_results = []
     for file in os.listdir('.'):
-        sign_sdk(file, sign_list)
+        sign_sdk(file, sign_list, sign_results)
+    for cmd, process in sign_results:
+        try:
+            stdout, stderr = process.communicate(timeout=600)
+            if process.returncode:
+                print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
+                raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
+        except Exception as e:
+            raise TimeoutError(r"run xcrun cmd timeout")
 
 
 if __name__ == '__main__':

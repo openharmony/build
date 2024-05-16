@@ -43,8 +43,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240219",
-          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "version": "20240510",
+          "url": "openharmony/compiler/gn/20240510/gn-linux-x86-20240510.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -52,8 +52,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240219",
-          "url": "openharmony/compiler/gn/20240219/gn-linux-x86-20240219.tar.gz",
+          "version": "20240510",
+          "url": "openharmony/compiler/gn/20240510/gn-linux-x86-20240510.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
@@ -61,8 +61,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "x86_64",
-          "version": "20240115",
-          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
           "type": "file"
@@ -70,8 +70,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "arm64",
-          "version": "20240115",
-          "url": "openharmony/compiler/gn/20240115/darwin/gn-darwin-x86-20240115.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/gn",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/gn",
           "type": "file"
@@ -85,8 +85,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "1.11.0",
-          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"
@@ -94,8 +94,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "1.11.0",
-          "url": "openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"
@@ -249,6 +249,78 @@
             "cryptography",
             "json5==0.9.6"
           ]
+        }
+      ]
+    },
+    {
+      "name": "rustc",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.72.0",
+          "url": "openharmony/compiler/rust/20240429/rust-nightly-x86_64-unknown-linux-gnu_20240429.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240429",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-aarch64-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.72.0",
+          "url": "openharmony/compiler/rust/20240429/rust-std-nightly-aarch64-unknown-linux-ohos_20240429.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240429",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-arm-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.72.0",
+          "url": "openharmony/compiler/rust/20240429/rust-std-nightly-armv7-unknown-linux-ohos_20240429.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240429",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
+        }
+      ]
+    },
+    {
+      "name": "rustc-x86_64-std",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "1.72.0",
+          "url": "openharmony/compiler/rust/20240429/rust-std-nightly-x86_64-unknown-linux-ohos_20240429.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240429",
+          "script": "install_ext.sh",
+          "args": [{
+            "prefix": "''"
+          }],
+          "destdir": "prebuilts/rustc/linux-x86_64/current",
+          "type": "dir"
         }
       ]
     }

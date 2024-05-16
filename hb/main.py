@@ -21,6 +21,7 @@ import os
 import sys
 import subprocess
 import json
+import time
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -79,6 +80,7 @@ from modules.ohos_push_module import OHOSPushModule
 
 from helper.separator import Separator
 from util.log_util import LogUtil
+from util.system_util import SystemUtil
 
 
 class Main():
@@ -99,16 +101,23 @@ class Main():
             ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, "")
             ohos_set_module.set_product()
 
+        start_time = time.time()
         preloader = OHOSPreloader()
         loader = OHOSLoader()
+        preloader_time = time.time()
         generate_ninja = Gn()
+        gn_time = time.time()
         ninja = Ninja()
+        end_time = time.time()
+        LogUtil.hb_info("The run time for preloader and loader is {}".format(preloader_time - start_time))
+        LogUtil.hb_info("The run time for GN is {}".format(gn_time - preloader_time))
+        LogUtil.hb_info("The run time for ninja is {}".format(end_time - gn_time))
         build_args_resolver = BuildArgsResolver(args_dict)
 
         return OHOSBuildModule(args_dict, build_args_resolver, preloader, loader, generate_ninja, ninja)
-    
+
     def _init_hb_init_module(self):
-        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build','prebuilts_config.sh')])
+        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build', 'prebuilts_config.sh')])
         sys.exit()
 
     def _init_set_module(self) -> SetModuleInterface:
@@ -120,6 +129,13 @@ class Main():
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:
+        if sys.argv[2] in ['--sshkey', '-s']:
+            self._set_path()
+            subprocess.run(['hpm', 'config', 'set', 'loginUser', str(sys.argv[3])])
+            subprocess.run(['hpm', 'gen-keys'])
+            key_path = os.path.join(os.path.expanduser("~"), '.hpm', 'key', 'publicKey_' + sys.argv[3] + '.pem')
+            print(f'Please add the content of {key_path} to https://repo.harmonyos.com/#/cn/profile/sshkeys')
+            sys.exit()
         args_dict = Arg.parse_all_args(ModuleType.ENV)
         env_args_resolver = EnvArgsResolver(args_dict)
         return OHOSEnvModule(args_dict, env_args_resolver)
@@ -186,7 +202,7 @@ class Main():
         hdc = Hdc()
         update_args_resolver = PushArgsResolver(args_dict)
         return OHOSPushModule(args_dict, update_args_resolver, hdc)
-    
+
     def _push_module(self):
         if sys.argv[2] in ['-h', '-help', 'h', 'help']:
             print('Please use the command "hb push" like this: hb push component_name -t device_num')
@@ -200,26 +216,32 @@ class Main():
         if check_device.stdout.strip() == "[Empty]":
             print("Error: Device is not connected.")
             sys.exit()
-        device = sys.argv[4]
-        if device not in device.stdout:
-            print("Error: Wrong device number")
-            sys.exit()
+        if len(check_device.stdout.strip().split('\n')) == 1:
+            device = check_device.stdout.strip()
+        else:
+            device = sys.argv[4]
+            if device not in check_device.stdout:
+                print("Error: Wrong device number")
+                sys.exit()
         subprocess.run(["hdc", "-t", str(device), "shell", "mount", "-o", "rw,remount", "/"], check=True,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         default = os.path.join(CURRENT_OHOS_ROOT, "out", "default")
         with open(os.path.join(default, "build_configs", "component_mapping.json"), 'r') as r:
             single_component_path = json.load(r).get("single_component_path")
-        if single_component_path:
-            part_path = next(iter(single_component_path.values()))
+        part_path = next(iter(single_component_path.values()))
         with open(os.path.join(CURRENT_OHOS_ROOT, part_path, "bundle.json"), 'r') as r:
             bundle = json.load(r)
         push_list = bundle.get("deployment")
         if push_list:
+            if not isinstance(push_list, list):
+                print("Error: Deployment value format error, should be in list format!")
             for one_push in push_list:
+                if one_push.get("src") and not os.path.exists(os.path.join(CURRENT_OHOS_ROOT, one_push.get("src"))):
+                    print("Error: The path in src does not exist, please modify the src path!")
                 if one_push.get("src") and one_push.get("target"):
                     subprocess.run(
-                        ["hdc", "-t", str(device), "file", "send", one_push.get("src"), one_push.get("target")],
-                        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                        ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
+                        one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hb push success!")
         sys.exit()
 
@@ -252,9 +274,12 @@ class Main():
         if module_type not in module_initializers:
             raise OHOSException(f'There is no such option {module_type}', '0018')
 
+        start_time = SystemUtil.get_current_time()
         module = module_initializers[module_type]()
         try:
             module.run()
+            if module_type == 'build':
+                LogUtil.hb_info('Cost Time:  {}'.format(SystemUtil.get_current_time() - start_time))
         except KeyboardInterrupt:
             for file in os.listdir(ARGS_DIR):
                 if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
