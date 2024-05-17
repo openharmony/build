@@ -21,6 +21,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/third_party/zlib:zlib_header",
   "//interface/sdk_c/global/resource_management:librawfile_ndk",
   "//interface/sdk_c/global/resource_management:rawfile_header",
+  "//interface/sdk_c/global/resource_management:native_resmgr_ndk",
+  "//interface/sdk_c/global/resource_management:native_resmgr_header",
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_header",
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_ndk",
   "//interface/sdk_c/hiviewdfx/hidebug:libohhidebug",
