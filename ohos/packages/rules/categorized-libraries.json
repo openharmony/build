@@ -10,17 +10,5 @@
   "//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_dump": {
     "so_file_name": "libhitrace_dump.z.so",
     "categories": [ "platformsdk" ]
-  },
-  "//base/security/access_token/frameworks/accesstoken:accesstoken_communication_adapter_cxx": {
-    "so_file_name": "libaccesstoken_communication_adapter_cxx.z.so",
-    "categories": [ "platformsdk-indirect" ]
-  },
-  "//base/security/access_token/frameworks/common:accesstoken_common_cxx": {
-    "so_file_name": "libaccesstoken_common_cxx.z.so",
-    "categories": [ "platformsdk-indirect" ]
-  },
-  "//base/security/access_token/frameworks/common:accesstoken_common_cxx": {
-    "so_file_name": "libaccesstoken_common_cxx.z.so",
-    "categories": [ "platformsdk-indirect" ]
   }
 }
