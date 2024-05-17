@@ -101,17 +101,10 @@ class Main():
             ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, "")
             ohos_set_module.set_product()
 
-        start_time = time.time()
         preloader = OHOSPreloader()
         loader = OHOSLoader()
-        preloader_time = time.time()
         generate_ninja = Gn()
-        gn_time = time.time()
         ninja = Ninja()
-        end_time = time.time()
-        LogUtil.hb_info("The run time for preloader and loader is {}".format(preloader_time - start_time))
-        LogUtil.hb_info("The run time for GN is {}".format(gn_time - preloader_time))
-        LogUtil.hb_info("The run time for ninja is {}".format(end_time - gn_time))
         build_args_resolver = BuildArgsResolver(args_dict)
 
         return OHOSBuildModule(args_dict, build_args_resolver, preloader, loader, generate_ninja, ninja)
@@ -241,7 +234,7 @@ class Main():
                 if one_push.get("src") and one_push.get("target"):
                     subprocess.run(
                         ["hdc", "-t", str(device), "file", "send", os.path.join(CURRENT_OHOS_ROOT, one_push.get("src")),
-                        one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                         one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hb push success!")
         sys.exit()
 
