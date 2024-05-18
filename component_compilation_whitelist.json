@@ -26591,6 +26591,10 @@
         "//foundation/multimedia/player_framework/test/fuzztest/screen_capture_fuzztest/screencapturevideosourcetype_fuzzer:ScreenCaptureVideoSourceTypeFuzzTest_resource_copy": [
             "//foundation/graphic/graphic_2d/utils:sync_fence"
         ],
+        "//foundation/multimedia/ringtone_library/frameworks/ringtone_extension_hap:ringtone_extension_hap": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
         "//foundation/multimodalinput/input/patch/diff_libinput_mmi:patch_gen_libinput-analyze": [
             "//third_party/libinput/patch:apply_patch"
         ],
@@ -36733,6 +36737,26 @@
         ],
         "//foundation/multimedia/player_framework/services/services:media_service": [
             "//third_party/libxml2:xml2"
+        ],
+        "//foundation/multimedia/ringtone_library/frameworks/ringtone_extension_hap:RingtoneLibStage_resources__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/multimedia/ringtone_library/frameworks/ringtone_extension_hap:ringtone_extension_hap": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//foundation/multimedia/ringtone_library/frameworks/ringtone_extension_hap:ringtone_extension_hap__compile_resources": [
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined"
+        ],
+        "//foundation/multimedia/ringtone_library/frameworks/ringtone_extension_hap:ringtone_extension_hap__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+            "//developtools/ace_js2bundle:ace_loader_ark_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
         ],
         "//foundation/multimedia/player_framework/services/utils:media_service_utils": [
             "//third_party/libxml2:xml2"
