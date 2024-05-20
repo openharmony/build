@@ -25,6 +25,8 @@ from services.interface.build_executor_interface import BuildExecutorInterface
 from services.interface.build_file_generator_interface import BuildFileGeneratorInterface
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 
+from hb.util.timer_util import TimerUtil
+
 
 class BuildModuleInterface(ModuleInterface):
 
@@ -35,7 +37,7 @@ class BuildModuleInterface(ModuleInterface):
                  loader: LoadInterface,
                  target_generator: BuildFileGeneratorInterface,
                  target_compiler: BuildExecutorInterface):
-        
+
         super().__init__(args_dict, args_resolver)
         self._loader = loader
         self._preloader = preloader
@@ -60,14 +62,10 @@ class BuildModuleInterface(ModuleInterface):
 
     def run(self):
         try:
-            self._prebuild()
-            self._preload()
+            self._prebuild_and_preload()
             self._load()
-            self._pre_target_generate()
-            self._target_generate()
-            self._post_target_generate()
-            self._pre_target_compilation()
-            self._target_compilation()
+            self._gn()
+            self._ninja()
         except OHOSException as exception:
             raise exception
         else:
@@ -82,6 +80,12 @@ class BuildModuleInterface(ModuleInterface):
     @abstractmethod
     def _preload(self):
         pass
+
+    @TimerUtil.cost_time
+    @abstractmethod
+    def _prebuild_and_preload(self):
+        self._prebuild()
+        self._preload()
 
     @abstractmethod
     def _load(self):
@@ -99,6 +103,13 @@ class BuildModuleInterface(ModuleInterface):
     def _post_target_generate(self):
         pass
 
+    @TimerUtil.cost_time
+    @abstractmethod
+    def _gn(self):
+        self._pre_target_generate()
+        self._target_generate()
+        self._post_target_generate()
+
     @abstractmethod
     def _pre_target_compilation(self):
         pass
@@ -106,6 +117,12 @@ class BuildModuleInterface(ModuleInterface):
     @abstractmethod
     def _target_compilation(self):
         pass
+
+    @TimerUtil.cost_time
+    @abstractmethod
+    def _ninja(self):
+        self._pre_target_compilation()
+        self._target_compilation()
 
     @abstractmethod
     def _post_target_compilation(self):
