@@ -205,8 +205,18 @@ if (host_os == "mac") {
   ]
 }
 
-_ndk_targets_list =
-    _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake
+_ndk_ninja = []
+if (host_os == "mac") {
+  _ndk_ninja += [ "//prebuilts/build-tools/darwin-x86/bin:darwin_ninja_copy" ]
+} else {
+  _ndk_ninja += [
+    "//prebuilts/build-tools/linux-x86/bin:linux_ninja_copy",
+    "//prebuilts/build-tools/windows-x86/bin:windows_ninja_copy",
+  ]
+}
+
+_ndk_targets_list = _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi +
+                    _ndk_cmake + _ndk_ninja
 
 _parse_script = "//build/ohos/ndk/parse_ndk_targets.py"
 _parse_args = [
