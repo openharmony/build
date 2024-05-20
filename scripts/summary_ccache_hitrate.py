@@ -28,15 +28,15 @@ def summary_ccache_new(ccache_log: str):
     hit_pre_str = "Result: preprocessed_cache_hit"
     mis_str = "Result: cache_miss"
     if os.path.exists(ccache_log):
-        cmd = "grep -c \'{}\'  {}".format(hit_dir_str, ccache_log)
+        cmd = "grep -c \'{}\'  '{}'".format(hit_dir_str, ccache_log)
         hit_dir_num = int(
             subprocess.Popen(cmd, shell=True,
                              stdout=subprocess.PIPE).communicate()[0])
-        cmd = "grep -c \'{}\'  {}".format(hit_pre_str, ccache_log)
+        cmd = "grep -c \'{}\'  '{}'".format(hit_pre_str, ccache_log)
         hit_pre_num = int(
             subprocess.Popen(cmd, shell=True,
                              stdout=subprocess.PIPE).communicate()[0])
-        cmd = "grep -c \'{}\'  {}".format(mis_str, ccache_log)
+        cmd = "grep -c \'{}\'  '{}'".format(mis_str, ccache_log)
         mis_num = int(
             subprocess.Popen(cmd, shell=True,
                              stdout=subprocess.PIPE).communicate()[0])
