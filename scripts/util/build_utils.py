@@ -233,7 +233,7 @@ def check_output(args,
         execute_args.extend(["--build-env"] + [f"{k}={v}" for k, v in env.items() if k != "addTestRunner"])
         if env.pop("addTestRunner", False):
             execute_args.append("--add-test-runner")
-        subprocess.Popen(execute_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        child = subprocess.Popen(execute_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         child = subprocess.Popen(args,
                                 stdout=subprocess.PIPE,

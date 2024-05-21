@@ -41,7 +41,7 @@ def copy_api(source_root: str):
 def convert_permission_method(source_root: str, nodejs: str):
     permission_convert_dir = os.path.join(OUTPATH, "build-tools", "permissions_converter")
     permission_convert_tool = os.path.join(permission_convert_dir, "convert.js")
-    config_file = os.path.join("base/global/system_resources/systemres/main", "config.json")
+    config_file = os.path.join("base/global/system_resources/systemres/main", "module.json")
     permission_gen_path = os.path.join(API_GEN_PATH, "permissions.d.ts")
 
     tool = os.path.abspath(os.path.join(source_root, permission_convert_tool))

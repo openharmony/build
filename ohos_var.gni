@@ -28,6 +28,7 @@ declare_args() {
 
 declare_args() {
   sdk_build_public = false
+  use_current_sdk = false
 }
 
 declare_args() {
@@ -167,7 +168,7 @@ declare_args() {
 }
 
 declare_args() {
-  skip_generate_module_list_file = false
+  skip_generate_module_list_file = true
 }
 
 declare_args() {
@@ -255,6 +256,14 @@ declare_args() {
 }
 declare_args() {
   innersdk_base_dir = "//${innersdk_dir_name}"
+}
+
+declare_args() {
+  ability_runtime_graphics = true
+}
+
+declare_args() {
+  scene_board_enabled = false
 }
 
 # Compile and generate output directory

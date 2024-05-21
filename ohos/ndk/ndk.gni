@@ -25,9 +25,18 @@ declare_args() {
   enable_ndk_doxygen = true
 }
 
-ndk_os_irrelevant_out_dir = "$root_out_dir/${sdk_native}/os-irrelevant"
-ndk_os_specific_out_dir = "$root_out_dir/${sdk_native}/os-specific"
-ndk_signature_out_dir = "$root_out_dir/${sdk_native}/signature"
+if (use_current_sdk) {
+  # native_dir is native current-sdk release dir, all things redefine base the value.
+  native_dir = "base-current-sdk/linux/${api_version}/native"
+
+  ndk_os_irrelevant_out_dir = "$root_out_dir/${native_dir}"
+  ndk_os_specific_out_dir = "$root_out_dir/${native_dir}"
+  ndk_signature_out_dir = "$root_out_dir/${native_dir}/.others/signature"
+} else {
+  ndk_os_irrelevant_out_dir = "$root_out_dir/${sdk_native}/os-irrelevant"
+  ndk_os_specific_out_dir = "$root_out_dir/${sdk_native}/os-specific"
+  ndk_signature_out_dir = "$root_out_dir/${sdk_native}/signature"
+}
 
 ndk_headers_out_dir = "$ndk_os_irrelevant_out_dir/sysroot/usr/include"
 ndk_libraries_out_dir = "$ndk_os_irrelevant_out_dir/sysroot/usr/lib"
@@ -36,10 +45,22 @@ ndk_docs_out_dir = "$ndk_os_irrelevant_out_dir/docs"
 windows_system = "windows"
 linux_system = "linux"
 darwin_system = "darwin"
+ohos_system = "ohos"
 
-ndk_windows_specific_out_dir = "${ndk_os_specific_out_dir}/${windows_system}"
-ndk_darwin_specific_out_dir = "${ndk_os_specific_out_dir}/${darwin_system}"
-ndk_linux_specific_out_dir = "${ndk_os_specific_out_dir}/${linux_system}"
+if (use_current_sdk) {
+  ndk_windows_specific_out_dir =
+      "${ndk_os_specific_out_dir}/.others/${windows_system}"
+  ndk_darwin_specific_out_dir =
+      "${ndk_os_specific_out_dir}/.others/${darwin_system}"
+  ndk_linux_specific_out_dir = "${ndk_os_specific_out_dir}"
+  ndk_ohos_specific_out_dir =
+      "${ndk_os_specific_out_dir}/.others/${ohos_system}"
+} else {
+  ndk_windows_specific_out_dir = "${ndk_os_specific_out_dir}/${windows_system}"
+  ndk_darwin_specific_out_dir = "${ndk_os_specific_out_dir}/${darwin_system}"
+  ndk_linux_specific_out_dir = "${ndk_os_specific_out_dir}/${linux_system}"
+  ndk_ohos_specific_out_dir = "${ndk_os_specific_out_dir}/${ohos_system}"
+}
 
 ndk_windows_toolchains_out_dir = "${ndk_windows_specific_out_dir}/llvm"
 ndk_windows_tools_out_dir = "${ndk_windows_specific_out_dir}/build-tools"
@@ -49,6 +70,9 @@ ndk_darwin_tools_out_dir = "${ndk_darwin_specific_out_dir}/build-tools"
 
 ndk_linux_toolchains_out_dir = "${ndk_linux_specific_out_dir}/llvm"
 ndk_linux_tools_out_dir = "${ndk_linux_specific_out_dir}/build-tools"
+
+ndk_ohos_toolchains_out_dir = "${ndk_ohos_specific_out_dir}/llvm"
+ndk_ohos_tools_out_dir = "${ndk_ohos_specific_out_dir}/build-tools"
 
 # Generate NDK library from NDK description file.
 #
@@ -142,7 +166,7 @@ template("ohos_ndk_library") {
   }
 
   ndk_toolchains = []
-  if (build_ohos_ndk) {
+  if (build_ohos_ndk || use_current_sdk) {
     ndk_toolchains = [
       "//build/toolchain/ohos:ohos_clang_arm",
       "//build/toolchain/ohos:ohos_clang_arm64",
@@ -172,6 +196,10 @@ template("ohos_ndk_library") {
 
     assert(defined(_ndk_shlib_directory))
     _output_dir = "$ndk_libraries_out_dir/$_ndk_shlib_directory"
+    if (defined(invoker.current_ndk_outpath) &&
+        invoker.current_ndk_outpath != "" && use_current_sdk) {
+      _output_dir = "${invoker.current_ndk_outpath}/${_ndk_shlib_directory}"
+    }
     _output_ndk_shlib = "${_output_dir}/lib${_output_name}.${_output_extension}"
 
     _toolchain_name = get_label_info(_toolchain, "name")
@@ -268,6 +296,11 @@ template("ohos_ndk_copy") {
   }
   _dest = invoker.dest_dir
 
+  if (defined(invoker.current_ndk_outpath) &&
+      invoker.current_ndk_outpath != "" && use_current_sdk) {
+    _dest = invoker.current_ndk_outpath
+  }
+
   sources = filter_exclude([ _dest ], [ "*os-irrelevant*" ])
   if (sources == []) {
     _notice_rel_dir = ndk_os_irrelevant_out_dir
@@ -358,6 +391,11 @@ template("ohos_ndk_headers") {
     _dest_dir = invoker.dest_dir
   } else {
     _dest_dir = "$ndk_headers_out_dir"
+  }
+
+  if (defined(invoker.current_ndk_outpath) &&
+      invoker.current_ndk_outpath != "" && use_current_sdk) {
+    _dest_dir = invoker.current_ndk_outpath
   }
 
   _ndk_header_signature_target = "${target_name}__ndk_signature_check"
@@ -487,6 +525,11 @@ template("ohos_ndk_prebuilt_library") {
     _dest_dir = "$ndk_libraries_out_dir"
   }
 
+  if (defined(invoker.current_ndk_outpath) &&
+      invoker.current_ndk_outpath != "" && use_current_sdk) {
+    _dest_dir = invoker.current_ndk_outpath
+  }
+
   ohos_ndk_copy(target_name) {
     forward_variables_from(invoker,
                            "*",
@@ -499,6 +542,63 @@ template("ohos_ndk_prebuilt_library") {
     args = [ "--ignore-stale" ]
     if (defined(invoker.args)) {
       args += invoker.args
+    }
+  }
+}
+
+template("current_ndk") {
+  forward_variables_from(invoker,
+                         [
+                           "ndk_class",
+                           "all_ndk_targets",
+                           "ndk_out_dir",
+                         ])
+
+  package_info_name = "oh-uni-package"
+  if (ndk_class != "base") {
+    package_info_name = "uni-package"
+  }
+  package_info_file = "$ndk_out_dir/$package_info_name.json"
+
+  package_info = {
+    path = "native"
+    displayName = "Native"
+    version = current_ndk_version
+    if (release_type != "") {
+      releaseType = release_type
+    }
+    if (meta_version != "") {
+      meta = {
+        metaVersion = meta_version
+      }
+    }
+    if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
+      platformVersion = platform_version
+    }
+    apiVersion = api_version
+  }
+  write_file(package_info_file, package_info, "json")
+
+  action_with_pydeps(target_name) {
+    deps = all_ndk_targets
+    script = "//build/ohos/ndk/collect_ndk_syscap.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _ndk_syscap_desc_file = "${ndk_out_dir}/ndk_system_capability.json"
+    _native_syscap_config_file = "${ndk_out_dir}/nativeapi_syscap_config.json"
+    outputs = [ _ndk_syscap_desc_file ]
+    args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--system-capability-file",
+      rebase_path(_ndk_syscap_desc_file, root_build_dir),
+      "--system-capability-header-config",
+      rebase_path(_native_syscap_config_file, root_build_dir),
+      "--targets-build-config",
+    ]
+    foreach(_ndk_target, all_ndk_targets) {
+      _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
+                        get_label_info(_ndk_target, "name") + ".build_config"
+      args += [ rebase_path(_target_bc_file, root_build_dir) ]
     }
   }
 }

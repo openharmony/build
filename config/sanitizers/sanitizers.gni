@@ -351,6 +351,12 @@ template("ohos_sanitizer_config") {
         if (defined(sanitize.cfi_no_nvcall) && sanitize.cfi_no_nvcall) {
           configs += [ "//build/config/sanitizers:cfi_no_nvcall" ]
         }
+        if (defined(sanitize.cfi_vcall_icall_only) &&
+            sanitize.cfi_vcall_icall_only) {
+          configs += [ "//build/config/sanitizers:cfi_no_all" ]
+          configs += [ "//build/config/sanitizers:cfi_vcall" ]
+          configs += [ "//build/config/sanitizers:cfi_icall" ]
+        }
       }
       configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }

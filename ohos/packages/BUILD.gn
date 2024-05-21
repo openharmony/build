@@ -298,6 +298,11 @@ foreach(_platform, target_platform_list) {
       args += [ "--post-process-modules-info-files" ]
       args += rebase_path(post_process_modules_list, root_build_dir)
     }
+
+    args += [ "--categorized-libraries" ]
+    args +=
+        [ rebase_path("//build/ohos/packages/rules/categorized-libraries.json",
+                      root_build_dir) ]
   }
 
   action("check_seccomp_filter_name") {

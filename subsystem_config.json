@@ -193,7 +193,7 @@
   },
   "barrierfree": {
     "path": "foundation/barrierfree/accessibility",
-    "name": "accessibility"
+    "name": "barrierfree"
   },
   "customization": {
     "path": "base/customization",

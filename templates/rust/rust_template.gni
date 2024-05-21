@@ -112,6 +112,8 @@ clippyOhosLints = [
   "clippy::upper-case-acronyms",
   "-A",
   "clippy::let_and_return",
+  "-A",
+  "clippy::unnecessary-cast",
 ]
 clippyVendorLints = [
   "-A",
@@ -747,6 +749,12 @@ template("ohos_rust_proc_macro") {
   }
 
   if (!_test_target) {
+    module_label = get_label_info(":${target_name}", "label_with_toolchain")
+    _collect_target = "${target_name}__collect"
+    collect_module_target(_collect_target) {
+      forward_variables_from(invoker, [ "install_images" ])
+    }
+
     _notice_target = "${target_name}__notice"
     _main_target_name = target_name
     collect_notice(_notice_target) {
@@ -891,7 +899,10 @@ template("ohos_rust_proc_macro") {
     }
 
     if (!_test_target) {
-      deps += [ ":$_notice_target" ]
+      deps += [
+        ":$_notice_target",
+        ":${_collect_target}",
+      ]
     }
     if (!defined(include_dirs)) {
       include_dirs = []

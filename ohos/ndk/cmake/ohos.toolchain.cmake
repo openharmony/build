@@ -164,6 +164,16 @@ if (OHOS_ENABLE_HWASAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
     endif()
 endif()
 
+if(OHOS_ENABLE_TSAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
+	list(APPEND OHOS_C_COMPILER_FLAGS
+		-shared-libsan
+		-fsanitize=thread
+		-fno-omit-frame-pointer)
+	if(DEFINED OHOS_TSAN_BLACKLIST)
+		list(APPEND OHOS_C_COMPILER_FLAGS -fsanitize-blacklist="${OHOS_TSAN_BLACKLIST}")
+	endif()
+endif()
+
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
 
 # set the common c++ flags
@@ -240,7 +250,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "" CACHE STRING "Flags for release variant builds.")
 set(CMAKE_CXX_FLAGS_RELEASE "${OHOS_RELEASE_COMPILER_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}")
 
 # set the cmake global asmflags
-set(CMAKE_ASM_FLAGS "-mrelax-relocations=no" CACHE STRING "Flags for all build types.")
+set(CMAKE_ASM_FLAGS "" CACHE STRING "Flags for all build types.")
 set(CMAKE_ASM_FLAGS "${OHOS_ASM_COMPILER_FLAGS} ${CMAKE_ASM_FLAGS} -D__MUSL__")
 
 set(CMAKE_ASM_FLAGS_DEBUG "" CACHE STRING "Flags for debug variant builds.")
@@ -282,3 +292,4 @@ set(OHOS_AR "${TOOLCHAIN_BIN_PATH}/llvm-ar${HOST_SYSTEM_EXE_SUFFIX}")
 set(OHOS_RANLIB "${TOOLCHAIN_BIN_PATH}/llvm-ranlib${HOST_SYSTEM_EXE_SUFFIX}")
 set(CMAKE_AR                "${OHOS_AR}" CACHE FILEPATH "Archiver")
 set(CMAKE_RANLIB            "${OHOS_RANLIB}" CACHE FILEPATH "Ranlib")
+set(UNIX TRUE CACHE BOOL FROCE)

@@ -17,6 +17,7 @@ import("//build/config/security/security_config.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/common/check_target.gni")
+import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
@@ -67,6 +68,12 @@ template("ohos_executable") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
@@ -214,6 +221,27 @@ template("ohos_executable") {
       }
       notice = "$target_out_dir/$ohos_module_name.notice.txt"
     }
+    if (defined(invoker.kernel_permission_path)) {
+      kernel_permission_info = []
+      _kernel_permission_path =
+          rebase_path(invoker.kernel_permission_path, root_build_dir)
+      _module_info_file =
+          rebase_path(get_label_info(target_label, "target_out_dir"),
+                      root_build_dir) + "/${target_name}_module_info.json"
+      kernel_permission_info_file = "${root_build_dir}/build_configs/kernel_permission/${target_name}_info_file.json"
+      kernel_permission_info += [
+        {
+          module_info_file = _module_info_file
+          kernel_permission_path = _kernel_permission_path
+          target_name = target_name
+          subsystem_name = subsystem_name
+          target_label = target_label
+        },
+      ]
+      write_file("${kernel_permission_info_file}",
+                 kernel_permission_info,
+                 "json")
+    }
   }
 
   if (!defined(invoker.stable)) {
@@ -342,6 +370,9 @@ template("ohos_executable") {
     if (!_ohos_test && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
+
+    deps += [ ":${_collect_target}" ]
+
     if (!defined(libs)) {
       libs = []
     }
@@ -350,6 +381,13 @@ template("ohos_executable") {
     }
     if (!defined(ldflags)) {
       ldflags = []
+    }
+
+    if (defined(visibility) && visibility != []) {
+      visibility += [ "//build/*" ]
+      if (defined(build_ext_path)) {
+        visibility += [ "${build_ext_path}/*" ]
+      }
     }
 
     if (defined(invoker.static_link) && invoker.static_link) {
@@ -491,6 +529,12 @@ template("ohos_shared_library") {
   }
   assert(subsystem_name != "")
   assert(part_name != "")
+
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  _collect_target = "${target_name}__collect"
+  collect_module_target(_collect_target) {
+    forward_variables_from(invoker, [ "install_images" ])
+  }
 
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
@@ -724,6 +768,26 @@ template("ohos_shared_library") {
     stable = false
   }
 
+  if (defined(invoker.kernel_permission_path)) {
+    kernel_permission_info = []
+    _kernel_permission_path =
+        rebase_path(invoker.kernel_permission_path, root_build_dir)
+    _module_info_file =
+        rebase_path(get_label_info(target_label, "target_out_dir"),
+                    root_build_dir) + "/${target_name}_module_info.json"
+    kernel_permission_info_file = "${root_build_dir}/build_configs/kernel_permission/${target_name}_info_file.json"
+    kernel_permission_info += [
+      {
+        module_info_file = _module_info_file
+        kernel_permission_path = _kernel_permission_path
+        target_name = target_name
+        subsystem_name = subsystem_name
+        target_label = target_label
+      },
+    ]
+    write_file("${kernel_permission_info_file}", kernel_permission_info, "json")
+  }
+
   shared_library("${target_name}") {
     forward_variables_from(invoker,
                            "*",
@@ -783,6 +847,13 @@ template("ohos_shared_library") {
 
     if (!defined(cflags)) {
       cflags = []
+    }
+
+    if (defined(visibility) && visibility != []) {
+      visibility += [ "//build/*" ]
+      if (defined(build_ext_path)) {
+        visibility += [ "${build_ext_path}/*" ]
+      }
     }
 
     # Enable branch protection.
@@ -975,6 +1046,8 @@ template("ohos_shared_library") {
     if (target_toolchain == "${current_toolchain}" && !skip_gen_module_info) {
       deps += [ ":$_module_info_target" ]
     }
+
+    deps += [ ":${_collect_target}" ]
     if (is_ohos) {
       if (defined(invoker.stl)) {
         cflags_cc += [

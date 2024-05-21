@@ -236,7 +236,7 @@ group("common_deps") {
     public_deps += [ "//third_party/musl:soft_shared_libs" ]
   }
 
-  if (ohos_indep_compiler_enable) {
+  if (ohos_indep_compiler_enable && current_toolchain != host_toolchain) {
     deps = [ "//build/common/ubsan:ubsan" ]
   }
 }

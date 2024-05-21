@@ -24,6 +24,9 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402
 from scripts.util import build_utils  # noqa: E402
 
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rules"))
+from categorized_libraries_utils import load_categorized_libraries
+from categorized_libraries_utils import update_module_info
 
 def _get_modules_info(system_install_info: dict, depfiles: list):
     modules_info_dict = {}
@@ -63,7 +66,7 @@ def _get_post_process_modules_info(post_process_modules_info_files: list, depfil
 def copy_modules(system_install_info: dict, install_modules_info_file: str,
                  modules_info_file: str, module_list_file: str,
                  post_process_modules_info_files: list, platform_installed_path: str,
-                 host_toolchain, additional_system_files: dict, depfiles: list):
+                 host_toolchain, additional_system_files: dict, depfiles: list, categorized_libraries: dict):
     output_result = []
     dest_list = []
     symlink_dest = []
@@ -76,6 +79,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
         install = module_info.get('install_enable')
         if not install:
             continue
+        update_module_info(module_info, categorized_libraries)
         output_result.append(module_info)
 
     # get post process modules info
@@ -139,6 +143,17 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                                                      symlink_dest_dir, name)
                     if not os.path.exists(symlink_dest_file):
                         os.symlink(symlink_src_file, symlink_dest_file)
+        if 'symlink_ext' in module_info:
+            symlink_ext = module_info.get('symlink_ext')
+            for dest in dests:
+                symlink_src_file = os.path.join(platform_installed_path, dest)
+                for name in symlink_ext:
+                    symlink_dest_file = os.path.join(platform_installed_path, dest.split('/')[0], name)
+                    relpath = os.path.relpath(os.path.dirname(symlink_src_file), os.path.dirname(symlink_dest_file))
+                    if not os.path.exists(os.path.dirname(symlink_dest_file)):
+                        os.makedirs(os.path.dirname(symlink_dest_file), exist_ok=True)
+                    if not os.path.exists(symlink_dest_file):
+                        os.symlink(os.path.join(relpath, os.path.basename(dest)), symlink_dest_file)
 
     # write install module info to file
     write_json_file(install_modules_info_file, modules_info_dict)
@@ -163,6 +178,7 @@ def main():
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--system-image-zipfile', required=True)
     parser.add_argument('--host-toolchain', required=True)
+    parser.add_argument('--categorized-libraries', required=False)
     parser.add_argument(
         '--additional-system-files',
         action='append',
@@ -245,11 +261,12 @@ def main():
         print('remove ramdisk dir...')
 
     print('copy modules...')
+    categorized_libraries = load_categorized_libraries(args.categorized_libraries)
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
                  args.post_process_modules_info_files,
                  args.platform_installed_path, args.host_toolchain,
-                 additional_system_files, depfiles)
+                 additional_system_files, depfiles, categorized_libraries)
 
     if os.path.exists(args.system_image_zipfile):
         os.unlink(args.system_image_zipfile)
