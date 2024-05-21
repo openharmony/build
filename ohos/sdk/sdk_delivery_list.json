@@ -28,5 +28,15 @@
       "windows/previewer/",
       "windows/toolchains/"
     ]
+  },
+  "ohos": {
+    "checkFiles": [],
+    "checkDirectories": [
+      "ohos/ets/",
+      "ohos/js/",
+      "ohos/native/",
+      "ohos/previewer/",
+      "ohos/toolchains/"
+    ]
   }
 }

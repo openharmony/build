@@ -85,10 +85,12 @@ def main():
     system_capability_file = os.path.join(variants_path, "SystemCapability.json")
     features_file = os.path.join(variants_path, "features.json")
     build_file = os.path.join(variants_path, "build_config.json")
+    paths_config_file = os.path.join(variants_path, "parts_config.json")
 
     shutil.copy(system_capability_file, etc_out_path)
     shutil.copy(features_file, variants_out_path)
     shutil.copy(build_file, variants_out_path)
+    shutil.copy(paths_config_file, variants_out_path)
 
 
 if __name__ == '__main__':

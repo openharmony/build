@@ -28,6 +28,7 @@ def parse_args(args):
     parser.add_argument('--include-dirs', nargs='+', help='path to header files')
     parser.add_argument('--output-file', help='path to .o file')
     parser.add_argument('--input-file', nargs='+', help='path to .c file')
+    parser.add_argument('--defines', nargs='+', help='clang defines')
 
     options = parser.parse_args(args)
     return options
@@ -45,6 +46,10 @@ def main(args):
     cmd.extend(['-v', '-g', '-c', '-O2', '-target', 'bpf'])
     for include_dir in options.include_dirs:
         cmd.extend(['-I', include_dir])
+
+    if options.defines:
+        for define in options.defines:
+            cmd.extend(['-D', define])
 
     outputs = [options.output_file]
 

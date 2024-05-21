@@ -97,13 +97,20 @@ def symlink_src2dest(src_dir, dest_dir):
 
 def install_hpm(code_path, download_dir, symlink_dir, home_path):
     content = """\
-    package-lock=true
-    registry=http://repo.huaweicloud.com/repository/npm
-    strict-ssl=false
-    lockfile=false
-    """
+package-lock=true
+registry=http://repo.huaweicloud.com/repository/npm
+strict-ssl=false
+lockfile=false
+"""
     with os.fdopen(os.open(os.path.join(home_path, '.npmrc'), os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as f:
+        os.truncate(f.fileno(), 0)
         f.write(content)
+    if not os.path.exists(download_dir):
+        os.makedirs(download_dir)
+    with os.fdopen(os.open(os.path.join(download_dir, 'package.json'), os.O_WRONLY | os.O_CREAT, mode=0o640),
+                    'w') as f:
+        os.truncate(f.fileno(), 0)
+        f.write('{}\n')
     npm_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin/npm")
     node_bin_path = os.path.join(code_path, "prebuilts/build-tools/common/nodejs/current/bin")
     os.environ['PATH'] = f"{node_bin_path}:{os.environ['PATH']}"
@@ -193,8 +200,7 @@ def print_process(chunk_size, downloaded_size, out_file, response, total_size):
         downloaded_size += len(chunk)
         if total_size != 0:
             progress = downloaded_size / total_size * 50
-            print('\r[' + '=' * int(progress) + ' ' * (50 - int(progress)) + '] {:.2f}%'.format(progress * 2),
-                  end='', flush=True)
+            print(f'\r[{"=" * int(progress)}{" " * (50 - int(progress))}] {progress * 2:.2f}%', end='', flush=True)
         else:
             print("\r[Error] Total size is zero, unable to calculate progress.", end='', flush=True)
 

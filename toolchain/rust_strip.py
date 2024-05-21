@@ -25,7 +25,7 @@ def do_strip(strip, output, unstripped_file, mini_debug, clang_base_dir):
         result = subprocess.call(
             [strip, '-o', output, unstripped_file])
 
-    if mini_debug and not unstripped_file.endswith(".exe"):
+    if mini_debug and not unstripped_file.endswith(".exe") and not unstripped_file.endswith(".dll"):
         unstripped_libfile = os.path.abspath(unstripped_file)
         script_path = os.path.join(
             os.path.dirname(__file__), 'mini_debug_info.py')

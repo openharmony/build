@@ -235,6 +235,10 @@ class Product():
                     self._dirs.source_root_dir, config.get('ext_sanitizer_check_list_path'))
                 if os.path.exists(ext_sanitizer_check_list_path):
                     build_vars['ext_sanitizer_check_list_path'] = ext_sanitizer_check_list_path
+            _global_ext_var_file = os.path.join(
+                self._dirs.source_root_dir, "out/products_ext", "global_ext_var_file.gni")
+            if os.path.exists(_global_ext_var_file):
+                build_vars['global_ext_var_file'] = _global_ext_var_file
             if 'enable_ramdisk' in config:
                 build_vars['enable_ramdisk'] = config.get('enable_ramdisk')
             if 'enable_absystem' in config:

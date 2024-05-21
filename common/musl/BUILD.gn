@@ -17,14 +17,16 @@ import("//build/ohos.gni")
 
 group("musl_install") {
   deps = [
-    ":musl-libc.so",
     ":musl-libcxx.so",
     ":musl_ld_path_etc_cfg",
     "//third_party/musl:musl_libs",
   ]
 
   if (target_cpu == "riscv64") {
-    deps += [ ":ld-musl-riscv64.so.1" ]
+    deps += [
+      ":ld-musl-riscv64.so.1",
+      ":musl-libc.so",
+    ]
   } else {
     deps += [ ":ld-musl-arm.so.1" ]
   }
@@ -70,6 +72,11 @@ if (target_cpu == "riscv64") {
       "updater",
       "ramdisk",
     ]
+    if (target_cpu == "arm") {
+      symlink_ext = [ "lib/libc.so" ]
+    } else if (target_cpu == "arm64" || target_cpu == "x86_64") {
+      symlink_ext = [ "lib64/libc.so" ]
+    }
     subsystem_name = "build"
     part_name = "build_framework"
     module_install_dir = "lib"

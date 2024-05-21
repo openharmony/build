@@ -5,7 +5,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -89,7 +90,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -808,6 +810,33 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//base/global/system_resources:copy_preview_fonts",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//third_party/noto-cjk:copy_preview_fonts_notocjk",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//third_party/notofonts:copy_preview_fonts_notofonts",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
         "install_dir": "previewer/common",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_system_resource_standard",
         "target_os": [
@@ -942,6 +971,15 @@
     },
     {
         "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:menuSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:insightIntentSchema_json",
         "target_os": [
             "linux",
@@ -952,6 +990,15 @@
     {
         "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:customUtdSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:appStartupSchema_json",
         "target_os": [
             "linux",
             "windows",
