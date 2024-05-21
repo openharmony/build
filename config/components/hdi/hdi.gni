@@ -1,0 +1,303 @@
+# Copyright (c) 2021-2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License..
+
+import("//build/ohos.gni")
+import("//drivers/hdf_core/adapter/uhdf2/uhdf.gni")
+
+hdf_fwk_path = "//drivers/hdf_core/framework"
+
+template("hdi") {
+  assert(defined(invoker.sources), "sources must be set")
+  assert(defined(invoker.language), "language must be set")
+  assert(defined(invoker.subsystem_name), "subsystem_name must be set")
+  assert(defined(invoker.part_name), "part_name must be set")
+
+  # the module_name is an obsolete option
+  if (defined(invoker.module_name)) {
+    print(invoker.module_name)
+  }
+
+  # system type
+  system = "full"
+
+  # generate mode, the default value is "ipc", the optional values are "ipc" or "passthrough"
+  mode = "ipc"
+  if (defined(invoker.mode)) {
+    assert(invoker.mode == "ipc" || invoker.mode == "passthrough",
+           "hdi mode must be 'ipc' or 'passthrough'")
+    mode = invoker.mode
+  }
+
+  assert(invoker.language == "c" || invoker.language == "cpp",
+         "the language must be set to 'c' or 'cpp'")
+  language = invoker.language
+
+  imports = []
+  if (defined(invoker.imports)) {
+    imports += invoker.imports
+  }
+
+  root_package = "ohos.hdi"
+  root_path = rebase_path("//drivers/interface")
+  if (defined(invoker.root)) {
+    package_path_map = string_split(invoker.root, ":")
+    root_package = package_path_map[0]
+    root_path = rebase_path(package_path_map[1])
+  }
+  root_package_path = "${root_package}:${root_path}"
+
+  # set base directory of hdi files, set this parameter to your component name if you are using external idl files.
+  if (defined(invoker.base_dir)) {
+    root_path += invoker.base_dir
+  }
+
+  sources_gen_dir = get_path_info("${root_path}/", "gen_dir")
+  get_build_info_args = [
+    "-s",
+    system,
+    "-m",
+    mode,
+    "-l",
+    invoker.language,
+    "-o",
+    sources_gen_dir,
+    "-r",
+    root_package_path,
+  ]
+  foreach(idl_file, invoker.sources) {
+    get_build_info_args += [ "-f" ]
+    get_build_info_args += [ rebase_path(idl_file) ]
+  }
+
+  foreach(import_info, imports) {
+    get_build_info_args += [
+      "--import",
+      import_info,
+    ]
+  }
+
+  hdi_build_info =
+      exec_script("$hdf_fwk_path/tools/hdi-gen/build_hdi_files_info.py",
+                  get_build_info_args,
+                  "json")
+  assert(defined(hdi_build_info.include_dirs), "missing include_dirs")
+  assert(defined(hdi_build_info.out_dir), "out_dir")
+  assert(defined(hdi_build_info.version), "missing version")
+  assert(defined(hdi_build_info.sources), "missing sources")
+  assert(defined(hdi_build_info.proxy_sources), "missing proxy_sources")
+  assert(defined(hdi_build_info.stub_sources), "missing stub_sources")
+  assert(defined(hdi_build_info.proxy_deps), "missing proxy_deps")
+  assert(defined(hdi_build_info.stub_deps), "missing stub_deps")
+  assert(defined(hdi_build_info.header_deps), "missing header_deps")
+
+  idl_headers_config = "$target_name" + "_idl_headers_config"
+  config("$idl_headers_config") {
+    include_dirs = [
+      "$hdf_uhdf_path/include/hdi",
+      "$hdf_uhdf_path/osal/include",
+      "$hdf_uhdf_path/ipc/include",
+      "$hdf_framework_path/include/utils",
+      "//drivers/hdf_core/interfaces/inner_api/utils",
+      "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+      "//drivers/hdf_core/interfaces/inner_api/hdi",
+    ]
+    include_dirs += hdi_build_info.include_dirs
+  }
+
+  action("hdi_gen") {
+    deps = [ "$hdf_fwk_path/tools/hdi-gen:build_hdi_gen" ]
+    script = "/usr/bin/env"
+    if (defined(ohos_lite)) {
+      script = "//build/lite/run_shell_cmd.py"
+    }
+
+    idl_sources = invoker.sources
+    inputs = invoker.sources
+    outputs = hdi_build_info.sources
+
+    args = [
+      rebase_path(get_path_info("$hdf_fwk_path/tools/hdi-gen/", "out_dir") +
+                  "/hdi-gen"),
+      "--system",
+      system,
+      "--mode",
+      mode,
+      "--language",
+      language,
+      "-d",
+      rebase_path(hdi_build_info.out_dir),
+    ]
+
+    foreach(idl_file, idl_sources) {
+      args += [ "-c" ]
+      args += [ rebase_path(idl_file) ]
+    }
+    args += [
+      "-r",
+      root_package_path,
+    ]
+  }
+
+  lib_client = "lib" + target_name + "_proxy" + "_" + hdi_build_info.version
+  ohos_shared_library(lib_client) {
+    if (defined(invoker.sources)) {
+      sources = hdi_build_info.proxy_sources
+      public_configs = [ ":$idl_headers_config" ]
+      deps = [ ":hdi_gen" ]
+      if (is_standard_system) {
+        public_deps = []
+        if (defined(invoker.sequenceable_pub_deps)) {
+          public_deps += invoker.sequenceable_pub_deps
+        }
+
+        public_deps += hdi_build_info.proxy_deps
+
+        external_deps = [
+          "c_utils:utils",
+          "hdf_core:libhdi",
+          "hdf_core:libpub_utils",
+          "hilog:libhilog",
+        ]
+        if (defined(invoker.sequenceable_ext_deps)) {
+          external_deps += invoker.sequenceable_ext_deps
+        }
+        if (invoker.language == "c") {
+          external_deps += [ "hdf_core:libhdf_ipc_adapter" ]
+        } else if (invoker.language == "cpp") {
+          external_deps += [ "ipc:ipc_single" ]
+        }
+      } else {
+        external_deps = [ "hilog:libhilog" ]
+      }
+
+      if (defined(invoker.innerapi_tags)) {
+        innerapi_tags = invoker.innerapi_tags
+      }
+      shlib_type = "hdi_proxy"
+      if (defined(invoker.install_images)) {
+        install_images = invoker.install_images
+      } else {
+        install_images = [ system_base_dir ]
+      }
+
+      subsystem_name = invoker.subsystem_name
+      partname_list = string_split(invoker.part_name, "_")
+      if (partname_list[0] == "drivers") {
+        part_name = invoker.part_name
+      } else {
+        part_name = invoker.part_name + "_interface"
+      }
+
+      if (defined(invoker.stack_protector_ret)) {
+        stack_protector_ret = invoker.stack_protector_ret
+      }
+
+      if (defined(invoker.sanitize)) {
+        sanitize = invoker.sanitize
+      }
+
+      if (defined(invoker.cflags)) {
+        cflags = invoker.cflags
+      }
+
+      if (defined(invoker.cflags_cc)) {
+        cflags_cc = invoker.cflags_cc
+      }
+    }
+  }
+
+  if (mode == "ipc") {
+    lib_server = "lib" + target_name + "_stub" + "_" + hdi_build_info.version
+    ohos_shared_library(lib_server) {
+      if (defined(invoker.sources)) {
+        sources = hdi_build_info.stub_sources
+        public_configs = [ ":$idl_headers_config" ]
+
+        deps = [ ":hdi_gen" ]
+        if (is_standard_system) {
+          public_deps = []
+          if (defined(invoker.sequenceable_pub_deps)) {
+            public_deps += invoker.sequenceable_pub_deps
+          }
+
+          public_deps += hdi_build_info.stub_deps
+
+          external_deps = [
+            "c_utils:utils",
+            "hdf_core:libhdi",
+            "hilog:libhilog",
+          ]
+          if (defined(invoker.sequenceable_ext_deps)) {
+            external_deps += invoker.sequenceable_ext_deps
+          }
+          if (invoker.language == "c") {
+            external_deps += [
+              "hdf_core:libhdf_ipc_adapter",
+              "hdf_core:libhdf_utils",
+            ]
+          } else if (invoker.language == "cpp") {
+            external_deps += [ "ipc:ipc_single" ]
+          }
+        } else {
+          external_deps = [ "hilog:libhilog" ]
+        }
+
+        shlib_type = "hdi_stub"
+        install_images = [ chipset_base_dir ]
+        subsystem_name = invoker.subsystem_name
+        part_name = invoker.part_name
+
+        if (defined(invoker.stack_protector_ret)) {
+          stack_protector_ret = invoker.stack_protector_ret
+        }
+
+        if (defined(invoker.sanitize)) {
+          sanitize = invoker.sanitize
+        }
+
+        if (defined(invoker.cflags)) {
+          cflags = invoker.cflags
+        }
+
+        if (defined(invoker.cflags_cc)) {
+          cflags_cc = invoker.cflags_cc
+        }
+      }
+    }
+  }
+
+  # generate code and shared library
+  group("$target_name" + "_idl_target") {
+    deps = [ ":$lib_client" ]
+    if (mode == "ipc") {
+      deps += [ ":$lib_server" ]
+    }
+  }
+
+  # only generate code and provide header file path
+  # usage example: external_deps = [ "drivers_interface_xxx:xxx_idl_headers" ]
+  # this target has been replaced by 'idl_headers_target', please use 'idl_headers_target'
+  group("$target_name" + "_idl_headers") {
+    public_configs = [ ":$idl_headers_config" ]
+    deps = [ ":hdi_gen" ]
+  }
+
+  # only generate code and provide header file path
+  # usage example: external_deps = [ "drivers_interface_xxx:xxx_idl_headers_1.0" ]
+  idl_headers_target = target_name + "_idl_headers_" + hdi_build_info.version
+  group(idl_headers_target) {
+    public_configs = [ ":$idl_headers_config" ]
+    deps = [ ":hdi_gen" ]
+    public_deps = hdi_build_info.header_deps
+  }
+}
