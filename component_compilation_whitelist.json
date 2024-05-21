@@ -4552,6 +4552,42 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
+        "//drivers/interface/ril/v2_0:libril_proxy_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/ril/v2_0:libril_stub_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/ril/v2_0:ril_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/ril/v2_0:ril_idl_headers_2.0": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
         "//drivers/interface/sensor/v2_0:libsensor_proxy_2.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
@@ -17355,6 +17391,9 @@
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/ril/v1_3:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
+        "//drivers/interface/ril/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/sensor/v2_0:hdi_gen": [
@@ -32532,6 +32571,9 @@
         "//drivers/interface/ril/v1_3:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
+        "//drivers/interface/ril/v2_0:hdi_gen": [
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
+        ],
         "//drivers/interface/sensor/v2_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
@@ -37950,6 +37992,9 @@
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/ril/v1_3/": [
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
+        ],
+        "//drivers/interface/ril/v2_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/sensor/v2_0/": [
