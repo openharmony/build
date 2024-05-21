@@ -16783,9 +16783,6 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
         ],
-        "//base/update/updater/services/updater_binary:updater_binary": [
-            "//third_party/musl:soft_static_libs"
-        ],
         "//base/update/updater/services:libupdater": [
             "//drivers/peripheral/input/udriver:hdi_input_udriver"
         ],
@@ -31490,9 +31487,6 @@
             "//third_party/openssl:libcrypto_static",
             "//third_party/openssl:libssl_static",
             "//third_party/zlib:libz"
-        ],
-        "//base/update/updater/services/updater_binary:updater_binary": [
-            "//third_party/musl:soft_static_libs"
         ],
         "//base/update/updater/services:libupdater": [
             "//third_party/bounds_checking_function:libsec_shared",
