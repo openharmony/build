@@ -248,8 +248,8 @@ template("ohos_executable") {
           type = "bin"
           gn_output_name = _output_name
           gn_output_extension = _output_extension
-      },
-    ]
+        },
+      ]
       write_file("${kernel_permission_info_file}",
                  kernel_permission_info,
                  "json")

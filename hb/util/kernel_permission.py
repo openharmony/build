@@ -154,6 +154,7 @@ class KernelPermission():
                     return True
                 else:
                     print("encaps.json is invalid")
+                    return False
         except FileNotFoundError:
             print("encaps.json is not found")
             return False
