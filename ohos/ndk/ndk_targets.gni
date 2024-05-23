@@ -242,6 +242,9 @@ if (ndk_platform == "win") {
 } else if (ndk_platform == "linux") {
   all_ndk_targets_list +=
       [ "//interface/sdk_c/third_party/musl/ndk_script:linux_x86_64" ]
+} else if (ndk_platform == "ohos") {
+  all_ndk_targets_list +=
+      [ "//interface/sdk_c/third_party/musl/ndk_script:ohos_arm64" ]
 } else if (ndk_platform == "default") {
   if (host_os == "mac") {
     if (host_cpu == "arm64") {
@@ -255,6 +258,7 @@ if (ndk_platform == "win") {
     all_ndk_targets_list += [
       "//interface/sdk_c/third_party/musl/ndk_script:windows_x86_64",
       "//interface/sdk_c/third_party/musl/ndk_script:linux_x86_64",
+      "//interface/sdk_c/third_party/musl/ndk_script:ohos_arm64",
     ]
   }
 }
