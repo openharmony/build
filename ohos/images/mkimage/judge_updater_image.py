@@ -42,6 +42,24 @@ def get_needed_lib(file_path: str) -> list:
     return needed_lib_name
 
 
+def judge_updater_binary_available(updater_root_path: str) -> bool:
+    updater_binary_path = os.path.join(updater_root_path, "bin", "updater_binary")
+    updater_binary_needed_lib = get_needed_lib(updater_binary_path)
+    # The ASAN version does not set restriction
+    for lib_name in updater_binary_needed_lib:
+        if lib_name.endswith('asan.so'):
+            return True
+    updater_binary_lib_scope = {'libc.so', 'libc++.so', 'libselinux.z.so', 'librestorecon.z.so',
+                                'libssl_openssl.z.so', 'libcrypto_openssl.z.so',
+                                'libbegetutil.z.so', 'libcjson.z.so', 'libpartition_slot_manager.z.so',
+                                'libclang_rt.ubsan_minimal.so'}
+    extra_lib = set(updater_binary_needed_lib) - updater_binary_lib_scope
+    if len(extra_lib) != 0:
+        print("Reason:  not allow updater_binary to depend dynamic library: {}".format(" ".join(extra_lib)))
+        return False
+    return True
+
+
 def judge_lib_available(lib_name: str, lib_chain: list, available_libs: list, lib_to_path: dict) -> bool:
     if lib_name in available_libs:
         return True
@@ -76,4 +94,5 @@ def judge_updater_available(updater_root_path: str) -> bool:
 
 
 def judge_updater_img_available(updater_root_path: str) -> bool:
-    return judge_updater_available(updater_root_path)
+    return judge_updater_binary_available(updater_root_path) and\
+           judge_updater_available(updater_root_path)
