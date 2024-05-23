@@ -108,7 +108,7 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk_ohos-arm64-84c630-20240515",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk_ohos_arm64-84c630-20240515",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk",
       "rename": "true"
     },
