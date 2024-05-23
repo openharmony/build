@@ -117,6 +117,15 @@
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/ninja",
           "type": "file"
+        },
+        {
+          "target_os": "ohos",
+          "target_cpu": "arm64",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/ohos/ninja-ohos-20240515.tar.gz",
+          "download_dir": ".prebuilts_cache/build-tools/ohos/bin/ninja",
+          "symlink": "prebuilts/build-tools/ohos/bin/ninja",
+          "type": "file"
         }
       ]
     },

@@ -194,6 +194,7 @@ _ndk_cmake = [
   "//prebuilts/cmake/darwin-x86:darwin_cmake_copy",
   "//prebuilts/cmake/linux-x86:linux_cmake_copy",
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
+  "//prebuilts/cmake/ohos:ohos_cmake_copy",
   "//build/ohos/ndk:ndk_cmake_files",
   "//build/ohos/ndk:cmake_patch",
 ]
@@ -204,6 +205,7 @@ if (host_os == "mac") {
   _ndk_cmake += [
     "//build/ohos/ndk:copy_linux_ohos_cmake",
     "//build/ohos/ndk:copy_windows_ohos_cmake",
+    "//build/ohos/ndk:copy_ohos_ohos_cmake",
   ]
 }
 
@@ -214,6 +216,7 @@ if (host_os == "mac") {
   _ndk_ninja += [
     "//prebuilts/build-tools/linux-x86/bin:linux_ninja_copy",
     "//prebuilts/build-tools/windows-x86/bin:windows_ninja_copy",
+    "//prebuilts/build-tools/ohos/bin:ohos_ninja_copy",
   ]
 }
 

@@ -255,6 +255,16 @@
           "unzip_filename": "linux-x86"
         },
         {
+          "unzip_dir": "prebuilts/cmake",
+          "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-ohos-3.28.2.tar.gz",
+          "unzip_filename": "ohos"
+        },
+        {
+          "unzip_dir": "prebuilts/build-tools/ohos/bin",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/ohos/ninja-ohos-20240515.tar.gz",
+          "unzip_filename": "ninja"
+        },
+        {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
           "file_path": "/openharmony/compiler/gn/20240510/gn-linux-x86-20240510.tar.gz",
           "unzip_filename": "gn"
