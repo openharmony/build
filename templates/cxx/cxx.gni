@@ -229,6 +229,14 @@ template("ohos_executable") {
           rebase_path(get_label_info(target_label, "target_out_dir"),
                       root_build_dir) + "/${target_name}_module_info.json"
       kernel_permission_info_file = "${root_build_dir}/build_configs/kernel_permission/${target_name}_info_file.json"
+      _output_name = ""
+      if (defined(invoker.output_name)) {
+        _output_name = invoker.output_name
+      }
+      _output_extension = ""
+      if (defined(invoker.output_extension)) {
+        _output_extension = "." + invoker.output_extension
+      }
       kernel_permission_info += [
         {
           module_info_file = _module_info_file
@@ -236,6 +244,10 @@ template("ohos_executable") {
           target_name = target_name
           subsystem_name = subsystem_name
           target_label = target_label
+          part_name = part_name
+          type = "bin"
+          gn_output_name = _output_name
+          gn_output_extension = _output_extension
         },
       ]
       write_file("${kernel_permission_info_file}",
@@ -776,6 +788,14 @@ template("ohos_shared_library") {
         rebase_path(get_label_info(target_label, "target_out_dir"),
                     root_build_dir) + "/${target_name}_module_info.json"
     kernel_permission_info_file = "${root_build_dir}/build_configs/kernel_permission/${target_name}_info_file.json"
+    _output_name = ""
+    if (defined(invoker.output_name)) {
+      _output_name = invoker.output_name
+    }
+    _output_extension = ""
+    if (defined(invoker.output_extension)) {
+      _output_extension = "." + invoker.output_extension
+    }
     kernel_permission_info += [
       {
         module_info_file = _module_info_file
@@ -783,6 +803,10 @@ template("ohos_shared_library") {
         target_name = target_name
         subsystem_name = subsystem_name
         target_label = target_label
+        part_name = part_name
+        type = "lib"
+        gn_output_name = _output_name
+        gn_output_extension = _output_extension
       },
     ]
     write_file("${kernel_permission_info_file}", kernel_permission_info, "json")
