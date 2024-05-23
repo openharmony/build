@@ -18,6 +18,8 @@
 
 import os
 import sys
+import json
+from collections import OrderedDict
 
 from exceptions.ohos_exception import OHOSException
 from util.system_util import SystemUtil
@@ -113,11 +115,23 @@ class KernelPermission():
                 raise OHOSException(
                     'kernel_permission json file {} invalid!'.format(kernel_permission_file), '0001')
             target_name = info.get("target_name")
-            module_info_file = os.path.join(out_path, info.get("module_info_file"))
-            target_info = IoUtil.read_json_file(module_info_file)
-            label_name = target_info.get("label_name")
-            target_source = os.path.join(out_path, target_info.get("source"))
-            if target_name == label_name:
+            output_extension = info.get("gn_output_extension")
+            output_name = info.get("gn_output_name")
+            part_name = info.get("part_name")
+            subsystem_name = info.get("subsystem_name")
+            type = info.get("type")
+            module_name = target_name
+            if output_name == "" and output_extension == "":
+                if type == "lib" and target_name.startswith("lib"):
+                    module_name = "{}.z.so".format(target_name)
+                elif type == "lib" and not target_name.startswith("lib"):
+                    module_name = "lib{}.z.so".format(target_name)
+            print("module_name:{}".format(module_name))
+            module_path = os.path.join(subsystem_name, part_name)
+            module_path = os.path.join(module_path, module_name)
+            print("module_path:{}".format(module_path))
+            target_source = os.path.join(out_path, module_path)
+            if target_name:
                 cmd = [llvm_path, 
                         "--add-section", 
                         ".kernelpermission=" + kernel_permission_file,
@@ -129,18 +143,32 @@ class KernelPermission():
 
     @staticmethod
     def check_json_file(file_path):
-        json_data = IoUtil.read_json_file(file_path)
-        if KernelPermission.check_json_content(json_data):
-            return True
-        else:
-            print("kernel_permission.json is invalid at file_path: {}".format(file_path))
+        try:
+            with os.fdopen(os.open(file_path, os.O_RDWR, 0o640), 'r+') as file:
+                json_data = json.load(file)
+                if KernelPermission.check_json_content(json_data):
+                    print(json_data)
+                    file.seek(0)
+                    file.truncate()
+                    json.dump(json_data, file, indent=4)
+                    return True
+                else:
+                    print("encaps.json is invalid")
+                    return False
+        except FileNotFoundError:
+            print("encaps.json is not found")
+            return False
+        except json.JSONDecodeError:
+            print("encaps.json doesn't conform to json format")
+            return False
+        except Exception:
+            print("encaps.json error")
             return False
 
 
     @staticmethod
     def check_json_content(json_data):
-        if len(json_data) == 1 and "kernelpermission" in json_data:
-            json_data = json_data["kernelpermission"]
+        if len(json_data) == 1 and "encaps" in json_data:
             return KernelPermission.check_json_value(json_data)
         else:
             return False
@@ -148,12 +176,17 @@ class KernelPermission():
 
     @staticmethod
     def check_json_value(json_data):
-        for key, value in json_data.items():
-            if not isinstance(value, (bool, str, list)):
+        cnt = 0
+        encaps_data = json_data["encaps"]
+        new_data = OrderedDict()
+        new_data["ohos.encaps.count"] = cnt
+        new_data.update(encaps_data)
+        for key, value in new_data.items():
+            if not isinstance(value, (bool, int)):
                 return False
-            if isinstance(value, list):
-                if not all(isinstance(item, str) for item in value):
-                    return False
+            cnt += 1
+        new_data["ohos.encaps.count"] = cnt -1
+        json_data["encaps"] = new_data
         return True
 
 
