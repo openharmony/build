@@ -160,12 +160,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0-20240520.tar.gz",
           "unzip_filename": "ninja"
         },
 	{
           "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/windows/ninja-windows-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -271,12 +271,12 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/linux/ninja-linux-x86-1.11.0-20240520.tar.gz",
           "unzip_filename": "ninja"
         },
         {
           "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/windows/ninja-windows-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -463,7 +463,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/ninja-darwin-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -541,7 +541,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/ninja-darwin-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0-20240320.tar.gz",
           "unzip_filename": "ninja"
         },
         {
