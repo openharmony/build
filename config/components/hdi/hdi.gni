@@ -12,9 +12,9 @@
 # limitations under the License..
 
 import("//build/ohos.gni")
-import("//drivers/hdf_core/adapter/uhdf2/uhdf.gni")
 
 hdf_fwk_path = "//drivers/hdf_core/framework"
+hdf_uhdf_path = "//drivers/hdf_core/adapter/uhdf2"
 
 template("hdi") {
   assert(defined(invoker.sources), "sources must be set")
@@ -106,7 +106,7 @@ template("hdi") {
       "$hdf_uhdf_path/include/hdi",
       "$hdf_uhdf_path/osal/include",
       "$hdf_uhdf_path/ipc/include",
-      "$hdf_framework_path/include/utils",
+      "$hdf_fwk_path/include/utils",
       "//drivers/hdf_core/interfaces/inner_api/utils",
       "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
       "//drivers/hdf_core/interfaces/inner_api/hdi",
