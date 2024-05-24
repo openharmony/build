@@ -153,6 +153,7 @@ def _copy_dir(src_path, target_path):
     if not os.path.isdir(src_path):
         return False
     filelist_src = os.listdir(src_path)
+    suffix_list = [".h", ".hpp", ".in", ".inc"]
     for file in filelist_src:
         path = os.path.join(os.path.abspath(src_path), file)
         if os.path.isdir(path):
@@ -161,7 +162,7 @@ def _copy_dir(src_path, target_path):
             path1 = os.path.join(target_path, file)
             _copy_dir(path, path1)
         else:
-            if not (path.endswith(".h") or path.endswith(".hpp") or path.endswith(".in")):
+            if not (os.path.splitext(path)[-1] in suffix_list):
                 continue
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
