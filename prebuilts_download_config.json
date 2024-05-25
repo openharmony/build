@@ -463,7 +463,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/ninja-darwin-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/arm/ninja-darwin-arm-1.12.0-20240525.tar.gz",
           "unzip_filename": "ninja"
         },
         {
@@ -541,7 +541,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/ninja-darwin-x86-1.12.0-20240523.tar.gz",
+          "file_path": "/openharmony/compiler/ninja/1.12.0/darwin/x86/ninja-darwin-x86-1.12.0-20240525.tar.gz",
           "unzip_filename": "ninja"
         },
         {
