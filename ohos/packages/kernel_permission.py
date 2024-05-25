@@ -18,13 +18,14 @@
 
 import os
 import sys
+import subprocess
 import json
 from collections import OrderedDict
 
-from exceptions.ohos_exception import OHOSException
-from util.system_util import SystemUtil
-from util.io_util import IoUtil
-from util.log_util import LogUtil
+sys.path.append(
+    os.path.dirname(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__)))))
+from scripts.util.file_utils import read_json_file
 
 
 class KernelPermission():
@@ -32,8 +33,9 @@ class KernelPermission():
 
     @staticmethod
     def run(out_path, root_path):
-        log_path = os.path.join(out_path, 'build.log')
-        KernelPermission.execute_kernel_permission_cmd(log_path, out_path, root_path)
+        tartget_out_path = os.path.join(root_path, out_path.lstrip("//"))
+        print("tartget_out_path:", tartget_out_path)
+        KernelPermission.execute_kernel_permission_cmd(tartget_out_path, root_path)
 
 
     @staticmethod
@@ -45,60 +47,43 @@ class KernelPermission():
         file_path = file_path = os.path.join(out_path, "build_configs/kernel_permission/")
         for root, subdirs, files in os.walk(file_path):
             for _filename in files:
-                content = IoUtil.read_json_file(os.path.join(root, _filename))
+                content = read_json_file(os.path.join(root, _filename))
                 file_list.append(content[0])
         return file_list
 
 
     @staticmethod
-    def execute_kernel_permission_cmd(log_path, out_path, root_path):
+    def execute_kernel_permission_cmd(out_path, root_path):
         """execute cmd
         llvm-object --add-section .kernelpermission=json_file xx/xx.so
         """
-        LogUtil.write_log(
-            log_path,
-            "begin run kernel permission cmd log_path:{}".format(log_path),
-            'info')
+        print("begin run kernel permission cmd")
         
         try:
             llvm_tool = KernelPermission.regist_llvm_objcopy_path(root_path)
-        except OHOSException as e:
-            LogUtil.write_log(
-                log_path,
-                "regist_llvm_objcopy_path failed:{}".format(e),
-                'warning')
-            return
-        
+        except FileNotFoundError as e:
+            print("regist_llvm_objcopy_path failed:{}".format(e))
         file_list = KernelPermission.scan_file(out_path)
         
         cmds = KernelPermission.gen_cmds(file_list, out_path, llvm_tool)
         if cmds:
             for cmd in cmds:
-                LogUtil.write_log(
-                    log_path,
-                    cmd,
-                    'info')
-                SystemUtil.exec_command(
-                    cmd,
-                    log_path
-                    )
+                print("llvm cmd: {}".format(cmd))
+                KernelPermission.exec_command(cmd)
         else:
-            LogUtil.write_log(
-                log_path,
-                "There is no kernel permission json file,no need to run llvm-object cmd.",
-                'info')
+            print("There is no kernel permission json file,no need to run llvm-object cmd.")
 
 
     @staticmethod
     def regist_llvm_objcopy_path(root_path):
         """find llvm_objcopy_path executable
-        :raise OHOSException: when can't find the llvm_objcopy_path excutable
+        :raise FileNotFoundError: when can't find the llvm_objcopy_path excutable
         """
         llvm_objcopy_path = os.path.join(root_path, "prebuilts/clang/ohos/linux-x86_64/llvm/bin/llvm-objcopy")
         if os.path.exists(llvm_objcopy_path):
             return llvm_objcopy_path
         else:
-            raise OHOSException(
+            raise FileNotFoundError(
                 'There is no llvm-object executable file at {}'.format(llvm_objcopy_path), '0001')
 
 
@@ -112,32 +97,32 @@ class KernelPermission():
         for info in file_list: 
             kernel_permission_file = os.path.join(out_path, info.get("kernel_permission_path"))
             if not KernelPermission.check_json_file(kernel_permission_file):
-                raise OHOSException(
+                raise FileExistsError(
                     'kernel_permission json file {} invalid!'.format(kernel_permission_file), '0001')
             target_name = info.get("target_name")
             output_extension = info.get("gn_output_extension")
             output_name = info.get("gn_output_name")
             part_name = info.get("part_name")
             subsystem_name = info.get("subsystem_name")
-            type = info.get("type")
+            target_type = info.get("type")
             module_name = target_name
             if output_name == "" and output_extension == "":
-                if type == "lib" and target_name.startswith("lib"):
+                if target_type == "lib" and target_name.startswith("lib"):
                     module_name = "{}.z.so".format(target_name)
-                elif type == "lib" and not target_name.startswith("lib"):
+                elif target_type == "lib" and not target_name.startswith("lib"):
                     module_name = "lib{}.z.so".format(target_name)
             print("module_name:{}".format(module_name))
             module_path = os.path.join(subsystem_name, part_name)
             module_path = os.path.join(module_path, module_name)
             print("module_path:{}".format(module_path))
             target_source = os.path.join(out_path, module_path)
-            if target_name:
+            if os.path.exists(target_source):
                 cmd = [llvm_path, 
                         "--add-section", 
                         ".kernelpermission=" + kernel_permission_file,
                         target_source
                         ]
-            cmds.append(cmd)
+                cmds.append(cmd)
         return cmds
 
 
@@ -185,10 +170,29 @@ class KernelPermission():
             if not isinstance(value, (bool, int)):
                 return False
             cnt += 1
-        new_data["ohos.encaps.count"] = cnt -1
+        new_data["ohos.encaps.count"] = cnt - 1
         json_data["encaps"] = new_data
         return True
 
+
+    @staticmethod
+    def exec_command(cmd: list, exec_env=None, **kwargs):
+        process = subprocess.Popen(cmd,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE,
+                                   encoding='utf-8',
+                                   errors='ignore',
+                                   env=exec_env,
+                                   **kwargs)
+        for line in iter(process.stdout.readline, ''):
+            print(line)
+
+        process.wait()
+        ret_code = process.returncode
+
+        if ret_code != 0:
+            raise Exception(
+                'please check llvm cmd: {}'.format(cmd))
 
 if __name__ == "__main__":
     pass

@@ -17,6 +17,7 @@ import sys
 import argparse
 import os
 
+from kernel_permission import KernelPermission
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
@@ -53,7 +54,11 @@ def main():
     parser.add_argument('--system-install-info-file', required=True)
     parser.add_argument('--current-platform', required=True)
     parser.add_argument('--depfile', required=False)
+    parser.add_argument('--root-build-dir', required=False)
+    parser.add_argument('--root-code-dir', required=False)
     args = parser.parse_args()
+
+    KernelPermission.run(args.root_build_dir, args.root_code_dir)
 
     current_platform_parts = get_platform_parts(args.current_platform,
                                                 args.platforms_parts_file)
