@@ -731,6 +731,13 @@
         ]
     },
     {
+        "install_dir": "toolchains",
+        "module_label": "//developtools/packing_tool/ohos_packing_tool/frameworks:ohos_packing_tool",
+        "target_os": [
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool:app_unpacking_tool",
         "target_os": [
