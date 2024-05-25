@@ -76,9 +76,6 @@ class Ninja(BuildExecutorInterface):
             log_mode=self.config.log_mode
         )
 
-        # run llvm-object --add-section .kernelpermission=json_file xx/xx.so
-        KernelPermission.run(self.config.out_path, self.config.root_path)
-
     def _convert_args(self) -> list:
         """convert all registed args into a list
         """

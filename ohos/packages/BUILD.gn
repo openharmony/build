@@ -118,6 +118,10 @@ foreach(_platform, target_platform_list) {
       rebase_path(_system_install_info_file, root_build_dir),
       "--current-platform",
       current_platform,
+      "--root-code-dir",
+      rebase_path("//"),
+      "--root-build-dir",
+      root_build_dir,
     ]
   }
 
