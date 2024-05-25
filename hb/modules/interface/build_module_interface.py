@@ -25,7 +25,7 @@ from services.interface.build_executor_interface import BuildExecutorInterface
 from services.interface.build_file_generator_interface import BuildFileGeneratorInterface
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 
-from hb.util.timer_util import TimerUtil
+from util.timer_util import TimerUtil
 
 
 class BuildModuleInterface(ModuleInterface):
