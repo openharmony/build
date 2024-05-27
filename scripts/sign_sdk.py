@@ -24,7 +24,7 @@ import shlex
 def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-out-dir')
-    # parser.add_argument('--sign-no-s3', action='store_true')
+    parser.add_argument('--sign-acceleration')
     options = parser.parse_args(args)
     return options
 
@@ -55,10 +55,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
         ohos_name = shlex.quote("ohos-sdk")
-        if sign_no_s3 is True:
-            cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
-        else
-            cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name]
+        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, sign_acceleration]
 
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
@@ -67,8 +64,10 @@ def sign_sdk(zipfile, sign_list, sign_results):
 def main(args):
     options = parse_args(args)
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
-    # global sign_no_s3
-    # sign_no_s3 = options.sign_no_s3
+    global sign_acceleration
+    sign_acceleration = ""
+    if options.sign_acceleration is not "":
+        sign_acceleration = '--no-' + options.sign_acceleration + '-acceleration'
     os.chdir(darwin_sdk_dir)
     sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
     sign_results = []

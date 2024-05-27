@@ -256,7 +256,8 @@ if (!use_current_sdk) {
     args = [
       "--sdk-out-dir",
       rebase_path(ohos_sdk_out_dir, root_build_dir),
-      sign_no_s3,
+      "--sign-acceleration",
+      "sign_acceleration",
     ]
     outputs = [ "$target_out_dir/$target_name.stamp" ]
   }
