@@ -36,6 +36,7 @@ declare_args() {
 
 declare_args() {
   enable_sign = false
+  sign_no_s3 = false
 }
 
 sdk_toolchains = {
