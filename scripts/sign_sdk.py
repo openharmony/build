@@ -24,7 +24,7 @@ import shlex
 def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-out-dir')
-    parser.add_argument('--sign-acceleration')
+    parser.add_argument('--sign-acceleration', default="")
     options = parser.parse_args(args)
     return options
 
