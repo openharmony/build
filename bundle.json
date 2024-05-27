@@ -21,7 +21,9 @@
     "name": "build_framework",
     "description": "build_framework component set",
     "subsystem": "build",
-    "features": [],
+    "features": [
+      "build_framework_feature_verify = ture"
+    ],
     "adapted_system_type": [
       "standard",
       "small",
