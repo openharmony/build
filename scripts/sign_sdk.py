@@ -24,6 +24,7 @@ import shlex
 def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-out-dir')
+    parser.add_argument('--sign-no-s3', default=False)
     options = parser.parse_args(args)
     return options
 
@@ -54,7 +55,10 @@ def sign_sdk(zipfile, sign_list, sign_results):
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
         ohos_name = shlex.quote("ohos-sdk")
-        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
+        if sign_no_s3 is True:
+            cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
+        else
+            cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name]
 
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
@@ -63,6 +67,8 @@ def sign_sdk(zipfile, sign_list, sign_results):
 def main(args):
     options = parse_args(args)
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
+    global sign_no_s3
+    sign_no_s3 = options.sign_no_s3
     os.chdir(darwin_sdk_dir)
     sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
     sign_results = []
@@ -70,7 +76,7 @@ def main(args):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
         try:
-            stdout, stderr = process.communicate(timeout=600)
+            stdout, stderr = process.communicate(timeout=1200)
             if process.returncode:
                 print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
                 raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")

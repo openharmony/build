@@ -255,6 +255,7 @@ if (!use_current_sdk) {
     script = "//build/scripts/sign_sdk.py"
     args = [
       "--sdk-out-dir",
+      "--sign-no-s3"
       rebase_path(ohos_sdk_out_dir, root_build_dir),
     ]
     outputs = [ "$target_out_dir/$target_name.stamp" ]
