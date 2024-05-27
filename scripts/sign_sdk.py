@@ -24,7 +24,7 @@ import shlex
 def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-out-dir')
-    parser.add_argument('--sign-no-s3', default=False)
+    parser.add_argument('--sign-no-s3', action='store_true')
     options = parser.parse_args(args)
     return options
 
