@@ -111,7 +111,7 @@ config("soft_musl_config") {
 
   defines = [ "BROKEN_VFP_ASM" ]
   if (!is_llvm_build) {
-    defines = [ "FEATURE_ATEXIT_CB_PROTECT" ]
+    defines += [ "FEATURE_ATEXIT_CB_PROTECT" ]
   }
   if (is_standard_system) {
     defines += [
