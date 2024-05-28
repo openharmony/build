@@ -157,6 +157,34 @@ def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, mo
             shutil.copyfile(lib_path, dest)
 
 
+def hvigor_obfuscation(options, cmd):
+    if options.hvigor_obfuscation:
+        cmd.extend(['-p', 'buildMode=release'])
+    else:
+        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+
+
+def hvigor_write_log(cmd, cwd, env):
+    proc = subprocess.Popen(cmd, 
+                            cwd=cwd, 
+                            env=env,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            encoding='utf-8')
+    stdout, stderr = proc.communicate()
+    for line in stdout.splitlines():
+        print(f"[1/1] Hvigor info: {line}")
+    for line in stderr.splitlines():
+        print(f"[2/2] Hvigor warning: {line}")
+    os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
+    with open(os.path.join(cwd, 'build', 'build.log'), 'w') as f:
+        f.write(f'{stdout}\n')
+        f.write(f'{stderr}\n')
+    if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
+        raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
+    print("[0/0] Hvigor build end")
+
+
 def hvigor_build(cwd: str, options):
     '''
     Run hvigorw to build the app or hap
@@ -181,8 +209,7 @@ def hvigor_build(cwd: str, options):
         hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
-    if not options.hvigor_obfuscation:
-        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+    hvigor_obfuscation(options, cmd)
     cmd.extend(['--no-daemon'])
     sdk_dir = options.sdk_home
     env = os.environ.copy()
@@ -201,24 +228,7 @@ def hvigor_build(cwd: str, options):
                    stdout=subprocess.DEVNULL,
                    stderr=subprocess.DEVNULL)
     print("[0/0] Hvigor build start")
-    proc = subprocess.Popen(cmd, 
-                            cwd=cwd, 
-                            env=env,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE,
-                            encoding='utf-8')
-    stdout, stderr = proc.communicate()
-    for line in stdout.splitlines():
-        print(f"[1/1] Hvigor info: {line}")
-    for line in stderr.splitlines():
-        print(f"[2/2] Hvigor warning: {line}")
-    os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
-    with open(os.path.join(cwd, 'build', 'build.log'), 'w') as f:
-        f.write(f'{stdout}\n')
-        f.write(f'{stderr}\n')
-    if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
-        raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
-    print("[0/0] Hvigor build end")
+    hvigor_write_log(cmd, cwd, env)
 
 
 def main(args):
@@ -248,3 +258,4 @@ def main(args):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
+
