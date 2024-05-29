@@ -125,15 +125,6 @@ config("soft_musl_config") {
     }
   }
 
-  if (use_gwp_asan) {
-    defines += [ "USE_GWP_ASAN" ]
-    if (!defined(libs)) {
-      libs = [ rebase_path(libgwp_asan_file) ]
-    } else {
-      libs += [ rebase_path(libgwp_asan_file) ]
-    }
-  }
-
   dynamic_list = rebase_path("${musl_out_dir}/${musl_ported_dir}/dynamic.list")
 
   ldflags = cflags_all
