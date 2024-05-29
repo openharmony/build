@@ -41,7 +41,6 @@ def sign_sdk(zipfile, sign_list, sign_results):
             for file in files:
                 file = os.path.join(root, file)
                 need_sign_files.append(file)
-        
         for file in need_sign_files:
             if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') \
                     or file.split('/')[-2] == 'bin':
@@ -69,7 +68,7 @@ def main(args):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
         try:
-            stdout, stderr = process.communicate(timeout=1200)
+            stdout, stderr = process.communicate(timeout=3600)
             if process.returncode:
                 print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
                 raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
