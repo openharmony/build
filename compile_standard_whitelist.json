@@ -14,6 +14,7 @@
         "//arkcompiler/toolchain/tooling/test:debugger_entry",
         "//arkcompiler/toolchain/tooling/test:jsdebugtest",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
+        "//arkcompiler/toolchain/tooling/client:libark_client",
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/device_manager:camera_device_manager",
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/driver_adapter:camera_v4l2_adapter",
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/metadata_manager:camera_metadata_manager",
@@ -373,6 +374,7 @@
     "external_deps_bundle_not_add": [
         "//arkcompiler/toolchain/tooling/test:jsdebugtest",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
+        "//arkcompiler/toolchain/tooling/client:libark_client",
         "//base/hiviewdfx/faultloggerd/tools/crasher_cpp:crasher_cpp",
         "//base/security/device_security_level/oem_property/common:oem_common_obj",
         "//base/security/device_security_level/services/common:service_common_obj",
@@ -442,6 +444,7 @@
     ],
     "third_deps_bundle_not_add": [
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
+        "//arkcompiler/toolchain/tooling/client:libark_client",
         "//base/global/i18n_lite/interfaces/kits/js/builtin:nativeapi_locale_simulator",
         "//base/global/resource_management_lite/frameworks/resmgr_lite:global_resmgr_simulator",
         "//base/security/device_security_level/services/sa:dslm_server",
