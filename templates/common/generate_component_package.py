@@ -297,8 +297,10 @@ def _copy_bundlejson(args, public_deps_list):
     bundlejson = os.path.join(args.get("root_path"), args.get("part_path"), "bundle.json")
     dependencies_dict = {}
     for public_deps in public_deps_list:
-        _public_dep = '@' + args.get('organization_name') + '/' + public_deps.split(':')[0]
-        dependencies_dict.update({_public_dep: "*"})
+        _public_dep_part_name = public_deps.split(':')[0]
+        if _public_dep_part_name != args.get("part_name"):
+            _public_dep = '@' + args.get('organization_name') + '/' + _public_dep_part_name
+            dependencies_dict.update({_public_dep: "*"})
     if os.path.isfile(bundlejson):
         with open(bundlejson, 'r') as f:
             bundle_data = json.load(f)
