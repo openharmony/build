@@ -65,9 +65,10 @@ def main(args):
     options = parse_args(args)
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
     global sign_acceleration
-    sign_acceleration = ""
-    if options.sign_acceleration != "":
-        sign_acceleration = '--no-' + options.sign_acceleration + '-acceleration'
+    if options.sign_acceleration != "sign_acceleration":
+        sign_acceleration = options.sign_acceleration
+    else:
+        sign_acceleration = ""
     os.chdir(darwin_sdk_dir)
     sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
     sign_results = []
