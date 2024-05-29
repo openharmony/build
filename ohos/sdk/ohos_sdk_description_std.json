@@ -29,6 +29,22 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//third_party/glslang:glslang_validator",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//third_party/glslang:spirv-remap",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    { 
+        "install_dir": "toolchains",
         "module_label": "//base/update/updater/services/diffpatch:diff",
         "target_os": [
             "linux",
