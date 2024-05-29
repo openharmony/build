@@ -73,7 +73,7 @@ def _scan_and_package_code_release(scan_dir: str, top_dir: str, package_dir: str
     file_dir_names = os.listdir(scan_dir)
     for file_dir_name in file_dir_names:
         file_dir_path = os.path.join(scan_dir, file_dir_name)
-        if os.path.isdir(file_dir_path):
+        if os.path.isdir(file_dir_path) and not os.path.islink(file_dir_path):
             _scan_and_package_code_release(file_dir_path, top_dir, package_dir)
         elif file_dir_path == os.path.join(scan_dir, RELEASE_FILENAME):
             if _parse_opensource_file(file_dir_path):
