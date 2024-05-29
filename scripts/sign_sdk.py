@@ -52,8 +52,9 @@ def sign_sdk(zipfile, sign_list, sign_results):
         subprocess.call(cmd4)
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
-        ohos_name = '\"ohos_sdk\"'
-        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
+        ohos_name = 'ohos_sdk'
+        q_ohos_name = f'"{ohos_name}"'
+        cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', q_ohos_name, '--no-s3-acceleration']
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
 
