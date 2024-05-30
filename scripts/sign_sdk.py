@@ -18,6 +18,8 @@ import subprocess
 import argparse
 import os
 import sys
+import shlex
+
 
 def parse_args(args):
     parser = argparse.ArgumentParser()
@@ -55,6 +57,9 @@ def sign_sdk(zipfile, sign_list, sign_results):
             ohos_name = shlex.quote("ohos-sdk")
         elif mac_machinestdout.strip() in ['x86_64', 'amd64', 'Intel64']:
             ohos_name = "ohos-sdk"
+        else:
+            print('worry machine cause submit fail')
+            return
         cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
