@@ -187,7 +187,10 @@ class OHOSLoader(LoadInterface):
                 continue
             _p_info = part[0]
             def_feature_list = _p_info.get('feature_list')
-            if not def_feature_list:
+            if vals and not def_feature_list:
+                message = "The product use a feature vals='{}', but that is not defined " \
+                      "in this part bundle.json file, part_name='{}'".format(vals, key)
+                LogUtil.hb_warning(message)
                 continue
             for _f_name in vals:
                 if _f_name not in def_feature_list:
