@@ -58,7 +58,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         elif mac_machine.stdout.strip() in ['x86_64', 'amd64', 'Intel64']:
             ohos_name = "ohos-sdk"
         else:
-            print('worry machine cause submit fail')
+            print('Submit fail, because machine is not mac. Please check your compilation command')
             return
         cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
