@@ -55,7 +55,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         mac_machine = subprocess.run(['uname', '-m'], stdout=subprocess.PIPE, text=True)  
         if mac_machine.stdout.strip() in ['arm64', 'aarch64']:
             ohos_name = shlex.quote("ohos-sdk")
-        elif mac_machinestdout.strip() in ['x86_64', 'amd64', 'Intel64']:
+        elif mac_machine.stdout.strip() in ['x86_64', 'amd64', 'Intel64']:
             ohos_name = "ohos-sdk"
         else:
             print('worry machine cause submit fail')
