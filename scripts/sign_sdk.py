@@ -18,7 +18,6 @@ import subprocess
 import argparse
 import os
 import sys
-import shlex
 
 
 def parse_args(args):
