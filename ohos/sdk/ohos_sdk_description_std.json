@@ -1078,5 +1078,19 @@
         "target_os": [
             "darwin"
         ]
-    }
+    },
+    {
+        "install_dir": "toolchains/hapsigntool_pc",
+        "module_label": "//developtools/hapsigner/pc/services:hapsigntool_pc_service",
+        "target_os": [
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains/hapsigntool_pc",
+        "module_label": "//developtools/hapsigner/pc/services:copy_signature_tools_resource",
+        "target_os": [
+            "ohos"
+        ]
+   }
 ]
