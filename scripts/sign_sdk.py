@@ -19,7 +19,6 @@ import argparse
 import os
 import sys
 
-
 def parse_args(args):
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-out-dir')
@@ -51,7 +50,11 @@ def sign_sdk(zipfile, sign_list, sign_results):
         subprocess.call(cmd4)
         cmd5 = ['rm', '-rf', dir_name]
         subprocess.call(cmd5)
-        ohos_name = "ohos_sdk"
+        mac_machine = subprocess.run(['uname', '-m'], stdout=subprocess.PIPE, text=True)  
+        if mac_machine.stdout.strip() in ['arm64', 'aarch64']:
+            ohos_name = shlex.quote("ohos-sdk")
+        elif mac_machinestdout.strip() in ['x86_64', 'amd64', 'Intel64']:
+            ohos_name = "ohos-sdk"
         cmd6 = ['xcrun', 'notarytool', 'submit', zipfile, '--keychain-profile', ohos_name, '--no-s3-acceleration']
         process = subprocess.Popen(cmd6, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         sign_results.append((cmd6, process))
@@ -67,7 +70,7 @@ def main(args):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
         try:
-            stdout, stderr = process.communicate(timeout=3600)
+            stdout, stderr = process.communicate(timeout=7200)
             if process.returncode:
                 print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
                 raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
