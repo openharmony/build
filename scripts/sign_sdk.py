@@ -75,7 +75,7 @@ def main(args):
         sign_sdk(file, sign_list, sign_results)
     for cmd, process in sign_results:
         try:
-            stdout, stderr = process.communicate(timeout=7200)
+            stdout, stderr = process.communicate(timeout=3600)
             if process.returncode:
                 print(f"cmd:{' '.join(cmd)}, result is {stdout}")       
                 raise Exception(f"run command {' '.join(cmd)} fail, error is {stderr}")
