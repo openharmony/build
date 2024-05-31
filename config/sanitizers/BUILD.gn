@@ -75,6 +75,11 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
     }
   }
 
+  if (is_tsan && target_cpu == "arm64" && current_os == "ohos" && !is_mingw &&
+      !is_win) {
+    _clang_rt_dso_path = "aarch64-linux-ohos/libclang_rt.tsan.so"
+  }
+
   _clang_rt_dso_full_path =
       "$clang_base_path/lib/clang/$clang_version/lib/$_clang_rt_dso_path"
 
@@ -313,6 +318,8 @@ config("link_executable") {
     } else if (target_cpu == "riscv64") {
       ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-riscv64-asan.so.1" ]
     }
+  } else if (is_tsan && is_ohos && !is_mingw && !is_win) {
+    libs = [ "$_clang_rt_dso_full_path" ]
   }
 }
 
@@ -325,6 +332,8 @@ config("link_shared_library") {
       libs = [ "clang_rt.asan_dll_thunk-i386.lib" ]
     }
   } else if (is_asan && is_ohos) {
+    libs = [ "$_clang_rt_dso_full_path" ]
+  } else if (is_tsan && is_ohos && !is_mingw && !is_win) {
     libs = [ "$_clang_rt_dso_full_path" ]
   }
 }
@@ -429,11 +438,11 @@ config("safestack_flags") {
 }
 
 config("tsan_flags") {
-  if (is_tsan) {
-    assert(is_linux, "tsan only supported on linux x86_64")
+  if (is_tsan && target_cpu == "arm64" && !is_mingw && !is_win) {
     if (!defined(tsan_blocklist_path)) {
-      tsan_blocklist_path =
-          rebase_path("//tools/memory/tsan_v2/ignores.txt", root_build_dir)
+      tsan_blocklist_path = rebase_path(
+              "//third_party/node/deps/v8/tools/memory/tsan_v2/ignores.txt",
+              root_build_dir)
     }
     cflags = [
       "-fsanitize=thread",
@@ -803,6 +812,8 @@ config_plus_compiler_rt("compiler_rt_debug") {
 }
 
 config_plus_compiler_rt("compiler_rt_release") {
-  cflags = [ "-fsanitize-minimal-runtime" ]
+  if (!is_tsan) {
+    cflags = [ "-fsanitize-minimal-runtime" ]
+  }
   compiler_rt_shared_lib_names = [ "ubsan_minimal" ]
 }
