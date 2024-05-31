@@ -19,6 +19,7 @@ import argparse
 import os
 import sys
 import shlex
+import glob
 
 
 def parse_args(args):
@@ -37,6 +38,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         cmd1 = ['unzip', "-q", zipfile]
         subprocess.call(cmd1)
         need_sign_files = []
+        test = []
         for root, dirs, files in os.walk(dir_name):
             for file in files:
                 file = os.path.join(root, file)
@@ -45,7 +47,9 @@ def sign_sdk(zipfile, sign_list, sign_results):
             if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') \
                     or file.split('/')[-2] == 'bin':
                 cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
+                test.append(file)
                 subprocess.call(cmd2)
+        print(test)
         cmd3 = ['rm', zipfile]
         subprocess.call(cmd3)
         cmd4 = ['zip', '-rq', zipfile, dir_name]
@@ -69,7 +73,7 @@ def main(args):
     options = parse_args(args)
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
     os.chdir(darwin_sdk_dir)
-    sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
+    sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool', 'ninja']
     sign_results = []
     for file in os.listdir('.'):
         sign_sdk(file, sign_list, sign_results)
