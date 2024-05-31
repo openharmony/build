@@ -112,19 +112,6 @@ copy("tsan_unstripped_copy") {
   outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
 
-copy("tsan_unstripped_copy") {
-  if (target_cpu == "arm") {
-    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.tsan.so" ]
-  } else if (target_cpu == "arm64") {
-    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so" ]
-  } else if (target_cpu == "x86_64") {
-    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.tsan.so" ]
-  } else {
-    sources = [ "" ]
-  }
-  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
-}
-
 ohos_prebuilt_etc("tsan.options") {
   source = "tsan.options"
   subsystem_name = "build"
