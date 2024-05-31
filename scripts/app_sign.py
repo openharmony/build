@@ -43,6 +43,7 @@ def parse_args(args):
     parser.add_argument('--inForm', help='')
     parser.add_argument('--certificate-file', help='')
     parser.add_argument('--hap-name', help='')
+    parser.add_argument('--custom-unsigned-to-signed-hap-list', help='')
     options = parser.parse_args(args)
     return options
 
@@ -78,14 +79,29 @@ def main(args):
         if not os.path.exists(options.hap_out_dir):
             os.makedirs(options.hap_out_dir, exist_ok=True)
         unsigned_hap_path_list = file_utils.read_json_file(options.unsigned_hap_path_list)
+        custom_signed_hap_names = {}
+        if os.path.isfile(options.custom_unsigned_to_signed_hap_list):
+            custom_unsigned_to_signed_hap_list = \
+                file_utils.read_json_file(options.custom_unsigned_to_signed_hap_list)
+            for unsigned_to_signed in custom_unsigned_to_signed_hap_list.get('custom_unsigned_to_signed_hap_names'):
+                names = unsigned_to_signed.split(':')
+                if len(names) == 2:
+                    custom_signed_hap_names[f'{names[0]}.hsp'] = f'{names[1]}.hsp'
+                    custom_signed_hap_names[f'{names[0]}.hap'] = f'{names[1]}.hap'
+                
         for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
             signed_hap_path = unsigned_hap_path.replace('unsigned', 'signed')
             output_hap_name = f'{options.hap_name}-{os.path.basename(signed_hap_path)}'
+            unsigned_hap_name = f'{options.hap_name}-{os.path.basename(unsigned_hap_path)}'
             if len(unsigned_hap_path_list.get('unsigned_hap_path_list')) == 1 and options.hap_name:
                 if unsigned_hap_path_list.get('unsigned_hap_path_list')[0].endswith('.hsp'):
                     output_hap_name = f'{options.hap_name}.hsp'
+                    unsigned_hap_name = output_hap_name
                 else:
                     output_hap_name = f'{options.hap_name}.hap'
+                    unsigned_hap_name = output_hap_name
+            if custom_signed_hap_names.get(unsigned_hap_name):
+                output_hap_name = custom_signed_hap_names.get(unsigned_hap_name)
             output_hap = os.path.join(options.hap_out_dir, output_hap_name)
             sign_app(options, unsigned_hap_path, output_hap)
 
