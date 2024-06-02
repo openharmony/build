@@ -83,12 +83,12 @@ def main(args):
         if os.path.isfile(options.custom_unsigned_to_signed_hap_list):
             custom_unsigned_to_signed_hap_list = \
                 file_utils.read_json_file(options.custom_unsigned_to_signed_hap_list)
+            custom_signed_hap_names['do_filter'] = custom_unsigned_to_signed_hap_list.get('do_filter')
             for unsigned_to_signed in custom_unsigned_to_signed_hap_list.get('custom_unsigned_to_signed_hap_names'):
                 names = unsigned_to_signed.split(':')
                 if len(names) == 2:
                     custom_signed_hap_names[f'{names[0]}.hsp'] = f'{names[1]}.hsp'
-                    custom_signed_hap_names[f'{names[0]}.hap'] = f'{names[1]}.hap'
-                
+                    custom_signed_hap_names[f'{names[0]}.hap'] = f'{names[1]}.hap'     
         for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
             signed_hap_path = unsigned_hap_path.replace('unsigned', 'signed')
             output_hap_name = f'{options.hap_name}-{os.path.basename(signed_hap_path)}'
@@ -100,10 +100,14 @@ def main(args):
                 else:
                     output_hap_name = f'{options.hap_name}.hap'
                     unsigned_hap_name = output_hap_name
-            if custom_signed_hap_names.get(unsigned_hap_name):
-                output_hap_name = custom_signed_hap_names.get(unsigned_hap_name)
-            output_hap = os.path.join(options.hap_out_dir, output_hap_name)
-            sign_app(options, unsigned_hap_path, output_hap)
+            if custom_signed_hap_names.get('do_filter'):
+                if custom_signed_hap_names.get(unsigned_hap_name):
+                    output_hap_name = custom_signed_hap_names.get(unsigned_hap_name)
+                    output_hap = os.path.join(options.hap_out_dir, output_hap_name)
+                    sign_app(options, unsigned_hap_path, output_hap)
+            else:
+                output_hap = os.path.join(options.hap_out_dir, output_hap_name)
+                sign_app(options, unsigned_hap_path, output_hap)
 
 
 if __name__ == '__main__':
