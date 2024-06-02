@@ -358,6 +358,7 @@ template("ohos_app") {
     "${target_out_dir}/${target_name}/custom_unsigned_to_signed_hap_list.json"
   if (defined(invoker.custom_unsigned_to_signed_hap_names)) {
     _custom_signed_hap_json = {
+      do_filter = true
       custom_unsigned_to_signed_hap_names = invoker.custom_unsigned_to_signed_hap_names
     }
     write_file(_custom_unsigned_to_signed_hap_list,
