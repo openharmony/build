@@ -101,6 +101,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/multimedia/av_codec/avdemuxer:native_media_avdemuxer_header",
   "//interface/sdk_c/multimedia/av_codec/avsource:libnative_media_avsource",
   "//interface/sdk_c/multimedia/av_codec/avsource:native_media_avsource_header",
+  "//interface/sdk_c/multimedia/av_codec/avcencinfo:libnative_media_avcencinfo",
+  "//interface/sdk_c/multimedia/av_codec/avcencinfo:native_media_avcencinfo_header",
   "//interface/sdk_c/multimedia/drm_framework:libnative_drm",
   "//interface/sdk_c/multimedia/drm_framework:native_drm_header",
   "//interface/sdk_c/multimedia/media_foundation/core:native_media_core_header",
