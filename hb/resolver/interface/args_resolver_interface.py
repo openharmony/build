@@ -42,7 +42,7 @@ class ArgsResolverInterface(metaclass=ABCMeta):
     @throw_exception
     def _map_args_to_function(self, args_dict: dict):
         for entity in args_dict.values():
-            if isinstance(entity, Arg):
+            if isinstance(entity, Arg) and entity.arg_name != 'sshkey':
                 args_name = entity.arg_name
                 function_name = entity.resolve_function
                 if not hasattr(self, function_name) or \
