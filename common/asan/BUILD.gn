@@ -52,6 +52,10 @@ ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
 ohos_prebuilt_shared_library("libclang_rt.tsan.so") {
   enable_strip = true
   source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so"
+  if (is_tsan) {
+    deps = [ ":tsan_unstripped_copy" ]
+  }
+
   install_images = [
     "system",
     "ramdisk",
@@ -89,6 +93,19 @@ copy("asan_unstripped_copy") {
     sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.asan.so" ]
   } else if (target_cpu == "riscv64") {
     sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/riscv64-linux-ohos/libclang_rt.asan.so" ]
+  } else {
+    sources = [ "" ]
+  }
+  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
+}
+
+copy("tsan_unstripped_copy") {
+  if (target_cpu == "arm") {
+    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.tsan.so" ]
+  } else if (target_cpu == "arm64") {
+    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so" ]
+  } else if (target_cpu == "x86_64") {
+    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.tsan.so" ]
   } else {
     sources = [ "" ]
   }

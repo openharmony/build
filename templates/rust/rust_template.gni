@@ -209,6 +209,14 @@ template("rust_target") {
       ]
     }
   }
+
+  if (is_tsan && !is_mingw && !is_win) {
+    _rustflags += [
+      "-Clink-arg=-fsanitize=thread",
+      "-Clink-arg=-shared-libasan",
+    ]
+  }
+
   target(invoker.target_type, "${target_name}") {
     forward_variables_from(invoker,
                            "*",

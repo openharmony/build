@@ -362,7 +362,17 @@ template("gcc_toolchain") {
         unstripped_sofile = sofile
       }
 
-      link_command = "$ld -shared {{ldflags}}${extra_ldflags} -o \"$unstripped_sofile\" @\"$rspfile\""
+      _clang_rt_dso_full_path = ""
+      if (is_tsan && target_cpu == "arm64" &&
+          invoker_toolchain_args.current_os == "ohos" && !is_mingw_link &&
+          !is_win && !is_mingw) {
+        _clang_rt_dso_full_path = rebase_path(
+                "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so",
+                root_build_dir)
+      }
+
+      link_command = "$ld -shared {{ldflags}}${extra_ldflags} $_clang_rt_dso_full_path -o \"$unstripped_sofile\" @\"$rspfile\""
+
       if (!is_mingw_link) {
         link_command = "$link_command -Wl,-soname=\"$soname\""
       } else {
@@ -552,6 +562,12 @@ template("gcc_toolchain") {
                   "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so",
                   root_build_dir)
         }
+      } else if (is_tsan && target_cpu == "arm64" &&
+                 invoker_toolchain_args.current_os == "ohos" && !is_win &&
+                 !is_mingw) {
+        _clang_rt_dso_full_path = rebase_path(
+                "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so",
+                root_build_dir)
       }
       link_command = "$ld {{ldflags}}${extra_ldflags} -o \"$unstripped_outfile\" $libs_section_prefix $start_group_flag $_clang_rt_dso_full_path @\"$rspfile\" {{solibs}} {{libs}} $end_group_flag $libs_section_postfix"
 
@@ -677,6 +693,7 @@ template("gcc_toolchain") {
 
         strip_level = "none"  # rustc supports none, debuginfo and symbols
                               # three strip degree.
+
         strip_switch = " -C strip=$strip_level"
 
         minidebug_switch = ""
@@ -707,6 +724,7 @@ template("gcc_toolchain") {
 
         strip_level = "none"  # rustc supports none, debuginfo and symbols
                               # three strip degree.
+
         strip_switch = " -C strip=$strip_level"
         minidebug_switch = ""
         if (full_mini_debug && !is_debug) {
@@ -725,6 +743,7 @@ template("gcc_toolchain") {
         dylibname =
             "{{target_output_name}}{{output_extension}}"  # e.g.
                                                           # "libfoo.dylib.so".
+
         outfile = "{{output_dir}}/$dylibname"
         depfile = "$outfile.d"
         rspfile = "$outfile.rsp"
@@ -736,6 +755,7 @@ template("gcc_toolchain") {
 
         strip_level = "none"  # rustc supports none, debuginfo and symbols
                               # three strip degree.
+
         strip_switch = " -C strip=$strip_level"
         minidebug_switch = ""
         if (full_mini_debug && !is_debug) {
@@ -755,6 +775,7 @@ template("gcc_toolchain") {
         dylibname =
             "{{target_output_name}}{{output_extension}}"  # e.g.
                                                           # "libfoo.dylib.so".
+
         outfile = "{{output_dir}}/$dylibname"
         depfile = "$outfile.d"
         rspfile = "$outfile.rsp"
@@ -766,6 +787,7 @@ template("gcc_toolchain") {
 
         strip_level = "none"  # rustc supports none, debuginfo and symbols
                               # three strip degree.
+
         strip_switch = " -C strip=$strip_level"
         minidebug_switch = ""
         if (full_mini_debug && !is_debug) {
