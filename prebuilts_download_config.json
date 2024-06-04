@@ -50,7 +50,7 @@
       "src":"/prebuilts/build-tools/common/nodejs",
       "dest":"/prebuilts/build-tools/common/nodejs",
       "rename": "true",
-      "symlink_src":"/node-v14.21.1-linux-x64",
+      "symlink_src":"/node-v16.20.2-linux-x64",
       "symlink_dest":"/current"
     },
     {
