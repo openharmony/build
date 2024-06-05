@@ -21,14 +21,13 @@ from file_utils import read_json_file
 
 
 def _get_external_deps_file_list(search_path: str):
-    search_str = "{}/**/*{}".format(search_path, "_external_deps_temp.json")
+    search_str = "{}/**/*{}".format(search_path, ".json")
     external_deps_file_list = glob.glob(search_str, recursive=True)
     return external_deps_file_list
 
 
 def _read_external_deps_info(build_out_dir: str):
-    ext_deps_file_list = _get_external_deps_file_list(
-        os.path.join(build_out_dir, 'gen'))
+    ext_deps_file_list = _get_external_deps_file_list(build_out_dir)
     ext_deps_file_dict = {}
     for _external_deps_file in ext_deps_file_list:
         if not os.path.exists(_external_deps_file):
@@ -39,8 +38,7 @@ def _read_external_deps_info(build_out_dir: str):
             raise Exception(
                 "read file '{}' failed.".format(_external_deps_file))
         _filename = os.path.basename(_external_deps_file)
-        _filename_snippet = re.search(r'(.*)_external_deps_temp.json',
-                                      _filename).group(1)
+        _filename_snippet = re.search(r'(.*).json', _filename).group(1)
         part_name, module_name = _parse_module_name(_filename_snippet)
         module_alias = '{}:{}'.format(part_name, module_name)
         ext_deps_file_dict[module_alias] = module_ext_deps_info
@@ -64,7 +62,7 @@ def _read_module_deps_info(module_deps_files_path: str):
         module_deps_info = read_json_file(_deps_file)
         if module_deps_info is None:
             raise Exception("read file '{}' failed.".format(_deps_file))
-        _filename_snippet = re.search(r'(.*).json', _filename).group(1)
+        _filename_snippet =  _filename
         part_name, module_name = _parse_module_name(_filename_snippet)
         module_alias = '{}:{}'.format(part_name, module_name)
         deps_data[module_alias] = module_deps_info
@@ -73,21 +71,26 @@ def _read_module_deps_info(module_deps_files_path: str):
 
 def _merge_external_deps_label(deps_data: dict, external_deps_data: dict):
     for _module_alias, _info in deps_data.items():
+        _module_alias_external_deps = _module_alias.replace('.json', '')
         external_deps = _info.get('external_deps')
         if not external_deps:
             continue
-        ext_deps_label_info = external_deps_data.get(_module_alias)
+        ext_deps_label_info = external_deps_data.get(_module_alias_external_deps)
         if not ext_deps_label_info:
             raise Exception(
                 "module '{}' external deps info is incorrect.".format(
-                    _module_alias))
+                    _module_alias_external_deps))
         _info['external_deps_label'] = ext_deps_label_info.get('deps')
-    return deps_data
+
+    deps_data_new = {}
+    for module_part, module_part_info in deps_data.items():
+        module_part_name = module_part.replace('.json', '')
+        deps_data_new[module_part_name] = module_part_info
+    return deps_data_new
 
 
 def get_all_deps_data(module_deps_files_path: str):
     deps_data = _read_module_deps_info(module_deps_files_path)
-    build_out_dir = os.path.dirname(module_deps_files_path)
     external_deps_data = _read_external_deps_info(build_out_dir)
     all_deps_data = _merge_external_deps_label(deps_data, external_deps_data)
     return all_deps_data
