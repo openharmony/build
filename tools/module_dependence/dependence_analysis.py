@@ -91,6 +91,6 @@ def _merge_external_deps_label(deps_data: dict, external_deps_data: dict):
 
 def get_all_deps_data(module_deps_files_path: str):
     deps_data = _read_module_deps_info(module_deps_files_path)
-    external_deps_data = _read_external_deps_info(build_out_dir)
+    external_deps_data = _read_external_deps_info(module_deps_files_path)
     all_deps_data = _merge_external_deps_label(deps_data, external_deps_data)
     return all_deps_data
