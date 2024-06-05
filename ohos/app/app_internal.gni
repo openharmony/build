@@ -434,7 +434,7 @@ template("app_sign") {
                              "hap_name",
                              "install_module_info",
                              "compatible_version",
-                             "custom_unsigned_to_signed_hap_list",
+                             "hap_list",
                            ])
     _sign_hap_py_path = "//build/scripts/app_sign.py"
     if (defined(sign_hap_py_path) && defined(compatible_version)) {
@@ -501,8 +501,8 @@ template("app_sign") {
       rebase_path(hap_out_dir, root_build_dir),
       "--hap-name",
       hap_name,
-      "--custom-unsigned-to-signed-hap-list",
-      rebase_path(custom_unsigned_to_signed_hap_list, root_build_dir),
+      "--hap-list",
+      rebase_path(hap_list, root_build_dir),
     ]
 
     if (defined(sign_hap_py_path)) {

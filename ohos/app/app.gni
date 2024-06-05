@@ -354,17 +354,15 @@ template("ohos_app") {
       build_level = invoker.build_level
     }
   }
-  _custom_unsigned_to_signed_hap_list =
-      "${target_out_dir}/${target_name}/custom_unsigned_to_signed_hap_list.json"
-  if (defined(invoker.custom_unsigned_to_signed_hap_names)) {
-    _custom_signed_hap_json = {
+  _hap_list =
+      "${target_out_dir}/${target_name}/hap_list.json"
+  if (defined(invoker.hap_list)) {
+    _hap_list_json = {
       do_filter = true
-      custom_unsigned_to_signed_hap_names =
-          invoker.custom_unsigned_to_signed_hap_names
+      hap_list =
+          invoker.hap_list
     }
-    write_file(_custom_unsigned_to_signed_hap_list,
-               _custom_signed_hap_json,
-               "json")
+    write_file(_hap_list, _hap_list_json, "json")
   }
   app_sign(target_name) {
     forward_variables_from(invoker,
@@ -385,7 +383,7 @@ template("ohos_app") {
     ]
     hap_out_dir = _hap_out_dir
     hap_name = _hap_name
-    custom_unsigned_to_signed_hap_list = _custom_unsigned_to_signed_hap_list
+    hap_list = _hap_list
     install_module_info = {
       module_def = get_label_info(":$target_name", "label_with_toolchain")
       module_info_file =
