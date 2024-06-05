@@ -354,13 +354,11 @@ template("ohos_app") {
       build_level = invoker.build_level
     }
   }
-  _hap_list =
-      "${target_out_dir}/${target_name}/hap_list.json"
+  _hap_list = "${target_out_dir}/${target_name}/hap_list.json"
   if (defined(invoker.hap_list)) {
     _hap_list_json = {
       do_filter = true
-      hap_list =
-          invoker.hap_list
+      hap_list = invoker.hap_list
     }
     write_file(_hap_list, _hap_list_json, "json")
   }
