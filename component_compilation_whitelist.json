@@ -37625,6 +37625,9 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/ace_config.gni"
         ],
+        "//base/inputmethod/imf/seccomp_policy/": [
+            "//base/startup/init/services/modules/seccomp/scripts/seccomp_policy_fixer.gni"
+        ],
         "//base/notification/common_event_service/interfaces/kits/napi/static_subscriber_extension/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
