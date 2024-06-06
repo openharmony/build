@@ -182,11 +182,11 @@ class OHOSLoader(LoadInterface):
         _preloader_feature_info = read_json_file(_preloader_feature_file)
         part_to_feature = _preloader_feature_info.get('part_to_feature')
         _feature_whitelist_file = os.path.join(
-            self.source_root_dir,"out/products_ext","component_feature_whitelist.json"
+            self.source_root_dir, "out/products_ext", "component_feature_whitelist.json"
         )
         if not os.path.exists(_feature_whitelist_file):
             _feature_whitelist_file = os.path.join(
-                self.source_root_dir,"build/","component_feature_whitelist.json"
+                self.source_root_dir, "build/", "component_feature_whitelist.json"
             )
         _feature_whitelist_info = read_json_file(_feature_whitelist_file)
         _feature_whitelist_list = []
@@ -202,7 +202,7 @@ class OHOSLoader(LoadInterface):
                 message = "The product use a feature vals='{}', but that is not defined " \
                       "in this part bundle.json file, part_name='{}'".format(vals, key)
                 if key not in _feature_whitelist_list:
-                    raise OHOSException(message,"2006")
+                    raise OHOSException(message, "2006")
                 LogUtil.hb_warning(message)
                 continue
             for _f_name in vals:
