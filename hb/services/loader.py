@@ -181,9 +181,13 @@ class OHOSLoader(LoadInterface):
                                                'features.json')
         _preloader_feature_info = read_json_file(_preloader_feature_file)
         part_to_feature = _preloader_feature_info.get('part_to_feature')
-        _feature_whitelist_file = os.path.join(self.source_root_dir,"out/products_ext","component_feature_whitelist.json")
+        _feature_whitelist_file = os.path.join(
+            self.source_root_dir,"out/products_ext","component_feature_whitelist.json"
+        )
         if not os.path.exists(_feature_whitelist_file):
-            _feature_whitelist_file = os.path.join(self.source_root_dir,"build/","component_feature_whitelist.json")
+            _feature_whitelist_file = os.path.join(
+                self.source_root_dir,"build/","component_feature_whitelist.json"
+            )
         _feature_whitelist_info = read_json_file(_feature_whitelist_file)
         _feature_whitelist_list = []
         if _feature_whitelist_info:
