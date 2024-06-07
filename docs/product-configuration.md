@@ -28,7 +28,7 @@ config.json的格式沿用轻鸿蒙的格式。
 	  {
 	    "subsystem": "aafwk",                         # 选择的子系统
 	    "components": [
-	      { "component": "ability", "features":[ "enable_ohos_appexecfwk_feature_ability = true" ] }   # 选择的组件和组件特性配置
+	      { "component": "ability", "features":[ "ability_lite_enable_ohos_appexecfwk_feature_ability = true" ] }   # 选择的组件和组件特性配置
 	    ]
 	  },
 	  {
