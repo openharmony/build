@@ -21,8 +21,6 @@ _ndk_library_targets = [
   "//interface/sdk_c/third_party/zlib:zlib_header",
   "//interface/sdk_c/global/resource_management:librawfile_ndk",
   "//interface/sdk_c/global/resource_management:rawfile_header",
-  "//interface/sdk_c/global/resource_management:native_resmgr_ndk",
-  "//interface/sdk_c/global/resource_management:native_resmgr_header",
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_header",
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_ndk",
   "//interface/sdk_c/hiviewdfx/hidebug:libohhidebug",
@@ -101,8 +99,6 @@ _ndk_library_targets = [
   "//interface/sdk_c/multimedia/av_codec/avdemuxer:native_media_avdemuxer_header",
   "//interface/sdk_c/multimedia/av_codec/avsource:libnative_media_avsource",
   "//interface/sdk_c/multimedia/av_codec/avsource:native_media_avsource_header",
-  "//interface/sdk_c/multimedia/av_codec/avcencinfo:libnative_media_avcencinfo",
-  "//interface/sdk_c/multimedia/av_codec/avcencinfo:native_media_avcencinfo_header",
   "//interface/sdk_c/multimedia/drm_framework:libnative_drm",
   "//interface/sdk_c/multimedia/drm_framework:native_drm_header",
   "//interface/sdk_c/multimedia/media_foundation/core:native_media_core_header",
@@ -207,8 +203,18 @@ if (host_os == "mac") {
   ]
 }
 
-_ndk_targets_list =
-    _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi + _ndk_cmake
+_ndk_ninja = []
+if (host_os == "mac") {
+  _ndk_ninja += [ "//prebuilts/build-tools/darwin-x86/bin:darwin_ninja_copy" ]
+} else {
+  _ndk_ninja += [
+    "//prebuilts/build-tools/linux-x86/bin:linux_ninja_copy",
+    "//prebuilts/build-tools/windows-x86/bin:windows_ninja_copy",
+  ]
+}
+
+_ndk_targets_list = _ndk_library_targets + _ndk_base_libs + _ndk_sysroot_uapi +
+                    _ndk_cmake + _ndk_ninja
 
 _parse_script = "//build/ohos/ndk/parse_ndk_targets.py"
 _parse_args = [
