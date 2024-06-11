@@ -201,7 +201,6 @@ _ndk_cmake = [
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
   "//prebuilts/cmake/ohos:ohos_cmake_copy",
   "//build/ohos/ndk:ndk_cmake_files",
-  "//build/ohos/ndk:cmake_patch",
 ]
 
 if (host_os == "mac") {
