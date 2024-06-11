@@ -61,8 +61,6 @@ config("stack_protector_config") {
       cflags += [ "-fstack-protector" ]
     }
   } else if (is_posix && !is_chromeos && !is_nacl) {
-    cflags += [ "--param=ssp-buffer-size=8" ]
-
     if (is_mingw) {
       cflags += [ "-fno-stack-protector" ]
     } else if (is_ohos && current_cpu == "x86") {
@@ -82,8 +80,6 @@ config("stack_protector_ret_all_config") {
       cflags += [ "-fstack-protector" ]
     }
   } else if (is_posix && !is_chromeos && !is_nacl) {
-    cflags += [ "--param=ssp-buffer-size=8" ]
-
     if (is_mingw) {
       cflags += [ "-fno-stack-protector" ]
     } else if (is_ohos && current_cpu == "x86") {
@@ -110,8 +106,6 @@ config("stack_protector_ret_strong_config") {
       cflags += [ "-fstack-protector" ]
     }
   } else if (is_posix && !is_chromeos && !is_nacl) {
-    cflags += [ "--param=ssp-buffer-size=8" ]
-
     if (is_mingw) {
       cflags += [ "-fno-stack-protector" ]
     } else if (is_ohos && current_cpu == "x86") {
