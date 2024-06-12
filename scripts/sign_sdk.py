@@ -44,7 +44,7 @@ def sign_sdk(zipfile, sign_list, sign_results):
         for file in need_sign_files:
             if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') \
                     or file.split('/')[-2] == 'bin':
-                cmd2 = ['codesign', '--sign', sign, '--timestamp', '--options=runtime', file]
+                cmd2 = ['codesign', '-fs', sign, '--timestamp', '--options=runtime', file]
                 subprocess.call(cmd2)
         cmd3 = ['rm', zipfile]
         subprocess.call(cmd3)
@@ -69,7 +69,8 @@ def main(args):
     options = parse_args(args)
     darwin_sdk_dir = os.path.join(options.sdk_out_dir, 'darwin')
     os.chdir(darwin_sdk_dir)
-    sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm', 'ark_disasm', 'hdc', 'syscap_tool']
+    sign_list = ['lldb-argdumper', 'fsevents.node', 'idl', 'restool', 'diff', 'ark_asm',
+                 'ark_disasm', 'hdc', 'syscap_tool', 'hnpcli']
     sign_results = []
     for file in os.listdir('.'):
         sign_sdk(file, sign_list, sign_results)
