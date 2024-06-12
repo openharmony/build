@@ -174,6 +174,16 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
 fi
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
 echo "prebuilts_download end"
+if [ -f "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja" ];then
+    rm -rf "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja"
+fi
+if [ -f "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe" ];then
+    rm -rf "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe"
+fi
+if [ -f "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja" ];then
+    rm -rf "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja"
+fi
+echo "remove ninja"
 
 if [[ -d "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin" && ! -f "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin/x86_64-w64-mingw32-clang" ]];then
     cp -rf "${code_dir}/build/x86_64-w64-mingw32-clang" "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin"
