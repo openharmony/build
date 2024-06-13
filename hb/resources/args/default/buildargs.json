@@ -70,8 +70,8 @@
     "resolve_function": "resolve_log_mode",
     "testFunction": "testLogMode"
   },
-  "tdd_branch": {
-    "arg_name": "--tdd-branch",
+  "precise_branch": {
+    "arg_name": "--precise-branch",
     "argDefault": "dayu200_tdd",
     "arg_help": "Default:'dayu200_tdd'. Help:You can use this option to select the dayu200_tdd branch",
     "arg_phase": "prebuild",

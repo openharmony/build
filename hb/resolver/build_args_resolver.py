@@ -76,7 +76,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             'device_config_path', config.device_config_path)
 
         target_generator.regist_arg('target_cpu', config.target_cpu)
-        target_generator.regist_arg('tdd_branch', config.tdd_branch)
+        target_generator.regist_arg('precise_branch', config.tdd_branch)
         target_generator.regist_arg(
             'is_{}_system'.format(config.os_level), True)
 
