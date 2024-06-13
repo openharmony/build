@@ -76,7 +76,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             'device_config_path', config.device_config_path)
 
         target_generator.regist_arg('target_cpu', config.target_cpu)
-        target_generator.regist_arg('precise_branch', config.tdd_branch)
+        target_generator.regist_arg('precise_branch', config.precise_branch)
         target_generator.regist_arg(
             'is_{}_system'.format(config.os_level), True)
 
@@ -145,18 +145,18 @@ class BuildArgsResolver(ArgsResolverInterface):
             config.target_os = target_arg.arg_value
 
     @staticmethod
-    def resolve_tdd_branch(target_arg: Arg, build_module: BuildModuleInterface):
-        """resolve '--tdd-branch' arg.
+    def resolve_precise_branch(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--precise-branch' arg.
         :param target_arg: arg object which is used to get arg value.
         :param build_module [maybe unused]: build module object which is used to get other services.
         :phase: prebuild.
         """
         config = Config()
         default_build_args = IoUtil.read_json_file(DEFAULT_BUILD_ARGS)
-        if config.tdd_branch == "":
-            config.tdd_branch = target_arg.arg_value
-        elif target_arg.arg_value != default_build_args.get("tdd_branch").get("argDefault"):
-            config.tdd_branch = target_arg.arg_value
+        if config.precise_branch == "":
+            config.precise_branch = target_arg.arg_value
+        elif target_arg.arg_value != default_build_args.get("precise_branch").get("argDefault"):
+            config.precise_branch = target_arg.arg_value
 
     @staticmethod
     def get_tdd_repository(input_file):
@@ -167,7 +167,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         with open(input_file, 'r') as input_f:
             data = csv.DictReader(input_f)
             for csv_row in data:
-                if csv_row[config.tdd_branch] == 'Y':
+                if csv_row[config.precise_branch] == 'Y':
                     target_set.add(csv_row['repoistory'])
         return target_set
 
