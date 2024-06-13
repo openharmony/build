@@ -93,6 +93,7 @@ class Config(metaclass=Singleton):
         self.support_cpu = config_content.get('support_cpu', None)
         self.fs_attr = set()
         self.platform = platform.system()
+        self.tdd_branch = ""
 
     @property
     def component_type(self):
