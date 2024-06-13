@@ -172,6 +172,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
   "//interface/sdk_c/multimodalinput/kits/c:libohinput_ndk",
   "//interface/sdk_c/multimodalinput/kits/c:ohinput_header",
+  "//interface/sdk_c/BasicServicesKit:libohprint_ndk",
+  "//interface/sdk_c/BasicServicesKit:ohprint_header",
   "//interface/sdk_c/tee:tee_ndk_header",
   "//interface/sdk_c/tee:libteec",
   "//interface/sdk_c/multimedia/image_framework:libohimage",
