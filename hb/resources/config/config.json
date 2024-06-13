@@ -18,5 +18,5 @@
     "subsystem_config_json": null,
     "device_config_path": null,
     "support_cpu": null,
-    "tdd_branch":null
+    "precise_branch":null
   }
