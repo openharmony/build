@@ -316,33 +316,33 @@
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/20240429/rust-nightly-x86_64-unknown-linux-gnu_20240429.tar.gz",
+          "file_path": "/openharmony/compiler/rust/20240528/rust-nightly-x86_64-unknown-linux-gnu_20240528.tar.gz",
           "unzip_filename": "rustc"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/20240429/rust-std-nightly-aarch64-unknown-linux-ohos_20240429.tar.gz",
+          "file_path": "/openharmony/compiler/rust/20240528/rust-std-nightly-aarch64-unknown-linux-ohos_20240528.tar.gz",
           "unzip_filename": "rustc-aarch64-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/20240429/rust-std-nightly-armv7-unknown-linux-ohos_20240429.tar.gz",
+          "file_path": "/openharmony/compiler/rust/20240528/rust-std-nightly-armv7-unknown-linux-ohos_20240528.tar.gz",
           "unzip_filename": "rustc-arm-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/20240429/rust-std-nightly-x86_64-unknown-linux-ohos_20240429.tar.gz",
+          "file_path": "/openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-unknown-linux-ohos_20240528.tar.gz",
           "unzip_filename": "rustc-x86_64-std"
         },
         {
           "unzip_dir": "prebuilts/rustc",
-          "file_path": "/openharmony/compiler/rust/20240429/rust-std-nightly-x86_64-pc-windows-gnullvm_20240429.tar.gz",
+          "file_path": "/openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-pc-windows-gnullvm_20240528.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
         }
       ],
       "install": [
         {
-          "install_dir":"prebuilts/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240429",
+          "install_dir":"prebuilts/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
           "script":"install.sh",
           "args": [
             {
@@ -352,7 +352,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos_20240429",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos_20240528",
           "script":"install.sh",
           "args": [
             {
@@ -362,7 +362,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-nightly-armv7-unknown-linux-ohos_20240429",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-armv7-unknown-linux-ohos_20240528",
           "script":"install.sh",
           "args": [
             {
@@ -372,7 +372,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-unknown-linux-ohos_20240429",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-unknown-linux-ohos_20240528",
           "script":"install.sh",
           "args": [
             {
@@ -382,7 +382,7 @@
           "destdir": "prebuilts/rustc/linux-x86_64/current"
         },
         {
-          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-pc-windows-gnullvm_20240429",
+          "install_dir":"prebuilts/rustc/rust-std-nightly-x86_64-pc-windows-gnullvm_20240528",
           "script":"install.sh",
           "args": [
             {
