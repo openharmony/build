@@ -44,12 +44,14 @@ if (current_cpu == "x86") {
   ohos_app_abi = "mips"
 } else if (current_cpu == "riscv64") {
   ohos_app_abi = "riscv64"
+} else if (current_cpu == "loongarch64") {
+  ohos_app_abi = "loongarch64"
 } else {
   assert(false, "Unknown ABI: " + current_cpu)
 }
 
 if (target_cpu == "arm64" || target_cpu == "x86_64" ||
-    target_cpu == "riscv64") {
+    target_cpu == "loongarch64" || target_cpu == "riscv64") {
   ohos_64bit_target_cpu = true
 } else if (target_cpu == "arm" || target_cpu == "x86" ||
            target_cpu == "mipsel") {

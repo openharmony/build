@@ -37,6 +37,8 @@ if (is_ohos) {
     abi_target = "riscv64-linux-ohos"
   } else if (current_cpu == "mipsel") {
     abi_target = "mipsel-linux-ohos"
+  } else if (current_cpu == "loongarch64") {
+    abi_target = "loongarch64-linux-ohos"
   } else {
     assert(false, "Architecture not supported")
   }

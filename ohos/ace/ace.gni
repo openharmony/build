@@ -37,7 +37,7 @@ template("gen_js_obj") {
     } else if (target_cpu == "x86_64") {
       script = "//foundation/arkui/ace_engine/build/tools/run_objcopy.py"
     } else if (target_cpu == "arm" || target_cpu == "arm64" ||
-               target_cpu == "riscv64") {
+               target_cpu == "riscv64" || target_cpu == "loongarch64") {
       script = "//foundation/arkui/ace_engine/build/tools/run_objcopy.py"
     }
 
