@@ -12,7 +12,8 @@
         "x86_64",
         "x64",
         "mipsel",
-        "riscv64"
+        "riscv64",
+        "loongarch64"
       ]
     },
     "resolve_function": "resolve_target_cpu",
