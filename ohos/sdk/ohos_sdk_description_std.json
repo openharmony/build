@@ -1080,14 +1080,14 @@
         ]
     },
     {
-        "install_dir": "toolchains/hapsigntool_pc",
+        "install_dir": "toolchains/lib",
         "module_label": "//developtools/hapsigner/pc/services:hapsigntool_pc_service",
         "target_os": [
             "ohos"
         ]
     },
     {
-        "install_dir": "toolchains/hapsigntool_pc",
+        "install_dir": "toolchains/lib",
         "module_label": "//developtools/hapsigner/pc/services:copy_signature_tools_resource",
         "target_os": [
             "ohos"
