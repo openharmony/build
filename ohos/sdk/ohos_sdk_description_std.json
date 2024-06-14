@@ -1081,7 +1081,7 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/hapsigner/pc/services:hapsigntool_pc_service",
+        "module_label": "//developtools/hapsigner/pc/services:hap-sign-tool",
         "target_os": [
             "ohos"
         ]
