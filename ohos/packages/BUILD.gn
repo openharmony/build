@@ -45,6 +45,9 @@ group("make_packages") {
       deps += [ ":gen_required_modules_${_platform}" ]
     }
     deps += [ ":${_platform}_parts_list" ]
+    if (!is_standard_system) {
+      deps += [ ":merge_system_notice_file_${_platform}" ]
+    }
   }
   if (make_osp) {
     deps += [ ":open_source_package" ]
@@ -118,6 +121,10 @@ foreach(_platform, target_platform_list) {
       rebase_path(_system_install_info_file, root_build_dir),
       "--current-platform",
       current_platform,
+      "--root-code-dir",
+      rebase_path("//"),
+      "--root-build-dir",
+      root_build_dir,
     ]
   }
 
@@ -209,6 +216,12 @@ foreach(_platform, target_platform_list) {
       "--notice-install-dir",
       "system/etc",
     ]
+    if (!is_standard_system) {
+      args += [
+        "--lite-product",
+        "true"
+      ]
+    }
   }
   post_process_modules_list += [ _notice_module_info_file ]
 
