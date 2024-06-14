@@ -70,6 +70,16 @@
     "resolve_function": "resolve_log_mode",
     "testFunction": "testLogMode"
   },
+  "precise_branch": {
+    "arg_name": "--precise-branch",
+    "argDefault": "dayu200_tdd",
+    "arg_help": "Default:'dayu200_tdd'. Help:You can use this option to select the dayu200_tdd branch",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {},
+    "resolve_function": "resolve_precise_branch",
+    "testFunction": "testPreciseBranch"
+  },
   "ccache": {
     "arg_name": "--ccache",
     "argDefault": true,
