@@ -229,9 +229,9 @@ def _get_toolchain_json(_path):
     return _json
 
 
-def _get_all_have_toolchain_component(root_path, toolchain_json):
+def _get_all_have_toolchain_component(toolchain_json, hpm_cache_path):
     _toolchain_list = toolchain_json.keys()
-    binarys_path = os.path.join(root_path, 'binarys')
+    binarys_path = os.path.join(hpm_cache_path, 'binarys')
     _part_toolchain_map_dict = dict()
     for toolchain in _toolchain_list:
         for root, dirs, files in os.walk(binarys_path, topdown=False, followlinks=True):
@@ -259,7 +259,7 @@ def main():
     toolchain_json = _get_toolchain_json(root_path)
     part_name_list = dependences_json.keys()
 
-    _part_toolchain_map_dict = _get_all_have_toolchain_component(root_path, toolchain_json)
+    _part_toolchain_map_dict = _get_all_have_toolchain_component(toolchain_json, hpm_cache_path)
     components_json = _components_info_handler(part_name_list, source_code_path,
                                                hpm_cache_path, root_path, dependences_json, _part_toolchain_map_dict)
     _out_components_json(components_json, output_part_path)
