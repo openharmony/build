@@ -273,6 +273,7 @@
         "//third_party/cups-filters:imagetoraster",
         "//third_party/cups-filters:pdftoraster",
         "//third_party/ffmpeg:libohosffmpeg",
+		"//third_party/ffmpeg:libohosffmpeg_static",
         "//third_party/glib:glib",
         "//third_party/gptfdisk:sgdisk",
         "//third_party/libdrm:libdrm",
