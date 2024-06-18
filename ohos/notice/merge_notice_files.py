@@ -303,7 +303,6 @@ def do_merge_notice(args, zipfiles: str, txt_files: str):
         write_json_file(args.notice_module_info, module_install_info_list)
     
     if args.lite_product:
-        import subprocess
         current_dir_cmd = ['pwd']
         process = subprocess.Popen(current_dir_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate(timeout=600)
