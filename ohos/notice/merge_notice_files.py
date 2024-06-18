@@ -307,10 +307,10 @@ def do_merge_notice(args, zipfiles: str, txt_files: str):
         process = subprocess.Popen(current_dir_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate(timeout=600)
         current_dir = stdout.decode().strip()
-        dest = f"{current_dir}/system/etc/NOTICE.txt"
-        
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        shutil.copyfile(notice_txt, dest)
+        dest = f"{current_dir}/system/etc/NOTICE.txt"        
+        if os.path.isfile(notice_txt):
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            shutil.copyfile(notice_txt, dest)
 
 if __name__ == "__main__":
     main()
