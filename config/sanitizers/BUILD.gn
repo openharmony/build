@@ -72,6 +72,8 @@ if ((is_mac || is_win || !use_xcode_clang || is_ohos) && using_sanitizer) {
       _clang_rt_dso_path = "x86_64-linux-ohos/libclang_rt.asan.so"
     } else if (target_cpu == "riscv64") {
       _clang_rt_dso_path = "riscv64-linux-ohos/libclang_rt.asan.so"
+    } else if (target_cpu == "loongarch64") {
+      _clang_rt_dso_path = "loongarch64-linux-ohos/libclang_rt.asan.so"
     }
   }
 
@@ -317,6 +319,8 @@ config("link_executable") {
       ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-aarch64-asan.so.1" ]
     } else if (target_cpu == "riscv64") {
       ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-riscv64-asan.so.1" ]
+    } else if (target_cpu == "loongarch64") {
+      ldflags = [ "-Wl,--dynamic-linker=/lib/ld-musl-loongarch64-asan.so.1" ]
     }
   } else if (is_tsan && is_ohos && !is_mingw && !is_win) {
     libs = [ "$_clang_rt_dso_full_path" ]

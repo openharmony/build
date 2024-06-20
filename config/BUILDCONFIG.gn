@@ -826,6 +826,10 @@ if (is_lite_system) {
     arch = "aarch64"
   }
 
+  if (current_cpu == "loongarch64") {
+    arch = "loongarch64"
+  }
+
   if (ohos_kernel_type == "liteos_a") {
     target_triple = "$arch-liteos-ohos"
   } else if (ohos_kernel_type == "linux") {
