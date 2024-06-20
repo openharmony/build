@@ -59,3 +59,5 @@ system/lib/ld-musl-riscv64.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-riscv64.so.1,00755,      0,          2000,       0
 system/lib/ld-musl-riscv64-asan.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-riscv64-asan.so.1,00755,      0,          2000,       0
+system/lib/ld-musl-loongarch64.so.1,00755,      0,          2000,       0
+updater/lib/ld-musl-loongarch64.so.1,00755,      0,          2000,       0
