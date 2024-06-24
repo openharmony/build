@@ -747,7 +747,7 @@
         ]
     },
     {
-        "install_dir": "toolchains",
+        "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool/ohos_packing_tool/frameworks:ohos_packing_tool",
         "target_os": [
             "ohos"
@@ -926,7 +926,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -935,7 +936,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -944,7 +946,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -953,7 +956,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
 	{
@@ -962,7 +966,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -971,7 +976,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -980,7 +986,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -989,7 +996,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -998,7 +1006,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -1007,7 +1016,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -1016,7 +1026,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -1025,7 +1036,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
