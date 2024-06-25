@@ -151,12 +151,15 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
             innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
-    if part_name == 'f2fs_tools':
-        part_name = 'f2fs-tools'
-    if part_name == 'fsverity_utils':
-        part_name = 'fsverity-utils'
     if part_name == 'freebsd':
         part_name = 'FreeBSD'
+    spe_component_names = ['astc_encoder', 'llvm_project', 'alsa_lib', 'alsa_utils', 'abseil_cpp', 'cups_filters',
+                           'libnfc_nci', 'vulkan_loader', 'libjpeg_turbo', 'opencl_headers', 'f2fs_tools', 'noto_cjk',
+                           'fsverity_utils', 'vk_gl_cts',
+                           'spirv_tools', 'spirv_headers', 'vulkan_headers', 'u_boot', 'weex_loader', 'ntfs_3g',
+                           'css_what']
+    if part_name in spe_component_names:
+        part_name = part_name.replace('_', '-')
     one_component_dict = {part_name: {
         "innerapis": innerapi_value_list,
         "path": path,
