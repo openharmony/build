@@ -62,7 +62,10 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             target_arg.arg_value = sys.argv[2]
 
         if target_arg.arg_value:
-            bundle_path = ComponentUtil.search_bundle_file(target_arg.arg_value)
+            try:
+                bundle_path = ComponentUtil.search_bundle_file(target_arg.arg_value)
+            except Exception as e:
+                raise OHOSException('Please check the bundle.json file of {} : {}'.format(target_arg.arg_value, e))
             if not bundle_path:
                 raise OHOSException(
                     'ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(target_arg.arg_value))
