@@ -394,9 +394,9 @@ def _generate_configs(fp, module):
     fp.write('  include_dirs = [\n')
     fp.write('    "includes",\n')
     if module == 'libunwind':
-        fp.write('    "includes/src",\n')
-        fp.write('    "includes/include",\n')
-        fp.write('    "includes/include/tdep-arm",\n')
+        fp.write('    "includes/libunwind/src",\n')
+        fp.write('    "includes/libunwind/include",\n')
+        fp.write('    "includes/libunwind/include/tdep-arm",\n')
     fp.write('  ]\n')
     if module == 'libunwind':
         fp.write('  cflags = [\n')
