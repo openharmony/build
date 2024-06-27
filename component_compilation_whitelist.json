@@ -290,6 +290,7 @@
         "//third_party/skia:skia_ohos_ng",
         "//third_party/vixl:libvixl",
         "//third_party/zlib:libz",
+        "//third_party/zlib:libz_crc",
         "//third_party/zlib:shared_libz",
         "//third_party/FreeBSD:libfreebsd_static"
     ],
