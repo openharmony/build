@@ -176,12 +176,15 @@ _ndk_library_targets = [
   "//interface/sdk_c/filemanagement/fileshare:oh_file_share_header",
   "//interface/sdk_c/multimodalinput/kits/c:libohinput_ndk",
   "//interface/sdk_c/multimodalinput/kits/c:ohinput_header",
+  "//interface/sdk_c/BasicServicesKit:libohprint_ndk",
+  "//interface/sdk_c/BasicServicesKit:ohprint_header",
   "//interface/sdk_c/multimedia/image_framework:libohimage",
   "//interface/sdk_c/multimedia/image_framework:ohimage_header",
   "//interface/sdk_c/multimedia/image_framework:libimage_receiver",
   "//interface/sdk_c/multimedia/image_framework:image_receiver_header",
   "//interface/sdk_c/graphic/graphic_2d/native_display_soloist:libnative_display_soloist_ndk",
   "//interface/sdk_c/graphic/graphic_2d/native_display_soloist:native_display_soloist_header",
+  "//interface/sdk_c/third_party/musl/ndk_script:copy_compatible_config",
 ]
 
 _ndk_base_libs = [
@@ -200,7 +203,6 @@ _ndk_cmake = [
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
   "//prebuilts/cmake/ohos:ohos_cmake_copy",
   "//build/ohos/ndk:ndk_cmake_files",
-  "//build/ohos/ndk:cmake_patch",
 ]
 
 if (host_os == "mac") {

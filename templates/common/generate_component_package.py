@@ -49,14 +49,14 @@ def _get_args():
 
 
 def _check_label(public_deps, value):
-    for i in value["innerapis"]:
-        if i:
-            label = i.get("label")
+    innerapis = value["innerapis"]
+    for _innerapi in innerapis:
+        if _innerapi:
+            label = _innerapi.get("label")
             if public_deps == label:
                 return label.split(':')[-1]
-            return ""
-        return ""
-
+            continue
+    return ""
 
 def _get_public_external_deps(data, public_deps):
     if not isinstance(data, dict):
@@ -67,6 +67,7 @@ def _get_public_external_deps(data, public_deps):
         _data = _check_label(public_deps, value)
         if _data:
             return key + ":" + _data
+        continue
     return ""
 
 
@@ -167,7 +168,6 @@ def _copy_dir(src_path, target_path):
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
             if not os.path.exists(target_path):
-                print('target_path,target_path', target_path)
                 os.makedirs(target_path)
             path1 = os.path.join(target_path, file)
             with os.fdopen(os.open(path1, os.O_WRONLY | os.O_CREAT, mode=0o640), "wb") as write_stream:
@@ -394,9 +394,9 @@ def _generate_configs(fp, module):
     fp.write('  include_dirs = [\n')
     fp.write('    "includes",\n')
     if module == 'libunwind':
-        fp.write('    "includes/src",\n')
-        fp.write('    "includes/include",\n')
-        fp.write('    "includes/include/tdep-arm",\n')
+        fp.write('    "includes/libunwind/src",\n')
+        fp.write('    "includes/libunwind/include",\n')
+        fp.write('    "includes/libunwind/include/tdep-arm",\n')
     fp.write('  ]\n')
     if module == 'libunwind':
         fp.write('  cflags = [\n')
@@ -586,26 +586,23 @@ def _generate_component_package(args, components_json):
                 _copy_hpm_pack(args)
 
 
-def _get_part_subsystem(out_path):
-    jsondata = ""
-    json_path = os.path.join(out_path + "/build_configs/parts_info/part_subsystem.json")
-    print("json_path", json_path)
-    f = open(json_path, 'r')
+def _get_part_subsystem(components_json: dict):
+    jsondata = dict()
     try:
-        jsondata = json.load(f)
+        for component, v in components_json.items():
+            jsondata[component] = v.get('subsystem')
     except Exception as e:
         print('--_get_part_subsystem parse json error--')
     return jsondata
 
 
-def _get_parts_path_info(out_path):
-    jsondata = ""
-    json_path = os.path.join(out_path + "/build_configs/parts_info/parts_path_info.json")
-    f = open(json_path, 'r')
+def _get_parts_path_info(components_json):
+    jsondata = dict()
     try:
-        jsondata = json.load(f)
+        for component, v in components_json.items():
+            jsondata[component] = v.get('path')
     except Exception as e:
-        print('--_get_parts_path_info parse json error--')
+        print('--_get_part_subsystem parse json error--')
     return jsondata
 
 
@@ -704,8 +701,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         components_list: list of all components that need to be built
         build_type: build type
             0: default pack,do not change organization_name
-            1:pack ,change organization_name
-            2:do not pack,do not change organization_name
+            1: pack ,change organization_name
+            2: do not pack,do not change organization_name
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
@@ -725,9 +722,9 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         if not components_list:
             sys.exit("stop for no target to pack..")
     print('components_list', type(components_list), components_list)
-    part_subsystem = _get_part_subsystem(out_path)
-    parts_path_info = _get_parts_path_info(out_path)
     components_json = _get_components_json(out_path)
+    part_subsystem = _get_part_subsystem(components_json)
+    parts_path_info = _get_parts_path_info(components_json)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
     toolchain_info = _get_toolchain_info(root_path)
     # del component_package

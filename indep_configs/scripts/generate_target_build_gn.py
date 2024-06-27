@@ -59,7 +59,7 @@ def _inner_kits_name(inner_kits_list, deps_list):
             deps_list.append(k['name'])
 
 
-def _output_build_gn(deps_list, output_path):
+def _output_build_gn(deps_list, output_path, _test_check):
     file_name = os.path.join(output_path, 'BUILD.gn')
     flags = os.O_WRONLY | os.O_CREAT
     modes = stat.S_IWUSR | stat.S_IRUSR
@@ -67,6 +67,8 @@ def _output_build_gn(deps_list, output_path):
         f.write('import("//build/ohos_var.gni")\n')
         f.write('\n')
         f.write('group("default") {\n')
+        if _test_check:
+            f.write('    testonly = true\n')
         f.write('    deps = [\n')
         for i in deps_list:
             f.write(f"        \"{i}\",\n")
@@ -115,11 +117,16 @@ def main():
     for ele in build_data.keys():
         if ele not in ['inner_kits', 'test', 'inner_api']:
             _judge_type(build_data[ele], deps_list)
-        elif ele in _target_list:
+        elif ele in ['inner_kits', 'inner_api']:
             inner_kits_list = build_data[ele]
             _inner_kits_name(inner_kits_list, deps_list)
+        elif _test_check and ele == 'test':
+            inner_kits_list = build_data[ele]
+            for k in inner_kits_list:
+                deps_list.append(k)
+
     output_path = os.path.join(args.root_path, 'out')
-    _output_build_gn(deps_list, output_path)
+    _output_build_gn(deps_list, output_path, _test_check)
 
 
 if __name__ == '__main__':

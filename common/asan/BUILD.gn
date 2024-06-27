@@ -24,6 +24,8 @@ ohos_prebuilt_shared_library("libclang_rt.asan.so") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.asan.so"
   } else if (target_cpu == "riscv64") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/riscv64-linux-ohos/libclang_rt.asan.so"
+  } else if (target_cpu == "loongarch64") {
+    source = "${clang_base_path}/lib/clang/$clang_version/lib/loongarch64-linux-ohos/libclang_rt.asan.so"
   } else {
     source = ""
   }
@@ -93,6 +95,8 @@ copy("asan_unstripped_copy") {
     sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.asan.so" ]
   } else if (target_cpu == "riscv64") {
     sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/riscv64-linux-ohos/libclang_rt.asan.so" ]
+  } else if (target_cpu == "loongarch64") {
+    sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/loongarch64-linux-ohos/libclang_rt.asan.so" ]
   } else {
     sources = [ "" ]
   }

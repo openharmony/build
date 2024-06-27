@@ -31,6 +31,15 @@ ohos_clang_toolchain("ohos_clang_x86_64") {
   }
 }
 
+ohos_clang_toolchain("ohos_clang_loongarch64") {
+  sysroot = "${musl_sysroot}"
+  lib_dir = "usr/lib/loongarch64-linux-ohos"
+  rust_abi_target = "loongarch64-linux-ohos"
+  toolchain_args = {
+    current_cpu = "loongarch64"
+  }
+}
+
 ohos_clang_toolchain("ohos_clang_riscv64") {
   sysroot = "${musl_sysroot}"
   lib_dir = "usr/lib/riscv64-linux-ohos"

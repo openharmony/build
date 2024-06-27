@@ -54,6 +54,8 @@ template("ohos_clang_toolchain") {
       abi_target = "riscv64-linux-ohos"
     } else if (invoker.target_name == "ohos_clang_x86_64") {
       abi_target = "x86_64-linux-ohos"
+    } else if (invoker.target_name == "ohos_clang_loongarch64") {
+      abi_target = "loongarch64-linux-ohos"
     }
 
     if (is_legacy) {
@@ -100,6 +102,8 @@ template("ohos_clang_toolchain") {
     } else if (rust_abi_target == "x86_64-unknown-linux-gnu") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target}"
     } else if (rust_abi_target == "riscv64-unknown-linux-ohos") {
+      cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
+    } else if (rust_abi_target == "loongarch64-linux-ohos") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
     }
   }

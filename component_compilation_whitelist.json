@@ -30508,6 +30508,9 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined"
         ],
+        "//base/hiviewdfx/hichecker/interfaces/js/kits/napi/js_leak_watcher:jsleakwatcher": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
         "//base/hiviewdfx/hidumper/frameworks/native:dump_main": [
             "//third_party/zlib:shared_libz"
         ],
@@ -37608,6 +37611,9 @@
         "//base/global/i18n/frameworks/intl/": [
             "//base/startup/init/services/etc/param/param_fixer.gni"
         ],
+        "//base/hiviewdfx/hichecker/interfaces/js/kits/napi/js_leak_watcher/": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+        ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/interfaces/js/test/unittest/cpp/": [
             "//foundation/arkui/napi/napi.gni"
         ],
@@ -37625,6 +37631,9 @@
         "//base/inputmethod/imf/frameworks/js/napi/inputmethodlist/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
             "//foundation/arkui/ace_engine/ace_config.gni"
+        ],
+        "//base/inputmethod/imf/seccomp_policy/": [
+            "//base/startup/init/services/modules/seccomp/scripts/seccomp_policy_fixer.gni"
         ],
         "//base/notification/common_event_service/interfaces/kits/napi/static_subscriber_extension/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"

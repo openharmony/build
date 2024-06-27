@@ -151,12 +151,15 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
             innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
-    if part_name == 'f2fs_tools':
-        part_name = 'f2fs-tools'
-    if part_name == 'fsverity_utils':
-        part_name = 'fsverity-utils'
     if part_name == 'freebsd':
         part_name = 'FreeBSD'
+    spe_component_names = ['astc_encoder', 'llvm_project', 'alsa_lib', 'alsa_utils', 'abseil_cpp', 'cups_filters',
+                           'libnfc_nci', 'vulkan_loader', 'libjpeg_turbo', 'opencl_headers', 'f2fs_tools', 'noto_cjk',
+                           'fsverity_utils', 'vk_gl_cts',
+                           'spirv_tools', 'spirv_headers', 'vulkan_headers', 'u_boot', 'weex_loader', 'ntfs_3g',
+                           'css_what']
+    if part_name in spe_component_names:
+        part_name = part_name.replace('_', '-')
     one_component_dict = {part_name: {
         "innerapis": innerapi_value_list,
         "path": path,
@@ -229,9 +232,9 @@ def _get_toolchain_json(_path):
     return _json
 
 
-def _get_all_have_toolchain_component(root_path, toolchain_json):
+def _get_all_have_toolchain_component(toolchain_json, hpm_cache_path):
     _toolchain_list = toolchain_json.keys()
-    binarys_path = os.path.join(root_path, 'binarys')
+    binarys_path = os.path.join(hpm_cache_path, 'binarys')
     _part_toolchain_map_dict = dict()
     for toolchain in _toolchain_list:
         for root, dirs, files in os.walk(binarys_path, topdown=False, followlinks=True):
@@ -259,7 +262,7 @@ def main():
     toolchain_json = _get_toolchain_json(root_path)
     part_name_list = dependences_json.keys()
 
-    _part_toolchain_map_dict = _get_all_have_toolchain_component(root_path, toolchain_json)
+    _part_toolchain_map_dict = _get_all_have_toolchain_component(toolchain_json, hpm_cache_path)
     components_json = _components_info_handler(part_name_list, source_code_path,
                                                hpm_cache_path, root_path, dependences_json, _part_toolchain_map_dict)
     _out_components_json(components_json, output_part_path)

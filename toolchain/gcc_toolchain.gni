@@ -557,6 +557,10 @@ template("gcc_toolchain") {
           _clang_rt_dso_full_path = rebase_path(
                   "$clang_base_path/lib/clang/$clang_version/lib/riscv64-linux-ohos/libclang_rt.asan.so",
                   root_build_dir)
+        } else if (invoker_toolchain_args.current_cpu == "loongarch64") {
+          _clang_rt_dso_full_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/loongarch64-linux-ohos/libclang_rt.asan.so",
+                  root_build_dir)
         } else {
           _clang_rt_dso_full_path = rebase_path(
                   "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so",

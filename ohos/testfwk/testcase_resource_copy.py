@@ -193,13 +193,13 @@ def copy_testcase_resources(resource_infos: list) -> list:
 
 
 def _get_subsystem_name(part_name: str):
-    subsystem_parts_file = 'build_configs/parts_info/subsystem_parts.json'
+    subsystem_parts_file = 'build_configs/parts_info/components.json'
     subsystem_parts_info = read_json_file(subsystem_parts_file)
     if subsystem_parts_info is None:
         raise Exception("read file '{}' failed.".format(subsystem_parts_file))
-    for name, p_list in subsystem_parts_info.items():
-        if part_name in p_list:
-            return name
+    for _part_name, p_dict in subsystem_parts_info.items():
+        if part_name == _part_name:
+            return p_dict.get("subsystem")
     return None
 
 
@@ -207,14 +207,12 @@ def _get_subsystem_path(part_name: str) -> str:
     subsystem_name = _get_subsystem_name(part_name)
     if subsystem_name is None:
         return None
-    subsystem_build_config_file = os.path.join('build_configs/subsystem_info',
-                                               'subsystem_build_config.json')
+    subsystem_build_config_file = os.path.join('../../build/subsystem_config.json')
     config_info = read_json_file(subsystem_build_config_file)
     if config_info is None:
         raise Exception(
             "read file '{}' failed.".format(subsystem_build_config_file))
-    subsystem_infos = config_info.get('subsystem')
-    info = subsystem_infos.get(subsystem_name)
+    info = config_info.get(subsystem_name)
     if info is None:
         raise Exception(
             "subsystem '{}' info doesn't exist.".format(subsystem_name))
