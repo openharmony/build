@@ -127,6 +127,8 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     source = "${clang_base_path}/lib/x86_64-linux-ohos/libc++.so"
   } else if (target_cpu == "riscv64") {
     source = "${clang_base_path}/lib/riscv64-linux-ohos/libc++.so"
+  } else if (target_cpu == "loongarch64") {
+    source = "${clang_base_path}/lib/loongarch64-linux-ohos/libc++.so"
   } else {
     source = ""
   }
@@ -151,6 +153,8 @@ copy("musl-libcxx_unstripped_copy") {
     sources = [ "${clang_base_path}/lib/x86_64-linux-ohos/libc++.so" ]
   } else if (target_cpu == "riscv64") {
     sources = [ "${clang_base_path}/lib/riscv64-linux-ohos/libc++.so" ]
+  } else if (target_cpu == "loongarch64") {
+    sources = [ "${clang_base_path}/lib/loongarch64-linux-ohos/libc++.so" ]
   } else {
     sources = [ "" ]
   }

@@ -136,7 +136,7 @@ def main(argv):
     if not os.path.exists(args.deps_files_path):
         raise Exception("'{}' doesn't exist.".format(args.deps_files_path))
     output_path = os.path.join(os.path.dirname(
-        args.deps_files_path), 'part_deps_info')
+        args.deps_files_path.replace('deps_files', '')), 'part_deps_info')
     print("------Generate part dependency info------")
     run(args.deps_files_path, output_path, args.graph)
     print('part deps data output to {}'.format(output_path))

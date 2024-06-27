@@ -416,7 +416,7 @@ template("ohos_executable") {
       }
     } else if (is_ohos) {
       if (current_cpu == "arm" || current_cpu == "arm64" ||
-          current_cpu == "riscv64") {
+          current_cpu == "riscv64" || current_cpu == "loongarch64") {
         libs += [ "unwind" ]
       }
       libs += [
@@ -1092,7 +1092,7 @@ template("ohos_shared_library") {
         libs += [ invoker.stl ]
       } else {
         if (current_cpu == "arm" || current_cpu == "arm64" ||
-            current_cpu == "riscv64") {
+            current_cpu == "riscv64" || current_cpu == "loongarch64") {
           libs += [ "unwind" ]
         }
 
