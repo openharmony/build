@@ -166,7 +166,10 @@ config("default_sanitizer_ldflags") {
       ldflags += [ "-fsanitize=leak" ]
     }
     if (is_tsan) {
-      ldflags += [ "-fsanitize=thread" ]
+      ldflags += [
+        "-fsanitize=thread",
+        "-shared-libsan",
+      ]
     }
     if (is_msan) {
       ldflags += [ "-fsanitize=memory" ]
@@ -451,6 +454,7 @@ config("tsan_flags") {
     cflags = [
       "-fsanitize=thread",
       "-fsanitize-blacklist=$tsan_blocklist_path",
+      "-shared-libsan",
     ]
   }
 }
