@@ -116,7 +116,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -135,7 +136,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -144,7 +146,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -153,7 +156,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -162,7 +166,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -171,7 +176,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -180,7 +186,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -238,7 +245,8 @@
 	    "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -247,7 +255,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -560,7 +569,8 @@
 	    "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -569,7 +579,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -578,7 +589,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -587,7 +599,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -596,7 +609,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -605,7 +619,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -623,7 +638,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -632,7 +648,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -641,7 +658,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -660,7 +678,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -739,7 +758,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -748,7 +768,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -913,7 +934,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -922,7 +944,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
