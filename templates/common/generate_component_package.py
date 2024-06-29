@@ -49,14 +49,14 @@ def _get_args():
 
 
 def _check_label(public_deps, value):
-    innerapis = value["innerapis"]
-    for _innerapi in innerapis:
-        if _innerapi:
-            label = _innerapi.get("label")
+    for i in value["innerapis"]:
+        if i:
+            label = i.get("label")
             if public_deps == label:
                 return label.split(':')[-1]
-            continue
-    return ""
+            return ""
+        return ""
+
 
 def _get_public_external_deps(data, public_deps):
     if not isinstance(data, dict):
@@ -67,7 +67,6 @@ def _get_public_external_deps(data, public_deps):
         _data = _check_label(public_deps, value)
         if _data:
             return key + ":" + _data
-        continue
     return ""
 
 
@@ -168,6 +167,7 @@ def _copy_dir(src_path, target_path):
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
             if not os.path.exists(target_path):
+                print('target_path,target_path', target_path)
                 os.makedirs(target_path)
             path1 = os.path.join(target_path, file)
             with os.fdopen(os.open(path1, os.O_WRONLY | os.O_CREAT, mode=0o640), "wb") as write_stream:
@@ -701,8 +701,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         components_list: list of all components that need to be built
         build_type: build type
             0: default pack,do not change organization_name
-            1: pack ,change organization_name
-            2: do not pack,do not change organization_name
+            1:pack ,change organization_name
+            2:do not pack,do not change organization_name
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
