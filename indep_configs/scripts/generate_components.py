@@ -19,6 +19,7 @@ import os
 import shutil
 import stat
 import utils
+import subprocess
 
 
 def _get_args():
@@ -184,6 +185,12 @@ def _get_src_part_name(src_bundle_paths):
     return _name, _path
 
 
+def _binarys_permissions_handler():
+    binarys_path = "binarys"
+    cmd = ["chmod", "755", "-R", binarys_path]
+    subprocess.Popen(cmd)
+
+
 def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, root_path, dependences_json,
                              _part_toolchain_map_dict):
     components_json = dict()
@@ -265,6 +272,7 @@ def main():
     _part_toolchain_map_dict = _get_all_have_toolchain_component(toolchain_json, hpm_cache_path)
     components_json = _components_info_handler(part_name_list, source_code_path,
                                                hpm_cache_path, root_path, dependences_json, _part_toolchain_map_dict)
+    _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
     _link_kernel_binarys(variants, hpm_cache_path, dependences_json)
