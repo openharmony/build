@@ -204,6 +204,10 @@ template("ohos_prebuilt_shared_library") {
     if (defined(invoker.enable_strip) && invoker.enable_strip) {
       enable_strip = true
     }
+    mini_debug = false
+    if (defined(invoker.mini_debug) && invoker.mini_debug) {
+      mini_debug = true
+    }
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
     }
