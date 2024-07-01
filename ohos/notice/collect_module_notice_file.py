@@ -103,14 +103,14 @@ def do_collect_notice_files(options, depfiles: str):
             depfiles.append(readme_path)
             notice_file_info = get_license_from_readme(readme_path)
             notice_file = notice_file_info[0]
-            module_notice_info['Software'] = "{} {}".format(notice_file_info[1])
+            module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
     if notice_file is None:
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
-            module_notice_info['Software'] = "{} {}".format(notice_file_info[1])
+            module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
         else:
             module_notice_info['Software'] = ""
