@@ -56,8 +56,9 @@ declare_args() {
   use_pthread_cancel = false
   musl_ported_dir = "intermidiates/${musl_target_os}/musl_src_ported"
   musl_inc_out_dir = "usr/include/${musl_target_triple}"
-  uapi_dir = "//kernel/linux/patches/linux-5.10/prebuilts/usr/include"
-  linux_kernel_dir = "//kernel/linux/linux-5.10"
+  uapi_dir =
+      "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include"
+  linux_kernel_dir = "//kernel/linux/${linux_kernel_version}"
   musl_dir = "//third_party/musl"
   musl_porting_dir = "//third_party/musl/porting/linux/user"
 
