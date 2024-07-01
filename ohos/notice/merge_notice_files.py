@@ -127,12 +127,14 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                     software_list.append(contents)
             for contens_value in software_list:
                 if len(contens_value) > 0 and contens_value[0].get('Path') and \
-                        contens_value[0].get('Software'):
+                        contens_value[0].get('Software') and contens_value[0].get('Version'):
                     notice_source_path = contens_value[0].get('Path').strip()
                     software_name = contens_value[0].get('Software').strip()
+                    version = contens_value[0].get('Version').strip()
 
                     write_file(output_file, "Software: {}".format(software_name))
                     write_file(output_file, "Path: {}".format(notice_source_path))
+                    write_file(output_file, "Version: {}".format(version))
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
