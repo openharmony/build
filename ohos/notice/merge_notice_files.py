@@ -133,8 +133,8 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                     version = contens_value[0].get('Version').strip()
 
                     write_file(output_file, "Software: {}".format(software_name))
-                    write_file(output_file, "Path: {}".format(notice_source_path))
                     write_file(output_file, "Version: {}".format(version))
+                    write_file(output_file, "Path: {}".format(notice_source_path))
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
