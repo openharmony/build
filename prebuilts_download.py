@@ -210,20 +210,34 @@ def _npm_install(args):
     npm = os.path.join(args.code_dir, node_path, 'npm')
     if args.skip_ssl:
         skip_ssl_cmd = '{} config set strict-ssl false;'.format(npm)
-        _run_cmd(skip_ssl_cmd)
+        out, err, retcode = _run_cmd(skip_ssl_cmd)
+        if retcode != 0:
+            return False, err.decode()
     npm_clean_cmd = '{} cache clean -f'.format(npm)
     npm_package_lock_cmd = '{} config set package-lock true'.format(npm)
-    _run_cmd(npm_clean_cmd)
-    _run_cmd(npm_package_lock_cmd)
+    out, err, retcode = _run_cmd(npm_clean_cmd)
+    if retcode != 0:
+        return False, err.decode()
+    out, err, retcode = _run_cmd(npm_package_lock_cmd)
+    if retcode != 0:
+        return False, err.decode()
     print('start npm install, please wait.')
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(args.code_dir, install_info)
         basename = os.path.basename(full_code_path)
+        node_modules_path = os.path.join(full_code_path, "node_modules")
         npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
+        print('check node_modules is not exist')
+        if os.path.exists(node_modules_path):
+            print('remove node_modules %s' % node_modules_path)
+            _run_cmd(('rm -rf {}'.format(node_modules_path)))
         if os.path.exists(full_code_path):
-            cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
+            cmd = ['timeout', '-s', '9', '90s', npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
+            if args.host_platform == 'darwin':
+                cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.unsafe_perm:
                 cmd.append('--unsafe-perm')
+            print("in dir:{}, executing:{}".format(full_code_path, ' '.join(cmd)))
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
@@ -371,9 +385,11 @@ def main():
         print('npm install try times:', retry_times + 1)
         result, error = _npm_install(args)
         if result:
+            print("npm install successfully")
             break
         elif retry_times == max_retry_times:
             for error_info in error.split('\n'):
+            print("npm install error, error info: %s" % error)
                 if error_info.endswith('debug.log'):
                     log_path = error_info.split()[-1]
                     cmd = ['cat', log_path]
