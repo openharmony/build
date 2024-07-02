@@ -126,13 +126,22 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                 if contents is not None and contents not in software_list:
                     software_list.append(contents)
             for contens_value in software_list:
-                if len(contens_value) > 0 and contens_value[0].get('Path') and \
-                        contens_value[0].get('Software'):
-                    notice_source_path = contens_value[0].get('Path').strip()
-                    software_name = contens_value[0].get('Software').strip()
-
-                    write_file(output_file, "Software: {}".format(software_name))
-                    write_file(output_file, "Path: {}".format(notice_source_path))
+                if len(contens_value) > 0:
+                    if contens_value[0].get('Software'):
+                        software_name = contens_value[0].get('Software').strip()
+                        write_file(output_file, "Software: {}".format(software_name))
+                    else:
+                        write_file(output_file, "Software: ")
+                    if contens_value[0].get('Version'):
+                        version = contens_value[0].get('Version').strip()
+                        write_file(output_file, "Version: {}".format(version))
+                    else:
+                        write_file(output_file, "Version: ")
+                    if contens_value[0].get('Path'):
+                        notice_source_path = contens_value[0].get('Path').strip()
+                        write_file(output_file, "Path: {}".format(notice_source_path))
+                    else:
+                        write_file(output_file, "Path: ")
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
