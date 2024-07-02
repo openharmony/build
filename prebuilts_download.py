@@ -389,7 +389,7 @@ def main():
             break
         elif retry_times == max_retry_times:
             for error_info in error.split('\n'):
-            print("npm install error, error info: %s" % error)
+                print("npm install error, error info: %s" % error)
                 if error_info.endswith('debug.log'):
                     log_path = error_info.split()[-1]
                     cmd = ['cat', log_path]
