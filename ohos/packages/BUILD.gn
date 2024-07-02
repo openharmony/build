@@ -416,7 +416,7 @@ foreach(_platform, target_platform_list) {
   }
 }
 
-if (is_asan) {
+if (is_asan || is_tsan) {
   foreach(_platform, target_platform_list) {
     action("restore_first_stage_artifact_${_platform}") {
       current_platform = _platform
@@ -512,7 +512,7 @@ group("package_libs_symbols") {
   deps = []
   foreach(_platform, target_platform_list) {
     deps += [ ":package_libs_symbols_${_platform}" ]
-    if (is_asan) {
+    if (is_asan || is_tsan) {
       deps += [ ":restore_first_stage_symbols_${_platform}" ]
     }
   }
