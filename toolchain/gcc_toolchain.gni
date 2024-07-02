@@ -544,7 +544,7 @@ template("gcc_toolchain") {
         end_group_flag = "-Wl,--end-group "
       }
       _clang_rt_dso_full_path = ""
-      if (is_asan && invoker_toolchain_args.current_os == "ohos") {
+      if ((is_asan || is_tsan) && invoker_toolchain_args.current_os == "ohos") {
         if (use_hwasan) {
           _clang_rt_dso_full_path = rebase_path(
                   "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.hwasan.so",
