@@ -60,15 +60,22 @@ def _prepare_updater(updater_path: str, target_cpu: str):
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('bin/init', os.path.join(updater_path, 'init'))
-    os.symlink('/bin', os.path.join(updater_path, 'system/bin'))
-    os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
+    if not os.path.exists(os.path.join(updater_path, 'init')):
+        os.symlink('bin/init', os.path.join(updater_path, 'init'))
+    if not os.path.exists(os.path.join(updater_path, 'system/bin')):
+        os.symlink('/bin', os.path.join(updater_path, 'system/bin'))
+    if not os.path.exists(os.path.join(updater_path, 'system/lib')):
+        os.symlink('/lib', os.path.join(updater_path, 'system/lib'))
     if target_cpu == 'arm64':
-        os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
-        os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
+        if not os.path.exists(os.path.join(updater_path, 'system/lib64')):
+            os.symlink('/lib64', os.path.join(updater_path, 'system/lib64'))
+        if not os.path.exists(os.path.join(updater_path, 'vendor/lib64')):
+            os.symlink('/lib64', os.path.join(updater_path, 'vendor/lib64'))
     else:
-        os.symlink('/lib', os.path.join(updater_path, 'vendor/lib'))
-    os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
+        if not os.path.exists(os.path.join(updater_path, 'vendor/lib')):
+            os.symlink('/lib', os.path.join(updater_path, 'vendor/lib'))
+    if not os.path.exists(os.path.join(updater_path, 'system/etc')):
+        os.symlink('/etc', os.path.join(updater_path, 'system/etc'))
 
 
 def _prepare_ramdisk(ramdisk_path: str):
@@ -78,7 +85,8 @@ def _prepare_ramdisk(ramdisk_path: str):
         if os.path.exists(_path):
             continue
         os.makedirs(_path, exist_ok=True)
-    os.symlink('bin/init_early', os.path.join(ramdisk_path, 'init'))
+    if not os.path.exists(os.path.join(ramdisk_path, 'init')):
+        os.symlink('bin/init_early', os.path.join(ramdisk_path, 'init'))
 
 
 def _prepare_eng_ststem(eng_system_path: str, build_variant: str):
