@@ -16,16 +16,17 @@
 import argparse
 import sys
 import os
-from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 sys.path.append(
     os.path.dirname(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util.file_utils import write_file, read_json_file  # noqa: E402
 
+# Import jinja2 from third_party/jinja2
+from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
+
 _SOURCE_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-# Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(_SOURCE_ROOT, 'third_party'))
 
 
