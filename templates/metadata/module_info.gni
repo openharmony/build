@@ -88,7 +88,7 @@ template("generate_module_info") {
     }
   }
 
-  if (!is_standard_system && is_asan &&
+  if (!is_standard_system && (is_asan || is_tsan) &&
       ("${module_type}" == "lib" || "${module_type}" == "lib64" ||
        "${module_type}" == "bin")) {
     system_base_dir = "${system_base_dir}/asan"

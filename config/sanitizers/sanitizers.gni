@@ -265,7 +265,7 @@ if (use_fuzzing_engine) {
 
     # Certain parts of binaries must be instrumented with ASan if the rest of
     # the binary is. For these, only remove non-ASan sanitizer instrumentation.
-    if (!is_asan) {
+    if (!is_asan && !is_tsan) {
       not_fuzzed_remove_nonasan_configs +=
           [ "//build/config/sanitizers:default_sanitizer_flags" ]
       assert(not_fuzzed_remove_nonasan_configs == not_fuzzed_remove_configs)
@@ -279,7 +279,7 @@ template("ohos_sanitizer_config") {
     if (defined(sanitize)) {
       configs = [ "//build/config/sanitizers:sanitizer_trap_all_flags" ]
       _mode = "release"
-      _debug = (defined(sanitize.debug) && sanitize.debug) || is_asan
+      _debug = (defined(sanitize.debug) && sanitize.debug) || is_asan || is_tsan
       if (_debug) {
         _mode = "debug"
       }
@@ -287,13 +287,14 @@ template("ohos_sanitizer_config") {
       if (_scudo) {
         configs += [ "//build/config/sanitizers:scudo_config" ]
       }
-      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan && !is_asan
+      _ubsan = defined(sanitize.ubsan) && sanitize.ubsan && !is_asan && !is_tsan
       if (_ubsan) {
         configs +=
             [ "//build/config/sanitizers:undefined_behavior_sanitize_config_" +
               _mode ]
       }
-      _all_ubsan = defined(sanitize.all_ubsan) && sanitize.all_ubsan && !is_asan
+      _all_ubsan = defined(sanitize.all_ubsan) && sanitize.all_ubsan &&
+                   !is_asan && !is_tsan
       if (_all_ubsan) {
         configs += [
           "//build/config/sanitizers:all_undefined_behavior_sanitize_config_" +
@@ -305,19 +306,20 @@ template("ohos_sanitizer_config") {
         configs += [ "//build/config/sanitizers:shadow_call_stack_config" ]
       }
       _boundary_sanitize = defined(sanitize.boundary_sanitize) &&
-                           sanitize.boundary_sanitize && !is_asan
+                           sanitize.boundary_sanitize && !is_asan && !is_tsan
       if (_boundary_sanitize) {
         configs +=
             [ "//build/config/sanitizers:boundary_sanitize_config_" + _mode ]
       }
 
       _integer_overflow = defined(sanitize.integer_overflow) &&
-                          sanitize.integer_overflow && !is_asan
+                          sanitize.integer_overflow && !is_asan && !is_tsan
       _unsigned_integer_overflow =
           defined(sanitize.unsigned_integer_overflow) &&
-          sanitize.unsigned_integer_overflow && !is_asan
-      _signed_integer_overflow = defined(sanitize.signed_integer_overflow) &&
-                                 sanitize.signed_integer_overflow && !is_asan
+          sanitize.unsigned_integer_overflow && !is_asan && !is_tsan
+      _signed_integer_overflow =
+          defined(sanitize.signed_integer_overflow) &&
+          sanitize.signed_integer_overflow && !is_asan && !is_tsan
       if (_unsigned_integer_overflow || _integer_overflow) {
         configs +=
             [ "//build/config/sanitizers:unsigned_integer_overflow_config" ]
@@ -341,7 +343,8 @@ template("ohos_sanitizer_config") {
       if (defined(sanitize.cfi) && sanitize.cfi && cfi_debug) {
         _mode = "debug"
       }
-      _cfi = use_cfi && defined(sanitize.cfi) && sanitize.cfi && !is_asan
+      _cfi = use_cfi && defined(sanitize.cfi) && sanitize.cfi && !is_asan &&
+             !is_tsan
       if (_cfi) {
         if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
           configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]

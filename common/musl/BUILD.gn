@@ -35,7 +35,7 @@ group("musl_install") {
 if (target_cpu == "riscv64") {
   ohos_prebuilt_shared_library("ld-musl-riscv64.so.1") {
     deps = [ "//third_party/musl:soft_create_linker" ]
-    if (is_asan) {
+    if (is_asan || is_tsan) {
       asan = "-asan"
     } else {
       asan = ""
@@ -57,7 +57,7 @@ if (target_cpu == "riscv64") {
 } else {
   ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
     deps = [ "//third_party/musl:soft_create_linker" ]
-    if (is_asan) {
+    if (is_asan || is_tsan) {
       asan = "-asan"
     } else {
       asan = ""
@@ -105,7 +105,7 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
   } else {
     source = "ld-musl-aarch64.path"
   }
-  if (is_asan) {
+  if (is_asan || is_tsan) {
     output = string_replace(source, ".path", "-asan.path")
   }
   install_images = [

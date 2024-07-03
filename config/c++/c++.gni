@@ -17,8 +17,8 @@ use_custom_libcxx = use_custom_libcxx && !is_nacl
 
 # libc++abi needs to be exported from executables to be picked up by shared
 # libraries on certain instrumented builds.
-export_libcxxabi_from_executables =
-    use_custom_libcxx && !is_component_build && (is_asan || is_ubsan_vptr)
+export_libcxxabi_from_executables = use_custom_libcxx && !is_component_build &&
+                                    (is_asan || is_tsan || is_ubsan_vptr)
 
 libcxx_prefix = "//third_party/libcxx"
 libcxxabi_prefix = "//third_party/libcxxabi"
