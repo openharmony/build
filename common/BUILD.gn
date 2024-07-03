@@ -26,10 +26,6 @@ group("common_packages") {
   ]
 
   if (target_cpu == "arm64") {
-    deps += [ "asan:libclang_rt.hwasan.so" ]
-  }
-
-  if (target_cpu == "arm64") {
     deps += [
       "asan:libclang_rt.tsan.so",
       "asan:tsan.options",
@@ -40,6 +36,15 @@ group("common_packages") {
     deps += [
       "asan:asan.cfg",
       "asan:asan_helper",
+    ]
+    if (target_cpu == "arm64") {
+      deps += [ "asan:libclang_rt.hwasan.so" ]
+    }
+  } else if (is_tsan) {
+    deps += [
+      "asan:asan.cfg",
+      "asan:asan_helper",
+      "asan:libclang_rt.tsan.so",
     ]
   } else {
     # ubsan.cfg defines the log_path, different with asan.cfg
