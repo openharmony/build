@@ -1081,14 +1081,14 @@
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/hapsigner/pc/services:hap-sign-tool",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp/services:hap-sign-tool",
         "target_os": [
             "ohos"
         ]
     },
     {
         "install_dir": "toolchains/lib",
-        "module_label": "//developtools/hapsigner/pc/services:copy_signature_tools_resource",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp/services:copy_signature_tools_resource",
         "target_os": [
             "ohos"
         ]
