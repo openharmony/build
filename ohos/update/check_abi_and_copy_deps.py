@@ -23,7 +23,7 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
-target_data_dicts = dict()
+TargetDataDicts = dict()
 
 
 def get_value_from_file(file: str, target: list, key: str, must: bool=True):
@@ -31,8 +31,8 @@ def get_value_from_file(file: str, target: list, key: str, must: bool=True):
     target_out_dir = target[1]
     file_path = os.path.join(target_out_dir, target_name + "_" + file + ".json")
 
-    global target_data_dicts
-    target_data = target_data_dicts.get(file_path)
+    global TargetDataDicts
+    target_data = TargetDataDicts.get(file_path)
     if target_data is not None:
         return target_data.get(key)
 
@@ -44,7 +44,7 @@ def get_value_from_file(file: str, target: list, key: str, must: bool=True):
             return "Unknown"
 
     target_data = read_json_file(file_path)
-    target_data_dicts[file_path] = target_data
+    TargetDataDicts[file_path] = target_data
     return target_data.get(key)
 
 
