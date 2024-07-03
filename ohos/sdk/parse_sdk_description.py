@@ -19,6 +19,7 @@ import os
 import pathlib
 import re
 from convert_permissions import convert_permissions
+from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 sys.path.append(
     os.path.dirname(
@@ -31,7 +32,6 @@ _SOURCE_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(_SOURCE_ROOT, 'third_party'))
-from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 KEYS = ['target_os', 'install_dir', 'module_label', 'build_only']
 
@@ -158,6 +158,7 @@ def expand_platform_targets(options, label: str, install_dir: str):
     else:
         return [label], [install_dir]    
 
+
 def add_sdk_targets(sdk_type, sdk_targets):
     sdk_targets.append({
         'type': sdk_type,
@@ -168,6 +169,7 @@ def add_sdk_targets(sdk_type, sdk_targets):
             'ohos': SdkTargets('ohos')
         }
     })
+
 
 def parse_description_file(options):
     data = read_json_file(options.sdk_description_file)
@@ -212,10 +214,10 @@ def parse_description_file(options):
                 for m in module_labels:
                     add_target(item, m, target_os)
 
-        for i in range(len(module_labels)):
+        for label, install_dir in zip(module_labels, install_dirs):
             install_info = {
-                'label': module_labels[i],
-                'install_dir': install_dirs[i]
+                'label': label,
+                'install_dir': install_dir
             }
             module_install_infos.append(install_info)
 
