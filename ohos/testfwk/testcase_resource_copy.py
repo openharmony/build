@@ -169,14 +169,14 @@ def find_testcase_resources(resource_config_file: str, testcase_target_name: str
     return _resources_list
 
 
-def copy_testcase_resources(resource_infos: list):
+def copy_testcase_resources(resource_infos: list) -> list:
     result_dest_list = []
     for resource_info in resource_infos:
         src_file = resource_info.get('src')
         if not os.path.exists(src_file):
             print("warning: testcase resource {} doesn't exist.".format(
                 src_file))
-            return
+            return None
         dest_file = resource_info.get('dest')
         dest_dir = os.path.dirname(dest_file)
         if os.path.isdir(src_file):
