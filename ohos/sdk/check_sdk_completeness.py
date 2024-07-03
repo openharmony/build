@@ -30,6 +30,7 @@ sdk_package_set = set()
 sdk_package_location = ""
 product_name = ""
 sdk_version = ""
+sdk_platform = ""
 
 
 def parse_sdk_check_list(sdk_check_list: list):

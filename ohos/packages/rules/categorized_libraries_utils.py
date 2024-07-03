@@ -71,7 +71,7 @@ def update_module_info(module_info, categorized_libraries):
         if pos < 0:
             dest.append(item)
             continue
-        lib_name = item[pos+1:]
+        lib_name = item[pos + 1:]
         dir_name = item[:pos]
 
         if dir_name.endswith("chipset-sdk") or dir_name.endswith("platformsdk") \
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     categories = load_categorized_libraries(os.path.join(
           os.path.dirname(os.path.abspath(__file__)), "categorized-libraries.json"))
     module_info = {
-        "dest": [ "system/lib/chipset-pub-sdk/libaccesstoken_sdk.z.so" ],
+        "dest": ["system/lib/chipset-pub-sdk/libaccesstoken_sdk.z.so"],
         "label": "//base/security/access_token/interfaces/innerkits/accesstoken:libaccesstoken_sdk"
     }
     update_module_info(module_info, categories)

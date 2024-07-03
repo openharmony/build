@@ -169,7 +169,7 @@ def find_testcase_resources(resource_config_file: str, testcase_target_name: str
     return _resources_list
 
 
-def copy_testcase_resources(resource_infos: list) -> list:
+def copy_testcase_resources(resource_infos: list):
     result_dest_list = []
     for resource_info in resource_infos:
         src_file = resource_info.get('src')
