@@ -44,6 +44,37 @@ class Packer():
         self.fs_cfg = None
         self.chmod_dirs = []
 
+    @classmethod
+    def is_lib(cls, lib):
+        return lib.startswith('lib') and lib.endswith('.so')
+
+    @classmethod
+    def is_incr(cls, fs_incr):
+        exist_ok = False if fs_incr is None else True
+        with_rm = True if fs_incr is None else False
+        return exist_ok, with_rm
+
+    @classmethod
+    def chmod(cls, file, mode):
+        mode = int(str(mode), base=8)
+        if os.path.exists(file):
+            os.chmod(file, mode)
+
+    @classmethod
+    def filter(cls, files, ignore_list):
+        if ignore_list is None or not len(ignore_list):
+            return files
+        filter_files = []
+        for file in files:
+            flag = True
+            for ignore in ignore_list:
+                if file.startswith(ignore) or file.endswith(ignore):
+                    flag = False
+                    break
+            if flag:
+                filter_files.append(file)
+        return filter_files
+
     def mv_usr_libs(self):
         src_path = self.config.out_path
         libs = [lib for lib in os.listdir(src_path) if self.is_lib(lib)]
@@ -54,16 +85,6 @@ class Packer():
             source_file = os.path.join(src_path, lib)
             target_file = os.path.join(target_path, lib)
             shutil.move(source_file, target_file)
-
-    @classmethod
-    def is_lib(cls, lib):
-        return lib.startswith('lib') and lib.endswith('.so')
-
-    @classmethod
-    def is_incr(cls, fs_incr):
-        exist_ok = False if fs_incr is None else True
-        with_rm = True if fs_incr is None else False
-        return exist_ok, with_rm
 
     def create_fs_dirs(self):
         fs_path = os.path.join(self.config.out_path,
@@ -123,27 +144,6 @@ class Packer():
             tdirname = srelpath.replace(spath, tpath)
             copy_file_process(sfile, tdirname)
 
-    @classmethod
-    def chmod(cls, file, mode):
-        mode = int(str(mode), base=8)
-        if os.path.exists(file):
-            os.chmod(file, mode)
-
-    @classmethod
-    def filter(cls, files, ignore_list):
-        if ignore_list is None or not len(ignore_list):
-            return files
-        filter_files = []
-        for file in files:
-            flag = True
-            for ignore in ignore_list:
-                if file.startswith(ignore) or file.endswith(ignore):
-                    flag = False
-                    break
-            if flag:
-                filter_files.append(file)
-        return filter_files
-
     def list_all_files(self, path, ignore_list=None):
         for relpath, _, files in os.walk(path):
             files = self.filter(files, ignore_list)
@@ -170,7 +170,7 @@ class Packer():
     def fs_filemode(self):
         fs_filemode = self.fs_cfg.get('fs_filemode', [])
         for filestat in fs_filemode:
-            file_dir = os.path.join(self.replace_items[r'${fs_dir}'],
+            file_dir = os.path.join(self.replace_items.get(r'${fs_dir}', ""),
                                     filestat.get('file_dir', ''))
             file_mode = filestat.get('file_mode', 0)
             if os.path.exists(file_dir) and file_mode > 0:

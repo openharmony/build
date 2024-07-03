@@ -28,6 +28,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rules"
 from categorized_libraries_utils import load_categorized_libraries
 from categorized_libraries_utils import update_module_info
 
+
 def _get_modules_info(system_install_info: dict, depfiles: list):
     modules_info_dict = {}
     for subsystem_info in system_install_info:
@@ -191,8 +192,8 @@ def main():
     args = parser.parse_args()
 
     additional_system_files = []
-    for tuple in args.additional_system_files or []:
-        filepath, system_path = tuple.split(':')
+    for tuples in args.additional_system_files or []:
+        filepath, system_path = tuples.split(':')
         additional_system_files.append((filepath, system_path))
 
     depfiles = []

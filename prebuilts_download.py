@@ -160,7 +160,7 @@ def _is_system_component() -> bool:
 def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     try:
         cnt = cpu_count()
-    except:
+    except Exception as e:
         cnt = 1
     with ThreadPoolExecutor(max_workers=cnt) as pool:
         tasks = dict()
