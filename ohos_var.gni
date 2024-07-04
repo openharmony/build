@@ -121,6 +121,7 @@ declare_args() {
 
   # ohos sdk
   build_ohos_sdk = false
+  enable_enhanced_opt = true
 
   # Build ohos sdk compatibility jar
   build_bc_sdk = false
