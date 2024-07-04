@@ -57,10 +57,13 @@ class JsonSAInfoMerger(object):
         self.process_sas_dict = {}
         self.output_filelist = []
 
-    def __add_to_output_filelist(self, infile: str):
+    def add_to_output_filelist(self, infile: str):
         self.output_filelist.append(os.path.join(self.output_dir, infile))
 
-    def __parse_json_file(self, file: str):
+    def merge(self, sa_info_filelist, output_dir):
+        return self.__merge(sa_info_filelist, output_dir)
+
+    def parse_json_file(self, file: str):
         with open(file, 'r') as json_files:
             data = json.load(json_files)
             _format = 'one and only one {} tag is expected, actually {} is found'
@@ -72,15 +75,15 @@ class JsonSAInfoMerger(object):
             # create a new collector if a new process tag is found
             sa_info_collector = self.SAInfoCollector(process_name, self.temp_dir)
             self.process_sas_dict[process_name] = sa_info_collector
-            self.__add_to_output_filelist(process_name + '.json')
+            self.add_to_output_filelist(process_name + '.json')
         else:
             sa_info_collector = self.process_sas_dict.get(process_name)
         # check systemability tag
         if 'systemability' not in data or data['systemability'] == '':
-            raise  json_err.BadFormatJsonError('provide a valid value for systemability', file)
+            raise json_err.BadFormatJsonError('provide a valid value for systemability', file)
         sys_count = len(data['systemability'])
         if sys_count != 1:
-            raise  json_err.BadFormatJsonError(_format.format('systemabiltiy', sys_count), file)
+            raise json_err.BadFormatJsonError(_format.format('systemabiltiy', sys_count), file)
         sys_value = data['systemability']
         if 'name' not in sys_value[0] or 'libpath' not in sys_value[0]:
             raise json_err.BadFormatJsonError('systemability must have name and libpath', file)
@@ -95,7 +98,7 @@ class JsonSAInfoMerger(object):
         self.temp_dir = path_merges
         self.output_dir = path_merges
         for file in sa_info_filelist:
-            self.__parse_json_file(file)
+            self.parse_json_file(file)
         global_ordered_systemability_names = []
         global_systemability_deps_dict = {}
         # merge systemability info for each process
@@ -122,6 +125,3 @@ class JsonSAInfoMerger(object):
             raise json_err.CrossProcessCircularDependencyError(error)
         # finally return an output filelist
         return self.output_filelist
-
-    def merge(self, sa_info_filelist, output_dir):
-        return self.__merge(sa_info_filelist, output_dir)

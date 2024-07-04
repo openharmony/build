@@ -29,11 +29,13 @@ from urllib.request import urlopen
 import urllib.error
 from scripts.util.file_utils import read_json_file
 
+
 def _run_cmd(cmd: str):
     res = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
     sout, serr = res.communicate()
     return sout.rstrip().decode('utf-8'), serr, res.returncode
+
 
 def _check_sha256(check_url: str, local_file: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
@@ -45,6 +47,7 @@ def _check_sha256(check_url: str, local_file: str) -> bool:
         check_sha256 = _obtain_sha256_by_sha_sums256(check_url)
     return check_sha256 == local_sha256
 
+
 def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, unzip_filename: str) -> bool:
     check_sha256_cmd = 'curl -s -k ' + check_url + '.sha256'
     check_sha256, err, returncode = _run_cmd(check_sha256_cmd)
@@ -53,6 +56,7 @@ def _check_sha256_by_mark(args, check_url: str, code_dir: str, unzip_dir: str, u
     mark_file_path = os.path.join(mark_file_dir, mark_file_name)
     args.mark_file_path = mark_file_path
     return os.path.exists(mark_file_path)
+
 
 def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
     sha_sums256 = 'SHASUMS256.txt'
@@ -66,6 +70,7 @@ def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
             check_sha256 = line.split(' ')[0]
     return check_sha256
 
+
 def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict = dict()
     parse_dict['unzip_dir'] = config.get('unzip_dir')
@@ -75,6 +80,7 @@ def _config_parse(config: dict, tool_repo: str) -> dict:
     parse_dict['md5_huaweicloud_url'], err, returncode = _run_cmd(md5_huaweicloud_url_cmd)
     parse_dict['bin_file'] = os.path.basename(parse_dict.get('huaweicloud_url'))
     return parse_dict
+
 
 def _uncompress(args, src_file: str, code_dir: str, unzip_dir: str, unzip_filename: str, mark_file_path: str):
     dest_dir = os.path.join(code_dir, unzip_dir)
@@ -142,6 +148,7 @@ def _copy_url_disable_rich(args, url: str, local_file: str, code_dir: str, unzip
     _uncompress(args, local_file, code_dir, unzip_dir, unzip_filename, mark_file_path)
     print("Decompressed {}".format(local_file))
 
+
 def _is_system_component() -> bool:
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if pathlib.Path(root_dir + "/interface/sdk-js").exists() or pathlib.Path(root_dir + "/foundation/arkui").exists() or pathlib.Path(root_dir + "/arkcompiler").exists():
@@ -149,10 +156,11 @@ def _is_system_component() -> bool:
     else:
         return False
 
+
 def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     try:
         cnt = cpu_count()
-    except:
+    except Exception as e:
         cnt = 1
     with ThreadPoolExecutor(max_workers=cnt) as pool:
         tasks = dict()
@@ -203,6 +211,7 @@ def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
                 style='green')
             else:
                 print('{}, download and decompress completed'.format(tasks.get(task)))
+
 
 def _npm_install(args):
     node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
@@ -262,6 +271,7 @@ def _node_modules_copy(config: dict, code_dir: str, enable_symlink: bool):
         else:
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
+
 def _file_handle(config: dict, code_dir: str, host_platform: str):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
@@ -292,6 +302,7 @@ def _file_handle(config: dict, code_dir: str, host_platform: str):
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
 
+
 def _import_rich_module():
     module = importlib.import_module('rich.progress')
     progress = module.Progress(
@@ -320,6 +331,7 @@ def _install(config: dict, code_dir: str):
         dest_dir = '{}/{}'.format(code_dir, config_info.get('destdir'))
         cmd = '{} --destdir={}'.format(cmd, dest_dir)
         _run_cmd(cmd)
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -404,6 +416,7 @@ def main():
     uninstalled_tools = config_info.get('uninstalled_tools')
     for tool_path in uninstalled_tools:
         subprocess.run(['rm', '-rf', tool_path])
+
 
 if __name__ == '__main__':
     sys.exit(main())
