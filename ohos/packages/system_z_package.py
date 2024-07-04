@@ -29,7 +29,8 @@ def archive_files(system_image_zipfile: str, additional_files: list, output_dir:
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
 
-    build_utils.extract_all(system_image_zipfile, output_dir + "/system", no_clobber=False)
+    build_utils.extract_all(system_image_zipfile, os.path.join(output_dir, "system"),
+                            no_clobber=False)
     for _file in additional_files:
         _dest = os.path.join(output_dir, os.path.basename(_file))
         if os.path.isdir(_file):

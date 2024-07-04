@@ -79,6 +79,7 @@ def remove_system_api_method(source_root: str, nodejs: str):
                         stdout=subprocess.PIPE)
     p.wait()
 
+
 def regenerate_sdk_description_file(source_root: str, sdk_description_file: str, output_pub_sdk_desc_file: str):
     info_list = read_json_file(sdk_description_file)
     public_info_list = []

@@ -29,8 +29,8 @@ def get_platform_parts(current_platform: str, platforms_parts_file: str):
     all_platforms_parts = read_json_file(platforms_parts_file)
     if all_platforms_parts is None:
         raise Exception("read file '{}' failed.".format(all_platforms_parts))
-    platform_parts = all_platforms_parts.get(current_platform)
-    return platform_parts
+    platforms_parts = all_platforms_parts.get(current_platform)
+    return platforms_parts
 
 
 def platform_parts(all_parts_info_file: str, current_platform_parts: dict):

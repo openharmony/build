@@ -158,6 +158,7 @@ def expand_platform_targets(options, label: str, install_dir: str):
     else:
         return [label], [install_dir]    
 
+
 def add_sdk_targets(sdk_type, sdk_targets):
     sdk_targets.append({
         'type': sdk_type,
@@ -168,6 +169,7 @@ def add_sdk_targets(sdk_type, sdk_targets):
             'ohos': SdkTargets('ohos')
         }
     })
+
 
 def parse_description_file(options):
     data = read_json_file(options.sdk_description_file)
@@ -212,10 +214,10 @@ def parse_description_file(options):
                 for m in module_labels:
                     add_target(item, m, target_os)
 
-        for i in range(len(module_labels)):
+        for label, install_dir in zip(module_labels, install_dirs):
             install_info = {
-                'label': module_labels[i],
-                'install_dir': install_dirs[i]
+                'label': label,
+                'install_dir': install_dir
             }
             module_install_infos.append(install_info)
 
