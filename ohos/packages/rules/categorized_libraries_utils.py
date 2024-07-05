@@ -42,6 +42,7 @@ def __get_relative_install_dir(categories):
         return "chipset-sdk"
     return ""
 
+
 def load_categorized_libraries(file_name):
     res = read_json_file(file_name)
 
