@@ -102,7 +102,7 @@ if __name__ == '__main__':
     fill_machine_OS_build(settings)
     fill_Xcode_version(settings)
     try:  
-        fill_SDK_path_and_version(settings, 'iphoneos', settings['xcode_version'])  
+        fill_SDK_path_and_version(settings, unknownargs[0], settings['xcode_version'])  
     except ValueError as e:  
         print(f"Error: {e}")
 
