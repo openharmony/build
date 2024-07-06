@@ -30,7 +30,7 @@ from scripts.util import build_utils  # noqa: E402
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(os.path.abspath(
                    os.path.join(os.path.dirname(__file__),
-                   '..', '..', '..')),'third_party'))
+                   '..', '..', '..')), 'third_party'))
 from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 KEYS = ['target_os', 'install_dir', 'module_label', 'build_only']
