@@ -50,6 +50,7 @@ def rename_file(source_file, target_file):
     except FileNotFoundError as rename_error:
         LogUtil.hb_warning(rename_error)
 
+
 class BuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
