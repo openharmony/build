@@ -25,7 +25,7 @@ from scripts.util.file_utils import write_file, read_json_file  # noqa: E402
 # Import jinja2 from third_party/jinja2
 sys.path.insert(1, os.path.join(os.path.abspath(
                    os.path.join(os.path.dirname(__file__),
-                   '..', '..', '..')),'third_party'))
+                   '..', '..', '..')), 'third_party'))
 from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
 
