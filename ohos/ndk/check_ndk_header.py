@@ -21,6 +21,7 @@ import subprocess
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util import build_utils  # noqa: E402
 
+
 def parse_args(args):
     args = build_utils.expand_file_args(args)
 
@@ -35,8 +36,9 @@ def parse_args(args):
 
     return options
 
+
 def check_ndk_header(headers: list, output: str):
-    cmd_list=[]
+    cmd_list = []
     cmd_list.append('clang')
     cmd_list.append('-I sdk-native/os-irrelevant/sysroot/')
     cmd_list.append('-std=c99')

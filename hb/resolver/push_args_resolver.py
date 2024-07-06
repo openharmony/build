@@ -27,6 +27,7 @@ from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
 from services.hdc import CMDTYPE
 
+
 class PushArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
@@ -51,15 +52,15 @@ class PushArgsResolver(ArgsResolverInterface):
     def resolve_list_targets(target_arg: Arg, push_module: PushModuleInterface):
         if target_arg.arg_value:
             push_module.hdc.execute_hdc_cmd(CMDTYPE.LIST_TARGETS)
-            Arg.write_args_file("list_targets",False,ModuleType.PUSH)
+            Arg.write_args_file("list_targets", False, ModuleType.PUSH)
 
     @staticmethod
     def resolve_reboot(target_arg: Arg, push_module: PushModuleInterface):
         if target_arg.arg_value:
-            push_module.hdc.regist_flag('reboot',True)
+            push_module.hdc.regist_flag('reboot', True)
     
     @staticmethod
     def resolve_src(target_arg: Arg, push_module: PushModuleInterface):
         if target_arg.arg_value:
-            push_module.hdc.regist_flag('src',target_arg.arg_value)
-            Arg.write_args_file("src","",ModuleType.PUSH)
+            push_module.hdc.regist_flag('src', target_arg.arg_value)
+            Arg.write_args_file("src", "", ModuleType.PUSH)
