@@ -57,14 +57,14 @@
       "src":"/prebuilts/python/linux-x86",
       "dest":"/prebuilts/python/linux-x86",
       "rename": "true",
-      "symlink_src":"/3.10.2",
+      "symlink_src":"/3.11.4",
       "symlink_dest":"/current"
     },
     {
       "src":"/prebuilts/python/darwin-x86",
       "dest":"/prebuilts/python/darwin-x86",
       "rename": "true",
-      "symlink_src":"/3.10.2",
+      "symlink_src":"/3.11.4",
       "symlink_dest":"/current"
     },
     {
@@ -232,7 +232,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-3.11.4_20240704.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -343,7 +343,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.10.2/linux/python-linux-x86-3.10.2_20230604.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-3.11.4_20240704.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -490,7 +490,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20240704.tar.gz",
           "unzip_filename": "darwin-x86"
         },
         {
@@ -568,7 +568,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.10.2/darwin/python-darwin-x86-3.10.2_20230604.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20240704.tar.gz",
           "unzip_filename": "darwin-x86"
         },
         {
