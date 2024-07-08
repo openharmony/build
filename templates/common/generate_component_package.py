@@ -49,13 +49,14 @@ def _get_args():
 
 
 def _check_label(public_deps, value):
-    for i in value["innerapis"]:
-        if i:
-            label = i.get("label")
+    innerapis = value["innerapis"]
+    for _innerapi in innerapis:
+        if _innerapi:
+            label = _innerapi.get("label")
             if public_deps == label:
                 return label.split(':')[-1]
-            return ""
-        return ""
+            continue
+    return ""
 
 
 def _get_public_external_deps(data, public_deps):
@@ -67,6 +68,7 @@ def _get_public_external_deps(data, public_deps):
         _data = _check_label(public_deps, value)
         if _data:
             return key + ":" + _data
+        continue
     return ""
 
 
@@ -167,7 +169,6 @@ def _copy_dir(src_path, target_path):
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
             if not os.path.exists(target_path):
-                print('target_path,target_path', target_path)
                 os.makedirs(target_path)
             path1 = os.path.join(target_path, file)
             with os.fdopen(os.open(path1, os.O_WRONLY | os.O_CREAT, mode=0o640), "wb") as write_stream:
@@ -397,6 +398,9 @@ def _generate_configs(fp, module):
         fp.write('    "includes/libunwind/src",\n')
         fp.write('    "includes/libunwind/include",\n')
         fp.write('    "includes/libunwind/include/tdep-arm",\n')
+    if module == 'ability_runtime':
+        fp.write('    "includes/context",\n')
+        fp.write('    "includes/app",\n')
     fp.write('  ]\n')
     if module == 'libunwind':
         fp.write('  cflags = [\n')
@@ -420,12 +424,12 @@ def _generate_configs(fp, module):
     fp.write('  }\n')
 
 
-def _generate_prebuilt_shared_library(fp, type, module):
-    if type == 'static_library':
+def _generate_prebuilt_shared_library(fp, lib_type, module):
+    if lib_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
-    elif type == 'executable':
+    elif lib_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
-    elif type == 'etc':
+    elif lib_type == 'etc':
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     else:
         fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
@@ -701,8 +705,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         components_list: list of all components that need to be built
         build_type: build type
             0: default pack,do not change organization_name
-            1:pack ,change organization_name
-            2:do not pack,do not change organization_name
+            1: pack ,change organization_name
+            2: do not pack,do not change organization_name
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
