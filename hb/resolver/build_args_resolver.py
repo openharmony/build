@@ -101,6 +101,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             target_generator = build_module.target_generator
             target_generator.regist_arg('build_ohos_sdk', True)
             target_generator.regist_arg('build_ohos_ndk', True)
+            target_generator.regist_arg('enable_enhanced_opt', False)
             if len(build_module.args_dict['build_target'].arg_value) == 0:
                 build_module.args_dict['build_target'].arg_value = [
                     'build_ohos_sdk']
