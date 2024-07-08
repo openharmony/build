@@ -376,7 +376,21 @@ template("ohos_sanitizer_check") {
                            ])
     need_check_cfi = false
     need_check_intsan = false
+    need_check_debug = true
     bypass_cfi_target_list = []
+
+    foreach(config_name, bypass_config_debug_list) {
+      if (part_name == config_name) {
+        need_check_debug = false
+      }
+    }
+
+    if (need_check_debug && defined(sanitize) && defined(sanitize.debug)) {
+      assert(
+          sanitize.debug == false,
+          "Enable CFI can't configure 'debug=true'. Please check this target ${build_name} in ${part_name}. For local debug, try to build with '--gn-args allow_sanitize_debug=true' to bypass sanitize check.")
+    }
+
     foreach(component_name, enable_cfi_part_and_bypass_list) {
       if (part_name == component_name[0]) {
         need_check_cfi = true
@@ -406,7 +420,7 @@ template("ohos_sanitizer_check") {
               sanitize.cfi_cross_dso == true &&
               ((defined(sanitize.debug) && sanitize.debug == false) ||
                    !defined(sanitize.debug)) && !defined(sanitize.blocklist),
-          "Build targets in ${part_name} should fully enable cfi(cfi, cfi_cross_dso, !debug). For local debug, try to build with '--gn-args allow_sanitize_debug=true' to bypass sanitize check. If this target ${build_name} cannot enable cfi, add the target to ${ext_sanitizer_check_list_path} in bypass_cfi_target_list.")
+          "Build targets in ${part_name} should fully enable cfi(cfi, cfi_cross_dso, !debug). For local debug, try to build with '--gn-args allow_sanitize_debug=true' to bypass sanitize check. If this target ${build_name} cannot enable cfi, add the target to ${ext_sanitizer_check_list_path} in bypass_${build_name}.")
     }
     if (need_check_intsan) {
       assert(
