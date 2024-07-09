@@ -55,9 +55,9 @@ class ComponentUtil():
         found_bundle_file, bundle_path = _recurrent_search_bundle_file(path)
         if found_bundle_file:
             data = IoUtil.read_json_file(bundle_path)
-            return data['component']['name'] , os.path.dirname(bundle_path)
+            return data['component']['name'], os.path.dirname(bundle_path)
 
-        return '' , ''
+        return '', ''
 
     @staticmethod
     def get_default_deps(variant: str) -> str:
@@ -102,6 +102,7 @@ class ComponentUtil():
         all_bundle_path = get_all_bundle_path(CURRENT_OHOS_ROOT)
         return all_bundle_path.get(component_name)
 
+
 def _recurrent_search_bundle_file(path: str):
     cur_dir = path
     while cur_dir != CURRENT_OHOS_ROOT:
@@ -111,6 +112,7 @@ def _recurrent_search_bundle_file(path: str):
             return True, bundle_json
         cur_dir = os.path.dirname(cur_dir)
     return False, ''
+
 
 def get_all_bundle_path(path):
     if os.path.exists(COMPONENTS_PATH_DIR):

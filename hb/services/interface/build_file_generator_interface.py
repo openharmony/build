@@ -20,6 +20,7 @@ from abc import abstractmethod
 from services.interface.service_interface import ServiceInterface
 from util.log_util import LogUtil
 
+
 class BuildFileGeneratorInterface(ServiceInterface):
 
     def __init__(self):

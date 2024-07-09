@@ -27,6 +27,7 @@ from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
 from services.hpm import CMDTYPE
 
+
 class PublishArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
