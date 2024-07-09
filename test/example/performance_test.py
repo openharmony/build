@@ -61,11 +61,11 @@ class PerformanceAnalyse:
         log_error("config file:build_example.json has error:{}".format(e))
         raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
 
-    def __init__(self, performance_cmd, output_path, report_title, ptyflag=False):
+    def __init__(self, performance_cmd, output_path, report_titles, ptyflags=False):
         self.performance_cmd = script_path + performance_cmd
         self.output_path = script_path + output_path
-        self.report_title = report_title
-        self.ptyflag = ptyflag
+        self.report_title = report_titles
+        self.ptyflag = ptyflags
         self.out_queue = queue.Queue()
         self.system_info = list()
         self.ninjia_trace_list = list()
@@ -245,6 +245,7 @@ class PerformanceAnalyse:
         self.table_html += "</tbody>"
 
         self.table_html += "</table></div></body></html>"
+        return True
 
     @staticmethod
     def generate_error_content(table_name, lines):
@@ -324,9 +325,9 @@ class PerformanceAnalyse:
                 ccache_res.append(tmp.split(":"))
         ccache_res.insert(0, ["ccache item", "data"])
 
-        for item in self.c_targets_li:
-            if len(item.split()) == 6:
-                c_targets_res.append(item.split())
+        for item_ in self.c_targets_li:
+            if len(item_.split()) == 6:
+                c_targets_res.append(item_.split())
         c_targets_res.insert(0, ["subsystem", "files NO.", " percentage", "builds NO.", "percentage", "verlap rate"])
         return ccache_res, c_targets_res
 
@@ -557,8 +558,8 @@ class PerformanceAnalyse:
         Description: start performance test
         """
         try:
-            cmd = self.performance_cmd.split(" ")
-            self.exec_command_pipe(cmd)
+            cmds = self.performance_cmd.split(" ")
+            self.exec_command_pipe(cmds)
             if self.error_message:
                 err_html = self.generate_error_content("Ohos Error", self.error_message)
                 self.write_html(err_html)
