@@ -6,7 +6,7 @@
 
 """Helper functions useful when writing scripts that integrate with GN.
 
-The main functions are ToGNString and FromGNString which convert between
+The main functions are ToGNString and from_gn_string which convert between
 serialized GN variables and Python variables.
 
 To use in a random python file in the build:
@@ -27,7 +27,7 @@ class GNException(Exception):
     pass
 
 
-def ToGNString(value: str, allow_dicts: bool=True) -> str:
+def to_gn_string(value: str, allow_dicts: bool = True) -> str:
     """Returns a stringified GN equivalent of the Python value.
 
     allow_dicts indicates if this function will allow converting dictionaries
@@ -41,7 +41,7 @@ def ToGNString(value: str, allow_dicts: bool=True) -> str:
                '"'
 
     if isinstance(value, str):
-        return ToGNString(value.encode('utf-8'))
+        return to_gn_string(value.encode('utf-8'))
 
     if isinstance(value, bool):
         if value:
@@ -49,7 +49,7 @@ def ToGNString(value: str, allow_dicts: bool=True) -> str:
         return "false"
 
     if isinstance(value, list):
-        return '[ %s ]' % ', '.join(ToGNString(v) for v in value)
+        return '[ %s ]' % ', '.join(to_gn_string(v) for v in value)
 
     if isinstance(value, dict):
         if not allow_dicts:
@@ -58,7 +58,7 @@ def ToGNString(value: str, allow_dicts: bool=True) -> str:
         for key in sorted(value):
             if not isinstance(key, str):
                 raise GNException("Dictionary key is not a string.")
-            result += "%s = %s\n" % (key, ToGNString(value[key], False))
+            result += "%s = %s\n" % (key, to_gn_string(value[key], False))
         return result
 
     if isinstance(value, int):
@@ -67,7 +67,7 @@ def ToGNString(value: str, allow_dicts: bool=True) -> str:
     raise GNException("Unsupported type when printing to GN.")
 
 
-def FromGNString(input_string: str) -> dict:
+def from_gn_string(input_string: str) -> dict:
     """Converts the input string from a GN serialized value to Python values.
 
     For details on supported types see GNValueParser.Parse() below.
@@ -108,7 +108,7 @@ def FromGNString(input_string: str) -> dict:
     return parser.Parse()
 
 
-def FromGNArgs(input_string: str) -> dict:
+def from_gn_args(input_string: str) -> dict:
     """Converts a string with a bunch of gn arg assignments into a Python dict.
 
     Given a whitespace-separated list of
@@ -117,7 +117,7 @@ def FromGNArgs(input_string: str) -> dict:
 
     gn assignments, this returns a Python dict, i.e.:
 
-      FromGNArgs("foo=true\nbar=1\n") -> { 'foo': True, 'bar': 1 }.
+      from_gn_args("foo=true\nbar=1\n") -> { 'foo': True, 'bar': 1 }.
 
     Only simple types and lists supported; variables, structs, calls
     and other, more complicated things are not.
@@ -129,7 +129,7 @@ def FromGNArgs(input_string: str) -> dict:
     return parser.ParseArgs()
 
 
-def UnescapeGNString(value: list) -> str:
+def unescape_gn_string(value: list) -> str:
     """Given a string with GN escaping, returns the unescaped string.
 
     Be careful not to feed with input from a Python parsing function like
@@ -171,17 +171,17 @@ class GNValueParser(object):
         self.input = string
         self.cur = 0
 
-    def IsDone(self) -> bool:
+    def is_done(self) -> bool:
         return self.cur == len(self.input)
 
     def ConsumeWhitespace(self):
-        while not self.IsDone() and self.input[self.cur] in ' \t\n':
+        while not self.is_done() and self.input[self.cur] in ' \t\n':
             self.cur += 1
 
     def Parse(self):
         """Converts a string representing a printed GN value to the Python type.
 
-        See additional usage notes on FromGNString above.
+        See additional usage notes on from_gn_string above.
 
         - GN booleans ('true', 'false') will be converted to Python booleans.
 
@@ -198,7 +198,7 @@ class GNValueParser(object):
         """
         result = self._ParseAllowTrailing()
         self.ConsumeWhitespace()
-        if not self.IsDone():
+        if not self.is_done():
             raise GNException("Trailing input after parsing:\n  " +
                               self.input[self.cur:])
         return result
@@ -206,12 +206,12 @@ class GNValueParser(object):
     def ParseArgs(self) -> dict:
         """Converts a whitespace-separated list of ident=literals to a dict.
 
-        See additional usage notes on FromGNArgs, above.
+        See additional usage notes on from_gn_args, above.
         """
         d = {}
 
         self.ConsumeWhitespace()
-        while not self.IsDone():
+        while not self.is_done():
             ident = self._ParseIdent()
             self.ConsumeWhitespace()
             if self.input[self.cur] != '=':
@@ -224,16 +224,112 @@ class GNValueParser(object):
 
         return d
 
+    def ParseNumber(self) -> int:
+        self.ConsumeWhitespace()
+        if self.is_done():
+            raise GNException('Expected number but got nothing.')
+
+        begin = self.cur
+
+        # The first character can include a negative sign.
+        if not self.is_done() and _is_digit_or_minus(self.input[self.cur]):
+            self.cur += 1
+        while not self.is_done() and self.input[self.cur].isdigit():
+            self.cur += 1
+
+        number_string = self.input[begin:self.cur]
+        if not len(number_string) or number_string == '-':
+            raise GNException("Not a valid number.")
+        return int(number_string)
+
+    def ParseString(self) -> str:
+        self.ConsumeWhitespace()
+        if self.is_done():
+            raise GNException('Expected string but got nothing.')
+
+        if self.input[self.cur] != '"':
+            raise GNException('Expected string beginning in a " but got:\n  ' +
+                              self.input[self.cur:])
+        self.cur += 1  # Skip over quote.
+
+        begin = self.cur
+        while not self.is_done() and self.input[self.cur] != '"':
+            if self.input[self.cur] == '\\':
+                self.cur += 1  # Skip over the backslash.
+                if self.is_done():
+                    raise GNException("String ends in a backslash in:\n  " +
+                                      self.input)
+            self.cur += 1
+
+        if self.is_done():
+            raise GNException('Unterminated string:\n  ' + self.input[begin:])
+
+        end = self.cur
+        self.cur += 1  # Consume trailing ".
+
+        return unescape_gn_string(self.input[begin:end])
+
+    def ParseList(self):
+        self.ConsumeWhitespace()
+        if self.is_done():
+            raise GNException('Expected list but got nothing.')
+
+        # Skip over opening '['.
+        if self.input[self.cur] != '[':
+            raise GNException("Expected [ for list but got:\n  " +
+                              self.input[self.cur:])
+        self.cur += 1
+        self.ConsumeWhitespace()
+        if self.is_done():
+            raise GNException("Unterminated list:\n  " + self.input)
+
+        list_result = []
+        previous_had_trailing_comma = True
+        while not self.is_done():
+            if self.input[self.cur] == ']':
+                self.cur += 1  # Skip over ']'.
+                return list_result
+
+            if not previous_had_trailing_comma:
+                raise GNException("List items not separated by comma.")
+
+            list_result += [self._ParseAllowTrailing()]
+            self.ConsumeWhitespace()
+            if self.is_done():
+                break
+
+            # Consume comma if there is one.
+            previous_had_trailing_comma = self.input[self.cur] == ','
+            if previous_had_trailing_comma:
+                # Consume comma.
+                self.cur += 1
+                self.ConsumeWhitespace()
+
+        raise GNException("Unterminated list:\n  " + self.input)
+
+    def _ConstantFollows(self, constant) -> bool:
+        """Returns true if the given constant follows immediately at the
+        current location in the input. If it does, the text is consumed and
+        the function returns true. Otherwise, returns false and the current
+        position is unchanged."""
+        end = self.cur + len(constant)
+        if end > len(self.input):
+            return False  # Not enough room.
+        if self.input[self.cur:end] == constant:
+            self.cur = end
+            return True
+        return False
+    
     def _ParseAllowTrailing(self):
         """Internal version of Parse that doesn't check for trailing stuff."""
         self.ConsumeWhitespace()
-        if self.IsDone():
+        if self.is_done():
             raise GNException("Expected input to parse.")
 
         next_char = self.input[self.cur]
         if next_char == '[':
             return self.ParseList()
-        elif _IsDigitOrMinus(next_char):
+        elif _is_digit_or_minus(next_char):
             return self.ParseNumber()
         elif next_char == '"':
             return self.ParseString()
@@ -261,99 +357,3 @@ class GNValueParser(object):
             next_char = self.input[self.cur]
 
         return ident
-
-    def ParseNumber(self) -> int:
-        self.ConsumeWhitespace()
-        if self.IsDone():
-            raise GNException('Expected number but got nothing.')
-
-        begin = self.cur
-
-        # The first character can include a negative sign.
-        if not self.IsDone() and _IsDigitOrMinus(self.input[self.cur]):
-            self.cur += 1
-        while not self.IsDone() and self.input[self.cur].isdigit():
-            self.cur += 1
-
-        number_string = self.input[begin:self.cur]
-        if not len(number_string) or number_string == '-':
-            raise GNException("Not a valid number.")
-        return int(number_string)
-
-    def ParseString(self) -> str:
-        self.ConsumeWhitespace()
-        if self.IsDone():
-            raise GNException('Expected string but got nothing.')
-
-        if self.input[self.cur] != '"':
-            raise GNException('Expected string beginning in a " but got:\n  ' +
-                              self.input[self.cur:])
-        self.cur += 1  # Skip over quote.
-
-        begin = self.cur
-        while not self.IsDone() and self.input[self.cur] != '"':
-            if self.input[self.cur] == '\\':
-                self.cur += 1  # Skip over the backslash.
-                if self.IsDone():
-                    raise GNException("String ends in a backslash in:\n  " +
-                                      self.input)
-            self.cur += 1
-
-        if self.IsDone():
-            raise GNException('Unterminated string:\n  ' + self.input[begin:])
-
-        end = self.cur
-        self.cur += 1  # Consume trailing ".
-
-        return UnescapeGNString(self.input[begin:end])
-
-    def ParseList(self):
-        self.ConsumeWhitespace()
-        if self.IsDone():
-            raise GNException('Expected list but got nothing.')
-
-        # Skip over opening '['.
-        if self.input[self.cur] != '[':
-            raise GNException("Expected [ for list but got:\n  " +
-                              self.input[self.cur:])
-        self.cur += 1
-        self.ConsumeWhitespace()
-        if self.IsDone():
-            raise GNException("Unterminated list:\n  " + self.input)
-
-        list_result = []
-        previous_had_trailing_comma = True
-        while not self.IsDone():
-            if self.input[self.cur] == ']':
-                self.cur += 1  # Skip over ']'.
-                return list_result
-
-            if not previous_had_trailing_comma:
-                raise GNException("List items not separated by comma.")
-
-            list_result += [self._ParseAllowTrailing()]
-            self.ConsumeWhitespace()
-            if self.IsDone():
-                break
-
-            # Consume comma if there is one.
-            previous_had_trailing_comma = self.input[self.cur] == ','
-            if previous_had_trailing_comma:
-                # Consume comma.
-                self.cur += 1
-                self.ConsumeWhitespace()
-
-        raise GNException("Unterminated list:\n  " + self.input)
-
-    def _ConstantFollows(self, constant) -> bool:
-        """Returns true if the given constant follows immediately at the
-        current location in the input. If it does, the text is consumed and
-        the function returns true. Otherwise, returns false and the current
-        position is unchanged."""
-        end = self.cur + len(constant)
-        if end > len(self.input):
-            return False  # Not enough room.
-        if self.input[self.cur:end] == constant:
-            self.cur = end
-            return True
-        return False

@@ -34,6 +34,10 @@ class OHOSPushModule(PushModuleInterface):
         self._hdc = hdc
         OHOSPushModule._instance = self
 
+    @property
+    def hdc(self):
+        return self._hdc
+
     @staticmethod
     def get_instance():
         if OHOSPushModule._instance is not None:
@@ -41,13 +45,6 @@ class OHOSPushModule(PushModuleInterface):
         else:
             raise OHOSException(
                 'OHOSPushModule has not been instantiated', '0000')
-
-    @property
-    def hdc(self):
-        return self._hdc
-
-    def _push(self):
-        self._run_phase()
         
 
     @throw_exception
@@ -56,6 +53,9 @@ class OHOSPushModule(PushModuleInterface):
             super().run()
         except OHOSException as exception:
             raise exception
+    
+    def _push(self):
+        self._run_phase()
 
     def _run_phase(self):
         if self.args_dict['list_targets'].arg_value:

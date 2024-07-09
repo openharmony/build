@@ -31,14 +31,6 @@ class OHOSToolModule(ToolModuleInterface):
         self._gn = gn
         OHOSToolModule._instance = self
 
-    @staticmethod
-    def get_instance():
-        if OHOSToolModule._instance is not None:
-            return OHOSToolModule._instance
-        else:
-            raise OHOSException(
-                'OHOSToolModule has not been instantiated', '0000')
-
     @property
     def gn(self):
         return self._gn
@@ -60,3 +52,11 @@ class OHOSToolModule(ToolModuleInterface):
 
     def clean_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['clean'], self)
+
+    @staticmethod
+    def get_instance():
+        if OHOSToolModule._instance is not None:
+            return OHOSToolModule._instance
+        else:
+            raise OHOSException(
+                'OHOSToolModule has not been instantiated', '0000')
