@@ -171,6 +171,7 @@ template("_ohos_test") {
 
 template("ohos_unittest") {
   _ohos_test(target_name) {
+    testonly = true
     forward_variables_from(invoker, "*")
     test_type = "unittest"
     deps = []
