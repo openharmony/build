@@ -39032,7 +39032,8 @@
             "//developtools/global_resource_tool:restool"
         ],
         "deps_gni": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ]
     }
 }
