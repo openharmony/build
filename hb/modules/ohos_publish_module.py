@@ -34,6 +34,10 @@ class OHOSPublishModule(PublishModuleInterface):
         self._hpm = hpm
         OHOSPublishModule._instance = self
 
+    @property
+    def hpm(self):
+        return self._hpm
+
     @staticmethod
     def get_instance():
         if OHOSPublishModule._instance is not None:
@@ -42,20 +46,16 @@ class OHOSPublishModule(PublishModuleInterface):
             raise OHOSException(
                 'OHOSPublishModule has not been instantiated', '0000')
 
-    @property
-    def hpm(self):
-        return self._hpm
-
-    def _publish(self):
-        self._run_phase()
-        self.hpm.execute_hpm_cmd(CMDTYPE.PUBLISH)
-
     @throw_exception
     def run(self):
         try:
             super().run()
         except OHOSException as exception:
             raise exception
+
+    def _publish(self):
+        self._run_phase()
+        self.hpm.execute_hpm_cmd(CMDTYPE.PUBLISH)
 
     def _run_phase(self):
         for arg in self.args_dict.values():
