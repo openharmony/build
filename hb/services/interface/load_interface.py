@@ -20,6 +20,7 @@ from services.interface.service_interface import ServiceInterface
 from resources.config import Config
 from util.log_util import LogUtil
 
+
 class LoadInterface(ServiceInterface):
 
     def __init__(self):
