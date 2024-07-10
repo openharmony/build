@@ -128,6 +128,7 @@ class Analyzer:
                 items = ele['subsystem'], ele['component'], ele['file_path'], str(ele['line_num']), ele['include_cmd']
                 f.write(" ".join(items) + "\n")
 
+
 def get_args():
     parser = argparse.ArgumentParser(
         description=f"common_template.\n")

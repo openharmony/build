@@ -344,9 +344,9 @@ def _copy_license(args):
     print("license_out : ", license_out)
     if not os.path.exists(license_out):
         os.makedirs(license_out)
-    license = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
-    if os.path.isfile(license):
-        shutil.copy(license, license_out)
+    license_file = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
+    if os.path.isfile(license_file):
+        shutil.copy(license_file, license_out)
     else:
         license_default = os.path.join(args.get("root_path"), "build", "LICENSE")
         shutil.copy(license_default, license_out)

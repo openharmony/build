@@ -172,7 +172,7 @@ def check(args) -> list:
         else:
             raise Exception(message)
 
-    check_part_deps(args, part_pattern, path_parts_info,compile_standard_allow_info, depfiles)
+    check_part_deps(args, part_pattern, path_parts_info, compile_standard_allow_info, depfiles)
 
     return depfiles
 

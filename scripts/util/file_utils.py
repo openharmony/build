@@ -29,6 +29,7 @@ def find_top():
             return cur_dir
         cur_dir = os.path.dirname(cur_dir)
 
+
 # Read json file data
 def read_json_file(input_file):
     if not os.path.exists(input_file):
@@ -98,7 +99,7 @@ def __check_changes(output_file, content):
 # Write file data
 def write_file(output_file, content):
     code_dir = find_top()
-    os_name= platform.system().lower()
+    os_name = platform.system().lower()
     gn_exe = os.path.join(code_dir, f'prebuilts/build-tools/{os_name}-x86/bin/gn')
     file_dir = os.path.dirname(os.path.abspath(output_file))
     if not os.path.exists(file_dir):
