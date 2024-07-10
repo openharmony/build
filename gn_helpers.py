@@ -32,7 +32,8 @@ def to_gn_string(value: str, allow_dicts: bool = True) -> str:
 
     allow_dicts indicates if this function will allow converting dictionaries
     to GN scopes. This is only possible at the top level, you can't nest a
-    GN scope in a list, so this should be set to False for recursive calls."""
+    GN scope in a list, so this should be set to False for recursive calls.
+    """
     if isinstance(value, str):
         if value.find('\n') >= 0:
             raise GNException("Trying to print a string with a newline in it.")
@@ -134,7 +135,8 @@ def unescape_gn_string(value: list) -> str:
 
     Be careful not to feed with input from a Python parsing function like
     'ast' because it will do Python unescaping, which will be incorrect when
-    fed into the GN unescaper."""
+    fed into the GN unescaper.
+    """
     result = []
     i = 0
     while i < len(value):
