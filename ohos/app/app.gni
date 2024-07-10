@@ -16,7 +16,6 @@ import("//build/ohos/app/app_internal.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/common/collect_target.gni")
-import("//build/templates/common/copy.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
@@ -205,26 +204,43 @@ template("ohos_resources") {
 
 if (app_need_publicity) {
   template("_ohos_publicity") {
-    assert(defined(invoker.publicity_file),
-           "publicity_file must be defined for ${target_name}.")
+    inherit_list = [
+      "_hap_name",
+      "module_install_dir",
+      "relative_install_dir",
+    ]
 
-    forward_variables_from(invoker,
-                           [
-                             "install_enable",
-                             "install_images",
-                             "module_install_dir",
-                             "relative_install_dir",
-                           ])
+    forward_variables_from(invoker, inherit_list)
 
-    ohos_copy(target_name) {
-      sources = [ invoker.publicity_file ]
-      outputs = [ "${target_out_dir}/${target_name}/publicity.xml" ]
+    action(target_name) {
+      script = "//build/scripts/collect_publicity.py"
       module_type = "app"
-      if (!defined(install_enable)) {
-        install_enable = true
+      if (defined(module_install_dir)) {
+        not_needed([ "relative_install_dir" ])
+        install_dir = string_replace(module_install_dir, "${module_type}/", "")
+      } else if (defined(relative_install_dir)) {
+        install_dir = relative_install_dir
+      } else {
+        install_dir = ""
       }
-      part_name = invoker._part_name
-      subsystem_name = invoker._subsystem_name
+
+      assert(install_dir != "", "empty install dir is invalid.")
+      args = []
+      if (defined(invoker.publicity_file)) {
+        inputs = [ invoker.publicity_file ]
+        source = inputs[0]
+        args += [
+          "--source",
+          rebase_path(source, root_build_dir),
+        ]
+      } else {
+        print("${invoker.module_label} need to set publicity_file.")
+      }
+      outputs = [ "${root_build_dir}/app_publicity/${install_dir}/${_hap_name}_publicity.xml" ]
+      args += [
+        "--output",
+        rebase_path(outputs[0], root_build_dir),
+      ]
     }
   }
 }
@@ -233,6 +249,7 @@ template("ohos_app") {
   forward_variables_from(invoker,
                          [
                            "testonly",
+                           "install_enable",
                            "install_images",
                            "module_install_dir",
                            "relative_install_dir",
@@ -303,6 +320,10 @@ template("ohos_app") {
     forward_variables_from(invoker, [ "install_images" ])
   }
 
+  if (!defined(install_enable)) {
+    install_enable = true
+  }
+
   if (!_test_target) {
     if (defined(install_images)) {
       app_allow_images = [ "system" ]
@@ -327,19 +348,12 @@ template("ohos_app") {
           "Set module_install_dir or relative_install_dir field in the ${module_label}. Do not install the module to app.")
     }
 
-    if (defined(invoker.publicity_file)) {
-      if (app_need_publicity) {
+    if (app_need_publicity) {
+      if (install_enable) {
         _publicity_target = "${_main_target_name}_publicity"
         _ohos_publicity(_publicity_target) {
-          forward_variables_from(invoker,
-                                 [
-                                   "publicity_file",
-                                   "install_enable",
-                                 ])
+          forward_variables_from(invoker, [ "publicity_file" ])
         }
-      } else {
-        print(
-            "${module_label} not support set publicity_file field, ${invoker.publicity_file} need to delete")
       }
     }
   }
@@ -355,10 +369,6 @@ template("ohos_app") {
       module_install_images += invoker.install_images
     } else {
       module_install_images = [ "system" ]
-    }
-    install_enable = true
-    if (defined(invoker.install_enable)) {
-      install_enable = invoker.install_enable
     }
 
     if (defined(invoker.symlink_target_name)) {
@@ -391,10 +401,17 @@ template("ohos_app") {
     ]
 
     if (!_test_target && app_need_publicity) {
-      if (defined(invoker.publicity_file)) {
+      if (install_enable) {
         deps += [ ":${_publicity_target}" ]
       } else {
-        print("${module_label} need to set publicity_file")
+        if (defined(invoker.publicity_file)) {
+          print(
+              "${module_label} is not install, please delete set publicity_file: ${invoker.publicity_file}.")
+        }
+      }
+    } else {
+      if (defined(invoker.publicity_file)) {
+        not_needed(invoker, [ "publicity_file" ])
       }
     }
     if (defined(invoker.deps)) {
@@ -487,6 +504,7 @@ template("ohos_hap") {
   forward_variables_from(invoker,
                          [
                            "testonly",
+                           "install_enable",
                            "install_images",
                            "module_install_dir",
                            "relative_install_dir",
@@ -622,6 +640,10 @@ template("ohos_hap") {
     module_source_dir = get_label_info(":${_main_target_name}", "dir")
   }
 
+  if (!defined(install_enable)) {
+    install_enable = true
+  }
+
   if (!_test_target) {
     if (defined(install_images)) {
       app_allow_images = [ "system" ]
@@ -646,19 +668,12 @@ template("ohos_hap") {
           "Set module_install_dir or relative_install_dir field in the ${module_label}. Do not install the module to app.")
     }
 
-    if (defined(invoker.publicity_file)) {
-      if (app_need_publicity) {
+    if (app_need_publicity) {
+      if (install_enable) {
         _publicity_target = "${_main_target_name}_publicity"
         _ohos_publicity(_publicity_target) {
-          forward_variables_from(invoker,
-                                 [
-                                   "publicity_file",
-                                   "install_enable",
-                                 ])
+          forward_variables_from(invoker, [ "publicity_file" ])
         }
-      } else {
-        print(
-            "${module_label} not support set publicity_file field, ${invoker.publicity_file} need to delete")
       }
     }
   }
@@ -678,10 +693,6 @@ template("ohos_hap") {
     if (defined(invoker.install_images)) {
       module_install_images = []
       module_install_images += invoker.install_images
-    }
-    install_enable = true
-    if (defined(invoker.install_enable)) {
-      install_enable = invoker.install_enable
     }
 
     module_output_extension = ".hap"
@@ -714,10 +725,17 @@ template("ohos_hap") {
       "//developtools/packing_tool:packing_tool",
     ]
     if (!_test_target && app_need_publicity) {
-      if (defined(invoker.publicity_file)) {
+      if (install_enable) {
         deps += [ ":${_publicity_target}" ]
       } else {
-        print("${module_label} need to set publicity_file")
+        if (defined(invoker.publicity_file)) {
+          print(
+              "${module_label} is not install, please delete set publicity_file: ${invoker.publicity_file}.")
+        }
+      }
+    } else {
+      if (defined(invoker.publicity_file)) {
+        not_needed(invoker, [ "publicity_file" ])
       }
     }
     if (!skip_gen_module_info) {
