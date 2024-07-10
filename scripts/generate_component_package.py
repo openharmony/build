@@ -169,9 +169,9 @@ def _copy_includes(args, module, includes: list):
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
     for include in includes:
-        splitInclude = include.split("//")[1]
-        realIncludePath = os.path.join(args.get("root_path"), splitInclude)
-        _copy_dir(realIncludePath, includes_out_dir)
+        split_include = include.split("//")[1]
+        real_include_path = os.path.join(args.get("root_path"), split_include)
+        _copy_dir(real_include_path, includes_out_dir)
     print("_copy_includes has done ")
 
 
@@ -270,9 +270,9 @@ def _copy_license(args):
     print("license_out : ", license_out)
     if not os.path.exists(license_out):
         os.makedirs(license_out)
-    license = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
-    if os.path.isfile(license):
-        shutil.copy(license, license_out)
+    license_file = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
+    if os.path.isfile(license_file):
+        shutil.copy(license_file, license_out)
 
 
 def _copy_readme(args):
@@ -366,17 +366,17 @@ def _generate_build_gn(args, module, json_data, deps: list, innerkit_json):
 
 def _parse_module_list(args):
     module_list = []
-    publicinfoPath = os.path.join(
+    publicinfo_path = os.path.join(
         args.get("out_path"),
         args.get("subsystem_name"),
         args.get("part_name"),
         "publicinfo",
     )
-    print("publicinfoPath", publicinfoPath)
-    if os.path.exists(publicinfoPath) is False:
+    print("publicinfoPath", publicinfo_path)
+    if os.path.exists(publicinfo_path) is False:
         return module_list
-    publicinfoDir = os.listdir(publicinfoPath)
-    for filename in publicinfoDir:
+    publicinfo_dir = os.listdir(publicinfo_path)
+    for filename in publicinfo_dir:
         if filename.endswith(".json"):
             module_name = filename.split(".json")[0]
             module_list.append(module_name)

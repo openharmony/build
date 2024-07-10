@@ -44,9 +44,9 @@ def copy_tree(src: str,
 def _do_copy_tree(items: list,
                   src: str,
                   dest: str,
-                  follow_all_symlinks: bool=False,
-                  follow_outside_symlinks: bool=False) -> str:
-    os.makedirs(dest, exist_ok=True)
+                  follow_all_symlinks: bool = False,
+                  follow_outside_symlinks: bool = False) -> str:
+    os.makedirs(dest, exist_ok = True)
     for item in items:
         srcname = os.path.join(src, item.name)
         destname = os.path.join(dest, item.name)

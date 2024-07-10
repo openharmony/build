@@ -78,6 +78,12 @@ class PyCache():
             raise Exception('Error: failed to get PYCACHE_DIR')
         self.storage = Storage()
 
+    @classmethod
+    def cache_key(cls, path):
+        sha256 = hashlib.sha256()
+        sha256.update(path.encode())
+        return sha256.hexdigest()
+    
     def retrieve(self, output_paths, prefix=''):
         for path in output_paths:
             _, cache_artifact = self.descend_directory('{}{}'.format(
@@ -111,12 +117,6 @@ class PyCache():
         with open(daemon_config_file, 'r') as jsonfile:
             data = json.load(jsonfile)
             return data.get('host'), data.get('port')
-
-    @classmethod
-    def cache_key(cls, path):
-        sha256 = hashlib.sha256()
-        sha256.update(path.encode())
-        return sha256.hexdigest()
 
     def descend_directory(self, path):
         digest = self.cache_key(path)

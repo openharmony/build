@@ -90,15 +90,15 @@ class Module():
             print(ohos_string)
             
         subsystem_pattern = re.compile(r'(?<=subsystem_name = ").+?(?="\n)')
-        if subsystem_pattern.search(ohos_string) != None:
+        if subsystem_pattern.search(ohos_string) is not None:
             subsystem_name = subsystem_pattern.search(ohos_string).group()
                          
         part_pattern = re.compile(r'(?<=part_name = ").+?(?="\n)')
-        if part_pattern.search(ohos_string) != None:
+        if part_pattern.search(ohos_string) is not None:
             part_name = part_pattern.search(ohos_string).group()
         
         deps_pattern = re.compile(r'(?<=deps = \[).+?(?=])', re.DOTALL)
-        deps_raw = deps_pattern.search(ohos_string).group() if deps_pattern.search(ohos_string) != None \
+        deps_raw = deps_pattern.search(ohos_string).group() if deps_pattern.search(ohos_string) is not None \
                    else ''
         deps_list = []
         deps_raw_list = deps_raw.replace('\n', '').replace(' ', '').replace('"', '').split(',')
@@ -107,7 +107,7 @@ class Module():
             deps_list.append(dep)
 
         external_deps_pattern = re.compile(r'(?<=external_deps = \[).+?(?=])', re.DOTALL)
-        external_deps_raw = external_deps_pattern.search(ohos_string).group() if external_deps_pattern.search(ohos_string) != None \
+        external_deps_raw = external_deps_pattern.search(ohos_string).group() if external_deps_pattern.search(ohos_string) is not None \
                             else ''
         external_deps_list = []
         external_deps_raw_list = external_deps_raw.replace('\n', '').replace(' ', '').replace('"', '').split(',')

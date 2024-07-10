@@ -63,7 +63,7 @@ def download(download_url, savepath):
         print("\nFile exsits!")
 
     filesize = os.path.getsize(os.path.join(savepath, filename))
-    print('File size = %.2f Mb' % (filesize/1024/1024))
+    print('File size = %.2f Mb' % (filesize / 1024 / 1024))
 
 
 def extract_file(filename):
@@ -103,6 +103,7 @@ def npm_install(target_dir, args):
             procs.append(proc)
     for proc in procs:
         out, error = proc.communicate(timeout=60)
+
 
 def main():
     parser = argparse.ArgumentParser()
