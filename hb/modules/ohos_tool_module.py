@@ -35,23 +35,23 @@ class OHOSToolModule(ToolModuleInterface):
     def gn(self):
         return self._gn
 
-    def list_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['ls'], self)
+    def clean_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['clean'], self)
 
     def desc_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['desc'], self)
+
+    def format_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['format'], self)
+
+    def list_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['ls'], self)
 
     def path_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['path'], self)
 
     def refs_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['refs'], self)
-
-    def format_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['format'], self)
-
-    def clean_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['clean'], self)
 
     @staticmethod
     def get_instance():
