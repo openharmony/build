@@ -39029,10 +39029,12 @@
         ],
         "deps_component_absolute": [
             "//arkcompiler/ets_frontend/es2panda:es2panda",
-            "//developtools/global_resource_tool:restool"
+            "//developtools/global_resource_tool:restool",
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "deps_gni": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ]
     }
 }
