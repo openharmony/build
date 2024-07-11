@@ -114,7 +114,7 @@ class PerformanceAnalyse:
         log_error("config file:build_example.json has error:{}".format(e))
         raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
 
-    def __init__(self, performance_cmd, output_path, report_titles, ptyflags=False):
+    def __init__(self, performance_cmd, output_path, report_titles, ptyflags = False):
         self.performance_cmd = script_path + performance_cmd
         self.output_path = script_path + output_path
         self.report_title = report_titles
