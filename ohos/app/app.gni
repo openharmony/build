@@ -204,13 +204,12 @@ template("ohos_resources") {
 
 if (app_need_publicity) {
   template("_ohos_publicity") {
-    inherit_list = [
-      "_hap_name",
-      "module_install_dir",
-      "relative_install_dir",
-    ]
-
-    forward_variables_from(invoker, inherit_list)
+    forward_variables_from(invoker,
+                           [
+                             "_hap_name",
+                             "module_install_dir",
+                             "relative_install_dir",
+                           ])
 
     action(target_name) {
       script = "//build/scripts/collect_publicity.py"
