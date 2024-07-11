@@ -156,7 +156,7 @@ def unescape_gn_string(value: list) -> str:
     return ''.join(result)
 
 
-def _IsDigitOrMinus(char: str):
+def _is_digit_or_minus(char: str):
     return char in "-0123456789"
 
 

@@ -662,7 +662,7 @@ def expand_file_args(args):
         # This should match parse_gn_list. The output is either a GN-formatted list
         # or a literal (with no quotes).
         if isinstance(expansion, list):
-            new_args[i] = arg[:match.start()] + gn_helpers.ToGNString(
+            new_args[i] = arg[:match.start()] + gn_helpers.to_gn_string(
                 expansion)
         else:
             new_args[i] = arg[:match.start()] + str(expansion)
