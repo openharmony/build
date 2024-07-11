@@ -282,7 +282,7 @@ template("ohos_rust_executable") {
           get_path_info(get_path_info(invoker.sources, "dir"), "abspath")
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
-      
+
       if (defined(invoker.install_images)) {
         install_images = []
         install_images = invoker.install_images
