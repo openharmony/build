@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/ohos/kernel/kernel.gni")
+
 template("ohos_build_ko") {
   _device_name = invoker.device_name
   _arch = invoker.device_arch
@@ -20,7 +22,7 @@ template("ohos_build_ko") {
     sources_name = get_path_info(sources, "name")
     source_path_info = get_path_info(sources[0], "dir")
     ko_out_dir = "$root_out_dir/packages/phone/chip_ckm"
-    script = "//build/templates/kernel/make_ko.sh"
+    script = "//build/templates/kernel/${linux_kernel_version}/make_ko.sh"
     args = [
       rebase_path(source_path_info, root_out_dir),
       _target_ko_name,
