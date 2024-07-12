@@ -31,6 +31,10 @@ class OHOSToolModule(ToolModuleInterface):
         self._gn = gn
         OHOSToolModule._instance = self
 
+    @property
+    def gn(self):
+        return self._gn
+    
     @staticmethod
     def get_instance():
         if OHOSToolModule._instance is not None:
@@ -39,24 +43,20 @@ class OHOSToolModule(ToolModuleInterface):
             raise OHOSException(
                 'OHOSToolModule has not been instantiated', '0000')
 
-    @property
-    def gn(self):
-        return self._gn
-
-    def list_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['ls'], self)
+    def clean_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['clean'], self)
 
     def desc_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['desc'], self)
+
+    def format_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['format'], self)
+
+    def list_targets(self):
+        self.args_resolver.resolve_arg(self.args_dict['ls'], self)
 
     def path_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['path'], self)
 
     def refs_targets(self):
         self.args_resolver.resolve_arg(self.args_dict['refs'], self)
-
-    def format_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['format'], self)
-
-    def clean_targets(self):
-        self.args_resolver.resolve_arg(self.args_dict['clean'], self)
