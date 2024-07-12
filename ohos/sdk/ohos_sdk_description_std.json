@@ -1136,5 +1136,19 @@
         "target_os": [
             "darwin"
         ]
-    }
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp:hap-sign-tool",
+        "target_os": [
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp:copy_signature_tools_resource",
+        "target_os": [
+            "ohos"
+        ]
+   }
 ]
