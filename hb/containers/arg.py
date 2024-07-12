@@ -67,6 +67,7 @@ class ModuleType(Enum):
     UPDATE = 9
     PUSH = 10
 
+
 class ArgType():
 
     NONE = 0
@@ -172,10 +173,6 @@ class Arg():
     def arg_value(self):
         return self._arg_value
 
-    @arg_value.setter
-    def arg_value(self, value):
-        self._arg_value = value
-
     @property
     def arg_help(self):
         return self._arg_help
@@ -195,10 +192,6 @@ class Arg():
     @property
     def resolve_function(self):
         return self._resolve_function
-
-    @resolve_function.setter
-    def resolve_function(self, value):
-        self._resolve_function = value
 
     @staticmethod
     @throw_exception
@@ -285,6 +278,14 @@ class Arg():
                     oh_arg.arg_name, oh_arg.arg_value, module_type)
 
         return args_dict
+        
+    @arg_value.setter
+    def arg_value(self, value):
+        self._arg_value = value
+
+    @resolve_function.setter
+    def resolve_function(self, value):
+        self._resolve_function = value
 
     @staticmethod
     @throw_exception

@@ -45,4 +45,4 @@ class OHOSEnvModule(EnvModuleInterface):
             self.args_resolver.resolve_arg(self.args_dict['install'], self)
 
     def clean(self):
-        self.args_resolver.resolve_arg(self.args_dict['clean'],self)
+        self.args_resolver.resolve_arg(self.args_dict['clean'], self)
