@@ -230,7 +230,7 @@ def write_bundle_json(res_def_name, cmd_path):
         res = data.get("component").get("build").get("sub_component")
         res.append("//{}:{}".format(cmd_path, res_def_name))
         data["component"]["build"]["sub_component"] = res
-    config_res = CURRENT_OHOS_ROOT + "/build/common/bundle.json"
+    config_res = os.path.join(CURRENT_OHOS_ROOT, "build/common/bundle.json")
     with open(config_res, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file, indent=4, ensure_ascii=False)
 
@@ -263,7 +263,7 @@ class TestModuleBuild:
         """
         res_def_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + res_def_name
-        res_path = BUILD_RES_PATH + "/libtest_ohos_shared_library.z.so"
+        res_path = os.path.join(BUILD_RES_PATH, "libtest_ohos_shared_library.z.so")
         result = exec_command_communicate(cmd_path, res_path, res_def_name)
         assert result, "build test_ohos_shared_library failed"
 
@@ -311,7 +311,7 @@ class TestModuleBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + "/src/" + function_name + "/hello.o"
+        res_path = os.path.join(RESULT_PATH, "src", function_name, "hello.o")
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_static_library failed"
 
@@ -321,7 +321,7 @@ class TestModuleBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + "/src/" + function_name + "/adder.o"
+        res_path = os.path.join(RESULT_PATH, "src", function_name, "adder.o")
         result = exec_command_communicate(cmd_path, res_path, function_name)
         assert result, "build test_ohos_source_set failed"
 
@@ -344,7 +344,7 @@ class TestPrecompiledBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_common = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + function_name + "/test_ohos_prebuilt_executable.stamp"
+        res_path = os.path.join(RESULT_PATH, function_name, "test_ohos_prebuilt_executable.stamp")
         result = exec_command_communicate(cmd_common, res_path, function_name)
         assert result, "build test_ohos_prebuilt_executable failed"
 
@@ -354,7 +354,7 @@ class TestPrecompiledBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + function_name + "/test_ohos_prebuilt_shared_library.stamp"
+        res_path = os.path.join(RESULT_PATH, function_name, "test_ohos_prebuilt_shared_library.stamp")
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_prebuilt_shared_library failed"
 
@@ -364,7 +364,7 @@ class TestPrecompiledBuild:
         """
         function_name = inspect.currentframe().f_code.co_name
         common_res_def = TEMPLATE_SOURCE_PATH + function_name
-        res_path = RESULT_PATH + function_name + "/test_ohos_prebuilt_static_library.stamp"
+        res_path = os.path.join(RESULT_PATH, function_name, "test_ohos_prebuilt_static_library.stamp")
         result = exec_command_communicate(common_res_def, res_path, function_name)
         assert result, "build test_ohos_prebuilt_static_library failed"
 
@@ -572,7 +572,8 @@ def write_initial_bundle_json():
     """
     with open(CONFIG_PATH, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
-    config_res = CURRENT_OHOS_ROOT + "/build/common/bundle.json"
+    config_res = os.path.join(CURRENT_OHOS_ROOT, "build/common/bundle.json")
+    
     with open(config_res, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file, indent=4, ensure_ascii=False)
 
