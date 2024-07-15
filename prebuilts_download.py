@@ -71,11 +71,14 @@ def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
     return check_sha256
 
 
-def _config_parse(config: dict, tool_repo: str) -> dict:
+def _config_parse(config: dict, tool_repo: str, host_os_version: str) -> dict:
     parse_dict = dict()
     parse_dict['unzip_dir'] = config.get('unzip_dir')
     parse_dict['huaweicloud_url'] = tool_repo + config.get('file_path')
     parse_dict['unzip_filename'] = config.get('unzip_filename')
+    config_os_version = config.get('host_os_version')
+    if config_os_version is not None and config_os_version != host_os_version:
+        parse_dict['huaweicloud_url'].replace(config_os_version, host_os_version, 1)
     md5_huaweicloud_url_cmd = 'echo ' + parse_dict.get('huaweicloud_url') + "|md5sum|cut -d ' ' -f1"
     parse_dict['md5_huaweicloud_url'], err, returncode = _run_cmd(md5_huaweicloud_url_cmd)
     parse_dict['bin_file'] = os.path.basename(parse_dict.get('huaweicloud_url'))
@@ -165,7 +168,7 @@ def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     with ThreadPoolExecutor(max_workers=cnt) as pool:
         tasks = dict()
         for config_info in config:
-            parse_dict = _config_parse(config_info, args.tool_repo)
+            parse_dict = _config_parse(config_info, args.tool_repo, args.host_os_version)
             unzip_dir = parse_dict.get('unzip_dir')
             huaweicloud_url = parse_dict.get('huaweicloud_url')
             unzip_filename = parse_dict.get('unzip_filename')
@@ -345,6 +348,7 @@ def main():
                         help='npm download source')
     parser.add_argument('--host-cpu', help='host cpu', required=True)
     parser.add_argument('--host-platform', help='host platform', required=True)
+    parser.add_argument('--host-os-version', help='host version', required=False)
     parser.add_argument('--config-file', help='prebuilts download config file')
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -353,6 +357,7 @@ def main():
 
     host_platform = args.host_platform
     host_cpu = args.host_cpu
+    host_os_version = args.host_os_version
     tool_repo = args.tool_repo
     if args.build_arkuix:
         config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
