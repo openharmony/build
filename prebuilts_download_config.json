@@ -584,8 +584,8 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20240704.tar.gz",
-          "unzip_filename": "darwin-arm64"
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20240704.tar.gz",
+          "unzip_filename": "darwin-x86"
         },
         {
           "unzip_dir": "prebuilts/rustc",
