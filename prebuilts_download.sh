@@ -170,7 +170,7 @@ fi
 
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
-if [ "x$host_os_version" != "$host_os_version" ]; then
+if [ "x$host_os_version" != "x" ]; then
     host_os_version="--host-os-version $host_os_version"
 fi
 echo "prebuilts_download start"
