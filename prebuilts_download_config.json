@@ -68,6 +68,20 @@
       "symlink_dest":"/current"
     },
     {
+      "src":"/prebuilts/python/linux-arm64",
+      "dest":"/prebuilts/python/linux-arm64",
+      "rename": "true",
+      "symlink_src":"/3.11.4",
+      "symlink_dest":"/current"
+    },
+    {
+      "src":"/prebuilts/python/darwin-arm64",
+      "dest":"/prebuilts/python/darwin-arm64",
+      "rename": "true",
+      "symlink_src":"/3.11.4",
+      "symlink_dest":"/current"
+    },
+    {
       "src": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi",
       "tmp": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi2",
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
@@ -232,8 +246,9 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-3.11.4_20240704.tar.gz",
-          "unzip_filename": "linux-x86"
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-Ubuntu_18.04-3.11.4_20240715.tar.gz",
+          "unzip_filename": "linux-x86",
+          "os_version": "Ubuntu_18.04"
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
@@ -343,8 +358,9 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-3.11.4_20240704.tar.gz",
-          "unzip_filename": "linux-x86"
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-Ubuntu_18.04-3.11.4_20240715.tar.gz",
+          "unzip_filename": "linux-x86",
+          "os_version": "Ubuntu_18.04"
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
@@ -490,8 +506,8 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20240704.tar.gz",
-          "unzip_filename": "darwin-x86"
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20240704.tar.gz",
+          "unzip_filename": "darwin-arm64"
         },
         {
           "unzip_dir": "prebuilts/rustc",
@@ -568,8 +584,8 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20240704.tar.gz",
-          "unzip_filename": "darwin-x86"
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20240704.tar.gz",
+          "unzip_filename": "darwin-arm64"
         },
         {
           "unzip_dir": "prebuilts/rustc",

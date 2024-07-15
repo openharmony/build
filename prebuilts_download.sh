@@ -77,6 +77,7 @@ case $(uname -s) in
     Linux)
 
         host_platform=linux
+        host_os_version=$(cat /etc/issue | grep -oE 'Ubuntu [0-9]{2}.[0-9]{2}' | sed  's/ /\-/')
         ;;
     Darwin)
         host_platform=darwin
@@ -90,9 +91,11 @@ case $(uname -m) in
     arm64)
 
         host_cpu=arm64
+        host_cpu_prefix=arm64
         ;;
     *)
         host_cpu=x86_64
+        host_cpu_prefix=x86
 esac
 
 if [ "X${SKIP_SSL}" == "XYES" ];then
@@ -167,12 +170,15 @@ fi
 
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
+if [ "x$host_os_version" != "$host_os_version" ]; then
+    host_os_version="--host-os-version $host_os_version"
+fi
 echo "prebuilts_download start"
 if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
 fi
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $host_os_version
 if [ -f "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja" ];then
     rm -rf "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja"
 fi
@@ -191,12 +197,12 @@ if [[ -d "${code_dir}/prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/bin" && 
 fi
 
 if [[ "${host_platform}" == "linux" ]]; then
-    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.11.4/bin/pip3.11
+    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/3.11.4/bin/pip3.11
 elif [[ "${host_platform}" == "darwin" ]]; then
-    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-x86/3.11.4/bin/pip3.11
+    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/3.11.4/bin/pip3.11
 fi
-prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-x86/3.11.4/bin/python3.11"
-prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-x86/3.11.4/bin/pip3.11"
+prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/current/bin/python3"
+prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/current/bin/pip3"
 $prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto cryptography json5\=\=0.9.6
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
