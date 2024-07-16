@@ -23,10 +23,6 @@ declare_args() {
 }
 
 declare_args() {
-  input_ext_feature_magiccursor = false
-}
-
-declare_args() {
   build_version_alpha = true
 }
 
