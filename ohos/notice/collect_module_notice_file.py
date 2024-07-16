@@ -42,7 +42,7 @@ def is_top_dir(current_dir: str):
 
 def find_license_recursively(current_dir: str, default_license: str):
     if is_top_dir(current_dir):
-        return default_license
+        return None
     for file in LICENSE_CANDIDATES:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
@@ -107,6 +107,8 @@ def do_collect_notice_files(options, depfiles: str):
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
     if notice_file is None:
+        notice_file = find_license_recursively(options.module_source_dir,
+                                               options.default_license)
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
