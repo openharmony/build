@@ -204,7 +204,8 @@ llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
 llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
 llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
 llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"
-llvm_dir_list=($llvm_dir $llvm_dir_win $llvm_dir_mac_x86 $llvm_dir_mac_arm64)
+llvm_dir_ohos_arm64="${code_dir}/prebuilts/clang/ohos/ohos-arm64"
+llvm_dir_list=($llvm_dir $llvm_dir_win $llvm_dir_mac_x86 $llvm_dir_mac_arm64 $llvm_dir_ohos_arm64)
 
 # copy libcxx-ndk library outside c++
 function copy_inside_cxx(){
