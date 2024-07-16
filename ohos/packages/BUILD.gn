@@ -15,8 +15,8 @@ import("//build/config/python.gni")
 import("//build/ohos/sa_profile/sa_profile.gni")
 
 import("//build/ohos.gni")
-import("//build/ohos_var.gni")
 import("//build/ohos/build_var.gni")
+import("//build/ohos_var.gni")
 
 import("//build/ohos/hisysevent/hisysevent.gni")
 
@@ -214,7 +214,7 @@ foreach(_platform, target_platform_list) {
       rebase_path(_collected_notice_zipfile, root_build_dir),
       "--notice-module-info",
       rebase_path(_notice_module_info_file, root_build_dir),
-      "--notice-install-dir"
+      "--notice-install-dir",
     ]
     if (is_system_component) {
       args += [ "system/etc" ]
