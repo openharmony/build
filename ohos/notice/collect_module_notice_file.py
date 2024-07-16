@@ -40,15 +40,14 @@ def is_top_dir(current_dir: str):
     return os.path.exists(os.path.join(current_dir, '.gn'))
 
 
-def find_license_recursively(current_dir: str, default_license: str):
+def find_license_recursively(current_dir: str):
     if is_top_dir(current_dir):
         return None
     for file in LICENSE_CANDIDATES:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)
-    return find_license_recursively(os.path.dirname(current_dir),
-                                    default_license)
+    return find_license_recursively(os.path.dirname(current_dir))
 
 
 def find_opensource_recursively(current_dir: str):
@@ -107,8 +106,7 @@ def do_collect_notice_files(options, depfiles: str):
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
     if notice_file is None:
-        notice_file = find_license_recursively(options.module_source_dir,
-                                               options.default_license)
+        notice_file = find_license_recursively(options.module_source_dir)
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
@@ -169,7 +167,6 @@ def main(args):
     build_utils.add_depfile_option(parser)
 
     parser.add_argument('--license-file', required=False)
-    parser.add_argument('--default-license', required=True)
     parser.add_argument('--output', action='append', required=False)
     parser.add_argument('--sources', action='append', required=False)
     parser.add_argument('--sdk-install-info-file', required=False)
