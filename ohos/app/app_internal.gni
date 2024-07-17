@@ -432,7 +432,6 @@ template("app_sign") {
     "hap_name",
     "install_module_info",
     "compatible_version",
-    "hap_list",
   ]
   if (defined(invoker.hap_list)) {
     sign_variables += [ "hap_list" ]
