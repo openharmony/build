@@ -57,15 +57,8 @@ def set_config_path(options: OptionParser) -> str:
         print("You must specify an architecture via -a if using a sysroot.")
         sys.exit(1)
     
-
-    print("****yangang:****")
-    print("****sysroot:{}".format(sysroot))
-    print("****options.system_libdir:{}".format(options.system_libdir))
-    
-    libdir = sysroot + '/usr/' + options.system_libdir + '/pkgconfig'
-    print("****yangang:libdir****".format(libdir))
-    libdir += ':' + sysroot + '/usr/share/pkgconfig'
-    print("****yangang:libdir_111****".format(libdir))
+    libdir = os.path.join(sysroot, 'usr', options.system_libdir, 'pkgconfig')
+    libdir += ':' + os.path.join(sysroot, 'usr', 'share', 'pkgconfig')
     os.environ['PKG_CONFIG_LIBDIR'] = libdir
     return libdir
 
