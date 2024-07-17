@@ -1,6 +1,3 @@
-# Standard library types.
-type:std::*
-
 # The stdext namespace contains Microsoft standard library extensions.
 type:stdext::*
 
