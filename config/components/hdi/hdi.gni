@@ -15,6 +15,34 @@ import("//build/ohos.gni")
 
 hdf_fwk_path = "//drivers/hdf_core/framework"
 hdf_uhdf_path = "//drivers/hdf_core/adapter/uhdf2"
+idl_tool_path = "//foundation/ability/idl_tool/idl_tool_2"
+
+idl_root = "//foundation/ability/idl_tool"
+idl_build_deps = ""
+idl_out_root = ""
+
+build_root = "//build"
+toolchain_linux = "$build_root/toolchain/linux:clang_x64"
+if (host_cpu == "arm64") {
+  toolchain_mac = "$build_root/toolchain/mac:clang_arm64"
+} else {
+  toolchain_mac = "$build_root/toolchain/mac:clang_x64"
+}
+toolchain_win = "$build_root/toolchain/mingw:mingw_x86_64"
+
+if (host_toolchain == toolchain_mac) {
+  idl_out_root = get_label_info("$idl_root:idl($toolchain_mac)", "root_out_dir")
+  idl_build_deps = [ "$idl_root:idl($toolchain_mac)" ]
+} else if (host_toolchain == toolchain_win) {
+  idl_out_root = get_label_info("$idl_root:idl($toolchain_win)", "root_out_dir")
+  idl_build_deps = [ "$idl_root:idl($toolchain_win)" ]
+} else {
+  idl_out_root =
+      get_label_info("$idl_root:idl($toolchain_linux)", "root_out_dir")
+  idl_build_deps = [ "$idl_root:idl($toolchain_linux)" ]
+}
+
+idl_build_path = idl_out_root + "/ability/idl_tool"
 
 template("hdi") {
   assert(defined(invoker.sources), "sources must be set")
@@ -86,10 +114,9 @@ template("hdi") {
     ]
   }
 
-  hdi_build_info =
-      exec_script("$hdf_fwk_path/tools/hdi-gen/build_hdi_files_info.py",
-                  get_build_info_args,
-                  "json")
+  hdi_build_info = exec_script("$idl_tool_path/build_hdi_files_info.py",
+                               get_build_info_args,
+                               "json")
   assert(defined(hdi_build_info.include_dirs), "missing include_dirs")
   assert(defined(hdi_build_info.out_dir), "out_dir")
   assert(defined(hdi_build_info.version), "missing version")
@@ -114,8 +141,9 @@ template("hdi") {
     include_dirs += hdi_build_info.include_dirs
   }
 
-  action("hdi_gen") {
-    deps = [ "$hdf_fwk_path/tools/hdi-gen:build_hdi_gen" ]
+  action("idl_gen") {
+    # deps = [ "$idl_tool_path:build_hdi_gen" ]
+    deps = idl_build_deps
     script = "/usr/bin/env"
     if (defined(ohos_lite)) {
       script = "//build/lite/run_shell_cmd.py"
@@ -126,17 +154,22 @@ template("hdi") {
     outputs = hdi_build_info.sources
 
     args = [
-      rebase_path(get_path_info("$hdf_fwk_path/tools/hdi-gen/", "out_dir") +
-                  "/hdi-gen"),
+      rebase_path("${idl_build_path}") + "/idl",
+      "--intf-type",
+      "hdi",
       "--system",
       system,
       "--mode",
       mode,
-      "--language",
-      language,
       "-d",
       rebase_path(hdi_build_info.out_dir),
     ]
+
+    if (language == "c") {
+      args += [ "--gen-c" ]
+    } else if (language == "cpp") {
+      args += [ "--gen-cpp" ]
+    }
 
     foreach(idl_file, idl_sources) {
       args += [ "-c" ]
@@ -153,7 +186,7 @@ template("hdi") {
     if (defined(invoker.sources)) {
       sources = hdi_build_info.proxy_sources
       public_configs = [ ":$idl_headers_config" ]
-      deps = [ ":hdi_gen" ]
+      deps = [ ":idl_gen" ]
       if (is_standard_system) {
         public_deps = []
         if (defined(invoker.sequenceable_pub_deps)) {
@@ -223,7 +256,7 @@ template("hdi") {
         sources = hdi_build_info.stub_sources
         public_configs = [ ":$idl_headers_config" ]
 
-        deps = [ ":hdi_gen" ]
+        deps = [ ":idl_gen" ]
         if (is_standard_system) {
           public_deps = []
           if (defined(invoker.sequenceable_pub_deps)) {
@@ -289,7 +322,7 @@ template("hdi") {
   # this target has been replaced by 'idl_headers_target', please use 'idl_headers_target'
   group("$target_name" + "_idl_headers") {
     public_configs = [ ":$idl_headers_config" ]
-    deps = [ ":hdi_gen" ]
+    deps = [ ":idl_gen" ]
   }
 
   # only generate code and provide header file path
@@ -297,7 +330,7 @@ template("hdi") {
   idl_headers_target = target_name + "_idl_headers_" + hdi_build_info.version
   group(idl_headers_target) {
     public_configs = [ ":$idl_headers_config" ]
-    deps = [ ":hdi_gen" ]
+    deps = [ ":idl_gen" ]
     public_deps = hdi_build_info.header_deps
   }
 }
