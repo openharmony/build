@@ -58,7 +58,7 @@ template("ohos_clang_toolchain") {
       abi_target = "loongarch64-linux-ohos"
     }
 
-    if (is_legacy) {
+    if (musl_is_legacy) {
       clang_rt_dir =
           rebase_path("${clang_lib_base_path}/${abi_target}/nanlegacy",
                       root_build_dir)
