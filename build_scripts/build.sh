@@ -59,14 +59,30 @@ if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
   exit 1
 fi
 
+
+host_cpu_prefix=""
+
+case $(uname -m) in
+    *x86_64)
+        host_cpu_prefix="x86"
+        ;;
+    *arm*)
+        host_cpu_prefix="arm64"
+        ;;
+    *)
+        echo "\033[31m[OHOS ERROR] Unsupported host arch: $(uname -m)\033[0m"
+        RET=1
+        exit $RET
+esac
+
 case $(uname -s) in
     Darwin)
-        HOST_DIR="darwin-x86"
+        HOST_DIR="darwin-$host_cpu_prefix"
         HOST_OS="mac"
         NODE_PLATFORM="darwin-x64"
         ;;
     Linux)
-        HOST_DIR="linux-x86"
+        HOST_DIR="linux-$host_cpu_prefix"
         HOST_OS="linux"
         NODE_PLATFORM="linux-x64"
         ;;
