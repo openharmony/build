@@ -27,7 +27,7 @@
     "input_feature_touchscreen": true,
     "input_feature_input_device": true,
     "memmgr_purgeable_memory": true,
-    "fusion_interaction_coordination": false,
+    "device_status_fusion_interaction_coordination": false,
     "wpa_supplicant_driver_nl80211": true,
     "hdf_core_platform_test_support": true,
     "drivers_peripheral_input_feature_support_ddk": true,
@@ -95,7 +95,7 @@
       "memmgr_purgeable_memory"
     ],
     "device_status": [
-      "fusion_interaction_coordination"
+      "device_status_fusion_interaction_coordination"
     ],
     "wpa_supplicant": [
       "wpa_supplicant_driver_nl80211"
