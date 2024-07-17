@@ -624,6 +624,15 @@ config("cfi_config_release") {
   }
 }
 
+# Temporarily skip cfi check of namespace std
+config("cfi_config_skip_std") {
+  if (is_ohos) {
+    _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist_std.txt"
+    cflags = [ "-fsanitize-blacklist=" +
+               rebase_path(_cfi_blocklist_path, root_build_dir) ]
+  }
+}
+
 # Debug mode, add no-trap and recover options over release mode
 config("cfi_config_debug") {
   if (is_ohos) {
