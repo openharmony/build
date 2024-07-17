@@ -231,7 +231,7 @@ declare_args() {
 
 if (ohos_indep_compiler_enable) {
   is_standard_system = true
-  is_legacy = false
+  musl_is_legacy = false
 }
 
 if (is_mini_system) {

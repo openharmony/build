@@ -51,7 +51,7 @@ ohos_clang_toolchain("ohos_clang_riscv64") {
 
 ohos_clang_toolchain("ohos_clang_mipsel") {
   sysroot = "${musl_sysroot}"
-  if (is_legacy) {
+  if (musl_is_legacy) {
     lib_dir = "usr/lib/mipsel-linux-ohos/nanlegacy"
   } else {
     lib_dir = "usr/lib/mipsel-linux-ohos"

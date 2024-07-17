@@ -52,17 +52,17 @@ declare_args() {
     }
   }
   if (!is_llvm_build) {
-    use_gwp_asan = true
+    musl_use_gwp_asan = true
   } else {
-    use_gwp_asan = false
+    musl_use_gwp_asan = false
   }
-  user_custom_libc = true
+  musl_user_custom_libc = true
   use_jemalloc = false
-  use_encaps = false
+  musl_use_encaps = false
   musl_malloc_plugin = ""
   use_jemalloc_dfx_intf = false
   use_jemalloc_recycle_func = false
-  use_pthread_cancel = false
+  musl_use_pthread_cancel = false
   musl_ported_dir = "intermidiates/${musl_target_os}/musl_src_ported"
   musl_inc_out_dir = "usr/include/${musl_target_triple}"
   uapi_dir =
@@ -86,7 +86,7 @@ declare_args() {
 
 declare_args() {
   if (!is_standard_system) {
-    enable_musl_log = false
+    musl_enable_musl_log = false
   }
   musl_iterate_and_stats_api = false
   musl_secure_level = 1
@@ -117,7 +117,7 @@ declare_args() {
 
 declare_args() {
   # whether clang select the legacy encoding
-  is_legacy = false
+  musl_is_legacy = false
 }
 
 declare_args() {
@@ -125,7 +125,7 @@ declare_args() {
 }
 
 declare_args() {
-  use_flto = false
+  musl_use_flto = false
 }
 
 # part of default_compiler_configs from build/config/BUILDCONFIG.gn
