@@ -418,24 +418,28 @@ template("compile_js_assets") {
 
 template("app_sign") {
   forward_variables_from(invoker, [ "testonly" ])
+  sign_variables = [
+                "deps",
+                "private_key_path",
+                "signature_algorithm",
+                "certificate_profile",
+                "keystore_password",
+                "key_alias",
+                "certificate_file",
+                "keystore_path",
+                "unsigned_hap_path_list",
+                "hap_out_dir",
+                "hap_name",
+                "install_module_info",
+                "compatible_version",
+                "hap_list",
+              ]
+  if (defined(invoker.hap_list)) {
+    sign_variables += [ "hap_list" ]
+  }
   action(target_name) {
     forward_variables_from(invoker,
-                           [
-                             "deps",
-                             "private_key_path",
-                             "signature_algorithm",
-                             "certificate_profile",
-                             "keystore_password",
-                             "key_alias",
-                             "certificate_file",
-                             "keystore_path",
-                             "unsigned_hap_path_list",
-                             "hap_out_dir",
-                             "hap_name",
-                             "install_module_info",
-                             "compatible_version",
-                             "hap_list",
-                           ])
+                           sign_variables)
     _sign_hap_py_path = "//build/scripts/app_sign.py"
     if (defined(sign_hap_py_path) && defined(compatible_version)) {
       _sign_hap_py_path = sign_hap_py_path
@@ -501,9 +505,11 @@ template("app_sign") {
       rebase_path(hap_out_dir, root_build_dir),
       "--hap-name",
       hap_name,
-      "--hap-list",
-      rebase_path(hap_list, root_build_dir),
     ]
+    if (defined(invoker.hap_list)) {
+      args += [ "--hap-list",
+                rebase_path(hap_list, root_build_dir) ]
+    }
 
     if (defined(sign_hap_py_path)) {
       if (defined(compatible_version)) {
