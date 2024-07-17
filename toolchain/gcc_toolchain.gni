@@ -363,14 +363,6 @@ template("gcc_toolchain") {
       }
 
       _clang_rt_dso_full_path = ""
-      if (is_tsan && target_cpu == "arm64" &&
-          invoker_toolchain_args.current_os == "ohos" && !is_mingw_link &&
-          !is_win && !is_mingw) {
-        _clang_rt_dso_full_path = rebase_path(
-                "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so",
-                root_build_dir)
-      }
-
       link_command = "$ld -shared {{ldflags}}${extra_ldflags} $_clang_rt_dso_full_path -o \"$unstripped_sofile\" @\"$rspfile\""
 
       if (!is_mingw_link) {
