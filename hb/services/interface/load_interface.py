@@ -27,6 +27,10 @@ class LoadInterface(ServiceInterface):
         super().__init__()
         self._config = Config()
 
+    @abstractmethod
+    def __post_init__(self):
+        pass
+
     @property
     def config(self):
         return self._config
@@ -62,10 +66,6 @@ class LoadInterface(ServiceInterface):
         self._generate_infos_for_testfwk()
         self._check_product_part_feature()
         self._generate_syscap_files()
-
-    @abstractmethod
-    def __post_init__(self):
-        pass
 
     @abstractmethod
     def _execute_loader_args_display(self):

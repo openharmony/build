@@ -85,24 +85,6 @@ class Menu(MenuInterface):
                 results[arg.arg_name] = result
         return results
 
-    def _select_os_level(self) -> str:
-        choices = [
-            {
-                'name': 'mini',
-                'value': 'os_level'
-            },
-            {
-                'name': 'small',
-                'value': 'os_level'
-            },
-            {
-                'name': 'standard',
-                'value': 'os_level'
-            }
-        ]
-        return self._list_promt('os_level', 'Which os_level do you need?',
-                                choices).get('os_level')[0]
-
     def select_product(self) -> dict:
         product_path_dict = {}
         company_separator = None
@@ -134,6 +116,24 @@ class Menu(MenuInterface):
                                    choices).get('product')
         product_key = f'{product[0]}@{product[1]}'
         return product_path_dict.get(product_key)
+
+    def _select_os_level(self) -> str:
+        choices = [
+            {
+                'name': 'mini',
+                'value': 'os_level'
+            },
+            {
+                'name': 'small',
+                'value': 'os_level'
+            },
+            {
+                'name': 'standard',
+                'value': 'os_level'
+            }
+        ]
+        return self._list_promt('os_level', 'Which os_level do you need?',
+                                choices).get('os_level')[0]
 
     def _list_promt(self, name: str, message: str, choices: list, **kwargs):
         questions = self._get_questions('list', name, message, choices)
@@ -317,6 +317,13 @@ class InquirerControl(TokenListControl):
         super(InquirerControl, self).__init__(self._get_choice_tokens,
                                               **kwargs)
 
+    @property
+    def choice_count(self):
+        return len(self.choices)
+
+    def get_selection(self):
+        return self.choices[self.selected_option_index]
+
     def _init_choices(self, choices: list, default=None):
         # helper to convert from question format to internal format
         self.choices = []  # list (name, value, disabled)
@@ -336,10 +343,6 @@ class InquirerControl(TokenListControl):
                 if searching_first_choice:
                     self.selected_option_index = index
                     searching_first_choice = False
-
-    @property
-    def choice_count(self):
-        return len(self.choices)
 
     def _get_choice_tokens(self, cli):
         tokens = []
@@ -380,9 +383,6 @@ class InquirerControl(TokenListControl):
             append(i, choice)
         tokens.pop()  # Remove last newline.
         return tokens
-
-    def get_selection(self):
-        return self.choices[self.selected_option_index]
 
 
 def _get_style(style_type: str):
