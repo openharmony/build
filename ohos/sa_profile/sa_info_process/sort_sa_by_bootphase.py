@@ -54,6 +54,36 @@ class SARearrangement(object):
         self.systemability_nodes = []
         self.sa_nodes_count = 0
 
+    @classmethod
+    def detect_invalid_dependency_globally(clazz,
+                                           global_ordered_systemability_names,
+                                           global_systemability_deps_dict):
+        dependency_checkers = []
+        clazz.__detect_invalid_dependency(dependency_checkers,
+                                          global_ordered_systemability_names,
+                                          global_systemability_deps_dict)
+
+    def sort(self, source_file: str, dest_file: str):
+        self.file_in_process = source_file
+        dependency_checkers = []
+        dependency_checkers.append(self.__detect_invert_dependency)
+        dependency_checkers.append(self.__detect_creation_dependency)
+
+        self.__parse_json_file(source_file)
+        self.__extract_info_from_systemability_nodes()
+        self.__detect_invalid_dependency(dependency_checkers,
+                                         self.ordered_systemability_names,
+                                         self.systemability_deps_dict)
+        self.__sort_systemability_by_bootphase_priority()
+        self.__rearrange_systemability_node_strict(source_file, dest_file)
+
+    def get_deps_info(self):
+        """
+        Returns systemabilities and their dependencies for later detecting
+        possible globally circular dependency problem
+        """
+        return [self.ordered_systemability_names, self.systemability_deps_dict]
+
     def __parse_json_file(self, source_file: str):
         with open(source_file, "r", encoding="utf-8") as file:
             data = json.load(file)
@@ -140,16 +170,17 @@ class SARearrangement(object):
         """
         Extract info like dependencies and bootphase from a systemability node
         """
+
         def validate_creation(creation: bool):
             _format = ("In tag {} only a boolean value is expected, " +
                        "but actually is '{}'")
             if str(creation) not in {"true", "false", "True", "False"}:
                 raise json_err.BadFormatJsonError(_format.format("run-on-create", creation),
-                                        self.file_in_process)
+                                                  self.file_in_process)
 
         def validate_bootphase(bootphase, nodename: str):
             _format = ("In systemability: {}, The bootphase '{}' is not supported " +
-                "please check yourself")
+                       "please check yourself")
             if self.policy.bootphase_categories.get(bootphase) is None:
                 raise json_err.NotSupportedBootphaseError(_format.format(nodename, bootphase))
 
@@ -157,7 +188,7 @@ class SARearrangement(object):
             if nodename < 1 or nodename > 16777215:
                 _format = ("name's value should be [1-16777215], but actually is {}")
                 raise json_err.BadFormatJsonError(_format.format(nodename),
-                                        self.file_in_process)
+                                                  self.file_in_process)
 
         def check_nodes_constraints_one(systemability_node: dict, tag: str):
             _format = ("The tag {} should exist, but it does not exist")
@@ -187,18 +218,18 @@ class SARearrangement(object):
             self.bootphase_dict[name_node] = default_bootphase
             # Optional bootphase: zero or one are both accepted
             bootphase_nodes = check_nodes_constraints_two(systemability_node,
-                                "bootphase")
+                                                          "bootphase")
             if bootphase_nodes != '':
                 validate_bootphase(bootphase_nodes, name_node)
                 self.bootphase_dict[name_node] = bootphase_nodes
             # Required run-on-create one and only one is expected
             runoncreate_node = check_nodes_constraints_one(systemability_node,
-                                "run-on-create")
+                                                           "run-on-create")
             validate_creation(runoncreate_node)
             self.creation_dict[name_node] = runoncreate_node
             # Optional depend:
             depend_nodes = check_nodes_constraints_two(systemability_node,
-                             "depend")
+                                                       "depend")
             for depend_node in depend_nodes:
                 deps = self.systemability_deps_dict.get(name_node)
                 deps.append(depend_node)
@@ -274,33 +305,3 @@ class SARearrangement(object):
         dep_creation = self.creation_dict.get(depend)
         if self_creation is True and dep_creation is False:
             raise json_err.RunOnCreateDependencyError(_format.format(systemability, depend))
-
-    def sort(self, source_file: str, dest_file: str):
-        self.file_in_process = source_file
-        dependency_checkers = []
-        dependency_checkers.append(self.__detect_invert_dependency)
-        dependency_checkers.append(self.__detect_creation_dependency)
-
-        self.__parse_json_file(source_file)
-        self.__extract_info_from_systemability_nodes()
-        self.__detect_invalid_dependency(dependency_checkers,
-                                         self.ordered_systemability_names,
-                                         self.systemability_deps_dict)
-        self.__sort_systemability_by_bootphase_priority()
-        self.__rearrange_systemability_node_strict(source_file, dest_file)
-
-    @classmethod
-    def detect_invalid_dependency_globally(clazz,
-                                           global_ordered_systemability_names,
-                                           global_systemability_deps_dict):
-        dependency_checkers = []
-        clazz.__detect_invalid_dependency(dependency_checkers,
-                                        global_ordered_systemability_names,
-                                        global_systemability_deps_dict)
-
-    def get_deps_info(self):
-        """
-        Returns systemabilities and their dependencies for later detecting
-        possible globally circular dependency problem
-        """
-        return [self.ordered_systemability_names, self.systemability_deps_dict]

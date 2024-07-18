@@ -28,7 +28,7 @@ class OhosInfo:
     g_ohos_version = BundleCheckTools.get_ohos_version(g_root_path)
 
 
-def check_all_bundle_json(path:str) -> list:
+def check_all_bundle_json(path: str) -> list:
     '''
     @func: 检查指定目录下所有 bundle.json 的文件规范。
     '''
@@ -74,7 +74,7 @@ def check_all_bundle_json(path:str) -> list:
     return all_error
 
 
-def get_all_bundle_json(path:str = '.') -> list:
+def get_all_bundle_json(path: str = '.') -> list:
     '''
     @func: 获取所有源码工程中所有 bundle.json 文件。
     '''
@@ -93,9 +93,9 @@ class BundlesCheck:
     '''导出全量检查的结果。'''
 
     @staticmethod
-    def to_json(all_errors:dict,
-                output_path:str = '.',
-                output_name:str = 'all_bundle_error.json'):
+    def to_json(all_errors: dict,
+                output_path: str = '.',
+                output_name: str = 'all_bundle_error.json'):
         '''@func: 导出所有错误到 json 格式文件中。'''
         all_errors = check_all_bundle_json(OhosInfo.g_root_path)
         all_error_json = json.dumps(all_errors,
@@ -111,7 +111,7 @@ class BundlesCheck:
         print("Please check " + out_path)
 
     @staticmethod
-    def to_df(path:str = None) -> pd.DataFrame:
+    def to_df(path: str = None) -> pd.DataFrame:
         '''将所有错误的 dict 数据类型转为 pd.DataFrame 类型。'''
         if path is None:
             path = OhosInfo.g_root_path
@@ -134,15 +134,15 @@ class BundlesCheck:
         return ret
 
     @staticmethod
-    def to_excel(output_path:str = '.',
-                 output_name:str = 'all_bundle_error.xlsx'):
+    def to_excel(output_path: str = '.',
+                 output_name: str = 'all_bundle_error.xlsx'):
         '''
         @func: 导出所有错误到 excel 格式文件中。
         '''
         err_df = BundlesCheck.to_df()
         outpath = os.path.normpath(output_path) + '/' + output_name
         err_df.to_excel(outpath, index=None)
-        print('Please check ' + outpath)  
+        print('Please check ' + outpath)
 
 
 class BundleJson(object):
@@ -160,10 +160,10 @@ class BundleJson(object):
       - ``check()`` : 静态检查该 bundle.json，返回错误告警 list。
     '''
 
-    def __init__(self, path:str) -> None:
-        self.__all_errors = [] # 该文件的所有错误列表
-        self.__json  = {} # 将该 josn 文件转为字典类型内容
-        self.__lines = [] # 将该 josn 文件转为列表类型内容
+    def __init__(self, path: str) -> None:
+        self.__all_errors = []  # 该文件的所有错误列表
+        self.__json = {}  # 将该 josn 文件转为字典类型内容
+        self.__lines = []  # 将该 josn 文件转为列表类型内容
         with open(path, 'r') as file:
             try:
                 self.__json = json.load(file)
@@ -177,12 +177,12 @@ class BundleJson(object):
         return self.__json.get('component').get('name')
 
     @property
-    def subsystem_name(self) -> str: # 目前存在为空的情况
+    def subsystem_name(self) -> str:  # 目前存在为空的情况
         return self.__json.get('component').get('subsystem')
-    
+
     def readlines(self) -> list:
         return self.__lines
-    
+
     def get_line_number(self, string) -> int:
         '''
         @func: 获取指定字符串所在行号。
@@ -218,16 +218,16 @@ class BundleJson(object):
         if 'name' not in self.__json:
             bundle_error["description"] = BCWarnInfo.NAME_NO_FIELD
             return bundle_error
-        
+
         name = self.__json['name']
         bundle_error["line"] = self.get_line_number('"name"')
-        if not name: # 为空
+        if not name:  # 为空
             bundle_error["description"] = BCWarnInfo.NAME_EMPTY
             return bundle_error
 
         bundle_error["description"] = BCWarnInfo.NAME_FORMAT_ERROR + \
-                BCWarnInfo.COMPONENT_NAME_FROMAT + \
-                BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
+                                      BCWarnInfo.COMPONENT_NAME_FROMAT + \
+                                      BCWarnInfo.COMPONENT_NAME_FROMAT_LEN
         match = BundleCheckTools.match_bundle_full_name(name)
         if not match:
             return bundle_error
@@ -246,13 +246,13 @@ class BundleJson(object):
             return bundle_error
 
         bundle_error["line"] = self.get_line_number('"version": ')
-        if len(self.__json['version']) < 3: # example 3.1
+        if len(self.__json['version']) < 3:  # example 3.1
             bundle_error["description"] = BCWarnInfo.VERSION_ERROR
             return bundle_error
 
         if self.__json['version'] != OhosInfo.g_ohos_version:
             bundle_error['description'] = BCWarnInfo.VERSION_ERROR + \
-                ' current ohos version is: ' + OhosInfo.g_ohos_version
+                                          ' current ohos version is: ' + OhosInfo.g_ohos_version
             return bundle_error
         return dict()
 
@@ -284,12 +284,12 @@ class BundleJson(object):
             bundle_error["description"] = BCWarnInfo.SEGMENT_DESTPATH_UNIQUE
             bundle_error_segment.append(bundle_error)
             return bundle_error_segment
-        
+
         if os.path.isabs(path):
             bundle_error["description"] = BCWarnInfo.SEGMENT_DESTPATH_ABS
             bundle_error_segment.append(bundle_error)
             return bundle_error_segment
-        
+
         return bundle_error_segment
 
     # component
@@ -301,7 +301,7 @@ class BundleJson(object):
                                 description=BCWarnInfo.COMPONENT_NO_FIELD)
             bundle_error_component.append(bundle_error)
             return bundle_error_component
-        
+
         component = self.__json.get('component')
         component_line = self.get_line_number('"component":')
         self._check_component_name(component, component_line, bundle_error_component)
@@ -315,6 +315,7 @@ class BundleJson(object):
         return bundle_error_component
 
         # component name
+
     def _check_component_name(self, component: dict, component_line: int, bundle_error_component: list):
         if 'name' not in component:
             bundle_error = dict(line=component_line,
@@ -331,8 +332,9 @@ class BundleJson(object):
                 if component['name'] != self.__json['name'].split('/')[1]:
                     bundle_error["description"] = BCWarnInfo.COMPONENT_NAME_VERACITY
                     bundle_error_component.append(bundle_error)
-        
+
         # component subsystem
+
     def _check_component_subsystem(self, component: dict, component_line: int,
                                    bundle_error_component: list):
         if 'subsystem' not in component:
@@ -351,13 +353,14 @@ class BundleJson(object):
                 bundle_error_component.append(bundle_error)
 
         # component syscap 可选且可以为空
+
     def _check_component_syscap(self, component: dict, bundle_error_component: list):
         if 'syscap' not in component:
             pass
         elif component['syscap']:
             bundle_error = dict(line=self.get_line_number('"syscap":'),
                                 contents='"component:syscap"')
-            err = [] # 收集所有告警
+            err = []  # 收集所有告警
             for i in component['syscap']:
                 # syscap string empty
                 if not i:
@@ -366,19 +369,20 @@ class BundleJson(object):
                 match = re.match(r'^SystemCapability(\.[A-Z][a-zA-Z]{1,63}){2,6}$', i)
                 if not match:
                     err.append(BCWarnInfo.COMPONENT_SYSCAP_STRING_FORMAT_ERROR)
-            errs = list(set(err)) # 去重告警
+            errs = list(set(err))  # 去重告警
             if errs:
                 bundle_error["description"] = str(errs)
                 bundle_error_component.append(bundle_error)
 
         # component adapted_system_type
+
     def _check_component_ast(self, component: dict, component_line: int, bundle_error_component: list):
         if 'adapted_system_type' not in component:
             bundle_error = dict(line=component_line, contents='"component"',
                                 description=BCWarnInfo.COMPONENT_AST_NO_FIELD)
             bundle_error_component.append(bundle_error)
             return
-        
+
         bundle_error = dict(line=self.get_line_number('"adapted_system_type":'),
                             contents='"component:adapted_system_type"')
         ast = component["adapted_system_type"]
@@ -402,6 +406,7 @@ class BundleJson(object):
         return
 
         # component rom
+
     def _check_component_rom(self, component: dict, component_line: int, bundle_error_component: list):
         if 'rom' not in component:
             bundle_error = dict(line=component_line, contents='"component:rom"',
@@ -417,15 +422,16 @@ class BundleJson(object):
                                 contents='"component:rom"')
             num, unit = BundleCheckTools.split_by_unit(component["rom"])
             if num < 0:
-                bundle_error["description"] = BCWarnInfo.COMPONENT_ROM_SIZE_ERROR # 非数值或小于0
+                bundle_error["description"] = BCWarnInfo.COMPONENT_ROM_SIZE_ERROR  # 非数值或小于0
                 bundle_error_component.append(bundle_error)
             elif unit:
                 unit_list = ["KB", "KByte", "MByte", "MB"]
                 if unit not in unit_list:
-                    bundle_error["description"] = BCWarnInfo.COMPONENT_ROM_UNIT_ERROR # 单位有误
+                    bundle_error["description"] = BCWarnInfo.COMPONENT_ROM_UNIT_ERROR  # 单位有误
                     bundle_error_component.append(bundle_error)
-            
+
         # component ram
+
     def _check_component_ram(self, component: dict, component_line: int, bundle_error_component: list):
         if 'ram' not in component:
             bundle_error = dict(line=component_line, contents='"component:ram"',
@@ -441,15 +447,16 @@ class BundleJson(object):
                                 contents='"component:ram"')
             num, unit = BundleCheckTools.split_by_unit(component["ram"])
             if num <= 0:
-                bundle_error["description"] = BCWarnInfo.COMPONENT_RAM_SIZE_ERROR # 非数值或小于0
+                bundle_error["description"] = BCWarnInfo.COMPONENT_RAM_SIZE_ERROR  # 非数值或小于0
                 bundle_error_component.append(bundle_error)
             elif unit:
                 unit_list = ["KB", "KByte", "MByte", "MB"]
                 if unit not in unit_list:
-                    bundle_error["description"] = BCWarnInfo.COMPONENT_RAM_UNIT_ERROR # 单位有误
+                    bundle_error["description"] = BCWarnInfo.COMPONENT_RAM_UNIT_ERROR  # 单位有误
                     bundle_error_component.append(bundle_error)
 
         # component deps
+
     def _check_component_deps(self, component: dict, component_line: int, bundle_error_component: list):
         if 'deps' not in component:
             bundle_error = dict(line=component_line, contents='"component:deps"',
@@ -483,7 +490,7 @@ def parse_args():
         if not BundleCheckTools.is_project(args.project):
             print("'" + args.project + "' is not a oopeharmony project.")
             exit(1)
-        
+
         if args.json:
             BundlesCheck.to_json(export_path)
         else:
@@ -498,7 +505,7 @@ def parse_args():
                     dict([(BCWarnInfo.CHECK_RULE_2_1, error_field)])
         # temp
         test_json = json.dumps(bundle_list_error,
-                               indent=4, separators=(', ', ': '), 
+                               indent=4, separators=(', ', ': '),
                                ensure_ascii=False)
         print(test_json)
     else:

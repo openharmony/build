@@ -62,7 +62,7 @@ def _read_module_deps_info(module_deps_files_path: str):
         module_deps_info = read_json_file(_deps_file)
         if module_deps_info is None:
             raise Exception("read file '{}' failed.".format(_deps_file))
-        _filename_snippet =  _filename
+        _filename_snippet = _filename
         part_name, module_name = _parse_module_name(_filename_snippet)
         module_alias = '{}:{}'.format(part_name, module_name)
         deps_data[module_alias] = module_deps_info

@@ -15,7 +15,7 @@
 
 import argparse
 import os
-import sys 
+import sys
 import json
 
 
@@ -23,7 +23,7 @@ def merge_files(args):
     products_dir = "../../productdefine/common/products"
     device_dir = "../../productdefine/common/device"
     products_path = r'%s/%s' % (products_dir, args)
-    with open(products_path,'r+', encoding='utf-8') as f:
+    with open(products_path, 'r+', encoding='utf-8') as f:
         data = json.load(f)
         name = data["product_name"]
         company = data["product_company"]
@@ -43,7 +43,7 @@ def merge_files(args):
     with open(products_path, "r", encoding='utf-8') as products_read:
         data_products_read = json.load(products_read)
 
-    data_all = merge(data_device_read , data_products_read)
+    data_all = merge(data_device_read, data_products_read)
     new_json = json.dumps(data_all, indent=4)
 
     flags = os.O_RDWR | os.O_CREAT
@@ -59,8 +59,8 @@ def readjson(path: str, device: str):
     with open(path, 'r+', encoding='utf-8') as f:
         data = json.load(f)
         parts = data['parts']
-        subsystem_list = list() 
-        for key in parts: 
+        subsystem_list = list()
+        for key in parts:
             substr = str(key).split(":")
             if substr[0] not in subsystem_list:
                 subsystem_list.append(substr[0])
@@ -94,9 +94,9 @@ def readjson(path: str, device: str):
         f.truncate()
 
 
-def merge(dict1: dict, dict2: dict): 
-    res = {**dict1, **dict2} 
-    return res 
+def merge(dict1: dict, dict2: dict):
+    res = {**dict1, **dict2}
+    return res
 
 
 def main(args):
