@@ -24,7 +24,7 @@ import subprocess
 from datetime import datetime
 
 from util.log_util import LogUtil
-from helper.noInstance import NoInstance
+from hb.helper.no_instance import NoInstance
 from exceptions.ohos_exception import OHOSException
 from containers.status import throw_exception
 
