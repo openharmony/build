@@ -24,7 +24,7 @@ from exceptions.ohos_exception import OHOSException
 from resources.config import Config
 from containers.status import throw_exception
 
-from helper.noInstance import NoInstance
+from hb.helper.no_instance import NoInstance
 
 
 class ProductUtil(metaclass=NoInstance):
