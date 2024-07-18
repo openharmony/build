@@ -37,11 +37,11 @@ if (is_ohos) {
       "system",
       "updater",
     ]
-    deps = [ ":ubsan_standalone_unstripped_copy" ]
     innerapi_tags = [
       "platformsdk",
       "chipsetsdk",
     ]
+    deps = [ ":ubsan_standalone_unstripped_copy" ]
     subsystem_name = "build"
     part_name = "build_framework"
   }
