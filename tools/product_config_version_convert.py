@@ -53,7 +53,7 @@ def merge_files(args):
     readjson(new_file_name, device)
 
 
-def readjson(path: str, device: str):
+def readjson(path, device):
     subsystems_list = list()
     config_dic = {}
     with open(path, 'r+', encoding='utf-8') as f:
@@ -72,8 +72,8 @@ def readjson(path: str, device: str):
                             fea = "{} = {}".format(str(k), str(v).lower())
                             features.append(fea)
                     if substr[0] == str(key_sub).split(":")[0]:
-                        components_list.append({"component":str(key_sub).split(":")[1], "features":features})
-                subsystems_list.append({"subsystem":substr[0], "components":components_list})
+                        components_list.append({"component": str(key_sub).split(":")[1], "features": features})
+                subsystems_list.append({"subsystem": substr[0], "components": components_list})
         config_dic["subsystems"] = subsystems_list
         del data['parts']
         data.update({"version": "3.0"})
@@ -82,11 +82,11 @@ def readjson(path: str, device: str):
         for datakey in data:
             if "enable_ramdisk" in datakey:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
-                "board", "enable_ramdisk", "enable_absystem", "subsystems"]
+                             "board", "enable_ramdisk", "enable_absystem", "subsystems"]
                 break
             else:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
-                "board", "enable_absystem", "subsystems"]
+                             "board", "enable_absystem", "subsystems"]
         dict_you_want = {new_key: data[new_key] for new_key in dict_keys}
         json_data = json.dumps(dict_you_want, indent=2)
         f.seek(0)
@@ -94,13 +94,14 @@ def readjson(path: str, device: str):
         f.truncate()
 
 
-def merge(dict1: dict, dict2: dict):
+def merge(dict1, dict2):
     res = {**dict1, **dict2}
     return res
 
 
 def main(args):
     merge_files(args)
+
 
 if __name__ == '__main__':
     main(sys.argv[1])

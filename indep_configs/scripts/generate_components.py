@@ -137,18 +137,19 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
     for i in component:
         innerapi_name = i["name"].split(':')[-1]
         if part_name == 'musl':
-            innerapi_label = os.path.join("//binarys", path) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path), innerapi_name)
         elif part_name in src_build_name_list:
             innerapi_label = i['name']
         else:
-            innerapi_label = os.path.join("//binarys", path, "innerapis", innerapi_name) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis", innerapi_name), innerapi_name)
         innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
         if innerapi_name in _part_toolchain_map_dict.keys():
             _name = innerapi_name
             innerapi_name = f"{innerapi_name}({_part_toolchain_map_dict[_name]['toolchain_value']})"
-            innerapi_label = os.path.join("//binarys", path, "innerapis",
-                                          _name,
-                                          _part_toolchain_map_dict[_name]['toolchain_key']) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis",
+                                                         _name,
+                                                         _part_toolchain_map_dict[_name]['toolchain_key']),
+                                            innerapi_name)
             innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
@@ -176,7 +177,11 @@ def _get_src_part_name(src_bundle_paths):
     _path = ''
     for src_bundle_path in src_bundle_paths:
         src_bundle_json = utils.get_json(src_bundle_path)
-        part_name = src_bundle_json['component']['name']
+        part_name = ""
+        try:
+            part_name = src_bundle_json['component']['name']
+        except KeyError:
+            print(f'--get bundle json component name error--')
         if part_name.endswith('_lite'):
             pass
         else:
@@ -203,7 +208,7 @@ def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, r
                                            utils.get_json(os.path.join(root_path, "build", "bundle.json")),
                                            "build_framework", src_build_name_list, _part_toolchain_map_dict)
     for part_name in part_name_list:
-        if part_name:
+        if part_name and part_name != src_part_name:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
             components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,
