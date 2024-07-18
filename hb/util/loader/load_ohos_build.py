@@ -159,42 +159,6 @@ class PartObject(object):
             lib_config.append('      }')
         return lib_config
 
-    def _overrided_part_name(self):
-        overrided_components = self._overrided_components
-        full_part_name = f"{self._subsystem_name}:{self._origin_name}"
-        overrided_map = overrided_components.get(full_part_name)
-        if overrided_map:
-            # origin_name is same as part_name in variant phone
-            overrided_origin_name = overrided_map.get("partName")
-            overrided_part_name = overrided_origin_name
-        else:
-            overrided_part_name = self._part_name
-            overrided_origin_name = self._origin_name
-
-        return overrided_part_name, overrided_origin_name
-
-    def _parsing_base_info(self, inner_kits_lib, part_name):
-        info = {'part_name': part_name}
-        label = inner_kits_lib.get('name')
-        lib_name = label.split(':')[1]
-        info['label'] = label
-        info['name'] = lib_name
-        if inner_kits_lib.get('visibility') is not None:
-            info['visibility'] = inner_kits_lib.get('visibility')
-        lib_type = inner_kits_lib.get('type')
-        if lib_type is None:
-            lib_type = 'so'
-        info['type'] = lib_type
-        prebuilt = inner_kits_lib.get('prebuilt_enable')
-        if prebuilt:
-            info['prebuilt_enable'] = prebuilt
-            prebuilt_source_libs = inner_kits_lib.get('prebuilt_source')
-            prebuilt_source = prebuilt_source_libs.get(target_arch)
-            info['prebuilt_source'] = prebuilt_source
-        else:
-            info['prebuilt_enable'] = False
-        return info, lib_name, lib_type
-
     @throw_exception
     def _parsing_inner_kits(self, part_name, inner_kits_info, build_gn_content,
                             target_arch):
@@ -236,81 +200,6 @@ class PartObject(object):
                 info['header_files'] = header.get('header_files')
             _libs_info[lib_name] = info
         self._inner_kits_info = _libs_info
-
-    def _parsing_system_kits(self, part_name, system_kits_info,
-                             build_gn_content):
-        system_kits_libs_gn = []
-        kits = []
-        for _kits_lib in system_kits_info:
-            system_kits_libs_gn.append('    {')
-            system_kits_libs_gn.extend(self._parsing_kits_lib(
-                _kits_lib, False))
-            kits.append('"{}"'.format(_kits_lib.get('name')))
-            system_kits_libs_gn.append('    },')
-        _kits_libs_gn_line = '\n'.join(system_kits_libs_gn)
-        system_kits_def = SYSTEM_KITS_TEMPLATE.format(part_name,
-                                                      _kits_libs_gn_line,
-                                                      self._origin_name,
-                                                      self._variant_name)
-        build_gn_content.append(system_kits_def)
-        self._kits = kits
-
-    def _parsing_config(self, part_name, part_config, subsystem_name):
-        self._part_target_list = []
-        build_gn_content = []
-        build_gn_content.append(IMPORT_LIST)
-
-        # ohos part
-        if 'module_list' not in part_config:
-            raise OHOSException(
-                "ohos.build incorrect, part name: '{}'".format(part_name), "2014")
-        module_list = part_config.get('module_list')
-        if len(module_list) == 0:
-            module_list_line = ''
-        else:
-            module_list_line = '"{}",'.format('",\n    "'.join(module_list))
-        parts_definition = PART_TEMPLATE.format(part_name, subsystem_name,
-                                                module_list_line,
-                                                self._origin_name,
-                                                self._variant_name)
-        build_gn_content.append(parts_definition)
-
-        # part inner kits
-        if part_config.get('inner_kits'):
-            self._part_target_list.append('inner_kits')
-            inner_kits_info = part_config.get('inner_kits')
-            self._parsing_inner_kits(part_name, inner_kits_info,
-                                     build_gn_content, self._target_arch)
-        # part system kits
-        if part_config.get('system_kits'):
-            self._part_target_list.append('system_kits')
-            system_kits_info = part_config.get('system_kits')
-            self._parsing_system_kits(part_name, system_kits_info,
-                                      build_gn_content)
-        # part test list
-        if part_config.get('test_list'):
-            self._part_target_list.append('test')
-            test_list = part_config.get('test_list')
-            test_list_line = '"{}",'.format('",\n    "'.join(test_list))
-            test_def = TEST_TEMPLATE.format(part_name, test_list_line,
-                                            subsystem_name)
-            build_gn_content.append(test_def)
-        self._build_gn_content = build_gn_content
-        # feature
-        if part_config.get('feature_list'):
-            self._feature_list = part_config.get('feature_list')
-            # check feature
-            for _feature_name in self._feature_list:
-                if not _feature_name.startswith('{}_'.format(
-                        self._origin_name)):
-                    raise OHOSException(
-                        "part feature list config incorrect,"
-                        " part_name='{}', feature_name='{}'".format(
-                            self._origin_name, _feature_name), "2014")
-
-        # system_capabilities is a list attribute of a part in ohos.build
-        if part_config.get('system_capabilities'):
-            self._system_capabilities = part_config.get('system_capabilities')
 
     def part_name(self):
         """part name."""
@@ -396,6 +285,117 @@ class PartObject(object):
         _info['build_out_dir'] = _build_out_dir
         return _info
 
+    def _overrided_part_name(self):
+        overrided_components = self._overrided_components
+        full_part_name = f"{self._subsystem_name}:{self._origin_name}"
+        overrided_map = overrided_components.get(full_part_name)
+        if overrided_map:
+            # origin_name is same as part_name in variant phone
+            overrided_origin_name = overrided_map.get("partName")
+            overrided_part_name = overrided_origin_name
+        else:
+            overrided_part_name = self._part_name
+            overrided_origin_name = self._origin_name
+
+        return overrided_part_name, overrided_origin_name
+
+    def _parsing_base_info(self, inner_kits_lib, part_name):
+        info = {'part_name': part_name}
+        label = inner_kits_lib.get('name')
+        lib_name = label.split(':')[1]
+        info['label'] = label
+        info['name'] = lib_name
+        if inner_kits_lib.get('visibility') is not None:
+            info['visibility'] = inner_kits_lib.get('visibility')
+        lib_type = inner_kits_lib.get('type')
+        if lib_type is None:
+            lib_type = 'so'
+        info['type'] = lib_type
+        prebuilt = inner_kits_lib.get('prebuilt_enable')
+        if prebuilt:
+            info['prebuilt_enable'] = prebuilt
+            prebuilt_source_libs = inner_kits_lib.get('prebuilt_source')
+            prebuilt_source = prebuilt_source_libs.get(target_arch)
+            info['prebuilt_source'] = prebuilt_source
+        else:
+            info['prebuilt_enable'] = False
+        return info, lib_name, lib_type
+
+    def _parsing_system_kits(self, part_name, system_kits_info,
+                             build_gn_content):
+        system_kits_libs_gn = []
+        kits = []
+        for _kits_lib in system_kits_info:
+            system_kits_libs_gn.append('    {')
+            system_kits_libs_gn.extend(self._parsing_kits_lib(
+                _kits_lib, False))
+            kits.append('"{}"'.format(_kits_lib.get('name')))
+            system_kits_libs_gn.append('    },')
+        _kits_libs_gn_line = '\n'.join(system_kits_libs_gn)
+        system_kits_def = SYSTEM_KITS_TEMPLATE.format(part_name,
+                                                      _kits_libs_gn_line,
+                                                      self._origin_name,
+                                                      self._variant_name)
+        build_gn_content.append(system_kits_def)
+        self._kits = kits
+
+    def _parsing_config(self, part_name, part_config, subsystem_name):
+        self._part_target_list = []
+        build_gn_content = []
+        build_gn_content.append(IMPORT_LIST)
+
+        # ohos part
+        if 'module_list' not in part_config:
+            raise OHOSException(
+                "ohos.build incorrect, part name: '{}'".format(part_name), "2014")
+        module_list = part_config.get('module_list')
+        if len(module_list) == 0:
+            module_list_line = ''
+        else:
+            module_list_line = '"{}",'.format('",\n    "'.join(module_list))
+        parts_definition = PART_TEMPLATE.format(part_name, subsystem_name,
+                                                module_list_line,
+                                                self._origin_name,
+                                                self._variant_name)
+        build_gn_content.append(parts_definition)
+
+        # part inner kits
+        if part_config.get('inner_kits'):
+            self._part_target_list.append('inner_kits')
+            inner_kits_info = part_config.get('inner_kits')
+            self._parsing_inner_kits(part_name, inner_kits_info,
+                                     build_gn_content, self._target_arch)
+        # part system kits
+        if part_config.get('system_kits'):
+            self._part_target_list.append('system_kits')
+            system_kits_info = part_config.get('system_kits')
+            self._parsing_system_kits(part_name, system_kits_info,
+                                      build_gn_content)
+        # part test list
+        if part_config.get('test_list'):
+            self._part_target_list.append('test')
+            test_list = part_config.get('test_list')
+            test_list_line = '"{}",'.format('",\n    "'.join(test_list))
+            test_def = TEST_TEMPLATE.format(part_name, test_list_line,
+                                            subsystem_name)
+            build_gn_content.append(test_def)
+        self._build_gn_content = build_gn_content
+        # feature
+        if part_config.get('feature_list'):
+            self._feature_list = part_config.get('feature_list')
+            # check feature
+            for _feature_name in self._feature_list:
+                if not _feature_name.startswith('{}_'.format(
+                        self._origin_name)):
+                    raise OHOSException(
+                        "part feature list config incorrect,"
+                        " part_name='{}', feature_name='{}'".format(
+                            self._origin_name, _feature_name), "2014")
+
+        # system_capabilities is a list attribute of a part in ohos.build
+        if part_config.get('system_capabilities'):
+            self._system_capabilities = part_config.get('system_capabilities')
+
 
 class LoadBuildConfig(object):
     """load build config file and parse configuration info."""
@@ -477,54 +477,6 @@ class LoadBuildConfig(object):
         self._parts_info_dict = _parts_info_dict
         self._phony_targets = _variant_phony_targets
         self._parts_deps = _parts_deps
-
-    def _merge_build_config(self):
-        _build_files = self._build_info.get('build_files')
-        is_thirdparty_subsystem = False
-        if _build_files[0].startswith(self._source_root_dir + 'third_party'):
-            is_thirdparty_subsystem = True
-        subsystem_name = None
-        parts_info = {}
-        parts_path_dict = {}
-        for _build_file in _build_files:
-            if _build_file.endswith('bundle.json'):
-                bundle_part_obj = load_bundle_file.BundlePartObj(
-                    _build_file, self._exclusion_modules_config_file,
-                    self._load_test_config)
-                _parts_config = bundle_part_obj.to_ohos_build()
-            else:
-                _parts_config = read_build_file(_build_file)
-
-            _subsystem_name = _parts_config.get('subsystem')
-            if not is_thirdparty_subsystem and subsystem_name and _subsystem_name != subsystem_name:
-                raise OHOSException(
-                    "subsystem name config incorrect in '{}'.".format(
-                        _build_file), "2014")
-            if _subsystem_name != self._subsystem_name:
-                is_allow = False
-                for file_path in self._bundle_subsystem_allow_list:
-                    if _build_file.endswith(file_path):
-                        is_allow = True
-                        break
-                if is_allow:
-                    print("warning: subsystem name config incorrect in '{}', build file subsystem name is {},"
-                          "configured subsystem name is {}.".format(
-                        _build_file, _subsystem_name, self._subsystem_name))
-                else:
-                    raise OHOSException("subsystem name config incorrect in '{}', build file subsystem name is {},"
-                                        "configured subsystem name is {}.".format(
-                        _build_file, _subsystem_name, self._subsystem_name), 2014)
-
-            subsystem_name = _subsystem_name
-            _curr_parts_info = _parts_config.get('parts')
-            for _pname in _curr_parts_info.keys():
-                parts_path_dict[_pname] = os.path.relpath(
-                    os.path.dirname(_build_file), self._source_root_dir)
-            parts_info.update(_curr_parts_info)
-        subsystem_config = {}
-        subsystem_config['subsystem'] = subsystem_name
-        subsystem_config['parts'] = parts_info
-        return subsystem_config, parts_path_dict
 
     def parse_syscap_info(self):
         _build_files = self._build_info.get('build_files')
@@ -636,6 +588,54 @@ class LoadBuildConfig(object):
             key: value for key, value in self._parts_module_list.items() if key in save_part}
         self._parts_deps = {
             key: value for key, value in self._parts_deps.items() if key in save_part}
+
+    def _merge_build_config(self):
+        _build_files = self._build_info.get('build_files')
+        is_thirdparty_subsystem = False
+        if _build_files[0].startswith(self._source_root_dir + 'third_party'):
+            is_thirdparty_subsystem = True
+        subsystem_name = None
+        parts_info = {}
+        parts_path_dict = {}
+        for _build_file in _build_files:
+            if _build_file.endswith('bundle.json'):
+                bundle_part_obj = load_bundle_file.BundlePartObj(
+                    _build_file, self._exclusion_modules_config_file,
+                    self._load_test_config)
+                _parts_config = bundle_part_obj.to_ohos_build()
+            else:
+                _parts_config = read_build_file(_build_file)
+
+            _subsystem_name = _parts_config.get('subsystem')
+            if not is_thirdparty_subsystem and subsystem_name and _subsystem_name != subsystem_name:
+                raise OHOSException(
+                    "subsystem name config incorrect in '{}'.".format(
+                        _build_file), "2014")
+            if _subsystem_name != self._subsystem_name:
+                is_allow = False
+                for file_path in self._bundle_subsystem_allow_list:
+                    if _build_file.endswith(file_path):
+                        is_allow = True
+                        break
+                if is_allow:
+                    print("warning: subsystem name config incorrect in '{}', build file subsystem name is {},"
+                          "configured subsystem name is {}.".format(
+                        _build_file, _subsystem_name, self._subsystem_name))
+                else:
+                    raise OHOSException("subsystem name config incorrect in '{}', build file subsystem name is {},"
+                                        "configured subsystem name is {}.".format(
+                        _build_file, _subsystem_name, self._subsystem_name), 2014)
+
+            subsystem_name = _subsystem_name
+            _curr_parts_info = _parts_config.get('parts')
+            for _pname in _curr_parts_info.keys():
+                parts_path_dict[_pname] = os.path.relpath(
+                    os.path.dirname(_build_file), self._source_root_dir)
+            parts_info.update(_curr_parts_info)
+        subsystem_config = {}
+        subsystem_config['subsystem'] = subsystem_name
+        subsystem_config['parts'] = parts_info
+        return subsystem_config, parts_path_dict
 
 
 def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
