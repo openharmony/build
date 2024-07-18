@@ -143,13 +143,6 @@ def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, mo
             shutil.copyfile(lib_path, dest)
 
 
-def hvigor_obfuscation(options, cmd):
-    if options.hvigor_obfuscation:
-        cmd.extend(['-p', 'buildMode=release'])
-    else:
-        cmd.extend(['-p', 'hvigor-obfuscation=false'])
-
-
 def hvigor_write_log(cmd, cwd, env):
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
@@ -171,6 +164,71 @@ def hvigor_write_log(cmd, cwd, env):
     print("[0/0] Hvigor build end")
 
 
+def get_integrated_project_config(cwd: str):
+    print(f"project dir: {cwd}")
+    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
+        hvigor_info = json5.load(input_f)
+        model_version = hvigor_info.get('modelVersion')
+    return model_version
+
+
+def build_hvigor_cmd(cwd: str, model_version: str, options):
+    cmd = ['bash']
+    if model_version:
+        cmd.extend(['hvigorw'])
+    else:
+        cmd.extend(['./hvigorw'])
+    
+    if options.test_hap:
+        cmd.extend(['--mode', 'module', '-p',
+               f'module={options.test_module}@ohosTest', 'assembleHap'])
+    elif options.build_modules:
+        cmd.extend(['assembleHap', '--mode',
+               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)])
+    else:
+        cmd.extend(['--mode',
+               options.build_level, '-p', 'product=default', options.assemble_type])
+
+    if options.enable_debug:
+        cmd.extend(['-p', 'debuggable=true'])
+    else:
+        cmd.extend(['-p', 'debuggable=false'])
+
+    if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
+        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
+        os.makedirs(hvigor_cache_dir, exist_ok=True)
+        cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
+
+    if options.hvigor_obfuscation:
+        cmd.extend(['-p', 'buildMode=release'])
+    else:
+        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+        
+    cmd.extend(['--no-daemon'])
+    
+    print("hvigor cmd: " + ' '.join(cmd))
+    return cmd
+
+
+def write_local_properties(cwd: str, options):
+    sdk_dir = options.sdk_home
+    nodejs_dir = os.path.abspath(
+        os.path.dirname(os.path.dirname(options.nodejs)))
+    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
+        for sdk_type in options.sdk_type_name:
+            f.write(f'{sdk_type}={sdk_dir}\n')
+        f.write(f'nodejs.dir={nodejs_dir}\n')
+
+
+def hvigor_sync(cwd: str, model_version: str, env):
+    if not model_version:
+        subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
+                   cwd=cwd,
+                   env=env,
+                   stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL)
+
+
 def hvigor_build(cwd: str, options):
     '''
     Run hvigorw to build the app or hap
@@ -178,41 +236,18 @@ def hvigor_build(cwd: str, options):
     :param options: command line parameters
     :return: None
     '''
-    if options.test_hap:
-        cmd = ['bash', './hvigorw', '--mode', 'module', '-p',
-               f'module={options.test_module}@ohosTest', 'assembleHap']
-    elif options.build_modules:
-        cmd = ['bash', './hvigorw', 'assembleHap', '--mode',
-               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)]
-    else:
-        cmd = ['bash', './hvigorw', '--mode',
-               options.build_level, '-p', 'product=default', options.assemble_type]
-    if options.enable_debug:
-        cmd.extend(['-p', 'debuggable=true'])
-    else:
-        cmd.extend(['-p', 'debuggable=false'])
-    if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
-        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
-        os.makedirs(hvigor_cache_dir, exist_ok=True)
-        cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
-    hvigor_obfuscation(options, cmd)
-    cmd.extend(['--no-daemon'])
-    sdk_dir = options.sdk_home
+    model_version = get_integrated_project_config(cwd)
+    print(f"model_version: {model_version}")
+
+    cmd = build_hvigor_cmd(cwd, model_version, options)
+
+    write_local_properties(cwd, options)
+
+    print("[0/0] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
-    nodejs_dir = os.path.abspath(
-        os.path.dirname(os.path.dirname(options.nodejs)))
-
-    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
-        for sdk_type in options.sdk_type_name:
-            f.write(f'{sdk_type}={sdk_dir}\n')
-        f.write(f'nodejs.dir={nodejs_dir}\n')
-    print("[0/0] Hvigor clean start")
-    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
-                   cwd=cwd,
-                   env=env,
-                   stdout=subprocess.DEVNULL,
-                   stderr=subprocess.DEVNULL)
+    hvigor_sync(cwd, model_version, env)
+    
     print("[0/0] Hvigor build start")
     hvigor_write_log(cmd, cwd, env)
 
