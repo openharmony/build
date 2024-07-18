@@ -91,7 +91,11 @@ def _get_src_part_name(src_bundle_paths):
     _bundle_path = ''
     for src_bundle_path, v_path in src_bundle_paths.items():
         src_bundle_json = utils.get_json(src_bundle_path)
-        part_name = src_bundle_json['component']['name']
+        part_name = ''
+        try:
+            part_name = src_bundle_json['component']['name']
+        except KeyError:
+            print(f'--get bundle json component name error--')
         if part_name.endswith('_lite'):
             pass
         else:
@@ -113,7 +117,11 @@ def main():
     bundle_paths = _get_bundle_path(source_code_path)
     _bundle_path, dir_path = _get_src_part_name(bundle_paths)
     bundle_json = utils.get_json(_bundle_path)
-    build_data = bundle_json["component"]["build"]
+    build_data = dict()
+    try:
+        build_data = bundle_json["component"]["build"]
+    except KeyError:
+        print(f'--get bundle json component build dict error--')
     for ele in build_data.keys():
         if ele not in ['inner_kits', 'test', 'inner_api']:
             _judge_type(build_data[ele], deps_list)
