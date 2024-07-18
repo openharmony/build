@@ -362,8 +362,7 @@ template("gcc_toolchain") {
         unstripped_sofile = sofile
       }
 
-      _clang_rt_dso_full_path = ""
-      link_command = "$ld -shared {{ldflags}}${extra_ldflags} $_clang_rt_dso_full_path -o \"$unstripped_sofile\" @\"$rspfile\""
+      link_command = "$ld -shared {{ldflags}}${extra_ldflags} -o \"$unstripped_sofile\" @\"$rspfile\""
 
       if (!is_mingw_link) {
         link_command = "$link_command -Wl,-soname=\"$soname\""
