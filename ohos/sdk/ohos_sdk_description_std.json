@@ -1087,6 +1087,16 @@
         ]
     },
     {
+        "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:configurationSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
