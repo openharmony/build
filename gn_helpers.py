@@ -130,6 +130,14 @@ def from_gn_args(input_string: str) -> dict:
     return parser.parse_args()
 
 
+def unescape_gn_special_char(char_after_backslash: str) -> str:
+    # Process the GN escape character and return it if it is a valid escape character; Otherwise, return a back slash
+    if char_after_backslash in ('$', '"', '\\'):
+        return char_after_backslash
+    else:
+        return '\\'
+
+
 def unescape_gn_string(value: list) -> str:
     """Given a string with GN escaping, returns the unescaped string.
 
@@ -140,16 +148,10 @@ def unescape_gn_string(value: list) -> str:
     result = []
     i = 0
     while i < len(value):
-        if value[i] == '\\':
-            if i < len(value) - 1:
-                next_char = value[i + 1]
-                if next_char in ('$', '"', '\\'):
-                    # These are the escaped characters GN supports.
-                    result.append(next_char)
-                    i += 1
-                else:
-                    # Any other backslash is a literal.
-                    result.append('\\')
+        if i < len(value) - 1 and value[i] == '\\':
+            # If it is not the last element of the list and the current character is a back slash    
+            result.append(unescape_gn_special_char(value[i + 1]))
+            i += 1
         else:
             result.append(value[i])
         i += 1
