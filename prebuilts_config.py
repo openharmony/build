@@ -294,7 +294,7 @@ def process_tar(tar_dict, args):
                 file_name = after_extract_file_list[0]
                 symlink_src2dest(os.path.join(download_dir, version, file_name), symlink)
             if tar_name == 'nodejs' and url == os.path.join(args.repo_https,
-                                                            "nodejs/v14.21.1/node-v14.21.1-linux-x64.tar.gz"):
+                                                            "nodejs/v16.20.2/node-v16.20.2-linux-x64.tar.gz"):
                 symlink_src2dest(symlink, os.path.join(os.path.dirname(symlink), 'current'))
 
 
