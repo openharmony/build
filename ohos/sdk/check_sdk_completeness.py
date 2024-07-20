@@ -88,7 +88,7 @@ def add_files_to_sdk_package(sdk_package_directory: dict, compressed_file: str):
 def get_sdk_package_directories():
     if sys.platform == 'linux':
         if sdk_platform == 'default':
-            os_types = ['linux', 'windows',"ohos"]
+            os_types = ['linux', 'windows', 'ohos']
         elif sdk_platform == 'win':
             os_types = ['windows']
         elif sdk_platform == 'linux':
