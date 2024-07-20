@@ -410,7 +410,8 @@ def main():
                 if error_info.endswith('debug.log'):
                     log_path = error_info.split()[-1]
                     cmd = ['cat', log_path]
-                    subprocess.Popen(cmd)
+                    process_cat = subprocess.Popen(cmd)
+                    process_cat.communicate(timeout=60)
                     raise Exception("npm install error with three times, prebuilts download exit")
         retry_times += 1
     _node_modules_copy(node_modules_copy_config, args.code_dir, args.enable_symlink)
@@ -421,7 +422,6 @@ def main():
     uninstalled_tools = config_info.get('uninstalled_tools')
     for tool_path in uninstalled_tools:
         subprocess.run(['rm', '-rf', tool_path])
-
 
 if __name__ == '__main__':
     sys.exit(main())

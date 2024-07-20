@@ -73,8 +73,7 @@ class SARearrangement(object):
         with open(source_file, "r", encoding="utf-8") as file:
             data = json.load(file)
         data['systemability'] = final_systemability
-        file_node = os.open(dest_file, os.O_RDWR | os.O_CREAT, 0o640)
-        with os.fdopen(file_node, 'w') as json_files:
+        with os.fdopen(os.open(dest_file, os.O_RDWR | os.O_CREAT, 0o640), 'w') as json_files:
             json.dump(data, json_files, indent=4, ensure_ascii=False)
 
     @classmethod

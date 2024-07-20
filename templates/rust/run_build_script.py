@@ -37,6 +37,7 @@ def host_triple(rustc_path):
         match = rustc_version.match(lines.rstrip())
         if match:
             known_vars[match.group(1)] = match.group(2)
+    proc.wait()
     return known_vars.get("host")
 
 

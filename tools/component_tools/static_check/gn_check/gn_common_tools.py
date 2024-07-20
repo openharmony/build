@@ -50,11 +50,11 @@ class GnCommon:
         for black_dir in black_dirs:
             bd_path = os.path.join(project_path, black_dir)
             cmd += " -o -path '{}' -prune".format(bd_path)
-        output = os.popen(cmd)
-        for file in output:
-            if GnCommon.contains_keywords(black_keywords, file):
-                continue
-            result_set.add(file.strip())
+        with os.popen(cmd) as output:
+            for file in output:
+                if GnCommon.contains_keywords(black_keywords, file):
+                    continue
+                result_set.add(file.strip())
         logging.info("total: %s", len(result_set))
         return result_set
 
@@ -82,9 +82,10 @@ class GnCommon:
             cmd += " | grep -Ev '{}'".format("|".join(black_keyword))
         logging.info(cmd)
         result = None
-        output = os.popen(cmd).read().strip()
-        if len(output) != 0:
-            result = output
+        with os.popen(cmd) as input_cmd:
+            output = input_cmd.read().strip()
+            f len(output) != 0:
+                result = output
         return result
 
     @staticmethod
