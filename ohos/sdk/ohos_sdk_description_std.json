@@ -15,7 +15,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
