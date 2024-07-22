@@ -59,14 +59,30 @@ if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
   exit 1
 fi
 
+
+host_cpu_prefix=""
+
+case $(uname -m) in
+    *x86_64)
+        host_cpu_prefix="x86"
+        ;;
+    *arm*)
+        host_cpu_prefix="arm64"
+        ;;
+    *)
+        echo "\033[31m[OHOS ERROR] Unsupported host arch: $(uname -m)\033[0m"
+        RET=1
+        exit $RET
+esac
+
 case $(uname -s) in
     Darwin)
-        HOST_DIR="darwin-x86"
+        HOST_DIR="darwin-$host_cpu_prefix"
         HOST_OS="mac"
         NODE_PLATFORM="darwin-x64"
         ;;
     Linux)
-        HOST_DIR="linux-x86"
+        HOST_DIR="linux-$host_cpu_prefix"
         HOST_OS="linux"
         NODE_PLATFORM="linux-x64"
         ;;
@@ -114,12 +130,14 @@ function init_ohpm() {
   pushd ${TOOLS_INSTALL_DIR} > /dev/null
     if [[ ! -f "${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
       echo "[OHOS INFO] download oh-command-line-tools"
-      wget https://contentcenter-vali-drcn.dbankcdn.cn/pvt_2/DeveloperAlliance_package_901_9/68/v3/r-5H8I7LT9mBjSFpSOY0Sg/ohcommandline-tools-linux-2.1.0.6.zip\?HW-CC-KV\=V1\&HW-CC-Date\=20231027T004601Z\&HW-CC-Expire\=315360000\&HW-CC-Sign\=A4D5E1A29C1C6962CA65592C3EB03ED363CE664CBE6C5974094064B67C34325E -O ohcommandline-tools-linux.zip
+      wget https://repo.huaweicloud.com/harmonyos/ohpm/5.0.2/oh-command-line-tools-20240715.zip -O ohcommandline-tools-linux.zip
       unzip ohcommandline-tools-linux.zip
     fi
-    OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm
-    chmod +x ${OHPM_HOME}/bin/init
-    ${OHPM_HOME}/bin/init > /dev/null
+    OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin
+    chmod +x ${OHPM_HOME}/ohpm
+    export PATH=${OHPM_HOME}:$PATH
+    chmod +x ${OHPM_HOME}/init
+    ${OHPM_HOME}/init > /dev/null
     echo "[OHOS INFO] Current ohpm version is $(ohpm -v)"
     ohpm config set registry https://repo.harmonyos.com/ohpm/
     ohpm config set strict_ssl false

@@ -34,6 +34,10 @@ class OHOSInstallModule(InstallModuleInterface):
         self._hpm = hpm
         OHOSInstallModule._instance = self
 
+    @property
+    def hpm(self):
+        return self._hpm
+    
     @staticmethod
     def get_instance():
         if OHOSInstallModule._instance is not None:
@@ -41,14 +45,6 @@ class OHOSInstallModule(InstallModuleInterface):
         else:
             raise OHOSException(
                 'OHOSInstallModule has not been instantiated', '0000')
-
-    @property
-    def hpm(self):
-        return self._hpm
-
-    def _install(self):
-        self._run_phase()
-        self.hpm.execute_hpm_cmd(CMDTYPE.INSTALL)
 
     @throw_exception
     def run(self):
@@ -58,6 +54,10 @@ class OHOSInstallModule(InstallModuleInterface):
             raise exception
         else:
             LogUtil.hb_info('{} build success')
+
+    def _install(self):
+        self._run_phase()
+        self.hpm.execute_hpm_cmd(CMDTYPE.INSTALL)
 
     def _run_phase(self):
         for arg in self.args_dict.values():

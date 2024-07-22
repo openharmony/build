@@ -46,7 +46,7 @@ def _do_copy_tree(items: list,
                   dest: str,
                   follow_all_symlinks: bool = False,
                   follow_outside_symlinks: bool = False) -> str:
-    os.makedirs(dest, exist_ok = True)
+    os.makedirs(dest, exist_ok=True)
     for item in items:
         srcname = os.path.join(src, item.name)
         destname = os.path.join(dest, item.name)
@@ -105,8 +105,8 @@ def _do_copy_tree(items: list,
 def copy_file(f: str,
               dest: str,
               deps: list,
-              follow_all_symlinks: bool=False,
-              follow_outside_symlinks: bool=False):
+              follow_all_symlinks: bool = False,
+              follow_outside_symlinks: bool = False):
     """Copy file or directory and update deps."""
     if os.path.isdir(f):
         copy_tree(f,

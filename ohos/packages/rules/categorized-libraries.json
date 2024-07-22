@@ -6,5 +6,65 @@
   "//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_dump": {
     "so_file_name": "libhitrace_dump.z.so",
     "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/composer/native_vsync:libnative_vsync": {
+    "so_file_name": "libnative_vsync.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:EGL": {
+    "so_file_name": "libEGL.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv3": {
+    "so_file_name": "libGLESv3.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor": {
+    "so_file_name": "libcolor_space_object_convertor.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation:window_animation": {
+    "so_file_name": "libwindow_animation.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/composer/vsync:libvsync": {
+    "so_file_name": "libvsync.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/effect/color_picker:color_picker": {
+    "so_file_name": "libcolor_picker.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/effect/egl:libegl_effect": {
+    "so_file_name": "libegl_effect.z.so",
+    "categories": [ "platformsdk_indirect" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/effect/skia_effectChain:skeffectchain": {
+    "so_file_name": "libskeffectchain.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/frame_analyzer:libframe_analyzer": {
+    "so_file_name": "libframe_analyzer.z.so",
+    "categories": [ "platformsdk_indirect" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/render_service_base:librender_service_base": {
+    "so_file_name": "librender_service_base.z.so",
+    "categories": [ "platformsdk_indirect" ]
+  },
+  "//foundation/graphic/graphic_2d/rosen/modules/render_service_client:librender_service_client": {
+    "so_file_name": "librender_service_client.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/utils/color_manager:color_manager": {
+    "so_file_name": "libcolor_manager.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/utils/socketpair:socketpair": {
+    "so_file_name": "libsocketpair.z.so",
+    "categories": [ "platformsdk_indirect" ]
+  },
+  "//base/powermgr/battery_statistics/interfaces/inner_api:batterystats_client": {
+    "so_file_name": "libbatterystats_client.z.so",
+    "categories": [ "platformsdk" ]
   }
 }

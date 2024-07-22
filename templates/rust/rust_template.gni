@@ -283,6 +283,11 @@ template("ohos_rust_executable") {
       file_path_split = string_split(file_path[0], "/")
       source_dir_begin = file_path_split[2]
 
+      if (defined(invoker.install_images)) {
+        install_images = []
+        install_images = invoker.install_images
+      }
+
       if (source_dir_begin == "third_party") {
         _rustflags += allowAllLints
       } else if (source_dir_begin == "prebuilts") {
@@ -393,6 +398,11 @@ template("ohos_rust_shared_library") {
       }
     }
 
+    if (defined(invoker.install_images)) {
+      install_images = []
+      install_images = invoker.install_images
+    }
+
     if (defined(rustc_lints)) {
       if (rustc_lints == "openharmony") {
         _rustflags += rustcOhosLints
@@ -475,6 +485,11 @@ template("ohos_rust_static_library") {
         _rustflags += rustcOhosLints
         _rustflags += clippyOhosLints
       }
+    }
+
+    if (defined(invoker.install_images)) {
+      install_images = []
+      install_images = invoker.install_images
     }
 
     if (defined(rustc_lints)) {
@@ -563,6 +578,11 @@ template("ohos_rust_shared_ffi") {
       }
     }
 
+    if (defined(invoker.install_images)) {
+      install_images = []
+      install_images = invoker.install_images
+    }
+
     if (defined(rustc_lints)) {
       if (rustc_lints == "openharmony") {
         _rustflags += rustcOhosLints
@@ -645,6 +665,11 @@ template("ohos_rust_static_ffi") {
         _rustflags += rustcOhosLints
         _rustflags += clippyOhosLints
       }
+    }
+
+    if (defined(invoker.install_images)) {
+      install_images = []
+      install_images = invoker.install_images
     }
 
     if (defined(rustc_lints)) {

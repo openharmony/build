@@ -2086,22 +2086,27 @@
             "//third_party/node/src/"
         ],
         "//developtools/hiperf:hiperf_platform_common": [
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
+            "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:hiperf_platform_linux": [
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
+            "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:support_elf": [
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
+            "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:support_libunwind": [
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
+            "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:support_protobuf": [
             "//third_party/protobuf/src/",
             "//third_party/protobuf/src/google/",
             "//third_party/protobuf/src/google/protobuf/",
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
+            "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/profiler/device/base:hiprofiler_base": [
             "//third_party/bounds_checking_function/include/",
@@ -39029,10 +39034,12 @@
         ],
         "deps_component_absolute": [
             "//arkcompiler/ets_frontend/es2panda:es2panda",
-            "//developtools/global_resource_tool:restool"
+            "//developtools/global_resource_tool:restool",
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "deps_gni": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ]
     }
 }
