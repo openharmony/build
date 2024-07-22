@@ -439,16 +439,26 @@ def _generate_public_configs(fp, module):
     fp.write('  public_configs = [":' + module + '_configs"]\n')
 
 
-def _generate_public_deps(fp, deps: list, components_json, public_deps_list: list):
+def _public_deps_special_handler(module):
+    if module == 'appexecfwk_core':
+        return ["ability_base:want"]
+    return []
+
+
+def _generate_public_deps(fp, module, deps: list, components_json, public_deps_list: list):
     if not deps:
         return public_deps_list
     fp.write('  public_external_deps = [\n')
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
         if len(public_external_deps) > 0:
-            fp.write('    "' + public_external_deps + '",\n')
+            fp.write(f"""    "{public_external_deps}",\n""")
             public_deps_list.append(public_external_deps)
+    for _public_external_deps in _public_deps_special_handler(module):
+        fp.write(f"""    "{_public_external_deps}",\n""")
+        public_deps_list.append(_public_external_deps)
     fp.write('  ]\n')
+
     return public_deps_list
 
 
@@ -472,7 +482,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _generate_configs(fp, module)
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
-    _list = _generate_public_deps(fp, deps, components_json, public_deps_list)
+    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print("_generate_build_gn has done ")
