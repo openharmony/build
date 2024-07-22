@@ -31,7 +31,7 @@ do
 done
 
 pushd ${SOURCE_FILE_DIR}
-cp ${PROJECT_DIR}/build/templates/kernel/Makefile .
+cp ${PROJECT_DIR}/build/templates/kernel/linux-5.10/Makefile .
 cp ${PROJECT_DIR}/out/kernel/OBJ/linux-5.10/certs/signing_key.pem .
 export PATH=${PROJECT_DIR}/out/kernel/OBJ/linux-5.10/scripts/:$PATH
 

@@ -16,6 +16,7 @@ import("//build/ohos/sa_profile/sa_profile.gni")
 
 import("//build/ohos.gni")
 import("//build/ohos/build_var.gni")
+import("//build/ohos_var.gni")
 
 import("//build/ohos/hisysevent/hisysevent.gni")
 
@@ -214,8 +215,12 @@ foreach(_platform, target_platform_list) {
       "--notice-module-info",
       rebase_path(_notice_module_info_file, root_build_dir),
       "--notice-install-dir",
-      "system/etc",
     ]
+    if (is_system_component) {
+      args += [ "system/etc" ]
+    } else {
+      args += [ "vendor/etc" ]
+    }
     if (!is_standard_system) {
       args += [
         "--lite-product",

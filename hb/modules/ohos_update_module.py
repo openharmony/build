@@ -34,6 +34,10 @@ class OHOSUpdateModule(UpdateModuleInterface):
         self._hpm = hpm
         OHOSUpdateModule._instance = self
 
+    @property
+    def hpm(self):
+        return self._hpm
+    
     @staticmethod
     def get_instance():
         if OHOSUpdateModule._instance is not None:
@@ -42,20 +46,16 @@ class OHOSUpdateModule(UpdateModuleInterface):
             raise OHOSException(
                 'OHOSUpdateModule has not been instantiated', '0000')
 
-    @property
-    def hpm(self):
-        return self._hpm
-
-    def _update(self):
-        self._run_phase()
-        self.hpm.execute_hpm_cmd(CMDTYPE.UPDATE)
-
     @throw_exception
     def run(self):
         try:
             super().run()
         except OHOSException as exception:
             raise exception
+    
+    def _update(self):
+        self._run_phase()
+        self.hpm.execute_hpm_cmd(CMDTYPE.UPDATE)
 
     def _run_phase(self):
         for arg in self.args_dict.values():

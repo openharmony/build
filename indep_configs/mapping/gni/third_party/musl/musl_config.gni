@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 import("//build/config/sanitizers/sanitizers.gni")
+import("//build/ohos/kernel/kernel.gni")
 
 declare_args() {
   if (current_cpu == "arm") {
@@ -14,6 +15,8 @@ declare_args() {
     musl_arch = "mips"
   } else if (current_cpu == "riscv64") {
     musl_arch = "riscv64"
+  } else if (current_cpu == "loongarch64") {
+    musl_arch = "loongarch64"
   }
   # musl_root = "$root_out_dir/obj/third_party/musl"
   # musl_sub_arch = ""
@@ -40,8 +43,13 @@ declare_args() {
   if (is_llvm_build) {
     runtime_lib_path = "//out/llvm-install/lib/clang/15.0.4/lib"
   } else {
-    runtime_lib_path =
-        "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/15.0.4/lib"
+    if (host_cpu == "arm64") {
+      runtime_lib_path =
+          "//prebuilts/clang/ohos/linux-aarch64/llvm/lib/clang/15.0.4/lib"
+    } else {
+      runtime_lib_path =
+          "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/15.0.4/lib"
+    }
   }
   if (!is_llvm_build) {
     use_gwp_asan = true
@@ -50,14 +58,16 @@ declare_args() {
   }
   user_custom_libc = true
   use_jemalloc = false
+  use_encaps = false
   musl_malloc_plugin = ""
   use_jemalloc_dfx_intf = false
   use_jemalloc_recycle_func = false
   use_pthread_cancel = false
   musl_ported_dir = "intermidiates/${musl_target_os}/musl_src_ported"
   musl_inc_out_dir = "usr/include/${musl_target_triple}"
-  uapi_dir = "//kernel/linux/patches/linux-5.10/prebuilts/usr/include"
-  linux_kernel_dir = "//kernel/linux/linux-5.10"
+  uapi_dir =
+      "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include"
+  linux_kernel_dir = "//kernel/linux/${linux_kernel_version}"
   musl_dir = "//third_party/musl"
   musl_porting_dir = "//third_party/musl/porting/linux/user"
 
@@ -109,3 +119,38 @@ declare_args() {
   # whether clang select the legacy encoding
   is_legacy = false
 }
+
+declare_args() {
+  dynamic_list = rebase_path("./dynamic.list")
+}
+
+declare_args() {
+  use_flto = false
+}
+
+# part of default_compiler_configs from build/config/BUILDCONFIG.gn
+musl_inherited_configs = [
+  "//build/config/compiler:afdo",
+  "//build/config/compiler:afdo_optimize_size",
+  "//build/config/compiler:compiler",
+  "//build/config/compiler:compiler_arm_fpu",
+  "//build/config/compiler:compiler_arm_thumb",
+  "//build/config/compiler:chromium_code",
+  "//build/config/compiler:default_include_dirs",
+  "//build/config/compiler:default_optimization",
+  "//build/config/compiler:default_stack_frames",
+  "//build/config/compiler:default_symbols",
+  "//build/config/compiler:export_dynamic",
+  "//build/config/compiler:no_exceptions",
+  "//build/config/compiler:no_rtti",
+  "//build/config/compiler:runtime_library",
+  "//build/config/compiler:thin_archive",
+  "//build/config/sanitizers:default_sanitizer_flags",
+]
+
+porting_deps = [
+  "//third_party/musl:create_alltypes_h",
+  "//third_party/musl:create_porting_src",
+  "//third_party/musl:create_syscall_h",
+  "//third_party/musl:create_version_h",
+]

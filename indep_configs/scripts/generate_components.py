@@ -203,7 +203,7 @@ def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, r
                                            utils.get_json(os.path.join(root_path, "build", "bundle.json")),
                                            "build_framework", src_build_name_list, _part_toolchain_map_dict)
     for part_name in part_name_list:
-        if part_name:
+        if part_name and part_name != src_part_name:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
             components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,

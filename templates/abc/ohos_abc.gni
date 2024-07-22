@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//arkcompiler/ets_frontend/es2panda/es2abc_config.gni")
+import("//build/config/components/ets_frontend/es2abc_config.gni")
 import("//build/config/python.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/templates/common/collect_target.gni")
