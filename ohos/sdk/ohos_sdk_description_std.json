@@ -20,13 +20,6 @@
         ]
     },
     {
-      "install_dir": "toolchains",
-      "module_label": "//developtools/hdc/hdc_rust:hdc_rust",
-      "target_os": [
-        "ohos"
-      ]
-    },
-    {
         "install_dir": "toolchains",
         "module_label": "//base/startup/appspawn/service/hnp:hnpcli",
         "target_os": [
