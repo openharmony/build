@@ -18,11 +18,11 @@ import sys
 import os
 
 
-def is_exists(filename: str, typ: str) -> bool:
+def is_exists(filename: str, file_type: str) -> bool:
     result = False
-    if typ == 'file':
+    if file_type == 'file':
         result = os.path.exists(filename) and os.path.isfile(filename)
-    elif typ == 'dir':
+    elif file_type == 'dir':
         result = os.path.exists(filename) and os.path.isdir(filename)
     return result
 
