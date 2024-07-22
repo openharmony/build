@@ -17,6 +17,8 @@ es2abc_root = "//arkcompiler/ets_frontend/es2panda"
 es2abc_build_path = ""
 es2abc_build_deps = ""
 es2abc_out_root = ""
+es2abc_indep_path =
+    "//binarys/arkcompiler/ets_frontend/innerapis/es2panda/clang_x64/libs"
 
 if (host_toolchain == toolchain_mac) {
   es2abc_out_root =
@@ -31,7 +33,11 @@ if (host_toolchain == toolchain_mac) {
       get_label_info("$es2abc_root:es2panda($toolchain_linux)", "root_out_dir")
   es2abc_build_deps = [ "$es2abc_root:es2panda($toolchain_linux)" ]
 }
-es2abc_build_path = es2abc_out_root + "/arkcompiler/ets_frontend"
+if (ohos_indep_compiler_enable) {
+  es2abc_build_path = es2abc_indep_path
+} else {
+  es2abc_build_path = es2abc_out_root + "/arkcompiler/ets_frontend"
+}
 
 # Generate abc.
 #
