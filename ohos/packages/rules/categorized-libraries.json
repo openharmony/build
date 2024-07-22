@@ -62,5 +62,9 @@
   "//foundation/graphic/graphic_2d/utils/socketpair:socketpair": {
     "so_file_name": "libsocketpair.z.so",
     "categories": [ "platformsdk_indirect" ]
+  },
+  "//base/powermgr/battery_statistics/interfaces/inner_api:batterystats_client": {
+    "so_file_name": "libbatterystats_client.z.so",
+    "categories": [ "platformsdk" ]
   }
 }
