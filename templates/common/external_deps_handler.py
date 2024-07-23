@@ -107,7 +107,7 @@ def _get_inner_kits_adapter_info(innerkits_adapter_info_file: str) -> dict:
     return _parts_compatibility
 
 
-def main() -> int:
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--external-deps', nargs='*', required=True)
     parser.add_argument('--parts-src-flag-file', required=True)
@@ -143,8 +143,7 @@ def main() -> int:
     include_dirs = []
 
     # load inner kits info file
-    inner_kits_info_file = 'build_configs/parts_info/inner_kits_info.json'
-    all_kits_info_dict = read_json_file(inner_kits_info_file)
+    all_kits_info_dict, components_info_dict = _parse_inner_kits_file()
     if all_kits_info_dict is None:
         raise Exception("read pre_build inner_kits_info failed.")
 
@@ -202,7 +201,7 @@ def main() -> int:
 
         if not use_sdk and is_external_part_valid:
             external_module_desc_info = _get_external_module_info(
-                all_kits_info_dict, external_part_name, external_module_name,
+                all_kits_info_dict, components_info_dict, external_part_name, external_module_name,
                 _adapted_part_name)
             dep_label = external_module_desc_info['label']
 
