@@ -333,6 +333,8 @@ def _copy_bundlejson(args, public_deps_list):
             if bundle_data.get('readmePath'):
                 del bundle_data['readmePath']
             bundle_data['dependencies'] = dependencies_dict
+            if os.path.isfile(os.path.join(bundlejson_out, "bundle.json")):
+                os.remove(os.path.join(bundlejson_out, "bundle.json"))
             with os.fdopen(os.open(os.path.join(bundlejson_out, "bundle.json"), os.O_WRONLY | os.O_CREAT, mode=0o640),
                            "w",
                            encoding='utf-8') as fd:
@@ -671,16 +673,18 @@ def _del_exist_component_package(out_path):
             print('del dir component_package FAILED')
 
 
-def _get_component_check() -> list:
+def _get_component_check(local_test) -> list:
     check_list = []
-    contents = urllib.request.urlopen("https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
-        encoding="utf-8")
-    _check_json = json.loads(contents)
-    try:
-        check_list.extend(_check_json["data"]["dep_list"])
-        check_list.extend(_check_json["data"]["indep_list"])
-    except Exception as e:
-        print("Call the component check API something wrong, plz check the API return..")
+    if local_test == 0:
+        contents = urllib.request.urlopen(
+            "https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
+            encoding="utf-8")
+        _check_json = json.loads(contents)
+        try:
+            check_list.extend(_check_json["data"]["dep_list"])
+            check_list.extend(_check_json["data"]["indep_list"])
+        except Exception as e:
+            print("Call the component check API something wrong, plz check the API return..")
     check_list = list(set(check_list))
     check_list = sorted(check_list)
     return check_list
@@ -710,22 +714,31 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
-        local_test: 1 to open local test , 0 to close
+        local_test: 1 to open local test , 0 to close , 2 to pack init and init deps
     Returns:
 
     """
     start_time = time.time()
-    _check_list = _get_component_check()
-    print(components_list)
-    if not components_list:
+    _check_list = _get_component_check(local_test)
+    if local_test == 1 and not components_list:
         components_list = []
     elif local_test == 1 and components_list:
         components_list = [component for component in components_list.split(",")]
+    elif local_test == 2:
+        components_list = ["init", "appspawn", "safwk", "c_utils",
+                           "napi", "ipc", "config_policy", "hilog", "hilog_lite", "samgr", "access_token", "common",
+                           "dsoftbus", "hvb", "hisysevent", "hiprofiler", "bounds_checking_function",
+                           "bundle_framework", "selinux", "selinux_adapter", "storage_service",
+                           "mbedtls", "zlib", "libuv", "cJSON", "mksh", "libunwind", "toybox",
+                           "bounds_checking_function",
+                           "selinux", "libunwind", "mbedtls", "zlib", "cJSON", "mksh", "toybox", "config_policy",
+                           "e2fsprogs", "f2fs-tools", "selinux_adapter", "storage_service"
+                           ]
     else:
         components_list = [component for component in components_list.split(",") if component in _check_list]
         if not components_list:
             sys.exit("stop for no target to pack..")
-    print('components_list', type(components_list), components_list)
+    print('components_list', components_list)
     components_json = _get_components_json(out_path)
     part_subsystem = _get_part_subsystem(components_json)
     parts_path_info = _get_parts_path_info(components_json)
