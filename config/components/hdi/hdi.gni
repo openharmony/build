@@ -103,10 +103,7 @@ template("hdi") {
   idl_headers_config = "$target_name" + "_idl_headers_config"
   config("$idl_headers_config") {
     include_dirs = [
-      "$hdf_uhdf_path/include/hdi",
-      "$hdf_uhdf_path/osal/include",
       "$hdf_uhdf_path/ipc/include",
-      "$hdf_fwk_path/include/utils",
       "//drivers/hdf_core/interfaces/inner_api/utils",
       "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
       "//drivers/hdf_core/interfaces/inner_api/hdi",
