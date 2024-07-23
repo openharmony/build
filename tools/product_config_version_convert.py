@@ -15,7 +15,7 @@
 
 import argparse
 import os
-import sys 
+import sys
 import json
 
 
@@ -53,14 +53,14 @@ def merge_files(args):
     readjson(new_file_name, device)
 
 
-def readjson(path: str, device: str):
+def readjson(path, device):
     subsystems_list = list()
     config_dic = {}
     with open(path, 'r+', encoding='utf-8') as f:
         data = json.load(f)
         parts = data['parts']
-        subsystem_list = list() 
-        for key in parts: 
+        subsystem_list = list()
+        for key in parts:
             substr = str(key).split(":")
             if substr[0] not in subsystem_list:
                 subsystem_list.append(substr[0])
@@ -94,13 +94,14 @@ def readjson(path: str, device: str):
         f.truncate()
 
 
-def merge(dict1: dict, dict2: dict): 
-    res = {**dict1, **dict2} 
-    return res 
+def merge(dict1, dict2):
+    res = {**dict1, **dict2}
+    return res
 
 
 def main(args):
     merge_files(args)
+
 
 if __name__ == '__main__':
     main(sys.argv[1])
