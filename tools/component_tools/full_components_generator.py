@@ -109,7 +109,7 @@ def update_components(subsys_file: str):
 
 def main():
     conf = Config()
-    subsystem_json_overlay_path = conf.product_path + '/subsystem_config_overlay.json'
+    subsystem_json_overlay_path = os.path.join(conf.product_path, 'subsystem_config_overlay.json')
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsys', type=str, default="./build/subsystem_config.json",
                         help='subsystem config file location, default=//build/subsystem_config.json')

@@ -55,8 +55,8 @@ try:
                 shutil.rmtree(os.path.join(out_dir, tmp_dir))
             else:
                 os.remove(os.path.join(out_dir, tmp_dir))
-except Exception as e:
-    log_error(e)
+except Exception as err:
+    log_error(err)
 
 
 @pytest.fixture()
@@ -98,78 +98,10 @@ class TestBuildOption:
         log_info("TIME_OVER:{}".format(TIME_OVER))
         log_info("PTYFLAG:{}".format(PTYFLAG))
         log_info("select_timeout:{}".format(select_timeout))
-    except Exception as e:
+    except Exception as err:
         log_error("build_example.json has error")
-        log_error(e)
-        raise e
-
-    def exec_command_select(self, cmd, timeout=60, ptyflag=False):
-        out_queue = queue.Queue()
-        log_info("select_exec cmd is :{}".format(" ".join(cmd)))
-        if not ptyflag:
-            try:
-                proc = subprocess.Popen(
-                    cmd,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    encoding="utf-8",
-                    universal_newlines=True,
-                    errors='ignore',
-                    cwd=script_path
-                )
-                start_time = time.time()
-                while True:
-                    if timeout and time.time() - start_time > timeout:
-                        raise Exception("exec cmd time out,select")
-                    ready_to_read, _, _ = select.select([proc.stdout, proc.stderr], [], [], self.select_timeout)
-                    for stream in ready_to_read:
-                        output = stream.readline().strip()
-                        if output:
-                            out_queue.put(output)
-                    if proc.poll() is not None:
-                        break
-                returncode = proc.wait()
-                out_res = list(out_queue.queue)
-                return out_res, returncode
-            except Exception as err:
-                log_error("An error occurred: {}".format(err))
-                raise Exception(err)
-        else:
-            try:
-                master, slave = pty.openpty()
-                proc = subprocess.Popen(
-                    cmd,
-                    stdin=slave,
-                    stdout=slave,
-                    stderr=slave,
-                    encoding="utf-8",
-                    universal_newlines=True,
-                    errors='ignore',
-                    cwd=script_path
-                )
-                start_time = time.time()
-                incomplete_line = ""
-                while True:
-                    if timeout and time.time() - start_time > timeout:
-                        raise Exception("exec cmd time out,select")
-                    ready_to_read, _, _ = select.select([master, ], [], [], self.select_timeout)
-                    for stream in ready_to_read:
-                        output_bytes = os.read(stream, 1024)
-                        output = output_bytes.decode('utf-8')
-                        lines = (incomplete_line + output).split("\n")
-                        for line in lines[:-1]:
-                            line = line.strip()
-                            if line:
-                                out_queue.put(line)
-                        incomplete_line = lines[-1]
-                    if proc.poll() is not None:
-                        break
-                returncode = proc.wait()
-                out_res = list(out_queue.queue)
-                return out_res, returncode
-            except Exception as e:
-                log_error("An error occurred: {}".format(e))
-                raise Exception(e)
+        log_error(err)
+        raise err
 
     @staticmethod
     def exec_command_communicate(cmd, timeout=60):
@@ -184,18 +116,12 @@ class TestBuildOption:
                 errors='ignore',
                 cwd=script_path
             )
-            out, err = proc.communicate(timeout=timeout)
-            out_res = out.splitlines() + err.splitlines()
+            out, err_ = proc.communicate(timeout=timeout)
+            out_res = out.splitlines() + err_.splitlines()
             return out_res, proc.returncode
-        except Exception as e:
-            log_error("An error occurred: {}".format(e))
+        except Exception as errs:
+            log_error("An error occurred: {}".format(errs))
             raise Exception("exec cmd time out,communicate")
-
-    def exec_command(self, cmd, ptyflag=PTYFLAG, timeout=TIMEOUT):
-        if TestBuildOption.COMMAND_TYPE == "select":
-            return self.exec_command_select(cmd, timeout=timeout, ptyflag=ptyflag)
-        else:
-            return self.exec_command_communicate(cmd, timeout=timeout)
 
     @staticmethod
     def resolve_res(cmd_res, flag_res):
@@ -250,17 +176,6 @@ class TestBuildOption:
                 return False
         return True
 
-    def get_match_result(self, cmd, para_type, para_value, ptyflag=PTYFLAG):
-        cmd_res, returncode = self.exec_command(cmd, ptyflag=ptyflag)
-        before_flags, expect_dict = self.get_match_flags(para_type, para_value)
-        flag_res = self.resolve_res(cmd_res, before_flags)
-        result = self.check_flags(flag_res, expect_dict, returncode)
-        if result == 1:
-            self.print_error_line(cmd_res)
-        else:
-            self.print_error_line(cmd_res, is_success=True)
-        return result
-
     @staticmethod
     def print_error_line(cmd_res, is_success=False):
         if is_success:
@@ -269,27 +184,6 @@ class TestBuildOption:
         else:
             for ind, line in enumerate(cmd_res):
                 log_error("【{}】:{}".format(ind, line))
-
-    def get_match_flags(self, para_type, para_value):
-        method_name = "get_{}_flags".format(para_type)
-        if hasattr(self, method_name):
-            method = self.__getattribute__(method_name)
-            flags, expect_dict = method(para_value)
-            return flags, expect_dict
-
-    def get_common_spec_result(self, option, cmd, para_type=None, ptyflag=PTYFLAG):
-        if not para_type:
-            flag_res, expect_dict = self.get_common_flags(option, check_file=True)
-        else:
-            flag_res, expect_dict = self.get_match_flags(para_type, option)
-        cmd_res, returncode = self.exec_command(cmd, ptyflag=ptyflag)
-        resolve_result = self.resolve_res(cmd_res, flag_res)
-        result = self.check_flags(resolve_result, expect_dict, returncode)
-        if result == 1:
-            self.print_error_line(cmd_res)
-        else:
-            self.print_error_line(cmd_res, is_success=True)
-        return resolve_result, result, cmd_res
 
     @staticmethod
     def get_build_only_gn_flags(para_value):
@@ -1140,3 +1034,107 @@ class TestBuildOption:
             else:
                 assert result == 0 and not check_file_flag, "enable pycache para {} failed".format(enable_pycache)
 
+    def exec_command_select(self, cmd, timeout=60, ptyflag=False):
+        out_queue = queue.Queue()
+        log_info("select_exec cmd is :{}".format(" ".join(cmd)))
+        if not ptyflag:
+            try:
+                proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    encoding="utf-8",
+                    universal_newlines=True,
+                    errors='ignore'
+                )
+                start_time = time.time()
+                while True:
+                    if timeout and time.time() - start_time > timeout:
+                        raise Exception("exec cmd time out,select")
+                    ready_to_read, _, _ = select.select([proc.stdout, proc.stderr], [], [], self.select_timeout)
+                    for stream in ready_to_read:
+                        output = stream.readline().strip()
+                        if output:
+                            out_queue.put(output)
+                    if proc.poll() is not None:
+                        break
+                returncode = proc.wait()
+                out_res = list(out_queue.queue)
+                return out_res, returncode
+            except Exception as err_:
+                log_error("An error occurred: {}".format(err_))
+                raise Exception(err_)
+        else:
+            try:
+                master, slave = pty.openpty()
+                proc = subprocess.Popen(
+                    cmd,
+                    stdin=slave,
+                    stdout=slave,
+                    stderr=slave,
+                    encoding="utf-8",
+                    universal_newlines=True,
+                    errors='ignore'
+                )
+                start_time = time.time()
+                incomplete_line = ""
+                while True:
+                    if timeout and time.time() - start_time > timeout:
+                        raise Exception("exec cmd time out,select")
+                    ready_to_read, _, _ = select.select([master, ], [], [], self.select_timeout)
+                    for stream in ready_to_read:
+                        output_bytes = os.read(stream, 1024)
+                        output = output_bytes.decode('utf-8')
+                        lines = (incomplete_line + output).split("\n")
+                        for line in lines[:-1]:
+                            line = line.strip()
+                            if line:
+                                out_queue.put(line)
+                        incomplete_line = lines[-1]
+                    if proc.poll() is not None:
+                        break
+                returncode = proc.wait()
+                out_res = list(out_queue.queue)
+                return out_res, returncode
+            except Exception as err_:
+                log_error("An error occurred: {}".format(err_))
+                raise Exception(err_)
+
+    def get_match_result(self, cmd, para_type, para_value, ptyflag=PTYFLAG):
+        cmd_res, returncode = self.exec_command(cmd, ptyflag=ptyflag)
+        before_flags, expect_dict = self.get_match_flags(para_type, para_value)
+        flag_res = self.resolve_res(cmd_res, before_flags)
+        result = self.check_flags(flag_res, expect_dict, returncode)
+        if result == 1:
+            self.print_error_line(cmd_res)
+        else:
+            self.print_error_line(cmd_res, is_success=True)
+        return result
+
+    def get_match_flags(self, para_type, para_value):
+        method_name = "get_{}_flags".format(para_type)
+        if hasattr(self, method_name):
+            method = self.__getattribute__(method_name)
+            flags, expect_dict = method(para_value)
+            return flags, expect_dict
+        return None, None
+
+    def get_common_spec_result(self, option, cmd, para_type=None, ptyflag=PTYFLAG):
+        if not para_type:
+            flag_res, expect_dict = self.get_common_flags(option, check_file=True)
+        else:
+            flag_res, expect_dict = self.get_match_flags(para_type, option)
+        cmd_res, returncode = self.exec_command(cmd, ptyflag=ptyflag)
+        resolve_result = self.resolve_res(cmd_res, flag_res)
+        result = self.check_flags(resolve_result, expect_dict, returncode)
+        if result == 1:
+            self.print_error_line(cmd_res)
+        else:
+            self.print_error_line(cmd_res, is_success=True)
+        return resolve_result, result, cmd_res
+
+    def exec_command(self, cmd, ptyflag=PTYFLAG, timeout=TIMEOUT):
+        if TestBuildOption.COMMAND_TYPE == "select":
+            return self.exec_command_select(cmd, timeout=timeout, ptyflag=ptyflag)
+        else:
+            return self.exec_command_communicate(cmd, timeout=timeout)
