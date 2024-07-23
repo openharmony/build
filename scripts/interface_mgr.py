@@ -22,15 +22,6 @@ import argparse
 class InterfaceMgr:
     __max_buf = 1024 * 1024
 
-    def _gen_checkfile(self, check_file_dir: str, target_type_dir: str, target_type: str):
-        subsystem_list = os.listdir(target_type_dir)
-        for subsystem_name in subsystem_list:
-            subsystem_dir = os.path.join(target_type_dir, subsystem_name)
-            if not os.path.isdir(subsystem_dir) or target_type.startswith(
-                    '.'):
-                continue
-            self.gen_sig_file_by_subsystem(subsystem_name, check_file_dir)
-
     def get_file_sha256(self, filename: str):
         hash_value = None
         if os.path.isfile(filename):
@@ -142,6 +133,15 @@ class InterfaceMgr:
                 raise Exception(
                     '[{}:{}] interface check failed. file [{}] has changed.'.
                     format(subsystem_name, module_name, h_file))
+                    
+    def _gen_checkfile(self, check_file_dir: str, target_type_dir: str, target_type: str):
+        subsystem_list = os.listdir(target_type_dir)
+        for subsystem_name in subsystem_list:
+            subsystem_dir = os.path.join(target_type_dir, subsystem_name)
+            if not os.path.isdir(subsystem_dir) or target_type.startswith(
+                    '.'):
+                continue
+            self.gen_sig_file_by_subsystem(subsystem_name, check_file_dir)
 
 
 def main():
