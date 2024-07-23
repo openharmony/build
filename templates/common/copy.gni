@@ -161,9 +161,9 @@ template("ohos_copy") {
                              [
                                "testonly",
                                "visibility",
-                               "public_configs",
-                               "public_external_deps",
                                "external_deps",
+                               "public_external_deps",
+                               "public_configs",
                                "sources",
                                "outputs",
                              ])
@@ -215,9 +215,9 @@ template("ohos_copy") {
                              [
                                "testonly",
                                "visibility",
-                               "public_configs",
-                               "public_external_deps",
                                "external_deps",
+                               "public_external_deps",
+                               "public_configs",
                                "sources",
                                "outputs",
                              ])
