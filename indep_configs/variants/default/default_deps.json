@@ -1,5 +1,6 @@
 [
   "musl",
   "linux",
-  "googletest"
+  "googletest",
+  "benchmark"
 ]
