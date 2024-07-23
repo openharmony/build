@@ -122,7 +122,7 @@ def tweak_hap_profile(options, package_dir: str):
     build_utils.write_json(config, hap_profile)
 
 
-def create_hap(options, signed_hap: str):
+def create_hap(options, signed_hap):
     with build_utils.temp_dir() as package_dir, tempfile.NamedTemporaryFile(
             suffix='.hap') as output:
         packing_cmd = ['java', '-jar', options.hap_packing_tool]
