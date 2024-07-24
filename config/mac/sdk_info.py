@@ -100,16 +100,16 @@ if __name__ == '__main__':
           os.path.basename(sys.argv[0]))
         sys.exit(1)
 
-    settings = {}
-    fill_machine_os_build(settings)
-    fill_xcode_version(settings)
+    external_settings = {}
+    fill_machine_os_build(external_settings)
+    fill_xcode_version(external_settings)
     try:  
-        fill_sdk_path_and_version(settings, unknownargs[0], settings.get('xcode_version'))  
+        fill_sdk_path_and_version(external_settings, unknownargs[0], external_settings.get('xcode_version'))  
     except ValueError as vle:  
         print(f"Error: {vle}")
 
-    for key in sorted(settings):
-        value = settings.get('key')
+    for key in sorted(external_settings):
+        value = external_settings.get('key')
         if isinstance(value, bytes):
             value = value.decode()
         if key != 'xcode_version_int':
