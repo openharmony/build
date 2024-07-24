@@ -85,6 +85,31 @@ class Hpm(BuildFileGeneratorInterface):
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
 
+    @throw_exception
+    def _execute_hpm_build_cmd(self, **kwargs):
+        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
+        SystemUtil.exec_command(hpm_build_cmd)
+
+    @throw_exception
+    def _execute_hpm_install_cmd(self, **kwargs):
+        hpm_install_cmd = [self.exec, "install"] + self._convert_flags()
+        SystemUtil.exec_command(hpm_install_cmd)
+
+    @throw_exception
+    def _execute_hpm_pack_cmd(self, **kwargs):
+        hpm_pack_cmd = [self.exec, "pack", "-t"] + self._convert_flags()
+        SystemUtil.exec_command(hpm_pack_cmd)
+
+    @throw_exception
+    def _execute_hpm_publish_cmd(self, **kwargs):
+        hpm_publish_cmd = [self.exec, "publish", "-t"] + self._convert_flags()
+        SystemUtil.exec_command(hpm_publish_cmd)
+
+    @throw_exception
+    def _execute_hpm_update_cmd(self, **kwargs):
+        hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
+        SystemUtil.exec_command(hpm_update_cmd)
+
     '''Description: Convert all registed args into a list
     @parameter: none
     @return: list of all registed args
@@ -137,28 +162,3 @@ class Hpm(BuildFileGeneratorInterface):
                 illegal_components.append(component)
         if illegal_components:
             raise OHOSException('ERROR argument "--parts": Invalid parts "{}". '.format(illegal_components))
-
-    @throw_exception
-    def _execute_hpm_build_cmd(self, **kwargs):
-        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_build_cmd)
-
-    @throw_exception
-    def _execute_hpm_install_cmd(self, **kwargs):
-        hpm_install_cmd = [self.exec, "install"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_install_cmd)
-
-    @throw_exception
-    def _execute_hpm_pack_cmd(self, **kwargs):
-        hpm_pack_cmd = [self.exec, "pack", "-t"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_pack_cmd)
-
-    @throw_exception
-    def _execute_hpm_publish_cmd(self, **kwargs):
-        hpm_publish_cmd = [self.exec, "publish", "-t"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_publish_cmd)
-
-    @throw_exception
-    def _execute_hpm_update_cmd(self, **kwargs):
-        hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_update_cmd)

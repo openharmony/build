@@ -336,6 +336,20 @@ class OHOSLoader(LoadInterface):
         LogUtil.hb_info("generate target syscap for init list to '{}'".format(
             target_syscap_for_init_file), mode=self.config.log_mode)
 
+# get method
+    @throw_exception
+    def _get_build_platforms(self) -> list:
+        build_platforms = []
+        if self.build_platform_name == 'all':
+            build_platforms = self._all_platforms
+        elif self.build_platform_name in self._all_platforms:
+            build_platforms = [self.build_platform_name]
+        else:
+            raise OHOSException(
+                "The target_platform is incorrect, only allows [{}].".format(
+                    ', '.join(self._all_platforms)), "2010")
+        return build_platforms
+
     '''Description: output infos for testfwk into a json file. \
         (/out/${product_name}/build_configs/infos_for_testfwk.json)
     @parameter:none
@@ -574,20 +588,6 @@ class OHOSLoader(LoadInterface):
         LogUtil.hb_info(
             "generated no src subsystem info to '{}/subsystem_info/no_src_subsystem_info.json'".format(
                 self.config_output_dir), mode=self.config.log_mode)
-
-# get method
-    @throw_exception
-    def _get_build_platforms(self) -> list:
-        build_platforms = []
-        if self.build_platform_name == 'all':
-            build_platforms = self._all_platforms
-        elif self.build_platform_name in self._all_platforms:
-            build_platforms = [self.build_platform_name]
-        else:
-            raise OHOSException(
-                "The target_platform is incorrect, only allows [{}].".format(
-                    ', '.join(self._all_platforms)), "2010")
-        return build_platforms
 
     def _get_parts_by_platform(self) -> dict:
         parts_info = {}

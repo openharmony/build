@@ -36,7 +36,7 @@ def parse_args(args):
     parser.add_option('--restool-path', help='path to restool')
     parser.add_option('--hap-profile', help='path to hap profile')
     parser.add_option('--package-name', help='package name of resource file')
-    parser.add_option('--app-profile', default = False, help='path to app profile')
+    parser.add_option('--app-profile', default = False, help = 'path to app profile')
 
     options, _ = parser.parse_args(args)
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
@@ -78,9 +78,9 @@ def compile_resources(options):
         cmd.extend(
             ['-p', package_name, '-o', gen_dir, '-r', generated_header_file])
         build_utils.check_output(cmd)
-        R_txt_path = os.path.join(gen_dir, 'R.txt')
-        if os.path.exists(R_txt_path):
-            os.unlink(R_txt_path)
+        txt_path = os.path.join(gen_dir, 'R.txt')
+        if os.path.exists(txt_path):
+            os.unlink(txt_path)
         if options.output_resources_zipfile:
             build_utils.zip_dir(options.output_resources_zipfile, gen_dir)
         if options.output_header_file:

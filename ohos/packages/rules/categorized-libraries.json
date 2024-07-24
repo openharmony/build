@@ -62,5 +62,17 @@
   "//foundation/graphic/graphic_2d/utils/socketpair:socketpair": {
     "so_file_name": "libsocketpair.z.so",
     "categories": [ "platformsdk_indirect" ]
+  },
+  "//base/powermgr/battery_statistics/interfaces/inner_api:batterystats_client": {
+    "so_file_name": "libbatterystats_client.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/filemanagement/user_file_service/services:file_access_service": {
+    "so_file_name": "libfile_access_service.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//drivers/interface/codec/image/v1_0:libimage_proxy_1.0": {
+    "so_file_name": "libimage_proxy_1.0.z.so",
+    "categories": [ "platformsdk" ]
   }
 }

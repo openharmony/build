@@ -38,6 +38,7 @@ advanced:
 @Date 2022/01/14
 """
 
+
 def find_files(path: str, name: str):
     ret, files, folders = [], [], [path]
     for folder in folders:
@@ -58,7 +59,7 @@ def read_component_from_ohos_build(file: str):
     ret = {"subsystem": "", "components": []}
     with open(file, "rb") as f:
         data = json.load(f)
-        ret["subsystem"] =  data.get("subsystem")
+        ret["subsystem"] = data.get("subsystem")
         for k, _ in data.get("parts").items():
             ret.get("components").append(k)
     return ret

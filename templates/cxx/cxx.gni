@@ -346,8 +346,14 @@ template("ohos_executable") {
     } else {
       if (support_stack_protector_ret) {
         if (defined(invoker.stack_protector_ret)) {
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
           if (invoker.stack_protector_ret) {
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -919,8 +925,14 @@ template("ohos_shared_library") {
     } else {
       if (support_stack_protector_ret) {
         if (defined(invoker.stack_protector_ret)) {
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
           if (invoker.stack_protector_ret) {
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -1392,8 +1404,14 @@ template("ohos_static_library") {
     } else {
       if (support_stack_protector_ret) {
         if (defined(invoker.stack_protector_ret)) {
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
           if (invoker.stack_protector_ret) {
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
@@ -1660,8 +1678,14 @@ template("ohos_source_set") {
     } else {
       if (support_stack_protector_ret) {
         if (defined(invoker.stack_protector_ret)) {
-          configs -=
-              [ "//build/config/security:stack_protector_ret_strong_config" ]
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
           if (invoker.stack_protector_ret) {
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
