@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 script_path=$(cd $(dirname $0);pwd)
 pre_dir_path=$(dirname ${script_path})
 pre_dir_path=$(dirname ${pre_dir_path})
@@ -27,7 +29,7 @@ echo $CONFIG_PATH
 
 function read_file() {
     FILENAME=$1;KEY=$2
-    RESULT=`cat $FILENAME | grep $KEY | awk -F\" '{ print $4 }'`
+    RESULT=$(cat $FILENAME | grep $KEY | awk -F\" '{ print $4 }')
     echo $RESULT
 }
 

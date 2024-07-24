@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 function install_pytest() {
     if ! command -v pytest &> /dev/null; then
         echo "Installing pytest..."
