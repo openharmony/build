@@ -154,7 +154,8 @@ template("ohos_copy") {
     }
   }
 
-  if ((defined(invoker.enable_strip) && invoker.enable_strip) {
+  if ((defined(invoker.enable_strip) && invoker.enable_strip) ||
+      (defined(invoker.mini_debug) && invoker.mini_debug)) {
     action_with_pydeps(target_name) {
       forward_variables_from(invoker,
                              [
@@ -168,6 +169,10 @@ template("ohos_copy") {
                              ])
       deps = _deps
       script = "//build/templates/common/delete_symbol.py"
+      mini_debug = "false"
+      if (defined(invoker.mini_debug) && invoker.mini_debug) {
+        mini_debug = "true"
+      }
       args = [
         "--strip",
         rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir),
@@ -175,6 +180,8 @@ template("ohos_copy") {
         rebase_path(sources[0], root_build_dir),
         "--output",
         rebase_path(outputs[0], root_build_dir),
+        "--mini-debug",
+        mini_debug,
       ]
 
       if (defined(visibility) && visibility != []) {
