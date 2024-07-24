@@ -23,7 +23,7 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402
 
 
-def get_toolchain(current_variant: str, external_part_variants: str, platform_toolchain: str, current_toolchain: str):
+def get_toolchain(current_variant, external_part_variants, platform_toolchain, current_toolchain):
     if current_variant == 'phone':
         toolchain = platform_toolchain.get(current_variant)
         required_include_dir = False
@@ -38,8 +38,18 @@ def get_toolchain(current_variant: str, external_part_variants: str, platform_to
     return toolchain, required_include_dir
 
 
-def _get_external_module_info(parts_inner_kits_info: dict, external_part_name: str,
-                              external_module_name: str, adapted_part_name: str) -> dict:
+def _get_components_info(components_info_dict, external_module_name):
+    external_module_result = {}
+    external_module_array = components_info_dict.get("innerapis")
+    for external_module in external_module_array:
+        if external_module.get("name") == external_module_name:
+            external_module_result = external_module
+            break
+    return external_module_result        
+
+
+def _get_external_module_info(parts_inner_kits_info, components_info, external_part_name,
+                              external_module_name, adapted_part_name):
     _inner_kits_info_dict = parts_inner_kits_info.get(external_part_name)
     if _inner_kits_info_dict is None:
         raise Exception(
@@ -59,14 +69,18 @@ def _get_external_module_info(parts_inner_kits_info: dict, external_part_name: s
                 "external dep module '{}' doesn't exist in part '{}'.".format(
                     external_module_name, adapted_part_name))
     else:
-        raise Exception(
-            "external dep module '{}' doesn't exist in part '{}'.".format(
-                external_module_name, external_part_name))
+        _components_info_dict = components_info.get(external_part_name)
+        external_module_desc_info = _get_components_info(_components_info_dict, external_module_name)
+        if not external_module_desc_info:
+            raise Exception(
+                "external dep module '{}' doesn't exist in part '{}'.".format(
+                    external_module_name, external_part_name))
+        external_module_desc_info['prebuilt_enable'] = False            
     return external_module_desc_info
 
 
-def _get_external_module_from_sdk(sdk_base_dir: str, external_part_name: str,
-                                  external_module_name: str, adapted_part_name: str):
+def _get_external_module_from_sdk(sdk_base_dir, external_part_name,
+                                  external_module_name, adapted_part_name):
     _sdk_info_file = os.path.join(sdk_base_dir, external_part_name,
                                   "sdk_info.json")
     subsystem_sdk_info = read_json_file(_sdk_info_file)
@@ -97,7 +111,7 @@ def _get_external_module_from_sdk(sdk_base_dir: str, external_part_name: str,
     return sdk_module_info, _adapted
 
 
-def _get_inner_kits_adapter_info(innerkits_adapter_info_file: str) -> dict:
+def _get_inner_kits_adapter_info(innerkits_adapter_info_file):
     _parts_compatibility = {}
     if os.path.exists(innerkits_adapter_info_file):
         inner_kits_adapter_info = read_json_file(innerkits_adapter_info_file)
@@ -105,6 +119,14 @@ def _get_inner_kits_adapter_info(innerkits_adapter_info_file: str) -> dict:
             raise Exception("read inner_kits_adapter info failed.")
         _parts_compatibility.update(inner_kits_adapter_info)
     return _parts_compatibility
+
+
+def _parse_inner_kits_file():
+    inner_kits_info_file = 'build_configs/parts_info/inner_kits_info.json'
+    all_kits_info_dict = read_json_file(inner_kits_info_file)
+    components_info_file = 'build_configs/parts_info/components.json'
+    components_info_dict = read_json_file(components_info_file)
+    return all_kits_info_dict, components_info_dict
 
 
 def main():
