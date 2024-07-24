@@ -84,6 +84,49 @@ from util.system_util import SystemUtil
 
 
 class Main():
+    @staticmethod
+    @throw_exception
+    def main():
+        main = Main()
+        module_initializers = {
+            'build': main._init_indep_build_module if main._is_indep_build() else main._init_build_module,
+            'init': main._init_hb_init_module,
+            'indep_build': main._init_indep_build_module,
+            'set': main._init_set_module,
+            'env': main._init_env_module,
+            'clean': main._init_clean_module,
+            'tool': main._init_tool_module,
+            'install': main._init_install_module,
+            'package': main._init_package_module,
+            'publish': main._init_publish_module,
+            'update': main._init_update_module,
+            'push': main._push_module
+        }
+
+        module_type = sys.argv[1]
+        if module_type == 'help':
+            for all_module_type in ModuleType:
+                LogUtil.hb_info(Separator.long_line)
+                LogUtil.hb_info(Arg.get_help(all_module_type))
+            exit()
+
+        if module_type not in module_initializers:
+            raise OHOSException(f'There is no such option {module_type}', '0018')
+
+        start_time = SystemUtil.get_current_time()
+        module = module_initializers[module_type]()
+        try:
+            module.run()
+            if module_type == 'build':
+                LogUtil.hb_info('Cost Time:  {}'.format(SystemUtil.get_current_time() - start_time))
+        except KeyboardInterrupt:
+            for file in os.listdir(ARGS_DIR):
+                if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
+                    os.remove(os.path.join(ARGS_DIR, file))
+            print('User abort')
+            return -1
+        else:
+            return 0
 
     def _set_path(self):
         user_home = os.path.expanduser("~")
@@ -110,7 +153,7 @@ class Main():
         return OHOSBuildModule(args_dict, build_args_resolver, preloader, loader, generate_ninja, ninja)
 
     def _init_hb_init_module(self):
-        subprocess.run(['bash', os.path.join(CURRENT_OHOS_ROOT, 'build', 'prebuilts_config.sh')])
+        subprocess.run([os.path.join(CURRENT_OHOS_ROOT, 'build', 'prebuilts_config.sh')])
         sys.exit()
 
     def _init_set_module(self) -> SetModuleInterface:
@@ -122,7 +165,7 @@ class Main():
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:
-        if len(sys.argv) > 2 and sys.argv[2] in ['--sshkey', '-s']:
+        if sys.argv[2] in ['--sshkey', '-s']:
             self._set_path()
             subprocess.run(['hpm', 'config', 'set', 'loginUser', str(sys.argv[3])])
             subprocess.run(['hpm', 'gen-keys'])
@@ -237,50 +280,6 @@ class Main():
                          one_push.get("target")], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         print("hb push success!")
         sys.exit()
-
-    @staticmethod
-    @throw_exception
-    def main():
-        main = Main()
-        module_initializers = {
-            'build': main._init_indep_build_module if main._is_indep_build() else main._init_build_module,
-            'init': main._init_hb_init_module,
-            'indep_build': main._init_indep_build_module,
-            'set': main._init_set_module,
-            'env': main._init_env_module,
-            'clean': main._init_clean_module,
-            'tool': main._init_tool_module,
-            'install': main._init_install_module,
-            'package': main._init_package_module,
-            'publish': main._init_publish_module,
-            'update': main._init_update_module,
-            'push': main._push_module
-        }
-
-        module_type = sys.argv[1]
-        if module_type == 'help':
-            for all_module_type in ModuleType:
-                LogUtil.hb_info(Separator.long_line)
-                LogUtil.hb_info(Arg.get_help(all_module_type))
-            exit()
-
-        if module_type not in module_initializers:
-            raise OHOSException(f'There is no such option {module_type}', '0018')
-
-        start_time = SystemUtil.get_current_time()
-        module = module_initializers[module_type]()
-        try:
-            module.run()
-            if module_type == 'build':
-                LogUtil.hb_info('Cost Time:  {}'.format(SystemUtil.get_current_time() - start_time))
-        except KeyboardInterrupt:
-            for file in os.listdir(ARGS_DIR):
-                if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
-                    os.remove(os.path.join(ARGS_DIR, file))
-            print('User abort')
-            return -1
-        else:
-            return 0
 
 
 if __name__ == "__main__":

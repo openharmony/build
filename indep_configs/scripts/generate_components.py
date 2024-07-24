@@ -137,18 +137,19 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
     for i in component:
         innerapi_name = i["name"].split(':')[-1]
         if part_name == 'musl':
-            innerapi_label = os.path.join("//binarys", path) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path), innerapi_name)
         elif part_name in src_build_name_list:
             innerapi_label = i['name']
         else:
-            innerapi_label = os.path.join("//binarys", path, "innerapis", innerapi_name) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis", innerapi_name), innerapi_name)
         innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
         if innerapi_name in _part_toolchain_map_dict.keys():
             _name = innerapi_name
             innerapi_name = f"{innerapi_name}({_part_toolchain_map_dict[_name]['toolchain_value']})"
-            innerapi_label = os.path.join("//binarys", path, "innerapis",
-                                          _name,
-                                          _part_toolchain_map_dict[_name]['toolchain_key']) + ":" + innerapi_name
+            innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis",
+                                                         _name,
+                                                         _part_toolchain_map_dict[_name]['toolchain_key']),
+                                            innerapi_name)
             innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
