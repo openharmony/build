@@ -20,11 +20,11 @@ def split_version(version: str or bytes):
     """
     Splits the Xcode version to 3 values.
 
-    >>> list(SplitVersion('8.2.1.1'))
+    >>> list(split_version('8.2.1.1'))
     ['8', '2', '1']
-    >>> list(SplitVersion('9.3'))
+    >>> list(split_version('9.3'))
     ['9', '3', '0']
-    >>> list(SplitVersion('10.0'))
+    >>> list(split_version('10.0'))
     ['10', '0', '0']
     """
     if isinstance(version, bytes):
@@ -37,12 +37,12 @@ def format_version(version: str or bytes):
     """
     Converts Xcode version to a format required for DTXcode in Info.plist
 
-    >>> FormatVersion('8.2.1')
+    >>> format_version('8.2.1')
     '0821'
-    >>> FormatVersion('9.3')
+    >>> format_version('9.3')
     '0930'
-    >>> FormatVersion('10.0')
-  '  1000'
+    >>> format_version('10.0')
+    '1000'
     """
     major, minor, patch = split_version(version)
     return ('%2s%s%s' % (major, minor, patch)).replace(' ', '0')
@@ -104,14 +104,14 @@ if __name__ == '__main__':
     fill_machine_os_build(settings)
     fill_xcode_version(settings)
     try:  
-        fill_sdk_path_and_version(settings, unknownargs[0], settings['xcode_version'])  
+        fill_sdk_path_and_version(settings, unknownargs[0], settings.get('xcode_version'))  
     except ValueError as vle:  
         print(f"Error: {vle}")
 
     for key in sorted(settings):
         value = settings.get('key')
         if isinstance(value, bytes):
-          value = value.decode()
+            value = value.decode()
         if key != 'xcode_version_int':
             value = '"%s"' % value
             print('%s=%s' % (key, value))
