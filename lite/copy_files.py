@@ -23,7 +23,7 @@ import sys
 from utils import makedirs
 
 
-def copytree(src: str, dst: str, symlinks: bool=False, ignore=None):
+def copytree(src: str, dst: str, symlinks: bool = False, ignore=None):
     src = os.path.normpath(src)
     for item in os.listdir(src):
         if '.git' in item or '.repo' in item:

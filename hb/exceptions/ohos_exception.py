@@ -23,9 +23,8 @@ from resources.global_var import STATUS_FILE
 
 class OHOSException(Exception):
 
-    def __init__(self, message: str, code:int = 0):
+    def __init__(self, message: str, code: int = 0):
         super().__init__(message)
-        print(message)
         self._code = code
 
     def get_solution(self) -> str:

@@ -23,6 +23,7 @@ import json
 from zipfile import ZipFile  # noqa: E402
 from util import build_utils  # noqa: E402
 
+
 def parse_args(args):
     args = build_utils.expand_file_args(args)
 

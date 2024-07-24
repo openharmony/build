@@ -88,11 +88,11 @@ config("soft_musl_config") {
     cflags_auto += [ "-DOHOS_FDTRACK_HOOK_ENABLE" ]
   }
 
-  if (musl_arch == "mips" && is_legacy) {
+  if (musl_arch == "mips" && musl_is_legacy) {
     cflags_auto += [ "-mnan=legacy" ]
   }
 
-  if (use_pthread_cancel) {
+  if (musl_use_pthread_cancel) {
     cflags_auto += [ "-DFEATURE_PTHREAD_CANCEL" ]
   }
 
@@ -122,8 +122,8 @@ config("soft_musl_config") {
     ]
   }
 
-  if (!is_standard_system && defined(enable_musl_log)) {
-    if (enable_musl_log) {
+  if (!is_standard_system && defined(musl_enable_musl_log)) {
+    if (musl_enable_musl_log) {
       defines += [ "ENABLE_MUSL_LOG" ]
     }
   }

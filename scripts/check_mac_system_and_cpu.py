@@ -52,9 +52,9 @@ def check_cpu() -> int:
 
 def main():
     if sys.argv[1] == "cpu":
-        check_cpu()
+        return check_cpu()
     elif sys.argv[1] == "system":
-        check_darwin_system()
+        return check_darwin_system()
     else:
         return 0
 
