@@ -160,6 +160,7 @@ _ndk_library_targets = [
   "//interface/sdk_c/drivers/external_device_manager/base:ddk_header",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:libvulkan_ndk",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header",
+  "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header_vk_video",
   "//interface/sdk_c/resourceschedule/ffrt:libffrt_ndk",
   "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
   "//interface/sdk_c/network/netmanager:libnet_connection",
