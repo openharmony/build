@@ -554,8 +554,10 @@ config("compiler") {
 
     cflags += [
       "-flto=thin",
-      "-fsplit-lto-unit",
     ]
+    if (!use_libfuzzer) {
+      cflags += [ "-fsplit-lto-unit" ]
+    }
 
     if (thin_lto_enable_optimizations) {
       lto_opt_level = 2
