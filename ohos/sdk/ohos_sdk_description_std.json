@@ -248,7 +248,8 @@
 	    "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -257,7 +258,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
