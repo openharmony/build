@@ -43,7 +43,8 @@ def get_subsystem_components(ohos_path: str):
             ErrorInfo.g_subsystem_path_error.append(subsystem_path)
             continue
         cmd = 'find %s -name bundle.json' % subsystem_path
-        bundle_json_list = os.popen(cmd).readlines()
+        with os.popen(cmd) as input_cmd:
+            bundle_json_list = input_cmd.readlines()
 
         # get components
         component_list = []

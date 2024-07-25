@@ -85,7 +85,8 @@ def get_all_bundle_json(path:str = '.') -> list:
     cmd = "find {} -name {}".format(path, "bundle.json")
     for i in exclude_list:
         cmd += " ! -path {}".format(i)
-    bundle_josn_list = os.popen(cmd).readlines()
+    with os.popen(cmd) as input_cmd:
+        bundle_josn_list = input_cmd.readlines()
     return bundle_josn_list
 
 
