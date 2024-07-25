@@ -179,8 +179,6 @@ template("package_app") {
       "--app-profile=@FileArg($_rebased_metadata:root:app_profile)",
       "--build-mode",
       build_mode,
-      "--target-out-dir",
-      rebase_path(target_out_dir, root_build_dir),
     ]
 
     inputs = [
