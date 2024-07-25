@@ -14,6 +14,7 @@
 # limitations under the License.
 import subprocess
 import sys
+import stat
 import os
 import argparse
 import shutil
@@ -91,11 +92,12 @@ def _is_innerkit(data, part, module):
 def _get_components_json(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/components.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_components_json parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_components_json parse json error--')
     return jsondata
 
 
@@ -118,12 +120,13 @@ def _handle_two_layer_json(json_key, json_data, desc_list):
 def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print(json_path)
-        print('--_get_json_data parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print(json_path)
+            print('--_get_json_data parse json error--')
     return jsondata
 
 
@@ -380,9 +383,8 @@ def _copy_readme(args):
         shutil.copy(readme_en, readme_out_file)
     else:
         try:
-            fd = os.open(readme_out_file, os.O_WRONLY | os.O_CREAT, mode=0o640)
-            fp = os.fdopen(fd, 'w')
-            fp.write('READ.ME')
+            with os.fdopen(os.open(readme_out_file, os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as fp:
+                fp.write('READ.ME')
         except FileExistsError:
             pass
 
@@ -615,11 +617,12 @@ def _get_parts_path_info(components_json):
 def _get_toolchain_info(root_path):
     jsondata = ""
     json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_toolchain_info parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_toolchain_info parse json error--')
     return jsondata
 
 

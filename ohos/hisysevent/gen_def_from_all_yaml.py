@@ -15,6 +15,7 @@
 
 import sys
 import os
+import stat
 import json
 import argparse
 from collections import Counter
@@ -725,8 +726,9 @@ def merge_hisysevent_config(yaml_list: str, output_path: str) -> str:
         global _yaml_file_path
         _yaml_file_path = yaml_path.replace("../", "")
         _build_warning_header()
-        yaml_file = open(yaml_path, 'r')
-        yaml_info = yaml.load(yaml_file, Loader=_UniqueKeySafeLoader)
+        with os.fdopen(os.open(yaml_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as yaml_file:
+            yaml_info = yaml.load(yaml_file, Loader=_UniqueKeySafeLoader)
         if not _check_yaml_format(yaml_info):
             _hisysevent_parse_res = False
             continue
