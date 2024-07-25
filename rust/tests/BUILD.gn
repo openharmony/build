@@ -29,15 +29,15 @@ group("tests") {
     deps += [ "//build/rust/tests/test_idl" ]
   }
   deps += [ ":original_libstd.so" ]
-  if(!use_clang_coverage) {
-    deps +=  [
-      "//build/rust/tests/test_rlib_crate",
-      "//build/rust/tests/test_dylib_crate",
+  if (!use_clang_coverage) {
+    deps += [
+      "test_bin_crate:test_bin_crate(${host_toolchain})",
       "test_dylib_crate:test_dylib_crate(${host_toolchain})",
-      "//build/rust/tests/test_static_link",
       "test_static_link:test_static_link(${host_toolchain})",
       "//build/rust/tests/test_bin_crate",
-      "test_bin_crate:test_bin_crate(${host_toolchain})",
+      "//build/rust/tests/test_dylib_crate",
+      "//build/rust/tests/test_rlib_crate",
+      "//build/rust/tests/test_static_link",
     ]
   }
 }
@@ -54,9 +54,7 @@ group("ohos_rust_xxxtest_tests") {
 }
 
 group("cargo_crate_test") {
-  deps = [
-    "test_proc_macro_cargo_crate:test_proc_macro_cargo_crate(${host_toolchain})",
-  ]
+  deps = [ "test_proc_macro_cargo_crate:test_proc_macro_cargo_crate(${host_toolchain})" ]
   if (!use_clang_coverage) {
     deps += [
       "test_bin_cargo_crate:test_bin_cargo_crate",
@@ -72,17 +70,17 @@ group("cxx_test_host_and_target") {
   ]
   if (!use_clang_coverage && !use_libfuzzer) {
     deps += [
-      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
-      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
-      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
-      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
-      "//build/rust/tests/test_cxx_rust:test_cxx_rust",
-      "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
       "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
       "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
+      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
+      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
       "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
       "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
-    ] 
+      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
+      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
+      "//build/rust/tests/test_cxx_rust:test_cxx_rust",
+      "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
+    ]
   }
 }
 
