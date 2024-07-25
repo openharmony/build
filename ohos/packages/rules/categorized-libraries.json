@@ -74,5 +74,13 @@
   "//drivers/interface/codec/image/v1_0:libimage_proxy_1.0": {
     "so_file_name": "libimage_proxy_1.0.z.so",
     "categories": [ "platformsdk" ]
+  },
+  "//foundation/filemanagement/dfs_service/interfaces/inner_api/native/cloudsync_kit_inner:cloudsync_kit_inner": {
+    "so_file_name": "libcloudsync_kit_inner.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/filemanagement/dfs_service/services/distributedfiledaemon:distributed_file_daemon_kit_inner": {
+    "so_file_name": "libdistributed_file_daemon_kit_inner.z.so",
+    "categories": [ "platformsdk" ]
   }
 }
