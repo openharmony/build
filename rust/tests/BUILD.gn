@@ -58,8 +58,10 @@ group("cargo_crate_test") {
     "test_proc_macro_cargo_crate:test_proc_macro_cargo_crate(${host_toolchain})",
   ]
   if (!use_clang_coverage) {
-    "test_bin_cargo_crate:test_bin_cargo_crate",
-    "test_rlib_cargo_crate:test_rlib_crate_associated_bin",
+    deps += [
+      "test_bin_cargo_crate:test_bin_cargo_crate",
+      "test_rlib_cargo_crate:test_rlib_crate_associated_bin",
+    ]
   }
 }
 
