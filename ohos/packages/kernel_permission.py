@@ -105,7 +105,7 @@ class KernelPermission():
             part_name = info.get("part_name")
             subsystem_name = info.get("subsystem_name")
             target_type = info.get("type")
-            module_name = target_name
+            module_name = target_name-
             if output_name == "" and output_extension == "":
                 if target_type == "lib" and target_name.startswith("lib"):
                     module_name = "{}.z.so".format(target_name)
@@ -158,7 +158,7 @@ class KernelPermission():
     @staticmethod
     def check_json_value(json_data):
         encaps_data = json_data["encaps"]
-        for key, value in new_data.items():
+        for key, value in encaps_data.items():
             if not isinstance(value, (bool, int)):
                 return False
         return True
