@@ -84,7 +84,7 @@ class GnCommon:
         result = None
         with os.popen(cmd) as input_cmd:
             output = input_cmd.read().strip()
-            f len(output) != 0:
+            if len(output) != 0:
                 result = output
         return result
 
