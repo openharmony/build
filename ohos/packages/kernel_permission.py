@@ -34,7 +34,7 @@ class KernelPermission():
     @staticmethod
     def run(out_path, root_path):
         target_out_path = os.path.join(root_path, out_path.lstrip("//"))
-        print("target_out_path:", target_out_path)
+        print("target_out_path", target_out_path)
         KernelPermission.execute_kernel_permission_cmd(target_out_path, root_path)
 
 
@@ -105,7 +105,7 @@ class KernelPermission():
             part_name = info.get("part_name")
             subsystem_name = info.get("subsystem_name")
             target_type = info.get("type")
-            module_name = target_name-
+            module_name = target_name
             if output_name == "" and output_extension == "":
                 if target_type == "lib" and target_name.startswith("lib"):
                     module_name = "{}.z.so".format(target_name)
@@ -129,7 +129,7 @@ class KernelPermission():
     @staticmethod
     def check_json_file(file_path):
         try:
-            with os.fdopen(os.open(file_path, os.O_RDWR, 0o640), 'r+') as file:
+            with os.fdopen(os.open(file_path, os.O_RDWR, 0o640), 'r') as file:
                 json_data = json.load(file)
                 if KernelPermission.check_json_content(json_data):
                     return True
@@ -181,7 +181,7 @@ class KernelPermission():
 
         if ret_code != 0:
             raise Exception(
-                'please check llvm cmd: {}'.format(cmd))
+                'Please check llvm cmd: {}'.format(cmd))
 
 if __name__ == "__main__":
     pass
