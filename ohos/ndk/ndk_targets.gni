@@ -27,6 +27,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_ndk",
   "//interface/sdk_c/hiviewdfx/hidebug:libohhidebug",
   "//interface/sdk_c/hiviewdfx/hidebug:oh_hidebug_header",
+  "//interface/sdk_c/hiviewdfx/hicollie:libohhicollie",
+  "//interface/sdk_c/hiviewdfx/hicollie:oh_hicollie_header",
   "//interface/sdk_c/hiviewdfx/hilog:hilog_header",
   "//interface/sdk_c/hiviewdfx/hilog:libhilog_ndk",
   "//interface/sdk_c/hiviewdfx/hitrace:hitrace_header",
