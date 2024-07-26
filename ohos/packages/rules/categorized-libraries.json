@@ -82,5 +82,9 @@
   "//foundation/filemanagement/dfs_service/services/distributedfiledaemon:distributed_file_daemon_kit_inner": {
     "so_file_name": "libdistributed_file_daemon_kit_inner.z.so",
     "categories": [ "platformsdk" ]
+  },
+  "//base/notification/distributed_notification_service/frameworks/ans:ans_innerkits": {
+    "so_file_name": "libans_innerkits.z.so",
+    "categories": [ "platformsdk" ]
   }
 }
