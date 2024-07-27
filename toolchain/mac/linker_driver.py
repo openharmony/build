@@ -55,12 +55,17 @@ def main(args):
     if len(args) < 2:
         raise RuntimeError("Usage: linker_driver.py [linker-invocation]")
 
-    for i in range(len(args)):
-        if args[i] != '--developer_dir':
-            continue
-        os.environ['DEVELOPER_DIR'] = args[i + 1]
-        del args[i:i + 2]
-        break
+    i = 0  
+    while i < len(args):  
+        arg = args[i]  
+        if arg == '--developer':  
+            if i + 1 < len(args) and not args[i + 1].startswith('--'):  
+                os.environ['DEVELOPER_DIR'] = args[i + 1]  
+                del args[i:i + 2]  
+            else:  
+                i += 1  
+        else:  
+            i += 1
 
     # Collect arguments to the linker driver (this script) and remove them from
     # the arguments being passed to the compiler driver.

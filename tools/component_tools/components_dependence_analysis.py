@@ -45,7 +45,7 @@ def draw_deps_pictrue_by_gn(output_path: str):
                 graph.edge(node_name, part_name)
             elif module_name in component_nodes:
                 graph.edge(node_name, module_name)
-    graph.render(filename=output_path + '/dep_graph')
+    graph.render(filename=os.path.join(output_path, 'dep_graph'))
 
 
 def merge_module():
