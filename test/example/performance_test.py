@@ -205,7 +205,7 @@ class PerformanceAnalyse:
         """
         if not os.path.exists(os.path.dirname(self.output_path)):
             os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-        with open(self.output_path, "w", encoding="utf-8") as html_file:
+        with os.fdopen(os.open(self.output_path, os.O_WRONLY | os.O_CREAT | os.TRUNC, os.stat.S_IWUSR), "w", encoding="utf-8") as html_file:
             html_file.write(content)
 
     def generate_content(self, table_name, data_rows, switch=False):
@@ -292,8 +292,8 @@ class PerformanceAnalyse:
             result = [key, len(value), max(value)]
             result_list.append(result)
         sort_result = sorted(result_list, key=lambda x: x[2], reverse=True)
-        for i in range(len(sort_result)):
-            sort_result[i][2] = round(float(sort_result[i][2]) / 1000, 4)
+        for i in sort_result:
+            i[2] = round(float(i[2]) / 1000, 4)
 
         self.ninjia_trace_list = sort_result[:self.top_count]
 
@@ -491,7 +491,7 @@ class PerformanceAnalyse:
                 for key, value in self.during_time_dic.items():
                     if re.search(value.get("start_pattern"), output):
                         self.during_time_dic.get(key)["start_time"] = int(time_stamp)
-                    if re.search(value["end_pattern"], output):
+                    if re.search(value.get("end_pattern"), output):
                         self.during_time_dic.get(key)["end_time"] = int(time_stamp)
 
                 if re.search(self.gn_exec_flag, output):
