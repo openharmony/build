@@ -437,6 +437,9 @@ template("ohos_app") {
     if (defined(invoker.sdk_type_name)) {
       sdk_type_name = invoker.sdk_type_name
     }
+    if (defined(invoker.hvigor_home)) {
+      hvigor_home = invoker.hvigor_home
+    }
     if (defined(invoker.build_modules)) {
       build_modules = invoker.build_modules
     }
