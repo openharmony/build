@@ -59,7 +59,7 @@ class Deps(object):
         self.all_deps = get_all_deps(direct_deps)
         self.all_deps_data = get_deps_metadata(self.all_deps)
 
-    def All(self, target_type):
+    def all(self, target_type):
         return get_deps_of_type(self.all_deps_data, target_type)
 
 
@@ -93,7 +93,7 @@ def write_meta_data(options, direct_deps):
         package_name = options.package_name
         root['package_name'] = package_name if package_name else ""
         for target_type in ['app_profile']:
-            for dep in deps.All(target_type):
+            for dep in deps.all(target_type):
                 if root.get(target_type):
                     root.get(target_type).extend(dep[target_type])
                     root.get('resources').extend(dep['resources'])
@@ -119,7 +119,7 @@ def write_meta_data(options, direct_deps):
         if options.resources:
             root['resources'] = options.resources
         for target_type in ['js_assets', 'ets_assets', 'assets', 'resources', 'app_profile']:
-            for dep in deps.All(target_type):
+            for dep in deps.all(target_type):
                 if root.get(target_type):
                     root.get(target_type).extend(dep[target_type])
                     root.get('hap_profile').extend(dep['hap_profile'])
@@ -132,7 +132,7 @@ def write_meta_data(options, direct_deps):
                     if dep.get('testrunner'):
                         root['testrunner'] = dep['testrunner']
         target_type = 'unresolved_assets'
-        for dep in deps.All(target_type):
+        for dep in deps.all(target_type):
             if options.js2abc:
                 if isinstance(dep[target_type], list):
                     for ability_path in dep[target_type]:

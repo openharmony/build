@@ -138,9 +138,6 @@ class Changes(object):
         self.force = force
         self.missing_outputs = missing_outputs
 
-    def _get_old_tag(self, path, subpath=None):
-        return self.old_metadata and self.old_metadata.get_tag(path, subpath)
-
     def has_changes(self):
         """Returns whether any changes exist."""
         return (
@@ -263,6 +260,9 @@ class Changes(object):
 
         return 'I have no idea what changed (there is a bug).'
 
+    def _get_old_tag(self, path, subpath=None):
+        return self.old_metadata and self.old_metadata.get_tag(path, subpath)        
+
 
 class _Metadata(object):
     """Data model for tracking change metadata."""
@@ -294,11 +294,6 @@ class _Metadata(object):
             "input-strings": self._strings,
         }
         json.dump(obj, fileobj, indent=2, sort_keys=True)
-
-    def _assert_not_queried(self):
-        assert self._files_md5 is None
-        assert self._strings_md5 is None
-        assert self._file_map is None
 
     def add_strings(self, values):
         self._assert_not_queried()
@@ -356,17 +351,6 @@ class _Metadata(object):
             self._strings_md5 = _compute_inline_md5(self._strings)
         return self._strings_md5
 
-    def _get_entry(self, path, subpath=None):
-        """Returns the JSON entry for the given path / subpath."""
-        if self._file_map is None:
-            self._file_map = {}
-            for entry in self._files:
-                self._file_map[(entry['path'], None)] = entry
-                for subentry in entry.get('entries', ()):
-                    self._file_map[(entry['path'],
-                                    subentry['path'])] = subentry
-        return self._file_map.get((path, subpath))
-
     def get_tag(self, path, subpath=None):
         """Returns the tag for the given path / subpath."""
         ret = self._get_entry(path, subpath)
@@ -387,6 +371,22 @@ class _Metadata(object):
             return ()
         subentries = outer_entry.get('entries', [])
         return (entry['path'] for entry in subentries)
+
+    def _assert_not_queried(self):
+        assert self._files_md5 is None
+        assert self._strings_md5 is None
+        assert self._file_map is None        
+
+    def _get_entry(self, path, subpath=None):
+        """Returns the JSON entry for the given path / subpath."""
+        if self._file_map is None:
+            self._file_map = {}
+            for entry in self._files:
+                self._file_map[(entry['path'], None)] = entry
+                for subentry in entry.get('entries', ()):
+                    self._file_map[(entry['path'],
+                                    subentry['path'])] = subentry
+        return self._file_map.get((path, subpath))    
 
 
 def _update_md5_for_file(md5, path, block_size=2**16):
