@@ -33,9 +33,9 @@ class KernelPermission():
 
     @staticmethod
     def run(out_path, root_path):
-        tartget_out_path = os.path.join(root_path, out_path.lstrip("//"))
-        print("tartget_out_path:", tartget_out_path)
-        KernelPermission.execute_kernel_permission_cmd(tartget_out_path, root_path)
+        target_out_path = os.path.join(root_path, out_path.lstrip("//"))
+        print("target_out_path", target_out_path)
+        KernelPermission.execute_kernel_permission_cmd(target_out_path, root_path)
 
 
     @staticmethod
@@ -62,7 +62,7 @@ class KernelPermission():
         try:
             llvm_tool = KernelPermission.regist_llvm_objcopy_path(root_path)
         except FileNotFoundError as e:
-            print("regist_llvm_objcopy_path failed:{}".format(e))
+            print("regist_llvm_objcopy_path failed:{}".format(e))        
         file_list = KernelPermission.scan_file(out_path)
         
         cmds = KernelPermission.gen_cmds(file_list, out_path, llvm_tool)
@@ -129,13 +129,9 @@ class KernelPermission():
     @staticmethod
     def check_json_file(file_path):
         try:
-            with os.fdopen(os.open(file_path, os.O_RDWR, 0o640), 'r+') as file:
+            with os.fdopen(os.open(file_path, os.O_RDWR, 0o640), 'r') as file:
                 json_data = json.load(file)
                 if KernelPermission.check_json_content(json_data):
-                    print(json_data)
-                    file.seek(0)
-                    file.truncate()
-                    json.dump(json_data, file, indent=4)
                     return True
                 else:
                     print("encaps.json is invalid")
@@ -161,17 +157,10 @@ class KernelPermission():
 
     @staticmethod
     def check_json_value(json_data):
-        cnt = 0
         encaps_data = json_data["encaps"]
-        new_data = OrderedDict()
-        new_data["ohos.encaps.count"] = cnt
-        new_data.update(encaps_data)
-        for key, value in new_data.items():
+        for key, value in encaps_data.items():
             if not isinstance(value, (bool, int)):
                 return False
-            cnt += 1
-        new_data["ohos.encaps.count"] = cnt - 1
-        json_data["encaps"] = new_data
         return True
 
 
@@ -179,7 +168,7 @@ class KernelPermission():
     def exec_command(cmd: list, exec_env=None, **kwargs):
         process = subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
                                    encoding='utf-8',
                                    errors='ignore',
                                    env=exec_env,
@@ -192,7 +181,7 @@ class KernelPermission():
 
         if ret_code != 0:
             raise Exception(
-                'please check llvm cmd: {}'.format(cmd))
+                'Please check llvm cmd: {}'.format(cmd))
 
 if __name__ == "__main__":
     pass
