@@ -197,7 +197,7 @@ class Main():
         return OHOSIndepBuildModule(args_dict, indep_build_args_resolver, hpm)
 
     def _is_indep_build(self) -> bool:
-        if "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:]:
+        if "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or (len(sys.argv) == 4 and sys.argv[-1] == "-t"):
             return True
         env_args_dict = Arg.read_args_file(ModuleType.ENV)
         return env_args_dict.get("indep_build").get("argDefault")
