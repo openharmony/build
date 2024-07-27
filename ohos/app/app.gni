@@ -223,7 +223,10 @@ if (app_need_publicity) {
         install_dir = ""
       }
 
-      assert(install_dir != "", "empty install dir is invalid.")
+      if (install_dir == "") {
+        print(
+            "${invoker.module_label} not set install dir, empty install dir is invalid.")
+      }
       args = []
       if (defined(invoker.publicity_file)) {
         inputs = [ invoker.publicity_file ]

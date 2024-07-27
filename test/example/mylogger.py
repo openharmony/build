@@ -111,4 +111,5 @@ def parse_json():
             return data
     except Exception as e:
         print(e)
+    return None
 
