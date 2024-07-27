@@ -161,6 +161,12 @@ config("default_sanitizer_ldflags") {
         ldflags += [ "-fsanitize-address-use-after-scope" ]
       }
       ldflags += [ "-fsanitize-recover=address" ]
+      if (use_libfuzzer) {
+        ldflags += [
+          "-fsanitize=address",
+          "-shared-libasan",
+        ]
+      }
     }
     if (is_lsan) {
       ldflags += [ "-fsanitize=leak" ]
