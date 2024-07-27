@@ -114,7 +114,7 @@ class PerformanceAnalyse:
         log_error("config file:build_example.json has error:{}".format(e))
         raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
 
-    def __init__(self, performance_cmd, output_path, report_titles, ptyflags = False):
+    def __init__(self, performance_cmd, output_path, report_titles, ptyflags=False):
         self.performance_cmd = script_path + performance_cmd
         self.output_path = script_path + output_path
         self.report_title = report_titles
@@ -165,6 +165,21 @@ class PerformanceAnalyse:
         self.base_html = self.html_tamplate.format(self.report_title)
         self.remove_out()
 
+    @staticmethod
+    def generate_error_content(table_name, lines):
+        """
+        Description: generate error html content
+        @parameter table_name: table name
+        @parameter lines: error message
+        """
+        table_title = table_name.capitalize()
+        lines = ['<br>' + text for text in lines]
+        html_content = '<center><h1>{}</h1><div style="text-align:left;">{}<div></center>'.format(table_title,
+                                                                                                  '\n'.join(lines))
+        error_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ohos Error</title></head><body>{}</body></html>'.format(
+            html_content)
+        return error_html
+
     def remove_out(self):
         """
         Description: remove out dir
@@ -190,7 +205,7 @@ class PerformanceAnalyse:
         """
         if not os.path.exists(os.path.dirname(self.output_path)):
             os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-        with open(self.output_path, "w", encoding="utf-8") as html_file:
+        with os.fdopen(os.open(self.output_path, os.O_WRONLY | os.O_CREAT | os.TRUNC, os.stat.S_IWUSR), "w", encoding="utf-8") as html_file:
             html_file.write(content)
 
     def generate_content(self, table_name, data_rows, switch=False):
@@ -246,21 +261,6 @@ class PerformanceAnalyse:
         self.table_html += "</table></div></body></html>"
         return True
 
-    @staticmethod
-    def generate_error_content(table_name, lines):
-        """
-        Description: generate error html content
-        @parameter table_name: table name
-        @parameter lines: error message
-        """
-        table_title = table_name.capitalize()
-        lines = ['<br>' + text for text in lines]
-        html_content = '<center><h1>{}</h1><div style="text-align:left;">{}<div></center>'.format(table_title,
-                                                                                                  '\n'.join(lines))
-        error_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ohos Error</title></head><body>{}</body></html>'.format(
-            html_content)
-        return error_html
-
     def read_ninjia_trace_file(self):
         """
         Description: read ninjia trace file
@@ -292,8 +292,8 @@ class PerformanceAnalyse:
             result = [key, len(value), max(value)]
             result_list.append(result)
         sort_result = sorted(result_list, key=lambda x: x[2], reverse=True)
-        for i in range(len(sort_result)):
-            sort_result[i][2] = round(float(sort_result[i][2]) / 1000, 4)
+        for i in sort_result:
+            i[2] = round(float(i[2]) / 1000, 4)
 
         self.ninjia_trace_list = sort_result[:self.top_count]
 
@@ -491,7 +491,7 @@ class PerformanceAnalyse:
                 for key, value in self.during_time_dic.items():
                     if re.search(value.get("start_pattern"), output):
                         self.during_time_dic.get(key)["start_time"] = int(time_stamp)
-                    if re.search(value["end_pattern"], output):
+                    if re.search(value.get("end_pattern"), output):
                         self.during_time_dic.get(key)["end_time"] = int(time_stamp)
 
                 if re.search(self.gn_exec_flag, output):
