@@ -29,16 +29,16 @@ template("gen_js_obj") {
     objcopy_tool = "${clang_base_path}/bin/llvm-objcopy"
     platform = "${current_os}_${current_cpu}"
     if (platform == "mingw_x86_64") {
-      script = "//foundation/arkui/ace_engine/build/tools/run_objcopy_pc_mac.py"
+      script = "//build/scripts/run_objcopy_pc_mac.py"
     } else if (platform == "mac_x64") {
-      script = "//foundation/arkui/ace_engine/build/tools/run_objcopy_pc_mac.py"
+      script = "//build/scripts/run_objcopy_pc_mac.py"
     } else if (platform == "linux_x64") {
-      script = "//foundation/arkui/ace_engine/build/tools/run_objcopy_pc_mac.py"
+      script = "//build/scripts/run_objcopy_pc_mac.py"
     } else if (target_cpu == "x86_64") {
-      script = "//foundation/arkui/ace_engine/build/tools/run_objcopy.py"
+      script = "//build/scripts/run_objcopy.py"
     } else if (target_cpu == "arm" || target_cpu == "arm64" ||
                target_cpu == "riscv64" || target_cpu == "loongarch64") {
-      script = "//foundation/arkui/ace_engine/build/tools/run_objcopy.py"
+      script = "//build/scripts/run_objcopy.py"
     }
 
     args = [
