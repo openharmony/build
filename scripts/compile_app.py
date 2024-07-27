@@ -31,6 +31,7 @@ def parse_args(args):
     parser.add_argument('--nodejs', help='nodejs path')
     parser.add_argument('--cwd', help='app project directory')
     parser.add_argument('--sdk-home', help='sdk home')
+    parser.add_argument('--hvigor-home', help='hvigor home')
     parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
     parser.add_argument('--build-level', default='project', help='module or project')
     parser.add_argument('--assemble-type', default='assembleApp', help='assemble type')
@@ -78,7 +79,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
-        print(f"ohpm_install_cmd:{ohpm_install_cmd}")
+        print(f"[0/0] ohpm_install_cmd:{ohpm_install_cmd}")
         proc = subprocess.Popen(ohpm_install_cmd,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
@@ -165,7 +166,7 @@ def hvigor_write_log(cmd, cwd, env):
 
 
 def get_integrated_project_config(cwd: str):
-    print(f"project dir: {cwd}")
+    print(f"[0/0] project dir: {cwd}")
     with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
         hvigor_info = json5.load(input_f)
         model_version = hvigor_info.get('modelVersion')
@@ -175,7 +176,10 @@ def get_integrated_project_config(cwd: str):
 def build_hvigor_cmd(cwd: str, model_version: str, options):
     cmd = ['bash']
     if model_version:
-        cmd.extend(['hvigorw'])
+        if options.hvigor_home:
+            cmd.extend([f'{os.path.abspath(options.hvigor_home)}/hvigorw'])
+        else:
+            cmd.extend(['hvigorw'])
     else:
         cmd.extend(['./hvigorw'])
     
@@ -206,8 +210,15 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         
     cmd.extend(['--no-daemon'])
     
-    print("hvigor cmd: " + ' '.join(cmd))
+    print("[0/0] hvigor cmd: " + ' '.join(cmd))
     return cmd
+
+
+def set_sdk_path(cwd: str, model_version: str, options, env):
+    if 'sdk.dir' not in options.sdk_type_name and model_version:
+        write_env_sdk(options, env)
+    else:
+        write_local_properties(cwd, options)
 
 
 def write_local_properties(cwd: str, options):
@@ -218,6 +229,11 @@ def write_local_properties(cwd: str, options):
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')
+
+
+def write_env_sdk(options, env):
+    sdk_dir = options.sdk_home
+    env['DEVECO_SDK_HOME'] = sdk_dir
 
 
 def hvigor_sync(cwd: str, model_version: str, env):
@@ -237,15 +253,16 @@ def hvigor_build(cwd: str, options):
     :return: None
     '''
     model_version = get_integrated_project_config(cwd)
-    print(f"model_version: {model_version}")
+    print(f"[0/0] model_version: {model_version}")
 
     cmd = build_hvigor_cmd(cwd, model_version, options)
-
-    write_local_properties(cwd, options)
 
     print("[0/0] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
+
+    set_sdk_path(cwd, model_version, options, env)
+
     hvigor_sync(cwd, model_version, env)
     
     print("[0/0] Hvigor build start")
