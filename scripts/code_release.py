@@ -27,6 +27,7 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 
 RELEASE_FILENAME = 'README.OpenSource'
 scan_dir_list = ['third_party', 'kernel', 'device', 'drivers']
+scan_licenses = ['GPL', 'LGPL']
 
 
 def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir: str) -> bool:
@@ -51,7 +52,7 @@ def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir
     return True
 
 
-def _parse_opensource_file(opensource_config_file: str) -> bool:
+def _parse_opensource_file(opensource_config_file: str, license_set: set) -> bool:
     if not os.path.exists(opensource_config_file):
         print("Warning, the opensource config file is not exists.")
         return False
@@ -64,20 +65,47 @@ def _parse_opensource_file(opensource_config_file: str) -> bool:
     result = False
     for info in opensource_config:
         _license = info.get('License')
-        if _license.count('GPL') > 0 or _license.count('LGPL') > 0:
+        # any license in collect list is collected
+        if any(lic in _license for lic in license_set):
             result = True
+            break
+
     return result
 
 
-def _scan_and_package_code_release(scan_dir: str, top_dir: str, package_dir: str):
+def _scan_and_package_code_release(scan_dir: str, top_dir: str, package_dir: str, license_set: set):
     file_dir_names = os.listdir(scan_dir)
     for file_dir_name in file_dir_names:
         file_dir_path = os.path.join(scan_dir, file_dir_name)
         if os.path.isdir(file_dir_path) and not os.path.islink(file_dir_path):
-            _scan_and_package_code_release(file_dir_path, top_dir, package_dir)
+            _scan_and_package_code_release(file_dir_path, top_dir, package_dir, license_set)
         elif file_dir_path == os.path.join(scan_dir, RELEASE_FILENAME):
-            if _parse_opensource_file(file_dir_path):
+            if _parse_opensource_file(file_dir_path, license_set):
                 _copy_opensource_file(file_dir_path, top_dir, package_dir)
+
+
+def _collect_opensource(options, package_dir: str):
+    # get the source top directory to be scan
+    top_dir = options.root_dir
+
+    # add extend scan directory
+    ext_scan_dirs = options.ext_scan_dirs
+    if ext_scan_dirs:
+        scan_dir_list.extend(ext_scan_dirs.split(":"))
+    # add extend scan license
+    ext_scan_licenses = options.ext_scan_licenses
+    if ext_scan_licenses:
+        scan_licenses.extend(ext_scan_licenses.split(":"))
+
+    # scan the target dir and copy release code to out/opensource dir
+    # remove duplicate scan dir
+    dir_set = set([os.path.join(top_dir, _dir) for _dir in scan_dir_list])
+    # remove duplicate licenses
+    license_set = set(scan_licenses)
+    for scan_dir in dir_set:
+        if not os.path.isdir(scan_dir):
+            raise Exception(f"{scan_dir} not exist, this is invalid.")
+        _scan_and_package_code_release(scan_dir, top_dir, package_dir, license_set)
 
 
 def _tar_opensource_package_file(options, package_dir: str) -> int:
@@ -98,17 +126,26 @@ def main(args) -> int:
     build_utils.add_depfile_option(parser)
     parser.add_option('--output', help='output')
     parser.add_option('--root-dir', help='source root directory')
+
+    # add optional extended parameters
+    parser.add_option('--ext-scan-dirs', help='extended scan directory')
+    parser.add_option('--ext-scan-licenses', help='extended scan licenses')
+    parser.add_option('--only-collect-file', action='store_true', help='need post process, only collect file')
+
     options, _ = parser.parse_args(args)
 
-    # get the source top directory to be scan
-    top_dir = options.root_dir
+    # need post process, only collection is required
+    if options.only_collect_file:
+        package_dir = os.path.dirname(options.output)
+        if os.path.exists(package_dir):
+            shutil.rmtree(package_dir)
+        os.makedirs(package_dir, exist_ok=True)
+        _collect_opensource(options, package_dir)
+        build_utils.touch(options.output)
+        return 0
 
     with build_utils.temp_dir() as package_dir:
-        # scan the target dir and copy release code to out/opensource dir
-        dir_list = [os.path.join(top_dir, _dir) for _dir in scan_dir_list]
-        for scan_dir in dir_list:
-            _scan_and_package_code_release(scan_dir, top_dir, package_dir)
-
+        _collect_opensource(options, package_dir)
         # package the opensource to Code_Opensource.tar.gz
         if _tar_opensource_package_file(options, package_dir) == 0:
             print('Generate the opensource package successfully.')
