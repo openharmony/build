@@ -23,7 +23,7 @@ def merge_files(args):
     products_dir = "../../productdefine/common/products"
     device_dir = "../../productdefine/common/device"
     products_path = r'%s/%s' % (products_dir, args)
-    with open(products_path,'r+', encoding='utf-8') as f:
+    with open(products_path, 'r+', encoding='utf-8') as f:
         data = json.load(f)
         name = data["product_name"]
         company = data["product_company"]
@@ -43,7 +43,7 @@ def merge_files(args):
     with open(products_path, "r", encoding='utf-8') as products_read:
         data_products_read = json.load(products_read)
 
-    data_all = merge(data_device_read , data_products_read)
+    data_all = merge(data_device_read, data_products_read)
     new_json = json.dumps(data_all, indent=4)
 
     flags = os.O_RDWR | os.O_CREAT
@@ -72,8 +72,8 @@ def readjson(path, device):
                             fea = "{} = {}".format(str(k), str(v).lower())
                             features.append(fea)
                     if substr[0] == str(key_sub).split(":")[0]:
-                        components_list.append({"component":str(key_sub).split(":")[1], "features":features})
-                subsystems_list.append({"subsystem":substr[0], "components":components_list})
+                        components_list.append({"component": str(key_sub).split(":")[1], "features": features})
+                subsystems_list.append({"subsystem": substr[0], "components": components_list})
         config_dic["subsystems"] = subsystems_list
         del data['parts']
         data.update({"version": "3.0"})
@@ -82,11 +82,11 @@ def readjson(path, device):
         for datakey in data:
             if "enable_ramdisk" in datakey:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
-                "board", "enable_ramdisk", "enable_absystem", "subsystems"]
+                             "board", "enable_ramdisk", "enable_absystem", "subsystems"]
                 break
             else:
                 dict_keys = ["product_name", "device_company", "device_build_path", "target_cpu", "type", "version",
-                "board", "enable_absystem", "subsystems"]
+                             "board", "enable_absystem", "subsystems"]
         dict_you_want = {new_key: data[new_key] for new_key in dict_keys}
         json_data = json.dumps(dict_you_want, indent=2)
         f.seek(0)

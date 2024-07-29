@@ -177,7 +177,11 @@ def _get_src_part_name(src_bundle_paths):
     _path = ''
     for src_bundle_path in src_bundle_paths:
         src_bundle_json = utils.get_json(src_bundle_path)
-        part_name = src_bundle_json['component']['name']
+        part_name = ""
+        try:
+            part_name = src_bundle_json['component']['name']
+        except KeyError:
+            print(f'--get bundle json component name error--')
         if part_name.endswith('_lite'):
             pass
         else:
