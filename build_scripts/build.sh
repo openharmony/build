@@ -77,12 +77,14 @@ esac
 
 case $(uname -s) in
     Darwin)
-        HOST_DIR="darwin-$host_cpu_prefix"
+        HOST_DIR="darwin-x86"
+        PYTHON_DIR="darwin-$host_cpu_prefix"
         HOST_OS="mac"
         NODE_PLATFORM="darwin-x64"
         ;;
     Linux)
-        HOST_DIR="linux-$host_cpu_prefix"
+        HOST_DIR="linux-x86"
+        PYTHON_DIR="linux-$host_cpu_prefix"
         HOST_OS="linux"
         NODE_PLATFORM="linux-x64"
         ;;
@@ -93,7 +95,7 @@ case $(uname -s) in
 esac
 
 # set python3
-PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/current/
+PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${PYTHON_DIR}/current/
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
