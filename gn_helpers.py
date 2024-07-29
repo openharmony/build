@@ -148,10 +148,11 @@ def unescape_gn_string(value: list) -> str:
     result = []
     i = 0
     while i < len(value):
-        if i < len(value) - 1 and value[i] == '\\':
+        if value[i] == '\\':
+            if i < len(value) - 1:
             # If it is not the last element of the list and the current character is a back slash    
-            result.append(unescape_gn_special_char(value[i + 1]))
-            i += 1
+                result.append(unescape_gn_special_char(value[i + 1]))
+                i += 1
         else:
             result.append(value[i])
         i += 1
