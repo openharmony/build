@@ -33,6 +33,7 @@ def parse_args(args):
     options = parser.parse_args(args)
     return options
 
+
 def bpf_compile(options, cmd: str):
     my_env = None
     for f in options.input_file:
@@ -40,6 +41,7 @@ def bpf_compile(options, cmd: str):
         cmd.extend(['-o', options.output_file])
         build_utils.check_output(cmd, env=my_env)
         
+
 def main(args):
     options = parse_args(args)
     cmd = [options.clang_path]
@@ -63,6 +65,7 @@ def main(args):
         force=False,
         add_pydeps=False
     )
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))

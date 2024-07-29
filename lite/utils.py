@@ -24,13 +24,13 @@ import sys
 import json
 
 
-def encode(data, encoding: str='utf-8'):
+def encode(data, encoding: str = 'utf-8'):
     if sys.version_info.major == 2:
         return data.encode(encoding)
     return data
 
 
-def decode(data, encoding: str='utf-8'):
+def decode(data, encoding: str = 'utf-8'):
     if sys.version_info.major == 2:
         return data.decode(encoding)
     return data
@@ -52,7 +52,7 @@ def read_json_file(input_file: str):
     return data
 
 
-def exec_command(cmd: str, log_path: str='out/build.log', **kwargs):
+def exec_command(cmd: str, log_path: str = 'out/build.log', **kwargs):
     with open(log_path, 'at', encoding='utf-8') as log_file:
         process = subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
@@ -88,7 +88,7 @@ def check_output(cmd: str, **kwargs):
     return ret
 
 
-def makedirs(path: str, exist_ok: bool=True):
+def makedirs(path: str, exist_ok: bool = True):
     try:
         os.makedirs(path, exist_ok=True)
     except OSError:

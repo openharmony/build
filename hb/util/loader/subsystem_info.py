@@ -43,7 +43,7 @@ def _output_subsystem_configs(output_dir, subsystem_configs):
                     subsystem_configs.get('no_src_subsystem'))
 
 
-def  merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
+def merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
     subsystem_info = subsystem_configs[key]
     overlay_info = subsystem_config_overlay[key]
 
@@ -60,6 +60,7 @@ def  merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
                         subsystem_config_overlay.get('subsystem').get(subsystem)['build_files']
         else:
             subsystem_configs[key].setdefault(subsystem, subsystem_config_overlay[key][subsystem])
+
 
 def get_subsystem_info(subsystem_config_file, example_subsystem_file,
                        source_root_dir, config_output_path, os_level):

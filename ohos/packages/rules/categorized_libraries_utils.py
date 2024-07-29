@@ -42,6 +42,7 @@ def __get_relative_install_dir(categories):
         return "chipset-sdk"
     return ""
 
+
 def load_categorized_libraries(file_name):
     res = read_json_file(file_name)
 
@@ -77,8 +78,7 @@ def update_module_info(module_info, categorized_libraries):
         if dir_name.endswith("chipset-sdk") or dir_name.endswith("platformsdk") \
         or dir_name.endswith("chipset-pub-sdk") or dir_name.endswith("ndk") or dir_name.endswith("chipsetsdk"):
             dir_name = dir_name[:dir_name.rfind("/")]
-
-        dest.append(dir_name + "/" + categorized_libraries[label]["relative_install_dir"] + "/" + lib_name)
+        dest.append("{}/{}/{}".format(dir_name, categorized_libraries[label]["relative_install_dir"], lib_name))
     module_info["dest"] = dest
 
 

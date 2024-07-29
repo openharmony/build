@@ -26,7 +26,7 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 target_data_dicts = dict()
 
 
-def get_value_from_file(file: str, target: list, key: str, must: bool=True):
+def get_value_from_file(file: str, target: list, key: str, must: bool = True):
     target_name = target[0]
     target_out_dir = target[1]
     file_path = os.path.join(target_out_dir, target_name + "_" + file + ".json")

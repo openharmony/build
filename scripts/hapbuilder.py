@@ -124,7 +124,7 @@ def tweak_hap_profile(options, package_dir: str):
 
 def create_hap(options, signed_hap: str):
     with build_utils.temp_dir() as package_dir, tempfile.NamedTemporaryFile(
-            suffix='.hap', delete=False, dir=options.target_out_dir) as output:
+            suffix='.hap') as output:
         packing_cmd = ['java', '-jar', options.hap_packing_tool]
         packing_cmd.extend(
             ['--mode', 'hap', '--force', 'true', '--out-path', output.name])
@@ -189,7 +189,6 @@ def parse_args(args):
     
     parser.add_option('--sign_hap_py_path', help='sign_hap_py_path')
     parser.add_option('--sign_compatible_version', default='', help='limit compatible_Version')
-    parser.add_option('--target-out-dir', default='', help='')
 
     options, _ = parser.parse_args(args)
     if options.assets:

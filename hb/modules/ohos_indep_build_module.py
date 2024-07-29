@@ -33,6 +33,10 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         self._hpm = hpm
         OHOSIndepBuildModule._instance = self
 
+    @property
+    def hpm(self):
+        return self._hpm
+    
     @staticmethod
     def get_instance():
         if OHOSIndepBuildModule._instance is not None:
@@ -40,14 +44,6 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         else:
             raise OHOSException(
                 'OHOSIndepBuildModule has not been instantiated', '0000')
-
-    @property
-    def hpm(self):
-        return self._hpm
-
-    def _target_compilation(self):
-        self._run_phase()
-        self.hpm.run()
 
     @throw_exception
     def run(self):
@@ -58,6 +54,10 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         else:
             LogUtil.hb_info('{} build success'.format(
                 self.args_dict.get('part').arg_value))
+            
+    def _target_compilation(self):
+        self._run_phase()
+        self.hpm.run()    
 
     def _run_phase(self):
         for arg in self.args_dict.values():

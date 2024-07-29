@@ -19,7 +19,7 @@ def _is_dir(dir_name) -> str:
     return str(os.path.isdir(dir_name))
 
 
-def DoMain(args):
+def do_main(args):
     """Hook to be called from gyp without starting a separate python
     interpreter."""
     return _is_dir(args[0])

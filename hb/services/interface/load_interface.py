@@ -20,11 +20,16 @@ from services.interface.service_interface import ServiceInterface
 from resources.config import Config
 from util.log_util import LogUtil
 
+
 class LoadInterface(ServiceInterface):
 
     def __init__(self):
         super().__init__()
         self._config = Config()
+
+    @abstractmethod
+    def __post_init__(self):
+        pass
 
     @property
     def config(self):
@@ -61,10 +66,6 @@ class LoadInterface(ServiceInterface):
         self._generate_infos_for_testfwk()
         self._check_product_part_feature()
         self._generate_syscap_files()
-
-    @abstractmethod
-    def __post_init__(self):
-        pass
 
     @abstractmethod
     def _execute_loader_args_display(self):

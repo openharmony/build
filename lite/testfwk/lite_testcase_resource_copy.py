@@ -192,7 +192,7 @@ def main():
     parser.add_argument('--output-file', required=True)
     args = parser.parse_args()
     if not args.resource_config_file:
-            return 0
+        return 0
     else:
         resource_config_file = args.resource_config_file
         if not os.path.exists(resource_config_file):

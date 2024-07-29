@@ -36,6 +36,25 @@ class PlatformsLoader:
         self._target_arch = target_arch
         self._scalable_build = scalable_build
 
+    @staticmethod
+    def _load_platform_config(platform_config_file):
+        if not os.path.exists(platform_config_file):
+            raise Exception(
+                "config file '{}' doesn't exist.".format(platform_config_file))
+        _platform_config = read_json_file(platform_config_file)
+        if _platform_config is None:
+            raise Exception(
+                "read file '{}' failed.".format(platform_config_file))
+        if 'parts' in _platform_config:
+            parts = _platform_config.get('parts')
+        else:
+            parts = []
+        if 'stub_parts' in _platform_config:
+            stub_parts = _platform_config.get('stub_parts')
+        else:
+            stub_parts = []
+        return parts, stub_parts
+
     @throw_exception
     def _read_platforms_config(self):
         if not os.path.exists(self._platforms_config_file):
@@ -81,25 +100,6 @@ class PlatformsLoader:
                     _infos[_name] = _info
                     platforms_config[arch] = _infos
         return platforms_config
-
-    @staticmethod
-    def _load_platform_config(platform_config_file):
-        if not os.path.exists(platform_config_file):
-            raise Exception(
-                "config file '{}' doesn't exist.".format(platform_config_file))
-        _platform_config = read_json_file(platform_config_file)
-        if _platform_config is None:
-            raise Exception(
-                "read file '{}' failed.".format(platform_config_file))
-        if 'parts' in _platform_config:
-            parts = _platform_config.get('parts')
-        else:
-            parts = []
-        if 'stub_parts' in _platform_config:
-            stub_parts = _platform_config.get('stub_parts')
-        else:
-            stub_parts = []
-        return parts, stub_parts
 
     @throw_exception
     def _loading(self):

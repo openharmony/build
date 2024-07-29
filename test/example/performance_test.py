@@ -47,73 +47,8 @@ if not config:
 
 
 class PerformanceAnalyse:
-    try:
-        TIMEOUT = int(config.get("performance").get("performance_exec_timeout"))
-        select_timeout = float(config.get("performance").get("performance_select_timeout"))
-        top_count = int(config.get("performance").get("performance_top_count"))
-        overflow = float(config.get("performance").get("performance_overflow"))
-        exclude = config.get("performance").get("exclude")
-        log_info("TIMEOUT:{}".format(TIMEOUT))
-        log_info("select_timeout:{}".format(select_timeout))
-        log_info("top_count:{}".format(top_count))
-        log_info("overflow:{} sec".format(overflow))
-    except Exception as e:
-        log_error("config file:build_example.json has error:{}".format(e))
-        raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
 
-    def __init__(self, performance_cmd, output_path, report_title, ptyflag=False):
-        self.performance_cmd = script_path + performance_cmd
-        self.output_path = script_path + output_path
-        self.report_title = report_title
-        self.ptyflag = ptyflag
-        self.out_queue = queue.Queue()
-        self.system_info = list()
-        self.ninjia_trace_list = list()
-        self.gn_exec_li = list()
-        self.gn_script_li = list()
-        self.gn_end_li = list()
-        self.ccache_li = list()
-        self.c_targets_li = list()
-        self.root_dir = None
-        self.gn_dir = None
-        self.gn_script_res = None
-        self.gn_exec_res = None
-        self.cost_time_res = list()
-        self.gn_exec_flag = re.compile(r"File execute times")
-        self.gn_script_flag = re.compile(r"Script execute times")
-        self.gn_end_flag = re.compile(r"Done\. Made \d+ targets from \d+ files in (\d+)ms")
-        self.root_dir_flag = re.compile(r"""loader args.*source_root_dir="([a-zA-Z\d/\\_]+)""""")
-        self.gn_dir_flag = re.compile(r"""loader args.*gn_root_out_dir="([a-zA-Z\d/\\_]+)""""")
-        self.ccache_start_flag = re.compile(r"ccache_dir =")
-        self.ccache_end_flag = re.compile(r"c targets overlap rate statistics")
-        self.c_targets_flag = re.compile(r"c overall build overlap rate")
-
-        self.build_error = re.compile(r"=====build\s\serror=====")
-        self.ohos_error = re.compile(r"OHOS ERROR")
-        self.total_flag = re.compile(r"Cost time:.*(\d+:\d+:\d+)")
-        self.total_cost_time = None
-        self.error_message = list()
-
-        self.during_time_dic = {
-            "Preloader": {"start_pattern": re.compile(r"Set cache size"),
-                          "end_pattern": re.compile(r"generated compile_standard_whitelist"),
-                          "start_time": 0,
-                          "end_time": 0
-                          },
-            "Loader": {"start_pattern": re.compile(r"Checking all build args"),
-                       "end_pattern": re.compile(r"generate target syscap"),
-                       "start_time": 0,
-                       "end_time": 0
-                       },
-            "Ninjia": {"start_pattern": re.compile(r"Done\. Made \d+ targets from \d+ files in (\d+)ms"),
-                       "end_pattern": re.compile(r"ccache_dir ="),
-                       "start_time": 0,
-                       "end_time": 0
-                       }}
-
-        self.table_html = ""
-
-        self.base_html = """
+    self.html_tamplate = """
                           <!DOCTYPE html>
                           <html lang="en">
                           <head>
@@ -163,8 +98,87 @@ class PerformanceAnalyse:
                           <body>
                           <div class="container">
                           <h1>{}</h1>
-                          """.format(self.report_title)
+                          """
+
+    try:
+        TIMEOUT = int(config.get("performance").get("performance_exec_timeout"))
+        select_timeout = float(config.get("performance").get("performance_select_timeout"))
+        top_count = int(config.get("performance").get("performance_top_count"))
+        overflow = float(config.get("performance").get("performance_overflow"))
+        exclude = config.get("performance").get("exclude")
+        log_info("TIMEOUT:{}".format(TIMEOUT))
+        log_info("select_timeout:{}".format(select_timeout))
+        log_info("top_count:{}".format(top_count))
+        log_info("overflow:{} sec".format(overflow))
+    except Exception as e:
+        log_error("config file:build_example.json has error:{}".format(e))
+        raise FileNotFoundError("config file:build_example.json has error:{}".format(e))
+
+    def __init__(self, performance_cmd, output_path, report_titles, ptyflags=False):
+        self.performance_cmd = script_path + performance_cmd
+        self.output_path = script_path + output_path
+        self.report_title = report_titles
+        self.ptyflag = ptyflags
+        self.out_queue = queue.Queue()
+        self.system_info = list()
+        self.ninjia_trace_list = list()
+        self.gn_exec_li = list()
+        self.gn_script_li = list()
+        self.gn_end_li = list()
+        self.ccache_li = list()
+        self.c_targets_li = list()
+        self.root_dir = None
+        self.gn_dir = None
+        self.gn_script_res = None
+        self.gn_exec_res = None
+        self.cost_time_res = list()
+        self.gn_exec_flag = re.compile(r"File execute times")
+        self.gn_script_flag = re.compile(r"Script execute times")
+        self.gn_end_flag = re.compile(r"Done\. Made \d+ targets from \d+ files in (\d+)ms")
+        self.root_dir_flag = re.compile(r"""loader args.*source_root_dir="([a-zA-Z\d/\\_]+)""""")
+        self.gn_dir_flag = re.compile(r"""loader args.*gn_root_out_dir="([a-zA-Z\d/\\_]+)""""")
+        self.ccache_start_flag = re.compile(r"ccache_dir =")
+        self.ccache_end_flag = re.compile(r"c targets overlap rate statistics")
+        self.c_targets_flag = re.compile(r"c overall build overlap rate")
+        self.build_error = re.compile(r"=====build\s\serror=====")
+        self.ohos_error = re.compile(r"OHOS ERROR")
+        self.total_flag = re.compile(r"Cost time:.*(\d+:\d+:\d+)")
+        self.total_cost_time = None
+        self.error_message = list()
+        self.during_time_dic = {
+            "Preloader": {"start_pattern": re.compile(r"Set cache size"),
+                          "end_pattern": re.compile(r"generated compile_standard_whitelist"),
+                          "start_time": 0,
+                          "end_time": 0
+                          },
+            "Loader": {"start_pattern": re.compile(r"Checking all build args"),
+                       "end_pattern": re.compile(r"generate target syscap"),
+                       "start_time": 0,
+                       "end_time": 0
+                       },
+            "Ninjia": {"start_pattern": re.compile(r"Done\. Made \d+ targets from \d+ files in (\d+)ms"),
+                       "end_pattern": re.compile(r"ccache_dir ="),
+                       "start_time": 0,
+                       "end_time": 0
+                       }}
+        self.table_html = ""
+        self.base_html = self.html_tamplate.format(self.report_title)
         self.remove_out()
+
+    @staticmethod
+    def generate_error_content(table_name, lines):
+        """
+        Description: generate error html content
+        @parameter table_name: table name
+        @parameter lines: error message
+        """
+        table_title = table_name.capitalize()
+        lines = ['<br>' + text for text in lines]
+        html_content = '<center><h1>{}</h1><div style="text-align:left;">{}<div></center>'.format(table_title,
+                                                                                                  '\n'.join(lines))
+        error_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ohos Error</title></head><body>{}</body></html>'.format(
+            html_content)
+        return error_html
 
     def remove_out(self):
         """
@@ -191,7 +205,7 @@ class PerformanceAnalyse:
         """
         if not os.path.exists(os.path.dirname(self.output_path)):
             os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-        with open(self.output_path, "w", encoding="utf-8") as html_file:
+        with os.fdopen(os.open(self.output_path, os.O_WRONLY | os.O_CREAT | os.TRUNC, os.stat.S_IWUSR), "w", encoding="utf-8") as html_file:
             html_file.write(content)
 
     def generate_content(self, table_name, data_rows, switch=False):
@@ -245,21 +259,7 @@ class PerformanceAnalyse:
         self.table_html += "</tbody>"
 
         self.table_html += "</table></div></body></html>"
-
-    @staticmethod
-    def generate_error_content(table_name, lines):
-        """
-        Description: generate error html content
-        @parameter table_name: table name
-        @parameter lines: error message
-        """
-        table_title = table_name.capitalize()
-        lines = ['<br>' + text for text in lines]
-        html_content = '<center><h1>{}</h1><div style="text-align:left;">{}<div></center>'.format(table_title,
-                                                                                                  '\n'.join(lines))
-        error_html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Ohos Error</title></head><body>{}</body></html>'.format(
-            html_content)
-        return error_html
+        return True
 
     def read_ninjia_trace_file(self):
         """
@@ -292,8 +292,8 @@ class PerformanceAnalyse:
             result = [key, len(value), max(value)]
             result_list.append(result)
         sort_result = sorted(result_list, key=lambda x: x[2], reverse=True)
-        for i in range(len(sort_result)):
-            sort_result[i][2] = round(float(sort_result[i][2]) / 1000, 4)
+        for i in sort_result:
+            i[2] = round(float(i[2]) / 1000, 4)
 
         self.ninjia_trace_list = sort_result[:self.top_count]
 
@@ -324,9 +324,9 @@ class PerformanceAnalyse:
                 ccache_res.append(tmp.split(":"))
         ccache_res.insert(0, ["ccache item", "data"])
 
-        for item in self.c_targets_li:
-            if len(item.split()) == 6:
-                c_targets_res.append(item.split())
+        for item_ in self.c_targets_li:
+            if len(item_.split()) == 6:
+                c_targets_res.append(item_.split())
         c_targets_res.insert(0, ["subsystem", "files NO.", " percentage", "builds NO.", "percentage", "verlap rate"])
         return ccache_res, c_targets_res
 
@@ -491,7 +491,7 @@ class PerformanceAnalyse:
                 for key, value in self.during_time_dic.items():
                     if re.search(value.get("start_pattern"), output):
                         self.during_time_dic.get(key)["start_time"] = int(time_stamp)
-                    if re.search(value["end_pattern"], output):
+                    if re.search(value.get("end_pattern"), output):
                         self.during_time_dic.get(key)["end_time"] = int(time_stamp)
 
                 if re.search(self.gn_exec_flag, output):
@@ -557,8 +557,8 @@ class PerformanceAnalyse:
         Description: start performance test
         """
         try:
-            cmd = self.performance_cmd.split(" ")
-            self.exec_command_pipe(cmd)
+            cmds = self.performance_cmd.split(" ")
+            self.exec_command_pipe(cmds)
             if self.error_message:
                 err_html = self.generate_error_content("Ohos Error", self.error_message)
                 self.write_html(err_html)

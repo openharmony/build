@@ -83,15 +83,6 @@ class InterfaceMgr:
                 output_file.write('\n'.join(check_content))
                 output_file.flush()
 
-    def _gen_checkfile(self, check_file_dir: str, target_type_dir: str, target_type: str):
-        subsystem_list = os.listdir(target_type_dir)
-        for subsystem_name in subsystem_list:
-            subsystem_dir = os.path.join(target_type_dir, subsystem_name)
-            if not os.path.isdir(subsystem_dir) or target_type.startswith(
-                    '.'):
-                continue
-            self.gen_sig_file_by_subsystem(subsystem_name, check_file_dir)
-
     def gen_interface_checkfile(self, sdk_base_dir, check_file_dir):
         if not os.path.isdir(sdk_base_dir):
             raise Exception(
@@ -142,6 +133,15 @@ class InterfaceMgr:
                 raise Exception(
                     '[{}:{}] interface check failed. file [{}] has changed.'.
                     format(subsystem_name, module_name, h_file))
+                    
+    def _gen_checkfile(self, check_file_dir: str, target_type_dir: str, target_type: str):
+        subsystem_list = os.listdir(target_type_dir)
+        for subsystem_name in subsystem_list:
+            subsystem_dir = os.path.join(target_type_dir, subsystem_name)
+            if not os.path.isdir(subsystem_dir) or target_type.startswith(
+                    '.'):
+                continue
+            self.gen_sig_file_by_subsystem(subsystem_name, check_file_dir)
 
 
 def main():

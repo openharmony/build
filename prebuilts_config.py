@@ -57,10 +57,10 @@ def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
     return check_sha256
 
 
-def npm_install(_dir):
-    result = subprocess.run(["npm", "install", "--prefix", _dir], capture_output=True, text=True)
+def npm_install(dir_name):
+    result = subprocess.run(["npm", "install", "--prefix", dir_name], capture_output=True, text=True)
     if result.returncode == 0:
-        print("{}目录下npm install完毕".format(_dir))
+        print("{}目录下npm install完毕".format(dir_name))
     else:
         print("依赖项安装失败:", result.stderr)
 

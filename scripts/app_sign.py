@@ -88,6 +88,8 @@ def main(args):
                 if len(names) == 2:
                     signed_hap_names[f'{names[0]}.hsp'] = f'{names[1]}.hsp'
                     signed_hap_names[f'{names[0]}.hap'] = f'{names[1]}.hap'
+                else:
+                    raise ValueError(f'Value hap_list {hap_list} not compliant with format')
         for unsigned_hap_path in unsigned_hap_path_list.get('unsigned_hap_path_list'):
             signed_hap_path = unsigned_hap_path.replace('unsigned', 'signed')
             output_hap_name = f'{options.hap_name}-{os.path.basename(signed_hap_path)}'
@@ -102,11 +104,8 @@ def main(args):
             if signed_hap_names.get('do_filter'):
                 if signed_hap_names.get(unsigned_hap_name):
                     output_hap_name = signed_hap_names.get(unsigned_hap_name)
-                    output_hap = os.path.join(options.hap_out_dir, output_hap_name)
-                    sign_app(options, unsigned_hap_path, output_hap)
-            else:
-                output_hap = os.path.join(options.hap_out_dir, output_hap_name)
-                sign_app(options, unsigned_hap_path, output_hap)
+            output_hap = os.path.join(options.hap_out_dir, output_hap_name)
+            sign_app(options, unsigned_hap_path, output_hap)
 
 
 if __name__ == '__main__':

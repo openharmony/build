@@ -24,41 +24,6 @@ import stat
 
 class Analyzer:
     @classmethod
-    def __get_need_scan_path(cls, components, project, components_info_path):
-        path_info = dict()
-        with open(components_info_path, 'r', encoding='utf-8') as r:
-            xml_info = r.readlines()
-        for line in xml_info:
-            if "path=" in line:
-                path = re.findall('path="(.*?)"', line)[0]
-                component = path.split('/')[-1]
-                path_info[component] = path
-        item_list = list(path_info.keys())
-        for component in components:
-            if component['component'] in path_info.keys():
-                component['scan_path'] = project + '/' + path_info[component['component']]
-                if (component['component'] in item_list):
-                    item_list.remove(component['component'])
-            else:
-                component['scan_path'] = ''
-        print("no scan component :" + " ".join(item_list))
-
-    @classmethod
-    def __get_components(cls, config: str, project: str):
-        components = list()
-        with open(config, 'r', encoding='utf-8') as r:
-            config_json = json.load(r)
-        if "inherit" in config_json.keys():
-            inherit = config_json['inherit']
-            cls.get_components_from_inherit_attr(components, inherit, project)
-        for subsystem in config_json['subsystems']:
-            for component in subsystem['components']:
-                if component not in components:
-                    component['subsystem'] = subsystem['subsystem']
-                    components.append(component)
-        return components
-
-    @classmethod
     def get_components_from_inherit_attr(cls, components, inherit, project):
         for json_name in inherit:
             with open(project + os.sep + json_name, 'r', encoding='utf-8') as r:
@@ -127,6 +92,43 @@ class Analyzer:
             for ele in result:
                 items = ele['subsystem'], ele['component'], ele['file_path'], str(ele['line_num']), ele['include_cmd']
                 f.write(" ".join(items) + "\n")
+
+    @classmethod
+    def __get_need_scan_path(cls, components, project, components_info_path):
+        path_info = dict()
+        with open(components_info_path, 'r', encoding='utf-8') as r:
+            xml_info = r.readlines()
+        for line in xml_info:
+            if "path=" in line:
+                path = re.findall('path="(.*?)"', line)[0]
+                component = path.split('/')[-1]
+                path_info[component] = path
+        item_list = list(path_info.keys())
+        for component in components:
+            if component['component'] in path_info.keys():
+                component['scan_path'] = project + '/' + path_info[component['component']]
+                if (component['component'] in item_list):
+                    item_list.remove(component['component'])
+            else:
+                component['scan_path'] = ''
+        print("no scan component :" + " ".join(item_list))
+
+    @classmethod
+    def __get_components(cls, config: str, project: str):
+        components = list()
+        with open(config, 'r', encoding='utf-8') as r:
+            config_json = json.load(r)
+        if "inherit" in config_json.keys():
+            inherit = config_json['inherit']
+            cls.get_components_from_inherit_attr(components, inherit, project)
+        for subsystem in config_json['subsystems']:
+            for component in subsystem['components']:
+                if component not in components:
+                    component['subsystem'] = subsystem['subsystem']
+                    components.append(component)
+        return components
+
+
 
 def get_args():
     parser = argparse.ArgumentParser(

@@ -27,6 +27,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/hiviewdfx/hiappevent:libhiappevent_ndk",
   "//interface/sdk_c/hiviewdfx/hidebug:libohhidebug",
   "//interface/sdk_c/hiviewdfx/hidebug:oh_hidebug_header",
+  "//interface/sdk_c/hiviewdfx/hicollie:libohhicollie",
+  "//interface/sdk_c/hiviewdfx/hicollie:oh_hicollie_header",
   "//interface/sdk_c/hiviewdfx/hilog:hilog_header",
   "//interface/sdk_c/hiviewdfx/hilog:libhilog_ndk",
   "//interface/sdk_c/hiviewdfx/hitrace:hitrace_header",
@@ -150,6 +152,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/distributeddatamgr/relational_store:data_ndk_header",
   "//interface/sdk_c/distributeddatamgr/relational_store:native_rdb_ndk_header",
   "//interface/sdk_c/distributeddatamgr/relational_store:libnative_rdb_ndk",
+  "//interface/sdk_c/distributeddatamgr/udmf:libudmf",
+  "//interface/sdk_c/distributeddatamgr/udmf:udmf_ndk_header",
   "//interface/sdk_c/drivers/external_device_manager/usb:libusb_ndk",
   "//interface/sdk_c/drivers/external_device_manager/usb:usb_header",
   "//interface/sdk_c/drivers/external_device_manager/hid:libhid",
@@ -158,6 +162,7 @@ _ndk_library_targets = [
   "//interface/sdk_c/drivers/external_device_manager/base:ddk_header",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:libvulkan_ndk",
   "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header",
+  "//interface/sdk_c/graphic/graphic_2d/vulkan:vulkan_header_vk_video",
   "//interface/sdk_c/resourceschedule/ffrt:libffrt_ndk",
   "//interface/sdk_c/resourceschedule/ffrt:ffrt_header",
   "//interface/sdk_c/network/netmanager:libnet_connection",
@@ -185,6 +190,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/graphic/graphic_2d/native_display_soloist:libnative_display_soloist_ndk",
   "//interface/sdk_c/graphic/graphic_2d/native_display_soloist:native_display_soloist_header",
   "//interface/sdk_c/third_party/musl/ndk_script:copy_compatible_config",
+  "//interface/sdk_c/CryptoArchitectureKit:libohcrypto",
+  "//interface/sdk_c/CryptoArchitectureKit:crypto_capi_header",
 ]
 
 _ndk_base_libs = [

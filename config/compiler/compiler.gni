@@ -53,7 +53,11 @@ declare_args() {
 
   # Enables support for ThinLTO, which links 3x-10x faster than full LTO. See
   # also http://blog.llvm.org/2016/06/thinlto-scalable-and-incremental-lto.html
-  use_thin_lto = is_cfi || is_ohos_or_android
+  if (use_libfuzzer) {
+    use_thin_lto = is_cfi || (is_ohos_or_android && is_official_build)
+  } else {
+    use_thin_lto = is_cfi || is_ohos_or_android
+  }
 
   # Tell VS to create a PDB that references information in .obj files rather
   # than copying it all. This should improve linker performance. mspdbcmf.exe
