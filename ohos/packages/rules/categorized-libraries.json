@@ -86,5 +86,13 @@
   "//base/notification/distributed_notification_service/frameworks/ans:ans_innerkits": {
     "so_file_name": "libans_innerkits.z.so",
     "categories": [ "platformsdk" ]
+  },
+  "//foundation/arkui/ace_engine/build:libace_engine_pa_ark": {
+    "so_file_name": "libace_engine_pa_ark.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/arkui/ace_engine/interfaces/native:ace_ndk": {
+    "so_file_name": "libace_ndk.z.so",
+    "categories": [ "ndk" ]
   }
 }
