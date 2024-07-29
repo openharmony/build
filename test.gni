@@ -171,6 +171,7 @@ template("_ohos_test") {
 
 template("ohos_unittest") {
   _ohos_test(target_name) {
+    testonly = true
     forward_variables_from(invoker, "*")
     test_type = "unittest"
     deps = []
@@ -289,14 +290,19 @@ template("ohos_fuzztest") {
 
 template("ohos_benchmarktest") {
   _ohos_test(target_name) {
+    testonly = true
     forward_variables_from(invoker, "*", [ "deps" ])
     test_type = "benchmark"
 
     deps = []
+    external_deps = []
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    deps += [ "//third_party/benchmark:benchmark" ]
+    if (defined(invoker.external_deps)) {
+      external_deps += invoker.external_deps
+    }
+    external_deps += [ "benchmark:benchmark" ]
   }
 }
 

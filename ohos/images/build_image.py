@@ -18,6 +18,7 @@ import os
 import shutil
 import argparse
 import json
+import stat
 from mkimage import mkimages
 
 sys.path.append(
@@ -51,6 +52,12 @@ def _prepare_root(system_path: str, target_cpu: str):
     if target_cpu == 'arm64' or target_cpu == 'riscv64':
         os.symlink('/system/lib64', os.path.join(root_dir, 'lib64'))
     os.symlink('/system/lib', os.path.join(root_dir, 'lib'))
+    os.makedirs("../../data/service/el1/network/hosts_user", exist_ok=True)
+    source_path = '../../data/service/el1/network/hosts_user/hosts'
+    target_path = os.path.join(root_dir, '../system/etc/hosts')
+    os.fdopen(os.open(source_path, os.O_WRONLY | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w')
+    if os.path.exists(source_path) and not os.path.islink(target_path):
+        os.symlink(source_path, target_path)
 
 
 def _prepare_updater(updater_path: str, target_cpu: str):

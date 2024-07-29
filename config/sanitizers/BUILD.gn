@@ -161,6 +161,12 @@ config("default_sanitizer_ldflags") {
         ldflags += [ "-fsanitize-address-use-after-scope" ]
       }
       ldflags += [ "-fsanitize-recover=address" ]
+      if (use_libfuzzer) {
+        ldflags += [
+          "-fsanitize=address",
+          "-shared-libasan",
+        ]
+      }
     }
     if (is_lsan) {
       ldflags += [ "-fsanitize=leak" ]
@@ -190,13 +196,24 @@ config("default_sanitizer_ldflags") {
     if (use_sanitizer_coverage) {
       if (use_libfuzzer && !is_mac) {
         ldflags += [ "-fsanitize=fuzzer-no-link" ]
-        fuzzer_lib_path = rebase_path(
-                "$clang_base_path/lib/clang/$clang_version/lib/$abi_target/libclang_rt.fuzzer_no_main.a",
-                root_build_dir)
+        if (target_cpu == "arm64") {
+          fuzzer_lib_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/$abi_target/libclang_rt.fuzzer_no_main.a",
+                  root_build_dir)
+        } else if (target_cpu == "arm") {
+          fuzzer_lib_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.fuzzer_no_main.a",
+                  root_build_dir)
+        } else if (target_cpu == "x86_64") {
+          fuzzer_lib_path = rebase_path(
+                  "$clang_base_path/lib/clang/$clang_version/lib/x86_64-linux-ohos/libclang_rt.fuzzer_no_main.a",
+                  root_build_dir)
+        }
         ldflags += [
           "-Wl,--whole-archive",
           "$fuzzer_lib_path",
           "-Wl,--no-whole-archive",
+          "-lc++",
         ]
       } else {
         ldflags += [ "-fsanitize-coverage=$sanitizer_coverage_flags" ]
@@ -621,6 +638,15 @@ config("cfi_config_release") {
           rebase_path("//build/config/sanitizers/cfi.versionscript")
       ldflags = [ "-Wl,--version-script=${_cfi_version_script}" ]
     }
+  }
+}
+
+# Temporarily skip cfi check of namespace std
+config("cfi_config_skip_std") {
+  if (is_ohos) {
+    _cfi_blocklist_path = "//build/config/sanitizers/cfi_blocklist_std.txt"
+    cflags = [ "-fsanitize-blacklist=" +
+               rebase_path(_cfi_blocklist_path, root_build_dir) ]
   }
 }
 

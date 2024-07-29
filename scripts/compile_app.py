@@ -31,6 +31,7 @@ def parse_args(args):
     parser.add_argument('--nodejs', help='nodejs path')
     parser.add_argument('--cwd', help='app project directory')
     parser.add_argument('--sdk-home', help='sdk home')
+    parser.add_argument('--hvigor-home', help='hvigor home')
     parser.add_argument('--enable-debug', action='store_true', help='if enable debuggable')
     parser.add_argument('--build-level', default='project', help='module or project')
     parser.add_argument('--assemble-type', default='assembleApp', help='assemble type')
@@ -61,10 +62,12 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     :param ohpm_registry: ohpm registry
     :return: None
     '''
+    print(f"build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
+        print(f"modules_list:{modules_list}")
         ohpm_install_cmd = ['ohpm', 'install']
         if ohpm_registry:
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
@@ -76,7 +79,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
-
+        print(f"[0/0] ohpm_install_cmd:{ohpm_install_cmd}")
         proc = subprocess.Popen(ohpm_install_cmd,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
@@ -88,22 +91,6 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
         if proc.returncode:
             raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
                 proc.returncode, stderr))
-
-        for module in modules_list:
-            src_path = module.get('srcPath')
-            ohpm_install_path = os.path.join(cwd, src_path)
-            proc = subprocess.Popen(ohpm_install_cmd,
-                                    cwd=ohpm_install_path,
-                                    stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE,
-                                    env=env,
-                                    encoding='utf-8')
-            stdout, stderr = proc.communicate()
-            print(f"[0/0] {stdout}")
-            print(f"[0/0] {stderr}")
-            if proc.returncode:
-                raise Exception('ReturnCode:{}. ohpm install module failed. {}'.format(
-                    proc.returncode, stderr))
     os.chdir(cur_dir)
 
 
@@ -157,13 +144,6 @@ def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, mo
             shutil.copyfile(lib_path, dest)
 
 
-def hvigor_obfuscation(options, cmd):
-    if options.hvigor_obfuscation:
-        cmd.extend(['-p', 'buildMode=release'])
-    else:
-        cmd.extend(['-p', 'hvigor-obfuscation=false'])
-
-
 def hvigor_write_log(cmd, cwd, env):
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
@@ -185,6 +165,86 @@ def hvigor_write_log(cmd, cwd, env):
     print("[0/0] Hvigor build end")
 
 
+def get_integrated_project_config(cwd: str):
+    print(f"[0/0] project dir: {cwd}")
+    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
+        hvigor_info = json5.load(input_f)
+        model_version = hvigor_info.get('modelVersion')
+    return model_version
+
+
+def build_hvigor_cmd(cwd: str, model_version: str, options):
+    cmd = ['bash']
+    if model_version:
+        if options.hvigor_home:
+            cmd.extend([f'{os.path.abspath(options.hvigor_home)}/hvigorw'])
+        else:
+            cmd.extend(['hvigorw'])
+    else:
+        cmd.extend(['./hvigorw'])
+    
+    if options.test_hap:
+        cmd.extend(['--mode', 'module', '-p',
+               f'module={options.test_module}@ohosTest', 'assembleHap'])
+    elif options.build_modules:
+        cmd.extend(['assembleHap', '--mode',
+               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)])
+    else:
+        cmd.extend(['--mode',
+               options.build_level, '-p', 'product=default', options.assemble_type])
+
+    if options.enable_debug:
+        cmd.extend(['-p', 'debuggable=true'])
+    else:
+        cmd.extend(['-p', 'debuggable=false'])
+
+    if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
+        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
+        os.makedirs(hvigor_cache_dir, exist_ok=True)
+        cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
+
+    if options.hvigor_obfuscation:
+        cmd.extend(['-p', 'buildMode=release'])
+    else:
+        cmd.extend(['-p', 'hvigor-obfuscation=false'])
+        
+    cmd.extend(['--no-daemon'])
+    
+    print("[0/0] hvigor cmd: " + ' '.join(cmd))
+    return cmd
+
+
+def set_sdk_path(cwd: str, model_version: str, options, env):
+    if 'sdk.dir' not in options.sdk_type_name and model_version:
+        write_env_sdk(options, env)
+    else:
+        write_local_properties(cwd, options)
+
+
+def write_local_properties(cwd: str, options):
+    sdk_dir = options.sdk_home
+    nodejs_dir = os.path.abspath(
+        os.path.dirname(os.path.dirname(options.nodejs)))
+    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
+        for sdk_type in options.sdk_type_name:
+            f.write(f'{sdk_type}={sdk_dir}\n')
+        f.write(f'nodejs.dir={nodejs_dir}\n')
+
+
+def write_env_sdk(options, env):
+    sdk_dir = options.sdk_home
+    env['DEVECO_SDK_HOME'] = sdk_dir
+
+
+def hvigor_sync(cwd: str, model_version: str, env):
+    if not model_version:
+        subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
+                   cwd=cwd,
+                   env=env,
+                   stdout=subprocess.DEVNULL,
+                   stderr=subprocess.DEVNULL)
+
+
 def hvigor_build(cwd: str, options):
     '''
     Run hvigorw to build the app or hap
@@ -192,41 +252,19 @@ def hvigor_build(cwd: str, options):
     :param options: command line parameters
     :return: None
     '''
-    if options.test_hap:
-        cmd = ['bash', './hvigorw', '--mode', 'module', '-p',
-               f'module={options.test_module}@ohosTest', 'assembleHap']
-    elif options.build_modules:
-        cmd = ['bash', './hvigorw', 'assembleHap', '--mode',
-               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)]
-    else:
-        cmd = ['bash', './hvigorw', '--mode',
-               options.build_level, '-p', 'product=default', options.assemble_type]
-    if options.enable_debug:
-        cmd.extend(['-p', 'debuggable=true'])
-    else:
-        cmd.extend(['-p', 'debuggable=false'])
-    if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
-        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
-        os.makedirs(hvigor_cache_dir, exist_ok=True)
-        cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
-    hvigor_obfuscation(options, cmd)
-    cmd.extend(['--no-daemon'])
-    sdk_dir = options.sdk_home
+    model_version = get_integrated_project_config(cwd)
+    print(f"[0/0] model_version: {model_version}")
+
+    cmd = build_hvigor_cmd(cwd, model_version, options)
+
+    print("[0/0] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
-    nodejs_dir = os.path.abspath(
-        os.path.dirname(os.path.dirname(options.nodejs)))
 
-    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
-        for sdk_type in options.sdk_type_name:
-            f.write(f'{sdk_type}={sdk_dir}\n')
-        f.write(f'nodejs.dir={nodejs_dir}\n')
-    print("[0/0] Hvigor clean start")
-    subprocess.run(['bash', './hvigorw', '--sync', '--no-daemon'],
-                   cwd=cwd,
-                   env=env,
-                   stdout=subprocess.DEVNULL,
-                   stderr=subprocess.DEVNULL)
+    set_sdk_path(cwd, model_version, options, env)
+
+    hvigor_sync(cwd, model_version, env)
+    
     print("[0/0] Hvigor build start")
     hvigor_write_log(cmd, cwd, env)
 

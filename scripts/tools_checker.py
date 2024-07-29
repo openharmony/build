@@ -20,7 +20,7 @@ import json
 from typing import List
 
 
-def run_command(cmd: List[str], verbose=None):
+def run_command(cmd: List[str], verbose = None):
     """Execute command `cmd`
     :param cmd: Command to be executed.
     :param verbose: Whether echo runtime infomation and output of command `cmd`.
@@ -47,7 +47,7 @@ def package_installed(pkg_name: str):
     return r
 
 
-def check_build_requried_packages(host_version: str, check: bool=True):
+def check_build_requried_packages(host_version: str, check: bool = True):
     """Check whether packages required by build process installed or not.
     By parsing file `REPO_ROOT/build/scripts/build_package_list.json`.
     Example content: `{"18.04":{"dep_package":["pkg1","pkg2",...]}, "20.04":{...}, "22.04":{...}}`

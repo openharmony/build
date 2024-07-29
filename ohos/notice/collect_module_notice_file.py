@@ -40,15 +40,14 @@ def is_top_dir(current_dir: str):
     return os.path.exists(os.path.join(current_dir, '.gn'))
 
 
-def find_license_recursively(current_dir: str, default_license: str):
+def find_license_recursively(current_dir: str):
     if is_top_dir(current_dir):
-        return default_license
+        return None
     for file in LICENSE_CANDIDATES:
         candidate = os.path.join(current_dir, file)
         if os.path.isfile(os.path.join(current_dir, file)):
             return os.path.join(candidate)
-    return find_license_recursively(os.path.dirname(current_dir),
-                                    default_license)
+    return find_license_recursively(os.path.dirname(current_dir))
 
 
 def find_opensource_recursively(current_dir: str):
@@ -107,6 +106,7 @@ def do_collect_notice_files(options, depfiles: str):
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
     if notice_file is None:
+        notice_file = find_license_recursively(options.module_source_dir)
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             notice_file_info = get_license_from_readme(opensource_file)
@@ -147,12 +147,12 @@ def write_file_content(notice_files, options, output, notice_info_json, module_n
 
 
 def write_notice_to_output(notice_file, output):
-    notice_data_flow = open(notice_file, "r+", encoding="utf-8", errors="ignore")
-    license_content = notice_data_flow.read()
-    notice_data_flow.close()
-    output_data_flow = open(output, "r+", encoding="utf-8", errors="ignore")
-    output_file_content = output_data_flow.read()
-    output_data_flow.close()
+    with os.fdopen(os.open(notice_file, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                   'r', encoding='utf-8', errors='ignore') as notice_data_flow:
+        license_content = notice_data_flow.read()
+    with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                   'r', encoding='utf-8', errors='ignore') as output_data_flow:
+        output_file_content = output_data_flow.read()
     if license_content not in output_file_content:
         with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
                        'a', encoding='utf-8') as testfwk_info_file:
@@ -167,7 +167,6 @@ def main(args):
     build_utils.add_depfile_option(parser)
 
     parser.add_argument('--license-file', required=False)
-    parser.add_argument('--default-license', required=True)
     parser.add_argument('--output', action='append', required=False)
     parser.add_argument('--sources', action='append', required=False)
     parser.add_argument('--sdk-install-info-file', required=False)

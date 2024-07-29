@@ -65,36 +65,6 @@ class Config(metaclass=Singleton):
         self.platform = platform.system()
         self.__post__init()
 
-    def __post__init(self):
-        self.config_json = get_config_path()
-        config_content = IoUtil.read_json_file(self.config_json)
-        self.root_path = CURRENT_OHOS_ROOT
-        self.board = config_content.get('board', None)
-        self.kernel = config_content.get('kernel', None)
-        self.product = config_content.get('product', None)
-        self.product_path = config_content.get('product_path', None)
-        self.device_path = config_content.get('device_path', None)
-        self.device_company = config_content.get('device_company', None)
-        self.patch_cache = config_content.get('patch_cache', None)
-        self.version = config_content.get('version', '3.0')
-        self.os_level = config_content.get('os_level', 'small')
-        self.product_json = config_content.get('product_json', None)
-        self.target_os = config_content.get('target_os', None)
-        self.target_cpu = config_content.get('target_cpu', None)
-        self.out_path = config_content.get('out_path', None)
-        self.compile_config = config_content.get('compile_config', None)
-        self.component_type = config_content.get('component_type', None)
-        self.device_config_path = config_content.get('device_config_path',
-                                                     None)
-        self.product_config_path = config_content.get('product_config_path',
-                                                      None)
-        self.subsystem_config_json = config_content.get(
-            'subsystem_config_json', None)
-        self.support_cpu = config_content.get('support_cpu', None)
-        self.fs_attr = set()
-        self.platform = platform.system()
-        self.precise_branch = ""
-
     @property
     def component_type(self):
         return self._component_type
@@ -400,3 +370,33 @@ class Config(metaclass=Singleton):
         config_content = IoUtil.read_json_file(self.config_json)
         config_content[key] = value
         IoUtil.dump_json_file(self.config_json, config_content)
+
+    def __post__init(self):
+        self.config_json = get_config_path()
+        config_content = IoUtil.read_json_file(self.config_json)
+        self.root_path = CURRENT_OHOS_ROOT
+        self.board = config_content.get('board', None)
+        self.kernel = config_content.get('kernel', None)
+        self.product = config_content.get('product', None)
+        self.product_path = config_content.get('product_path', None)
+        self.device_path = config_content.get('device_path', None)
+        self.device_company = config_content.get('device_company', None)
+        self.patch_cache = config_content.get('patch_cache', None)
+        self.version = config_content.get('version', '3.0')
+        self.os_level = config_content.get('os_level', 'small')
+        self.product_json = config_content.get('product_json', None)
+        self.target_os = config_content.get('target_os', None)
+        self.target_cpu = config_content.get('target_cpu', None)
+        self.out_path = config_content.get('out_path', None)
+        self.compile_config = config_content.get('compile_config', None)
+        self.component_type = config_content.get('component_type', None)
+        self.device_config_path = config_content.get('device_config_path',
+                                                     None)
+        self.product_config_path = config_content.get('product_config_path',
+                                                      None)
+        self.subsystem_config_json = config_content.get(
+            'subsystem_config_json', None)
+        self.support_cpu = config_content.get('support_cpu', None)
+        self.fs_attr = set()
+        self.platform = platform.system()
+        self.precise_branch = ""

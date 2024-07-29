@@ -38,6 +38,7 @@ advanced:
 @Date 2022/01/14
 """
 
+
 def find_files(path: str, name: str):
     ret, files, folders = [], [], [path]
     for folder in folders:
@@ -58,7 +59,7 @@ def read_component_from_ohos_build(file: str):
     ret = {"subsystem": "", "components": []}
     with open(file, "rb") as f:
         data = json.load(f)
-        ret["subsystem"] =  data.get("subsystem")
+        ret["subsystem"] = data.get("subsystem")
         for k, _ in data.get("parts").items():
             ret.get("components").append(k)
     return ret
@@ -108,7 +109,7 @@ def update_components(subsys_file: str):
 
 def main():
     conf = Config()
-    subsystem_json_overlay_path = conf.product_path + '/subsystem_config_overlay.json'
+    subsystem_json_overlay_path = os.path.join(conf.product_path, 'subsystem_config_overlay.json')
     parser = argparse.ArgumentParser()
     parser.add_argument('--subsys', type=str, default="./build/subsystem_config.json",
                         help='subsystem config file location, default=//build/subsystem_config.json')

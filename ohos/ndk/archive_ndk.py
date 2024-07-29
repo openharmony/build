@@ -84,7 +84,7 @@ def archive_ndk(output: str, os_irrelevant_dir: str, os_specific_dir: str, prefi
 def file_filter(os_irrelevant_dir: str):
     filter_file_name = []
     target_dir = os.path.join(os_irrelevant_dir, 'sysroot/usr/include/linux')
-    filter_file_path =  build_utils.find_in_directory(target_dir, '*[A-Z].h')
+    filter_file_path = build_utils.find_in_directory(target_dir, '*[A-Z].h')
     for file_path in filter_file_path:
         file_name = os.path.basename(file_path)
         if os.path.exists(os.path.join(os.path.dirname(file_path), file_name.lower())):

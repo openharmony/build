@@ -83,6 +83,7 @@ def main():
         return 0
     else:
         print(f"{install_dest} not in allowed_so_list")
+        return 1
 
 
 if __name__ == '__main__':

@@ -45,14 +45,14 @@ def _read_external_deps_info(build_out_dir: str):
     return ext_deps_file_dict
 
 
-def _parse_module_name(name_str: str):
+def _parse_module_name(name_str):
     split_result = name_str.split('__')
     part_name = split_result[0]
     module_name = split_result[1]
     return part_name, module_name
 
 
-def _read_module_deps_info(module_deps_files_path: str):
+def _read_module_deps_info(module_deps_files_path):
     deps_files = os.listdir(module_deps_files_path)
     deps_data = {}
     for _filename in deps_files:
@@ -69,7 +69,7 @@ def _read_module_deps_info(module_deps_files_path: str):
     return deps_data
 
 
-def _merge_external_deps_label(deps_data: dict, external_deps_data: dict):
+def _merge_external_deps_label(deps_data, external_deps_data):
     for _module_alias, _info in deps_data.items():
         _module_alias_external_deps = _module_alias.replace('.json', '')
         external_deps = _info.get('external_deps')
@@ -89,7 +89,7 @@ def _merge_external_deps_label(deps_data: dict, external_deps_data: dict):
     return deps_data_new
 
 
-def get_all_deps_data(module_deps_files_path: str):
+def get_all_deps_data(module_deps_files_path):
     deps_data = _read_module_deps_info(module_deps_files_path)
     external_deps_data = _read_external_deps_info(module_deps_files_path)
     all_deps_data = _merge_external_deps_label(deps_data, external_deps_data)

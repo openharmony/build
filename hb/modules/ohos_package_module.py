@@ -34,6 +34,10 @@ class OHOSPackageModule(PackageModuleInterface):
         self._hpm = hpm
         OHOSPackageModule._instance = self
 
+    @property
+    def hpm(self):
+        return self._hpm
+
     @staticmethod
     def get_instance():
         if OHOSPackageModule._instance is not None:
@@ -42,20 +46,16 @@ class OHOSPackageModule(PackageModuleInterface):
             raise OHOSException(
                 'OHOSPackageModule has not been instantiated', '0000')
 
-    @property
-    def hpm(self):
-        return self._hpm
-
-    def _package(self):
-        self._run_phase()
-        self.hpm.execute_hpm_cmd(CMDTYPE.PACKAGE)
-
     @throw_exception
     def run(self):
         try:
             super().run()
         except OHOSException as exception:
             raise exception
+
+    def _package(self):
+        self._run_phase()
+        self.hpm.execute_hpm_cmd(CMDTYPE.PACKAGE)
 
     def _run_phase(self):
         for arg in self.args_dict.values():

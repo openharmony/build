@@ -15,15 +15,9 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
-    },
-    {
-      "install_dir": "toolchains",
-      "module_label": "//developtools/hdc/hdc_rust:hdc_rust",
-      "target_os": [
-        "ohos"
-      ]
     },
     {
         "install_dir": "toolchains",
@@ -272,7 +266,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
-            "linux"
+            "linux",
+            "ohos"
         ]
     },
     {
@@ -293,7 +288,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
         "target_os": [
-            "linux"
+            "linux",
+            "ohos"
         ]
     },
     {
@@ -321,8 +317,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_js2abc_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -343,8 +338,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_ts2abc_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -365,8 +359,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -387,8 +380,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package-lock_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -409,8 +401,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -431,8 +422,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -453,8 +443,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -475,8 +464,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -497,8 +485,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -519,8 +506,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_win",
         "target_os": [
-            "windows",
-            "ohos"
+            "windows"
         ]
     },
     {
@@ -787,7 +773,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "ohos"
         ]
     },
     {
@@ -1096,6 +1083,16 @@
         ]
     },
     {
+        "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:configurationSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//foundation/ability/idl_tool:idl",
         "target_os": [
@@ -1145,5 +1142,19 @@
         "target_os": [
             "darwin"
         ]
-    }
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp:hap-sign-tool",
+        "target_os": [
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains/lib",
+        "module_label": "//developtools/hapsigner/hapsigntool_cpp:copy_signature_tools_resource",
+        "target_os": [
+            "ohos"
+        ]
+   }
 ]

@@ -21,6 +21,7 @@ from services.interface.service_interface import ServiceInterface
 from util.system_util import SystemUtil
 from util.log_util import LogUtil
 
+
 class BuildExecutorInterface(ServiceInterface):
 
     def __init__(self):

@@ -176,7 +176,7 @@ def copy_testcase_resources(resource_infos: list) -> list:
         if not os.path.exists(src_file):
             print("warning: testcase resource {} doesn't exist.".format(
                 src_file))
-            return None
+            return result_dest_list
         dest_file = resource_info.get('dest')
         dest_dir = os.path.dirname(dest_file)
         if os.path.isdir(src_file):

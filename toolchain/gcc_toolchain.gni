@@ -362,16 +362,7 @@ template("gcc_toolchain") {
         unstripped_sofile = sofile
       }
 
-      _clang_rt_dso_full_path = ""
-      if (is_tsan && target_cpu == "arm64" &&
-          invoker_toolchain_args.current_os == "ohos" && !is_mingw_link &&
-          !is_win && !is_mingw) {
-        _clang_rt_dso_full_path = rebase_path(
-                "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so",
-                root_build_dir)
-      }
-
-      link_command = "$ld -shared {{ldflags}}${extra_ldflags} $_clang_rt_dso_full_path -o \"$unstripped_sofile\" @\"$rspfile\""
+      link_command = "$ld -shared {{ldflags}}${extra_ldflags} -o \"$unstripped_sofile\" @\"$rspfile\""
 
       if (!is_mingw_link) {
         link_command = "$link_command -Wl,-soname=\"$soname\""
@@ -544,7 +535,7 @@ template("gcc_toolchain") {
         end_group_flag = "-Wl,--end-group "
       }
       _clang_rt_dso_full_path = ""
-      if ((is_asan || is_tsan) && invoker_toolchain_args.current_os == "ohos") {
+      if (is_asan && invoker_toolchain_args.current_os == "ohos") {
         if (use_hwasan) {
           _clang_rt_dso_full_path = rebase_path(
                   "$clang_base_path/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.hwasan.so",
@@ -580,7 +571,7 @@ template("gcc_toolchain") {
       if (defined(invoker.strip)) {
         strip_switch = " --strip=\"${invoker.strip}\" --unstripped-file=\"$unstripped_outfile\""
       }
-      if (is_asan && invoker_toolchain_args.current_os == "ohos") {
+      if ((is_asan || is_tsan) && invoker_toolchain_args.current_os == "ohos") {
         strip_switch =
             "$strip_switch --clang_rt_dso_path=\"$_clang_rt_dso_full_path\""
       }

@@ -14,6 +14,7 @@
 # limitations under the License.
 import subprocess
 import sys
+import stat
 import os
 import argparse
 import shutil
@@ -49,13 +50,14 @@ def _get_args():
 
 
 def _check_label(public_deps, value):
-    for i in value["innerapis"]:
-        if i:
-            label = i.get("label")
+    innerapis = value["innerapis"]
+    for _innerapi in innerapis:
+        if _innerapi:
+            label = _innerapi.get("label")
             if public_deps == label:
                 return label.split(':')[-1]
-            return ""
-        return ""
+            continue
+    return ""
 
 
 def _get_public_external_deps(data, public_deps):
@@ -67,6 +69,7 @@ def _get_public_external_deps(data, public_deps):
         _data = _check_label(public_deps, value)
         if _data:
             return key + ":" + _data
+        continue
     return ""
 
 
@@ -89,11 +92,12 @@ def _is_innerkit(data, part, module):
 def _get_components_json(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/components.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_components_json parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_components_json parse json error--')
     return jsondata
 
 
@@ -116,12 +120,13 @@ def _handle_two_layer_json(json_key, json_data, desc_list):
 def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print(json_path)
-        print('--_get_json_data parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print(json_path)
+            print('--_get_json_data parse json error--')
     return jsondata
 
 
@@ -167,7 +172,6 @@ def _copy_dir(src_path, target_path):
             with open(path, 'rb') as read_stream:
                 contents = read_stream.read()
             if not os.path.exists(target_path):
-                print('target_path,target_path', target_path)
                 os.makedirs(target_path)
             path1 = os.path.join(target_path, file)
             with os.fdopen(os.open(path1, os.O_WRONLY | os.O_CREAT, mode=0o640), "wb") as write_stream:
@@ -332,6 +336,8 @@ def _copy_bundlejson(args, public_deps_list):
             if bundle_data.get('readmePath'):
                 del bundle_data['readmePath']
             bundle_data['dependencies'] = dependencies_dict
+            if os.path.isfile(os.path.join(bundlejson_out, "bundle.json")):
+                os.remove(os.path.join(bundlejson_out, "bundle.json"))
             with os.fdopen(os.open(os.path.join(bundlejson_out, "bundle.json"), os.O_WRONLY | os.O_CREAT, mode=0o640),
                            "w",
                            encoding='utf-8') as fd:
@@ -343,9 +349,9 @@ def _copy_license(args):
     print("license_out : ", license_out)
     if not os.path.exists(license_out):
         os.makedirs(license_out)
-    license = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
-    if os.path.isfile(license):
-        shutil.copy(license, license_out)
+    license_file = os.path.join(args.get("root_path"), args.get("part_path"), "LICENSE")
+    if os.path.isfile(license_file):
+        shutil.copy(license_file, license_out)
     else:
         license_default = os.path.join(args.get("root_path"), "build", "LICENSE")
         shutil.copy(license_default, license_out)
@@ -377,9 +383,8 @@ def _copy_readme(args):
         shutil.copy(readme_en, readme_out_file)
     else:
         try:
-            fd = os.open(readme_out_file, os.O_WRONLY | os.O_CREAT, mode=0o640)
-            fp = os.fdopen(fd, 'w')
-            fp.write('READ.ME')
+            with os.fdopen(os.open(readme_out_file, os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as fp:
+                fp.write('READ.ME')
         except FileExistsError:
             pass
 
@@ -397,6 +402,9 @@ def _generate_configs(fp, module):
         fp.write('    "includes/libunwind/src",\n')
         fp.write('    "includes/libunwind/include",\n')
         fp.write('    "includes/libunwind/include/tdep-arm",\n')
+    if module == 'ability_runtime':
+        fp.write('    "includes/context",\n')
+        fp.write('    "includes/app",\n')
     fp.write('  ]\n')
     if module == 'libunwind':
         fp.write('  cflags = [\n')
@@ -420,12 +428,12 @@ def _generate_configs(fp, module):
     fp.write('  }\n')
 
 
-def _generate_prebuilt_shared_library(fp, type, module):
-    if type == 'static_library':
+def _generate_prebuilt_shared_library(fp, lib_type, module):
+    if lib_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
-    elif type == 'executable':
+    elif lib_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
-    elif type == 'etc':
+    elif lib_type == 'etc':
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     else:
         fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
@@ -435,16 +443,26 @@ def _generate_public_configs(fp, module):
     fp.write('  public_configs = [":' + module + '_configs"]\n')
 
 
-def _generate_public_deps(fp, deps: list, components_json, public_deps_list: list):
+def _public_deps_special_handler(module):
+    if module == 'appexecfwk_core':
+        return ["ability_base:want"]
+    return []
+
+
+def _generate_public_deps(fp, module, deps: list, components_json, public_deps_list: list):
     if not deps:
         return public_deps_list
     fp.write('  public_external_deps = [\n')
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
         if len(public_external_deps) > 0:
-            fp.write('    "' + public_external_deps + '",\n')
+            fp.write(f"""    "{public_external_deps}",\n""")
             public_deps_list.append(public_external_deps)
+    for _public_external_deps in _public_deps_special_handler(module):
+        fp.write(f"""    "{_public_external_deps}",\n""")
+        public_deps_list.append(_public_external_deps)
     fp.write('  ]\n')
+
     return public_deps_list
 
 
@@ -468,7 +486,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _generate_configs(fp, module)
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
-    _list = _generate_public_deps(fp, deps, components_json, public_deps_list)
+    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print("_generate_build_gn has done ")
@@ -609,11 +627,12 @@ def _get_parts_path_info(components_json):
 def _get_toolchain_info(root_path):
     jsondata = ""
     json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
-    f = open(json_path, 'r')
-    try:
-        jsondata = json.load(f)
-    except Exception as e:
-        print('--_get_toolchain_info parse json error--')
+    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+            'r', encoding='utf-8') as f:
+        try:
+            jsondata = json.load(f)
+        except Exception as e:
+            print('--_get_toolchain_info parse json error--')
     return jsondata
 
 
@@ -667,16 +686,18 @@ def _del_exist_component_package(out_path):
             print('del dir component_package FAILED')
 
 
-def _get_component_check() -> list:
+def _get_component_check(local_test) -> list:
     check_list = []
-    contents = urllib.request.urlopen("https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
-        encoding="utf-8")
-    _check_json = json.loads(contents)
-    try:
-        check_list.extend(_check_json["data"]["dep_list"])
-        check_list.extend(_check_json["data"]["indep_list"])
-    except Exception as e:
-        print("Call the component check API something wrong, plz check the API return..")
+    if local_test == 0:
+        contents = urllib.request.urlopen(
+            "https://ci.openharmony.cn/api/daily_build/component/check/list").read().decode(
+            encoding="utf-8")
+        _check_json = json.loads(contents)
+        try:
+            check_list.extend(_check_json["data"]["dep_list"])
+            check_list.extend(_check_json["data"]["indep_list"])
+        except Exception as e:
+            print("Call the component check API something wrong, plz check the API return..")
     check_list = list(set(check_list))
     check_list = sorted(check_list)
     return check_list
@@ -701,27 +722,36 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         components_list: list of all components that need to be built
         build_type: build type
             0: default pack,do not change organization_name
-            1:pack ,change organization_name
-            2:do not pack,do not change organization_name
+            1: pack ,change organization_name
+            2: do not pack,do not change organization_name
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
-        local_test: 1 to open local test , 0 to close
+        local_test: 1 to open local test , 0 to close , 2 to pack init and init deps
     Returns:
 
     """
     start_time = time.time()
-    _check_list = _get_component_check()
-    print(components_list)
-    if not components_list:
+    _check_list = _get_component_check(local_test)
+    if local_test == 1 and not components_list:
         components_list = []
     elif local_test == 1 and components_list:
         components_list = [component for component in components_list.split(",")]
+    elif local_test == 2:
+        components_list = ["init", "appspawn", "safwk", "c_utils",
+                           "napi", "ipc", "config_policy", "hilog", "hilog_lite", "samgr", "access_token", "common",
+                           "dsoftbus", "hvb", "hisysevent", "hiprofiler", "bounds_checking_function",
+                           "bundle_framework", "selinux", "selinux_adapter", "storage_service",
+                           "mbedtls", "zlib", "libuv", "cJSON", "mksh", "libunwind", "toybox",
+                           "bounds_checking_function",
+                           "selinux", "libunwind", "mbedtls", "zlib", "cJSON", "mksh", "toybox", "config_policy",
+                           "e2fsprogs", "f2fs-tools", "selinux_adapter", "storage_service"
+                           ]
     else:
         components_list = [component for component in components_list.split(",") if component in _check_list]
         if not components_list:
             sys.exit("stop for no target to pack..")
-    print('components_list', type(components_list), components_list)
+    print('components_list', components_list)
     components_json = _get_components_json(out_path)
     part_subsystem = _get_part_subsystem(components_json)
     parts_path_info = _get_parts_path_info(components_json)

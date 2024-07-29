@@ -31,6 +31,10 @@ class OHOSSetModule(SetModuleInterface):
         self._menu = menu
         OHOSSetModule._instance = self
 
+    @property
+    def menu(self):
+        return self._menu
+
     @staticmethod
     def get_instance():
         if OHOSSetModule._instance is not None:
@@ -38,13 +42,9 @@ class OHOSSetModule(SetModuleInterface):
         else:
             raise OHOSException(
                 'OHOSSetModule has not been instantiated', '0000')
-
-    @property
-    def menu(self):
-        return self._menu
+        
+    def set_parameter(self):
+        self.args_resolver.resolve_arg(self.args_dict['all'], self)
 
     def set_product(self):
         self.args_resolver.resolve_arg(self.args_dict['product_name'], self)
-
-    def set_parameter(self):
-        self.args_resolver.resolve_arg(self.args_dict['all'], self)

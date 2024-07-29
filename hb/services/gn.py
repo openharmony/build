@@ -88,75 +88,6 @@ class Gn(BuildFileGeneratorInterface):
             raise OHOSException(
                 'There is no gn executable file at {}'.format(gn_path), '0001')
 
-    '''Description: Convert all registed args into a list
-    @parameter: none
-    @return: list of all registed args
-    '''
-
-    def _convert_args(self) -> list:
-        args_list = []
-
-        for key, value in self.args_dict.items():
-            if isinstance(value, bool):
-                args_list.append('{}={}'.format(key, str(value).lower()))
-
-            elif isinstance(value, str):
-                args_list.append('{}="{}"'.format(key, value))
-
-            elif isinstance(value, int):
-                args_list.append('{}={}'.format(key, value))
-
-            elif isinstance(value, list):
-                args_list.append('{}="{}"'.format(key, "&&".join(value)))
-
-        return args_list
-
-    '''Description: Convert all registed flags into a list
-    @parameter: none
-    @return: list of all registed flags
-    '''
-
-    def _convert_flags(self) -> list:
-        flags_list = []
-
-        for key, value in self.flags_dict.items():
-            if key == 'gn_flags' and isinstance(value, list):
-                flags_list += value
-            elif value == '':
-                flags_list.append('{}'.format(key))
-            else:
-                flags_list.append('{}={}'.format(key, str(value)).lower())
-
-        return flags_list
-
-    '''Description: Option validity check
-    @parameter: "option": Option to be checked
-                "args_file": Option config file
-    @return: Inspection result(True|False)
-    '''
-
-    def _check_options_validity(self, option: str, args_file: dict):
-        support_sub_options = args_file.get(
-            "arg_attribute").get("support_sub_options")
-        option_name = option.lstrip('-')
-        option_value = ""
-        if '=' in option:
-            option_name, option_value = option.lstrip('-').split('=')
-        if option_name in support_sub_options:
-            sub_optional_list = support_sub_options.get(
-                option_name).get("arg_attribute").get("optional")
-            if sub_optional_list and option_value not in sub_optional_list:
-                if not len(option_value):
-                    raise OHOSException('ERROR argument "--{}": Invalid choice "{}". '
-                                        'choose from {}'.format(option_name, option_value, sub_optional_list), '3006')
-                else:
-                    raise OHOSException('ERROR argument "--{}": Invalid choice "{}". '
-                                        'choose from {}'.format(option_name, option_value, sub_optional_list), '3003')
-        else:
-            raise OHOSException('ERROR argument "{}": Invalid choice "{}". '
-                                'choose from {}'.format(args_file.get("arg_name"),
-                                                        option, list(support_sub_options.keys())), '3003')
-
     '''Description: Execute 'gn gen' command using registed args
     @parameter: kwargs TBD
     @return: None
@@ -322,3 +253,72 @@ class Gn(BuildFileGeneratorInterface):
         else:
             raise OHOSException('"{}" Not a build directory.'
                                 'Usage: "gn clean <out_dir>"'.format(out_dir), '3004')
+
+    '''Description: Convert all registed args into a list
+    @parameter: none
+    @return: list of all registed args
+    '''
+
+    def _convert_args(self) -> list:
+        args_list = []
+
+        for key, value in self.args_dict.items():
+            if isinstance(value, bool):
+                args_list.append('{}={}'.format(key, str(value).lower()))
+
+            elif isinstance(value, str):
+                args_list.append('{}="{}"'.format(key, value))
+
+            elif isinstance(value, int):
+                args_list.append('{}={}'.format(key, value))
+
+            elif isinstance(value, list):
+                args_list.append('{}="{}"'.format(key, "&&".join(value)))
+
+        return args_list
+
+    '''Description: Convert all registed flags into a list
+    @parameter: none
+    @return: list of all registed flags
+    '''
+
+    def _convert_flags(self) -> list:
+        flags_list = []
+
+        for key, value in self.flags_dict.items():
+            if key == 'gn_flags' and isinstance(value, list):
+                flags_list += value
+            elif value == '':
+                flags_list.append('{}'.format(key))
+            else:
+                flags_list.append('{}={}'.format(key, str(value)).lower())
+
+        return flags_list
+
+    '''Description: Option validity check
+    @parameter: "option": Option to be checked
+                "args_file": Option config file
+    @return: Inspection result(True|False)
+    '''
+
+    def _check_options_validity(self, option: str, args_file: dict):
+        support_sub_options = args_file.get(
+            "arg_attribute").get("support_sub_options")
+        option_name = option.lstrip('-')
+        option_value = ""
+        if '=' in option:
+            option_name, option_value = option.lstrip('-').split('=')
+        if option_name in support_sub_options:
+            sub_optional_list = support_sub_options.get(
+                option_name).get("arg_attribute").get("optional")
+            if sub_optional_list and option_value not in sub_optional_list:
+                if not len(option_value):
+                    raise OHOSException('ERROR argument "--{}": Invalid choice "{}". '
+                                        'choose from {}'.format(option_name, option_value, sub_optional_list), '3006')
+                else:
+                    raise OHOSException('ERROR argument "--{}": Invalid choice "{}". '
+                                        'choose from {}'.format(option_name, option_value, sub_optional_list), '3003')
+        else:
+            raise OHOSException('ERROR argument "{}": Invalid choice "{}". '
+                                'choose from {}'.format(args_file.get("arg_name"),
+                                                        option, list(support_sub_options.keys())), '3003')

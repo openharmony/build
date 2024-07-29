@@ -1,0 +1,36 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+if (!defined(ark_standalone_build)) {
+  ark_standalone_build = false
+}
+
+if (!ark_standalone_build) {
+  build_root = "//build"
+  ark_third_party_root = "//third_party"
+  import("$build_root/ohos.gni")
+} else {
+  ark_third_party_root = "//arkcompiler/toolchain/build/third_party_gn"
+  import("$build_root/ark.gni")
+}
+import("$build_root/test.gni")
+
+ets_frontend_root = "//arkcompiler/ets_frontend"
+
+toolchain_linux = "$build_root/toolchain/linux:clang_x64"
+if (host_cpu == "arm64") {
+  toolchain_mac = "$build_root/toolchain/mac:clang_arm64"
+} else {
+  toolchain_mac = "$build_root/toolchain/mac:clang_x64"
+}
+toolchain_win = "$build_root/toolchain/mingw:mingw_x86_64"

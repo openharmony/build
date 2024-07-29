@@ -552,10 +552,10 @@ config("compiler") {
     assert(use_lld || target_os == "chromeos" || target_os == "ohos",
            "gold plugin only supported with ChromeOS")
 
-    cflags += [
-      "-flto=thin",
-      "-fsplit-lto-unit",
-    ]
+    cflags += [ "-flto=thin" ]
+    if (!use_libfuzzer) {
+      cflags += [ "-fsplit-lto-unit" ]
+    }
 
     if (thin_lto_enable_optimizations) {
       lto_opt_level = 2
@@ -748,7 +748,7 @@ config("compiler_cpu_abi") {
         cflags += [ "-march=rv64imafdc" ]
       }
       ldflags += [ "-march=rv64imafdc" ]
-    } else if (current_cpu == "mipsel" && is_legacy) {
+    } else if (current_cpu == "mipsel" && musl_is_legacy) {
       cflags += [ "-mnan=legacy" ]
     }
   }

@@ -16,6 +16,7 @@ import("//build/ohos.gni")
 
 ohos_prebuilt_shared_library("libclang_rt.asan.so") {
   enable_strip = true
+  mini_debug = true
   if (target_cpu == "arm") {
     source = "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so"
   } else if (target_cpu == "arm64") {
@@ -41,6 +42,7 @@ ohos_prebuilt_shared_library("libclang_rt.asan.so") {
 
 ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
   enable_strip = true
+  mini_debug = true
   source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.hwasan.so"
   install_images = [
     "system",
@@ -53,6 +55,7 @@ ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
 
 ohos_prebuilt_shared_library("libclang_rt.tsan.so") {
   enable_strip = true
+  mini_debug = true
   source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.tsan.so"
   if (is_tsan) {
     deps = [ ":tsan_unstripped_copy" ]
