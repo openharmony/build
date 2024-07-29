@@ -205,7 +205,7 @@ class PerformanceAnalyse:
         """
         if not os.path.exists(os.path.dirname(self.output_path)):
             os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
-        with os.fdopen(os.open(self.output_path, os.O_WRONLY | os.O_CREAT | os.TRUNC, os.stat.S_IWUSR), "w", encoding="utf-8") as html_file:
+        with os.fdopen(os.open(self.output_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, os.stat.S_IWUSR), "w", encoding="utf-8") as html_file:
             html_file.write(content)
 
     def generate_content(self, table_name, data_rows, switch=False):
