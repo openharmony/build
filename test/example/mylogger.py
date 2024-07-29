@@ -74,7 +74,7 @@ class SafeFileHandler(FileHandler):
         self.baseFilename = os.path.abspath(self.filename) + "." + self.suftime
 
         if not self.delay:
-            with os.fdopen(os.open(self.baseFilename, os.O_WRONLT | os.CREAT | os.O_EXCL,
+            with os.fdopen(os.open(self.baseFilename, os.O_WRONLT | os.O_CREAT | os.O_EXCL,
                            stat.S_IWUSR | stat.S_IRUSR), self.mode, encoding=self.encoding) as f:
                 self.stream = f
 
@@ -105,7 +105,7 @@ def get_logger(class_name, level="info"):
 def parse_json():
     config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_example.json")
     try:
-        with os.fdopen(os.open(config_path, os.O_WRONLT | os.CREAT | os.O_EXCL,
+        with os.fdopen(os.open(config_path, os.O_WRONLT | os.O_CREAT | os.O_EXCL,
                        stat.S_IWUSR | stat.S_IRUSR), "r", encoding="utf-8") as json_file:
             data = json.load(json_file)
             return data
