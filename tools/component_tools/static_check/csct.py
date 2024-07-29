@@ -70,7 +70,7 @@ class CsctGlobal(object):
                 ret_list.append(key)
 
         if check_path:
-            ret_list = [x[len(check_path)+1:]
+            ret_list = [x[len(check_path) + 1:]
                         for x in ret_list if x.startswith(check_path)]
 
         return tuple(ret_list)
@@ -157,7 +157,7 @@ class CsctGlobal(object):
         flags = os.O_WRONLY | os.O_CREAT
         modes = stat.S_IWUSR | stat.S_IRUSR
         with os.fdopen(
-            os.open(os.path.join(out_path, "gn_problems.txt"), flags, modes), "w"
+                os.open(os.path.join(out_path, "gn_problems.txt"), flags, modes), "w"
         ) as file:
             file.write(table_str)
 

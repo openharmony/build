@@ -34,6 +34,30 @@ class CsctOnline(object):
         self.pr_list = pr_list
         self.log_verbose = log_verbose
 
+    def csct_check_process(self):
+        pr_list = self.pr_list
+        self.__verbose_print(
+            self.log_verbose,
+            "\nCsct check begin!\tPull request list: {}.".format(pr_list),
+        )
+        csct_prehandler = GiteeCsctPrehandler(
+            pr_list, "BUILD.gn", "bundle.json"
+        )
+
+        _, gn_errs = CheckGnOnline(csct_prehandler.get_diff_dict("BUILD.gn")).output()
+        _, bundle_errs = BundleCheckOnline.check_diff(
+            csct_prehandler.get_diff_dict("bundle.json")
+        )
+
+        errs_info = gn_errs + bundle_errs
+        if len(errs_info) == 0:
+            self.__verbose_print(self.log_verbose, "Result: without any errors.")
+        else:
+            self.__print_pretty(errs_info)
+
+        self.__verbose_print(self.log_verbose, "Csct check end!\n")
+        return errs_info
+
     def __verbose_print(self, verbose_flag, print_content):
         if verbose_flag is True:
             print(print_content)
@@ -58,7 +82,6 @@ class CsctOnline(object):
             except Exception:
                 print('prettytable installed failed')
 
-
         table = PrettyTable(["文件", "定位", "违反规则", "错误说明"])
         table.add_rows(errs_info)
         table.align["文件"] = "l"
@@ -73,30 +96,6 @@ class CsctOnline(object):
         )
         print("There are(is) {} error(s):\n".format(len(errs_info)))
         print(str(info))
-
-    def csct_check_process(self):
-        pr_list = self.pr_list
-        self.__verbose_print(
-            self.log_verbose,
-            "\nCsct check begin!\tPull request list: {}.".format(pr_list),
-        )
-        csct_prehandler = GiteeCsctPrehandler(
-            pr_list, "BUILD.gn", "bundle.json"
-        )
-
-        _, gn_errs = CheckGnOnline(csct_prehandler.get_diff_dict("BUILD.gn")).output()
-        _, bundle_errs = BundleCheckOnline.check_diff(
-            csct_prehandler.get_diff_dict("bundle.json")
-        )
-
-        errs_info = gn_errs + bundle_errs
-        if len(errs_info) == 0:
-            self.__verbose_print(self.log_verbose, "Result: without any errors.")
-        else:
-            self.__print_pretty(errs_info)
-
-        self.__verbose_print(self.log_verbose, "Csct check end!\n")
-        return errs_info
 
 
 def add_options(version):
