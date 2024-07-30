@@ -91,7 +91,7 @@ class Analyzer:
         with os.fdopen(os.open(output_path, flags, modes), 'w') as f:
             for ele in result:
                 items = ele['subsystem'], ele['component'], ele['file_path'], str(ele['line_num']), ele['include_cmd']
-                f.write(" ".join(items) + "\n")
+                f.write(f'{" ".join(items)}\n')
 
     @classmethod
     def __get_need_scan_path(cls, components, project, components_info_path):
