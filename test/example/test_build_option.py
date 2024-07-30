@@ -708,7 +708,7 @@ class TestBuildOption:
             assert result == 0, "ignore api check para {} failed".format(ignore_api_check)
         else:
             if ignore_api_check:
-                ignore_str = resolve_result["ignore_api_check"]["flag"][0]  # ['xts', 'common']
+                ignore_str = resolve_result.get("ignore_api_check").get("flag")[0]  # ['xts', 'common']
                 log_info("ignore_str is {}".format(ignore_str))
                 ignor_li = eval(ignore_str)
                 log_info("ignor_li is {0},type is {1}".format(ignor_li, type(ignor_li)))
@@ -813,8 +813,8 @@ class TestBuildOption:
         if result != 0:
             assert result == 0, "build_variant para {} failed".format(variant_option)
         else:
-            root_dir = resolve_result["root_dir"]["flag"][0]
-            gn_dir = resolve_result["gn_dir"]["flag"][0]
+            root_dir = resolve_result.get("root_dir").get("flag")[0]
+            gn_dir = resolve_result.get("gn_dir").get("flag")[0]
 
             ohos_para_path = "packages/phone/system/etc/param/ohos.para"
             if os.path.exists(os.path.join(root_dir, gn_dir, ohos_para_path)):
@@ -857,8 +857,8 @@ class TestBuildOption:
         if result != 0:
             assert result == 0, "archive_image para {} failed".format(archive_option)
         else:
-            root_dir = resolve_result["root_dir"]["flag"][0]
-            gn_dir = resolve_result["gn_dir"]["flag"][0]
+            root_dir = resolve_result.get("root_dir").get("flag")[0]
+            gn_dir = resolve_result.get("gn_dir").get("flag")[0]
             image_path = os.path.join("packages", "phone", "images")
             if archive_option.lower() == "true":
                 if os.path.exists(os.path.join(root_dir, gn_dir, image_path)):
@@ -885,7 +885,7 @@ class TestBuildOption:
         if result != 0:
             assert result == 0, "rom_size_statistics para {} failed".format(rom_option)
         else:
-            os_level = resolve_result["os_level"]["flag"][0]
+            os_level = resolve_result.get("os_level").get("flag")[0]
             log_info("os_level:{}".format(os_level))
             if os_level in ("mini", "small"):
                 assert result == 0, "rom_size_statistics para {} failed".format(rom_option)
@@ -966,7 +966,7 @@ class TestBuildOption:
         if result != 0:
             assert result == 0, "clean_args para {} failed".format(clean_option)
         else:
-            root_dir = resolve_result["root_dir"]["flag"][0]
+            root_dir = resolve_result.get("root_dir").get("flag")[0]
             json_path = os.path.join(root_dir, "out", "hb_args")
             json_file_li = [file for file in os.listdir(json_path) if os.path.splitext(file)[-1] == ".json"]
             log_info("test_clean_args, json_file_li:{}".format(json_file_li))
@@ -988,7 +988,7 @@ class TestBuildOption:
         if result != 0:
             assert result == 0, "deps_guard para {}failed.".format(deps_guard_option)
         else:
-            os_level = resolve_result["os_level"]["flag"][0]
+            os_level = resolve_result.get("os_level").get("flag")[0]
             log_info("test_deps_guard,os_level:{}".format(os_level))
             if deps_guard_option.lower() == "false" and os_level == "standard":
                 standard_flags = {"Scanning": {"pattern": r"Scanning.*ELF files now", "flag": False},
