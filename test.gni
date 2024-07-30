@@ -17,7 +17,7 @@ import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 import("//build/templates/cxx/cxx.gni")
 
-if (!is_arkui_x) {
+if (!build_cross_platform_version) {
   import("//build/rust/rustc_toolchain.gni")
 }
 
