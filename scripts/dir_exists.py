@@ -21,7 +21,8 @@ def _is_dir(dir_name) -> str:
 
 def do_main(args):
     """Hook to be called from gyp without starting a separate python
-    interpreter."""
+    interpreter.
+    """
     return _is_dir(args[0])
 
 

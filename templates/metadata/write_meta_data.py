@@ -50,7 +50,7 @@ def get_deps_metadata(deps):
 
 
 def get_deps_of_type(deps_data, target_type):
-    return [d for d in deps_data if d['type'] == target_type]
+    return [d for d in deps_data if d.get('type') == target_type]
 
 
 class Deps(object):
