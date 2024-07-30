@@ -43,9 +43,7 @@ export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_D
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
-
-prebuilts/build-tools/linux-x86/bin/gn gen --args="ohos_indep_compiler_enable=true product_name=\"$VARIANTS\"" -C out/$VARIANTS
-prebuilts/build-tools/linux-x86/bin/ninja -C out/$VARIANTS
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
 
 rm -rf .gn
 ln -s build/core/gn/dotfile.gn .gn
