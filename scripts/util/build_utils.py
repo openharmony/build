@@ -174,11 +174,12 @@ def atomic_output(path, only_if_changed=True):
                 os.unlink(f.name)
 
 
-class called_process_error(Exception):
+class CalledProcessError(Exception):
     """This exception is raised when the process run by check_output
-    exits with a non-zero exit code."""
+    exits with a non-zero exit code.
+    """
     def __init__(self, cwd, args, output):
-        super(called_process_error, self).__init__()
+        super(CalledProcessError, self).__init__()
         self.cwd = cwd
         self.args = args
         if isinstance(output, bytes):
@@ -212,7 +213,7 @@ def filter_lines(output, filter_string):
 
 # This can be used in most cases like subprocess.check_output(). The output,
 # particularly when the command fails, better highlights the command's failure.
-# If the command fails, raises a build_utils.called_process_error.
+# If the command fails, raises a build_utils.CalledProcessError.
 def check_output(args,
                  cwd=None,
                  env=None,
@@ -253,7 +254,7 @@ def check_output(args,
         stderr = stderr.decode()
 
     if fail_func(child.returncode, stderr):
-        raise called_process_error(cwd, args, stdout + stderr)
+        raise CalledProcessError(cwd, args, stdout + stderr)
 
     if print_stdout:
         if isinstance(stdout, bytes):
@@ -736,7 +737,8 @@ def call_and_write_depfile_if_stale(function,
 
 def get_all_files(base, follow_symlinks=False):
     """Returns a list of all the files in |base|. Each entry is relative to the
-    last path entry of |base|."""
+    last path entry of |base|.
+    """
     result = []
     for root, _, files in os.walk(base, followlinks=follow_symlinks):
         result.extend([os.path.join(root, f) for f in files])
@@ -744,8 +746,8 @@ def get_all_files(base, follow_symlinks=False):
     return result
 
 
-def rebase_path(input, new_base=None, current_base="."):
+def rebase_path(path_to_rebase, new_base=None, current_base="."):
     if new_base:
-        return os.path.relpath(os.path.join(current_base, input), new_base)
+        return os.path.relpath(os.path.join(current_base, path_to_rebase), new_base)
     else:
-        return os.path.realpath(os.path.join(current_base, input))
+        return os.path.realpath(os.path.join(current_base, path_to_rebase))

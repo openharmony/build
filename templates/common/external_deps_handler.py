@@ -225,7 +225,7 @@ def main():
             external_module_desc_info = _get_external_module_info(
                 all_kits_info_dict, components_info_dict, external_part_name, external_module_name,
                 _adapted_part_name)
-            dep_label = external_module_desc_info['label']
+            dep_label = external_module_desc_info.get('label')
 
             part_variants_info = all_parts_variants_info.get(external_part_name)
             if part_variants_info is None:
@@ -244,8 +244,8 @@ def main():
                     include_dirs.append(include_dir)
 
             # sdk prebuilt
-            if external_module_desc_info['prebuilt_enable']:
-                libs += [external_module_desc_info['prebuilt_source']]
+            if external_module_desc_info.get('prebuilt_enable'):
+                libs += [external_module_desc_info.get('prebuilt_source')]
         else:
             sdk_module_info, adapted_ok = _get_external_module_from_sdk(
                 sdk_base_dir, external_part_name, external_module_name,
