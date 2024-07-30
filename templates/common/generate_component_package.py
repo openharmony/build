@@ -68,7 +68,7 @@ def _get_public_external_deps(data, public_deps):
             continue
         _data = _check_label(public_deps, value)
         if _data:
-            return key + ":" + _data
+            return f"{key}:{_data}"
         continue
     return ""
 
@@ -198,7 +198,8 @@ def _copy_includes(args, module, includes: list):
         else:
             continue
         for include in includes:
-            _sub_include = include.split(args.get("part_path") + '/')[-1]
+            part_path = args.get("part_path")
+            _sub_include = include.split(f"{part_path}/")[-1]
             split_include = include.split("//")[1]
             real_include_path = os.path.join(args.get("root_path"), split_include)
             if args.get('part_name') == 'libunwind':
@@ -209,7 +210,8 @@ def _copy_includes(args, module, includes: list):
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
     for include in includes:
-        _sub_include = include.split(args.get("part_path") + '/')[-1]
+        part_path = args.get("part_path")
+        _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
         real_include_path = os.path.join(args.get("root_path"), split_include)
         if args.get('part_name') == 'libunwind':
@@ -283,7 +285,7 @@ def _dirs_handler(bundlejson_out):
         if os.path.isfile(filepath):
             dirs['./'].append(filename)
         else:
-            dirs[filename] = [filename + "/*"]
+            dirs[filename] = [f"{filename}/*"]
     delete_list = ['LICENSE', 'README.md', 'README_zh.md', 'README_en.md', 'bundle.json']
     for delete_txt in delete_list:
         if delete_txt in dirs['./']:
@@ -303,7 +305,7 @@ def _copy_bundlejson(args, public_deps_list):
     for public_deps in public_deps_list:
         _public_dep_part_name = public_deps.split(':')[0]
         if _public_dep_part_name != args.get("part_name"):
-            _public_dep = '@' + args.get('organization_name') + '/' + _public_dep_part_name
+            _public_dep = f"@{args.get('organization_name')}/{_public_dep_part_name}"
             dependencies_dict.update({_public_dep: "*"})
     if os.path.isfile(bundlejson):
         with open(bundlejson, 'r') as f:
@@ -440,7 +442,7 @@ def _generate_prebuilt_shared_library(fp, lib_type, module):
 
 
 def _generate_public_configs(fp, module):
-    fp.write('  public_configs = [":' + module + '_configs"]\n')
+    fp.write(f'  public_configs = [":{module}_configs"]\n')
 
 
 def _public_deps_special_handler(module):
