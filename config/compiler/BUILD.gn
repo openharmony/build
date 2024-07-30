@@ -976,7 +976,7 @@ config("chromium_code") {
     }
   } else {
     cflags = [ "-Wall" ]
-    if (treat_warnings_as_errors && !is_arkui_x) {
+    if (treat_warnings_as_errors && !build_cross_platform_version) {
       cflags += [ "-Werror" ]
 
       # The compiler driver can sometimes (rarely) emit warnings before calling
