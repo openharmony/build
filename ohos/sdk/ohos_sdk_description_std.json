@@ -266,8 +266,7 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
-            "linux",
-            "ohos"
+            "linux"
         ]
     },
     {
@@ -288,8 +287,7 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
         "target_os": [
-            "linux",
-            "ohos"
+            "linux"
         ]
     },
     {
@@ -317,7 +315,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_js2abc_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -338,7 +337,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_ts2abc_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -359,7 +359,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -380,7 +381,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package-lock_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -401,7 +403,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -422,7 +425,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -443,7 +447,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -464,7 +469,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -485,7 +491,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -506,7 +513,8 @@
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_win",
         "target_os": [
-            "windows"
+            "windows",
+            "ohos"
         ]
     },
     {
@@ -773,8 +781,7 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin",
-            "ohos"
+            "darwin"
         ]
     },
     {
