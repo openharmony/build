@@ -20,18 +20,18 @@ def copy_tree(src: str,
               follow_all_symlinks=False,
               follow_outside_symlinks=False):
     """copy src/* to dest/
-  I. If follow_outside_symlinks is true,
-     1. If src item is a symlink, and points to some item inside src,
-        then copy the symlink to dest.
-     2. If src item points to items outside src, then follow links to copy
-        the original file to dest.
-     3. Else copy src item to dest.
-  II. If follow_all_symlinks is true,
-     1. If src item is a symlink, then follow links to copy the original file
-        to dest.
-     2. Else copy src item to dest.
-  follow_outside_symlinks is true when follow_all_symlinks is true.
-  """
+    I. If follow_outside_symlinks is true,
+        1. If src item is a symlink, and points to some item inside src,
+            then copy the symlink to dest.
+        2. If src item points to items outside src, then follow links to copy
+            the original file to dest.
+        3. Else copy src item to dest.
+    II. If follow_all_symlinks is true,
+        1. If src item is a symlink, then follow links to copy the original file
+            to dest.
+        2. Else copy src item to dest.
+    follow_outside_symlinks is true when follow_all_symlinks is true.
+    """
     with os.scandir(src) as itr:
         items = list(itr)
     return _do_copy_tree(items,
