@@ -107,11 +107,11 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
     musl_lib_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/lib/arm-linux-ohos")
     os.makedirs(musl_include_link_path, exist_ok=True)
     os.makedirs(musl_lib_link_path, exist_ok=True)
-    _symlink_src2dest(musl_real_path + os.sep + "innerapis/includes", musl_include_link_path)
-    _symlink_src2dest(musl_real_path + os.sep + "innerapis/libs", musl_lib_link_path)
+    _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'includes'), musl_include_link_path)
+    _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'libs'), musl_lib_link_path)
 
     kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']
-    kernel_link_path = os.path.join("kernel/linux/patches")
+    kernel_link_path = os.path.join("kernel", "linux")
     if not os.path.isdir(kernel_link_path):
         try:
             os.remove(kernel_link_path)
@@ -119,7 +119,7 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
             pass
         os.makedirs(kernel_link_path, exist_ok=True)
     os.makedirs(kernel_link_path, exist_ok=True)
-    _symlink_src2dest(kernel_real_path + os.sep + "innerapis/patches", kernel_link_path)
+    _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
