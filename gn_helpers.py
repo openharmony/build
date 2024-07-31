@@ -153,7 +153,7 @@ def unescape_gn_string(value: list, skip_next: bool) -> str:
             if i < len(value) - 1:
             # If it is not the last element of the list and the current character is a back slash
                 next_char = value[i + 1] 
-                result.append(unescape_gn_special_char(value[i + 1]))
+                result.append(unescape_gn_special_char(next_char))
                 skip_next = next_char in ('$', '"', '\\')
         else:
             result.append(value[i])
