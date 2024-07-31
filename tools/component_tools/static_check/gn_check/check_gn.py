@@ -269,7 +269,7 @@ class CheckGn(object):
             if not bad_target_to_excel:
                 continue
             for path, content in self.subsystem_info.items():
-                for index in range(len(bad_target_to_excel)):
+                for index, _ in enumerate(bad_target_to_excel):
                     bad_target_to_excel[index][:2] = [content['subsystem'], content['component']] if key.startswith(
                         path) else bad_target_to_excel[index][:2]
 
