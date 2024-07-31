@@ -67,8 +67,8 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             except Exception as e:
                 raise OHOSException('Please check the bundle.json file of {} : {}'.format(target_arg.arg_value, e))
             if not bundle_path:
-                print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(target_arg.arg_value))
-            assert bundle_path
+                raise OHOSException(
+                    'ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(target_arg.arg_value))
             build_executor.regist_flag('path', bundle_path)
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
