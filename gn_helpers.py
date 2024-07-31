@@ -138,7 +138,7 @@ def unescape_gn_special_char(char_after_backslash: str) -> str:
         return '\\'
 
 
-def unescape_gn_string(value: list) -> str:
+def unescape_gn_string(value: list, skip_next: bool) -> str:
     """Given a string with GN escaping, returns the unescaped string.
 
     Be careful not to feed with input from a Python parsing function like
@@ -147,15 +147,18 @@ def unescape_gn_string(value: list) -> str:
     """
     result = []
     i = 0
+    skip_next = False
     while i < len(value):
         if value[i] == '\\':
             if i < len(value) - 1:
-            # If it is not the last element of the list and the current character is a back slash    
+            # If it is not the last element of the list and the current character is a back slash
+                next_char = value[i + 1] 
                 result.append(unescape_gn_special_char(value[i + 1]))
-                i += 1
+                skip_next = next_char in ('$', '"', '\\')
         else:
             result.append(value[i])
-        i += 1
+        i += 1 + int(skip_next)
+        skip_next = False
     return ''.join(result)
 
 
