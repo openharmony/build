@@ -58,7 +58,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     gen_keep_symbols_cmd = "comm -13 " + dynsyms_path + " " + funcsysms_path
     gen_keep_debug_cmd = llvm_objcopy_path + \
         " --only-keep-debug " + binary_path + " " + debug_path
-    gen_mini_debug_cmd = llvm_objcopy_path + " -S --remove-section .gbd_index --remove-section .comment --keep-symbols=" + \
+    gen_mini_debug_cmd = llvm_objcopy_path + " -S --remove-section .gdb_index --remove-section .comment --keep-symbols=" + \
         keep_path + " " + debug_path + " " + mini_debug_path
     compress_debuginfo = "xz " + mini_debug_path
     gen_stripped_binary = llvm_objcopy_path + " --add-section .gnu_debugdata=" + \
