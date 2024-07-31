@@ -27,6 +27,10 @@ class PreloadInterface(ServiceInterface):
         super().__init__()
         self._config = Config()
 
+    @abstractmethod
+    def __post_init__(self):
+        pass
+
     @property
     def outputs(self):
         return self._preloader_outputs
@@ -57,10 +61,6 @@ class PreloadInterface(ServiceInterface):
         self._generate_systemcapability_json()
         self._generate_compile_standard_whitelist_json()
         self._generate_compile_env_allowlist_json()
-
-    @abstractmethod
-    def __post_init__(self):
-        pass
 
     @abstractmethod
     def _generate_build_prop(self):

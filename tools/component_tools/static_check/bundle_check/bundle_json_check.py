@@ -281,7 +281,7 @@ class BundleJson(object):
             bundle_error_segment.append(bundle_error)
             return bundle_error_segment
 
-        if type(path) != str:
+        if isinstance(path, str):
             bundle_error["description"] = BCWarnInfo.SEGMENT_DESTPATH_UNIQUE
             bundle_error_segment.append(bundle_error)
             return bundle_error_segment
