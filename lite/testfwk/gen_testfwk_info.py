@@ -20,8 +20,8 @@ import json
 import os
 import stat
 
-part_infos = "part_infos"
-subsystem_infos = "subsystem_infos"
+PART_INFOS = "part_infos"
+SUBSYSTEM_INFOS = "subsystem_infos"
 
 
 def create_testfwk_info_file(component_info_file: str, abs_fold: str, file_name: str):
@@ -44,10 +44,10 @@ def get_testfwk_info(platform_json_file: str):
     platform_name = platform_name[0: platform_name.rfind(".")]
     data = {
         platform_name: {
-            subsystem_infos: {
+            SUBSYSTEM_INFOS: {
 
             },
-            part_infos: {
+            PART_INFOS: {
 
             }
         }
@@ -65,10 +65,10 @@ def get_testfwk_info(platform_json_file: str):
                 list_components_name.append(component_name)
                 if component_name not in set_components_name:
                     set_components_name.append(component_name)
-            data[platform_name][subsystem_infos][subsystem_name] = \
+            data[platform_name][SUBSYSTEM_INFOS][subsystem_name] = \
                 list_components_name
         for component_name in set_components_name:
-            data[platform_name][part_infos][component_name] = \
+            data[platform_name][PART_INFOS][component_name] = \
                 {"part_name": component_name, "build_out_dir": "."}
     return data
 
