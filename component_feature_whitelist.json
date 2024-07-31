@@ -2,9 +2,6 @@
     "usb_manager": [
         "usb_manager_feature_pop_up_func_switch_model"
     ],
-    "device_status": [
-        "device_status_interaction_coordination"
-    ],
     "battery_lite": [
         "enable_screensaver"
     ],
