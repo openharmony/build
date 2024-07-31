@@ -46,7 +46,7 @@ def get_all_deps(direct_deps):
 
 
 def get_deps_metadata(deps):
-    return [deps_metadta_cache[d] for d in deps]
+    return [deps_metadta_cache.get(d) for d in deps]
 
 
 def get_deps_of_type(deps_data, target_type):
