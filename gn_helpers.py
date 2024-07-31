@@ -130,7 +130,7 @@ def from_gn_args(input_string: str) -> dict:
     return parser.parse_args()
 
 
-def unescape_gn_special_char(char_after_backslash: str) -> str:
+def unescape_gn_special_char(char_after_backslash: list) -> str:
     # Process the GN escape character and return it if it is a valid escape character; Otherwise, return a back slash
     if char_after_backslash in ('$', '"', '\\'):
         return char_after_backslash
