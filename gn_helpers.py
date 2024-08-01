@@ -158,7 +158,7 @@ def unescape_gn_string(value: list) -> str:
         else:
             result.append(value[i])
         i += 1 + int(skip_char)
-        skip_char = 0
+        skip_char = False
     return ''.join(result)
 
 
