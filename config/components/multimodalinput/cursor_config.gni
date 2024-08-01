@@ -12,5 +12,7 @@
 # limitations under the License.
 
 declare_args() {
-  input_ext_feature_magiccursor = false
+  if (!is_arkui_x) {
+    input_ext_feature_magiccursor = false
+  }
 }
