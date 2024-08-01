@@ -349,6 +349,7 @@ template("compile_js_assets") {
                        "target_out_dir") + "/ets_loader_ark"
     _webpack_config_ets = "${_ets_loader_home}/webpack.config.js"
     _webpack_js = "${_ace_loader_home}/node_modules/webpack/bin/webpack.js"
+    _webpack_ets = "${_ets_loader_home}/node_modules/webpack/bin/webpack.js"
     _manifest_file_path = "${target_gen_dir}/manifest_file"
 
     inputs = [
