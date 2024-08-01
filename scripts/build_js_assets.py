@@ -241,7 +241,7 @@ def main(args):
             webpack_path = options.webpack_js
         cmd = [
             node_js,
-            os.path.relpath(options.webpack_js, loader_home),
+            os.path.relpath(options.webpack_path, loader_home),
             '--config',
             os.path.relpath(webpack_config, loader_home)
         ]
