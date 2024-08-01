@@ -24,10 +24,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def _run_cmd(cmd: list):
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
+                               stderr=subprocess.PIPE,
                                encoding='utf-8')
     for line in iter(process.stdout.readline, ''):
-        print(line)
+        print(line, end='')
+    process_status = process.poll()
+    if process_status:
+        sys.exit(process_status)
 
 
 def _get_args():
@@ -69,6 +72,7 @@ def _ninja_cmd(root_path, variants):
 def _exec_cmd(root_path, variants):
     gn_cmd = _gn_cmd(root_path, variants)
     _run_cmd(gn_cmd)
+
     ninja_cmd = _ninja_cmd(root_path, variants)
     _run_cmd(ninja_cmd)
 
