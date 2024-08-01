@@ -33,7 +33,8 @@ def parse_args(args):
     parser.add_option('--js-forms-dir', help='js forms directory')
     parser.add_option('--testrunner-dir', help='testrunner directory')
     parser.add_option('--nodejs-path', help='path to nodejs app')
-    parser.add_option('--webpack-js', help='path to webpack.js')
+    parser.add_option('--webpack-js', help='path to js webpack.js')
+    parser.add_option('--webpack-ets', help='path to ets webpack.js')
     parser.add_option('--webpack-config-js', help='path to webpack.config.js')
     parser.add_option('--webpack-config-ets', help='path to webpack.rich.config.js')
     parser.add_option('--hap-profile', help='path to hap profile')
@@ -196,7 +197,8 @@ def main(args):
     options = parse_args(args)
 
     inputs = [
-        options.nodejs_path, options.webpack_js, options.webpack_config_js, options.webpack_config_ets
+        options.nodejs_path, options.webpack_js, options.webpack_ets,
+        options.webpack_config_js, options.webpack_config_ets
     ]
     depfiles = []
     if not options.js_assets_dir and not options.ets_assets_dir:
@@ -207,6 +209,7 @@ def main(args):
         depfiles.extend(build_utils.get_all_files(options.ark_es2abc_dir))
 
     depfiles.append(options.webpack_js)
+    depfiles.append(options.webpack_ets)
     depfiles.append(options.webpack_config_js)
     depfiles.append(options.webpack_config_ets)
     depfiles.extend(build_utils.get_all_files(options.ace_loader_home))
@@ -230,10 +233,12 @@ def main(args):
             js2abc = False
             loader_home = options.ets_loader_home
             webpack_config = options.webpack_config_ets
+            webpack_path = options.webpack_ets
         else:
             js2abc = True
             loader_home = options.ace_loader_home
             webpack_config = options.webpack_config_js
+            webpack_path = options.webpack_js
         cmd = [
             node_js,
             os.path.relpath(options.webpack_js, loader_home),

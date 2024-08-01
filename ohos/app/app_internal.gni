@@ -369,6 +369,8 @@ template("compile_js_assets") {
       rebase_path(nodejs, root_build_dir),
       "--webpack-js",
       rebase_path(_webpack_js, root_build_dir),
+      "--webpack-ets",
+      rebase_path(_webpack_ets, root_build_dir),
       "--webpack-config-js",
       rebase_path(_webpack_config_js, root_build_dir),
       "--webpack-config-ets",
