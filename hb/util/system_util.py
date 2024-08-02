@@ -45,7 +45,11 @@ class SystemUtil(metaclass=NoInstance):
             len(sys.argv) == 5 and 
             '-i' in sys.argv[3:] and 
             {'-t', '-test'} & set(sys.argv[3:])):
-            cmd.append('-t')
+            cmd.extend(['-t', 'both'])
+        if (sys.argv[1] == 'build' and 
+            len(sys.argv) == 4 and 
+            sys.argv[-1] == '-t'):
+            cmd.extend(['-t', 'onlytest'])
         with open(log_path, 'at', encoding='utf-8') as log_file:
             LogUtil.hb_info("start run hpm command")
             process = subprocess.Popen(cmd,
