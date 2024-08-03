@@ -9,7 +9,7 @@
   "ability_tools": "ability",
   "bluetooth_native_js": "communication",
   "net_manager": "communication",
-  "contacts_data_hap" :"contacts_data",
+  "contacts_data" :"contacts_data",
   "device_rk3568" :"device_rk3568",
   "ril_device_driver_interface":"hdf",
   "location_common": "location",
