@@ -88,7 +88,7 @@ if __name__ == '__main__':
     parser.add_argument("--developer_dir", required=False)
     args, unknownargs = parser.parse_known_args()
     if args.developer_dir:
-          os.environ['DEVELOPER_DIR'] = args.developer_dir
+        os.environ['DEVELOPER_DIR'] = args.developer_dir
 
     if len(unknownargs) != 1:
         sys.stderr.write(
@@ -100,16 +100,16 @@ if __name__ == '__main__':
     fill_machine_os_build(settings)
     fill_xcode_version(settings)
     try:
-      fill_sdk_path_and_version(settings, unknownargs[0], settings.get('xcode_version'))
+        fill_sdk_path_and_version(settings, unknownargs[0], settings.get('xcode_version'))
     except ValueError as vle:
-      print(f"Error: {vle}")
+        print(f"Error: {vle}")
 
     for key in sorted(settings):
-      value = settings[key]
+      value = settings.get(key)
       if isinstance(value, bytes):
-        value = value.decode()
+          value = value.decode()
       if key != 'xcode_version_int':
-        value = '"%s"' % value
-        print('%s=%s' % (key, value))
+          value = '"%s"' % value
+          print('%s=%s' % (key, value))
       else:
         print('%s=%d' % (key, value))
