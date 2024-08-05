@@ -157,7 +157,7 @@ def unescape_gn_string(value: list) -> str:
                 skip_char = next_char in ('$', '"', '\\')
         else:
             result.append(value[i])
-        i += 1 + int(skip_char)
+        i += 2 if skip_char else 1
         skip_char = False
     return ''.join(result)
 
