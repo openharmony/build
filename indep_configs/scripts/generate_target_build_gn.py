@@ -36,7 +36,7 @@ def _get_args():
     parser.add_argument(
         "-t", "--test",
         default=1, type=int,
-        help="whether the target contains test type. default 1 , choices: 0 or 1 ",
+        help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
     args = parser.parse_args()
     return args
@@ -61,6 +61,8 @@ def _inner_kits_name(inner_kits_list, deps_list):
 
 def _output_build_gn(deps_list, output_path, _test_check):
     file_name = os.path.join(output_path, 'BUILD.gn')
+    if os.path.exists(file_name):
+        os.remove(file_name)
     flags = os.O_WRONLY | os.O_CREAT
     modes = stat.S_IWUSR | stat.S_IRUSR
     with os.fdopen(os.open(file_name, flags, modes), 'w') as f:
@@ -105,14 +107,23 @@ def _get_src_part_name(src_bundle_paths):
     return _bundle_path, _path
 
 
+def _target_handle(ele, build_data, deps_list, _test_check):
+    if ele not in ['inner_kits', 'test', 'inner_api']:
+        _judge_type(build_data[ele], deps_list)
+    elif ele in ['inner_kits', 'inner_api']:
+        inner_kits_list = build_data[ele]
+        _inner_kits_name(inner_kits_list, deps_list)
+
+    if _test_check == 1 and ele == 'test':
+        inner_kits_list = build_data[ele]
+        for k in inner_kits_list:
+            deps_list.append(k)
+
+
 def main():
     args = _get_args()
     source_code_path = args.input_path
     _test_check = args.test
-    if _test_check:
-        _target_list = ['inner_kits', 'inner_api', 'test']
-    else:
-        _target_list = ['inner_kits', 'inner_api']
     deps_list = list()
     bundle_paths = _get_bundle_path(source_code_path)
     _bundle_path, dir_path = _get_src_part_name(bundle_paths)
@@ -122,16 +133,14 @@ def main():
         build_data = bundle_json["component"]["build"]
     except KeyError:
         print(f'--get bundle json component build dict error--')
-    for ele in build_data.keys():
-        if ele not in ['inner_kits', 'test', 'inner_api']:
-            _judge_type(build_data[ele], deps_list)
-        elif ele in ['inner_kits', 'inner_api']:
-            inner_kits_list = build_data[ele]
-            _inner_kits_name(inner_kits_list, deps_list)
-        elif _test_check and ele == 'test':
-            inner_kits_list = build_data[ele]
-            for k in inner_kits_list:
-                deps_list.append(k)
+    if _test_check != 2:
+        for ele in build_data.keys():
+            _target_handle(ele, build_data, deps_list, _test_check)
+    elif _test_check == 2:
+        inner_kits_list = build_data.get('test')
+        deps_list = []
+        for k in inner_kits_list:
+            deps_list.append(k)
 
     output_path = os.path.join(args.root_path, 'out')
     _output_build_gn(deps_list, output_path, _test_check)
