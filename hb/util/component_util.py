@@ -61,9 +61,9 @@ class ComponentUtil():
 
     @staticmethod
     def get_default_deps(variant: str) -> str:
+        gen_default_deps_json(variant, CURRENT_OHOS_ROOT)
         default_deps_path = os.path.join(
-            CURRENT_OHOS_ROOT, 'build', 'indep_configs', 'variants', variant, 'default_deps.json')
-
+            CURRENT_OHOS_ROOT, 'out', 'preloader', 'default_deps.json')
         return default_deps_path
 
     @staticmethod
@@ -134,3 +134,14 @@ def process_bundle_path(bundle_json, bundles_path, data):
     if data.get("component") and data.get("component").get("name"):
         bundles_path[data["component"]["name"]] = os.path.dirname(bundle_json)
     return bundles_path
+
+
+def gen_default_deps_json(variant, root_path):
+    default_deps_out_file = os.path.join(root_path, "out", "preloader", "default_deps.json")
+    default_deps_file = os.path.join(root_path, "build", "indep_configs", "variants", "common", 'default_deps.json')
+    default_deps_json = IoUtil.read_json_file(default_deps_file)
+    default_deps_json.append("variants_" + variant)
+
+    preloader_path = os.path.join(root_path, "out", "preloader")
+    os.makedirs(preloader_path, exist_ok=True)
+    IoUtil.dump_json_file(default_deps_out_file, default_deps_json)

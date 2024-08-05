@@ -38,9 +38,8 @@ def _get_args():
     return args
 
 
-def _get_all_features_info(root_path) -> dict:
-    _features_info_path = os.path.join(root_path, 'build', 'indep_configs', 'variants', 'default',
-                                       'features.json')
+def _get_all_features_info(root_path, variants) -> dict:
+    _features_info_path = os.path.join(root_path, 'out', 'preloader', variants, 'features.json')
     try:
         _features_json = get_json(_features_info_path)
     except Exception as e:
@@ -49,7 +48,7 @@ def _get_all_features_info(root_path) -> dict:
 
 
 def _gn_cmd(root_path, variants):
-    _features_info = _get_all_features_info(root_path)
+    _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
     for k, v in _features_info.items():
         _args_list.append(f'{k}={str(v).lower()}')
