@@ -191,7 +191,7 @@
       ]
     },
     {
-      "component": "contacts_data_hap",
+      "component": "contacts_data",
       "syscap": [
         "SystemCapability.Applications.ContactsData"
       ]
