@@ -107,9 +107,9 @@ if __name__ == '__main__':
     for key in sorted(settings):
         value = settings.get(key)
         if isinstance(value, bytes):
-          value = value.decode()
+            value = value.decode()
         if key != 'xcode_version_int':
-          value = '"%s"' % value
-          print('%s=%s' % (key, value))
+            value = '"%s"' % value
+            print('%s=%s' % (key, value))
         else:
-          print('%s=%d' % (key, value))
+            print('%s=%d' % (key, value))
