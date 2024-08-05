@@ -241,7 +241,7 @@ def _npm_install(args):
         basename = os.path.basename(full_code_path)
         node_modules_path = os.path.join(full_code_path, "node_modules")
         npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
-        print('check node_modules is not exist')
+
         if os.path.exists(node_modules_path):
             print('remove node_modules %s' % node_modules_path)
             _run_cmd(('rm -rf {}'.format(node_modules_path)))
@@ -251,12 +251,12 @@ def _npm_install(args):
                 cmd = [npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.unsafe_perm:
                 cmd.append('--unsafe-perm')
-            print("in dir:{}, executing:{}".format(full_code_path, ' '.join(cmd)))
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
             out, err = proc.communicate()
             if proc.returncode:
+                print("in dir:{}, executing:{}".format(full_code_path, ' '.join(cmd)))
                 return False, err.decode()
         else:
             raise Exception("{} not exist, it shouldn't happen, pls check...".format(full_code_path))
@@ -396,19 +396,16 @@ def main():
         with args.progress:
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
 
-    print('download finished')
     _file_handle(file_handle_config, args.code_dir, args.host_platform)
     retry_times = 0
     max_retry_times = 2
     while retry_times <= max_retry_times:
-        print('npm install try times:', retry_times + 1)
         result, error = _npm_install(args)
         if result:
-            print("npm install successfully")
             break
-        elif retry_times == max_retry_times:
+        print("npm install error, error info: %s" % error)
+        if retry_times == max_retry_times:
             for error_info in error.split('\n'):
-                print("npm install error, error info: %s" % error)
                 if error_info.endswith('debug.log'):
                     log_path = error_info.split()[-1]
                     cmd = ['cat', log_path]
