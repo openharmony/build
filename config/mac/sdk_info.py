@@ -105,11 +105,11 @@ if __name__ == '__main__':
         print(f"Error: {vle}")
 
     for key in sorted(settings):
-      value = settings.get(key)
-      if isinstance(value, bytes):
+        value = settings.get(key)
+        if isinstance(value, bytes):
           value = value.decode()
-      if key != 'xcode_version_int':
+        if key != 'xcode_version_int':
           value = '"%s"' % value
           print('%s=%s' % (key, value))
-      else:
-        print('%s=%d' % (key, value))
+        else:
+          print('%s=%d' % (key, value))
