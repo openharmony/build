@@ -11,9 +11,6 @@
     "powermgr_lite": [
         "enable_screensaver"
     ],
-    "hitrace": [
-        "support_executable_file"
-    ],
     "hichecker": [
         "hichecker_support_asan"
     ],
@@ -69,9 +66,5 @@
     ],
     "graphic_utils_lite": [
         "enable_ohos_graphic_utils_product_config"
-    ],
-    "libuv": [
-        "libuv_use_ffrt",
-        "use_ffrt"
     ]
 }
