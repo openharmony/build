@@ -42,52 +42,27 @@ def _get_args():
     return args
 
 
-def _gen_syscap_para_info(variants_path, syscap_out_path):
-    syscap_json_file = os.path.join(variants_path, 'syscap.json')
-    syscap_json = utils.get_json(syscap_json_file)
-    syscap_value = syscap_json.get('syscap_value')
-    os.makedirs(syscap_out_path)
-    out_path = os.path.join(syscap_out_path, 'syscap.para')
-
-    flags = os.O_WRONLY | os.O_CREAT
-    modes = stat.S_IWUSR | stat.S_IRUSR
-    try:
-        with os.fdopen(os.open(out_path, flags, modes), 'w') as f:
-            for k, v in syscap_value.items():
-                f.write(f'{k}={str(v).lower()}' + '\n')
-    except Exception as e:
-        print(f"{out_path}: \n {e}")
-    return syscap_json
-
-
-def _re_gen_syscap_json(syscap_json, variants_out_path):
-    syscap_json_out_file = os.path.join(variants_out_path, "syscap.json")
-
-    del syscap_json['syscap_value']
-    flags = os.O_WRONLY | os.O_CREAT
-    modes = stat.S_IWUSR | stat.S_IRUSR
-    with os.fdopen(os.open(syscap_json_out_file, flags, modes), 'w') as f:
-        json.dump(syscap_json, f, indent=4)
-
-
 def main():
     args = _get_args()
     root_path = args.root_path
     variants = args.variants
-    variants_path = os.path.join(root_path, 'build', 'indep_configs', "variants", variants)
+    variants_path = os.path.join(root_path, 'binarys', "variants", "variants_" + variants, "config")
     variants_out_path = os.path.join(root_path, 'out', "preloader", variants)
     etc_out_path = os.path.join(variants_out_path, "system", "etc")
-    syscap_out_path = os.path.join(etc_out_path, "param")
+    syscap_para_out_path = os.path.join(etc_out_path, "param")
     
-    re_syscap_json = _gen_syscap_para_info(variants_path, syscap_out_path)
-    _re_gen_syscap_json(re_syscap_json, etc_out_path)
+    os.makedirs(syscap_para_out_path, exist_ok=True)
 
     system_capability_file = os.path.join(variants_path, "SystemCapability.json")
     features_file = os.path.join(variants_path, "features.json")
     build_file = os.path.join(variants_path, "build_config.json")
     paths_config_file = os.path.join(variants_path, "parts_config.json")
+    syscap_json_file = os.path.join(variants_path, "syscap.json")
+    syscap_para_file = os.path.join(variants_path, "syscap.para")
 
     shutil.copy(system_capability_file, etc_out_path)
+    shutil.copy(syscap_json_file, etc_out_path)
+    shutil.copy(syscap_para_file, syscap_para_out_path)
     shutil.copy(features_file, variants_out_path)
     shutil.copy(build_file, variants_out_path)
     shutil.copy(paths_config_file, variants_out_path)
