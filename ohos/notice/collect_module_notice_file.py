@@ -32,13 +32,30 @@ LICENSE_CANDIDATES = [
     'COPYRIGHT',
     'Copyright',
     'COPYING',
-    'Copying'
+    'Copying',
+    'AUTHORS'
 ]
 
 
 def is_top_dir(current_dir: str):
     return os.path.exists(os.path.join(current_dir, '.gn'))
 
+def find_other_files(license_file_path):
+    other_files = []
+    if os.path.isfile(license_file_path):
+        license_dir = os.path.dirname(license_file_path)
+        license_file = os.path.basename(license_file_path)
+        for file in LICENSE_CANDIDATES:
+            license_path = os.path.join(license_dir, file)
+            if os.path.isfile(license_path) and file != license_file:
+                if license_path not in other_files:
+                    other_files.append(license_path)
+    elif os.path.isdir(license_file_path):
+        for file in ['COPYRIGHT', 'Copyright', 'COPYING', 'Copying', 'AUTHORS']:
+            license_file = os.path.join(license_file_path, file)
+            if os.path.isfile(license_file):
+                other_files.append(license_file)
+    return other_files
 
 def find_license_recursively(current_dir: str):
     if is_top_dir(current_dir):
@@ -84,9 +101,11 @@ def do_collect_notice_files(options, depfiles: str):
     module_notice_info_list = []
     module_notice_info = {}
     notice_file = options.license_file
+    other_files = []
     if notice_file:
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
+            other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
             module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
@@ -96,6 +115,7 @@ def do_collect_notice_files(options, depfiles: str):
     if notice_file is None:
         readme_path = os.path.join(options.module_source_dir,
                                    README_FILE_NAME)
+        other_files.extend(find_other_files(options.module_source_dir))
         if not os.path.exists(readme_path):
             readme_path = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if readme_path is not None:
@@ -109,6 +129,7 @@ def do_collect_notice_files(options, depfiles: str):
         notice_file = find_license_recursively(options.module_source_dir)
         opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
+            other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
             module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
@@ -121,12 +142,14 @@ def do_collect_notice_files(options, depfiles: str):
         module_notice_info_list.append(module_notice_info)
 
     if notice_file:
+        if other_files:
+            notice_file = f"{notice_file},{','.join(other_files)}"
         for output in options.output:
             notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
             
-            notice_files = notice_file.split(',')
+            notice_files = [file for file in notice_file.split(',') if file]
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
 
@@ -200,3 +223,4 @@ def main(args):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
+
