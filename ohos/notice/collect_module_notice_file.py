@@ -40,6 +40,7 @@ LICENSE_CANDIDATES = [
 def is_top_dir(current_dir: str):
     return os.path.exists(os.path.join(current_dir, '.gn'))
 
+
 def find_other_files(license_file_path):
     other_files = []
     if os.path.isfile(license_file_path):
@@ -47,15 +48,16 @@ def find_other_files(license_file_path):
         license_file = os.path.basename(license_file_path)
         for file in LICENSE_CANDIDATES:
             license_path = os.path.join(license_dir, file)
-            if os.path.isfile(license_path) and file != license_file:
-                if license_path not in other_files:
-                    other_files.append(license_path)
+            if os.path.isfile(license_path) and file != license_file and \
+                    license_path not in other_files:
+                other_files.append(license_path)
     elif os.path.isdir(license_file_path):
         for file in ['COPYRIGHT', 'Copyright', 'COPYING', 'Copying', 'AUTHORS']:
             license_file = os.path.join(license_file_path, file)
             if os.path.isfile(license_file):
                 other_files.append(license_file)
     return other_files
+
 
 def find_license_recursively(current_dir: str):
     if is_top_dir(current_dir):
