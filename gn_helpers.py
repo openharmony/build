@@ -71,7 +71,7 @@ def to_gn_string(value: str, allow_dicts: bool = True) -> str:
 def from_gn_string(input_string: str) -> dict:
     """Converts the input string from a GN serialized value to Python values.
 
-    For details on supported types see GNValueParser.Parse() below.
+    For details on supported types see GNValueParser.parse() below.
 
     If your GN script did:
       something = [ "file1", "file2" ]
@@ -106,7 +106,7 @@ def from_gn_string(input_string: str) -> dict:
     re-parsed to get the same result.
     """
     parser = GNValueParser(input_string)
-    return parser.Parse()
+    return parser.parse()
 
 
 def from_gn_args(input_string: str) -> dict:
@@ -127,7 +127,15 @@ def from_gn_args(input_string: str) -> dict:
     arise in parsing --args.
     """
     parser = GNValueParser(input_string)
-    return parser.ParseArgs()
+    return parser.parse_args()
+
+
+def unescape_gn_special_char(char_after_backslash: str) -> str:
+    # Process the GN escape character and return it if it is a valid escape character; Otherwise, return a back slash
+    if char_after_backslash in ('$', '"', '\\'):
+        return char_after_backslash
+    else:
+        return '\\'
 
 
 def unescape_gn_string(value: list) -> str:
@@ -139,20 +147,18 @@ def unescape_gn_string(value: list) -> str:
     """
     result = []
     i = 0
+    skip_char = False
     while i < len(value):
         if value[i] == '\\':
             if i < len(value) - 1:
-                next_char = value[i + 1]
-                if next_char in ('$', '"', '\\'):
-                    # These are the escaped characters GN supports.
-                    result.append(next_char)
-                    i += 1
-                else:
-                    # Any other backslash is a literal.
-                    result.append('\\')
+            # If it is not the last element of the list and the current character is a back slash
+                next_char = value[i + 1] 
+                result.append(unescape_gn_special_char(next_char))
+                skip_char = next_char in ('$', '"', '\\')
         else:
             result.append(value[i])
-        i += 1
+        i += 2 if skip_char else 1
+        skip_char = False
     return ''.join(result)
 
 
@@ -176,11 +182,11 @@ class GNValueParser(object):
     def is_done(self) -> bool:
         return self.cur == len(self.input)
 
-    def ConsumeWhitespace(self):
+    def consume_whitespace(self):
         while not self.is_done() and self.input[self.cur] in ' \t\n':
             self.cur += 1
 
-    def Parse(self):
+    def parse(self):
         """Converts a string representing a printed GN value to the Python type.
 
         See additional usage notes on from_gn_string above.
@@ -198,36 +204,36 @@ class GNValueParser(object):
 
         - GN scopes ('{ ... }') are not supported.
         """
-        result = self._ParseAllowTrailing()
-        self.ConsumeWhitespace()
+        result = self._parse_allow_trailing()
+        self.consume_whitespace()
         if not self.is_done():
             raise GNException("Trailing input after parsing:\n  " +
                               self.input[self.cur:])
         return result
 
-    def ParseArgs(self) -> dict:
+    def parse_args(self) -> dict:
         """Converts a whitespace-separated list of ident=literals to a dict.
 
         See additional usage notes on from_gn_args, above.
         """
         d = {}
 
-        self.ConsumeWhitespace()
+        self.consume_whitespace()
         while not self.is_done():
-            ident = self._ParseIdent()
-            self.ConsumeWhitespace()
+            ident = self._parse_ident()
+            self.consume_whitespace()
             if self.input[self.cur] != '=':
                 raise GNException("Unexpected token: " + self.input[self.cur:])
             self.cur += 1
-            self.ConsumeWhitespace()
-            val = self._ParseAllowTrailing()
-            self.ConsumeWhitespace()
+            self.consume_whitespace()
+            val = self._parse_allow_trailing()
+            self.consume_whitespace()
             d[ident] = val
 
         return d
 
-    def ParseNumber(self) -> int:
-        self.ConsumeWhitespace()
+    def parse_number(self) -> int:
+        self.consume_whitespace()
         if self.is_done():
             raise GNException('Expected number but got nothing.')
 
@@ -244,8 +250,8 @@ class GNValueParser(object):
             raise GNException("Not a valid number.")
         return int(number_string)
 
-    def ParseString(self) -> str:
-        self.ConsumeWhitespace()
+    def parse_string(self) -> str:
+        self.consume_whitespace()
         if self.is_done():
             raise GNException('Expected string but got nothing.')
 
@@ -271,8 +277,8 @@ class GNValueParser(object):
 
         return unescape_gn_string(self.input[begin:end])
 
-    def ParseList(self):
-        self.ConsumeWhitespace()
+    def parse_list(self):
+        self.consume_whitespace()
         if self.is_done():
             raise GNException('Expected list but got nothing.')
 
@@ -281,7 +287,7 @@ class GNValueParser(object):
             raise GNException("Expected [ for list but got:\n  " +
                               self.input[self.cur:])
         self.cur += 1
-        self.ConsumeWhitespace()
+        self.consume_whitespace()
         if self.is_done():
             raise GNException("Unterminated list:\n  " + self.input)
 
@@ -295,8 +301,8 @@ class GNValueParser(object):
             if not previous_had_trailing_comma:
                 raise GNException("List items not separated by comma.")
 
-            list_result += [self._ParseAllowTrailing()]
-            self.ConsumeWhitespace()
+            list_result += [self._parse_allow_trailing()]
+            self.consume_whitespace()
             if self.is_done():
                 break
 
@@ -305,11 +311,11 @@ class GNValueParser(object):
             if previous_had_trailing_comma:
                 # Consume comma.
                 self.cur += 1
-                self.ConsumeWhitespace()
+                self.consume_whitespace()
 
         raise GNException("Unterminated list:\n  " + self.input)
 
-    def _ConstantFollows(self, constant) -> bool:
+    def _constant_follows(self, constant) -> bool:
         """Returns true if the given constant follows immediately at the
         current location in the input. If it does, the text is consumed and
         the function returns true. Otherwise, returns false and the current
@@ -322,27 +328,27 @@ class GNValueParser(object):
             return True
         return False
     
-    def _ParseAllowTrailing(self):
+    def _parse_allow_trailing(self):
         """Internal version of Parse that doesn't check for trailing stuff."""
-        self.ConsumeWhitespace()
+        self.consume_whitespace()
         if self.is_done():
             raise GNException("Expected input to parse.")
 
         next_char = self.input[self.cur]
         if next_char == '[':
-            return self.ParseList()
+            return self.parse_list()
         elif _is_digit_or_minus(next_char):
-            return self.ParseNumber()
+            return self.parse_number()
         elif next_char == '"':
-            return self.ParseString()
-        elif self._ConstantFollows('true'):
+            return self.parse_string()
+        elif self._constant_follows('true'):
             return True
-        elif self._ConstantFollows('false'):
+        elif self._constant_follows('false'):
             return False
         else:
             raise GNException("Unexpected token: " + self.input[self.cur:])
 
-    def _ParseIdent(self) -> str:
+    def _parse_ident(self) -> str:
         ident = ''
 
         next_char = self.input[self.cur]
