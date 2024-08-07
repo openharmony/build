@@ -117,13 +117,14 @@ def do_collect_notice_files(options, depfiles: str):
     if notice_file is None:
         readme_path = os.path.join(options.module_source_dir,
                                    README_FILE_NAME)
-        other_files.extend(find_other_files(options.module_source_dir))
         if not os.path.exists(readme_path):
             readme_path = find_opensource_recursively(os.path.abspath(options.module_source_dir))
         if readme_path is not None:
             depfiles.append(readme_path)
             notice_file_info = get_license_from_readme(readme_path)
             notice_file = notice_file_info[0]
+            notice_dir = os.path.dirname(readme_path)
+            other_files.extend(find_other_files(os.path.join(notice_dir, notice_file)))
             module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
@@ -145,7 +146,9 @@ def do_collect_notice_files(options, depfiles: str):
 
     if notice_file:
         if other_files:
-            notice_file = f"{notice_file},{','.join(other_files)}"
+            all_files = [notice_file].extend(other_files)
+            notice_files = list(dict.fromkeys(all_files))
+            notice_file = ",".join(notice_files)
         for output in options.output:
             notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
