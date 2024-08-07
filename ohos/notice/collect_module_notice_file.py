@@ -150,12 +150,11 @@ def do_collect_notice_files(options, depfiles: str):
             notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
-            notice_files = notice_file.split(",")
+            notice_files = [file for file in notice_file.split(",") if file]
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
 
 def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
-    notice_files = [file for file in notice_files if file]
     for notice_file in notice_files:
         notice_file = notice_file.strip()
         if not os.path.exists(notice_file):
