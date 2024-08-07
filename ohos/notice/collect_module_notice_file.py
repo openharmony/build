@@ -147,14 +147,13 @@ def do_collect_notice_files(options, depfiles: str):
     if notice_file:
         if other_files:
             all_files = [notice_file].extend(other_files)
-            notice_files = list(dict.fromkeys(all_files))
+            notice_files = [file for file in list(dict.fromkeys(all_files)) if file]
             notice_file = ",".join(notice_files)
         for output in options.output:
             notice_info_json = '{}.json'.format(output)
             os.makedirs(os.path.dirname(output), exist_ok=True)
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
-            
-            notice_files = [file for file in notice_file.split(',') if file]
+
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
 
