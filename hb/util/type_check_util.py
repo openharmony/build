@@ -17,7 +17,7 @@
 #
 
 from exceptions.ohos_exception import OHOSException
-from helper.noInstance import NoInstance
+from hb.helper.no_instance import NoInstance
 
 
 class TypeCheckUtil(metaclass=NoInstance):
