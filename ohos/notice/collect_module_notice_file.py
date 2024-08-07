@@ -119,12 +119,11 @@ def do_collect_notice_files(options, depfiles: str):
                                    README_FILE_NAME)
         if not os.path.exists(readme_path):
             readme_path = find_opensource_recursively(os.path.abspath(options.module_source_dir))
+        other_files.extend(find_other_files(options.module_source_dir))
         if readme_path is not None:
             depfiles.append(readme_path)
             notice_file_info = get_license_from_readme(readme_path)
             notice_file = notice_file_info[0]
-            notice_dir = os.path.dirname(readme_path)
-            other_files.extend(find_other_files(os.path.join(notice_dir, notice_file)))
             module_notice_info['Software'] = "{}".format(notice_file_info[1])
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
