@@ -5,7 +5,7 @@
         "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
         "//arkcompiler/ets_frontend/es2panda:es2panda",
         "//arkcompiler/ets_frontend/es2panda:es2panda_build",
-        "//arkcompiler/ets_frontend/ets2panda/aot:es2panda",
+        "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda",
         "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages",
         "//arkcompiler/runtime_core/assembler:libarkassembler_static",
         "//arkcompiler/runtime_core/isa:isa_combine",
@@ -12107,7 +12107,7 @@
         "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
         "//arkcompiler/ets_frontend/es2panda:es2panda",
         "//arkcompiler/ets_frontend/es2panda:es2panda_build",
-        "//arkcompiler/ets_frontend/ets2panda/aot:es2panda",
+        "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda",
         "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages",
         "//arkcompiler/ets_runtime:ark_jsruntime_public_config",
         "//arkcompiler/ets_runtime:libark_jsruntime_test",
@@ -12460,7 +12460,7 @@
         "//arkcompiler/ets_frontend/es2panda:gen_isa_headers": [
             "//arkcompiler/runtime_core/isa:isa_combine"
         ],
-        "//arkcompiler/ets_frontend/ets2panda/aot:es2panda": [
+        "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda": [
             "//arkcompiler/runtime_core/static_core/assembler:libarktsassembler_package",
             "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase_package",
             "//arkcompiler/runtime_core/static_core/bytecode_optimizer:libarktsbytecodeopt_package",
@@ -15561,10 +15561,10 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:ark_packages": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:es2panda"
+            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:es2panda"
+            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/verifier/tests:gen_test_checksum_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
@@ -27204,7 +27204,7 @@
         "//arkcompiler/ets_frontend/es2panda:gen_isa_headers": [
             "//arkcompiler/runtime_core/isa:isa_combine"
         ],
-        "//arkcompiler/ets_frontend/ets2panda/aot:es2panda": [
+        "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda": [
             "//third_party/bounds_checking_function:libsec_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
@@ -30179,10 +30179,10 @@
             "//third_party/bounds_checking_function:libsec_public_config"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:ark_packages": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:es2panda"
+            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:es2panda"
+            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/static_core/runtime/asm_defines:asm_defines": [
             "//third_party/bounds_checking_function:libsec_public_config",
