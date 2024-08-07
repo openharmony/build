@@ -31655,6 +31655,9 @@
         "//base/web/webview/ohos_nweb:libnweb": [
             "//third_party/libxml2:libxml2"
         ],
+	"//base/web/webview/sa:app_fwk_update_service_interface": [
+	    "//foundation/ability/idl_tool:idl"
+	],
         "//commonlibrary/c_utils/base:utils": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
