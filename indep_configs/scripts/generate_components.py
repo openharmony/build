@@ -52,6 +52,11 @@ def _get_args():
         type=str,
         help="Path of root",
     )
+    parser.add_argument(
+        "-t", "--test",
+        default=1, type=int,
+        help="whether the target contains test type. default 0 , choices: 0 or 1 2",
+    )
     args = parser.parse_args()
     return args
 
@@ -120,6 +125,14 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
         os.makedirs(kernel_link_path, exist_ok=True)
     os.makedirs(kernel_link_path, exist_ok=True)
     _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
+
+
+def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
+    if test_check != 0:
+        googletest_real_path = hpm_cache_path + dependences_json["googletest"]['installPath']
+        googletest_link_path = os.path.join("out", variants, "obj/binarys/third_party/googletest")
+        os.makedirs(googletest_link_path, exist_ok=True)
+        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), os.path.join(googletest_link_path, 'innerapis'))
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
@@ -267,6 +280,7 @@ def main():
     hpm_cache_path = args.hpmcache_path
     variants = args.variants
     root_path = args.root_path
+    test_check = args.test
     project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
     output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
@@ -281,6 +295,7 @@ def main():
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
     _link_kernel_binarys(variants, hpm_cache_path, dependences_json)
+    _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
 
 
 if __name__ == '__main__':
