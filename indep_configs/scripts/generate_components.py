@@ -132,7 +132,8 @@ def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
         googletest_real_path = hpm_cache_path + dependences_json["googletest"]['installPath']
         googletest_link_path = os.path.join("out", variants, "obj/binarys/third_party/googletest")
         os.makedirs(googletest_link_path, exist_ok=True)
-        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), os.path.join(googletest_link_path, 'innerapis'))
+        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
+            os.path.join(googletest_link_path, 'innerapis'))
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
