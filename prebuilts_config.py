@@ -276,10 +276,10 @@ def process_tar(tar_dict, args):
                 continue
             if tar_name == 'llvm':
                 after_extract_folder = os.listdir(os.path.join(download_dir, version))[0]
-                copy_folder(os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src')),
-                            os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_dest')))
-                copy_folder(os.path.join(download_dir, version, after_extract_folder),
-                            os.path.join(code_path, one_type.get('symlink')))
+                symlink_src2dest(os.path.join(download_dir, version, after_extract_folder),
+                                os.path.join(code_path, one_type.get('symlink')))
+                symlink_src2dest(os.path.join(code_path, one_type.get('symlink'), one_type.get('copy_src')),
+                                os.path.join(code_path, one_type.get('symlink'), one_type.get('copy_dest')))
                 continue
             if tar_name in ['ark_tools']:
                 after_extract_folder = os.listdir(os.path.join(download_dir, version))[0]
