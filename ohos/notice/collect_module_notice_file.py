@@ -151,7 +151,6 @@ def do_collect_notice_files(options, depfiles: str):
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
             notice_files = [file for file in notice_file.split(",") if file]
 
-            notice_files = notice_file.split(',')
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
 
