@@ -21,7 +21,7 @@ import re
 import os
 
 from containers.colors import Colors
-from helper.noInstance import NoInstance
+from hb.helper.no_instance import NoInstance
 from resources.global_var import STATUS_FILE
 from util.io_util import IoUtil
 from exceptions.ohos_exception import OHOSException

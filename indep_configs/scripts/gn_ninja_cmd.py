@@ -24,10 +24,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def _run_cmd(cmd: list):
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT,
+                               stderr=subprocess.PIPE,
                                encoding='utf-8')
     for line in iter(process.stdout.readline, ''):
-        print(line)
+        print(line, end='')
+    process_status = process.poll()
+    if process_status:
+        sys.exit(process_status)
 
 
 def _get_args():
@@ -38,9 +41,8 @@ def _get_args():
     return args
 
 
-def _get_all_features_info(root_path) -> dict:
-    _features_info_path = os.path.join(root_path, 'build', 'indep_configs', 'variants', 'default',
-                                       'features.json')
+def _get_all_features_info(root_path, variants) -> dict:
+    _features_info_path = os.path.join(root_path, 'out', 'preloader', variants, 'features.json')
     try:
         _features_json = get_json(_features_info_path)
     except Exception as e:
@@ -49,7 +51,7 @@ def _get_all_features_info(root_path) -> dict:
 
 
 def _gn_cmd(root_path, variants):
-    _features_info = _get_all_features_info(root_path)
+    _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
     for k, v in _features_info.items():
         _args_list.append(f'{k}={str(v).lower()}')
@@ -69,6 +71,7 @@ def _ninja_cmd(root_path, variants):
 def _exec_cmd(root_path, variants):
     gn_cmd = _gn_cmd(root_path, variants)
     _run_cmd(gn_cmd)
+
     ninja_cmd = _ninja_cmd(root_path, variants)
     _run_cmd(ninja_cmd)
 

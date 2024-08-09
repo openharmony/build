@@ -59,23 +59,22 @@ def find_other_files(license_file_path):
     return other_files
 
 
-def find_license_recursively(current_dir: str):
+def find_file_recursively(current_dir: str, target_files: list):
     if is_top_dir(current_dir):
         return None
-    for file in LICENSE_CANDIDATES:
+    for file in target_files:
         candidate = os.path.join(current_dir, file)
-        if os.path.isfile(os.path.join(current_dir, file)):
-            return os.path.join(candidate)
-    return find_license_recursively(os.path.dirname(current_dir))
+        if os.path.isfile(candidate):
+            return candidate
+    return find_file_recursively(os.path.dirname(current_dir), target_files)
 
 
-def find_opensource_recursively(current_dir: str):
-    if is_top_dir(current_dir):
-        return None
-    candidate = os.path.join(current_dir, README_FILE_NAME)
-    if os.path.isfile(candidate):
-        return os.path.join(candidate)
-    return find_opensource_recursively(os.path.dirname(current_dir))
+def find_license(current_dir: str):
+    return find_file_recursively(current_dir, LICENSE_CANDIDATES)
+
+
+def find_opensource(current_dir: str):
+    return find_file_recursively(current_dir, [README_FILE_NAME])
 
 
 def get_license_from_readme(readme_path: str):
@@ -84,7 +83,7 @@ def get_license_from_readme(readme_path: str):
         raise Exception("Error: failed to read {}.".format(readme_path))
 
     notice_file = contents[0].get('License File').strip()
-    notice_name = contents[0].get('Name').strip()  
+    notice_name = contents[0].get('Name').strip()
     notice_version = contents[0].get('Version Number').strip()
     if notice_file is None:
         raise Exception("Error: value of notice file is empty in {}.".format(
@@ -105,7 +104,7 @@ def do_collect_notice_files(options, depfiles: str):
     notice_file = options.license_file
     other_files = []
     if notice_file:
-        opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
+        opensource_file = find_opensource(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
@@ -118,7 +117,7 @@ def do_collect_notice_files(options, depfiles: str):
         readme_path = os.path.join(options.module_source_dir,
                                    README_FILE_NAME)
         if not os.path.exists(readme_path):
-            readme_path = find_opensource_recursively(os.path.abspath(options.module_source_dir))
+            readme_path = find_opensource(os.path.abspath(options.module_source_dir))
         other_files.extend(find_other_files(options.module_source_dir))
         if readme_path is not None:
             depfiles.append(readme_path)
@@ -128,8 +127,8 @@ def do_collect_notice_files(options, depfiles: str):
             module_notice_info['Version'] = "{}".format(notice_file_info[2])
 
     if notice_file is None:
-        notice_file = find_license_recursively(options.module_source_dir)
-        opensource_file = find_opensource_recursively(os.path.abspath(options.module_source_dir))
+        notice_file = find_license(options.module_source_dir)
+        opensource_file = find_opensource(os.path.abspath(options.module_source_dir))
         if opensource_file is not None and os.path.exists(opensource_file):
             other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
@@ -138,7 +137,7 @@ def do_collect_notice_files(options, depfiles: str):
         else:
             module_notice_info['Software'] = ""
             module_notice_info['Version'] = ""
-    
+
     if module_notice_info['Software']:
         module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
         module_notice_info_list.append(module_notice_info)
@@ -151,6 +150,8 @@ def do_collect_notice_files(options, depfiles: str):
             os.makedirs(os.path.dirname(output), exist_ok=True)
             os.makedirs(os.path.dirname(notice_info_json), exist_ok=True)
             notice_files = [file for file in notice_file.split(",") if file]
+
+            notice_files = notice_file.split(',')
             write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles)
 
 

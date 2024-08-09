@@ -18,7 +18,7 @@
 
 import os
 import traceback
-
+import sys
 from exceptions.ohos_exception import OHOSException
 from util.log_util import LogUtil
 from util.io_util import IoUtil
@@ -61,8 +61,9 @@ def throw_exception(func):
                 _type = 'UNKNOWN ERROR TYPE'
                 _desc = 'NO DESCRIPTION'
                 _solution = 'NO SOLUTION'
-
-            _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
+            if not (sys.argv[1] == 'build' and ("--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] 
+                                                or (len(sys.argv) == 4 and sys.argv[-1] == "-t"))):
+                _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
             exit(-1)
     return wrapper
 
