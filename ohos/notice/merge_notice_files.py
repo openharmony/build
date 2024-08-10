@@ -125,23 +125,30 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                 contents = read_json_file(json_filename)
                 if contents is not None and contents not in software_list:
                     software_list.append(contents)
+            software_dict = {}
             for contens_value in software_list:
                 if len(contens_value) > 0:
                     if contens_value[0].get('Software'):
                         software_name = contens_value[0].get('Software').strip()
-                        write_file(output_file, "Software: {}".format(software_name))
+                        if software_name not in software_dict:
+                            software_dict[software_name] = {"Version": "", "Path": []}
                     else:
                         write_file(output_file, "Software: ")
                     if contens_value[0].get('Version'):
                         version = contens_value[0].get('Version').strip()
-                        write_file(output_file, "Version: {}".format(version))
+                        software_dict[software_name]["Version"] = version
                     else:
                         write_file(output_file, "Version: ")
                     if contens_value[0].get('Path'):
                         notice_source_path = contens_value[0].get('Path').strip()
-                        write_file(output_file, "Path: {}".format(notice_source_path))
+                        software_dict[software_name]["Path"].append(notice_source_path)
                     else:
                         write_file(output_file, "Path: ")
+            for software, software_dict in software_dict.items():
+                write_file(output_file, f"Software: {software}")
+                write_file(output_file, f"Version: {software_dict.get('Version')}")
+                for path in software_dict.get("Path"):
+                    write_file(output_file, f"Path: {path}")
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
