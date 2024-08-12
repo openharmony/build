@@ -100,7 +100,7 @@ def parse_gn_list(gn_string):
     """
     if gn_string.startswith('['):
         parser = gn_helpers.GNValueParser(gn_string)
-        return parser.ParseList()
+        return parser.parse_list()
     if len(gn_string):
         return [gn_string]
     return []
