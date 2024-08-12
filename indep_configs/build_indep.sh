@@ -19,7 +19,8 @@ VARIANTS="default"
 if [ -n "$4" ]; then
   VARIANTS=$4
 fi
-rm -rf out
+rm -rf out/$VARIANTS
+rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
 mkdir -p out/$VARIANTS
@@ -36,9 +37,13 @@ HOST_OS="linux"
 NODE_PLATFORM="linux-x64"
 
 PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/current/
+if [ ! -d $PYTHON3_DIR ];then
+    PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/3.10.2/
+fi
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
+
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 if [ -d "binarys/third_party/rust" ];then
     echo "rust directory exists"
