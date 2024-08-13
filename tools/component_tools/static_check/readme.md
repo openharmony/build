@@ -181,7 +181,7 @@ python3 build/tools/component_tools/static_check/csct.py -p base/global
 
 ### 规则3.1 部件编译脚本中只允许引用本部件的路径，禁止引用其他部件的绝对或相对路径。
 
-部件间的依赖都必须使用“externel_deps”，部件编译目标的变量sources、include_dirs、configs、public_configs、deps、public_deps引用其他部件的相对和绝对路径属于非法引入依赖：
+部件间的依赖都必须使用“external_deps”，部件编译目标的变量sources、include_dirs、configs、public_configs、deps、public_deps引用其他部件的相对和绝对路径属于非法引入依赖：
 
 - sources
 
@@ -189,7 +189,7 @@ python3 build/tools/component_tools/static_check/csct.py -p base/global
 
 - include_dirs
 
-  include_dirs只允许引用本部件的头文件搜索路径，编译单元对其他部件的接口的依赖都通过externel_deps自动导入。
+  include_dirs只允许引用本部件的头文件搜索路径，编译单元对其他部件的接口的依赖都通过external_deps自动导入。
 
 - configs
 
