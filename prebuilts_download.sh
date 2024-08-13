@@ -191,13 +191,15 @@ fi
 echo "remove ninja in cmake"
 echo "prebuilts_download end"
 
+PYTHON_PATH=$(readlink -f $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
+
 if [[ "${host_platform}" == "linux" ]]; then
-    sed -i "1s%.*%#!/usr/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/3.11.4/bin/pip3.11
+    sed -i "1s%.*%#!/usr/bin/env python3%" "${PYTHON_PATH}/pip3"
 elif [[ "${host_platform}" == "darwin" ]]; then
-    sed -i "" "1s%.*%#!/use/bin/env python3%" ${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/3.11.4/bin/pip3.11
+    sed -i "" "1s%.*%#!/usr/bin/env python3%" "${PYTHON_PATH}/pip3"
 fi
-prebuild_python3_path="$code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/current/bin/python3"
-prebuild_pip3_path="${code_dir}/prebuilts/python/${host_platform}-${host_cpu_prefix}/current/bin/pip3"
+prebuild_python3_path="${PYTHON_PATH}/python3"
+prebuild_pip3_path="${PYTHON_PATH}/pip3"
 $prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto cryptography json5\=\=0.9.6
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
