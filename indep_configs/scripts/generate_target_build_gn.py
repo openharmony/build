@@ -139,11 +139,8 @@ def main():
     elif _test_check == 2:
         inner_kits_list = build_data.get('test')
         deps_list = []
-        if inner_kits_list:
-            for k in inner_kits_list:
-                deps_list.append(k)
-        else:
-            deps_list = []
+        for k in inner_kits_list:
+            deps_list.append(k)
 
     output_path = os.path.join(args.root_path, 'out')
     _output_build_gn(deps_list, output_path, _test_check)
