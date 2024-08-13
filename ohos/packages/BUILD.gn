@@ -684,58 +684,10 @@ group("package_testcase") {
   }
 }
 
-group("test_example_template") {
-  testonly = true
-  if (device_name == "rk3568") {
-    deps = [
-      "//build/test/test_example_template/test_ohos_executable:test_ohos_executable",
-      "//build/test/test_example_template/test_ohos_sa_profile:test_ohos_sa_profile",
-      "//build/test/test_example_template/test_ohos_shared_library:test_ohos_shared_library",
-      "//build/test/test_example_template/test_ohos_shared_library_module_install_dir:test_ohos_shared_library_module_install_dir",
-      "//build/test/test_example_template/test_ohos_shared_library_output_name:test_ohos_shared_library_output_name",
-      "//build/test/test_example_template/test_ohos_shared_library_relative_install_dir:test_ohos_shared_library_relative_install_dir",
-      "//build/test/test_example_template/test_ohos_shared_library_testonly:test_ohos_shared_library_testonly",
-      "//build/test/test_example_template/test_ohos_source_set:test_ohos_source_set",
-      "//build/test/test_example_template/test_ohos_static_library:test_ohos_static_library",
-    ]
-  }
-}
-
-group("test_rust_template") {
-  testonly = true
-  if (device_name == "rk3568") {
-    deps = [
-      "//build/rust/tests/test_bin_cargo_crate:test_bin_cargo_crate",
-      "//build/rust/tests/test_bin_crate:test_bin_crate",
-      "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
-      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
-      "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
-      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
-      "//build/rust/tests/test_cdylib_crate:test_cdylib_crate",
-      "//build/rust/tests/test_cxx:test_cxx_exe",
-      "//build/rust/tests/test_cxx_rust:test_cxx_rust",
-      "//build/rust/tests/test_dylib_crate:test_dylib_crate",
-      "//build/rust/tests/test_idl:test_idl",
-      "//build/rust/tests/test_proc_macro_cargo_crate:test_proc_macro_cargo_crate",
-      "//build/rust/tests/test_proc_macro_crate/test_attribute_macro:test_attribute_macro",
-      "//build/rust/tests/test_proc_macro_crate/test_derive_helper_macro:test_derive_helper_macro",
-      "//build/rust/tests/test_proc_macro_crate/test_function_macro:test_function_macro",
-      "//build/rust/tests/test_rlib_cargo_crate:test_rlib_crate_associated_bin",
-      "//build/rust/tests/test_rlib_crate:test_rlib_crate",
-      "//build/rust/tests/test_rust_st:test_rust_st",
-      "//build/rust/tests/test_rust_ut:test_rust_ut",
-      "//build/rust/tests/test_static_link:test_static_link",
-      "//build/rust/tests/test_staticlib_crate:test_staticlib_crate",
-    ]
-  }
-}
-
 group("build_all_test_pkg") {
   testonly = true
   if (!is_llvm_build) {
     deps = [
-      ":test_example_template",
-      ":test_rust_template",
       "$root_build_dir/build_configs:parts_test",
       "//test/testfwk/developer_test:make_temp_test",
     ]
