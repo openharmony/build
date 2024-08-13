@@ -41,24 +41,44 @@ def _get_args():
     return args
 
 
-def _get_all_features_info(root_path, variants) -> dict:
+def _get_all_features_info(root_path, variants) -> list:
     _features_info_path = os.path.join(root_path, 'out', 'preloader', variants, 'features.json')
+    args_list = []
     try:
         _features_json = get_json(_features_info_path)
+        for key, value in _features_json.get('features').items():
+            if isinstance(value, bool):
+                args_list.append('{}={}'.format(key, str(value).lower()))
+
+            elif isinstance(value, str):
+                args_list.append('{}="{}"'.format(key, value))
+
+            elif isinstance(value, int):
+                args_list.append('{}={}'.format(key, value))
+
+            elif isinstance(value, list):
+                args_list.append('{}="{}"'.format(key, "&&".join(value)))
+
     except Exception as e:
         print('--_get_all_features_info json error--')
-    return _features_json.get('features')
+
+    return args_list
 
 
 def _gn_cmd(root_path, variants):
     _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
-    for k, v in _features_info.items():
-        _args_list.append(f'{k}={str(v).lower()}')
+    _args_list.extend(_features_info)
 
-    _args_info = ' '.join(_args_list)
-    _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen', f'--args={_args_info}']
-    _cmd_list += ['-C', f'out/{variants}']
+    _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
+                 '--args={}'.format(' '.join(_args_list)),
+                 '-C', f'out/{variants}']
+
+    print('Excuting gn command: {} {} --args="{}" {}'.format(
+        f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
+        ' '.join(_args_list).replace('"', "\\\""),
+        ' '.join(_cmd_list[3:])),
+        'info')
     return _cmd_list
 
 
@@ -71,7 +91,6 @@ def _ninja_cmd(root_path, variants):
 def _exec_cmd(root_path, variants):
     gn_cmd = _gn_cmd(root_path, variants)
     _run_cmd(gn_cmd)
-
     ninja_cmd = _ninja_cmd(root_path, variants)
     _run_cmd(ninja_cmd)
 
