@@ -106,22 +106,10 @@ def _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name):
     _symlink_src2dest(real_path, link_path)
 
 
-def _get_target_cpu(code_path, variants):
-    target_cpu_str = ""
-    config_path = os.path.join(code_path, "binarys", "variants", "variants_" + variants, "config", "build_config.json")
-    target_cpu = utils.get_json(config_path).get("target_cpu")
-    if target_cpu == "arm":
-        target_cpu_str = "arm"
-    elif target_cpu == "arm64":
-        target_cpu_str = "aarch64"
-    return target_cpu_str
-
-
-def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu):
-    target_path = target_cpu + "-linux-ohos"
+def _link_kernel_binarys(variants, hpm_cache_path, dependences_json):
     musl_real_path = hpm_cache_path + dependences_json["musl"]['installPath']
-    musl_include_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/include", target_path)
-    musl_lib_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/lib", target_path)
+    musl_include_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/include/arm-linux-ohos")
+    musl_lib_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/lib/arm-linux-ohos")
     os.makedirs(musl_include_link_path, exist_ok=True)
     os.makedirs(musl_lib_link_path, exist_ok=True)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'includes'), musl_include_link_path)
@@ -307,7 +295,7 @@ def main():
     _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
-    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
+    _link_kernel_binarys(variants, hpm_cache_path, dependences_json)
     _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
 
 
