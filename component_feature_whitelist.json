@@ -8,28 +8,6 @@
     "powermgr_lite": [
         "enable_screensaver"
     ],
-    "device_auth": [
-        "deviceauth_hichain_thread_stack_size",
-        "deviceauth_storage_path"
-    ],
-    "huks": [
-        "huks_use_lite_storage",
-        "disable_authenticate",
-        "huks_key_store_path",
-        "ohos_security_huks_mbedtls_porting_path",
-        "huks_use_hardware_root_key",
-        "disable_huks_binary",
-        "huks_use_lite_storage",
-        "disable_authenticate",
-        "huks_config_file",
-        "huks_use_mbedtls",
-        "huks_uid_trust_list_define",
-        "huks_dependency_mbedtls_path",
-        "huks_qemu_enabled"
-    ],
-    "hitrace": [
-        "support_executable_file"
-    ],
     "hichecker": [
         "hichecker_support_asan"
     ],
@@ -85,12 +63,5 @@
     ],
     "graphic_utils_lite": [
         "enable_ohos_graphic_utils_product_config"
-    ],
-    "wpa_supplicant": [
-        "wpa_supplicant_driver_nl80211"
-    ],
-    "libuv": [
-        "libuv_use_ffrt",
-        "use_ffrt"
     ]
 }
