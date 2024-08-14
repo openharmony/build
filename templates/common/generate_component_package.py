@@ -749,8 +749,12 @@ def generate_component_package(out_path, root_path, components_list=None, build_
                            "selinux", "libunwind", "mbedtls", "zlib", "cJSON", "mksh", "toybox", "config_policy",
                            "e2fsprogs", "f2fs-tools", "selinux_adapter", "storage_service"
                            ]
-    else:
+    elif components_list:
         components_list = [component for component in components_list.split(",") if component in _check_list]
+        if not components_list:
+            sys.exit("stop for no target to pack..")
+    else:
+        components_list = _check_list
         if not components_list:
             sys.exit("stop for no target to pack..")
     print('components_list', components_list)
