@@ -24,7 +24,7 @@ target_cpu=$(uname -m | tr '[:upper:]' '[:lower:]')
 # 运行Python命令
 python3 "${script_path}/prebuilts_config.py" --code_path $code_dir --home_path $home_path --config_file $config_file --repo_https https://repo.huaweicloud.com --target_os $target_os --target_cpu $target_cpu
 
-PYTHON_PATH=$(readlink -f ${code_dir}/prebuilts/python/${target_os}-*/*/bin | tail -1)
+PYTHON_PATH=$(realpath ${code_dir}/prebuilts/python/${target_os}-*/*/bin | tail -1)
 
 if [[ "${target_os}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" "${PYTHON_PATH}/pip3"
