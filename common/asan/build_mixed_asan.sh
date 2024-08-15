@@ -150,7 +150,6 @@ make_mixed_asan_img() {
     cp -a "$asan_dir"/system/lib/ld-musl-*-asan.so.1 system/lib/
     if grep -qw LD_PRELOAD system/etc/init/faultloggerd.cfg; then
         sed -i '/LD_PRELOAD/d' system/etc/init/asan.cfg
-        sed -i 's/LD_PRELOAD\s\+/&libasan_helper.z.so:/g' system/etc/init/faultloggerd.cfg
     fi
     test -f system/etc/selinux/config && sed -i 's,enforcing,permissive,g' $_
     sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
