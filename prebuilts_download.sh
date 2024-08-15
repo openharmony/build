@@ -191,7 +191,7 @@ fi
 echo "remove ninja in cmake"
 echo "prebuilts_download end"
 
-PYTHON_PATH=$(readlink -f $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
+PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
 if [[ "${host_platform}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" "${PYTHON_PATH}/pip3"
