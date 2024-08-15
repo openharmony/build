@@ -36,7 +36,7 @@ HOST_DIR="linux-x86"
 HOST_OS="linux"
 NODE_PLATFORM="linux-x64"
 
-PYTHON3_DIR=$(readlink -f ${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/*/ | tail -1)
+PYTHON3_DIR=$(realpath ${SOURCE_ROOT_DIR}/prebuilts/python/${HOST_DIR}/*/ | tail -1)
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
