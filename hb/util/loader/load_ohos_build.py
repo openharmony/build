@@ -638,11 +638,11 @@ class LoadBuildConfig(object):
         return subsystem_config, parts_path_dict
 
 
-def compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
+def compare_subsystem_and_component(subsystem_name, components_name, subsystem_components_whitelist_info,
                                     part_subsystem_component_info, parts_config_path, subsystem_components_list):
     name = ""
     message = ""
-    if components_name in list(subsystem_compoents_whitelist_info.keys()):
+    if components_name in list(subsystem_components_whitelist_info.keys()):
         return
     overrided_components_name = '{}_{}'.format(components_name, 'override')
     if components_name in list(part_subsystem_component_info.keys()) \
@@ -670,9 +670,9 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
                                        "part_subsystem.json")
     part_subsystem_component_info = read_json_file(part_subsystem_file)
 
-    subsystem_compoents_whitelist_file = os.path.join(config.root_path,
-                                                      "build/subsystem_compoents_whitelist.json")
-    subsystem_compoents_whitelist_info = read_json_file(subsystem_compoents_whitelist_file)
+    subsystem_components_whitelist_file = os.path.join(config.root_path,
+                                                      "build/subsystem_components_whitelist.json")
+    subsystem_components_whitelist_info = read_json_file(subsystem_components_whitelist_file)
 
     compile_standard_whitelist_file = os.path.join(config.root_path, "out/preloader", config.product,
                                                    "compile_standard_whitelist.json")
@@ -693,7 +693,7 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
                     parts_config_path))
                 continue
             if not skip_partlist_check:
-                compare_subsystem_and_component(subsystem_name, components_name, subsystem_compoents_whitelist_info,
+                compare_subsystem_and_component(subsystem_name, components_name, subsystem_components_whitelist_info,
                                                 part_subsystem_component_info, parts_config_path,
                                                 subsystem_components_list)
 
