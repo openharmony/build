@@ -83,12 +83,6 @@ ohos_prebuilt_etc("asan.cfg") {
   part_name = "build_framework"
 }
 
-ohos_shared_library("asan_helper") {
-  sources = [ "asan_helper.c" ]
-  subsystem_name = "build"
-  part_name = "build_framework"
-}
-
 copy("asan_unstripped_copy") {
   if (target_cpu == "arm") {
     sources = [ "${clang_base_path}/lib/clang/$clang_version/lib/arm-linux-ohos/libclang_rt.asan.so" ]
