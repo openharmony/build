@@ -126,21 +126,21 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                 if contents is not None and contents not in software_list:
                     software_list.append(contents)
             software_dict = {}
-            for contens_value in software_list:
-                if len(contens_value) > 0:
-                    if contens_value[0].get('Software'):
-                        software_name = contens_value[0].get('Software').strip()
+            for contents_value in software_list:
+                if len(contents_value) > 0:
+                    if contents_value[0].get('Software'):
+                        software_name = contents_value[0].get('Software').strip()
                         if software_name not in software_dict:
                             software_dict[software_name] = {"Version": "", "Path": []}
                     else:
                         write_file(output_file, "Software: ")
-                    if contens_value[0].get('Version'):
-                        version = contens_value[0].get('Version').strip()
+                    if contents_value[0].get('Version'):
+                        version = contents_value[0].get('Version').strip()
                         software_dict[software_name]["Version"] = version
                     else:
                         write_file(output_file, "Version: ")
-                    if contens_value[0].get('Path'):
-                        notice_source_path = contens_value[0].get('Path').strip()
+                    if contents_value[0].get('Path'):
+                        notice_source_path = contents_value[0].get('Path').strip()
                         software_dict[software_name]["Path"].append(notice_source_path)
                     else:
                         write_file(output_file, "Path: ")
