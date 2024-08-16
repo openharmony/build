@@ -18,6 +18,8 @@ import os
 import stat
 import json
 import argparse
+import zipfile
+
 from collections import Counter
 
 sys.path.append(
@@ -751,7 +753,16 @@ def merge_hisysevent_config(yaml_list: str, output_path: str) -> str:
     print("The hisysevent.def {} is generated successfully."
         .format(hisysevent_def_file))
     _close_warning_file()
-    return hisysevent_def_file
+
+    # zip def file
+    hisysevent_def_zip_file = os.path.join(output_path, 'hisysevent.zip')
+    def_zip_file = zipfile.ZipFile(hisysevent_def_zip_file, "w", zipfile.ZIP_DEFLATED)
+    def_zip_file.write(hisysevent_def_file, arcname=os.path.basename(hisysevent_def_file))
+    def_zip_file.close()
+    # remove def file
+    os.remove(hisysevent_def_file)
+
+    return hisysevent_def_zip_file
 
 
 def main(argv) -> int:
