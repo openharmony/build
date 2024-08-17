@@ -120,6 +120,19 @@ def get_license_from_readme(readme_path: str):
             notice_names, notice_versions
 
 
+def add_path_to_module_notice(module_notice_info, module_notice_info_list, options):
+    if isinstance(module_notice_info['Software'], list):
+        softwares = module_notice_info['Software']
+        versions = module_notice_info['Version']
+        for software, version in zip(softwares, versions):
+            module_notice_info_list.append({'Software': software, 'Version': version})
+        module_notice_info_list[-1]['Path'] = "/{}".format(options.module_source_dir[5:])
+    else:
+        if module_notice_info['Software']:
+            module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
+            module_notice_info_list.append(module_notice_info)
+
+
 def do_collect_notice_files(options, depfiles: str):
     module_notice_info_list = []
     module_notice_info = {}
@@ -161,17 +174,8 @@ def do_collect_notice_files(options, depfiles: str):
         else:
             module_notice_info['Software'] = ""
             module_notice_info['Version'] = ""
-
-    if isinstance(module_notice_info['Software'], list):
-        softwares = module_notice_info['Software']
-        versions = module_notice_info['Version']
-        for software, version in zip(softwares, versions):
-            module_notice_info_list.append({'Software': software, 'Version': version})
-        module_notice_info_list[-1]['Path'] = "/{}".format(options.module_source_dir[5:])
-    else:
-        if module_notice_info['Software']:
-            module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
-            module_notice_info_list.append(module_notice_info)
+    
+    add_path_to_module_notice(module_notice_info, module_notice_info_list, options)
 
     if notice_file:
         if other_files:
