@@ -49,7 +49,6 @@ XML_ESCAPE_TABLE = {
 }
 
 
-
 def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []
@@ -126,30 +125,32 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                 contents = read_json_file(json_filename)
                 if contents is not None and contents not in software_list:
                     software_list.append(contents)
-            software_dict = {}
+                        software_dict = {}
             for contents_value in software_list:
                 if len(contents_value) > 0:
-                    if contents_value[0].get('Software'):
-                        software_name = contents_value[0].get('Software').strip()
-                        if software_name not in software_dict:
-                            software_dict[software_name] = {"Version": "", "Path": []}
-                    else:
-                        write_file(output_file, "Software: ")
-                    if contents_value[0].get('Version'):
-                        version = contents_value[0].get('Version').strip()
-                        software_dict[software_name]["Version"] = version
-                    else:
-                        write_file(output_file, "Version: ")
-                    if contents_value[0].get('Path'):
-                        notice_source_path = contents_value[0].get('Path').strip()
-                        software_dict[software_name]["Path"].append(notice_source_path)
-                    else:
-                        write_file(output_file, "Path: ")
-            for software, software_dict in software_dict.items():
+                    for val in contents_value:
+                        if val.get('Software'):
+                            software_name = val.get('Software').strip()
+                            if software_name not in software_dict:
+                                software_dict[software_name] = {"Version": "", "Path": []}
+                        else:
+                            write_file(output_file, "Software: ")
+                        if val.get('Version'):
+                            version = val.get('Version').strip()
+                            software_dict[software_name]["Version"] = version
+                        else:
+                            write_file(output_file, "Version: ")
+                        if val.get('Path'):
+                            notice_source_path = val.get('Path').strip()
+                            software_dict[software_name]["Path"].append(notice_source_path)
+                        # else:
+                        #     write_file(output_file, "Path: ")
+            for software, software_value in software_dict.items():
                 write_file(output_file, f"Software: {software}")
-                write_file(output_file, f"Version: {software_dict.get('Version')}")
-                for path in software_dict.get("Path"):
-                    write_file(output_file, f"Path: {path}")
+                write_file(output_file, f"Version: {software_value.get('Version')}")
+                if software_value.get("Path"):
+                    for path in software_value.get("Path"):
+                        write_file(output_file, f"Path: {path}")
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
                 write_file(output_file, temp_file_hd.read())
