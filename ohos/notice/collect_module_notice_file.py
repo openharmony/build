@@ -59,7 +59,6 @@ def find_other_files(license_file_path):
     return other_files
 
 
-
 def find_file_recursively(current_dir: str, target_files: list):
     if is_top_dir(current_dir):
         return None
@@ -83,20 +82,42 @@ def get_license_from_readme(readme_path: str):
     if contents is None:
         raise Exception("Error: failed to read {}.".format(readme_path))
 
-    notice_file = contents[0].get('License File').strip()
-    notice_name = contents[0].get('Name').strip()
-    notice_version = contents[0].get('Version Number').strip()
-    if notice_file is None:
-        raise Exception("Error: value of notice file is empty in {}.".format(
-            readme_path))
-    if notice_name is None:
-        raise Exception("Error: Name of notice file is empty in {}.".format(
-            readme_path))
-    if notice_version is None:
-        raise Exception("Error: Version Number of notice file is empty in {}.".format(
-            readme_path))
+    if len(contents) <= 1:
+        notice_file = contents[0].get('License File').strip()
+        notice_name = contents[0].get('Name').strip()
+        notice_version = contents[0].get('Version Number').strip()
+        if notice_file is None:
+            raise Exception("Error: value of notice file is empty in {}.".format(
+                readme_path))
+        if notice_name is None:
+            raise Exception("Error: Name of notice file is empty in {}.".format(
+                readme_path))
+        if notice_version is None:
+            raise Exception("Error: Version Number of notice file is empty in {}.".format(
+                readme_path))
 
-    return os.path.join(os.path.dirname(readme_path), notice_file), notice_name, notice_version
+        return os.path.join(os.path.dirname(readme_path), notice_file), notice_name, notice_version
+    else:
+        notice_files = []
+        notice_names = []
+        notice_versions = []
+        for content in contents:
+            notice_files.append(content.get('License File').strip())
+            notice_names.append(content.get('Name').strip())
+            notice_versions.append(content.get('Version Number').strip())
+            
+        if notice_files is None:
+            raise Exception("Error: value of notice file is empty in {}.".format(
+                readme_path))
+        if notice_names is None:
+            raise Exception("Error: Name of notice file is empty in {}.".format(
+                readme_path))
+        if notice_versions is None:
+            raise Exception("Error: Version Number of notice file is empty in {}.".format(
+                readme_path))
+
+        return [os.path.join(os.path.dirname(readme_path), file) for file in notice_files], \
+            notice_names, notice_versions
 
 
 def do_collect_notice_files(options, depfiles: str):
@@ -109,8 +130,8 @@ def do_collect_notice_files(options, depfiles: str):
         if opensource_file is not None and os.path.exists(opensource_file):
             other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
-            module_notice_info['Software'] = "{}".format(notice_file_info[1])
-            module_notice_info['Version'] = "{}".format(notice_file_info[2])
+            module_notice_info['Software'] = notice_file_info[1]
+            module_notice_info['Version'] = notice_file_info[2]
         else:
             module_notice_info['Software'] = ""
             module_notice_info['Version'] = ""
@@ -124,8 +145,10 @@ def do_collect_notice_files(options, depfiles: str):
             depfiles.append(readme_path)
             notice_file_info = get_license_from_readme(readme_path)
             notice_file = notice_file_info[0]
-            module_notice_info['Software'] = "{}".format(notice_file_info[1])
-            module_notice_info['Version'] = "{}".format(notice_file_info[2])
+            if isinstance(notice_file, list):
+                notice_file = ",".join(notice_file)
+            module_notice_info['Software'] = notice_file_info[1]
+            module_notice_info['Version'] = notice_file_info[2]
 
     if notice_file is None:
         notice_file = find_license(options.module_source_dir)
@@ -133,15 +156,22 @@ def do_collect_notice_files(options, depfiles: str):
         if opensource_file is not None and os.path.exists(opensource_file):
             other_files.extend(find_other_files(opensource_file))
             notice_file_info = get_license_from_readme(opensource_file)
-            module_notice_info['Software'] = "{}".format(notice_file_info[1])
-            module_notice_info['Version'] = "{}".format(notice_file_info[2])
+            module_notice_info['Software'] = notice_file_info[1]
+            module_notice_info['Version'] = notice_file_info[2]
         else:
             module_notice_info['Software'] = ""
             module_notice_info['Version'] = ""
 
-    if module_notice_info['Software']:
-        module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
-        module_notice_info_list.append(module_notice_info)
+    if isinstance(module_notice_info['Software'], list):
+        softwares = module_notice_info['Software']
+        versions = module_notice_info['Version']
+        for software, version in zip(softwares, versions):
+            module_notice_info_list.append({'Software': software, 'Version': version})
+        module_notice_info_list[-1]['Path'] = "/{}".format(options.module_source_dir[5:])
+    else:
+        if module_notice_info['Software']:
+            module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
+            module_notice_info_list.append(module_notice_info)
 
     if notice_file:
         if other_files:
