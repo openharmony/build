@@ -49,6 +49,7 @@ XML_ESCAPE_TABLE = {
 }
 
 
+
 def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []

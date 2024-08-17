@@ -59,6 +59,7 @@ def find_other_files(license_file_path):
     return other_files
 
 
+
 def find_file_recursively(current_dir: str, target_files: list):
     if is_top_dir(current_dir):
         return None
