@@ -125,7 +125,7 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                 contents = read_json_file(json_filename)
                 if contents is not None and contents not in software_list:
                     software_list.append(contents)
-                        software_dict = {}
+            software_dict = {}
             for contents_value in software_list:
                 if len(contents_value) > 0:
                     for val in contents_value:
@@ -143,8 +143,6 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                         if val.get('Path'):
                             notice_source_path = val.get('Path').strip()
                             software_dict[software_name]["Path"].append(notice_source_path)
-                        # else:
-                        #     write_file(output_file, "Path: ")
             for software, software_value in software_dict.items():
                 write_file(output_file, f"Software: {software}")
                 write_file(output_file, f"Version: {software_value.get('Version')}")
