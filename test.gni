@@ -188,13 +188,17 @@ template("ohos_unittest") {
 
 template("ohos_moduletest") {
   _ohos_test(target_name) {
+    testonly = true
     forward_variables_from(invoker, "*")
     test_type = "moduletest"
     deps = []
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    deps += [ "//third_party/googletest:gtest_main" ]
+    if (defined(invoker.external_deps)) {
+      external_deps += invoker.external_deps
+    }
+    external_deps += [ "googletest:gtest_main" ]
   }
 }
 
@@ -207,16 +211,19 @@ template("ohos_systemtest") {
 
 template("ohos_performancetest") {
   _ohos_test(target_name) {
+    testonly = true
     forward_variables_from(invoker, "*")
     test_type = "performance"
     deps = []
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    deps += [
-      "//test/testfwk/developer_test/aw/cxx/hwext:performance_test_static",
-      "//third_party/googletest:gtest_main",
-    ]
+    deps +=
+        [ "//test/testfwk/developer_test/aw/cxx/hwext:performance_test_static" ]
+    if (defined(invoker.external_deps)) {
+      external_deps += invoker.external_deps
+    }
+    external_deps += [ "googletest:gtest_main" ]
   }
 }
 
