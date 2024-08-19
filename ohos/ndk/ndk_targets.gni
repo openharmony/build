@@ -37,6 +37,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/network/netstack/net_websocket:websocket_header",
   "//interface/sdk_c/network/netssl:libnet_ssl_ndk",
   "//interface/sdk_c/network/netssl:net_ssl_header",
+  "//interface/sdk_c/security/access_token:libability_access_control",
+  "//interface/sdk_c/security/access_token:accesstoken_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
   "//interface/sdk_c/security/asset:libasset_ndk",
