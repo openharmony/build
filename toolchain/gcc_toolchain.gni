@@ -41,6 +41,7 @@ declare_args() {
 
 declare_args() {
   share_ccache = ""
+  toolchain_uses_remoteexec = False
 }
 
 # When the arg is set via args.gn, it applies to all toolchains. In order to not
@@ -164,7 +165,6 @@ template("gcc_toolchain") {
     # When the invoker has explicitly overridden remote_execution, otherwise default
     # to the global one. This works because the only reasonable override
     # that toolchains might supply for these values are to force-disable them.
-    toolchain_uses_remoteexec = False
     if (defined(toolchain_args.remote_execution)) {
       toolchain_uses_remoteexec = toolchain_args.remote_execution
     } else if (defined(remote_execution)) {
