@@ -315,37 +315,11 @@ template("ohos_executable") {
     pac_ret = false
     bti = false
     if (defined(invoker.branch_protector_ret)) {
-      if (invoker.branch_protector_ret == "pac_ret") {
-        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-        foreach(config, configs) {
-          if (config ==
-              "//build/config/security:stack_protector_ret_strong_config") {
-            configs -=
-                [ "//build/config/security:stack_protector_ret_strong_config" ]
-          }
-        }
+      if (invoker.branch_protector_ret == "pac_ret" ||
+          invoker.branch_protector_ret == "stack_protector_ret_all") {
         if (support_branch_protector_pac_ret) {
           pac_ret = true
-        } else {
-          configs +=
-              [ "//build/config/security:stack_protector_ret_all_config" ]
-        }
-      }
-
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_all") {
-        configs -=
-            [ "//build/config/security:stack_protector_ret_strong_config" ]
-        configs += [ "//build/config/security:stack_protector_ret_all_config" ]
-      }
-
-      # Nothing to do, supported by default.
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_strong") {
-      }
-    } else {
-      if (support_stack_protector_ret) {
-        if (defined(invoker.stack_protector_ret)) {
+        } else if (support_stack_protector_ret) {
           foreach(config, configs) {
             if (config ==
                 "//build/config/security:stack_protector_ret_strong_config") {
@@ -354,12 +328,42 @@ template("ohos_executable") {
               ]
             }
           }
-          if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        }
+      }
+
+      # Nothing to do, supported by default.
+      if (support_stack_protector_ret &&
+          invoker.branch_protector_ret == "stack_protector_ret_strong") {
+      }
+    } else {
+      if (defined(invoker.stack_protector_ret)) {
+        if (invoker.stack_protector_ret) {
+          if (support_branch_protector_pac_ret) {
+            pac_ret = true
+          } else if (support_stack_protector_ret) {
+            foreach(config, configs) {
+              if (config ==
+                  "//build/config/security:stack_protector_ret_strong_config") {
+                configs -= [
+                  "//build/config/security:stack_protector_ret_strong_config",
+                ]
+              }
+            }
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
-          } else {
-            configs += [ "//build/config/security:stack_protector_config" ]
           }
+        } else {
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
+          configs += [ "//build/config/security:stack_protector_config" ]
         }
       }
     }
@@ -894,37 +898,11 @@ template("ohos_shared_library") {
     pac_ret = false
     bti = false
     if (defined(invoker.branch_protector_ret)) {
-      if (invoker.branch_protector_ret == "pac_ret") {
-        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-        foreach(config, configs) {
-          if (config ==
-              "//build/config/security:stack_protector_ret_strong_config") {
-            configs -=
-                [ "//build/config/security:stack_protector_ret_strong_config" ]
-          }
-        }
+      if (invoker.branch_protector_ret == "pac_ret" ||
+          invoker.branch_protector_ret == "stack_protector_ret_all") {
         if (support_branch_protector_pac_ret) {
           pac_ret = true
-        } else {
-          configs +=
-              [ "//build/config/security:stack_protector_ret_all_config" ]
-        }
-      }
-
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_all") {
-        configs -=
-            [ "//build/config/security:stack_protector_ret_strong_config" ]
-        configs += [ "//build/config/security:stack_protector_ret_all_config" ]
-      }
-
-      # Nothing to do, supported by default.
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_strong") {
-      }
-    } else {
-      if (support_stack_protector_ret) {
-        if (defined(invoker.stack_protector_ret)) {
+        } else if (support_stack_protector_ret) {
           foreach(config, configs) {
             if (config ==
                 "//build/config/security:stack_protector_ret_strong_config") {
@@ -933,12 +911,42 @@ template("ohos_shared_library") {
               ]
             }
           }
-          if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        }
+      }
+
+      # Nothing to do, supported by default.
+      if (support_stack_protector_ret &&
+          invoker.branch_protector_ret == "stack_protector_ret_strong") {
+      }
+    } else {
+      if (defined(invoker.stack_protector_ret)) {
+        if (invoker.stack_protector_ret) {
+          if (support_branch_protector_pac_ret) {
+            pac_ret = true
+          } else if (support_stack_protector_ret) {
+            foreach(config, configs) {
+              if (config ==
+                  "//build/config/security:stack_protector_ret_strong_config") {
+                configs -= [
+                  "//build/config/security:stack_protector_ret_strong_config",
+                ]
+              }
+            }
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
-          } else {
-            configs += [ "//build/config/security:stack_protector_config" ]
           }
+        } else {
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
+          configs += [ "//build/config/security:stack_protector_config" ]
         }
       }
     }
@@ -1373,37 +1381,11 @@ template("ohos_static_library") {
     pac_ret = false
     bti = false
     if (defined(invoker.branch_protector_ret)) {
-      if (invoker.branch_protector_ret == "pac_ret") {
-        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-        foreach(config, configs) {
-          if (config ==
-              "//build/config/security:stack_protector_ret_strong_config") {
-            configs -=
-                [ "//build/config/security:stack_protector_ret_strong_config" ]
-          }
-        }
+      if (invoker.branch_protector_ret == "pac_ret" ||
+          invoker.branch_protector_ret == "stack_protector_ret_all") {
         if (support_branch_protector_pac_ret) {
           pac_ret = true
-        } else {
-          configs +=
-              [ "//build/config/security:stack_protector_ret_all_config" ]
-        }
-      }
-
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_all") {
-        configs -=
-            [ "//build/config/security:stack_protector_ret_strong_config" ]
-        configs += [ "//build/config/security:stack_protector_ret_all_config" ]
-      }
-
-      # Nothing to do, supported by default.
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_strong") {
-      }
-    } else {
-      if (support_stack_protector_ret) {
-        if (defined(invoker.stack_protector_ret)) {
+        } else if (support_stack_protector_ret) {
           foreach(config, configs) {
             if (config ==
                 "//build/config/security:stack_protector_ret_strong_config") {
@@ -1412,12 +1394,42 @@ template("ohos_static_library") {
               ]
             }
           }
-          if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        }
+      }
+
+      # Nothing to do, supported by default.
+      if (support_stack_protector_ret &&
+          invoker.branch_protector_ret == "stack_protector_ret_strong") {
+      }
+    } else {
+      if (defined(invoker.stack_protector_ret)) {
+        if (invoker.stack_protector_ret) {
+          if (support_branch_protector_pac_ret) {
+            pac_ret = true
+          } else if (support_stack_protector_ret) {
+            foreach(config, configs) {
+              if (config ==
+                  "//build/config/security:stack_protector_ret_strong_config") {
+                configs -= [
+                  "//build/config/security:stack_protector_ret_strong_config",
+                ]
+              }
+            }
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
-          } else {
-            configs += [ "//build/config/security:stack_protector_config" ]
           }
+        } else {
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
+          configs += [ "//build/config/security:stack_protector_config" ]
         }
       }
     }
@@ -1647,37 +1659,11 @@ template("ohos_source_set") {
     pac_ret = false
     bti = false
     if (defined(invoker.branch_protector_ret)) {
-      if (invoker.branch_protector_ret == "pac_ret") {
-        # We need to remove stack_protector_ret_strong_config because it's conflict with pac-ret.
-        foreach(config, configs) {
-          if (config ==
-              "//build/config/security:stack_protector_ret_strong_config") {
-            configs -=
-                [ "//build/config/security:stack_protector_ret_strong_config" ]
-          }
-        }
+      if (invoker.branch_protector_ret == "pac_ret" ||
+          invoker.branch_protector_ret == "stack_protector_ret_all") {
         if (support_branch_protector_pac_ret) {
           pac_ret = true
-        } else {
-          configs +=
-              [ "//build/config/security:stack_protector_ret_all_config" ]
-        }
-      }
-
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_all") {
-        configs -=
-            [ "//build/config/security:stack_protector_ret_strong_config" ]
-        configs += [ "//build/config/security:stack_protector_ret_all_config" ]
-      }
-
-      # Nothing to do, supported by default.
-      if (support_stack_protector_ret &&
-          invoker.branch_protector_ret == "stack_protector_ret_strong") {
-      }
-    } else {
-      if (support_stack_protector_ret) {
-        if (defined(invoker.stack_protector_ret)) {
+        } else if (support_stack_protector_ret) {
           foreach(config, configs) {
             if (config ==
                 "//build/config/security:stack_protector_ret_strong_config") {
@@ -1686,12 +1672,42 @@ template("ohos_source_set") {
               ]
             }
           }
-          if (invoker.stack_protector_ret) {
+          configs +=
+              [ "//build/config/security:stack_protector_ret_all_config" ]
+        }
+      }
+
+      # Nothing to do, supported by default.
+      if (support_stack_protector_ret &&
+          invoker.branch_protector_ret == "stack_protector_ret_strong") {
+      }
+    } else {
+      if (defined(invoker.stack_protector_ret)) {
+        if (invoker.stack_protector_ret) {
+          if (support_branch_protector_pac_ret) {
+            pac_ret = true
+          } else if (support_stack_protector_ret) {
+            foreach(config, configs) {
+              if (config ==
+                  "//build/config/security:stack_protector_ret_strong_config") {
+                configs -= [
+                  "//build/config/security:stack_protector_ret_strong_config",
+                ]
+              }
+            }
             configs +=
                 [ "//build/config/security:stack_protector_ret_all_config" ]
-          } else {
-            configs += [ "//build/config/security:stack_protector_config" ]
           }
+        } else {
+          foreach(config, configs) {
+            if (config ==
+                "//build/config/security:stack_protector_ret_strong_config") {
+              configs -= [
+                "//build/config/security:stack_protector_ret_strong_config",
+              ]
+            }
+          }
+          configs += [ "//build/config/security:stack_protector_config" ]
         }
       }
     }
