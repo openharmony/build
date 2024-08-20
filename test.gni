@@ -192,6 +192,7 @@ template("ohos_moduletest") {
     forward_variables_from(invoker, "*")
     test_type = "moduletest"
     deps = []
+    external_deps = []
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
@@ -215,6 +216,7 @@ template("ohos_performancetest") {
     forward_variables_from(invoker, "*")
     test_type = "performance"
     deps = []
+    external_deps = []
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
