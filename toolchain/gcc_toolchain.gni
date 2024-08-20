@@ -41,7 +41,7 @@ declare_args() {
 
 declare_args() {
   share_ccache = ""
-  toolchain_uses_remoteexec = False
+  toolchain_uses_remoteexec = false
 }
 
 # When the arg is set via args.gn, it applies to all toolchains. In order to not
