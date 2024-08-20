@@ -142,10 +142,10 @@ def check_part_deps(args, part_pattern: str, path_parts_info: dict, compile_stan
             if dep_part not in parts_src_info and dep_part in third_party_allow_info:
                 print("[0/0] WARNING: deps third_party '{dep_part}' not configured in part config json, "
                     f"target: '{args.target_path}', deps: '{dep}'")
-                else dep_part not in parts_src_info and dep_part not in third_party_allow_info:
-                    raise Exception(
-                        f"deps third_party '{dep_part}' not configured in part config json, "
-                        f"target: '{args.target_path}', deps: '{dep}'")
+            else dep_part not in parts_src_info and dep_part not in third_party_allow_info:
+                raise Exception(
+                    f"deps third_party '{dep_part}' not configured in part config json, "
+                    f"target: '{args.target_path}', deps: '{dep}'")
                         
             tips_info = "{} depend part {}, need set part deps {} info to".format(
                 args.target_path, dep, dep_part)
