@@ -17,7 +17,7 @@ import sys
 import os
 import shutil
 import tarfile
-import optparse
+import argparse
 from util import build_utils
 
 sys.path.append(
@@ -26,8 +26,6 @@ sys.path.append(
 from scripts.util.file_utils import read_json_file  # noqa: E402
 
 RELEASE_FILENAME = 'README.OpenSource'
-scan_dir_list = ['third_party', 'kernel', 'device', 'drivers']
-scan_licenses = ['GPL', 'LGPL']
 
 
 def _copy_opensource_file(opensource_config_file: str, top_dir: str, package_dir: str) -> bool:
@@ -88,14 +86,13 @@ def _collect_opensource(options, package_dir: str):
     # get the source top directory to be scan
     top_dir = options.root_dir
 
-    # add extend scan directory
-    ext_scan_dirs = options.ext_scan_dirs
-    if ext_scan_dirs:
-        scan_dir_list.extend(ext_scan_dirs.split(":"))
-    # add extend scan license
-    ext_scan_licenses = options.ext_scan_licenses
-    if ext_scan_licenses:
-        scan_licenses.extend(ext_scan_licenses.split(":"))
+    # processing scan dir and license, split by colon
+    scan_dir_list = options.scan_dirs.split(":")
+    if not scan_dir_list:
+        raise Exception("empty scan dir, please check the value of osp_scan_dirs.")
+    scan_licenses = options.scan_licenses.split(":")
+    if not scan_licenses:
+        raise Exception("empty scan licenses, please check the value of osp_scan_licenses.")
 
     # scan the target dir and copy release code to out/opensource dir
     # remove duplicate scan dir
@@ -122,17 +119,17 @@ def _tar_opensource_package_file(options, package_dir: str) -> int:
 
 def main(args) -> int:
     """generate open source packages to release."""
-    parser = optparse.OptionParser()
+    parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
-    parser.add_option('--output', help='output')
-    parser.add_option('--root-dir', help='source root directory')
+    parser.add_argument('--output', required=True, help='output')
+    parser.add_argument('--root-dir', required=True, help='source root directory')
+    parser.add_argument('--scan-dirs', required=True, help='extended scan directory')
+    parser.add_argument('--scan-licenses', required=True, help='extended scan licenses')
 
     # add optional extended parameters
-    parser.add_option('--ext-scan-dirs', help='extended scan directory')
-    parser.add_option('--ext-scan-licenses', help='extended scan licenses')
-    parser.add_option('--only-collect-file', action='store_true', help='need post process, only collect file')
+    parser.add_argument('--only-collect-file', action='store_true', help='need post process, only collect file')
 
-    options, _ = parser.parse_args(args)
+    options = parser.parse_args(args)
 
     # need post process, only collection is required
     if options.only_collect_file:
