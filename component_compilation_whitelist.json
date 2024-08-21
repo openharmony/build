@@ -141,7 +141,6 @@
         "//third_party/gstreamer/gstplugins_base:gstplugins_base_packages",
         "//third_party/gstreamer/gstplugins_good:gstplugins_good_packages",
         "//third_party/gstreamer/gstreamer:gstreamer_packages",
-        "//third_party/icu/icu4c:ohos_icudat",
         "//third_party/icu/icu4c:static_icui18n",
         "//third_party/icu/icu4c:static_icuuc",
         "//third_party/iptables:iptables",
@@ -12252,7 +12251,6 @@
         "//third_party/gstreamer/gstreamer:gstreamer_packages",
         "//third_party/icu/icu4c/source/common:icu_font",
         "//third_party/icu/icu4c:icu_config",
-        "//third_party/icu/icu4c:ohos_icudat",
         "//third_party/icu/icu4c:shared_icui18n",
         "//third_party/icu/icu4c:shared_icuuc",
         "//third_party/icu/icu4c:static_icui18n",
@@ -15817,7 +15815,6 @@
             "//third_party/libxml2:xml2"
         ],
         "//base/global/i18n/frameworks/intl:intl_util": [
-            "//third_party/icu/icu4c:ohos_icudat",
             "//third_party/libxml2:xml2"
         ],
         "//base/global/i18n/frameworks/zone/test:zone_util_test": [
@@ -15827,7 +15824,6 @@
             "//third_party/libxml2:xml2"
         ],
         "//base/global/i18n/frameworks/zone:zone_util": [
-            "//third_party/icu/icu4c:ohos_icudat",
             "//third_party/libxml2:xml2"
         ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr_win": [
@@ -30353,7 +30349,6 @@
             "//third_party/libphonenumber/cpp:geocoding"
         ],
         "//base/global/i18n/frameworks/intl:intl_util": [
-            "//third_party/icu/icu4c:ohos_icudat",
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/libphonenumber/cpp:phonenumber_standard",
@@ -30361,7 +30356,6 @@
             "//third_party/libxml2:xml2"
         ],
         "//base/global/i18n/frameworks/zone:zone_util": [
-            "//third_party/icu/icu4c:ohos_icudat",
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/libphonenumber/cpp:phonenumber_standard",
