@@ -22,16 +22,13 @@ import re
 from pathlib import Path
 import subprocess
 
-#sys.path.append(os.path.dirname(
-#        os.path.abspath(__file__)))
 from resources.global_var import ROOT_CONFIG_FILE
 from log_util import LogUtil
 from io_util import IoUtil
 
-#ROOT_CONFIG_FILE = "/mnt/dev/linyy/ohos_master/out/ohos_config.json"
-
 GB_CONSTANT = 1024 ** 3
 MEM_CONSTANT = 1024
+
 
 class Monitor():
     def __init__(self):
@@ -115,7 +112,7 @@ class Monitor():
             sys.exit(-1)
 
         output = os.popen(f"tail -n 200 {log_path}").read()
-        while "c overall build overlap rate" not in output or "OHOS ERROR" not in output and os.path.exists(log_path):
+        while "build result" not in output and os.path.exists(log_path):
             now_time = datetime.now().strftime("%H:%M:%S")
             self.now_times.append(now_time)
             usr_cpu, sys_cpu, idle_cpu = self.collect_cpu_info()
@@ -133,8 +130,6 @@ class Monitor():
             LogUtil.hb_info(f"Total Memory: {total_mem}GB")
             LogUtil.hb_info(f"Free Memory: {free_mem}GB")
             LogUtil.hb_info(f"Swap Memory: {swap_mem}GB")
-            # if Path(os.path.join(os.path.dirname(log_path), "build.trace.gz")).exists():
-            #    break
             time.sleep(30)
             output = os.popen(f"tail -n 200 {log_path}").read()
         
