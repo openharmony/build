@@ -274,7 +274,7 @@ declare_args() {
 }
 
 declare_args() {
-  scene_board_enabled = false
+  window_manager_use_sceneboard = false
 }
 
 # Compile and generate output directory
