@@ -1,0 +1,199 @@
+# Copyright (c) 2022 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/python.gni")
+import("//build/ohos.gni")
+
+template("ohos_prebuilt_seccomp") {
+  if (!build_seccomp) {
+    group(target_name) {
+      not_needed(invoker, "*")
+    }
+  } else {
+    assert(defined(invoker.sources),
+           "source must be defined for ${target_name}.")
+    assert(defined(invoker.filtername),
+           "source must be defined for ${target_name}.")
+    assert(
+        defined(invoker.process_type) &&
+            (invoker.process_type == "app" || invoker.process_type == "system"),
+        "process_type must be defined for ${target_name}, and the type must be app or system")
+
+    _seccomp_filter_target = "gen_${target_name}"
+    _output_name = "${invoker.filtername}_filter"
+    _seccomp_filter_file = target_gen_dir + "/${_output_name}.c"
+    _syscall_to_nr_arm_name = "${target_name}_syscall_to_nr_arm"
+    _syscall_to_nr_arm64_name = "${target_name}_syscall_to_nr_arm64"
+    _syscall_to_nr_riscv64_name = "${target_name}_syscall_to_nr_riscv64"
+    _blocklist_file_name = "//build/config/components/init/seccomp/seccomp_policy/${invoker.process_type}.blocklist.seccomp.policy"
+    _key_process_file_name = "//build/config/components/init/seccomp/seccomp_policy/privileged_process.seccomp.policy"
+
+    action(_syscall_to_nr_arm_name) {
+      script = "${clang_base_path}/bin/clang"
+      output_dir =
+          target_gen_dir + "/${_seccomp_filter_target}/libsyscall_to_nr_arm"
+      args = [
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include/asm-arm"),
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include"),
+        "-dD",
+        "-E",
+        "-Wall",
+        "-nostdinc",
+        "-o",
+        rebase_path(output_dir),
+        rebase_path(
+            "//build/config/components/init/seccomp/gen_syscall_name_nrs.c"),
+      ]
+
+      outputs = [ output_dir ]
+    }
+
+    action(_syscall_to_nr_arm64_name) {
+      script = "${clang_base_path}/bin/clang"
+      output_dir =
+          target_gen_dir + "/${_seccomp_filter_target}/libsyscall_to_nr_arm64"
+      args = [
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include/asm-arm64"),
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include"),
+        "-dD",
+        "-E",
+        "-Wall",
+        "-nostdinc",
+        "-o",
+        rebase_path(output_dir),
+        rebase_path(
+            "//build/config/components/init/seccomp/gen_syscall_name_nrs.c"),
+      ]
+
+      outputs = [ output_dir ]
+    }
+    action(_syscall_to_nr_riscv64_name) {
+      script = "${clang_base_path}/bin/clang"
+      output_dir =
+          target_gen_dir + "/${_seccomp_filter_target}/libsyscall_to_nr_riscv64"
+      args = [
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include/asm-riscv"),
+        "-I",
+        rebase_path(
+            "//kernel/linux/patches/${linux_kernel_version}/prebuilts/usr/include"),
+        "-dD",
+        "-E",
+        "-Wall",
+        "-nostdinc",
+        "-o",
+        rebase_path(output_dir),
+        rebase_path(
+            "//build/config/components/init/seccomp/gen_syscall_name_nrs.c"),
+      ]
+      outputs = [ output_dir ]
+    }
+    action(_seccomp_filter_target) {
+      script = "//build/config/components/init/seccomp/scripts/generate_code_from_policy.py"
+
+      sources = invoker.sources
+      sources += get_target_outputs(":${_syscall_to_nr_arm_name}")
+      sources += get_target_outputs(":${_syscall_to_nr_arm64_name}")
+      sources += get_target_outputs(":${_syscall_to_nr_riscv64_name}")
+      uid_is_root = false
+      if (defined(invoker.uid_is_root)) {
+        uid_is_root = invoker.uid_is_root
+      } else {
+        uid_is_root = false
+      }
+      if (invoker.process_type == "system" &&
+          invoker.filtername != "appspawn" &&
+          invoker.filtername != "nwebspawn" && uid_is_root == false) {
+        sources += [ "//build/config/components/init/seccomp/seccomp_policy/system_uid_filter.seccomp.policy" ]
+      }
+
+      deps = [
+        ":${_syscall_to_nr_arm64_name}",
+        ":${_syscall_to_nr_arm_name}",
+        ":${_syscall_to_nr_riscv64_name}",
+      ]
+
+      if (build_variant == "root") {
+        seccomp_is_debug = "true"
+      } else {
+        seccomp_is_debug = "false"
+      }
+
+      args = []
+      foreach(source, sources) {
+        args += [
+          "--src-files",
+          rebase_path(source),
+        ]
+      }
+      args += [
+        "--blocklist-file",
+        rebase_path(_blocklist_file_name),
+        "--dst-file",
+        rebase_path(_seccomp_filter_file),
+        "--filter-name",
+        invoker.filtername,
+        "--target-cpu",
+        invoker.target_cpu,
+        "--keyprocess-file",
+        rebase_path(_key_process_file_name),
+        "--is-debug",
+        seccomp_is_debug,
+      ]
+
+      outputs = [ _seccomp_filter_file ]
+    }
+
+    ohos_shared_library(target_name) {
+      output_name = _output_name
+      deps = [ ":${_seccomp_filter_target}" ]
+      sources = get_target_outputs(":${_seccomp_filter_target}")
+      sanitize = {
+        cfi = true
+        cfi_cross_dso = true
+        debug = false
+      }
+
+      relative_install_dir = "seccomp"
+
+      if (defined(invoker.include_dirs)) {
+        include_dirs = invoker.include_dirs
+      }
+
+      if (defined(invoker.install_enable)) {
+        install_enable = invoker.install_enable
+      }
+
+      if (defined(invoker.part_name)) {
+        part_name = invoker.part_name
+      }
+
+      if (defined(invoker.subsystem_name)) {
+        subsystem_name = invoker.subsystem_name
+      }
+
+      if (defined(invoker.install_images)) {
+        install_images = invoker.install_images
+      }
+    }
+  }
+}
