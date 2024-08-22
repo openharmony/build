@@ -250,13 +250,11 @@ template("rust_target") {
     if (use_clang_coverage == true) {
       cflags_cc += [ "-DRUSTC_BOOTSTRAP=1" ]
       rustflags += [
-        "-C",
-        "instrument-coverage",
+        "-Cinstrument-coverage",
         "-Clink-dead-code",
         "-Zprofile",
-        "-C",
-        "codegen-units=1"
-      ]
+        "-Ccodegen-units=1"
+        ]
     }
   }
 }
