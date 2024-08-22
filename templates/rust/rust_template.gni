@@ -252,13 +252,6 @@ template("rust_target") {
       rustflags += [
         "-C",
         "instrument-coverage",
-        "--cfg=coverage_nightly",
-        "-Cllvm-args=-sanitizer-coverage-stack-depth",
-        "-Cdebug-assertions",
-        "-Cllvm-args=-sanitizer-coverage-inline-8bit-counters",
-        "-Cllvm-args=-sanitizer-coverage-pc-table",
-        "-Cllvm-args=-sanitizer-coverage-trace-compares",
-        "-Cpasses=sancov-module",
         "-Clink-dead-code",
         "-Cdebug-assertions",
         "-Zprofile",
