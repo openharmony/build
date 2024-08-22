@@ -31,7 +31,7 @@ MEM_CONSTANT = 1024
 
 
 class Monitor():
-    def __init__(self):
+    def __init__(self, stop_event):
         self.now_times = []
         self.usr_cpus = []
         self.sys_cpus = []
@@ -39,6 +39,7 @@ class Monitor():
         self.total_mems = []
         self.swap_mems = []
         self.free_mems = []
+        self.stop_event = stop_event
 
     def collect_cpu_info(self):
         if platform.system() == "Darwin":
@@ -88,7 +89,7 @@ class Monitor():
         return config_content.get('out_path', None)
     
     def get_disk_usage(self):
-        result = subprocess.popen(['df', '-h'], stdout=subprocess.PIPE, text=True)
+        result = subprocess.run(['df', '-h'], stdout=subprocess.PIPE, text=True)
         if result.returncode == 0:
             lines = result.stdout.strip().split('\n')[1:]
             for line in lines:
@@ -111,27 +112,45 @@ class Monitor():
         if not os.path.exists(log_path):
             sys.exit(-1)
 
-        output = os.popen(f"tail -n 200 {log_path}").read()
-        while "build result" not in output and os.path.exists(log_path):
-            now_time = datetime.now().strftime("%H:%M:%S")
-            self.now_times.append(now_time)
-            usr_cpu, sys_cpu, idle_cpu = self.collect_cpu_info()
-            self.usr_cpus.append(usr_cpu)
-            self.sys_cpus.append(sys_cpu)
-            self.idle_cpus.append(idle_cpu)
-            LogUtil.hb_info(f"User Cpu%: {usr_cpu}%")
-            LogUtil.hb_info(f"System Cpu%: {sys_cpu}%")
-            LogUtil.hb_info(f"Idle CPU%: {idle_cpu}%")
+        while not self.stop_event.is_set():
+            #now_time = datetime.now().strftime("%H:%M:%S")
+            #self.now_times.append(now_time)
+            #usr_cpu, sys_cpu, idle_cpu = self.collect_cpu_info()
+            #self.usr_cpus.append(usr_cpu)
+            #self.sys_cpus.append(sys_cpu)
+            #self.idle_cpus.append(idle_cpu)
+            #LogUtil.hb_info(f"User Cpu%: {usr_cpu}%")
+            #LogUtil.hb_info(f"System Cpu%: {sys_cpu}%")
+            #LogUtil.hb_info(f"Idle CPU%: {idle_cpu}%")
 
-            total_mem, free_mem, swap_mem = self.collect_linux_mem_info()
-            self.total_mems.append(total_mem)
-            self.free_mems.append(free_mem)
-            self.swap_mems.append(swap_mem)
-            LogUtil.hb_info(f"Total Memory: {total_mem}GB")
-            LogUtil.hb_info(f"Free Memory: {free_mem}GB")
-            LogUtil.hb_info(f"Swap Memory: {swap_mem}GB")
+            #total_mem, free_mem, swap_mem = self.collect_linux_mem_info()
+            #self.total_mems.append(total_mem)
+            #self.free_mems.append(free_mem)
+            #self.swap_mems.append(swap_mem)
+            #LogUtil.hb_info(f"Total Memory: {total_mem}GB")
+            #LogUtil.hb_info(f"Free Memory: {free_mem}GB")
+            #LogUtil.hb_info(f"Swap Memory: {swap_mem}GB")
+            #self.get_disk_usage()
             time.sleep(30)
-            output = os.popen(f"tail -n 200 {log_path}").read()
+
+        now_time = datetime.now().strftime("%H:%M:%S")
+        self.now_times.append(now_time)
+        usr_cpu, sys_cpu, idle_cpu = self.collect_cpu_info()
+        self.usr_cpus.append(usr_cpu)
+        self.sys_cpus.append(sys_cpu)
+        self.idle_cpus.append(idle_cpu)
+        LogUtil.hb_info(f"User Cpu%: {usr_cpu}%")
+        LogUtil.hb_info(f"System Cpu%: {sys_cpu}%")
+        LogUtil.hb_info(f"Idle CPU%: {idle_cpu}%")
+
+        total_mem, free_mem, swap_mem = self.collect_linux_mem_info()
+        self.total_mems.append(total_mem)
+        self.free_mems.append(free_mem)
+        self.swap_mems.append(swap_mem)
+        LogUtil.hb_info(f"Total Memory: {total_mem}GB")
+        LogUtil.hb_info(f"Free Memory: {free_mem}GB")
+        LogUtil.hb_info(f"Swap Memory: {swap_mem}GB")
+        self.get_disk_usage()
         
         for i, time_stamp in enumerate(self.now_times):
             LogUtil.hb_info(f"Time: {time_stamp}, User CPU%: {self.usr_cpus[i]}%, System CPU%: {self.sys_cpus[i]}%, "
