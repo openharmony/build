@@ -32,6 +32,7 @@ def parse_args():
     parser.add_argument("--skip-check-subsystem", required=False, action="store_true")
     parser.add_argument('--part-name', required=True)
     parser.add_argument('--subsystem-name', required=True)
+    parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--target-path', required=True)
     parser.add_argument('--deps', nargs='*', required=False)
     parser.add_argument('--external-deps', nargs='*', required=False)
