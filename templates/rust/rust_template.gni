@@ -253,11 +253,9 @@ template("rust_target") {
         "-C",
         "instrument-coverage",
         "-Clink-dead-code",
-        "-Cdebug-assertions",
         "-Zprofile",
         "-C",
-        "codegen-units=1",
-        "-Zpanic_abort_tests",
+        "codegen-units=1"
       ]
     }
   }
