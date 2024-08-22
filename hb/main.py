@@ -170,7 +170,7 @@ class Main():
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:
-        if sys.argv[2] in ['--sshkey', '-s']:
+        if len(sys.argv) > 2 and sys.argv[2] in ['--sshkey', '-s']:
             self._set_path()
             subprocess.run(['hpm', 'config', 'set', 'loginUser', str(sys.argv[3])])
             subprocess.run(['hpm', 'gen-keys'])
