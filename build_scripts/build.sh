@@ -95,7 +95,7 @@ case $(uname -s) in
 esac
 
 # set python3
-PYTHON3_DIR=${SOURCE_ROOT_DIR}/prebuilts/python/${PYTHON_DIR}/current/
+PYTHON3_DIR=$(realpath ${SOURCE_ROOT_DIR}/prebuilts/python/${PYTHON_DIR}/*/ | tail -1)
 PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 if [[ ! -f "${PYTHON3}" ]]; then
