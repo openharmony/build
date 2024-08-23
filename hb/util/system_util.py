@@ -33,6 +33,10 @@ class SystemUtil(metaclass=NoInstance):
 
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
+        if os.path.exists(log_path):
+            mtime = os.stat(log_path).st_mtime
+            os.rename(
+                log_path, '{}/build.{}.log'.format(os.path.dirname(log_path), mtime))
         useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
         is_log_filter = kwargs.pop('log_filter', False)
         if log_mode == 'silent':
