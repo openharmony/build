@@ -23,8 +23,8 @@ from pathlib import Path
 import subprocess
 
 from resources.global_var import ROOT_CONFIG_FILE
-from util.log_util import LogUtil
-# from io_util import IoUtil
+from log_util import LogUtil
+from io_util import IoUtil
 
 GB_CONSTANT = 1024 ** 3
 MEM_CONSTANT = 1024
@@ -40,6 +40,7 @@ class Monitor():
         self.swap_mems = []
         self.free_mems = []
         self.stop_event = stop_event
+        self.log_path = ""
 
     def collect_cpu_info(self):
         if platform.system() == "Darwin":
@@ -89,18 +90,18 @@ class Monitor():
         self.usr_cpus.append(usr_cpu)
         self.sys_cpus.append(sys_cpu)
         self.idle_cpus.append(idle_cpu)
-        LogUtil.hb_info(f"User Cpu%: {usr_cpu}%")
-        LogUtil.hb_info(f"System Cpu%: {sys_cpu}%")
-        LogUtil.hb_info(f"Idle CPU%: {idle_cpu}%")
+        LogUtil.write_log(self.log_path, f"User Cpu%: {usr_cpu}%", "info")
+        LogUtil.write_log(self.log_path, f"System Cpu%: {sys_cpu}%", "info")
+        LogUtil.write_log(self.log_path, f"Idle CPU%: {idle_cpu}%", "info")
         
     def get_current_memory(self):
         total_mem, free_mem, swap_mem = self.collect_linux_mem_info()
         self.total_mems.append(total_mem)
         self.free_mems.append(free_mem)
         self.swap_mems.append(swap_mem)
-        LogUtil.hb_info(f"Total Memory: {total_mem}GB")
-        LogUtil.hb_info(f"Free Memory: {free_mem}GB")
-        LogUtil.hb_info(f"Swap Memory: {swap_mem}GB")
+        LogUtil.write_log(self.log_path, f"Total Memory: {total_mem}GB", "info")
+        LogUtil.write_log(self.log_path, f"Free Memory: {free_mem}GB", "info")
+        LogUtil.write_log(self.log_path, f"Swap Memory: {swap_mem}GB", "info")
 
     def get_log_path(self):
         count = 0
@@ -118,36 +119,49 @@ class Monitor():
                 columns = line.split()
                 if len(columns) > 5:
                     filesystem, size, used, available, percent, mountpoint = columns[:6]
-                    LogUtil.hb_info(f"Filesystem: {filesystem}, Size: {size}, Used: {used}, Available: {available}, Use%: {percent}, Mounted on: {mountpoint}")
+                    LogUtil.write_log(self.log_path, 
+                    f"Filesystem: {filesystem}, "
+                    f"Size: {size}, "
+                    f"Used: {used}, "
+                    f"Available: {available}, "
+                    f"Use%: {percent}, "
+                    f"Mounted on: {mountpoint}", 
+                    "info")
         else:
             print("Error running df command:", result.stderr)
 
     def print_result(self):
         for i, time_stamp in enumerate(self.now_times):
-            LogUtil.hb_info(f"Time: {time_stamp}, User CPU%: {self.usr_cpus[i]}%, System CPU%: {self.sys_cpus[i]}%, "
-                            f"Idle CPU%: {self.idle_cpus[i]}, Total Memory: {self.total_mems[i]}, Swap Memory: {self.swap_mems[i]}"
-                            f"Using Memory: {self.total_mems[i] - self.free_mems[i]}")
+            LogUtil.write_log(f"Time: {time_stamp}, "
+                            f"User CPU%: {self.usr_cpus[i]}%, "
+                            f"System CPU%: {self.sys_cpus[i]}%, "
+                            f"Idle CPU%: {self.idle_cpus[i]}, "
+                            f"Total Memory: {self.total_mems[i]}, "
+                            f"Swap Memory: {self.swap_mems[i]}, "
+                            f"Using Memory: {self.total_mems[i] - self.free_mems[i]}", 
+                            "info")
+        self.get_disk_usage()
 
     def run(self):
         if platform.system() != "Linux":
             return
         
         out_path = self.get_log_path()
-        log_path = os.path.join(out_path, "build.log")
+        self.log_path = os.path.join(out_path, "build.log")
         exit_count = 0
-        while not os.path.exists(log_path) and exit_count < 60:
+        while not os.path.exists(self.log_path) and exit_count < 60:
             time.sleep(6)
             exit_count += 1
-        if not os.path.exists(log_path):
+        if not os.path.exists(self.log_path):
             sys.exit(-1)
 
-        output = os.popen(f"tail -n 200 {log_path}").read()
+        output = os.popen(f"tail -n 200 {self.log_path}").read()
         while not self.stop_event.is_set() and "OHOS ERROR" not in output:
-            #self.get_current_time()
-            #self.get_current_cpu()
-            #self.get_current_memory()
-            #self.get_disk_usage()
-            output = os.popen(f"tail -n 200 {log_path}").read()
+            self.get_current_time()
+            self.get_current_cpu()
+            self.get_current_memory()
+            self.get_disk_usage()
+            output = os.popen(f"tail -n 200 {self.log_path}").read()
             time.sleep(30)
         self.get_current_time()
         self.get_current_cpu()
