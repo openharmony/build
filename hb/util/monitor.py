@@ -28,6 +28,9 @@ from io_util import IoUtil
 
 GB_CONSTANT = 1024 ** 3
 MEM_CONSTANT = 1024
+RET_CONSTANT = 0
+MONITOR_TIME_CONSTANT = 30
+SNOP_TIME_CONSTANT = 5
 
 
 class Monitor():
@@ -43,8 +46,8 @@ class Monitor():
         self.log_path = ""
 
     def collect_cpu_info(self):
-        if platform.system() == "Darwin":
-            return 0, 0, 0
+        if platform.system() != "Linux":
+            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
         cmd = "top -bn1 | grep '%Cpu(s)' | awk '{print $2, $4, $8}'"
         result = os.popen(cmd).read().strip()
@@ -59,9 +62,9 @@ class Monitor():
                 self.idle_cpu = idle_cpu
                 return self.usr_cpu, self.sys_cpu, self.idle_cpu
             else:
-                return 0, 0, 0
+                return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
         else:
-            return 0, 0, 0
+            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
     def get_linux_mem_info(self):
         with open('/proc/meminfo', 'r') as f:
@@ -107,7 +110,7 @@ class Monitor():
         count = 0
         config_content = IoUtil.read_json_file(ROOT_CONFIG_FILE)
         while not os.path.exists(ROOT_CONFIG_FILE) or not config_content.get('out_path', None) and count <= 60:
-            time.sleep(5)
+            time.sleep(SNAP_TIME_CONSTANT)
             count += 1
         return config_content.get('out_path', None)
 
@@ -150,7 +153,7 @@ class Monitor():
         self.log_path = os.path.join(out_path, "build.log")
         exit_count = 0
         while not os.path.exists(self.log_path) and exit_count < 60:
-            time.sleep(6)
+            time.sleep(SNAP_TIME_CONSTANT)
             exit_count += 1
         if not os.path.exists(self.log_path):
             sys.exit(-1)
@@ -162,7 +165,7 @@ class Monitor():
             self.get_current_memory()
             self.get_disk_usage()
             output = os.popen(f"tail -n 200 {self.log_path}").read()
-            time.sleep(30)
+            time.sleep(MONITOR_TIME_CONSTANT)
         self.get_current_time()
         self.get_current_cpu()
         self.get_current_memory()
