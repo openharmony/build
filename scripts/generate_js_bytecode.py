@@ -48,6 +48,8 @@ def parse_args():
                         help='dump symbol table of base abc')
     parser.add_argument("--input-symbol-table",
                         help='input symbol table for patch abc')
+    parser.add_argument("--target-api-sub-version",
+                        help='input symbol table for patch abc')
     arguments = parser.parse_args()
     return arguments
 
@@ -89,6 +91,7 @@ def gen_abc_info(input_arguments):
         src_index = cmd.index(input_arguments.src_js)
         cmd.insert(src_index, '--generate-patch')
         # insert d.ts option to cmd later
+    cmd.append("--target-api-sub-version=beta3")
     run_command(cmd, path)
 
 

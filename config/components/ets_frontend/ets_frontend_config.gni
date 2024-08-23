@@ -27,7 +27,7 @@ import("$build_root/test.gni")
 
 ets_frontend_root = "//arkcompiler/ets_frontend"
 
-toolchain_linux = "$build_root/toolchain/linux:clang_x64"
+toolchain_linux = "$build_root/toolchain/linux:clang_${host_cpu}"
 if (host_cpu == "arm64") {
   toolchain_mac = "$build_root/toolchain/mac:clang_arm64"
 } else {
