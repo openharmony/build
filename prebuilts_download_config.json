@@ -246,7 +246,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-Ubuntu_18.04-3.11.4_20240715.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-Ubuntu_18.04-3.11.4_20240823.tar.gz",
           "unzip_filename": "linux-x86",
           "os_version": "Ubuntu_18.04"
         },
@@ -358,7 +358,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-Ubuntu_18.04-3.11.4_20240715.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-Ubuntu_18.04-3.11.4_20240823.tar.gz",
           "unzip_filename": "linux-x86",
           "os_version": "Ubuntu_18.04"
         },
