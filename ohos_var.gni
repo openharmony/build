@@ -103,12 +103,11 @@ declare_args() {
   # Whether to make Code_OpenSource.tar.gz
   make_osp = false
 
-  # Opensource extend args
-  # extend opensource scan dir
-  osp_ext_scan_dirs = ""
+  # sepcify opensource scan dir, separated by a colon
+  osp_scan_dirs = "third_party:kernel:device:drivers"
 
-  # extend opensource scan license
-  osp_ext_scan_licenses = ""
+  # sepcify opensource scan license, separated by a colon
+  osp_scan_licenses = "GPL:LGPL"
 
   # Collecting but not pacaking open-source packages for post processing
   osp_only_collect_file = false

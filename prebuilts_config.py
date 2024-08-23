@@ -231,9 +231,9 @@ def install_python(version, download_dir, one_type, code_path):
     copy_folder(os.path.join(download_dir, version, after_extract_folder),
                 os.path.join(code_path, one_type.get('symlink')))
     python3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src'),
-                                'bin', 'python3.11')
+                                'bin', 'python3')
     pip3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src'), 'bin',
-                             'pip3.11')
+                             'pip3')
     subprocess.run(
         [python3_path, pip3_path, "install", "--trusted-host", "repo.huaweicloud.com", "-i",
          "http://repo.huaweicloud.com/repository/pypi/simple"] + one_type.get(
