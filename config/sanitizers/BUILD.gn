@@ -618,6 +618,13 @@ config("sanitizer_trap_all_flags") {
   ldflags = cflags
 }
 
+config("cfi_trap_function_flags") {
+  if (is_ohos && target_cpu == "arm64") {
+    cflags = [ "-fcfi-trap-function=__cfi_fail_report" ]
+    ldflags = [ "-fcfi-trap-function=__cfi_fail_report" ]
+  }
+}
+
 # By default, cfi is in release mode
 config("cfi_config_release") {
   if (is_ohos) {
