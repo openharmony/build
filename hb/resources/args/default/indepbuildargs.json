@@ -12,7 +12,7 @@
       },
     "target_cpu": {
         "arg_name": "--target-cpu",
-        "argDefault": "",
+        "argDefault": "arm",
         "arg_help": "Default:''. Help:Specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb build --target-cpu {cpu_architectures}' to set os type cpu architectures",
         "arg_phase": "prebuild",
         "arg_type": "str",
@@ -32,7 +32,7 @@
       },
       "target_os": {
         "arg_name": "--target-os",
-        "argDefault": "",
+        "argDefault": "ohos",
         "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb build --target-os {os_type}' to set os type",
         "arg_phase": "prebuild",
         "arg_type": "str",
