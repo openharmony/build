@@ -30,6 +30,8 @@ template("check_target") {
       part_name,
       "--subsystem-name",
       subsystem_name,
+      "--source-root-dir",
+      rebase_path("//", root_build_dir),
       "--target-path",
       target_path,
       "--depfile",

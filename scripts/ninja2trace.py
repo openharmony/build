@@ -53,8 +53,9 @@ class NinjaToTrace(object):
             for _, line in enumerate(f.readlines()):
                 start, end, time_stamp, name, cmdhash = line.strip().split(
                     '\t')
-                storing_data.setdefault(cmdhash, StoringDataLine(start, end))
-                storing_data.get(cmdhash).target_obj_names.append(name)
+                if time_stamp > ninja_start_time:
+                    storing_data.setdefault(cmdhash, StoringDataLine(start, end))
+                    storing_data.get(cmdhash).target_obj_names.append(name)
 
         self.datalist = sorted(storing_data.values(),
                                key=lambda line: line.start)
