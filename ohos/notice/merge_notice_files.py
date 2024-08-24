@@ -12,16 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
 
-Usage: gen_notice_file --output-image-name system \
-               --notice-file-root xx/NOTICE_FILE \
-               --notice-file-install-path xx/system \
-               --output-title notice_title_string
-
-Generate the project notice files, including both text and xml files.
-
-"""
 from collections import defaultdict
 import argparse
 import hashlib
@@ -40,7 +31,7 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 from scripts.util.file_utils import write_json_file, read_json_file  # noqa: E402
 
-XML_ESCAPE_TABLE = {
+xml_escape_table = {
     "&": "&amp;",
     '"': "&quot;",
     "'": "&apos;",
@@ -102,7 +93,7 @@ def compute_hash(file: str):
 
 
 def get_entity(text: str):
-    return "".join(XML_ESCAPE_TABLE.get(c, c) for c in text)
+    return "".join(xml_escape_table.get(c, c) for c in text)
 
 
 def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: str,
@@ -136,7 +127,7 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                         write_file(output_file, "Software: ")
                     if contents_value[0].get('Version'):
                         version = contents_value[0].get('Version').strip()
-                        software_dict[software_name]["Version"] = version
+                        software_dict[software_name]["_version"] = version
                     else:
                         write_file(output_file, "Version: ")
                     if contents_value[0].get('Path'):
@@ -172,7 +163,7 @@ def generate_xml_notice_files(files_with_same_hash: dict, input_dir: str,
             stripped_filename = re.sub('.txt.*', '',
                                        os.path.relpath(filename, input_dir))
             write_file(
-                output_file, '<file-name contentId="%s">%s</file-name>' %
+                output_file, '<file-name content_id="%s">%s</file-name>' %
                              (id_table.get(filename), stripped_filename))
 
         write_file(output_file, '')
@@ -189,7 +180,7 @@ def generate_xml_notice_files(files_with_same_hash: dict, input_dir: str,
             with open(filename, errors='ignore') as temp_file_hd:
                 write_file(
                     output_file,
-                    '<file-content contentId="{}"><![CDATA[{}]]></file-content>'
+                    '<file-content content_id="{}"><![CDATA[{}]]></file-content>'
                         .format(file_key, get_entity(temp_file_hd.read())))
             write_file(output_file, '')
 
@@ -217,56 +208,6 @@ def handle_zipfile_notices(zip_file: str):
         with open(notice_file, 'w') as merged_notice:
             merged_notice.write('\n\n'.join(contents))
     return notice_file
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--image-name')
-    parser.add_argument('--collected-notice-zipfile',
-                        action='append',
-                        help='zipfile stors collected notice files')
-    parser.add_argument('--notice-root-dir', help='where notice files store')
-    parser.add_argument('--output-notice-txt', help='output notice.txt')
-    parser.add_argument('--output-notice-gz', help='output notice.txt')
-    parser.add_argument('--notice-title', help='title of notice.txt')
-    parser.add_argument('--static-library-notice-dir',
-                        help='path to static library notice files')
-    parser.add_argument('--target-cpu', help='cpu arch')
-    parser.add_argument('--depfile', help='depfile')
-    parser.add_argument('--notice-module-info',
-                        help='module info file for notice target')
-    parser.add_argument('--notice-install-dir',
-                        help='install directories of notice file')
-    parser.add_argument('--lite-product', help='', default="")
-
-    args = parser.parse_args()
-
-    notice_dir = args.notice_root_dir
-    depfiles = []
-    if args.collected_notice_zipfile:
-        for zip_file in args.collected_notice_zipfile:
-            build_utils.extract_all(zip_file, notice_dir, no_clobber=False)
-    else:
-        depfiles += build_utils.get_all_files(notice_dir)
-    # Copy notice of static targets to notice_root_dir
-    if args.static_library_notice_dir:
-        copy_static_library_notices(args, depfiles)
-
-    zipfiles = glob.glob('{}/**/*.zip'.format(notice_dir), recursive=True)
-
-    txt_files = glob.glob('{}/**/*.txt'.format(notice_dir), recursive=True)
-    txt_files += glob.glob('{}/**/*.txt.?'.format(notice_dir), recursive=True)
-    
-    outputs = [args.output_notice_txt, args.output_notice_gz]
-    if args.notice_module_info:
-        outputs.append(args.notice_module_info)
-    build_utils.call_and_write_depfile_if_stale(
-        lambda: do_merge_notice(args, zipfiles, txt_files),
-        args,
-        depfile_deps=depfiles,
-        input_paths=depfiles,
-        input_strings=args.notice_title + args.target_cpu,
-        output_paths=(outputs))
 
 
 def do_merge_notice(args, zipfiles: str, txt_files: str):
@@ -319,16 +260,74 @@ def do_merge_notice(args, zipfiles: str, txt_files: str):
         ]
         module_install_info_list.append(module_install_info)
         write_json_file(args.notice_module_info, module_install_info_list)
-    
+
     if args.lite_product:
         current_dir_cmd = ['pwd']
         process = subprocess.Popen(current_dir_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate(timeout=600)
         current_dir = stdout.decode().strip()
-        dest = f"{current_dir}/system/etc/NOTICE.txt"        
+        dest = f"{current_dir}/system/etc/NOTICE.txt"
         if os.path.isfile(notice_txt):
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             shutil.copyfile(notice_txt, dest)
+
+
+def parse_args():
+    """Parses command-line arguments."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--image-name')
+    parser.add_argument('--collected-notice-zipfile',
+                        action='append',
+                        help='zipfile stors collected notice files')
+    parser.add_argument('--notice-root-dir', help='where notice files store')
+    parser.add_argument('--output-notice-txt', help='output notice.txt')
+    parser.add_argument('--output-notice-gz', help='output notice.txt')
+    parser.add_argument('--notice-title', help='title of notice.txt')
+    parser.add_argument('--static-library-notice-dir',
+                        help='path to static library notice files')
+    parser.add_argument('--target-cpu', help='cpu arch')
+    parser.add_argument('--depfile', help='depfile')
+    parser.add_argument('--notice-module-info',
+                        help='module info file for notice target')
+    parser.add_argument('--notice-install-dir',
+                        help='install directories of notice file')
+    parser.add_argument('--lite-product', help='', default="")
+
+
+    return parser.parse_args()
+
+
+def main():
+    """Main function to merge and generate notice files."""
+    args = parse_args()
+
+    notice_dir = args.notice_root_dir
+    depfiles = []
+    if args.collected_notice_zipfile:
+        for zip_file in args.collected_notice_zipfile:
+            build_utils.extract_all(zip_file, notice_dir, no_clobber=False)
+    else:
+        depfiles += build_utils.get_all_files(notice_dir)
+    # Copy notice of static targets to notice_root_dir
+    if args.static_library_notice_dir:
+        copy_static_library_notices(args, depfiles)
+
+    zipfiles = glob.glob('{}/**/*.zip'.format(notice_dir), recursive=True)
+
+    txt_files = glob.glob('{}/**/*.txt'.format(notice_dir), recursive=True)
+    txt_files += glob.glob('{}/**/*.txt.?'.format(notice_dir), recursive=True)
+
+    outputs = [args.output_notice_txt, args.output_notice_gz]
+    if args.notice_module_info:
+        outputs.append(args.notice_module_info)
+    build_utils.call_and_write_depfile_if_stale(
+        lambda: do_merge_notice(args, zipfiles, txt_files),
+        args,
+        depfile_deps=depfiles,
+        input_paths=depfiles,
+        input_strings=args.notice_title + args.target_cpu,
+        output_paths=(outputs))
+
 
 if __name__ == "__main__":
     main()

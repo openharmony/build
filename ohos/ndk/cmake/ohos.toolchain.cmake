@@ -157,6 +157,7 @@ if (OHOS_ENABLE_HWASAN STREQUAL ON AND OHOS_ARCH STREQUAL arm64-v8a)
     list(APPEND OHOS_C_COMPILER_FLAGS
 	    -shared-libasan
 	    -fsanitize=hwaddress
+	    -mllvm -hwasan-globals=0
 	    -fno-emulated-tls
 	    -fno-omit-frame-pointer)
     if (DEFINED OHOS_ASAN_BLACKLIST)
