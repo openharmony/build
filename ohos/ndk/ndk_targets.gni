@@ -37,6 +37,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/network/netstack/net_websocket:websocket_header",
   "//interface/sdk_c/network/netssl:libnet_ssl_ndk",
   "//interface/sdk_c/network/netssl:net_ssl_header",
+  "//interface/sdk_c/security/access_token:libability_access_control",
+  "//interface/sdk_c/security/access_token:accesstoken_header",
   "//interface/sdk_c/security/huks:libhuks_ndk",
   "//interface/sdk_c/security/huks:huks_header",
   "//interface/sdk_c/security/asset:libasset_ndk",
@@ -58,6 +60,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/arkui/napi:napi_header",
   "//interface/sdk_c/arkui/window_manager:window_manager_header",
   "//interface/sdk_c/arkui/window_manager:native_window_manager",
+  "//interface/sdk_c/arkui/display_manager:display_manager_header",
+  "//interface/sdk_c/arkui/display_manager:native_display_manager",
   "//interface/sdk_c/ark_runtime/jsvm:libjsvm_ndk",
   "//interface/sdk_c/ark_runtime/jsvm:jsvm_header",
   "//interface/sdk_c/bundlemanager/bundle_framework/bundle:bundle_header",
@@ -198,6 +202,10 @@ _ndk_library_targets = [
   "//interface/sdk_c/CryptoArchitectureKit:crypto_capi_header",
   "//interface/sdk_c/BasicServicesKit:libohscan_ndk",
   "//interface/sdk_c/BasicServicesKit:ohscan_header",
+  "//interface/sdk_c/DataProtectionKit:libohdlp_permission",
+  "//interface/sdk_c/DataProtectionKit:dlppermission_capi_header",
+  "//interface/sdk_c/inputmethod:libohinputmethod",
+  "//interface/sdk_c/inputmethod:libohinputmethod_header",
 ]
 
 _ndk_base_libs = [

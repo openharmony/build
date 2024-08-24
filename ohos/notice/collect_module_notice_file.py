@@ -32,8 +32,7 @@ LICENSE_CANDIDATES = [
     'COPYRIGHT',
     'Copyright',
     'COPYING',
-    'Copying',
-    'AUTHORS'
+    'Copying'
 ]
 
 
@@ -52,7 +51,7 @@ def find_other_files(license_file_path):
                     license_path not in other_files:
                 other_files.append(license_path)
     elif os.path.isdir(license_file_path):
-        for file in ['COPYRIGHT', 'Copyright', 'COPYING', 'Copying', 'AUTHORS']:
+        for file in ['COPYRIGHT', 'Copyright', 'COPYING', 'Copying']:
             license_file = os.path.join(license_file_path, file)
             if os.path.isfile(license_file):
                 other_files.append(license_file)

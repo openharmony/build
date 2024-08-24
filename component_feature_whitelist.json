@@ -11,14 +11,6 @@
     "hichecker": [
         "hichecker_support_asan"
     ],
-    "init": [
-        "enable_ohos_startup_init_feature_loader",
-        "enable_ohos_startup_init_feature_ab_partition",
-        "enable_ohos_startup_init_feature_begetctl_liteos",
-        "enable_ohos_startup_init_lite_use_thirdparty_mbedtls",
-        "enable_ohos_startup_init_lite_use_posix_file_api",
-        "enable_appspawn_client_module=false"
-    ],
     "acts": [
         "build_xts",
         "config_ohos_xts_acts_utils_lite_kv_store_data_path",
@@ -41,11 +33,6 @@
     "ability_lite": [
         "config_ohos_aafwk_ams_task_size",
         "config_ohos_aafwk_aafwk_lite_task_stack_size",
-        "enable_ohos_appexecfwk_feature_ability"
-    ],
-    "ace_engine_lite": [
-        "",
-        "enable_ohos_ace_engine_lite_product_config",
         "enable_ohos_appexecfwk_feature_ability"
     ],
     "ui_lite": [

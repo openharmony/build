@@ -653,21 +653,13 @@ action_with_pydeps("open_source_package") {
     rebase_path(_output, root_build_dir),
     "--root-dir",
     rebase_path("//", root_build_dir),
+    "--scan-dirs",
+    osp_scan_dirs,
+    "--scan-licenses",
+    osp_scan_licenses,
   ]
 
   # extend args
-  if (osp_ext_scan_dirs != "") {
-    args += [
-      "--ext-scan-dirs",
-      osp_ext_scan_dirs,
-    ]
-  }
-  if (osp_ext_scan_licenses != "") {
-    args += [
-      "--ext-scan-licenses",
-      osp_ext_scan_licenses,
-    ]
-  }
   if (osp_only_collect_file) {
     args += [ "--only-collect-file" ]
   }

@@ -60,5 +60,6 @@ mingw_toolchain("mingw_x86_64") {
     current_os = "mingw"
     use_custom_libcxx = false
     is_clang = true
+    remote_execution = false
   }
 }
