@@ -202,6 +202,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/CryptoArchitectureKit:crypto_capi_header",
   "//interface/sdk_c/BasicServicesKit:libohscan_ndk",
   "//interface/sdk_c/BasicServicesKit:ohscan_header",
+  "//interface/sdk_c/BasicServicesKit:libcommonevent_ndk",
+  "//interface/sdk_c/BasicServicesKit:ohcommonevent_header",
   "//interface/sdk_c/DataProtectionKit:libohdlp_permission",
   "//interface/sdk_c/DataProtectionKit:dlppermission_capi_header",
   "//interface/sdk_c/inputmethod:libohinputmethod",
