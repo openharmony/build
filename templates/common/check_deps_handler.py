@@ -122,6 +122,13 @@ def check_part_deps(args, part_pattern: str, path_parts_info: dict, compile_stan
         raise Exception("read pre_build parts_deps failed.")
     depfiles.append(parts_deps_file)
 
+    parts_src_flag_file = "build_configs/parts_src_flag.json"
+    parts_src_info = read_json_file(parts_src_flag_file)
+    third_party_allow_list = os.path.join(args.source_root_dir, "out/products_ext/third_party_allow_list.json")
+    if not os.path.exists(third_party_allow_list):
+        third_party_allow_list = os.path.join(args.source_root_dir, "build/third_party_allow_list.json")
+    third_party_allow_info = read_json_file(third_party_allow_list)
+
     # filter third_party part info, sort by longest path match
     third_party_info = [x for x in path_parts_info.items() if x[0].find('third_party') != -1]
     third_party_info.reverse()
@@ -131,6 +138,15 @@ def check_part_deps(args, part_pattern: str, path_parts_info: dict, compile_stan
             continue
         if dep_path.find('third_party') != -1:
             dep_part = get_dep_part(dep_path, third_party_info)
+            
+            if dep_part not in parts_src_info and dep_part in third_party_allow_info:
+                print("[0/0] WARNING: deps third_party '{dep_part}' not configured in part config json, "
+                    f"target: '{args.target_path}', deps: '{dep}'")
+            elif dep_part not in parts_src_info and dep_part not in third_party_allow_info:
+                raise Exception(
+                    f"deps third_party '{dep_part}' not configured in part config json, "
+                    f"target: '{args.target_path}', deps: '{dep}'")
+                        
             tips_info = "{} depend part {}, need set part deps {} info to".format(
                 args.target_path, dep, dep_part)
             check_third_party_deps(args, dep_part, parts_deps_info, tips_info, third_deps_allow_list)
@@ -182,6 +198,7 @@ def main():
     parser.add_argument('--deps', nargs='*', required=True)
     parser.add_argument('--part-name', required=True)
     parser.add_argument('--target-path', required=True)
+    parser.add_argument('--source-root-dir', required=True)
     args = parser.parse_args()
 
     check(args)
