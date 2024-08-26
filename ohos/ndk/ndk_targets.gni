@@ -206,6 +206,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/DataProtectionKit:dlppermission_capi_header",
   "//interface/sdk_c/inputmethod:libohinputmethod",
   "//interface/sdk_c/inputmethod:libohinputmethod_header",
+  "//interface/sdk_c/backgroundtasks/transient:libtransient_task_ndk",
+  "//interface/sdk_c/backgroundtasks/transient:transient_task_header",
 ]
 
 _ndk_base_libs = [
