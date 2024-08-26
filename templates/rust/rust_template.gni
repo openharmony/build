@@ -244,6 +244,14 @@ template("rust_target") {
     if (!defined(output_name) || output_name == "") {
       output_name = crate_name
     }
+    if (use_clang_coverage == true) {
+      rustflags += [
+        "-Cinstrument-coverage",
+        "-Clink-dead-code",
+        "-Zprofile",
+        "-Ccodegen-units=1",
+      ]
+    }
   }
 }
 
