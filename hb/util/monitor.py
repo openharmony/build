@@ -34,7 +34,7 @@ SNOP_TIME_CONSTANT = 5
 
 
 class Monitor():
-    def __init__(self, stop_event):
+    def __init__(self):
         self.now_times = []
         self.usr_cpus = []
         self.sys_cpus = []
@@ -42,7 +42,6 @@ class Monitor():
         self.total_mems = []
         self.swap_mems = []
         self.free_mems = []
-        self.stop_event = stop_event
         self.log_path = ""
 
     def collect_cpu_info(self):
@@ -133,39 +132,11 @@ class Monitor():
         else:
             print("Error running df command:", result.stderr)
 
-    def print_result(self):
-        for i, time_stamp in enumerate(self.now_times):
-            LogUtil.write_log(f"Time: {time_stamp}, "
-                            f"User CPU%: {self.usr_cpus[i]}%, "
-                            f"System CPU%: {self.sys_cpus[i]}%, "
-                            f"Idle CPU%: {self.idle_cpus[i]}, "
-                            f"Total Memory: {self.total_mems[i]}, "
-                            f"Swap Memory: {self.swap_mems[i]}, "
-                            f"Using Memory: {self.total_mems[i] - self.free_mems[i]}", 
-                            "info")
-        self.get_disk_usage()
-
     def run(self):
         if platform.system() != "Linux":
             return
-        
         out_path = self.get_log_path()
         self.log_path = os.path.join(out_path, "build.log")
-        exit_count = 0
-        while not os.path.exists(self.log_path) and exit_count < 60:
-            time.sleep(SNAP_TIME_CONSTANT)
-            exit_count += 1
-        if not os.path.exists(self.log_path):
-            sys.exit(-1)
-
-        output = os.popen(f"tail -n 200 {self.log_path}").read()
-        while not self.stop_event.is_set() and "OHOS ERROR" not in output:
-            self.get_current_time()
-            self.get_current_cpu()
-            self.get_current_memory()
-            self.get_disk_usage()
-            output = os.popen(f"tail -n 200 {self.log_path}").read()
-            time.sleep(MONITOR_TIME_CONSTANT)
         self.get_current_time()
         self.get_current_cpu()
         self.get_current_memory()

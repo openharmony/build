@@ -22,7 +22,6 @@ import sys
 import subprocess
 import json
 import time
-import threading 
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -82,7 +81,6 @@ from modules.ohos_push_module import OHOSPushModule
 from helper.separator import Separator
 from util.log_util import LogUtil
 from util.system_util import SystemUtil
-from util.monitor import Monitor
 
 
 class Main():
@@ -117,24 +115,17 @@ class Main():
 
         start_time = SystemUtil.get_current_time()
         module = module_initializers[module_type]()
-        stop_event = threading.Event()
-        monitor = Monitor(stop_event)
-        thread_monitor = threading.Thread(target=monitor.run)
-        thread_monitor.start()
         try:
             module.run()
             if module_type == 'build':
                 LogUtil.hb_info('Cost Time:  {}'.format(SystemUtil.get_current_time() - start_time))
-                stop_event.set()
         except KeyboardInterrupt:
             for file in os.listdir(ARGS_DIR):
                 if file.endswith('.json') and os.path.exists(os.path.join(ARGS_DIR, file)):
                     os.remove(os.path.join(ARGS_DIR, file))
             print('User abort')
-            stop_event.set()
             return -1
         else:
-            stop_event.set()
             return 0
 
     def _set_path(self):
@@ -174,7 +165,7 @@ class Main():
         return OHOSSetModule(args_dict, set_args_resolver, menu)
 
     def _init_env_module(self) -> EnvModuleInterface:
-        if sys.argv[2] in ['--sshkey', '-s']:
+        if len(sys.argv) > 2 and sys.argv[2] in ['--sshkey', '-s']:
             self._set_path()
             subprocess.run(['hpm', 'config', 'set', 'loginUser', str(sys.argv[3])])
             subprocess.run(['hpm', 'gen-keys'])
