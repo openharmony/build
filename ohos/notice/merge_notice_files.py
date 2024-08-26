@@ -123,22 +123,22 @@ def generate_txt_notice_files(file_hash: str, input_dir: str, output_filename: s
                         if val.get('Software'):
                             software_name = val.get('Software').strip()
                             if software_name not in software_dict:
-                                software_dict[software_name] = {"Version": "", "Path": []}
+                                software_dict[software_name] = {"_version": "", "_path": []}
                         else:
                             write_file(output_file, "Software: ")
                         if val.get('Version'):
                             version = val.get('Version').strip()
-                            software_dict[software_name]["Version"] = version
+                            software_dict[software_name]["_version"] = version
                         else:
                             write_file(output_file, "Version: ")
                         if val.get('Path'):
                             notice_source_path = val.get('Path').strip()
-                            software_dict[software_name]["Path"].append(notice_source_path)
+                            software_dict[software_name]["_path"].append(notice_source_path)
             for software, software_value in software_dict.items():
                 write_file(output_file, f"Software: {software}")
-                write_file(output_file, f"Version: {software_value.get('Version')}")
-                if software_value.get("Path"):
-                    for path in software_value.get("Path"):
+                write_file(output_file, f"Version: {software_value.get('_version')}")
+                if software_value.get("_path"):
+                    for path in software_value.get("_path"):
                         write_file(output_file, f"Path: {path}")
             write_file(output_file, '-' * 60)
             with open(value[0], errors='ignore') as temp_file_hd:
