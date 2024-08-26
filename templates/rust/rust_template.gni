@@ -249,7 +249,7 @@ template("rust_target") {
         "-Cinstrument-coverage",
         "-Clink-dead-code",
         "-Zprofile",
-        "-Ccodegen-units=1"
+        "-Ccodegen-units=1",
       ]
     }
   }
