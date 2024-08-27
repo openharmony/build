@@ -48,6 +48,7 @@ template("generate_module_info") {
                            "part_name",
                            "subsystem_name",
                            "symlink_ext",
+                           "symlink_path",
                          ])
 
   if (!defined(module_label)) {
