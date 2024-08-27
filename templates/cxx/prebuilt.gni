@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 import("//build/templates/common/copy.gni")
 
 template("ohos_prebuilt_executable") {
@@ -278,12 +277,13 @@ template("ohos_prebuilt_etc") {
     _copy_output = "${target_out_dir}/${invoker.source}"
   }
 
+  source_path = rebase_path(invoker.source, root_build_dir)
   module_label = get_label_info(":${target_name}", "label_with_toolchain")
   target_deps_data = {
     label = module_label
     type = "etc"
     prebuilt = true
-    source_path = rebase_path(invoker.source, root_build_dir)
+    source_path = source_path
     output_path = rebase_path(_copy_output, root_build_dir)
   }
   write_file("${target_out_dir}/${target_name}_deps_data.json",
@@ -320,6 +320,9 @@ template("ohos_prebuilt_etc") {
     install_enable = true
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
+    }
+    if (defined(invoker.symlink_path)) {
+      symlink_path = invoker.symlink_path
     }
   }
 }
