@@ -161,7 +161,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             if os.path.exists(dest_file):
                 os.remove(dest_file)
             os.symlink(symlink_path, dest_file)
-            if not path.lexists(dest_file):
+            if not os.path.lexists(dest_file):
                 raise FileNotFoundError(f"target symlink {dest_file} to {symlink_path} create failed")
 
     # write install module info to file
