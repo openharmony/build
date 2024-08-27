@@ -46,6 +46,7 @@ class SystemUtil(metaclass=NoInstance):
                 {'-t', '-test'} & set(sys.argv[3:])):
             cmd.extend(['-t', 'both'])
         if (sys.argv[1] == 'build' and
+                '-i' not in sys.argv[3:] and
                 (sys.argv[-1] == "-t" or ("-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))):
             cmd.extend(['-t', 'onlytest'])
         with open(log_path, 'at', encoding='utf-8') as log_file:
