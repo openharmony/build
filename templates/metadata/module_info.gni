@@ -48,6 +48,7 @@ template("generate_module_info") {
                            "part_name",
                            "subsystem_name",
                            "symlink_ext",
+                           "symlink_path",
                          ])
 
   if (!defined(module_label)) {
@@ -227,6 +228,12 @@ template("generate_module_info") {
     if (defined(symlink_ext)) {
       args += [ "--symlink-ext" ]
       args += symlink_ext
+    }
+    if (defined(symlink_path) && symlink_path != "") {
+      args += [
+        "--symlink-path",
+        symlink_path,
+      ]
     }
     script = gen_script
     outputs = [ output_file ]
