@@ -178,7 +178,7 @@ def main():
     parser.add_argument('--shlib-type', help='', required=False, default='')
     parser.add_argument('--innerapi-tags', nargs='+', help='', required=False, default='')
     parser.add_argument('--symlink-ext', nargs='+', help='', required=False, default='')
-    parser.add_argument('--symlink-path', nargs='+', help='', required=False, default='')
+    parser.add_argument('--symlink-path', help='', required=False, default='')
     parser.add_argument('--version_script', help='', required=False, default='')
     parser.add_argument('--prefix-override',
                         dest='prefix_override',
