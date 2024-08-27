@@ -198,6 +198,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/CryptoArchitectureKit:crypto_capi_header",
   "//interface/sdk_c/BasicServicesKit:libohscan_ndk",
   "//interface/sdk_c/BasicServicesKit:ohscan_header",
+  "//interface/sdk_c/BasicServicesKit:libtime_service_ndk",
+  "//interface/sdk_c/BasicServicesKit:time_service_ndk_header",
   "//interface/sdk_c/BasicServicesKit:libcommonevent_ndk",
   "//interface/sdk_c/BasicServicesKit:ohcommonevent_header",
 ]
