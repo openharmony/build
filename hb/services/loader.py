@@ -255,6 +255,9 @@ class OHOSLoader(LoadInterface):
                 all_syscap_list.append(syscap_string.split('=')[0].strip())
 
         for key, value in syscap_product_dict['part_to_syscap'].items():
+            part = self.parts_info.get(key)
+            if part is None:
+                continue
             for syscap in value:
                 if syscap not in all_syscap_list:
                     raise OHOSException(
