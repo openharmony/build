@@ -63,12 +63,13 @@ class OHOSBuildModule(BuildModuleInterface):
     @throw_exception
     def run(self):
         try:
+            monitor = Monitor()
             super().run()
         except OHOSException as exception:
-            monitor = Monitor()
             monitor.run()
             raise exception
         else:
+            monitor.run()
             LogUtil.hb_info('{} build success'.format(
                 self.args_dict.get('product_name').arg_value))
 
