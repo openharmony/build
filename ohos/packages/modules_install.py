@@ -158,8 +158,6 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
         if 'symlink_path' in module_info:
             symlink_path = module_info.get('symlink_path')
             dest_file = os.path.join(platform_installed_path, dests[0])
-            if os.path.exists(dest_file):
-                os.remove(dest_file)
             os.symlink(symlink_path, dest_file)
             if not os.path.lexists(dest_file):
                 raise FileNotFoundError(f"target symlink {dest_file} to {symlink_path} create failed")
