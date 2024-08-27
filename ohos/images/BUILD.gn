@@ -15,7 +15,6 @@ import("//build/config/python.gni")
 import("//build/ohos.gni")
 import("//build/ohos/build_var.gni")
 
-
 # import target_platform_list
 import("${build_configs_path}/platforms_list.gni")
 group("make_images") {
