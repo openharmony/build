@@ -28,7 +28,6 @@ from scripts.util import build_utils
 from build_scripts.build import find_top  # noqa: E402
 
 
-
 def _prepare_userdata(userdata_path: str):
     if os.path.exists(userdata_path):
         shutil.rmtree(userdata_path)
