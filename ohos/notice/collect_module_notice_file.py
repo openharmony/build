@@ -127,7 +127,7 @@ def add_path_to_module_notice(module_notice_info, module_notice_info_list, optio
             module_notice_info_list.append({'Software': software, 'Version': version})
         module_notice_info_list[-1]['Path'] = "/{}".format(options.module_source_dir[5:])
     else:
-        if module_notice_info['Software']:
+        if module_notice_info.get('Software', None):
             module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
             module_notice_info_list.append(module_notice_info)
 
