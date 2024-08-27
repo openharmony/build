@@ -17,7 +17,6 @@ import sys
 import argparse
 import os
 import shutil
-import subprocess
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -161,8 +160,9 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             dest_file = os.path.join(platform_installed_path, dests[0])
             if os.path.exists(dest_file):
                 os.remove(dest_file)
-            symlink_cmd = ['ln', '-s', symlink_path, dest_file]
-            subprocess.run(symlink_cmd)
+            os.symlink(symlink_path, dest_file)
+            if not path.lexists(dest_file):
+                raise FileNotFoundError(f"target symlink {dest_file} to {symlink_path} create failed")
 
     # write install module info to file
     write_json_file(install_modules_info_file, modules_info_dict)
