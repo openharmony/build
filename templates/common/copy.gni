@@ -1,4 +1,3 @@
-
 # Copyright (c) 2021 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -129,6 +128,11 @@ template("ohos_copy") {
 
       part_name = _part_name
       subsystem_name = _subsystem_name
+
+      if (defined(invoker.symlink_path)) {
+        symlink_path = invoker.symlink_path
+      }
+
 
       module_install_images = [ "system" ]
       if (defined(invoker.install_images)) {
