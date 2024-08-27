@@ -158,7 +158,7 @@ def _copy_dir(src_path, target_path):
     if not os.path.isdir(src_path):
         return False
     filelist_src = os.listdir(src_path)
-    suffix_list = [".h", ".hpp", ".in", ".inc"]
+    suffix_list = [".h", ".hpp", ".in", ".inc", ".inl"]
     for file in filelist_src:
         path = os.path.join(os.path.abspath(src_path), file)
         if os.path.isdir(path):
