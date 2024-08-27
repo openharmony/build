@@ -131,7 +131,7 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
     if args.symlink_ext:
         data['symlink_ext'] = args.symlink_ext
     if args.symlink_path:
-        data['symlink_path'] = args.symlink_path[0]
+        data['symlink_path'] = args.symlink_path
     if symlink_target:
         data['symlink'] = symlink_target
     return data
