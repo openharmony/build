@@ -77,7 +77,8 @@ template("generate_module_info") {
 
   # reset module_type when module_type is lib
   if (module_type == "lib") {
-    if (target_cpu == "arm64" || target_cpu == "x86_64") {
+    if (target_cpu == "arm64" || target_cpu == "x86_64" ||
+        target_cpu == "loongarch64" || target_cpu == "riscv64") {
       module_type = "lib64"
     } else if (target_cpu == "arm" || target_cpu == "x86") {
       module_type = "lib"
