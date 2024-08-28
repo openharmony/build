@@ -132,30 +132,6 @@ class Monitor():
                     "info")
         else:
             print("Error running df command:", result.stderr)
-    
-    def get_docker_data(self):
-        containers = subprocess.run(['docker', 'ps', '-q'], capture_output=True, text=True, check=True).stdout.strip().split()
-        container_stats = []
-        for container_id in containers:
-            try:
-                result = subprocess.run(['docker', 'stats', '--format', '{{.Container}},{{.CPUPerc}},{{.MemUsage}}/{{.MemLimit}}', container_id],
-                                    capture_output=True, text=True, check=True, timeout=1)
-                lines = result.stdout.strip().split('\n')
-                if lines:
-                    container, cpu_perc, mem_usage_limit = lines[0].split(',')
-                    mem_usage, mem_limit = mem_usage_limit.split('/')
-                    container_stats.append({
-                        'container_id': container.strip(),
-                        'cpu_percent': cpu_perc.strip(),
-                        'mem_usage_bytes': int(mem_usage.strip()),
-                        'mem_limit_bytes': int(mem_limit.strip()),
-                    })
-            except subprocess.TimeoutExpired:
-                print(f"Timeout while getting stats for container {container_id}")
-            except Exception as e:
-                print(f"Error getting stats for container {container_id}: {e}")
-        for stat in container_stats:
-            LogUtil.write_log(self.log_path, stat, "info")
 
     def run(self):
         if platform.system() != "Linux":
@@ -166,4 +142,3 @@ class Monitor():
         self.get_current_cpu()
         self.get_current_memory()
         self.get_disk_usage()
-
