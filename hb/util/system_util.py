@@ -39,7 +39,7 @@ class SystemUtil(metaclass=NoInstance):
                 variant = 'default'
             else:
                 variant = sys.argv[sys.argv.index("-v") + 1]
-            log_path = 'out/' + variant + '/build.log'
+            log_path = os.path.join('out', variant, 'build.log')
         if os.path.exists(log_path):
             mtime = os.stat(log_path).st_mtime
             os.rename(
