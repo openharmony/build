@@ -30,14 +30,14 @@
     "camera_lite": [
         "enable_multimedia_camera_lite"
     ],
-    "ui_lite": [
-        "enable_video_component",
-        "enable_graphic_font"
-    ],
     "ability_lite": [
         "config_ohos_aafwk_ams_task_size",
         "config_ohos_aafwk_aafwk_lite_task_stack_size",
         "enable_ohos_appexecfwk_feature_ability"
+    ],
+    "ui_lite": [
+        "enable_video_component",
+        "enable_graphic_font"
     ],
     "samgr_lite": [
         "config_ohos_systemabilitymgr_samgr_lite_shared_task_size",
