@@ -170,7 +170,7 @@ ohos_ndk_copy("ndk_cmake_files") {
 
 if (host_os == "mac") {
   copy("copy_darwin_ohos_cmake") {
-    deps = [ "//prebuilts/cmake/darwin-x86:darwin_cmake_copy" ]
+    deps = [ "//prebuilts/cmake/darwin-universal:darwin_cmake_copy" ]
     sources = [ "./OHOS.cmake" ]
     outputs = [ "$ndk_darwin_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
