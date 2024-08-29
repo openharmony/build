@@ -146,6 +146,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/multimedia/image_framework:libimage_packer_header",
   "//interface/sdk_c/multimedia/image_effect:libimage_effect",
   "//interface/sdk_c/multimedia/image_effect:libimage_effect_header",
+  "//interface/sdk_c/multimedia/video_processing_engine/video_processing:libvideo_processing_ndk",
+  "//interface/sdk_c/multimedia/video_processing_engine/video_processing:video_processing_ndk_headers",
   "//interface/sdk_c/third_party/openSLES:sles_header",
   "//interface/sdk_c/third_party/openSLES:libOpenSLES_ndk",
   "//interface/sdk_c/ai/neural_network_runtime:libneural_network_core_ndk",
