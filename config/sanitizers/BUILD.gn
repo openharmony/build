@@ -693,14 +693,18 @@ config("cfi_no_all") {
 
 # Enable cfi vcall
 config("cfi_vcall") {
-  cflags = [ "-fsanitize=cfi-vcall" ]
-  ldflags = [ "-fsanitize=cfi-vcall" ]
+  if (is_ohos) {
+    cflags = [ "-fsanitize=cfi-vcall" ]
+    ldflags = [ "-fsanitize=cfi-vcall" ]
+  }
 }
 
 # Enable cfi icall
 config("cfi_icall") {
-  cflags = [ "-fsanitize=cfi-icall" ]
-  ldflags = [ "-fsanitize=cfi-icall" ]
+  if (is_ohos) {
+    cflags = [ "-fsanitize=cfi-icall" ]
+    ldflags = [ "-fsanitize=cfi-icall" ]
+  }
 }
 
 config("cfi_cross_dso_debug") {
