@@ -178,7 +178,9 @@ endif()
 if(OHOS_ENABLE_UBSAN)
 	list(APPEND OHOS_C_COMPILER_FLAGS
 		-shared-libsan
-		-fsanitize=undefined)
+		-fsanitize=undefined
+    -fno-omit-frame-pointer
+    -fno-sanitize-recover=undefined)
 endif()
 
 string(REPLACE ";" " " OHOS_C_COMPILER_FLAGS "${OHOS_C_COMPILER_FLAGS}")
