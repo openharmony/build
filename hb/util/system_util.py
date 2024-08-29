@@ -33,6 +33,13 @@ class SystemUtil(metaclass=NoInstance):
 
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
+        if "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or sys.argv[-1] == "-t" or (
+                "-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'):
+            if "-v" not in sys.argv:
+                variant = 'default'
+            else:
+                variant = sys.argv[sys.argv.index("-v") + 1]
+            log_path = 'out/' + variant + '/build.log'
         if os.path.exists(log_path):
             mtime = os.stat(log_path).st_mtime
             os.rename(
