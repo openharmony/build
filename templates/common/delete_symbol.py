@@ -35,8 +35,8 @@ def main():
     copy_strip(args)
     if args.mini_debug == "true":
         ohos_root_path = os.path.join(os.path.dirname(__file__), '../../..')
-        script_path = os.path.join(ohos_root_path, '/build/toolchain/mini_debug_info.py')
-        clang_base_path = os.path.join(ohos_root_path, '/prebuilts/clang/ohos')
+        script_path = os.path.join(os.path.dirname(__file__), '../../../build/toolchain/mini_debug_info.py')
+        clang_base_path = os.path.join(os.path.dirname(__file__), '../../../prebuilts/clang/ohos')
         subprocess.call(
                 ['python3', script_path, '--unstripped-path', args.input, '--stripped-path', args.output,
                 '--root-path', ohos_root_path, '--clang-base-dir', clang_base_path])
