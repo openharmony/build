@@ -87,8 +87,13 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
+        if "-v" not in sys.argv:
+            variant = 'default'
+        else:
+            variant = sys.argv[sys.argv.index("-v") + 1]
+        logpath = os.path.join('out', variant, 'build.log')
         hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_build_cmd)
+        SystemUtil.exec_command(hpm_build_cmd, log_path=logpath)
 
     @throw_exception
     def _execute_hpm_install_cmd(self, **kwargs):
