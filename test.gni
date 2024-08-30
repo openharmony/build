@@ -169,7 +169,7 @@ template("_ohos_test") {
   }
 }
 
-template("ohos_unittest") {
+template("ohos_unittest") {  #chenjialiang modified
   _ohos_test(target_name) {
     testonly = true
     forward_variables_from(invoker, "*")
@@ -183,6 +183,19 @@ template("ohos_unittest") {
       external_deps += invoker.external_deps
     }
     external_deps += [ "googletest:gtest_main" ]
+
+    #在下方添加静态链接库的判断逻辑
+    _ans = false
+    if (defined(invoker.invoker)) {
+      _ans = invoker.invoker
+      if (defined(_ans._compile_flag_rtti_)) {
+        deps += [ "//third_party/googletest:gtest_rtti_main" ]
+      } else {
+        deps += [ "//third_party/googletest:gtest_main" ]
+      }
+    } else {
+      deps += [ "//third_party/googletest:gtest_main" ]
+    }
   }
 }
 
