@@ -229,7 +229,7 @@ _ndk_sysroot_uapi =
     [ "//interface/sdk_c/third_party/musl/ndk_script:musl_sysroot" ]
 
 _ndk_cmake = [
-  "//prebuilts/cmake/darwin-x86:darwin_cmake_copy",
+  "//prebuilts/cmake/darwin-universal:darwin_cmake_copy",
   "//prebuilts/cmake/linux-x86:linux_cmake_copy",
   "//prebuilts/cmake/windows-x86:windows_cmake_copy",
   "//prebuilts/cmake/ohos:ohos_cmake_copy",
