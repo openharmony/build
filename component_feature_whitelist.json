@@ -42,8 +42,5 @@
     "samgr_lite": [
         "config_ohos_systemabilitymgr_samgr_lite_shared_task_size",
         "enable_ohos_systemabilitymgr_samgr_lite_rpc_mini"
-    ],
-    "graphic_utils_lite": [
-        "enable_ohos_graphic_utils_product_config"
     ]
 }
