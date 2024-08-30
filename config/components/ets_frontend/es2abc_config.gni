@@ -15,27 +15,27 @@ import("//build/config/components/ets_frontend/ets_frontend_config.gni")
 
 es2abc_root = "//arkcompiler/ets_frontend/es2panda"
 es2abc_build_path = ""
-es2abc_build_deps = ""
+es2abc_build_deps = []
 es2abc_out_root = ""
 es2abc_indep_path =
     "//binarys/arkcompiler/ets_frontend/innerapis/es2panda/clang_x64/libs"
 
-if (host_toolchain == toolchain_mac) {
-  es2abc_out_root =
-      get_label_info("$es2abc_root:es2panda($toolchain_mac)", "root_out_dir")
-  es2abc_build_deps = [ "$es2abc_root:es2panda($toolchain_mac)" ]
-} else if (host_toolchain == toolchain_win) {
-  es2abc_out_root =
-      get_label_info("$es2abc_root:es2panda($toolchain_win)", "root_out_dir")
-  es2abc_build_deps = [ "$es2abc_root:es2panda($toolchain_win)" ]
-} else {
-  es2abc_out_root =
-      get_label_info("$es2abc_root:es2panda($toolchain_linux)", "root_out_dir")
-  es2abc_build_deps = [ "$es2abc_root:es2panda($toolchain_linux)" ]
-}
 if (ohos_indep_compiler_enable) {
   es2abc_build_path = es2abc_indep_path
 } else {
+  if (host_toolchain == toolchain_mac) {
+    es2abc_out_root =
+        get_label_info("$es2abc_root:es2panda($toolchain_mac)", "root_out_dir")
+    es2abc_build_deps += [ "$es2abc_root:es2panda($toolchain_mac)" ]
+  } else if (host_toolchain == toolchain_win) {
+    es2abc_out_root =
+        get_label_info("$es2abc_root:es2panda($toolchain_win)", "root_out_dir")
+    es2abc_build_deps += [ "$es2abc_root:es2panda($toolchain_win)" ]
+  } else {
+    es2abc_out_root = get_label_info("$es2abc_root:es2panda($toolchain_linux)",
+                                     "root_out_dir")
+    es2abc_build_deps += [ "$es2abc_root:es2panda($toolchain_linux)" ]
+  }
   es2abc_build_path = es2abc_out_root + "/arkcompiler/ets_frontend"
 }
 
@@ -104,6 +104,69 @@ template("es2abc_gen_abc") {
     if (defined(invoker.in_puts)) {
       inputs = invoker.in_puts
     }
+
+    outputs = invoker.out_puts
+  }
+}
+
+template("es2abc_gen_newest_abc") {
+  assert(defined(invoker.src_js), "src_js is required!")
+  assert(defined(invoker.dst_file), "dst_file is required!")
+  assert(defined(invoker.out_puts), "out_puts is required!")
+
+  extra_dependencies = []
+  if (defined(invoker.extra_dependencies)) {
+    extra_dependencies += invoker.extra_dependencies
+  }
+
+  action("$target_name") {
+    if (defined(invoker.extra_visibility)) {
+      visibility = invoker.extra_visibility
+    }
+
+    script = "//build/scripts/generate_js_bytecode.py"
+
+    deps = extra_dependencies
+    deps += es2abc_build_deps
+
+    args = [
+      "--src-js",
+      invoker.src_js,
+      "--dst-file",
+      invoker.dst_file,
+      "--frontend-tool-path",
+      rebase_path("${es2abc_build_path}"),
+    ]
+
+    if (defined(invoker.extension)) {
+      args += [
+        "--extension",
+        invoker.extension,
+      ]
+    }
+
+    if (defined(invoker.dump_symbol_table)) {
+      args += [
+        "--dump-symbol-table",
+        invoker.dump_symbol_table,
+      ]
+    }
+    if (defined(invoker.input_symbol_table)) {
+      args += [
+        "--input-symbol-table",
+        invoker.input_symbol_table,
+      ]
+    }
+
+    if (defined(invoker.extra_args)) {
+      args += invoker.extra_args
+    }
+
+    if (defined(invoker.in_puts)) {
+      inputs = invoker.in_puts
+    }
+
+    args += [ "--target-api-sub-version=beta3" ]
 
     outputs = invoker.out_puts
   }
