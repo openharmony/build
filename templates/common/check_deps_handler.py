@@ -134,7 +134,7 @@ def check_part_deps(args, part_pattern: str, path_parts_info: dict, compile_stan
     third_party_info.reverse()
     for dep in args.deps:
         dep_path = get_path_from_label(dep)
-        if dep_path.find('third_party/rust/crates') != -1 or dep_path.find('vendor/open_source') != -1:
+        if dep_path.find('third_party/rust/crates') != -1:
             continue
         if dep_path.find('third_party') != -1:
             dep_part = get_dep_part(dep_path, third_party_info)
