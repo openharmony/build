@@ -28,6 +28,7 @@ from exceptions.ohos_exception import OHOSException
 from util.system_util import SystemUtil
 from util.log_util import LogUtil
 from containers.status import throw_exception
+from util.monitor import Monitor
 
 
 class OHOSBuildModule(BuildModuleInterface):
@@ -62,10 +63,13 @@ class OHOSBuildModule(BuildModuleInterface):
     @throw_exception
     def run(self):
         try:
+            monitor = Monitor()
             super().run()
         except OHOSException as exception:
+            monitor.run()
             raise exception
         else:
+            monitor.run()
             LogUtil.hb_info('{} build success'.format(
                 self.args_dict.get('product_name').arg_value))
 
