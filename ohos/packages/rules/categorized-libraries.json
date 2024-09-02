@@ -94,5 +94,13 @@
   "//foundation/arkui/ace_engine/interfaces/native:ace_ndk": {
     "so_file_name": "libace_ndk.z.so",
     "categories": [ "ndk" ]
+  },
+  "//third_party/vulkan-loader:vulkan_loader": {
+    "so_file_name": "libvulkan.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//foundation/filemanagement/file_api/interfaces/kits/rust:rust_file": {
+    "so_file_name": "librust_file.z.so",
+    "categories": [ "platformsdk" ]
   }
 }
