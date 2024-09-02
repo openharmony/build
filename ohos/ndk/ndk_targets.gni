@@ -53,6 +53,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/BasicServicesKit:os_account_ndk_header",
   "//interface/sdk_c/ability/ability_runtime/child_process:child_process_header",
   "//interface/sdk_c/ability/ability_runtime/child_process:libchild_process",
+  "//interface/sdk_c/AbilityKit/ability_runtime:ability_runtime_ndk_header",
+  "//interface/sdk_c/AbilityKit/ability_runtime:libability_runtime",
   "//interface/sdk_c/arkui/ace_engine/native:ace_header",
   "//interface/sdk_c/arkui/ace_engine/native:arkui_header",
   "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
