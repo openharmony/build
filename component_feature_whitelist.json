@@ -35,10 +35,6 @@
         "config_ohos_aafwk_aafwk_lite_task_stack_size",
         "enable_ohos_appexecfwk_feature_ability"
     ],
-    "ui_lite": [
-        "enable_video_component",
-        "enable_graphic_font"
-    ],
     "samgr_lite": [
         "config_ohos_systemabilitymgr_samgr_lite_shared_task_size",
         "enable_ohos_systemabilitymgr_samgr_lite_rpc_mini"
