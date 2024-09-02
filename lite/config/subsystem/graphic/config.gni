@@ -14,8 +14,8 @@
 #
 
 declare_args() {
-  enable_graphic_font = false
+  ui_lite_enable_graphic_font_config = false
   enable_graphic_dualcore = false
-  enable_video_component = false
-  enable_canvas_extend = false
+  ui_lite_enable_video_component_config = false
+  ui_lite_enable_canvas_extend = false
 }
