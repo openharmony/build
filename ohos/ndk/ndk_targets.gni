@@ -218,6 +218,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/inputmethod:libohinputmethod_header",
   "//interface/sdk_c/backgroundtasks/transient:libtransient_task_ndk",
   "//interface/sdk_c/backgroundtasks/transient:transient_task_header",
+  "//interface/sdk_c/BasicServicesKit:ohbattery_info_header",
+  "//interface/sdk_c/BasicServicesKit:libohbattery_info_ndk",
   "//interface/sdk_c/telephony/cellular_data:libtelephony_data",
   "//interface/sdk_c/telephony/cellular_data:telephony_data_header",
   "//interface/sdk_c/telephony/core_service:libtelephony_radio",
