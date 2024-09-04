@@ -50,6 +50,12 @@ def parse_args():
                         help='input symbol table for patch abc')
     parser.add_argument("--target-api-sub-version",
                         help='input symbol table for patch abc')
+    parser.add_argument("--module-record-field-name",
+                        help='specify the field name of module record in unmerged abc. This argument is optional, ' +
+                             'its value will be the path of input file if not specified')
+    parser.add_argument("--source-file",
+                        help='specify the file path info recorded in generated abc. This argument is optional, ' +
+                             'its value will be the path of input file if not specified')
     arguments = parser.parse_args()
     return arguments
 
@@ -90,6 +96,10 @@ def gen_abc_info(input_arguments):
     if input_arguments.generate_patch:
         src_index = cmd.index(input_arguments.src_js)
         cmd.insert(src_index, '--generate-patch')
+    if input_arguments.module_record_field_name:
+        cmd += ["--module-record-field-name", input_arguments.module_record_field_name]
+    if input_arguments.source_file:
+        cmd += ["--source-file", input_arguments.source_file]
         # insert d.ts option to cmd later
     cmd.append("--target-api-sub-version=beta3")
     run_command(cmd, path)
