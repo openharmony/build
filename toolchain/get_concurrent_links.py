@@ -8,7 +8,6 @@
 # in the build as a function of machine spec. It's based
 # on GetDefaultConcurrentLinks in GYP.
 
-import get_cpu_count
 import multiprocessing
 import optparse
 import os
@@ -38,8 +37,14 @@ def _get_total_memory_in_bytes():
         ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(stat))
         return stat.ullTotalPhys
     elif sys.platform.startswith('linux'):
-        return _get_total_memory()
-
+        if os.path.exists("/proc/meminfo"):
+            with open("/proc/meminfo") as meminfo:
+                memtotal_re = re.compile(r'^MemTotal:\s*(\d*)\s*kB')
+                for line in meminfo:
+                    match = memtotal_re.match(line)
+                    if not match:
+                        continue
+                    return float(match.group(1)) * 2**10
     elif sys.platform == 'darwin':
         try:
             return int(subprocess.check_output(['sysctl', '-n', 'hw.memsize']))
@@ -50,59 +55,17 @@ def _get_total_memory_in_bytes():
 
 def _get_default_concurrent_links(mem_per_link_gb, reserve_mem_gb):
     mem_total_bytes = _get_total_memory_in_bytes()
-    mem_total_bytes = max(0, mem_total_bytes - reserve_mem_gb * 2 ** 30)
+    mem_total_bytes = max(0, mem_total_bytes - reserve_mem_gb * 2**30)
     num_concurrent_links = int(
-        max(1, mem_total_bytes / mem_per_link_gb / 2 ** 30))
-    hard_cap = max(1, int(os.getenv('GYP_LINK_CONCURRENCY_MAX', 2 ** 32)))
+        max(1, mem_total_bytes / mem_per_link_gb / 2**30))
+    hard_cap = max(1, int(os.getenv('GYP_LINK_CONCURRENCY_MAX', 2**32)))
 
     try:
-        cpu_cap = get_cpu_count.get_cpu_count()
+        cpu_cap = multiprocessing.cpu_count()
     except: # noqa E722
         cpu_cap = 1
 
     return min(num_concurrent_links, hard_cap, cpu_cap)
-
-
-def _get_total_memory():
-    total_memory = _get_host_memory()       
-    cfs_quota_us = -1
-    quota_us_file = "/sys/fs/cgroup/cpu/cpu.cfs_quota_us"
-    if os.path.exists(quota_us_file):
-        try:
-            with open(quota_us_file, 'r') as quota:
-                cfs_quota_us = int(quota.read().strip())
-        except IOError:
-            pass
-
-    memory_limit_file = "/sys/fs/cgroup/memory/memory.limit_in_bytes"
-    if os.path.exists(memory_limit_file) and cfs_quota_us != -1:
-        try:
-            with open(memory_limit_file, 'r') as memory:
-                total_memory = int(memory.read().strip())
-        except IOError:
-            pass
-    return total_memory    
-
-
-def _get_host_memory():
-    if not os.path.exists("/proc/meminfo"):
-        return 0
-    try:
-        with open("/proc/meminfo") as meminfo:
-            return _get_memory(meminfo)
-    except IOError:
-        pass
-    return 0
-
-
-def _get_memory(meminfo):
-    memtotal_re = re.compile(r'^MemTotal:\s*(\d*)\s*kB')
-    for line in meminfo:
-        match = memtotal_re.match(line)
-        if not match:
-            continue
-        return int(match.group(1)) * 2 ** 10
-    return 0
 
 
 def main():
