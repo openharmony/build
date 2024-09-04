@@ -87,7 +87,7 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-6fe50d-20240902",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -101,7 +101,7 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-6fe50d-20240902",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -122,7 +122,7 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk_ohos-arm64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk_ohos-arm64-6fe50d-20240902",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk",
       "rename": "true"
     },
@@ -132,7 +132,7 @@
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-6fe50d-20240902",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
@@ -216,12 +216,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/ohos_arm64/clang_ohos-arm64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/ohos_arm64/clang_ohos-arm64-6fe50d-20240902.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/ohos_arm64/libcxx-ndk_ohos-arm64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/ohos_arm64/libcxx-ndk_ohos-arm64-6fe50d-20240902.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -236,12 +236,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/clang_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/linux/clang_linux-x86_64-6fe50d-20240902.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/libcxx-ndk_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/linux/libcxx-ndk_linux-x86_64-6fe50d-20240902.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -328,12 +328,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/ohos_arm64/clang_ohos-arm64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/ohos_arm64/clang_ohos-arm64-6fe50d-20240902.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/ohos_arm64/libcxx-ndk_ohos-arm64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/ohos_arm64/libcxx-ndk_ohos-arm64-6fe50d-20240902.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -348,12 +348,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/clang_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/linux/clang_linux-x86_64-6fe50d-20240902.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/libcxx-ndk_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-6fe50d/linux/libcxx-ndk_linux-x86_64-6fe50d-20240902.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
