@@ -363,6 +363,7 @@ template("ohos_sanitizer_config") {
           configs += [ "//build/config/sanitizers:cfi_vcall" ]
           configs += [ "//build/config/sanitizers:cfi_icall" ]
         }
+        configs += [ "//build/config/sanitizers:cfi_trap_function_flags" ]
       }
       configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }
