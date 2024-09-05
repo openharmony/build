@@ -102,5 +102,17 @@
   "//foundation/filemanagement/file_api/interfaces/kits/rust:rust_file": {
     "so_file_name": "librust_file.z.so",
     "categories": [ "platformsdk" ]
+  },
+  "//arkcompiler/toolchain/inspector:ark_debugger": {
+    "so_file_name": "libark_inspector.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//arkcompiler/toolchain/inspector:connectserver_debugger": {
+    "so_file_name": "libark_connect_inspector.z.so",
+    "categories": [ "platformsdk" ]
+  },
+  "//arkcompiler/toolchain/tooling:libark_ecma_debugger": {
+    "so_file_name": "libark_tooling.so",
+    "categories": [ "platformsdk" ]
   }
 }
