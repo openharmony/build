@@ -51,16 +51,23 @@ class Monitor():
 
         cmd = "top -bn1 | grep '%Cpu(s)' | awk '{print $2, $4, $8}'"
         result = os.popen(cmd).read().strip()
+
         if result:
             parts = result.split()
             if len(parts) == 3:
-                usr_cpu = float(parts[0].rstrip('%')) if parts[0].endswith('%') else float(parts[0])
-                sys_cpu = float(parts[1].rstrip('%')) if parts[1].endswith('%') else float(parts[1])
-                idle_cpu = float(parts[2].rstrip('%')) if parts[2].endswith('%') else float(parts[2])
-                self.usr_cpu = usr_cpu
-                self.sys_cpu = sys_cpu
-                self.idle_cpu = idle_cpu
-                return self.usr_cpu, self.sys_cpu, self.idle_cpu
+                try:
+                    # 清理掉非数值字符，并处理转换异常
+                    usr_cpu = float(parts[0].rstrip('%')) if parts[0].replace('.', '', 1).isdigit() else RET_CONSTANT
+                    sys_cpu = float(parts[1].rstrip('%')) if parts[1].replace('.', '', 1).isdigit() else RET_CONSTANT
+                    idle_cpu = float(parts[2].rstrip('%')) if parts[2].replace('.', '', 1).isdigit() else RET_CONSTANT
+
+                    self.usr_cpu = usr_cpu
+                    self.sys_cpu = sys_cpu
+                    self.idle_cpu = idle_cpu
+                    return self.usr_cpu, self.sys_cpu, self.idle_cpu
+                except ValueError:
+                    # 如果转换失败，则返回默认值
+                    return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
             else:
                 return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
         else:
