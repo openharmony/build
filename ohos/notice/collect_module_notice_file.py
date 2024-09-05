@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Copyright (c) 2021 Huawei Device Co., Ltd.
@@ -131,6 +130,11 @@ def add_path_to_module_notice(module_notice_info, module_notice_info_list, optio
         if module_notice_info.get('Software', None):
             module_notice_info['Path'] = "/{}".format(options.module_source_dir[5:])
             module_notice_info_list.append(module_notice_info)
+    if module_notice_info_list:
+        for module_notice_info in module_notice_info_list:
+            module_path = module_notice_info.get("Path", None)
+            if module_path is not None:
+                module_notice_info["Path"] = module_path.replace("../", "")
 
 
 def do_collect_notice_files(options, depfiles: str):
