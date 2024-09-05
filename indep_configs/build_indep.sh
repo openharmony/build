@@ -19,11 +19,11 @@ VARIANTS="default"
 if [ -n "$4" ]; then
   VARIANTS=$4
 fi
-rm -rf out/$VARIANTS
+# keep the logs of hpm
+find out/$VARIANTS -type f -not -name '*.log' -delete
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
-mkdir -p out/$VARIANTS
 mkdir -p out/preloader
 mkdir -p out/$VARIANTS/build_configs/parts_info
 cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/build_configs
