@@ -59,17 +59,26 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         '''
         build_executor = indep_build_module.hpm
         if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):  # 第一个部件名参数
-            target_arg.arg_value = sys.argv[2]
+            part_name_list = []
+            for name in sys.argv[2:]:
+                if not name.startswith('-'):
+                    part_name_list.append(name)
+                else:
+                    break
+            target_arg.arg_value = part_name_list
 
         if target_arg.arg_value:
-            try:
-                bundle_path = ComponentUtil.search_bundle_file(target_arg.arg_value)
-            except Exception as e:
-                raise OHOSException('Please check the bundle.json file of {} : {}'.format(target_arg.arg_value, e))
-            if not bundle_path:
-                print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(target_arg.arg_value))
-                sys.exit(1)
-            build_executor.regist_flag('path', bundle_path)
+            bundle_path_list = []
+            for path in target_arg.arg_value:
+                try:
+                    bundle_path = ComponentUtil.search_bundle_file(path)
+                    bundle_path_list.append(bundle_path)
+                except Exception as e:
+                    raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
+                if not bundle_path:
+                    print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(path))
+                    sys.exit(1)
+            build_executor.regist_flag('path', ','.join(bundle_path_list))
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
             if part_name:
