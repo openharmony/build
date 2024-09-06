@@ -34,7 +34,7 @@ KERNEL_MAKE := \
 PWD:=$(shell pwd)
 
 default:
-	$(KERNEL_MAKE) -C $(KDIR) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) M=$(PWD) modules
+	$(KERNEL_MAKE) -fstack-protector-all -C $(KDIR) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) M=$(PWD) modules
 
 clean:
 	rm -rf .*.cmd *.o *.mod.c *.ko *.tmp_version *.order *symvers *Module.markers .*.o.d *.mod .thinlto-cache
