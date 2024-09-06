@@ -53,7 +53,7 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
             raise exception
         else:
             LogUtil.hb_info('{} build success'.format(
-                self.args_dict.get('part').arg_value))
+                ' '.join(self.args_dict.get('part').arg_value)))
             
     def _target_compilation(self):
         self._run_phase()
