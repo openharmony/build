@@ -61,7 +61,7 @@ def throw_exception(func):
                 _type = 'UNKNOWN ERROR TYPE'
                 _desc = 'NO DESCRIPTION'
                 _solution = 'NO SOLUTION'
-            if judge_indep():
+            if not judge_indep():
                 _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
             exit(-1)
     return wrapper
@@ -73,9 +73,9 @@ def judge_indep():
     if sys.argv[1] == 'build' and (
         "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or sys.argv[-1] == "-t" or (
         "-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-')):
-        return False
-    else:
         return True
+    else:
+        return False
 
 
 def _print_formatted_tracebak(_code, _exception, _type, _desc, _solution):
