@@ -246,6 +246,10 @@ template("hdi") {
       if (defined(invoker.cflags_cc)) {
         cflags_cc = invoker.cflags_cc
       }
+
+      if (defined(invoker.branch_protector_ret)) {
+        branch_protector_ret = invoker.branch_protector_ret
+      }
     }
   }
 
@@ -304,6 +308,10 @@ template("hdi") {
 
         if (defined(invoker.cflags_cc)) {
           cflags_cc = invoker.cflags_cc
+        }
+
+        if (defined(invoker.branch_protector_ret)) {
+          branch_protector_ret = invoker.branch_protector_ret
         }
       }
     }
