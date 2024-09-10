@@ -114,5 +114,9 @@
   "//arkcompiler/toolchain/tooling:libark_ecma_debugger": {
     "so_file_name": "libark_tooling.so",
     "categories": [ "platformsdk" ]
+  },
+  "//foundation/graphic/graphic_2d/frameworks/surfaceimage:libnative_image": {
+    "so_file_name": "libnative_image.so",
+    "categories": [ "platformsdk" ]
   }
 }
