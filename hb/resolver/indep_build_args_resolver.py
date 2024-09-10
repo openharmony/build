@@ -27,6 +27,17 @@ from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
 
 
+def get_part_name():
+    part_name_list = []
+    if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):           
+        for name in sys.argv[2:]:
+            if not name.startswith('-'):
+                part_name_list.append(name)
+            else:
+                break
+    return part_name_list
+
+
 class IndepBuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
@@ -58,14 +69,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         编译部件名获取优先级： hb build 指定的部件名参数  > hb build 在部件源码仓运行时通过找到bundle.json获取到的部件名 > hb env 设置的部件名参数
         '''
         build_executor = indep_build_module.hpm
-        if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):  # 第一个部件名参数
-            part_name_list = []
-            for name in sys.argv[2:]:
-                if not name.startswith('-'):
-                    part_name_list.append(name)
-                else:
-                    break
-            target_arg.arg_value = part_name_list
+        target_arg.arg_value = get_part_name()
 
         if target_arg.arg_value:
             bundle_path_list = []
