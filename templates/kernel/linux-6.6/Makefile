@@ -16,7 +16,7 @@ KDIR:=${OHOS_BUILD_HOME}/out/KERNEL_OBJ/kernel/OBJ/linux-6.6
 endif
 
 CLANG_HOST_TOOLCHAIN := $(OHOS_BUILD_HOME)/prebuilts/clang/ohos/linux-x86_64/llvm/bin
-CLANG_CC := $(CLANG_HOST_TOOLCHAIN)/clang
+CLANG_CC := $(CLANG_HOST_TOOLCHAIN)/clang -fstack-protector-all
 
 PAHOLE_TOOLCHAIN := $(OHOS_BUILD_HOME)/prebuilts/develop_tools/pahole/bin
 
@@ -33,7 +33,7 @@ KERNEL_MAKE := \
 PWD:=$(shell pwd)
 
 default:
-	export KBUILD_MODPOST_WARN=1 && $(KERNEL_MAKE) -fstack-protector-all -C $(KDIR) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) M=$(PWD) modules
+	export KBUILD_MODPOST_WARN=1 && $(KERNEL_MAKE) -C $(KDIR) ARCH=$(KERNEL_ARCH) $(KERNEL_CROSS_COMPILE) M=$(PWD) modules
 
 clean:
 	rm -rf .*.cmd *.o *.mod.c *.ko *.tmp_version *.order *symvers *Module.markers .*.o.d *.mod .thinlto-cache
