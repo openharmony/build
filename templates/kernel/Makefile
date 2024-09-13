@@ -17,7 +17,7 @@ endif
 
 
 CLANG_HOST_TOOLCHAIN := $(OHOS_BUILD_HOME)/prebuilts/clang/ohos/linux-x86_64/llvm/bin
-CLANG_CC := $(CLANG_HOST_TOOLCHAIN)/clang
+CLANG_CC := $(CLANG_HOST_TOOLCHAIN)/clang -fstack-protector-all
 
 PAHOLE_TOOLCHAIN := $(OHOS_BUILD_HOME)/prebuilts/develop_tools/pahole/bin
 
