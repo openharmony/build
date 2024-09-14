@@ -313,7 +313,8 @@ config("compiler") {
 
   if (is_linux || is_android || is_ohos) {
     if (use_pic) {
-      configs += [ "//build/config/security:pic_config" ]
+      cflags += [ "-fPIC" ]
+      ldflags += [ "-fPIC" ]
     }
 
     if (!is_clang) {
@@ -322,7 +323,11 @@ config("compiler") {
       cflags += [ "-pipe" ]
     }
 
-    configs += [ "//build/config/security:-Wl-z_config" ]
+    ldflags += [
+      "-Wl,-z,noexecstack",
+      "-Wl,-z,now",
+      "-Wl,-z,relro",
+    ]
 
     # Compiler instrumentation can introduce dependencies in DSOs to symbols in
     # the executable they are loaded into, so they are unresolved at link-time.
