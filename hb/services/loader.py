@@ -16,6 +16,8 @@
 # limitations under the License.
 
 import os
+import json
+import copy
 
 from services.interface.load_interface import LoadInterface
 from containers.status import throw_exception
@@ -27,6 +29,7 @@ from util.loader import subsystem_scan  # noqa: E402
 from util.loader import subsystem_info  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
 from util.log_util import LogUtil
+from resources.config import Config
 
 
 class OHOSLoader(LoadInterface):
@@ -76,6 +79,16 @@ class OHOSLoader(LoadInterface):
             self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
         self.example_subsystem_file = os.path.join(
             self.config.root_path, 'build', 'subsystem_config_example.json')
+        self.parts_src_file = os.path.join(
+            self.config_output_dir, 'parts_src_flag.json')
+        self.auto_install_file = os.path.join(
+            self.config_output_dir, 'auto_install_parts.json')
+        self.components_file = os.path.join(
+            self.config_output_dir, 'parts_info', 'components.json')
+        self.target_platform_file = os.path.join(
+            self.config_output_dir, "target_platforms_parts.json")
+        self.cropping_allow_file = os.path.join(
+            self.config.root_path, 'out/products_ext/cropping_allow_list.json')
 
         compile_standard_allow_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'compile_standard_whitelist.json')
@@ -135,6 +148,29 @@ class OHOSLoader(LoadInterface):
         self.required_parts_targets_list = self._get_required_build_parts_list()
         self.required_phony_targets = self._get_required_phony_targets()
         self.required_parts_targets = self._get_required_build_targets()
+    
+    @throw_exception
+    def _cropping_components(self):
+        with os.fdopen(os.open(self.parts_src_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
+            src_parts = json.load(fd)
+
+        with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
+            auto_parts = json.load(fd)
+        
+        with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
+            cropping_parts = json.load(fd)
+        
+        with os.fdopen(os.open(self.components_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as components_fd:
+            components_data = json.load(components_fd)
+
+        new_components_data = copy.deepcopy(components_data)
+        
+        for component, component_value in components_data.items():
+            if component not in src_parts and component not in auto_parts and component not in cropping_parts:
+                del new_components_data[component]
+        os.rename(self.components_file, f"{self.components_file}_old")
+        with os.fdopen(os.open(f"{self.components_file}", os.O_CREAT | os.O_WRONLY, mode=0o644), 'w+') as new_components_fd:
+            json.dump(new_components_data, new_components_fd, indent=2)
 
 # check method
 
@@ -255,9 +291,6 @@ class OHOSLoader(LoadInterface):
                 all_syscap_list.append(syscap_string.split('=')[0].strip())
 
         for key, value in syscap_product_dict['part_to_syscap'].items():
-            part = self.parts_info.get(key)
-            if part is None:
-                continue
             for syscap in value:
                 if syscap not in all_syscap_list:
                     raise OHOSException(
@@ -945,3 +978,4 @@ class OHOSLoader(LoadInterface):
             part = part.replace("/", "_")
             parts_config[part] = True
         write_json_file(output_file, parts_config)
+
