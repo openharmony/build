@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -66,6 +67,7 @@ class LoadInterface(ServiceInterface):
         self._generate_infos_for_testfwk()
         self._check_product_part_feature()
         self._generate_syscap_files()
+        self._cropping_components()
 
     @abstractmethod
     def _execute_loader_args_display(self):
@@ -98,7 +100,11 @@ class LoadInterface(ServiceInterface):
     @abstractmethod
     def _generate_target_gn(self):
         pass
-
+    
+    @abstractmethod
+    def _cropping_components(self):
+        pass
+   
     @abstractmethod
     def _generate_phony_targets_build_file(self):
         pass
