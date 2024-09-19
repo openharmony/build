@@ -85,8 +85,6 @@ class OHOSLoader(LoadInterface):
             self.config_output_dir, 'auto_install_parts.json')
         self.components_file = os.path.join(
             self.config_output_dir, 'parts_info', 'components.json')
-        self.target_platform_file = os.path.join(
-            self.config_output_dir, "target_platforms_parts.json")
         self.third_party_file = os.path.join(
             self.config.root_path, 'out/products_ext/third_party_allow_list.json')
 
