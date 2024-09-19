@@ -54,8 +54,8 @@
     "harfbuzz",
     "qrcodegen",
     "jerryscript",
-
-  	"resource_schedule_service",
+    
+    "resource_schedule_service",
     "hilog",
 
     "config_policy",
