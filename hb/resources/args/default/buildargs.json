@@ -376,16 +376,6 @@
     "resolve_function": "resolve_runtime_mode",
     "testFunction": "testResolveRuntimeMode"
   },
-  "check_compilation_parameters": {
-    "arg_name": "--check-compilation-parameters",
-    "argDefault": false,
-    "arg_help": "Default:false. Help:check compilation parameters",
-    "arg_phase": "postTargetGenerate",
-    "arg_type": "bool",
-    "arg_attribute": {},
-    "resolve_function": "resolve_check_compilation_parameters",
-    "testFunction": "testCheckCompilationParameters"
-  },
   "keep_ninja_going": {
     "arg_name": "--keep-ninja-going",
     "argDefault": false,

@@ -41,7 +41,6 @@ from util.component_util import ComponentUtil
 from util.product_util import ProductUtil
 from util.prebuild.patch_process import Patch
 from util.post_build.part_rom_statistics import output_part_rom_status
-from util.post_gn.check_compilation_parameters import check_compilation_parameters
 
 
 def rename_file(source_file, target_file):
@@ -654,16 +653,6 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         target_generator = build_module.target_generator
         target_generator.regist_arg('runtime_mode', target_arg.arg_value)
-
-    @staticmethod
-    def resolve_check_compilation_parameters(target_arg: Arg, build_module: BuildModuleInterface):
-        """resolve '--check-compilation-parameters' arg
-        :param target_arg: arg object which is used to get arg value.
-        :param build_module [maybe unused]: build module object which is used to get other services.
-        :phase: postTargetGenerate.
-        """
-        if target_arg.arg_value:
-            check_compilation_parameters(CURRENT_OHOS_ROOT)
         
     @staticmethod
     def resolve_keep_ninja_going(target_arg: Arg, build_module: BuildModuleInterface):
