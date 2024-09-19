@@ -87,8 +87,8 @@ class OHOSLoader(LoadInterface):
             self.config_output_dir, 'parts_info', 'components.json')
         self.target_platform_file = os.path.join(
             self.config_output_dir, "target_platforms_parts.json")
-        self.cropping_allow_file = os.path.join(
-            self.config.root_path, 'out/products_ext/cropping_allow_list.json')
+        self.third_party_file = os.path.join(
+            self.config.root_path, 'out/products_ext/third_party_allow_list.json')
 
         compile_standard_allow_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'compile_standard_whitelist.json')
@@ -148,7 +148,21 @@ class OHOSLoader(LoadInterface):
         self.required_parts_targets_list = self._get_required_build_parts_list()
         self.required_phony_targets = self._get_required_phony_targets()
         self.required_parts_targets = self._get_required_build_targets()
+
     
+    @throw_exception
+    def _merge_components_info(self, components):
+        config = Config()
+        sdk_components_file = os.path.join(config.root_path, "out/products_ext/components.json")
+        if not os.path.exists(sdk_components_file):
+            return
+    
+        sdk_components_info = read_json_file(sdk_components_file)
+        for name, val in sdk_components_info.items():
+            if name not in components.keys():
+                components[name] = val
+
+
     @throw_exception
     def _cropping_components(self):
         with os.fdopen(os.open(self.parts_src_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
@@ -157,7 +171,7 @@ class OHOSLoader(LoadInterface):
         with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
             auto_parts = json.load(fd)
         
-        with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
+        with os.fdopen(os.open(self.third_party_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
             cropping_parts = json.load(fd)
         
         with os.fdopen(os.open(self.components_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as components_fd:
@@ -168,9 +182,11 @@ class OHOSLoader(LoadInterface):
         for component, component_value in components_data.items():
             if component not in src_parts and component not in auto_parts and component not in cropping_parts:
                 del new_components_data[component]
-        os.rename(self.components_file, f"{self.components_file}_old")
-        with os.fdopen(os.open(f"{self.components_file}", os.O_CREAT | os.O_WRONLY, mode=0o644), 'w+') as new_components_fd:
+        self._merge_components_info(new_components_data)
+        os.remove(self.components_file)
+        with os.fdopen(os.open(self.components_file, os.O_CREAT | os.O_WRONLY, mode=0o644), 'w+') as new_components_fd:
             json.dump(new_components_data, new_components_fd, indent=2)
+        
 
 # check method
 
