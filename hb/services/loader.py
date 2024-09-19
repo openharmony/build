@@ -85,8 +85,6 @@ class OHOSLoader(LoadInterface):
             self.config_output_dir, 'auto_install_parts.json')
         self.components_file = os.path.join(
             self.config_output_dir, 'parts_info', 'components.json')
-        self.third_party_file = os.path.join(
-            self.config.root_path, 'out/products_ext/third_party_allow_list.json')
 
         compile_standard_allow_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'compile_standard_whitelist.json')
@@ -169,6 +167,9 @@ class OHOSLoader(LoadInterface):
         with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
             auto_parts = json.load(fd)
         
+        self.third_party_file = os.path.join(self.config.root_path, "out/products_ext/third_party_allow_list.json")
+        if not os.path.exists(third_party_allow_list):
+            self.third_party_file = os.path.join(self.config.root_path, 'build/third_party_allow_list.json')
         with os.fdopen(os.open(self.third_party_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
             cropping_parts = json.load(fd)
         
