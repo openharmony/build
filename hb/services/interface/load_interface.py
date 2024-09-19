@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -100,7 +99,7 @@ class LoadInterface(ServiceInterface):
     @abstractmethod
     def _generate_target_gn(self):
         pass
-    
+
     @abstractmethod
     def _cropping_components(self):
         pass
