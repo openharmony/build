@@ -168,7 +168,7 @@ class OHOSLoader(LoadInterface):
             auto_parts = json.load(fd)
         
         self.third_party_file = os.path.join(self.config.root_path, "out/products_ext/third_party_allow_list.json")
-        if not os.path.exists(third_party_allow_list):
+        if not os.path.exists(self.third_party_file):
             self.third_party_file = os.path.join(self.config.root_path, 'build/third_party_allow_list.json')
         with os.fdopen(os.open(self.third_party_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
             cropping_parts = json.load(fd)
