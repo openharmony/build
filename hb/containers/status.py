@@ -61,11 +61,18 @@ def throw_exception(func):
                 _type = 'UNKNOWN ERROR TYPE'
                 _desc = 'NO DESCRIPTION'
                 _solution = 'NO SOLUTION'
-            if not (sys.argv[1] == 'build' and ("--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] 
-                                                or (len(sys.argv) == 4 and sys.argv[-1] == "-t"))):
+            if not judge_indep():
                 _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
             exit(-1)
     return wrapper
+
+
+def judge_indep():
+    """Description: judge whether it is related to independent build
+    """
+    return sys.argv[1] == 'build' and (
+            "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or sys.argv[-1] == "-t" or (
+            "-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))
 
 
 def _print_formatted_tracebak(_code, _exception, _type, _desc, _solution):
