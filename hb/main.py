@@ -29,7 +29,7 @@ sys.path.append(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lite'))  # ohos/build/lite dir
 
 from containers.arg import Arg, ModuleType
-from containers.status import throw_exception
+from containers.status import throw_exception, judge_indep
 from resources.global_var import ARGS_DIR
 from resources.global_var import CURRENT_OHOS_ROOT
 from exceptions.ohos_exception import OHOSException
@@ -197,7 +197,7 @@ class Main():
         return OHOSIndepBuildModule(args_dict, indep_build_args_resolver, hpm)
 
     def _is_indep_build(self) -> bool:
-        if "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or (len(sys.argv) == 4 and sys.argv[-1] == "-t"):
+        if judge_indep():
             return True
         env_args_dict = Arg.read_args_file(ModuleType.ENV)
         return env_args_dict.get("indep_build").get("argDefault")

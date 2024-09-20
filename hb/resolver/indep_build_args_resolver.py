@@ -109,3 +109,11 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value))
         else:
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("default"))
+    
+    @staticmethod
+    def resolve_branch(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        build_executor = indep_build_module.hpm
+        if target_arg.arg_value:
+            build_executor.regist_flag('branch', target_arg.arg_value)
+        else:
+            build_executor.regist_flag('branch', "master")

@@ -13,11 +13,11 @@
 
 # OHOS version
 declare_args() {
-  sdk_version = "5.0.0.41"
-  api_version = "12"
+  sdk_version = "5.0.2.43"
+  api_version = "14"
 
   # Release type, optional values: Betax, RCx...
-  release_type = "Release"
+  release_type = "Canary1"
   meta_version = "3.0.0"
   platform_version = "4.0.0"
 }
