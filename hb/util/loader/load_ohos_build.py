@@ -698,17 +698,6 @@ def check_subsystem_and_component(parts_info_output_path, skip_partlist_check):
                                                 subsystem_components_list)
 
 
-def _merge_components_info(components):
-    config = Config()
-    sdk_components_file = os.path.join(config.root_path, "out/products_ext/components.json")
-    if not os.path.exists(sdk_components_file):
-        return
-    
-    sdk_components_info = read_json_file(sdk_components_file)
-    for name, val in sdk_components_info.items():
-        if name not in components.keys():
-            components[name] = val
-
 
 def _output_all_components_info(parts_config_dict, parts_info_output_path):
     if 'parts_component_info' not in parts_config_dict:
@@ -747,8 +736,6 @@ def _output_all_components_info(parts_config_dict, parts_info_output_path):
                 component["innerapis"].append(innerapi)
 
         components[name] = component
-
-    _merge_components_info(components)
 
     _component_file = os.path.join(parts_info_output_path,
                                    "components.json")

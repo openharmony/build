@@ -16,6 +16,8 @@
 # limitations under the License.
 
 import os
+import json
+import copy
 
 from services.interface.load_interface import LoadInterface
 from containers.status import throw_exception
@@ -27,6 +29,7 @@ from util.loader import subsystem_scan  # noqa: E402
 from util.loader import subsystem_info  # noqa: E402
 from scripts.util.file_utils import read_json_file, write_json_file, write_file  # noqa: E402, E501
 from util.log_util import LogUtil
+from resources.config import Config
 
 
 class OHOSLoader(LoadInterface):
@@ -76,6 +79,12 @@ class OHOSLoader(LoadInterface):
             self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
         self.example_subsystem_file = os.path.join(
             self.config.root_path, 'build', 'subsystem_config_example.json')
+        self.parts_src_file = os.path.join(
+            self.config_output_dir, 'parts_src_flag.json')
+        self.auto_install_file = os.path.join(
+            self.config_output_dir, 'auto_install_parts.json')
+        self.components_file = os.path.join(
+            self.config_output_dir, 'parts_info', 'components.json')
 
         compile_standard_allow_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'compile_standard_whitelist.json')
@@ -135,6 +144,43 @@ class OHOSLoader(LoadInterface):
         self.required_parts_targets_list = self._get_required_build_parts_list()
         self.required_phony_targets = self._get_required_phony_targets()
         self.required_parts_targets = self._get_required_build_targets()
+
+    
+    @throw_exception
+    def _merge_components_info(self, components):
+        config = Config()
+        sdk_components_file = os.path.join(config.root_path, "out/products_ext/components.json")
+        if not os.path.exists(sdk_components_file):
+            return
+    
+        sdk_components_info = read_json_file(sdk_components_file)
+        for name, val in sdk_components_info.items():
+            if name not in components.keys():
+                components[name] = val
+
+
+    @throw_exception
+    def _cropping_components(self):
+        src_parts = read_json_file(self.parts_src_file)
+
+        auto_parts = read_json_file(self.auto_install_file)
+        
+        self.third_party_file = os.path.join(self.config.root_path, "out/products_ext/third_party_allow_list.json")
+        if not os.path.exists(self.third_party_file):
+            self.third_party_file = os.path.join(self.config.root_path, 'build/third_party_allow_list.json')
+        cropping_parts = read_json_file(self.third_party_file)
+        
+        components_data = read_json_file(self.components_file)
+
+        new_components_data = copy.deepcopy(components_data)
+        
+        for component, component_value in components_data.items():
+            if component not in src_parts and component not in auto_parts and component not in cropping_parts:
+                del new_components_data[component]
+        self._merge_components_info(new_components_data)
+        os.remove(self.components_file)
+        write_json_file(self.components_file, new_components_data)
+        
 
 # check method
 
