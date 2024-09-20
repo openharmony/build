@@ -69,11 +69,11 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         编译部件名获取优先级： hb build 指定的部件名参数  > hb build 在部件源码仓运行时通过找到bundle.json获取到的部件名 > hb env 设置的部件名参数
         '''
         build_executor = indep_build_module.hpm
-        target_arg.arg_value = get_part_name()
+        target_arg.arg_value_list = get_part_name()
 
-        if target_arg.arg_value:
+        if target_arg.arg_value_list:
             bundle_path_list = []
-            for path in target_arg.arg_value:
+            for path in target_arg.arg_value_list:
                 try:
                     bundle_path = ComponentUtil.search_bundle_file(path)
                     bundle_path_list.append(bundle_path)
@@ -86,7 +86,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
             if part_name:
-                target_arg.arg_value = part_name
+                target_arg.arg_value_list = part_name
                 build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "no bundle.json": Invalid directory "{}". '.format(os.getcwd()))
@@ -97,7 +97,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 bundle_path = ComponentUtil.search_bundle_file(arg.get("argDefault"))
                 if not bundle_path:
                     raise OHOSException('ERROR argument "hb env --part <part_name>": Invalid part_name "{}". '.format(
-                        target_arg.arg_value))
+                        target_arg.arg_value_list))
                 build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "hb build <part_name>": no part_name . ')
