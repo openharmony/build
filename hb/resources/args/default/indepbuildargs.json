@@ -1,66 +1,74 @@
 {
-    "part": {
-        "arg_name": "--part",
-        "argDefault": "",
-        "arg_help": "Default:''. Help:specify component name, run 'hb build {part_name} or hb build --part {part_name}'",
-        "arg_phase": "prebuild",
-        "arg_type": "str",
-        "arg_attribute": {
-        },
-        "resolve_function": "resolve_part",
-        "testFunction": ""
-      },
-    "target_cpu": {
-        "arg_name": "--target-cpu",
-        "argDefault": "arm",
-        "arg_help": "Default:''. Help:Specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb build --target-cpu {cpu_architectures}' to set os type cpu architectures",
-        "arg_phase": "prebuild",
-        "arg_type": "str",
-        "arg_attribute": {
-          "optional": [
-            "arm",
-            "arm64",
-            "x86_64",
-            "x64",
-            "mipsel",
-            "riscv64",
-            "loongarch64"
-          ]
-        },
-        "resolve_function": "resolve_target_cpu",
-        "testFunction": ""
-      },
-      "target_os": {
-        "arg_name": "--target-os",
-        "argDefault": "ohos",
-        "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb build --target-os {os_type}' to set os type",
-        "arg_phase": "prebuild",
-        "arg_type": "str",
-        "arg_attribute": {
-          "optional": [
-            "android",
-            "ohos",
-            "mac",
-            "linux",
-            "windows"
-          ]
-        },
-        "resolve_function": "resolve_target_os",
-        "testFunction": ""
-      },
-      "variant": {
-          "arg_name": "--variant",
-          "argDefault": "",
-          "arg_help": "Default:''. Help:install product variant, run 'hb build --variant {variant_name}'",
-          "arg_phase": "prebuild",
-          "arg_type": "str",
-          "arg_attribute": {
-              "abbreviation": "-v",
-              "optional": [
-                "default"
-              ]
-          },
-          "resolve_function": "resolve_variant",
-          "testFunction": ""
-      }
+  "part": {
+    "arg_name": "--part",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:specify component name, run 'hb build {part_name} or hb build --part {part_name}'",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {},
+    "resolve_function": "resolve_part",
+    "testFunction": ""
+  },
+  "target_cpu": {
+    "arg_name": "--target-cpu",
+    "argDefault": "arm",
+    "arg_help": "Default:''. Help:Specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb build --target-cpu {cpu_architectures}' to set os type cpu architectures",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "optional": [
+        "arm",
+        "arm64",
+        "x86_64",
+        "x64",
+        "mipsel",
+        "riscv64",
+        "loongarch64"
+      ]
+    },
+    "resolve_function": "resolve_target_cpu",
+    "testFunction": ""
+  },
+  "target_os": {
+    "arg_name": "--target-os",
+    "argDefault": "ohos",
+    "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb build --target-os {os_type}' to set os type",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "optional": [
+        "android",
+        "ohos",
+        "mac",
+        "linux",
+        "windows"
+      ]
+    },
+    "resolve_function": "resolve_target_os",
+    "testFunction": ""
+  },
+  "variant": {
+    "arg_name": "--variant",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:install product variant, run 'hb build --variant {variant_name}'",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "abbreviation": "-v"
+    },
+    "resolve_function": "resolve_variant",
+    "testFunction": ""
+  },
+  "branch": {
+    "arg_name": "--branch",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:code branch name, run 'hb build --branch {branch_name}'",
+    "arg_phase": "prebuild",
+    "arg_type": "str",
+    "arg_attribute": {
+      "abbreviation": "-b"
+    },
+    "resolve_function": "resolve_branch",
+    "testFunction": ""
+  }
 }
