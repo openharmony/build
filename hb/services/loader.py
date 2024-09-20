@@ -161,20 +161,16 @@ class OHOSLoader(LoadInterface):
 
     @throw_exception
     def _cropping_components(self):
-        with os.fdopen(os.open(self.parts_src_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
-            src_parts = json.load(fd)
+        src_parts = read_json_file(self.parts_src_file)
 
-        with os.fdopen(os.open(self.auto_install_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
-            auto_parts = json.load(fd)
+        auto_parts = read_json_file(self.auto_install_file)
         
         self.third_party_file = os.path.join(self.config.root_path, "out/products_ext/third_party_allow_list.json")
         if not os.path.exists(self.third_party_file):
             self.third_party_file = os.path.join(self.config.root_path, 'build/third_party_allow_list.json')
-        with os.fdopen(os.open(self.third_party_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as fd:
-            cropping_parts = json.load(fd)
+        cropping_parts = read_json_file(self.third_party_file)
         
-        with os.fdopen(os.open(self.components_file, os.O_CREAT | os.O_RDONLY, mode=0o644), 'r') as components_fd:
-            components_data = json.load(components_fd)
+        components_data = read_json_file(self.components_file)
 
         new_components_data = copy.deepcopy(components_data)
         
@@ -183,8 +179,7 @@ class OHOSLoader(LoadInterface):
                 del new_components_data[component]
         self._merge_components_info(new_components_data)
         os.remove(self.components_file)
-        with os.fdopen(os.open(self.components_file, os.O_CREAT | os.O_WRONLY, mode=0o644), 'w+') as new_components_fd:
-            json.dump(new_components_data, new_components_fd, indent=2)
+        write_json_file(self.components_file, new_components_data)
         
 
 # check method
@@ -306,6 +301,9 @@ class OHOSLoader(LoadInterface):
                 all_syscap_list.append(syscap_string.split('=')[0].strip())
 
         for key, value in syscap_product_dict['part_to_syscap'].items():
+            part = self.parts_info.get(key)
+            if part is None:
+                continue
             for syscap in value:
                 if syscap not in all_syscap_list:
                     raise OHOSException(
@@ -993,4 +991,3 @@ class OHOSLoader(LoadInterface):
             part = part.replace("/", "_")
             parts_config[part] = True
         write_json_file(output_file, parts_config)
-
