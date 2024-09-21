@@ -90,6 +90,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/graphic/graphic_2d/native_effect:native_effect_header",
   "//interface/sdk_c/IPCKit:libipc_capi",
   "//interface/sdk_c/IPCKit:ipc_capi_header",
+  "//interface/sdk_c/ConnectivityKit/bluetooth:libbluetooth_ndk",
+  "//interface/sdk_c/ConnectivityKit/bluetooth:bluetooth_ndk_header",
   "//interface/sdk_c/third_party/libuv:libuv_ndk",
   "//interface/sdk_c/third_party/libuv:libuv_header",
   "//interface/sdk_c/third_party/libuv:libuv_uv_header",
