@@ -232,6 +232,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/telephony/cellular_data:telephony_data_header",
   "//interface/sdk_c/telephony/core_service:libtelephony_radio",
   "//interface/sdk_c/telephony/core_service:telephony_radio_header",
+  "//interface/sdk_c/ConnectivityKit/wifi:libwifi_ndk",
+  "//interface/sdk_c/ConnectivityKit/wifi:wifi_ndk_header",
 ]
 
 _ndk_base_libs = [
