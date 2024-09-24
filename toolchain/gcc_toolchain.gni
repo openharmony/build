@@ -194,7 +194,7 @@ template("gcc_toolchain") {
     link_prefix = ""
     ar_prefix = ""
     if (toolchain_uses_remoteexec) {
-      compiler_prefix = "${rbe_bin_dir}/rewrapper -cfg=${rbe_cfg_dir}/rewrapper_compile.cfg ${rbe_compile_missing_inputs} -exec_root=${exec_root}"
+      compiler_prefix = "${rbe_bin_dir}/rewrapper -cfg=${rbe_cfg_dir}/rewrapper_compile.cfg ${rbe_compile_missing_inputs} -exec_root=${exec_root} "
     }
 
     cc = compiler_prefix + invoker.cc

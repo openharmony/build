@@ -21,6 +21,8 @@ import sys
 import os
 import time
 import threading
+import subprocess
+import re
 from enum import Enum
 
 from containers.status import throw_exception
@@ -31,7 +33,7 @@ from util.system_util import SystemUtil
 from util.io_util import IoUtil
 from util.log_util import LogUtil
 from util.component_util import ComponentUtil
-from resources.global_var import CURRENT_OHOS_ROOT
+from resources.global_var import CURRENT_OHOS_ROOT, set_hpm_check_info
 
 
 class CMDTYPE(Enum):
@@ -73,6 +75,24 @@ class Hpm(BuildFileGeneratorInterface):
     '''
 
     @throw_exception
+    def _check_hpm_version(self, cmd, current_hpm):
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        try:
+            out, err = proc.communicate(timeout=5)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+        if proc.returncode == 0:
+            latest_hpm_version = ""
+            pattern = r'^@ohos/hpm-cli\s*\|(?:[^|]*\|){3}([^|]*)'
+            for line in out.splitlines():
+                match = re.match(pattern, line)
+                if match:
+                    latest_hpm_version = match.group(1).strip()
+                    break
+            if latest_hpm_version and latest_hpm_version != current_hpm:
+                set_hpm_check_info("your current hpm version is not the latest, consider update hpm: bash build/prebuilts_config.sh")
+
+    @throw_exception
     def _regist_hpm_path(self):
         hpm_path = shutil.which("hpm")
         if os.path.exists(hpm_path):
@@ -84,6 +104,13 @@ class Hpm(BuildFileGeneratorInterface):
         else:
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
+
+        current_hpm_version = subprocess.run([self.exec, "-V"], capture_output=True, text=True).stdout.strip()
+        npm_path = os.path.join(CURRENT_OHOS_ROOT, "prebuilts/build-tools/common/nodejs/current/bin/npm")
+        cmd = npm_path + " search hpm-cli --registry https://registry.npmjs.org/"
+        cmd = cmd.split()
+        thread = threading.Thread(target=self._check_hpm_version, args=(cmd, current_hpm_version))
+        thread.start()
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
