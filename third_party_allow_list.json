@@ -113,5 +113,7 @@
     "drivers_peripheral_bluetooth",
     "miscdevice",
     "bluetooth",
+
+    "c_utils",
     "init"
 ]
