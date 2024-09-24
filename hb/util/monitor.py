@@ -46,11 +46,11 @@ class Monitor():
         self.log_path = ""
 
     def collect_cpu_info(self):
-        if platform.system()!= "Linux":
+        if platform.system() != "Linux":
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
         try:
-            result = subprocess.check_output("top -bn1 | grep '%Cpu(s)'", shell=True, universal_newlines=True).strip()
+            result = subprocess.check_output(["top", "-bn1", "|", "grep", "'%Cpu(s)'"], universal_newlines=True).strip()
             if result:
                 parts = result.split()
                 if len(parts) >= 5:
@@ -85,21 +85,12 @@ class Monitor():
                 free_memory = RET_CONSTANT
                 for line in f:
                     if line.startswith('MemTotal:'):
-                        match = re.search(r'\d+', line)
-                        if match:
-                            total_memory = int(match.group()) * self.MEM_CONSTANT
+                        total_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
                     elif line.startswith('SwapTotal:'):
-                        match = re.search(r'\d+', line)
-                        if match:
-                            swap_memory = int(match.group()) * self.MEM_CONSTANT
-                    elif line.start_startswith('MemFree'):
-                        match = re.search(r'\d+', line)
-                        if match:
-                            free_memory = int(match.group()) * self.MEM_CONSTANT
-                if total_memory is not RET_CONSTANT and swap_memory is not RET_CONSTANT and free_memory is not RET_CONSTANT:
-                    return total_memory, swap_memory, free_memory
-                else:
-                    return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
+                        swap_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
+                    elif line.startswith('MemFree'):
+                        free_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
+                return total_memory, swap_memory, free_memory
         except FileNotFoundError:
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
         except Exception as e:
