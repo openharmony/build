@@ -50,7 +50,10 @@ class Monitor():
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
         try:
-            result = subprocess.check_output(["top", "-bn1", "|", "grep", "'%Cpu(s)'"], universal_newlines=True).strip()
+            top_command = ["top", "-bn1"]
+            grep_command = ["grep", "%Cpu(s)"]
+            top_output = subprocess.check_output(top_command, universal_newlines=True)
+            result = subprocess.check_output(grep_command, input=top_output, universal_newlines=True).strip()
             if result:
                 parts = result.split()
                 if len(parts) >= 5:
@@ -77,20 +80,22 @@ class Monitor():
         except subprocess.CalledProcessError:
             return self.RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
 
+    def extract_memory_value(line):
+        match = re.search(r'\d+', line)
+        return int(match.group()) * MEM_CONSTANT if match else RET_CONSTANT
+
     def get_linux_mem_info(self):
         try:
+            memory_info = [RET_CONSTANT] * 3
+            target_keys = ['MemTotal', 'SwapTotal', 'MemFree']
+            key_indices = {key: index for index, key in enumerate(target_keys)}
             with open('/proc/meminfo', 'r') as f:
-                total_memory = RET_CONSTANT
-                swap_memory = RET_CONSTANT
-                free_memory = RET_CONSTANT
                 for line in f:
-                    if line.startswith('MemTotal:'):
-                        total_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-                    elif line.startswith('SwapTotal:'):
-                        swap_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-                    elif line.startswith('MemFree'):
-                        free_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-                return total_memory, swap_memory, free_memory
+                    key = line.split(':')[0]
+                    if key in target_keys:
+                        value = extract_memory_value(line)
+                        memory_info[key_indices[key]] = value
+            return memory_info[0], memory_info[1], memory_info[2]
         except FileNotFoundError:
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
         except Exception as e:
