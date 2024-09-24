@@ -266,6 +266,9 @@ def _npm_install(args):
 def _node_modules_copy(config: dict, code_dir: str, enable_symlink: bool):
     for config_info in config:
         src_dir = os.path.join(code_dir, config_info.get('src'))
+        if not os.path.exists(src_dir):
+            print(f"{src_dir} not exist, skip node_modules copy.")
+            continue
         dest_dir = os.path.join(code_dir, config_info.get('dest'))
         use_symlink = config_info.get('use_symlink')
         if os.path.exists(os.path.dirname(dest_dir)):
