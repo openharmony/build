@@ -29,7 +29,9 @@ from exceptions.ohos_exception import OHOSException
 from containers.status import throw_exception
 from resources.global_var import get_hpm_check_info
 
+
 class SystemUtil(metaclass=NoInstance):
+    
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
         if os.path.exists(log_path):

@@ -92,9 +92,11 @@ COMPONENTS_PATH_DIR = os.path.join(CURRENT_OHOS_ROOT, 'out/components_path.json'
 
 HPM_CHECK_INFO = ""
 
+
 def set_hpm_check_info(info):
     global HPM_CHECK_INFO
     HPM_CHECK_INFO = info
-  
+
+
 def get_hpm_check_info():
     return HPM_CHECK_INFO
