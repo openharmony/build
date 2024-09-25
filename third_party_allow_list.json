@@ -113,6 +113,8 @@
     "drivers_peripheral_bluetooth",
     "miscdevice",
     "bluetooth",
-    
-    "c_utils"
+
+    "c_utils",
+    "init",
+    "distribute_notification_service"
 ]
