@@ -177,7 +177,7 @@
           "file_path": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz",
           "unzip_filename": "ninja"
         },
-	{
+	      {
           "unzip_dir": "prebuilts/build-tools/windows-x86/bin",
           "file_path": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240523.tar.gz",
           "unzip_filename": "ninja"
@@ -247,8 +247,7 @@
         {
           "unzip_dir": "prebuilts/python",
           "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-Ubuntu_18.04-3.11.4_20240715.tar.gz",
-          "unzip_filename": "linux-x86",
-          "os_version": "Ubuntu_18.04"
+          "unzip_filename": "linux-x86"
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
@@ -358,9 +357,8 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-Ubuntu_18.04-3.11.4_20240823.tar.gz",
-          "unzip_filename": "linux-x86",
-          "os_version": "Ubuntu_18.04"
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20240823.tar.gz",
+          "unzip_filename": "linux-x86"
         },
         {
           "unzip_dir": "prebuilts/develop_tools",
