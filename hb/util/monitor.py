@@ -89,9 +89,9 @@ class Monitor():
 
     def get_ret_num(line: str):
         key = line.split(':')[0]
-            if key in target_keys:
-                value = extract_memory_value(line)
-                memory_info[key_indices[key]] = value
+        if key in target_keys:
+            value = extract_memory_value(line)
+            memory_info[key_indices[key]] = value
 
     def get_linux_mem_info(self):
         try:
