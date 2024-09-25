@@ -27,6 +27,17 @@ from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
 
 
+def get_part_name():
+    part_name_list = []
+    if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):           
+        for name in sys.argv[2:]:
+            if not name.startswith('-'):
+                part_name_list.append(name)
+            else:
+                break
+    return part_name_list
+
+
 class IndepBuildArgsResolver(ArgsResolverInterface):
 
     def __init__(self, args_dict: dict):
@@ -58,22 +69,24 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         编译部件名获取优先级： hb build 指定的部件名参数  > hb build 在部件源码仓运行时通过找到bundle.json获取到的部件名 > hb env 设置的部件名参数
         '''
         build_executor = indep_build_module.hpm
-        if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):  # 第一个部件名参数
-            target_arg.arg_value = sys.argv[2]
+        target_arg.arg_value_list = get_part_name()
 
-        if target_arg.arg_value:
-            try:
-                bundle_path = ComponentUtil.search_bundle_file(target_arg.arg_value)
-            except Exception as e:
-                raise OHOSException('Please check the bundle.json file of {} : {}'.format(target_arg.arg_value, e))
-            if not bundle_path:
-                print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(target_arg.arg_value))
-                sys.exit(1)
-            build_executor.regist_flag('path', bundle_path)
+        if target_arg.arg_value_list:
+            bundle_path_list = []
+            for path in target_arg.arg_value_list:
+                try:
+                    bundle_path = ComponentUtil.search_bundle_file(path)
+                    bundle_path_list.append(bundle_path)
+                except Exception as e:
+                    raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
+                if not bundle_path:
+                    print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(path))
+                    sys.exit(1)
+            build_executor.regist_flag('path', ','.join(bundle_path_list))
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
             if part_name:
-                target_arg.arg_value = part_name
+                target_arg.arg_value_list = part_name
                 build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "no bundle.json": Invalid directory "{}". '.format(os.getcwd()))
@@ -84,7 +97,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 bundle_path = ComponentUtil.search_bundle_file(arg.get("argDefault"))
                 if not bundle_path:
                     raise OHOSException('ERROR argument "hb env --part <part_name>": Invalid part_name "{}". '.format(
-                        target_arg.arg_value))
+                        target_arg.arg_value_list))
                 build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "hb build <part_name>": no part_name . ')

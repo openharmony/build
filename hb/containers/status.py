@@ -70,12 +70,9 @@ def throw_exception(func):
 def judge_indep():
     """Description: judge whether it is related to independent build
     """
-    if sys.argv[1] == 'build' and (
-        "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or sys.argv[-1] == "-t" or (
-        "-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-')):
-        return True
-    else:
-        return False
+    return sys.argv[1] == 'build' and (
+            "--indep-build" in sys.argv[2:] or "-i" in sys.argv[2:] or sys.argv[-1] == "-t" or (
+            "-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))
 
 
 def _print_formatted_tracebak(_code, _exception, _type, _desc, _solution):

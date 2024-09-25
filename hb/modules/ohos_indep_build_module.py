@@ -22,6 +22,7 @@ from exceptions.ohos_exception import OHOSException
 from services.interface.build_file_generator_interface import BuildFileGeneratorInterface
 from util.log_util import LogUtil
 from containers.status import throw_exception
+from resolver.indep_build_args_resolver import get_part_name
 
 
 class OHOSIndepBuildModule(IndepBuildModuleInterface):
@@ -52,8 +53,7 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('{} build success'.format(
-                self.args_dict.get('part').arg_value))
+            LogUtil.hb_info('{} build success'.format(','.join(get_part_name())))
             
     def _target_compilation(self):
         self._run_phase()
