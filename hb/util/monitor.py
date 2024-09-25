@@ -33,6 +33,9 @@ RET_CONSTANT = 0
 MONITOR_TIME_CONSTANT = 30
 SNOP_TIME_CONSTANT = 5
 
+memory_info = [RET_CONSTANT] * 3
+target_keys = ['MemTotal', 'SwapTotal', 'MemFree']
+key_indices = {key: index for index, key in enumerate(target_keys)}
 
 class Monitor():
     def __init__(self):
@@ -84,17 +87,17 @@ class Monitor():
         match = re.search(r'\d+', line)
         return int(match.group()) * MEM_CONSTANT if match else RET_CONSTANT
 
+    def get_ret_num(line: str):
+        key = line.split(':')[0]
+            if key in target_keys:
+                value = extract_memory_value(line)
+                memory_info[key_indices[key]] = value
+
     def get_linux_mem_info(self):
         try:
-            memory_info = [RET_CONSTANT] * 3
-            target_keys = ['MemTotal', 'SwapTotal', 'MemFree']
-            key_indices = {key: index for index, key in enumerate(target_keys)}
             with open('/proc/meminfo', 'r') as f:
                 for line in f:
-                    key = line.split(':')[0]
-                    if key in target_keys:
-                        value = extract_memory_value(line)
-                        memory_info[key_indices[key]] = value
+                    get_ret_num(line)
             return memory_info[0], memory_info[1], memory_info[2]
         except FileNotFoundError:
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
