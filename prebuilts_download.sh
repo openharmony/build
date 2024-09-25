@@ -77,7 +77,7 @@ case $(uname -s) in
     Linux)
 
         host_platform=linux
-        host_os_version=$(cat /etc/issue | grep -oE 'Ubuntu [0-9]{2}.[0-9]{2}' | sed  's/ /\-/')
+        glibc_version=$(getconf GNU_LIBC_VERSION | grep -oE '[0-9].[0-9]{2}')
         ;;
     Darwin)
         host_platform=darwin
@@ -170,15 +170,17 @@ fi
 
 cpu="--host-cpu $host_cpu"
 platform="--host-platform $host_platform"
-if [ "x$host_os_version" != "x" ]; then
-    host_os_version="--host-os-version $host_os_version"
+if [[ "${glibc_version}" < "2.35" ]]; then
+    glibc_version="--glibc-version GLIBC2.27"
+else
+    glibc_version="--glibc-version GLIBC2.35"
 fi
 echo "prebuilts_download start"
 if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
 fi
-python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $host_os_version
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
 if [ -f "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja" ];then
     rm -rf "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja"
 fi
