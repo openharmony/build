@@ -37,6 +37,7 @@ memory_info = [RET_CONSTANT] * 3
 target_keys = ['MemTotal', 'SwapTotal', 'MemFree']
 key_indices = {key: index for index, key in enumerate(target_keys)}
 
+
 class Monitor():
     def __init__(self):
         self.now_times = []
