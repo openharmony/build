@@ -10,7 +10,6 @@ handle_abort=0
 handle_segv=0
 history_size=7
 log_exe_name=true
-log_path=/dev/asanlog/tsan.log
 print_full_thread_history=1
 print_module_map=2
 print_suppressions=1
