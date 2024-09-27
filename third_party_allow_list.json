@@ -116,5 +116,5 @@
 
     "c_utils",
     "init",
-    "distribute_notification_service"
+    "distributed_notification_service"
 ]
