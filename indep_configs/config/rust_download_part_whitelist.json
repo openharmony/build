@@ -1,0 +1,9 @@
+[
+  "ylong_runtime",
+  "ylong_json",
+  "c_utils",
+  "samgr",
+  "safwk",
+  "ipc",
+  "faultloggerd"
+]

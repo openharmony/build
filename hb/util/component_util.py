@@ -17,12 +17,24 @@
 
 import os
 import re
+import sys
 
 from resources.global_var import CURRENT_OHOS_ROOT
 from resources.global_var import COMPONENTS_PATH_DIR
 from exceptions.ohos_exception import OHOSException
 from util.io_util import IoUtil
 from containers.status import throw_exception
+
+
+def get_part_name():
+    part_name_list = []
+    if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):
+        for name in sys.argv[2:]:
+            if not name.startswith('-'):
+                part_name_list.append(name)
+            else:
+                break
+    return part_name_list
 
 
 class ComponentUtil():
@@ -137,10 +149,18 @@ def process_bundle_path(bundle_json, bundles_path, data):
 
 
 def gen_default_deps_json(variant, root_path):
+    part_name_list = get_part_name()
     default_deps_out_file = os.path.join(root_path, "out", "preloader", "default_deps.json")
     default_deps_file = os.path.join(root_path, "build", "indep_configs", "variants", "common", 'default_deps.json')
     default_deps_json = IoUtil.read_json_file(default_deps_file)
     default_deps_json.append("variants_" + variant)
+
+    part_white_list_path = os.path.join(root_path, "build", "indep_configs", "config",
+                                        "rust_download_part_whitelist.json")
+    part_white_list = IoUtil.read_json_file(part_white_list_path)
+    for part_name in part_name_list:
+        if part_name in part_white_list and 'rust' not in default_deps_json:
+            default_deps_json.append('rust')
 
     preloader_path = os.path.join(root_path, "out", "preloader")
     os.makedirs(preloader_path, exist_ok=True)
