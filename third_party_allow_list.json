@@ -112,5 +112,6 @@
     "display_manager",
     "drivers_peripheral_bluetooth",
     "miscdevice",
-    "bluetooth"
+    "bluetooth",
+    "c_utils"
 ]
