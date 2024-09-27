@@ -245,7 +245,10 @@ template("rust_target") {
       output_name = crate_name
     }
     if (use_clang_coverage == true) {
-      ldflags = [ "-Wl,--undefined-version" ]
+      if (!defined(ldflags)) {
+        ldflags = []
+      } 
+      ldflags += [ "-Wl,--undefined-version" ]
       rustflags += [
         "-Cinstrument-coverage",
         "-Clink-dead-code",
