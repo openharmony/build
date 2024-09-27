@@ -247,7 +247,7 @@ template("rust_target") {
     if (use_clang_coverage == true) {
       if (!defined(ldflags)) {
         ldflags = []
-      } 
+      }
       ldflags += [ "-Wl,--undefined-version" ]
       rustflags += [
         "-Cinstrument-coverage",
