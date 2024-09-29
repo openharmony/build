@@ -62,8 +62,8 @@ class OHOSBuildModule(BuildModuleInterface):
 
     @throw_exception
     def run(self):
+        monitor = Monitor()
         try:
-            monitor = Monitor()
             super().run()
         except OHOSException as exception:
             monitor.run()

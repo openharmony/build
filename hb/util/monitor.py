@@ -33,6 +33,10 @@ RET_CONSTANT = 0
 MONITOR_TIME_CONSTANT = 30
 SNOP_TIME_CONSTANT = 5
 
+memory_info = [RET_CONSTANT] * 3
+target_keys = ['MemTotal', 'SwapTotal', 'MemFree']
+key_indices = {key: index for index, key in enumerate(target_keys)}
+
 
 class Monitor():
     def __init__(self):
@@ -49,40 +53,58 @@ class Monitor():
         if platform.system() != "Linux":
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
-        cmd = "top -bn1 | grep '%Cpu(s)' | awk '{print $2, $4, $8}'"
-        result = os.popen(cmd).read().strip()
+        try:
+            top_command = ["top", "-bn1"]
+            grep_command = ["grep", "%Cpu(s)"]
+            top_output = subprocess.check_output(top_command, universal_newlines=True)
+            result = subprocess.check_output(grep_command, input=top_output, universal_newlines=True).strip()
+            if result:
+                parts = result.split()
+                if len(parts) >= 5:
+                    usr_cpu_str = parts[1]
+                    sys_cpu_str = parts[3]
+                    idle_cpu_str = parts[7]
 
-        if result:
-            parts = result.split()
-            if len(parts) == 3:
-                try:
-                    # 清理掉非数值字符，并处理转换异常
-                    usr_cpu = float(parts[0].rstrip('%')) if parts[0].replace('.', '', 1).isdigit() else RET_CONSTANT
-                    sys_cpu = float(parts[1].rstrip('%')) if parts[1].replace('.', '', 1).isdigit() else RET_CONSTANT
-                    idle_cpu = float(parts[2].rstrip('%')) if parts[2].replace('.', '', 1).isdigit() else RET_CONSTANT
+                    usr_cpu_str = usr_cpu_str.split(',')[0].rstrip('%')
+                    sys_cpu_str = sys_cpu_str.split(',')[0].rstrip('%')
+                    idle_cpu_str = idle_cpu_str.split(',')[0].rstrip('%')
+
+                    usr_cpu = float(usr_cpu_str) if usr_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
+                    sys_cpu = float(sys_cpu_str) if sys_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
+                    idle_cpu = float(idle_cpu_str) if idle_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
 
                     self.usr_cpu = usr_cpu
                     self.sys_cpu = sys_cpu
                     self.idle_cpu = idle_cpu
                     return self.usr_cpu, self.sys_cpu, self.idle_cpu
-                except ValueError:
-                    # 如果转换失败，则返回默认值
-                    return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
+                else:
+                    return RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
             else:
-                return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
-        else:
-            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
+                return self.RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
+        except subprocess.CalledProcessError:
+            return self.RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
+
+    def extract_memory_value(line):
+        match = re.search(r'\d+', line)
+        return int(match.group()) * MEM_CONSTANT if match else RET_CONSTANT
+
+    def get_ret_num(line: str):
+        key = line.split(':')[0]
+        if key in target_keys:
+            value = extract_memory_value(line)
+            memory_info[key_indices[key]] = value
 
     def get_linux_mem_info(self):
-        with open('/proc/meminfo', 'r') as f:
-            for line in f:
-                if line.startswith('MemTotal:'):
-                    total_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-                elif line.startswith('SwapTotal:'):
-                    swap_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-                elif line.startswith('MemFree'):
-                    free_memory = int(re.search(r'\d+', line).group()) * MEM_CONSTANT
-            return total_memory, swap_memory, free_memory
+        try:
+            with open('/proc/meminfo', 'r') as f:
+                for line in f:
+                    get_ret_num(line)
+            return memory_info[0], memory_info[1], memory_info[2]
+        except FileNotFoundError:
+            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
+        except Exception as e:
+            print(f"Error occurred while getting memory info: {e}")
+            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
     def collect_linux_mem_info(self):
         total_memory, swap_memory, free_memory = self.get_linux_mem_info()
