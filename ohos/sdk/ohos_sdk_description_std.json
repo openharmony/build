@@ -589,16 +589,6 @@
         ]
     },
     {
-        "install_dir": "ets/api/device-define-common",
-        "module_label": "//interface/sdk-js:device_define_common",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "js/api/@internal/full",
         "module_label": "//interface/sdk-js:internal_full",
         "target_os": [
