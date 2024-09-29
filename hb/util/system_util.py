@@ -27,9 +27,11 @@ from util.log_util import LogUtil
 from hb.helper.no_instance import NoInstance
 from exceptions.ohos_exception import OHOSException
 from containers.status import throw_exception
+from resources.global_var import get_hpm_check_info
 
 
 class SystemUtil(metaclass=NoInstance):
+    
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
         if os.path.exists(log_path):
@@ -72,7 +74,9 @@ class SystemUtil(metaclass=NoInstance):
         process.wait()
         LogUtil.hb_info("end hpm command")
         ret_code = process.returncode
-
+        hpm_info = get_hpm_check_info()
+        if hpm_info:
+            print(hpm_info)
         if ret_code != 0:
             LogUtil.get_failed_log(log_path)
 
