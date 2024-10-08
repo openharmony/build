@@ -22,6 +22,7 @@ import shutil
 import importlib
 import time
 import pathlib
+import re
 from multiprocessing import cpu_count
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from functools import partial
@@ -71,14 +72,14 @@ def _obtain_sha256_by_sha_sums256(check_url: str) -> str:
     return check_sha256
 
 
-def _config_parse(config: dict, tool_repo: str, host_os_version: str) -> dict:
+def _config_parse(config: dict, tool_repo: str, glibc_version: str) -> dict:
     parse_dict = dict()
     parse_dict['unzip_dir'] = config.get('unzip_dir')
-    parse_dict['huaweicloud_url'] = tool_repo + config.get('file_path')
+    file_path = config.get('file_path')
+    if 'python' in file_path and glibc_version is not None:
+        file_path = re.sub(r'GLIBC[0-9]\.[0-9]{2}', glibc_version, file_path)
+    parse_dict['huaweicloud_url'] = tool_repo + file_path
     parse_dict['unzip_filename'] = config.get('unzip_filename')
-    config_os_version = config.get('host_os_version')
-    if config_os_version is not None and config_os_version != host_os_version:
-        parse_dict['huaweicloud_url'].replace(config_os_version, host_os_version, 1)
     md5_huaweicloud_url_cmd = 'echo ' + parse_dict.get('huaweicloud_url') + "|md5sum|cut -d ' ' -f1"
     parse_dict['md5_huaweicloud_url'], err, returncode = _run_cmd(md5_huaweicloud_url_cmd)
     parse_dict['bin_file'] = os.path.basename(parse_dict.get('huaweicloud_url'))
@@ -162,7 +163,7 @@ def _is_system_component() -> bool:
         return False
 
 
-def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
+def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str, glibc_version: str):
     try:
         cnt = cpu_count()
     except Exception as e:
@@ -170,7 +171,7 @@ def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str):
     with ThreadPoolExecutor(max_workers=cnt) as pool:
         tasks = dict()
         for config_info in config:
-            parse_dict = _config_parse(config_info, args.tool_repo, args.host_os_version)
+            parse_dict = _config_parse(config_info, args.tool_repo, glibc_version)
             unzip_dir = parse_dict.get('unzip_dir')
             huaweicloud_url = parse_dict.get('huaweicloud_url')
             unzip_filename = parse_dict.get('unzip_filename')
@@ -353,7 +354,7 @@ def main():
                         help='npm download source')
     parser.add_argument('--host-cpu', help='host cpu', required=True)
     parser.add_argument('--host-platform', help='host platform', required=True)
-    parser.add_argument('--host-os-version', help='host version', required=False)
+    parser.add_argument('--glibc-version', help='glibc version', required=False)
     parser.add_argument('--config-file', help='prebuilts download config file')
     args = parser.parse_args()
     args.code_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -362,7 +363,7 @@ def main():
 
     host_platform = args.host_platform
     host_cpu = args.host_cpu
-    host_os_version = args.host_os_version
+    glibc_version = args.glibc_version
     tool_repo = args.tool_repo
     if args.build_arkuix:
         config_file = os.path.join(args.code_dir, 'build_plugins/prebuilts_download_config.json')
@@ -393,11 +394,11 @@ def main():
         darwin_copy_config = config_info.get(host_platform).get(host_cpu).get('darwin_copy_config')
         copy_config.extend(darwin_copy_config)
     if args.disable_rich:
-        _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
+        _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir, glibc_version)
     else:
         args.progress = _import_rich_module()
         with args.progress:
-            _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir)
+            _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir, glibc_version)
 
     _file_handle(file_handle_config, args.code_dir, args.host_platform)
     retry_times = 0
