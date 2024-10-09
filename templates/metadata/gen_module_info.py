@@ -130,6 +130,8 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
                                                   module_alt_source)
     if args.symlink_ext:
         data['symlink_ext'] = args.symlink_ext
+    if args.symlink_path:
+        data['symlink_path'] = args.symlink_path
     if symlink_target:
         data['symlink'] = symlink_target
     return data
@@ -176,6 +178,7 @@ def main():
     parser.add_argument('--shlib-type', help='', required=False, default='')
     parser.add_argument('--innerapi-tags', nargs='+', help='', required=False, default='')
     parser.add_argument('--symlink-ext', nargs='+', help='', required=False, default='')
+    parser.add_argument('--symlink-path', help='', required=False, default='')
     parser.add_argument('--version_script', help='', required=False, default='')
     parser.add_argument('--prefix-override',
                         dest='prefix_override',
