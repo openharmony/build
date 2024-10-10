@@ -129,6 +129,10 @@ template("ohos_copy") {
       part_name = _part_name
       subsystem_name = _subsystem_name
 
+      if (defined(invoker.symlink_path)) {
+        symlink_path = invoker.symlink_path
+      }
+
       module_install_images = [ "system" ]
       if (defined(invoker.install_images)) {
         module_install_images = []
