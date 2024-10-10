@@ -170,6 +170,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/distributeddatamgr/relational_store:libnative_rdb_ndk",
   "//interface/sdk_c/distributeddatamgr/udmf:libudmf",
   "//interface/sdk_c/distributeddatamgr/udmf:udmf_ndk_header",
+  "//interface/sdk_c/distributeddatamgr/preferences:preferences_ndk_header",
+  "//interface/sdk_c/distributeddatamgr/preferences:libohpreferences",
   "//interface/sdk_c/drivers/external_device_manager/usb:libusb_ndk",
   "//interface/sdk_c/drivers/external_device_manager/usb:usb_header",
   "//interface/sdk_c/drivers/external_device_manager/hid:libhid",
