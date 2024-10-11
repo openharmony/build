@@ -119,6 +119,9 @@ class Hpm(BuildFileGeneratorInterface):
         else:
             variant = sys.argv[sys.argv.index("-v") + 1]
         logpath = os.path.join('out', variant, 'build.log')
+        if os.path.exists(logpath):
+            mtime = os.stat(logpath).st_mtime
+            os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
         hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
         SystemUtil.exec_command(hpm_build_cmd, log_path=logpath)
 
