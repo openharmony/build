@@ -93,7 +93,7 @@ def _get_components_json(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/components.json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
@@ -121,7 +121,7 @@ def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
@@ -252,9 +252,12 @@ def _copy_lib(args, json_data, module):
     subsystem_name = args.get("subsystem_name")
     if json_data.get('type') == 'static_library':
         so_path = _get_static_lib_path(args, json_data)
-    else:
+    elif json_data.get('type') == 'shared_library':
         so_path = os.path.join(args.get("out_path"), subsystem_name,
                                args.get("part_name"), json_data.get('out_name'))
+    elif json_data.get('type') == 'copy' and module == 'ipc_core':
+        so_path = os.path.join(args.get("out_path"), subsystem_name,
+                               args.get("part_name"), 'libipc_single.z.so')
     if args.get("toolchain_info").keys():
         for i in args.get("toolchain_info").keys():
             so_type = ''
@@ -470,6 +473,8 @@ def _generate_public_deps(fp, module, deps: list, components_json, public_deps_l
 
 def _generate_other(fp, args, json_data, module):
     so_name = json_data.get('out_name')
+    if json_data.get('type') == 'copy' and module == 'ipc_core':
+        so_name = 'libipc_single.z.so'
     fp.write('  source = "libs/' + so_name + '"\n')
     fp.write('  part_name = "' + args.get("part_name") + '"\n')
     fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
@@ -630,7 +635,7 @@ def _get_toolchain_info(root_path):
     jsondata = ""
     json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
