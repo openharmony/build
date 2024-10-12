@@ -223,7 +223,7 @@
         "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base:appexecfwk_base",
         "//foundation/communication/dsoftbus/sdk:softbus_client",
         "//foundation/communication/dsoftbus/tests/sdk/frame/fuzztest/softbusclientstub_fuzzer:softbus_client_static",
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core",
+        "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
         "//foundation/communication/ipc/interfaces/innerkits/ipc_napi_common:ipc_napi",
         "//foundation/communication/netmanager_base/services/netsyscontroller:netsys_controller",
         "//foundation/distributeddatamgr/preferences/interfaces/inner_api:native_preferences",
