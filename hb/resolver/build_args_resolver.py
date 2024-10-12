@@ -822,8 +822,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         if target_arg.arg_value:
             config = Config()
-            # 中国标准时间与UTC标准时间差8h, _start_time记录为中国标准时间
-            epoch = datetime.utcfromtimestamp(28800)
+            epoch = datetime.utcfromtimestamp(0)
             unixtime = '%f' % (
                 (build_module.target_compiler._start_time - epoch).total_seconds() * 10**9)
             cmd = [
