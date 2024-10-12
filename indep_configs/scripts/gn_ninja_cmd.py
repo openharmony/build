@@ -24,7 +24,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 def _run_cmd(cmd: list):
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE,
+                               stderr=subprocess.STDOUT,
                                encoding='utf-8')
     for line in iter(process.stdout.readline, ''):
         print(line, end='')
