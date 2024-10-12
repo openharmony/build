@@ -95,12 +95,10 @@ class Hpm(BuildFileGeneratorInterface):
     @throw_exception
     def _regist_hpm_path(self):
         hpm_path = shutil.which("hpm")
-        if os.path.exists(hpm_path):
+        if hpm_path and os.path.exists(hpm_path):
             self.exec = hpm_path
-        elif os.path.exists(os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
-            self.exec = os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")
-        elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
-            self.exec = os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")
+        elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")):
+            self.exec = os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")
         else:
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
