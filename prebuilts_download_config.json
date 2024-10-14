@@ -394,6 +394,11 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-pc-windows-gnullvm_20240528.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
+        },
+        {
+          "unzip_dir": "prebuilts/hc_gen",
+          "file_path": "/openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
+          "unzip_filename": "hc-gen"
         }
       ],
       "install": [
