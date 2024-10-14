@@ -134,6 +134,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/multimedia/player_framework/avplayer:avplayer_header",
   "//interface/sdk_c/multimedia/audio_framework:libohaudio_ndk",
   "//interface/sdk_c/multimedia/audio_framework:ohaudio_header",
+  "//interface/sdk_c/multimedia/av_session:libohavsession_ndk",
+  "//interface/sdk_c/multimedia/av_session:ohavsession_header",
   "//interface/sdk_c/multimedia/camera_framework:libohcamera",
   "//interface/sdk_c/multimedia/camera_framework:camera_ndk_header",
   "//interface/sdk_c/multimedia/image_framework:libpixelmap_ndk",
