@@ -262,6 +262,21 @@
       ]
     },
     {
+      "name": "hcgen",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "linux",
+          "url": "openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
+          "download_dir": ".prebuilts_cache/hc_gen",
+          "symlink": "prebuilts/hc_gen/hc-gen",
+          "type": "dir"
+        }
+      ]
+    },
+    {
       "name": "rustc",
       "download": [
         {
