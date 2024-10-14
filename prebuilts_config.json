@@ -271,7 +271,7 @@
           "version": "linux",
           "url": "openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
           "download_dir": ".prebuilts_cache/hc_gen",
-          "symlink": "build/config/components/hc_gen/hc-gen",
+          "symlink": "prebuilts/hc_gen/hc-gen",
           "type": "dir"
         }
       ]
