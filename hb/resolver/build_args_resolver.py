@@ -301,10 +301,14 @@ class BuildArgsResolver(ArgsResolverInterface):
             if ccache_log_suffix:
                 logfile = os.path.join(
                     ccache_base, "ccache.{}.log".format(ccache_log_suffix))
+            elif os.environ.get('CCACHE_LOGFILE'):
+                logfile = os.environ.get('CCACHE_LOGFILE')
+                if not os.path.exists(os.path.dirname(logfile)):
+                    os.makedirs(os.path.dirname(logfile), exist_ok=True)
             else:
                 logfile = os.path.join(ccache_base, "ccache.log")
             if os.path.exists(logfile):
-                oldfile = os.path.join(ccache_base, '{}.old'.format(logfile))
+                oldfile = '{}.old'.format(logfile)
                 if os.path.exists(oldfile):
                     os.unlink(oldfile)
                 rename_file(logfile, oldfile)
@@ -779,11 +783,16 @@ class BuildArgsResolver(ArgsResolverInterface):
             if not ccache_base:
                 ccache_base = os.environ.get('HOME')
             ccache_base = os.path.join(ccache_base, ccache_local_dir)
+            if os.environ.get('CCACHE_LOGFILE'):
+                logfile = os.environ.get('CCACHE_LOGFILE')
+            else:
+                logfile = os.path.join(ccache_base, logfile)
             cmd = [
                 'python3', '{}/build/scripts/summary_ccache_hitrate.py'.format(
-                    config.root_path), '{}/{}'.format(ccache_base, logfile)
+                    config.root_path), logfile
             ]
-            SystemUtil.exec_command(cmd, log_path=config.log_path)
+            if os.path.isfile(logfile):
+                SystemUtil.exec_command(cmd, log_path=config.log_path)
 
     @staticmethod
     def resolve_get_warning_list(target_arg: Arg, build_module: BuildModuleInterface):
