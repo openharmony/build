@@ -396,7 +396,7 @@
           "unzip_filename": "rustc-x86_64-windows-std"
         },
         {
-          "unzip_dir": "build/config/components/hc_gen",
+          "unzip_dir": "prebuilts/hc_gen",
           "file_path": "/openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
           "unzip_filename": "hc-gen"
         }
