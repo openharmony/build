@@ -112,15 +112,12 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        if "-v" not in sys.argv:
-            variant = 'default'
-        else:
-            variant = sys.argv[sys.argv.index("-v") + 1]
+        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
+        variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
         logpath = os.path.join('out', variant, 'build.log')
         if os.path.exists(logpath):
             mtime = os.stat(logpath).st_mtime
             os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
-        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
         SystemUtil.exec_command(hpm_build_cmd, log_path=logpath)
 
     @throw_exception

@@ -49,7 +49,7 @@
   },
   "variant": {
     "arg_name": "--variant",
-    "argDefault": "",
+    "argDefault": "default",
     "arg_help": "Default:''. Help:install product variant, run 'hb build --variant {variant_name}'",
     "arg_phase": "prebuild",
     "arg_type": "str",
@@ -61,7 +61,7 @@
   },
   "branch": {
     "arg_name": "--branch",
-    "argDefault": "",
+    "argDefault": "master",
     "arg_help": "Default:''. Help:code branch name, run 'hb build --branch {branch_name}'",
     "arg_phase": "prebuild",
     "arg_type": "str",
