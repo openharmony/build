@@ -1116,7 +1116,6 @@ template("ohos_shared_library") {
           libs += [ "unwind" ]
         }
 
-        libs += [ rebase_path(libclang_rt_file) ]
         if (target_name != "libpcre2" && target_name != "libselinux" &&
             target_name != "libsec_shared" && target_name != "libsepol") {
           libs += [ "c++" ]
