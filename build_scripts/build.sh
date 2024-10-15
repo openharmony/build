@@ -206,9 +206,8 @@ function build_sdk() {
 }
 function get_api(){
   current_dir=$(pwd)
-  if [ -d "$current_dir/prebuilts/ohos-sdk-12/" ]; then
-    mkdir -p $current_dir/prebuilts/ohos-sdk/linux/12
-    mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
+  if [ -d "$current_dir/prebuilts/ohos-sdk-12/" ]; then 
+    cp -af "$current_dir/prebuilts/ohos-sdk-12/linux/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
   fi
 }
 if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
