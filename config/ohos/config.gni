@@ -42,7 +42,7 @@ if (is_ohos) {
   } else {
     assert(false, "Architecture not supported")
   }
-  if (current_cpu != "riscv64") {
+  if (current_cpu == "arm64") {
     libgwp_asan_file = "${clang_base_path}/lib/clang/${clang_version}/lib/${abi_target}/libclang_rt.gwp_asan.a"
   }
   libclang_rt_file = "${clang_base_path}/lib/clang/${clang_version}/lib/${abi_target}/libclang_rt.builtins.a"
