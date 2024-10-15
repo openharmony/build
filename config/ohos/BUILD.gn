@@ -97,7 +97,7 @@ config("runtime_library") {
     rebase_path(libcxxabi_file),
   ]
 
-  if (!is_llvm_build && current_cpu != "riscv64") {
+  if (!is_llvm_build && current_cpu == "arm64") {
     libs += [ rebase_path(libgwp_asan_file) ]
   }
 
