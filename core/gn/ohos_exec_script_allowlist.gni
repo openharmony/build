@@ -30,6 +30,7 @@ ohos_exec_script_config = {
     "//base/web/webview/ohos_nweb/BUILD.gn",
     "//build/config/BUILDCONFIG.gn",
     "//build/config/components/hdi/hdi.gni",
+    "//build/config/components/hc_gen/hc_gen.gni",
     "//build/config/linux/pkg_config.gni",
     "//build/config/mac/mac_sdk.gni",
     "//build/config/posix/BUILD.gn",

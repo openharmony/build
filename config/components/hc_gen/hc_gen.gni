@@ -1,0 +1,116 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+template("hc_gen") {
+  assert(defined(invoker.sources), "sources are must")
+  if (defined(invoker.outputs)) {
+    foreach(o, invoker.outputs) {
+      if (o == string_replace(o, "{{", "")) {
+        specified_output_name = true
+      }
+    }
+  }
+  if (defined(specified_output_name) && specified_output_name) {
+    target_type = "action"
+  } else {
+    target_type = "action_foreach"
+  }
+
+  # get all hcs file by sources
+  hcs_inputs = exec_script("//build/config/components/hc_gen/hcs_build_info.py",
+                           rebase_path(invoker.sources),
+                           "list lines")
+
+  target(target_type, target_name) {
+    script = "/usr/bin/env"
+    if (defined(ohos_lite)) {
+      script = "//build/lite/run_shell_cmd.py"
+    }
+    inputs = hcs_inputs
+    sources = invoker.sources
+    if (defined(invoker.hc_gen_hex) && invoker.hc_gen_hex) {
+      hc_flags = [
+        "-b",
+        "-i",
+        "-a",
+      ]
+      output_suffix = "_hex.c"
+      output_suffix2 = ".hcb"
+    } else if (defined(invoker.hc_gen_c) && invoker.hc_gen_c) {
+      hc_flags = [ "-t" ]
+      output_suffix = ".c"
+      output_suffix2 = ".h"
+    } else if (defined(invoker.hc_gen_macro) && invoker.hc_gen_macro) {
+      hc_flags = [ "-m" ]
+      output_suffix = ".h"
+    } else if (defined(invoker.hc_gen_start_cfg) && invoker.hc_gen_start_cfg) {
+      hc_flags = [ "-s" ]
+      output_suffix = ".cfg"
+    } else {
+      hc_flags = []
+      output_suffix = ".hcb"
+    }
+
+    if (defined(invoker.outputs)) {
+      outputs = invoker.outputs
+    } else {
+      outputs = [ "$target_gen_dir/{{source_name_part}}$output_suffix" ]
+    }
+    if (defined(output_suffix2)) {
+      outputs += [ string_replace(outputs[0], output_suffix, output_suffix2) ]
+    }
+    if (target_type == "action") {
+      src = rebase_path(sources[0], root_build_dir)
+    } else {
+      src = "{{source}}"
+    }
+
+    args = [ rebase_path("//prebuilts/hc_gen/hc-gen") ]
+    args += hc_flags
+    args += [
+      "-o",
+      rebase_path(string_replace(outputs[0], output_suffix, "")),
+      src,
+    ]
+  }
+}
+
+template("hc_gen_c") {
+  hc_gen_c = true
+  hc_gen(target_name) {
+    forward_variables_from(invoker, "*")
+  }
+}
+
+template("hc_gen_hex") {
+  hc_gen_hex = true
+  hc_gen(target_name) {
+    forward_variables_from(invoker, "*")
+  }
+}
+
+template("hc_gen_macro") {
+  hc_gen_macro = true
+  hc_gen(target_name) {
+    forward_variables_from(invoker, "*")
+  }
+}
+
+template("hc_gen_start_cfg") {
+  hc_gen_start_cfg = true
+  hc_gen(target_name) {
+    forward_variables_from(invoker, "*")
+  }
+}
