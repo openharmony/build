@@ -19,7 +19,6 @@ idl_tool_path = "//foundation/ability/idl_tool/idl_tool_2"
 
 idl_root = "//foundation/ability/idl_tool"
 idl_build_deps = ""
-idl_out_root = ""
 
 build_root = "//build"
 toolchain_linux = "$build_root/toolchain/linux:clang_x64"
@@ -29,20 +28,25 @@ if (host_cpu == "arm64") {
   toolchain_mac = "$build_root/toolchain/mac:clang_x64"
 }
 toolchain_win = "$build_root/toolchain/mingw:mingw_x86_64"
-
-if (host_toolchain == toolchain_mac) {
-  idl_out_root = get_label_info("$idl_root:idl($toolchain_mac)", "root_out_dir")
-  idl_build_deps = [ "$idl_root:idl($toolchain_mac)" ]
-} else if (host_toolchain == toolchain_win) {
-  idl_out_root = get_label_info("$idl_root:idl($toolchain_win)", "root_out_dir")
-  idl_build_deps = [ "$idl_root:idl($toolchain_win)" ]
+if (ohos_indep_compiler_enable) {
+  idl_build_path =
+      "//binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64/libs"
 } else {
-  idl_out_root =
-      get_label_info("$idl_root:idl($toolchain_linux)", "root_out_dir")
-  idl_build_deps = [ "$idl_root:idl($toolchain_linux)" ]
+  if (host_toolchain == toolchain_mac) {
+    idl_out_root =
+        get_label_info("$idl_root:idl($toolchain_mac)", "root_out_dir")
+    idl_build_deps = [ "$idl_root:idl($toolchain_mac)" ]
+  } else if (host_toolchain == toolchain_win) {
+    idl_out_root =
+        get_label_info("$idl_root:idl($toolchain_win)", "root_out_dir")
+    idl_build_deps = [ "$idl_root:idl($toolchain_win)" ]
+  } else {
+    idl_out_root =
+        get_label_info("$idl_root:idl($toolchain_linux)", "root_out_dir")
+    idl_build_deps = [ "$idl_root:idl($toolchain_linux)" ]
+  }
+  idl_build_path = idl_out_root + "/ability/idl_tool"
 }
-
-idl_build_path = idl_out_root + "/ability/idl_tool"
 
 template("hdi") {
   assert(defined(invoker.sources), "sources must be set")
@@ -114,9 +118,10 @@ template("hdi") {
     ]
   }
 
-  hdi_build_info = exec_script("$idl_tool_path/build_hdi_files_info.py",
-                               get_build_info_args,
-                               "json")
+  hdi_build_info = exec_script(
+          rebase_path("//build/config/components/hdi/build_hdi_files_info.py"),
+          get_build_info_args,
+          "json")
   assert(defined(hdi_build_info.include_dirs), "missing include_dirs")
   assert(defined(hdi_build_info.out_dir), "out_dir")
   assert(defined(hdi_build_info.version), "missing version")
@@ -129,21 +134,27 @@ template("hdi") {
 
   idl_headers_config = "$target_name" + "_idl_headers_config"
   config("$idl_headers_config") {
-    include_dirs = [
-      "$hdf_uhdf_path/include/hdi",
-      "$hdf_uhdf_path/osal/include",
-      "$hdf_uhdf_path/ipc/include",
-      "$hdf_fwk_path/include/utils",
-      "//drivers/hdf_core/interfaces/inner_api/utils",
-      "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
-      "//drivers/hdf_core/interfaces/inner_api/hdi",
-    ]
-    include_dirs += hdi_build_info.include_dirs
+    if (ohos_indep_compiler_enable) {
+      include_dirs = hdi_build_info.include_dirs
+    } else {
+      include_dirs = [
+        "$hdf_uhdf_path/include/hdi",
+        "$hdf_uhdf_path/osal/include",
+        "$hdf_uhdf_path/ipc/include",
+        "$hdf_fwk_path/include/utils",
+        "//drivers/hdf_core/interfaces/inner_api/utils",
+        "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+        "//drivers/hdf_core/interfaces/inner_api/hdi",
+      ]
+      include_dirs += hdi_build_info.include_dirs
+    }
   }
 
   action("idl_gen") {
     # deps = [ "$idl_tool_path:build_hdi_gen" ]
-    deps = idl_build_deps
+    if (!ohos_indep_compiler_enable) {
+      deps = idl_build_deps
+    }
     script = "/usr/bin/env"
     if (defined(ohos_lite)) {
       script = "//build/lite/run_shell_cmd.py"
@@ -188,6 +199,10 @@ template("hdi") {
       public_configs = [ ":$idl_headers_config" ]
       deps = [ ":idl_gen" ]
       if (is_standard_system) {
+        if (defined(invoker.deps)) {
+          deps += invoker.deps
+        }
+
         public_deps = []
         if (defined(invoker.sequenceable_pub_deps)) {
           public_deps += invoker.sequenceable_pub_deps
@@ -197,6 +212,7 @@ template("hdi") {
 
         external_deps = [
           "c_utils:utils",
+          "hdf_core:libhdf_utils",
           "hdf_core:libhdi",
           "hdf_core:libpub_utils",
           "hilog:libhilog",
@@ -262,6 +278,9 @@ template("hdi") {
 
         deps = [ ":idl_gen" ]
         if (is_standard_system) {
+          if (defined(invoker.deps)) {
+            deps += invoker.deps
+          }
           public_deps = []
           if (defined(invoker.sequenceable_pub_deps)) {
             public_deps += invoker.sequenceable_pub_deps
@@ -271,6 +290,7 @@ template("hdi") {
 
           external_deps = [
             "c_utils:utils",
+            "hdf_core:libhdf_utils",
             "hdf_core:libhdi",
             "hilog:libhilog",
           ]
