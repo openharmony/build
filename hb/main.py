@@ -189,6 +189,10 @@ class Main():
         return OHOSToolModule(args_dict, tool_args_resolever, generate_ninja)
 
     def _init_indep_build_module(self) -> IndepBuildModuleInterface:
+        cwd = os.getcwd()
+        if not os.path.exists(os.path.join(cwd, 'build', 'indep_configs', 'build_indep.sh')):
+            print("ERROR: you are running hb build command in wrong dir!")
+            sys.exit()
         self._set_path()
         Arg.clean_args_file_by_type(ModuleType.INDEP_BUILD)
         args_dict = Arg.parse_all_args(ModuleType.INDEP_BUILD)
