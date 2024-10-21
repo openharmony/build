@@ -30,14 +30,14 @@ template("clang_toolchain") {
     }
 
     tool("cc") {
-      command = "$cc {{defines}} {{include_dirs}} {{cflags}} {{cflags_c}} -c {{source}} -o {{output}}"
+      command = "$cc {{defines}} {{cflags}} {{cflags_c}} {{include_dirs}} -c {{source}} -o {{output}}"
       description = "clang {{output}}"
       outputs =
           [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
     }
     tool("cxx") {
       depfile = "{{output}}.d"
-      command = "$cxx {{defines}} {{include_dirs}} {{cflags_cc}} -c {{source}} -o {{output}}"
+      command = "$cxx {{defines}} {{cflags_cc}} {{include_dirs}} -c {{source}} -o {{output}}"
       description = "clang++ {{output}}"
       outputs =
           [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
