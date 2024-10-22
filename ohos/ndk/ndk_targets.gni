@@ -236,6 +236,8 @@ _ndk_library_targets = [
   "//interface/sdk_c/telephony/core_service:telephony_radio_header",
   "//interface/sdk_c/ConnectivityKit/wifi:libwifi_ndk",
   "//interface/sdk_c/ConnectivityKit/wifi:wifi_ndk_header",
+  "//interface/sdk_c/backgroundtasks/transient:libtransient_task_ndk",
+  "//interface/sdk_c/backgroundtasks/transient:transient_task_header",
 ]
 
 _ndk_base_libs = [
