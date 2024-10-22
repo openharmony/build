@@ -35,7 +35,6 @@
         "//device/soc/rockchip/rk3568/hardware/omx_il/component/video/enc:libomxvpu_enc",
         "//device/soc/rockchip/rk3568/hardware/omx_il/core:libOMX_Core",
         "//device/soc/rockchip/rk3568/hardware/omx_il/libOMXPlugin:libOMX_Pluginhw",
-        "//foundation/arkui/napi/sample/native_module_systemtest:systemtestnapi",
         "//ide/tools/previewer:lite_previewer",
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor",
         "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
