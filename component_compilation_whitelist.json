@@ -18,7 +18,6 @@
         "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_package",
         "//base/global/system_resources:ohos_fonts",
         "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-        "//base/powermgr/battery_statistics/utils:batterystats_utils",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
         "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen",
@@ -90,9 +89,7 @@
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock",
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock",
         "//foundation/ability/ability_runtime/tools/aa:tools_aa_source_set",
-        "//foundation/ability/idl_tool:idl",
         "//foundation/ai/neural_network_runtime:nnrt_target",
-        "//foundation/arkui/napi:ace_container_scope_static",
         "//foundation/bundlemanager/bundle_framework/test/sceneProject/tools/ohos_test:copy_ohos_test",
         "//foundation/communication/ipc/interfaces/kits/js/napi:ipc_js",
         "//foundation/graphic/graphic_2d/utils:sync_fence",
@@ -105,9 +102,6 @@
         "//third_party/css-what:css_what_sources",
         "//third_party/cups-filters:third_party_cupsfilters",
         "//third_party/cups:third_party_cups",
-        "//third_party/f2fs-tools:f2fs-tools",
-        "//third_party/f2fs-tools/fsck:fsck.f2fs",
-        "//third_party/f2fs-tools/mkfs:mkfs.f2fs",
         "//third_party/flatbuffers:flatbuffers_install_action",
         "//third_party/glib:glib_packages",
         "//third_party/gptfdisk:sgdisk",
@@ -137,7 +131,6 @@
         "//third_party/noto-cjk:fonts_notocjk",
         "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
-        "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
         "//third_party/openssl:ssl_source",
         "//third_party/parse5:parse5_ark_hap",
@@ -170,10 +163,6 @@
         "//drivers/interface/camera/sequenceable/buffer_handle:libbuffer_handle_sequenceable_1.0",
         "//drivers/interface/camera/sequenceable/buffer_producer:libbuffer_producer_sequenceable_1.0",
         "//drivers/interface/camera/sequenceable/map_data:libmap_data_sequenceable_1.0",
-        "//foundation/ability/ability_base:base",
-        "//foundation/ability/ability_base:session_info",
-        "//foundation/ability/ability_base:want",
-        "//foundation/ability/ability_base:zuri",
         "//foundation/ability/ability_runtime/interfaces/inner_api/runtime:runtime",
         "//foundation/bundlemanager/bundle_framework/common:libappexecfwk_common",
         "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base:appexecfwk_base",
@@ -367,18 +356,6 @@
         "//drivers/interface/motion/v1_1:libmotion_stub_1.1": [
             "//drivers/interface/motion/v1_0:libmotion_stub_1.0"
         ],
-        "//drivers/interface/pin_auth/v1_1:libpin_auth_proxy_1.1": [
-            "//drivers/interface/pin_auth/v1_0:libpin_auth_proxy_1.0"
-        ],
-        "//drivers/interface/pin_auth/v1_1:libpin_auth_stub_1.1": [
-            "//drivers/interface/pin_auth/v1_0:libpin_auth_stub_1.0"
-        ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_proxy_2.0": [
-            "//drivers/interface/pin_auth/v1_0:libpin_auth_proxy_1.0"
-        ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_stub_2.0": [
-            "//drivers/interface/pin_auth/v1_0:libpin_auth_stub_1.0"
-        ],
         "//drivers/interface/ril/v1_2:libril_proxy_1.2": [
             "//drivers/interface/ril/v1_1:libril_proxy_1.1"
         ],
@@ -469,8 +446,7 @@
         "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
             "//foundation/graphic/graphic_2d/utils/buffer_handle:buffer_handle",
             "//foundation/graphic/graphic_2d/utils/frame_report:frame_report",
-            "//foundation/graphic/graphic_2d/utils/sandbox:sandbox_utils",
-            "//foundation/graphic/graphic_2d/utils/scoped_bytrace:scoped_bytrace"
+            "//foundation/graphic/graphic_2d/utils/sandbox:sandbox_utils"
         ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor": [
             "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor_source"
@@ -483,7 +459,6 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/composer:libcomposer": [
             "//foundation/graphic/graphic_2d/utils:buffer_handle",
-            "//foundation/graphic/graphic_2d/utils:scoped_bytrace",
             "//foundation/graphic/graphic_2d/utils:sync_fence",
             "//foundation/graphic/graphic_2d/rosen/modules/composer/vsync:libvsync"
         ],
@@ -513,7 +488,6 @@
             "//foundation/graphic/graphic_2d/utils/raw_maker:raw_maker",
             "//foundation/graphic/graphic_2d/utils/raw_parser:raw_parser",
             "//foundation/graphic/graphic_2d/utils/sandbox:sandbox_utils",
-            "//foundation/graphic/graphic_2d/utils/scoped_bytrace:scoped_bytrace",
             "//foundation/graphic/graphic_2d/utils/semaphore:semaphore",
             "//foundation/graphic/graphic_2d/utils/test_header:test_header"
         ],
@@ -524,16 +498,6 @@
         "//foundation/multimedia/av_session/frameworks/native/session:avsession_client": [
             "//foundation/multimedia/av_session/utils:avsession_utils",
             "//foundation/multimedia/av_session/frameworks/common:avsession_common"
-        ],
-        "//foundation/resourceschedule/device_standby/interfaces/innerkits:standby_innerkits": [
-            "//foundation/resourceschedule/device_standby/frameworks:standby_fwk",
-            "//foundation/resourceschedule/device_standby/utils/common:standby_utils_common"
-        ],
-        "//foundation/resourceschedule/device_standby/plugins:standby_plugin": [
-            "//foundation/resourceschedule/device_standby/frameworks:standby_fwk",
-            "//foundation/resourceschedule/device_standby/services:standby_service",
-            "//foundation/resourceschedule/device_standby/utils/common:standby_utils_common",
-            "//foundation/resourceschedule/device_standby/utils/policy:standby_utils_policy"
         ],
         "//foundation/window/window_manager/utils:libwmutil": [
             "//foundation/window/window_manager/utils:libwmutil_base"
@@ -547,12 +511,10 @@
     },
     "includes_absolute_deps_other": {
         "//applications/standard/calendardata/calendarmanager:calendarmanager": [
-            "//foundation/arkui/napi/interfaces/kits/",
             "//third_party/node/src/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/"
         ],
         "//applications/standard/calendardata/calendarmanager:calendarmanager_static": [
-            "//foundation/arkui/napi/interfaces/kits/",
             "//third_party/node/src/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/"
         ],
@@ -641,14 +603,6 @@
             "//third_party/zlib/",
             "//third_party/zlib/contrib/minizip/"
         ],
-        "//arkcompiler/runtime_core/static_core/compiler/optimizer/code_generator:libarkencoder": [
-            "//third_party/vixl/src/aarch32/",
-            "//third_party/vixl/src/"
-        ],
-        "//arkcompiler/runtime_core/static_core/compiler/optimizer/code_generator:libarkencoder_frontend_static": [
-            "//third_party/vixl/src/aarch32/",
-            "//third_party/vixl/src/"
-        ],
         "//arkcompiler/runtime_core/static_core/irtoc:irtoc": [
             "//third_party/elfio/"
         ],
@@ -670,21 +624,6 @@
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets/runtime/interop_js:ets_interop_js_napi_static": [
             "//third_party/node/src/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//arkcompiler/runtime_core/static_core/runtime:arkruntime_interpreter_impl_static": [
-            "//third_party/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/icu/icu4c/source/i18n/",
-            "//third_party/icu/icu4c/source/",
-            "//third_party/icu/"
-        ],
-        "//arkcompiler/runtime_core/static_core/runtime:libarkruntime_set_static": [
-            "//third_party/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/icu/icu4c/source/i18n/",
-            "//third_party/icu/icu4c/source/",
-            "//third_party/icu/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//arkcompiler/toolchain/tooling/client/ark_cli:arkdb": [
@@ -771,9 +710,6 @@
             "//third_party/libxml2/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//base/hiviewdfx/hiview/plugins/usage_event_report/service:usage_report": [
-            "//base/powermgr/battery_statistics/utils/native/include/"
-        ],
         "//base/hiviewdfx/hiview/utility/common_utils:hiview_reliability_common_utils": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//third_party/openssl/"
@@ -786,9 +722,6 @@
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
-        ],
-        "//base/inputmethod/imf/interfaces/inner_api/inputmethod_controller:inputmethod_client": [
-            "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
         "//base/inputmethod/imf/test/unittest/cpp_test/common:inputmethod_tdd_util": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
@@ -814,10 +747,10 @@
             "//third_party/node/src/",
             "//third_party/libuv/include/"
         ],
-        "//base/notification/common_event_service/services:cesfwk_services": [
+        "//base/notification/common_event_service/services:cesfwk_services_static": [
             "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
-        "//base/notification/common_event_service/services:cesfwk_services_static": [
+        "//base/notification/common_event_service/services:cesfwk_services": [
             "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
         "//base/notification/distributed_notification_service/frameworks/ans:ans_innerkits": [
@@ -855,18 +788,6 @@
         "//base/notification/distributed_notification_service/services/distributed:libans_distributed": [
             "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
-        "//base/powermgr/battery_statistics/services:batterystats_service": [
-            "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/app/"
-        ],
-        "//base/powermgr/battery_statistics/services:batterystats_stub": [
-            "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/app/"
-        ],
-        "//base/powermgr/thermal_manager/services:thermalservice": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/common:mock_thermalsrv_client": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
         "//base/print/print_fwk/frameworks/helper/print_helper:print_helper": [
             "//third_party/node/src/",
             "//third_party/curl/include/"
@@ -893,7 +814,6 @@
             "//third_party/cups/cups-2.4.0/"
         ],
         "//base/request/request/common:request_common_static": [
-            "//third_party/curl/include/",
             "//third_party/openssl/include/"
         ],
         "//base/request/request/frameworks/js/napi:request": [
@@ -934,9 +854,6 @@
         "//base/startup/init/interfaces/innerkits/init_module_engine:libinit_module_engine": [
             "//third_party/cJSON/"
         ],
-        "//base/tee/tee_client/services/tlogcat/build/standard:tlogcat": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//base/telephony/cellular_data/frameworks/js:data": [
             "//third_party/node/src/"
         ],
@@ -949,12 +866,6 @@
         ],
         "//base/telephony/state_registry/frameworks/js/napi:observer": [
             "//third_party/node/src/"
-        ],
-        "//base/theme/screenlock_mgr/services:screenlock_server": [
-            "//foundation/resourceschedule/ffrt/interfaces/kits/"
-        ],
-        "//base/theme/screenlock_mgr/services:screenlock_server_static": [
-            "//foundation/resourceschedule/ffrt/interfaces/kits/"
         ],
         "//base/theme/wallpaper_mgr/frameworks/kits/extension:wallpaper_extension_module": [
             "//foundation/ability/ability_runtime/services/common/include/"
@@ -980,7 +891,6 @@
             "//base/update/updater/interfaces/kits/include/",
             "//base/update/updater/services/include/",
             "//commonlibrary/utils_lite/include/",
-            "//third_party/curl/include/",
             "//utils/native/base/include/",
             "//utils/system/safwk/native/include/",
             "//third_party/libxml2/include/",
@@ -991,13 +901,9 @@
             "//base/update/sys_installer/interfaces/inner_api/include/"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
-            "//foundation/arkui/napi/native_engine/",
-            "//foundation/arkui/napi/interfaces/kits/",
             "//third_party/node/src/"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usbmanager": [
-            "//foundation/arkui/napi/native_engine/",
-            "//foundation/arkui/napi/interfaces/kits/",
             "//third_party/node/src/"
         ],
         "//build/rust/tests/test_cxx_rust:test_cxx_rust_staticlib": [
@@ -1433,12 +1339,6 @@
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//base/user_iam/user_auth/common/logs/"
         ],
-        "//drivers/peripheral/pin_auth/hdi_service:libpin_auth_interface_service_1.1": [
-            "//third_party/openssl/include/"
-        ],
-        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_1.1_fuzzer": [
-            "//third_party/openssl/include/"
-        ],
         "//drivers/peripheral/sensor/hal:hdi_sensor": [
             "//third_party/bounds_checking_function/include/"
         ],
@@ -1681,31 +1581,13 @@
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/graphic/graphic_2d/interfaces/inner_api/"
         ],
-        "//foundation/ability/ability_base:base": [
-            "//foundation/communication/ipc/ipc/native/src/napi/include/"
-        ],
-        "//foundation/ability/ability_base:configuration": [
-            "//base/global/resource_management/interfaces/inner_api/include/",
-            "//third_party/json/include/"
-        ],
-        "//foundation/ability/ability_base:extractortool": [
-            "//third_party/json/include/",
-            "//third_party/zlib/contrib/minizip/",
-            "//third_party/zlib/"
-        ],
         "//foundation/ability/ability_base:want": [
             "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/ability_constant:abilityconstant": [
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
-            "//foundation/ability/ability_base/interfaces/inner_api/base/include/",
             "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/ability_constant:abilityconstant_napi": [
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
-            "//foundation/ability/ability_base/interfaces/inner_api/base/include/",
             "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/ability_manager:abilitymanager": [
@@ -1773,7 +1655,6 @@
             "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi/",
             "//foundation/window/window_manager/utils/include/",
             "//third_party/node/src/",
-            "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/rdb/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/common/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/dataability/include/"
@@ -1785,7 +1666,6 @@
             "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/utils/include/"
@@ -1833,7 +1713,6 @@
             "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/utils/include/"
@@ -1880,41 +1759,28 @@
             "//foundation/ability/form_fwk/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:uiabilitykit_native": [
-            "//foundation/arkui/napi/",
-            "//foundation/arkui/napi/interfaces/kits/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/libuv/include/",
             "//third_party/node/src/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/utils/include/"
         ],
-        "//foundation/ability/ability_runtime/frameworks/native/ability:ability_context_native": [
-            "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/"
-        ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context": [
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//base/global/resource_management/interfaces/inner_api/include/",
-            "//base/global/i18n/frameworks/intl/include/",
             "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/"
+            "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context_utils": [
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//base/global/resource_management/interfaces/inner_api/include/",
-            "//base/global/i18n/frameworks/intl/include/",
             "//third_party/icu/icu4c/source/common/",
             "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_delegator": [
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//base/global/resource_management/interfaces/inner_api/include/",
-            "//base/global/i18n/frameworks/intl/include/",
             "//third_party/icu/icu4c/source/common/",
             "//third_party/json/include/"
         ],
@@ -1922,17 +1788,13 @@
             "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_native": [
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//base/global/resource_management/interfaces/inner_api/include/",
-            "//base/global/i18n/frameworks/intl/include/",
             "//third_party/icu/icu4c/source/common/",
             "//third_party/json/include/",
             "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/src/EGL/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_connect_callback_stub": [
             "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
             "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
@@ -1942,9 +1804,6 @@
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_manager": [
             "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1953,9 +1812,6 @@
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_start_setting": [
             "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1964,9 +1820,6 @@
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:mission_info": [
             "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1974,9 +1827,6 @@
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager:app_manager": [
-            "//foundation/ability/ability_base/interfaces/inner_api/log/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//third_party/json/include/"
         ],
@@ -1985,8 +1835,7 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/dataobs_manager:dataobs_manager": [
-            "//utils/system/safwk/native/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/"
+            "//utils/system/safwk/native/include/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/runtime:runtime": [
             "//third_party/json/include/",
@@ -1994,7 +1843,6 @@
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits": [
             "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//base/global/resource_management/interfaces/inner_api/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
@@ -2004,10 +1852,6 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common/"
         ],
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms": [
-            "//foundation/ability/ability_base/interfaces/inner_api/base/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//prebuilts/jdk/jdk8/linux-x86/include/",
             "//prebuilts/jdk/jdk8/linux-x86/include/linux/",
             "//third_party/json/include/",
@@ -2024,9 +1868,7 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/",
             "//foundation/graphic/graphic_2d/interfaces/inner_api/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
-            "//foundation/graphic/graphic_2d/interfaces/inner_api/wmservice/",
-            "//base/global/i18n/frameworks/intl/include/"
+            "//foundation/graphic/graphic_2d/interfaces/inner_api/wmservice/"
         ],
         "//foundation/ability/ability_runtime/services/appmgr:libappms": [
             "//third_party/json/include/",
@@ -2051,7 +1893,6 @@
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest:abilityms_test_source": [
-            "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
@@ -2105,7 +1946,6 @@
         ],
         "//foundation/ability/form_fwk:form_manager": [
             "//third_party/json/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/ability/native/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
@@ -2117,9 +1957,6 @@
             "//foundation/ability/ability_runtime/services/common/include/",
             "//foundation/ability/ability_runtime/frameworks/native/appkit/ability_runtime/",
             "//base/startup/init/interfaces/innerkits/include/syspara/"
-        ],
-        "//foundation/ability/idl_tool:idl": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/ai/intelligent_voice_framework/frameworks/js:intelligentvoice": [
             "//foundation/arkui/napi/interfaces/kits/"
@@ -2252,10 +2089,6 @@
             "//third_party/openssl/include/",
             "//third_party/bounds_checking_function/include/"
         ],
-        "//foundation/communication/dhcp/services/dhcp_client:dhcp_updater_client": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//foundation/communication/dsoftbus/adapter:softbus_adapter": [
             "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/",
             "//commonlibrary/c_utils/base/include/",
@@ -2316,10 +2149,7 @@
             "//base/security/access_token/interfaces/innerkits/privacy/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
-            "//base/notification/common_event_service/interfaces/inner_api/",
-            "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
-            "//foundation/ability/ability_base/interfaces/kits/native/uri/include/",
-            "//foundation/ability/ability_base/interfaces/inner_api/base/include/"
+            "//base/notification/common_event_service/interfaces/inner_api/"
         ],
         "//foundation/communication/dsoftbus/sdk:softbus_client": [
             "//utils/system/safwk/native/include/",
@@ -2345,8 +2175,6 @@
             "//third_party/json/single_include/"
         ],
         "//foundation/communication/ipc/interfaces/kits/js/napi:rpc": [
-            "//foundation/arkui/napi/interfaces/kits/",
-            "//foundation/arkui/napi/native_engine/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/communication/ipc/ipc/test/auxiliary/native:ipc_test_helper": [
@@ -2510,11 +2338,7 @@
             "//foundation/communication/netmanager_base/utils/common_utils/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
-        "//foundation/communication/netstack/frameworks/js/napi/fetch:fetch": [
-            "//third_party/curl/include/"
-        ],
         "//foundation/communication/netstack/frameworks/js/napi/http:http": [
-            "//third_party/curl/include/",
             "//foundation/communication/netmanager_base/interfaces/innerkits/include/",
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient/include/"
         ],
@@ -2648,13 +2472,11 @@
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_native": [
             "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_utils": [
             "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_p2p:wifi_p2p_service": [
             "//commonlibrary/c_utils/base/include/",
@@ -2679,10 +2501,7 @@
             "//foundation/appexecfwk/adapter/interfaces/innerkits/appexecfwk_base/include/",
             "//base/notification/common_event_service/interfaces/inner_api/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/powermgr/power_manager/interfaces/inner_api/native/include/",
-            "//base/powermgr/power_manager/services/zidl/include/",
-            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/"
+            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"            
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_hotspot_service_impl": [
             "//commonlibrary/c_utils/base/include/",
@@ -2693,10 +2512,7 @@
             "//foundation/appexecfwk/adapter/interfaces/innerkits/appexecfwk_base/include/",
             "//base/notification/common_event_service/interfaces/inner_api/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/powermgr/power_manager/interfaces/inner_api/native/include/",
-            "//base/powermgr/power_manager/services/zidl/include/",
-            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/"
+            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_manager_service": [
             "//commonlibrary/c_utils/base/include/",
@@ -2707,10 +2523,7 @@
             "//foundation/appexecfwk/adapter/interfaces/innerkits/appexecfwk_base/include/",
             "//base/notification/common_event_service/interfaces/inner_api/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/powermgr/power_manager/interfaces/inner_api/native/include/",
-            "//base/powermgr/power_manager/services/zidl/include/",
-            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/"
+            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_p2p_service_impl": [
             "//commonlibrary/c_utils/base/include/",
@@ -2721,10 +2534,7 @@
             "//foundation/appexecfwk/adapter/interfaces/innerkits/appexecfwk_base/include/",
             "//base/notification/common_event_service/interfaces/inner_api/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/powermgr/power_manager/interfaces/inner_api/native/include/",
-            "//base/powermgr/power_manager/services/zidl/include/",
-            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/"
+            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_scan_service_impl": [
             "//commonlibrary/c_utils/base/include/",
@@ -2735,28 +2545,21 @@
             "//foundation/appexecfwk/adapter/interfaces/innerkits/appexecfwk_base/include/",
             "//base/notification/common_event_service/interfaces/inner_api/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/powermgr/power_manager/interfaces/inner_api/native/include/",
-            "//base/powermgr/power_manager/services/zidl/include/",
-            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
-            "//foundation/ability/ability_base/interfaces/kits/native/configuration/include/"
+            "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_toolkit:wifi_toolkit": [
             "//commonlibrary/c_utils/base/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//base/security/certificate_manager/frameworks/cert_manager_standard/main/common/include/",
-            "//base/security/certificate_manager/interfaces/innerkits/cert_manager_standard/main/include/"
+            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service": [
             "//commonlibrary/c_utils/base/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
             "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service_updater": [
             "//commonlibrary/c_utils/base/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
             "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_hal/unittest:WifiHalVendorTest": [
@@ -3203,9 +3006,6 @@
         "//foundation/graphic/graphic_2d/frameworks/surfaceimage:libnative_image": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/vulkan_layers:vulkan_swapchain_layer": [
-            "//third_party/vulkan-loader/loader/generated/"
-        ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/animation/window_animation_manager:windowanimationmanager_napi": [
             "//foundation/window/window_manager/wm/include/",
             "//foundation/window/window_manager/wmserver/include/",
@@ -3218,35 +3018,14 @@
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:colorspacemanager_napi_source": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/drawing:drawing_napi": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/drawing:drawing_napi_impl": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/effect_kit:effectkit": [
-            "//foundation/multimedia/image_framework/interfaces/kits/js/common/include/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//third_party/skia/"
         ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/webgl:webgl_src": [
             "//third_party/node/src/",
             "//commonlibrary/c_utils/base/include/",
-            "//third_party/EGL/api/",
-            "//third_party/openGLES/api/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/build/icu:rosen_libicu_ohos": [
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/icu/icu4c/source/i18n/",
-            "//third_party/icu/icu4c/source/ohos/",
-            "//third_party/icu/icu4c/source/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/build/icu:rosen_libicu_ohos_ng": [
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/icu/icu4c/source/i18n/",
-            "//third_party/icu/icu4c/source/ohos/",
-            "//third_party/icu/icu4c/source/"
+            "//third_party/EGL/api/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
             "//third_party/skia/"
@@ -3281,18 +3060,12 @@
             "//third_party/flutter/txt/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos": [
-            "//foundation/multimedia/image_framework/interfaces/kits/js/common/include/",
-            "//foundation/multimedia/image_framework/interfaces/kits/native/include/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/mdkKits/",
             "//third_party/flutter/engine/",
             "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/txt/src/",
             "//third_party/skia/third_party/externals/harfbuzz/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos_ng": [
-            "//foundation/multimedia/image_framework/interfaces/kits/js/common/include/",
-            "//foundation/multimedia/image_framework/interfaces/kits/native/include/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/mdkKits/",
             "//third_party/flutter/engine/",
             "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/txt/src/",
@@ -3330,20 +3103,11 @@
         "//foundation/graphic/graphic_2d/rosen/modules/composer/vsync:libvsync": [
             "//base/notification/eventhandler/interfaces/inner_api/"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/color_picker:color_picker": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/effectChain:libeffectchain": [
-            "//third_party/cJSON/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
-            "//third_party/openGLES/api/"
+            "//third_party/cJSON/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/egl:libegl_effect": [
-            "//third_party/EGL/api/",
-            "//third_party/openGLES/api/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/skia_effectChain:skeffectchain": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
+            "//third_party/EGL/api/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/hyper_graphic_manager:libhyper_graphic_manager": [
             "//third_party/libxml2/include/"
@@ -3363,7 +3127,6 @@
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_base/src/platform/ohos:rosen_ohos_sources": [
             "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//third_party/openssl/include/",
             "//third_party/skia/"
         ],
@@ -3401,9 +3164,6 @@
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:render_service_client_rs_animation_demo": [
             "//foundation/window/window_manager/interfaces/innerkits/"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:render_service_client_rs_demo": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:render_service_client_scale_demo": [
             "//foundation/window/window_manager/interfaces/innerkits/"
         ],
@@ -3427,9 +3187,6 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:render_service_client_watermark_demo": [
             "//foundation/window/window_manager/interfaces/innerkits/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:render_service_display_mode_demo": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test:rs_uni_render_pixelmap_demo": [
             "//foundation/window/window_manager/interfaces/innerkits/"
@@ -3473,24 +3230,8 @@
             "//third_party/minimp3/player/",
             "//third_party/bounds_checking_function/include/"
         ],
-        "//foundation/graphic/graphic_surface/buffer_handle:buffer_handle": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/",
-            "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/graphic/graphic_2d/utils/log/"
-        ],
-        "//foundation/graphic/graphic_surface/surface:surface": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
-        ],
-        "//foundation/graphic/graphic_surface/sync_fence:sync_fence": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/",
-            "//base/notification/eventhandler/interfaces/inner_api/",
-            "//foundation/graphic/graphic_2d/utils/log/"
-        ],
         "//foundation/multimedia/av_codec/interfaces/inner_api/native:av_codec_client": [
             "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
             "//third_party/ffmpeg/",
             "//foundation/multimedia/drm_framework/services/drm_service/ipc/"
@@ -3500,72 +3241,63 @@
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_adec": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_aenc": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_avdemuxer": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_avmuxer": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_avsource": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_codecbase": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_vdec": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/interfaces/kits/c:native_media_venc": [
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//foundation/graphic/graphic_surface/surface/include/"
+            "//foundation/multimedia/media_foundation/interface/inner_api/"
         ],
         "//foundation/multimedia/av_codec/services/dfx:av_codec_service_dfx": [
             "//foundation/multimedia/media_foundation/interface/inner_api/",
@@ -3661,7 +3393,6 @@
             "//foundation/multimedia/media_foundation/interface/inner_api/",
             "//foundation/multimedia/media_foundation/src/",
             "//third_party/ffmpeg/",
-            "//third_party/curl/include/",
             "//third_party/openssl/include/"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/plugins/source:media_plugin_DataStreamSource": [
@@ -3707,7 +3438,6 @@
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/helper:hcodec_test_helper": [
             "//third_party/openmax/api/1.1.2/",
             "//foundation/window/window_manager/interfaces/innerkits/",
-            "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/multimedia/media_foundation/interface/inner_api/",
             "//foundation/multimedia/media_foundation/interface/kits/c/"
         ],
@@ -3788,7 +3518,6 @@
             "//foundation/multimedia/media_foundation/engine/include/",
             "//third_party/skia/third_party/externals/oboe/samples/RhythmGame/third_party/"
         ],
-
         "//foundation/multimedia/media_library/frameworks/innerkitsimpl/media_library_helper:media_library": [
             "//third_party/json/include/"
         ],
@@ -3829,20 +3558,6 @@
             "//foundation/multimedia/camera_framework/interfaces/kits/js/camera_napi/include/",
             "//foundation/multimedia/camera_framework/interfaces/inner_api/native/camera/include/"
         ],
-        "//foundation/resourceschedule/ffrt:ffrt_ndk": [
-            "//third_party/jsoncpp/include/",
-            "//third_party/libunwind/include/"
-        ],
-        "//foundation/resourceschedule/ffrt:libffrt": [
-            "//third_party/jsoncpp/include/",
-            "//third_party/libunwind/include/"
-        ],
-        "//foundation/resourceschedule/frame_aware_sched/interfaces/innerkits/frameintf:rtg_interface": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/resourceschedule/resource_schedule_service/ressched/plugins/frame_aware_plugin:frame_aware_plugin": [
-            "//foundation/resourceschedule/frame_aware_sched/common/include/"
-        ],
         "//foundation/resourceschedule/resource_schedule_service/ressched/services:resschedsvc": [
             "//foundation/ability/ability_runtime/interfaces/inner_api/connectionobs_manager/include/"
         ],
@@ -3850,8 +3565,7 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/connectionobs_manager/include/"
         ],
         "//foundation/resourceschedule/work_scheduler/frameworks/extension:workschedextension": [
-            "//foundation/ability/ability_runtime/frameworks/native/ability/native/",
-            "//foundation/arkui/napi/native_engine/"
+            "//foundation/ability/ability_runtime/frameworks/native/ability/native/"
         ],
         "//foundation/systemabilitymgr/safwk/test/mock/common/audio_ability:test_audio_ability": [
             "//utils/system/safwk/native/include/"
@@ -3873,8 +3587,7 @@
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
         ],
         "//foundation/window/window_manager/dm:libdm_static": [
-            "//foundation/graphic/graphic_2d/utils/color_manager/export/",
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
+            "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/window/window_manager/dmserver:libdms": [
             "//third_party/skia/src/"
@@ -3885,20 +3598,8 @@
         "//foundation/window/window_manager/interfaces/kits/napi/common:dm_napi_common": [
             "//third_party/node/src/"
         ],
-        "//foundation/window/window_manager/interfaces/kits/napi/display_runtime:display_napi": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
         "//foundation/window/window_manager/interfaces/kits/napi/picture_in_picture_napi:pipwindow_napi": [
             "//foundation/arkui/ace_engine/interface/inner_api/ace/"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/window_runtime:window_native_kit": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/window_runtime:windowstage_kit": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
-        ],
-        "//foundation/window/window_manager/test/demo:demo_freeze_display": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
         ],
         "//foundation/window/window_manager/utils:libwmutil": [
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
@@ -3921,7 +3622,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
-            "//foundation/resourceschedule/ffrt/interfaces/kits/",
             "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/include/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
@@ -3931,7 +3631,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
-            "//foundation/resourceschedule/ffrt/interfaces/kits/",
             "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/include/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
@@ -3941,19 +3640,13 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
-            "//foundation/resourceschedule/ffrt/interfaces/kits/",
             "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/include/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
         "//foundation/window/window_manager/wm:libwm": [
-            "//foundation/arkui/napi/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
-        "//foundation/window/window_manager/wm:libwm_lite": [
-            "//foundation/arkui/napi/"
-        ],
         "//foundation/window/window_manager/wm:libwm_static": [
-            "//foundation/arkui/napi/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
         "//foundation/window/window_manager/wmserver:libwms": [
@@ -4082,32 +3775,6 @@
             "//third_party/libusb/",
             "//third_party/openssl/include/"
         ],
-        "//third_party/curl:curl": [
-            "//third_party/nghttp2/lib/includes/",
-            "//third_party/nghttp2/lib/includes/nghttp2/",
-            "//third_party/cares/include/"
-        ],
-        "//third_party/curl:curl_http3": [
-            "//third_party/nghttp2/lib/includes/",
-            "//third_party/nghttp2/lib/includes/nghttp2/",
-            "//third_party/cares/include/"
-        ],
-        "//third_party/curl:curl_shared": [
-            "//third_party/nghttp2/lib/includes/",
-            "//third_party/nghttp2/lib/includes/nghttp2/",
-            "//third_party/cares/include/"
-        ],
-        "//third_party/curl:curl_shared_http3": [
-            "//third_party/nghttp2/lib/includes/",
-            "//third_party/nghttp2/lib/includes/nghttp2/",
-            "//third_party/cares/include/"
-        ],
-        "//third_party/f2fs-tools/fsck:fsck.f2fs": [
-            "//third_party/e2fsprogs/e2fsprogs/contrib/android/"
-        ],
-        "//third_party/f2fs-tools/mkfs:mkfs.f2fs": [
-            "//third_party/e2fsprogs/e2fsprogs/lib/uuid/"
-        ],
         "//third_party/glib:g_mem_dfx": [
             "//commonlibrary/c_utils/base/include/",
             "//foundation/multimedia/media_standard/interfaces/inner_api/native/",
@@ -4170,8 +3837,7 @@
         "//third_party/gstreamer/gstplugins_bad:curlhttp_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
-            "//third_party/glib/gmodule/",
-            "//third_party/curl/include/"
+            "//third_party/glib/gmodule/"
         ],
         "//third_party/gstreamer/gstplugins_bad:drmdec_source": [
             "//third_party/glib/glib/",
@@ -4637,8 +4303,7 @@
         ],
         "//third_party/skia:gpu": [
             "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/",
-            "//third_party/EGL/api/",
-            "//third_party/openGLES/api/"
+            "//third_party/EGL/api/"
         ],
         "//third_party/skia:gpu_shared": [
             "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
@@ -4730,7 +4395,6 @@
         "//arkcompiler/runtime_core:ark_config",
         "//base/global/system_resources:ohos_fonts",
         "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-        "//base/powermgr/battery_statistics/utils:batterystats_utils",
         "//base/security/access_token/frameworks/accesstoken:accesstoken_communication_adapter_cxx",
         "//commonlibrary/c_utils/base:utils_config",
         "//developtools/ace_ets2bundle:ets_loader_ark_hap",
@@ -4758,11 +4422,9 @@
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test:aafwk_mock_config",
         "//foundation/ability/ability_runtime/tools/aa:ability_command_config",
         "//foundation/ability/form_fwk/services/form_render_service:formrender",
-        "//foundation/ability/idl_tool:idl",
         "//foundation/arkui/ace_engine/interfaces/inner_api/ui_service_manager:ui_service_mgr",
         "//foundation/arkui/ace_engine:ace_config",
         "//foundation/arkui/ace_engine:ace_test_config",
-        "//foundation/arkui/napi:ace_container_scope_static",
         "//foundation/arkui/napi:ace_napi_config",
         "//foundation/bundlemanager/bundle_framework/services/bundlemgr/test:bundlemgr_test_config",
         "//foundation/bundlemanager/bundle_framework/services/bundlemgr:libbms",
@@ -4777,7 +4439,6 @@
         "//foundation/graphic/graphic_2d/utils:sync_fence",
         "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer:audio_capturer_config",
         "//foundation/multimedia/audio_framework/frameworks/native/audiorenderer:audio_renderer_config",
-        "//foundation/multimedia/image_framework/interfaces/innerkits:image_external_config",
         "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk:system_ability_config",
         "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy_config",
         "//foundation/window/window_manager/dmserver:libdms",
@@ -4807,10 +4468,7 @@
         "//third_party/cups-filters:third_party_cupsfilters",
         "//third_party/cups:cups",
         "//third_party/cups:third_party_cups",
-        "//third_party/curl:curl",
-        "//third_party/curl:curl_shared_http3",
         "//third_party/elfio:elfio",
-        "//third_party/f2fs-tools:f2fs-tools",
         "//third_party/ffmpeg:libohosffmpeg",
         "//third_party/flatbuffers:flatbuffers_install_action",
         "//third_party/freetype:freetype_static",
@@ -4852,8 +4510,6 @@
         "//third_party/libbpf:libbpf",
         "//third_party/libffi:ffi",
         "//third_party/libinput/patch:apply_patch",
-        "//third_party/libjpeg-turbo:turbojpeg",
-        "//third_party/libjpeg-turbo:turbojpeg_static",
         "//third_party/libphonenumber/cpp:geocoding",
         "//third_party/libphonenumber/cpp:phonenumber_standard",
         "//third_party/libpng:libpng",
@@ -4879,7 +4535,6 @@
         "//third_party/noto-cjk:fonts_notocjk",
         "//third_party/notofonts:fonts_notofonts",
         "//third_party/ntfs-3g:ntfsprogs",
-        "//third_party/openGLES:libGLES",
         "//third_party/openSLES:libSLES",
         "//third_party/openssl:libcrypto_shared",
         "//third_party/openssl:libcrypto_static",
@@ -4914,17 +4569,12 @@
         "//third_party/selinux:selinuxexeccon",
         "//third_party/selinux:setenforce",
         "//third_party/selinux:setfilecon",
-        "//third_party/skia/third_party/libjpeg-turbo:libjpeg",
         "//third_party/skia/third_party/piex:piex",
         "//third_party/skia:skcms",
         "//third_party/skia:skia_ohos",
         "//third_party/skia:skia_ohos_ng",
         "//third_party/typescript:build_typescript",
-        "//third_party/vixl:libvixl",
-        "//third_party/vixl:vixl_public_config",
-        "//third_party/weex-loader:weex_loader_ark_hap",
-        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client",
-        "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater"
+        "//third_party/weex-loader:weex_loader_ark_hap"
     ],
     "deps_not_lib": {
         "//arkcompiler/ets_frontend/arkguard:build_arkguard": [
@@ -5384,12 +5034,6 @@
         "//base/msdp/device_status/services/interaction/drag:interaction_drag": [
             "//third_party/libxml2:xml2"
         ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalActionReportTest": [
-            "//base/powermgr/battery_statistics/utils:batterystats_utils"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalActionReportTest_resource_copy": [
-            "//base/powermgr/battery_statistics/utils:batterystats_utils"
-        ],
         "//base/print/print_fwk/frameworks/kits/extension:print_extension_framework": [
             "//foundation/communication/ipc/interfaces/kits/js/napi:ipc_js"
         ],
@@ -5420,86 +5064,8 @@
         "//base/update/updater/services/updater_binary:updater_binary": [
             "//third_party/musl:soft_static_libs"
         ],
-        "//base/update/updateservice/services/engine:updateservice": [
-            "//third_party/curl:curl"
-        ],
         "//base/web/webview/interfaces/kits/napi/protos:proto_gen": [
             "//third_party/protobuf:protoc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/buffer/test:test_buffer_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/buffer/test:test_buffer_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/convertxml/test:test_convertxml_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/convertxml/test:test_convertxml_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/uri/test:test_uri_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/uri/test:test_uri_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/url/test:test_url_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/url/test:test_url_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/xml/test:test_xml_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_api_module/xml/test:test_xml_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/taskpool/test:test_taskpool_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/taskpool/test:test_taskpool_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/test:test_concurrent_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/test:test_concurrent_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/worker/test:test_worker_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/worker/test:test_worker_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/console/test:test_console_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/console/test:test_console_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/timer/test:test_timer_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/timer/test:test_timer_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/timer:timer_static": [
-            "//foundation/arkui/napi:ace_container_scope_static"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/test:test_process_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_sys_module/test:test_process_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_util_module/util/test:test_util_unittest": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_util_module/util/test:test_util_unittest_resource_copy": [
-            "//third_party/icu/icu4c:static_icuuc"
         ],
         "//developtools/ace_ets2bundle:install_arkguard_tsc": [
             "//arkcompiler/ets_frontend/arkguard:build_arkguard",
@@ -5610,9 +5176,6 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/simulator/ability_simulator:gen_abc_js_mock": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
-        ],
-        "//foundation/ability/ability_runtime/interfaces/inner_api/quick_fix:quickfix_manager_interface": [
-            "//foundation/ability/idl_tool:idl"
         ],
         "//foundation/ability/form_fwk/test/unittest/fms_form_host_callback_test:FmsFormHostCallbackTest": [
             "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_target"
@@ -5789,20 +5352,16 @@
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:EGL": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv1": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv2": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv3": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:debug_layer_test1": [
             "//third_party/EGL:libEGL"
@@ -6272,9 +5831,6 @@
         ],
         "//third_party/weex-loader:weex_styler_ark_hap": [
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
-        ],
-        "//test/testfwk/arkxtest/testserver/src:test_server_interface": [
-            "//foundation/ability/idl_tool:idl"
         ]
     },
     "target_absolute_deps_other": {
@@ -6402,20 +5958,8 @@
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icuuc"
         ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:ark_stub_compiler": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
         "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer": [
             "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -6424,10 +5968,6 @@
         ],
         "//arkcompiler/ets_runtime:libark_jsruntime_test": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_test_set": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//arkcompiler/runtime_core/arkplatform:arkplatform_static": [
             "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
@@ -6558,12 +6098,6 @@
             "//third_party/bounds_checking_function:libsec_public_config",
             "//third_party/bounds_checking_function:libsec_static"
         ],
-        "//arkcompiler/runtime_core/static_core/compiler/optimizer/code_generator:libarkencoder": [
-            "//third_party/vixl:libvixl"
-        ],
-        "//arkcompiler/runtime_core/static_core/compiler/optimizer/code_generator:libarkencoder_frontend_static": [
-            "//third_party/vixl:libvixl"
-        ],
         "//arkcompiler/runtime_core/static_core/compiler:libarktscompiler": [
             "//third_party/bounds_checking_function:libsec_public_config",
             "//third_party/bounds_checking_function:libsec_static"
@@ -6692,21 +6226,15 @@
         "//base/global/resource_management/frameworks/resmgr:global_resmgr": [
             "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/cJSON:cjson",
-            "//third_party/zlib:shared_libz",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//third_party/zlib:shared_libz"
         ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr_linux": [
             "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/cJSON:cjson_static",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/zlib:shared_libz"
         ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr_win": [
             "//third_party/cJSON:cjson_static",
-            "//third_party/icu/icu4c:static_icui18n",
-            "//third_party/icu/icu4c:static_icuuc",
             "//third_party/zlib:libz"
         ],
         "//base/global/resource_management/frameworks/resmgr:librawfile": [
@@ -6968,12 +6496,6 @@
         "//base/notification/distributed_notification_service/tools/dump:anm": [
             "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits_public_config"
         ],
-        "//base/powermgr/battery_statistics/services:batterystats_service": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/powermgr/display_manager/brightness_manager:brightness_manager": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//base/print/print_fwk/frameworks/kits/extension:print_extension_framework": [
             "//foundation/ability/ability_runtime/frameworks/native/ability:ability_context_public_config"
         ],
@@ -6983,7 +6505,6 @@
             "//third_party/cups-filters:third_party_cupsfilters"
         ],
         "//base/request/request/common:request_common_static": [
-            "//third_party/curl:curl_shared",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
         ],
@@ -6998,33 +6519,11 @@
         "//base/security/appverify/interfaces/innerkits/appverify:libhapverify": [
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//base/tee/tee_client/frameworks/build/standard:libteec_vendor": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/tee/tee_client/interfaces/kits/c:teec": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/tee/tee_client/services/cadaemon/build/standard:libcadaemon": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/tee/tee_client/services/cadaemon/build/standard:libcadaemon_tui": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/tee/tee_client/services/teecd/build/standard:teecd": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/tee/tee_client/services/tlogcat/build/standard:tlogcat": [
-            "//third_party/zlib:libz"
-        ],
         "//base/telephony/call_manager/frameworks/js:call": [
             "//third_party/libuv:uv"
         ],
         "//base/telephony/call_manager:tel_call_manager": [
             "//third_party/cJSON:cjson",
-            "//third_party/libphonenumber/cpp:phonenumber_standard"
-        ],
-        "//base/telephony/cellular_call:tel_cellular_call": [
             "//third_party/libphonenumber/cpp:phonenumber_standard"
         ],
         "//base/telephony/core_service/frameworks/js/network_search:radio": [
@@ -7256,7 +6755,6 @@
         ],
         "//base/update/updateservice/services/engine:updateservice": [
             "//third_party/cJSON:cjson",
-            "//third_party/curl:curl",
             "//third_party/libxml2:libxml2",
             "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared",
@@ -7291,21 +6789,6 @@
         "//base/usb/usb_manager/services:usbservice": [
             "//third_party/jsoncpp:jsoncpp",
             "//third_party/cJSON:cjson"
-        ],
-        "//base/useriam/pin_auth/frameworks:pinauth_framework_source_set": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/useriam/pin_auth/services:pinauthservice_source_set": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/useriam/pin_auth/test/fuzztest/common_fuzzer:pinauthservice_source_set_fuzzer": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/useriam/user_auth_framework/services/context:userauth_service_context": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/useriam/user_auth_framework/test/fuzztest/common_fuzzer:userauth_service_context_fuzzer": [
-            "//third_party/openssl:libcrypto_shared"
         ],
         "//base/web/webview/interfaces/kits/napi/protos:proto_gen": [
             "//third_party/protobuf:protoc"
@@ -7354,9 +6837,8 @@
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_sys_module/timer:timer_static": [
-            "//foundation/arkui/napi:ace_napi_config",
             "//foundation/arkui/napi:ace_napi",
-            "//foundation/arkui/napi:ace_container_scope_static"
+            "//foundation/arkui/napi:ace_napi_config"
         ],
         "//commonlibrary/ets_utils/js_util_module/json:json_static": [
             "//third_party/icu/icu4c:icu_config",
@@ -7961,7 +7443,6 @@
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//drivers/peripheral/camera/vdi_base/usb_camera/pipeline_core:usb_camera_pipeline_core": [
-            "//third_party/libjpeg-turbo:turbojpeg_static",
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//drivers/peripheral/clearplay/hdi_service:libmedia_key_system_factory_clearplay_service_1.0": [
@@ -7991,12 +7472,6 @@
         ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0"
-        ],
-        "//drivers/peripheral/pin_auth/hdi_service:libpin_auth_interface_service_1.1": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_1.1_fuzzer": [
-            "//third_party/openssl:libcrypto_shared"
         ],
         "//drivers/peripheral/power/interfaces/hdi_service:libpower_interface_service_1.1": [
             "//third_party/libxml2:xml2"
@@ -8041,17 +7516,6 @@
         "//foundation/CastEngine/castengine_wifi_display/services:sharing_service": [
             "//third_party/cJSON:cjson_static"
         ],
-        "//foundation/ability/ability_base:extractortool": [
-            "//third_party/zlib:shared_libz"
-        ],
-        "//foundation/ability/ability_base:view_data": [
-            "//third_party/json:nlohmann_json_static"
-        ],
-        "//foundation/ability/ability_base:want": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/json:nlohmann_json_static",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility:featureability": [
             "//third_party/libuv:uv"
         ],
@@ -8065,30 +7529,6 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/particleAbility:particleability": [
             "//third_party/jsoncpp:jsoncpp",
             "//third_party/libuv:uv"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/ability/native:abilitykit_native": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/ability/native:abilitykit_utils": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/ability/native:uiabilitykit_native": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context_utils": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_delegator": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_manager_helper": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_native": [
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//foundation/ability/ability_runtime/frameworks/simulator/ability_simulator:gen_abc_js_mock": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
@@ -8107,8 +7547,7 @@
             "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
         ],
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms": [
-            "//third_party/icu/icu4c:shared_icuuc",
-            "//third_party/libjpeg-turbo:turbojpeg_static"
+            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//foundation/ability/ability_runtime/services/dialog_ui/ams_system_dialog:ams_system_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -8163,8 +7602,6 @@
         ],
         "//foundation/ability/ability_runtime/test/unittest:abilityms_test_source": [
             "//foundation/arkui/ace_engine/interfaces/inner_api/ui_service_manager:ui_service_mgr",
-            "//base/global/i18n/frameworks/intl:intl_util",
-            "//foundation/multimedia/image_framework/interfaces/innerkits:image_native",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/libjpeg-turbo:turbojpeg_static"
         ],
@@ -8185,9 +7622,6 @@
         ],
         "//foundation/ability/form_fwk:form_manager": [
             "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//foundation/ability/idl_tool:idl": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/engine/jsi:gen_js_mock_system_plugin_abc": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
@@ -8231,9 +7665,6 @@
         "//foundation/communication/bluetooth_service/services/bluetooth/stack:btstack": [
             "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/communication/dhcp/services/dhcp_client:dhcp_updater_client": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/communication/dsoftbus/adapter:softbus_adapter": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -8341,11 +7772,7 @@
         "//foundation/communication/netmanager_ext/utils:net_manager_ext_common": [
             "//commonlibrary/c_utils/base:utils_config"
         ],
-        "//foundation/communication/netstack/frameworks/js/napi/fetch:fetch": [
-            "//third_party/curl:curl_shared"
-        ],
         "//foundation/communication/netstack/frameworks/js/napi/http:http": [
-            "//third_party/curl:curl_shared_http3",
             "//third_party/jsoncpp:jsoncpp"
         ],
         "//foundation/communication/netstack/frameworks/js/napi/net_ssl:networksecurity_napi": [
@@ -8361,7 +7788,6 @@
             "//third_party/openssl:libssl_shared"
         ],
         "//foundation/communication/netstack/interfaces/innerkits/http_client:http_client": [
-            "//third_party/curl:curl_shared",
             "//third_party/jsoncpp:jsoncpp"
         ],
         "//foundation/communication/netstack/interfaces/innerkits/net_ssl:net_ssl": [
@@ -8385,15 +7811,6 @@
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_sdk": [
             "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_native": [
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service": [
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service_updater": [
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard:wpa_client_updater"
         ],
         "//foundation/communication/wifi/wifi/utils:wifi_utils": [
             "//third_party/jsoncpp:jsoncpp"
@@ -8599,20 +8016,16 @@
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:EGL": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv1": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv2": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:GLESv3": [
-            "//third_party/EGL:libEGL",
-            "//third_party/openGLES:libGLES"
+            "//third_party/EGL:libEGL"
         ],
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:debug_layer_test1": [
             "//third_party/EGL:libEGL"
@@ -8626,15 +8039,8 @@
         "//foundation/graphic/graphic_2d/frameworks/vulkan_layers:vulkan_swapchain_layer": [
             "//third_party/vulkan-headers:vulkan_headers"
         ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor_source": [
-            "//foundation/arkui/napi:ace_napi_config"
-        ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:colorspacemanager_napi_source": [
-            "//foundation/arkui/napi:ace_napi_config"
-        ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/effect_kit:effectkit": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//foundation/multimedia/image_framework/interfaces/innerkits:image_external_config"
+            "//commonlibrary/c_utils/base:utils_config"
         ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/webgl:webgl_src": [
             "//third_party/bounds_checking_function:libsec_shared"
@@ -8712,9 +8118,6 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:eventhandler": [
             "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/platform:image_native": [
-            "//foundation/multimedia/image_framework/interfaces/innerkits:image_native"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:impl_eventhandler": [
             "//third_party/libuv:uv"
@@ -8882,14 +8285,7 @@
         ],
         "//foundation/graphic/graphic_3d/lume/LumeEngine:lume_engine_src": [
             "//third_party/libpng:libpng_static",
-            "//third_party/libjpeg-turbo:turbojpeg_static",
             "//third_party/zlib:shared_libz"
-        ],
-        "//foundation/graphic/graphic_surface/buffer_handle:buffer_handle": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_surface/surface:surface": [
-            "//commonlibrary/c_utils/base:utils_config"
         ],
         "//foundation/multimedia/av_codec/interfaces/inner_api/native:av_codec_client": [
             "//third_party/bounds_checking_function:libsec_static"
@@ -8931,7 +8327,6 @@
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/plugins/source/http_source:media_plugin_HttpSource": [
-            "//third_party/curl:curl_shared",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/multimedia/av_codec/test/nativedemo:av_codec_demo": [
@@ -9009,17 +8404,6 @@
         ],
         "//foundation/resourceschedule/background_task_mgr/services:bgtaskmgr_service_static": [
             "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/resourceschedule/ffrt:ffrt_ndk": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/libunwind:libunwind"
-        ],
-        "//foundation/resourceschedule/ffrt:libffrt": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/libunwind:libunwind"
-        ],
-        "//foundation/resourceschedule/frame_aware_sched/interfaces/innerkits/frameintf:rtg_interface": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/resourceschedule/resource_schedule_service/cgroup_sched/framework/process_group:libprocess_group": [
             "//third_party/json:nlohmann_json_static"
@@ -9109,28 +8493,6 @@
         "//third_party/cups:usb": [
             "//third_party/libusb:libusb"
         ],
-        "//third_party/curl:curl": [
-            "//third_party/openssl:ssl_config_public",
-            "//third_party/nghttp2/lib:libnghttp2_shared",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/openssl:libssl_shared",
-            "//third_party/zlib:shared_libz",
-            "//third_party/cares:c_ares"
-        ],
-        "//third_party/curl:curl_http3": [
-            "//third_party/openssl:ssl_config_public",
-            "//third_party/nghttp2/lib:libnghttp2_shared",
-            "//third_party/zlib:shared_libz",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/openssl:libssl_shared",
-            "//third_party/cares:c_ares"
-        ],
-        "//third_party/f2fs-tools/fsck:fsck.f2fs": [
-            "//third_party/e2fsprogs:libdacconfig"
-        ],
-        "//third_party/f2fs-tools/mkfs:mkfs.f2fs": [
-            "//third_party/e2fsprogs:libext2_uuid"
-        ],
         "//third_party/freetype:freetype_static": [
             "//third_party/zlib:libz"
         ],
@@ -9188,7 +8550,6 @@
             "//third_party/glib:glib"
         ],
         "//third_party/gstreamer/gstplugins_bad:gstcurl": [
-            "//third_party/curl:curl_shared",
             "//third_party/glib:glib",
             "//third_party/glib:gobject"
         ],
@@ -9468,9 +8829,6 @@
         "//third_party/skia:pdf": [
             "//third_party/zlib:libz"
         ],
-        "//third_party/vixl:libvixl": [
-            "//arkcompiler/runtime_core/static_core:ark_config"
-        ],
         "//third_party/weex-loader:weex_loader_ark_hap": [
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
         ],
@@ -9489,9 +8847,6 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:gen_start_cfg": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
-        ],
-        "//test/testfwk/arkxtest/testserver/src:test_server_interface": [
-            "//foundation/ability/idl_tool:idl"
         ]
     },
     "import_other": {
@@ -9519,13 +8874,8 @@
         "//arkcompiler/toolchain/": [
             "//arkcompiler/ets_runtime/js_runtime_config.gni"
         ],
-        "//base/hiviewdfx/hiview/plugins/faultlogger/interfaces/js/test/unittest/cpp/": [
-            "//foundation/arkui/napi/napi.gni"
-        ],
         "//base/hiviewdfx/hiview/test/": [
-            "//foundation/arkui/ace_engine/ace_config.gni",
-            "//foundation/arkui/napi/napi.gni",
-            "//foundation/arkui/napi/test/unittest/ut.gni"
+            "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//base/inputmethod/imf/frameworks/js/napi/inputmethodlist/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
@@ -9556,14 +8906,6 @@
         ],
         "//base/update/updater/interfaces/kits/slot_info/": [
             "//base/startup/init/begetd.gni"
-        ],
-        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_extension/module_loader/": [
-            "//commonlibrary/memory_utils/purgeable_mem_config.gni",
-            "//foundation/ability/ability_runtime/ability_runtime.gni",
-            "//foundation/distributeddatamgr/relational_store/relational_store.gni"
-        ],
-        "//base/useriam/user_auth_framework/frameworks/js/napi/user_auth_icon/": [
-            "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//build/config/": [
             "//device/board/hihope/rk3568/config.gni"
@@ -9690,9 +9032,6 @@
         "//foundation/ability/ability_runtime/frameworks/simulator/ability_simulator/": [
             "//foundation/arkui/ace_engine/build/ace_gen_obj.gni"
         ],
-        "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/": [
-            "//foundation/ability/ability_base/ability_base.gni"
-        ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/quick_fix/": [
             "//foundation/ability/idl_tool/idl_config.gni"
         ],
@@ -9750,9 +9089,6 @@
         "//foundation/arkui/ace_engine/test/unittest/core/svg/": [
             "//foundation/ability/ability_runtime/ability_runtime.gni"
         ],
-        "//foundation/arkui/napi/test/fuzztest/arknativeengine_fuzzer/": [
-            "//arkcompiler/ets_runtime/js_runtime_config.gni"
-        ],
         "//foundation/arkui/napi/test/unittest/": [
             "//foundation/ability/form_fwk/form_fwk.gni",
             "//foundation/arkui/ace_engine/ace_config.gni"
@@ -9762,12 +9098,6 @@
         ],
         "//foundation/communication/bluetooth_service/test/example/bluetoothtest/": [
             "//test/xts/tools/build/suite.gni"
-        ],
-        "//foundation/communication/dhcp/services/": [
-            "//foundation/communication/wifi/wifi/wifi.gni"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_toolkit/": [
-            "//foundation/communication/dhcp/dhcp.gni"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal/": [
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/wpa.gni"
@@ -9823,9 +9153,6 @@
         "//foundation/distributedhardware/device_manager/common/include/show_confirm_dialog/dialog_ui/js/": [
             "//foundation/arkui/ace_engine/build/ace_gen_sa_dialog_js.gni"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/skia_effectChain/": [
-            "//foundation/multimedia/image_framework/ide/image_decode_config.gni"
-        ],
         "//foundation/graphic/graphic_3d/3d_widget_adapter/test/": [
             "//foundation/arkui/ace_engine/ace_config.gni",
             "//foundation/graphic/graphic_2d/graphic_config.gni"
@@ -9849,12 +9176,6 @@
             "//foundation/graphic/graphic_2d/graphic_config.gni"
         ],
         "//foundation/graphic/graphic_3d/lume/Lume_3D/DLL/": [
-            "//foundation/graphic/graphic_2d/graphic_config.gni"
-        ],
-        "//foundation/graphic/graphic_surface/surface/": [
-            "//foundation/graphic/graphic_2d/graphic_config.gni"
-        ],
-        "//foundation/graphic/graphic_surface/surface/test/unittest/": [
             "//foundation/graphic/graphic_2d/graphic_config.gni"
         ],
         "//foundation/multimedia/av_session/avpicker/": [
@@ -9915,9 +9236,6 @@
         ],
         "//third_party/skia/gn/": [
             "//foundation/graphic/graphic_2d/graphic_config.gni"
-        ],
-        "//third_party/vixl/": [
-            "//arkcompiler/runtime_core/static_core/ark_config.gni"
         ],
         "//third_party/weex-loader/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
