@@ -189,7 +189,7 @@
         },
         {
           "unzip_dir": "prebuilts/packing_tool",
-          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20240730.zip",
+          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
           "unzip_filename": "packing_tool"
         }
       ],
@@ -300,7 +300,7 @@
         },
         {
           "unzip_dir": "prebuilts/packing_tool",
-          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20240730.zip",
+          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
           "unzip_filename": "packing_tool"
         }
       ],
@@ -492,7 +492,7 @@
         },
         {
           "unzip_dir": "prebuilts/packing_tool",
-          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20240730.zip",
+          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
           "unzip_filename": "packing_tool"
         }
       ],
@@ -570,7 +570,7 @@
         },
         {
           "unzip_dir": "prebuilts/packing_tool",
-          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20240730.zip",
+          "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
           "unzip_filename": "packing_tool"
         }
       ],
