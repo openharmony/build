@@ -45,10 +45,7 @@ def reporthook(data_download, data_size, total_size):
     :param total_size: remote file size
     :return:None
     '''
-    progress = int(0)
-    if progress != int(data_download * data_size * 1000 / total_size):
-        progress = int(data_download * data_size * 1000 / total_size)
-        sys.stdout.flush()
+    print("\rdownloading: %5.1f%%" % (data_download * data_size * 100.0 / total_size), end="")
 
 
 def download(download_url, savepath):
@@ -81,10 +78,10 @@ def extract_file(filename):
         os.remove(os.path.join(target_dir, "manifest_tag.xml"))
 
 
-def npm_install(target_dir, args):
+def unzip_inner_packages(target_dir, api_version):
 
     sdk_zip_file_dir = os.path.join(target_dir, "ohos-sdk/linux")
-    sdk_unzip_dir = os.path.join(sdk_zip_file_dir, args.api_version)
+    sdk_unzip_dir = os.path.join(sdk_zip_file_dir, api_version)
 
     if os.path.exists(sdk_unzip_dir):
         shutil.rmtree(sdk_unzip_dir)
@@ -166,7 +163,7 @@ def main():
 
             extract_file(os.path.join(
                 save_path2, os.path.basename(download_url)))
-            npm_install(save_path2, args)
+            unzip_inner_packages(save_path2, args.api_version)
             break
 
 
