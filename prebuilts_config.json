@@ -277,6 +277,21 @@
       ]
     },
     {
+      "name": "OpenHarmonyApplication.pem",
+      "tag": "base",
+      "download": [
+        {
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "linux",
+          "url": "openharmony/compiler/certificates/20241025/OpenHarmonyApplication.zip",
+          "download_dir": ".prebuilts_cache/OpenHarmonyApplication.pem",
+          "symlink": "prebuilts/ohos-sdk/OpenHarmonyApplication.pem",
+          "type": "file"
+        }
+      ]
+    },
+    {
       "name": "rustc",
       "download": [
         {

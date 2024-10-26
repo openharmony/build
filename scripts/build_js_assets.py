@@ -75,7 +75,8 @@ def make_my_env(options, js2abc: bool) -> dict:
         "aceModuleBuild": assets_dir,
         "buildMode": options.build_mode,
         "PATH": os.environ.get('PATH'),
-        "appResource": os.path.join(gen_dir, "ResourceTable.txt")
+        "appResource": os.path.join(gen_dir, "ResourceTable.txt"),
+        "xtsMode": 'true'
     }
     if options.app_profile:
         my_env["aceProfilePath"] = os.path.join(gen_dir, "resources/base/profile")
