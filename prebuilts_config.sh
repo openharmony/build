@@ -13,6 +13,7 @@
 # limitations under the License.
 set -e
 
+
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 home_path=$HOME
@@ -25,6 +26,24 @@ target_cpu=$(uname -m | tr '[:upper:]' '[:lower:]')
 python3 "${script_path}/prebuilts_config.py" --code_path $code_dir --home_path $home_path --config_file $config_file --repo_https https://repo.huaweicloud.com --target_os $target_os --target_cpu $target_cpu
 
 PYTHON_PATH=$(realpath ${code_dir}/prebuilts/python/${target_os}-*/*/bin | tail -1)
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --download-sdk)       # Download the SDK if this flag is set
+    DOWNLOAD_SDK=YES
+    ;;
+    *)
+    echo "$0: Warning: unsupported parameter: $1" >&2
+    ;;
+  esac
+  shift
+done
+
+if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk/linux" ]]; then
+  $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version 14
+fi
+
+
 
 if [[ "${target_os}" == "linux" ]]; then
     sed -i "1s%.*%#!/usr/bin/env python3%" "${PYTHON_PATH}/pip3"
