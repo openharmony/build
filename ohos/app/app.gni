@@ -727,8 +727,10 @@ template("ohos_hap") {
       ":$_notice_target",
       ":$_resources_target",
       ":${_collect_target}",
-      "//developtools/packing_tool:packing_tool",
     ]
+    if (!ohos_indep_compiler_enable) {
+      deps += [ "//developtools/packing_tool:packing_tool" ]
+    }
     if (!_test_target && app_need_publicity) {
       if (install_enable) {
         deps += [ ":${_publicity_target}" ]
