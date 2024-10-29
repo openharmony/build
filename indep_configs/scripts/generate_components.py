@@ -57,6 +57,13 @@ def _get_args():
         default=1, type=int,
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
+    parser.add_argument(
+        "-bmode", 
+        "--build_mode",
+        default=1, 
+        type=int,
+        help="the independent build mode. default 1 , choices: 0 or 1",
+    )
     args = parser.parse_args()
     return args
 
@@ -117,7 +124,7 @@ def _get_target_cpu(code_path, variants):
     return target_cpu_str
 
 
-def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu):
+def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu, build_mode):
     target_path = target_cpu + "-linux-ohos"
     musl_real_path = hpm_cache_path + dependences_json["musl"]['installPath']
     musl_include_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/include", target_path)
@@ -135,6 +142,8 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
             pass
         os.makedirs(kernel_link_path, exist_ok=True)
     os.makedirs(kernel_link_path, exist_ok=True)
+    if build_mode == 1:
+        _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
 
 
 def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
@@ -292,6 +301,7 @@ def main():
     variants = args.variants
     root_path = args.root_path
     test_check = args.test
+    build_mode = args.build_mode
     project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
     output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
@@ -305,7 +315,7 @@ def main():
     _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
-    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
+    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants), build_mode)
     _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
 
 
