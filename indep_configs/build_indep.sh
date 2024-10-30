@@ -31,12 +31,6 @@ ln -s build/indep_configs/dotfile.gn .gn
 
 export SOURCE_ROOT_DIR="$PWD"
 
-if [ -d $PWD/.repo/projects/kernel/linux ]; then
-  BUILD_MODE=0
-else
-  BUILD_MODE=1
-fi
-
 # set python3
 HOST_DIR="linux-x86"
 HOST_OS="linux"
@@ -47,7 +41,7 @@ PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER} -bmode ${BUILD_MODE}
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 if [ -d "binarys/third_party/rust" ];then
     echo "rust directory exists"
     if [ -d "third_party/rust" ]; then
