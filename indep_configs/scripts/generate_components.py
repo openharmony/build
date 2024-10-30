@@ -289,7 +289,6 @@ def main():
     variants = args.variants
     root_path = args.root_path
     test_check = args.test
-    build_mode = args.build_mode
     project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
     output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
@@ -303,7 +302,7 @@ def main():
     _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
-    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants), build_mode)
+    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
     _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
 
 
