@@ -64,7 +64,8 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     '''
     print(f"build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
-    ohpm_path = os.path.join(cur_dir, "../../", "prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm")
+    root_dir = os.path.dirname(os.path.dirname(cur_dir))
+    ohpm_path = os.path.join(root_dir, "prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm")
     if not os.path.exists(ohpm_path):
         ohpm_path = "ohpm"
     with open(build_profile, 'r') as input_f:
