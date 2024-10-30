@@ -31,7 +31,7 @@ ln -s build/indep_configs/dotfile.gn .gn
 
 export SOURCE_ROOT_DIR="$PWD"
 
-if [ -d $PWD/.repo/project-objects/kernel_linux_config.git ]; then
+if [ -d $PWD/.repo/projects/kernel/linux ]; then
   BUILD_MODE=0
 else
   BUILD_MODE=1
