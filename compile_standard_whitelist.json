@@ -10,7 +10,6 @@
     ],
     "subsystem_components": [],
     "gn_part_or_subsystem_error": [
-        "//arkcompiler/ets_runtime:libark_jsruntime_test",
         "//arkcompiler/toolchain/tooling/test:debugger_entry",
         "//arkcompiler/toolchain/tooling/test:jsdebugtest",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_test",
@@ -41,12 +40,6 @@
         "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "deps_added_external_part_module": [
-        "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler",
-        "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer_set",
-        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump",
-        "//arkcompiler/ets_runtime:libark_js_intl_set",
-        "//arkcompiler/ets_runtime:libark_jsruntime",
-        "//arkcompiler/ets_runtime:libark_jsruntime_set",
         "//arkcompiler/toolchain/inspector:ark_debugger_static",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set",
