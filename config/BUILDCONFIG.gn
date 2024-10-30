@@ -890,7 +890,7 @@ if (is_lite_system) {
       ohos_current_cxx_command = "${compile_prefix}clang++$toolchain_cmd_suffix"
       compile_prefix += "llvm-"
       ohos_current_ar_command = "${compile_prefix}ar$toolchain_cmd_suffix"
-      ohos_current_ld_command = ohos_current_cc_command
+      ohos_current_ld_command = ohos_current_cxx_command
       ohos_current_strip_command =
           "${compile_prefix}strip$toolchain_cmd_suffix --strip-unneeded"
       default_compiler_configs += [ "//build/lite/config:clang_opt" ]
@@ -943,7 +943,6 @@ if (is_lite_system) {
   if (board_toolchain_type != "iccarm") {
     if (current_os == "ohos") {
       default_compiler_configs += [
-        "//build/lite/config:board_config",
         "//build/lite/config:cpu_arch",
         "//build/lite/config:common",
         "//build/lite/config:default_link_path",
@@ -977,7 +976,10 @@ if (is_lite_system) {
     ]
 
     if (current_os == "ohos") {
-      default_compiler_configs += [ "//build/lite/config:kernel_macros" ]
+      default_compiler_configs += [
+        "//build/lite/config:kernel_macros",
+        "//build/lite/config:board_config",
+      ]
     }
 
     default_shared_library_configs =
