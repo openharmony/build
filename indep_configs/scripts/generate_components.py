@@ -57,13 +57,6 @@ def _get_args():
         default=1, type=int,
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
-    parser.add_argument(
-        "-bmode", 
-        "--build_mode",
-        default=1, 
-        type=int,
-        help="the independent build mode. default 1 , choices: 0 or 1",
-    )
     args = parser.parse_args()
     return args
 
@@ -124,7 +117,7 @@ def _get_target_cpu(code_path, variants):
     return target_cpu_str
 
 
-def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu, build_mode):
+def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu):
     target_path = target_cpu + "-linux-ohos"
     musl_real_path = hpm_cache_path + dependences_json["musl"]['installPath']
     musl_include_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/include", target_path)
@@ -136,14 +129,8 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu,
     
     kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']    
     kernel_link_path = os.path.join("kernel", "linux")
-    if not os.path.isdir(kernel_link_path):
-        try:
-            os.remove(kernel_link_path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(kernel_link_path, exist_ok=True)
-    os.makedirs(kernel_link_path, exist_ok=True)
-    if build_mode == 1:
+    if not os.path.exists(kernel_link_path):
+        os.makedirs(kernel_link_path)
         _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
 
 
