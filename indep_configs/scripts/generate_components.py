@@ -126,17 +126,12 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
     os.makedirs(musl_lib_link_path, exist_ok=True)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'includes'), musl_include_link_path)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'libs'), musl_lib_link_path)
-
-    kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']
+    
+    kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']    
     kernel_link_path = os.path.join("kernel", "linux")
-    if not os.path.isdir(kernel_link_path):
-        try:
-            os.remove(kernel_link_path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(kernel_link_path, exist_ok=True)
-    os.makedirs(kernel_link_path, exist_ok=True)
-    _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
+    if not os.path.exists(kernel_link_path):
+        os.makedirs(kernel_link_path)
+        _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
 
 
 def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
