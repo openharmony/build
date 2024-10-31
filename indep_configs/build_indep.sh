@@ -24,9 +24,19 @@ find out/$VARIANTS -type f -not -name '*.log' -delete
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
+if [ $3 -eq 0 ]; then
+  PRODUCTION_DIR="src"
+fi
+if [ $3 -eq 1 ]; then
+  PRODUCTION_DIR="src_test"
+fi
+if [ $3 -eq 2 ]; then
+  PRODUCTION_DIR="test"
+fi
+
 mkdir -p out/preloader
-mkdir -p out/$VARIANTS/build_configs/parts_info
-cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/build_configs
+mkdir -p out/$VARIANTS/$PRODUCTION_DIR/build_configs/parts_info
+cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/$PRODUCTION_DIR/build_configs
 ln -s build/indep_configs/dotfile.gn .gn
 
 export SOURCE_ROOT_DIR="$PWD"
@@ -41,7 +51,7 @@ PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER} -pdir ${PRODUCTION_DIR}
 if [ -d "binarys/third_party/rust" ];then
     echo "rust directory exists"
     if [ -d "third_party/rust" ]; then
@@ -57,7 +67,7 @@ fi
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
 # gn and ninja command
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS} -pdir ${PRODUCTION_DIR}
 
 if [ $? -ne 0 ]; then
   exit 1
