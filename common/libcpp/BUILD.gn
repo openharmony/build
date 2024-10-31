@@ -1,0 +1,51 @@
+# Copyright (c) 2024 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License
+
+import("//build/config/clang/clang.gni")
+import("//build/ohos.gni")
+
+group("libcpp_install") {
+  deps = [ ":libc++_shared.so" ]
+}
+
+ohos_prebuilt_shared_library("libc++_shared.so") {
+  enable_strip = true
+  mini_debug = true
+  if (target_cpu == "arm") {
+    source = "${clang_stl_path}/arm-linux-ohos/libc++_shared.so"
+  } else if (target_cpu == "arm64") {
+    source = "${clang_stl_path}/aarch64-linux-ohos/libc++_shared.so"
+  } else if (target_cpu == "x86_64") {
+    source = "${clang_stl_path}/x86_64-linux-ohos/libc++_shared.so"
+  } else {
+    source = ""
+  }
+  deps = [ ":libcpp_unstripped_copy" ]
+  install_images = [ "system" ]
+  subsystem_name = "build"
+  part_name = "build_framework"
+  relative_install_dir = ""
+}
+
+copy("libcpp_unstripped_copy") {
+  if (target_cpu == "arm") {
+    sources = [ "${clang_stl_path}/arm-linux-ohos/libc++_shared.so" ]
+  } else if (target_cpu == "arm64") {
+    sources = [ "${clang_stl_path}/aarch64-linux-ohos/libc++_shared.so" ]
+  } else if (target_cpu == "x86_64") {
+    sources = [ "${clang_stl_path}/x86_64-linux-ohos/libc++_shared.so" ]
+  } else {
+    sources = [ "" ]
+  }
+  outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
+}
