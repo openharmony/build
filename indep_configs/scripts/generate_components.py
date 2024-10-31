@@ -57,6 +57,13 @@ def _get_args():
         default=1, type=int,
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
+    parser.add_argument(
+        "-out",
+        "--out_dir",
+        default="src",
+        type=str,
+        help="the independent build out storage dir. default src , choices: src src_test or test",
+    )
     args = parser.parse_args()
     return args
 
@@ -129,14 +136,13 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
 
     kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']
     kernel_link_path = os.path.join("kernel", "linux")
-    if not os.path.isdir(kernel_link_path):
-        try:
-            os.remove(kernel_link_path)
-        except FileNotFoundError:
-            pass
-        os.makedirs(kernel_link_path, exist_ok=True)
-    os.makedirs(kernel_link_path, exist_ok=True)
-    _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
+    if not os.path.exists(kernel_link_path):
+        os.makedirs(kernel_link_path)
+        _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
+
+
+def is_directory_empty(path):
+    return len([f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]) == 0
 
 
 def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
@@ -144,8 +150,14 @@ def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
         googletest_real_path = hpm_cache_path + dependences_json["googletest"]['installPath']
         googletest_link_path = os.path.join("out", variants, "obj/binarys/third_party/googletest")
         os.makedirs(googletest_link_path, exist_ok=True)
+    if is_directory_empty(googletest_link_path):
         shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
-            os.path.join(googletest_link_path, 'innerapis'))
+                        os.path.join(googletest_link_path, 'innerapis'))
+    else:
+        shutil.rmtree(googletest_link_path, True)
+        os.makedirs(googletest_link_path, exist_ok=True)
+        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
+                        os.path.join(googletest_link_path, 'innerapis'))
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
@@ -213,7 +225,7 @@ def _get_src_part_name(src_bundle_paths):
         else:
             _name = part_name
             _path = src_bundle_path
-    return _name, _path
+    return [_name, _path]
 
 
 def _binarys_permissions_handler():
@@ -222,19 +234,31 @@ def _binarys_permissions_handler():
     subprocess.Popen(cmd)
 
 
-def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, root_path, dependences_json,
+def _components_info_handler(part_name_list, source_code_path: str, hpm_cache_path, root_path, dependences_json,
                              _part_toolchain_map_dict):
+    source_code_path_list = source_code_path.split(",")
     components_json = dict()
-    src_bundle_paths = _get_src_bundle_path(source_code_path)
-    src_part_name, src_bundle_path = _get_src_part_name(src_bundle_paths)
-    src_build_name_list = [src_part_name, 'build_framework']
-    components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
-                                           src_build_name_list, _part_toolchain_map_dict)
-    components_json = _gen_components_info(components_json,
-                                           utils.get_json(os.path.join(root_path, "build", "bundle.json")),
+    src_build_name_list = ['build_framework']
+
+    # 获取源代码路径和组件名称的映射
+    src_bundle_path_dict = {
+        _get_src_part_name(_get_src_bundle_path(src_path))[0]: _get_src_part_name(_get_src_bundle_path(src_path))[1]
+        for src_path in source_code_path_list
+    }
+    # 更新构建名称列表并生成组件信息
+    src_build_name_list.extend(src_bundle_path_dict.keys())
+    for src_part_name, src_bundle_path in src_bundle_path_dict.items():
+        components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
+                                               src_build_name_list, _part_toolchain_map_dict)
+
+    # 处理构建框架
+    build_framework_bundle_path = os.path.join(root_path, "build", "bundle.json")
+    components_json = _gen_components_info(components_json, utils.get_json(build_framework_bundle_path),
                                            "build_framework", src_build_name_list, _part_toolchain_map_dict)
+
+    # 处理其他组件
     for part_name in part_name_list:
-        if part_name and part_name != src_part_name:
+        if part_name and part_name not in src_bundle_path_dict:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
             components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,
@@ -277,7 +301,7 @@ def _get_all_have_toolchain_component(toolchain_json, hpm_cache_path):
     for toolchain in _toolchain_list:
         for root, dirs, files in os.walk(binarys_path, topdown=False, followlinks=True):
             if toolchain in dirs:
-                _part_name = root.split(os.sep)[-1]
+                _part_name = os.path.basename(root)
                 _part_toolchain_map_dict.update({
                     _part_name: {
                         'toolchain_key': toolchain,
@@ -294,9 +318,10 @@ def main():
     variants = args.variants
     root_path = args.root_path
     test_check = args.test
+    out_dir = args.out_dir
     project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
-    output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
+    output_part_path = os.path.join(project_path, 'out', variants, out_dir, 'build_configs', 'parts_info')
+    output_config_path = os.path.join(project_path, 'out', variants, out_dir, 'build_configs')
     dependences_json = _get_dependence_json(hpm_cache_path)
     toolchain_json = _get_toolchain_json(root_path)
     part_name_list = dependences_json.keys()
@@ -307,8 +332,8 @@ def main():
     _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
-    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
-    _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
+    _link_kernel_binarys(variants + os.sep + out_dir, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
+    _copy_test_binarys(test_check, variants + os.sep + out_dir, hpm_cache_path, dependences_json)
 
 
 if __name__ == '__main__':
