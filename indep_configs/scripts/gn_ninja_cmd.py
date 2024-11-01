@@ -38,11 +38,11 @@ def _get_args():
     parser.add_argument("-v", "--variants", default=r".", type=str, help="variants of build target")
     parser.add_argument("-rp", "--root_path", default=r".", type=str, help="Path of root")
     parser.add_argument(
-        "-pdir", 
-        "--production_dir",
+        "-odir", 
+        "--out_dir",
         default="src", 
         type=str,
-        help="the independent build production storage dir. default src , choices: src src_test or test",
+        help="the independent build out storage dir. default src , choices: src src_test or test",
     )
     args = parser.parse_args()
     return args
@@ -72,14 +72,14 @@ def _get_all_features_info(root_path, variants) -> list:
     return args_list
 
 
-def _gn_cmd(root_path, variants, production_dir):
+def _gn_cmd(root_path, variants, out_dir):
     _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
     _args_list.extend(_features_info)
 
     _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
                  '--args={}'.format(' '.join(_args_list)),
-                 '-C', f'out/{variants}/{production_dir}']
+                 '-C', f'out/{variants}/{out_dir}']
 
     print('Excuting gn command: {} {} --args="{}" {}'.format(
         f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
@@ -89,16 +89,16 @@ def _gn_cmd(root_path, variants, production_dir):
     return _cmd_list
 
 
-def _ninja_cmd(root_path, variants, production_dir):
+def _ninja_cmd(root_path, variants, out_dir):
     _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/ninja', '-w', 'dupbuild=warn', '-C',
-                 f'out/{variants}/{production_dir}']
+                 f'out/{variants}/{out_dir}']
     return _cmd_list
 
 
-def _exec_cmd(root_path, variants, production_dir):
-    gn_cmd = _gn_cmd(root_path, variants, production_dir)
+def _exec_cmd(root_path, variants, out_dir):
+    gn_cmd = _gn_cmd(root_path, variants, out_dir)
     _run_cmd(gn_cmd)
-    ninja_cmd = _ninja_cmd(root_path, variants, production_dir)
+    ninja_cmd = _ninja_cmd(root_path, variants, out_dir)
     _run_cmd(ninja_cmd)
 
 
@@ -106,8 +106,8 @@ def main():
     args = _get_args()
     variants = args.variants
     root_path = args.root_path
-    production_dir = args.production_dir
-    _exec_cmd(root_path, variants, production_dir)
+    out_dir = args.out_dir
+    _exec_cmd(root_path, variants, out_dir)
 
     return 0
 
