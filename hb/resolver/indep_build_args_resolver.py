@@ -75,7 +75,9 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             bundle_path_list = []
             for path in target_arg.arg_value_list:
                 try:
+                    print("collecting bundle.json, please wait")
                     bundle_path = ComponentUtil.search_bundle_file(path)
+                    print("collect done")
                     bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
