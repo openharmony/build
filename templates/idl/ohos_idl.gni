@@ -32,7 +32,11 @@ import("//build/config/python.gni")
 template("ohos_idl") {
   forward_variables_from(invoker, [ "testonly" ])
   assert(defined(invoker.sources), "sources are necessary")
-  _idl_target = "//foundation/ability/idl_tool:idl($host_toolchain)"
+  if (ohos_indep_compiler_enable) {
+    _idl_target = "//binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64:idl($host_toolchain)"
+  } else {
+    _idl_target = "//foundation/ability/idl_tool:idl($host_toolchain)"
+  }
   _idl_module_info_target =
       get_label_info("$_idl_target", "label_no_toolchain") +
       "_info($host_toolchain)"
