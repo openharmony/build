@@ -4,7 +4,6 @@
         "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
         "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
         "//arkcompiler/ets_frontend/es2panda:es2panda_build",
-        "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages",
         "//arkcompiler/runtime_core/assembler:libarkassembler_static",
         "//arkcompiler/runtime_core/isa:isa_combine",
         "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
@@ -119,14 +118,6 @@
         "//third_party/mindspore:mindir",
         "//third_party/mksh:sh",
         "//third_party/mtdev/patch:apply_patch",
-        "//third_party/musl:create_alltypes_h",
-        "//third_party/musl:create_porting_src",
-        "//third_party/musl:create_syscall_h",
-        "//third_party/musl:create_version_h",
-        "//third_party/musl:musl_copy_inc_bits",
-        "//third_party/musl:musl_copy_inc_root",
-        "//third_party/musl:musl_copy_inc_sys",
-        "//third_party/musl:soft_static_libs",
         "//third_party/node:node_header",
         "//third_party/noto-cjk:fonts_notocjk",
         "//third_party/notofonts:fonts_notofonts",
@@ -155,7 +146,6 @@
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/idl:faultlogger_service_ohos_common",
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/idl:faultlogger_service_ohos_common_with_cfi",
         "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler",
-        "//base/telephony/ril_adapter/interfaces/innerkits:hril_innerkits",
         "//commonlibrary/c_utils/base:utils",
         "//commonlibrary/c_utils/base:utilsbase",
         "//commonlibrary/c_utils/base:utilsbase_rtti",
@@ -170,7 +160,6 @@
         "//foundation/communication/dsoftbus/tests/sdk/frame/fuzztest/softbusclientstub_fuzzer:softbus_client_static",
         "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single",
         "//foundation/communication/ipc/interfaces/innerkits/ipc_napi_common:ipc_napi",
-        "//foundation/communication/netmanager_base/services/netsyscontroller:netsys_controller",
         "//foundation/distributeddatamgr/preferences/interfaces/inner_api:native_preferences",
         "//foundation/distributeddatamgr/preferences/interfaces/inner_api:native_preferences_static",
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_base:librender_service_base",
@@ -182,8 +171,6 @@
         "//foundation/systemabilitymgr/samgr/interfaces/innerkits/dynamic_cache:dynamic_cache",
         "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
         "//foundation/systemabilitymgr/samgr/services/samgr/native/test/unittest:samgr_proxy_tdd",
-        "//third_party/bounds_checking_function:libsec_shared",
-        "//third_party/bounds_checking_function:libsec_static",
         "//third_party/icu/icu4c:shared_icuuc",
         "//third_party/skia:android_utils",
         "//third_party/skia:fontmgr_ohos",
@@ -222,7 +209,6 @@
         "//third_party/gptfdisk:sgdisk",
         "//third_party/libdrm:libdrm",
         "//third_party/libexif:libexif",
-        "//third_party/lz4:liblz4_static",
         "//third_party/opencl-headers:libcl",
         "//third_party/opencl-headers:opencl_headers",
         "//third_party/skia/modules/svg:svg",
@@ -626,58 +612,6 @@
             "//third_party/node/src/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//arkcompiler/toolchain/tooling/client/ark_cli:arkdb": [
-            "//third_party/cJSON/",
-            "//third_party/libuv/include/"
-        ],
-        "//arkcompiler/toolchain/tooling/client:libark_client_set": [
-            "//third_party/cJSON/"
-        ],
-        "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set": [
-            "//third_party/cJSON/",
-            "//third_party/libuv/include/"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_base": [
-            "//third_party/openssl/include/"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_client": [
-            "//third_party/openssl/include/"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_server": [
-            "//third_party/openssl/include/"
-        ],
-        "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_src": [
-            "//third_party/libunwind/include/",
-            "//third_party/libunwind/src/"
-        ],
-        "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_static_src": [
-            "//third_party/libunwind/include/",
-            "//third_party/libunwind/src/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:backtrace_local": [
-            "//third_party/libunwind/include/",
-            "//third_party/libunwind/include/tdep/",
-            "//third_party/libunwind/src/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:libbacktrace_local": [
-            "//third_party/libunwind/include/",
-            "//third_party/libunwind/include/tdep/",
-            "//third_party/libunwind/src/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/dump_catcher:libdfx_dumpcatcher": [
-            "//third_party/libunwind/include/",
-            "//third_party/libunwind/src/",
-            "//third_party/libunwind/include/tdep-arm/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder": [
-            "//third_party/lzma/C/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder_src": [
-            "//third_party/lzma/C/"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder_static": [
-            "//third_party/lzma/C/"
-        ],
         "//base/hiviewdfx/faultloggerd/services:faultloggerd": [
             "//commonlibrary/c_utils/base/include/"
         ],
@@ -693,18 +627,11 @@
         "//base/hiviewdfx/hiview/adapter/plugins/eventservice/service/idl:sys_event_service_ohos": [
             "//utils/system/safwk/native/include/"
         ],
-        "//base/hiviewdfx/hiview/adapter/plugins/eventservice/service:sys_event_service_adapter": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//base/hiviewdfx/hiview/base/event_store:event_store_source": [
-            "//third_party/bounds_checking_function/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/interfaces/js/napi:faultlogger_napi": [
             "//third_party/node/src/"
-        ],
-        "//base/hiviewdfx/hiview/plugins/faultlogger/service:faultlogger_service_ability": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//base/hiviewdfx/hiview/plugins/freeze_detector:freeze_detector": [
             "//third_party/libxml2/include/",
@@ -715,13 +642,11 @@
             "//third_party/openssl/"
         ],
         "//base/hiviewdfx/hiview/utility/smart_parser:smart_parser": [
-            "//third_party/bounds_checking_function/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//base/inputmethod/imf/interfaces/inner_api/inputmethod_ability:inputmethod_ability": [
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
-            "//foundation/window/window_manager/interfaces/innerkits/wm/",
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
+            "//foundation/window/window_manager/interfaces/innerkits/wm/"
         ],
         "//base/inputmethod/imf/test/unittest/cpp_test/common:inputmethod_tdd_util": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
@@ -846,10 +771,6 @@
             "//third_party/openssl/include/",
             "//third_party/json/include/",
             "//third_party/json/single_include/"
-        ],
-        "//base/sensors/sensor/frameworks/js/napi:libsensor": [
-            "//third_party/libuv/include/",
-            "//third_party/node/src/"
         ],
         "//base/startup/init/interfaces/innerkits/init_module_engine:libinit_module_engine": [
             "//third_party/cJSON/"
@@ -990,47 +911,34 @@
             "//third_party/openssl/include/"
         ],
         "//developtools/global_resource_tool:restool": [
-            "//third_party/jsoncpp/include/",
-            "//third_party/bounds_checking_function/include/"
+            "//third_party/jsoncpp/include/"
         ],
         "//developtools/hdc/test:hdc_daemon": [
             "//third_party/libuv/",
-            "//third_party/lz4/lib/",
             "//base/startup/init/interfaces/innerkits/include/",
             "//base/startup/init/interfaces/innerkits/include/syspara/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/hdc/test:hdc_daemon_platform": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/openssl/include/",
             "//third_party/libuv/"
         ],
         "//developtools/hdc/test:hdc_host": [
             "//third_party/libuv/",
-            "//third_party/lz4/lib/",
             "//base/startup/init/interfaces/innerkits/include/",
             "//base/startup/init/interfaces/innerkits/include/syspara/"
         ],
         "//developtools/hdc:hdc": [
-            "//third_party/bounds_checking_function/include/",
-            "//third_party/lz4/lib/",
             "//third_party/openssl/include/",
-            "//third_party/libuv/",
-            "//third_party/selinux/libselinux/include/"
+            "//third_party/libuv/"
         ],
         "//developtools/hdc:hdcd_system_source": [
-            "//third_party/bounds_checking_function/include/",
-            "//third_party/lz4/lib/",
             "//third_party/openssl/include/",
-            "//third_party/libuv/",
-            "//third_party/selinux/libselinux/include/"
+            "//third_party/libuv/"
         ],
         "//developtools/hdc:hdcd_updater_source": [
-            "//third_party/bounds_checking_function/include/",
-            "//third_party/lz4/lib/",
             "//third_party/openssl/include/",
-            "//third_party/libuv/",
-            "//third_party/selinux/libselinux/include/"
+            "//third_party/libuv/"
         ],
         "//developtools/hiperf/interfaces/kits/js/napi:hiperf_client_napi": [
             "//third_party/node/src/"
@@ -1059,92 +967,29 @@
             "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
         "//developtools/profiler/device/base:hiprofiler_base": [
-            "//third_party/bounds_checking_function/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/device/plugins/api:plugins_sources": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/openssl/include/"
-        ],
-        "//developtools/profiler/device/plugins/arkts_plugin:arkts_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/cpu_plugin:cpudataplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/cpu_plugin:cpudataplugintest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/diskio_plugin:diskiodataplugin_source": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//developtools/profiler/device/plugins/ftrace_plugin/tools/device_kernel_version/default/event_parsers:ftrace_event_parsers": [
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/device/plugins/ftrace_plugin:ftrace_plugin_source": [
-            "//third_party/bounds_checking_function/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
-        "//developtools/profiler/device/plugins/gpu_plugin:gpudataplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/hidump_plugin:hidumpplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/hilog_plugin:hilogplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/hiperf_plugin:hiperfplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/hisysevent_plugin:hisyseventplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/memory_plugin:memdataplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/memory_plugin:memorytest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//developtools/profiler/device/plugins/native_daemon:native_daemon": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/googletest/googletest/include/"
         ],
         "//developtools/profiler/device/plugins/native_hook:malloctest_cpp": [
             "//third_party/bounds_checking_function/include/"
         ],
         "//developtools/profiler/device/plugins/native_hook:native_hook_source": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/googletest/googletest/include/"
         ],
-        "//developtools/profiler/device/plugins/native_hook:nativetest_c": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/native_hook:statisticstest_cpp": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/network_plugin:networkplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/process_plugin:processplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/sample_plugin:sampleplugin": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/stream_plugin:streamplugin_source": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//developtools/profiler/device/plugins/xpower_plugin:xpowerdecoder": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/protobuf/src/",
             "//third_party/cJSON/"
-        ],
-        "//developtools/profiler/device/plugins/xpower_plugin:xpowerplugin": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/services/ipc:ipc": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//developtools/profiler/device/services/ipc:protoc_gen_ipc": [
             "//third_party/protobuf/"
@@ -1156,11 +1001,9 @@
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/device/services/shared_memory:shared_memory_lite": [
-            "//third_party/bounds_checking_function/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/device/services/shared_memory:shared_memory_source": [
-            "//third_party/bounds_checking_function/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/hiebpf:hiebpf.bpf": [
@@ -1324,15 +1167,6 @@
         "//drivers/peripheral/input/hdi_service:libinput_interfaces_service_1.0": [
             "//third_party/FreeBSD/sys/dev/evdev/"
         ],
-        "//drivers/peripheral/intelligent_voice/hdi_service/engine:intell_voice_engine_manager_service_1.1": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/intelligent_voice/hdi_service/trigger:intell_voice_trigger_manager_service_1.1": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/light/hal:hdi_light": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartition_slot_service_1.0": [
             "//base/user_iam/user_auth/common/logs/"
         ],
@@ -1351,12 +1185,6 @@
         ],
         "//drivers/peripheral/user_auth/test/fuzztest/user_auth/common_fuzzer:libuser_auth_interface_service_fuzzer": [
             "//third_party/openssl/include/"
-        ],
-        "//drivers/peripheral/vibrator/hal:hdi_vibrator": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/wlan/hal:wifi_hal": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//drivers/peripheral/wlan/hostapd/interfaces/hdi_service:libhostapd_interface_service_1.0": [
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
@@ -1794,7 +1622,6 @@
             "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/src/EGL/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_connect_callback_stub": [
-            "//base/notification/eventhandler/interfaces/inner_api/",
             "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
@@ -1803,7 +1630,6 @@
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_manager": [
-            "//base/notification/eventhandler/interfaces/inner_api/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1811,7 +1637,6 @@
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_start_setting": [
-            "//base/notification/eventhandler/interfaces/inner_api/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1819,7 +1644,6 @@
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:mission_info": [
-            "//base/notification/eventhandler/interfaces/inner_api/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//third_party/jsoncpp/include/",
@@ -1842,7 +1666,6 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits": [
-            "//base/notification/eventhandler/interfaces/inner_api/",
             "//base/global/resource_management/interfaces/inner_api/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
@@ -1858,9 +1681,6 @@
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/appdatafwk/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/dataability/include/",
-            "//base/account/os_account/frameworks/common/account_error/include/",
-            "//base/account/os_account/frameworks/common/database/include/",
-            "//base/account/os_account/interfaces/innerkits/osaccount/native/include/",
             "//foundation/resourceschedule/background_task_mgr/interfaces/innerkits/include/",
             "//foundation/resourceschedule/background_task_mgr/frameworks/common/include/",
             "//foundation/resourceschedule/background_task_mgr/frameworks/include/",
@@ -1872,7 +1692,6 @@
         ],
         "//foundation/ability/ability_runtime/services/appmgr:libappms": [
             "//third_party/json/include/",
-            "//base/startup/appspawn/interfaces/innerkits/include/",
             "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddatamgr/include/"
         ],
         "//foundation/ability/ability_runtime/services/dataobsmgr:dataobsms": [
@@ -1964,12 +1783,6 @@
         "//foundation/arkui/ui_lite/ext/updater:libupdater_layout": [
             "//foundation/graphic/graphic_utils_lite/interfaces/innerkits/",
             "//foundation/graphic/graphic_utils_lite/interfaces/kits/"
-        ],
-        "//foundation/barrierfree/accessibility/common/interface:accessibility_interface": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi:accessibility": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
         ],
         "//foundation/barrierfree/accessibility/services/aams:accessibleabilityms": [
             "//foundation/barrierfree/foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/"
@@ -2090,7 +1903,6 @@
             "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/dsoftbus/adapter:softbus_adapter": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/",
             "//commonlibrary/c_utils/base/include/",
             "//third_party/bounds_checking_function/include/",
             "//third_party/json/include/"
@@ -2109,7 +1921,6 @@
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_ctrl:nstackx_ctrl": [
             "//third_party/cJSON/",
-            "//third_party/libcoap/include/",
             "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_util:nstackx_util.open": [
@@ -2135,13 +1946,11 @@
             "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/dsoftbus/core/frame:softbus_server": [
-            "//base/security/device_auth/interfaces/inner_api/",
             "//foundation/deviceprofile/device_info_manager/interfaces/innerkits/core/include/",
             "//foundation/deviceprofile/device_info_manager/common/include/interfaces/",
             "//foundation/deviceprofile/device_info_manager/common/include/constants/",
             "//foundation/deviceprofile/device_info_manager/commoninclude/utils/",
             "//foundation/communication/wifi/wifi/frameworks/native/interfaces/",
-            "//base/security/huks/interfaces/inner_api/huks_standard/main/include/",
             "//utils/system/safwk/native/include/",
             "//third_party/cJSON/",
             "//foundation/communication/wifi/wifi/interfaces/kits/c/",
@@ -2917,7 +2726,6 @@
             "//foundation/multimedia/media_library/interfaces/inner_api/media_library_helper/include/",
             "//foundation/multimedia/media_library/frameworks/services/media_thumbnail/include/",
             "//foundation/multimedia/media_library/frameworks/utils/include/",
-            "//third_party/e2fsprogs/e2fsprogs/lib/",
             "//foundation/multimedia/media_library/frameworks/innerkitsimpl/medialibrary_data_extension/include/"
         ],
         "//foundation/filemanagement/dfs_service/services/cloudsyncservice:cloudsync_sa_static": [
@@ -3048,12 +2856,6 @@
             "//third_party/skia/modules/",
             "//third_party/skia/modules/skunicode/"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_skia": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_texgine": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_txt": [
             "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/engine/",
@@ -3100,9 +2902,6 @@
             "//third_party/skia/third_party/externals/harfbuzz/src/",
             "//"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/composer/vsync:libvsync": [
-            "//base/notification/eventhandler/interfaces/inner_api/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/effectChain:libeffectchain": [
             "//third_party/cJSON/"
         ],
@@ -3115,11 +2914,7 @@
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:librender_service": [
             "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//foundation/barrierfree/accessibility/interfaces/innerkits/acfwk/include/",
-            "//foundation/resourceschedule/memmgr/interface/innerkits/include/",
-            "//foundation/resourceschedule/memmgr/services/memmgrservice/include/memory_level_manager/",
-            "//foundation/resourceschedule/memmgr_override/interface/innerkits/include/",
-            "//foundation/resourceschedule/memmgr_override/services/memmgrservice/include/memory_level_manager/"
+            "//foundation/barrierfree/accessibility/interfaces/innerkits/acfwk/include/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:render_service": [
             "//commonlibrary/c_utils/base/include/"
@@ -3203,8 +2998,7 @@
         ],
         "//foundation/graphic/graphic_2d/utils/buffer_handle:buffer_handle": [
             "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/",
-            "//base/notification/eventhandler/interfaces/inner_api/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
         ],
         "//foundation/graphic/graphic_2d/utils/color_manager:color_manager_source": [
             "//third_party/skia/"
@@ -3216,8 +3010,7 @@
         ],
         "//foundation/graphic/graphic_2d/utils/sync_fence:sync_fence": [
             "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/",
-            "//base/notification/eventhandler/interfaces/inner_api/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
         ],
         "//foundation/graphic/graphic_3d/3d_widget_adapter:widget_adapter_source": [
             "//foundation/graphic/graphic_2d/rosen/modules/"
@@ -3469,7 +3262,7 @@
             "//foundation/graphic/graphic_2d/utils/buffer_handle/export/",
             "//utils/system/safwk/native/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/"
-        ],
+        ],     
         "//foundation/multimedia/camera_framework/frameworks/native/ndk:ohcamera": [
             "//foundation/graphic/graphic_surface/surface/include/"
         ],
@@ -3601,12 +3394,6 @@
         "//foundation/window/window_manager/interfaces/kits/napi/picture_in_picture_napi:pipwindow_napi": [
             "//foundation/arkui/ace_engine/interface/inner_api/ace/"
         ],
-        "//foundation/window/window_manager/utils:libwmutil": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
-        ],
-        "//foundation/window/window_manager/utils:libwmutil_static": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
-        ],
         "//foundation/window/window_manager/window_scene/intention_event/service:intention_event_anr_manager": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
@@ -3617,8 +3404,6 @@
             "//foundation/arkui/ace_engine/interfaces/inner_api/ace/"
         ],
         "//foundation/window/window_manager/window_scene/session_manager:screen_session_manager": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
-            "//foundation/multimodalinput/input/util/common/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
@@ -3626,8 +3411,6 @@
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
         "//foundation/window/window_manager/window_scene/session_manager:session_manager": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
-            "//foundation/multimodalinput/input/util/common/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
@@ -3635,8 +3418,6 @@
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/"
         ],
         "//foundation/window/window_manager/window_scene/session_manager:session_manager_lite": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
-            "//foundation/multimodalinput/input/util/common/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/session_handler/include/",
@@ -3653,8 +3434,6 @@
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/window/window_manager/wmserver:sms": [
-            "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
-            "//foundation/multimodalinput/input/util/common/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/include/",
             "//foundation/graphic/graphic_2d/rosen/modules/platform/image_native/",
@@ -3786,9 +3565,6 @@
         ],
         "//third_party/glib:glibpcre": [
             "//third_party/pcre2/pcre2/src/"
-        ],
-        "//third_party/glib:gobject_source": [
-            "//third_party/libffi/include/"
         ],
         "//third_party/gptfdisk:sgdisk": [
             "//third_party/e2fsprogs/e2fsprogs/lib/",
@@ -4149,26 +3925,6 @@
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_train_lib": [
             "//third_party/flatbuffers/include/"
         ],
-        "//third_party/musl/libc-test/src/functionalext/backtrace:unittest_backtrace": [
-            "//third_party/FreeBSD/contrib/libexecinfo/",
-            "//third_party/FreeBSD/sys/"
-        ],
-        "//third_party/musl:soft_musl_jemalloc": [
-            "//prebuilts/clang/ohos/linux-x86_64/llvm/lib/clang/15.0.4/include/",
-            "//third_party/"
-        ],
-        "//third_party/musl:soft_musl_src": [
-            "//third_party/FreeBSD/lib/libc/arm/",
-            "//third_party/FreeBSD/lib/libc/include/",
-            "//third_party/FreeBSD/contrib/libexecinfo/",
-            "//third_party/FreeBSD/crypto/openssh/openbsd-compat/"
-        ],
-        "//third_party/musl:soft_musl_src_ld128": [
-            "//third_party/FreeBSD/lib/msun/ld128/",
-            "//third_party/FreeBSD/lib/msun/src/",
-            "//third_party/FreeBSD/lib/libc/include/",
-            "//third_party/FreeBSD/sys/"
-        ],
         "//third_party/pulseaudio/ohosbuild/src/pulse:pulse-mainloop-glib": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
@@ -4213,158 +3969,6 @@
             "//base/startup/init/interfaces/innerkits/include/",
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//third_party/selinux:libselinux": [
-            "//third_party/pcre2/pcre2/src/",
-            "//third_party/FreeBSD/"
-        ],
-        "//third_party/selinux:sefcontext_compile": [
-            "//third_party/pcre2/pcre2/src/"
-        ],
-        "//third_party/skia/experimental/sktext:sktext": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia/modules/skottie:skottie": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:android_utils": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:armv7": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_FontConfigInterface": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_FontConfigInterface_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_android": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_android_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_directory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_directory_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_embedded": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_embedded_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_empty": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_custom_empty_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_empty_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_fontconfig": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_fontconfig_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_fuchsia": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_mac_ct": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_mac_ct_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_ohos": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_symbol_load": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_win": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_win_factory": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:fontmgr_win_gdi": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:gif": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:gpu": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/",
-            "//third_party/EGL/api/"
-        ],
-        "//third_party/skia:gpu_shared": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:graphite": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:heif": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:jpeg_decode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:jpeg_encode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:ndk_images": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:pathkit": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:pdf": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:png_decode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:png_encode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:raw": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:skia_canvaskit": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:skia_canvaskit_static": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:skvm_jit": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:typeface_freetype": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:webp_decode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:webp_encode": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:wuffs": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:xml": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
-        "//third_party/skia:xps": [
-            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
-        ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ]
@@ -4376,7 +3980,6 @@
         "//arkcompiler/ets_frontend/es2panda:es2panda",
         "//arkcompiler/ets_frontend/es2panda:es2panda_build",
         "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda",
-        "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages",
         "//arkcompiler/ets_runtime:ark_jsruntime_public_config",
         "//arkcompiler/ets_runtime:libark_jsruntime_test",
         "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
@@ -4508,7 +4111,6 @@
         "//third_party/jsoncpp:jsoncpp_public_config",
         "//third_party/jsoncpp:jsoncpp_static",
         "//third_party/libbpf:libbpf",
-        "//third_party/libffi:ffi",
         "//third_party/libinput/patch:apply_patch",
         "//third_party/libphonenumber/cpp:geocoding",
         "//third_party/libphonenumber/cpp:phonenumber_standard",
@@ -4523,14 +4125,7 @@
         "//third_party/libxml2:xml2",
         "//third_party/mksh:sh",
         "//third_party/mtdev/patch:apply_patch",
-        "//third_party/musl:create_alltypes_h",
-        "//third_party/musl:create_porting_src",
-        "//third_party/musl:create_syscall_h",
-        "//third_party/musl:create_version_h",
-        "//third_party/musl:musl_copy_inc_bits",
-        "//third_party/musl:musl_copy_inc_root",
-        "//third_party/musl:musl_copy_inc_sys",
-        "//third_party/musl:soft_static_libs",
+
         "//third_party/node:node_header",
         "//third_party/noto-cjk:fonts_notocjk",
         "//third_party/notofonts:fonts_notofonts",
@@ -4557,18 +4152,6 @@
         "//third_party/pulseaudio/ohosbuild/src:pulsecommon",
         "//third_party/pulseaudio/sonic:sonic",
         "//third_party/re2:re2",
-        "//third_party/selinux:checkpolicy",
-        "//third_party/selinux:chkcon",
-        "//third_party/selinux:getenforce",
-        "//third_party/selinux:getfilecon",
-        "//third_party/selinux:getpidcon",
-        "//third_party/selinux:libselinux",
-        "//third_party/selinux:secilc",
-        "//third_party/selinux:sefcontext_compile",
-        "//third_party/selinux:selinux_check_access",
-        "//third_party/selinux:selinuxexeccon",
-        "//third_party/selinux:setenforce",
-        "//third_party/selinux:setfilecon",
         "//third_party/skia/third_party/piex:piex",
         "//third_party/skia:skcms",
         "//third_party/skia:skia_ohos",
@@ -4579,12 +4162,6 @@
     "deps_not_lib": {
         "//arkcompiler/ets_frontend/arkguard:build_arkguard": [
             "//third_party/typescript:build_typescript"
-        ],
-        "//arkcompiler/ets_frontend/es2panda/test:es2abc_compiler_tests": [
-            "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages"
-        ],
-        "//arkcompiler/ets_frontend/es2panda/test:es2abc_type_extractor_tests": [
-            "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages"
         ],
         "//arkcompiler/ets_frontend/es2panda:es2panda_lib": [
             "//third_party/icu/icu4c:static_icuuc"
@@ -4620,416 +4197,12 @@
         "//arkcompiler/ets_frontend/merge_abc:merge_abc": [
             "//third_party/icu/icu4c:static_icuuc"
         ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:AssemblerTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:AssemblerTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:CombinedPassVisitorTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:CombinedPassVisitorTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:ConstantFoldingTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:ConstantFoldingTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:DeadCodeEliminationTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:DeadCodeEliminationTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:GlobalValueNumberingTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:GlobalValueNumberingTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:InstructionCombineTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:InstructionCombineTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:LoopOptimizationTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:LoopOptimizationTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:TypedArrayLoweringTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler/tests:TypedArrayLoweringTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:ark_aot_compiler": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
-            "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:ark_stub_compiler": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer_set_with_maple": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/debugger/tests:HotReloadManagerTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/debugger/tests:HotReloadManagerTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/js_vm:ark_js_vm": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
-            "//arkcompiler/runtime_core/libpandabase:libarkbase_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests:JSPandaFileTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests:JSPandaFileTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/module/tests:ModuleTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/module/tests:ModuleTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:JsnapiSample": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:JsnapiSample_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/prof_dump:profdump": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
-            "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:PGOProfilerTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/pgo_profiler/tests:PGOProfilerTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/quick_fix:quick_fix": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps",
-            "//arkcompiler/runtime_core/libpandabase:libarkbase_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_018_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_018_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_019_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_019_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_020_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_020_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_021_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_021_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_022_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_022_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_023_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_023_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_024_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_024_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_025_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_025_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_026_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_026_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_039_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_039_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_040_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_040_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_041_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_041_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_042_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_042_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_044_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_044_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_046_Test": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_046_Test_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/ts_types/tests:TSTypeTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/ts_types/tests:TSTypeTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/test/executiontest:ThreadTerminationTest": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/test/executiontest:ThreadTerminationTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/bigintrefnew_fuzzer:BigIntRefNewFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/bigintrefnew_fuzzer:BigIntRefNewFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/binarytotext_fuzzer:BinaryToTextFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/binarytotext_fuzzer:BinaryToTextFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/copyableglobalisempty_fuzzer:CopyableGlobalIsEmptyFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/copyableglobalisempty_fuzzer:CopyableGlobalIsEmptyFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/copyableglobalsetandclearweak_fuzzer:CopyableGlobalSetandClearWeakFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/copyableglobalsetandclearweak_fuzzer:CopyableGlobalSetandClearWeakFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/integerrefnewvalue_fuzzer:IntegerRefNewValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/integerrefnewvalue_fuzzer:IntegerRefNewValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereffoundationvalue_fuzzer:JSValueRefFoundationValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereffoundationvalue_fuzzer:JSValueRefFoundationValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefint32value_fuzzer:JSValueRefInt32ValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefint32value_fuzzer:JSValueRefInt32ValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefintegervalue_fuzzer:JSValueRefIntegerValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefintegervalue_fuzzer:JSValueRefIntegerValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisarrayvalue_fuzzer:JSValueRefIsArrayValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisarrayvalue_fuzzer:JSValueRefIsArrayValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefishashmap_fuzzer:JSValueRefIsHashMapFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefishashmap_fuzzer:JSValueRefIsHashMapFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefishashset_fuzzer:JSValueRefIsHashSetFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefishashset_fuzzer:JSValueRefIsHashSetFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislightweightmapandset_fuzzer:JSValueRefIsLightWeightMapAndSetFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislightweightmapandset_fuzzer:JSValueRefIsLightWeightMapAndSetFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislinkedlist_fuzzer:JSValueRefIsLinkedListFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislinkedlist_fuzzer:JSValueRefIsLinkedListFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislinkedlistiterator_fuzzer:JSValueRefIsLinkedListIteratorFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislinkedlistiterator_fuzzer:JSValueRefIsLinkedListIteratorFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislist_fuzzer:JSValueRefIsListFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefislist_fuzzer:JSValueRefIsListFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisnativepointervalue_fuzzer:JSValueRefIsNativePointerValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisnativepointervalue_fuzzer:JSValueRefIsNativePointerValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisplainarray_fuzzer:JSValueRefIsPlainArrayFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefisplainarray_fuzzer:JSValueRefIsPlainArrayFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefispromisevalue_fuzzer:JSValueRefIsPromiseValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefispromisevalue_fuzzer:JSValueRefIsPromiseValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefnullvalue_fuzzer:JSValueRefNullValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefnullvalue_fuzzer:JSValueRefNullValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftobooleanvalue_fuzzer:JSValueRefToBooleanValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftobooleanvalue_fuzzer:JSValueRefToBooleanValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftonumbervalue_fuzzer:JSValueRefToNumberValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftonumbervalue_fuzzer:JSValueRefToNumberValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftoobjectvalue_fuzzer:JSValueRefToObjectValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluereftoobjectvalue_fuzzer:JSValueRefToObjectValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefuint32value_fuzzer:JSValueRefUint32ValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/jsvaluerefuint32value_fuzzer:JSValueRefUint32ValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/mapiteratorefget_fuzzer:MapIteratorRefGetFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/mapiteratorefget_fuzzer:MapIteratorRefGetFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/numberrefvalue_fuzzer:NumberRefValueFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/numberrefvalue_fuzzer:NumberRefValueFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/objectrefdelete_fuzzer:ObjectRefDeleteFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/objectrefdelete_fuzzer:ObjectRefDeleteFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/objectrefgetglobalobject_fuzzer:ObjectRefGetGlobalObjectFuzzTest": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime/test/fuzztest/objectrefgetglobalobject_fuzzer:ObjectRefGetGlobalObjectFuzzTest_resource_copy": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime:libark_js_intl_arm_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime:libark_js_intl_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_arm_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_static": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_test": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_test_set": [
-            "//arkcompiler/runtime_core/libpandafile:arkfile_header_deps"
-        ],
+        
         "//arkcompiler/runtime_core/static_core/plugins/ets:ark_packages": [
             "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib": [
             "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
-        ],
-        "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler": [
-            "//third_party/musl:create_alltypes_h",
-            "//third_party/musl:create_porting_src",
-            "//third_party/musl:create_syscall_h",
-            "//third_party/musl:create_version_h",
-            "//third_party/musl:musl_copy_inc_bits",
-            "//third_party/musl:musl_copy_inc_root",
-            "//third_party/musl:musl_copy_inc_sys"
         ],
         "//base/msdp/device_status/services/interaction/drag:interaction_drag": [
             "//third_party/libxml2:xml2"
@@ -5061,27 +4234,14 @@
         "//base/telephony/core_service/utils:libtel_vcard": [
             "//third_party/glib:glib_packages"
         ],
-        "//base/update/updater/services/updater_binary:updater_binary": [
-            "//third_party/musl:soft_static_libs"
-        ],
         "//base/web/webview/interfaces/kits/napi/protos:proto_gen": [
             "//third_party/protobuf:protoc"
         ],
         "//developtools/ace_ets2bundle:install_arkguard_tsc": [
-            "//arkcompiler/ets_frontend/arkguard:build_arkguard",
-            "//third_party/typescript:build_typescript"
+            "//arkcompiler/ets_frontend/arkguard:build_arkguard"
         ],
         "//developtools/ace_js2bundle:ace_loader_ark_hap": [
             "//developtools/ace_ets2bundle:ets_loader_ark_hap"
-        ],
-        "//developtools/hiperf:hiperf_host": [
-            "//third_party/musl:soft_static_libs"
-        ],
-        "//developtools/hiperf:hiperf_host_build_proto": [
-            "//third_party/protobuf:protoc"
-        ],
-        "//developtools/hiperf:support_libunwind": [
-            "//third_party/libunwind:unwind_source_arm"
         ],
         "//developtools/profiler/proto_encoder/test:proto_gen_source": [
             "//third_party/protobuf:protoc"
@@ -5765,9 +4925,6 @@
         "//foundation/resourceschedule/resource_schedule_service/ressched/test/fuzztest/ressched_fuzzer:ResSchedFuzzTest_resource_copy": [
             "//third_party/libxml2:xml2"
         ],
-        "//test/testfwk/arkxtest/uitest:uitest_server": [
-            "//base/hiviewdfx/hidumper/services:hidumper_client"
-        ],
         "//third_party/jsframework:gen_snapshot": [
             "//third_party/css-what:css_what_sources"
         ],
@@ -5785,32 +4942,6 @@
         ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_train_lib": [
             "//third_party/flatbuffers:flatbuffers_install_action"
-        ],
-        "//third_party/musl/libc-test/src/functionalext/unittest:unittest_ldso_dynlink": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl/libc-test/src/functionalext/unittest:unittest_ldso_ld_log": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_libc_musl_shared": [
-            "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_libc_musl_static": [
-            "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_hook": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_jemalloc": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_ldso": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_src": [
-            "//base/startup/init/services/param/base:parameterbase"
         ],
         "//third_party/parse5:parse5_ark_hap": [
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
@@ -5891,12 +5022,6 @@
         "//arkcompiler/ets_frontend/arkguard:build_arkguard": [
             "//third_party/typescript:build_typescript"
         ],
-        "//arkcompiler/ets_frontend/es2panda/test:es2abc_compiler_tests": [
-            "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages"
-        ],
-        "//arkcompiler/ets_frontend/es2panda/test:es2abc_type_extractor_tests": [
-            "//arkcompiler/ets_runtime:ark_js_host_linux_tools_packages"
-        ],
         "//arkcompiler/ets_frontend/es2panda:es2panda_lib": [
             "//third_party/icu/icu4c:static_icuuc"
         ],
@@ -5958,267 +5083,12 @@
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icuuc"
         ],
-        "//arkcompiler/ets_runtime/ecmascript/compiler:libark_jsoptimizer": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime:libark_jsruntime_test": [
-            "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
-        ],
-        "//arkcompiler/runtime_core/arkplatform:arkplatform_static": [
-            "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
-        ],
-        "//arkcompiler/runtime_core/assembler:ark_asm_static": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/assembler:libarkassembler_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/assembler:libarkassembler_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/bytecode_optimizer:libarkbytecodeopt": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/bytecode_optimizer:libarkbytecodeopt_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/compiler:libarkcompiler": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/compiler:libarkcompiler_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/compiler:libarkcompiler_frontend_static_for_libark_defect_scan_aux": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/disassembler:ark_disasm": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/disassembler:arkdisassembler": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/disassembler:arkdisassembler_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libark_defect_scan_aux/tests/unittest:defect_scan_aux_demo": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libark_defect_scan_aux:libark_defect_scan_aux": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libark_defect_scan_aux:libark_defect_scan_aux_static_test": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandabase:libarkbase_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandabase:libarkbase_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandabase:libarkbase_static_fuzz": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandafile:libarkfile_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandafile:libarkfile_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libpandafile:libarkfile_static_fuzz": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libziparchive:libarkziparchive_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/zlib:libz",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/libziparchive:libarkziparchive_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/zlib:shared_libz",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/assembler:ark_asm_static": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/assembler:libarkassembler_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/assembler:libarkassembler_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/bytecode_optimizer:libarktsbytecodeopt": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/bytecode_optimizer:libarktsbytecodeopt_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/compiler/aot:libarkaotmanager": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/compiler:libarktscompiler": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/compiler:libarktscompiler_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/dprof:libdprof_static": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/irtoc:irtoc": [
-            "//third_party/vixl:vixl_public_config",
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandabase:libarkbase_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandabase:libarkbase_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandafile/external:libarkfileExt": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandafile/external:libarksupport": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandafile:libarkfile_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/libpandafile:libarkfile_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/libziparchive:libarkziparchive_frontend_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/zlib:libz"
-        ],
-        "//arkcompiler/runtime_core/static_core/libziparchive:libarkziparchive_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/zlib:libz"
-        ],
-        "//arkcompiler/runtime_core/static_core/panda:arkts_bin": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/plugins/ets:ark_packages": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
-        ],
-        "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib": [
-            "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
-        ],
-        "//arkcompiler/runtime_core/static_core/runtime/asm_defines:asm_defines": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/runtime:arkruntime_interpreter_impl_static": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/runtime_core/static_core/runtime:libarkruntime_set_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//arkcompiler/runtime_core/static_core/verification/verifier:verifier_bin": [
-            "//third_party/bounds_checking_function:libsec_public_config"
-        ],
-        "//arkcompiler/toolchain/inspector:ark_debugger_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//arkcompiler/toolchain/inspector:connectserver_debugger_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//arkcompiler/toolchain/tooling/client:libark_client_set": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/cJSON:cjson_static",
-            "//third_party/libuv:uv",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//arkcompiler/toolchain/tooling:libark_ecma_debugger": [
-            "//third_party/libuv:uv"
-        ],
-        "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set": [
-            "//third_party/cJSON:cjson"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_base": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_client": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//arkcompiler/toolchain/websocket:websocket_server": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/openssl:libcrypto_shared"
-        ],
         "//base/customization/enterprise_device_management/common/native:edm_commom": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//base/customization/enterprise_device_management/interfaces/inner_api/plugin_kits:plugin_kits": [
             "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/customization/enterprise_device_management/interfaces/kits/usb_manager:usbmanager": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/customization/enterprise_device_management/interfaces/kits/wifi_manager:wifimanager": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//base/customization/enterprise_device_management/services/edm:edmservice": [
             "//third_party/jsoncpp:jsoncpp"
@@ -6261,117 +5131,22 @@
         "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_src": [
             "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/libunwind:libunwind"
+            "//third_party/jsoncpp:jsoncpp"
         ],
         "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_static_src": [
             "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/jsoncpp:jsoncpp_static",
-            "//third_party/libunwind:libunwind_local"
+            "//third_party/jsoncpp:jsoncpp_static"
         ],
         "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:backtrace_local": [
             "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/jsoncpp:jsoncpp_static",
-            "//third_party/libunwind:libunwind_local"
+            "//third_party/jsoncpp:jsoncpp_static"
         ],
         "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:libbacktrace_local": [
             "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/libunwind:libunwind"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/procinfo:dfx_procinfo_static": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/procinfo:libdfx_procinfo": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfx_local_handler": [
-            "//third_party/libunwind:libunwind"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler": [
-            "//third_party/musl:create_alltypes_h",
-            "//third_party/musl:create_porting_src",
-            "//third_party/musl:create_syscall_h",
-            "//third_party/musl:create_version_h",
-            "//third_party/musl:musl_copy_inc_bits",
-            "//third_party/musl:musl_copy_inc_root",
-            "//third_party/musl:musl_copy_inc_sys"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder": [
-            "//third_party/lzma:lzma_shared",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder_src": [
-            "//third_party/lzma:lzma_shared",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:libunwinder_static": [
-            "//third_party/lzma:lzma_shared",
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/unwinder:unwinder_host": [
-            "//third_party/lzma:lzma_static",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/test/funchook:dfxexithook": [
-            "//third_party/libunwind:libunwind"
-        ],
-        "//base/hiviewdfx/faultloggerd/test/funchook:dfxsighook": [
-            "//third_party/libunwind:libunwind"
-        ],
-        "//base/hiviewdfx/faultloggerd/tools/crash_validator:crashvalidator": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/hiviewdfx/faultloggerd/tools/process_dump:process_info_src": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/faultloggerd/tools/process_dump:processdump": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiappevent/frameworks/js/napi:hiappevent_v9": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiappevent/frameworks/native/libhiappevent/observer:hiappevent_observer": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/adapter/plugins/eventservice/service/idl:sys_event_service_ohos": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
-        ],
-        "//base/hiviewdfx/hiview/adapter/plugins/eventservice/service:sys_event_service_adapter": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/adapter/service/idl:hiview_service_impl": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_publish:hiview_event_publish": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_report:hiview_event_report": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_store/config:event_store_config_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_store/utility:event_store_utility_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_store:event_store_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/event_threshold:event_threshold_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base/running_status_logger:running_status_logger_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/base:hiview_base": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
         ],
         "//base/hiviewdfx/hiview/core/param_update:hiview_param_update": [
             "//third_party/openssl:libcrypto_shared",
@@ -6585,22 +5360,11 @@
         ],
         "//base/update/sys_installer/frameworks/ipc_server:sys_installer": [
             "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson",
-            "//third_party/lz4:liblz4_static"
+            "//third_party/cJSON:cjson"
         ],
         "//base/update/sys_installer/interfaces/innerkits/ipc_client:libsysinstaller_shared": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/lz4:liblz4_static",
             "//third_party/zlib:shared_libz"
-        ],
-        "//base/update/sys_installer/interfaces/innerkits/ipc_client:libsysinstallerkits": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/sys_installer/interfaces/innerkits/ipc_client:sys_installer_client": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/sys_installer/test/unittest:sys_installer_client_test": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//base/update/updater/interfaces/kits/diff_patch:libdiff_patch": [
             "//third_party/openssl:libcrypto_shared"
@@ -6608,40 +5372,28 @@
         "//base/update/updater/interfaces/kits/diff_patch:libdiff_patch_shared": [
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//base/update/updater/interfaces/kits/misc_info:libmiscinfo": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//base/update/updater/interfaces/kits/packages:libpackageExt": [
             "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/interfaces/kits/packages:libpackage_shared": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:shared_libz"
         ],
         "//base/update/updater/interfaces/kits/updaterkits:libupdater_shared": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:shared_libz"
-        ],
-        "//base/update/updater/interfaces/kits/updaterkits:libupdaterkits": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//base/update/updater/services/applypatch:libapplypatch": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/bzip2:libbz2",
             "//third_party/openssl:libcrypto_static"
-        ],
-        "//base/update/updater/services/common/ring_buffer:libringbuffer": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//base/update/updater/services/diffpatch/diff:libdiff": [
             "//third_party/bounds_checking_function:libsec_static",
@@ -6651,30 +5403,24 @@
         "//base/update/updater/services/diffpatch/patch:libpatch": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/bzip2:libbz2",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_static",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/diffpatch:diff": [
             "//third_party/bzip2:libbz2",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_static",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/flashd:flashd_deamon": [
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/selinux:libselinux"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//base/update/updater/services/flashd:libflashd": [
             "//third_party/bzip2:libbz2",
             "//third_party/cJSON:cjson",
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_shared",
-            "//third_party/zlib:libz",
-            "//third_party/selinux:libselinux"
+            "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/flow_update/update_bin:libBinFlowUpdate": [
             "//third_party/bounds_checking_function:libsec_static",
@@ -6713,13 +5459,9 @@
         "//base/update/updater/services/updater_binary:libupdater_binary": [
             "//third_party/bzip2:libbz2",
             "//third_party/cJSON:cjson_static",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_static",
             "//third_party/openssl:libssl_static",
             "//third_party/zlib:libz"
-        ],
-        "//base/update/updater/services/updater_binary:updater_binary": [
-            "//third_party/musl:soft_static_libs"
         ],
         "//base/update/updater/services:libupdater": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -6728,8 +5470,7 @@
             "//third_party/cJSON:cjson",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
-            "//third_party/zlib:libz",
-            "//third_party/selinux:libselinux"
+            "//third_party/zlib:libz"
         ],
         "//base/update/updater/services:libupdater_static": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -6739,13 +5480,11 @@
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:libz",
-            "//third_party/libdrm:libdrm",
-            "//third_party/selinux:libselinux"
+            "//third_party/libdrm:libdrm"
         ],
         "//base/update/updater/utils:libutils": [
             "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson",
-            "//third_party/selinux:libselinux"
+            "//third_party/cJSON:cjson"
         ],
         "//base/update/updater/utils:write_updater": [
             "//third_party/bounds_checking_function:libsec_static"
@@ -6756,7 +5495,6 @@
         "//base/update/updateservice/services/engine:updateservice": [
             "//third_party/cJSON:cjson",
             "//third_party/libxml2:libxml2",
-            "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
         ],
@@ -6858,8 +5596,7 @@
             "//third_party/openssl:libssl_shared"
         ],
         "//developtools/ace_ets2bundle:install_arkguard_tsc": [
-            "//arkcompiler/ets_frontend/arkguard:build_arkguard",
-            "//third_party/typescript:build_typescript"
+            "//arkcompiler/ets_frontend/arkguard:build_arkguard"
         ],
         "//developtools/ace_js2bundle:ace_loader_ark_hap": [
             "//developtools/ace_ets2bundle:ets_loader_ark_hap"
@@ -6873,7 +5610,6 @@
         "//developtools/hdc/test:hdc_daemon": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_static"
         ],
         "//developtools/hdc/test:hdc_daemon_platform": [
@@ -6885,7 +5621,6 @@
         "//developtools/hdc/test:hdc_host": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
             "//third_party/openssl:libcrypto_static",
             "//third_party/libusb:libusb"
         ],
@@ -6893,9 +5628,7 @@
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/libusb:libusb",
             "//third_party/libuv:uv_static",
-            "//third_party/lz4:liblz4_static",
-            "//third_party/openssl:libcrypto_static",
-            "//third_party/selinux:libselinux"
+            "//third_party/openssl:libcrypto_static"
         ],
         "//developtools/hdc:hdc_register": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -6903,18 +5636,11 @@
         ],
         "//developtools/hdc:hdcd_system_source": [
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/selinux:libselinux"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/hdc:hdcd_updater_source": [
             "//third_party/libuv:uv",
-            "//third_party/lz4:liblz4_static",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/selinux:libselinux"
-        ],
-        "//developtools/hiperf:hiperf_host": [
-            "//third_party/musl:soft_static_libs"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/hiperf:hiperf_host_build_proto": [
             "//third_party/protobuf:protoc"
@@ -6945,8 +5671,7 @@
         "//developtools/hiperf:support_libunwind": [
             "//third_party/bounds_checking_function:libsec_public_config",
             "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config",
-            "//third_party/libunwind:unwind_source_arm"
+            "//third_party/googletest:gtest_config"
         ],
         "//developtools/hiperf:support_protobuf": [
             "//third_party/bounds_checking_function:libsec_public_config",
@@ -7019,26 +5744,14 @@
             "//third_party/protobuf:protobuf_lite",
             "//third_party/bounds_checking_function:libsec_static"
         ],
-        "//developtools/profiler/device/plugins/memory_plugin:memorytest": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//developtools/profiler/device/plugins/native_daemon:native_daemon": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/zlib:libz"
         ],
-        "//developtools/profiler/device/plugins/native_hook:malloctest_cpp": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//developtools/profiler/device/plugins/native_hook:native_hook_source": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/zlib:libz"
-        ],
-        "//developtools/profiler/device/plugins/native_hook:nativetest_c": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//developtools/profiler/device/plugins/native_hook:statisticstest_cpp": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//developtools/profiler/device/plugins/network_plugin:networkplugin_source": [
             "//third_party/protobuf:protobuf_lite",
@@ -7543,9 +6256,6 @@
         "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits": [
             "//commonlibrary/c_utils/base:utils_config"
         ],
-        "//foundation/ability/ability_runtime/js_environment/frameworks/js_environment:js_environment": [
-            "//arkcompiler/ets_runtime:ark_jsruntime_public_config"
-        ],
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms": [
             "//third_party/icu/icu4c:shared_icuuc"
         ],
@@ -7678,17 +6388,14 @@
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_core/dfile:nstackx_dfile.open": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/mbedtls:mbedtls",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_ctrl:nstackx_ctrl": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/libcoap:libcoap",
             "//third_party/cJSON:cjson"
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_util:nstackx_util.open": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/mbedtls:mbedtls"
+            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/communication/dsoftbus/core/common/dfx/anonymize:softbus_dfx_anonymizer": [
             "//third_party/bounds_checking_function:libsec_shared"
@@ -7698,15 +6405,13 @@
         ],
         "//foundation/communication/dsoftbus/core/common/dfx/hidumper_adapter:softbus_dfx_dump": [
             "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson",
-            "//third_party/sqlite:sqlite"
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/communication/dsoftbus/core/common/dfx/log:softbus_dfx_log": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/communication/dsoftbus/core/common:softbus_utils": [
-            "//third_party/cJSON:cjson",
-            "//third_party/sqlite:sqlite"
+            "//third_party/cJSON:cjson"
         ],
         "//foundation/communication/dsoftbus/core/frame:softbus_server": [
             "//third_party/openssl:libcrypto_shared",
@@ -7746,13 +6451,11 @@
         ],
         "//foundation/communication/ipc/ipc/test/auxiliary/native:ipc_test_helper": [
             "//base/security/access_token/interfaces/innerkits/nativetoken:libnativetoken",
-            "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc"
         ],
         "//foundation/communication/ipc/ipc/test/auxiliary/native:ipc_test_helper_extra": [
             "//base/security/access_token/interfaces/innerkits/nativetoken:libnativetoken",
-            "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc"
         ],
         "//foundation/communication/netmanager_ext/frameworks/js/napi/vpnext:vpnextension": [
             "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_config"
@@ -7809,9 +6512,6 @@
         "//foundation/communication/netstack/utils/napi_utils:napi_utils_static": [
             "//third_party/jsoncpp:jsoncpp"
         ],
-        "//foundation/communication/wifi/wifi/frameworks/native:wifi_sdk": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
         "//foundation/communication/wifi/wifi/utils:wifi_utils": [
             "//third_party/jsoncpp:jsoncpp"
         ],
@@ -7822,15 +6522,12 @@
             "//third_party/cJSON:cjson"
         ],
         "//foundation/distributeddatamgr/data_object/interfaces/innerkits:distributeddataobject_impl": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/libuv:uv"
         ],
         "//foundation/distributeddatamgr/data_object/interfaces/innerkits:distributeddataobject_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/libuv:uv"
         ],
         "//foundation/distributeddatamgr/data_object/interfaces/jskits:distributeddataobject": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/libuv:uv"
         ],
         "//foundation/distributeddatamgr/data_share/frameworks/js/napi/dataShare:datashare": [
@@ -7844,12 +6541,10 @@
         ],
         "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/gaussdb_rd:gaussdb_rd": [
             "//third_party/cJSON:cJSON_config",
-            "//third_party/sqlite:sqlite",
             "//third_party/cJSON:cjson"
         ],
         "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb:distributeddb": [
             "//third_party/jsoncpp:jsoncpp_config",
-            "//third_party/sqlite:sqlite",
             "//third_party/zlib:shared_libz",
             "//third_party/jsoncpp:jsoncpp",
             "//third_party/openssl:libcrypto_shared"
@@ -7901,9 +6596,6 @@
         "//foundation/distributeddatamgr/udmf/interfaces/jskits:uniformtypedescriptor_napi": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
-        "//foundation/distributedhardware/device_manager/commondependency:devicemanagerdependency": [
-            "//third_party/mbedtls:mbedtls_shared"
-        ],
         "//foundation/distributedhardware/device_manager/display/entry:DeviceManager_UI": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
@@ -7916,25 +6608,13 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//foundation/distributedhardware/device_manager/interfaces/kits/js4.0:distributeddevicemanager": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/distributedhardware/device_manager/interfaces/kits/js:devicemanager": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
         "//foundation/distributedhardware/device_manager/radar:devicemanagerradar": [
-            "//third_party/mbedtls:mbedtls_shared",
             "//third_party/cJSON:cjson"
         ],
-        "//foundation/distributedhardware/device_manager/services/implementation:devicemanagerserviceimpl": [
-            "//third_party/mbedtls:mbedtls_shared"
-        ],
         "//foundation/distributedhardware/device_manager/services/service:devicemanagerservice": [
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/mbedtls:mbedtls_shared"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/distributedhardware/device_manager/utils:devicemanagerutils": [
-            "//third_party/mbedtls:mbedtls_shared",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/distributedhardware/distributed_hardware_fwk/application:DHardware_UI": [
@@ -7974,14 +6654,8 @@
         "//foundation/filemanagement/dfs_service/services/cloudfiledaemon:cloudfiledaemon": [
             "//third_party/libfuse:libfuse"
         ],
-        "//foundation/filemanagement/dfs_service/services/cloudsyncservice:cloudsync_sa": [
-            "//third_party/e2fsprogs:libext2_uuid"
-        ],
         "//foundation/filemanagement/dfs_service/services/cloudsyncservice:cloudsync_sa_static": [
             "//third_party/e2fsprogs:libext2_uuid"
-        ],
-        "//foundation/filemanagement/file_api/interfaces/kits/js:file": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/filemanagement/file_api/interfaces/kits/js:fileio": [
             "//third_party/bounds_checking_function:libsec_shared",
@@ -8042,9 +6716,6 @@
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/effect_kit:effectkit": [
             "//commonlibrary/c_utils/base:utils_config"
         ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/webgl:webgl_src": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
         "//foundation/graphic/graphic_2d/rosen/build/icu:rosen_libicu_ohos": [
             "//third_party/icu/icu4c:shared_icuuc"
         ],
@@ -8072,23 +6743,12 @@
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_txt": [
             "//third_party/skia:skia_ohos"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos_ng": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_new": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos": [
             "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos_ng": [
             "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/skia:skia_ohos_ng"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/composer/native_vsync:libnative_vsync": [
@@ -8116,17 +6776,11 @@
         "//foundation/graphic/graphic_2d/rosen/modules/platform:ace_skia": [
             "//third_party/skia:skia_ohos"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/platform:eventhandler": [
-            "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:impl_eventhandler": [
             "//third_party/libuv:uv"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:ipc_core": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/platform:mock_utils": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:utils": [
             "//commonlibrary/c_utils/base:utils"
@@ -8257,8 +6911,7 @@
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/texgine:libtexgine_source": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/jsoncpp:jsoncpp"
         ],
         "//foundation/graphic/graphic_2d/rosen/samples/2d_graphics:drawing_engine_sample": [
             "//third_party/openssl:libcrypto_shared",
@@ -8271,7 +6924,6 @@
             "//commonlibrary/c_utils/base:utils_config"
         ],
         "//foundation/graphic/graphic_2d/utils/color_manager:color_manager": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/utils/raw_maker:raw_maker": [
@@ -8287,22 +6939,13 @@
             "//third_party/libpng:libpng_static",
             "//third_party/zlib:shared_libz"
         ],
-        "//foundation/multimedia/av_codec/interfaces/inner_api/native:av_codec_client": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//foundation/multimedia/av_codec/services/engine/codec/audio:av_codec_audio_ffmpeg_codec": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//foundation/multimedia/av_codec/services/engine/codec/video:av_codec_video_ffmpeg_codec": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/ffmpeg:libohosffmpeg"
         ],
-        "//foundation/multimedia/av_codec/services/engine/common:av_codec_engine_common": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//foundation/multimedia/av_codec/services/engine/plugin/plugins/demuxer/ffmpeg_demuxer:av_codec_plugin_FFmpegDemuxer": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/ffmpeg:libohosffmpeg"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/filters:av_codec_media_engine_filters": [
@@ -8433,9 +7076,6 @@
             "//base/security/access_token/interfaces/innerkits/nativetoken:libnativetoken",
             "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc"
         ],
-        "//foundation/window/window_manager/interfaces/kits/napi/common:dm_napi_common": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
         "//foundation/window/window_manager/snapshot:libsnapshot_util": [
             "//third_party/libjpeg-turbo:turbojpeg_static"
         ],
@@ -8495,9 +7135,6 @@
         ],
         "//third_party/freetype:freetype_static": [
             "//third_party/zlib:libz"
-        ],
-        "//third_party/glib:gobject": [
-            "//third_party/libffi:ffi"
         ],
         "//third_party/gptfdisk:sgdisk": [
             "//third_party/e2fsprogs:libext2_uuid",
@@ -8755,32 +7392,6 @@
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_train_lib": [
             "//third_party/flatbuffers:flatbuffers_install_action"
         ],
-        "//third_party/musl/libc-test/src/functionalext/unittest:unittest_ldso_dynlink": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl/libc-test/src/functionalext/unittest:unittest_ldso_ld_log": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_libc_musl_shared": [
-            "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_libc_musl_static": [
-            "//base/hiviewdfx/faultloggerd/interfaces/innerkits/signal_handler:dfxsignalhandler",
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_hook": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_jemalloc": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_ldso": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
-        "//third_party/musl:soft_musl_src": [
-            "//base/startup/init/services/param/base:parameterbase"
-        ],
         "//third_party/parse5:parse5_ark_hap": [
             "//developtools/ace_js2bundle:ace_loader_ark_hap"
         ],
@@ -8802,26 +7413,18 @@
         "//third_party/pulseaudio/ohosbuild:pulseaudio_packages": [
             "//third_party/libsnd:sndfile"
         ],
-        "//third_party/selinux:libselinux": [
-            "//third_party/pcre2:libpcre2"
-        ],
-        "//third_party/selinux:sefcontext_compile": [
-            "//third_party/pcre2:libpcre2"
-        ],
         "//third_party/skia/third_party/libpng:libpng": [
             "//third_party/zlib:libz"
         ],
         "//third_party/skia:fontmgr_ohos": [
             "//third_party/jsoncpp:jsoncpp_static",
-            "//third_party/bounds_checking_function:libsec_shared",
             "//base/global/system_resources:ohos_fonts",
             "//third_party/noto-cjk:fonts_notocjk",
             "//third_party/notofonts:fonts_notofonts",
             "//base/startup/init/interfaces/innerkits:libbegetutil"
         ],
         "//third_party/skia:fontmgr_symbol_load": [
-            "//third_party/jsoncpp:jsoncpp_static",
-            "//third_party/bounds_checking_function:libsec_shared"
+            "//third_party/jsoncpp:jsoncpp_static"
         ],
         "//third_party/skia:gpu": [
             "//foundation/graphic/graphic_2d:libgl"
@@ -8855,10 +7458,7 @@
         ],
         "//arkcompiler/ets_frontend/es2panda/": [
             "//arkcompiler/runtime_core/ark_config.gni"
-        ],
-        "//arkcompiler/ets_frontend/es2panda/test/": [
-            "//arkcompiler/ets_runtime/js_runtime_config.gni"
-        ],
+        ], 
         "//arkcompiler/ets_frontend/ets2panda/": [
             "//arkcompiler/runtime_core/static_core/ark_config.gni"
         ],
@@ -8867,12 +7467,6 @@
         ],
         "//arkcompiler/ets_frontend/merge_abc/": [
             "//arkcompiler/runtime_core/ark_config.gni"
-        ],
-        "//arkcompiler/ets_runtime/compiler_service/": [
-            "//foundation/ability/idl_tool/idl_config.gni"
-        ],
-        "//arkcompiler/toolchain/": [
-            "//arkcompiler/ets_runtime/js_runtime_config.gni"
         ],
         "//base/hiviewdfx/hiview/test/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
@@ -9036,7 +7630,6 @@
             "//foundation/ability/idl_tool/idl_config.gni"
         ],
         "//foundation/ability/ability_runtime/services/abilitymgr/": [
-            "//base/account/os_account/os_account.gni",
             "//foundation/distributeddatamgr/relational_store/relational_store.gni",
             "//foundation/resourceschedule/background_task_mgr/bgtaskmgr.gni"
         ],
@@ -9216,16 +7809,8 @@
         "//third_party/cups-filters/": [
             "//third_party/cups/cups.gni"
         ],
-        "//third_party/e2fsprogs/": [
-            "//developtools/profiler/build/config.gni"
-        ],
         "//third_party/jsframework/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
-        ],
-        "//third_party/musl/": [
-            "//base/startup/init/begetd.gni",
-            "//third_party/FreeBSD/FreeBSD.gni",
-            "//third_party/optimized-routines/optimized-routines.gni"
         ],
         "//third_party/parse5/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
