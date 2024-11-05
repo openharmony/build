@@ -20,6 +20,8 @@ group("common_packages") {
 
   deps += [ "musl:musl_install" ]
 
+  deps += [ "libcpp:libcpp_install" ]
+
   deps += [
     "asan:asan.options",
     "asan:libclang_rt.asan.so",

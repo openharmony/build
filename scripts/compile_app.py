@@ -64,11 +64,15 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     '''
     print(f"build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
+    root_dir = os.path.dirname(os.path.dirname(cur_dir))
+    ohpm_path = os.path.join(root_dir, "prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm")
+    if not os.path.exists(ohpm_path):
+        ohpm_path = "ohpm"
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         print(f"modules_list:{modules_list}")
-        ohpm_install_cmd = ['ohpm', 'install']
+        ohpm_install_cmd = [ohpm_path, 'install']
         if ohpm_registry:
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
         env = {
