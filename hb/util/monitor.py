@@ -69,36 +69,36 @@ class Monitor():
                     sys_cpu_str = sys_cpu_str.split(',')[0].rstrip('%')
                     idle_cpu_str = idle_cpu_str.split(',')[0].rstrip('%')
 
-                    usr_cpu = float(usr_cpu_str) if usr_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
-                    sys_cpu = float(sys_cpu_str) if sys_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
-                    idle_cpu = float(idle_cpu_str) if idle_cpu_str.replace('.', '', 1).isdigit() else self.RET_CONSTANT
+                    usr_cpu = float(usr_cpu_str) if usr_cpu_str.replace('.', '', 1).isdigit() else RET_CONSTANT
+                    sys_cpu = float(sys_cpu_str) if sys_cpu_str.replace('.', '', 1).isdigit() else RET_CONSTANT
+                    idle_cpu = float(idle_cpu_str) if idle_cpu_str.replace('.', '', 1).isdigit() else RET_CONSTANT
 
                     self.usr_cpu = usr_cpu
                     self.sys_cpu = sys_cpu
                     self.idle_cpu = idle_cpu
                     return self.usr_cpu, self.sys_cpu, self.idle_cpu
                 else:
-                    return RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
+                    return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
             else:
-                return self.RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
+                return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
         except subprocess.CalledProcessError:
-            return self.RET_CONSTANT, self.RET_CONSTANT, self.RET_CONSTANT
+            return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT
 
-    def extract_memory_value(line):
+    def extract_memory_value(self, line: str):
         match = re.search(r'\d+', line)
         return int(match.group()) * MEM_CONSTANT if match else RET_CONSTANT
 
-    def get_ret_num(line: str):
+    def get_ret_num(self, line: str):
         key = line.split(':')[0]
         if key in target_keys:
-            value = extract_memory_value(line)
+            value = self.extract_memory_value(line)
             memory_info[key_indices[key]] = value
 
     def get_linux_mem_info(self):
         try:
             with open('/proc/meminfo', 'r') as f:
                 for line in f:
-                    get_ret_num(line)
+                    self.get_ret_num(line)
             return memory_info[0], memory_info[1], memory_info[2]
         except FileNotFoundError:
             return RET_CONSTANT, RET_CONSTANT, RET_CONSTANT

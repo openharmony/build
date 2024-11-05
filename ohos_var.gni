@@ -319,10 +319,15 @@ openjdk_package_names = [
   "java.*",
   "javax.*",
 ]
-
-hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
-hap_packing_tool =
-    "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
+if (ohos_indep_compiler_enable) {
+  hapsigner = "//prebuilts/ohos-sdk/linux/14/toolchains/lib/hap-sign-tool.jar"
+  hap_packing_tool =
+      "//prebuilts/ohos-sdk/linux/14/toolchains/lib/app_packing_tool.jar"
+} else {
+  hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
+  hap_packing_tool =
+      "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
+}
 
 nodejs = "//prebuilts/build-tools/common/nodejs/current/bin/node"
 npm = "//prebuilts/build-tools/common/nodejs/current/bin/npm"
@@ -331,6 +336,13 @@ default_key_alias = "OpenHarmony Application Release"
 default_signature_algorithm = "SHA256withECDSA"
 default_hap_private_key_path = "123456"
 default_keystore_password = "123456"
-default_keystore_path = "//developtools/hapsigner/dist/OpenHarmony.p12"
-default_hap_certificate_file =
-    "//developtools/hapsigner/dist/OpenHarmonyApplication.pem"
+if (ohos_indep_compiler_enable) {
+  default_keystore_path =
+      "//prebuilts/ohos-sdk/linux/14/toolchains/lib/OpenHarmony.p12"
+  default_hap_certificate_file =
+      "//prebuilts/ohos-sdk/OpenHarmonyApplication.pem"
+} else {
+  default_keystore_path = "//developtools/hapsigner/dist/OpenHarmony.p12"
+  default_hap_certificate_file =
+      "//developtools/hapsigner/dist/OpenHarmonyApplication.pem"
+}

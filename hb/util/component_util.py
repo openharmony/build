@@ -127,8 +127,6 @@ def _recurrent_search_bundle_file(path: str):
 
 
 def get_all_bundle_path(path):
-    if os.path.exists(COMPONENTS_PATH_DIR):
-        return IoUtil.read_json_file(COMPONENTS_PATH_DIR)
     bundles_path = {}
     for root, dirnames, filenames in os.walk(path):
         if root == os.path.join(path, "out") or root == os.path.join(path, ".repo"):

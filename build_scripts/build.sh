@@ -204,6 +204,13 @@ function build_sdk() {
       popd > /dev/null
     popd > /dev/null
 }
+function get_api(){
+  current_dir=$(pwd)
+  if [ -d "$current_dir/prebuilts/ohos-sdk-12/" ]; then
+    mkdir -p $current_dir/prebuilts/ohos-sdk/linux/12
+    mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
+  fi
+}
 if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
   if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
@@ -217,6 +224,7 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* &
     xcache_args="--xcache=false"
   fi
   build_sdk
+  get_api
   if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed, please remove the out/sdk directory and try again!\033[0m"
     exit 1

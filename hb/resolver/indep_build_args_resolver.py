@@ -75,7 +75,9 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             bundle_path_list = []
             for path in target_arg.arg_value_list:
                 try:
+                    print("collecting bundle.json, please wait")
                     bundle_path = ComponentUtil.search_bundle_file(path)
+                    print("collect done")
                     bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
@@ -107,8 +109,12 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         build_executor = indep_build_module.hpm
         if target_arg.arg_value:
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value))
+            build_executor.regist_flag('variant', target_arg.arg_value)
         else:
-            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("default"))
+            args_dict = Arg.read_args_file(ModuleType.ENV)
+            arg = args_dict.get("variant")
+            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("argDefault"))
+            build_executor.regist_flag('variant', arg.get("argDefault"))
     
     @staticmethod
     def resolve_branch(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
@@ -116,4 +122,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         if target_arg.arg_value:
             build_executor.regist_flag('branch', target_arg.arg_value)
         else:
-            build_executor.regist_flag('branch', "master")
+            args_dict = Arg.read_args_file(ModuleType.ENV)
+            arg = args_dict.get("branch")
+            build_executor.regist_flag('branch', "argDefault")

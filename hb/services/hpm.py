@@ -95,12 +95,10 @@ class Hpm(BuildFileGeneratorInterface):
     @throw_exception
     def _regist_hpm_path(self):
         hpm_path = shutil.which("hpm")
-        if os.path.exists(hpm_path):
+        if hpm_path and os.path.exists(hpm_path):
             self.exec = hpm_path
-        elif os.path.exists(os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
-            self.exec = os.path.join(os.path.expanduser("~"), ".prebuilts_cache/hpm/node_modules/.bin/hpm")
-        elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")):
-            self.exec = os.path.join(CURRENT_OHOS_ROOT, ".prebuilts_cache/hpm/node_modules/.bin/hpm")
+        elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")):
+            self.exec = os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")
         else:
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
@@ -114,12 +112,12 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        if "-v" not in sys.argv:
-            variant = 'default'
-        else:
-            variant = sys.argv[sys.argv.index("-v") + 1]
-        logpath = os.path.join('out', variant, 'build.log')
         hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
+        variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
+        logpath = os.path.join('out', variant, 'build.log')
+        if os.path.exists(logpath):
+            mtime = os.stat(logpath).st_mtime
+            os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
         SystemUtil.exec_command(hpm_build_cmd, log_path=logpath)
 
     @throw_exception
@@ -183,7 +181,7 @@ class Hpm(BuildFileGeneratorInterface):
                 elif key == 'path':
                     flags_list.extend(['--{}'.format(key), '{}'.format(str(value))])
                 else:
-                    flags_list.extend(['--{}'.format(key).lower(), '{}'.format(str(value)).lower()])
+                    flags_list.extend(['--{}'.format(key).lower(), '{}'.format(str(value))])
 
         return flags_list
 
