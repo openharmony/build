@@ -58,7 +58,7 @@ def _get_args():
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
     parser.add_argument(
-        "-odir", 
+        "-out", 
         "--out_dir",
         default="src", 
         type=str,
