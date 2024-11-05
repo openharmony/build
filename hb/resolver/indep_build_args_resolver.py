@@ -73,17 +73,17 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
 
         if target_arg.arg_value_list:
             bundle_path_list = []
+            print("collecting bundle.json, please wait")
             for path in target_arg.arg_value_list:
                 try:
-                    print("collecting bundle.json, please wait")
                     bundle_path = ComponentUtil.search_bundle_file(path)
-                    print("collect done")
                     bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
                 if not bundle_path:
                     print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(path))
                     sys.exit(1)
+            print("collect done")
             build_executor.regist_flag('path', ','.join(bundle_path_list))
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
