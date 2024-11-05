@@ -445,7 +445,6 @@
         "//base/security/huks/interfaces/inner_api/huks_lite:huks_3.0_sdk",
         "//base/security/huks/interfaces/inner_api/huks_lite:huks_server",
         "//base/security/huks/utils/crypto_adapter:libhuks_utils_client_service_adapter_static",
-        "//developtools/hdc/test:hdc_common",
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core",
         "//device/soc/rockchip/rk3568/hardware/display:display_composer_vendor",
         "//device/soc/rockchip/rk3568/hardware/display:libdisplay_buffer_vendor",
