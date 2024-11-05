@@ -24,15 +24,11 @@ find out/$VARIANTS -type f -not -name '*.log' -delete
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
-if [ $3 -eq 0 ]; then
-  OUT_DIR="src"
-fi
-if [ $3 -eq 1 ]; then
-  OUT_DIR="src_test"
-fi
-if [ $3 -eq 2 ]; then
-  OUT_DIR="test"
-fi
+case $3 in
+0) OUT_DIR="src" ;;
+1) OUT_DIR="src_test" ;;
+2) OUT_DIR="test" ;;
+esac
 
 mkdir -p out/preloader
 mkdir -p out/$VARIANTS/$OUT_DIR/build_configs/parts_info
