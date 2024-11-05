@@ -164,12 +164,16 @@ config("default_link_path") {
 
 config("board_config") {
   cflags = []
+  cflags_c = []
   cflags_cc = []
   ldflags = []
   include_dirs = []
   defines = []
   asmflags = []
   cflags += board_cflags
+  if (defined(board_c_cflags)) {
+    cflags_c += board_c_cflags
+  }
   cflags_cc += board_cxx_flags
   ldflags += board_ld_flags
   include_dirs += board_include_dirs
