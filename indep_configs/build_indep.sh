@@ -25,9 +25,9 @@ rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
 case $3 in
-0) OUT_DIR="src" ;;
-1) OUT_DIR="src_test" ;;
-2) OUT_DIR="test" ;;
+    0) OUT_DIR="src" ;;
+    1) OUT_DIR="src_test" ;;
+    2) OUT_DIR="test" ;;
 esac
 
 mkdir -p out/preloader
