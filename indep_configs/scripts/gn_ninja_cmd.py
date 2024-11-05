@@ -38,7 +38,7 @@ def _get_args():
     parser.add_argument("-v", "--variants", default=r".", type=str, help="variants of build target")
     parser.add_argument("-rp", "--root_path", default=r".", type=str, help="Path of root")
     parser.add_argument(
-        "-odir", 
+        "-out", 
         "--out_dir",
         default="src", 
         type=str,
