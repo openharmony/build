@@ -46,9 +46,11 @@ ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
   source = "${clang_base_path}/lib/clang/$clang_version/lib/aarch64-linux-ohos/libclang_rt.hwasan.so"
   install_images = [
     "system",
-    "ramdisk",
     "updater",
   ]
+  if (use_hwasan) {
+    install_images += [ "ramdisk" ]
+  }
   subsystem_name = "build"
   part_name = "build_framework"
 }
