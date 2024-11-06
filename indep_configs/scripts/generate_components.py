@@ -57,6 +57,13 @@ def _get_args():
         default=1, type=int,
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
+    parser.add_argument(
+        "-out", 
+        "--out_dir",
+        default="src", 
+        type=str,
+        help="the independent build out storage dir. default src , choices: src src_test or test",
+    )
     args = parser.parse_args()
     return args
 
@@ -134,13 +141,23 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
         _symlink_src2dest(os.path.join(kernel_real_path, "innerapis"), kernel_link_path)
 
 
+def is_directory_empty(path):
+    return len([f for f in os.listdir(path) if os.path.isdir(os.path.join(path, f))]) == 0
+
+
 def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
     if test_check != 0:
         googletest_real_path = hpm_cache_path + dependences_json["googletest"]['installPath']
         googletest_link_path = os.path.join("out", variants, "obj/binarys/third_party/googletest")
         os.makedirs(googletest_link_path, exist_ok=True)
-        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
-            os.path.join(googletest_link_path, 'innerapis'))
+        if is_directory_empty(googletest_link_path):
+            shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), 
+                            os.path.join(googletest_link_path, 'innerapis'))
+        else:
+            shutil.rmtree(googletest_link_path, True)
+            os.makedirs(googletest_link_path, exist_ok=True)
+            shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), 
+                            os.path.join(googletest_link_path, 'innerapis'))
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
@@ -289,9 +306,10 @@ def main():
     variants = args.variants
     root_path = args.root_path
     test_check = args.test
+    out_dir = args.out_dir
     project_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    output_part_path = os.path.join(project_path, 'out', variants, 'build_configs', 'parts_info')
-    output_config_path = os.path.join(project_path, 'out', variants, 'build_configs')
+    output_part_path = os.path.join(project_path, 'out', variants, out_dir, 'build_configs', 'parts_info')
+    output_config_path = os.path.join(project_path, 'out', variants, out_dir, 'build_configs')
     dependences_json = _get_dependence_json(hpm_cache_path)
     toolchain_json = _get_toolchain_json(root_path)
     part_name_list = dependences_json.keys()
@@ -302,8 +320,8 @@ def main():
     _binarys_permissions_handler()
     _out_components_json(components_json, output_part_path)
     _generate_platforms_list(output_config_path)
-    _link_kernel_binarys(variants, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
-    _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json)
+    _link_kernel_binarys(variants + os.sep + out_dir, hpm_cache_path, dependences_json, _get_target_cpu(root_path, variants))
+    _copy_test_binarys(test_check, variants + os.sep + out_dir, hpm_cache_path, dependences_json)
 
 
 if __name__ == '__main__':
