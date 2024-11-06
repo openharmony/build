@@ -41,7 +41,7 @@ ohos_exec_script_config = {
     "//build/ohos/images/BUILD.gn",
     "//build/ohos/native_stub/native_stub.gni",
     "//build/ohos/ndk/ndk.gni",
-    "//build/ohos/ndk/ndk_targets.gni",
+    "//interface/sdk_c/ndk_targets.gni",
     "//build/ohos/packages/BUILD.gn",
     "//build/ohos/sa_profile/sa_profile.gni",
     "//build/ohos/sdk/BUILD.gn",
