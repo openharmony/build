@@ -228,6 +228,15 @@ class Arg():
         for arg in all_args.values():
             arg = dict(arg)
             ArgsFactory.genetic_add_option(parser, arg)
+        if module_type == ModuleType.INDEP_BUILD:
+            ArgsFactory.genetic_add_option(parser, {'arg_name': '-i', 'argDefault': '',
+                                                    'arg_help': "Default:''. Help:specify independent build, run 'hb build {part_name} -i'",
+                                                    'arg_phase': 'prebuild', 'arg_type': 'str', 'arg_attribute': {},
+                                                    'resolve_function': '', 'testFunction': ''})
+            ArgsFactory.genetic_add_option(parser, {'arg_name': '-t', 'argDefault': '',
+                                                    'arg_help': "Default:''. Help:specify build test module, run 'hb build {part_name} -t'",
+                                                    'arg_phase': 'prebuild', 'arg_type': 'str', 'arg_attribute': {},
+                                                    'resolve_function': '', 'testFunction': ''})
 
         parser.usage = 'hb {} [option]'.format(module_type.name.lower())
         parser.parse_known_args(sys.argv[2:])
