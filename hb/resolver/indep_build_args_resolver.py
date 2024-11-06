@@ -18,10 +18,11 @@
 
 import os
 import sys
-
+import xml.etree.ElementTree as ET
 from containers.arg import Arg
 from containers.arg import ModuleType
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
+from resources.global_var import CURRENT_OHOS_ROOT
 from modules.interface.indep_build_module_interface import IndepBuildModuleInterface
 from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
@@ -29,13 +30,24 @@ from exceptions.ohos_exception import OHOSException
 
 def get_part_name():
     part_name_list = []
-    if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):           
+    if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):
         for name in sys.argv[2:]:
             if not name.startswith('-'):
                 part_name_list.append(name)
             else:
                 break
     return part_name_list
+
+
+def get_bundle_by_manifest(part_name):
+    tree = ET.parse(os.path.join(CURRENT_OHOS_ROOT, ".repo", "manifests", "ohos", "ohos.xml"))
+    root = tree.getroot()
+    for project in root.findall('project'):
+        path = project.get('path')
+        if part_name == path.split('/')[-1]:
+            return True, os.path.join(CURRENT_OHOS_ROOT, path)
+    else:
+        return False, ""
 
 
 class IndepBuildArgsResolver(ArgsResolverInterface):
@@ -76,8 +88,12 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             print("collecting bundle.json, please wait")
             for path in target_arg.arg_value_list:
                 try:
-                    bundle_path = ComponentUtil.search_bundle_file(path)
-                    bundle_path_list.append(bundle_path)
+                    res, bundle_path = get_bundle_by_manifest(path)
+                    if res:
+                        bundle_path_list.append(bundle_path)
+                    else:
+                        bundle_path = ComponentUtil.search_bundle_file(path)
+                        bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
                 if not bundle_path:
