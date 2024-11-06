@@ -39,15 +39,15 @@ def get_part_name():
     return part_name_list
 
 
-def get_bundle_by_manifest(part_name):
+def get_bundle_path(part_name):
     tree = ET.parse(os.path.join(CURRENT_OHOS_ROOT, ".repo", "manifests", "ohos", "ohos.xml"))
     root = tree.getroot()
     for project in root.findall('project'):
         path = project.get('path')
         if part_name == path.split('/')[-1]:
-            return True, os.path.join(CURRENT_OHOS_ROOT, path)
+            return os.path.join(CURRENT_OHOS_ROOT, path)
     else:
-        return False, ""
+        return ComponentUtil.search_bundle_file(part_name)
 
 
 class IndepBuildArgsResolver(ArgsResolverInterface):
@@ -88,12 +88,8 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             print("collecting bundle.json, please wait")
             for path in target_arg.arg_value_list:
                 try:
-                    res, bundle_path = get_bundle_by_manifest(path)
-                    if res:
-                        bundle_path_list.append(bundle_path)
-                    else:
-                        bundle_path = ComponentUtil.search_bundle_file(path)
-                        bundle_path_list.append(bundle_path)
+                    bundle_path = get_bundle_path(path)
+                    bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
                 if not bundle_path:
