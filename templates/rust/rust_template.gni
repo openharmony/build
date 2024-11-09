@@ -149,7 +149,12 @@ template("rust_target") {
     _deps += invoker.deps
   }
 
-  _rustflags = [ "-Zstack-protector=all" ]
+  if (is_standard_system) {
+    _rustflags = [ "-Zstack-protector=strong" ]
+  } else {
+    _rustflags = [ "-Zstack-protector=all" ]
+  }
+
   if (defined(invoker.rustflags)) {
     _rustflags += invoker.rustflags
   }
