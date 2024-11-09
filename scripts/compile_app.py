@@ -90,7 +90,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
         stdout, stderr = proc.communicate()
         if proc.returncode:
             raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
-                proc.returncode, stderr))
+                proc.returncode, stdout))
     os.chdir(cur_dir)
 
 
