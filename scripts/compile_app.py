@@ -88,8 +88,6 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
                                 env=env,
                                 encoding='utf-8')
         stdout, stderr = proc.communicate()
-        print(f"[0/0] {stdout}")
-        print(f"[0/0] {stderr}")
         if proc.returncode:
             raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
                 proc.returncode, stderr))
