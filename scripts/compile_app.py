@@ -71,7 +71,6 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
-        print(f"modules_list:{modules_list}")
         ohpm_install_cmd = [ohpm_path, 'install']
         if ohpm_registry:
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
@@ -83,18 +82,15 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
         subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
-        print(f"[0/0] ohpm_install_cmd:{ohpm_install_cmd}")
         proc = subprocess.Popen(ohpm_install_cmd,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
                                 env=env,
                                 encoding='utf-8')
         stdout, stderr = proc.communicate()
-        print(f"[0/0] {stdout}")
-        print(f"[0/0] {stderr}")
         if proc.returncode:
             raise Exception('ReturnCode:{}. ohpm install failed. {}'.format(
-                proc.returncode, stderr))
+                proc.returncode, stdout))
     os.chdir(cur_dir)
 
 
