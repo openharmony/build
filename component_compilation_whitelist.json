@@ -137,9 +137,6 @@
         "//base/customization/enterprise_device_management/common/native:edm_commom",
         "//base/customization/enterprise_device_management/interfaces/inner_api/plugin_kits:plugin_kits",
         "//base/global/resource_management/frameworks/resmgr:global_resmgr",
-        "//base/hiviewdfx/hisysevent/adapter/native/idl:sys_event_impl_client",
-        "//base/hiviewdfx/hisysevent/adapter/native/idl:sys_event_service_gen_src_client",
-        "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent:hisysevent_static_lib_for_tdd",
         "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent:libhisysevent",
         "//base/hiviewdfx/hiview/base:hiviewbase",
         "//base/hiviewdfx/hiview/base:hiviewbase_static_lib_for_tdd",
@@ -147,8 +144,6 @@
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/idl:faultlogger_service_ohos_common_with_cfi",
         "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler",
         "//commonlibrary/c_utils/base:utils",
-        "//commonlibrary/c_utils/base:utilsbase",
-        "//commonlibrary/c_utils/base:utilsbase_rtti",
         "//drivers/interface/camera/metadata:metadata",
         "//drivers/interface/camera/sequenceable/buffer_handle:libbuffer_handle_sequenceable_1.0",
         "//drivers/interface/camera/sequenceable/buffer_producer:libbuffer_producer_sequenceable_1.0",
@@ -609,40 +604,16 @@
             "//third_party/zlib/contrib/minizip/"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets/runtime/interop_js:ets_interop_js_napi_static": [
-            "//third_party/node/src/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//base/hiviewdfx/faultloggerd/services:faultloggerd": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//base/hiviewdfx/faultloggerd/services:faultloggerd_fuzzer_src": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//base/hiviewdfx/hiappevent/frameworks/js/napi:hiappevent_v9": [
-            "//third_party/jsoncpp/include/"
-        ],
-        "//base/hiviewdfx/hiappevent/frameworks/native/libhiappevent/observer:hiappevent_observer": [
-            "//third_party/jsoncpp/include/"
+            "//third_party/node/src/"
         ],
         "//base/hiviewdfx/hiview/adapter/plugins/eventservice/service/idl:sys_event_service_ohos": [
             "//utils/system/safwk/native/include/"
         ],
-        "//base/hiviewdfx/hiview/base/event_store:event_store_source": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/interfaces/js/napi:faultlogger_napi": [
             "//third_party/node/src/"
         ],
-        "//base/hiviewdfx/hiview/plugins/freeze_detector:freeze_detector": [
-            "//third_party/libxml2/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//base/hiviewdfx/hiview/utility/common_utils:hiview_reliability_common_utils": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//third_party/openssl/"
-        ],
-        "//base/hiviewdfx/hiview/utility/smart_parser:smart_parser": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//base/inputmethod/imf/interfaces/inner_api/inputmethod_ability:inputmethod_ability": [
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
@@ -745,14 +716,12 @@
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility/",
             "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common/",
-            "//third_party/libuv/include/",
             "//foundation/arkui/ace_engine/frameworks/"
         ],
         "//base/request/request/frameworks/js/napi:request_static": [
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility/",
             "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common/",
-            "//third_party/libuv/include/",
             "//foundation/arkui/ace_engine/frameworks/"
         ],
         "//base/request/request/frameworks/native:request_native": [
@@ -768,9 +737,7 @@
             "//foundation/multimedia/audio_framework/services/audio_policy/common/include/"
         ],
         "//base/security/appverify/interfaces/innerkits/appverify:libhapverify": [
-            "//third_party/openssl/include/",
-            "//third_party/json/include/",
-            "//third_party/json/single_include/"
+            "//third_party/openssl/include/"
         ],
         "//base/startup/init/interfaces/innerkits/init_module_engine:libinit_module_engine": [
             "//third_party/cJSON/"
@@ -804,21 +771,15 @@
         "//base/time/time_service/interfaces/inner_api:time_client": [
             "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent/include/"
         ],
-        "//base/update/updateservice/interfaces/inner_api/engine:updateservicekits": [
-            "//third_party/json/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//base/update/updateservice/services/engine:updateservice": [
             "//base/update/updater/interfaces/kits/include/",
             "//base/update/updater/services/include/",
             "//commonlibrary/utils_lite/include/",
             "//utils/native/base/include/",
             "//utils/system/safwk/native/include/",
-            "//third_party/libxml2/include/",
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/openssl/include/",
-            "//third_party/cJSON/",
             "//base/update/sys_installer/interfaces/inner_api/include/"
         ],
         "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
@@ -910,35 +871,25 @@
             "//third_party/openssl/",
             "//third_party/openssl/include/"
         ],
-        "//developtools/global_resource_tool:restool": [
-            "//third_party/jsoncpp/include/"
-        ],
         "//developtools/hdc/test:hdc_daemon": [
-            "//third_party/libuv/",
             "//base/startup/init/interfaces/innerkits/include/",
-            "//base/startup/init/interfaces/innerkits/include/syspara/",
-            "//commonlibrary/c_utils/base/include/"
+            "//base/startup/init/interfaces/innerkits/include/syspara/"
         ],
         "//developtools/hdc/test:hdc_daemon_platform": [
-            "//third_party/openssl/include/",
-            "//third_party/libuv/"
+            "//third_party/openssl/include/"
         ],
         "//developtools/hdc/test:hdc_host": [
-            "//third_party/libuv/",
             "//base/startup/init/interfaces/innerkits/include/",
             "//base/startup/init/interfaces/innerkits/include/syspara/"
         ],
         "//developtools/hdc:hdc": [
-            "//third_party/openssl/include/",
-            "//third_party/libuv/"
+            "//third_party/openssl/include/"
         ],
         "//developtools/hdc:hdcd_system_source": [
-            "//third_party/openssl/include/",
-            "//third_party/libuv/"
+            "//third_party/openssl/include/"
         ],
         "//developtools/hdc:hdcd_updater_source": [
-            "//third_party/openssl/include/",
-            "//third_party/libuv/"
+            "//third_party/openssl/include/"
         ],
         "//developtools/hiperf/interfaces/kits/js/napi:hiperf_client_napi": [
             "//third_party/node/src/"
@@ -966,45 +917,23 @@
             "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/",
             "//kernel/linux/patches/linux-6.6/prebuilts/usr/include/"
         ],
-        "//developtools/profiler/device/base:hiprofiler_base": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
         "//developtools/profiler/device/plugins/api:plugins_sources": [
             "//third_party/openssl/include/"
         ],
-        "//developtools/profiler/device/plugins/ftrace_plugin/tools/device_kernel_version/default/event_parsers:ftrace_event_parsers": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//developtools/profiler/device/plugins/ftrace_plugin:ftrace_plugin_source": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
         "//developtools/profiler/device/plugins/native_daemon:native_daemon": [
             "//third_party/googletest/googletest/include/"
-        ],
-        "//developtools/profiler/device/plugins/native_hook:malloctest_cpp": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//developtools/profiler/device/plugins/native_hook:native_hook_source": [
             "//third_party/googletest/googletest/include/"
         ],
         "//developtools/profiler/device/plugins/xpower_plugin:xpowerdecoder": [
-            "//third_party/protobuf/src/",
-            "//third_party/cJSON/"
+            "//third_party/protobuf/src/"
         ],
         "//developtools/profiler/device/services/ipc:protoc_gen_ipc": [
             "//third_party/protobuf/"
         ],
         "//developtools/profiler/device/services/ipc:protoencoder_plugin": [
             "//third_party/protobuf/"
-        ],
-        "//developtools/profiler/device/services/profiler_service:profiler_service": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//developtools/profiler/device/services/shared_memory:shared_memory_lite": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//developtools/profiler/device/services/shared_memory:shared_memory_source": [
-            "//commonlibrary/c_utils/base/include/"
         ],
         "//developtools/profiler/hiebpf:hiebpf.bpf": [
             "//third_party/libbpf/src/"
@@ -1029,8 +958,7 @@
             "//third_party/libexif/"
         ],
         "//domains/advertising/advertising/common:advertising_common": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/jsoncpp/include/json/"
+            "//commonlibrary/c_utils/base/include/"
         ],
         "//domains/advertising/advertising/frameworks/js/napi/extension:adsservice_extension_module": [
             "//foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/"
@@ -1045,38 +973,6 @@
         "//drivers/external_device_manager/services/native/driver_extension:driver_extension_module": [
             "//foundation/ability/ability_runtime/interfaces/kits/native/ability/native/",
             "//foundation/ability/ability_runtime/services/common/include/"
-        ],
-        "//drivers/peripheral/audio/effect/model/src/mock_effect:mock_effect_lib": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/effect/model:effect_model_service_1.0": [
-            "//third_party/bounds_checking_function/include/",
-            "//third_party/cJSON/"
-        ],
-        "//drivers/peripheral/audio/hal/hdi_binder/server:hdi_audio_a2dp_server": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hal/hdi_binder/server:hdi_audio_usb_server": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hdi_service/event:hdi_audio_pnp_server": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hdi_service/pathselect:audio_path_select": [
-            "//third_party/cJSON/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hdi_service/primary_impl:audio_primary_impl_vendor": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hdi_service/supportlibs:audio_capture_adapter": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/hdi_service/supportlibs:audio_render_adapter": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//drivers/peripheral/audio/test/audio_utils/audio_mixer:audio_mixer": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//drivers/peripheral/bluetooth/audio/hal/hdi_binder/proxy:audio_bluetooth_hdi_proxy_server": [
             "//third_party/cJSON/",
@@ -1098,12 +994,6 @@
         "//drivers/peripheral/camera/vdi_base/usb_camera/pipeline_core:usb_camera_pipeline_core": [
             "//third_party/libexif/",
             "//third_party/ffmpeg/"
-        ],
-        "//drivers/peripheral/camera/vdi_base/usb_camera/vdi_impl:camera_daemon": [
-            "//third_party/libdrm/"
-        ],
-        "//drivers/peripheral/camera/vdi_base/usb_camera/vdi_impl:camera_daemon_static": [
-            "//third_party/libdrm/"
         ],
         "//drivers/peripheral/clearplay/hdi_service:libmedia_key_system_factory_clearplay_service_1.0": [
             "//third_party/openssl/include/",
@@ -1173,12 +1063,8 @@
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//base/user_iam/user_auth/common/logs/"
         ],
-        "//drivers/peripheral/sensor/hal:hdi_sensor": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//drivers/peripheral/thermal/interfaces/hdi_service:libthermal_interface_service_1.1": [
-            "//hiperf/include/",
-            "//third_party/libxml2/include/"
+            "//hiperf/include/"
         ],
         "//drivers/peripheral/user_auth/hdi_service:libuser_auth_interface_service_1.3": [
             "//third_party/openssl/include/"
@@ -1412,18 +1298,10 @@
         "//foundation/ability/ability_base:want": [
             "//third_party/json/include/"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/ability_constant:abilityconstant": [
-            "//third_party/json/include/"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/ability_constant:abilityconstant_napi": [
-            "//third_party/json/include/"
-        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/ability_manager:abilitymanager": [
-            "//third_party/icu/icu4c/source/common/",
             "//foundation/communication/ipc/ipc/native/src/napi/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/ability_manager:abilitymanager_napi": [
-            "//third_party/icu/icu4c/source/common/",
             "//foundation/communication/ipc/ipc/native/src/napi/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/app/ability_delegator:abilitydelegatorregistry": [
@@ -1443,20 +1321,11 @@
         "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common:napi_common": [
             "//third_party/node/src/"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/js_mission_manager:missionmanager": [
-            "//third_party/icu/icu4c/source/common/"
-        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/mission_manager:distributedmissionmanager": [
-            "//third_party/libuv/include/",
             "//third_party/node/src/"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/mission_manager:missionmanager_napi": [
-            "//third_party/icu/icu4c/source/common/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/particleAbility:particleability": [
             "//third_party/node/src/",
-            "//third_party/jsoncpp/",
-            "//third_party/jsoncpp/include/json/",
             "//foundation/distributeddatamgr/kv_store/frameworks/common/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/common/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/dataability/include/",
@@ -1464,18 +1333,13 @@
             "//foundation/distributeddatamgr/relational_store/frameworks/common/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/wantagent/ability_want_agent:wantagent_napi": [
-            "//third_party/node/src/",
-            "//third_party/libuv/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/wantagent:wantagent": [
-            "//third_party/node/src/",
-            "//third_party/libuv/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:abilitykit_native": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/",
-            "//third_party/libuv/include/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1490,8 +1354,6 @@
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:abilitykit_utils": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1510,9 +1372,6 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:continuation_ipc": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/",
-            "//third_party/libuv/include/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1523,9 +1382,6 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:data_ability_helper": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/",
-            "//third_party/libuv/include/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1537,8 +1393,6 @@
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:extensionkit_native": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1547,9 +1401,6 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:form_extension_module": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/",
-            "//third_party/libuv/include/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1560,9 +1411,6 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:service_extension_module": [
             "//foundation/barrierfree/accessibility/interfaces/innerkits/common/include/",
-            "//third_party/libuv/include/",
-            "//third_party/jsoncpp/include/",
-            "//third_party/json/include/",
             "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
@@ -1589,7 +1437,6 @@
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:uiabilitykit_native": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/libuv/include/",
             "//third_party/node/src/",
             "//foundation/ability/form_fwk/interfaces/inner_api/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
@@ -1598,61 +1445,45 @@
             "//foundation/window/window_manager/utils/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context": [
-            "//base/global/resource_management/interfaces/inner_api/include/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/"
+            "//base/global/resource_management/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:app_context_utils": [
-            "//base/global/resource_management/interfaces/inner_api/include/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/"
+            "//base/global/resource_management/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_delegator": [
-            "//base/global/resource_management/interfaces/inner_api/include/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_manager_helper": [
-            "//third_party/json/include/"
+            "//base/global/resource_management/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/appkit:appkit_native": [
             "//base/global/resource_management/interfaces/inner_api/include/",
-            "//third_party/icu/icu4c/source/common/",
-            "//third_party/json/include/",
             "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/src/EGL/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_connect_callback_stub": [
             "//foundation/ability/ability_base/interfaces/kits/native/want/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_manager": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_start_setting": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:mission_info": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/jsoncpp/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/graphic/graphic_2d/utils/color_manager/export/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager:app_manager": [
-            "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
-            "//third_party/json/include/"
+            "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/connectionobs_manager:connection_obs_manager": [
             "//utils/system/safwk/native/include/",
@@ -1662,14 +1493,12 @@
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/runtime:runtime": [
-            "//third_party/json/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common/"
         ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits": [
             "//base/global/resource_management/interfaces/inner_api/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
-            "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
-            "//third_party/icu/icu4c/source/common/"
+            "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
         "//foundation/ability/ability_runtime/service_router_framework/interfaces/kits/js/serviceroutermgr:businessabilityrouter": [
             "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common/"
@@ -1677,7 +1506,6 @@
         "//foundation/ability/ability_runtime/services/abilitymgr:abilityms": [
             "//prebuilts/jdk/jdk8/linux-x86/include/",
             "//prebuilts/jdk/jdk8/linux-x86/include/linux/",
-            "//third_party/json/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/appdatafwk/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/dataability/include/",
@@ -1691,22 +1519,11 @@
             "//foundation/graphic/graphic_2d/interfaces/inner_api/wmservice/"
         ],
         "//foundation/ability/ability_runtime/services/appmgr:libappms": [
-            "//third_party/json/include/",
             "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddatamgr/include/"
-        ],
-        "//foundation/ability/ability_runtime/services/dataobsmgr:dataobsms": [
-            "//third_party/json/include/"
-        ],
-        "//foundation/ability/ability_runtime/services/dataobsmgr:dataobsms_static": [
-            "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/appmgr_test_service:appmgr_test_service": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/",
-            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
-            "//third_party/jsoncpp/include/"
-        ],
-        "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock": [
-            "//third_party/jsoncpp/include/"
+            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/sa_mgr:sa_mgr_mock": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
@@ -1717,8 +1534,7 @@
         ],
         "//foundation/ability/ability_runtime/tools/aa:tools_aa_source_set": [
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
-            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
-            "//third_party/jsoncpp/include/"
+            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
         "//foundation/ability/dmsfwk/interfaces/innerkits/distributed_event:distributed_sdk": [
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
@@ -1726,8 +1542,7 @@
         ],
         "//foundation/ability/dmsfwk/services/dtbschedmgr:distributedschedsvr": [
             "//foundation/communication/dsoftbus/dsoftbus_enhance/interfaces/kits/broadcast/",
-            "//foundation/communication/dsoftbus/interfaces/kits/common/",
-            "//third_party/cJSON/"
+            "//foundation/communication/dsoftbus/interfaces/kits/common/"
         ],
         "//foundation/ability/form_fwk/frameworks/js/napi:formagent": [
             "//foundation/ability/ability_runtime/interfaces/inner_api/runtime/include/"
@@ -1764,7 +1579,6 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/"
         ],
         "//foundation/ability/form_fwk:form_manager": [
-            "//third_party/json/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/ability/native/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager/include/",
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/",
@@ -1772,7 +1586,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/runtime/include/"
         ],
         "//foundation/ability/form_fwk:libfms": [
-            "//third_party/json/include/",
             "//foundation/ability/ability_runtime/services/common/include/",
             "//foundation/ability/ability_runtime/frameworks/native/appkit/ability_runtime/",
             "//base/startup/init/interfaces/innerkits/include/syspara/"
@@ -1788,14 +1601,10 @@
             "//foundation/barrierfree/foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base:appexecfwk_base": [
-            "//third_party/json/include/",
             "//base/notification/common_event_service/interfaces/inner_api/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core:appexecfwk_core": [
             "//base/notification/common_event_service/interfaces/inner_api/"
-        ],
-        "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/bundlemgr_graphics:bundlemgr_graphics": [
-            "//third_party/json/include/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/app_control:appcontrol": [
             "//third_party/node/src/"
@@ -1810,70 +1619,55 @@
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/bundlemgr:bundle": [
-            "//third_party/node/src/",
-            "//third_party/libuv/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common:bundle_napi_common": [
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/default_app:defaultappmanager": [
-            "//third_party/node/src/",
-            "//third_party/libuv/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/free_install:freeinstall": [
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/installer:installer": [
-            "//third_party/libuv/include/",
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/launcher_bundle_manager:launcherbundlemanager": [
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/launchermgr:innerbundlemanager": [
-            "//third_party/libuv/include/",
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/overlay:overlay": [
             "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/package:package": [
-            "//third_party/node/src/",
-            "//third_party/libuv/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/zip:zlib": [
             "//third_party/libuv/include/",
             "//third_party/node/src/",
             "//third_party/zlib/"
         ],
-        "//foundation/bundlemanager/bundle_framework/interfaces/kits/native/bundle:bundle_ndk": [
-            "//third_party/json/include/"
-        ],
         "//foundation/bundlemanager/bundle_framework/services/bundlemgr:bundle_parser": [
-            "//third_party/json/include/",
             "//third_party/zlib/contrib/minizip/",
             "//third_party/zlib/"
         ],
         "//foundation/bundlemanager/bundle_framework/services/bundlemgr:parser_common": [
-            "//third_party/json/include/",
             "//third_party/zlib/contrib/minizip/",
             "//third_party/zlib/"
         ],
         "//foundation/bundlemanager/bundle_tool/frameworks:tools_bm_source_set": [
             "//foundation/bundlemanager/bundle_framework/common/log/include/",
-            "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/bundlemgr/",
-            "//third_party/json/include/"
+            "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/bundlemgr/"
         ],
         "//foundation/bundlemanager/bundle_tool/frameworks:tools_test_bm_source_set": [
             "//foundation/bundlemanager/bundle_framework/common/log/include/",
-            "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/bundlemgr/",
-            "//third_party/json/include/"
+            "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/bundlemgr/"
         ],
         "//foundation/bundlemanager/distributed_bundle_framework/interfaces/kits/js/distributedBundle:distributedbundlemanager": [
             "//foundation/bundlemanager/bundle_framework/interfaces/kits/js/common/"
-        ],
-        "//foundation/communication/bluetooth_service/services/bluetooth/hardware:bluetooth_hdi_adapter": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//foundation/communication/bluetooth_service/services/bluetooth/ipc:btipc_service": [
             "//foundation/communication/bluetooth/frameworks/inner/include/"
@@ -1893,57 +1687,12 @@
         "//foundation/communication/bluetooth_service/services/bluetooth/service:btservice": [
             "//foundation/communication/bluetooth/interfaces/inner_api/include/",
             "//foundation/communication/bluetooth/frameworks/inner/include/",
-            "//third_party/bounds_checking_function/include/",
             "//base/telephony/state_registry/frameworks/native/observer/include/",
             "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/",
             "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiomanager/include/"
         ],
         "//foundation/communication/bluetooth_service/services/bluetooth/stack:btstack": [
-            "//third_party/openssl/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/adapter:softbus_adapter": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/",
-            "//third_party/json/include/"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/fillp:FillpSo.open": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_congestion:nstackx_congestion.open": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_core/dfile:nstackx_dfile.open": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_ctrl:nstackx_ctrl": [
-            "//third_party/cJSON/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_util:nstackx_util.open": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/bounds_checking_function/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/anonymize:softbus_dfx_anonymizer": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/event:softbus_dfx_event": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/hidumper_adapter:softbus_dfx_dump": [
-            "//third_party/cJSON/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/log:softbus_dfx_log": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/dsoftbus/core/common:softbus_utils": [
-            "//third_party/cJSON/",
-            "//third_party/bounds_checking_function/include/"
+            "//third_party/openssl/include/"
         ],
         "//foundation/communication/dsoftbus/core/frame:softbus_server": [
             "//foundation/deviceprofile/device_info_manager/interfaces/innerkits/core/include/",
@@ -1952,9 +1701,7 @@
             "//foundation/deviceprofile/device_info_manager/commoninclude/utils/",
             "//foundation/communication/wifi/wifi/frameworks/native/interfaces/",
             "//utils/system/safwk/native/include/",
-            "//third_party/cJSON/",
             "//foundation/communication/wifi/wifi/interfaces/kits/c/",
-            "//third_party/bounds_checking_function/include/",
             "//base/security/access_token/interfaces/innerkits/privacy/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_base/include/",
@@ -1962,9 +1709,7 @@
         ],
         "//foundation/communication/dsoftbus/sdk:softbus_client": [
             "//utils/system/safwk/native/include/",
-            "//third_party/cJSON/",
-            "//third_party/openssl/include/",
-            "//third_party/bounds_checking_function/include/"
+            "//third_party/openssl/include/"
         ],
         "//foundation/communication/dsoftbus/tests/sdk/common:softbus_access_token_test": [
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
@@ -1973,15 +1718,7 @@
         ],
         "//foundation/communication/dsoftbus/tests/sdk/frame/fuzztest/softbusclientstub_fuzzer:softbus_client_static": [
             "//utils/system/safwk/native/include/",
-            "//third_party/cJSON/",
-            "//third_party/openssl/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core": [
-            "//third_party/json/single_include/"
-        ],
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single": [
-            "//third_party/json/single_include/"
+            "//third_party/openssl/include/"
         ],
         "//foundation/communication/ipc/interfaces/kits/js/napi:rpc": [
             "//utils/system/safwk/native/include/"
@@ -2097,7 +1834,6 @@
         "//foundation/communication/netmanager_ext/services/networksharemanager:net_tether_manager": [
             "//utils/native/base/include/",
             "//utils/system/safwk/native/include/",
-            "//third_party/json/include/",
             "//third_party/openssl/include/",
             "//foundation/communication/netmanager_base/interfaces/innerkits/netshareclient/include/",
             "//foundation/communication/netmanager_base/interfaces/innerkits/netshareclient/include/proxy/",
@@ -2111,7 +1847,6 @@
             "//foundation/communication/netmanager_base/interfaces/innerkits/dnsresolverclient/include/",
             "//foundation/communication/netmanager_base/services/netsyscontroller/include/",
             "//foundation/communication/bluetooth/interfaces/inner_api/include/",
-            "//third_party/jsoncpp/include/json/",
             "//foundation/communication/netmanager_base/services/netmanagernative/include/netsys/",
             "//foundation/communication/netmanager_base/utils/common_utils/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -2182,45 +1917,33 @@
         "//foundation/communication/wifi/wifi/frameworks/js/napi:wifi": [
             "//third_party/node/src/",
             "//native_engine/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/js/napi:wifi_native_js": [
             "//third_party/node/src/",
             "//native_engine/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/js/napi:wifiext": [
             "//third_party/node/src/",
             "//native_engine/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/js/napi:wifimanager": [
             "//third_party/node/src/",
             "//native_engine/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/js/napi:wifimanagerext": [
             "//third_party/node/src/",
             "//native_engine/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_device_proxy_impl": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -2228,9 +1951,7 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_hotspot_proxy_impl": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -2238,9 +1959,7 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_p2p_proxy_impl": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -2248,9 +1967,7 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_scan_proxy_impl": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -2258,52 +1975,18 @@
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
         "//foundation/communication/wifi/wifi/frameworks/native:wifi_sdk": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//foundation/systemabilitymgr/samgr/adapter/interfaces/innerkits/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/bundlemgr/"
         ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/ipc_framework/cRPC:crpc_client": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/ipc_framework/cRPC:crpc_server": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_ap:wifi_ap_service": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_native": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_utils": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_p2p:wifi_p2p_service": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_scan:wifi_scan_service": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage/wifi_sta:wifi_sta_service": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//foundation/systemability/safwk/interfaces/innerkits/safwk/",
-            "//commonlibrary/c_utils/base/include/"
+            "//foundation/systemability/safwk/interfaces/innerkits/safwk/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_device_service_impl": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
@@ -2313,8 +1996,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"            
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_hotspot_service_impl": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
@@ -2324,8 +2005,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_manager_service": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
@@ -2335,8 +2014,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_p2p_service_impl": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
@@ -2346,8 +2023,6 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_manage:wifi_scan_service_impl": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/arkui/ace_engine/frameworks/base/utils/",
             "//foundation/arkui/ace_engine/frameworks/",
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/",
@@ -2357,33 +2032,7 @@
             "//foundation/ability/ability_runtime/interfaces/inner_api/app_manager/include/appmgr/"
         ],
         "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_framework/wifi_toolkit:wifi_toolkit": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/wifi/wifi/services/wifi_standard/wifi_hal:wifi_hal_service_updater": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_hal/unittest:WifiHalVendorTest": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/communication/wifi/wifi/utils:wifi_utils": [
-            "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include/",
-            "//third_party/jsoncpp/include/"
-        ],
-        "//foundation/deviceprofile/device_info_manager/common:distributed_device_profile_common": [
-            "//third_party/json/include/"
-        ],
-        "//foundation/deviceprofile/device_info_manager/interfaces/innerkits/core:distributed_device_profile_sdk": [
-            "//third_party/json/include/"
         ],
         "//foundation/deviceprofile/device_info_manager/old/interfaces/innerkits/core:distributed_device_profile_client": [
             "//third_party/json/include/"
@@ -2479,26 +2128,20 @@
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/app/src/flowctrl_manager:distributeddata_flowctrl_static": [
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/",
-            "//third_party/json/single_include/"
+            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/app/src/installer:distributeddata_installer_static": [
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/",
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
-            "//third_party/json/single_include/"
+            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/app:distributeddataservice": [
             "//foundation/distributeddatamgr/kv_store/frameworks/common/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
-            "//foundation/distributeddatamgr/distributedfile/interfaces/kits/js/src/mod_securitylabel/",
-            "//third_party/json/single_include/"
+            "//foundation/distributeddatamgr/distributedfile/interfaces/kits/js/src/mod_securitylabel/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/framework:distributeddatasvcfwk": [
-            "//third_party/json/single_include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/common/",
             "//third_party/openssl/include/",
             "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/",
@@ -2509,13 +2152,11 @@
             "//foundation/distributeddatamgr/kv_store/frameworks/common/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/data_share:data_share_service": [
-            "//third_party/json/single_include/",
             "//foundation/distributeddatamgr/data_share/frameworks/native/common/include/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/consumer/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/udmf:udmf_server": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/filemanagement/app_file_service/interfaces/innerkits/native/remote_file_share/include/",
             "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/",
             "//foundation/distributeddatamgr/kv_store/framework/libs/distributeddb/interfaces/include/",
@@ -2525,7 +2166,6 @@
             "//foundation/distributeddatamgr/udmf/interfaces/innerkits/data/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service:distributeddatasvc": [
-            "//third_party/json/single_include/",
             "//foundation/distributeddatamgr/data_share/frameworks/native/common/include/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/",
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/consumer/include/",
@@ -2565,15 +2205,13 @@
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/provider/include/"
         ],
         "//foundation/distributeddatamgr/pasteboard/framework/innerkits:pasteboard_client": [
-            "//commonlibrary/c_utils/base/include/",
             "//foundation/filemanagement/app_file_service/interfaces/innerkits/remote_file_share/native/"
         ],
         "//foundation/distributeddatamgr/pasteboard/interfaces/kits:pasteboard_napi": [
             "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common/"
         ],
         "//foundation/distributeddatamgr/pasteboard/services:pasteboard_service": [
-            "//foundation/filemanagement/dfs_service/services/distributedfiledaemon/include/ipc/",
-            "//commonlibrary/c_utils/base/include/"
+            "//foundation/filemanagement/dfs_service/services/distributedfiledaemon/include/ipc/"
         ],
         "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/cloud_data:clouddata": [
             "//foundation/distributeddatamgr/data_share/interfaces/inner_api/provider/include/",
@@ -2714,12 +2352,7 @@
         "//foundation/filemanagement/dfs_service/services/clouddisk_database:clouddisk_database": [
             "//foundation/multimedia/media_library/frameworks/innerkitsimpl/media_library_helper/include/",
             "//foundation/multimedia/media_library/interfaces/inner_api/media_library_helper/include/",
-            "//foundation/multimedia/media_library/frameworks/utils/include/",
-            "//third_party/libfuse/include/"
-        ],
-        "//foundation/filemanagement/dfs_service/services/cloudfiledaemon:cloudfiledaemon": [
-            "//third_party/libfuse/include/",
-            "//third_party/libfuse/lib/"
+            "//foundation/multimedia/media_library/frameworks/utils/include/"
         ],
         "//foundation/filemanagement/dfs_service/services/cloudsyncservice:cloudsync_sa": [
             "//foundation/multimedia/media_library/frameworks/innerkitsimpl/media_library_helper/include/",
@@ -2737,12 +2370,8 @@
             "//foundation/multimedia/media_library/frameworks/innerkitsimpl/medialibrary_data_extension/include/"
         ],
         "//foundation/filemanagement/dfs_service/services/distributedfiledaemon:distributed_file_daemon_kit_inner": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/multimedia/media_library/frameworks/utils/include/",
             "//foundation/multimedia/media_library/interfaces/inner_api/media_library_helper/include/"
-        ],
-        "//foundation/filemanagement/dfs_service/services/distributedfiledaemon:libdistributedfiledaemon": [
-            "//third_party/json/include/"
         ],
         "//foundation/filemanagement/file_api/interfaces/kits/js:document": [
             "//foundation/arkui/napi/interfaces/kits/",
@@ -2750,13 +2379,11 @@
         ],
         "//foundation/filemanagement/file_api/interfaces/kits/js:file": [
             "//foundation/arkui/napi/interfaces/kits/",
-            "//third_party/node/src/",
-            "//third_party/bounds_checking_function/include/"
+            "//third_party/node/src/"
         ],
         "//foundation/filemanagement/file_api/interfaces/kits/js:fileio": [
             "//foundation/arkui/napi/interfaces/kits/",
             "//third_party/node/src/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/libuv/include/",
             "//third_party/openssl/include/"
         ],
@@ -2805,9 +2432,6 @@
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/bootanimation:bootanimation": [
-            "//third_party/cJSON/"
-        ],
         "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
@@ -2820,19 +2444,11 @@
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/"
         ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:color_space_object_convertor_source": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/color_manager:colorspacemanager_napi_source": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/effect_kit:effectkit": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
             "//third_party/skia/"
         ],
         "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/webgl:webgl_src": [
             "//third_party/node/src/",
-            "//commonlibrary/c_utils/base/include/",
             "//third_party/EGL/api/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
@@ -2857,30 +2473,25 @@
             "//third_party/skia/modules/skunicode/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text:rosen_text_txt": [
-            "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/engine/",
             "//third_party/flutter/txt/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos": [
             "//third_party/flutter/engine/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/txt/src/",
             "//third_party/skia/third_party/externals/harfbuzz/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/drawing_ndk:drawing_ndk_source_ohos_ng": [
             "//third_party/flutter/engine/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/txt/src/",
             "//third_party/skia/third_party/externals/harfbuzz/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_drawing": [
             "//third_party/flutter/engine/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/flutter/txt/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos": [
             "//foundation/arkui/ace_engine/frameworks/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/skia/include/core/",
             "//third_party/skia/include/private/",
             "//third_party/skia/src/core/",
@@ -2892,7 +2503,6 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos_ng": [
             "//foundation/arkui/ace_engine/frameworks/",
-            "//third_party/bounds_checking_function/include/",
             "//third_party/skia/include/core/",
             "//third_party/skia/include/private/",
             "//third_party/skia/src/core/",
@@ -2902,25 +2512,14 @@
             "//third_party/skia/third_party/externals/harfbuzz/src/",
             "//"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/effectChain:libeffectchain": [
-            "//third_party/cJSON/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/egl:libegl_effect": [
             "//third_party/EGL/api/"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/hyper_graphic_manager:libhyper_graphic_manager": [
-            "//third_party/libxml2/include/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:librender_service": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
             "//foundation/barrierfree/accessibility/interfaces/innerkits/acfwk/include/"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/render_service:render_service": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_base/src/platform/ohos:rosen_ohos_sources": [
-            "//commonlibrary/c_utils/base/include/",
             "//utils/system/safwk/native/include/",
             "//third_party/openssl/include/",
             "//third_party/skia/"
@@ -2987,8 +2586,7 @@
             "//foundation/window/window_manager/interfaces/innerkits/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/texgine:libtexgine_source": [
-            "//third_party/skia/third_party/externals/harfbuzz/src/",
-            "//third_party/bounds_checking_function/include/"
+            "//third_party/skia/third_party/externals/harfbuzz/src/"
         ],
         "//foundation/graphic/graphic_2d/rosen/samples/2d_graphics:drawing_engine_sample": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
@@ -2996,21 +2594,11 @@
         "//foundation/graphic/graphic_2d/rosen/samples/2d_graphics:drawing_sample_rs": [
             "//foundation/window/window_manager/interfaces/innerkits/wm/"
         ],
-        "//foundation/graphic/graphic_2d/utils/buffer_handle:buffer_handle": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
-        ],
         "//foundation/graphic/graphic_2d/utils/color_manager:color_manager_source": [
             "//third_party/skia/"
         ],
         "//foundation/graphic/graphic_2d/utils/socketpair:socketpair": [
-            "//commonlibrary/c_utils/base/include/",
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/message_parcel.h/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
-        ],
-        "//foundation/graphic/graphic_2d/utils/sync_fence:sync_fence": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/"
+            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/message_parcel.h/"
         ],
         "//foundation/graphic/graphic_3d/3d_widget_adapter:widget_adapter_source": [
             "//foundation/graphic/graphic_2d/rosen/modules/"
@@ -3103,8 +2691,6 @@
         ],
         "//foundation/multimedia/av_codec/services/engine/codec/audio:av_codec_audio_ffmpeg_codec": [
             "//foundation/multimedia/media_foundation/interface/inner_api/",
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include/",
             "//third_party/ffmpeg/"
         ],
         "//foundation/multimedia/av_codec/services/engine/codec/video/hcodec:hcodec": [
@@ -3117,7 +2703,6 @@
             "//foundation/multimedia/media_foundation/interface/inner_api/",
             "//foundation/multimedia/media_foundation/src/buffer/avbuffer/include/",
             "//base/startup/init/interfaces/innerkits/include/syspara/",
-            "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include/",
             "//third_party/ffmpeg/"
         ],
         "//foundation/multimedia/av_codec/services/engine/codeclist:av_codec_engine_codeclist": [
@@ -3129,7 +2714,6 @@
             "//foundation/multimedia/media_foundation/interface/inner_api/",
             "//foundation/multimedia/media_foundation/src/buffer/avbuffer/include/",
             "//foundation/multimedia/media_foundation/interface/kits/c/",
-            "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent/include/",
             "//third_party/ffmpeg/"
         ],
         "//foundation/multimedia/av_codec/services/engine/plugin/plugins/demuxer/ffmpeg_demuxer:av_codec_plugin_FFmpegDemuxer": [
@@ -3147,7 +2731,6 @@
         "//foundation/multimedia/av_codec/services/media_engine/modules:av_codec_media_engine_modules": [
             "//foundation/multimedia/media_foundation/interface/inner_api/",
             "//foundation/multimedia/media_foundation/src/",
-            "//commonlibrary/c_utils/base/include/",
             "//third_party/ffmpeg/"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/plugins/ffmpeg_adapter/audio_decoder/g711mu:media_plugin_G711muAudioDecoder": [
@@ -3362,18 +2945,6 @@
         ],
         "//foundation/systemabilitymgr/safwk/test/mock/common/audio_ability:test_audio_ability": [
             "//utils/system/safwk/native/include/"
-        ],
-        "//foundation/systemabilitymgr/samgr/interfaces/innerkits/common:samgr_common": [
-            "//third_party/json/include/",
-            "//third_party/json/single_include/"
-        ],
-        "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy": [
-            "//third_party/json/include/",
-            "//third_party/json/single_include/"
-        ],
-        "//foundation/systemabilitymgr/samgr/services/samgr/native/test/unittest:samgr_proxy_tdd": [
-            "//third_party/json/include/",
-            "//third_party/json/single_include/"
         ],
         "//foundation/window/window_manager/dm:libdm": [
             "//foundation/graphic/graphic_2d/utils/color_manager/export/",
@@ -3769,57 +3340,49 @@
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:audioparsers_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:autodetect_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:id3demux_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:isomp4_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:matroska_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:multifile_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstplugins_good:wavparse_source": [
             "//third_party/glib/glib/",
             "//third_party/glib/",
             "//third_party/glib/gmodule/",
-            "//third_party/zlib/",
-            "//third_party/bzip2/"
+            "//third_party/zlib/"
         ],
         "//third_party/gstreamer/gstreamer:gst_inspect_source": [
             "//third_party/glib/glib/",
@@ -3927,47 +3490,22 @@
         ],
         "//third_party/pulseaudio/ohosbuild/src/pulse:pulse-mainloop-glib": [
             "//third_party/glib/glib/",
-            "//third_party/glib/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//third_party/glib/"
         ],
         "//third_party/pulseaudio/ohosbuild/src/pulse:pulse-simple": [
             "//third_party/glib/glib/",
-            "//third_party/glib/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//third_party/glib/"
         ],
         "//third_party/pulseaudio/ohosbuild/src/pulse:pulse_sources": [
             "//third_party/glib/glib/",
-            "//third_party/glib/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/pulsecore:cli": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/pulsecore:protocol-cli": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/pulsecore:protocol-native": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//third_party/glib/"
         ],
         "//third_party/pulseaudio/ohosbuild/src/pulsecore:pulsecore_sources": [
             "//third_party/glib/glib/",
-            "//third_party/glib/",
-            "//third_party/libsnd/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/utils:pacat": [
-            "//third_party/libsnd/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/utils:pacmd": [
-            "//third_party/libsnd/include/"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/utils:pactl": [
-            "//third_party/libsnd/include/"
+            "//third_party/glib/"
         ],
         "//third_party/pulseaudio/ohosbuild/src:pulsecommon_sources": [
-            "//third_party/libsnd/include/",
-            "//base/startup/init/interfaces/innerkits/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//base/startup/init/interfaces/innerkits/include/"
         ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
@@ -4062,11 +3600,7 @@
         "//third_party/abseil-cpp:absl_time",
         "//third_party/astc-encoder:astc_encoder_shared",
         "//third_party/bounds_checking_function:libsec_public_config",
-        "//third_party/bounds_checking_function:libsec_static",
-        "//third_party/bzip2:libbz2",
         "//third_party/cJSON:cJSON_config",
-        "//third_party/cJSON:cjson",
-        "//third_party/cJSON:cjson_static",
         "//third_party/css-what:css_what_sources",
         "//third_party/cups-filters:third_party_cupsfilters",
         "//third_party/cups:cups",
@@ -4098,18 +3632,10 @@
         "//third_party/gstreamer/gstreamer:gstbase",
         "//third_party/gstreamer/gstreamer:gstreamer",
         "//third_party/gstreamer/gstreamer:gstreamer_packages",
-        "//third_party/icu/icu4c/source/common:icu_font",
         "//third_party/icu/icu4c:icu_config",
-        "//third_party/icu/icu4c:shared_icui18n",
-        "//third_party/icu/icu4c:shared_icuuc",
-        "//third_party/icu/icu4c:static_icui18n",
-        "//third_party/icu/icu4c:static_icuuc",
         "//third_party/jsframework:ark_build",
         "//third_party/jsframework:gen_snapshot",
-        "//third_party/json:nlohmann_json_static",
         "//third_party/jsoncpp:jsoncpp_config",
-        "//third_party/jsoncpp:jsoncpp_public_config",
-        "//third_party/jsoncpp:jsoncpp_static",
         "//third_party/libbpf:libbpf",
         "//third_party/libinput/patch:apply_patch",
         "//third_party/libphonenumber/cpp:geocoding",
@@ -4117,11 +3643,9 @@
         "//third_party/libpng:libpng",
         "//third_party/libpng:libpng_static",
         "//third_party/libpng:png_static",
-        "//third_party/libsnd:sndfile",
         "//third_party/libusb:libusb",
         "//third_party/libwebsockets:websockets",
         "//third_party/libxml2:libxml2_config",
-        "//third_party/libxml2:static_libxml2",
         "//third_party/libxml2:xml2",
         "//third_party/mksh:sh",
         "//third_party/mtdev/patch:apply_patch",
@@ -4163,9 +3687,6 @@
         "//arkcompiler/ets_frontend/arkguard:build_arkguard": [
             "//third_party/typescript:build_typescript"
         ],
-        "//arkcompiler/ets_frontend/es2panda:es2panda_lib": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
         "//arkcompiler/ets_frontend/es2panda:gen_isa_headers": [
             "//arkcompiler/runtime_core/isa:isa_combine"
         ],
@@ -4183,8 +3704,6 @@
             "//arkcompiler/runtime_core/static_core/isa:isa_combine"
         ],
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_frontend_static": [
-            "//third_party/icu/icu4c:static_icui18n",
-            "//third_party/icu/icu4c:static_icuuc",
             "//arkcompiler/runtime_core/static_core/assembler:libarktsassembler_package",
             "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_package"
         ],
@@ -4194,18 +3713,11 @@
         "//arkcompiler/ets_frontend/merge_abc:arkcompiler_generate_proto": [
             "//third_party/protobuf:protoc"
         ],
-        "//arkcompiler/ets_frontend/merge_abc:merge_abc": [
-            "//third_party/icu/icu4c:static_icuuc"
-        ],
-        
         "//arkcompiler/runtime_core/static_core/plugins/ets:ark_packages": [
             "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
         ],
         "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib": [
             "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda"
-        ],
-        "//base/msdp/device_status/services/interaction/drag:interaction_drag": [
-            "//third_party/libxml2:xml2"
         ],
         "//base/print/print_fwk/frameworks/kits/extension:print_extension_framework": [
             "//foundation/communication/ipc/interfaces/kits/js/napi:ipc_js"
@@ -4315,18 +3827,6 @@
         "//drivers/external_device_manager/test/unittest/driver_extension_context_test:driver_extension_context_test_resource_copy": [
             "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock",
             "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock"
-        ],
-        "//drivers/peripheral/power/interfaces/hdi_service:libpower_interface_service_1.1": [
-            "//third_party/libxml2:xml2"
-        ],
-        "//drivers/peripheral/thermal/interfaces/hdi_service:libthermal_interface_service_1.1": [
-            "//third_party/libxml2:xml2"
-        ],
-        "//drivers/peripheral/thermal/test/unittest:hdi_unittest_thermal": [
-            "//third_party/libxml2:xml2"
-        ],
-        "//drivers/peripheral/thermal/test/unittest:hdi_unittest_thermal_resource_copy": [
-            "//third_party/libxml2:xml2"
         ],
         "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
             "//third_party/glib:glib_packages"
@@ -5029,7 +4529,6 @@
             "//arkcompiler/runtime_core/isa:isa_combine"
         ],
         "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
@@ -5045,7 +4544,6 @@
             "//arkcompiler/runtime_core/static_core/isa:isa_combine"
         ],
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
@@ -5054,7 +4552,6 @@
             "//third_party/icu/icu4c:static_icuuc"
         ],
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_public_frontend_static": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
@@ -5083,32 +4580,14 @@
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icuuc"
         ],
-        "//base/customization/enterprise_device_management/common/native:edm_commom": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//base/customization/enterprise_device_management/interfaces/inner_api/plugin_kits:plugin_kits": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/customization/enterprise_device_management/services/edm:edmservice": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson",
             "//third_party/zlib:shared_libz"
         ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr_linux": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson_static",
             "//third_party/zlib:shared_libz"
         ],
         "//base/global/resource_management/frameworks/resmgr:global_resmgr_win": [
-            "//third_party/cJSON:cjson_static",
             "//third_party/zlib:libz"
-        ],
-        "//base/global/resource_management/frameworks/resmgr:librawfile": [
-            "//third_party/cJSON:cjson_static"
         ],
         "//base/global/system_resources/systemres:systemres_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -5122,84 +4601,22 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//base/hiviewdfx/faultloggerd/common/cutil:dfx_cutil": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/example:dumpcatcherdemo": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_src": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/faultloggerd/frameworks/unwinder:dfx_unwinder_static_src": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/jsoncpp:jsoncpp_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:backtrace_local": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/jsoncpp:jsoncpp_static"
-        ],
-        "//base/hiviewdfx/faultloggerd/interfaces/innerkits/backtrace:libbacktrace_local": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//base/hiviewdfx/hiview/core/param_update:hiview_param_update": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:ssl_source"
         ],
-        "//base/hiviewdfx/hiview/core:hiview_core": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
-        ],
-        "//base/hiviewdfx/hiview/plugins/event_store:sys_event_store": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
-        ],
-        "//base/hiviewdfx/hiview/plugins/eventlogger:eventlogger": [
-            "//third_party/libxml2:xml2"
-        ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/service/sanitizer_collector/gwp_asan:libasan_logger": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/zlib:libz"
         ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/service:faultlogger_service": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/zlib:libz"
         ],
         "//base/hiviewdfx/hiview/plugins/faultlogger/service:faultlogger_service_fuzz_src": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/zlib:libz"
-        ],
-        "//base/hiviewdfx/hiview/plugins/sys_dispatcher:sys_dispatcher": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
-        ],
-        "//base/hiviewdfx/hiview/plugins/sysevent_source:sysevent_source": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
-        ],
-        "//base/hiviewdfx/hiview/plugins/usage_event_report/service:usage_report": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/plugins/usage_event_report:usage_event_report": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview/service:hiview_service": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
         ],
         "//base/hiviewdfx/hiview/utility/common_utils:hiview_reliability_common_utils": [
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/hiviewdfx/hiview/utility/smart_parser:smart_parser": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/hiviewdfx/hiview:hiview": [
-            "//third_party/jsoncpp:jsoncpp_public_config"
         ],
         "//base/inputmethod/imf/services/adapter/settings_data_provider:settings_data_static": [
             "//third_party/cJSON:cjson"
@@ -5225,29 +4642,11 @@
         "//base/inputmethod/imf/test/unittest/cpp_test/common:inputmethod_tdd_util": [
             "//third_party/cJSON:cjson"
         ],
-        "//base/location/frameworks/native:locator_sdk": [
-            "//third_party/libuv:uv"
-        ],
-        "//base/msdp/device_status/frameworks/js/napi/interaction/drag:draginteraction": [
-            "//third_party/libuv:uv"
-        ],
         "//base/msdp/device_status/intention/services/device_manager:intention_device_manager": [
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//base/msdp/device_status/libs:devicestatus_algo": [
-            "//third_party/cJSON:cjson_static",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//base/msdp/device_status/libs:devicestatus_mock": [
-            "//third_party/cJSON:cjson_static"
-        ],
         "//base/msdp/device_status/services/interaction/coordination:coordination": [
-            "//third_party/cJSON:cjson",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/msdp/device_status/services/interaction/drag:interaction_drag": [
-            "//third_party/cJSON:cjson",
-            "//third_party/libxml2:xml2"
         ],
         "//base/notification/distributed_notification_service/services/ans:libans": [
             "//third_party/icu/icu4c:shared_icuuc",
@@ -5284,18 +4683,13 @@
             "//third_party/openssl:libssl_shared"
         ],
         "//base/request/request/frameworks/js/napi:request": [
-            "//third_party/libuv:uv",
             "//third_party/openssl:libssl_shared"
         ],
         "//base/request/request/frameworks/js/napi:request_static": [
-            "//third_party/libuv:uv",
             "//third_party/openssl:libssl_shared"
         ],
         "//base/security/appverify/interfaces/innerkits/appverify:libhapverify": [
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//base/telephony/call_manager/frameworks/js:call": [
-            "//third_party/libuv:uv"
         ],
         "//base/telephony/call_manager:tel_call_manager": [
             "//third_party/cJSON:cjson",
@@ -5326,7 +4720,6 @@
             "//third_party/glib:glib_packages"
         ],
         "//base/telephony/core_service:tel_core_service": [
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/libphonenumber/cpp:phonenumber_standard",
             "//third_party/libpng:libpng",
             "//third_party/libxml2:libxml2",
@@ -5347,9 +4740,6 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//base/telephony/telephony_data:tel_telephony_data": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//base/update/sys_installer/frameworks/actions/verify_action:libverifyaction": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
@@ -5358,12 +4748,7 @@
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
         ],
-        "//base/update/sys_installer/frameworks/ipc_server:sys_installer": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson"
-        ],
         "//base/update/sys_installer/interfaces/innerkits/ipc_client:libsysinstaller_shared": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/zlib:shared_libz"
         ],
         "//base/update/updater/interfaces/kits/diff_patch:libdiff_patch": [
@@ -5373,128 +4758,69 @@
             "//third_party/openssl:libcrypto_shared"
         ],
         "//base/update/updater/interfaces/kits/packages:libpackageExt": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/interfaces/kits/packages:libpackage_shared": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:shared_libz"
         ],
         "//base/update/updater/interfaces/kits/updaterkits:libupdater_shared": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:shared_libz"
         ],
         "//base/update/updater/services/applypatch:libapplypatch": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/bzip2:libbz2",
             "//third_party/openssl:libcrypto_static"
         ],
         "//base/update/updater/services/diffpatch/diff:libdiff": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/bzip2:libbz2",
             "//third_party/openssl:libcrypto_static"
         ],
         "//base/update/updater/services/diffpatch/patch:libpatch": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/bzip2:libbz2",
             "//third_party/openssl:libcrypto_static",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/diffpatch:diff": [
-            "//third_party/bzip2:libbz2",
             "//third_party/openssl:libcrypto_static",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/flashd:flashd_deamon": [
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//base/update/updater/services/flashd:libflashd": [
-            "//third_party/bzip2:libbz2",
-            "//third_party/cJSON:cjson",
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services/flow_update/update_bin:libBinFlowUpdate": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_static"
         ],
-        "//base/update/updater/services/fs_manager:libfsmanager": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/updater/services/log:libupdaterlog": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/updater/services/log:libupdaterlog_shared": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//base/update/updater/services/package:libupdaterpackage": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_static"
         ],
         "//base/update/updater/services/ptable_parse:libptableparse": [
-            "//third_party/bzip2:libbz2",
-            "//third_party/cJSON:cjson",
             "//third_party/zlib:libz"
         ],
-        "//base/update/updater/services/script:libupdaterscript": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/updater/services/sdcard_update:libsdupdate": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
         "//base/update/updater/services/ui:libui": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson",
-            "//third_party/libdrm:libdrm",
             "//third_party/libpng:libpng"
         ],
         "//base/update/updater/services/updater_binary:libupdater_binary": [
-            "//third_party/bzip2:libbz2",
-            "//third_party/cJSON:cjson_static",
             "//third_party/openssl:libcrypto_static",
             "//third_party/openssl:libssl_static",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services:libupdater": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/bzip2:libbz2",
-            "//third_party/cJSON:cjson",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
             "//third_party/zlib:libz"
         ],
         "//base/update/updater/services:libupdater_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/bzip2:libbz2",
-            "//third_party/cJSON:cjson",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared",
-            "//third_party/zlib:libz",
-            "//third_party/libdrm:libdrm"
-        ],
-        "//base/update/updater/utils:libutils": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson"
-        ],
-        "//base/update/updater/utils:write_updater": [
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//base/update/updateservice/interfaces/inner_api/engine:updateservicekits": [
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/zlib:libz"
         ],
         "//base/update/updateservice/services/engine:updateservice": [
-            "//third_party/cJSON:cjson",
-            "//third_party/libxml2:libxml2",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
         ],
@@ -5510,24 +4836,6 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//base/usb/usb_manager/interfaces/innerkits:usbsrv_client": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/cJSON:cjson"
-        ],
-        "//base/usb/usb_manager/interfaces/kits/js/napi:usb": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/cJSON:cjson"
-        ],
-        "//base/usb/usb_manager/interfaces/kits/js/napi:usbmanager": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/cJSON:cjson"
-        ],
-        "//base/usb/usb_manager/services:usbservice": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/cJSON:cjson"
-        ],
         "//base/web/webview/interfaces/kits/napi/protos:proto_gen": [
             "//third_party/protobuf:protoc"
         ],
@@ -5535,7 +4843,6 @@
             "//third_party/protobuf:protobuf_lite"
         ],
         "//commonlibrary/ets_utils/js_api_module/buffer:buffer_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_api_module/convertxml:convertxml_static": [
@@ -5548,18 +4855,10 @@
         ],
         "//commonlibrary/ets_utils/js_api_module/url:url_static": [
             "//third_party/icu/icu4c:icu_config",
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_api_module/xml:xml_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/taskpool:taskpool": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//commonlibrary/ets_utils/js_concurrent_module/taskpool:taskpool_static": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//commonlibrary/ets_utils/js_concurrent_module/worker:worker_static": [
             "//foundation/arkui/napi:ace_napi"
@@ -5571,7 +4870,6 @@
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_sys_module/process:process_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_sys_module/timer:timer_static": [
@@ -5581,15 +4879,13 @@
         "//commonlibrary/ets_utils/js_util_module/json:json_static": [
             "//third_party/icu/icu4c:icu_config",
             "//foundation/arkui/napi:ace_napi_config",
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//commonlibrary/ets_utils/js_util_module/util:util_static": [
             "//third_party/icu/icu4c:icu_config",
             "//foundation/arkui/napi:ace_napi_config",
             "//third_party/icu/icu4c:shared_icuuc",
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/bounds_checking_function:libsec_shared"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//commonlibrary/rust/ylong_http/ylong_http_client:ylong_http_client_inner": [
             "//third_party/openssl:libcrypto_shared",
@@ -5602,109 +4898,74 @@
             "//developtools/ace_ets2bundle:ets_loader_ark_hap"
         ],
         "//developtools/global_resource_tool:restool": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/jsoncpp:jsoncpp_static",
-	        "//third_party/cJSON:cjson_static",
             "//third_party/libpng:libpng_static"
         ],
         "//developtools/hdc/test:hdc_daemon": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_static"
         ],
         "//developtools/hdc/test:hdc_daemon_platform": [
             "//third_party/googletest:gtest_config",
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_static"
         ],
         "//developtools/hdc/test:hdc_host": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_static",
             "//third_party/libusb:libusb"
         ],
         "//developtools/hdc:hdc": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/libusb:libusb",
-            "//third_party/libuv:uv_static",
             "//third_party/openssl:libcrypto_static"
         ],
-        "//developtools/hdc:hdc_register": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/libuv:uv"
-        ],
         "//developtools/hdc:hdcd_system_source": [
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/hdc:hdcd_updater_source": [
-            "//third_party/libuv:uv",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/hiperf:hiperf_host_build_proto": [
             "//third_party/protobuf:protoc"
         ],
         "//developtools/hiperf:hiperf_platform_common": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//commonlibrary/c_utils/base:utils_config",
             "//third_party/googletest:gtest_config",
-            "//third_party/zlib:libz",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/zlib:libz"
         ],
         "//developtools/hiperf:hiperf_platform_linux": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//commonlibrary/c_utils/base:utils_config",
             "//third_party/googletest:gtest_config",
-            "//third_party/zlib:libz",
-            "//third_party/bounds_checking_function:libsec_shared"
+            "//third_party/zlib:libz"
         ],
         "//developtools/hiperf:proto_file_cpp": [
             "//third_party/protobuf:protobuf_lite_static"
         ],
         "//developtools/hiperf:support_elf": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//commonlibrary/c_utils/base:utils_config",
             "//third_party/googletest:gtest_config"
         ],
         "//developtools/hiperf:support_libunwind": [
-            "//third_party/bounds_checking_function:libsec_public_config",
-            "//commonlibrary/c_utils/base:utils_config",
             "//third_party/googletest:gtest_config"
         ],
         "//developtools/hiperf:support_protobuf": [
-            "//third_party/bounds_checking_function:libsec_public_config",
             "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//developtools/profiler/device/base:hiprofiler_base": [
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/googletest:gtest_config"
         ],
         "//developtools/profiler/device/cmds:hiprofiler_cmd": [
             "//third_party/protobuf:protobuf",
             "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/api:plugins_sources": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/profiler/device/plugins/arkts_plugin:arkts_source": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/profiler/device/plugins/cpu_plugin:cpudataplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/cpu_plugin:cpudataplugintest": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/diskio_plugin:diskiodataplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/diskio_plugin:diskiodataplugintest": [
             "//third_party/protobuf:protobuf_lite"
@@ -5713,74 +4974,55 @@
             "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/ftrace_plugin:ftrace_plugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/gpu_plugin:gpudataplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/gpu_plugin:gpudataplugintest": [
             "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/hidump_plugin:hidumpplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/hilog_plugin:hilogplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/hiperf_plugin:hiperfplugin_source": [
             "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//developtools/profiler/device/plugins/hisysevent_plugin:hisyseventplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/memory_plugin:memdataplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/native_daemon:native_daemon": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/openssl:libcrypto_shared",
             "//third_party/zlib:libz"
         ],
         "//developtools/profiler/device/plugins/native_hook:native_hook_source": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/zlib:libz"
         ],
         "//developtools/profiler/device/plugins/network_plugin:networkplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/process_plugin:processplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/sample_plugin:sampleplugin": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/stream_plugin:streamplugin_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//developtools/profiler/device/plugins/xpower_plugin:xpowerdecoder": [
-            "//third_party/bounds_checking_function:libsec_static",
-            "//third_party/cJSON:cjson_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/plugins/xpower_plugin:xpowerplugin": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/device/services/ipc:ipc": [
             "//third_party/protobuf:protobuf_lite_static",
-            "//third_party/protobuf:protobuf_static",
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_static"
         ],
         "//developtools/profiler/device/services/ipc:protoc_gen_ipc": [
             "//third_party/protobuf:protobuf_lite_static",
@@ -5793,14 +5035,9 @@
             "//third_party/protobuf:protoc_static_lib"
         ],
         "//developtools/profiler/device/services/shared_memory:shared_memory_source": [
-            "//third_party/protobuf:protobuf_lite",
-            "//third_party/bounds_checking_function:libsec_static"
-        ],
-        "//developtools/profiler/hidebug/frameworks/native:libhidebug_init_source": [
-            "//third_party/bounds_checking_function:libsec_static"
+            "//third_party/protobuf:protobuf_lite"
         ],
         "//developtools/profiler/hiebpf:hiebpf_source_common": [
-            "//third_party/bounds_checking_function:libsec_static",
             "//third_party/libbpf:libbpf"
         ],
         "//developtools/profiler/host/smartperf/client/client_command:SP_daemon": [
@@ -5824,9 +5061,6 @@
         ],
         "//developtools/profiler/proto_encoder/test:proto_gen_source": [
             "//third_party/protobuf:protoc"
-        ],
-        "//developtools/profiler/proto_encoder:proto_encoder_source": [
-            "//third_party/bounds_checking_function:libsec_static"
         ],
         "//developtools/profiler/protos/services:all_type_gen": [
             "//third_party/grpc:grpc_cpp_plugin",
@@ -6099,52 +5333,17 @@
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:generate_source": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
-        "//domains/advertising/advertising/common:advertising_common": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//domains/advertising/advertising/frameworks/js/napi/ads:advertising": [
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/libuv:uv_static"
         ],
         "//domains/advertising/oaid/interfaces/kits/js/napi/oaid:oaid": [
             "//third_party/libuv:uv_static"
         ],
         "//domains/advertising/oaid/services:oaid_service": [
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//drivers/external_device_manager/services/native/driver_extension_manager/src/bus_extension/usb:driver_extension_usb_bus": [
-            "//third_party/jsoncpp:jsoncpp",
-	        "//third_party/cJSON:cjson"
-        ],
-        "//drivers/external_device_manager/services/native/driver_extension_manager/src/driver_controller:driver_extension_controller": [
-            "//third_party/jsoncpp:jsoncpp",
-	        "//third_party/cJSON:cjson"
-        ],
-        "//drivers/external_device_manager/services/native/driver_extension_manager/src/drivers_pkg_manager:drivers_pkg_manager": [
-            "//third_party/jsoncpp:jsoncpp",
-	        "//third_party/cJSON:cjson"
-        ],
-        "//drivers/peripheral/audio/effect/model:effect_model_service_1.0": [
-            "//third_party/cJSON:cjson"
-        ],
-        "//drivers/peripheral/audio/hdi_service/primary:audio_primary_driver": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/audio/test/audio_utils/audio_mixer:audio_mixer": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/battery/interfaces/hdi_service:libbattery_driver": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//drivers/peripheral/battery/interfaces/hdi_service:libbattery_interface_service_2.0": [
-            "//third_party/jsoncpp:jsoncpp"
         ],
         "//drivers/peripheral/bluetooth/audio/hal/hdi_passthrough:hdi_audio_bluetooth": [
             "//foundation/communication/bluetooth_service/services/bluetooth/ipc:btipc_static"
-        ],
-        "//drivers/peripheral/camera/vdi_base/common/pipeline_core:peripheral_camera_pipeline_core": [
-            "//third_party/libjpeg-turbo:turbojpeg_static"
         ],
         "//drivers/peripheral/camera/vdi_base/common/utils:peripheral_camera_utils": [
             "//third_party/libexif:libexif"
@@ -6162,35 +5361,13 @@
             "//third_party/cJSON:cjson",
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//drivers/peripheral/codec/test/demo/adapter:codec_hdi_adapter_decode": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/codec/test/demo/adapter:codec_hdi_adapter_encode": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/codec/test/demo/v2.0:codec_hdi_omx_decode": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/codec/test/demo/v2.0:codec_hdi_omx_encode": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//drivers/peripheral/display/buffer/vdi_base:display_buffer_vdi_impl_default": [
-            "//third_party/libdrm:libdrm"
-        ],
-        "//drivers/peripheral/display/composer/vdi_base:display_composer_vdi_impl_default": [
-            "//third_party/libdrm:libdrm"
-        ],
         "//drivers/peripheral/display/hdi_service/gralloc/client:libhdi_display_gralloc_client": [
             "//drivers/interface/display/v1_0:libdisplay_gralloc"
         ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0"
         ],
-        "//drivers/peripheral/power/interfaces/hdi_service:libpower_interface_service_1.1": [
-            "//third_party/libxml2:xml2"
-        ],
         "//drivers/peripheral/thermal/interfaces/hdi_service:libthermal_interface_service_1.1": [
-            "//third_party/libxml2:xml2",
             "//third_party/zlib:libz"
         ],
         "//drivers/peripheral/user_auth/hdi_service:libuser_auth_interface_service_1.3": [
@@ -6229,35 +5406,11 @@
         "//foundation/CastEngine/castengine_wifi_display/services:sharing_service": [
             "//third_party/cJSON:cjson_static"
         ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility:featureability": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common:napi_common": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/js_dialog_session:dialogsession_napi": [
-            "//third_party/json:nlohmann_json_static",
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//foundation/ability/ability_runtime/frameworks/js/napi/particleAbility:particleability": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/libuv:uv"
-        ],
         "//foundation/ability/ability_runtime/frameworks/simulator/ability_simulator:gen_abc_js_mock": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
         ],
-        "//foundation/ability/ability_runtime/interfaces/inner_api/ability_manager:ability_manager": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/ability/ability_runtime/interfaces/inner_api/runtime:runtime": [
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/zlib:shared_libz"
-        ],
-        "//foundation/ability/ability_runtime/interfaces/inner_api/wantagent:wantagent_innerkits": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/ability/ability_runtime/services/abilitymgr:abilityms": [
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//foundation/ability/ability_runtime/services/dialog_ui/ams_system_dialog:ams_system_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -6271,13 +5424,9 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/appmgr_test_service:appmgr_test_service": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/aakit:aakit_mock": [
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk:system_ability_fwk",
-            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-            "//third_party/jsoncpp:jsoncpp"
+            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy"
         ],
         "//foundation/ability/ability_runtime/test/mock/services_abilitymgr_test/libs/appexecfwk_core:appexecfwk_appmgr_mock": [
             "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk:system_ability_fwk",
@@ -6312,11 +5461,7 @@
         ],
         "//foundation/ability/ability_runtime/test/unittest:abilityms_test_source": [
             "//foundation/arkui/ace_engine/interfaces/inner_api/ui_service_manager:ui_service_mgr",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/libjpeg-turbo:turbojpeg_static"
-        ],
-        "//foundation/ability/dmsfwk/services/dtbschedmgr:distributedschedsvr": [
-            "//third_party/cJSON:cjson"
         ],
         "//foundation/ability/form_fwk/services/form_render_service:formrender_service_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -6329,9 +5474,6 @@
             "//developtools/ace_js2bundle:ace_loader_ark_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/ability/form_fwk:form_manager": [
-            "//third_party/jsoncpp:jsoncpp"
         ],
         "//foundation/arkui/ace_engine/frameworks/bridge/declarative_frontend/engine/jsi:gen_js_mock_system_plugin_abc": [
             "//ide/tools/previewer/automock:gen_snapshot_jsmock"
@@ -6358,9 +5500,6 @@
         "//foundation/bundlemanager/bundle_framework/services/bundlemgr:parser_common": [
             "//third_party/zlib:shared_libz"
         ],
-        "//foundation/bundlemanager/bundle_tool/frameworks:tools_test_bm_source_set": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/communication/bluetooth_service/services/bluetooth/hardware:bluetooth_hdi_adapter": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
@@ -6377,49 +5516,15 @@
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/communication/dsoftbus/adapter:softbus_adapter": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/fillp:FillpSo.open": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_congestion:nstackx_congestion.open": [
-            "//third_party/bounds_checking_function:libsec_shared"
         ],
         "//foundation/communication/dsoftbus/components/nstackx/nstackx_core/dfile:nstackx_dfile.open": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_ctrl:nstackx_ctrl": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/communication/dsoftbus/components/nstackx/nstackx_util:nstackx_util.open": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/anonymize:softbus_dfx_anonymizer": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/event:softbus_dfx_event": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/hidumper_adapter:softbus_dfx_dump": [
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/communication/dsoftbus/core/common/dfx/log:softbus_dfx_log": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/communication/dsoftbus/core/common:softbus_utils": [
-            "//third_party/cJSON:cjson"
-        ],
         "//foundation/communication/dsoftbus/core/frame:softbus_server": [
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/bounds_checking_function:libsec_shared",
-            "//third_party/cJSON:cjson"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/communication/dsoftbus/sdk:softbus_client": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/communication/dsoftbus/tests/sdk/common:softbus_access_token_test": [
@@ -6428,14 +5533,7 @@
             "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc"
         ],
         "//foundation/communication/dsoftbus/tests/sdk/frame/fuzztest/softbusclientstub_fuzzer:softbus_client_static": [
-            "//third_party/bounds_checking_function:libsec_shared",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_napi_common:ipc_napi": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/communication/ipc/interfaces/kits/js/napi:rpc": [
-            "//third_party/libuv:uv"
         ],
         "//foundation/communication/ipc/ipc/test/auxiliary/native:ipc_client_test": [
             "//base/security/access_token/interfaces/innerkits/nativetoken:libnativetoken",
@@ -6490,48 +5588,17 @@
             "//third_party/libwebsockets:websockets",
             "//third_party/openssl:libssl_shared"
         ],
-        "//foundation/communication/netstack/interfaces/innerkits/http_client:http_client": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/communication/netstack/interfaces/innerkits/net_ssl:net_ssl": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
         ],
         "//foundation/communication/netstack/interfaces/innerkits/websocket_client:websocket_client": [
             "//third_party/libwebsockets:websockets",
-            "//third_party/openssl:libssl_shared",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/openssl:libssl_shared"
         ],
         "//foundation/communication/netstack/interfaces/kits/c/net_ssl:net_ssl_ndk": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/openssl:libssl_shared"
-        ],
-        "//foundation/communication/netstack/utils/napi_utils:napi_utils": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//foundation/communication/netstack/utils/napi_utils:napi_utils_static": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//foundation/communication/wifi/wifi/utils:wifi_utils": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
-        "//foundation/deviceprofile/device_info_manager/common:distributed_device_profile_common": [
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/deviceprofile/device_info_manager/services/core:distributed_device_profile_svr": [
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/distributeddatamgr/data_object/interfaces/innerkits:distributeddataobject_impl": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/distributeddatamgr/data_object/interfaces/innerkits:distributeddataobject_static": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/distributeddatamgr/data_object/interfaces/jskits:distributeddataobject": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/distributeddatamgr/data_share/frameworks/js/napi/dataShare:datashare": [
-            "//third_party/libuv:uv"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/adapter/dfx:distributeddata_dfx_static": [
             "//third_party/openssl:libcrypto_shared"
@@ -6539,22 +5606,9 @@
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/framework:distributeddatasvcfwk": [
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/gaussdb_rd:gaussdb_rd": [
-            "//third_party/cJSON:cJSON_config",
-            "//third_party/cJSON:cjson"
-        ],
         "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb:distributeddb": [
-            "//third_party/jsoncpp:jsoncpp_config",
             "//third_party/zlib:shared_libz",
-            "//third_party/jsoncpp:jsoncpp",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/framework/framework:pasteboard_framework": [
-            "//third_party/cJSON:cJSON_config",
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits:pasteboard_napi": [
-            "//third_party/libuv:uv"
         ],
         "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
@@ -6568,11 +5622,6 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//foundation/distributeddatamgr/pasteboard/services:pasteboard_service": [
-            "//third_party/cJSON:cJSON_config",
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/cJSON:cjson"
-        ],
         "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb:native_rdb": [
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc",
@@ -6582,10 +5631,6 @@
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/sqlite:sqlite"
-        ],
-        "//foundation/distributeddatamgr/udmf/interfaces/innerkits:udmf_client": [
-            "//third_party/cJSON:cJSON_config",
-            "//third_party/cJSON:cjson"
         ],
         "//foundation/distributeddatamgr/udmf/interfaces/jskits:udmf_data_napi": [
             "//third_party/bounds_checking_function:libsec_shared"
@@ -6607,15 +5652,6 @@
             "//developtools/ace_js2bundle:ace_loader_ark_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/distributedhardware/device_manager/radar:devicemanagerradar": [
-            "//third_party/cJSON:cjson"
-        ],
-        "//foundation/distributedhardware/device_manager/services/service:devicemanagerservice": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/distributedhardware/device_manager/utils:devicemanagerutils": [
-            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/distributedhardware/distributed_hardware_fwk/application:DHardware_UI": [
             "//developtools/packing_tool:packing_tool",
@@ -6641,18 +5677,9 @@
         "//foundation/filemanagement/app_file_service/services/backup_sa:backup_sa": [
             "//third_party/jsoncpp:jsoncpp"
         ],
-        "//foundation/filemanagement/app_file_service/tools/backup_tool:backup_tool": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/filemanagement/app_file_service/utils:backup_utils": [
             "//third_party/jsoncpp:jsoncpp",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/filemanagement/dfs_service/services/clouddisk_database:clouddisk_database": [
-            "//third_party/libfuse:libfuse"
-        ],
-        "//foundation/filemanagement/dfs_service/services/cloudfiledaemon:cloudfiledaemon": [
-            "//third_party/libfuse:libfuse"
         ],
         "//foundation/filemanagement/dfs_service/services/cloudsyncservice:cloudsync_sa_static": [
             "//third_party/e2fsprogs:libext2_uuid"
@@ -6684,8 +5711,6 @@
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
         "//foundation/graphic/graphic_2d/frameworks/bootanimation:bootanimation": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/cJSON:cjson_static",
             "//third_party/zlib:libz",
             "//third_party/skia:skia_ohos"
         ],
@@ -6707,20 +5732,8 @@
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper:debug_layer_test2": [
             "//third_party/EGL:libEGL"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/surface:surface": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
         "//foundation/graphic/graphic_2d/frameworks/vulkan_layers:vulkan_swapchain_layer": [
             "//third_party/vulkan-headers:vulkan_headers"
-        ],
-        "//foundation/graphic/graphic_2d/interfaces/kits/napi/graphic/effect_kit:effectkit": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/build/icu:rosen_libicu_ohos": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/build/icu:rosen_libicu_ohos_ng": [
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_libtxt_ohos": [
             "//third_party/skia:skia_ohos"
@@ -6744,30 +5757,12 @@
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics_source_ohos_ng": [
-            "//third_party/jsoncpp:jsoncpp_public_config",
             "//third_party/skia:skia_ohos_ng"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/composer/native_vsync:libnative_vsync": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/composer/vsync:libvsync": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/composer:libcomposer": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/color_picker:color_picker": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/effect/effectChain:libeffectchain": [
-            "//commonlibrary/c_utils/base:utils_config"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/effect/skia_effectChain:skeffectchain": [
-            "//commonlibrary/c_utils/base:utils_config",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/frame_analyzer:libframe_analyzer": [
@@ -6776,17 +5771,8 @@
         "//foundation/graphic/graphic_2d/rosen/modules/platform:ace_skia": [
             "//third_party/skia:skia_ohos"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/platform:impl_eventhandler": [
-            "//third_party/libuv:uv"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/platform:ipc_core": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core:ipc_core"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/platform:utils": [
-            "//commonlibrary/c_utils/base:utils"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/modules/render_frame_trace:render_frame_trace": [
-            "//third_party/jsoncpp:jsoncpp"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/render_service:librender_service": [
             "//third_party/libpng:libpng",
@@ -6910,18 +5896,12 @@
         "//foundation/graphic/graphic_2d/rosen/modules/texgine/texgine_drawing:libtexgine_drawing": [
             "//third_party/skia:skia_ohos"
         ],
-        "//foundation/graphic/graphic_2d/rosen/modules/texgine:libtexgine_source": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/graphic/graphic_2d/rosen/samples/2d_graphics:drawing_engine_sample": [
             "//third_party/openssl:libcrypto_shared",
             "//third_party/skia:skia_ohos"
         ],
         "//foundation/graphic/graphic_2d/rosen/samples/2d_graphics:drawing_sample_rs": [
             "//third_party/zlib:libz"
-        ],
-        "//foundation/graphic/graphic_2d/utils/buffer_handle:buffer_handle": [
-            "//commonlibrary/c_utils/base:utils_config"
         ],
         "//foundation/graphic/graphic_2d/utils/color_manager:color_manager": [
             "//third_party/skia:skia_ohos"
@@ -6988,8 +5968,7 @@
             "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/multimedia/av_session/services/session:avsession_service": [
-            "//third_party/openssl:libcrypto_shared",
-            "//third_party/jsoncpp:jsoncpp"
+            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/multimedia/av_session/utils:avsession_utils": [
             "//third_party/openssl:libcrypto_shared"
@@ -7042,21 +6021,6 @@
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
         ],
-        "//foundation/resourceschedule/background_task_mgr/services:bgtaskmgr_service": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/resourceschedule/background_task_mgr/services:bgtaskmgr_service_static": [
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//foundation/resourceschedule/resource_schedule_service/cgroup_sched/framework/process_group:libprocess_group": [
-            "//third_party/json:nlohmann_json_static"
-        ],
-        "//foundation/resourceschedule/resource_schedule_service/ressched/interfaces/innerkits/ressched_client:ressched_client": [
-            "//third_party/json:nlohmann_json_static"
-        ],
-        "//foundation/resourceschedule/work_scheduler/utils/native:workschedutils": [
-            "//third_party/jsoncpp:jsoncpp"
-        ],
         "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/rust:audio_rust_ipc": [
             "//foundation/communication/ipc/interfaces/innerkits/rust:ipc_rust"
         ],
@@ -7075,9 +6039,6 @@
         "//foundation/systemabilitymgr/samgr/services/samgr/native/test/unittest/rust/service:test_access_token": [
             "//base/security/access_token/interfaces/innerkits/nativetoken:libnativetoken",
             "//base/security/access_token/interfaces/innerkits/token_setproc:libtoken_setproc"
-        ],
-        "//foundation/window/window_manager/snapshot:libsnapshot_util": [
-            "//third_party/libjpeg-turbo:turbojpeg_static"
         ],
         "//foundation/window/window_manager/test/demo:demo_mirror_screen_listener": [
             "//foundation/graphic/graphic_2d/rosen/modules/render_service_base:librender_service_base"
@@ -7316,7 +6277,6 @@
             "//third_party/zlib:libz"
         ],
         "//third_party/gstreamer/gstplugins_good:gstmatroska": [
-            "//third_party/bzip2:libbz2",
             "//third_party/glib:glib",
             "//third_party/glib:gobject"
         ],
@@ -7398,33 +6358,14 @@
         "//third_party/pulseaudio/ohosbuild/src/pulse:pulse-mainloop-glib": [
             "//third_party/glib:glib"
         ],
-        "//third_party/pulseaudio/ohosbuild/src/pulsecore:pulsecore": [
-            "//third_party/libsnd:sndfile"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/utils:pacat": [
-            "//third_party/libsnd:sndfile"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src/utils:pactl": [
-            "//third_party/libsnd:sndfile"
-        ],
-        "//third_party/pulseaudio/ohosbuild/src:pulsecommon": [
-            "//third_party/libsnd:sndfile"
-        ],
-        "//third_party/pulseaudio/ohosbuild:pulseaudio_packages": [
-            "//third_party/libsnd:sndfile"
-        ],
         "//third_party/skia/third_party/libpng:libpng": [
             "//third_party/zlib:libz"
         ],
         "//third_party/skia:fontmgr_ohos": [
-            "//third_party/jsoncpp:jsoncpp_static",
             "//base/global/system_resources:ohos_fonts",
             "//third_party/noto-cjk:fonts_notocjk",
             "//third_party/notofonts:fonts_notofonts",
             "//base/startup/init/interfaces/innerkits:libbegetutil"
-        ],
-        "//third_party/skia:fontmgr_symbol_load": [
-            "//third_party/jsoncpp:jsoncpp_static"
         ],
         "//third_party/skia:gpu": [
             "//foundation/graphic/graphic_2d:libgl"
@@ -7743,9 +6684,6 @@
         "//foundation/distributeddatamgr/relational_store/test/native/rdb_data_share_adapter/": [
             "//foundation/distributeddatamgr/data_share/datashare.gni"
         ],
-        "//foundation/distributedhardware/device_manager/common/include/show_confirm_dialog/dialog_ui/js/": [
-            "//foundation/arkui/ace_engine/build/ace_gen_sa_dialog_js.gni"
-        ],
         "//foundation/graphic/graphic_3d/3d_widget_adapter/test/": [
             "//foundation/arkui/ace_engine/ace_config.gni",
             "//foundation/graphic/graphic_2d/graphic_config.gni"
@@ -7799,9 +6737,6 @@
         ],
         "//foundation/resourceschedule/resource_schedule_service/cgroup_sched/test/fuzztest/cgroupsched_fuzzer/": [
             "//foundation/resourceschedule/background_task_mgr/bgtaskmgr.gni"
-        ],
-        "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest/listen_ability/": [
-            "//foundation/ability/idl_tool/idl_config.gni"
         ],
         "//ide/tools/previewer/automock/": [
             "//foundation/arkui/ace_engine/ace_config.gni"
