@@ -13,7 +13,12 @@
 
 import("//build/ohos.gni")
 
-idl_root = "//foundation/ability/idl_tool"
+if (ohos_indep_compiler_enable) {
+  idl_root = "//binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64"
+} else {
+  idl_root = "//foundation/ability/idl_tool"
+}
+
 idl_build_deps = ""
 idl_out_root = ""
 
@@ -38,7 +43,13 @@ if (host_toolchain == toolchain_mac) {
   idl_build_deps = [ "$idl_root:idl($toolchain_linux)" ]
 }
 
-idl_build_path = idl_out_root + "/ability/idl_tool"
+if (ohos_indep_compiler_enable) {
+  idl_build_path =
+      idl_out_root +
+      "/obj/binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64/libs"
+} else {
+  idl_build_path = idl_out_root + "/ability/idl_tool"
+}
 
 template("idl_gen_interface") {
   # idl sources
@@ -110,7 +121,7 @@ template("idl_gen_interface") {
   action("$target_name") {
     inputs = src_idl_fullpath
     deps = idl_build_deps
-    script = "${idl_root}/scripts/idl.py"
+    script = "//build/config/components/idl_tool/idl.py"
     args = [
       "--src-idl",
       arg_src_idl,
