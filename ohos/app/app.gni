@@ -712,6 +712,7 @@ template("ohos_hap") {
     forward_variables_from(invoker,
                            [
                              "shared_libraries",
+                             "external_shared_libraries",
                              "private_key_path",
                              "signature_algorithm",
                              "certificate_profile",
@@ -728,6 +729,7 @@ template("ohos_hap") {
       ":$_resources_target",
       ":${_collect_target}",
     ]
+    external_deps = []
     if (!ohos_indep_compiler_enable) {
       deps += [ "//developtools/packing_tool:packing_tool" ]
     }
@@ -751,6 +753,9 @@ template("ohos_hap") {
     enable_ark = build_ark
     if (defined(shared_libraries)) {
       deps += shared_libraries
+    }
+    if (defined(external_shared_libraries)) {
+      external_deps += external_shared_libraries
     }
     packaged_js_assets = _packaged_js_assets
     packaged_resources = _packaged_resources
