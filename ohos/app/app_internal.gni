@@ -143,6 +143,7 @@ template("package_app") {
     forward_variables_from(invoker,
                            [
                              "deps",
+                             "external_deps",
                              "shared_libraries",
                              "hap_profile",
                              "hap_path",
