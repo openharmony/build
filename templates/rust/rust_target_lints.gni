@@ -55,11 +55,7 @@ template("rust_target_lints") {
   _crate_name = target_name
   _crate_type = invoker.crate_type
   _target_type = invoker.target_type
-  if (is_standard_system) {
-    _rustflags = [ "-Zstack-protector=strong" ]
-  } else {
-    _rustflags = [ "-Zstack-protector=all" ]
-  }
+  _rustflags = [ "-Zstack-protector=all" ]
 
   target(_target_type, "$_target_name") {
     forward_variables_from(invoker, "*")
