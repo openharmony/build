@@ -148,7 +148,7 @@ template("rust_target") {
   if (defined(invoker.deps)) {
     _deps += invoker.deps
   }
-  
+
   _rustflags = [ "-Zstack-protector=all" ]
 
   if (defined(invoker.rustflags)) {
