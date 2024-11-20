@@ -193,7 +193,7 @@ def parse_description_file(options):
         rebased_build_gn = build_utils.rebase_path(
             get_build_gn(label), current_base=options.source_root_dir)
         if not os.path.exists(rebased_build_gn):
-            continue
+            raise Exception(f'Unresolved path: {rebased_build_gn}, label is {label}')
 
         if build_only:
             build_only_targets.append(label)
