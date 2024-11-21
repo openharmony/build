@@ -313,7 +313,7 @@ def _hb_build(part):
 
 
 def _check_inner_api(part, files):
-    parts_info = CURRENT_DIRECTORY+'/out/rk3568/build_configs/parts_info/parts_info.json'
+    parts_info = CURRENT_DIRECTORY + '/out/rk3568/build_configs/parts_info/parts_info.json'
     subsystem_name = None
     with open(parts_info, 'r', encoding='utf-8') as info_json:
         parts_info_json = json.load(info_json)
@@ -355,13 +355,13 @@ def _check_inner_api(part, files):
     return False
 
 
-def _create_datapart_json(type, changed):
+def _create_datapart_json(alternative, changed):
     data = {
-        'build.type': type,
+        'build.type': alternative,
         'innerAPI.changed': changed
     }
     json_str = json.dumps(data, indent=4)
-    output_dir = CURRENT_DIRECTORY+'/out'
+    output_dir = CURRENT_DIRECTORY + '/out'
     output_file = 'dataPart.json'
     output_path = os.path.join(output_dir, output_file)
     if not os.path.exists(output_dir):
@@ -375,8 +375,8 @@ def _build_dayu200():
     if pr_list is None or pr_list == '':
         subprocess.run(['rm', '-rf', 'prebuilts/ohos-sdk'], check=True)
         subprocess.run(['rm', '-rf', 'prebuilts/build-tools/common/oh-command-line-tools'], check=True)
-    subprocess.run('yes y | apt install libxinerama-dev libxcursor-dev libxrandr-dev libxi-dev', shell=True, check=True)
-    subprocess.run('yes y | apt install gcc-multilib', shell=True, check=True)
+    subprocess.run(['sudo', 'apt-get', 'install', '-y', 'libxinerama-dev', 'libxcursor-dev', 'libxrandr-dev', 'libxi-dev'], check=True)
+    subprocess.run(['sudo', 'apt-get', 'install', '-y', 'gcc-multilib'], check=True)
     if os.path.exists('out'):
         try:
             result = subprocess.run(['ls', 'out'], check=True, capture_output=True, text=True)
@@ -390,7 +390,6 @@ def _build_dayu200():
             print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
     else:
         print("'out' does not exist, skipping the command.")
-    # subprocess.run(['bash', 'build/prebuilts_download.sh'], check=True)
     subprocess.run(['rm', '-rf', './prebuilts/*.tar.gz'], check=True)
     print("Return pre compile: success")
     current_env = os.environ.copy()
