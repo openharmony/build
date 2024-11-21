@@ -24,6 +24,7 @@ import glob
 import sys
 import argparse
 import stat
+from itertools import chain
 
 CURRENT_DIRECTORY = os.getcwd()
 
@@ -264,9 +265,9 @@ lockfile=false
 
 
 def _prebuild_build():
-    script_path = 'build/prebuilts_download.sh'
+    script_path = './build/prebuilts_download.sh'
     try:
-        result = subprocess.run(['bash', script_path], check=True, text=True)
+        result = subprocess.run([script_path], check=True, text=True)
         print("Script completed successfully with return code:", result.returncode)
     except subprocess.CalledProcessError as e:
         print("Script failed with return code:", e.returncode)
@@ -353,10 +354,16 @@ def _process_public_configs(publicinfo_json):
         base_path = publicinfo_json.get('path', '').rstrip('/') + '/'
         for public_config in publicinfo_json['public_configs']:
             if 'include_dirs' in public_config and isinstance(public_config['include_dirs'], list):
-                for include_dir in public_config['include_dirs']:
-                    if include_dir.startswith(base_path):
-                        publicinfo_paths.add(include_dir[len(base_path):])
+                publicinfo_paths.update(_process_include_dirs(base_path, public_config['include_dirs']))
     return publicinfo_paths
+
+
+def _process_include_dirs(base_path, include_dirs):
+    processed_paths = set()
+    for include_dir in include_dirs:
+        if include_dir.startswith(base_path):
+            processed_paths.add(include_dir[len(base_path):])
+    return processed_paths
 
 
 def _check_if_file_modifies_inner_api(change_file, publicinfo_paths):
@@ -533,7 +540,7 @@ def images_cmmands(depfile, image_name, input_path, image_config_file, deviceima
     return images_command
 
 
-def get_images_commands():
+def get_images_vendor_commands():
     images_commands = [
         {
             "echo": "update chip_ckm.img in packages/phone/images",
@@ -570,6 +577,18 @@ def get_images_commands():
                                   "packages/phone/images/eng_chipset.img")
         },
         {
+            "echo": "update vendor.img in packages/phone/images",
+            "cmd": images_cmmands("gen/build/ohos/images/phone_vendor_image.d", "vendor", "packages/phone/vendor",
+                                  "../../build/ohos/images/mkimage/vendor_image_conf.txt",
+                                  "packages/imagesconf/vendor_image_conf.txt", "packages/phone/images/vendor.img")
+        }
+    ]
+    return images_commands
+
+
+def get_images_system_commands():
+    images_system_commands = [
+        {
             "echo": "update eng_system.img in packages/phone/images",
             "cmd": images_cmmands("gen/build/ohos/images/phone_eng_system_image.d", "eng_system",
                                   "packages/phone/eng_system",
@@ -584,10 +603,10 @@ def get_images_commands():
                                   "packages/imagesconf/sys_prod_image_conf.txt", "packages/phone/images/sys_prod.img")
         },
         {
-            "echo": "update system.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_system_image.d", "system", "packages/phone/system",
-                                  "../../build/ohos/images/mkimage/system_image_conf.txt",
-                                  "packages/imagesconf/system_image_conf.txt", "packages/phone/images/system.img")
+            "echo": "update userdata.img in packages/phone/images",
+            "cmd": images_cmmands("gen/build/ohos/images/phone_userdata_image.d", "userdata", "packages/phone/data",
+                                  "../../build/ohos/images/mkimage/userdata_image_conf.txt",
+                                  "packages/imagesconf/userdata_image_conf.txt", "packages/phone/images/userdata.img")
         },
         {
             "echo": "update updater_ramdisk.img in packages/phone/images",
@@ -597,19 +616,13 @@ def get_images_commands():
                                   "packages/imagesconf/updater_ramdisk_image_conf.txt", "updater_ramdisk.img")
         },
         {
-            "echo": "update userdata.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_userdata_image.d", "userdata", "packages/phone/data",
-                                  "../../build/ohos/images/mkimage/userdata_image_conf.txt",
-                                  "packages/imagesconf/userdata_image_conf.txt", "packages/phone/images/userdata.img")
-        },
-        {
-            "echo": "update vendor.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_vendor_image.d", "vendor", "packages/phone/vendor",
-                                  "../../build/ohos/images/mkimage/vendor_image_conf.txt",
-                                  "packages/imagesconf/vendor_image_conf.txt", "packages/phone/images/vendor.img")
+            "echo": "update system.img in packages/phone/images",
+            "cmd": images_cmmands("gen/build/ohos/images/phone_system_image.d", "system", "packages/phone/system",
+                                  "../../build/ohos/images/mkimage/system_image_conf.txt",
+                                  "packages/imagesconf/system_image_conf.txt", "packages/phone/images/system.img")
         }
     ]
-    return images_commands
+    return images_system_commands
 
 
 def regenerate_packages_images():
@@ -619,7 +632,9 @@ def regenerate_packages_images():
     current_dir = os.getcwd()
     print(f"The current dir is {current_dir}")
     print("The third step: begin to regenerate img files, please wait ...")
-    images_commands = get_images_commands()
+    images_vendor_commands = get_images_vendor_commands()
+    images_system_commands = get_images_system_commands()
+    images_commands = list(chain(images_vendor_commands, images_system_commands))
     for cmd_info in images_commands:
         print(cmd_info["echo"])
         try:
@@ -659,14 +674,16 @@ def build_trees(part, list_text, files, paths):
 
 
 if __name__ == '__main__':
-    request_param = _get_export_project('project_list')
+    # request_param = _get_export_project('project_list')
+    request_param = ['account_os_account']
     if not request_param:
         subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
         _build_dayu200()
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        file_list = _get_export_files('PR_FILE_PATHS')
+        # file_list = _get_export_files('PR_FILE_PATHS')
+        file_list = "{\"account_os_account\":[\"crypto/src/napi_asy_key_generator.cpp\"]}"
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
         build_trees(parts, whitelist_parts, file_list, request_param)
