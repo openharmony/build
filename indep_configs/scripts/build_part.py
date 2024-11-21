@@ -36,18 +36,6 @@ def replace_part_sofile(part_name, old_folder, new_folder):
     copy_component_sofile(_source_list, part_name, old_folder, new_folder)
 
 
-def copy_component_sofile1(subsystem: str, component: str, old_folder, new_folder):
-    print('dst_obj_output_dir', dst_obj_output_dir)
-    dst_normal_output_dir = os.path.join(old_folder, 'out', 'rk3568', subsystem, component)
-    print('dst_normal_output_dir', dst_normal_output_dir)
-    new_out_dir = os.path.join(new_folder, 'out', 'default', 'src')
-    print('src_obj_output_dir', src_obj_output_dir)
-    src_normal_output_dir = os.path.join(new_out_dir, subsystem, component)
-    print('src_normal_output_dir', src_normal_output_dir)
-    if os.path.exists(dst_normal_output_dir):
-        shutil.copytree(src_normal_output_dir, dst_normal_output_dir, dirs_exist_ok=True)
-
-
 def copy_component_sofile(_source_list, part_name, old_folder, new_folder):
     for source_info in _source_list:
         so_path = source_info.get("source")
@@ -55,7 +43,10 @@ def copy_component_sofile(_source_list, part_name, old_folder, new_folder):
         so_dir = os.path.dirname(so_path)
         old_so_folder = os.path.join(old_folder, 'out', 'rk3568', so_dir)
         if os.path.exists(indep_so_path):
-            shutil.copy(indep_so_path, old_so_folder)
+            try:
+                shutil.copy(indep_so_path, old_so_folder)
+            except shutil.SameFileError:
+                print(f"Cannot copy '{indep_so_path}' to '{old_so_folder}' because they are the same file.")
             print(f'{part_name}:{so_path} done')
 
 
@@ -137,6 +128,16 @@ def _get_export_files(export):
         return None
 
 
+def _handle_successful_response(ret):
+    try:
+        mkdirs_text = json.loads(ret.text)
+        print("The request was successful:", mkdirs_text)
+        return mkdirs_text
+    except json.JSONDecodeError:
+        print("The response is not in valid JSON format.")
+        return None
+
+
 def _get_api_mkdir(params):
     post_url = "http://ci.openharmony.cn/api/sple/external/artifact/repo?projectName=openharmony"
     fails = 0
@@ -148,12 +149,7 @@ def _get_api_mkdir(params):
             headers = {'Content-Type': 'application/json'}
             ret = requests.post(post_url, data=json.dumps(params), headers=headers, timeout=10)
             if ret.status_code == 200:
-                try:
-                    mkdirs_text = json.loads(ret.text)
-                    print("The request was successful:", mkdirs_text)
-                    return mkdirs_text
-                except json.JSONDecodeError:
-                    print("The response is not in valid JSON format.")
+                return _handle_successful_response(ret)
             else:
                 print(f"The request failed, and the status code is displayed: {ret.status_code}, message: {ret.text}")
             fails += 1
@@ -198,16 +194,22 @@ def _get_dep_parts(mkdirs, files):
             all_parts.extend(component.keys())
         else:
             for driver, driver_path in component.items():
-                if not driver_path:
-                    continue
-                parts_s = driver_path.split('/')
-                remaining_parts = '/'.join(parts_s[2:]) if len(parts_s) > 2 else ''
-                for cc, ffs in files_json.items():
-                    for file in ffs:
-                        if file.startswith(remaining_parts):
-                            all_parts.append(driver)
-                            break
+                if driver_path:
+                    matched_parts = _match_files_with_driver(driver_path, files_json)
+                    all_parts.extend(matched_parts)
     return all_parts
+
+
+def _match_files_with_driver(driver_path, files_json):
+    matched_parts = []
+    parts_s = driver_path.split('/')
+    remaining_parts = '/'.join(parts_s[2:]) if len(parts_s) > 2 else ''
+    for driver_name, files_list in files_json.items():
+        for file in files_list:
+            if file.startswith(remaining_parts):
+                matched_parts.append(driver_name)
+                break
+    return matched_parts
 
 
 def symlink_src2dest(src_dir, dest_dir):
@@ -312,45 +314,55 @@ def _hb_build(part):
         print(f"Error output: {e.stderr}")
 
 
-def _check_inner_api(part, files):
-    parts_info = CURRENT_DIRECTORY + '/out/rk3568/build_configs/parts_info/parts_info.json'
-    subsystem_name = None
-    with open(parts_info, 'r', encoding='utf-8') as info_json:
+def get_subsystem_name(part, parts_info_path):
+    with open(parts_info_path, 'r', encoding='utf-8') as info_json:
         parts_info_json = json.load(info_json)
     for part_list in parts_info_json.values():
         for part_info in part_list:
             if part_info['part_name'] == part:
-                subsystem_name = part_info['subsystem_name']
-                break
-        if subsystem_name:
-            break
-    print(f"The subsystem name for '{part}' is: {subsystem_name}")
-    publicinfo_path = os.path.join(CURRENT_DIRECTORY, 'out', 'default', 'src', subsystem_name, part, 'publicinfo')
-    if not os.path.exists(publicinfo_path):
-        return False
-    publicinfo_files = glob.glob(os.path.join(publicinfo_path, '*.json'))
-    if not publicinfo_files:
-        return False
+                return part_info['subsystem_name']
+    return None
+
+
+def get_publicinfo_paths(subsystem_name, current_directory):
+    publicinfo_path = os.path.join(current_directory, 'out', 'default', 'src', subsystem_name, '*', 'publicinfo')
+    publicinfo_files = glob.glob(os.path.join(publicinfo_path, '*.json'), recursive=True)
     publicinfo_paths = set()
     for publicinfo_file in publicinfo_files:
         with open(publicinfo_file, 'r', encoding='utf-8') as f:
             publicinfo_json = json.load(f)
-        if 'public_configs' in publicinfo_json and isinstance(publicinfo_json['public_configs'], list):
+            if not ('public_configs' in publicinfo_json and isinstance(publicinfo_json['public_configs'], list)):
+                continue
+            base_path = publicinfo_json.get('path', '').rstrip('/') + '/'
             for public_config in publicinfo_json['public_configs']:
-                if 'include_dirs' in public_config and isinstance(public_config['include_dirs'], list):
-                    base_path = publicinfo_json.get('path', '').rstrip('/')
-                    for include_dir in public_config['include_dirs']:
-                        if include_dir.startswith(base_path + '/'):
-                            publicinfo_paths.add(include_dir[len(base_path) + 1:])
-    print(f"The publicinfo is: {publicinfo_paths}")
-    if not publicinfo_paths:
+                if not ('include_dirs' in public_config and isinstance(public_config['include_dirs'], list)):
+                    continue
+                for include_dir in public_config['include_dirs']:
+                    if include_dir.startswith(base_path):
+                        publicinfo_paths.add(include_dir[len(base_path):])
+    return publicinfo_paths
+
+
+def _check_inner_api(part, files, current_directory):
+    parts_info_path = os.path.join(current_directory, 'out', 'rk3568', 'build_configs', 'parts_info', 'parts_info.json')
+    subsystem_name = get_subsystem_name(part, parts_info_path)
+    if not subsystem_name:
+        print(f"The subsystem name for '{part}' is not found.")
         return False
+    print(f"The subsystem name for '{part}' is: {subsystem_name}")
+
+    publicinfo_paths = get_publicinfo_paths(subsystem_name, current_directory)
+    if not publicinfo_paths:
+        print("No publicinfo paths found.")
+        return False
+    print(f"The publicinfo paths are: {publicinfo_paths}")
+
     files_json = json.loads(files)
     for parts_p, change_files in files_json.items():
         for change_file in change_files:
             for publicinfo_path in publicinfo_paths:
                 if change_file.startswith(publicinfo_path):
-                    print('the modification involves the inner api')
+                    print('The modification involves the inner API.')
                     return True
     return False
 
@@ -370,7 +382,7 @@ def _create_datapart_json(alternative, changed):
         f.write(json_str)
 
 
-def _build_dayu200():
+def _build_pre_compile():
     pr_list = os.getenv('pr_list')
     if pr_list is None or pr_list == '':
         subprocess.run(['rm', '-rf', 'prebuilts/ohos-sdk'], check=True)
@@ -392,6 +404,10 @@ def _build_dayu200():
         print("'out' does not exist, skipping the command.")
     subprocess.run(['rm', '-rf', './prebuilts/*.tar.gz'], check=True)
     print("Return pre compile: success")
+
+
+def _build_dayu200():
+    _build_pre_compile()
     current_env = os.environ.copy()
     current_env['CCACHE_BASE'] = os.getcwd()
     current_env['NO_DEVTOOL'] = '1'
@@ -421,6 +437,10 @@ def _build_dayu200():
     ]
     result = subprocess.run(cmd, env=current_env, check=True, text=True)
     print("Return compile cmd:", result.returncode)
+    _build_after_compile()
+
+
+def _build_after_compile():
     work_dir = os.getcwd()
     command1 = [
         "python",
@@ -536,12 +556,9 @@ def regenerate_packages_images():
         except subprocess.CalledProcessError as e:
             print(f"Error executing command: {cmd_info['cmd']}")
             print(f"Return code: {e.returncode}")
-            print(f"Output: {e.stdout}")
             print(f"Error output: {e.stderr}")
-            pass
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
-            pass
     print("The third step finished successfully")
     os.chdir(os.path.dirname(os.path.dirname(work_dir)))
 
@@ -555,7 +572,7 @@ def build_trees(part, list_text, files, paths):
         print('Independent compilation')
         _prebuild_build()
         _hb_build(part[0])
-        if _check_inner_api(part[0], files):
+        if _check_inner_api(part[0], files, CURRENT_DIRECTORY):
             _create_datapart_json(1, True)
             _build_dayu200()
         else:
@@ -571,14 +588,14 @@ def build_trees(part, list_text, files, paths):
 
 
 if __name__ == '__main__':
-    request_param = ['account_os_account']
+    request_param = _get_export_project('project_list')
     if not request_param:
         subprocess.run(['bash', 'build/prebuilts_download.sh'], check=True)
         _build_dayu200()
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        file_list = "{\"account_os_account\":[\"crypto/src/napi_asy_key_generator.cpp\"]}"
+        file_list = _get_export_files('PR_FILE_PATHS')
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
         build_trees(parts, whitelist_parts, file_list, request_param)
