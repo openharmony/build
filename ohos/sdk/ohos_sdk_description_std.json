@@ -778,16 +778,6 @@
         ]
     },
     {
-        "install_dir": "toolchains",
-        "module_label": "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/rawheap_translate:rawheap_translator",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool:app_packing_tool",
         "target_os": [
