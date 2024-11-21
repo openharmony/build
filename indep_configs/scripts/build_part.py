@@ -184,19 +184,31 @@ def _get_part_list():
             fails += 1
 
 
+def _handle_single_component_case(path, component):
+    if path not in {'drivers_interface', 'drivers_peripheral'}:
+        return list(component.keys())
+    return []
+
+
+def _handle_multiple_component_case(component, files_json):
+    all_parts = []
+    for driver, driver_path in component.items():
+        if driver_path:
+            matched_parts = _match_files_with_driver(driver_path, files_json)
+            all_parts.extend(matched_parts)
+    return all_parts
+
+
 def _get_dep_parts(mkdirs, files):
     all_parts = []
     files_json = json.loads(files)
     for path, component in mkdirs.items():
         if not component:
             continue
-        elif len(component) == 1 and path not in {'drivers_interface', 'drivers_peripheral'}:
-            all_parts.extend(component.keys())
+        elif len(component) == 1:
+            all_parts.extend(_handle_single_component_case(path, component))
         else:
-            for driver, driver_path in component.items():
-                if driver_path:
-                    matched_parts = _match_files_with_driver(driver_path, files_json)
-                    all_parts.extend(matched_parts)
+            all_parts.extend(_handle_multiple_component_case(component, files_json))
     return all_parts
 
 
@@ -314,7 +326,7 @@ def _hb_build(part):
         print(f"Error output: {e.stderr}")
 
 
-def get_subsystem_name(part, parts_info_path):
+def _get_subsystem_names(part, parts_info_path):
     with open(parts_info_path, 'r', encoding='utf-8') as info_json:
         parts_info_json = json.load(info_json)
     for part_list in parts_info_json.values():
@@ -324,34 +336,45 @@ def get_subsystem_name(part, parts_info_path):
     return None
 
 
-def get_publicinfo_paths(subsystem_name, current_directory):
+def _get_publicinfo_paths(subsystem_name, current_directory):
     publicinfo_path = os.path.join(current_directory, 'out', 'default', 'src', subsystem_name, '*', 'publicinfo')
     publicinfo_files = glob.glob(os.path.join(publicinfo_path, '*.json'), recursive=True)
-    publicinfo_paths = set()
+    all_publicinfo_paths = set()
     for publicinfo_file in publicinfo_files:
         with open(publicinfo_file, 'r', encoding='utf-8') as f:
             publicinfo_json = json.load(f)
-            if not ('public_configs' in publicinfo_json and isinstance(publicinfo_json['public_configs'], list)):
-                continue
-            base_path = publicinfo_json.get('path', '').rstrip('/') + '/'
-            for public_config in publicinfo_json['public_configs']:
-                if not ('include_dirs' in public_config and isinstance(public_config['include_dirs'], list)):
-                    continue
+            all_publicinfo_paths.update(_process_public_configs(publicinfo_json))
+    return all_publicinfo_paths
+
+
+def _process_public_configs(publicinfo_json):
+    publicinfo_paths = set()
+    if 'public_configs' in publicinfo_json and isinstance(publicinfo_json['public_configs'], list):
+        base_path = publicinfo_json.get('path', '').rstrip('/') + '/'
+        for public_config in publicinfo_json['public_configs']:
+            if 'include_dirs' in public_config and isinstance(public_config['include_dirs'], list):
                 for include_dir in public_config['include_dirs']:
                     if include_dir.startswith(base_path):
                         publicinfo_paths.add(include_dir[len(base_path):])
     return publicinfo_paths
 
 
+def _check_if_file_modifies_inner_api(change_file, publicinfo_paths):
+    for publicinfo_path in publicinfo_paths:
+        if change_file.startswith(publicinfo_path):
+            return True
+    return False
+
+
 def _check_inner_api(part, files, current_directory):
     parts_info_path = os.path.join(current_directory, 'out', 'rk3568', 'build_configs', 'parts_info', 'parts_info.json')
-    subsystem_name = get_subsystem_name(part, parts_info_path)
+    subsystem_name = _get_subsystem_names(part, parts_info_path)
     if not subsystem_name:
         print(f"The subsystem name for '{part}' is not found.")
         return False
     print(f"The subsystem name for '{part}' is: {subsystem_name}")
 
-    publicinfo_paths = get_publicinfo_paths(subsystem_name, current_directory)
+    publicinfo_paths = _get_publicinfo_paths(subsystem_name, current_directory)
     if not publicinfo_paths:
         print("No publicinfo paths found.")
         return False
@@ -359,11 +382,9 @@ def _check_inner_api(part, files, current_directory):
 
     files_json = json.loads(files)
     for parts_p, change_files in files_json.items():
-        for change_file in change_files:
-            for publicinfo_path in publicinfo_paths:
-                if change_file.startswith(publicinfo_path):
-                    print('The modification involves the inner API.')
-                    return True
+        if any(_check_if_file_modifies_inner_api(change_file, publicinfo_paths) for change_file in change_files):
+            print('The modification involves the inner API.')
+            return True
     return False
 
 
@@ -373,7 +394,7 @@ def _create_datapart_json(alternative, changed):
         'innerAPI.changed': changed
     }
     json_str = json.dumps(data, indent=4)
-    output_dir = CURRENT_DIRECTORY + '/out'
+    output_dir = os.path.join(CURRENT_DIRECTORY, 'out')
     output_file = 'dataPart.json'
     output_path = os.path.join(output_dir, output_file)
     if not os.path.exists(output_dir):
@@ -382,28 +403,49 @@ def _create_datapart_json(alternative, changed):
         f.write(json_str)
 
 
+def _remove_directories(directory, exclude_pattern):
+    try:
+        result = subprocess.run(['ls', directory], check=True, capture_output=True, text=True)
+        contents = result.stdout.strip().split('\n')
+        for content in contents:
+            full_path = os.path.join(directory, content)
+            if os.path.isdir(full_path) and exclude_pattern not in content:
+                subprocess.run(['rm', '-rf', full_path], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
+
+
 def _build_pre_compile():
     pr_list = os.getenv('pr_list')
-    if pr_list is None or pr_list == '':
-        subprocess.run(['rm', '-rf', 'prebuilts/ohos-sdk'], check=True)
-        subprocess.run(['rm', '-rf', 'prebuilts/build-tools/common/oh-command-line-tools'], check=True)
-    subprocess.run(['sudo', 'apt-get', 'install', '-y', 'libxinerama-dev', 'libxcursor-dev', 'libxrandr-dev', 'libxi-dev'], check=True)
-    subprocess.run(['sudo', 'apt-get', 'install', '-y', 'gcc-multilib'], check=True)
+    if not pr_list:
+        _remove_prebuilts()
+    _install_dependencies()
     if os.path.exists('out'):
-        try:
-            result = subprocess.run(['ls', 'out'], check=True, capture_output=True, text=True)
-            out_contents = result.stdout.strip().split('\n')
-            files_to_remove = [f for f in out_contents if 'kernel' not in f]
-            for f in files_to_remove:
-                full_path = os.path.join(os.getcwd(), 'out', f)
-                if os.path.isdir(full_path):
-                    subprocess.run(['rm', '-rf', full_path], check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Command '{e.cmd}' returned non-zero exit status {e.returncode}.")
+        _clean_out_directory(exclude_pattern='kernel')
     else:
-        print("'out' does not exist, skipping the command.")
+        print("'out' directory does not exist, skipping cleanup.")
+    _remove_tar_gz_files_in_prebuilts()
+    print("Pre-compile step completed successfully.")
+
+
+def _remove_prebuilts():
+    subprocess.run(['rm', '-rf', 'prebuilts/ohos-sdk'], check=True)
+    subprocess.run(['rm', '-rf', 'prebuilts/build-tools/common/oh-command-line-tools'], check=True)
+
+
+def _install_dependencies():
+    subprocess.run(
+        ['sudo', 'apt-get', 'install', '-y', 'libxinerama-dev', 'libxcursor-dev', 'libxrandr-dev', 'libxi-dev'],
+        check=True)
+    subprocess.run(['sudo', 'apt-get', 'install', '-y', 'gcc-multilib'], check=True)
+
+
+def _clean_out_directory(exclude_pattern):
+    _remove_directories('out', exclude_pattern)
+
+
+def _remove_tar_gz_files_in_prebuilts():
     subprocess.run(['rm', '-rf', './prebuilts/*.tar.gz'], check=True)
-    print("Return pre compile: success")
 
 
 def _build_dayu200():
@@ -491,13 +533,7 @@ def images_cmmands(depfile, image_name, input_path, image_config_file, deviceima
     return images_command
 
 
-def regenerate_packages_images():
-    work_dir = os.path.dirname(os.path.abspath(__file__))
-    out_dir = os.path.join(work_dir, 'out', 'rk3568')
-    os.chdir(out_dir)
-    current_dir = os.getcwd()
-    print(f"The current dir is {current_dir}")
-    print("The third step: begin to regenerate img files, please wait ...")
+def get_images_commands():
     images_commands = [
         {
             "echo": "update chip_ckm.img in packages/phone/images",
@@ -514,41 +550,76 @@ def regenerate_packages_images():
         },
         {
             "echo": "update chip_prod.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_chip_prod_image.d", "chip_prod", "packages/phone/chip_prod", "../../build/ohos/images/mkimage/chip_prod_image_conf.txt", "packages/imagesconf/chip_prod_image_conf.txt", "packages/phone/images/chip_prod.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_chip_prod_image.d", "chip_prod",
+                                  "packages/phone/chip_prod",
+                                  "../../build/ohos/images/mkimage/chip_prod_image_conf.txt",
+                                  "packages/imagesconf/chip_prod_image_conf.txt", "packages/phone/images/chip_prod.img")
         },
         {
             "echo": "update ramdisk.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_ramdisk_image.d", "ramdisk", "packages/phone/ramdisk", "../../build/ohos/images/mkimage/ramdisk_image_conf.txt", "packages/imagesconf/ramdisk_image_conf.txt", "ramdisk.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_ramdisk_image.d", "ramdisk", "packages/phone/ramdisk",
+                                  "../../build/ohos/images/mkimage/ramdisk_image_conf.txt",
+                                  "packages/imagesconf/ramdisk_image_conf.txt", "ramdisk.img")
         },
         {
             "echo": "update eng_chipset.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_eng_chipset_image.d", "eng_chipset", "packages/phone/eng_chipset", "../../build/ohos/images/mkimage/eng_chipset_image_conf.txt", "packages/imagesconf/eng_chipset_image_conf.txt", "packages/phone/images/eng_chipset.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_eng_chipset_image.d", "eng_chipset",
+                                  "packages/phone/eng_chipset",
+                                  "../../build/ohos/images/mkimage/eng_chipset_image_conf.txt",
+                                  "packages/imagesconf/eng_chipset_image_conf.txt",
+                                  "packages/phone/images/eng_chipset.img")
         },
         {
             "echo": "update eng_system.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_eng_system_image.d", "eng_system", "packages/phone/eng_system", "../../build/ohos/images/mkimage/eng_system_image_conf.txt", "packages/imagesconf/eng_system_image_conf.txt", "packages/phone/images/eng_system.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_eng_system_image.d", "eng_system",
+                                  "packages/phone/eng_system",
+                                  "../../build/ohos/images/mkimage/eng_system_image_conf.txt",
+                                  "packages/imagesconf/eng_system_image_conf.txt",
+                                  "packages/phone/images/eng_system.img")
         },
         {
             "echo": "update sys_prod.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_sys_prod_image.d", "sys_prod", "packages/phone/sys_prod", "../../build/ohos/images/mkimage/sys_prod_image_conf.txt", "packages/imagesconf/sys_prod_image_conf.txt", "packages/phone/images/sys_prod.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_sys_prod_image.d", "sys_prod", "packages/phone/sys_prod",
+                                  "../../build/ohos/images/mkimage/sys_prod_image_conf.txt",
+                                  "packages/imagesconf/sys_prod_image_conf.txt", "packages/phone/images/sys_prod.img")
         },
         {
             "echo": "update system.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_system_image.d", "system", "packages/phone/system", "../../build/ohos/images/mkimage/system_image_conf.txt", "packages/imagesconf/system_image_conf.txt", "packages/phone/images/system.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_system_image.d", "system", "packages/phone/system",
+                                  "../../build/ohos/images/mkimage/system_image_conf.txt",
+                                  "packages/imagesconf/system_image_conf.txt", "packages/phone/images/system.img")
         },
         {
             "echo": "update updater_ramdisk.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_updater_ramdisk_image.d", "updater_ramdisk", "packages/phone/updater", "../../build/ohos/images/mkimage/updater_ramdisk_image_conf.txt", "packages/imagesconf/updater_ramdisk_image_conf.txt", "updater_ramdisk.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_updater_ramdisk_image.d", "updater_ramdisk",
+                                  "packages/phone/updater",
+                                  "../../build/ohos/images/mkimage/updater_ramdisk_image_conf.txt",
+                                  "packages/imagesconf/updater_ramdisk_image_conf.txt", "updater_ramdisk.img")
         },
         {
             "echo": "update userdata.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_userdata_image.d", "userdata", "packages/phone/data", "../../build/ohos/images/mkimage/userdata_image_conf.txt", "packages/imagesconf/userdata_image_conf.txt", "packages/phone/images/userdata.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_userdata_image.d", "userdata", "packages/phone/data",
+                                  "../../build/ohos/images/mkimage/userdata_image_conf.txt",
+                                  "packages/imagesconf/userdata_image_conf.txt", "packages/phone/images/userdata.img")
         },
         {
             "echo": "update vendor.img in packages/phone/images",
-            "cmd": images_cmmands("gen/build/ohos/images/phone_vendor_image.d", "vendor", "packages/phone/vendor", "../../build/ohos/images/mkimage/vendor_image_conf.txt", "packages/imagesconf/vendor_image_conf.txt", "packages/phone/images/vendor.img")
+            "cmd": images_cmmands("gen/build/ohos/images/phone_vendor_image.d", "vendor", "packages/phone/vendor",
+                                  "../../build/ohos/images/mkimage/vendor_image_conf.txt",
+                                  "packages/imagesconf/vendor_image_conf.txt", "packages/phone/images/vendor.img")
         }
     ]
+    return images_commands
+
+
+def regenerate_packages_images():
+    work_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir = os.path.join(work_dir, 'out', 'rk3568')
+    os.chdir(out_dir)
+    current_dir = os.getcwd()
+    print(f"The current dir is {current_dir}")
+    print("The third step: begin to regenerate img files, please wait ...")
+    images_commands = get_images_commands()
     for cmd_info in images_commands:
         print(cmd_info["echo"])
         try:
@@ -588,14 +659,16 @@ def build_trees(part, list_text, files, paths):
 
 
 if __name__ == '__main__':
-    request_param = _get_export_project('project_list')
+    # request_param = _get_export_project('project_list')
+    request_param = ['account_os_account']
     if not request_param:
-        subprocess.run(['bash', 'build/prebuilts_download.sh'], check=True)
+        subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
         _build_dayu200()
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        file_list = _get_export_files('PR_FILE_PATHS')
+        # file_list = _get_export_files('PR_FILE_PATHS')
+        file_list = "{\"account_os_account\":[\"crypto/src/napi_asy_key_generator.cpp\"]}"
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
         build_trees(parts, whitelist_parts, file_list, request_param)
