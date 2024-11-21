@@ -674,7 +674,6 @@ def build_trees(part, list_text, files, paths):
 
 
 if __name__ == '__main__':
-    # request_param = _get_export_project('project_list')
     request_param = ['account_os_account']
     if not request_param:
         subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
@@ -682,7 +681,6 @@ if __name__ == '__main__':
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        # file_list = _get_export_files('PR_FILE_PATHS')
         file_list = "{\"account_os_account\":[\"crypto/src/napi_asy_key_generator.cpp\"]}"
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
