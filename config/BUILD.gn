@@ -144,7 +144,6 @@ config("release") {
   }
 }
 
-
 # define custom board_config
 config("cust_board_config") {
   cflags = []
