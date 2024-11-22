@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/lite/config/toolchain/config.gni")
+
 template("clang_toolchain") {
   toolchain(target_name) {
     assert(defined(invoker.cc), "clang toolchain must specify a \"cc\" value")
@@ -30,14 +32,22 @@ template("clang_toolchain") {
     }
 
     tool("cc") {
-      command = "$cc {{defines}} {{cflags}} {{cflags_c}} {{include_dirs}} -c {{source}} -o {{output}}"
+      save_temps = ""
+      if (enable_save_temps) {
+        save_temps = "-save-temps=obj"
+      }
+      command = "$cc {{defines}} {{cflags}} {{cflags_c}} {{include_dirs}} -c {{source}} $save_temps -o {{output}}"
       description = "clang {{output}}"
       outputs =
           [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
     }
     tool("cxx") {
+      save_temps = ""
+      if (enable_save_temps) {
+        save_temps = "-save-temps=obj"
+      }
       depfile = "{{output}}.d"
-      command = "$cxx {{defines}} {{cflags_cc}} {{include_dirs}} -c {{source}} -o {{output}}"
+      command = "$cxx {{defines}} {{cflags_cc}} {{include_dirs}} -c {{source}} $save_temps -o {{output}}"
       description = "clang++ {{output}}"
       outputs =
           [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
@@ -91,12 +101,26 @@ template("clang_toolchain") {
       unstripped_outfile = outfile
 
       rspfile = "$outfile.rsp"
-      custom_ld_flags = " "
+      custom_ld_flags = ""
+      if (defined(board_custom_ld_flags)) {
+        foreach(ld_flags, board_custom_ld_flags) {
+          custom_ld_flags += ld_flags
+          custom_ld_flags += " "
+        }
+      }
       command = ""
       if (need_strip) {
         unstripped_outfile = "{{output_dir}}/unstripped/bin/{{target_output_name}}{{output_extension}}"
       }
-      command += "$ld {{ldflags}} {{inputs}} {{libs}} $custom_ld_flags -o $unstripped_outfile"
+      command += "$ld {{ldflags}} "
+      if (defined(board_custom_ld_flags)) {
+        command += "-Wl,--whole-archive -Wl,--start-group "
+      }
+      command += "{{inputs}} {{libs}} $custom_ld_flags "
+      if (defined(board_custom_ld_flags)) {
+        command += "-Wl,--end-group -Wl,--no-whole-archive "
+      }
+      command += "-o $unstripped_outfile"
       if (need_strip) {
         command += " && $strip \"$unstripped_outfile\" -o \"$outfile\""
       }

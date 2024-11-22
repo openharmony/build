@@ -90,9 +90,9 @@ def _resources_with_xml_v1(root, testcase_target_name: str, test_resource_path: 
             if _resource_src:
                 _out_resources_list.append({
                     "src":
-                    os.path.relpath(_resource_src),
+                        os.path.relpath(_resource_src),
                     "dest":
-                    os.path.relpath(_res_dest)
+                        os.path.relpath(_res_dest)
                 })
     return _out_resources_list
 
@@ -134,9 +134,9 @@ def _resources_with_xml_v2(root, testcase_target_name: str, test_resource_path: 
                 if _resource_src:
                     _out_resources_list.append({
                         "src":
-                        os.path.relpath(_resource_src),
+                            os.path.relpath(_resource_src),
                         "dest":
-                        os.path.relpath(_res_dest)
+                            os.path.relpath(_res_dest)
                     })
     return _out_resources_list
 
@@ -161,10 +161,10 @@ def find_testcase_resources(resource_config_file: str, testcase_target_name: str
     # copy ohos_test.xml
     _resources_list.append({
         "src":
-        resource_config_file,
+            resource_config_file,
         "dest":
-        os.path.join(resource_output_path,
-                     os.path.basename(resource_config_file))
+            os.path.join(resource_output_path,
+                         os.path.basename(resource_config_file))
     })
     return _resources_list
 
@@ -203,11 +203,28 @@ def _get_subsystem_name(part_name: str):
     return None
 
 
+def find_project_root(start_path: str, marker: str = '.gn') -> str:
+    """
+    :param start_path: 起始路径
+    :param marker: 标记文件名, 默认使用 .gn
+    :return: 项目根目录路径
+    """
+    current_path = os.path.abspath(start_path)
+    while True:
+        if os.path.isfile(os.path.join(current_path, marker)):
+            return current_path
+        parent_path = os.path.dirname(current_path)
+        if current_path == parent_path:  # 达到文件系统的根目录
+            raise Exception(f"Cant find the root of the project containing '{marker}'.")
+        current_path = parent_path
+
+
 def _get_subsystem_path(part_name: str) -> str:
     subsystem_name = _get_subsystem_name(part_name)
     if subsystem_name is None:
         return None
-    subsystem_build_config_file = os.path.join('../../build/subsystem_config.json')
+    project_root = find_project_root(__file__)
+    subsystem_build_config_file = os.path.join(project_root, 'build', 'subsystem_config.json')
     config_info = read_json_file(subsystem_build_config_file)
     if config_info is None:
         raise Exception(

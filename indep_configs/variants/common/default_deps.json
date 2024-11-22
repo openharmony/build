@@ -2,5 +2,6 @@
   "musl",
   "linux",
   "googletest",
-  "benchmark"
+  "benchmark",
+  "ets_frontend"
 ]

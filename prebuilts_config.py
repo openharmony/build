@@ -81,7 +81,7 @@ def copy_folder(src, dest):
 
 
 def symlink_src2dest(src_dir, dest_dir):
-    if os.path.exists(dest_dir):
+    if os.path.exists(dest_dir) or os.path.islink(dest_dir):
         if os.path.islink(dest_dir):
             os.unlink(dest_dir)
         elif os.path.isdir(dest_dir):

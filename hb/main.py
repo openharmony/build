@@ -187,6 +187,9 @@ class Main():
         generate_ninja = Gn()
         tool_args_resolever = ToolArgsResolver(args_dict)
         return OHOSToolModule(args_dict, tool_args_resolever, generate_ninja)
+    
+    def _indep_build_command_format_check(self) -> bool:
+        return "-i" in sys.argv[2:-1] and sys.argv[sys.argv.index("-i") + 1][0] != '-'
 
     def _init_indep_build_module(self) -> IndepBuildModuleInterface:
         cwd = os.getcwd()
@@ -201,6 +204,9 @@ class Main():
         return OHOSIndepBuildModule(args_dict, indep_build_args_resolver, hpm)
 
     def _is_indep_build(self) -> bool:
+        if self._indep_build_command_format_check():
+            print("ERROR: when use hb build command please add -i after component_name")
+            sys.exit()
         if judge_indep():
             return True
         env_args_dict = Arg.read_args_file(ModuleType.ENV)

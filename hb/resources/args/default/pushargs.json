@@ -10,14 +10,14 @@
         "resolve_function": "resolve_part",
         "testFunction": ""
       },
-      "target": {
-        "arg_name": "--target",
+      "sn": {
+        "arg_name": "--sn",
         "argDefault": "",
-        "arg_help": "Default:''. Help:specify target name, run 'hb push -t {target_number} or hb push --target {target_number}' ",
+        "arg_help": "Default:''. Help:specify machine number, run 'hb push -sn {sn_number} or hb push --sn {sn_number}' ",
         "arg_phase": "prebuild",
         "arg_type": "str",
         "arg_attribute": {
-          "abbreviation": "-t"
+          "abbreviation": "-sn"
         },
         "resolve_function": "resolve_target",
         "testFunction": ""
