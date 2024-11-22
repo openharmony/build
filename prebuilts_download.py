@@ -303,8 +303,12 @@ def _file_handle(config: dict, code_dir: str, host_platform: str):
                     shutil.rmtree(dest_dir)
                 shutil.move(src_dir, dest_dir)
                 if symlink_src and symlink_dest:
-                    if os.path.exists(dest_dir + symlink_dest):
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.isfile(dest_dir + symlink_dest):
                         os.remove(dest_dir + symlink_dest)
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.isdir(dest_dir + symlink_dest):
+                        shutil.rmtree(dest_dir + symlink_dest)
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.islink(dest_dir + symlink_dest):
+                        os.unlink(dest_dir + symlink_dest)
                     if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
                         symlink_src = symlink_src.replace('linux', 'darwin')
                     os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
