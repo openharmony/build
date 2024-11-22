@@ -144,6 +144,35 @@ config("release") {
   }
 }
 
+
+# define custom board_config
+config("cust_board_config") {
+  cflags = []
+  cflags_cc = []
+  ldflags = []
+  include_dirs = []
+  defines = []
+  asmflags = []
+  if (defined(cust_board_cflags)) {
+    cflags += cust_board_cflags
+  }
+  if (defined(cust_board_cxx_flags)) {
+    cflags_cc += cust_board_cxx_flags
+  }
+  if (defined(cust_board_ld_flags)) {
+    ldflags += cust_board_ld_flags
+  }
+  if (defined(cust_board_include_dirs)) {
+    include_dirs += cust_board_include_dirs
+  }
+  if (defined(cust_board_macro_defines)) {
+    defines += cust_board_macro_defines
+  }
+  if (defined(cust_board_asmflags)) {
+    asmflags += cust_board_asmflags
+  }
+}
+
 # Default libraries ------------------------------------------------------------
 
 # This config defines the default libraries applied to all targets.
