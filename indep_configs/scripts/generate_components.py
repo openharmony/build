@@ -58,9 +58,9 @@ def _get_args():
         help="whether the target contains test type. default 0 , choices: 0 or 1 2",
     )
     parser.add_argument(
-        "-out",
+        "-out", 
         "--out_dir",
-        default="src",
+        default="src", 
         type=str,
         help="the independent build out storage dir. default src , choices: src src_test or test",
     )
@@ -133,8 +133,8 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
     os.makedirs(musl_lib_link_path, exist_ok=True)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'includes'), musl_include_link_path)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'libs'), musl_lib_link_path)
-
-    kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']
+    
+    kernel_real_path = hpm_cache_path + dependences_json["linux"]['installPath']    
     kernel_link_path = os.path.join("kernel", "linux")
     if not os.path.exists(kernel_link_path):
         os.makedirs(kernel_link_path)
@@ -150,14 +150,14 @@ def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
         googletest_real_path = hpm_cache_path + dependences_json["googletest"]['installPath']
         googletest_link_path = os.path.join("out", variants, "obj/binarys/third_party/googletest")
         os.makedirs(googletest_link_path, exist_ok=True)
-    if is_directory_empty(googletest_link_path):
-        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
-                        os.path.join(googletest_link_path, 'innerapis'))
-    else:
-        shutil.rmtree(googletest_link_path, True)
-        os.makedirs(googletest_link_path, exist_ok=True)
-        shutil.copytree(os.path.join(googletest_real_path, 'innerapis'),
-                        os.path.join(googletest_link_path, 'innerapis'))
+        if is_directory_empty(googletest_link_path):
+            shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), 
+                            os.path.join(googletest_link_path, 'innerapis'))
+        else:
+            shutil.rmtree(googletest_link_path, True)
+            os.makedirs(googletest_link_path, exist_ok=True)
+            shutil.copytree(os.path.join(googletest_real_path, 'innerapis'), 
+                            os.path.join(googletest_link_path, 'innerapis'))
 
 
 def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):

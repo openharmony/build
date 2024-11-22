@@ -712,6 +712,7 @@ template("ohos_hap") {
     forward_variables_from(invoker,
                            [
                              "shared_libraries",
+                             "external_deps",
                              "private_key_path",
                              "signature_algorithm",
                              "certificate_profile",
@@ -728,6 +729,7 @@ template("ohos_hap") {
       ":$_resources_target",
       ":${_collect_target}",
     ]
+
     if (!ohos_indep_compiler_enable) {
       deps += [ "//developtools/packing_tool:packing_tool" ]
     }

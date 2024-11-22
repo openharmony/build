@@ -45,7 +45,9 @@ def reporthook(data_download, data_size, total_size):
     :param total_size: remote file size
     :return:None
     '''
-    print("\rdownloading: %5.1f%%" % (data_download * data_size * 100.0 / total_size), end="")
+    current_progress = data_download * data_size * 100.0 / total_size
+    if "DISABLE_DOWNLOAD_PROGRESS" not in os.environ:
+        print("\r[%-50s] %5.1f%%" % ("=" * int(current_progress // 2), current_progress), end="")
 
 
 def download(download_url, savepath):

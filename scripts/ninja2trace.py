@@ -66,6 +66,9 @@ class NinjaToTrace(object):
 
     def save_durations(self, duration_file: str):
         total_time = 0
+        if os.path.exists(duration_file):
+            shutil.move(duration_file, '{}/sorted_action_duration.{}.txt'.format(os.path.dirname(duration_file),
+                os.stat(duration_file).st_mtime))
         with open(duration_file, 'w') as file:
             for item in self.durations:
                 duration = item.end - item.start
