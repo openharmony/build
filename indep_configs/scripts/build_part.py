@@ -24,9 +24,10 @@ import glob
 import sys
 import argparse
 import stat
+import shlex
 from itertools import chain
 
-CURRENT_DIRECTORY = os.getcwd()
+CURRENT_DIRECTORY = os.path.abspath(os.getcwd())
 
 
 def replace_part_sofile(part_name, old_folder, new_folder):
@@ -673,7 +674,201 @@ def build_trees(part, list_text, files, paths):
         print('Inherited dayu200 result or dependent compilation')
 
 
+def _run_build_script(product_name, build_option):
+    result = subprocess.run(['./build.sh', '--product-name', product_name, build_option],
+                            check=True, text=True)
+
+
+def _load_json_file(file_path):
+    try:
+        with open(file_path, 'r') as json_file:
+            return json.load(json_file)
+    except FileNotFoundError:
+        print(f"The file at {file_path} was not found.")
+        return None
+    except json.JSONDecodeError:
+        print(f"Failed to decode JSON at {file_path}.")
+        return None
+
+
+def _get_parts_deps(call, product_name='rk3568', current_dir_abspath=None):
+    if current_dir_abspath is None:
+        current_dir_abspath = os.path.abspath(os.getcwd())
+
+    build_option = '--build-only-load' if call == "deps" else '--build-only-gn'
+    base_path = os.path.join(current_dir_abspath, 'out', product_name, 'build_configs', 'parts_info')
+    file_path = os.path.join(base_path, 'parts_deps.json' if call == "deps" else 'parts_info.json')
+    if os.path.exists(file_path):
+        print(f"File {file_path} already exists, skipping build script execution.")
+        parts_json = _load_json_file(file_path)
+        return parts_json
+    else:
+        try:
+            _run_build_script(product_name, build_option)
+            parts_json = _load_json_file(file_path)
+            return parts_json
+        except subprocess.CalledProcessError as e:
+            print(f"Error occurred during subprocess execution: {e}")
+            print(e.stderr)
+            return None
+
+
+def _bool_only_build(house, export_button):
+    try:
+        deps_files = json.loads(export_button)
+    except json.JSONDecodeError:
+        print("export_button not json file")
+        return True
+    deps_value = deps_files.get(house, [])
+    top_file_bool = False
+    for file in deps_value:
+        ext = os.path.splitext(file)[1].lower()
+        if ext in ['.hpp', '.inl', '.inc', '.h', '.in']:
+            print(f"{file} ends with a valid extension: {ext}")
+            top_file_bool = True
+            return top_file_bool
+        else:
+            print(f"{file} does not end with a valid extension.")
+    return top_file_bool
+
+
+def _path_inner_api(component):
+    file_path = os.path.join('out', 'rk3568', 'build_configs', 'parts_info', 'parts_info.json')
+    try:
+        with open(file_path, 'r') as json_file:
+            parts_data = json.load(json_file)
+    except FileNotFoundError:
+        print("parts_info.json not found")
+    except json.JSONDecodeError:
+        print("parts_info.json decode error")
+    if component not in parts_data:
+        print("component not found")
+    file_path = None
+    if component in parts_data and isinstance(parts_data[component], list):
+        subsystem_name = [item['subsystem_name'] for item in parts_data[component] if 'subsystem_name' in item]
+        origin_part_name = [item['origin_part_name'] for item in parts_data[component] if 'origin_part_name' in item]
+        if subsystem_name and origin_part_name:
+            file_path = os.path.join(CURRENT_DIRECTORY, 'out', 'rk3568', subsystem_name[0], origin_part_name[0], 'publicinfo')
+    if os.path.isdir(file_path):
+        innerapi_path = []
+        for filename in os.listdir(file_path):
+            if filename.endswith(".json"):
+                print(f"find innerapi file: {filename}")
+                with open(os.path.join(file_path, filename), "r") as f:
+                    innerapi_json = json.load(f)
+                for public_config in innerapi_json.get('public_configs', []):
+                    include_dirs = public_config.get('include_dirs', [])
+                    innerapi_path.extend(include_dirs)
+        path_set = [item for index, item in enumerate(innerapi_path) if item not in innerapi_path[:index]]
+        return path_set
+    else:
+        print("no inner api")
+        return ["noinnerapi"]
+
+
+def _file_paths(component, house, export_button):
+    file_path = os.path.join('out', 'rk3568', 'build_configs', 'parts_info', 'parts_path_info.json')
+    try:
+        with open(file_path, 'r') as json_file:
+            parts_data = json.load(json_file)
+    except FileNotFoundError:
+        print("parts_path_info.json not found")
+    except json.JSONDecodeError:
+        print("parts_path_info.json decode error")
+    component_mkdir = parts_data[component]
+    deps_files = json.loads(export_button)
+    deps_value = deps_files.get(house, [])
+    files_path = []
+    for file in deps_value:
+        files_path.append(os.path.join(component_mkdir, file))
+    return files_path
+
+
+def _bool_target_build(house, component):
+    export_files_info = _get_export_files('PR_FILE_PATHS')
+    if not _bool_only_build(house, export_files_info):
+        return True
+    innerapi_paths = _path_inner_api(component)
+    if len(innerapi_paths) == 0:
+        return True
+    elif innerapi_paths[0] == 'noinnerapi':
+        return False
+    file_paths = _file_paths(component, house, export_button)
+    for file_path in file_paths:
+        for innerapi_path in innerapi_paths:
+            if innerapi_path.startswith('//'):
+                innerapi_path = innerapi_path[2:]
+            if file_path.startswith(innerapi_path):
+                return False
+    return True
+
+
+def get_build_target(deps, default_target='make_all'):
+    try:
+        if not deps:
+            return f' --build-target {default_target} '
+        build_targets = [f' --build-target {dep}' for dep in deps]
+        return ''.join(build_targets)
+    except TypeError:
+        print(f"deps failed  {type(deps)}")
+        return f' --build-target {default_target} '
+
+
+def execute_build_command(build_target, gnargs):
+    _build_pre_compile()
+    current_env = os.environ.copy()
+    current_env['CCACHE_BASE'] = os.getcwd()
+    current_env['NO_DEVTOOL'] = '1'
+    current_env['CCACHE_LOG_SUFFIX'] = 'dayu200-arm32'
+    current_env['CCACHE_NOHASHDIR'] = 'true'
+    current_env['CCACHE_SLOPPINESS'] = 'include_file_ctime'
+    build_cmd = ['./build.sh', '--product-name', 'rk3568']
+    build_cmd.extend(shlex.split(build_target))
+    build_cmd.extend(shlex.split(gnargs))
+    try:
+        result = subprocess.run(build_cmd, check=True, text=True)
+        print(result.stdout)
+    except subprocess.CalledProcessError as e:
+        print(f"Build failed with error: {e.stderr}")
+    _build_after_compile()
+
+
+def precise_dayu200_build(gnargs):
+    project_list = _get_export_project('project_list')
+    values_to_all = {'build', 'manifest'}
+    subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
+    if not project_list or not values_to_all.isdisjoint(set(project_list)):
+        print("need full build")
+        execute_build_command('--build-target make_all', gnargs)
+        return 0
+    parts_deps = _get_parts_deps("deps")
+    component_dir = _get_api_mkdir(project_list)
+    component_dep_list = []
+    for part_house, part in component_dir.items():
+        if part and part.keys():
+            component_name = list(part.keys())[0]
+            component_dep_list.append(component_name)
+            if _bool_target_build(part_house, component_name):
+                continue
+            else:
+                for c, info in parts_deps.items():
+                    if info:
+                        if (info.get("components") and component_name in info.get("components")) or (info.get("third_party") and component_name in info.get("third_party")):
+                            component_dep_list.append(c)
+        else:
+            execute_build_command('--build-target make_all', gnargs)
+            print("part not found full build")
+            return 0
+    component_dep_list = list(set(component_dep_list))
+    targets = get_build_target(component_dep_list)
+    print(f' targets : {targets} ')
+    execute_build_command(targets, gnargs)
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--gnargs', required=True)
+    args = parser.parse_args()
     request_param = _get_export_project('project_list')
     if not request_param:
         subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
