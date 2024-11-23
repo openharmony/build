@@ -6322,7 +6322,7 @@
             "//third_party/protobuf/src/",
             "//foundation/arkui/"
         ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest": [
+        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base": [
             "//third_party/googletest/include/",
             "//third_party/node/src/",
             "//commonlibrary/c_utils/base/include/",
@@ -36987,11 +36987,11 @@
             "//third_party/googletest:gtest_main",
             "//foundation/ability/form_fwk/services/form_render_service:formrender"
         ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest": [
+        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base": [
             "//third_party/googletest:gtest",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_resource_copy": [
+        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base_resource_copy": [
             "//third_party/googletest:gtest",
             "//third_party/googletest:gtest_main"
         ],
