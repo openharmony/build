@@ -143,26 +143,6 @@
         ]
     },
     {
-        "install_dir": "js/build-tools/",
-        "module_label": "//prebuilts/sdk/js-loader:ace_loader",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "js/build-tools/ace-loader/bin/",
-        "module_label": "//third_party/quickjs:qjsc",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "js/build-tools/ace-loader/bin/",
         "module_label": "//third_party/jerryscript:jerry",
         "target_os": [
