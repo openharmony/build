@@ -732,38 +732,56 @@ def _bool_only_build(house, export_button):
     return top_file_bool
 
 
-def _path_inner_api(component):
+def _load_parts_info_json():
     file_path = os.path.join('out', 'rk3568', 'build_configs', 'parts_info', 'parts_info.json')
     try:
         with open(file_path, 'r') as json_file:
-            parts_data = json.load(json_file)
+            return json.load(json_file)
     except FileNotFoundError:
         print("parts_info.json not found")
+        return None
     except json.JSONDecodeError:
         print("parts_info.json decode error")
-    if component not in parts_data:
-        print("component not found")
-    file_path = None
+        return None
+
+
+def _generate_file_path(parts_data, component):
     if component in parts_data and isinstance(parts_data[component], list):
         subsystem_name = [item['subsystem_name'] for item in parts_data[component] if 'subsystem_name' in item]
         origin_part_name = [item['origin_part_name'] for item in parts_data[component] if 'origin_part_name' in item]
         if subsystem_name and origin_part_name:
-            file_path = os.path.join(CURRENT_DIRECTORY, 'out', 'rk3568', subsystem_name[0], origin_part_name[0], 'publicinfo')
+            return os.path.join(CURRENT_DIRECTORY, 'out', 'rk3568', subsystem_name[0], origin_part_name[0], 'publicinfo')
+    return None
+
+
+def _extract_include_dirs_from_file(file_path):
+    innerapi_path = []
     if os.path.isdir(file_path):
-        innerapi_path = []
         for filename in os.listdir(file_path):
             if filename.endswith(".json"):
                 print(f"find innerapi file: {filename}")
-                with open(os.path.join(file_path, filename), "r") as f:
-                    innerapi_json = json.load(f)
-                for public_config in innerapi_json.get('public_configs', []):
-                    include_dirs = public_config.get('include_dirs', [])
-                    innerapi_path.extend(include_dirs)
-        path_set = [item for index, item in enumerate(innerapi_path) if item not in innerapi_path[:index]]
-        return path_set
-    else:
+                try:
+                    with open(os.path.join(file_path, filename), "r") as f:
+                        innerapi_json = json.load(f)
+                    for public_config in innerapi_json.get('public_configs', []):
+                        include_dirs = public_config.get('include_dirs', [])
+                        innerapi_path.extend(include_dirs)
+                except (FileNotFoundError, json.JSONDecodeError):
+                    continue
+    return innerapi_path
+
+
+def _path_inner_api(component):
+    parts_data = _load_parts_info_json()
+    if parts_data is None:
+        return ["noinnerapi"]
+    file_path = _generate_file_path(parts_data, component)
+    if file_path is None:
         print("no inner api")
         return ["noinnerapi"]
+    innerapi_path = _extract_include_dirs_from_file(file_path)
+    path_set = [item for index, item in enumerate(innerapi_path) if item not in innerapi_path[:index]]
+    return path_set
 
 
 def _file_paths(component, house, export_button):
@@ -833,6 +851,15 @@ def execute_build_command(build_target, gnargs):
     _build_after_compile()
 
 
+def add_dependent_components(component_name, component_dep_list, parts_deps):
+    for c, info in parts_deps.items():
+        if info and (
+            (info.get("components") and component_name in info.get("components")) or
+            (info.get("third_party") and component_name in info.get("third_party"))
+        ):
+            component_dep_list.append(c)
+
+
 def precise_dayu200_build(gnargs):
     project_list = _get_export_project('project_list')
     values_to_all = {'build', 'manifest'}
@@ -840,7 +867,6 @@ def precise_dayu200_build(gnargs):
     if not project_list or not values_to_all.isdisjoint(set(project_list)):
         print("need full build")
         execute_build_command('--build-target make_all', gnargs)
-        return 0
     parts_deps = _get_parts_deps("deps")
     component_dir = _get_api_mkdir(project_list)
     component_dep_list = []
@@ -851,14 +877,10 @@ def precise_dayu200_build(gnargs):
             if _bool_target_build(part_house, component_name):
                 continue
             else:
-                for c, info in parts_deps.items():
-                    if info:
-                        if (info.get("components") and component_name in info.get("components")) or (info.get("third_party") and component_name in info.get("third_party")):
-                            component_dep_list.append(c)
+                add_dependent_components(component_name, component_dep_list, parts_deps)
         else:
             execute_build_command('--build-target make_all', gnargs)
             print("part not found full build")
-            return 0
     component_dep_list = list(set(component_dep_list))
     targets = get_build_target(component_dep_list)
     print(f' targets : {targets} ')
@@ -869,14 +891,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gnargs', required=True)
     args = parser.parse_args()
-    request_param = _get_export_project('project_list')
+    request_param = ['window_window_manager']
     if not request_param:
         subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
         _build_dayu200()
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        file_list = _get_export_files('PR_FILE_PATHS')
+        file_list = "{\"window_window_manager\":[\"frameworks/js/napi/crypto/src/napi_asy_key_generator.h\"]}"
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
         build_trees(parts, whitelist_parts, file_list, request_param)
