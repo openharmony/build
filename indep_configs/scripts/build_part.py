@@ -898,14 +898,14 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--gnargs', required=True)
     args = parser.parse_args()
-    request_param = ['window_window_manager']
+    request_param = _get_export_project('project_list')
     if not request_param:
         subprocess.run(['./build/prebuilts_download.sh'], check=True, text=True)
         _build_dayu200()
         print('Prebuilt build')
     else:
         mkdir_text = _get_api_mkdir(request_param)
-        file_list = "{\"window_window_manager\":[\"frameworks/js/napi/crypto/src/napi_asy_key_generator.h\"]}"
+        file_list = _get_export_files('PR_FILE_PATHS')
         parts = _get_dep_parts(mkdir_text, file_list)
         whitelist_parts = _get_part_list()
         build_trees(parts, whitelist_parts, file_list, request_param)
