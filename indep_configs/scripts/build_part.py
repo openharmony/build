@@ -754,20 +754,27 @@ def _generate_file_path(parts_data, component):
     return None
 
 
+def _load_and_extract_include_dirs(json_file_path):
+    include_dirs = []
+    try:
+        with open(json_file_path, "r") as f:
+            innerapi_json = json.load(f)
+            for public_config in innerapi_json.get('public_configs', []):
+                dirs = public_config.get('include_dirs', [])
+                include_dirs.extend(dirs)
+    except (FileNotFoundError, json.JSONDecodeError):
+        pass
+    return include_dirs
+
+
 def _extract_include_dirs_from_file(file_path):
     innerapi_path = []
     if os.path.isdir(file_path):
         for filename in os.listdir(file_path):
             if filename.endswith(".json"):
                 print(f"find innerapi file: {filename}")
-                try:
-                    with open(os.path.join(file_path, filename), "r") as f:
-                        innerapi_json = json.load(f)
-                    for public_config in innerapi_json.get('public_configs', []):
-                        include_dirs = public_config.get('include_dirs', [])
-                        innerapi_path.extend(include_dirs)
-                except (FileNotFoundError, json.JSONDecodeError):
-                    continue
+                json_file_path = os.path.join(file_path, filename)
+                innerapi_path.extend(_load_and_extract_include_dirs(json_file_path))
     return innerapi_path
 
 
