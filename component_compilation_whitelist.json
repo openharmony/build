@@ -77,7 +77,10 @@
     "includes_over_range": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
         "//arkcompiler/ets_runtime:libark_jsruntime_static",
+        "//arkcompiler/runtime_core/assembler:libarkassembler_static",
         "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_runtime_static",
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_static",
         "//foundation/arkui/napi:ace_napi",
         "//third_party/FreeBSD:libfreebsd_static",
         "//third_party/bzip2:libbz2",
@@ -345,13 +348,18 @@
             "//third_party/icu/icu4c/source/"
         ],
         "//arkcompiler/ets_frontend/merge_abc:assembly_proto_static": [
+            "//third_party/bounds_checking_function/include/",
+            "//arkcompiler/runtime_core/",
             "//arkcompiler/runtime_core/assembler/",
             "//arkcompiler/runtime_core/libpandabase/",
             "//arkcompiler/runtime_core/libpandabase/mem/",
-            "//arkcompiler/runtime_core/",
             "//third_party/protobuf/src/",
             "//third_party/protobuf/src/google/",
-            "//third_party/protobuf/src/google/protobuf/"
+            "//third_party/protobuf/src/google/protobuf/",
+            "//arkcompiler/runtime_core/plugins/ecmascript/assembler/",
+            "//arkcompiler/runtime_core/libpandafile/",
+            "//arkcompiler/runtime_core/libziparchive/",
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//arkcompiler/ets_frontend/merge_abc:merge_abc": [
             "//arkcompiler/runtime_core/assembler/",
@@ -366,6 +374,15 @@
             "//third_party/",
             "//third_party/bounds_checking_function/include/"
         ],
+        "//arkcompiler/runtime_core/assembler:ark_asm_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/assembler:libarkassembler_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/assembler:libarkassembler_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
         "//arkcompiler/runtime_core/libpandabase:libarkbase_frontend_set_static": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
@@ -374,6 +391,67 @@
         ],
         "//arkcompiler/runtime_core/libpandabase:libarkbase_static_fuzz": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_runtime_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_static_fuzz": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libpandafile:libarkfile_static_verifier": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libziparchive:libarkziparchive_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/libziparchive:libarkziparchive_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/assembler:arkts_asm_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/assembler:libarktsassembler_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/assembler:libarktsassembler_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/dprof:libdprof_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libziparchive:libarktsziparchive_frontend_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/libziparchive:libarktsziparchive_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/runtime:arkruntime_interpreter_impl_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//arkcompiler/runtime_core/static_core/runtime:libarkruntime_set_static": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
+            "//third_party/icu/icu4c/source/common/",
+            "//third_party/icu/icu4c/source/i18n/",
+            "//third_party/icu/icu4c/source/",
+            "//third_party/icu/"
         ],
         "//arkcompiler/toolchain/tooling/test:DebuggerCIntClientTest": [
             "//arkcompiler/ets_runtime/",
@@ -877,6 +955,10 @@
         "//base/print/print_fwk/frameworks/kits/extension:print_extension_framework": [
             "//third_party/libuv/include/",
             "//third_party/json/include/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/context/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/native/",
             "//third_party/node/src/"
         ],
         "//base/print/print_fwk/frameworks/kits/extension:print_extension_module": [
@@ -889,6 +971,7 @@
             "//third_party/curl/include/"
         ],
         "//base/print/print_fwk/services/print_service:print_service": [
+            "//commonlibrary/c_utils/base/include/",
             "//third_party/cups/cups-2.4.0/"
         ],
         "//base/print/print_fwk/test/fuzztest/printcupsclient_fuzzer:PrintCupsClientFuzzTest": [
@@ -931,7 +1014,40 @@
         "//base/print/print_fwk/test/unittest/service_test:scan_service_test": [
             "//third_party/node/src/"
         ],
+        "//base/startup/appspawn/util:libappspawn_util": [
+            "//commonlibrary/c_utils/base/include/"
+        ],
         "//base/startup/init/interfaces/innerkits/init_module_engine:libinit_module_engine": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/bootchart:libbootchart_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/bootevent:libbootevent_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/crashhandler:libcrashhandler": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/init_context:initcontext_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/init_eng:libiniteng_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/init_hook:inithook": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/reboot:libreboot_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/seccomp:libseccomp_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/selinux:libselinuxadp_static": [
+            "//third_party/cJSON/"
+        ],
+        "//base/startup/init/services/modules/udid:libudid_static": [
             "//third_party/cJSON/"
         ],
         "//base/startup/init/test/unittest:init_dmverify_unittest": [
@@ -1404,15 +1520,22 @@
             "//third_party/node/src/"
         ],
         "//developtools/hiperf:hiperf_platform_common": [
+            "//commonlibrary/c_utils/base/include/",
+            "//third_party/googletest/googletest/include/",
             "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:hiperf_platform_linux": [
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
+            "//commonlibrary/c_utils/base/include/",
+            "//third_party/googletest/googletest/include/"
         ],
         "//developtools/hiperf:support_elf": [
+            "//commonlibrary/c_utils/base/include/",
+            "//third_party/googletest/googletest/include/",
             "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
         ],
         "//developtools/hiperf:support_protobuf": [
+            "//commonlibrary/c_utils/base/include/",
+            "//third_party/googletest/googletest/include/",
             "//third_party/protobuf/src/",
             "//third_party/protobuf/src/google/",
             "//third_party/protobuf/src/google/protobuf/",
@@ -3657,7 +3780,10 @@
             "//third_party/glib/"
         ],
         "//foundation/CastEngine/castengine_cast_framework/service/src/session:cast_session": [
-            "//third_party/jsoncpp/include/"
+            "//third_party/jsoncpp/include/",
+            "//third_party/glib/glib/",
+            "//third_party/glib/",
+            "//third_party/json/single_include/nlohmann/"
         ],
         "//foundation/CastEngine/castengine_wifi_display/interfaces/innerkits/native/wfd:sharingwfd_client": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -3866,6 +3992,16 @@
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility:featureability": [
             "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_napi/"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_ability_common:napi_ability_common": [
+            "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi/",
+            "//foundation/window/window_manager/interfaces/innerkits/wm/",
+            "//foundation/window/window_manager/interfaces/innerkits/dm/"
+        ],
+        "//foundation/ability/ability_runtime/frameworks/js/napi/inner/napi_common:napi_common": [
+            "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi/",
+            "//foundation/window/window_manager/interfaces/innerkits/wm/",
+            "//foundation/window/window_manager/interfaces/innerkits/dm/"
         ],
         "//foundation/ability/ability_runtime/frameworks/native/ability/native:abilitykit_native": [
             "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi/",
@@ -4076,6 +4212,11 @@
         "//foundation/ability/ability_runtime/test/fuzztest/cacheprocessmanagerb_fuzzer:CacheProcessManagerbFuzzTest": [
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
         ],
+        "//foundation/ability/ability_runtime/test/fuzztest/connectability_fuzzer:ConnectAbilityFuzzTest": [
+            "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi/",
+            "//foundation/window/window_manager/interfaces/innerkits/wm/",
+            "//foundation/window/window_manager/interfaces/innerkits/dm/"
+        ],
         "//foundation/ability/ability_runtime/test/fuzztest/connectionobserverclient_fuzzer:ConnectionObserverClientFuzzTest": [
             "//foundation/resourceschedule/background_task_mgr/interfaces/innerkits/include/",
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
@@ -4215,18 +4356,18 @@
             "//third_party/jsoncpp/include/"
         ],
         "//foundation/ability/ability_runtime/test/moduletest/ability_test:ability_post_event_timeout_test": [
+            "//foundation/systemabilitymgr/samgr/services/samgr/native/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
-            "//third_party/jsoncpp/include/",
-            "//foundation/systemabilitymgr/samgr/services/samgr/native/include/"
+            "//third_party/jsoncpp/include/"
         ],
         "//foundation/ability/ability_runtime/test/moduletest/ability_test:ability_thread_call_request_module_test": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//third_party/jsoncpp/include/"
         ],
         "//foundation/ability/ability_runtime/test/moduletest/ability_test:data_ability_helper_module_test": [
+            "//foundation/systemabilitymgr/samgr/services/samgr/native/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
-            "//third_party/jsoncpp/include/",
-            "//foundation/systemabilitymgr/samgr/services/samgr/native/include/"
+            "//third_party/jsoncpp/include/"
         ],
         "//foundation/ability/ability_runtime/test/moduletest/ability_test:data_ability_operation_moduletest": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
@@ -4238,6 +4379,12 @@
         ],
         "//foundation/ability/ability_runtime/test/moduletest/common/ams/ipc_ams_mgr_test:AmsIpcAmsmgrModuleTest": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
+        ],
+        "//foundation/ability/ability_runtime/test/moduletest/common/ams:appmgr_mst_source": [
+            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
+            "//commonlibrary/c_utils/base/include/",
+            "//third_party/googletest/googletest/include/",
+            "//third_party/googletest/googlemock/include/"
         ],
         "//foundation/ability/ability_runtime/test/moduletest/ipc_ability_mgr_test:IpcAbilityMgrServiceModuleTest": [
             "//third_party/jsoncpp/include/"
@@ -4700,12 +4847,12 @@
             "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:ability_window_test": [
+            "//foundation/window/window_manager/wm/include/",
             "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
             "//base/global/i18n/frameworks/intl/include/",
-            "//foundation/ability/form_fwk/interfaces/kits/native/include/",
-            "//foundation/window/window_manager/wm/include/"
+            "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:abilityruntime_test": [
             "//third_party/zlib/contrib/minizip/",
@@ -4782,14 +4929,14 @@
             "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:data_ability_impl_test": [
-            "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
-            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
-            "//base/global/i18n/frameworks/intl/include/",
-            "//foundation/ability/form_fwk/interfaces/kits/native/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/rdb/include/",
             "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/common/include/",
-            "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/dataability/include/"
+            "//foundation/distributeddatamgr/relational_store/frameworks/js/napi/dataability/include/",
+            "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
+            "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
+            "//base/global/i18n/frameworks/intl/include/",
+            "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:data_ability_operation_test": [
             "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
@@ -4897,12 +5044,12 @@
             "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:js_ui_extension_Callback_test": [
+            "//foundation/window/window_manager/window_scene/interfaces/include/",
             "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//foundation/ability/ability_base/interfaces/kits/native/extractortool/include/",
             "//base/global/i18n/frameworks/intl/include/",
-            "//foundation/ability/form_fwk/interfaces/kits/native/include/",
-            "//foundation/window/window_manager/window_scene/interfaces/include/"
+            "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:new_ability_impl_test": [
             "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
@@ -4954,12 +5101,12 @@
             "//foundation/ability/form_fwk/interfaces/kits/native/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:scene_created_test": [
+            "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//third_party/googletest/googlemock/include/",
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
             "//third_party/libuv/include/",
-            "//base/global/resource_management/interfaces/inner_api/include/",
-            "//foundation/window/window_manager/interfaces/innerkits/wm/"
+            "//base/global/resource_management/interfaces/inner_api/include/"
         ],
         "//foundation/ability/ability_runtime/test/unittest/frameworks_kits_ability_native_test:service_ability_impl_test": [
             "//foundation/distributeddatamgr/distributeddatamgr/interfaces/innerkits/app_distributeddata/include/",
@@ -5240,7 +5387,8 @@
         ],
         "//foundation/ability/ability_runtime/test/unittest:appmgr_test_source": [
             "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/",
-            "//base/global/i18n/frameworks/intl/include/"
+            "//base/global/i18n/frameworks/intl/include/",
+            "//commonlibrary/c_utils/base/include/"
         ],
         "//foundation/ability/ability_runtime/tools/test/moduletest/aa:aa_command_dump_module_test": [
             "//third_party/googletest/googlemock/include/"
@@ -5795,6 +5943,12 @@
             "//foundation/ability/ability_runtime/services/formmgr/include/",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/"
         ],
+        "//foundation/ability/form_fwk/test:benchmarktest": [
+            "//commonlibrary/c_utils/base/include/"
+        ],
+        "//foundation/ability/form_fwk/test:unittest": [
+            "//commonlibrary/c_utils/base/include/"
+        ],
         "//foundation/ai/intelligent_voice_framework/frameworks/js:intelligentvoice": [
             "//foundation/arkui/napi/interfaces/kits/"
         ],
@@ -6002,6 +6156,7 @@
             "//foundation/graphic/graphic_2d/rosen/modules/render_service_base/include/common/rs_common_def.h/"
         ],
         "//foundation/arkui/ace_engine/test/unittest/core/svg:parse_test_ng": [
+            "//third_party/skia/",
             "//commonlibrary/c_utils/base/include/",
             "//foundation/graphic/graphic_2d/rosen/modules/",
             "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/",
@@ -6014,7 +6169,6 @@
             "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/include/",
             "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/src/",
             "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics/src/drawing/engine_adapter/",
-            "//third_party/skia/",
             "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/export/"
         ],
         "//foundation/arkui/ace_engine/test/unittest/core/svg:svg_dom_test_ng": [
@@ -6152,21 +6306,6 @@
             "//foundation/window/window_manager/interfaces/innerkits/",
             "//commonlibrary/c_utils/base/include/",
             "//third_party/node/src/"
-        ],
-        "//foundation/arkui/napi/test/unittest/cj_native:test_ark_interop": [
-            "//third_party/googletest/include/",
-            "//third_party/node/src/",
-            "//commonlibrary/c_utils/base/include/",
-            "//foundation/ability/form_fwk/services/form_render_service/include/",
-            "//foundation/ability/form_fwk/interfaces/inner_api/include/",
-            "//base/global/i18n/interfaces/js/kits/include/",
-            "//base/global/i18n/frameworks/intl/include/",
-            "//base/global/i18n/interfaces/native/inner_api/preferred_language/include/",
-            "//third_party/skia/third_party/externals/icu/source/common/unicode/",
-            "//third_party/libphonenumber/",
-            "//third_party/libphonenumber/cpp/src/",
-            "//third_party/protobuf/src/",
-            "//foundation/arkui/"
         ],
         "//foundation/arkui/napi/test/unittest:test_ark_api_allowlist": [
             "//third_party/googletest/include/",
@@ -8892,6 +9031,9 @@
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient/include/proxy/",
             "//foundation/communication/netmanager_base/services/netsyscontroller/include/"
         ],
+        "//foundation/communication/netmanager_ext/utils:net_manager_ext_common": [
+            "//commonlibrary/c_utils/base/include/"
+        ],
         "//foundation/communication/netstack/frameworks/js/napi/http:http": [
             "//foundation/communication/netmanager_base/interfaces/innerkits/include/",
             "//foundation/communication/netmanager_base/interfaces/innerkits/netconnclient/include/"
@@ -8971,8 +9113,8 @@
             "//third_party/curl/include/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/ipc_framework/cRPC/unittest:crpc_unittest": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
+            "//commonlibrary/c_utils/base/include/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/native:native_unittest": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
@@ -9066,8 +9208,8 @@
             "//third_party/googletest/googletest/include/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_framework/wifi_toolkit/unittest:toolkit_unittest": [
-            "//commonlibrary/c_utils/base/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
+            "//commonlibrary/c_utils/base/include/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_hal/unittest:wifi_hal_unittest": [
             "//commonlibrary/c_utils/base/include/",
@@ -9711,17 +9853,17 @@
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:DataShareServiceImplTest": [
+            "//foundation/distributeddatamgr/data_share/frameworks/native/common/include/",
+            "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/",
+            "//foundation/distributeddatamgr/data_share/interfaces/inner_api/consumer/include/",
+            "//third_party/json/single_include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/data_share/frameworks/native/common/include/",
-            "//foundation/distributeddatamgr/data_share/interfaces/inner_api/common/include/",
-            "//foundation/distributeddatamgr/data_share/interfaces/inner_api/consumer/include/",
-            "//third_party/json/single_include/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:DeviceMatrixTest": [
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
@@ -9751,59 +9893,59 @@
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:KVDBGeneralStoreTest": [
+            "//foundation/distributeddatamgr/relational_store/interfaces/innerapi/clouddata/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/innerapi/clouddata/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:KvdbServiceImplTest": [
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:MetaDataTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
-            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/"
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
+            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ObjectAssetLoaderTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ObjectAssetMachineTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ObjectDmsHandlerTest": [
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
@@ -9815,66 +9957,66 @@
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ObjectManagerTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
-            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/",
+            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ObjectSnapshotTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/"
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:RdbResultSetImplTest": [
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/"
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:RdbServiceTest": [
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/"
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:UdmfRunTimeStoreTest": [
-            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
-            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
-            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatasvc/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/"
-        ],
-        "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ValueProxyServiceTest": [
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
             "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/"
+        ],
+        "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:ValueProxyServiceTest": [
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
-            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/"
+            "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
+            "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
+            "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
+            "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test:WaterVersionManagerTest": [
             "//foundation/distributedhardware/device_manager/interfaces/inner_kits/native_cpp/include/",
@@ -9894,19 +10036,19 @@
             "//foundation/distributeddatamgr/udmf/interfaces/innerkits/data/"
         ],
         "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service:distributeddatasvc": [
-            "//foundation/distributeddatamgr/kv_store/frameworks/common/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/relational/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/",
             "//foundation/distributeddatamgr/data_object/frameworks/innerkitsimpl/include/common/",
             "//foundation/distributeddatamgr/data_object/interfaces/innerkits/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/cloud_data/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/common_type/include/",
             "//foundation/distributeddatamgr/relational_store/interfaces/inner_api/rdb/include/",
-            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/"
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/common/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/kvdb/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/",
+            "//foundation/distributeddatamgr/kv_store/frameworks/libs/distributeddb/interfaces/include/relational/"
         ],
         "//foundation/distributeddatamgr/kv_store/frameworks/innerkitsimpl/distributeddatafwk/test:BlobTest": [
             "//commonlibrary/c_utils/base/include/",
@@ -11336,6 +11478,10 @@
             "//foundation/bundlemanager/bundle_framework/services/bundlemgr/include/"
         ],
         "//foundation/filemanagement/user_file_service/interfaces/inner_api/file_access:file_access_extension_ability_kit": [
+            "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/ability_runtime/context/",
+            "//foundation/ability/ability_runtime/interfaces/kits/native/ability/native/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//foundation/filemanagement/user_file_service/interfaces/kits/native/trash:trash": [
@@ -11728,6 +11874,18 @@
             "//commonlibrary/c_utils/base/include/",
             "//third_party/bounds_checking_function/include/"
         ],
+        "//foundation/graphic/graphic_3d/lume/LumeRender:lume_render_src": [
+            "//third_party/bounds_checking_function/include/"
+        ],
+        "//foundation/graphic/graphic_3d/lume/Lume_3D:lume_3d_src": [
+            "//third_party/bounds_checking_function/include/"
+        ],
+        "//foundation/graphic/graphic_3d/lume/metaobject:lume_metaobject_src": [
+            "//third_party/bounds_checking_function/include/"
+        ],
+        "//foundation/graphic/graphic_3d/lume/scenewidgetplugin:lume_scenewidget_src": [
+            "//third_party/bounds_checking_function/include/"
+        ],
         "//foundation/multimedia/audio_framework/frameworks/native/audiopolicy/test/unittest/policy_test:audio_policy_unit_test": [
             "//foundation/foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/"
         ],
@@ -11854,9 +12012,21 @@
             "//commonlibrary/memory_utils/libdmabufheap/include/"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/filters:av_codec_media_engine_filters": [
+            "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/frameworks/native/audiostream/include/",
+            "//foundation/multimedia/audio_framework/services/audio_service/client/include/",
             "//foundation/multimedia/drm_framework/services/drm_service/ipc/",
             "//foundation/graphic/graphic_2d/interfaces/inner_api/",
             "//foundation/graphic/graphic_surface/interfaces/inner_api/"
+        ],
+        "//foundation/multimedia/av_codec/services/media_engine/modules:av_codec_media_engine_modules": [
+            "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/frameworks/native/audiostream/include/",
+            "//foundation/multimedia/audio_framework/services/audio_service/client/include/"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/plugins/sink:media_plugin_AudioServerSink": [
             "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/"
@@ -11929,6 +12099,13 @@
             "//foundation/window/window_manager/interfaces/innerkits/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/common/",
             "//foundation/multimedia/drm_framework/interfaces/kits/c/drm_capi/include/"
+        ],
+        "//foundation/multimedia/av_codec/test/unittest/audio_capture_test:audio_capture_module_unit_test": [
+            "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/frameworks/native/audiostream/include/",
+            "//foundation/multimedia/audio_framework/services/audio_service/client/include/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/audio_test:av_audio_capi_unit_test": [
             "//third_party/ffmpeg/"
@@ -12731,11 +12908,109 @@
             "//foundation/multimedia/media_foundation/engine/include/",
             "//third_party/skia/third_party/externals/oboe/samples/RhythmGame/third_party/"
         ],
+        "//foundation/multimedia/media_foundation/engine/foundation:histreamer_foundation": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/codec:codec_filters": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/demux:demuxer_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/muxer:muxer_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/sink:audio_sink_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/sink:media_synchronous_sink": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/sink:output_sink_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/sink:video_sink_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/source:audio_capture_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/source:media_source_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline/filters/source:video_capture_filter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_pipeline": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/pipeline:histreamer_pipeline_base": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/codec_adapter:std_plugin_codec_adapter": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_adapter_common": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_audio_decoders": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_audio_encoders": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_demuxers": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_muxers": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_video_decoders": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/ffmpeg_adapter:ffmpeg_video_encoders": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/sink/audio_server_sink:histreamer_plugin_AudioServerSink": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/sink/video_surface_sink:std_video_surface_sink": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/source/audio_capture:histreamer_plugin_StdAudioCapture": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/source/file_source:filefdsource": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/source/file_source:filesource": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin/plugins/source/http_source:httpsource": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin:ffmpeg_convert": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_core": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin:histreamer_plugin_intf": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
+        "//foundation/multimedia/media_foundation/engine/plugin:plugin_base": [
+            "//base/hiviewdfx/hitrace/interfaces/native/innerkits/include/hitrace_meter/"
+        ],
         "//foundation/multimedia/media_foundation/test/moduletest:vpe_video_native_module_test": [
             "//foundation/graphic/graphic_2d/interfaces/inner_api/",
             "//foundation/window/window_manager/interfaces/innerkits/"
         ],
         "//foundation/multimedia/media_foundation/test/unittest:histreamer_unit_test": [
+            "//foundation/multimedia/audio_framework/frameworks/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocommon/include/",
+            "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocapturer/include/",
+            "//foundation/multimedia/audio_framework/frameworks/native/audiostream/include/",
+            "//foundation/multimedia/audio_framework/services/audio_service/client/include/",
             "//drivers/peripheral/base/",
             "//third_party/openmax/api/1.1.2/",
             "//graphic/graphic_surface/interfaces/innerkits/surface/",
@@ -13260,9 +13535,9 @@
             "//foundation/mutimodalinput/input/interfaces/"
         ],
         "//test/testfwk/arkxtest/uitest:uitest_client": [
+            "//third_party/libuv/include/",
             "//third_party/json/single_include/nlohmann/",
-            "//foundation/mutimodalinput/input/interfaces/",
-            "//third_party/libuv/include/"
+            "//foundation/mutimodalinput/input/interfaces/"
         ],
         "//test/testfwk/arkxtest/uitest:uitest_core": [
             "//third_party/json/single_include/nlohmann/",
@@ -13293,9 +13568,9 @@
             "//foundation/mutimodalinput/input/interfaces/"
         ],
         "//test/testfwk/arkxtest/uitest:uitest_server": [
+            "//base/hiviewdfx/hidumper/interfaces/native/innerkits/include/",
             "//third_party/json/single_include/nlohmann/",
-            "//foundation/mutimodalinput/input/interfaces/",
-            "//base/hiviewdfx/hidumper/interfaces/native/innerkits/include/"
+            "//foundation/mutimodalinput/input/interfaces/"
         ],
         "//test/xts/device_attest/interfaces/innerkits/native_cpp/test/unittest:test_devattestclient": [
             "//third_party/googletest/include/"
@@ -15713,9 +15988,6 @@
         "//arkcompiler/ets_frontend/arkguard:build_arkguard": [
             "//third_party/typescript:build_typescript"
         ],
-		"//arkcompiler/ets_runtime/test/aottest/createarraywithbuffer3:gen_createarraywithbuffer3_abc": [
-			"//arkcompiler/ets_frontend/es2panda:es2panda"
-		],
         "//arkcompiler/ets_frontend/es2panda:es2panda_lib": [
             "//third_party/icu/icu4c:static_icuuc"
         ],
@@ -17798,6 +18070,9 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/createarraywithbuffer2:gen_createarraywithbuffer2_abc": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda"
+        ],
+        "//arkcompiler/ets_runtime/test/aottest/createarraywithbuffer3:gen_createarraywithbuffer3_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
         "//arkcompiler/ets_runtime/test/aottest/createarraywithbuffer:gen_createarraywithbuffer_abc": [
@@ -34816,12 +35091,6 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/ai/intelligent_voice_framework/tests/unittest/intell_voice_test:update_engine_test": [
-            "//third_party/googletest:gmock_main"
-        ],
-        "//foundation/ai/intelligent_voice_framework/tests/unittest/intell_voice_test:update_engine_test_resource_copy": [
-            "//third_party/googletest:gmock_main"
-        ],
         "//foundation/ai/neural_network_runtime/test/unittest/components:CompilationV1_0Test": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
@@ -36686,12 +36955,6 @@
             "//third_party/libuv:uv"
         ],
         "//foundation/arkui/napi/test/fuzztest/runscriptpath_fuzzer:RunScriptPathFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/unittest/cj_native:test_ark_interop": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/unittest/cj_native:test_ark_interop_resource_copy": [
             "//third_party/libuv:uv"
         ],
         "//foundation/arkui/napi/test/unittest:jerry_host_jstest_es2015": [
@@ -47571,12 +47834,6 @@
         "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_client/unittest/ui:RSUIDisplaySoloistTest_resource_copy": [
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_client/unittest/ui:RSUIShareContextTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_client/unittest/ui:RSUIShareContextTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
         "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_profiler/unittest:RSProfilerArchiveTest": [
             "//third_party/googletest:gtest_main"
         ],
@@ -49571,24 +49828,6 @@
             "//third_party/googletest:gmock",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/window/window_manager/interfaces/kits/napi/embeddable_window_stage:gen_embeddable_window_stage_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/extension_window:gen_extension_window_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/window_extension_ability:gen_window_extension_ability_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/window_extension_context:gen_window_extension_context_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_stage_napi:gen_window_stage_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/window/window_manager/resources/abc/pip/interface:gen_pip_content_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
         "//foundation/window/window_manager/snapshot/test/unittest:utils_unittest_common": [
             "//commonlibrary/c_utils/base:utils",
             "//foundation/graphic/graphic_2d/rosen/modules/2d_graphics:2d_graphics",
@@ -50184,6 +50423,13 @@
         "//arkcompiler/ets_frontend/merge_abc/": [
             "//arkcompiler/runtime_core/ark_config.gni"
         ],
+        "//arkcompiler/ets_frontend/panda_guard/": [
+            "//arkcompiler/runtime_core/ark_config.gni"
+        ],
+        "//arkcompiler/ets_frontend/panda_guard/tests/": [
+            "//arkcompiler/runtime_core/ark_config.gni",
+            "//arkcompiler/runtime_core/tests/test_helper.gni"
+        ],
         "//arkcompiler/ets_runtime/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -50206,9 +50452,6 @@
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//arkcompiler/runtime_core/libark_defect_scan_aux/tests/unittest/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
-        ],
-        "//arkcompiler/runtime_core/verifier/tests/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//base/customization/enterprise_device_management/interfaces/kits/enterprise_admin_extension/": [
@@ -50613,6 +50856,32 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf/": [
             "//drivers/hdf_core/adapter/uhdf2/hcs/hcs.gni"
+        ]
+    },
+    "fuzzy_match": {
+        "deps_not_lib": [
+            "//drivers/interface",
+            "//drivers/hdf_core",
+            "//drivers/peripheral",
+            "//developtools/packing_tool",
+            "//arkcompiler/ets_frontend/es2panda"
+        ],
+        "deps_includes_absolute": [
+            "//drivers/hdf_core",
+            "//drivers/peripheral"
+        ],
+        "deps_component_absolute": [
+            "//arkcompiler/ets_frontend/es2panda:es2panda",
+            "//developtools/global_resource_tool:restool",
+            "//developtools/global_resource_tool:restool_id_defined",
+            "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen",
+            "//foundation/ability/idl_tool:idl"
+        ],
+        "deps_gni": [
+            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
+            "//drivers/hdf_core/adapter/uhdf2/hdi.gni",
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
+            "//device/board/hihope/rk3568/config.gni"
         ]
     }
 }
