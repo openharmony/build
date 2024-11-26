@@ -199,8 +199,9 @@ def print_process(chunk_size, downloaded_size, out_file, response, total_size):
         out_file.write(chunk)
         downloaded_size += len(chunk)
         if total_size != 0:
-            progress = downloaded_size / total_size * 50
-            print(f'\r[{"=" * int(progress)}{" " * (50 - int(progress))}] {progress * 2:.2f}%', end='', flush=True)
+            if "DISABLE_DOWNLOAD_PROGRESS" not in os.environ:
+                progress = downloaded_size / total_size * 50
+                print(f'\r[{"=" * int(progress)}{" " * (50 - int(progress))}] {progress * 2:.2f}%', end='', flush=True)
         else:
             print("\r[Error] Total size is zero, unable to calculate progress.", end='', flush=True)
 
