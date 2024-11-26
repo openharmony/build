@@ -102,7 +102,7 @@
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-9176a7-20241115",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-9176a7_sp1-20241115",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true"
     },
@@ -112,12 +112,12 @@
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-9176a7-20241115",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-9176a7_sp1-20241115",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-9176a7-20241115",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-9176a7_sp1-20241115",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "rename": "true"
     },
@@ -236,7 +236,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/windows/clang_windows-x86_64-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7_sp1/windows/clang_windows-x86_64-9176a7_sp1-20241115.tar.gz",
           "unzip_filename": "llvm"
         },
         {
@@ -347,7 +347,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/windows/clang_windows-x86_64-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7_sp1/windows/clang_windows-x86_64-9176a7_sp1-20241115.tar.gz",
           "unzip_filename": "llvm"
         },
         {
@@ -519,7 +519,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/darwin_arm64/clang_darwin-arm64-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7_sp1/darwin_arm64/clang_darwin-arm64-9176a7_sp1-20241115.tar.gz",
           "unzip_filename": "llvm"
         },
         {
@@ -607,7 +607,7 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/darwin_x86_64/clang_darwin-x86_64-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7_sp1/darwin_x86_64/clang_darwin-x86_64-9176a7_sp1-20241115.tar.gz",
           "unzip_filename": "llvm"
         },
         {
