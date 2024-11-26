@@ -176,17 +176,6 @@
           "type": "dir",
           "copy_src":"lib/clang/15.0.4",
           "copy_dest":"lib/clang/current"
-        },
-        {
-          "target_os": "ohos",
-          "target_cpu": "arm64",
-          "version": "20240902",
-          "url": "openharmony/compiler/clang/15.0.4-6fe50d/ohos_arm64/clang_ohos-arm64-6fe50d-20240902.tar.gz",
-          "download_dir": ".prebuilts_cache/clang/ohos/ohos-x86_64/llvm",
-          "symlink": "prebuilts/clang/ohos/ohos-x86_64/llvm",
-          "type": "dir",
-          "copy_src":"lib/clang/15.0.4",
-          "copy_dest":"lib/clang/current"
         }
       ]
     },
