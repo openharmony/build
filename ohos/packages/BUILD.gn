@@ -181,7 +181,6 @@ foreach(_platform, target_platform_list) {
 
   _merged_notice_txt = "${current_platform_dir}/NOTICE.txt"
   _notice_module_info_file = "${current_platform_dir}/NOTICE_module_info.json"
-  _lite_notice_root_dir = "${root_build_dir}/NOTICE_FILES"
   action_with_pydeps("merge_system_notice_file_${current_platform}") {
     deps = [ ":collect_notice_files__${current_platform}" ]
     script = "//build/ohos/notice/merge_notice_files.py"
@@ -205,6 +204,7 @@ foreach(_platform, target_platform_list) {
     args += [ "--notice-root-dir" ]
 
     if (is_lite_system) {
+      _lite_notice_root_dir = "${root_build_dir}/NOTICE_FILES"
       args += [ rebase_path(_lite_notice_root_dir, root_build_dir) ]
     } else {
       args += [ rebase_path(_notice_root_dir, root_build_dir) ]
