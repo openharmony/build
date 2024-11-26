@@ -181,6 +181,7 @@ foreach(_platform, target_platform_list) {
 
   _merged_notice_txt = "${current_platform_dir}/NOTICE.txt"
   _notice_module_info_file = "${current_platform_dir}/NOTICE_module_info.json"
+  _lite_notice_root_dir = "${root_build_dir}/NOTICE_FILES"
   action_with_pydeps("merge_system_notice_file_${current_platform}") {
     deps = [ ":collect_notice_files__${current_platform}" ]
     script = "//build/ohos/notice/merge_notice_files.py"
@@ -195,9 +196,23 @@ foreach(_platform, target_platform_list) {
     ]
     args = [
       "--image-name",
-      "system",
-      "--notice-root-dir",
-      rebase_path(_notice_root_dir, root_build_dir),
+    ]
+
+    if (is_lite_system) {
+      args += [ "lite" ]
+    } else {
+      args += [ "system" ]
+    }
+      
+    args += [ "--notice-root-dir" ]
+
+    if (is_lite_system) {
+      args += [ rebase_path(_lite_notice_root_dir, root_build_dir) ]
+    } else {
+      args += [ rebase_path(_notice_root_dir, root_build_dir) ]
+    }
+
+    args += [
       "--output-notice-txt",
       rebase_path(_merged_notice_txt, root_out_dir),
       "--output-notice-gz",
@@ -205,7 +220,15 @@ foreach(_platform, target_platform_list) {
       "--notice-title",
       "Notices for files contained in the system filesystem image in this directory:",
       "--static-library-notice-dir",
-      rebase_path(static_libraries_notice_dir, root_build_dir),
+    ]
+
+    if (is_lite_system) {
+      args += [ rebase_path(lite_libraries_notice_dir, root_build_dir) ]
+    } else {
+      args += [ rebase_path(static_libraries_notice_dir, root_build_dir) ]
+    }
+    
+    args += [ 
       "--target-cpu",
       target_cpu,
       "--depfile",
@@ -221,7 +244,7 @@ foreach(_platform, target_platform_list) {
     } else {
       args += [ "vendor/etc" ]
     }
-    if (!is_standard_system) {
+    if (is_lite_system) {
       args += [
         "--lite-product",
         "true",
