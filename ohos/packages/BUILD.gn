@@ -194,16 +194,14 @@ foreach(_platform, target_platform_list) {
       _merged_notice_gz,
       _notice_module_info_file,
     ]
-    args = [
-      "--image-name",
-    ]
+    args = [ "--image-name" ]
 
     if (is_lite_system) {
       args += [ "lite" ]
     } else {
       args += [ "system" ]
     }
-      
+
     args += [ "--notice-root-dir" ]
 
     if (is_lite_system) {
@@ -227,8 +225,8 @@ foreach(_platform, target_platform_list) {
     } else {
       args += [ rebase_path(static_libraries_notice_dir, root_build_dir) ]
     }
-    
-    args += [ 
+
+    args += [
       "--target-cpu",
       target_cpu,
       "--depfile",
