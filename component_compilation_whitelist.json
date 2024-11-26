@@ -27555,6 +27555,16 @@
         "//base/theme/wallpaper_mgr/frameworks/js/napi/wallpaperextensionability:gen_wallpaper_extension_ability_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
+        "//base/theme/wallpaper_mgr/test/unittest/js/src/wallpaper_js:WallpaperJSTest": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
+        ],
+        "//base/theme/wallpaper_mgr/test/unittest/js/src/wallpaper_js:WallpaperJSTest__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap"
+        ],
         "//base/time/time_service/test/unittest/js_test/nopermission/acl:TimeTestNoAclPermission": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
@@ -50426,7 +50436,7 @@
         "//arkcompiler/ets_frontend/panda_guard/": [
             "//arkcompiler/runtime_core/ark_config.gni"
         ],
-        "//arkcompiler/ets_frontend/panda_guard/test/": [
+        "//arkcompiler/ets_frontend/panda_guard/tests/": [
             "//arkcompiler/runtime_core/ark_config.gni",
             "//arkcompiler/runtime_core/tests/test_helper.gni"
         ],
