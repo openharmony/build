@@ -120,32 +120,38 @@ def _target_handle(ele, build_data, deps_list, _test_check):
             deps_list.append(k)
 
 
-def main():
-    args = _get_args()
-    source_code_path = args.input_path
-    _test_check = args.test
-    deps_list = list()
-    bundle_paths = _get_bundle_path(source_code_path)
-    _bundle_path, dir_path = _get_src_part_name(bundle_paths)
-    bundle_json = utils.get_json(_bundle_path)
-    build_data = dict()
-    try:
-        build_data = bundle_json["component"]["build"]
-    except KeyError:
-        print(f'--get bundle json component build dict error--')
-    if _test_check != 2:
-        for ele in build_data.keys():
-            _target_handle(ele, build_data, deps_list, _test_check)
-    elif _test_check == 2:
-        inner_kits_list = build_data.get('test')
-        deps_list = []
+def process_build_data(build_data, _test_check, deps_list):
+    for ele in build_data:
+        _target_handle(ele, build_data, deps_list, _test_check)
+
+
+def handle_test_check(build_data, _test_check, deps_list):
+    if _test_check == 2:
+        inner_kits_list = build_data.get('test', [])
         if inner_kits_list:
             for k in inner_kits_list:
                 deps_list.append(k)
-        else:
-            deps_list = []
 
+
+def process_bundle_path(_bundle_path, _test_check, deps_list):
+    bundle_json = utils.get_json(_bundle_path)
+    build_data = bundle_json.get("component", {}).get("build", {})
+    process_build_data(build_data, _test_check, deps_list)
+    handle_test_check(build_data, _test_check, deps_list)
+
+
+def main():
+    args = _get_args()
+    source_code_paths = args.input_path.split(',')
+    _test_check = args.test
     output_path = os.path.join(args.root_path, 'out')
+    deps_list = []
+
+    for source_code_path in source_code_paths:
+        bundle_paths = _get_bundle_path(source_code_path)
+        for _bundle_path in bundle_paths:
+            process_bundle_path(_bundle_path, _test_check, deps_list)
+
     _output_build_gn(deps_list, output_path, _test_check)
 
 

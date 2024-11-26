@@ -225,7 +225,7 @@ def _get_src_part_name(src_bundle_paths):
         else:
             _name = part_name
             _path = src_bundle_path
-    return _name, _path
+    return [_name, _path]
 
 
 def _binarys_permissions_handler():
@@ -234,19 +234,31 @@ def _binarys_permissions_handler():
     subprocess.Popen(cmd)
 
 
-def _components_info_handler(part_name_list, source_code_path, hpm_cache_path, root_path, dependences_json,
+def _components_info_handler(part_name_list, source_code_path: str, hpm_cache_path, root_path, dependences_json,
                              _part_toolchain_map_dict):
+    source_code_path_list = source_code_path.split(",")
     components_json = dict()
-    src_bundle_paths = _get_src_bundle_path(source_code_path)
-    src_part_name, src_bundle_path = _get_src_part_name(src_bundle_paths)
-    src_build_name_list = [src_part_name, 'build_framework']
-    components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
-                                           src_build_name_list, _part_toolchain_map_dict)
-    components_json = _gen_components_info(components_json,
-                                           utils.get_json(os.path.join(root_path, "build", "bundle.json")),
+    src_build_name_list = ['build_framework']
+
+    # 获取源代码路径和组件名称的映射
+    src_bundle_path_dict = {
+        _get_src_part_name(_get_src_bundle_path(src_path))[0]: _get_src_part_name(_get_src_bundle_path(src_path))[1]
+        for src_path in source_code_path_list
+    }
+    # 更新构建名称列表并生成组件信息
+    src_build_name_list.extend(src_bundle_path_dict.keys())
+    for src_part_name, src_bundle_path in src_bundle_path_dict.items():
+        components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
+                                               src_build_name_list, _part_toolchain_map_dict)
+
+    # 处理构建框架
+    build_framework_bundle_path = os.path.join(root_path, "build", "bundle.json")
+    components_json = _gen_components_info(components_json, utils.get_json(build_framework_bundle_path),
                                            "build_framework", src_build_name_list, _part_toolchain_map_dict)
+
+    # 处理其他组件
     for part_name in part_name_list:
-        if part_name and part_name != src_part_name:
+        if part_name and part_name not in src_bundle_path_dict:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
             components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,
@@ -289,7 +301,7 @@ def _get_all_have_toolchain_component(toolchain_json, hpm_cache_path):
     for toolchain in _toolchain_list:
         for root, dirs, files in os.walk(binarys_path, topdown=False, followlinks=True):
             if toolchain in dirs:
-                _part_name = root.split(os.sep)[-1]
+                _part_name = os.path.basename(root)
                 _part_toolchain_map_dict.update({
                     _part_name: {
                         'toolchain_key': toolchain,
