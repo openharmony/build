@@ -14291,7 +14291,7 @@
         "//drivers/peripheral/pin_auth/hdi_service:libpin_auth_interface_service_2.1": [
             "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
-        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_2.0_fuzzer": [
+        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_2.1_fuzzer": [
             "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/pinauthexecutorstub_fuzzer:PinAuthExecutorStubFuzzTest": [
