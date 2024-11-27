@@ -748,7 +748,6 @@ if (is_standard_system) {
     "//build/config/security:default_security_configs",
     "//build/config/rust:rust_config",
     "//build/config:predefined_macro",
-    "//build/config:cust_board_config",
   ]
 
   if (is_ohos) {
