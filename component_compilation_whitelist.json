@@ -53,6 +53,7 @@
         "//third_party/jsframework:gen_snapshot",
         "//third_party/libxml2:xml2",
         "//third_party/mindspore:mindir",
+        "//third_party/musl:musl_all",
         "//third_party/typescript:build_typescript"
     ],
     "all_dependent_configs": [
@@ -13835,6 +13836,7 @@
         "//third_party/libwebsockets:websockets",
         "//third_party/libxml2:libxml2_config",
         "//third_party/libxml2:xml2",
+        "//third_party/musl:musl_all",
         "//third_party/popt:popt_static",
         "//third_party/typescript:build_typescript",
         "//third_party/weex-loader:weex_loader_ark_hap"
@@ -14555,6 +14557,9 @@
         ],
         "//foundation/arkui/napi/test/unittest:jerry_tdd_host_test_run": [
             "//third_party/jerryscript/tests/unit-core:jerry_tdd_host_test"
+        ],
+        "//foundation/arkui/napi/jsvm:build_libjsvm": [
+            "//third_party/musl:musl_all"
         ],
         "//foundation/arkui/napi/test/unittest:jerry_tdd_test_run": [
             "//third_party/jerryscript/tests/unit-core:jerry_tdd_test"
@@ -17118,6 +17123,9 @@
             "//third_party/icu/icu4c:shared_icui18n",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/bounds_checking_function:libsec_shared"
+        ],
+        "//foundation/arkui/napi/jsvm:build_libjsvm": [
+            "//third_party/musl:musl_all"
         ],
         "//arkcompiler/ets_runtime/ecmascript/tests:EcmaVm_015_Test_resource_copy": [
             "//third_party/icu/icu4c:shared_icui18n",
@@ -50885,7 +50893,13 @@
             "//developtools/global_resource_tool:restool",
             "//developtools/global_resource_tool:restool_id_defined",
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen",
-            "//foundation/ability/idl_tool:idl"
+            "//foundation/ability/idl_tool:idl",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
+            "//arkcompiler/ets_frontend/es2panda:es2panda_build",
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
+            "//third_party/parse5:parse5_ark_hap",
+            "//third_party/weex-loader:weex_loader_ark_hap",
+			"//developtools/packing_tool:packing_tool"
         ],
         "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
