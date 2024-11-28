@@ -347,44 +347,60 @@ if (ohos_indep_compiler_enable) {
       "//developtools/hapsigner/dist/OpenHarmonyApplication.pem"
 }
 
+declare_args(){
+  build_default_sdk_target = false
+  build_mac_sdk_target = false
+  build_linux_sdk_target = false
+  build_windows_sdk_target = false
+  build_ohos_sdk_target = false
+}
+
+declare_args(){
+  build_default_ndk_target = false
+  build_mac_ndk_target = false
+  build_linux_ndk_target = false
+  build_windows_ndk_target = false
+  build_ohos_ndk_target = false
+}
+
 python_script = "//build/scripts/is_substring.py"
 
-if (exec_script(python_script, [sdk_platform, "default"], "string") == "True") {
+if (exec_script(python_script, [ sdk_platform, "default" ], "string") == "True") {
   build_default_sdk_target = true
 }
 
-if (exec_script(python_script, [sdk_platform, "mac"], "string") == "True") {
+if (exec_script(python_script, [ sdk_platform, "mac" ], "string") == "True") {
   build_mac_sdk_target = true
 }
 
-if (exec_script(python_script, [sdk_platform, "win"], "string") == "True") {
+if (exec_script(python_script, [ sdk_platform, "win" ], "string") == "True") {
   build_windows_sdk_target = true
 }
 
-if (exec_script(python_script, [sdk_platform, "linux"], "string") == "True") {
+if (exec_script(python_script, [ sdk_platform, "linux" ], "string") == "True") {
   build_linux_sdk_target = true
 }
 
-if (exec_script(python_script, [sdk_platform, "ohos"], "string") == "True"){
+if (exec_script(python_script, [ sdk_platform, "ohos" ], "string") == "True"){
   build_ohos_sdk_target = true
 }
 
-if (exec_script(python_script, [ndk_platform, "default"], "string") == "True") {
+if (exec_script(python_script, [ ndk_platform, "default" ], "string") == "True") {
   build_default_ndk_target = true
 }
 
-if (exec_script(python_script, [ndk_platform, "mac"], "string") == "True") {
+if (exec_script(python_script, [ ndk_platform, "mac" ], "string") == "True") {
   build_mac_ndk_target = true
 }
 
-if (exec_script(python_script, [ndk_platform, "win"], "string") == "True") {
+if (exec_script(python_script, [ ndk_platform, "win" ], "string") == "True") {
   build_windows_ndk_target = true
 }
 
-if (exec_script(python_script, [ndk_platform, "linux"], "string") == "True") {
+if (exec_script(python_script, [ ndk_platform, "linux" ], "string") == "True") {
   build_linux_ndk_target = true
 }
 
-if (exec_script(python_script, [ndk_platform, "ohos"], "string") == "True"){
+if (exec_script(python_script, [ ndk_platform, "ohos" ], "string") == "True"){
   build_ohos_ndk_target = true
 }
