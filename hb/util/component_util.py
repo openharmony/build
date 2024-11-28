@@ -72,8 +72,8 @@ class ComponentUtil():
         return '', ''
 
     @staticmethod
-    def get_default_deps(variant: str) -> str:
-        gen_default_deps_json(variant, CURRENT_OHOS_ROOT)
+    def get_default_deps(variant: str, has_test=False) -> str:
+        gen_default_deps_json(variant, CURRENT_OHOS_ROOT, has_test)
         default_deps_path = os.path.join(
             CURRENT_OHOS_ROOT, 'out', 'preloader', 'default_deps.json')
         return default_deps_path
@@ -146,7 +146,7 @@ def process_bundle_path(bundle_json, bundles_path, data):
     return bundles_path
 
 
-def gen_default_deps_json(variant, root_path):
+def gen_default_deps_json(variant, root_path, has_test=False):
     part_name_list = get_part_name()
     default_deps_out_file = os.path.join(root_path, "out", "preloader", "default_deps.json")
     default_deps_file = os.path.join(root_path, "build", "indep_configs", "variants", "common", 'default_deps.json')
@@ -159,6 +159,8 @@ def gen_default_deps_json(variant, root_path):
     for part_name in part_name_list:
         if part_name in part_white_list and 'rust' not in default_deps_json:
             default_deps_json.append('rust')
+    if has_test:
+        default_deps_json.append('developer_test')
 
     preloader_path = os.path.join(root_path, "out", "preloader")
     os.makedirs(preloader_path, exist_ok=True)
