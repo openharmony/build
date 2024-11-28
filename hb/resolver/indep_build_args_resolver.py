@@ -108,7 +108,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
     def resolve_variant(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         build_executor = indep_build_module.hpm
         if target_arg.arg_value:
-            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value))
+            build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value, True if '-t' in sys.argv else False))
             build_executor.regist_flag('variant', target_arg.arg_value)
         else:
             args_dict = Arg.read_args_file(ModuleType.ENV)

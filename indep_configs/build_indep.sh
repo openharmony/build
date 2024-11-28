@@ -60,6 +60,18 @@ if [ -d "binarys/third_party/rust" ];then
 else
     echo "rust directory exists"
 fi
+if [ -d "binarys/test/testfwk/developer_test" ];then
+    echo "developer_test directory exists"
+    if [ -d "test/testfwk/developer_test" ]; then
+        echo "test/testfwk/developer_test exists"
+        cp -r binarys/test/testfwk/developer_test test/testfwk
+    else
+        mkdir -p "test/testfwk"
+        cp -r binarys/test/testfwk/developer_test test/testfwk
+    fi
+else
+    echo "developer_test directory exists"
+fi
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
 # gn and ninja command
