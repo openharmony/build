@@ -14,8 +14,10 @@
 
 import sys
 
+
 def is_substring(main_str, sub_str):
     return sub_str in main_str
+
 
 def main(argv):
     if len(argv) != 2:
@@ -26,6 +28,6 @@ def main(argv):
     result = is_substring(main_str, sub_str)
     sys.stdout.write(str(result))
     return 0
- 
+
 if __name__ == "__main__":
     sys.exit(main(sys.argv[1:]))

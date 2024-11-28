@@ -347,7 +347,7 @@ if (ohos_indep_compiler_enable) {
       "//developtools/hapsigner/dist/OpenHarmonyApplication.pem"
 }
 
-python_script = "//build/ohos/sdk/is_substring.py"
+python_script = "//build/scripts/is_substring.py"
 
 if (exec_script(python_script, [sdk_platform, "default"], "string") == "True") {
   build_default_sdk_target = true
