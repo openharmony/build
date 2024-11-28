@@ -64,7 +64,8 @@ if [ -d "binarys/test/testfwk/developer_test" ];then
     echo "developer_test directory exists"
     if [ -d "test/testfwk/developer_test" ]; then
         echo "test/testfwk/developer_test exists"
-        cp -r binarys/test/testfwk/developer_test test/testfwk
+        rm -rf test/testfwk
+        cp -r binarys/test/testfwk test/testfwk
     else
         mkdir -p "test/testfwk"
         cp -r binarys/test/testfwk/developer_test test/testfwk
