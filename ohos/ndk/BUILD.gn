@@ -248,13 +248,17 @@ if (!use_current_sdk) {
           ":archive_windows_ndk",
         ]
       }
-    } if (build_windows_ndk_target) {
+    }
+    if (build_windows_ndk_target) {
       deps += [ ":archive_windows_ndk" ]
-    } if (build_mac_ndk_target) {
+    }
+    if (build_mac_ndk_target) {
       deps += [ ":archive_darwin_ndk" ]
-    } if (build_linux_ndk_target) {
+    }
+    if (build_linux_ndk_target) {
       deps += [ ":archive_linux_ndk" ]
-    } if (build_ohos_ndk_target) {
+    }
+    if (build_ohos_ndk_target) {
       deps += [ ":archive_ohos_ndk" ]
     }
   }

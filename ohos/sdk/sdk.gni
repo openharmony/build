@@ -72,13 +72,13 @@ if (build_default_sdk_target) {
   sdk_systems = []
   if (build_mac_sdk_target) {
     sdk_systems += [ sdk_system_darwin ]
-  } 
+  }
   if (build_windows_sdk_target) {
     sdk_systems += [ sdk_system_windows ]
-  } 
+  }
   if (build_linux_sdk_target) {
     sdk_systems += [ sdk_system_linux ]
-  } 
+  }
   if (build_ohos_sdk_target) {
     sdk_systems += [ sdk_system_ohos ]
   }
