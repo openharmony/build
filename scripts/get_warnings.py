@@ -79,7 +79,7 @@ def _parse(in_name: str, out_name: str, prj_dir: str) -> bool:
                             break
                     # solving relative path
                     templist = line_info.split(":")
-                    templist[0] = os.path.abspath(templist[0])
+                    templist[0] = os.path.realpath(templist[0])
                     templist[0] = templist[0].replace(prj_dir + "/",
                                                       "").strip()
                     temp = ":"
