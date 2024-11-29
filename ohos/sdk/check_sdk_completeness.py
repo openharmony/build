@@ -53,15 +53,24 @@ def parse_sdk_check_list(sdk_check_list: list):
             sdk_check_files.extend(ohos_sdk_check_files)
             sdk_check_directories.extend(win_sdk_check_directories)
             sdk_check_directories.extend(ohos_sdk_check_directories)
-        elif sdk_platform == 'win':
-            sdk_check_files = sdk_delivery_list['windows']['checkFiles']
-            sdk_check_directories = sdk_delivery_list['windows']['checkDirectories']
-        elif sdk_platform == 'linux':
-            sdk_check_files = sdk_delivery_list['linux']['checkFiles']
-            sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
-        elif sdk_platform == 'ohos':
-            sdk_check_files = sdk_delivery_list['ohos']['checkFiles']
-            sdk_check_directories = sdk_delivery_list['ohos']['checkDirectories']
+        else:
+            sdk_check_files = []
+            sdk_check_directories = []
+        if 'win' in sdk_platform:
+            win_sdk_check_files = sdk_delivery_list['windows']['checkFiles']
+            win_sdk_check_directories = sdk_delivery_list['windows']['checkDirectories']
+            sdk_check_files.extend(win_sdk_check_files)
+            sdk_check_directories.extend(win_sdk_check_directories)
+        if 'linux' in sdk_platform:
+            linux_sdk_check_files = sdk_delivery_list['linux']['checkFiles']
+            linux_sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
+            sdk_check_files.extend(linux_sdk_check_files)
+            sdk_check_directories.extend(linux_sdk_check_directories)
+        if 'ohos' in sdk_platform:
+            ohos_sdk_check_files = sdk_delivery_list['ohos']['checkFiles']
+            ohos_sdk_check_directories = sdk_delivery_list['ohos']['checkDirectories']
+            sdk_check_files.extend(ohos_sdk_check_files)
+            sdk_check_directories.extend(ohos_sdk_check_directories)
     else:  
         sdk_check_files = sdk_delivery_list['darwin']['checkFiles']
         sdk_check_directories = sdk_delivery_list['darwin']['checkDirectories']
@@ -86,15 +95,16 @@ def add_files_to_sdk_package(sdk_package_directory: dict, compressed_file: str):
 
 
 def get_sdk_package_directories():
+    os_types = []
     if sys.platform == 'linux':
         if sdk_platform == 'default':
             os_types = ['linux', 'windows', 'ohos']
-        elif sdk_platform == 'win':
-            os_types = ['windows']
-        elif sdk_platform == 'linux':
-            os_types = ['linux']
-        elif sdk_platform == 'ohos':
-            os_types = ['ohos']
+        if 'win' in sdk_platform:
+            os_types.append('windows')
+        if 'linux' in sdk_platform:
+            os_types.append('linux')
+        if 'ohos' in sdk_platform:
+            os_types.append('ohos')
     else:
         os_types = ['darwin']
 

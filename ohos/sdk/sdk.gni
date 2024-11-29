@@ -58,7 +58,7 @@ if (host_cpu == "arm64") {
   arch = "x64"
 }
 
-if (sdk_platform == "default") {
+if (build_default_sdk_target) {
   if (host_os == "mac") {
     sdk_systems = [ sdk_system_darwin ]
   } else {
@@ -68,14 +68,20 @@ if (sdk_platform == "default") {
       sdk_system_ohos,
     ]
   }
-} else if (sdk_platform == "mac") {
-  sdk_systems = [ sdk_system_darwin ]
-} else if (sdk_platform == "win") {
-  sdk_systems = [ sdk_system_windows ]
-} else if (sdk_platform == "linux") {
-  sdk_systems = [ sdk_system_linux ]
-} else if (sdk_platform == "ohos") {
-  sdk_systems = [ sdk_system_ohos ]
+} else {
+  sdk_systems = []
+  if (build_mac_sdk_target) {
+    sdk_systems += [ sdk_system_darwin ]
+  }
+  if (build_windows_sdk_target) {
+    sdk_systems += [ sdk_system_windows ]
+  }
+  if (build_linux_sdk_target) {
+    sdk_systems += [ sdk_system_linux ]
+  }
+  if (build_ohos_sdk_target) {
+    sdk_systems += [ sdk_system_ohos ]
+  }
 }
 
 if (use_current_sdk) {
