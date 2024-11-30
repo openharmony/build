@@ -719,6 +719,20 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
     _generate_component_package(args, components_json)
 
 
+def _get_exclusion_list(root_path):
+    part_black_list_path = os.path.join(root_path, "build", "indep_configs", "config",
+                                        "binary_package_exclusion_list.json")
+    data = []
+    try:
+        with open(part_black_list_path, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"can not find file: {part_black_list_path}.")
+    except Exception as e:
+        print(f"{part_black_list_path}: \n {e}")
+    return data
+
+
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
                                os_arg='linux', build_arch_arg='x86', local_test=0):
     """
@@ -734,40 +748,36 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         organization_name: default ohos, if diff then change
         os_arg: default : linux
         build_arch_arg:  default : x86
-        local_test: 1 to open local test , 0 to close , 2 to pack init and init deps
+        local_test: 1 to open local test , default 0 to close
     Returns:
 
     """
     start_time = time.time()
-    _check_list = _get_component_check(local_test)
-    if local_test == 1 and not components_list:
-        components_list = []
-    elif local_test == 1 and components_list:
-        components_list = [component for component in components_list.split(",")]
-    elif local_test == 2:
-        components_list = ["init", "appspawn", "safwk", "c_utils",
-                           "napi", "ipc", "config_policy", "hilog", "hilog_lite", "samgr", "access_token", "common",
-                           "dsoftbus", "hvb", "hisysevent", "hiprofiler", "bounds_checking_function",
-                           "bundle_framework", "selinux", "selinux_adapter", "storage_service",
-                           "mbedtls", "zlib", "libuv", "cJSON", "mksh", "libunwind", "toybox",
-                           "bounds_checking_function",
-                           "selinux", "libunwind", "mbedtls", "zlib", "cJSON", "mksh", "toybox", "config_policy",
-                           "e2fsprogs", "f2fs-tools", "selinux_adapter", "storage_service"
-                           ]
-    elif components_list:
-        components_list = [component for component in components_list.split(",") if component in _check_list]
-        if not components_list:
-            sys.exit("stop for no target to pack..")
-    else:
-        components_list = _check_list
-        if not components_list:
-            sys.exit("stop for no target to pack..")
-    print('components_list', components_list)
+
     components_json = _get_components_json(out_path)
     part_subsystem = _get_part_subsystem(components_json)
     parts_path_info = _get_parts_path_info(components_json)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
     toolchain_info = _get_toolchain_info(root_path)
+
+    exclusion_list = _get_exclusion_list(root_path)  # 黑名单列表
+    # 如果没有提供 components_list，则默认为所有非黑名单组件
+    all_components = components_json.keys()
+    if local_test == 1:
+        components_list = components_list.split(",") if components_list else all_components
+
+    elif local_test == 0:
+        if components_list:
+            components_list = [component for component in components_list.split(",") if component not in exclusion_list]
+        else:
+            components_list = [component for component in all_components if component not in exclusion_list]
+
+        # 如果 components_list 为空，则退出程序
+        if not components_list:
+            sys.exit("stop for no target to pack..")
+
+    print('components_list', components_list)
+
     # del component_package
     _del_exist_component_package(out_path)
     args = {"out_path": out_path, "root_path": root_path,
@@ -775,15 +785,12 @@ def generate_component_package(out_path, root_path, components_list=None, build_
             "build_type": build_type, "organization_name": organization_name,
             "toolchain_info": toolchain_info
             }
+
     for key, value in part_subsystem.items():
         part_name = key
         subsystem_name = value
-        # components_list is NONE or part name in components_list
-        if not components_list:
+        if not components_list or part_name in components_list:
             _package_interface(args, parts_path_info, part_name, subsystem_name, components_json)
-        for component in components_list:
-            if part_name == component:
-                _package_interface(args, parts_path_info, part_name, subsystem_name, components_json)
 
     end_time = time.time()
     run_time = end_time - start_time
