@@ -12,7 +12,7 @@
 
 最终合并的NOTICE.txt文件需明确显示镜像中每个文件所采用的许可协议，确保每个模块与其许可协议有明确的对应。
 
-不同构建形态下的打包位置差异，最终合并的NOTICE.txt文件将被放置在镜像的/system/etc/目录下，而以NDK构建的NOTICE.txt则会被置于native根目录。
+不同构建形态下的打包位置差异，最终合并的NOTICE.txt文件将被放置在镜像的/system/etc/目录下，而Native Sdk构建的NOTICE.txt则会被置于native根目录。
 
 
 ### 收集规则
@@ -23,7 +23,7 @@
 
    如果Readme.OpenSource文件中配置的license文件不存在，会采用步骤2进行收集。
 
-2. 对于系统编译、NDK和SDK编译、非标准系统设备编译时收集NOTICE使用的模板各不相同，在模板中通过license_file字段直接声明自己使用的License文件。
+2. 对于系统编译、SDK编译、非标准系统设备编译时收集NOTICE使用的模板各不相同，在模板中通过license_file字段直接声明自己使用的License文件。
 
 3. 如果Readme.OpenSource文件不存在，编译脚本会从当前目录开始，向上层目录寻找（一直找到源码的根目录），默认查找License/Copyright/Notice三个文件，如果找到，则将其作为模块的License。
 
@@ -31,7 +31,7 @@
 
 **不同产品形态如何配置收集LICENSE**
 
-***对于系统编译、NDK和SDK编译、瘦设备编译时收集notice使用的模板是不相同的，下面列举不同产品形态编译使用的模板***
+***对于系统编译、SDK编译、瘦设备编译时收集notice使用的模板是不相同的，下面列举不同产品形态编译使用的模板***
    
 1. rk3568形态可使用ohos_shared_library、ohos_static_library、ohos_executable、ohos_app、ohos_rust_library、ohos_abc、ohos_bpf、ohos_rust_proc_macro模板，这几种模板分别是编译在编译动态库、静态库、可执行文件、app、rust库、abc文件、bpf文件、proc_macro时使用的，在完成编译任务后，会自动收集编译目标所依赖到的三方开源信息。如下图示例：
 
@@ -43,10 +43,10 @@
    }
    ```
 
-2. SDK以及NDK形态除了1中列举的模板可以使用外，还可使用ohos_cargo_crate、ohos_ndk_copy用于在编译SDK时生产rust类型目标，ohos_ndk_copy主要是将prebuilts下的软件直接拷贝到native目录，最后打包到ndk中。
+2. SDK形态除了1中列举的模板可以使用外，还可使用ohos_cargo_crate。其中ohos_ndk_copy用于在编译SDK时生产rust类型目标，ohos_ndk_copy主要是将prebuilts下的软件直接拷贝到native目录，最后打包到Native SDK中。
 
    ```
-   ohos_ndk_copy("example") {
+   ohos_cargo_crate("example") {
    	...
    	license_file = "path/to/license/file"
    	...
