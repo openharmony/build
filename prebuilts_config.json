@@ -178,8 +178,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240902",
-          "url": "openharmony/compiler/clang/15.0.4-6fe50d/linux/clang_linux-x86_64-6fe50d-20240902.tar.gz",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/linux/clang_linux-x86_64-666b9b-20240218.tar.gz",
           "download_dir": ".prebuilts_cache/clang/ohos/linux-x86_64/llvm",
           "symlink": "prebuilts/clang/ohos/linux-x86_64/llvm",
           "type": "dir",
@@ -189,8 +189,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240902",
-          "url": "openharmony/compiler/clang/15.0.4-6fe50d/linux/clang_linux-x86_64-6fe50d-20240902.tar.gz",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/linux/clang_linux-x86_64-666b9b-20240218.tar.gz",
           "download_dir": ".prebuilts_cache/clang/ohos/linux-x86_64/llvm",
           "symlink": "prebuilts/clang/ohos/linux-x86_64/llvm",
           "type": "dir",
@@ -200,8 +200,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "arm64",
-          "version": "20240727",
-          "url": "openharmony/compiler/clang/15.0.4-5fbff2/darwin_arm64/clang_darwin-arm64-5fbff2-20240727.tar.gz",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/darwin_x86/clang_darwin-x86_64-666b9b-20240218.tar.gz",
           "download_dir": ".prebuilts_cache/clang/ohos/darwin-x86_64/llvm",
           "symlink": "prebuilts/clang/ohos/darwin-x86_64/llvm",
           "type": "dir",
@@ -211,8 +211,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "x86_64",
-          "version": "20240727",
-          "url": "openharmony/compiler/clang/15.0.4-5fbff2/darwin_x86_64/clang_darwin-x86_64-5fbff2_sp1-20240727.tar.gz",
+          "version": "20240218",
+          "url": "openharmony/compiler/clang/15.0.4-666b9b/darwin_x86/clang_darwin-x86_64-666b9b-20240218.tar.gz",
           "download_dir": ".prebuilts_cache/clang/ohos/darwin-x86_64/llvm",
           "symlink": "prebuilts/clang/ohos/darwin-x86_64/llvm",
           "type": "dir",
