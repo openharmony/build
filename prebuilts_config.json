@@ -127,8 +127,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240523",
-          "url": "openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"
@@ -136,8 +136,8 @@
         {
           "target_os": "linux",
           "target_cpu": "arm64",
-          "version": "20240523",
-          "url": "openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz",
+          "version": "20240416",
+          "url": "openharmony/compiler/ninja/20240416/ninja-linux-x86-20240416.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/linux-x86/bin/ninja",
           "type": "file"
@@ -145,8 +145,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "x86_64",
-          "version": "1.12.0",
-          "url": "openharmony/compiler/ninja/1.12.0/darwin/x86/ninja-darwin-x86-1.12.0-20240829.tar.gz",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/ninja",
           "type": "file"
@@ -154,8 +154,8 @@
         {
           "target_os": "darwin",
           "target_cpu": "arm64",
-          "version": "1.12.0",
-          "url": "openharmony/compiler/ninja/1.12.0/darwin/arm/ninja-darwin-arm-1.12.0-20240829.tar.gz",
+          "version": "1.11.0",
+          "url": "openharmony/compiler/ninja/1.11.0/darwin/ninja-darwin-x86-1.11.0.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/darwin-x86/bin/ninja",
           "symlink": "prebuilts/build-tools/darwin-x86/bin/ninja",
           "type": "file"
