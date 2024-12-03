@@ -8510,10 +8510,6 @@
             "//third_party/googletest/googlemock/include/",
             "//third_party/json/single_include/"
         ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/dbms_services_kit_test:DbmsServicesKitTest": [
-            "//foundation/bundlemanager/bundle_framework/services/bundlemgr/include/",
-            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/"
-        ],
         "//foundation/bundlemanager/ecological_rule_manager/test/unittest:EcologicalRuleMgrServiceClientTest": [
             "//utils/system/safwk/native/include/",
             "//foundation/bundlemanager/bundle_framework/interfaces/inner_api/appexecfwk_core/include/",
@@ -40611,14 +40607,6 @@
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/distributed_bms_host_test:DistributedBmsHostTest": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/distributed_bms_host_test:DistributedBmsHostTest_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
         ],
         "//foundation/bundlemanager/ecological_rule_manager/test/unittest:EcologicalRuleMgrServiceClientTest": [
             "//third_party/googletest:gtest_main"
