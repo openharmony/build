@@ -377,8 +377,6 @@
         "//base/security/huks/utils/crypto_adapter:libhuks_utils_client_service_adapter_static",
         "//base/security/huks/utils/file_operator:libhuks_utils_file_operator_static",
         "//base/security/huks/utils/mutex:libhuks_utils_mutex_static",
-        "//base/startup/appspawn/adapter/sysevent:event_reporter",
-        "//base/startup/appspawn:appspawn_server",
         "//base/startup/init/services/begetctl:begetctl",
         "//base/startup/init/services/modules/seccomp:libseccomp_static",
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/device_manager:camera_device_manager",
