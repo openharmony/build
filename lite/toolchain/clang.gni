@@ -54,7 +54,7 @@ template("clang_toolchain") {
     }
     tool("asm") {
       depfile = "{{output}}.d"
-      command = "$cc {{include_dirs}} {{asmflags}} -c {{source}} -o {{output}}"
+      command = "$cc {{defines}} {{include_dirs}} {{asmflags}} -c {{source}} -o {{output}}"
       description = "ASM {{output}}"
       outputs =
           [ "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o" ]
