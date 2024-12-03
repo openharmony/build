@@ -26874,12 +26874,6 @@
         "//base/security/access_token/services/el5filekeymanager/test:el5_filekey_manager_stub_unittest_resource_copy": [
             "//third_party/googletest:gtest_main"
         ],
-        "//base/security/appverify/interfaces/innerkits/appverify/test:verify_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/security/appverify/interfaces/innerkits/appverify/test:verify_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
         "//base/security/code_signature/test/unittest:add_cert_path_unittest": [
             "//third_party/selinux:libselinux"
         ],
