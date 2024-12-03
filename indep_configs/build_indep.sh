@@ -20,7 +20,8 @@ if [ -n "$4" ]; then
   VARIANTS=$4
 fi
 # keep the logs of hpm
-find out/$VARIANTS -type d -not -name '*.log' -empty -delete
+find out/$VARIANTS -type f -not -name '*.log' -delete
+find out/$VARIANTS -type d -empty -delete
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
