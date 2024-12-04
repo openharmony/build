@@ -252,12 +252,12 @@ def _copy_lib(args, json_data, module):
     subsystem_name = args.get("subsystem_name")
     if json_data.get('type') == 'static_library':
         so_path = _get_static_lib_path(args, json_data)
-    elif json_data.get('type') == 'shared_library':
-        so_path = os.path.join(args.get("out_path"), subsystem_name,
-                               args.get("part_name"), json_data.get('out_name'))
     elif json_data.get('type') == 'copy' and module == 'ipc_core':
         so_path = os.path.join(args.get("out_path"), subsystem_name,
                                args.get("part_name"), 'libipc_single.z.so')
+    else:
+        so_path = os.path.join(args.get("out_path"), subsystem_name,
+                               args.get("part_name"), json_data.get('out_name'))
     if args.get("toolchain_info").keys():
         for i in args.get("toolchain_info").keys():
             so_type = ''
