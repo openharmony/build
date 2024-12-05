@@ -1545,44 +1545,11 @@
         "//developtools/packing_tool/packing_tool/frameworks/test/unittest/shell_command_test:shell_command_test": [
             "//third_party/json/include/"
         ],
-        "//developtools/profiler/device/plugins/cpu_plugin/test/fuzztest/cpustartplugin_fuzzer:CpuStartPluginFuzzTest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/diskio_plugin/test/fuzztest/diskiostartplugin_fuzzer:DiskioStartPluginFuzzTest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/ftrace_plugin/test:ftrace_plugin_ut": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//developtools/profiler/device/plugins/hilog_plugin/test/fuzztest/hilogstartplugin_fuzzer:HilogStartPluginFuzzTest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/hiperf_plugin/test/fuzztest/hiperfstartplugin_fuzzer:HiperfStartPluginFuzzTest": [
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//developtools/profiler/device/plugins/memory_plugin/test/fuzztest/memorystartplugin_fuzzer:MemoryStartPluginFuzzTest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
-        "//developtools/profiler/device/plugins/native_hook/test:nativehook_ut": [
-            "//third_party/musl/include/musl_preinit_common.h/"
-        ],
-        "//developtools/profiler/device/plugins/network_plugin/test/fuzztest/networkstartplugin_fuzzer:NetworkStartPluginFuzzTest": [
-            "//third_party/bounds_checking_function/include/"
-        ],
         "//developtools/profiler/hidebug/test/unittest/native:hidebug_test": [
             "//third_party/googletest/googletest/include/gtest/"
         ],
-        "//developtools/profiler/hiebpf:hiebpf.bpf": [
-            "//third_party/libbpf/src/"
-        ],
-        "//developtools/profiler/hiebpf:hiebpf_source_common": [
-            "//third_party/libbpf/src/"
-        ],
         "//developtools/profiler/host/smartperf/client/client_command/test:sp_daemon_ut": [
             "//third_party/googletest/googletest/include/gtest/"
-        ],
-        "//developtools/profiler/proto_encoder:proto_encoder_source": [
-            "//third_party/bounds_checking_function/include/"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/device_manager:camera_device_manager": [
             "//base/hiviewdfx/interfaces/innerkits/libhilog/include/",
@@ -13661,30 +13628,6 @@
         "//third_party/gptfdisk:sgdisk": [
             "//third_party/e2fsprogs/e2fsprogs/lib/",
             "//third_party/popt/"
-        ],
-        "//third_party/grpc:gpr": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
-        ],
-        "//third_party/grpc:grpc": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
-        ],
-        "//third_party/grpc:grpc_cpp_plugin": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
-        ],
-        "//third_party/grpc:grpc_plugin_support": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
-        ],
-        "//third_party/grpc:grpcpp": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
-        ],
-        "//third_party/grpc:grpcxx": [
-            "//third_party/abseil-cpp/abseil-cpp/",
-            "//third_party/re2/re2/"
         ],
         "//third_party/jerryscript/tests/unit-core:TddTest": [
             "//commonlibrary/c_utils/base/include/",
@@ -50013,12 +49956,6 @@
         "//third_party/gptfdisk:sgdisk": [
             "//third_party/e2fsprogs:libext2_uuid",
             "//third_party/popt:popt_static"
-        ],
-        "//third_party/grpc:grpc_plugin_support": [
-            "//third_party/protobuf:protoc_lib"
-        ],
-        "//third_party/grpc:reflection": [
-            "//third_party/protobuf:protobuf"
         ],
         "//third_party/jerryscript/tests/unit-core:TddTest": [
             "//third_party/bounds_checking_function:libsec_public_config",
