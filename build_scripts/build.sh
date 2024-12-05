@@ -206,7 +206,7 @@ function build_sdk() {
 }
 function get_api(){
   current_dir=$(pwd)
-  if [ -d "$current_dir/prebuilts/ohos-sdk-12/" ]; then
+  if [ -d "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12" ]; then
     mkdir -p $current_dir/prebuilts/ohos-sdk/linux/12
     mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
   fi
