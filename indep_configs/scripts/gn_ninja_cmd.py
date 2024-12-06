@@ -44,6 +44,11 @@ def _get_args():
         type=str,
         help="the independent build out storage dir. default src , choices: src src_test or test",
     )
+    parser.add_argument(
+        "-t", "--test",
+        default=1, type=int,
+        help="whether the target contains test type. default 0 , choices: 0 or 1 2",
+    )
     args = parser.parse_args()
     return args
 
@@ -72,10 +77,14 @@ def _get_all_features_info(root_path, variants) -> list:
     return args_list
 
 
-def _gn_cmd(root_path, variants, out_dir):
+def _gn_cmd(root_path, variants, out_dir, test_filter):
     _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
     _args_list.extend(_features_info)
+
+    # Add 'use_thin_lto=false' to _args_list if test_filter equals 2
+    if test_filter in (1, 2):
+        _args_list.append('use_thin_lto=false')
 
     _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
                  '--args={}'.format(' '.join(_args_list)),
@@ -95,8 +104,8 @@ def _ninja_cmd(root_path, variants, out_dir):
     return _cmd_list
 
 
-def _exec_cmd(root_path, variants, out_dir):
-    gn_cmd = _gn_cmd(root_path, variants, out_dir)
+def _exec_cmd(root_path, variants, out_dir, test_filter):
+    gn_cmd = _gn_cmd(root_path, variants, out_dir, test_filter)
     _run_cmd(gn_cmd)
     ninja_cmd = _ninja_cmd(root_path, variants, out_dir)
     _run_cmd(ninja_cmd)
@@ -107,7 +116,8 @@ def main():
     variants = args.variants
     root_path = args.root_path
     out_dir = args.out_dir
-    _exec_cmd(root_path, variants, out_dir)
+    test_filter = args.test
+    _exec_cmd(root_path, variants, out_dir, test_filter)
 
     return 0
 
