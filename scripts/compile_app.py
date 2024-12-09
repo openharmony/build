@@ -79,7 +79,8 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
             'NODE_HOME': os.path.dirname(os.path.abspath(options.nodejs)),
         }
         os.chdir(cwd)
-        subprocess.run(['chmod', '+x', 'hvigorw'])
+        if os.path.exists(os.path.join(cwd, 'hvigorw')):
+            subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
             subprocess.run(['chmod', '+x', '.arkui-x/android/gradlew'])
         proc = subprocess.Popen(ohpm_install_cmd,
