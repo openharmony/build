@@ -49,7 +49,7 @@ class JsonSAInfoMerger(object):
             xml_lines['systemability'] = self.systemabilities
             if not os.path.exists(self.wdir):
                 os.mkdir(self.wdir)
-            with os.fdopen(os.open(self.output_filename, os.O_RDWR | os.O_CREAT, 0o640), 'w') as json_files:
+            with os.fdopen(os.open(self.output_filename, os.O_RDWR | os.O_CREAT | os.O_TRUNC, 0o640), 'w') as json_files:
                 json.dump(xml_lines, json_files, indent=4, ensure_ascii=False)
 
     def __init__(self):
