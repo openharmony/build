@@ -6,5 +6,6 @@
   "safwk",
   "ipc",
   "faultloggerd",
-  "graphic_2d"
+  "graphic_2d",
+  "hitrace"
 ]
