@@ -1517,31 +1517,6 @@
             "//third_party/openssl/",
             "//third_party/openssl/include/"
         ],
-        "//developtools/hiperf/interfaces/kits/js/napi:hiperf_client_napi": [
-            "//third_party/node/src/"
-        ],
-        "//developtools/hiperf:hiperf_platform_common": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/googletest/googletest/include/",
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
-        ],
-        "//developtools/hiperf:hiperf_platform_linux": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/googletest/googletest/include/"
-        ],
-        "//developtools/hiperf:support_elf": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/googletest/googletest/include/",
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
-        ],
-        "//developtools/hiperf:support_protobuf": [
-            "//commonlibrary/c_utils/base/include/",
-            "//third_party/googletest/googletest/include/",
-            "//third_party/protobuf/src/",
-            "//third_party/protobuf/src/google/",
-            "//third_party/protobuf/src/google/protobuf/",
-            "//kernel/linux/patches/linux-5.10/prebuilts/usr/include/"
-        ],
         "//developtools/packing_tool/packing_tool/frameworks/test/unittest/shell_command_test:shell_command_test": [
             "//third_party/json/include/"
         ],
@@ -28429,36 +28404,6 @@
             "//foundation/arkui/napi:ace_napi_config",
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/openssl:libcrypto_shared"
-        ],
-        "//developtools/hiperf/test:hiperf_unittest": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//developtools/hiperf/test:hiperf_unittest_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//developtools/hiperf:hiperf_host_build_proto": [
-            "//third_party/protobuf:protoc"
-        ],
-        "//developtools/hiperf:hiperf_platform_common": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config"
-        ],
-        "//developtools/hiperf:hiperf_platform_linux": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config"
-        ],
-        "//developtools/hiperf:proto_file_cpp": [
-            "//third_party/protobuf:protobuf_lite_static"
-        ],
-        "//developtools/hiperf:support_elf": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config"
-        ],
-        "//developtools/hiperf:support_protobuf": [
-            "//commonlibrary/c_utils/base:utils_config",
-            "//third_party/googletest:gtest_config"
         ],
         "//developtools/packing_tool/packing_tool/frameworks/test/unittest/app_packager_test/appPackagerHapTest:appPackagerHapTest": [
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
