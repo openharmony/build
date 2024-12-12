@@ -279,6 +279,21 @@ template("package_app") {
       }
     }
 
+    if (defined(external_deps)) {
+      foreach(lib, external_deps) {
+        _module_info = get_label_info(lib, "target_out_dir") + "/" +
+                       get_label_info(lib, "name") + "_module_info.json"
+        _rebased_module_info = rebase_path(_module_info, root_build_dir)
+        args += [ "--dso=@FileArg($_rebased_module_info:source)" ]
+      }
+      if (is_ohos) {
+        args += [
+          "--ohos-app-abi",
+          ohos_app_abi,
+        ]
+      }
+    }
+    
     if (defined(install_module_info)) {
       metadata = {
         install_modules = [ install_module_info ]
