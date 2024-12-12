@@ -100,7 +100,6 @@
         "//build/rust/tests/test_rlib_cargo_crate:test_rlib_crate_associated_bin",
         "//build/rust/tests/test_rlib_crate:test_rlib_crate",
         "//build/rust/tests/test_staticlib_crate:test_staticlib_crate",
-        "//commonlibrary/ets_utils/js_concurrent_module/worker:worker_static",
         "//commonlibrary/utils_lite/js/builtin/simulator:ace_kit_deviceinfo_simulator",
         "//commonlibrary/utils_lite/js/builtin/simulator:ace_kit_file_simulator",
         "//commonlibrary/utils_lite/js/builtin/simulator:ace_kit_kvstore_simulator",
