@@ -101,7 +101,7 @@
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-60204f-20240831",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -132,7 +132,7 @@
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-ef33c3-20240828",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-60204f-20240831",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
@@ -236,12 +236,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/clang_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-60204f/linux/clang_linux-x86_64-60204f-20240831.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/libcxx-ndk_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-60204f/linux/libcxx-ndk_linux-x86_64-60204f-20240831.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -348,12 +348,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/clang_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-60204f/linux/clang_linux-x86_64-60204f-20240831.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-ef33c3/linux/libcxx-ndk_linux-x86_64-ef33c3-20240828.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-60204f/linux/libcxx-ndk_linux-x86_64-60204f-20240831.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
