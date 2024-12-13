@@ -92,12 +92,12 @@
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/common_libs/compiler-rt-common-9176a7-20241115",
+      "src": "/prebuilts/clang/ohos/common_libs/compiler-rt-common-c2f890-20241211",
       "dest": "/prebuilts/clang/ohos/common_libs/compiler-rt-common",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/common_libs/libcxx-common-9176a7-20241115/",
+      "src": "/prebuilts/clang/ohos/common_libs/libcxx-common-c2f890-20241211/",
       "dest": "/prebuilts/clang/ohos/common_libs/libcxx-common",
       "rename": "true"
     },
@@ -221,12 +221,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/compiler-rt-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/compiler-rt-common-c2f890-20241211.tar.gz",
           "unzip_filename": "compilert-rt-common"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/libcxx-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/libcxx-common-c2f890-20241211.tar.gz",
           "unzip_filename": "libcxx-common"
         },
         {
@@ -367,12 +367,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/compiler-rt-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/compiler-rt-common-c2f890-20241211.tar.gz",
           "unzip_filename": "compilert-rt-common"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/libcxx-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/libcxx-common-c2f890-20241211.tar.gz",
           "unzip_filename": "libcxx-common"
         },
         {
@@ -529,12 +529,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/compiler-rt-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/compiler-rt-common-c2f890-20241211.tar.gz",
           "unzip_filename": "compilert-rt-common"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/libcxx-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/libcxx-common-c2f890-20241211.tar.gz",
           "unzip_filename": "libcxx-common"
         },
         {
@@ -617,12 +617,12 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/compiler-rt-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/compiler-rt-common-c2f890-20241211.tar.gz",
           "unzip_filename": "compilert-rt-common"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/common_libs",
-          "file_path": "/openharmony/compiler/clang/15.0.4-9176a7/common_libs/libcxx-common-9176a7-20241115.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-c2f890/common_libs/libcxx-common-c2f890-20241211.tar.gz",
           "unzip_filename": "libcxx-common"
         },
         {
