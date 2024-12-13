@@ -19,11 +19,6 @@ VARIANTS="default"
 if [ -n "$4" ]; then
   VARIANTS=$4
 fi
-# keep the logs of hpm
-find out/$VARIANTS -type f -not -name '*.log' -delete
-find out/$VARIANTS -type d -empty -delete
-rm -rf out/preloader/$VARIANTS
-rm -rf .gn
 
 case $3 in
     0) OUT_DIR="src" ;;
@@ -32,6 +27,14 @@ case $3 in
 esac
 
 mkdir -p out/preloader
+mkdir -p out/$VARIANTS/$OUT_DIR/
+
+# keep the logs of hpm
+find out/$VARIANTS -type f -not -name '*.log' -delete
+find out/$VARIANTS -type d -empty -delete
+rm -rf out/preloader/$VARIANTS
+rm -rf .gn
+
 mkdir -p out/$VARIANTS/$OUT_DIR/build_configs/parts_info
 cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/$OUT_DIR/build_configs
 ln -s build/indep_configs/dotfile.gn .gn
