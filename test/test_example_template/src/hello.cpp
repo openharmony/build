@@ -15,17 +15,17 @@
 
 #include <iostream>
 
-static const uint32_t ip_idx = 1;
+static const uint32_t IP_IDX = 1;
 
 using namespace std;
 
 namespace {
 uint32_t fact(uint32_t ip)
 {
-    if (ip == ip_idx) {
+    if (ip == IP_IDX) {
         return ip;
     } else {
-        return ip * fact(ip - ip_idx);
+        return ip * fact(ip - IP_IDX);
     }
 }
 }  // namespace
