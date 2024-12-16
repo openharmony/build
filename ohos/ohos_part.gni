@@ -16,7 +16,7 @@ import("//build/ohos/ebpf.gni")
 import("//build/ohos_var.gni")
 
 template("ohos_part") {
-  assert(defined(invoker.subsystem_name), "module_list is required.")
+  assert(defined(invoker.subsystem_name), "subsystem_name is required.")
   assert(defined(invoker.module_list), "module_list is required.")
 
   part_label = get_label_info(":${target_name}", "label_with_toolchain")
