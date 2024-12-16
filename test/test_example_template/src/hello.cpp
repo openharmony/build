@@ -20,12 +20,12 @@ static const uint32_t IP_IDX = 1;
 using namespace std;
 
 namespace {
-uint32_t fact(uint32_t ip)
+uint32_t Fact(uint32_t ip)
 {
     if (ip == IP_IDX) {
         return ip;
     } else {
-        return ip * fact(ip - IP_IDX);
+        return ip * Fact(ip - IP_IDX);
     }
 }
 }  // namespace
