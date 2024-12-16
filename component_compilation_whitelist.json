@@ -36634,12 +36634,6 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension:gen_accessibility_extension_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension_context:gen_accessibility_extension_context_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
         "//foundation/barrierfree/accessibility/services/aams/test:accessibility_account_data_test": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
@@ -50290,12 +50284,6 @@
         ],
         "//foundation/arkui/ui_lite/ext/updater/": [
             "//foundation/graphic/graphic_utils_lite/utils.gni"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension_context/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/communication/bluetooth_service/test/example/bluetoothtest/": [
             "//test/xts/tools/build/suite.gni"
