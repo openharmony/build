@@ -189,13 +189,29 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20240218",
-          "url": "openharmony/compiler/clang/15.0.4-666b9b/linux/clang_linux-x86_64-666b9b-20240218.tar.gz",
+          "version": "20241115",
+          "url": "openharmony/compiler/clang/15.0.4-9176a7/linux/clang_linux-x86_64-9176a7-20241115.tar.gz",
           "download_dir": ".prebuilts_cache/clang/ohos/linux-x86_64/llvm",
           "symlink": "prebuilts/clang/ohos/linux-x86_64/llvm",
-          "type": "dir",
-          "copy_src":"lib/clang/15.0.4",
-          "copy_dest":"lib/clang/current"
+          "type": "dir"
+        },
+	{
+	  "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "20241115",
+          "url": "openharmony/compiler/clang/15.0.4-9176a7/common_libs/compiler-rt-common-9176a7-20241115.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/common_libs/compiler-rt-common",
+          "symlink": "prebuilts/clang/ohos/common_libs/compiler-rt-common",
+          "type": "dir"
+	},
+	{
+          "target_os": "linux",
+          "target_cpu": "x86_64",
+          "version": "20241115",
+          "url": "openharmony/compiler/clang/15.0.4-9176a7/common_libs/libcxx-common-9176a7-20241115.tar.gz",
+          "download_dir": ".prebuilts_cache/clang/ohos/common_libs/libcxx-common",
+          "symlink": "prebuilts/clang/ohos/common_libs/libcxx-common",
+          "type": "dir"
         },
         {
           "target_os": "darwin",
