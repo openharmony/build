@@ -15,9 +15,9 @@
 
 #include <iostream>
 
-static const uint32_t ip_ida = 10;
-static const uint32_t ip_idb = 20;
-static const uint32_t ip_idc = 30;
+static const uint32_t IP_IDA = 10;
+static const uint32_t IP_IDB = 20;
+static const uint32_t IP_IDC = 30;
 
 using namespace std;
 class Adder {
@@ -40,9 +40,9 @@ private:
 int main()
 {
     Adder a;
-    a.AddNum(ip_ida);
-    a.AddNum(ip_idb);
-    a.AddNum(ip_idc);
+    a.AddNum(IP_IDA);
+    a.AddNum(IP_IDB);
+    a.AddNum(IP_IDC);
     cout << "Total " << a.GetTotal() << endl;
     return 0;
 }
