@@ -246,18 +246,43 @@ def _toolchain_static_file_path_mapping(subsystem_name, args, i):
     return toolchain_path
 
 
+def remove_prefix_if_present(path, prefix="ohos_clang_arm64/"):
+    return path[len(prefix):] if path.startswith(prefix) else path
+
+
 def _copy_lib(args, json_data, module):
     so_path = ""
     lib_status = False
     subsystem_name = args.get("subsystem_name")
-    if json_data.get('type') == 'static_library':
-        so_path = _get_static_lib_path(args, json_data)
-    elif json_data.get('type') == 'copy' and module == 'ipc_core':
+
+    # 根据 type 字段和 module 选择正确的 so_path
+    if json_data.get('type') == 'copy' and module == 'ipc_core':
         so_path = os.path.join(args.get("out_path"), subsystem_name,
                                args.get("part_name"), 'libipc_single.z.so')
+    elif json_data.get('type') == 'rust_library':
+        # 选择包含 'lib.unstripped' 的路径
+        outputs = json_data.get('outputs', [])
+        for output in outputs:
+            if 'lib.unstripped' in output:
+                output = remove_prefix_if_present(output)
+                so_path = output
+                break
+        # 如果没有找到包含 'lib.unstripped' 的路径，则选择最后一个路径
+        if not so_path and outputs:
+            so_path = outputs[-1]
+        so_path = os.path.join(args.get("out_path"), so_path)
     else:
-        so_path = os.path.join(args.get("out_path"), subsystem_name,
-                               args.get("part_name"), json_data.get('out_name'))
+        # 对于非 rust_library 类型，选择不包含 'lib.unstripped' 的路径
+        outputs = json_data.get('outputs', [])
+        for output in outputs:
+            if 'lib.unstripped' not in output:
+                output = remove_prefix_if_present(output)
+                so_path = output
+                break
+        # 如果所有路径都包含 'lib.unstripped' 或者没有 outputs，则使用 out_name
+        if not so_path:
+            so_path = json_data.get('out_name')
+        so_path = os.path.join(args.get("out_path"), so_path)
     if args.get("toolchain_info").keys():
         for i in args.get("toolchain_info").keys():
             so_type = ''
@@ -269,7 +294,8 @@ def _copy_lib(args, json_data, module):
                 toolchain_path = _toolchain_static_file_path_mapping(subsystem_name, args, i)
             _toolchain_lib_handler(args, toolchain_path, _name, module, i)
             lib_status = lib_status or True
-    if os.path.isfile(so_path):
+    # 确保路径存在，然后复制文件
+    if so_path and os.path.isfile(so_path):
         lib_out_dir = os.path.join(args.get("out_path"), "component_package",
                                    args.get("part_path"), "innerapis", module, "libs")
         if not os.path.exists(lib_out_dir):
@@ -440,6 +466,8 @@ def _generate_prebuilt_shared_library(fp, lib_type, module):
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif lib_type == 'etc':
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
+    elif lib_type == 'rust_library':
+        fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
         fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
 
@@ -471,6 +499,27 @@ def _generate_public_deps(fp, module, deps: list, components_json, public_deps_l
     return public_deps_list
 
 
+def _get_rust_external_deps(components_json: dict, dep):
+    matching_results = []
+    for key, value in components_json.items():
+        for innerapi in value.get("innerapis", []):
+            if innerapi.get("label") == dep:
+                label_field = innerapi["label"].split(":")[1]
+                return (key, label_field)
+    return None
+
+
+def _rust_lib_gn_handle(fp, args, json_data, module, components_json):
+    fp.write('  rust_crate_name = "' + json_data.get("rust_crate_name") + '"\n')
+    fp.write('  rust_crate_type = "' + json_data.get("rust_crate_type") + '"\n')
+    fp.write('  external_deps = [\n')
+    for dep in json_data.get("rust_deps"):
+        matching_results = _get_rust_external_deps(components_json, dep)
+        if matching_results:
+            fp.write(f"""    "{matching_results[0]}":"{matching_results[1]}",\n""")
+    fp.write('  ]\n')
+
+
 def _generate_other(fp, args, json_data, module):
     so_name = json_data.get('out_name')
     if json_data.get('type') == 'copy' and module == 'ipc_core':
@@ -494,6 +543,8 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
     _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
+    if json_data.get('type') == 'rust_library':
+        _rust_lib_gn_handle(fp, args, json_data, module, components_json)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print("_generate_build_gn has done ")
