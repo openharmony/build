@@ -30,6 +30,7 @@
         "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
         "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers",
         "//drivers/interface/usb/ddk/v1_1:usb_ddk_idl_headers",
+        "//drivers/interface/usb/usb_serial_ddk/v1_0:usb_serial_ddk_idl_headers",
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
@@ -3714,9 +3715,6 @@
             "//drivers/hdf_core/framework/model/usb/include/"
         ],
         "//drivers/peripheral/usb/ddk:libusb_pnp_manager": [
-            "//drivers/hdf_core/framework/model/usb/include/"
-        ],
-        "//drivers/peripheral/usb/ddk_service:libusb_ddk_service_1.0": [
             "//drivers/hdf_core/framework/model/usb/include/"
         ],
         "//drivers/peripheral/usb/net:libusbhost_ecm": [
