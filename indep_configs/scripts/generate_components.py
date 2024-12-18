@@ -131,6 +131,7 @@ def _link_kernel_binarys(variants, hpm_cache_path, dependences_json, target_cpu)
     musl_lib_link_path = os.path.join("out", variants, "obj/binarys/third_party/musl/usr/lib", target_path)
     os.makedirs(musl_include_link_path, exist_ok=True)
     os.makedirs(musl_lib_link_path, exist_ok=True)
+
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'includes'), musl_include_link_path)
     _symlink_src2dest(os.path.join(musl_real_path, 'innerapis', 'libs'), musl_lib_link_path)
     
@@ -185,9 +186,8 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
             _name = innerapi_name
             innerapi_name = f"{innerapi_name}({_part_toolchain_map_dict[_name]['toolchain_value']})"
             innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis",
-                                                         _name,
-                                                         _part_toolchain_map_dict[_name]['toolchain_key']),
-                                            innerapi_name)
+                                          _name,
+                                          _part_toolchain_map_dict[_name]['toolchain_key']), innerapi_name)
             innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
     if part_name == 'cjson':
         part_name = 'cJSON'
