@@ -3914,9 +3914,6 @@
         "//foundation/CastEngine/castengine_wifi_display/tests/unittest/network:network_udp_unit_test": [
             "//utils/native/base/include/"
         ],
-        "//foundation/ability/ability_base:want": [
-            "//third_party/json/include/"
-        ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility:featureability": [
             "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_napi/"
         ],
@@ -15603,18 +15600,6 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
         "//foundation/distributeddatamgr/kv_store/test/unittest/distributeddata:KvStoreDataJsTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
@@ -44110,36 +44095,6 @@
             "//third_party/googletest:gmock",
             "//third_party/googletest:gtest_main",
             "//third_party/cJSON:cjson"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
         ],
         "//foundation/distributeddatamgr/pasteboard/services/test:PasteboardDialogAbnormalTest": [
             "//third_party/googletest:gtest_main"
