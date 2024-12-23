@@ -174,13 +174,26 @@ def get_integrated_project_config(cwd: str):
     return model_version
 
 
+def get_hvigor_version(cwd: str):
+    print(f"[0/0] project dir: {cwd}")
+    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
+        hvigor_info = json5.load(input_f)
+        hvigor_version = hvigor_info.get('hvigorVersion')
+    return hvigor_version
+
+
 def build_hvigor_cmd(cwd: str, model_version: str, options):
     cmd = ['bash']
-    if model_version:
+    hvigor_version = get_hvigor_version
+    if hvigor_version:
         if options.hvigor_home:
             cmd.extend([f'{os.path.abspath(options.hvigor_home)}/hvigorw'])
         else:
             cmd.extend(['hvigorw'])
+    elif model_version:
+        code_home = os.path.dirname(os.path.dirname(options.sdk_home))
+        hvigor_home = f"{code_home}/tool/command-line-tools/bin"
+        cmd.extend([f'{hvigor_home}/hvigorw'])
     else:
         cmd.extend(['./hvigorw'])
     
