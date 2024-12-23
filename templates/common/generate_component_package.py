@@ -476,22 +476,55 @@ def _generate_public_configs(fp, module):
     fp.write(f'  public_configs = [":{module}_configs"]\n')
 
 
-def _public_deps_special_handler(module):
-    if module == 'appexecfwk_core':
-        return ["ability_base:want"]
-    return []
+# 目前特殊处理的依赖关系映射
+_DEPENDENCIES_MAP = {
+    ('bundle_framework', 'appexecfwk_core'): ["ability_base:want", "samgr:samgr_proxy"],
+    ('graphic_surface', 'surface'): ["ipc:ipc_core"],
+    ('netmanager_base', 'net_conn_manager_if'): ["ipc:ipc_core"],
+    ('ability_base', 'want'): ["ipc:ipc_core", "json:nlohmann_json_static"],
+    ('ability_base', 'session_info'): ["bundle_framework:appexecfwk_base"],
+    ('window_manager', 'libdm'): ["graphic_2d:librender_service_base"],
+    ('enterprise_device_management', 'edmservice_kits'): ["ability_base:want"],
+    ('ability_runtime', 'appkit_native'): ["ets_runtime:libark_jsruntime"],
+    ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
+    ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime", "runtime_core:libarkfile_static",
+                           "runtime_core:libarkbase_static"],
+    ('ability_runtime', 'ability_context_native'): ["eventhandler:libeventhandler"],
+    ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi", "ability_runtime:ability_manager",
+                                               "eventhandler:libeventhandler"],
+    ('ipc', 'ipc_core'): ["c_utils:utils"],
+    ('ipc', 'ipc_single'): ["c_utils:utils"],
+    ('graphic_2d', 'libcomposer'): ["eventhandler:libeventhandler"],
+    ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
+    ('graphic_2d', 'librender_service_client'): ["graphic_2d:2d_graphics", "graphic_2d:libcomposer",
+                                                 "image_framework:pixelconvertadapter", "eventhandler:libeventhandler"],
+    ('graphic_2d', 'librender_service_base'): ["opengles:libGLES"],
+    ('graphic_2d', '2d_graphics'): ["skia:skia_canvaskit", "opengles:libGLES"],
+    ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
+    ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
+    ('relational_store', 'native_rdb'): ["c_utils:utils"],
+    ('opengles', 'libGLES'): ["egl:libEGL"],
+    ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
+    ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
+    ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
+    ('bundle_framework', 'bundlemgr_mini'): ["bundle_framework:appexecfwk_base"],
+}
 
 
-def _generate_public_deps(fp, module, deps: list, components_json, public_deps_list: list):
-    if not deps:
-        return public_deps_list
+def _public_deps_special_handler(module, args):
+    _part_name = args.get('part_name')
+    # 使用映射字典来获取依赖列表
+    return _DEPENDENCIES_MAP.get((_part_name, module), [])
+
+
+def _generate_public_deps(fp, module, deps: list, components_json, public_deps_list: list, args):
     fp.write('  public_external_deps = [\n')
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
         if len(public_external_deps) > 0:
             fp.write(f"""    "{public_external_deps}",\n""")
             public_deps_list.append(public_external_deps)
-    for _public_external_deps in _public_deps_special_handler(module):
+    for _public_external_deps in _public_deps_special_handler(module, args):
         fp.write(f"""    "{_public_external_deps}",\n""")
         public_deps_list.append(_public_external_deps)
     fp.write('  ]\n')
@@ -547,7 +580,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
         _rust_lib_gn_handle(fp, args, json_data, module, components_json)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
-    print("_generate_build_gn has done ")
+    print(f"{module}_generate_build_gn has done ")
     fp.close()
     return _list
 

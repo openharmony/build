@@ -12,7 +12,7 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
         "//drivers/interface/face_auth/v2_0:face_auth_idl_headers",
         "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers",
-        "//drivers/interface/huks/v1_0:huks_idl_headers",
+        "//drivers/interface/huks/v1_1:huks_idl_headers",
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
         "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers",
@@ -2593,7 +2593,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/huks/v1_0:huks_idl_headers": [
+        "//drivers/interface/huks/v1_1:huks_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2602,7 +2602,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/huks/v1_0:huks_idl_headers_1.0": [
+        "//drivers/interface/huks/v1_1:huks_idl_headers_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -2611,7 +2611,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/huks/v1_0:libhuks_proxy_1.0": [
+        "//drivers/interface/huks/v1_1:libhuks_proxy_1.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -3913,9 +3913,6 @@
         ],
         "//foundation/CastEngine/castengine_wifi_display/tests/unittest/network:network_udp_unit_test": [
             "//utils/native/base/include/"
-        ],
-        "//foundation/ability/ability_base:want": [
-            "//third_party/json/include/"
         ],
         "//foundation/ability/ability_runtime/frameworks/js/napi/featureAbility:featureability": [
             "//foundation/window/window_manager/interfaces/kits/napi/window_runtime/window_napi/"
@@ -8435,10 +8432,6 @@
             "//foundation/bundlemanager/bundle_framework/services/bundlemgr/include/uninstall_data_mgr/",
             "//third_party/googletest/googlemock/include/",
             "//third_party/json/single_include/"
-        ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/dbms_services_kit_test:DbmsServicesKitTest": [
-            "//foundation/bundlemanager/bundle_framework/services/bundlemgr/include/",
-            "//foundation/distributeddatamgr/kv_store/interfaces/innerkits/distributeddata/include/"
         ],
         "//foundation/bundlemanager/ecological_rule_manager/test/unittest:EcologicalRuleMgrServiceClientTest": [
             "//utils/system/safwk/native/include/",
@@ -14135,23 +14128,23 @@
         "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfacestub_fuzzer:FingerprintAuthInterfaceStubFuzzTest": [
             "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
         ],
-        "//drivers/peripheral/huks/hdi_service:libhuks_hdi_service_1.0": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+        "//drivers/peripheral/huks/hdi_service:libhuks_hdi_service_1.1": [
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/huks/test/fuzztest/agreekeyfuzz:huks_hdi_agreekey_fuzz": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/huks/test/fuzztest/generatekeyfuzz:huks_hdi_generatekey_fuzz": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/huks/test/fuzztest/importkeyfuzz:huks_hdi_importkey_fuzz": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/huks/test/fuzztest/importwrappedkeyfuzz:huks_hdi_importwrappedkey_fuzz": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/huks/test/fuzztest/initfuzz:huks_hdi_init_fuzz": [
-            "//drivers/interface/huks/v1_0:huks_idl_headers"
+            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/input/ddk_service/src/emit_event_manager:emit_event_manager": [
             "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers"
@@ -15607,18 +15600,6 @@
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
         "//foundation/distributeddatamgr/kv_store/test/unittest/distributeddata:KvStoreDataJsTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
@@ -28702,7 +28683,7 @@
         "//drivers/interface/fingerprint_auth/v2_0:idl_gen": [
             "//foundation/ability/idl_tool:idl"
         ],
-        "//drivers/interface/huks/v1_0:idl_gen": [
+        "//drivers/interface/huks/v1_1:idl_gen": [
             "//foundation/ability/idl_tool:idl"
         ],
         "//drivers/interface/input/ddk/v1_0:idl_gen": [
@@ -36634,12 +36615,6 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension:gen_accessibility_extension_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension_context:gen_accessibility_extension_context_abc": [
-            "//arkcompiler/ets_frontend/es2panda:es2panda"
-        ],
         "//foundation/barrierfree/accessibility/services/aams/test:accessibility_account_data_test": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
@@ -40169,14 +40144,6 @@
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/distributed_bms_host_test:DistributedBmsHostTest": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/unittest/distributed_bms_host_test:DistributedBmsHostTest_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
         ],
         "//foundation/bundlemanager/ecological_rule_manager/test/unittest:EcologicalRuleMgrServiceClientTest": [
             "//third_party/googletest:gtest_main"
@@ -44128,36 +44095,6 @@
             "//third_party/googletest:gmock",
             "//third_party/googletest:gtest_main",
             "//third_party/cJSON:cjson"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardapi:PasteBoardJSTest__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/interfaces/kits/napi/test/unittest/pasteboardperf:PasteBoardPerfJSTest__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-            "//arkcompiler/ets_frontend/es2panda:es2panda_build"
-        ],
-        "//foundation/distributeddatamgr/pasteboard/services/dialog:pasteboard_dialog_hap__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-            "//third_party/parse5:parse5_ark_hap",
-            "//third_party/weex-loader:weex_loader_ark_hap"
         ],
         "//foundation/distributeddatamgr/pasteboard/services/test:PasteboardDialogAbnormalTest": [
             "//third_party/googletest:gtest_main"
@@ -50290,12 +50227,6 @@
         ],
         "//foundation/arkui/ui_lite/ext/updater/": [
             "//foundation/graphic/graphic_utils_lite/utils.gni"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
-        ],
-        "//foundation/barrierfree/accessibility/interfaces/kits/napi/accessibility_extension_context/": [
-            "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
         "//foundation/communication/bluetooth_service/test/example/bluetoothtest/": [
             "//test/xts/tools/build/suite.gni"
