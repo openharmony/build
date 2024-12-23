@@ -31,6 +31,7 @@
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
+        "//drivers/interface/usb/v1_2:usb_idl_headers_1.2",
         "//drivers/interface/user_auth/v3_0:user_auth_idl_headers",
         "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
@@ -242,6 +243,15 @@
         ],
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1": [
             "//drivers/interface/usb/v1_0:usb_idl_headers_1.0"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_proxy_1.2": [
+            "//drivers/interface/usb/v1_1:libusb_proxy_1.1"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_stub_1.2": [
+            "//drivers/interface/usb/v1_1:libusb_stub_1.1"
+        ],
+        "//drivers/interface/usb/v1_2:usb_idl_headers_1.2": [
+            "//drivers/interface/usb/v1_1:usb_idl_headers_1.1"
         ],
         "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2": [
             "//drivers/interface/vibrator/v1_1:libvibrator_proxy_1.1"
@@ -3467,6 +3477,42 @@
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_proxy_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_stub_1.2": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/usb/v1_2:usb_idl_headers": [
+            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
+            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
+            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
+            "//drivers/hdf_core/framework/include/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/utils/",
+            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
+            "//drivers/hdf_core/interfaces/inner_api/hdi/"
+        ],
+        "//drivers/interface/usb/v1_2:usb_idl_headers_1.2": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -14217,6 +14263,10 @@
         ],
         "//drivers/peripheral/usb/hdi_service:libusb_interface_service_1.1": [
             "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
+            "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers"
+        ],
+        "//drivers/peripheral/usb/hdi_service:libusb_interface_service_1.2": [
+            "//drivers/interface/usb/v1_2:usb_idl_headers_1.2",
             "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers"
         ],
         "//drivers/peripheral/user_auth/hdi_service:libuser_auth_interface_service_3.0": [
@@ -28777,6 +28827,9 @@
             "//foundation/ability/idl_tool:idl"
         ],
         "//drivers/interface/usb/v1_1:idl_gen": [
+            "//foundation/ability/idl_tool:idl"
+        ],
+        "//drivers/interface/usb/v1_2:idl_gen": [
             "//foundation/ability/idl_tool:idl"
         ],
         "//drivers/interface/user_auth/v3_0:idl_gen": [
