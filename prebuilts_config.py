@@ -229,16 +229,17 @@ def install_python(version, download_dir, one_type, code_path):
     after_extract_folder = os.listdir(os.path.join(download_dir, version))[0]
     copy_folder(os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src')),
                 os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_dest')))
-    copy_folder(os.path.join(download_dir, version, after_extract_folder),
-                os.path.join(code_path, one_type.get('symlink')))
-    python3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src'),
+    python3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_dest'),
                                 'bin', 'python3')
-    pip3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_src'), 'bin',
+    pip3_path = os.path.join(download_dir, version, after_extract_folder, one_type.get('copy_dest'), 'bin',
                              'pip3')
     subprocess.run(
         [python3_path, pip3_path, "install", "--trusted-host", "repo.huaweicloud.com", "-i",
          "http://repo.huaweicloud.com/repository/pypi/simple"] + one_type.get(
             'pip_install'))
+    copy_folder(os.path.join(download_dir, version, after_extract_folder),
+                os.path.join(code_path, one_type.get('symlink')))
+    
 
 
 def install_rustc(url, download_dir, version, one_type, code_path):
@@ -279,8 +280,6 @@ def process_tar(tar_dict, args):
                 after_extract_folder = os.listdir(os.path.join(download_dir, version))[0]
                 symlink_src2dest(os.path.join(download_dir, version, after_extract_folder),
                                 os.path.join(code_path, one_type.get('symlink')))
-                symlink_src2dest(os.path.join(code_path, one_type.get('symlink'), one_type.get('copy_src')),
-                                os.path.join(code_path, one_type.get('symlink'), one_type.get('copy_dest')))
                 continue
             if tar_name in ['ark_tools']:
                 after_extract_folder = os.listdir(os.path.join(download_dir, version))[0]
