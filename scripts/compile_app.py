@@ -184,7 +184,7 @@ def get_hvigor_version(cwd: str):
 
 def build_hvigor_cmd(cwd: str, model_version: str, options):
     cmd = ['bash']
-    hvigor_version = get_hvigor_version()
+    hvigor_version = get_hvigor_version(cwd)
     if hvigor_version:
         if options.hvigor_home:
             cmd.extend([f'{os.path.abspath(options.hvigor_home)}/hvigorw'])
