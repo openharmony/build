@@ -3692,7 +3692,7 @@
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/hostapd/"
         ],
-        "//drivers/peripheral/wlan/wpa/interfaces/hdi_service:libwpa_interface_service_1.1": [
+        "//drivers/peripheral/wlan/wpa/interfaces/hdi_service:libwpa_interface_service_1.2": [
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/",
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/utils/",
