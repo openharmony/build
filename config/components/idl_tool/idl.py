@@ -17,6 +17,7 @@
 import os
 import subprocess
 import argparse
+import sys
 
 
 def parse_args():
@@ -33,10 +34,12 @@ def parse_args():
     return arguments
 
 
-def run_command(cmd, execution_path, input_arguments):
-    print(" ".join(cmd) + " | execution_path: " + execution_path)
+def run_command(cmd, execution_path):
+    print("cmd:", " ".join(cmd))
+    print("execution_path:", execution_path)
     proc = subprocess.Popen(cmd, cwd=execution_path, stdout=subprocess.PIPE)
     proc.wait()
+    return proc.returncode
 
 
 def idl_gen_interface(input_arguments):
@@ -53,13 +56,9 @@ def idl_gen_interface(input_arguments):
     print("idl_gen_interface run os.remove start")
     dst_file_list = input_arguments.dst_file.split(',')
     for dst_file in dst_file_list:
-        i_dst_file = 'i{0}'.format(dst_file)
-        for file_name in os.listdir(input_arguments.dst_path):
-            if ((file_name.startswith(dst_file) or file_name.startswith(i_dst_file)) and
-                (file_name.endswith('.cpp') or file_name.endswith('.h'))):
-                file_path = os.path.join(input_arguments.dst_path, file_name)
-                os.remove(file_path)
-                print("idl_gen_interface run os.remove", i_dst_file)
+        if os.path.exists(dst_file):
+            os.remove(dst_file)
+            print("idl_gen_interface run os.remove", dst_file)
 
     gen_language = "-gen-cpp"
     if input_arguments.language == "rust":
@@ -67,17 +66,20 @@ def idl_gen_interface(input_arguments):
     elif input_arguments.language == "ts":
         gen_language = "-gen-ts"
 
-    src_idls = input_arguments.src_idl.split(",")
-    for src_idl in src_idls:
-        cmd = [os.path.join("./", name, "idl"),
-            gen_language, "-d", input_arguments.dst_path, "-c", src_idl]
+    src_idl_list = input_arguments.src_idl.split(",")
+    for src_idl in src_idl_list:
+        cmd = [os.path.join("./", name, "idl"), gen_language, "-d", input_arguments.dst_path, "-c", src_idl]
         if input_arguments.log_domainid:
             cmd += ['-log-domainid', input_arguments.log_domainid]
         if input_arguments.log_tag:
             cmd += ['-log-tag', input_arguments.log_tag]
         if input_arguments.hitrace:
             cmd += ['-t', input_arguments.hitrace]
-        run_command(cmd, path, input_arguments)
+        ret = run_command(cmd, path)
+        if ret != 0:
+            return ret
+    return 0
+
 
 if __name__ == '__main__':
-    idl_gen_interface(parse_args())
+    sys.exit(idl_gen_interface(parse_args()))
