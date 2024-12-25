@@ -36815,102 +36815,6 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/client/app_domain_verify_agent_client_test:app_domain_verify_agent_client_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/client/app_domain_verify_agent_client_test:app_domain_verify_agent_client_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/client/app_domain_verify_mgr_client_test:app_domain_verify_mgr_client_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/client/app_domain_verify_mgr_client_test:app_domain_verify_mgr_client_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/bean_parcel_test:app_domain_verify_bean_parcel_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/bean_parcel_test:app_domain_verify_bean_parcel_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/bean_test:app_domain_verify_bean_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/bean_test:app_domain_verify_bean_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/zidl_test:app_domain_verify_zidl_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/common/zidl_test:app_domain_verify_zidl_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_agent_ext_test:app_domain_verify_agent_ext_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_agent_ext_test:app_domain_verify_agent_ext_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_extension_mgr_test:app_domain_verify_extension_mgr_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_extension_mgr_test:app_domain_verify_extension_mgr_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_extension_register_test:app_domain_verify_extension_register_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/extension/app_domain_verify_extension_register_test:app_domain_verify_extension_register_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/bms_test:app_domain_verify_bms_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/bms_test:app_domain_verify_bms_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/config_test:app_domain_verify_config_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/config_test:app_domain_verify_config_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/httpsession_test:app_domain_verify_httpsession_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/frameworks_common/httpsession_test:app_domain_verify_httpsession_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/moduletest:app_domain_verify_module_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/moduletest:app_domain_verify_module_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
         "//foundation/bundlemanager/app_domain_verify/test/unittest/services/ability_filter_test:ability_filter_test": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
@@ -36919,51 +36823,11 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_agent_service_test:app_domain_verify_agent_service_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_agent_service_test:app_domain_verify_agent_service_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_data_mgr_test:app_domain_verify_data_mgr_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_data_mgr_test:app_domain_verify_data_mgr_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_mgr_service_test:app_domain_verify_mgr_service_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_mgr_service_test:app_domain_verify_mgr_service_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_rdb_test:app_domain_verify_rdb_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/services/app_domain_verify_rdb_test:app_domain_verify_rdb_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
         "//foundation/bundlemanager/app_domain_verify/test/unittest/services/deferred_link_test:deferred_link_test": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
         "//foundation/bundlemanager/app_domain_verify/test/unittest/services/deferred_link_test:deferred_link_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/verifier:app_domain_verify_agent_verifier_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/bundlemanager/app_domain_verify/test/unittest/verifier:app_domain_verify_agent_verifier_test_resource_copy": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
@@ -50382,7 +50246,7 @@
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap",
-			"//developtools/packing_tool:packing_tool"
+            "//developtools/packing_tool:packing_tool"
         ],
         "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
