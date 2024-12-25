@@ -136,8 +136,15 @@ def handle_test_check(build_data, _test_check, deps_list):
 def process_bundle_path(_bundle_path, _test_check, deps_list):
     bundle_json = utils.get_json(_bundle_path)
     build_data = bundle_json.get("component", {}).get("build", {})
-    process_build_data(build_data, _test_check, deps_list)
-    handle_test_check(build_data, _test_check, deps_list)
+    if _test_check == 0:
+        process_build_data(build_data, _test_check, deps_list)
+    elif _test_check == 1:
+        process_build_data(build_data, _test_check, deps_list)
+        handle_test_check(build_data, _test_check, deps_list)
+    elif _test_check == 2:
+        handle_test_check(build_data, _test_check, deps_list)
+    else:
+        print("Error: Please pass the correct test parameters")
 
 
 def main():
