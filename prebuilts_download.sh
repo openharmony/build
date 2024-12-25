@@ -238,20 +238,6 @@ do
 done
 }
 
-# copy compiler-rt and libcxx to llvm
-function install_llvm_libs(){
-for i in ${llvm_dir_list[@]}
-do
-    compiler_rt_dir="${i}/../common_libs/compiler-rt-common"
-    libcxx_dir="${i}/../common_libs/libcxx-common"
-    if [[ -d "${i}/llvm" ]]; then
-          $(rsync -a ${compiler_rt_dir}/* ${i}/llvm/lib)
-          $(rsync -a ${libcxx_dir}/* ${i}/llvm/lib)
-          $(ln -snf 15.0.4 ${i}/llvm/lib/clang/current)
-    fi
-done
-}
-
 function update_llvm_ndk(){
 if [[ -e "${llvm_dir}/llvm_ndk" ]];then
   rm -rf "${llvm_dir}/llvm_ndk"
@@ -260,8 +246,6 @@ mkdir -p "${llvm_dir}/llvm_ndk"
 cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
 cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
 }
-
-install_llvm_libs
 
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
     copy_inside_cxx
