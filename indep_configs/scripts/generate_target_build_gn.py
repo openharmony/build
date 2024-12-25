@@ -82,7 +82,7 @@ def _get_bundle_path(source_code_path):
     bundle_paths = dict()
     for root, dirs, files in os.walk(source_code_path):
         for file in files:
-            if file.endswith("bundle.json"):
+            if file == "bundle.json":
                 bundle_paths.update({os.path.join(root, file): root})
     return bundle_paths
 
