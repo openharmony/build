@@ -575,7 +575,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _generate_configs(fp, module)
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
-    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
+    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list, args)
     if json_data.get('type') == 'rust_library':
         _rust_lib_gn_handle(fp, args, json_data, module, components_json)
     _generate_other(fp, args, json_data, module)
