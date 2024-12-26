@@ -203,6 +203,10 @@ template("hdi") {
           deps += invoker.deps
         }
 
+        if (defined(invoker.proxy_deps)) {
+          deps += invoker.proxy_deps
+        }
+
         public_deps = []
         if (defined(invoker.sequenceable_pub_deps)) {
           public_deps += invoker.sequenceable_pub_deps
@@ -281,6 +285,11 @@ template("hdi") {
           if (defined(invoker.deps)) {
             deps += invoker.deps
           }
+
+          if (defined(invoker.stub_deps)) {
+            deps += invoker.stub_deps
+          }
+
           public_deps = []
           if (defined(invoker.sequenceable_pub_deps)) {
             public_deps += invoker.sequenceable_pub_deps
