@@ -850,7 +850,8 @@
         "module_label": "//foundation/ability/ability_runtime/frameworks/simulator:copy_ability_simulator",
         "target_os": [
             "windows",
-            "darwin"
+            "darwin",
+            "linux"
         ]
     },
     {
