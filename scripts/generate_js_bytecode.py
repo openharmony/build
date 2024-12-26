@@ -56,6 +56,8 @@ def parse_args():
     parser.add_argument("--source-file",
                         help='specify the file path info recorded in generated abc. This argument is optional, ' +
                              'its value will be the path of input file if not specified')
+    parser.add_argument("--enable-annotations", action='store_true',
+                        help='whether annotations are enabled or not')
     arguments = parser.parse_args()
     return arguments
 
@@ -64,6 +66,8 @@ def run_command(cmd, execution_path):
     print(" ".join(cmd) + " | execution_path: " + execution_path)
     proc = subprocess.Popen(cmd, cwd=execution_path)
     proc.wait()
+    if proc.returncode != 0:
+        raise subprocess.CalledProcessError(proc.returncode, cmd)
 
 
 def gen_abc_info(input_arguments):
@@ -100,9 +104,16 @@ def gen_abc_info(input_arguments):
         cmd += ["--module-record-field-name", input_arguments.module_record_field_name]
     if input_arguments.source_file:
         cmd += ["--source-file", input_arguments.source_file]
+    if input_arguments.enable_annotations:
+        src_index = cmd.index(input_arguments.src_js)
+        cmd.insert(src_index, '--enable-annotations')
         # insert d.ts option to cmd later
     cmd.append("--target-api-sub-version=beta3")
-    run_command(cmd, path)
+
+    try:
+        run_command(cmd, path)
+    except subprocess.CalledProcessError as e:
+        exit(e.returncode)
 
 
 if __name__ == '__main__':
