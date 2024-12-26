@@ -144,6 +144,9 @@ declare_args() {
 
   # Which OS the generated SDK works on. possible values: 'win/mac/linux/default'
   sdk_platform = "default"
+
+  # Build arkoala libs for the OHOS SDK.
+  arkoala_for_sdk = false
 }
 
 declare_args() {
