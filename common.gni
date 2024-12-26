@@ -16,4 +16,3 @@ declare_args() {
   root_perf_main = "main"
   device_type = "default"
 }
-
