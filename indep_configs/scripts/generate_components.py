@@ -261,9 +261,11 @@ def _components_info_handler(part_name_list, source_code_path: str, hpm_cache_pa
         if part_name and part_name not in src_bundle_path_dict:
             bundle_path = _get_bundle_path(hpm_cache_path, dependences_json, part_name)
             bundle_json = utils.get_json(bundle_path)
+            _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
+            if part_name == 'developer_test':
+                continue
             components_json = _gen_components_info(components_json, bundle_json, part_name, src_build_name_list,
                                                    _part_toolchain_map_dict)
-            _symlink_binarys(hpm_cache_path, bundle_json, dependences_json, part_name)
 
     return components_json
 
