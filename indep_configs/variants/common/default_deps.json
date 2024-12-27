@@ -3,5 +3,6 @@
   "linux",
   "googletest",
   "benchmark",
-  "ets_frontend"
+  "ets_frontend",
+  "libxml2"
 ]
