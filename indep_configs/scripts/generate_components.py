@@ -84,7 +84,7 @@ def _get_src_bundle_path(source_code_path):
     bundle_paths = list()
     for root, dirs, files in os.walk(source_code_path):
         for file in files:
-            if file.endswith("bundle.json"):
+            if file == "bundle.json":
                 bundle_paths.append(os.path.join(root, file))
     return bundle_paths
 
