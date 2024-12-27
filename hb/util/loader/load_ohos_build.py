@@ -385,8 +385,9 @@ class PartObject(object):
             self._feature_list = part_config.get('feature_list')
             # check feature
             for _feature_name in self._feature_list:
+                replace_name = self._origin_name.replace('-', '_')
                 if not _feature_name.startswith('{}_'.format(
-                        self._origin_name)):
+                        replace_name)):
                     raise OHOSException(
                         "part feature list config incorrect,"
                         " part_name='{}', feature_name='{}'".format(
