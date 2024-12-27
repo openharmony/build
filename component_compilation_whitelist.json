@@ -14,6 +14,7 @@
         "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers",
         "//drivers/interface/huks/v1_1:huks_idl_headers",
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
+        "//drivers/interface/input/ddk/v1_1:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
         "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers",
         "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers",
@@ -186,6 +187,15 @@
             "//drivers/interface/display/composer/hdifd_parcelable:libhdifd_parcelable",
             "//drivers/interface/display/composer/v1_0:libdisplay_composer_stub_1.0",
             "//drivers/interface/display/composer/v1_1:libdisplay_composer_stub_1.1"
+        ],
+        "//drivers/interface/input/ddk/v1_1:libhid_ddk_proxy_1.1": [
+            "//drivers/interface/input/ddk/v1_0:libhid_ddk_proxy_1.0"
+        ],
+        "//drivers/interface/input/ddk/v1_1:libhid_ddk_stub_1.1": [
+            "//drivers/interface/input/ddk/v1_0:libhid_ddk_stub_1.0"
+        ],
+        "//drivers/interface/input/ddk/v1_1:hid_ddk_idl_headers_1.1": [
+            "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers_1.0"
         ],
         "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_proxy_1.1": [
             "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_proxy_1.0"
