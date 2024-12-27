@@ -1,4 +1,4 @@
-# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Copyright (c) 2023-2024 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -52,20 +52,18 @@ if (ohos_indep_compiler_enable) {
 }
 
 template("idl_gen_interface") {
+  not_needed(invoker, [ "dst_file" ])
+
   # idl sources
-  idl_list = []
   src_idl_fullpath = []
   if (defined(invoker.sources)) {
-    idl_list += invoker.sources
-    not_needed(invoker,
-               [
-                 "src_idl",
-                 "dst_file",
-               ])
+    not_needed(invoker, [ "src_idl" ])
+
+    # sources support multiple idl files
+    src_idl_fullpath += invoker.sources
   } else {
-    assert(defined(invoker.src_idl), "src-idl is required!")
-    not_needed(invoker, [ "dst_file" ])
-    idl_list += [ get_path_info(invoker.src_idl, "file") ]
+    # src_idl support single idl file
+    assert(defined(invoker.src_idl), "src_idl is required")
     src_idl_fullpath += [ invoker.src_idl ]
   }
 
@@ -78,45 +76,28 @@ template("idl_gen_interface") {
     language = invoker.language
   }
 
-  # idl name transform
-  str_upper = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
-  str_lower = "a b c d e f g h i j k l m n o p q r s t u v w x y z"
-  str_upper_list = string_split(str_upper, " ")
-  str_lower_list = string_split(str_lower, " ")
-  store = []
-  dst_file_list = []
-  print("idl config idl_list: ", idl_list)
-  foreach(idl_name, idl_list) {
-    i = 0
-    if (defined(invoker.sources)) {
-      src_idl_fullpath += [ rebase_path(idl_name) ]
-    }
-    name = string_replace(idl_name, ".idl", "")
-    foreach(s, str_upper_list) {
-      name = string_replace(name, s, "_" + str_lower_list[i])
-      i = i + 1
-    }
-
-    # first letter
-    name_split = []
-    name_split = string_split(name, "_i_")
-    if (name_split[0] == "") {
-      name = string_replace(name, "_i_", "", 1)
-    }
-    name_split = []
-    name_split = string_split(name, "_")
-    if (name_split[0] == "") {
-      name = string_replace(name, "_", "", 1)
-    }
-    dst_file_list += [ name ]
-    store += [
-      "${target_gen_dir}/" + name + "_proxy.cpp",
-      "${target_gen_dir}/" + name + "_stub.cpp",
-    ]
+  # get build info
+  build_info_args = [
+    "-l",
+    language,
+    "-o",
+    rebase_path(target_gen_dir),
+    "-r",
+    rebase_path("//"),
+  ]
+  foreach(idl_file, src_idl_fullpath) {
+    build_info_args += [ "-f" ]
+    build_info_args += [ rebase_path(idl_file) ]
   }
-  arg_src_idl = string_join(",", src_idl_fullpath)
-  arg_dst_file = string_join(",", dst_file_list)
-  print("idl config store: ", store, dst_file_list)
+  build_info =
+      exec_script("//build/config/components/idl_tool/build_sa_files_info.py",
+                  build_info_args,
+                  "json")
+  assert(defined(build_info.include_dirs), "missing build_info.include_dirs")
+  assert(defined(build_info.out_dir), "missing build_info.out_dir")
+  assert(defined(build_info.sources), "missing build_info.sources")
+  assert(defined(build_info.proxy_sources), "missing build_info.proxy_sources")
+  assert(defined(build_info.stub_sources), "missing build_info.stub_sources")
 
   action("$target_name") {
     inputs = src_idl_fullpath
@@ -124,13 +105,13 @@ template("idl_gen_interface") {
     script = "//build/config/components/idl_tool/idl.py"
     args = [
       "--src-idl",
-      arg_src_idl,
+      string_join(",", src_idl_fullpath),
       "--dst-path",
-      rebase_path("${target_gen_dir}"),
+      rebase_path(target_gen_dir),
       "--idl-tool-path",
-      rebase_path("${idl_build_path}"),
+      rebase_path(idl_build_path),
       "--dst-file",
-      arg_dst_file,
+      string_join(",", rebase_path(build_info.sources)),
       "--language",
       language,
     ]
@@ -152,27 +133,31 @@ template("idl_gen_interface") {
         invoker.hitrace,
       ]
     }
-    outputs = store
+    outputs = build_info.sources
   }
 
-  # multip cpp, build as so
+  # build so
   if ((language == "c" || language == "cpp") && defined(invoker.sources)) {
     idl_headers_config = target_name + "_idl_headers_config"
     config("$idl_headers_config") {
-      include_dirs = [ "${target_gen_dir}" ]
+      include_dirs = [ target_gen_dir ]
       if (defined(invoker.sub_include)) {
         include_dirs += invoker.sub_include
       }
+      include_dirs += build_info.include_dirs
     }
+
     lib_client = "lib" + target_name + "_proxy"
+    lib_server = "lib" + target_name + "_stub"
     action_target_name = ":" + target_name
+
+    # build client so
     ohos_shared_library(lib_client) {
       sources = []
-      output_values = get_target_outputs(action_target_name)
-      sources += filter_include(output_values, [ "*_proxy.cpp" ])
       if (defined(invoker.sources_cpp)) {
         sources += invoker.sources_cpp
       }
+      sources += build_info.proxy_sources
       if (defined(invoker.configs)) {
         configs = invoker.configs
       }
@@ -220,14 +205,14 @@ template("idl_gen_interface") {
         }
       }
     }
-    lib_server = "lib" + target_name + "_stub"
+
+    # build server so
     ohos_shared_library(lib_server) {
       sources = []
-      output_values = get_target_outputs(action_target_name)
-      sources += filter_include(output_values, [ "*_stub.cpp" ])
       if (defined(invoker.sources_cpp)) {
         sources += invoker.sources_cpp
       }
+      sources += build_info.stub_sources
       if (defined(invoker.configs)) {
         configs = invoker.configs
       }
