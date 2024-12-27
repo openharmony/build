@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/common.gni")
 import("//build/version.gni")
 
 declare_args() {
@@ -197,12 +198,6 @@ declare_args() {
 declare_args() {
   enable_archive_sdk = true
   enable_process_notice = true
-}
-
-declare_args() {
-  build_variant = "root"
-  root_perf_main = "main"
-  device_type = "default"
 }
 
 declare_args() {
