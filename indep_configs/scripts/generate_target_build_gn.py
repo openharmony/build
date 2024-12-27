@@ -82,7 +82,7 @@ def _get_bundle_path(source_code_path):
     bundle_paths = dict()
     for root, dirs, files in os.walk(source_code_path):
         for file in files:
-            if file.endswith("bundle.json"):
+            if file == "bundle.json":
                 bundle_paths.update({os.path.join(root, file): root})
     return bundle_paths
 
@@ -136,8 +136,15 @@ def handle_test_check(build_data, _test_check, deps_list):
 def process_bundle_path(_bundle_path, _test_check, deps_list):
     bundle_json = utils.get_json(_bundle_path)
     build_data = bundle_json.get("component", {}).get("build", {})
-    process_build_data(build_data, _test_check, deps_list)
-    handle_test_check(build_data, _test_check, deps_list)
+    if _test_check == 0:
+        process_build_data(build_data, _test_check, deps_list)
+    elif _test_check == 1:
+        process_build_data(build_data, _test_check, deps_list)
+        handle_test_check(build_data, _test_check, deps_list)
+    elif _test_check == 2:
+        handle_test_check(build_data, _test_check, deps_list)
+    else:
+        print("Error: Please pass the correct test parameters")
 
 
 def main():
