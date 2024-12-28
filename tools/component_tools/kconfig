@@ -647,13 +647,6 @@ config feature$$developtools$$hiperf
         string "feature"
         default ""
         depends on developtools$$hiperf
-config developtools$$bytrace
-    bool "bytrace"
-    default n
-config feature$$developtools$$bytrace
-        string "feature"
-        default ""
-        depends on developtools$$bytrace
 config developtools$$packing_tool
     bool "packing_tool"
     default n
