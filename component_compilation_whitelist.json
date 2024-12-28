@@ -71,7 +71,7 @@
         "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers",
         "//drivers/interface/nnrt/v2_1:nnrt_idl_headers",
         "//drivers/interface/partitionslot/v1_0:partitionslot_idl_headers",
-        "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers",
+        "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers",
         "//drivers/interface/power/v1_1:power_idl_headers",
         "//drivers/interface/power/v1_2:power_idl_headers",
         "//drivers/interface/ril/v1_1:ril_idl_headers",
@@ -86,7 +86,7 @@
         "//drivers/interface/usb/v1_0:usb_idl_headers_1.0",
         "//drivers/interface/usb/v1_1:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
-        "//drivers/interface/user_auth/v2_0:user_auth_idl_headers",
+        "//drivers/interface/user_auth/v3_0:user_auth_idl_headers",
         "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
         "//drivers/interface/vibrator/v1_3:vibrator_idl_headers",
         "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
@@ -421,10 +421,10 @@
         "//drivers/interface/pin_auth/v1_1:libpin_auth_stub_1.1": [
             "//drivers/interface/pin_auth/v1_0:libpin_auth_stub_1.0"
         ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_proxy_2.0": [
+        "//drivers/interface/pin_auth/v2_1:libpin_auth_proxy_2.1": [
             "//drivers/interface/pin_auth/v1_0:libpin_auth_proxy_1.0"
         ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_stub_2.0": [
+        "//drivers/interface/pin_auth/v2_1:libpin_auth_stub_2.1": [
             "//drivers/interface/pin_auth/v1_0:libpin_auth_stub_1.0"
         ],
         "//drivers/interface/ril/v1_2:libril_proxy_1.2": [
@@ -466,10 +466,10 @@
         "//drivers/interface/user_auth/v1_3:libuser_auth_stub_1.3": [
             "//drivers/interface/user_auth/v1_2:libuser_auth_stub_1.2"
         ],
-        "//drivers/interface/user_auth/v2_0:libuser_auth_proxy_2.0": [
+        "//drivers/interface/user_auth/v3_0:libuser_auth_proxy_3.0": [
             "//drivers/interface/user_auth/v1_2:libuser_auth_proxy_1.2"
         ],
-        "//drivers/interface/user_auth/v2_0:libuser_auth_stub_2.0": [
+        "//drivers/interface/user_auth/v3_0:libuser_auth_stub_3.0": [
             "//drivers/interface/user_auth/v1_2:libuser_auth_stub_1.2"
         ],
         "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2": [
@@ -4308,7 +4308,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_proxy_2.0": [
+        "//drivers/interface/pin_auth/v2_1:libpin_auth_proxy_2.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4317,7 +4317,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/pin_auth/v2_0:libpin_auth_stub_2.0": [
+        "//drivers/interface/pin_auth/v2_1:libpin_auth_stub_2.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4326,7 +4326,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers": [
+        "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4335,7 +4335,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers_2.0": [
+        "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers_2.1": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4928,7 +4928,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/user_auth/v2_0:libuser_auth_proxy_2.0": [
+        "//drivers/interface/user_auth/v3_0:libuser_auth_proxy_3.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4937,7 +4937,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/user_auth/v2_0:libuser_auth_stub_2.0": [
+        "//drivers/interface/user_auth/v3_0:libuser_auth_stub_3.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4946,7 +4946,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/user_auth/v2_0:user_auth_idl_headers": [
+        "//drivers/interface/user_auth/v3_0:user_auth_idl_headers": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -4955,7 +4955,7 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/user_auth/v2_0:user_auth_idl_headers_2.0": [
+        "//drivers/interface/user_auth/v3_0:user_auth_idl_headers_3.0": [
             "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
             "//drivers/hdf_core/adapter/uhdf2/osal/include/",
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
@@ -17383,7 +17383,7 @@
         "//drivers/interface/pin_auth/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/pin_auth/v2_0:hdi_gen": [
+        "//drivers/interface/pin_auth/v2_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/power/v1_0:hdi_gen": [
@@ -17434,7 +17434,7 @@
         "//drivers/interface/user_auth/v1_3:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/user_auth/v2_0:hdi_gen": [
+        "//drivers/interface/user_auth/v3_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/vibrator/v1_1:hdi_gen": [
@@ -17890,23 +17890,23 @@
         "//drivers/peripheral/partitionslot/hdi_service:libpartition_slot_service_1.0": [
             "//drivers/interface/partitionslot/v1_0:partitionslot_idl_headers"
         ],
-        "//drivers/peripheral/pin_auth/hdi_service:libpin_auth_interface_service_2.0": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+        "//drivers/peripheral/pin_auth/hdi_service:libpin_auth_interface_service_2.1": [
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
-        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_2.0_fuzzer": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+        "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/common_fuzzer:libpin_auth_interface_service_2.1_fuzzer": [
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/pinauthexecutorstub_fuzzer:PinAuthExecutorStubFuzzTest": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/pinauthhdi_fuzzer:PinAuthHdiFuzzTest": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/pinauthinterfaceservice_fuzzer:PinAuthInterfaceServiceFuzzTest": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/pin_auth/test/fuzztest/pin_auth/pinauthinterfacestub_fuzzer:PinAuthInterfaceStubFuzzTest": [
-            "//drivers/interface/pin_auth/v2_0:pin_auth_idl_headers"
+            "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers"
         ],
         "//drivers/peripheral/power/interfaces/hdi_service:libpower_interface_service_1.1": [
             "//third_party/libxml2:xml2",
@@ -17959,29 +17959,29 @@
             "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
             "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers"
         ],
-        "//drivers/peripheral/user_auth/hdi_service:libuser_auth_interface_service_2.0": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+        "//drivers/peripheral/user_auth/hdi_service:libuser_auth_interface_service_3.0": [
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/fuzztest/user_auth/common_fuzzer:libuser_auth_interface_service_fuzzer": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/fuzztest/user_auth/userauthhdi_fuzzer:UserAuthHdiFuzzTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/fuzztest/user_auth/userauthhdistub_fuzzer:UserAuthHdiStubFuzzTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/unittest/co_auth:UserAuthCoAuthTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/unittest/database:UserAuthDatabaseTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/unittest/idm_test:UserAuthIdmTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/user_auth/test/unittest/user_auth_test:UserAuthUserAuthTest": [
-            "//drivers/interface/user_auth/v2_0:user_auth_idl_headers"
+            "//drivers/interface/user_auth/v3_0:user_auth_idl_headers"
         ],
         "//drivers/peripheral/vibrator/hdi_impl:libhdi_vibrator_impl": [
             "//drivers/interface/vibrator/v1_2:vibrator_idl_headers",
@@ -32570,7 +32570,7 @@
         "//drivers/interface/pin_auth/v1_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/pin_auth/v2_0:hdi_gen": [
+        "//drivers/interface/pin_auth/v2_1:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/power/v1_0:hdi_gen": [
@@ -32621,7 +32621,7 @@
         "//drivers/interface/user_auth/v1_3:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
-        "//drivers/interface/user_auth/v2_0:hdi_gen": [
+        "//drivers/interface/user_auth/v3_0:hdi_gen": [
             "//drivers/hdf_core/framework/tools/hdi-gen:build_hdi_gen"
         ],
         "//drivers/interface/vibrator/v1_1:hdi_gen": [
@@ -37999,7 +37999,7 @@
         "//drivers/interface/pin_auth/v1_1/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/pin_auth/v2_0/": [
+        "//drivers/interface/pin_auth/v2_1/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/power/v1_0/": [
@@ -38050,7 +38050,7 @@
         "//drivers/interface/user_auth/v1_3/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
-        "//drivers/interface/user_auth/v2_0/": [
+        "//drivers/interface/user_auth/v3_0/": [
             "//drivers/hdf_core/adapter/uhdf2/hdi.gni"
         ],
         "//drivers/interface/vibrator/v1_1/": [
