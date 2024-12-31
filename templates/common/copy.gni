@@ -224,9 +224,6 @@ template("ohos_copy") {
                                "public_configs",
                                "sources",
                                "outputs",
-                               "copy_linkable_file",
-                               "rust_crate_name",
-                               "rust_crate_type",
                              ])
       deps = _deps
 
