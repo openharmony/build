@@ -57,8 +57,7 @@ def gen_output_file(part_name: str, origin_part_name: str, all_modules_file: str
 
         modules_def[module_def] = ''
         thirdparty = info.get('subsystem_name')
-        _part_name = info.get('part_name')
-        if thirdparty == 'thirdparty' and not _part_name.startswith('rust_'):
+        if thirdparty == 'thirdparty':
             thirdparty_module_list.append(info)
             external_module_list.append(info)
         if str(module_def).startswith("//drivers/interface"):
