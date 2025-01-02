@@ -31,7 +31,7 @@
 
 **不同产品形态如何配置收集LICENSE**
 
-***对于系统编译、SDK编译、瘦设备编译时收集notice使用的模板是不相同的，下面列举不同产品形态编译使用的模板***
+***对于系统编译、SDK编译、lite设备编译时收集notice使用的模板是不相同的，下面列举不同产品形态编译使用的模板***
    
 1. rk3568形态可使用ohos_shared_library、ohos_static_library、ohos_executable、ohos_app、ohos_rust_library、ohos_abc、ohos_bpf、ohos_rust_proc_macro模板，这几种模板分别是编译在编译动态库、静态库、可执行文件、app、rust库、abc文件、bpf文件、proc_macro时使用的，在完成编译任务后，会自动收集编译目标所依赖到的三方开源信息。如下图示例：
 
@@ -53,7 +53,7 @@
    }
    ```
 
-3. 瘦设备编译主要是通过lite_library模板实现编译操作，模板只能在非标准形态下使用。
+3. lite设备编译主要是通过lite_library模板实现编译操作，模板只能在非标准形态下使用。
    ```
    lite_library("example") {
    	...
