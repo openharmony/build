@@ -11,7 +11,75 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import("//build/config/python.gni")
 import("//build/lite/config/subsystem/aafwk/path.gni")
+
+template("generate_lite_notice") {
+  action_with_pydeps(target_name) {
+    assert(defined(invoker.module_name), "module_name in required.")
+    assert(target_name != "")
+    forward_variables_from(invoker,
+                           [
+                             "module_name",
+                             "module_source_dir",
+                             "deps",
+                             "license_file",
+                             "module_type",
+                             "outputs",
+
+                             # Some license file are generated in gn gen.
+                             # Such notices should not be used as sources.
+                             "license_as_sources",
+                           ])
+    script = rebase_path("//build/ohos/notice/collect_module_notice_file.py")
+    depfile = "${target_gen_dir}/$target_name.d"
+    module_name = invoker.module_name
+
+    if (!defined(outputs)) {
+      outputs = []
+
+      # _notice_subdir = "${invoker.subsystem_name}/${invoker.part_name}"
+      if (defined(module_type) && module_type == "static_library") {
+        outputs +=
+            [ "$root_build_dir/NOTICE_FILES/rootfs/libs/$module_name.a.txt" ]
+      } else if (defined(module_type) && module_type == "shared_library") {
+        outputs += [
+          "$root_build_dir/NOTICE_FILES/rootfs/usr/lib/$module_name.so.txt",
+        ]
+      } else if (defined(module_type) && module_type == "executable") {
+        outputs +=
+            [ "$root_build_dir/NOTICE_FILES/rootfs/bin/$module_name.bin.txt" ]
+      }
+    }
+
+    args = [
+      "--module-source-dir",
+      rebase_path(module_source_dir, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+    ]
+    foreach(o, outputs) {
+      args += [
+        "--output",
+        rebase_path(o, root_build_dir),
+      ]
+    }
+
+    if (defined(license_file)) {
+      _license_as_sources = true
+      if (defined(license_as_sources)) {
+        _license_as_sources = license_as_sources
+      }
+      if (_license_as_sources) {
+        inputs = [ license_file ]
+      }
+      args += [
+        "--license-file",
+        rebase_path(license_file, root_build_dir),
+      ]
+    }
+  }
+}
 
 template("lite_library") {
   assert(defined(invoker.target_type), "Library target_type is required.")
@@ -36,6 +104,19 @@ template("lite_library") {
       }
     }
   } else {
+    notice_target_type = invoker.target_type
+    if (notice_target_type == "shared_library" ||
+        notice_target_type == "static_library" ||
+        notice_target_type == "executable") {
+      _notice_target = "${target_name}__notice"
+      _main_target_name = target_name
+      generate_lite_notice(_notice_target) {
+        module_type = notice_target_type
+        module_name = _main_target_name
+        module_source_dir = get_label_info(":${_main_target_name}", "dir")
+      }
+    }
+
     target(target_type, target_name) {
       forward_variables_from(invoker, "*", [ "remove_configs" ])
       cflags = []
@@ -62,6 +143,18 @@ template("lite_library") {
                                  ohos_kernel_type != "uniproton")) {
         cflags += [ "-fPIE" ]
         cflags_cc += [ "-fPIE" ]
+      }
+      if (!defined(deps)) {
+        deps = []
+      }
+      if (defined(invoker.target_type)) {
+        notice_target_type = invoker.target_type
+        if (notice_target_type == "shared_library" ||
+            notice_target_type == "static_library" ||
+            notice_target_type == "executable") {
+          _notice_target = "${target_name}__notice"
+          deps += [ ":$_notice_target" ]
+        }
       }
     }
   }

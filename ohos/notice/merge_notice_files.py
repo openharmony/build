@@ -40,6 +40,33 @@ xml_escape_table = {
 }
 
 
+def move_static_library_notices(options):
+    dest = os.path.join(options.notice_root_dir, 'libs')
+    os.makedirs(dest, exist_ok=True)
+    static_dir = os.path.join(options.notice_root_dir, "static")
+    static_subdir = os.path.join(options.static_library_notice_dir, "libs")
+    if os.path.exists(static_dir):
+        files = build_utils.get_all_files(static_dir)
+        files.sort()
+    if os.path.exists(static_subdir):
+        other_files = build_utils.get_all_files(static_subdir)
+        other_files.sort()
+    files.extend(other_files)
+    if files:
+        for file in files:
+            file_name = os.path.basename(file)
+            if not file_name.startswith("lib"):
+                dest_file = os.path.join(dest, f"lib{file_name}")
+            else:
+                dest_file = os.path.join(dest, file_name)
+            shutil.copyfile(file, dest_file)
+            if os.path.isfile("{}.json".format(dest_file)):
+                os.makedirs(os.path.dirname("{}.json".format(dest_file)), exist_ok=True)
+                shutil.copyfile("{}.json".format(file), "{}.json".format(dest_file))
+        shutil.rmtree(static_dir)
+        shutil.rmtree(static_subdir)
+    
+
 def copy_static_library_notices(options, depfiles: list):
     valid_notices = []
     basenames = []
@@ -49,9 +76,18 @@ def copy_static_library_notices(options, depfiles: list):
     for file in files:
         if os.stat(file).st_size == 0:
             continue
-        if not file.endswith('.a.txt'):
+        if not options.lite_product:
+            if not file.endswith('.a.txt'):
+                continue
+        elif not file.endswith('.txt'):
             continue
         notice_file_name = os.path.basename(file)
+        if options.lite_product:
+            if not notice_file_name.startswith("lib"):
+                file_dir = os.path.dirname(file)
+                lib_file = os.path.join(file_dir, f"lib{notice_file_name}")
+                os.rename(file, lib_file)
+                file = lib_file
         if file not in basenames:
             basenames.append(notice_file_name)
             valid_notices.append(file)
@@ -309,6 +345,8 @@ def main():
     else:
         depfiles += build_utils.get_all_files(notice_dir)
     # Copy notice of static targets to notice_root_dir
+    if args.lite_product:
+        move_static_library_notices(args)
     if args.static_library_notice_dir:
         copy_static_library_notices(args, depfiles)
 
@@ -331,3 +369,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
