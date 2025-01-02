@@ -285,6 +285,7 @@ dist_subsystem_info_file =
 dist_build_install_packages_dir = "${dist_build_out_dir}/packages_to_install"
 dist_subsystem_info_output_file =
     "${dist_build_install_packages_dir}/${dist_subsystem_info_filename}"
+prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/16"
 
 ramdisk_dir_list = []
 
@@ -315,9 +316,8 @@ openjdk_package_names = [
   "javax.*",
 ]
 if (ohos_indep_compiler_enable) {
-  hapsigner = "//prebuilts/ohos-sdk/linux/14/toolchains/lib/hap-sign-tool.jar"
-  hap_packing_tool =
-      "//prebuilts/ohos-sdk/linux/14/toolchains/lib/app_packing_tool.jar"
+  hapsigner = "${prebuilts_sdk_dir}/toolchains/lib/hap-sign-tool.jar"
+  hap_packing_tool = "${prebuilts_sdk_dir}/toolchains/lib/app_packing_tool.jar"
 } else {
   hapsigner = "//developtools/hapsigner/dist/hap-sign-tool.jar"
   hap_packing_tool =
@@ -332,8 +332,7 @@ default_signature_algorithm = "SHA256withECDSA"
 default_hap_private_key_path = "123456"
 default_keystore_password = "123456"
 if (ohos_indep_compiler_enable) {
-  default_keystore_path =
-      "//prebuilts/ohos-sdk/linux/14/toolchains/lib/OpenHarmony.p12"
+  default_keystore_path = "${prebuilts_sdk_dir}/toolchains/lib/OpenHarmony.p12"
   default_hap_certificate_file =
       "//prebuilts/ohos-sdk/OpenHarmonyApplication.pem"
 } else {
