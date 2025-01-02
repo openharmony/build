@@ -55,16 +55,26 @@ template("idl_gen_interface") {
   not_needed(invoker, [ "dst_file" ])
 
   # idl sources
-  src_idl_fullpath = []
+  idl_list = []
+  idl_callback_list = []
+  idl_common_list = []
+
   if (defined(invoker.sources)) {
     not_needed(invoker, [ "src_idl" ])
 
     # sources support multiple idl files
-    src_idl_fullpath += invoker.sources
+    idl_list += rebase_path(invoker.sources)
   } else {
     # src_idl support single idl file
     assert(defined(invoker.src_idl), "src_idl is required")
-    src_idl_fullpath += [ invoker.src_idl ]
+    idl_list += [ invoker.src_idl ]
+  }
+
+  if (defined(invoker.sources_callback)) {
+    idl_callback_list += invoker.sources_callback
+  }
+  if (defined(invoker.sources_common)) {
+    idl_common_list += invoker.sources_common
   }
 
   # language, default cpp, support c/cpp/rust
@@ -76,42 +86,116 @@ template("idl_gen_interface") {
     language = invoker.language
   }
 
-  # get build info
-  build_info_args = [
-    "-l",
-    language,
-    "-o",
-    rebase_path(target_gen_dir),
-    "-r",
-    rebase_path("//"),
-  ]
-  foreach(idl_file, src_idl_fullpath) {
-    build_info_args += [ "-f" ]
-    build_info_args += [ rebase_path(idl_file) ]
+  # idl name transform
+  str_upper = "A B C D E F G H I J K L M N O P Q R S T U V W X Y Z"
+  str_lower = "a b c d e f g h i j k l m n o p q r s t u v w x y z"
+  str_upper_list = string_split(str_upper, " ")
+  str_lower_list = string_split(str_lower, " ")
+  sources_all = []
+  sources_proxy = []
+  sources_stub = []
+
+  # sources
+  foreach(idl_full_name, idl_list) {
+    name = get_path_info(idl_full_name, "name")
+    i = 0
+    foreach(s, str_upper_list) {
+      name = string_replace(name, s, "_" + str_lower_list[i])
+      i = i + 1
+    }
+
+    # first letter 'i'
+    name_split = []
+    name_split = string_split(name, "_i_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_i_", "", 1)
+    }
+    name_split = []
+    name_split = string_split(name, "_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_", "", 1)
+    }
+
+    sources_all += [
+      "${target_gen_dir}/" + name + "_proxy.cpp",
+      "${target_gen_dir}/" + name + "_stub.cpp",
+    ]
+    sources_proxy += [ "${target_gen_dir}/" + name + "_proxy.cpp" ]
+    sources_stub += [ "${target_gen_dir}/" + name + "_stub.cpp" ]
   }
-  build_info =
-      exec_script("//build/config/components/idl_tool/build_sa_files_info.py",
-                  build_info_args,
-                  "json")
-  assert(defined(build_info.include_dirs), "missing build_info.include_dirs")
-  assert(defined(build_info.out_dir), "missing build_info.out_dir")
-  assert(defined(build_info.sources), "missing build_info.sources")
-  assert(defined(build_info.proxy_sources), "missing build_info.proxy_sources")
-  assert(defined(build_info.stub_sources), "missing build_info.stub_sources")
+
+  # callback sources
+  foreach(idl_full_name, idl_callback_list) {
+    idl_name = get_path_info(idl_full_name, "file")
+    i = 0
+    name = string_replace(idl_name, ".idl", "")
+    foreach(s, str_upper_list) {
+      name = string_replace(name, s, "_" + str_lower_list[i])
+      i = i + 1
+    }
+
+    # first letter 'i'
+    name_split = []
+    name_split = string_split(name, "_i_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_i_", "", 1)
+    }
+    name_split = []
+    name_split = string_split(name, "_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_", "", 1)
+    }
+    out_full_name = string_replace(idl_full_name, idl_name, name)
+
+    sources_all += [
+      "${target_gen_dir}/" + out_full_name + "_proxy.cpp",
+      "${target_gen_dir}/" + out_full_name + "_stub.cpp",
+    ]
+    sources_proxy += [ "${target_gen_dir}/" + out_full_name + "_stub.cpp" ]
+    sources_stub += [ "${target_gen_dir}/" + out_full_name + "_proxy.cpp" ]
+  }
+
+  # common sources
+  foreach(idl_full_name, idl_common_list) {
+    idl_name = get_path_info(idl_full_name, "file")
+    i = 0
+    name = string_replace(idl_name, ".idl", "")
+    foreach(s, str_upper_list) {
+      name = string_replace(name, s, "_" + str_lower_list[i])
+      i = i + 1
+    }
+
+    # first letter 'i'
+    name_split = []
+    name_split = string_split(name, "_i_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_i_", "i", 1)
+    }
+    name_split = []
+    name_split = string_split(name, "_")
+    if (name_split[0] == "") {
+      name = string_replace(name, "_", "", 1)
+    }
+    out_full_name = string_replace(idl_full_name, idl_name, name)
+
+    sources_all += [ "${target_gen_dir}/" + out_full_name + ".cpp" ]
+    sources_proxy += [ "${target_gen_dir}/" + out_full_name + ".cpp" ]
+    sources_stub += [ "${target_gen_dir}/" + out_full_name + ".cpp" ]
+  }
 
   action("$target_name") {
-    inputs = src_idl_fullpath
+    inputs = idl_list
     deps = idl_build_deps
     script = "//build/config/components/idl_tool/idl.py"
     args = [
       "--src-idl",
-      string_join(",", src_idl_fullpath),
+      string_join(",", idl_list),
       "--dst-path",
       rebase_path(target_gen_dir),
       "--idl-tool-path",
       rebase_path(idl_build_path),
       "--dst-file",
-      string_join(",", rebase_path(build_info.sources)),
+      string_join(",", rebase_path(sources_all)),
       "--language",
       language,
     ]
@@ -133,7 +217,7 @@ template("idl_gen_interface") {
         invoker.hitrace,
       ]
     }
-    outputs = build_info.sources
+    outputs = sources_all
   }
 
   # build so
@@ -144,7 +228,6 @@ template("idl_gen_interface") {
       if (defined(invoker.sub_include)) {
         include_dirs += invoker.sub_include
       }
-      include_dirs += build_info.include_dirs
     }
 
     lib_client = "lib" + target_name + "_proxy"
@@ -157,7 +240,7 @@ template("idl_gen_interface") {
       if (defined(invoker.sources_cpp)) {
         sources += invoker.sources_cpp
       }
-      sources += build_info.proxy_sources
+      sources += sources_proxy
       if (defined(invoker.configs)) {
         configs = invoker.configs
       }
@@ -212,7 +295,7 @@ template("idl_gen_interface") {
       if (defined(invoker.sources_cpp)) {
         sources += invoker.sources_cpp
       }
-      sources += build_info.stub_sources
+      sources += sources_stub
       if (defined(invoker.configs)) {
         configs = invoker.configs
       }
