@@ -22,10 +22,10 @@ import sys
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--src-idl', help='idl source file')
-    parser.add_argument('--dst-path', help='the converted target path')
-    parser.add_argument('--dst-file', help='the converted target file')
-    parser.add_argument('--idl-tool-path', help='path of the idl conversion tool')
+    parser.add_argument('--src-idl', required=True, help='idl source file')
+    parser.add_argument('--dst-path', required=True, help='the converted target path')
+    parser.add_argument('--dst-file', required=True, help='the converted target file')
+    parser.add_argument('--idl-tool-path', required=True, help='path of the idl conversion tool')
     parser.add_argument('--log-domainid', help='hilog domain id')
     parser.add_argument('--log-tag', help='hilog tag')
     parser.add_argument('--hitrace', help='hitrace switch, default off')
@@ -43,9 +43,7 @@ def run_command(cmd, execution_path):
 
 
 def idl_gen_interface(input_arguments):
-    (path, name) = os.path.split(input_arguments.idl_tool_path)
-    is_exists = os.path.exists(input_arguments.dst_path)
-    if not is_exists:
+    if not os.path.exists(input_arguments.dst_path):
         try:
             os.makedirs(input_arguments.dst_path, 0o750, exist_ok=True)
         except (OSError, TypeError) as excep:
@@ -68,14 +66,14 @@ def idl_gen_interface(input_arguments):
 
     src_idl_list = input_arguments.src_idl.split(",")
     for src_idl in src_idl_list:
-        cmd = [os.path.join("./", name, "idl"), gen_language, "-d", input_arguments.dst_path, "-c", src_idl]
+        cmd = [os.path.join(".", "idl"), gen_language, "-d", input_arguments.dst_path, "-c", src_idl]
         if input_arguments.log_domainid:
             cmd += ['-log-domainid', input_arguments.log_domainid]
         if input_arguments.log_tag:
             cmd += ['-log-tag', input_arguments.log_tag]
         if input_arguments.hitrace:
             cmd += ['-t', input_arguments.hitrace]
-        ret = run_command(cmd, path)
+        ret = run_command(cmd, input_arguments.idl_tool_path)
         if ret != 0:
             return ret
     return 0
