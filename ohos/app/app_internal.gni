@@ -83,7 +83,7 @@ template("compile_resources") {
     script = "//build/scripts/compile_resources.py"
     depfile = "$target_gen_dir/$target_name.d"
     if (ohos_indep_compiler_enable) {
-      restool_path = "${sdk_version_dir}/toolchains/restool"
+      restool_path = "${prebuilts_sdk_dir}/toolchains/restool"
     } else {
       if (defined(deps)) {
         deps += [
@@ -301,7 +301,7 @@ template("package_app") {
     }
     if (defined(enable_ark) && enable_ark) {
       if (ohos_indep_compiler_enable) {
-        _js2abc_js = "${sdk_version_dir}/ets/build-tools/ets-loader/bin/ark/ts2abc.js"
+        _js2abc_js = "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/bin/ark/ts2abc.js"
       } else {
         _ark_deps = [
           "//arkcompiler/ets_frontend/es2panda:es2abc_js_file($host_toolchain)",
@@ -359,9 +359,9 @@ template("compile_js_assets") {
     }
     if (ohos_indep_compiler_enable) {
       _ace_loader_home =
-          "${sdk_version_dir}/js/build-tools/ace-loader"
+          "${prebuilts_sdk_dir}/js/build-tools/ace-loader"
       _ets_loader_home =
-          "${sdk_version_dir}/ets/build-tools/ets-loader/"
+          "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/"
     } else {
       deps += [
         "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap($host_toolchain)",
@@ -432,7 +432,7 @@ template("compile_js_assets") {
     if (js2abc || ets2abc) {
       if (ohos_indep_compiler_enable) {
         _es2abc_dir =
-            "${sdk_version_dir}/js/build-tools/ace-loader/bin/ark"
+            "${prebuilts_sdk_dir}/js/build-tools/ace-loader/bin/ark"
       } else {
         _es2abc_dir = get_label_info(
                 "//arkcompiler/ets_frontend/es2panda:es2panda_build($host_toolchain)",
