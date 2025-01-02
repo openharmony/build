@@ -21,6 +21,7 @@ declare_args() {
   sdk_notice_archive_dir = "$root_build_dir/NOTICE_FILES/sdk_archives"
   ndk_notice_dir = "$root_build_dir/NOTICE_FILES/ndk"
   static_libraries_notice_dir = "$root_build_dir/NOTICE_FILES/static"
+  lite_libraries_notice_dir = "$root_build_dir/NOTICE_FILES/rootfs"
 }
 
 declare_args() {
