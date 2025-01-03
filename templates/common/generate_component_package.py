@@ -68,7 +68,7 @@ def _get_public_external_deps(data, public_deps):
             continue
         _data = _check_label(public_deps, value)
         if _data:
-            return '{}:{}'.format(key, _data)
+            return f"{key}:{_data}"
         continue
     return ""
 
@@ -93,7 +93,7 @@ def _get_components_json(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/components.json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
@@ -121,7 +121,7 @@ def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
@@ -198,7 +198,8 @@ def _copy_includes(args, module, includes: list):
         else:
             continue
         for include in includes:
-            _sub_include = include.split('{}/'.format(args.get("part_path")))[-1]
+            part_path = args.get("part_path")
+            _sub_include = include.split(f"{part_path}/")[-1]
             split_include = include.split("//")[1]
             real_include_path = os.path.join(args.get("root_path"), split_include)
             if args.get('part_name') == 'libunwind':
@@ -209,7 +210,8 @@ def _copy_includes(args, module, includes: list):
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
     for include in includes:
-        _sub_include = include.split('{}/'.format(args.get("part_path")))[-1]
+        part_path = args.get("part_path")
+        _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
         real_include_path = os.path.join(args.get("root_path"), split_include)
         if args.get('part_name') == 'libunwind':
@@ -312,7 +314,7 @@ def _dirs_handler(bundlejson_out):
         if os.path.isfile(filepath):
             dirs['./'].append(filename)
         else:
-            dirs[filename] = ['{}/*'.format(filename)]
+            dirs[filename] = [f"{filename}/*"]
     delete_list = ['LICENSE', 'README.md', 'README_zh.md', 'README_en.md', 'bundle.json']
     for delete_txt in delete_list:
         if delete_txt in dirs['./']:
@@ -332,7 +334,7 @@ def _copy_bundlejson(args, public_deps_list):
     for public_deps in public_deps_list:
         _public_dep_part_name = public_deps.split(':')[0]
         if _public_dep_part_name != args.get("part_name"):
-            _public_dep = '@{}/{}'.format(args.get('organization_name'), _public_dep_part_name)
+            _public_dep = f"@{args.get('organization_name')}/{_public_dep_part_name}"
             dependencies_dict.update({_public_dep: "*"})
     if os.path.isfile(bundlejson):
         with open(bundlejson, 'r') as f:
@@ -356,7 +358,7 @@ def _copy_bundlejson(args, public_deps_list):
                 bundle_data['version'] += '-snapshot'
             if args.get('organization_name'):
                 _name_pattern = r'@(.*.)/'
-                bundle_data['name'] = re.sub(_name_pattern, '@{}/'.format(args.get('organization_name')), 
+                bundle_data['name'] = re.sub(_name_pattern, '@' + args.get('organization_name') + '/',
                                              bundle_data['name'])
             if bundle_data.get('scripts'):
                 bundle_data.update({'scripts': {}})
@@ -459,19 +461,19 @@ def _generate_configs(fp, module):
 
 def _generate_prebuilt_shared_library(fp, lib_type, module):
     if lib_type == 'static_library':
-        fp.write('ohos_prebuilt_static_library("{}") {\n'.format(module))
+        fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
     elif lib_type == 'executable':
-        fp.write('ohos_prebuilt_executable("{}") {\n'.format(module))
+        fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif lib_type == 'etc':
-        fp.write('ohos_prebuilt_etc("{}") {\n'.format(module))
+        fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     elif lib_type == 'rust_library':
-        fp.write('ohos_prebuilt_rust_library("{}") {\n'.format(module))
+        fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
-        fp.write('ohos_prebuilt_shared_library("{}") {\n'.format(module))
+        fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
 
 
 def _generate_public_configs(fp, module):
-    fp.write('  public_configs = [":{}_configs"]\n'.format(module))
+    fp.write(f'  public_configs = [":{module}_configs"]\n')
 
 
 # 目前特殊处理的依赖关系映射
@@ -520,7 +522,7 @@ def _generate_public_deps(fp, module, deps: list, components_json, public_deps_l
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
         if len(public_external_deps) > 0:
-            fp.write('    "{}",\n'.format(public_external_deps))
+            fp.write(f"""    "{public_external_deps}",\n""")
             public_deps_list.append(public_external_deps)
     for _public_external_deps in _public_deps_special_handler(module, args):
         fp.write(f"""    "{_public_external_deps}",\n""")
@@ -555,9 +557,9 @@ def _generate_other(fp, args, json_data, module):
     so_name = json_data.get('out_name')
     if json_data.get('type') == 'copy' and module == 'ipc_core':
         so_name = 'libipc_single.z.so'
-    fp.write('  source = "libs/{}"\n'.format(so_name))
-    fp.write('  part_name = "{}"\n'.format(args.get("part_name")))
-    fp.write('  subsystem_name = "{}"\n'.format(args.get("subsystem_name")))
+    fp.write('  source = "libs/' + so_name + '"\n')
+    fp.write('  part_name = "' + args.get("part_name") + '"\n')
+    fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
 
 
 def _generate_end(fp):
@@ -717,7 +719,7 @@ def _get_toolchain_info(root_path):
     jsondata = ""
     json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
-            'r', encoding='utf-8') as f:
+                   'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
         except Exception as e:
