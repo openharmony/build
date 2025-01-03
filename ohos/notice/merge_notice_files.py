@@ -41,6 +41,7 @@ xml_escape_table = {
 
 
 def move_static_library_notices(options):
+    files = []
     dest = os.path.join(options.notice_root_dir, 'libs')
     os.makedirs(dest, exist_ok=True)
     static_dir = os.path.join(options.notice_root_dir, "static")
@@ -51,7 +52,7 @@ def move_static_library_notices(options):
     if os.path.exists(static_subdir):
         other_files = build_utils.get_all_files(static_subdir)
         other_files.sort()
-    files.extend(other_files)
+        files.extend(other_files)
     if files:
         for file in files:
             file_name = os.path.basename(file)
