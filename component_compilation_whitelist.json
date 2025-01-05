@@ -44086,7 +44086,9 @@
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap",
-            "//developtools/packing_tool:packing_tool"
+            "//developtools/packing_tool:packing_tool",
+            "//third_party/rust/crates/cxx",
+            "//third_party/rust/crates/libc"
         ],
         "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",

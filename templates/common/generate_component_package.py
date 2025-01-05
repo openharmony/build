@@ -627,7 +627,7 @@ def _hilog_rust_handle(part_data, module, components_json):
     _copy_includes(part_data, module, includes)
     _list = _generate_build_gn(part_data, module, json_data, deps, components_json, public_deps_list)
     write_hilog_gn(part_data, module)
-    _toolchain_gn_copy(part_data, module)
+    _toolchain_gn_copy(part_data, module, json_data['out_name'])
     hilog_rust_out = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
                                   "innerapis", module)
     hilog_rust_dir = os.path.join(part_data.get("root_path"), part_data.get("part_path"), "interfaces", "rust")
@@ -721,7 +721,7 @@ def _hisysevent_rust_handle(part_data, module, components_json):
     _copy_includes(part_data, module, includes)
     _list = _generate_build_gn(part_data, module, json_data, deps, components_json, public_deps_list)
     generate_hisysevent_gn(part_data, module)
-    _toolchain_gn_copy(part_data, module)
+    _toolchain_gn_copy(part_data, module, json_data['out_name'])
     hisysevent_rust_out = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
                                        "innerapis", module)
     hisysevent_rust_dir = os.path.join(part_data.get("root_path"), part_data.get("part_path"), "interfaces",
@@ -795,7 +795,7 @@ def _handle_module_runtime_core(args, components_json, module):
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
     _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
-    _toolchain_gn_copy(args, module)
+    _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 
 
@@ -912,13 +912,9 @@ def process_drivers_interface_ril(part_data, parts_path_info, part_name, subsyst
 # 函数映射字典
 function_map = {
     'musl': process_musl,
-    'rust': process_rust,
     "developer_test": process_developer_test,  # 同rust
     "drivers_interface_display": process_drivers_interface_display,  # 驱动的, 新建一个libs目录/ innerapi同名文件
-    # "skia": process_skia,  # 特殊, 需要修改后编译的产物
-    "hilog": process_hilog,  # hilog_rust的处理
     "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
-    "hisysevent": process_hisysevent,  # rust 打包方式
     "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
     "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
 }
@@ -992,12 +988,37 @@ def _handle_one_layer_json(json_key, json_data, desc_list):
         desc_list.append(json_data.get(json_key))
 
 
+def _get_external_public_config(_path, _config_name):
+    py_args = _get_args()
+    out_path = py_args.out_path
+    _json_path = os.path.join(out_path, 'external_public_configs', _path, f'{_config_name}.json')
+    try:
+        with os.fdopen(os.open(_json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+                       'r', encoding='utf-8') as f:
+            jsondata = json.load(f)
+    except Exception as e:
+        print('_json_path: ', _json_path)
+        print('--_get_external_public_config parse json error--')
+        return []
+
+    include_dirs = jsondata.get('include_dirs')
+    return include_dirs
+
+
 def _handle_two_layer_json(json_key, json_data, desc_list):
     value_depth = len(json_data.get(json_key))
     for i in range(value_depth):
+        _label = json_data.get(json_key)[i].get('label')
         _include_dirs = json_data.get(json_key)[i].get('include_dirs')
         if _include_dirs:
             desc_list.extend(_include_dirs)
+        else:
+            full_path = _label.split('//')[-1]
+            _path = full_path.split(':')[0]
+            _config_name = full_path.split(':')[-1]
+            _include_dirs = _get_external_public_config(_path, _config_name)
+            if _include_dirs:
+                desc_list.extend(_include_dirs)
 
 
 def _get_json_data(args, module):
@@ -1006,10 +1027,11 @@ def _get_json_data(args, module):
     with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
                    'r', encoding='utf-8') as f:
         try:
-            jsondata = json.load(f)
+            file_content = f.read()
+            jsondata = json.loads(file_content)
         except Exception as e:
             print(json_path)
-            print('--_get_json_data parse json error--')
+            print('--_get_json_data parse json error--', e)
     return jsondata
 
 
@@ -1040,26 +1062,22 @@ def _get_static_lib_path(args, json_data):
 def _copy_dir(src_path, target_path):
     if not os.path.isdir(src_path):
         return False
-    filelist_src = os.listdir(src_path)
-    suffix_list = [".h", ".hpp", ".in", ".inc", ".inl"]
-    for file in filelist_src:
-        path = os.path.join(os.path.abspath(src_path), file)
+    for file in os.listdir(src_path):
+        path = os.path.join(src_path, file)
         if os.path.isdir(path):
             if file.startswith("."):
                 continue
             path1 = os.path.join(target_path, file)
             _copy_dir(path, path1)
         else:
-            if not (os.path.splitext(path)[-1] in suffix_list):
+            _, file_extension = os.path.splitext(file)
+            if file_extension not in [".h", ".hpp", ".in", ".inc", ".inl"]:
                 continue
-            with open(path, 'rb') as read_stream:
-                contents = read_stream.read()
             if not os.path.exists(target_path):
                 os.makedirs(target_path)
-            path1 = os.path.join(target_path, file)
-            with os.fdopen(os.open(path1, os.O_WRONLY | os.O_CREAT, mode=0o640), "wb") as write_stream:
-                write_stream.write(contents)
+            shutil.copy2(path, os.path.join(target_path, file))
     return True
+  
 
 
 def _copy_includes(args, module, includes: list):
@@ -1114,11 +1132,16 @@ def _copy_toolchain_lib(file_name, root, _name, lib_out_dir):
 
 
 def _toolchain_lib_handler(args, toolchain_path, _name, module, toolchain_name):
-    for root, dirs, files in os.walk(toolchain_path):
-        for file_name in files:
-            lib_out_dir = os.path.join(args.get("out_path"), "component_package",
+    lib_out_dir = os.path.join(args.get("out_path"), "component_package",
                                        args.get("part_path"), "innerapis", module, toolchain_name, "libs")
-            _copy_toolchain_lib(file_name, root, _name, lib_out_dir)
+    if os.path.isfile(toolchain_path):
+        if not os.path.exists(lib_out_dir):
+            os.makedirs(lib_out_dir)
+        shutil.copy(toolchain_path, lib_out_dir)
+    else:
+        for root, dirs, files in os.walk(toolchain_path):
+            for file_name in files:
+                _copy_toolchain_lib(file_name, root, _name, lib_out_dir)
 
 
 def _toolchain_static_file_path_mapping(subsystem_name, args, i):
@@ -1129,63 +1152,74 @@ def _toolchain_static_file_path_mapping(subsystem_name, args, i):
     return toolchain_path
 
 
-def remove_prefix_if_present(path, prefix="ohos_clang_arm64/"):
-    return path[len(prefix):] if path.startswith(prefix) else path
+def replace_default_toolchains_in_output(path, default_toolchain="ohos_clang_arm64/"):
+    return path.replace(default_toolchain, "")
 
 
 def _copy_lib(args, json_data, module):
     so_path = ""
     lib_status = False
+    _target_type = json_data.get('type')
     subsystem_name = args.get("subsystem_name")
 
     # 根据 type 字段和 module 选择正确的 so_path
-    if json_data.get('type') == 'copy' and module == 'ipc_core':
-        so_path = os.path.join(args.get("out_path"), subsystem_name,
-                               args.get("part_name"), 'libipc_single.z.so')
-    elif json_data.get('type') == 'rust_library':
+    if _target_type == 'copy' and module == 'ipc_core':
+        so_path = os.path.join(subsystem_name, args.get("part_name"), 'libipc_single.z.so')
+    elif _target_type == "rust_library" or _target_type == "rust_proc_macro":
         # 选择包含 'lib.unstripped' 的路径
         outputs = json_data.get('outputs', [])
         for output in outputs:
             if 'lib.unstripped' in output:
-                output = remove_prefix_if_present(output)
+                output = replace_default_toolchains_in_output(output)
                 so_path = output
                 break
         # 如果没有找到包含 'lib.unstripped' 的路径，则选择最后一个路径
         if not so_path and outputs:
             so_path = outputs[-1]
-        so_path = os.path.join(args.get("out_path"), so_path)
     else:
         # 对于非 rust_library 类型，选择不包含 'lib.unstripped' 的路径
         outputs = json_data.get('outputs', [])
         for output in outputs:
             if 'lib.unstripped' not in output:
-                output = remove_prefix_if_present(output)
+                output = replace_default_toolchains_in_output(output)
                 so_path = output
                 break
         # 如果所有路径都包含 'lib.unstripped' 或者没有 outputs，则使用 out_name
         if not so_path:
             so_path = json_data.get('out_name')
-        so_path = os.path.join(args.get("out_path"), so_path)
-    if args.get("toolchain_info").keys():
-        for i in args.get("toolchain_info").keys():
-            so_type = ''
-            toolchain_path = os.path.join(args.get("out_path"), i, subsystem_name,
-                                          args.get("part_name"))
-            _name = json_data.get('out_name').split('.')[0]
-            if json_data.get('type') == 'static_library':
-                _name = json_data.get('out_name')
-                toolchain_path = _toolchain_static_file_path_mapping(subsystem_name, args, i)
-            _toolchain_lib_handler(args, toolchain_path, _name, module, i)
-            lib_status = lib_status or True
-    # 确保路径存在，然后复制文件
-    if so_path and os.path.isfile(so_path):
-        lib_out_dir = os.path.join(args.get("out_path"), "component_package",
-                                   args.get("part_path"), "innerapis", module, "libs")
-        if not os.path.exists(lib_out_dir):
-            os.makedirs(lib_out_dir)
-        shutil.copy(so_path, lib_out_dir)
-        lib_status = lib_status or True
+    if so_path:
+        lib_status = lib_status or copy_so_file(args, module, so_path)
+    
     return lib_status
+
+
+def copy_so_file(args, module, so_path):
+    lib_status = False
+    out_path = args.get("out_path")
+    so_path_with_out_path = os.path.join(out_path, so_path)
+    lib_out_dir = os.path.join(out_path, "component_package",
+                                   args.get("part_path"), "innerapis", module, "libs")
+    if args.get("toolchain_info").keys():
+        for toolchain_name in args.get("toolchain_info").keys():
+            lib_out_dir_with_toolchain = os.path.join(args.get("out_path"), "component_package",
+                                       args.get("part_path"), "innerapis", module, toolchain_name, "libs")
+            so_path_with_toolchain = os.path.join(args.get("out_path"), toolchain_name, so_path)
+            if toolchain_name in so_path :
+                lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain) or lib_status
+            elif os.path.isfile(so_path_with_toolchain):
+                lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
+    lib_status = _copy_file(so_path_with_out_path, lib_out_dir) or lib_status
+    return lib_status
+
+
+def _copy_file(so_path, lib_out_dir):
+    if not os.path.isfile(so_path):
+        print("WARNING: {} is not a file!".format(so_path))
+        return False
+    if not os.path.exists(lib_out_dir):
+        os.makedirs(lib_out_dir)
+    shutil.copy(so_path, lib_out_dir)
+    return True
 
 
 def _dirs_handler(bundlejson_out):
@@ -1307,49 +1341,64 @@ def _generate_import(fp):
     fp.write('import("//build/ohos.gni")\n')
 
 
-def _generate_configs(fp, module):
+def _gcc_flags_info_handle(json_data):
+    def should_process_key(k):
+        return k not in ["label", "include_dirs"]
+
+    def process_config(config):
+        result = {}
+        for k, v in config.items():
+            if should_process_key(k):
+                result.setdefault(k, []).extend(v)
+        return result
+
+    _flags_info = {}
+    _public_configs = json_data.get('public_configs')
+    if _public_configs:
+        for config in _public_configs:
+            config_info = process_config(config)
+            for k, v in config_info.items():
+                _flags_info.setdefault(k, []).extend(v)
+    return _flags_info
+
+
+def _generate_configs(fp, module, json_data, _part_name):
     fp.write('\nconfig("' + module + '_configs") {\n')
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
     fp.write('    "includes",\n')
     if module == 'libunwind':
-        fp.write('    "includes/libunwind/src",\n')
-        fp.write('    "includes/libunwind/include",\n')
-        fp.write('    "includes/libunwind/include/tdep-arm",\n')
+        fp.write('    "includes/libunwind-1.6.2",\n')
+        fp.write('    "includes/libunwind-1.6.2/src",\n')
+        fp.write('    "includes/libunwind-1.6.2/include",\n')
+        fp.write('    "includes/libunwind-1.6.2/include/tdep-arm",\n')
     if module == 'ability_runtime':
         fp.write('    "includes/context",\n')
         fp.write('    "includes/app",\n')
     fp.write('  ]\n')
-    if module == 'libunwind':
-        fp.write('  cflags = [\n')
-        fp.write("""    "-D_GNU_SOURCE",
-    "-DHAVE_CONFIG_H",
-    "-DNDEBUG",
-    "-DCC_IS_CLANG",
-    "-fcommon",
-    "-Werror",
-    "-Wno-absolute-value",
-    "-Wno-header-guard",
-    "-Wno-unused-parameter",
-    "-Wno-unused-variable",
-    "-Wno-int-to-pointer-cast",
-    "-Wno-pointer-to-int-cast",
-    "-Wno-inline-asm",
-    "-Wno-shift-count-overflow",
-    "-Wno-tautological-constant-out-of-range-compare",
-    "-Wno-unused-function",\n""")
-        fp.write('  ]\n')
+    if _part_name == 'runtime_core':
+        fp.write('  }\n')
+        return
+    _flags_info = _gcc_flags_info_handle(json_data)
+    if _flags_info:
+        for k, _list in _flags_info.items():
+            fp.write(f'  {k} = [\n')
+            for j in _list:
+                # 保留所有 \ 转义符号
+                j_escaped = j.replace('"', '\\"')
+                fp.write(f'  "{j_escaped}",\n')
+            fp.write('  ]\n')
     fp.write('  }\n')
 
 
-def _generate_prebuilt_shared_library(fp, lib_type, module):
-    if lib_type == 'static_library':
+def _generate_prebuilt_target(fp, target_type, module):
+    if target_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
-    elif lib_type == 'executable':
+    elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
-    elif lib_type == 'etc':
+    elif target_type == 'etc' or target_type == 'copy':
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
-    elif lib_type == 'rust_library':
+    elif target_type == 'rust_library' or target_type == 'rust_proc_macro':
         fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
         fp.write('ohos_prebuilt_shared_library("' + module + '") {\n')
@@ -1391,6 +1440,7 @@ _DEPENDENCIES_MAP = {
     ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
     ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
     ('bundle_framework', 'bundlemgr_mini'): ["bundle_framework:appexecfwk_base"],
+    ('media_foundation', 'media_monitor_client'): ["samgr:samgr_proxy"],
 }
 
 
@@ -1415,31 +1465,16 @@ def _generate_public_deps(fp, module, deps: list, components_json, public_deps_l
     return public_deps_list
 
 
-def _get_rust_external_deps(components_json: dict, dep):
-    matching_results = []
-    for key, value in components_json.items():
-        for innerapi in value.get("innerapis", []):
-            if innerapi.get("label") == dep:
-                label_field = innerapi["label"].split(":")[1]
-                return (key, label_field)
-    return None
-
-
-def _rust_lib_gn_handle(fp, args, json_data, module, components_json):
-    fp.write('  rust_crate_name = "' + json_data.get("rust_crate_name") + '"\n')
-    fp.write('  rust_crate_type = "' + json_data.get("rust_crate_type") + '"\n')
-    fp.write('  external_deps = [\n')
-    for dep in json_data.get("rust_deps"):
-        matching_results = _get_rust_external_deps(components_json, dep)
-        if matching_results:
-            fp.write(f"""    "{matching_results[0]}":"{matching_results[1]}",\n""")
-    fp.write('  ]\n')
-
-
 def _generate_other(fp, args, json_data, module):
-    so_name = json_data.get('out_name')
+    outputs = json_data.get('outputs', [])
     if json_data.get('type') == 'copy' and module == 'ipc_core':
         so_name = 'libipc_single.z.so'
+    else:
+        so_name = json_data.get('out_name')
+        for output in outputs:
+            so_name = output.split('/')[-1]
+    if json_data.get('type') == 'copy':
+        fp.write('  copy_linkable_file = true \n')
     fp.write('  source = "libs/' + so_name + '"\n')
     fp.write('  part_name = "' + args.get("part_name") + '"\n')
     fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
@@ -1449,18 +1484,61 @@ def _generate_end(fp):
     fp.write('}')
 
 
+def convert_rustdeps_to_innerapi(dep, components_json):
+    # 分割路径和模块名
+    dep_parts = dep.split(':', 1)
+    if len(dep_parts) != 2:
+        return False, "" # 格式不正确，不是 innerapi
+
+    path, module = dep_parts
+    path = path.lstrip('//')
+
+    # 遍历 components.json 中的每个部件
+    for component, info in components_json.items():
+        if path.startswith(info['path']) and _check_dep_in_innerapi(info.get('innerapis', []), dep):
+            return True, f"{component}:{module}"
+    return False, ""
+
+
+def _check_dep_in_innerapi(innerapis, dep):
+    for innerapi in innerapis:
+        if innerapi['label'] == (dep.split('(')[0] if ('(' in dep) else dep):
+            return True
+    return False
+
+
+def _generate_rust_deps(fp, json_data, components_json):
+    rust_deps = json_data.get("rust_deps")
+    external_deps = []
+    for _dep in rust_deps:
+        has_innerapi, innerapi = convert_rustdeps_to_innerapi(_dep, components_json)
+        if has_innerapi:
+            external_deps.append(innerapi)
+    fp.write('  external_deps = [\n')
+    for external_dep in external_deps:
+        fp.write(f"""    "{external_dep}",\n""")
+    fp.write('  ]\n')
+
+
+def _copy_rust_crate_info(fp, json_data):
+    fp.write(f'  rust_crate_name = \"{json_data.get("rust_crate_name")}\"\n')
+    fp.write(f'  rust_crate_type = \"{json_data.get("rust_crate_type")}\"\n')
+
+
 def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
     _generate_import(fp)
-    _generate_configs(fp, module)
-    _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
+    _generate_configs(fp, module, json_data, args.get('part_name'))
+    _target_type = json_data.get('type')
+    _generate_prebuilt_target(fp, _target_type, module)
     _generate_public_configs(fp, module)
     _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list, args)
-    if json_data.get('type') == 'rust_library':
-        _rust_lib_gn_handle(fp, args, json_data, module, components_json)
+    if _target_type == "rust_library" or _target_type == "rust_proc_macro":
+        _copy_rust_crate_info(fp, json_data)
+        _generate_rust_deps(fp, json_data, components_json)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print(f"{module}_generate_build_gn has done ")
@@ -1480,25 +1558,21 @@ def _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file):
         fp.close()
 
 
-def _get_toolchain_gn_file(lib_out_dir):
-    file_name = ''
-    try:
-        file_list = os.scandir(lib_out_dir)
-    except FileNotFoundError:
-        return file_name
-    for file in file_list:
-        if not file.name.startswith('.') and file.is_file():
-            file_name = file.name
-    return file_name
+def _get_toolchain_gn_file(lib_out_dir, out_name):
+    if os.path.exists(os.path.join(lib_out_dir, out_name)):
+        return out_name
+    else:
+        print('Output file not found in toolchain dir.')
+        return ''
 
 
-def _toolchain_gn_copy(args, module):
+def _toolchain_gn_copy(args, module, out_name):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
     for i in args.get("toolchain_info").keys():
         lib_out_dir = os.path.join(args.get("out_path"), "component_package",
                                    args.get("part_path"), "innerapis", module, i, "libs")
-        file_name = _get_toolchain_gn_file(lib_out_dir)
+        file_name = _get_toolchain_gn_file(lib_out_dir, out_name)
         if not file_name:
             continue
         toolchain_gn_file = os.path.join(args.get("out_path"), "component_package",
@@ -1549,14 +1623,12 @@ def _handle_module(args, components_json, module):
         return public_deps_list
     json_data = _get_json_data(args, module)
     _lib_special_handler(args.get("part_name"), module, args)
-    lib_exists = _copy_lib(args, json_data, module)
-    if lib_exists is False:
-        return public_deps_list
+    _copy_lib(args, json_data, module)
     includes = _handle_includes_data(json_data)
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
     _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
-    _toolchain_gn_copy(args, module)
+    _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 
 
@@ -1697,13 +1769,9 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
                  "part_path": part_path})
     if part_name in [
         "musl",  # 从obj/third_party/musl/usr 下提取到includes和libs
-        "rust",  # 全量,  手动做一个bundle
         "developer_test",  # 同rust
         "drivers_interface_display",  # 驱动的, 新建一个libs目录/ innerapi同名文件
-        # "skia",  # 特殊, 需要修改后编译的产物, 暂时不行
-        "hilog",  # hilog_rust的处理
         "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
-        "hisysevent",  # rust 打包方式
         "drivers_interface_usb",  # 同驱动
         "drivers_interface_ril",  # 同驱动
     ]:
@@ -1746,7 +1814,6 @@ def generate_component_package(out_path, root_path, components_list=None, build_
 
     """
     start_time = time.time()
-
     components_json = _get_components_json(out_path)
     components_json.update({"rust": {
         "innerapis": [],
@@ -1766,22 +1833,20 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     hpm_packages_path = _make_hpm_packages_dir(root_path)
     toolchain_info = _get_toolchain_info(root_path)
 
+    ### add
     exclusion_list = _get_exclusion_list(root_path)  # 黑名单列表
     # 如果没有提供 components_list，则默认为所有非黑名单组件
     all_components = components_json.keys()
     if local_test == 1:
         components_list = components_list.split(",") if components_list else all_components
-
     elif local_test == 0:
         if components_list:
             components_list = [component for component in components_list.split(",") if component not in exclusion_list]
         else:
             components_list = [component for component in all_components if component not in exclusion_list]
-
         # 如果 components_list 为空，则退出程序
         if not components_list:
             sys.exit("stop for no target to pack..")
-
     print('components_list', components_list)
 
     # del component_package

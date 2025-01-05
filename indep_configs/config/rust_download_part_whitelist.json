@@ -7,5 +7,6 @@
   "ipc",
   "faultloggerd",
   "graphic_2d",
-  "hitrace"
+  "hitrace",
+  "code_signature"
 ]
