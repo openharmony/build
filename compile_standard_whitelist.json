@@ -408,8 +408,6 @@
         "//foundation/graphic/graphic_2d/rosen/samples/texgine:libskia_rs_framework",
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_video",
         "//foundation/multimedia/player_framework/services/services:media_service",
-        "//foundation/systemabilitymgr/samgr/services/samgr/native/test/unittest:TestTool",
-        "//foundation/systemabilitymgr/samgr/services/samgr/native/test/unittest:ondemand",
         "//foundation/window/window_manager/wmserver:libwms",
         "//test/xts/acts/hiviewdfx/utils/native:utilskit",
         "//test/xts/hats/hdf/display/composer/common:disp_dev_hdi_test",
