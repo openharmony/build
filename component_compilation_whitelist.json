@@ -31,6 +31,7 @@
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
+        "//drivers/interface/usb/v1_2:usb_idl_headers_1.2",
         "//drivers/interface/user_auth/v3_0:user_auth_idl_headers",
         "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
@@ -242,6 +243,15 @@
         ],
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1": [
             "//drivers/interface/usb/v1_0:usb_idl_headers_1.0"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_proxy_1.2": [
+            "//drivers/interface/usb/v1_1:libusb_proxy_1.1"
+        ],
+        "//drivers/interface/usb/v1_2:libusb_stub_1.2": [
+            "//drivers/interface/usb/v1_1:libusb_stub_1.1"
+        ],
+        "//drivers/interface/usb/v1_2:usb_idl_headers_1.2": [
+            "//drivers/interface/usb/v1_1:usb_idl_headers_1.1"
         ],
         "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2": [
             "//drivers/interface/vibrator/v1_1:libvibrator_proxy_1.1"
