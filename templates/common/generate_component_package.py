@@ -49,6 +49,889 @@ def _get_args():
     return args
 
 
+def create_directories(paths):
+    for path in paths:
+        os.makedirs(path, exist_ok=True)
+
+
+def copy_files(src_dst_pairs):
+    for src, dst in src_dst_pairs:
+        shutil.copy2(src, dst)
+
+
+def generate_common_configs():
+    return """import("//build/ohos.gni")
+
+
+config("musl_common_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__algorithm",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__bit",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__charconv",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__chrono",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__compare",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__concepts",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__debug_utils",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__concepts",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__filesystem",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__format",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__functional",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__fwd",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__ios",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__iterator",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__memory",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__numeric",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__random",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__ranges",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__string",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__support",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__thread",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__type_traits",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__utility",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/__variant",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/experimental",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/c++/v1/ext",
+    "//prebuilts/clang/ohos/linux-x86_64/15.0.4/llvm/include/arm-linux-ohos/c++/v1",
+  ]
+
+   cflags_c = [
+      "-Wno-error=bitwise-op-parentheses",
+      "-Wno-error=shift-op-parentheses",
+    ]
+}
+    """
+
+
+def generate_soft_libc_musl_shared_configs():
+    return """
+config("soft_libc_musl_shared_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_shared_library("soft_libc_musl_shared") {
+  public_configs = [":soft_libc_musl_shared_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libc.so"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}
+    """
+
+
+def generate_soft_libcrypt_configs():
+    return """
+config("soft_libcrypt_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libcrypt") {
+  public_configs = [":soft_libcrypt_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libcrypt.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+} 
+    """
+
+
+def generate_soft_libdl_configs():
+    return """
+config("soft_libdl_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libdl") {
+  public_configs = [":soft_libdl_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libdl.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}       
+    """
+
+
+def generate_soft_libm_configs():
+    return """
+config("soft_libm_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libm") {
+  public_configs = [":soft_libm_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libm.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}        
+    """
+
+
+def generate_soft_libpthread_configs():
+    return """
+config("soft_libpthread_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libpthread") {
+  public_configs = [":soft_libpthread_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libpthread.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}       
+    """
+
+
+def generate_soft_libresolv_configs():
+    return """
+config("soft_libresolv_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libresolv") {
+  public_configs = [":soft_libresolv_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libresolv.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}
+    """
+
+
+def generate_soft_librt_configs():
+    return """
+config("soft_librt_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_librt") {
+  public_configs = [":soft_librt_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/librt.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}
+    """
+
+
+def generate_soft_libutil_configs():
+    return """
+config("soft_libutil_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libutil") {
+  public_configs = [":soft_libutil_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libutil.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}
+    """
+
+
+def generate_soft_libxnet_configs():
+    return """
+config("soft_libxnet_configs") {
+  visibility = [ ":*" ]
+  include_dirs = [
+    "innerapis/includes",
+  ]
+}
+
+ohos_prebuilt_static_library("soft_libxnet") {
+  public_configs = [":soft_libxnet_configs",":musl_common_configs"]
+  public_external_deps = [
+  ]
+  source = "innerapis/libs/libxnet.a"
+  part_name = "musl"
+  subsystem_name = "thirdparty"
+}
+    """
+
+
+def generate_group_copy_libs_block():
+    return """
+group("copy_libs") {
+    lib_files = [
+      "libc.a",
+      "libc.so",
+      "libcrypt.a",
+      "libdl.a",
+      "libm.a",
+      "libpthread.a",
+      "libresolv.a",
+      "librt.a",
+      "libutil.a",
+      "libxnet.a",
+      "crtn.o",
+      "crti.o",
+      "crt1.o",
+      "rcrt1.o",
+      "Scrt1.o",
+    ]
+    sources = []
+    outputs = []
+    deps = []
+    foreach(file, lib_files) {
+      copy("copy_${file}") {
+        sources += [ "innerapis/libs/${file}" ]
+        outputs += [ "${target_out_dir}/usr/lib/arm-linux-ohos/${file}" ]
+      }
+      deps += [ ":copy_${file}" ]
+    }
+}
+group("soft_shared_libs") {
+  public_configs = [":musl_common_configs", ":soft_libxnet_configs"]
+  deps = [
+    ":soft_libc_musl_shared",
+    ":soft_libcrypt",
+    ":soft_libdl",
+    ":soft_libm",
+    ":soft_libpthread",
+    ":soft_libresolv",
+    ":soft_librt",
+    ":soft_libutil",
+    ":soft_libxnet",
+  ]
+}
+    """
+
+
+def generate_group_musl_headers_block():
+    return """
+group("musl_headers") {
+  public_deps = [
+    ":musl_common_configs",
+  ]
+}
+    """
+
+
+def generate_gn_file_content(part_data):
+    gn_content = []
+    gn_content.append(generate_common_configs())
+    gn_content.append(generate_soft_libc_musl_shared_configs())
+    gn_content.append(generate_soft_libcrypt_configs())
+    gn_content.append(generate_soft_libdl_configs())
+    gn_content.append(generate_soft_libm_configs())
+    gn_content.append(generate_soft_libpthread_configs())
+    gn_content.append(generate_soft_libresolv_configs())
+    gn_content.append(generate_soft_librt_configs())
+    gn_content.append(generate_soft_libutil_configs())
+    gn_content.append(generate_soft_libxnet_configs())
+    gn_content.append(generate_group_copy_libs_block())
+    gn_content.append(generate_group_musl_headers_block())
+    return '\n'.join(gn_content)
+
+
+def write_gn_file(gn_path, content):
+    with open(gn_path, 'w') as gn_file:
+        gn_file.write(content)
+
+
+def copy_musl_libs_includes(musl_obj_path, innerapi_target_path):
+    for folder_name in ['include', 'lib']:
+        src_folder_path = os.path.join(musl_obj_path, folder_name, 'arm-linux-ohos')
+        dst_folder_path = os.path.join(innerapi_target_path, folder_name + 's')
+        dst_folder_path_1 = os.path.join(innerapi_target_path, 'musl_headers', folder_name + 's')
+        dst_folder_path_2 = os.path.join(innerapi_target_path, 'soft_libc_musl_static', folder_name + 's')
+        dst_folder_path_3 = os.path.join(innerapi_target_path, 'soft_shared_libs', folder_name + 's')
+        if os.path.exists(src_folder_path):
+            shutil.copytree(src_folder_path, dst_folder_path, dirs_exist_ok=True)
+            shutil.copytree(src_folder_path, dst_folder_path_1, dirs_exist_ok=True)
+            shutil.copytree(src_folder_path, dst_folder_path_2, dirs_exist_ok=True)
+            shutil.copytree(src_folder_path, dst_folder_path_3, dirs_exist_ok=True)
+
+
+def process_musl(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    musl_obj_path = os.path.join(part_data.get('out_path'), 'obj', 'third_party', 'musl', 'usr')
+    musl_dst_path = os.path.join(part_data.get('out_path'), 'component_package', 'third_party', 'musl')
+    musl_src_path = os.path.join(part_data.get('root_path'), 'third_party', 'musl')
+    create_directories([musl_dst_path])
+
+    # Copy necessary files to the musl destination path
+    files_to_copy = [
+        'configure',
+        'dynamic.list',
+        'libc.map.txt',
+        'musl_config.gni'
+    ]
+    copy_files([(os.path.join(musl_src_path, file_name), os.path.join(musl_dst_path, file_name)) for file_name in
+                files_to_copy])
+
+    # Generate and write the GN file
+    gn_path = os.path.join(musl_dst_path, 'BUILD.gn')
+    gn_content = generate_gn_file_content(part_data)
+    write_gn_file(gn_path, gn_content)
+    innerapi_target_path = os.path.join(musl_dst_path, 'innerapis')
+    copy_musl_libs_includes(musl_obj_path, innerapi_target_path)
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    _public_deps_list = []
+    # ... Additional logic for processing modules, copying docs, and finishing the component build ...
+    _copy_required_docs(part_data, _public_deps_list)
+    _finish_component_build(part_data)
+
+
+def _create_bundle_json(bundle_path, bundle_content):
+    bundle = {}
+    with open(bundle_path, "w", encoding="utf-8") as f1:
+        json.dump(bundle_content, f1, indent=2)
+
+
+def _generate_rust_bundle_content():
+    bundle_content = {
+        "name": "@ohos/rust",
+        "description": "third party rust tools, provide multiply functions about compiler",
+        "version": "3.1.0-snapshot",
+        "license": "Apache License 2.0",
+        "publishAs": "binary",
+        "segment": {"destPath": "third_party/rust/crates"},
+        "dirs": {"./": ["*"]},
+        "scripts": {},
+        "component": {
+            "name": "rust",
+            "subsystem": "thirdparty",
+            "syscap": [],
+            "features": [],
+            "adapted_system_type": ["standard"],
+            "rom": "",
+            "ram": "",
+            "hisysevent_config": [],
+            "deps": {
+                "components": [],
+                "third_party": []
+            },
+            "build": {
+                "sub_component": [],
+                "inner_api": [],
+                "test": []
+            }
+        },
+        "os": "linux",
+        "buildArch": "x86"
+    }
+    return bundle_content
+
+
+def process_rust(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    rust_src_path = os.path.join(part_data.get('root_path'), 'third_party', 'rust', 'crates')
+    dst_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"))
+    copy_directory_contents(rust_src_path, dst_path)
+
+    gn_path = os.path.join(dst_path, "bundle.json")
+    bundle_content = _generate_rust_bundle_content()
+    _create_bundle_json(gn_path, bundle_content)
+
+    _copy_license(part_data)
+    _copy_readme(part_data)
+
+
+def copy_directory_contents(src_path, dst_path):
+    if not os.path.exists(dst_path):
+        os.makedirs(dst_path)
+    for item in os.listdir(src_path):
+        src = os.path.join(src_path, item)
+        dst = os.path.join(dst_path, item)
+        if os.path.isdir(src):
+            if os.path.exists(dst):
+                shutil.rmtree(dst)
+            shutil.copytree(src, dst)
+        elif os.path.isfile(src):
+            shutil.copy2(src, dst)
+
+
+def generate_developer_test_bundle_base_info():
+    return {
+        "name": "@ohos/developer_test",
+        "description": "developer_test",
+        "version": "3.1.0-snapshot",
+        "license": "Apache License 2.0",
+        "publishAs": "binary",
+        "segment": {"destPath": "test/testfwk/developer_test"},
+        "repository": "",
+        "dirs": {"./": ["*"]},
+        "scripts": {},
+        "os": "linux",
+        "buildArch": "x86"
+    }
+
+
+def generate_developer_test_component_info():
+    return {
+        "name": "developer_test",
+        "subsystem": "testfwk",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": ["mini", "small", "standard"],
+        "rom": "0KB",
+        "ram": "0KB",
+        "deps": {}
+    }
+
+
+def generate_developer_test_build_info():
+    return {
+        "sub_component": [
+            "//test/testfwk/developer_test/examples/app_info:app_info",
+            "//test/testfwk/developer_test/examples/detector:detector",
+            "//test/testfwk/developer_test/examples/calculator:calculator",
+            "//test/testfwk/developer_test/examples/calculator:calculator_static"
+        ],
+        "inner_kits": [
+            {
+                "name": "//test/testfwk/developer_test/aw/cxx/distributed:distributedtest_lib",
+                "header": {
+                    "header_base": [
+                        "//test/testfwk/developer_test/aw/cxx/distributed/utils",
+                        "//test/testfwk/developer_test/aw/cxx/distributed"
+                    ],
+                    "header_files": [
+                        "csv_transform_xml.h",
+                        "distributed.h",
+                        "distributed_agent.h",
+                        "distributed_cfg.h",
+                        "distributed_major.h"
+                    ]
+                }
+            },
+            {
+                "name": "//test/testfwk/developer_test/aw/cxx/hwext:performance_test_static",
+                "header": {
+                    "header_base": "//test/testfwk/developer_test/aw/cxx/hwext",
+                    "header_files": "perf.h"
+                }
+            }
+        ],
+        "test": [
+            "//test/testfwk/developer_test/examples/app_info/test:unittest",
+            "//test/testfwk/developer_test/examples/calculator/test:unittest",
+            "//test/testfwk/developer_test/examples/calculator/test:fuzztest",
+            "//test/testfwk/developer_test/examples/calculator/test:benchmarktest",
+            "//test/testfwk/developer_test/examples/detector/test:unittest",
+            "//test/testfwk/developer_test/examples/sleep/test:performance",
+            "//test/testfwk/developer_test/examples/distributedb/test:distributedtest",
+            "//test/testfwk/developer_test/examples/stagetest/actsbundlemanagerstagetest:unittest"
+        ]
+    }
+
+
+def _generate_developer_test_bundle_content():
+    bundle_content = generate_developer_test_bundle_base_info()
+    component_info = generate_developer_test_component_info()
+    build_info = generate_developer_test_build_info()
+
+    bundle_content["component"] = component_info
+    component_info["build"] = build_info
+
+    return bundle_content
+
+
+def process_developer_test(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    developer_test_src_path = os.path.join(part_data.get('root_path'), 'test', 'testfwk', 'developer_test')
+    dst_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"))
+
+    copy_directory_contents(developer_test_src_path, dst_path)
+
+    gn_path = os.path.join(dst_path, "bundle.json")
+
+    bundle_content = _generate_developer_test_bundle_content()
+    _create_bundle_json(gn_path, bundle_content)
+
+    _copy_license(part_data)
+    _copy_readme(part_data)
+    _finish_component_build(part_data)
+
+
+def write_hilog_gn(part_data, module):
+    gn_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
+                           "innerapis", module, "BUILD.gn")
+    if os.path.exists(gn_path):
+        os.remove(gn_path)
+    fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
+    fp = os.fdopen(fd, 'w')
+    fp.write("""import("//build/ohos.gni")
+
+    config("hilog_rust_configs") {
+      visibility = [ ":*" ]
+      include_dirs = [
+        "includes",
+      ]
+      }
+
+
+    ohos_rust_shared_library("hilog_rust") {
+      sources = [ "src/lib.rs" ]
+
+      deps = [ "../libhilog:libhilog" ]
+      crate_name = "hilog_rust"
+      crate_type = "dylib"
+      rustflags = [ "-Zstack-protector=all" ]
+
+      subsystem_name = "hiviewdfx"
+      part_name = "hilog"
+    }""")
+    print("_generate_build_gn has done ")
+    fp.close()
+
+
+def _hilog_rust_handle(part_data, module, components_json):
+    public_deps_list = []
+    if not _is_innerkit(components_json, part_data.get("part_name"), module):
+        return public_deps_list
+    json_data = _get_json_data(part_data, module)
+    _lib_special_handler(part_data.get("part_name"), module, part_data)
+    lib_exists = _copy_lib(part_data, json_data, module)
+    if lib_exists is False:
+        return public_deps_list
+    includes = _handle_includes_data(json_data)
+    deps = _handle_deps_data(json_data)
+    _copy_includes(part_data, module, includes)
+    _list = _generate_build_gn(part_data, module, json_data, deps, components_json, public_deps_list)
+    write_hilog_gn(part_data, module)
+    _toolchain_gn_copy(part_data, module)
+    hilog_rust_out = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
+                                  "innerapis", module)
+    hilog_rust_dir = os.path.join(part_data.get("root_path"), part_data.get("part_path"), "interfaces", "rust")
+    folder_to_copy = os.path.join(hilog_rust_dir, "src")  # 替换为实际的文件夹名称
+    file_to_copy = os.path.join(hilog_rust_dir, "Cargo.toml")  # 替换为实际的文件名称
+    # 检查文件夹和文件是否存在
+    if os.path.exists(folder_to_copy) and os.path.exists(file_to_copy):
+        # 复制文件夹
+        shutil.copytree(folder_to_copy, os.path.join(hilog_rust_out, os.path.basename(folder_to_copy)))
+        # 复制文件
+        shutil.copy(file_to_copy, os.path.join(hilog_rust_out, os.path.basename(file_to_copy)))
+    else:
+        print("文件夹或文件不存在，无法复制。")
+
+    return _list
+
+
+def process_hilog(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    # 只处理一个模块
+    # 处理分类B的逻辑
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module == 'hilog_rust':
+            _hilog_rust_handle(part_data, module, components_json)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+        is_component_build = True
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+def generate_hisysevent_gn(part_data, module):
+    gn_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
+                           "innerapis", module, "BUILD.gn")
+    if os.path.exists(gn_path):
+        os.remove(gn_path)
+    fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
+    fp = os.fdopen(fd, 'w')
+    fp.write("""import("//build/ohos.gni")
+
+    ohos_rust_shared_library("hisysevent_rust") {
+      sources = [
+        "src/lib.rs",
+        "src/macros.rs",
+        "src/sys_event.rs",
+        "src/sys_event_manager.rs",
+        "src/utils.rs",
+      ]
+
+      external_deps = [
+        "hisysevent:hisysevent_c_wrapper",
+        "hisysevent:libhisysevent",
+        "hisysevent:libhisyseventmanager",
+      ]
+
+      crate_name = "hisysevent"
+      crate_type = "dylib"
+      rustflags = [ "-Zstack-protector=all" ]
+
+      part_name = "hisysevent"
+      subsystem_name = "hiviewdfx"
+    }
+    """)
+    print("_generate_build_gn has done ")
+    fp.close()
+
+
+def _hisysevent_rust_handle(part_data, module, components_json):
+    public_deps_list = []
+    if not _is_innerkit(components_json, part_data.get("part_name"), module):
+        return public_deps_list
+    json_data = _get_json_data(part_data, module)
+    _lib_special_handler(part_data.get("part_name"), module, part_data)
+    lib_exists = _copy_lib(part_data, json_data, module)
+    if lib_exists is False:
+        return public_deps_list
+    includes = _handle_includes_data(json_data)
+    deps = _handle_deps_data(json_data)
+    _copy_includes(part_data, module, includes)
+    _list = _generate_build_gn(part_data, module, json_data, deps, components_json, public_deps_list)
+    generate_hisysevent_gn(part_data, module)
+    _toolchain_gn_copy(part_data, module)
+    hisysevent_rust_out = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
+                                       "innerapis", module)
+    hisysevent_rust_dir = os.path.join(part_data.get("root_path"), part_data.get("part_path"), "interfaces",
+                                       "innerkits", "rust")
+    folder_to_copy = os.path.join(hisysevent_rust_dir, "src")  # 替换为实际的文件夹名称
+    file_to_copy = os.path.join(hisysevent_rust_dir, "Cargo.toml")  # 替换为实际的文件名称
+    # 检查文件夹和文件是否存在
+    if os.path.exists(folder_to_copy) and os.path.exists(file_to_copy):
+        # 复制文件夹
+        shutil.copytree(folder_to_copy, os.path.join(hisysevent_rust_out, os.path.basename(folder_to_copy)))
+        # 复制文件
+        shutil.copy(file_to_copy, os.path.join(hisysevent_rust_out, os.path.basename(file_to_copy)))
+    else:
+        print("文件夹或文件不存在，无法复制。")
+
+    return _list
+
+
+def process_hisysevent(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    # 只处理一个模块
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module == 'hisysevent_rust':
+            _hisysevent_rust_handle(part_data, module, components_json)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+        is_component_build = True
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+def _generate_runtime_core_build_gn():
+    gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
+                           "innerapis", module, "BUILD.gn")
+    fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
+    fp = os.fdopen(fd, 'w')
+    _generate_import(fp)
+    _generate_configs(fp, module)
+    _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
+    _generate_public_configs(fp, module)
+    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
+    _generate_other(fp, args, json_data, module)
+    _generate_end(fp)
+    print("_generate_build_gn has done ")
+    fp.close()
+    return _list
+
+
+def _handle_module_runtime_core(args, components_json, module):
+    public_deps_list = []
+    if _is_innerkit(components_json, args.get("part_name"), module) == False:
+        return public_deps_list
+    json_data = _get_json_data(args, module)
+    _lib_special_handler(args.get("part_name"), module, args)
+    lib_exists = _copy_lib(args, json_data, module)
+    if lib_exists is False:
+        return public_deps_list
+    includes = _handle_includes_data(json_data)
+    deps = _handle_deps_data(json_data)
+    _copy_includes(args, module, includes)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
+    _toolchain_gn_copy(args, module)
+    return _list
+
+
+def process_runtime_core(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    # 处理分类runtime_core的逻辑
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module_runtime_core(part_data, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+            is_component_build = True
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+def process_drivers_interface_display(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+            is_component_build = True
+    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
+                               part_data.get("part_path"), "innerapis", "display_commontype_idl_headers", "libs")
+    if not os.path.exists(lib_out_dir):
+        os.makedirs(lib_out_dir)
+    file_path = os.path.join(lib_out_dir, 'libdisplay_commontype_idl_headers')
+    with open(file_path, 'wb') as file:
+        pass
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+def process_drivers_interface_usb(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+            is_component_build = True
+    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
+                               part_data.get("part_path"), "innerapis", "usb_idl_headers_1.1", "libs")
+    if not os.path.exists(lib_out_dir):
+        os.makedirs(lib_out_dir)
+    file_path = os.path.join(lib_out_dir, 'libusb_idl_headers_1.1')
+    with open(file_path, 'wb') as file:
+        pass
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+def process_drivers_interface_ril(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    print('modules', modules)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+            is_component_build = True
+    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
+                               part_data.get("part_path"), "innerapis", "ril_idl_headers", "libs")
+    if not os.path.exists(lib_out_dir):
+        os.makedirs(lib_out_dir)
+    file_path = os.path.join(lib_out_dir, 'libril_idl_headers')
+    with open(file_path, 'wb') as file:
+        pass
+    if is_component_build:
+        _copy_required_docs(part_data, _public_deps_list)
+        _finish_component_build(part_data)
+
+
+# 函数映射字典
+function_map = {
+    'musl': process_musl,
+    'rust': process_rust,
+    "developer_test": process_developer_test,  # 同rust
+    "drivers_interface_display": process_drivers_interface_display,  # 驱动的, 新建一个libs目录/ innerapi同名文件
+    # "skia": process_skia,  # 特殊, 需要修改后编译的产物
+    "hilog": process_hilog,  # hilog_rust的处理
+    "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
+    "hisysevent": process_hisysevent,  # rust 打包方式
+    "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
+    "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
+}
+
+
+def _process_part(args, parts_path_info, part_name, subsystem_name, components_json):
+    # 使用映射字典来调用对应的函数
+    if part_name in function_map.keys():
+        function_map[part_name](args, parts_path_info, part_name, subsystem_name, components_json)
+    else:
+        print(f"没有找到处理分类{part_name}的函数。")
+
+
 def _check_label(public_deps, value):
     innerapis = value["innerapis"]
     for _innerapi in innerapis:
@@ -660,8 +1543,37 @@ def _lib_special_handler(part_name, module, args):
             shutil.copy(blkid_file_path, blkid_out)
 
 
+def _handle_module(args, components_json, module):
+    public_deps_list = []
+    if _is_innerkit(components_json, args.get("part_name"), module) == False:
+        return public_deps_list
+    json_data = _get_json_data(args, module)
+    _lib_special_handler(args.get("part_name"), module, args)
+    lib_exists = _copy_lib(args, json_data, module)
+    if lib_exists is False:
+        return public_deps_list
+    includes = _handle_includes_data(json_data)
+    deps = _handle_deps_data(json_data)
+    _copy_includes(args, module, includes)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
+    _toolchain_gn_copy(args, module)
+    return _list
+
+
+def _copy_required_docs(args, public_deps_list):
+    _copy_bundlejson(args, public_deps_list)
+    _copy_license(args)
+    _copy_readme(args)
+
+
+def _finish_component_build(args):
+    if args.get("build_type") in [0, 1]:
+        _hpm_status = _hpm_pack(args)
+        if _hpm_status:
+            _copy_hpm_pack(args)
+
+
 def _generate_component_package(args, components_json):
-    part_name = args.get("part_name")
     modules = _parse_module_list(args)
     print('modules', modules)
     if len(modules) == 0:
@@ -669,30 +1581,13 @@ def _generate_component_package(args, components_json):
     is_component_build = False
     _public_deps_list = []
     for module in modules:
-        public_deps_list = []
-        if _is_innerkit(components_json, args.get("part_name"), module) == False:
-            continue
-        json_data = _get_json_data(args, module)
-        _lib_special_handler(part_name, module, args)
-        lib_exists = _copy_lib(args, json_data, module)
-        if lib_exists is False:
-            continue
+        module_deps_list = _handle_module(args, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
         is_component_build = True
-        includes = _handle_includes_data(json_data)
-        deps = _handle_deps_data(json_data)
-        _copy_includes(args, module, includes)
-        _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
-        if _list:
-            _public_deps_list.extend(_list)
-        _toolchain_gn_copy(args, module)
     if is_component_build:
-        _copy_bundlejson(args, _public_deps_list)
-        _copy_license(args)
-        _copy_readme(args)
-        if args.get("build_type") in [0, 1]:
-            _hpm_status = _hpm_pack(args)
-            if _hpm_status:
-                _copy_hpm_pack(args)
+        _copy_required_docs(args, _public_deps_list)
+        _finish_component_build(args)
 
 
 def _get_part_subsystem(components_json: dict):
@@ -800,7 +1695,21 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
         return
     args.update({"subsystem_name": subsystem_name, "part_name": part_name,
                  "part_path": part_path})
-    _generate_component_package(args, components_json)
+    if part_name in [
+        "musl",  # 从obj/third_party/musl/usr 下提取到includes和libs
+        "rust",  # 全量,  手动做一个bundle
+        "developer_test",  # 同rust
+        "drivers_interface_display",  # 驱动的, 新建一个libs目录/ innerapi同名文件
+        # "skia",  # 特殊, 需要修改后编译的产物, 暂时不行
+        "hilog",  # hilog_rust的处理
+        "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
+        "hisysevent",  # rust 打包方式
+        "drivers_interface_usb",  # 同驱动
+        "drivers_interface_ril",  # 同驱动
+    ]:
+        _process_part(args, parts_path_info, part_name, subsystem_name, components_json)
+    else:
+        _generate_component_package(args, components_json)
 
 
 def _get_exclusion_list(root_path):
@@ -839,6 +1748,19 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     start_time = time.time()
 
     components_json = _get_components_json(out_path)
+    components_json.update({"rust": {
+        "innerapis": [],
+        "path": "third_party/rust",
+        "subsystem": "thirdparty",
+        "variants": []
+    },
+        "developer_test": {
+            "innerapis": [],
+            "path": "test/testfwk/developer_test",
+            "subsystem": "testfwk",
+            "variants": []
+        }
+    })
     part_subsystem = _get_part_subsystem(components_json)
     parts_path_info = _get_parts_path_info(components_json)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
@@ -869,13 +1791,11 @@ def generate_component_package(out_path, root_path, components_list=None, build_
             "build_type": build_type, "organization_name": organization_name,
             "toolchain_info": toolchain_info
             }
-
     for key, value in part_subsystem.items():
         part_name = key
         subsystem_name = value
         if not components_list or part_name in components_list:
             _package_interface(args, parts_path_info, part_name, subsystem_name, components_json)
-
     end_time = time.time()
     run_time = end_time - start_time
     print("generate_component_package out_path", out_path)
