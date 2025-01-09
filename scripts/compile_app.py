@@ -97,7 +97,25 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     os.chdir(cur_dir)
 
 
+def get_integrated_project_config(cwd: str):
+    print(f"[0/0] project dir: {cwd}")
+    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
+        hvigor_info = json5.load(input_f)
+        model_version = hvigor_info.get('modelVersion')
+    return model_version
+
+
+def get_hvigor_version(cwd: str):
+    print(f"[0/0] project dir: {cwd}")
+    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
+        hvigor_info = json5.load(input_f)
+        hvigor_version = hvigor_info.get('hvigorVersion')
+    return hvigor_version
+
+
 def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
+    hvigor_version = get_hvigor_version(cwd)
+    model_version = get_integrated_project_config(cwd)
     if options.test_hap:
         if options.target_app_dir and ((hvigor_version and int(hvigor_version[0]) > 3) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
@@ -182,22 +200,6 @@ def hvigor_write_log(cmd, cwd, env):
     if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
         raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
     print("[0/0] Hvigor build end")
-
-
-def get_integrated_project_config(cwd: str):
-    print(f"[0/0] project dir: {cwd}")
-    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
-        hvigor_info = json5.load(input_f)
-        model_version = hvigor_info.get('modelVersion')
-    return model_version
-
-
-def get_hvigor_version(cwd: str):
-    print(f"[0/0] project dir: {cwd}")
-    with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
-        hvigor_info = json5.load(input_f)
-        hvigor_version = hvigor_info.get('hvigorVersion')
-    return hvigor_version
 
 
 def build_hvigor_cmd(cwd: str, model_version: str, options):
