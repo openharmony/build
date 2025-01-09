@@ -695,5 +695,13 @@ template("compile_app") {
         install_modules = [ install_module_info ]
       }
     }
+    if (defined(target_app_dir) && target_app_dir != "") {
+      args += {
+        "--target-out-dir",
+        rebase_path(root_out_dir),
+        "--target-app-dir",
+        target_app_dir
+      }
+    }
   }
 }

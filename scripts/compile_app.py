@@ -49,6 +49,8 @@ def parse_args(args):
     parser.add_argument('--build-modules', help='build modules', nargs='+', default=[])
     parser.add_argument('--use-hvigor-cache', help='use hvigor cache', action='store_true')
     parser.add_argument('--hvigor-obfuscation', help='hvigor obfuscation', action='store_true')
+    parser.add_argument('--target-out-dir', help='base output dir')
+    parser.add_argument('--target-app-dir', help='target output dir')
 
     options = parser.parse_args(args)
     return options
@@ -109,12 +111,22 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         modules_list = build_info.get('modules')
         for module in modules_list:
             src_path = module.get('srcPath')
+            project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
+            src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             if options.test_hap:
-                unsigned_hap_path = os.path.join(
-                    cwd, src_path, 'build/default/outputs/ohosTest')
+                if options.target_app_dir:
+                    unsigned_hap_path = os.path.join(
+                        src_path, 'build/default/outputs/ohosTest')
+                else:
+                    unsigned_hap_path = os.path.join(
+                        cwd, src_path, 'build/default/outputs/ohosTest')
             else:
-                unsigned_hap_path = os.path.join(
-                    cwd, src_path, 'build/default/outputs/default')
+                if options.target_app_dir:
+                    unsigned_hap_path = os.path.join(
+                        src_path, 'build/default/outputs/default')
+                else:
+                    unsigned_hap_path = os.path.join(
+                        cwd, src_path, 'build/default/outputs/default')
             hap_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hap')
             hsp_file = build_utils.find_in_directory(
@@ -221,6 +233,12 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'buildMode=release'])
     else:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
+    
+    if options.target_app_dir and options.target_app_dir != "":
+        if (hvigor_version and int(hvigor_version[0]) > 3) or model_version:
+            target_out_dir = os.path.abspath(options.target_out_dir)
+            output_dir = os.path.join(target_out_dir, options.target_app_dir)
+            cmd.extend(['-c', f'properties.ohos.buildDir="{output_dir}"'])
         
     cmd.extend(['--no-daemon'])
     
