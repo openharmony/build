@@ -97,7 +97,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     os.chdir(cur_dir)
 
 
-def get_unsigned_hap_path(project_name: str, src_path: str, options):
+def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
     if options.test_hap:
         if options.target_app_dir:
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
