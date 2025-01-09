@@ -113,8 +113,8 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
             src_path = module.get('srcPath')
             project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
             if options.test_hap:
-                src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
                 if options.target_app_dir:
+                    src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
                     unsigned_hap_path = os.path.join(
                         src_path, 'build/default/outputs/ohosTest')
                 else:
