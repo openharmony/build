@@ -132,7 +132,7 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         for module in modules_list:
             src_path = module.get('srcPath')
             project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
-            unsigned_hap_path = get_unsigned_hap_path(project_name, src_path, options)
+            unsigned_hap_path = get_unsigned_hap_path(project_name, src_path, cwd, options)
             hap_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hap')
             hsp_file = build_utils.find_in_directory(
