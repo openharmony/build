@@ -117,7 +117,7 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
     hvigor_version = get_hvigor_version(cwd)
     model_version = get_integrated_project_config(cwd)
     if options.test_hap:
-        if options.target_app_dir and ((hvigor_version and int(hvigor_version[0]) > 3) or model_version):
+        if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
                 new_src_path, 'build/default/outputs/ohosTest')
@@ -125,7 +125,7 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
             unsigned_hap_path = os.path.join(
                 cwd, src_path, 'build/default/outputs/ohosTest')
     else:
-        if options.target_app_dir and ((hvigor_version and int(hvigor_version[0]) > 3) or model_version):
+        if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
                 new_src_path, 'build/default/outputs/default')
@@ -243,7 +243,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
     
     if options.target_app_dir and options.target_app_dir != "":
-        if (hvigor_version and int(hvigor_version[0]) > 3) or model_version:
+        if (hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version:
             target_out_dir = os.path.abspath(options.target_out_dir)
             output_dir = os.path.join(target_out_dir, options.target_app_dir)
             cmd.extend(['-c', f'properties.ohos.buildDir="{output_dir}"'])
