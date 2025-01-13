@@ -125,6 +125,10 @@ declare_args() {
 }
 
 declare_args() {
+  target_app_dir = ""
+}
+
+declare_args() {
   system_kits_package = false
 
   kits_api_statistics = false
