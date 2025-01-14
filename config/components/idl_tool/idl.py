@@ -30,6 +30,7 @@ def parse_args():
     parser.add_argument('--log-tag', help='hilog tag')
     parser.add_argument('--hitrace', help='hitrace switch, default off')
     parser.add_argument('--language', help='language switch, default cpp')
+    parser.add_argument('--client-enable', help='gen client code')
     arguments = parser.parse_args()
     return arguments
 
@@ -73,6 +74,8 @@ def idl_gen_interface(input_arguments):
             cmd += ['-log-tag', input_arguments.log_tag]
         if input_arguments.hitrace:
             cmd += ['-t', input_arguments.hitrace]
+        if input_arguments.client_enable == 'true':
+            cmd += ['-client-enable']
         ret = run_command(cmd, input_arguments.idl_tool_path)
         if ret != 0:
             return ret

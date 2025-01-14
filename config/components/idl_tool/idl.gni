@@ -122,6 +122,10 @@ template("idl_gen_interface") {
     ]
     sources_proxy += [ "${target_gen_dir}/" + name + "_proxy.cpp" ]
     sources_stub += [ "${target_gen_dir}/" + name + "_stub.cpp" ]
+    if (defined(invoker.client_enable) && invoker.client_enable) {
+      sources_all += [ "${target_gen_dir}/" + name + "_client.cpp" ]
+      sources_proxy += [ "${target_gen_dir}/" + name + "_client.cpp" ]
+    }
   }
 
   # callback sources
@@ -217,6 +221,12 @@ template("idl_gen_interface") {
         invoker.hitrace,
       ]
     }
+    if (defined(invoker.client_enable) && invoker.client_enable) {
+      args += [
+        "--client-enable",
+        "true",
+      ]
+    }
     outputs = sources_all
   }
 
@@ -287,6 +297,12 @@ template("idl_gen_interface") {
           debug = false
         }
       }
+      if (defined(invoker.cflags)) {
+        cflags = invoker.cflags
+      }
+      if (defined(invoker.cflags_cc)) {
+        cflags_cc = invoker.cflags_cc
+      }
     }
 
     # build server so
@@ -338,6 +354,12 @@ template("idl_gen_interface") {
           cfi_cross_dso = true
           debug = false
         }
+      }
+      if (defined(invoker.cflags)) {
+        cflags = invoker.cflags
+      }
+      if (defined(invoker.cflags_cc)) {
+        cflags_cc = invoker.cflags_cc
       }
     }
 
