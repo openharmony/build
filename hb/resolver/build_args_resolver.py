@@ -784,7 +784,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     config.root_path), logfile
             ]
             if os.path.isfile(logfile):
-                SystemUtil.exec_command(cmd, log_path=config.log_path)
+                SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
 
     @staticmethod
     def resolve_get_warning_list(target_arg: Arg, build_module: BuildModuleInterface):
@@ -803,7 +803,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 '--warning-out-file',
                 '{}/packages/WarningList.txt'.format(config.out_path),
             ]
-            SystemUtil.exec_command(cmd, log_path=config.log_path)
+            SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
 
     @staticmethod
     def resolve_generate_ninja_trace(target_arg: Arg, build_module: BuildModuleInterface):
@@ -830,7 +830,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 "--duration-file",
                 "{}/sorted_action_duration.txt".format(config.out_path),
             ]
-            SystemUtil.exec_command(cmd, log_path=config.log_path)
+            SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
 
     @staticmethod
     def resolve_compute_overlap_rate(target_arg: Arg, build_module: BuildModuleInterface):
@@ -864,7 +864,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                     "{}/build/subsystem_config.json".format(config.root_path),
                     "--root-source-dir", config.root_path
                 ]
-            SystemUtil.exec_command(cmd, log_path=config.log_path)
+            SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
 
     @staticmethod
     def resolve_deps_guard(target_arg: Arg, build_module: BuildModuleInterface):

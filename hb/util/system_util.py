@@ -31,28 +31,23 @@ from resources.global_var import get_hpm_check_info
 
 
 class SystemUtil(metaclass=NoInstance):
-    
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', **kwargs):
         useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
         is_log_filter = kwargs.pop('log_filter', False)
         if log_mode == 'silent':
             is_log_filter = True
-        if '' in cmd:
-            cmd.remove('')
+
+        log_stage = kwargs.pop('log_stage', '')
+        if log_stage:
+            LogUtil.set_stage(log_stage)
+
+        process_cmd = SystemUtil.__process_cmd(cmd)
         if not os.path.exists(os.path.dirname(log_path)):
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
-        if (sys.argv[1] == 'build' and
-                '-i' in sys.argv[3:] and
-                {'-t', '-test'} & set(sys.argv[3:])):
-            cmd.extend(['-t', 'both'])
-        if (sys.argv[1] == 'build' and
-                '-i' not in sys.argv[3:] and
-                (sys.argv[-1] == "-t" or ("-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))):
-            cmd.extend(['-t', 'onlytest'])
         with open(log_path, 'at', encoding='utf-8') as log_file:
             LogUtil.hb_info("start run hpm command")
-            process = subprocess.Popen(cmd,
+            process = subprocess.Popen(process_cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
                                        encoding='utf-8',
@@ -69,6 +64,8 @@ class SystemUtil(metaclass=NoInstance):
 
         process.wait()
         LogUtil.hb_info("end hpm command")
+        if log_stage:
+            LogUtil.clear_stage()
         ret_code = process.returncode
         hpm_info = get_hpm_check_info()
         if hpm_info:
@@ -83,6 +80,21 @@ class SystemUtil(metaclass=NoInstance):
         if time_type == 'datetime':
             return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         return datetime.now().replace(microsecond=0)
+
+    @staticmethod
+    def __process_cmd(cmd: list):
+        if '' in cmd:
+            cmd.remove('')
+        if (sys.argv[1] == 'build' and
+                '-i' in sys.argv[3:] and
+                {'-t', '-test'} & set(sys.argv[3:])):
+            cmd.extend(['-t', 'both'])
+        if (sys.argv[1] == 'build' and
+                '-i' not in sys.argv[3:] and
+                (sys.argv[-1] == "-t" or ("-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))):
+            cmd.extend(['-t', 'onlytest'])
+
+        return cmd
 
 
 class ExecEnviron:
