@@ -78,12 +78,16 @@ class OHOSBuildModule(BuildModuleInterface):
     def _preload(self):
         self._run_phase(BuildPhase.PRE_LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').arg_value:
+            LogUtil.set_stage("[PRELOAD]")
             self.preloader.run()
+            LogUtil.clear_stage()
 
     def _load(self):
         self._run_phase(BuildPhase.LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').arg_value:
+            LogUtil.set_stage("[LOAD]")
             self.loader.run()
+            LogUtil.clear_stage()
 
     def _pre_target_generate(self):
         self._run_phase(BuildPhase.PRE_TARGET_GENERATE)
@@ -91,7 +95,9 @@ class OHOSBuildModule(BuildModuleInterface):
     def _target_generate(self):
         self._run_phase(BuildPhase.TARGET_GENERATE)
         if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("fast_rebuild").arg_value:
+            LogUtil.set_stage("[GN]")
             self.target_generator.run()
+            LogUtil.clear_stage()
 
     def _post_target_generate(self):
         self._run_phase(BuildPhase.POST_TARGET_GENERATE)
@@ -102,7 +108,9 @@ class OHOSBuildModule(BuildModuleInterface):
     def _target_compilation(self):
         self._run_phase(BuildPhase.TARGET_COMPILATION)
         if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("build_only_gn").arg_value:
+            LogUtil.set_stage("[NINJA]")
             self.target_compiler.run()
+            LogUtil.clear_stage()
 
     def _post_target_compilation(self):
         self._run_phase(BuildPhase.POST_TARGET_COMPILATION)

@@ -35,48 +35,64 @@ class LogLevel():
 
 
 class LogUtil(metaclass=NoInstance):
+    # static member for store current stage
+    stage = ""
 
     @staticmethod
-    def hb_info(msg, mode='normal'):
+    def set_stage(stage):
+        LogUtil.stage = stage
+
+    @staticmethod
+    def clear_stage():
+        LogUtil.stage = ""
+
+    @staticmethod
+    def hb_info(msg, stage='', mode='normal'):
         level = 'info'
+        if not stage:
+            stage = LogUtil.stage
         if mode == 'silent':
             for line in str(msg).splitlines():
                 sys.stdout.write('\033[K')
                 sys.stdout.write(
-                    '\r' + (LogUtil.message(level, line)).strip('\n'))
+                    '\r' + (LogUtil.message(level, line, stage)).strip('\n'))
                 sys.stdout.flush()
         elif mode == 'normal':
             level = 'info'
             for line in str(msg).splitlines():
-                sys.stdout.write(LogUtil.message(level, line))
+                sys.stdout.write(LogUtil.message(level, line, stage))
                 sys.stdout.flush()
 
     @staticmethod
-    def hb_warning(msg):
+    def hb_warning(msg, stage=''):
         level = 'warning'
+        if not stage:
+            stage = LogUtil.stage
         for line in str(msg).splitlines():
-            sys.stderr.write(LogUtil.message(level, line))
+            sys.stderr.write(LogUtil.message(level, line, stage))
             sys.stderr.flush()
 
     @staticmethod
-    def hb_error(msg):
+    def hb_error(msg, stage=''):
         level = 'error'
+        if not stage:
+            stage = LogUtil.stage
         sys.stderr.write('\n')
         for line in str(msg).splitlines():
-            sys.stderr.write(LogUtil.message(level, line))
+            sys.stderr.write(LogUtil.message(level, line, stage))
             sys.stderr.flush()
 
     @staticmethod
-    def message(level, msg):
+    def message(level, msg, stage=''):
         if isinstance(msg, str) and not msg.endswith('\n'):
             msg += '\n'
         if level == 'error':
             msg = msg.replace('error:', f'{Colors.ERROR}error{Colors.END}:')
-            return f'{Colors.ERROR}[OHOS {level.upper()}]{Colors.END} {msg}'
+            return f'{Colors.ERROR}[OHOS {level.upper()}]{Colors.END} {stage} {msg}'
         elif level == 'info':
-            return f'[OHOS {level.upper()}] {msg}'
+            return f'[OHOS {level.upper()}] {stage} {msg}'
         else:
-            return f'{Colors.WARNING}[OHOS {level.upper()}]{Colors.END} {msg}'
+            return f'{Colors.WARNING}[OHOS {level.upper()}]{Colors.END} {stage} {msg}'
 
     @staticmethod
     def write_log(log_path, msg, level):
@@ -84,9 +100,9 @@ class LogUtil(metaclass=NoInstance):
         sys.stderr.write('\n')
         with open(log_path, 'at', encoding='utf-8') as log_file:
             for line in str(msg).splitlines():
-                sys.stderr.write(LogUtil.message(level, line))
+                sys.stderr.write(LogUtil.message(level, line, LogUtil.stage))
                 sys.stderr.flush()
-                log_file.write(LogUtil.message(level, line))
+                log_file.write(LogUtil.message(level, line, LogUtil.stage))
 
     @staticmethod
     def analyze_build_error(error_log, status_code_prefix):
