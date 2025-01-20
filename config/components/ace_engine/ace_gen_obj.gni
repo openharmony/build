@@ -18,20 +18,9 @@ use_mingw_win = "${current_os}_${current_cpu}" == "mingw_x86_64"
 objcopy_mingw = "//prebuilts/gcc/linux-x86/host/x86_64-w64-mingw32-4.8/x86_64-w64-mingw32/bin/objcopy"
 objcopy_clang = "$clang_base_path/bin/llvm-objcopy"
 objcopy_x86_64 = "${default_clang_base_path}/bin/llvm-objcopy"
-
-if ("${current_os}_${current_cpu}" == "mac_arm64") {
-  mac_buildtool = "//build/toolchain/mac:clang_arm64"
-} else if ("${current_os}_${current_cpu}" == "mac_x64") {
-  mac_buildtool = "//build/toolchain/mac:clang_x64"
-}
-
 objcopy_default = "//prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/aarch64-linux-android/bin/objcopy"
 
-objcopy_clang = "$clang_base_path/bin/llvm-objcopy"
-
-is_ohos_standard_system = is_standard_system && !is_arkui_x
-
-if (is_ohos_standard_system) {
+if (is_standard_system && !is_arkui_x) {
   if (host_cpu == "arm64") {
     objcopy_default =
         "//prebuilts/clang/ohos/linux-aarch64/llvm/bin/llvm-objcopy"
