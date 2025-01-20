@@ -5,7 +5,9 @@
   "rust",
   "developer_test",
   "drivers_interface_display",
-  "napi",
   "skia",
-  "hilog"
+  "hilog",
+  "runtime_core",
+  "hisysevent",
+  "drivers_interface_usb"
 ]
