@@ -253,6 +253,7 @@ template("ohos_prebuilt_static_library") {
                              "public_configs",
                              "subsystem_name",
                              "part_name",
+                             "copy_linkable_file",
 
                              # Open source license related
                              "license_file",
@@ -308,6 +309,7 @@ template("ohos_prebuilt_etc") {
                              "module_install_dir",
                              "relative_install_dir",
                              "symlink_target_name",
+                             "copy_linkable_file",
 
                              # Open source license related
                              "license_file",
@@ -324,5 +326,138 @@ template("ohos_prebuilt_etc") {
     if (defined(invoker.symlink_path)) {
       symlink_path = invoker.symlink_path
     }
+  }
+}
+
+template("ohos_prebuilt_rust_library") {
+  assert(defined(invoker.source), "source must be defined for ${target_name}.")
+
+  if (defined(invoker.output)) {
+    _copy_output = "${target_out_dir}/${invoker.output}"
+  } else {
+    _copy_output = "${target_out_dir}/${invoker.source}"
+  }
+  config("${target_name}__config") {
+    libs = [ _copy_output ]
+  }
+
+  if (!defined(invoker.deps)) {
+    invoker.deps = []
+  }
+
+  if (!defined(invoker.stable)) {
+    invoker.stable = false
+  }
+
+  # auto set auto_relative_install_dir by innerapi_tags
+  if (defined(invoker.innerapi_tags)) {
+    is_chipsetsdk = false
+    is_platformsdk = false
+    is_passthrough = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk*" ])) {
+      is_chipsetsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk*" ])) {
+      is_platformsdk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "passthrough*" ])) {
+      is_passthrough = true
+    }
+
+    if (is_chipsetsdk && is_platformsdk) {
+      auto_relative_install_dir = "chipset-pub-sdk"
+    } else if (is_chipsetsdk) {
+      auto_relative_install_dir = "chipset-sdk"
+    } else if (is_platformsdk) {
+      auto_relative_install_dir = "platformsdk"
+    }
+    if (is_passthrough) {
+      auto_relative_install_dir = chipset_passthrough_dir
+    }
+
+    is_ndk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
+      is_ndk = true
+    }
+    if (is_ndk) {
+      auto_relative_install_dir = "ndk"
+    }
+  }
+
+  deps_info = []
+  foreach(dep, invoker.deps) {
+    info = {
+    }
+    info = {
+      target_out_dir =
+          rebase_path(get_label_info(dep, "target_out_dir"), root_build_dir)
+      target_name = get_label_info(dep, "name")
+    }
+    deps_info += [ info ]
+  }
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    module_deps_info = deps_info
+    type = "rust_library"
+    prebuilt = true
+    stable = invoker.stable
+    toolchain = get_label_info(":${target_name}", "toolchain")
+    source_path = rebase_path(invoker.source, root_build_dir)
+    output_path = rebase_path(_copy_output, root_build_dir)
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
+
+  ohos_copy(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "testonly",
+                             "visibility",
+                             "rust_crate_name",
+                             "rust_crate_type",
+                             "copy_linkable_file",
+                             "deps",
+                             "external_deps",
+                             "public_external_deps",
+                             "public_configs",
+                             "subsystem_name",
+                             "part_name",
+
+                             # For generate_module_info
+                             "install_images",
+                             "module_install_dir",
+                             "symlink_target_name",
+                             "innerapi_tags",
+                             "symlink_ext",
+
+                             # Open source license related
+                             "license_file",
+                             "license_as_sources",
+                           ])
+    sources = [ invoker.source ]
+    outputs = [ _copy_output ]
+    module_type = "lib"
+    prebuilt = true
+    install_enable = true
+    if (!defined(invoker.copy_linkable_file)) {
+      copy_linkable_file = true
+    }
+    if (defined(invoker.install_enable)) {
+      install_enable = invoker.install_enable
+    }
+
+    # update relative_install_dir if auto_relative_install_dir defined
+    if (defined(auto_relative_install_dir)) {
+      relative_install_dir = auto_relative_install_dir
+    }
+    if (defined(invoker.relative_install_dir)) {
+      relative_install_dir = invoker.relative_install_dir
+    }
+    if (!defined(public_configs)) {
+      public_configs = []
+    }
+    public_configs += [ ":${target_name}__config" ]
   }
 }
