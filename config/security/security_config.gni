@@ -40,7 +40,7 @@ if (target_cpu == "arm64" && res == 1 && is_ohos && is_standard_system &&
   support_stack_protector_ret = false
 }
 
-# pac_ret is supported in armv8.
+# pac_ret is supported in armv8.3
 # bti is supported in armv8.5
 if (target_cpu == "arm64" && is_ohos && is_standard_system && !is_mingw) {
   if (use_pac_ret) {
