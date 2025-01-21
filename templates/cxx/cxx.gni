@@ -375,10 +375,16 @@ template("ohos_executable") {
       }
     }
 
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
+
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
@@ -400,9 +406,6 @@ template("ohos_executable") {
     }
     if (!defined(include_dirs)) {
       include_dirs = []
-    }
-    if (!defined(ldflags)) {
-      ldflags = []
     }
 
     if (defined(visibility) && visibility != []) {
@@ -960,8 +963,10 @@ template("ohos_shared_library") {
 
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
@@ -1076,9 +1081,6 @@ template("ohos_shared_library") {
       ]
     }
 
-    if (!defined(ldflags)) {
-      ldflags = []
-    }
     if (!defined(libs)) {
       libs = []
     }
@@ -1440,10 +1442,16 @@ template("ohos_static_library") {
       }
     }
 
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
+
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
@@ -1718,10 +1726,16 @@ template("ohos_source_set") {
       }
     }
 
+    if (!defined(ldflags)) {
+      ldflags = []
+    }
+
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
       cflags += [ "-mbranch-protection=bti" ]
+      ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     }
