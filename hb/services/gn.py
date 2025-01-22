@@ -20,6 +20,7 @@
 import sys
 import os
 import time
+import platform
 import threading
 from enum import Enum
 
@@ -80,7 +81,11 @@ class Gn(BuildFileGeneratorInterface):
 
     @throw_exception
     def _regist_gn_path(self):
-        gn_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/gn'
+        if sys.platform == "linux" and platform.machine().lower() == "aarch64":
+            gn_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-aarch64/bin/gn'
+                .format(sys.platform))
+        else:
+            gn_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/gn'
                 .format(sys.platform))
         if os.path.exists(gn_path):
             self.exec = gn_path
