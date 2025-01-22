@@ -46,15 +46,24 @@
 # When writing build files, to do something only for the host:
 #   if (current_toolchain == host_toolchain) { ...
 
-check_mac_system_and_cpu_script =
-    rebase_path("//build/scripts/check_mac_system_and_cpu.py")
-check_darwin_system_result =
-    exec_script(check_mac_system_and_cpu_script, [ "system" ], "string")
+if (host_os == "mac") {
+  check_mac_system_and_cpu_script =
+      rebase_path("//build/scripts/check_mac_system_and_cpu.py")
+  check_darwin_system_result =
+      exec_script(check_mac_system_and_cpu_script, [ "system" ], "string")
 
-if (check_darwin_system_result != "") {
-  check_mac_host_cpu_result =
-      exec_script(check_mac_system_and_cpu_script, [ "cpu" ], "string")
-  if (check_mac_host_cpu_result != "") {
+  if (check_darwin_system_result != "") {
+    check_mac_host_cpu_result =
+        exec_script(check_mac_system_and_cpu_script, [ "cpu" ], "string")
+    if (check_mac_host_cpu_result != "") {
+      host_cpu = "arm64"
+    }
+  }
+} else if (host_os == "linux") {
+  check_linux_cpu_script = rebase_path("//build/scripts/check_linux_cpu.py")
+  check_linux_cpu_result =
+      exec_script(check_linux_cpu_script, [ "cpu" ], "string")
+  if (check_linux_cpu_result != "") {
     host_cpu = "arm64"
   }
 }
@@ -96,14 +105,13 @@ product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
 global_parts_info =
-  read_file("${preloader_output_dir}/parts_config.json", "json")
+    read_file("${preloader_output_dir}/parts_config.json", "json")
 
 napi_white_list_path = "developtools/integration_verification/tools/deps_guard/rules/NO-Depends-On-NAPI"
 if (!is_llvm_build) {
   if (!ohos_indep_compiler_enable) {
-    napi_white_list = read_file(
-            "//${napi_white_list_path}/whitelist.json",
-            "json")
+    napi_white_list =
+        read_file("//${napi_white_list_path}/whitelist.json", "json")
   } else if (ohos_indep_compiler_enable) {
     napi_white_list = read_file(
             "//build/indep_configs/mapping/config/${napi_white_list_path}/whitelist.json",
@@ -372,7 +380,11 @@ if ((target_os == "ohos" && target_cpu == "x86_64") ||
 
 # different host platform tools directory.
 if (host_os == "linux") {
-  host_platform_dir = "linux-x86_64"
+  if (host_cpu == "arm64") {
+    host_platform_dir = "linux-aarch64"
+  } else {
+    host_platform_dir = "linux-x86_64"
+  }
 } else if (host_os == "mac") {
   if (host_cpu == "arm64") {
     host_platform_dir = "darwin-arm64"

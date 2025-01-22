@@ -19,6 +19,7 @@ import sys
 import zipfile
 import argparse
 import time
+import platform
 
 sys.path.append(
     os.path.dirname(
@@ -41,7 +42,10 @@ def parse_sdk_check_list(sdk_check_list: list):
     if sdk_delivery_list is None:
         raise Exception("read file '{}' failed.".format(sdk_check_list))
 
-    if sys.platform == 'linux':
+    if sys.platform == 'linux' and platform.machine().lower() == "aarch64":
+        sdk_check_files = sdk_delivery_list['linux']['checkFiles']
+        sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
+    elif sys.platform == 'linux':
         if sdk_platform == 'default':
             sdk_check_files = sdk_delivery_list['linux']['checkFiles']
             sdk_check_directories = sdk_delivery_list['linux']['checkDirectories']
@@ -96,7 +100,9 @@ def add_files_to_sdk_package(sdk_package_directory: dict, compressed_file: str):
 
 def get_sdk_package_directories():
     os_types = []
-    if sys.platform == 'linux':
+    if sys.platform == 'linux' and platform.machine().lower() == "aarch64":
+        os_types = ['linux']
+    elif sys.platform == 'linux':
         if sdk_platform == 'default':
             os_types = ['linux', 'windows', 'ohos']
         if 'win' in sdk_platform:

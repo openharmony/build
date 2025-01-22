@@ -100,7 +100,10 @@ def __check_changes(output_file, content):
 def write_file(output_file, content):
     code_dir = find_top()
     os_name = platform.system().lower()
-    gn_exe = os.path.join(code_dir, f'prebuilts/build-tools/{os_name}-x86/bin/gn')
+    if os_name == "linux" and platform.machine().lower() == "aarch64":
+        gn_exe = os.path.join(code_dir, f'prebuilts/build-tools/{os_name}-aarch64/bin/gn')
+    else:
+        gn_exe = os.path.join(code_dir, f'prebuilts/build-tools/{os_name}-x86/bin/gn')
     file_dir = os.path.dirname(os.path.abspath(output_file))
     if not os.path.exists(file_dir):
         os.makedirs(file_dir, exist_ok=True)

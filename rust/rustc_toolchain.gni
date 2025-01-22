@@ -58,5 +58,11 @@ musl_path = rebase_path("${musl_sysroot}", root_build_dir)
 if (defined(abi_target)) {
   musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
 }
-llvm_strip = rebase_path("${toolchains_dir}/linux-x86_64/llvm/bin/llvm-strip",
-                         root_build_dir)
+if (host_cpu == "arm64") {
+  llvm_strip =
+      rebase_path("${toolchains_dir}/linux-aarch64/llvm/bin/llvm-strip",
+                  root_build_dir)
+} else {
+  llvm_strip = rebase_path("${toolchains_dir}/linux-x86_64/llvm/bin/llvm-strip",
+                           root_build_dir)
+}
