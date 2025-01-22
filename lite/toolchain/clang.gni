@@ -101,9 +101,10 @@ template("clang_toolchain") {
       unstripped_outfile = outfile
 
       rspfile = "$outfile.rsp"
-      custom_ld_flags = ""
       if (defined(board_custom_ld_flags)) {
+        custom_ld_flags = ""
         foreach(ld_flags, board_custom_ld_flags) {
+          custom_ld_flags += "-Wl,"
           custom_ld_flags += ld_flags
           custom_ld_flags += " "
         }
@@ -116,9 +117,9 @@ template("clang_toolchain") {
       if (defined(board_custom_ld_flags)) {
         command += "-Wl,--whole-archive -Wl,--start-group "
       }
-      command += "{{inputs}} {{libs}} $custom_ld_flags "
+      command += "{{inputs}} {{libs}} "
       if (defined(board_custom_ld_flags)) {
-        command += "-Wl,--end-group -Wl,--no-whole-archive "
+        command += "-Wl,--end-group -Wl,--no-whole-archive $custom_ld_flags "
       }
       command += "-o $unstripped_outfile"
       if (need_strip) {
