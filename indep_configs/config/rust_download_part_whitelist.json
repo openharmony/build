@@ -8,5 +8,6 @@
   "faultloggerd",
   "graphic_2d",
   "hitrace",
-  "code_signature"
+  "code_signature",
+  "input"
 ]
