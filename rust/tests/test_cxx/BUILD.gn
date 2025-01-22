@@ -19,7 +19,7 @@ rust_cxx("test_cxx_exe_gen") {
 
 ohos_rust_static_ffi("test_cxx_examp_rust") {
   sources = [ "src/lib.rs" ]
-  deps = [ "//third_party/rust/crates/cxx:lib" ]
+  external_deps = [ "rust_cxx:lib" ]
 }
 
 ohos_executable("test_cxx_exe") {
@@ -29,6 +29,6 @@ ohos_executable("test_cxx_exe") {
   deps = [
     ":test_cxx_examp_rust",
     ":test_cxx_exe_gen",
-    "//third_party/rust/crates/cxx:cxx_cppdeps",
   ]
+  external_deps = [ "rust_cxx:cxx_cppdeps" ]
 }
