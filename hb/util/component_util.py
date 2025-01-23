@@ -156,7 +156,7 @@ def gen_default_deps_json(variant, root_path, has_test=False):
     part_white_list_path = os.path.join(root_path, "build", "indep_configs", "config",
                                         "rust_download_part_whitelist.json")
     part_white_list = IoUtil.read_json_file(part_white_list_path)
-    rust_deps = ['rust', 'rust_cxx', 'rust_libc', 'rust_syn', 'rust_proc_macro2', 'rust_quote', 'rust_unicode_ident']
+    rust_deps = ['rust', 'rust_cxx', 'rust_libc', 'rust_syn', 'rust_proc_macro2', 'rust_quote', 'rust_unicode_ident', 'rust_bindgen']
     for part_name in part_name_list:
         if part_name in part_white_list:
             for dep in rust_deps:
