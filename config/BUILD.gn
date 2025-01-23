@@ -263,6 +263,11 @@ group("common_deps") {
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
     public_deps += [ "//third_party/musl:soft_shared_libs" ]
   }
+
+  if (is_ohos && ohos_indep_compiler_enable &&
+      current_toolchain != host_toolchain) {
+    public_deps += [ "//build/common/ubsan:ubsan" ]
+  }
 }
 
 group("executable_deps") {
@@ -276,18 +281,10 @@ group("executable_deps") {
 
 group("loadable_module_deps") {
   public_deps = [ ":common_deps" ]
-  if (is_ohos && ohos_indep_compiler_enable &&
-      current_toolchain != host_toolchain) {
-    public_deps += [ "//build/common/ubsan:ubsan" ]
-  }
 }
 
 group("shared_library_deps") {
   public_deps = [ ":common_deps" ]
-  if (is_ohos && ohos_indep_compiler_enable &&
-      current_toolchain != host_toolchain) {
-    public_deps += [ "//build/common/ubsan:ubsan" ]
-  }
 }
 
 group("rust_library_deps") {

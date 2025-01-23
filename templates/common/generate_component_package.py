@@ -1180,7 +1180,7 @@ def _copy_lib(args, json_data, module):
         # 对于非 rust_library 类型，选择不包含 'lib.unstripped' 的路径
         outputs = json_data.get('outputs', [])
         for output in outputs:
-            if 'lib.unstripped' not in output:
+            if '.unstripped' not in output:
                 output = replace_default_toolchains_in_output(output)
                 so_path = output
                 break
@@ -1396,7 +1396,7 @@ def _generate_prebuilt_target(fp, target_type, module):
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
     elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
-    elif target_type == 'etc' or target_type == 'copy':
+    elif module != 'ipc_core' and (target_type == 'etc' or target_type == 'copy'):
         fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     elif target_type == 'rust_library' or target_type == 'rust_proc_macro':
         fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
