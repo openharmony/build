@@ -56,7 +56,6 @@ if [ -d "binarys/third_party/rust" ];then
     echo "rust directory exists"
     if [ -d "third_party/rust" ]; then
         echo "third_party/rust exists"
-        rm -rf third_party/rust/crates
         cp -r binarys/third_party/rust/crates third_party/rust
     else
         mkdir -p "third_party/rust"
