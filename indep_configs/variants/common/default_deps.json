@@ -4,5 +4,6 @@
   "googletest",
   "benchmark",
   "ets_frontend",
-  "libxml2"
+  "libxml2",
+  "idl_tool"
 ]
