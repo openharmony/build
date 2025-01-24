@@ -982,7 +982,9 @@ if (is_lite_system) {
         "//build/lite/config:board_config",
       ]
     }
-
+    if (current_os == "ohos" && !is_mini_system && !ohos_kernel_is_prebuilt) {
+      default_compiler_configs += [ "//build/lite/config:sysroot_flags" ]
+    }
     default_shared_library_configs =
         default_compiler_configs +
         [ "//build/lite/config:shared_library_config" ]
