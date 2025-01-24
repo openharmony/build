@@ -64,8 +64,10 @@ def move_static_library_notices(options):
             if os.path.isfile("{}.json".format(dest_file)):
                 os.makedirs(os.path.dirname("{}.json".format(dest_file)), exist_ok=True)
                 shutil.copyfile("{}.json".format(file), "{}.json".format(dest_file))
-        shutil.rmtree(static_dir)
-        shutil.rmtree(static_subdir)
+        if os.path.exists(static_dir):
+            shutil.rmtree(static_dir)
+        if os.path.exists(static_subdir):
+            shutil.rmtree(static_subdir)
     
 
 def copy_static_library_notices(options, depfiles: list):
