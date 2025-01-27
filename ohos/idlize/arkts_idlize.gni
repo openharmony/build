@@ -1,0 +1,147 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+
+# Template: idlize_idl2peer
+# This template is designed to generate code from IDL (Interface Description Language) files.
+# It takes input from an IDL file, uses a specific generation mode, and invokes a Python script to generate the required code.
+#
+# Parameters:
+# - input: The path to the input IDL file or directory. This is where the template will read the IDL definitions from.
+# - output: The path to the output directory where the generated code will be saved.
+# - mode (optional): The code generation mode. If not provided, the default mode "idl2peer" will be used.
+# - dirmode (optional): The way how to handle the genereated path.
+template("idlize_idl2peer") {
+  forward_variables_from(invoker,
+                         [
+                           "input",
+                           "output",
+                           "mode",
+                           "dirmode",
+                         ])
+  input_path = input
+  out_path = output
+  if (defined(mode)) {
+    generate_mode = mode
+  } else {
+    generate_mode = "idl2peer"
+  }
+
+  if (!defined(dirmode)) {
+    dirmode = "error"
+  }
+
+  nodejs_version = "v16.20.2"
+  if (host_os == "mac") {
+    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
+  } else {
+    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+  }
+
+  idlize_tool_path = "//third_party/musl/temp_idlize"
+  idl2peer_args = [
+    "--nodejs",
+    rebase_path(_nodejs, root_build_dir),
+    "--execute-mode",
+    "generate",
+    "--generate-mode",
+    generate_mode,
+    "--arkgen-path",
+    rebase_path("${idlize_tool_path}/node_modules/.bin/arkgen", root_build_dir),
+    "--generator-target=ohos",
+    "--language=arkts",
+    "--input-dir",
+    rebase_path(input_path, root_build_dir),
+    "--output-dir",
+    rebase_path(out_path, root_build_dir),
+    "--dir-mode",
+    dirmode,
+  ]
+
+  print("idlize gn ", idl2peer_args, target_name)
+
+  # generate code from idl files
+  exec_script("//build/scripts/arkts_idlize.py", idl2peer_args)
+}
+
+# Template: idlize_shared_library
+# This template is used to create a shared library.
+# It scans the generated code, collects the source files and header file paths, and then creates a shared library with the specified dependencies.
+#
+# Parameters:
+# - generated: The directory path where the generated code is located. This template will scan this directory for source files.
+# - relative_install_dir: The relative installation directory for the shared library.
+# - source_sets: A collection of source sets that the shared library depends on.
+# - subsystem_name: OHOS subsystem for the shared library.
+# - part_name: OHOS part name for the shared library.
+template("idlize_shared_library") {
+  forward_variables_from(invoker,
+                         [
+                           "generated",
+                           "relative_install_dir",
+                           "source_sets",
+                           "subsystem_name",
+                           "part_name",
+                         ])
+
+  idlize_tool_path = "//third_party/musl/temp_idlize"
+  scan_args = [
+    "--execute-mode",
+    "scan",
+    "--output-dir",
+    rebase_path(generated, root_build_dir),
+    "--origin-dir",
+    generated,
+  ]
+
+  # scan generated code from generated path
+  generated_cpp_sources =
+      exec_script("//build/scripts/arkts_idlize.py", scan_args, "list lines")
+
+  generated_cpp_sources += [
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/common-interop.cc",
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/ets/convertors-ets.cc",
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/interop-logging.cc",
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/types/signatures.cc",
+  ]
+
+  generated_includes = [
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/",
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/ets/",
+    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/types/",
+    generated,
+  ]
+
+  generated_defines = [
+    "KOALA_INTEROP_MODULE=NativeModule",
+    "KOALA_LINUX",
+    "KOALA_USE_PANDA_VM",
+    "KOALA_ETS_NAPI",
+    "ETS_NATIVE_MODULE_QUALIFIED_NAME=" + target_name,
+  ]
+
+  print("idlize_shared_library",
+        generated_cpp_sources,
+        generated_includes,
+        generated_defines)
+
+  ohos_shared_library(target_name) {
+    defines = generated_defines
+    sources = generated_cpp_sources
+    include_dirs = generated_includes
+    subsystem_name = subsystem_name
+    part_name = part_name
+    deps = source_sets
+  }
+}
