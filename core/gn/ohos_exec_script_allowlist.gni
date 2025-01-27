@@ -38,6 +38,7 @@ ohos_exec_script_config = {
     "//build/lite/config/component/lite_component.gni",
     "//build/lite/config/test/test.gni",
     "//build/ohos/app/app.gni",
+    "//build/ohos/idlize/arkts_idlize.gni",
     "//build/ohos/images/BUILD.gn",
     "//build/ohos/native_stub/native_stub.gni",
     "//build/ohos/ndk/ndk.gni",
