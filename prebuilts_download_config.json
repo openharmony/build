@@ -8,7 +8,8 @@
     "third_party/weex-loader",
     "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools",
-    "arkcompiler/ets_frontend/arkguard"
+    "arkcompiler/ets_frontend/arkguard",
+    "third_party/musl/temp_idlize"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
