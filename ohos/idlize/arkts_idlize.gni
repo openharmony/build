@@ -89,6 +89,7 @@ template("idlize_shared_library") {
   forward_variables_from(invoker,
                          [
                            "generated",
+                           "module_install_dir",
                            "relative_install_dir",
                            "source_sets",
                            "subsystem_name",
@@ -124,7 +125,6 @@ template("idlize_shared_library") {
   ]
 
   generated_defines = [
-    "KOALA_INTEROP_MODULE=NativeModule",
     "KOALA_LINUX",
     "KOALA_USE_PANDA_VM",
     "KOALA_ETS_NAPI",
@@ -143,5 +143,7 @@ template("idlize_shared_library") {
     subsystem_name = subsystem_name
     part_name = part_name
     deps = source_sets
+    relative_install_dir = relative_install_dir
+    module_install_dir = module_install_dir
   }
 }
