@@ -1,0 +1,139 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/components/ets_frontend/ets_frontend_config.gni")
+
+ets2abc_root = "ets_frontend"
+ets2abc_build_path = ""
+ets2abc_build_deps = ""
+ets2abc_out_root = ""
+static_linker_root = "runtime_core"
+static_linker_build_path = ""
+static_linker_build_deps = ""
+static_linker_out_root = ""
+
+if (host_toolchain == toolchain_mac) {
+  ets2abc_out_root =
+      get_label_info("$ets2abc_root:ets2panda($toolchain_mac)", "root_out_dir")
+  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_mac)" ]
+  static_linker_out_root =
+      get_label_info("$static_linker_root:ark_link($toolchain_mac)",
+                     "root_out_dir")
+  static_linker_build_deps = [ "$static_linker_root:ark_link($toolchain_mac)" ]
+} else if (host_toolchain == toolchain_win) {
+  ets2abc_out_root =
+      get_label_info("$ets2abc_root:ets2panda($toolchain_win)", "root_out_dir")
+  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_win)" ]
+  static_linker_out_root =
+      get_label_info("$static_linker_root:ark_link($toolchain_win)",
+                     "root_out_dir")
+  static_linker_build_deps = [ "$static_linker_root:ark_link($toolchain_win)" ]
+} else {
+  ets2abc_out_root = get_label_info("$ets2abc_root:ets2panda($toolchain_linux)",
+                                    "root_out_dir")
+  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_linux)" ]
+  static_linker_out_root =
+      get_label_info("$static_linker_root:ark_link($toolchain_linux)",
+                     "root_out_dir")
+  static_linker_build_deps =
+      [ "$static_linker_root:ark_link($toolchain_linux)" ]
+}
+ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
+static_linker_build_path =
+    static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
+
+template("generate_static_abc") {
+  assert(defined(invoker.input_dir), "The 'input_dir' parameter is required!")
+  assert(defined(invoker.dst_file), "The 'dst_file' parameter is required!")
+
+  dependencies = []
+  external_dependencies = []
+  if (defined(invoker.dependencies)) {
+    dependencies += invoker.dependencies
+  }
+  if (defined(invoker.external_dependencies)) {
+    external_dependencies += invoker.external_dependencies
+  }
+
+  action("$target_name") {
+    if (defined(invoker.extra_visibility)) {
+      visibility = invoker.extra_visibility
+    }
+
+    script = "//build/config/components/ets_frontend/generate_merged_abc.py"
+
+    deps = dependencies
+    external_deps = external_dependencies
+    external_deps += ets2abc_build_deps
+    external_deps += static_linker_build_deps
+
+    if (defined(invoker.std)) {
+      std = invoker.std
+    } else {
+      std = [ rebase_path(
+              "${static_linker_out_root}/arkcompiler/runtime_core/static_core/plugins/ets/stdlib/std") ]
+    }
+
+    if (defined(invoker.escompat)) {
+      escompat = invoker.escompat
+    } else {
+      escompat = [ rebase_path(
+              "${static_linker_out_root}/arkcompiler/runtime_core/static_core/plugins/ets/stdlib/escompat") ]
+    }
+
+    std_str = string_join(",", std)
+    escompat_str = string_join(",", escompat)
+
+    print(std_str)
+
+    args = [
+      "--es2panda",
+      rebase_path("${ets2abc_build_path}"),
+      "--input-dir",
+      rebase_path(invoker.input_dir),
+      "--ark-link",
+      rebase_path("${static_linker_build_path}"),
+      "--output",
+      rebase_path(invoker.dst_file),
+      "--env-path",
+      rebase_path("${static_linker_out_root}/arkcompiler/runtime_core/"),
+      "--std",
+      std_str,
+      "--escompat",
+      escompat_str,
+    ]
+
+    if (defined(invoker.base_url)) {
+      args += [
+        "--base-url",
+        rebase_path(invoker.base_url),
+      ]
+    }
+
+    if (defined(invoker.cache_path)) {
+      args += [
+        "--cache-path",
+        rebase_path(invoker.cache_path),
+      ]
+    }
+
+    if (defined(invoker.timeout_limit)) {
+      args += [
+        "--timeout-limit",
+        invoker.timeout_limit,
+      ]
+    }
+
+    outputs = [ invoker.dst_file ]
+  }
+}
