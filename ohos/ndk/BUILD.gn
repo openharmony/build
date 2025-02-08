@@ -22,7 +22,7 @@ if (!use_current_sdk) {
     import(ext_ndk_target)
     package_info_name = "uni-package"
   } else {
-    import("//build/ohos/ndk/ndk_targets.gni")
+    import("//interface/sdk_c/ndk_targets.gni")
   }
 
   package_info_file = "$ndk_os_irrelevant_out_dir/$package_info_name.json"
