@@ -56,7 +56,7 @@ def collect_cfg_services_name(cfg_dir: str):
 
 def collect_seccomp_services_name(lib_dir: str):
     services_name = set()
-    name_allow_list = ['system', 'app', 'nwebspawn', 'imf_secure_mode', 'app_privilege']
+    name_allow_list = ['system', 'app', 'nwebspawn', 'imf_secure_mode', 'app_privilege', 'app_atomic']
     if not os.path.exists(lib_dir):
         return services_name
     for file in os.listdir(lib_dir):
