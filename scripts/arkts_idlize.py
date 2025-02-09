@@ -22,62 +22,123 @@ import shutil
 
 from util import build_utils
 
+
+def debug_log(*args, **kwargs):
+    if os.getenv("IDLIZE_DEBUG") == "1":
+        print(*args, **kwargs)
+
+
 def parse_args(args):
     parser = argparse.ArgumentParser()
     build_utils.add_depfile_option(parser)
 
-    parser.add_argument('--nodejs', help='nodejs path')
-    parser.add_argument('--arkgen-path', help='arkgen path')
+    parser.add_argument('--nodejs')
+    parser.add_argument('--arkgen-path')
     parser.add_argument('--execute-mode', choices=['generate', 'scan'])
     parser.add_argument('--generate-mode', choices=['dts2peer', 'idl2peer'])
-    parser.add_argument('--input-dir', metavar='<path>', help='Path to input dir(s), comma separated')
-    parser.add_argument('--output-dir', metavar='<path>', help='Path to output dir')
+    parser.add_argument('--input-dir', metavar='<path>')
+    parser.add_argument('--input-files', nargs="+")
+    parser.add_argument('--output-dir', metavar='<path>')
     parser.add_argument('--origin-dir', metavar='<path>')
-    parser.add_argument('--input-file', metavar='<name>', help='Name of file to convert, all files in input-dir if none')
-    parser.add_argument('--language', choices=['arkts', 'ts'], help='Output language')
+    parser.add_argument('--input-file', metavar='<name>')
+    parser.add_argument('--language', choices=['arkts', 'ts'])
     parser.add_argument('--generator-target', choices=['ohos'])
     parser.add_argument('--dir-mode', choices=['error', 'backup', 'delete'])
+    parser.add_argument('--options-file', metavar='<path>')
+    parser.add_argument('--default-idl-package')
 
     options = parser.parse_args(args)
     return options
 
-def generate(options):
-    print("idlize generate", options)
-    node_binary = options.nodejs
+
+def get_generate_mode(options):
     generate_mode = ""
     if options.generate_mode == "dts2peer":
         generate_mode = "--dts2peer"
     elif options.generate_mode == "idl2peer":
         generate_mode = "--idl2peer"
+    return generate_mode
+
+
+def handle_target_path(options):
     target_path = options.output_dir + "/generated"
     if os.path.exists(target_path):
         match options.dir_mode:
-            case 'error':
-                raise ValueError("Target dir {} already exist!".format(target_path))
+            case 'delete':
+                shutil.rmtree(target_path)
             case 'backup':
                 shutil.move(target_path, target_path + ".bak")
             case _:
-                shutil.rmtree(target_path)
-    run_config = [node_binary, options.arkgen_path, "--generator-target", options.generator_target, generate_mode, "--input-dir", options.input_dir, "--output-dir", options.output_dir, "--verify-idl", "--common-to-attributes", "--docs=none", "--language", options.language]
-    print("idlize generate run_config", run_config)
-    subprocess.run(run_config)
+                raise ValueError(
+                    "Target dir {} already exist!".format(target_path))
+
+
+def handle_input(run_config, options):
+    if options.input_dir:
+        run_config += ["--input-dir", options.input_dir]
+    elif options.input_files:
+        run_config += ["--input-files", *options.input_files]
+
+
+def pack_run_config(options):
+    handle_target_path(options)
+    run_config = [options.nodejs, options.arkgen_path]
+    run_config += ["--generator-target", options.generator_target]
+    run_config += [get_generate_mode(options)]
+    handle_input(run_config, options)
+    run_config += ["--output-dir", options.output_dir]
+    run_config += ["--language", options.language]
+    run_config += ["--verify-idl", "--common-to-attributes", "--docs=none"]
+    run_config += ["--options-file", options.options_file]
+    run_config += ["--default-idl-package", options.default_idl_package]
+    run_config += ["--use-new-ohos"]
+    return run_config
+
+
+def generate(options):
+    debug_log("idlize generate", options)
+    run_config = pack_run_config(options)
+    debug_log("idlize generate run_config", run_config)
+    try:
+        process = subprocess.Popen(
+            run_config,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+
+        _, stderr = process.communicate()
+
+        if process.returncode == 0:
+            print("idlize argen genereate succuess")
+        else:
+            print("idlize argen genereate failed")
+            print(stderr)
+            sys.exit(1)
+    except Exception as e:
+        print("idlize argen genereate error")
+        print(e)
+        sys.exit(1)
+
 
 def scan(options):
     cpp_files = []
     for root, _, files in os.walk(options.output_dir):
         for file in files:
-            if file.endswith(".cpp") or file.endswith(".cc"):
-                cpp_files.append(options.origin_dir + "/" + os.path.relpath(os.path.join(root, file), options.output_dir))
-    return cpp_files
+            if "impl" not in file.lower() and (file.endswith(".cpp") or file.endswith(".cc")):
+                cpp_files.append(
+                    options.origin_dir + "/" + os.path.relpath(os.path.join(root, file), options.output_dir))
+    for file in cpp_files:
+        print(file)
+
 
 def main(args):
     options = parse_args(args)
     if options.execute_mode == "generate":
         generate(options)
     elif options.execute_mode == "scan":
-        cpp_files = scan(options)
-        for file in cpp_files:
-            print(file)
+        scan(options)
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
