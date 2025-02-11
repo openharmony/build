@@ -4866,51 +4866,6 @@
             "//commonlibrary/c_utils/base/include/",
             "//third_party/node/src/"
         ],
-        "//foundation/arkui/napi/test/unittest:test_ark_api_allowlist": [
-            "//third_party/googletest/include/",
-            "//third_party/node/src/",
-            "//commonlibrary/c_utils/base/include/",
-            "//foundation/ability/form_fwk/services/form_render_service/include/",
-            "//foundation/ability/form_fwk/interfaces/inner_api/include/",
-            "//base/global/i18n/interfaces/js/kits/include/",
-            "//base/global/i18n/frameworks/intl/include/",
-            "//base/global/i18n/interfaces/native/inner_api/preferred_language/include/",
-            "//third_party/skia/third_party/externals/icu/source/common/unicode/",
-            "//third_party/libphonenumber/",
-            "//third_party/libphonenumber/cpp/src/",
-            "//third_party/protobuf/src/",
-            "//foundation/arkui/"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base": [
-            "//third_party/googletest/include/",
-            "//third_party/node/src/",
-            "//commonlibrary/c_utils/base/include/",
-            "//foundation/ability/form_fwk/services/form_render_service/include/",
-            "//foundation/ability/form_fwk/interfaces/inner_api/include/",
-            "//base/global/i18n/interfaces/js/kits/include/",
-            "//base/global/i18n/frameworks/intl/include/",
-            "//base/global/i18n/interfaces/native/inner_api/preferred_language/include/",
-            "//third_party/skia/third_party/externals/icu/source/common/unicode/",
-            "//third_party/libphonenumber/",
-            "//third_party/libphonenumber/cpp/src/",
-            "//third_party/protobuf/src/",
-            "//foundation/arkui/"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_threadsafe": [
-            "//third_party/googletest/include/",
-            "//third_party/node/src/",
-            "//commonlibrary/c_utils/base/include/",
-            "//foundation/ability/form_fwk/services/form_render_service/include/",
-            "//foundation/ability/form_fwk/interfaces/inner_api/include/",
-            "//base/global/i18n/interfaces/js/kits/include/",
-            "//base/global/i18n/frameworks/intl/include/",
-            "//base/global/i18n/interfaces/native/inner_api/preferred_language/include/",
-            "//third_party/skia/third_party/externals/icu/source/common/unicode/",
-            "//third_party/libphonenumber/",
-            "//third_party/libphonenumber/cpp/src/",
-            "//third_party/protobuf/src/",
-            "//foundation/arkui/"
-        ],
         "//foundation/arkui/ui_lite/ext/updater:libupdater_layout": [
             "//foundation/graphic/graphic_utils_lite/interfaces/innerkits/",
             "//foundation/graphic/graphic_utils_lite/interfaces/kits/"
@@ -30341,50 +30296,6 @@
             "//third_party/googletest:gtest_main",
             "//third_party/icu/icu4c:static_icuuc"
         ],
-        "//foundation/arkui/napi/module_manager/test/unittest/module_manager_test:module_manager_test": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/arkui/napi/module_manager/test/unittest/module_manager_test:module_manager_test_resource_copy": [
-            "//third_party/googletest:gmock_main",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/executejsbin_fuzzer:ExecuteJsBinFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/executejsbin_fuzzer:ExecuteJsBinFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/loadarkmodule_fuzzer:LoadArkModuleFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/loadarkmodule_fuzzer:LoadArkModuleFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runactor_fuzzer:RunActorFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runactor_fuzzer:RunActorFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runbufferscript_fuzzer:RunBufferScriptFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runbufferscript_fuzzer:RunBufferScriptFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runscriptbuffer_fuzzer:RunScriptBufferFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runscriptbuffer_fuzzer:RunScriptBufferFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runscriptpath_fuzzer:RunScriptPathFuzzTest": [
-            "//third_party/libuv:uv"
-        ],
-        "//foundation/arkui/napi/test/fuzztest/runscriptpath_fuzzer:RunScriptPathFuzzTest_resource_copy": [
-            "//third_party/libuv:uv"
-        ],
         "//foundation/arkui/napi/test/unittest:jerry_host_jstest_es2015": [
             "//third_party/jerryscript/tests/jerry:jerry_host_js_test_es2015",
             "//third_party/jerryscript/tests/unit-core:jerry_tdd_host_test"
@@ -30404,32 +30315,6 @@
         ],
         "//foundation/arkui/napi/test/unittest:jerry_tdd_test_run": [
             "//third_party/jerryscript/tests/unit-core:jerry_tdd_test"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_api_allowlist": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main",
-            "//foundation/ability/form_fwk/services/form_render_service:formrender"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_api_allowlist_resource_copy": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main",
-            "//foundation/ability/form_fwk/services/form_render_service:formrender"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_base_resource_copy": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_threadsafe": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/arkui/napi/test/unittest:test_ark_unittest_threadsafe_resource_copy": [
-            "//third_party/googletest:gtest",
-            "//third_party/googletest:gtest_main"
         ],
         "//foundation/arkui/ui_lite/ext/updater:libupdater_layout": [
             "//third_party/bounds_checking_function:libsec_static",
