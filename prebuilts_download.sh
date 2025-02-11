@@ -185,8 +185,8 @@ fi
 if [ -f "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe" ];then
     rm -rf "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe"
 fi
-if [ -f "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja" ];then
-    rm -rf "${code_dir}/prebuilts/cmake/darwin-x86/bin/ninja"
+if [ -f "${code_dir}/prebuilts/cmake/darwin-universal/bin/ninja" ];then
+    rm -rf "${code_dir}/prebuilts/cmake/darwin-universal/bin/ninja"
 fi
 echo "remove ninja in cmake"
 echo "prebuilts_download end"
