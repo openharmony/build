@@ -25,21 +25,34 @@ import("//build/ohos.gni")
 template("idlize_idl2peer") {
   forward_variables_from(invoker,
                          [
-                           "input",
+                           "input_dir",
+                           "input_files",
                            "output",
                            "mode",
                            "dirmode",
+                           "default_package",
                          ])
-  input_path = input
-  out_path = output
-  if (defined(mode)) {
-    generate_mode = mode
-  } else {
-    generate_mode = "idl2peer"
+  idl2peer_args = []
+  if (!defined(mode)) {
+    mode = "idl2peer"
   }
 
   if (!defined(dirmode)) {
     dirmode = "error"
+  }
+
+  if (defined(input_files)) {
+    idl2peer_args += [ "--input-files" ]
+    foreach(file, input_files) {
+      idl2peer_args += [ rebase_path(file, root_build_dir) ]
+    }
+  }
+
+  if (defined(input_dir)) {
+    idl2peer_args += [
+      "--input-dir",
+      rebase_path(input_dir, root_build_dir),
+    ]
   }
 
   nodejs_version = "v16.20.2"
@@ -50,29 +63,33 @@ template("idlize_idl2peer") {
   }
 
   idlize_tool_path = "//third_party/musl/temp_idlize"
-  idl2peer_args = [
+  idl2peer_args += [
     "--nodejs",
     rebase_path(_nodejs, root_build_dir),
     "--execute-mode",
     "generate",
     "--generate-mode",
-    generate_mode,
+    mode,
     "--arkgen-path",
     rebase_path("${idlize_tool_path}/node_modules/.bin/arkgen", root_build_dir),
     "--generator-target=ohos",
     "--language=arkts",
-    "--input-dir",
-    rebase_path(input_path, root_build_dir),
     "--output-dir",
-    rebase_path(out_path, root_build_dir),
+    rebase_path(output, root_build_dir),
     "--dir-mode",
     dirmode,
+    "--default-idl-package",
+    default_package,
+    "--options-file",
+    rebase_path("//build/scripts/config/ohos-generator.json", root_build_dir),
   ]
 
   print("idlize gn ", idl2peer_args, target_name)
 
   # generate code from idl files
-  exec_script("//build/scripts/arkts_idlize.py", idl2peer_args)
+  result =
+      exec_script("//build/scripts/arkts_idlize.py", idl2peer_args, "string")
+  print(result)
 }
 
 # Template: idlize_shared_library
@@ -96,7 +113,6 @@ template("idlize_shared_library") {
                            "part_name",
                          ])
 
-  idlize_tool_path = "//third_party/musl/temp_idlize"
   scan_args = [
     "--execute-mode",
     "scan",
@@ -110,18 +126,22 @@ template("idlize_shared_library") {
   generated_cpp_sources =
       exec_script("//build/scripts/arkts_idlize.py", scan_args, "list lines")
 
+  interop_base =
+      "//third_party/musl/temp_idlize/node_modules/@koalaui/interop/src/cpp/"
+
   generated_cpp_sources += [
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/common-interop.cc",
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/ets/convertors-ets.cc",
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/interop-logging.cc",
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/types/signatures.cc",
+    "${interop_base}/callback-resource.cc",
+    "${interop_base}/common-interop.cc",
+    "${interop_base}/ets/convertors-ets.cc",
+    "${interop_base}/interop-logging.cc",
+    "${interop_base}/types/signatures.cc",
   ]
 
   generated_includes = [
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/",
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/ets/",
-    "${idlize_tool_path}/node_modules/@koalaui/interop/src/cpp/types/",
-    generated,
+    "${interop_base}/",
+    "${interop_base}/ets/",
+    "${interop_base}/types/",
+    "${generated}/native/",
   ]
 
   generated_defines = [
