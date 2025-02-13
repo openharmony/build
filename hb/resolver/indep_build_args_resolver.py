@@ -68,28 +68,38 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         '''
         编译部件名获取优先级： hb build 指定的部件名参数  > hb build 在部件源码仓运行时通过找到bundle.json获取到的部件名 > hb env 设置的部件名参数
         '''
-        build_executor = indep_build_module.hpm
+        hpm_executor = indep_build_module.hpm
+        indep_build_executor = indep_build_module.indep_build
         target_arg.arg_value_list = get_part_name()
 
         if target_arg.arg_value_list:
+            if hasattr(IndepBuildArgsResolver, "bundle_path_list_ccache"):
+                bundle_path_list = IndepBuildArgsResolver.bundle_path_list_ccache
+                print("use ccache:", bundle_path_list)
+                hpm_executor.regist_flag('path', ','.join(bundle_path_list))
+                indep_build_executor.regist_flag('path', ','.join(bundle_path_list))
+                return
             bundle_path_list = []
+            print("collecting bundle.json, please wait")
             for path in target_arg.arg_value_list:
                 try:
-                    print("collecting bundle.json, please wait")
-                    bundle_path = ComponentUtil.search_bundle_file(path)
-                    print("collect done")
+                    bundle_path = ComponentUtil.search_bundle_file(path)               
                     bundle_path_list.append(bundle_path)
                 except Exception as e:
                     raise OHOSException('Please check the bundle.json file of {} : {}'.format(path, e))
                 if not bundle_path:
                     print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(path))
                     sys.exit(1)
-            build_executor.regist_flag('path', ','.join(bundle_path_list))
+            print("collect done")
+            IndepBuildArgsResolver.bundle_path_list_ccache = bundle_path_list
+            hpm_executor.regist_flag('path', ','.join(bundle_path_list))
+            indep_build_executor.regist_flag('path', ','.join(bundle_path_list))
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
             part_name, bundle_path = ComponentUtil.get_component(os.getcwd())
             if part_name:
                 target_arg.arg_value_list = part_name
-                build_executor.regist_flag('path', bundle_path)
+                hpm_executor.regist_flag('path', bundle_path)
+                indep_build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "no bundle.json": Invalid directory "{}". '.format(os.getcwd()))
         else:
@@ -100,7 +110,8 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 if not bundle_path:
                     raise OHOSException('ERROR argument "hb env --part <part_name>": Invalid part_name "{}". '.format(
                         target_arg.arg_value_list))
-                build_executor.regist_flag('path', bundle_path)
+                hpm_executor.regist_flag('path', bundle_path)
+                indep_build_executor.regist_flag('path', bundle_path)
             else:
                 raise OHOSException('ERROR argument "hb build <part_name>": no part_name . ')
 
@@ -110,11 +121,13 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         if target_arg.arg_value:
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value, True if '-t' in sys.argv else False))
             build_executor.regist_flag('variant', target_arg.arg_value)
+            indep_build_module.indep_build.regist_flag('variant', target_arg.arg_value)
         else:
             args_dict = Arg.read_args_file(ModuleType.ENV)
             arg = args_dict.get("variant")
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("argDefault"))
             build_executor.regist_flag('variant', arg.get("argDefault"))
+            indep_build_module.indep_build.regist_flag('variant', target_arg.arg_value)
     
     @staticmethod
     def resolve_branch(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
@@ -125,3 +138,47 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             args_dict = Arg.read_args_file(ModuleType.ENV)
             arg = args_dict.get("branch")
             build_executor.regist_flag('branch', "argDefault")
+
+    
+    @staticmethod
+    def resolve_build_type(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        if (sys.argv[1] == 'build' and
+                '-i' in sys.argv[3:] and
+                {'-t', '-test'} & set(sys.argv[3:])):
+            indep_build_module.hpm.regist_flag("buildType", "both")
+            indep_build_module.indep_build.regist_flag("buildType", "both")
+        elif (sys.argv[1] == 'build' and
+                '-i' not in sys.argv[3:] and
+                (sys.argv[-1] == "-t" or ("-t" in sys.argv and sys.argv[sys.argv.index("-t") + 1][0] == '-'))):
+            indep_build_module.hpm.regist_flag("buildType", "onlytest")
+            indep_build_module.indep_build.regist_flag("buildType", "onlytest")
+        else:
+            indep_build_module.indep_build.regist_flag("buildType", "onlysrc")
+
+    @staticmethod
+    def resolve_keep_ninja_going(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('keep-ninja-going', target_arg.arg_value)
+    
+    @staticmethod
+    def resolve_gn_args(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('gn-args', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_skip_download(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.hpm.regist_flag('skip-download', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_build_target(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('build-target', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_fast_rebuild(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('fast-rebuild', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_separate_build(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.hpm.regist_flag('separate-build', target_arg.arg_value)
+        indep_build_module.indep_build.regist_flag('separate-build', target_arg.arg_value)
+
+    
+    
