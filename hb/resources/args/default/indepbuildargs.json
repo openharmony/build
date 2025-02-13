@@ -3,7 +3,7 @@
     "arg_name": "--part",
     "argDefault": "",
     "arg_help": "Default:''. Help:specify component name, run 'hb build {part_name} or hb build --part {part_name}'",
-    "arg_phase": "prebuild",
+    "arg_phase": ["hpmDownload", "indepCompilation"],
     "arg_type": "str",
     "arg_attribute": {},
     "resolve_function": "resolve_part",
@@ -13,7 +13,7 @@
     "arg_name": "--target-cpu",
     "argDefault": "arm",
     "arg_help": "Default:''. Help:Specifies the desired cpu architecture for the build, each may support different cpu architectures, run 'hb build --target-cpu {cpu_architectures}' to set os type cpu architectures",
-    "arg_phase": "prebuild",
+    "arg_phase": "hpmDownload",
     "arg_type": "str",
     "arg_attribute": {
       "optional": [
@@ -33,7 +33,7 @@
     "arg_name": "--target-os",
     "argDefault": "ohos",
     "arg_help": "Default:''. Help:Specifies the desired os type for the build, each may support different os type, run 'hb build --target-os {os_type}' to set os type",
-    "arg_phase": "prebuild",
+    "arg_phase": "hpmDownload",
     "arg_type": "str",
     "arg_attribute": {
       "optional": [
@@ -51,7 +51,7 @@
     "arg_name": "--variant",
     "argDefault": "default",
     "arg_help": "Default:''. Help:install product variant, run 'hb build --variant {variant_name}'",
-    "arg_phase": "prebuild",
+    "arg_phase": ["hpmDownload", "indepCompilation"],
     "arg_type": "str",
     "arg_attribute": {
       "abbreviation": "-v"
@@ -63,12 +63,83 @@
     "arg_name": "--branch",
     "argDefault": "master",
     "arg_help": "Default:''. Help:code branch name, run 'hb build --branch {branch_name}'",
-    "arg_phase": "prebuild",
+    "arg_phase": "hpmDownload",
     "arg_type": "str",
     "arg_attribute": {
       "abbreviation": "-b"
     },
     "resolve_function": "resolve_branch",
+    "testFunction": ""
+  },
+  "build_type": {
+    "arg_name": "--build-type",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:set independent build type, do not use this option, use -i or -t instead",
+    "arg_phase": ["hpmDownload", "indepCompilation"],
+    "arg_type": "str",
+    "arg_attribute": {},
+    "resolve_function": "resolve_build_type",
+    "testFunction": ""
+  },
+  "keep_ninja_going": {
+    "arg_name": "--keep-ninja-going",
+    "argDefault": false,
+    "arg_help": "Default:''. Help: keep ninja going when error occurred",
+    "arg_phase": ["indepCompilation"],
+    "arg_type": "bool",
+    "arg_attribute": {
+    },
+    "resolve_function": "resolve_keep_ninja_going",
+    "testFunction": ""
+  },
+  "gn_args": {
+    "arg_name": "--gn-args",
+    "argDefault": [],
+    "arg_help": "Default:[]. Help:You use this option to add custom gn args",
+    "arg_phase": "indepCompilation",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_gn_args",
+    "testFunction": ""
+  },
+  "skip_download": {
+    "arg_name": "--skip-download",
+    "argDefault": false,
+    "arg_help": "Default:false. Help:You use this option to skip hpm download",
+    "arg_phase": "hpmDownload",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_skip_download",
+    "testFunction": ""
+  },
+  "separate_build": {
+    "arg_name": "--separate-build",
+    "argDefault": false,
+    "arg_help": "Default:false. Help: just for debug",
+    "arg_phase": ["indepCompilation","hpmDownload"],
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_separate_build",
+    "testFunction": ""
+  },
+  "build_target": {
+    "arg_name": "--build-target",
+    "argDefault": [],
+    "arg_help": "Default:false. Help:You use this option to specify a single compilation target",
+    "arg_phase": "indepCompilation",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_build_target",
+    "testFunction": ""
+  },
+  "fast_rebuild": {
+    "arg_name": "--fast-rebuild",
+    "argDefault": false,
+    "arg_help": "Default:false. Help:You use this option to fast rebuild a target or a component",
+    "arg_phase": "indepCompilation",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_fast_rebuild",
     "testFunction": ""
   }
 }
