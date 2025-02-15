@@ -61,18 +61,24 @@ def build_es2panda_command(es2panda_path: str, arktsconfig: str) -> List[str]:
     return [es2panda_path, "--arktsconfig", arktsconfig, "--ets-module"]
 
 
+def build_es2panda_command_stdlib(es2panda_path: str, arktsconfig: str, dst_path: str) -> List[str]:
+    """Construct es2panda command arguments."""
+    return [es2panda_path, "--arktsconfig", arktsconfig, "--ets-module", 
+        "--gen-stdlib=true", "--output=" + dst_path, "--extension=sts", "--opt-level=2"]
+
+
 def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
     """
     Execute a subprocess with timeout and environment settings.
-    
+
     Args:
         cmd: Command sequence to execute
         timeout: Maximum execution time in seconds (as string)
         env: Environment variables dictionary
-    
+
     Returns:
         Captured standard output
-    
+
     Raises:
         SubprocessTimeoutError: When process exceeds timeout
         SubprocessRunError: When process returns non-zero status
@@ -119,6 +125,13 @@ def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
 def execute_es2panda(es2panda_path: str, arktsconfig: str, env_path: str, timeout: str) -> str:
     """Execute es2panda compilation process."""
     cmd = build_es2panda_command(es2panda_path, arktsconfig)
+    env = set_environment(env_path)
+    return run_subprocess(cmd, timeout, env)
+
+
+def execute_es2panda_stdlib(es2panda_path: str, arktsconfig: str, env_path: str, timeout: str, dst_path: str) -> str:
+    """Execute es2panda compilation process."""
+    cmd = build_es2panda_command_stdlib(es2panda_path, arktsconfig, dst_path)
     env = set_environment(env_path)
     return run_subprocess(cmd, timeout, env)
 
@@ -170,6 +183,14 @@ def parse_arguments() -> argparse.Namespace:
                         help="Process timeout in seconds (default: 12000)")
     parser.add_argument("--cache-path", type=str, default=None,
                         help="Path to cache directory (optional)")
+    parser.add_argument("--bootpath-json-file", type=str, required=True,
+                        help="bootpath.json file records the path in device for boot abc files.")
+    parser.add_argument("--is-boot-abc", type=bool, default=False,
+                        help="Flag indicating if the file is a boot abc")
+    parser.add_argument("--device-dst-file", type=str, default=None,
+                        help="Path for device dst file. If 'is-boot-abc' is True, this parameter is required.")
+    parser.add_argument("--is-stdlib", type=bool, default=False,
+                        help="Flag indicating if the compile target is etsstdlib")
 
     return parser.parse_args()
 
@@ -211,6 +232,24 @@ def restore_arktsconfig(arktsconfig_path: str) -> None:
         os.rename(backup_path, arktsconfig_path)
 
 
+def add_to_bootpath(device_dst_file: str, bootpath_json_file: str) -> None:
+    data = {}
+    if os.path.exists(bootpath_json_file):
+        with open(bootpath_json_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+    current_value = data.get("bootpath", "")
+    abc_set = set(current_value.split(":")) if current_value else set()
+    abc_set.add(device_dst_file)
+    new_value = ":".join(abc_set)
+    data["bootpath"] = new_value
+
+    os.makedirs(os.path.dirname(bootpath_json_file), exist_ok=True)
+
+    with open(bootpath_json_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+
 def main() -> None:
     """Main compilation workflow."""
     start_time = time.time()
@@ -229,8 +268,14 @@ def main() -> None:
             base_dir = os.path.dirname(os.path.abspath(args.arktsconfig))
             out_dir = os.path.join(base_dir, out_dir)
 
-        execute_es2panda(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit)
-        execute_ark_link(args.ark_link, args.dst_file, out_dir, args.env_path, args.timeout_limit)
+        if args.is_stdlib:
+            execute_es2panda_stdlib(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit, args.dst_file)
+        else:
+            execute_es2panda(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit)
+            execute_ark_link(args.ark_link, args.dst_file, out_dir, args.env_path, args.timeout_limit)
+
+        if args.is_boot_abc:
+            add_to_bootpath(args.device_dst_file, args.bootpath_json_file)
 
         print(f"Compilation succeeded in {time.time() - start_time:.2f} seconds")
         sys.exit(EXIT_CODE["SUCCESS"])
