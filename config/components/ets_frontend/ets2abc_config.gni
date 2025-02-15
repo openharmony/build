@@ -21,6 +21,7 @@ static_linker_root = "runtime_core"
 static_linker_build_path = ""
 static_linker_build_deps = ""
 static_linker_out_root = ""
+bootpath_json_file = ""
 
 if (host_toolchain == toolchain_mac) {
   ets2abc_out_root =
@@ -51,6 +52,9 @@ if (host_toolchain == toolchain_mac) {
 ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
+
+bootpath_json_file = root_out_dir + "/" +
+                     rebase_path(ets2abc_out_root, root_out_dir) + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
 
 template("generate_static_abc") {
   assert(defined(invoker.arktsconfig),
@@ -88,6 +92,8 @@ template("generate_static_abc") {
       rebase_path("${static_linker_build_path}"),
       "--dst-file",
       rebase_path(invoker.dst_file),
+      "--bootpath-json-file",
+      rebase_path("${bootpath_json_file}"),
       "--env-path",
       rebase_path("${static_linker_out_root}/arkcompiler/runtime_core/"),
     ]
@@ -108,6 +114,29 @@ template("generate_static_abc") {
 
     if (defined(invoker.in_puts)) {
       inputs = invoker.in_puts
+    }
+
+    if (defined(invoker.is_stdlib)) {
+      args += [
+        "--is-stdlib",
+        invoker.is_stdlib,
+      ]
+    }
+
+    if (defined(invoker.is_boot_abc)) {
+      args += [
+        "--is-boot-abc",
+        invoker.is_boot_abc,
+      ]
+      if (invoker.is_boot_abc == "True") {
+        assert(
+            defined(invoker.device_dst_file),
+            "The 'device_dst_file' parameter is required if 'is_boot_abc' is True!")
+        args += [
+          "--device-dst-file",
+          invoker.device_dst_file,
+        ]
+      }
     }
 
     outputs = invoker.out_puts
