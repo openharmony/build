@@ -906,7 +906,27 @@
     },
     {
         "install_dir": "js/build-tools/binary-tools",
-        "module_label": "//developtools/packing_tool:fastjson-1.2.83",
+        "module_label": "//developtools/packing_tool:fastjson-2.0.52",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/binary-tools",
+        "module_label": "//developtools/packing_tool:fastjson2-2.0.52",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "js/build-tools/binary-tools",
+        "module_label": "//developtools/packing_tool:fastjson2-extension-2.0.52",
         "target_os": [
             "linux",
             "windows",
