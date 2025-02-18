@@ -32,7 +32,9 @@ template("idlize_idl2peer") {
                            "dirmode",
                            "default_package",
                          ])
+  out_root = rebase_path(output, root_build_dir)
   idl2peer_args = []
+
   if (!defined(mode)) {
     mode = "idl2peer"
   }
@@ -71,17 +73,15 @@ template("idlize_idl2peer") {
     "--generate-mode",
     mode,
     "--arkgen-path",
-    rebase_path("${idlize_tool_path}/node_modules/.bin/arkgen", root_build_dir),
-    "--generator-target=ohos",
+    rebase_path("${idlize_tool_path}/node_modules/.bin/ohosgen",
+                root_build_dir),
     "--language=arkts",
     "--output-dir",
-    rebase_path(output, root_build_dir),
+    out_root,
     "--dir-mode",
     dirmode,
     "--default-idl-package",
     default_package,
-    "--options-file",
-    rebase_path("//build/scripts/config/ohos-generator.json", root_build_dir),
   ]
 
   print("idlize gn ", idl2peer_args, target_name)
@@ -106,16 +106,12 @@ template("idlize_shared_library") {
   forward_variables_from(invoker,
                          [
                            "generated",
-                           "module_install_dir",
-                           "relative_install_dir",
-                           "source_sets",
-                           "subsystem_name",
-                           "part_name",
+                           "classpath_prefix",
                          ])
 
   scan_args = [
     "--execute-mode",
-    "scan",
+    "scancpp",
     "--output-dir",
     rebase_path(generated, root_build_dir),
     "--origin-dir",
@@ -148,7 +144,8 @@ template("idlize_shared_library") {
     "KOALA_LINUX",
     "KOALA_USE_PANDA_VM",
     "KOALA_ETS_NAPI",
-    "ETS_NATIVE_MODULE_QUALIFIED_NAME=" + target_name,
+    "ETS_NATIVE_MODULE_QUALIFIED_NAME=${target_name}",
+    "ETS_MODULE_CLASSPATH_PREFIX=${classpath_prefix}",
   ]
 
   print("idlize_shared_library",
@@ -157,13 +154,9 @@ template("idlize_shared_library") {
         generated_defines)
 
   ohos_shared_library(target_name) {
+    forward_variables_from(invoker, "*")
     defines = generated_defines
     sources = generated_cpp_sources
     include_dirs = generated_includes
-    subsystem_name = subsystem_name
-    part_name = part_name
-    deps = source_sets
-    relative_install_dir = relative_install_dir
-    module_install_dir = module_install_dir
   }
 }
