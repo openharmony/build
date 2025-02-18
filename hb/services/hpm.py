@@ -115,7 +115,6 @@ class Hpm(BuildFileGeneratorInterface):
         else:
             self.flags_dict.pop("skip-download")
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
-            print(hpm_build_cmd)
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')
             if os.path.exists(logpath):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# Copyright (c) 2023 Huawei Device Co., Ltd.
+# Copyright (c) 2025 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -28,19 +28,17 @@ class IndepBuild(BuildFileGeneratorInterface):
         super().__init__()
 
     def run(self):
-        if not self.flags_dict["separate-build"]:
+        if not "RUN_INDEP_BUILD_PY" in os.environ:
             return
-        else:
-            self.flags_dict.pop("separate-build")
-            flags_list = self._convert_flags()
-            cmd = ["/bin/bash", "build/indep_configs/build_indep.sh"]
-            cmd.extend(flags_list)
-            variant = self.flags_dict["variant"]
-            logpath = os.path.join('out', variant, 'build.log')
-            ret_code = SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
-                                               after_msg="indeo build end")
-            if ret_code != 0:
-                raise OHOSException(f'ERROR: build_indep.sh encountered a problem, please check, cmd: {cmd}', '0001')
+        flags_list = self._convert_flags()
+        cmd = ["/bin/bash", "build/indep_configs/build_indep.sh"]
+        cmd.extend(flags_list)
+        variant = self.flags_dict["variant"]
+        logpath = os.path.join('out', variant, 'build.log')
+        ret_code = SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
+                                            after_msg="indeo build end")
+        if ret_code != 0:
+            raise OHOSException(f'ERROR: build_indep.sh encountered a problem, please check, cmd: {cmd}', '0001')
 
     def _convert_flags(self) -> list:
         flags_list = []
