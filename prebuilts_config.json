@@ -286,7 +286,7 @@
           "target_os": "darwin",
           "target_cpu": "x86_64",
           "version": "20240729",
-          "url": "openharmony/compiler/python/3.11.4/linux/python-darwin-x86-3.11.4_20250213.tar.gz",
+          "url": "openharmony/compiler/python/3.11.4/linux/python-darwin-x86-3.11.4_20250217.tar.gz",
           "download_dir": ".prebuilts_cache/python/darwin-x86",
           "symlink": "prebuilts/python/darwin-x86",
           "type": "dir",
