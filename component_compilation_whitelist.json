@@ -106,6 +106,7 @@
         "//third_party/skia:pathkit",
         "//third_party/skia:skia_canvaskit",
         "//third_party/skia:skia_canvaskit_static",
+        "//third_party/skia:sksl_ext_static",
         "//third_party/vixl:libvixl",
         "//third_party/zlib:libz",
         "//third_party/zlib:libz_crc",
