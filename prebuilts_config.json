@@ -86,7 +86,7 @@
           "target_os": "linux",
           "target_cpu": "x86_64",
           "version": "20241022",
-          "url": "harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
+          "url": "harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "download_dir": ".prebuilts_cache/packing_tool",
           "symlink": "prebuilts/packing_tool",
           "type": "dir"
@@ -95,7 +95,7 @@
           "target_os": "linux",
           "target_cpu": "arm64",
           "version": "20241022",
-          "url": "harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
+          "url": "harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "download_dir": ".prebuilts_cache/packing_tool",
           "symlink": "prebuilts/packing_tool",
           "type": "dir"
@@ -104,7 +104,7 @@
           "target_os": "darwin",
           "target_cpu": "x86_64",
           "version": "20241022",
-          "url": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
+          "url": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "download_dir": ".prebuilts_cache/packing_tool",
           "symlink": "prebuilts/packing_tool",
           "type": "dir"
@@ -113,7 +113,7 @@
           "target_os": "darwin",
           "target_cpu": "arm64",
           "version": "20241022",
-          "url": "/harmonyos/compiler/packing_tool/packing_tool_libs_20241022.zip",
+          "url": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "download_dir": ".prebuilts_cache/packing_tool",
           "symlink": "prebuilts/packing_tool",
           "type": "dir"
