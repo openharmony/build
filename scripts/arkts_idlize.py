@@ -19,6 +19,7 @@ import subprocess
 import os
 import json
 import shutil
+import re
 
 from util import build_utils
 
@@ -34,7 +35,8 @@ def parse_args(args):
 
     parser.add_argument('--nodejs')
     parser.add_argument('--arkgen-path')
-    parser.add_argument('--execute-mode', choices=['generate', 'scan'])
+    parser.add_argument(
+        '--execute-mode', choices=['generate', 'scancpp', 'scanidl'])
     parser.add_argument('--generate-mode', choices=['dts2peer', 'idl2peer'])
     parser.add_argument('--input-dir', metavar='<path>')
     parser.add_argument('--input-files', nargs="+")
@@ -44,7 +46,6 @@ def parse_args(args):
     parser.add_argument('--language', choices=['arkts', 'ts'])
     parser.add_argument('--generator-target', choices=['ohos'])
     parser.add_argument('--dir-mode', choices=['error', 'backup', 'delete'])
-    parser.add_argument('--options-file', metavar='<path>')
     parser.add_argument('--default-idl-package')
 
     options = parser.parse_args(args)
@@ -83,13 +84,11 @@ def handle_input(run_config, options):
 def pack_run_config(options):
     handle_target_path(options)
     run_config = [options.nodejs, options.arkgen_path]
-    run_config += ["--generator-target", options.generator_target]
     run_config += [get_generate_mode(options)]
     handle_input(run_config, options)
     run_config += ["--output-dir", options.output_dir]
     run_config += ["--language", options.language]
-    run_config += ["--verify-idl", "--common-to-attributes", "--docs=none"]
-    run_config += ["--options-file", options.options_file]
+    run_config += ["--verify-idl", "--docs=none"]
     run_config += ["--default-idl-package", options.default_idl_package]
     run_config += ["--use-new-ohos"]
     return run_config
@@ -121,14 +120,14 @@ def generate(options):
         sys.exit(1)
 
 
-def scan(options):
-    cpp_files = []
-    for root, _, files in os.walk(options.output_dir):
+def scan(scandir, origindir, pattern):
+    result_files = []
+    for root, _, files in os.walk(scandir):
         for file in files:
-            if "impl" not in file.lower() and (file.endswith(".cpp") or file.endswith(".cc")):
-                cpp_files.append(
-                    options.origin_dir + "/" + os.path.relpath(os.path.join(root, file), options.output_dir))
-    for file in cpp_files:
+            if re.match(pattern, file):
+                result_files.append(
+                    origindir + "/" + os.path.relpath(os.path.join(root, file), scandir))
+    for file in result_files:
         print(file)
 
 
@@ -136,8 +135,12 @@ def main(args):
     options = parse_args(args)
     if options.execute_mode == "generate":
         generate(options)
-    elif options.execute_mode == "scan":
-        scan(options)
+    elif options.execute_mode == "scancpp":
+        scan(options.output_dir, options.origin_dir,
+             r"(?i)^(?!.*impl).*\.(cc|cpp)$")
+    elif options.execute_mode == "scanidl":
+        scan(options.input_dir, options.origin_dir,
+             r"(?i).*\.idl$")
 
 
 if __name__ == '__main__':
