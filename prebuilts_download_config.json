@@ -357,7 +357,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20250213.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20250219.tar.gz",
           "unzip_filename": "linux-x86"
         },
         {
@@ -509,7 +509,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20240715.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20250219.tar.gz",
           "unzip_filename": "darwin-arm64"
         },
         {
@@ -587,7 +587,7 @@
         },
         {
           "unzip_dir": "prebuilts/python",
-          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250213.tar.gz",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250217.tar.gz",
           "unzip_filename": "darwin-x86"
         },
         {
