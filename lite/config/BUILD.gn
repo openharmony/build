@@ -191,3 +191,21 @@ config("board_exe_ld_flags") {
     ldflags += board_exe_ld_flags
   }
 }
+
+sysroot_path = rebase_path(ohos_current_sysroot)
+config("sysroot_flags") {
+  if (ohos_build_compiler == "clang") {
+    cflags = [
+      "--target=$target_triple",
+      "--sysroot=$sysroot_path",
+    ]
+  } else {
+    cflags = [
+      "--sysroot=$sysroot_path",
+      "-specs=musl-gcc.specs",
+    ]
+  }
+  cflags_cc = cflags
+  ldflags = cflags
+  asmflags = cflags
+}
