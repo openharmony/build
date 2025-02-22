@@ -16,7 +16,8 @@ import subprocess
 import sys
 import argparse
 import os
-from utils import get_json
+import json
+from utils import get_json, get_ninja_args, get_gn_args
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -38,9 +39,9 @@ def _get_args():
     parser.add_argument("-v", "--variants", default=r".", type=str, help="variants of build target")
     parser.add_argument("-rp", "--root_path", default=r".", type=str, help="Path of root")
     parser.add_argument(
-        "-out", 
+        "-out",
         "--out_dir",
-        default="src", 
+        default="src",
         type=str,
         help="the independent build out storage dir. default src , choices: src src_test or test",
     )
@@ -86,6 +87,9 @@ def _gn_cmd(root_path, variants, out_dir, test_filter):
     if test_filter in (1, 2):
         _args_list.append('use_thin_lto=false')
 
+    input_args = get_gn_args()
+    _args_list.extend(input_args)
+
     _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/gn', 'gen',
                  '--args={}'.format(' '.join(_args_list)),
                  '-C', f'out/{variants}/{out_dir}']
@@ -101,6 +105,8 @@ def _gn_cmd(root_path, variants, out_dir, test_filter):
 def _ninja_cmd(root_path, variants, out_dir):
     _cmd_list = [f'{root_path}/prebuilts/build-tools/linux-x86/bin/ninja', '-w', 'dupbuild=warn', '-C',
                  f'out/{variants}/{out_dir}']
+    input_args = get_ninja_args()
+    _cmd_list.extend(input_args)
     return _cmd_list
 
 
