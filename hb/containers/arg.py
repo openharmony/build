@@ -109,6 +109,8 @@ class BuildPhase():
     TARGET_COMPILATION = 8
     POST_TARGET_COMPILATION = 9
     POST_BUILD = 10
+    HPM_DOWNLOAD = 11
+    INDEP_COMPILATION = 12
 
     @staticmethod
     def get_type(value: str):
@@ -132,6 +134,10 @@ class BuildPhase():
             return BuildPhase.POST_TARGET_COMPILATION
         elif value == 'postbuild':
             return BuildPhase.POST_BUILD
+        elif value == 'hpmDownload':
+            return BuildPhase.HPM_DOWNLOAD
+        elif value == 'indepCompilation':
+            return BuildPhase.INDEP_COMPILATION
         else:
             return BuildPhase.NONE
 
@@ -198,7 +204,11 @@ class Arg():
     def create_instance_by_dict(data: dict):
         arg_name = str(data['arg_name']).replace("-", "_")[2:]
         arg_help = str(data['arg_help'])
-        arg_phase = BuildPhase.get_type(str(data['arg_phase']))
+        arg_phase = data['arg_phase']
+        if (isinstance(arg_phase, list)):
+            arg_phase = [BuildPhase.get_type(str(phase_item)) for phase_item in arg_phase]
+        else:
+            arg_phase = BuildPhase.get_type(str(data['arg_phase']))
         arg_attibute = dict(data['arg_attribute'])
         arg_type = ArgType.get_type(data['arg_type'])
         arg_value = ''

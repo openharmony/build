@@ -17,9 +17,7 @@
 #
 
 import shutil
-import sys
 import os
-import time
 import threading
 import subprocess
 import re
@@ -28,12 +26,10 @@ from enum import Enum
 from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 from services.interface.build_file_generator_interface import BuildFileGeneratorInterface
-from containers.arg import Arg, ModuleType
 from util.system_util import SystemUtil
-from util.io_util import IoUtil
-from util.log_util import LogUtil
 from util.component_util import ComponentUtil
 from resources.global_var import CURRENT_OHOS_ROOT, set_hpm_check_info
+from resources.global_var import get_hpm_check_info
 
 
 class CMDTYPE(Enum):
@@ -90,7 +86,8 @@ class Hpm(BuildFileGeneratorInterface):
                     latest_hpm_version = match.group(1).strip()
                     break
             if latest_hpm_version and latest_hpm_version != current_hpm:
-                set_hpm_check_info("your current hpm version is not the latest, consider update hpm: bash build/prebuilts_config.sh")
+                set_hpm_check_info(
+                    "your current hpm version is not the latest, consider update hpm: bash build/prebuilts_config.sh")
 
     @throw_exception
     def _regist_hpm_path(self):
@@ -113,38 +110,51 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
-        variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
-        logpath = os.path.join('out', variant, 'build.log')
-        if os.path.exists(logpath):
-            mtime = os.stat(logpath).st_mtime
-            os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
-        SystemUtil.exec_command(hpm_build_cmd, log_path=logpath)
+        if self.flags_dict.get("skip-download"):
+            return
+        else:
+            self.flags_dict.pop("skip-download")
+            hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
+            variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
+            logpath = os.path.join('out', variant, 'build.log')
+            if os.path.exists(logpath):
+                mtime = os.stat(logpath).st_mtime
+                os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
+            self._run_hpm_cmd(hpm_build_cmd, log_path=logpath)
 
     @throw_exception
     def _execute_hpm_install_cmd(self, **kwargs):
         hpm_install_cmd = [self.exec, "install"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_install_cmd)
+        self._run_hpm_cmd(hpm_install_cmd)
 
     @throw_exception
     def _execute_hpm_pack_cmd(self, **kwargs):
         hpm_pack_cmd = [self.exec, "pack", "-t"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_pack_cmd)
+        self._run_hpm_cmd(hpm_pack_cmd)
 
     @throw_exception
     def _execute_hpm_publish_cmd(self, **kwargs):
         hpm_publish_cmd = [self.exec, "publish", "-t"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_publish_cmd)
+        self._run_hpm_cmd(hpm_publish_cmd)
 
     @throw_exception
     def _execute_hpm_update_cmd(self, **kwargs):
         hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
-        SystemUtil.exec_command(hpm_update_cmd)
+        self._run_hpm_cmd(hpm_update_cmd)
 
     '''Description: Convert all registed args into a list
     @parameter: none
     @return: list of all registed args
     '''
+
+    def _run_hpm_cmd(self, cmd, log_path):
+        ret_code = SystemUtil.exec_command(cmd, log_path=log_path, pre_msg="start run hpm command",
+                                           after_msg="end hpm command")
+        hpm_info = get_hpm_check_info()
+        if hpm_info:
+            print(hpm_info)
+        if ret_code != 0:
+            raise OHOSException(f'ERROR: hpm command failed, cmd: {cmd}', '0001')
 
     def _convert_args(self) -> list:
         args_list = []
@@ -183,6 +193,9 @@ class Hpm(BuildFileGeneratorInterface):
                     flags_list.extend(['--{}'.format(key), '{}'.format(str(value))])
                 else:
                     flags_list.extend(['--{}'.format(key).lower(), '{}'.format(str(value))])
+
+        if "--buildtype" in flags_list:
+            flags_list[flags_list.index("--buildtype")] = "-t"
 
         return flags_list
 

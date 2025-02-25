@@ -21,7 +21,6 @@ import os
 import sys
 import subprocess
 import json
-import time
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -39,6 +38,7 @@ from services.loader import OHOSLoader
 from services.gn import Gn
 from services.ninja import Ninja
 from services.hpm import Hpm
+from services.indep_build import IndepBuild
 from services.hdc import Hdc
 
 from resolver.build_args_resolver import BuildArgsResolver
@@ -200,8 +200,9 @@ class Main():
         Arg.clean_args_file_by_type(ModuleType.INDEP_BUILD)
         args_dict = Arg.parse_all_args(ModuleType.INDEP_BUILD)
         hpm = Hpm()
+        indep_build = IndepBuild()
         indep_build_args_resolver = IndepBuildArgsResolver(args_dict)
-        return OHOSIndepBuildModule(args_dict, indep_build_args_resolver, hpm)
+        return OHOSIndepBuildModule(args_dict, indep_build_args_resolver, hpm, indep_build)
 
     def _is_indep_build(self) -> bool:
         if self._indep_build_command_format_check():
