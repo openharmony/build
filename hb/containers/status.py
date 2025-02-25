@@ -63,6 +63,9 @@ def throw_exception(func):
                 _solution = 'NO SOLUTION'
             if not judge_indep():
                 _print_formatted_tracebak(_code, str(exception), _type, _desc, _solution)
+            else:
+                print(exception)
+                traceback.print_exc()
             exit(-1)
     return wrapper
 
