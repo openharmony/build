@@ -44,7 +44,7 @@
             "windows"
         ]
     },
-    { 
+    {
         "install_dir": "toolchains",
         "module_label": "//base/update/updater/services/diffpatch:diff",
         "target_os": [
@@ -1275,5 +1275,13 @@
         "target_os": [
             "ohos"
         ]
-   }
+   },
+   {
+        "install_dir": "ets/ets1.2/build-tools/driver/build-system",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/build_system:ets2panda_build_system",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    }
 ]
