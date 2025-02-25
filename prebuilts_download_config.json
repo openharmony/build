@@ -9,7 +9,8 @@
     "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools",
     "arkcompiler/ets_frontend/arkguard",
-    "third_party/musl/temp_idlize"
+    "third_party/musl/temp_idlize",
+    "arkcompiler/ets_frontend/ets2panda/driver/build_system"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
@@ -522,7 +523,7 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/20240429/rust-std-nightly-aarch64-apple-darwin_20240429.tar.gz",
           "unzip_filename": "rustc-aarch64-std"
-        }    
+        }
       ],
       "install": [
         {
@@ -544,7 +545,7 @@
             }
           ],
           "destdir": "prebuilts/rustc/darwin-aarch64/current"
-        }   
+        }
       ]
     },
     "x86_64": {
