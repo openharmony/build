@@ -106,6 +106,10 @@ template("generate_static_abc") {
       ]
     }
 
+    if (defined(invoker.in_puts)) {
+      inputs = invoker.in_puts
+    }
+
     outputs = invoker.out_puts
   }
 }
