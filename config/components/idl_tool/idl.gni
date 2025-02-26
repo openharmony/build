@@ -188,7 +188,7 @@ template("idl_gen_interface") {
   }
 
   action("$target_name") {
-    inputs = idl_list
+    inputs = idl_list + idl_callback_list + idl_common_list
     deps = idl_build_deps
     script = "//build/config/components/idl_tool/idl.py"
     args = [
@@ -230,16 +230,155 @@ template("idl_gen_interface") {
     outputs = sources_all
   }
 
-  # build so
-  if ((language == "c" || language == "cpp") && defined(invoker.sources)) {
-    idl_headers_config = target_name + "_idl_headers_config"
-    config("$idl_headers_config") {
-      include_dirs = [ target_gen_dir ]
-      if (defined(invoker.sub_include)) {
-        include_dirs += invoker.sub_include
+  idl_headers_config = target_name + "_idl_headers_config"
+  config("$idl_headers_config") {
+    include_dirs = [ target_gen_dir ]
+    if (defined(invoker.sub_include)) {
+      include_dirs += invoker.sub_include
+    }
+  }
+
+  if (invoker.target_type == "source_set" && defined(invoker.sources)) {
+    source_set_client = target_name + "_source_set_proxy"
+    source_set_server = target_name + "_source_set_stub"
+    action_target_name = ":" + target_name
+
+    # build client source_set
+    ohos_source_set(source_set_client) {
+      sources = []
+      if (defined(invoker.sources_cpp)) {
+        sources += invoker.sources_cpp
+      }
+      sources += sources_proxy
+      if (defined(invoker.configs)) {
+        configs = invoker.configs
+      }
+      public_configs = [ ":$idl_headers_config" ]
+      deps = [ action_target_name ]
+      if (is_standard_system) {
+        public_deps = []
+        if (defined(invoker.sequenceable_pub_deps)) {
+          public_deps += invoker.sequenceable_pub_deps
+        }
+        external_deps = [ "c_utils:utils" ]
+        if (defined(invoker.hitrace)) {
+          external_deps += [ "hitrace:hitrace_meter" ]
+        }
+        if (defined(invoker.log_domainid)) {
+          external_deps += [ "hilog:libhilog" ]
+        }
+        if (defined(invoker.sequenceable_ext_deps)) {
+          external_deps += invoker.sequenceable_ext_deps
+        }
+        if (language == "c") {
+          external_deps += [ "hdf_core:libhdf_ipc_adapter" ]
+        } else if (language == "cpp") {
+          external_deps += [ "ipc:ipc_single" ]
+        }
+      } else {
+        external_deps = [ "hilog:libhilog" ]
+      }
+      if (defined(invoker.subsystem_name)) {
+        subsystem_name = invoker.subsystem_name
+      }
+      if (defined(invoker.part_name)) {
+        part_name = invoker.part_name
+      }
+      if (defined(invoker.innerapi_tags)) {
+        innerapi_tags = invoker.innerapi_tags
+      }
+      if (defined(invoker.sanitize)) {
+        sanitize = invoker.sanitize
+      } else {
+        sanitize = {
+          cfi = true
+          cfi_cross_dso = true
+          debug = false
+        }
+      }
+      if (defined(invoker.cflags)) {
+        cflags = invoker.cflags
+      }
+      if (defined(invoker.cflags_cc)) {
+        cflags_cc = invoker.cflags_cc
+      }
+      if (defined(invoker.remove_configs)) {
+        remove_configs = invoker.remove_configs
       }
     }
 
+    # build server source_set
+    ohos_source_set(source_set_server) {
+      sources = []
+      if (defined(invoker.sources_cpp)) {
+        sources += invoker.sources_cpp
+      }
+      sources += sources_stub
+      if (defined(invoker.configs)) {
+        configs = invoker.configs
+      }
+      public_configs = [ ":$idl_headers_config" ]
+      deps = [ action_target_name ]
+      if (is_standard_system) {
+        public_deps = []
+        if (defined(invoker.sequenceable_pub_deps)) {
+          public_deps += invoker.sequenceable_pub_deps
+        }
+        external_deps = [ "c_utils:utils" ]
+        if (defined(invoker.hitrace)) {
+          external_deps += [ "hitrace:hitrace_meter" ]
+        }
+        if (defined(invoker.log_domainid)) {
+          external_deps += [ "hilog:libhilog" ]
+        }
+        if (defined(invoker.sequenceable_ext_deps)) {
+          external_deps += invoker.sequenceable_ext_deps
+        }
+        if (language == "c") {
+          external_deps += [ "hdf_core:libhdf_ipc_adapter" ]
+        } else if (language == "cpp") {
+          external_deps += [ "ipc:ipc_single" ]
+        }
+      } else {
+        external_deps = [ "hilog:libhilog" ]
+      }
+      if (defined(invoker.subsystem_name)) {
+        subsystem_name = invoker.subsystem_name
+      }
+      if (defined(invoker.part_name)) {
+        part_name = invoker.part_name
+      }
+      if (defined(invoker.sanitize)) {
+        sanitize = invoker.sanitize
+      } else {
+        sanitize = {
+          cfi = true
+          cfi_cross_dso = true
+          debug = false
+        }
+      }
+      if (defined(invoker.cflags)) {
+        cflags = invoker.cflags
+      }
+      if (defined(invoker.cflags_cc)) {
+        cflags_cc = invoker.cflags_cc
+      }
+      if (defined(invoker.remove_configs)) {
+        remove_configs = invoker.remove_configs
+      }
+    }
+
+    # generate code and shared library
+    group("$target_name" + "_idl_target") {
+      deps = [
+        ":$lib_client",
+        ":$lib_server",
+      ]
+    }
+  }
+
+  # build so
+  if ((language == "c" || language == "cpp" || invoker.target_type == "shared_library") && defined(invoker.sources)) {
     lib_client = "lib" + target_name + "_proxy"
     lib_server = "lib" + target_name + "_stub"
     action_target_name = ":" + target_name
@@ -303,6 +442,9 @@ template("idl_gen_interface") {
       if (defined(invoker.cflags_cc)) {
         cflags_cc = invoker.cflags_cc
       }
+      if (defined(invoker.remove_configs)) {
+        remove_configs = invoker.remove_configs
+      }
     }
 
     # build server so
@@ -360,6 +502,9 @@ template("idl_gen_interface") {
       }
       if (defined(invoker.cflags_cc)) {
         cflags_cc = invoker.cflags_cc
+      }
+      if (defined(invoker.remove_configs)) {
+        remove_configs = invoker.remove_configs
       }
     }
 
