@@ -367,14 +367,6 @@ template("idl_gen_interface") {
         remove_configs = invoker.remove_configs
       }
     }
-
-    # generate code and shared library
-    group("$target_name" + "_idl_target") {
-      deps = [
-        ":$lib_client",
-        ":$lib_server",
-      ]
-    }
   }
 
   # build so
