@@ -370,7 +370,8 @@ template("idl_gen_interface") {
   }
 
   # build so
-  if ((language == "c" || language == "cpp" || invoker.target_type == "shared_library") && defined(invoker.sources)) {
+  if ((language == "c" || language == "cpp" ||
+       invoker.target_type == "shared_library") && defined(invoker.sources)) {
     lib_client = "lib" + target_name + "_proxy"
     lib_server = "lib" + target_name + "_stub"
     action_target_name = ":" + target_name
