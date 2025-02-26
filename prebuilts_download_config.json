@@ -330,6 +330,36 @@
           "unzip_filename": "ark_js_prebuilts"
         },
         {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_x86_release",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-x86_64.tar.xz",
+          "unzip_filename": "llvm_aot_x86_release"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_x86_debug",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-debug-x86_64.tar.xz",
+          "unzip_filename": "llvm_aot_x86_debug"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_aarch64_release",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-aarch64.tar.xz",
+          "unzip_filename": "llvm_aot_aarch64_release"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_aarch64_debug",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-debug-aarch64.tar.xz",
+          "unzip_filename": "llvm_aot_aarch64_debug"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_ohos_release",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-ohos.tar.xz",
+          "unzip_filename": "llvm_aot_ohos_release"
+        },
+        {
+          "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_gn_ohos",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-ohos-gn.tar.xz",
+          "unzip_filename": "llvm_aot_gn_ohos_release"
+        },
+        {
           "unzip_dir": "prebuilts/packing_tool",
           "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "unzip_filename": "packing_tool"
