@@ -25,29 +25,88 @@ from datetime import datetime
 from util.log_util import LogUtil
 from hb.helper.no_instance import NoInstance
 from containers.status import throw_exception
+import copy
+
+
+class HandleKwargs(metaclass=NoInstance):
+    compile_item_pattern = re.compile(r'\[\d+/\d+\].+')
+    key_word_register_list = ["pre_msg", "log_stage", "after_msg", "log_filter", "custom_line_handle"]
+    filter_print = False
+
+    @staticmethod
+    def remove_registry_kwargs(kw_dict):
+        for item in HandleKwargs.key_word_register_list:
+            kw_dict.pop(item, "")
+
+    @staticmethod
+    def before_msg(kw_dict):
+        pre_msg = kw_dict.get('pre_msg', '')
+        if pre_msg:
+            LogUtil.hb_info(pre_msg)
+
+    @staticmethod
+    def set_log_stage(kw_dict):
+        log_stage = kw_dict.get('log_stage', '')
+        if log_stage:
+            LogUtil.set_stage(log_stage)
+
+    @staticmethod
+    def remove_useless_space(cmd):
+        while "" in cmd:
+            cmd.remove("")
+        return cmd
+
+    @staticmethod
+    def after_msg(kw_dict):
+        after_msg = kw_dict.get('after_msg', '')
+        if after_msg:
+            LogUtil.hb_info(after_msg)
+
+    @staticmethod
+    def clear_log_stage(kw_dict):
+        log_stage = kw_dict.get('log_stage', '')
+        if log_stage:
+            LogUtil.clear_stage()
+
+    @staticmethod
+    def handle_line(line, kw_dict):
+        filter_function = kw_dict.get('custom_line_handle', False)
+        if filter_function:
+            return filter_function(line)
+        else:
+            return True, line
+
+    @staticmethod
+    def set_filter_print(log_mode, kw_dict):
+        if kw_dict.get('log_filter', False) or log_mode == 'silent':
+            HandleKwargs.filter_print = True
+
+    @staticmethod
+    def handle_print(line, log_mode):
+        if HandleKwargs.filter_print:
+            info = re.findall(HandleKwargs.compile_item_pattern, line)
+            if len(info):
+                LogUtil.hb_info(info[0], mode=log_mode)
+        else:
+            LogUtil.hb_info(line)
 
 
 class SystemUtil(metaclass=NoInstance):
     @staticmethod
-    def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal', pre_msg="", after_msg="",
+    def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal',
                      **kwargs):
-        useful_info_pattern = re.compile(r'\[\d+/\d+\].+')
-        is_log_filter = kwargs.pop('log_filter', False)
-        if log_mode == 'silent':
-            is_log_filter = True
+        raw_kwargs = copy.deepcopy(kwargs)
+        HandleKwargs.remove_registry_kwargs(kwargs)
 
-        log_stage = kwargs.pop('log_stage', '')
-        if log_stage:
-            LogUtil.set_stage(log_stage)
-
-        while "" in cmd:
-            cmd.remove("")
+        HandleKwargs.set_log_stage(raw_kwargs)
+        HandleKwargs.set_filter_print(log_mode, raw_kwargs)
+        cmd = HandleKwargs.remove_useless_space(cmd)
 
         if not os.path.exists(os.path.dirname(log_path)):
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
+        HandleKwargs.before_msg(raw_kwargs)
         with open(log_path, 'at', encoding='utf-8') as log_file:
-            LogUtil.hb_info(pre_msg)
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
@@ -55,19 +114,15 @@ class SystemUtil(metaclass=NoInstance):
                                        env=exec_env,
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
-                log_file.write(line)
-                info = ""
-                if is_log_filter:
-                    info = re.findall(useful_info_pattern, line)
-                else:
-                    LogUtil.hb_info(line)
-                if len(info):
-                    LogUtil.hb_info(info[0], mode=log_mode)
+                keep_deal, new_line = HandleKwargs.handle_line(line, raw_kwargs)
+                if keep_deal:
+                    log_file.write(new_line)
+                    HandleKwargs.handle_print(new_line, log_mode)
 
         process.wait()
-        LogUtil.hb_info(after_msg)
-        if log_stage:
-            LogUtil.clear_stage()
+        HandleKwargs.after_msg(raw_kwargs)
+        HandleKwargs.clear_log_stage(raw_kwargs)
+
         ret_code = process.returncode
         if ret_code != 0:
             LogUtil.get_failed_log(log_path)

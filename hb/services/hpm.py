@@ -21,6 +21,7 @@ import os
 import threading
 import subprocess
 import re
+import sys
 from enum import Enum
 
 from containers.status import throw_exception
@@ -142,21 +143,57 @@ class Hpm(BuildFileGeneratorInterface):
         hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
         self._run_hpm_cmd(hpm_update_cmd)
 
-    '''Description: Convert all registed args into a list
-    @parameter: none
-    @return: list of all registed args
-    '''
-
     def _run_hpm_cmd(self, cmd, log_path):
-        ret_code = SystemUtil.exec_command(cmd, log_path=log_path, pre_msg="start run hpm command",
-                                           after_msg="end hpm command")
+        ret_code = SystemUtil.exec_command(
+            cmd,
+            log_path=log_path,
+            pre_msg="start run hpm command",
+            after_msg="end hpm command",
+            custom_line_handle=self._custom_line_handle,
+        )
         hpm_info = get_hpm_check_info()
         if hpm_info:
             print(hpm_info)
         if ret_code != 0:
-            raise OHOSException(f'ERROR: hpm command failed, cmd: {cmd}', '0001')
+            raise OHOSException(f"ERROR: hpm command failed, cmd: {cmd}", "0001")
+
+
+    def _custom_line_handle(self, line):
+        """
+        Handle the output line from the hpm command.
+        Args:
+            line (str): The output line from the hpm command.
+        Returns:
+            tuple: A tuple containing a boolean indicating whether the line should be processed,
+                   and the processed line (or an empty string if the line should be skipped).
+        """
+        if not hasattr(self, "custom_line_handle_preline"):
+            setattr(self, "custom_line_handle_preline", "")
+
+        if line.strip() == "" and "Extracting" in self.custom_line_handle_preline:
+            self.custom_line_handle_preline = line
+            return False, ""
+
+        if "Extracting..." in line:
+            if "Extracted successfully." in line:
+                sys.stdout.write("\r")
+                self.custom_line_handle_preline = line
+                return True, "Extracted successfully.\n"
+            else:
+                if "DISABLE_PROGRESS" not in os.environ:
+                    sys.stdout.write(f"\r[OHOS INFO]  {line.strip()}")
+                self.custom_line_handle_preline = line
+                return False, ""
+        else:
+            self.custom_line_handle_preline = line
+            return True, line
 
     def _convert_args(self) -> list:
+        '''
+        Description: Convert all registed args into a list
+        @parameter: none
+        @return: list of all registed args
+        '''
         args_list = []
 
         for key, value in self.args_dict.items():
@@ -174,12 +211,12 @@ class Hpm(BuildFileGeneratorInterface):
 
         return args_list
 
-    '''Description: Convert all registed flags into a list
-    @parameter: none
-    @return: list of all registed flags
-    '''
-
     def _convert_flags(self) -> list:
+        '''
+        Description: Convert all registed flags into a list
+        @parameter: none
+        @return: list of all registed flags
+        '''
         flags_list = []
 
         for key, value in self.flags_dict.items():
