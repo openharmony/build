@@ -25,6 +25,9 @@ from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from modules.interface.indep_build_module_interface import IndepBuildModuleInterface
 from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
+from util.log_util import LogUtil
+import subprocess
+from distutils.spawn import find_executable
 
 
 def get_part_name():
@@ -48,6 +51,13 @@ def _search_bundle_path(part_name: str) -> str:
         print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(part_name))
         sys.exit(1)
     return bundle_path
+
+
+def rename_file(source_file, target_file):
+    try:
+        os.rename(source_file, target_file)
+    except FileNotFoundError as rename_error:
+        LogUtil.hb_warning(rename_error)
 
 
 class IndepBuildArgsResolver(ArgsResolverInterface):
@@ -188,5 +198,65 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         indep_build_module.indep_build.regist_flag('build-target', target_arg.arg_value)
 
     @staticmethod
-    def resolve_fast_rebuild(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
-        indep_build_module.indep_build.regist_flag('fast-rebuild', target_arg.arg_value)
+    def resolve_keep_out(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('keep-out', target_arg.arg_value)
+
+    @staticmethod
+    def resolve_ccache(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        """resolve '--ccache' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        if target_arg.arg_value:
+            ccache_path = find_executable('ccache')
+            if ccache_path is None:
+                LogUtil.hb_warning('Failed to find ccache, ccache disabled.')
+                return
+            else:
+                indep_build_module.indep_build.regist_arg(
+                    'ohos_build_enable_ccache', target_arg.arg_value)
+
+            ccache_local_dir = os.environ.get('CCACHE_LOCAL_DIR')
+            ccache_base = os.environ.get('CCACHE_BASE')
+            if not ccache_local_dir:
+                ccache_local_dir = '.ccache'
+            if not ccache_base:
+                ccache_base = os.environ.get('HOME')
+            ccache_base = os.path.join(ccache_base, ccache_local_dir)
+            if not os.path.exists(ccache_base):
+                os.makedirs(ccache_base, exist_ok=True)
+
+            ccache_log_suffix = os.environ.get('CCACHE_LOG_SUFFIX')
+            if ccache_log_suffix:
+                logfile = os.path.join(
+                    ccache_base, "ccache.{}.log".format(ccache_log_suffix))
+            elif os.environ.get('CCACHE_LOGFILE'):
+                logfile = os.environ.get('CCACHE_LOGFILE')
+                if not os.path.exists(os.path.dirname(logfile)):
+                    os.makedirs(os.path.dirname(logfile), exist_ok=True)
+            else:
+                logfile = os.path.join(ccache_base, "ccache.log")
+            if os.path.exists(logfile):
+                oldfile = '{}.old'.format(logfile)
+                if os.path.exists(oldfile):
+                    os.unlink(oldfile)
+                rename_file(logfile, oldfile)
+            ccache_basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+            os.environ['CCACHE_EXEC'] = ccache_path
+            os.environ['CCACHE_LOGFILE'] = logfile
+            os.environ['USE_CCACHE'] = '1'
+            os.environ['CCACHE_DIR'] = ccache_base
+            os.environ['CCACHE_UMASK'] = '002'
+            os.environ['CCACHE_BASEDIR'] = ccache_basedir
+            ccache_max_size = os.environ.get('CCACHE_MAXSIZE')
+            if not ccache_max_size:
+                ccache_max_size = '100G'
+
+            cmd = ['ccache', '-M', ccache_max_size]
+            try:
+                subprocess.check_output(cmd, text=True)
+            except FileNotFoundError:
+                print("错误：找不到 ccache 命令")
+            except subprocess.CalledProcessError as e:
+                print(f"执行 ccache 命令失败: {e}")
