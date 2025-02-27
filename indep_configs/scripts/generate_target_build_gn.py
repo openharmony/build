@@ -147,18 +147,68 @@ def process_bundle_path(_bundle_path, _test_check, deps_list):
         print("Error: Please pass the correct test parameters")
 
 
+def process_inner_fields(module_to_path, all_target_list):
+    # 检查并处理可能的字段名称
+    for item in all_target_list:
+        fullpath = item
+        module = fullpath.split(":")[-1]
+        module_to_path[module] = fullpath
+
+
+def target_args_handle(_bundle_path, build_target_list, deps_list):
+    bundle_json = utils.get_json(_bundle_path)
+    build_data = bundle_json.get("component", {}).get("build", {})
+
+    all_target_list = []
+    module_to_path = {}
+
+    # 获取所有目标列表和module到全路径的映射
+    process_target_data(build_data, all_target_list, module_to_path)
+
+    # 处理构建目标列表，返回依赖列表
+    return process_build_target_list(build_target_list, module_to_path, deps_list)
+
+
+def process_target_data(build_data, all_target_list, module_to_path):
+    # 获取所有目标列表
+    process_build_data(build_data, 1, all_target_list)
+    # 获取module到全路径的映射
+    process_inner_fields(module_to_path, all_target_list)
+
+
+def process_build_target_list(build_target_list, module_to_path, deps_list):
+    for item in build_target_list:
+        if item.startswith("//"):
+            # 如果是全路径，直接添加
+            add_to_deps_list(deps_list, item)
+        else:
+            # 如果不是全路径，查找对应的module
+            fullpath = module_to_path.get(item)
+            if fullpath:
+                add_to_deps_list(deps_list, fullpath)
+    return deps_list
+
+
+def add_to_deps_list(deps_list, item):
+    if item not in deps_list:
+        deps_list.append(item)
+
+
 def main():
     args = _get_args()
     source_code_paths = args.input_path.split(',')
     _test_check = args.test
     output_path = os.path.join(args.root_path, 'out')
     deps_list = []
+    build_target_list = utils.get_build_target()
 
     for source_code_path in source_code_paths:
         bundle_paths = _get_bundle_path(source_code_path)
         for _bundle_path in bundle_paths:
-            process_bundle_path(_bundle_path, _test_check, deps_list)
-
+            if build_target_list:
+                deps_list = target_args_handle(_bundle_path, build_target_list, deps_list)
+            else:
+                process_bundle_path(_bundle_path, _test_check, deps_list)
     _output_build_gn(deps_list, output_path, _test_check)
 
 
