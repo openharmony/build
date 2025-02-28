@@ -16,9 +16,7 @@ import("//build/config/sanitizers/sanitizers.gni")
 import("//build/ohos.gni")
 
 group("common_packages") {
-  deps = [ "//third_party/sqlite:sqlite" ]
-
-  deps += [ "musl:musl_install" ]
+  deps = [ "musl:musl_install" ]
 
   deps += [ "libcpp:libcpp_install" ]
 
