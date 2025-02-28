@@ -752,6 +752,7 @@ template("ohos_rust_proc_macro") {
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
     check_target(_check_target) {
       module_deps = []
+      module_ex_deps = []
       if (defined(invoker.deps)) {
         module_deps += invoker.deps
       }
@@ -760,6 +761,12 @@ template("ohos_rust_proc_macro") {
       }
       if (defined(invoker.external_deps)) {
         module_ex_deps = invoker.external_deps
+      }
+      if (defined(invoker.external_deps)) {
+        module_ex_deps += invoker.external_deps
+      }
+      if (defined(invoker.public_external_deps)) {
+        module_ex_deps += invoker.public_external_deps
       }
     }
   }
