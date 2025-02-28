@@ -256,10 +256,6 @@ template("idl_gen_interface") {
       public_configs = [ ":$idl_headers_config" ]
       deps = [ action_target_name ]
       if (is_standard_system) {
-        public_deps = []
-        if (defined(invoker.sequenceable_pub_deps)) {
-          public_deps += invoker.sequenceable_pub_deps
-        }
         external_deps = [ "c_utils:utils" ]
         if (defined(invoker.hitrace)) {
           external_deps += [ "hitrace:hitrace_meter" ]
@@ -320,10 +316,6 @@ template("idl_gen_interface") {
       public_configs = [ ":$idl_headers_config" ]
       deps = [ action_target_name ]
       if (is_standard_system) {
-        public_deps = []
-        if (defined(invoker.sequenceable_pub_deps)) {
-          public_deps += invoker.sequenceable_pub_deps
-        }
         external_deps = [ "c_utils:utils" ]
         if (defined(invoker.hitrace)) {
           external_deps += [ "hitrace:hitrace_meter" ]
