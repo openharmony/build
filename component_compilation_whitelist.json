@@ -1083,6 +1083,9 @@
         "//base/startup/init/services/modules/reboot:libreboot_static": [
             "//third_party/cJSON/"
         ],
+        "//base/startup/init/services/modules/trace:inittrace_static": [
+            "//third_party/cJSON/"
+        ],
         "//base/startup/init/services/modules/seccomp:libseccomp_static": [
             "//third_party/cJSON/"
         ],
