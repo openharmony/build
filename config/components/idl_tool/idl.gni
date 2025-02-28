@@ -188,7 +188,7 @@ template("idl_gen_interface") {
   }
 
   action("$target_name") {
-    inputs = idl_list + idl_callback_list + idl_common_list
+    inputs = idl_list
     deps = idl_build_deps
     script = "//build/config/components/idl_tool/idl.py"
     args = [
