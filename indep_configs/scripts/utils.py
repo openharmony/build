@@ -15,7 +15,7 @@
 
 import json
 import os
-import stat
+import subprocess
 
 
 def get_json(file_path):
@@ -88,3 +88,55 @@ def get_build_target():
     if data["build_target"]["argDefault"]:
         input_build_target.extend(data["build_target"]["argDefault"])
     return input_build_target
+
+
+def is_enable_ccache():
+    """
+    检查是否启用了ccache。
+    :return: 如果启用了ccache，则返回True；否则返回False。
+    """
+    # Read the independent build parameters JSON file and get the value of the "ccache" key's "argDefault"
+    return get_indep_args()["ccache"]["argDefault"]
+
+
+
+def print_ccache_stats():
+    """
+    打印ccache的统计信息。
+    如果ccache已启用，则执行ccache -s命令并打印输出。
+    如果ccache命令未找到或执行失败，则打印相应的错误消息。
+    """
+    # Check if ccache is enabled
+    if is_enable_ccache():
+        try:
+            # Execute the 'ccache -s' command and capture the output
+            output = subprocess.check_output(["ccache", "-s"], text=True)
+            # Print the header for ccache hit statistics
+            print("ccache hit statistics:")
+            # Print the output of the 'ccache -s' command
+            print(output)
+        except FileNotFoundError:
+            # Print an error message if the 'ccache' command is not found
+            print("Error: ccache command not found")
+        except subprocess.CalledProcessError as e:
+            # Print an error message if the 'ccache -s' command fails
+            print(f"Failed to execute ccache command: {e}")
+
+
+def clean_ccache_info():
+    """
+    清除ccache的统计信息。
+    如果ccache已启用，则执行ccache -z命令以重置ccache的统计信息。
+    如果ccache命令未找到或执行失败，则打印相应的错误消息。
+    """
+    # Check if ccache is enabled
+    if is_enable_ccache():
+        try:
+            # Execute the 'ccache -z' command to reset the ccache statistics
+            subprocess.check_output(["ccache", "-z"], text=True)
+        except FileNotFoundError:
+            # Print an error message if the 'ccache' command is not found
+            print("Error: ccache command not found")
+        except subprocess.CalledProcessError as e:
+            # Print an error message if the 'ccache -z' command fails
+            print(f"Failed to execute ccache command: {e}")
