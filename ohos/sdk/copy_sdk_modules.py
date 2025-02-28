@@ -114,22 +114,19 @@ def main():
         [options.sdk_modules_desc_file, options.sdk_archive_paths_file])
     copy_infos = []
     for module in sdk_modules:
-        cp_info = {}
         sdk_label = module.get('label')
         module_info_file = module.get('module_info_file')
         source, notice = get_source_from_module_info_file(module_info_file)
-        cp_info['source'] = source
-        cp_info['notice'] = notice
         depfile_deps.add(module_info_file)
 
         for item in archive_paths:
             if sdk_label == item.get('label'):
                 dest = os.path.join(sdk_out_dir, item.get('install_dir'),
                                     os.path.basename(source))
-                break
-        cp_info['dest'] = dest
-        cp_info['install_dir'] = item.get('install_dir')
-        copy_infos.append(cp_info)
+                copy_infos.append({'source': source,
+                                   'notice': notice,
+                                  'dest': dest,
+                                   'install_dir': item.get('install_dir')})
 
     do_copy_and_stamp(copy_infos, options, depfile_deps)
 
