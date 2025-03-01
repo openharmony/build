@@ -17,7 +17,7 @@ import sys
 import argparse
 import os
 import json
-from utils import get_json, get_ninja_args, get_gn_args
+from utils import get_json, get_ninja_args, get_gn_args, is_enable_ccache, print_ccache_stats, clean_ccache_info
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -82,6 +82,8 @@ def _gn_cmd(root_path, variants, out_dir, test_filter):
     _features_info = _get_all_features_info(root_path, variants)
     _args_list = [f"ohos_indep_compiler_enable=true", f"product_name=\"{variants}\""]
     _args_list.extend(_features_info)
+    if is_enable_ccache():
+        _args_list.append(f"ohos_build_enable_ccache=true")
 
     # Add 'use_thin_lto=false' to _args_list if test_filter equals 2
     if test_filter in (1, 2):
@@ -114,7 +116,9 @@ def _exec_cmd(root_path, variants, out_dir, test_filter):
     gn_cmd = _gn_cmd(root_path, variants, out_dir, test_filter)
     _run_cmd(gn_cmd)
     ninja_cmd = _ninja_cmd(root_path, variants, out_dir)
+    clean_ccache_info()
     _run_cmd(ninja_cmd)
+    print_ccache_stats()
 
 
 def main():
