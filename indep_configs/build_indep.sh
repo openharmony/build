@@ -29,9 +29,11 @@ esac
 mkdir -p out/preloader
 mkdir -p out/$VARIANTS/$OUT_DIR/
 
-# keep the logs of hpm
-find out/$VARIANTS -type f -not -name '*.log' -delete
-find out/$VARIANTS -type d -empty -delete
+if [[ ! "$@" =~ "--keep-out" ]]; then
+    # keep the logs of hpm
+    find out/$VARIANTS -type f -not -name '*.log' -delete
+    find out/$VARIANTS -type d -empty -delete
+fi
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
 
