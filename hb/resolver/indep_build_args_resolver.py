@@ -26,8 +26,10 @@ from modules.interface.indep_build_module_interface import IndepBuildModuleInter
 from util.component_util import ComponentUtil
 from exceptions.ohos_exception import OHOSException
 from util.log_util import LogUtil
+from util.io_util import IoUtil
 import subprocess
 from distutils.spawn import find_executable
+from resources.global_var import COMPONENTS_PATH_DIR
 
 
 def get_part_name():
@@ -41,10 +43,24 @@ def get_part_name():
     return part_name_list
 
 
+def search_bundle_file_from_ccache(part_name: str) -> str:
+    if os.path.exists(COMPONENTS_PATH_DIR):
+        data = IoUtil.read_json_file(COMPONENTS_PATH_DIR)
+        if data.get(part_name):
+            return data.get(part_name)
+    return ""
+
+
 def _search_bundle_path(part_name: str) -> str:
     bundle_path = None
     try:
-        bundle_path = ComponentUtil.search_bundle_file(part_name)
+        bundle_path = search_bundle_file_from_ccache(part_name)
+        if not bundle_path:
+            bundle_path = ComponentUtil.search_bundle_file(part_name)
+        else:
+            print(
+                "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
+                    part_name, bundle_path, COMPONENTS_PATH_DIR))
     except Exception as e:
         raise OHOSException('Please check the bundle.json file of {} : {}'.format(part_name, e))
     if not bundle_path:
@@ -207,7 +223,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         if target_arg.arg_value:
             # 查找 ccache 可执行文件的路径
             ccache_path = find_executable('ccache')
-            # 如果未找到 ccache 可执行文件，打印警告信息并返回
             if ccache_path is None:
                 LogUtil.hb_warning('Failed to find ccache, ccache disabled.')
                 return
@@ -216,73 +231,51 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 indep_build_module.indep_build.regist_arg(
                     'ohos_build_enable_ccache', target_arg.arg_value)
 
-            # 获取 ccache 本地目录环境变量
+            # 设置缓存目录
             ccache_local_dir = os.environ.get('CCACHE_LOCAL_DIR')
-            # 获取 ccache 基础目录环境变量
             ccache_base = os.environ.get('CCACHE_BASE')
-            # 如果未设置 ccache 本地目录，使用默认值
             if not ccache_local_dir:
                 ccache_local_dir = '.ccache'
-            # 如果未设置 ccache 基础目录，使用用户主目录
             if not ccache_base:
                 ccache_base = os.environ.get('HOME')
-            # 拼接 ccache 基础目录
             ccache_base = os.path.join(ccache_base, ccache_local_dir)
-            # 如果 ccache 基础目录不存在，则创建它
             if not os.path.exists(ccache_base):
                 os.makedirs(ccache_base, exist_ok=True)
 
-            # 获取 ccache 日志后缀环境变量
+            # 日志文件处理
             ccache_log_suffix = os.environ.get('CCACHE_LOG_SUFFIX')
             if ccache_log_suffix:
-                # 如果设置了日志后缀，拼接日志文件路径
                 logfile = os.path.join(
                     ccache_base, "ccache.{}.log".format(ccache_log_suffix))
             elif os.environ.get('CCACHE_LOGFILE'):
-                # 如果设置了日志文件环境变量，使用该环境变量的值
                 logfile = os.environ.get('CCACHE_LOGFILE')
-                # 如果日志文件所在目录不存在，则创建它
                 if not os.path.exists(os.path.dirname(logfile)):
                     os.makedirs(os.path.dirname(logfile), exist_ok=True)
             else:
-                # 如果未设置日志后缀和日志文件环境变量，使用默认日志文件路径
                 logfile = os.path.join(ccache_base, "ccache.log")
-            # 如果日志文件已存在，将其重命名为旧文件
             if os.path.exists(logfile):
                 oldfile = '{}.old'.format(logfile)
-                # 如果旧文件已存在，删除它
                 if os.path.exists(oldfile):
                     os.unlink(oldfile)
-                # 重命名日志文件
                 rename_file(logfile, oldfile)
             # 获取项目根目录
-            ccache_basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-            # 设置 ccache 可执行文件路径环境变量
+            src_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+            # 设置ccache相关环境变量
             os.environ['CCACHE_EXEC'] = ccache_path
-            # 设置 ccache 日志文件路径环境变量
             os.environ['CCACHE_LOGFILE'] = logfile
-            # 设置启用 ccache 环境变量
             os.environ['USE_CCACHE'] = '1'
-            # 设置 ccache 缓存目录环境变量
             os.environ['CCACHE_DIR'] = ccache_base
-            # 设置 ccache 权限掩码环境变量
             os.environ['CCACHE_UMASK'] = '002'
-            # 设置 ccache 基础目录环境变量
-            os.environ['CCACHE_BASEDIR'] = ccache_basedir
-            # 获取 ccache 最大缓存大小环境变量
+            os.environ['CCACHE_BASEDIR'] = src_root
             ccache_max_size = os.environ.get('CCACHE_MAXSIZE')
-            # 如果未设置最大缓存大小，使用默认值
             if not ccache_max_size:
                 ccache_max_size = '100G'
 
             # 构建设置 ccache 最大缓存大小的命令
             cmd = ['ccache', '-M', ccache_max_size]
             try:
-                # 执行命令
                 subprocess.check_output(cmd, text=True)
             except FileNotFoundError:
-                # 如果找不到 ccache 命令，打印错误信息
                 print("错误：找不到 ccache 命令")
             except subprocess.CalledProcessError as e:
-                # 如果命令执行失败，打印错误信息
                 print(f"执行 ccache 命令失败: {e}")

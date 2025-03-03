@@ -28,8 +28,6 @@ class IndepBuild(BuildFileGeneratorInterface):
         super().__init__()
 
     def run(self):
-        if not "RUN_INDEP_BUILD_PY" in os.environ:
-            return
         flags_list = self._convert_flags()
         cmd = ["/bin/bash", "build/indep_configs/build_indep.sh"]
         cmd.extend(flags_list)
