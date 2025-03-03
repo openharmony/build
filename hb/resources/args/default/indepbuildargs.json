@@ -134,7 +134,7 @@
   },
   "ccache": {
     "arg_name": "--ccache",
-    "argDefault": false,
+    "argDefault": true,
     "arg_help": "Default:false. Help:You use this option to use build cache",
     "arg_phase": "indepCompilation",
     "arg_type": "bool",
