@@ -1103,7 +1103,7 @@
     },
     {
         "install_dir": "ets/ets1.2/kits",
-        "module_label": "//interface/sdk-js:bundle_kits",
+        "module_label": "//interface/sdk-js:bundle_kits2",
         "target_os": [
             "windows",
             "linux",
