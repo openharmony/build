@@ -1571,5 +1571,21 @@
             "linux",
             "windows"
         ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/koala-wrapper/",
+        "module_label": "//developtools/ace_ets2bundle/koala-wrapper:ets2panda_koala_wrapper",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ui-plugins/",
+        "module_label": "//developtools/ace_ets2bundle/arkui-plugins:ui_plugin",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
     }
 ]

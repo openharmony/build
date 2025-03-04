@@ -10,7 +10,9 @@
     "interface/sdk-js/build-tools",
     "arkcompiler/ets_frontend/arkguard",
     "third_party/musl/temp_idlize",
-    "arkcompiler/ets_frontend/ets2panda/driver/build_system"
+    "arkcompiler/ets_frontend/ets2panda/driver/build_system",
+    "developtools/ace_ets2bundle/koala-wrapper",
+    "developtools/ace_ets2bundle/arkui-plugins"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
