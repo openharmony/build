@@ -176,7 +176,8 @@ class Hpm(BuildFileGeneratorInterface):
 
         if "Extracting..." in line:
             if "Extracted successfully." in line:
-                sys.stdout.write("\r")
+                if "DISABLE_PROGRESS" not in os.environ:
+                    sys.stdout.write("\r")
                 self.custom_line_handle_preline = line
                 return True, "Extracted successfully.\n"
             else:

@@ -34,7 +34,7 @@ class IndepBuild(BuildFileGeneratorInterface):
         variant = self.flags_dict["variant"]
         logpath = os.path.join('out', variant, 'build.log')
         ret_code = SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
-                                            after_msg="indeo build end")
+                                            after_msg="indep build end")
         if ret_code != 0:
             raise OHOSException(f'ERROR: build_indep.sh encountered a problem, please check, cmd: {cmd}', '0001')
 
