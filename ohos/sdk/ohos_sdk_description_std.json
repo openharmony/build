@@ -287,6 +287,14 @@
         ]
     },
     {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda:libes2panda_public",
+        "target_os": [
+            "windows",
+            "linux"
+        ]
+    },
+    {
         "install_dir": "ets/ets1.2/build-tools/ets-loader/bin/ark/",
         "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc_ets",
         "target_os": [
