@@ -242,19 +242,19 @@ def modify_arktsconfig_with_cache(arktsconfig_path: str, cache_path: str) -> Non
     Backup the original file, modify it, and restore it after use.
     """
     backup_path = arktsconfig_path + ".bak"
-    os.rename(arktsconfig_path, backup_path)
+    shutil.copy(arktsconfig_path, backup_path)
 
     try:
-        with open(backup_path, "r", encoding="utf-8") as f:
+        with open(arktsconfig_path, "r", encoding="utf-8") as f:
             config = json.load(f)
 
         config["compilerOptions"]["outDir"] = cache_path
         with open(arktsconfig_path, "w", encoding="utf-8") as f:
-            json.dump(config, f, indent=4, ensure_ascii=False)
+            json.dump(config, f, indent=2, ensure_ascii=False)
     except json.JSONDecodeError as e:
         raise ConfigValidationError(f"Invalid JSON format: {e}")
     except Exception as e:
-        os.rename(backup_path, arktsconfig_path)
+        restore_arktsconfig(arktsconfig_path)
         raise e
 
 
@@ -262,7 +262,7 @@ def restore_arktsconfig(arktsconfig_path: str) -> None:
     """Restore the original arktsconfig.json from backup."""
     backup_path = arktsconfig_path + ".bak"
     if os.path.exists(backup_path):
-        os.rename(backup_path, arktsconfig_path)
+        shutil.move(backup_path, arktsconfig_path)
 
 
 def add_to_bootpath(device_dst_file: str, bootpath_json_file: str) -> None:
@@ -300,7 +300,7 @@ def get_key_from_file_name(file_name: str) -> str:
     return os.path.splitext(file_name)[0]
 
 
-def scan_directory_for_paths(directory: str) -> Dict[str, list[str]]:
+def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
     """
     Scan the specified directory to find all target files and organize their paths by key.
     """
@@ -358,8 +358,8 @@ def build_config(args: argparse.Namespace) -> Dict:
     if args.files:
         config["files"] = args.files
 
-    with open(args.arktsconfig, 'w') as f:
-        json.dump(config, f, indent=2)
+    with open(args.arktsconfig, 'w', encoding="utf-8") as f:
+        json.dump(config, f, indent=2, ensure_ascii=False)
 
     return config
 
@@ -372,7 +372,7 @@ def handle_configuration(args: argparse.Namespace) -> Tuple[Dict, str]:
         config = build_config(args)
         out_dir = config["compilerOptions"]["outDir"]
     else:
-        if args.cache_path is not None:
+        if args.cache_path:
             modify_arktsconfig_with_cache(args.arktsconfig, args.cache_path)
         with open(args.arktsconfig, "r", encoding="utf-8") as f:
             config = json.load(f)
