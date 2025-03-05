@@ -187,7 +187,7 @@ template("generate_static_abc") {
       }
     }
 
-    cache_path = "$target_out_dir/cache"
+    cache_path = "$target_out_dir/$target_name/cache"
     if (defined(invoker.cache_path)) {
       cache_path = invoker.cache_path
     }
