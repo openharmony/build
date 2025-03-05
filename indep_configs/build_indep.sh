@@ -54,30 +54,33 @@ PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER} -out ${OUT_DIR}
-if [ -d "binarys/third_party/rust" ];then
+
+
+if [ -d "binarys/third_party/rust/crates" ];then
     echo "rust directory exists"
-    if [ -d "third_party/rust" ]; then
-        echo "third_party/rust exists"
-        cp -r binarys/third_party/rust/crates third_party/rust
-    else
+    if [ ! -d "third_party/rust/crates" ]; then
+        echo "third_party/rust/crates not exist, copy from binarys."
         mkdir -p "third_party/rust"
         cp -r binarys/third_party/rust/crates third_party/rust
     fi
-else
-    echo "rust directory exists"
 fi
+ 
 if [ -d "binarys/test/testfwk/developer_test" ];then
     echo "developer_test directory exists"
-    if [ -d "test/testfwk/developer_test" ]; then
-        echo "test/testfwk/developer_test exists"
-        rm -rf test/testfwk
-        cp -r binarys/test/testfwk test/testfwk
-    else
+    if [ ! -d "test/testfwk/developer_test" ]; then
+        echo "test/testfwk/developer_test not exist, copy from binarys."
         mkdir -p "test/testfwk"
         cp -r binarys/test/testfwk/developer_test test/testfwk
     fi
-else
-    echo "developer_test directory exists"
+fi
+ 
+if [ -d "binarys/third_party/typescript" ];then
+    echo "typescript directory exists"
+    if [ ! -d "third_party/typescript" ]; then
+        echo "third_party/typescript not exist, copy from binarys."
+        mkdir -p  "third_party"
+        cp -r binarys/third_party/typescript third_party
+    fi
 fi
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS}
