@@ -303,14 +303,18 @@ def get_key_from_file_name(file_name: str) -> str:
 def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
     """
     Scan the specified directory to find all target files and organize their paths by key.
+    The key is the relative path with '/' replaced by '.'.
     """
     paths = {}
     for root, _, files in os.walk(directory):
         for file in files:
             if not is_target_file(file):
                 continue
-            key = get_key_from_file_name(file)
             file_path = os.path.abspath(os.path.join(root, file))
+            file_name = get_key_from_file_name(file)
+            file_abs_path = os.path.abspath(os.path.join(root, file_name))
+            file_rel_path = os.path.relpath(file_abs_path, start=directory)
+            key = file_rel_path.replace(os.sep, '.')
             if key in paths:
                 paths[key].append(file_path)
             else:
