@@ -1248,11 +1248,13 @@ def _copy_bundlejson(args, public_deps_list):
         os.makedirs(bundlejson_out)
     bundlejson = os.path.join(args.get("root_path"), args.get("part_path"), "bundle.json")
     dependencies_dict = {}
+    sorted_dict = {}
     for public_deps in public_deps_list:
         _public_dep_part_name = public_deps.split(':')[0]
         if _public_dep_part_name != args.get("part_name"):
             _public_dep = f"@{args.get('organization_name')}/{_public_dep_part_name}"
             dependencies_dict.update({_public_dep: "*"})
+            sorted_dict = dict(sorted(dependencies_dict.items()))
     if os.path.isfile(bundlejson):
         with open(bundlejson, 'r') as f:
             bundle_data = json.load(f)
@@ -1283,7 +1285,7 @@ def _copy_bundlejson(args, public_deps_list):
                 del bundle_data['licensePath']
             if bundle_data.get('readmePath'):
                 del bundle_data['readmePath']
-            bundle_data['dependencies'] = dependencies_dict
+            bundle_data['dependencies'] = sorted_dict
             if os.path.isfile(os.path.join(bundlejson_out, "bundle.json")):
                 os.remove(os.path.join(bundlejson_out, "bundle.json"))
             with os.fdopen(os.open(os.path.join(bundlejson_out, "bundle.json"), os.O_WRONLY | os.O_CREAT, mode=0o640),
