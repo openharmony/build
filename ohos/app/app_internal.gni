@@ -703,5 +703,12 @@ template("compile_app") {
         target_app_dir,
       ]
     }
+    if (ohos_app_enable_asan) {
+      args += [ "--ohos-app-enable-asan" ]
+    } else if (ohos_app_enable_tsan) {
+      args += [ "--ohos-app-enable-tsan" ]
+    } else if (ohos_app_enable_ubsan) {
+      args += [ "--ohos-app-enable-ubsan" ]
+    }
   }
 }
