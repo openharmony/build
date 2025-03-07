@@ -194,7 +194,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--timeout-limit", type=str, default="12000", 
                         help="Process timeout in seconds (default: 12000)")
     parser.add_argument("--cache-path", type=str, default=None, 
-                        help="Path to cache directory (optional)")
+                        help="Path to cache directory")
     parser.add_argument("--bootpath-json-file", type=str, required=True, 
                         help="bootpath.json file records the path in device for boot abc files")
     parser.add_argument("--is-boot-abc", type=bool, default=False, 
@@ -245,14 +245,21 @@ def modify_arktsconfig_with_cache(arktsconfig_path: str, cache_path: str) -> Non
     shutil.copy(arktsconfig_path, backup_path)
 
     try:
-        with open(arktsconfig_path, "r", encoding="utf-8") as f:
-            config = json.load(f)
+        config = {}
+        if os.path.exists(arktsconfig_path):
+            with open(arktsconfig_path, "r") as f:
+                content = f.read()
+                config = json.loads(content)
+            if "compilerOptions" in config:
+                config["compilerOptions"]["outDir"] = cache_path
+                config["compilerOptions"]["useEmptyPackage"] = True
 
-        config["compilerOptions"]["outDir"] = cache_path
-        with open(arktsconfig_path, "w", encoding="utf-8") as f:
-            json.dump(config, f, indent=2, ensure_ascii=False)
+        if os.path.exists(arktsconfig_path):
+            with open(arktsconfig_path, "w", encoding="utf-8") as f:
+                json.dump(config, f, indent=2, ensure_ascii=False)
     except json.JSONDecodeError as e:
-        raise ConfigValidationError(f"Invalid JSON format: {e}")
+        print(f"{arktsconfig_path} Invalid JSON format (cache): {e}", file=sys.stderr)
+        sys.exit()
     except Exception as e:
         restore_arktsconfig(arktsconfig_path)
         raise e
@@ -266,21 +273,25 @@ def restore_arktsconfig(arktsconfig_path: str) -> None:
 
 
 def add_to_bootpath(device_dst_file: str, bootpath_json_file: str) -> None:
-    data = {}
-    if os.path.exists(bootpath_json_file):
-        with open(bootpath_json_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
+    try:
+        data = {}
+        if os.path.exists(bootpath_json_file):
+            with open(bootpath_json_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
 
-    current_value = data.get("bootpath", "")
-    abc_set = set(current_value.split(":")) if current_value else set()
-    abc_set.add(device_dst_file)
-    new_value = ":".join(abc_set)
-    data["bootpath"] = new_value
+        current_value = data.get("bootpath", "")
+        abc_set = set(current_value.split(":")) if current_value else set()
+        abc_set.add(device_dst_file)
+        new_value = ":".join(abc_set)
+        data["bootpath"] = new_value
 
-    os.makedirs(os.path.dirname(bootpath_json_file), exist_ok=True)
+        os.makedirs(os.path.dirname(bootpath_json_file), exist_ok=True)
 
-    with open(bootpath_json_file, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=4, ensure_ascii=False)
+        with open(bootpath_json_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
+    except json.JSONDecodeError as e:
+        print(f"{bootpath_json_file} Invalid JSON format (bootpath): {e}", file=sys.stderr)
+        sys.exit()
 
 
 def is_target_file(file_name: str) -> bool:
@@ -303,7 +314,8 @@ def get_key_from_file_name(file_name: str) -> str:
 def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
     """
     Scan the specified directory to find all target files and organize their paths by key.
-    The key is the relative path with '/' replaced by '.'.
+    If the first-level directory is 'arkui', the key is the file name.
+    Otherwise, the key is the relative path with '/' replaced by '.'.
     """
     paths = {}
     for root, _, files in os.walk(directory):
@@ -314,7 +326,11 @@ def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
             file_name = get_key_from_file_name(file)
             file_abs_path = os.path.abspath(os.path.join(root, file_name))
             file_rel_path = os.path.relpath(file_abs_path, start=directory)
-            key = file_rel_path.replace(os.sep, '.')
+            first_level_dir = file_rel_path.split(os.sep)[0]
+            if first_level_dir == "arkui":
+                key = file_name
+            else:
+                key = file_rel_path.replace(os.sep, ".")
             if key in paths:
                 paths[key].append(file_path)
             else:
@@ -322,7 +338,7 @@ def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
     return paths
 
 
-def build_config(args: argparse.Namespace) -> Dict:
+def build_config(args: argparse.Namespace) -> None:
     """
     Build the configuration dictionary based on command-line arguments.
     """
@@ -352,6 +368,7 @@ def build_config(args: argparse.Namespace) -> Dict:
             "paths": paths,
             "outDir": args.cache_path,
             "package": args.package if args.package else "",
+            "useEmptyPackage": True
         }
     }
 
@@ -362,31 +379,19 @@ def build_config(args: argparse.Namespace) -> Dict:
     if args.files:
         config["files"] = args.files
 
+    os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
     with open(args.arktsconfig, 'w', encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
-    return config
 
-
-def handle_configuration(args: argparse.Namespace) -> Tuple[Dict, str]:
+def handle_configuration(args: argparse.Namespace) -> None:
     """
     Handle the configuration setup based on command-line arguments.
     """
     if args.base_url:
-        config = build_config(args)
-        out_dir = config["compilerOptions"]["outDir"]
+        build_config(args)
     else:
-        if args.cache_path:
-            modify_arktsconfig_with_cache(args.arktsconfig, args.cache_path)
-        with open(args.arktsconfig, "r", encoding="utf-8") as f:
-            config = json.load(f)
-            validate_arktsconfig(config)
-        out_dir = config["compilerOptions"]["outDir"]
-        if not os.path.isabs(out_dir):
-            base_dir = os.path.dirname(os.path.abspath(args.arktsconfig))
-            out_dir = os.path.join(base_dir, out_dir)
-
-    return config, out_dir
+        modify_arktsconfig_with_cache(args.arktsconfig, args.cache_path)
 
 
 def main() -> None:
@@ -395,13 +400,13 @@ def main() -> None:
     args = parse_arguments()
 
     try:
-        config, out_dir = handle_configuration(args)
+        handle_configuration(args)
 
         if args.is_stdlib:
             execute_es2panda_stdlib(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit, args.dst_file)
         else:
             execute_es2panda(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit)
-            execute_ark_link(args.ark_link, args.dst_file, out_dir, args.env_path, args.timeout_limit)
+            execute_ark_link(args.ark_link, args.dst_file, args.cache_path, args.env_path, args.timeout_limit)
 
         if args.is_boot_abc:
             add_to_bootpath(args.device_dst_file, args.bootpath_json_file)
@@ -414,9 +419,6 @@ def main() -> None:
     except SubprocessRunError as e:
         print(f"[ERROR] Execution failed: {e}", file=sys.stderr)
         sys.exit(EXIT_CODE["EXECUTION_FAILURE"])
-    except json.JSONDecodeError as e:
-        print(f"[CONFIG] Invalid JSON in {args.arktsconfig}: {e}", file=sys.stderr)
-        sys.exit(EXIT_CODE["CONFIG_ERROR"])
     except FileNotFoundError as e:
         print(f"[IO ERROR] File not found: {e}", file=sys.stderr)
         sys.exit(EXIT_CODE["FILE_NOT_FOUND"])
@@ -436,7 +438,7 @@ def main() -> None:
         print(f"[UNKNOWN] Unexpected error: {e}", file=sys.stderr)
         sys.exit(EXIT_CODE["UNKNOWN_ERROR"])
     finally:
-        if not args.base_url and args.cache_path:
+        if not args.base_url:
             restore_arktsconfig(args.arktsconfig)
 
 
