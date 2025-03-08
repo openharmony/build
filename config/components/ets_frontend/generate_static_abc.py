@@ -252,7 +252,6 @@ def modify_arktsconfig_with_cache(arktsconfig_path: str, cache_path: str) -> Non
                 config = json.loads(content)
             if "compilerOptions" in config:
                 config["compilerOptions"]["outDir"] = cache_path
-                config["compilerOptions"]["useEmptyPackage"] = True
 
         if os.path.exists(arktsconfig_path):
             with open(arktsconfig_path, "w", encoding="utf-8") as f:
