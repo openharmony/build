@@ -49,6 +49,9 @@ def parse_args(args):
     parser.add_argument('--build-modules', help='build modules', nargs='+', default=[])
     parser.add_argument('--use-hvigor-cache', help='use hvigor cache', action='store_true')
     parser.add_argument('--hvigor-obfuscation', help='hvigor obfuscation', action='store_true')
+    parser.add_argument('--ohos-app-enable-asan', help='hvigor enable asan', action='store_true')
+    parser.add_argument('--ohos-app-enable-tsan', help='hvigor enable tsan', action='store_true')
+    parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
 
@@ -216,6 +219,13 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend([f'{hvigor_home}/hvigorw'])
     else:
         cmd.extend(['./hvigorw'])
+    
+    if options.ohos_app_enable_asan:
+        cmd.extend(['-p', 'ohos-debug-asan=true'])
+    elif options.ohos_app_enable_tsan:
+        cmd.extend(['-p', 'ohos-enable-tsan=true'])
+    elif options.ohos_app_enable_ubsan:
+        cmd.extend(['-p', 'ohos-enable-ubsan=true'])
     
     if options.test_hap:
         cmd.extend(['--mode', 'module', '-p',

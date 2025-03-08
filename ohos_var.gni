@@ -243,6 +243,9 @@ declare_args() {
   ohpm_registry = ""
   use_hvigor_cache = false
   hvigor_obfuscation = true
+  ohos_app_enable_ubsan = false
+  ohos_app_enable_asan = false
+  ohos_app_enable_tsan = false
 }
 
 # enhance some optimizations
