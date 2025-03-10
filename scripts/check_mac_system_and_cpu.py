@@ -37,15 +37,13 @@ def check_darwin_system() -> int:
 
 
 def check_cpu() -> int:
-    check_host_cpu_cmd = "sysctl machdep.cpu.brand_string"
+    check_host_cpu_cmd = "sysctl -n machdep.cpu.brand_string"
     res = run_cmd(check_host_cpu_cmd)
-    if res[1] == 0 and res[2] != "":
-        host_cpu = res[2].strip().decode().split("brand_string:")[-1]
-        host_cpu_list = ['M1', 'M2', 'M3']
-        for host_cpu_num in host_cpu_list:
-            if host_cpu_num in host_cpu:
-                print("host cpu is", host_cpu_num)
-                break
+    pattern = r'(M\d+\b)(?:\s+[A-Za-z]+)?'
+    matches = re.findall(pattern, res)
+    if matches:
+        host_cpu_num = match.group(1)
+        print("host cpu is", host_cpu_num)
 
     return 0
 
