@@ -197,6 +197,11 @@ template("gcc_toolchain") {
       compiler_prefix = "${rbe_bin_dir}/rewrapper -cfg=${rbe_cfg_dir}/rewrapper_compile.cfg ${rbe_compile_missing_inputs} -exec_root=${exec_root} "
     }
 
+    # For hitest
+    if (define(use_hitest) && use_hitest) {
+      compiler_prefix = "${hitest_wrapper} "
+      link_prefix = "${hitest_wrapper} "
+    }
     cc = compiler_prefix + invoker.cc
     cxx = compiler_prefix + invoker.cxx
     ar = ar_prefix + invoker.ar
