@@ -39,13 +39,14 @@ declare_args() {
 }
 
 sdk_toolchains = {
-  linux = "//build/toolchain/linux:clang_x64"
   windows = "//build/toolchain/mingw:mingw_x86_64"
   ohos = "//build/toolchain/ohos:ohos_clang_arm64"
 
   if (host_cpu == "arm64") {
+    linux = "//build/toolchain/linux:clang_arm64"
     darwin = "//build/toolchain/mac:clang_arm64"
   } else {
+    linux = "//build/toolchain/linux:clang_x64"
     darwin = "//build/toolchain/mac:clang_x64"
   }
 }
@@ -61,6 +62,8 @@ if (host_cpu == "arm64") {
 if (build_default_sdk_target) {
   if (host_os == "mac") {
     sdk_systems = [ sdk_system_darwin ]
+  } else if (host_os == "linux" && host_cpu == "arm64") {
+    sdk_systems = [ sdk_system_linux ]
   } else {
     sdk_systems = [
       sdk_system_windows,

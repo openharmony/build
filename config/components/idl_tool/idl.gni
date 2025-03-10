@@ -23,10 +23,12 @@ idl_build_deps = ""
 idl_out_root = ""
 
 build_root = "//build"
-toolchain_linux = "$build_root/toolchain/linux:clang_x64"
+
 if (host_cpu == "arm64") {
+  toolchain_linux = "$build_root/toolchain/linux:clang_arm64"
   toolchain_mac = "$build_root/toolchain/mac:clang_arm64"
 } else {
+  toolchain_linux = "$build_root/toolchain/linux:clang_x64"
   toolchain_mac = "$build_root/toolchain/mac:clang_x64"
 }
 toolchain_win = "$build_root/toolchain/mingw:mingw_x86_64"

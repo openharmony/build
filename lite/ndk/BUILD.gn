@@ -88,6 +88,8 @@ ndk_toolchains("source") {
   }
   if (host_os == "win") {
     src_dir += [ "//prebuilts/build-tools/win-x86/bin" ]
+  } else if (host_os == "linux" && host_cpu == "arm64") {
+    src_dir += [ "//prebuilts/build-tools/linux-aarch64/bin" ]
   } else {
     src_dir += [ "//prebuilts/build-tools/linux-x86/bin" ]
   }

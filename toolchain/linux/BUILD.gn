@@ -18,7 +18,15 @@ clang_toolchain("clang_arm") {
 }
 
 clang_toolchain("clang_arm64") {
-  toolprefix = "aarch64-linux-gnu-"
+  if (host_cpu == "arm64") {
+    # Output linker map files for binary size analysis.
+    enable_linker_map = true
+
+    strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
+    shlib_extension = ".so"
+  } else {
+    toolprefix = "aarch64-linux-gnu-"
+  }
   toolchain_args = {
     current_cpu = "arm64"
     current_os = "linux"
@@ -34,7 +42,14 @@ clang_toolchain("clang_riscv64") {
 }
 
 gcc_toolchain("arm64") {
-  toolprefix = "aarch64-linux-gnu-"
+  if (host_cpu == "arm64") {
+    toolprefix = ""
+
+    # Output linker map files for binary size analysis.
+    enable_linker_map = true
+  } else {
+    toolprefix = "aarch64-linux-gnu-"
+  }
 
   cc = "${toolprefix}gcc"
   cxx = "${toolprefix}g++"
