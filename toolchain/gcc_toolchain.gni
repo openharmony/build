@@ -198,7 +198,7 @@ template("gcc_toolchain") {
     }
 
     # For hitest
-    if (define(use_hitest) && use_hitest) {
+    if (defined(use_hitest) && use_hitest) {
       compiler_prefix = "${hitest_wrapper} "
       link_prefix = "${hitest_wrapper} "
     }
