@@ -59,15 +59,16 @@ if [[ "${SOURCE_ROOT_DIR}x" == "x" ]]; then
   exit 1
 fi
 
-
-host_cpu_prefix=""
-
 case $(uname -m) in
     *x86_64)
+        host_cpu=x86_64
         host_cpu_prefix="x86"
+        node_prefix="x64"
         ;;
-    *arm*)
-        host_cpu_prefix="arm64"
+    *arm* | *aarch64)
+        host_cpu=arm64
+        host_cpu_prefix="aarch64"
+        node_prefix="aarch64"
         ;;
     *)
         echo "\033[31m[OHOS ERROR] Unsupported host arch: $(uname -m)\033[0m"
@@ -77,16 +78,16 @@ esac
 
 case $(uname -s) in
     Darwin)
-        HOST_DIR="darwin-x86"
+        HOST_DIR="darwin-$host_cpu_prefix"
         PYTHON_DIR="darwin-$host_cpu_prefix"
         HOST_OS="mac"
-        NODE_PLATFORM="darwin-x64"
+        NODE_PLATFORM="darwin-$node_prefix"
         ;;
     Linux)
-        HOST_DIR="linux-x86"
+        HOST_DIR="linux-$host_cpu_prefix"
         PYTHON_DIR="linux-$host_cpu_prefix"
         HOST_OS="linux"
-        NODE_PLATFORM="linux-x64"
+        NODE_PLATFORM="linux-$node_prefix"
         ;;
     *)
         echo "\033[31m[OHOS ERROR] Unsupported host platform: $(uname -s)\033[0m"

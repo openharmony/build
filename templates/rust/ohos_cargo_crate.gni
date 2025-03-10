@@ -259,7 +259,11 @@ template("ohos_cargo_crate") {
       } else if (is_mingw) {
         _build_script_build_dir = "${root_out_dir}/../clang_x64"
       } else {
-        _build_script_build_dir = "${root_out_dir}/clang_x64"
+        if (host_cpu == "arm64") {
+          _build_script_build_dir = "${root_out_dir}/clang_arm64"
+        } else {
+          _build_script_build_dir = "${root_out_dir}/clang_x64"
+        }
       }
 
       if (is_standard_system) {
