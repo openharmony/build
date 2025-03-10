@@ -352,7 +352,7 @@
         },
         {
           "unzip_dir": "prebuilts/ark_tools/llvm_aot/aot_gn_ohos",
-          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-ohos-gn.tar.xz",
+          "file_path": "/harmonyos/compiler/clang/15.0.4-0d8b9c-ark/llvm-15.0.4-ark18-release-ohos-gn_20250306.tar.xz",
           "unzip_filename": "llvm_aot_gn_ohos_release"
         },
         {
