@@ -215,7 +215,7 @@ if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk-12"
 fi
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
-if [[ "${host_platform}" == "linux" ]]; then
+if [[ "${host_platform}" == "linux" && "${host_cpu}" == "arm64" ]]; then
     llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-aarch64"
 else
     llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"

@@ -286,21 +286,16 @@ def _do_rename(config_info: dict, code_dir: str, host_platform: str, host_cpu: s
     dest_dir = code_dir + config_info.get('dest')
     symlink_src = config_info.get('symlink_src')
     symlink_dest = config_info.get('symlink_dest')
-    symlink_src_dir = src_dir + symlink_src
     if os.path.exists(dest_dir) and dest_dir != src_dir:
         shutil.rmtree(dest_dir)
     shutil.move(src_dir, dest_dir)
-    if os.path.exists(symlink_src_dir) and symlink_src and symlink_dest:
+    if symlink_src and symlink_dest and os.path.exists(src_dir + symlink_src):
         if os.path.exists(dest_dir + symlink_dest) and os.path.islink(dest_dir + symlink_dest):
             os.unlink(dest_dir + symlink_dest)
         if os.path.exists(dest_dir + symlink_dest) and os.path.isfile(dest_dir + symlink_dest):
             os.remove(dest_dir + symlink_dest)
         if os.path.exists(dest_dir + symlink_dest) and os.path.isdir(dest_dir + symlink_dest):
             shutil.rmtree(dest_dir + symlink_dest)
-        if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
-            symlink_src = symlink_src.replace('linux', 'darwin')
-        if host_platform == 'linux' and host_cpu == 'arm64' and os.path.basename(dest_dir) == "nodejs":
-            symlink_src = symlink_src.replace('linux-x64', 'linux-aarch64')
         os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
 
 

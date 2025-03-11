@@ -63,11 +63,13 @@ case $(uname -m) in
     *x86_64)
         host_cpu=x86_64
         host_cpu_prefix="x86"
+        python_prefix="x86"
         node_prefix="x64"
         ;;
     *arm* | *aarch64)
         host_cpu=arm64
         host_cpu_prefix="aarch64"
+        python_prefix="arm64"
         node_prefix="aarch64"
         ;;
     *)
@@ -79,13 +81,13 @@ esac
 case $(uname -s) in
     Darwin)
         HOST_DIR="darwin-$host_cpu_prefix"
-        PYTHON_DIR="darwin-$host_cpu_prefix"
+        PYTHON_DIR="darwin-$python_prefix"
         HOST_OS="mac"
-        NODE_PLATFORM="darwin-$node_prefix"
+        NODE_PLATFORM="darwin-x64"
         ;;
     Linux)
         HOST_DIR="linux-$host_cpu_prefix"
-        PYTHON_DIR="linux-$host_cpu_prefix"
+        PYTHON_DIR="linux-$python_prefix"
         HOST_OS="linux"
         NODE_PLATFORM="linux-$node_prefix"
         ;;
