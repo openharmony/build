@@ -174,12 +174,6 @@ if (host_os == "mac") {
     sources = [ "./OHOS.cmake" ]
     outputs = [ "$ndk_darwin_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
-} else if (host_os == "linux" && host_cpu == "arm64") {
-  copy("copy_linux_ohos_cmake") {
-    deps = [ "//prebuilts/cmake/linux-aarch64:linux_cmake_copy" ]
-    sources = [ "./OHOS.cmake" ]
-    outputs = [ "$ndk_linux_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
-  }
 } else {
   copy("copy_linux_ohos_cmake") {
     deps = [ "//prebuilts/cmake/linux-x86:linux_cmake_copy" ]
@@ -247,8 +241,6 @@ if (!use_current_sdk) {
     if (ndk_platform == "default") {
       if (host_os == "mac") {
         deps += [ ":archive_darwin_ndk" ]
-      } else if (host_os == "linux" && host_cpu == "arm64") {
-        deps += [ ":archive_linux_ndk" ]
       } else {
         deps += [
           ":archive_linux_ndk",
@@ -368,36 +360,36 @@ if (!use_current_sdk) {
     ]
     outputs = [ _output ]
   }
+}
 
-  action_with_pydeps("archive_ohos_ndk") {
-    deps = ndk_targets
-    script = "//build/ohos/ndk/archive_ndk.py"
-    depfile = "$target_gen_dir/$target_name.d"
-    _output = "$ohos_sdk_out_dir/${ohos_system}/${ndk_zip_prefix}-${ohos_system}-${arch}-${current_ndk_version}"
-    if (release_type != "") {
-      _output += "-${release_type}.zip"
-    } else {
-      _output += ".zip"
-    }
-
-    args = [
-      "--os-irrelevant-dir",
-      rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
-      "--output",
-      rebase_path(_output, root_build_dir),
-      "--depfile",
-      rebase_path(depfile, root_build_dir),
-      "--notice-file",
-      rebase_path(ndk_notice_txt, root_build_dir),
-      "--os-specific-dir",
-      rebase_path("$ndk_ohos_specific_out_dir", root_build_dir),
-      "--prefix",
-      ndk_zip_prefix,
-      "--record-path",
-      rebase_path(
-          "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
-          root_build_dir),
-    ]
-    outputs = [ _output ]
+action_with_pydeps("archive_ohos_ndk") {
+  deps = ndk_targets
+  script = "//build/ohos/ndk/archive_ndk.py"
+  depfile = "$target_gen_dir/$target_name.d"
+  _output = "$ohos_sdk_out_dir/${ohos_system}/${ndk_zip_prefix}-${ohos_system}-${arch}-${current_ndk_version}"
+  if (release_type != "") {
+    _output += "-${release_type}.zip"
+  } else {
+    _output += ".zip"
   }
+
+  args = [
+    "--os-irrelevant-dir",
+    rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+    "--output",
+    rebase_path(_output, root_build_dir),
+    "--depfile",
+    rebase_path(depfile, root_build_dir),
+    "--notice-file",
+    rebase_path(ndk_notice_txt, root_build_dir),
+    "--os-specific-dir",
+    rebase_path("$ndk_ohos_specific_out_dir", root_build_dir),
+    "--prefix",
+    ndk_zip_prefix,
+    "--record-path",
+    rebase_path(
+        "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+        root_build_dir),
+  ]
+  outputs = [ _output ]
 }
