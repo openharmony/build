@@ -54,6 +54,13 @@
       "symlink_dest":"/current"
     },
     {
+      "src":"/prebuilts/build-tools/common/nodejs",
+      "dest":"/prebuilts/build-tools/common/nodejs",
+      "rename": "true",
+      "symlink_src":"/node-v14.21.1-darwin-x64",
+      "symlink_dest":"/current"
+    },
+    {
       "src":"/prebuilts/python/linux-x86",
       "dest":"/prebuilts/python/linux-x86",
       "rename": "true",
