@@ -121,7 +121,7 @@ template("idl_gen_interface") {
     # second letter of result is '_'
     name_split = []
     name_split = string_split(name, "_")
-    if (filter_include(name_split, [ name_split[0] ]) != []) {
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
       name = string_replace(name, "_", "", 1)
     }
 
@@ -162,7 +162,7 @@ template("idl_gen_interface") {
     # second letter of result is '_'
     name_split = []
     name_split = string_split(name, "_")
-    if (filter_include(name_split, [ name_split[0] ]) != []) {
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
       name = string_replace(name, "_", "", 1)
     }
 
@@ -201,7 +201,7 @@ template("idl_gen_interface") {
     # second letter of result is '_'
     name_split = []
     name_split = string_split(name, "_")
-    if (filter_include(name_split, [ name_split[0] ]) != []) {
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
       name = string_replace(name, "_", "", 1)
     }
 
