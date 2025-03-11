@@ -78,6 +78,7 @@ done
 
 case $(uname -s) in
     Linux)
+
         host_platform=linux
         glibc_version=$(getconf GNU_LIBC_VERSION | grep -oE '[0-9].[0-9]{2}')
         ;;
@@ -91,12 +92,9 @@ esac
 
 case $(uname -m) in
     arm64)
+
         host_cpu=arm64
         host_cpu_prefix=arm64
-        ;;
-    aarch64)
-        host_cpu=arm64
-        host_cpu_prefix=aarch64
         ;;
     *)
         host_cpu=x86_64
@@ -186,8 +184,8 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     echo "remove nodejs"
 fi
 python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
-if [ -f "${code_dir}/prebuilts/cmake/linux-${host_cpu_prefix}/bin/ninja" ];then
-    rm -rf "${code_dir}/prebuilts/cmake/linux-${host_cpu_prefix}/bin/ninja"
+if [ -f "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja" ];then
+    rm -rf "${code_dir}/prebuilts/cmake/linux-x86/bin/ninja"
 fi
 if [ -f "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe" ];then
     rm -rf "${code_dir}/prebuilts/cmake/windows-x86/bin/ninja.exe"
@@ -215,11 +213,7 @@ if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk-12"
 fi
 
 # llvm_ndk is merged form llvm and libcxx-ndk for compiling the native of hap
-if [[ "${host_platform}" == "linux" ]]; then
-    llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-aarch64"
-else
-    llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
-fi
+llvm_dir="${code_dir}/prebuilts/clang/ohos/linux-x86_64"
 llvm_dir_win="${code_dir}/prebuilts/clang/ohos/windows-x86_64"
 llvm_dir_mac_x86="${code_dir}/prebuilts/clang/ohos/darwin-x86_64"
 llvm_dir_mac_arm64="${code_dir}/prebuilts/clang/ohos/darwin-arm64"

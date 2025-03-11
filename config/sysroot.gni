@@ -9,8 +9,8 @@ declare_args() {
   # The absolute path of the sysroot that is applied when compiling using
   # the target toolchain.
   target_sysroot = ""
-  use_sysroot = current_cpu == "arm" || (!is_linux && current_cpu == "arm64") ||
-                current_cpu == "riscv64"
+  use_sysroot =
+      current_cpu == "arm" || current_cpu == "arm64" || current_cpu == "riscv64"
 }
 
 if (current_os == target_os && current_cpu == target_cpu &&

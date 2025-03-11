@@ -18,7 +18,6 @@
 
 import os
 import sys
-import platform
 
 from exceptions.ohos_exception import OHOSException
 from services.interface.build_executor_interface import BuildExecutorInterface
@@ -95,11 +94,7 @@ class Ninja(BuildExecutorInterface):
         """find ninja executable
         :raise OHOSException: when can't find the ninja excutable
         """
-        if sys.platform == "linux" and platform.machine().lower() == "aarch64":
-            ninja_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-aarch64/bin/ninja'
-                .format(sys.platform))
-        else:
-            ninja_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/ninja'
+        ninja_path = os.path.join(self.config.root_path, 'prebuilts/build-tools/{}-x86/bin/ninja'
                 .format(sys.platform))
         if os.path.exists(ninja_path):
             self.exec = ninja_path

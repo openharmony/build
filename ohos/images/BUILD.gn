@@ -185,19 +185,9 @@ group("updater_image") {
   }
 }
 
-if (host_cpu == "arm64") {
-  build_image_tools_path = [
-    "//out/${device_name}/clang_arm64/thirdparty/e2fsprogs",
-    "//out/${device_name}/clang_arm64/thirdparty/f2fs-tools",
-  ]
-} else {
-  build_image_tools_path = [
-    "//out/${device_name}/clang_x64/thirdparty/e2fsprogs",
-    "//out/${device_name}/clang_x64/thirdparty/f2fs-tools",
-  ]
-}
-
-build_image_tools_path += [
+build_image_tools_path = [
+  "//out/${device_name}/clang_x64/thirdparty/e2fsprogs",
+  "//out/${device_name}/clang_x64/thirdparty/f2fs-tools",
   "//third_party/e2fsprogs/prebuilt/host/bin",
   "//build/ohos/images/mkimage",
 ]
@@ -387,20 +377,11 @@ foreach(_platform, target_platform_list) {
   action("mk_chip_ckm_img") {
     script = "//build/ohos/images/mkimage/mkchip_ckm.py"
     device_name = "packages/phone/images/chip_ckm.img"
-
-    if (host_cpu == "arm64") {
-      build_image_tool_path = [
-        "$root_build_dir/clang_arm64/thirdparty/f2fs-tools",
-        "$root_build_dir/clang_arm64/thirdparty/e2fsprogs",
-      ]
-    } else {
-      build_image_tool_path = [
-        "$root_build_dir/clang_x64/thirdparty/f2fs-tools",
-        "$root_build_dir/clang_x64/thirdparty/e2fsprogs",
-      ]
-    }
-    build_image_tool_path += [ "//third_party/e2fsprogs/prebuilt/host/bin" ]
-
+    build_image_tool_path = [
+      "$root_build_dir/clang_x64/thirdparty/f2fs-tools",
+      "$root_build_dir/clang_x64/thirdparty/e2fsprogs",
+      "//third_party/e2fsprogs/prebuilt/host/bin",
+    ]
     config_file_path = "//build/ohos/images/mkimage/chip_ckm.txt"
     mkextimage_tools_path = "//build/ohos/images/mkimage/mkextimage.py"
 

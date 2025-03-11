@@ -17,7 +17,6 @@ import sys
 import argparse
 import subprocess
 import os
-import platform
 
 FS_TYPE = "ext4"
 BLOCKSIZE = 4096
@@ -93,12 +92,8 @@ def build_run_mke2fs(args) -> int:
 
 
 def build_run_e2fsdroid(args) -> int:
-    if sys.platform == "linux" and platform.machine().lower() == "aarch64":
-        libselinux_path = os.path.realpath("./clang_arm64/thirdparty/selinux/")
-        libpcre2_path = os.path.realpath("./clang_arm64/thirdparty/pcre2/")
-    else:
-        libselinux_path = os.path.realpath("./clang_x64/thirdparty/selinux/")
-        libpcre2_path = os.path.realpath("./clang_x64/thirdparty/pcre2/")
+    libselinux_path = os.path.realpath("./clang_x64/thirdparty/selinux/")
+    libpcre2_path = os.path.realpath("./clang_x64/thirdparty/pcre2/")
     os.environ['LD_LIBRARY_PATH'] = libselinux_path + ":" + libpcre2_path
 
     e2fsdroid_opts = ""

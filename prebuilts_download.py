@@ -281,50 +281,37 @@ def _node_modules_copy(config: dict, code_dir: str, enable_symlink: bool):
             shutil.copytree(src_dir, dest_dir, symlinks=True)
 
 
-def _do_rename(config_info: dict, code_dir: str, host_platform: str, host_cpu: str):
-    src_dir = code_dir + config_info.get('src')
-    dest_dir = code_dir + config_info.get('dest')
-    symlink_src = config_info.get('symlink_src')
-    symlink_dest = config_info.get('symlink_dest')
-    symlink_src_dir = src_dir + symlink_src
-    if os.path.exists(dest_dir) and dest_dir != src_dir:
-        shutil.rmtree(dest_dir)
-    shutil.move(src_dir, dest_dir)
-    if os.path.exists(symlink_src_dir) and symlink_src and symlink_dest:
-        if os.path.exists(dest_dir + symlink_dest) and os.path.islink(dest_dir + symlink_dest):
-            os.unlink(dest_dir + symlink_dest)
-        if os.path.exists(dest_dir + symlink_dest) and os.path.isfile(dest_dir + symlink_dest):
-            os.remove(dest_dir + symlink_dest)
-        if os.path.exists(dest_dir + symlink_dest) and os.path.isdir(dest_dir + symlink_dest):
-            shutil.rmtree(dest_dir + symlink_dest)
-        if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
-            symlink_src = symlink_src.replace('linux', 'darwin')
-        if host_platform == 'linux' and host_cpu == 'arm64' and os.path.basename(dest_dir) == "nodejs":
-            symlink_src = symlink_src.replace('linux-x64', 'linux-aarch64')
-        os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
-
-
-def _handle_tmp(tmp_dir: str, src_dir: str, dest_dir: str):
-    shutil.move(src_dir, tmp_dir)
-    cmd = 'mv {}/*.mark {}'.format(dest_dir, tmp_dir)
-    _run_cmd(cmd)
-    if os.path.exists(dest_dir):
-        shutil.rmtree(dest_dir)
-    shutil.move(tmp_dir, dest_dir)
-
-
-def _file_handle(config: dict, code_dir: str, host_platform: str, host_cpu: str):
+def _file_handle(config: dict, code_dir: str, host_platform: str):
     for config_info in config:
         src_dir = code_dir + config_info.get('src')
         dest_dir = code_dir + config_info.get('dest')
         tmp_dir = config_info.get('tmp')
+        symlink_src = config_info.get('symlink_src')
+        symlink_dest = config_info.get('symlink_dest')
         rename = config_info.get('rename')
         if os.path.exists(src_dir):
             if tmp_dir:
                 tmp_dir = code_dir + tmp_dir
-                _handle_tmp(tmp_dir, src_dir, dest_dir)
+                shutil.move(src_dir, tmp_dir)
+                cmd = 'mv {}/*.mark {}'.format(dest_dir, tmp_dir)
+                _run_cmd(cmd)
+                if os.path.exists(dest_dir):
+                    shutil.rmtree(dest_dir)
+                shutil.move(tmp_dir, dest_dir)
             elif rename:
-                _do_rename(config_info, code_dir, host_platform, host_cpu)
+                if os.path.exists(dest_dir) and dest_dir != src_dir:
+                    shutil.rmtree(dest_dir)
+                shutil.move(src_dir, dest_dir)
+                if symlink_src and symlink_dest:
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.islink(dest_dir + symlink_dest):
+                        os.unlink(dest_dir + symlink_dest)
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.isfile(dest_dir + symlink_dest):
+                        os.remove(dest_dir + symlink_dest)
+                    if os.path.exists(dest_dir + symlink_dest) and os.path.isdir(dest_dir + symlink_dest):
+                        shutil.rmtree(dest_dir + symlink_dest)
+                    if host_platform == 'darwin' and os.path.basename(dest_dir) == "nodejs":
+                        symlink_src = symlink_src.replace('linux', 'darwin')
+                    os.symlink(os.path.basename(symlink_src), dest_dir + symlink_dest)
             else:
                 _run_cmd('chmod 755 {} -R'.format(dest_dir))
 
@@ -357,21 +344,6 @@ def _install(config: dict, code_dir: str):
         dest_dir = '{}/{}'.format(code_dir, config_info.get('destdir'))
         cmd = '{} --destdir={}'.format(cmd, dest_dir)
         _run_cmd(cmd)
-
-
-def _build_copy_config(config_info: dict, host_platform: str, host_cpu: str):
-    copy_config = config_info.get(host_platform).get(host_cpu).get('copy_config')
-    node_config = config_info.get(host_platform).get('node_config')
-    if node_config is None:
-        node_config = config_info.get(host_platform).get(host_cpu).get('node_config')
-    copy_config.extend(node_config)
-    if host_platform == 'linux':
-        linux_copy_config = config_info.get(host_platform).get(host_cpu).get('linux_copy_config')
-        copy_config.extend(linux_copy_config)
-    elif host_platform == 'darwin':
-        darwin_copy_config = config_info.get(host_platform).get(host_cpu).get('darwin_copy_config')
-        copy_config.extend(darwin_copy_config)
-    return copy_config
 
 
 def main():
@@ -415,7 +387,16 @@ def main():
     args.bin_dir = os.path.join(args.code_dir, config_info.get('prebuilts_download_dir'))
     if not os.path.exists(args.bin_dir):
         os.makedirs(args.bin_dir, exist_ok=True)
-    copy_config = _build_copy_config(config_info, host_platform, host_cpu)
+    copy_config = config_info.get(host_platform).get(host_cpu).get('copy_config')
+    node_config = config_info.get(host_platform).get('node_config')
+    copy_config.extend(node_config)
+    install_config = config_info.get(host_platform).get(host_cpu).get('install')
+    if host_platform == 'linux':
+        linux_copy_config = config_info.get(host_platform).get(host_cpu).get('linux_copy_config')
+        copy_config.extend(linux_copy_config)
+    elif host_platform == 'darwin':
+        darwin_copy_config = config_info.get(host_platform).get(host_cpu).get('darwin_copy_config')
+        copy_config.extend(darwin_copy_config)
     if args.disable_rich:
         _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir, glibc_version)
     else:
@@ -423,8 +404,7 @@ def main():
         with args.progress:
             _hwcloud_download(args, copy_config, args.bin_dir, args.code_dir, glibc_version)
 
-    _file_handle(file_handle_config, args.code_dir, args.host_platform, host_cpu)
-    install_config = config_info.get(host_platform).get(host_cpu).get('install')
+    _file_handle(file_handle_config, args.code_dir, args.host_platform)
     retry_times = 0
     max_retry_times = 2
     while retry_times <= max_retry_times:
