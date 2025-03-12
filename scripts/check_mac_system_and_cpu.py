@@ -16,6 +16,7 @@
 import os
 import sys
 import subprocess
+import re
 
 
 def run_cmd(cmd: str):
