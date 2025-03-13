@@ -169,13 +169,20 @@ class OHOSLoader(LoadInterface):
         if not os.path.exists(self.third_party_file):
             self.third_party_file = os.path.join(self.config.root_path, 'build/third_party_allow_list.json')
         cropping_parts = read_json_file(self.third_party_file)
+
+        # auto_install_whitelist
+        self.auto_install_file = os.path.join(self.config.root_path, "out/products_ext/auto_install_whitelist.json")
+        if not os.path.exists(self.auto_install_file):
+            self.auto_install_file = os.path.join(self.config.root_path, 'build/auto_install_whitelist.json')
+        add_parts = read_json_file(self.auto_install_file)
         
         components_data = read_json_file(self.components_file)
 
         new_components_data = copy.deepcopy(components_data)
         
         for component, component_value in components_data.items():
-            if component not in src_parts and component not in auto_parts and component not in cropping_parts:
+            if component not in src_parts and component not in auto_parts and component not in cropping_parts \
+                    and component not in add_parts:
                 del new_components_data[component]
         self._merge_components_info(new_components_data)
         os.remove(self.components_file)
@@ -481,10 +488,6 @@ class OHOSLoader(LoadInterface):
     def _generate_auto_install_part(self):
         parts_path_info = self.parts_config_info.get("parts_path_info")
         auto_install_part_list = []
-        for part, path in parts_path_info.items():
-            if str(path).startswith("drivers/interface") or \
-                    str(path).startswith("third_party"):
-                auto_install_part_list.append(part)
         auto_install_list_file = os.path.join(
             self.config_output_dir, "auto_install_parts.json")
         write_json_file(auto_install_list_file, auto_install_part_list)
