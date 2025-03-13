@@ -1437,11 +1437,9 @@ _DEPENDENCIES_MAP = {
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
     ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
     ('relational_store', 'native_rdb'): ["c_utils:utils"],
-    ('opengles', 'libGLES'): ["egl:libEGL"],
     ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
     ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
     ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
-    ('bundle_framework', 'bundlemgr_mini'): ["bundle_framework:appexecfwk_base"],
     ('media_foundation', 'media_monitor_client'): ["samgr:samgr_proxy"],
 }
 
