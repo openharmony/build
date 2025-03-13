@@ -9,7 +9,8 @@
     "arkcompiler/ets_frontend/legacy_bin/api8",
     "interface/sdk-js/build-tools",
     "arkcompiler/ets_frontend/arkguard",
-    "arkcompiler/ets_frontend/ets2panda/driver/build_system"
+    "arkcompiler/ets_frontend/ets2panda/driver/build_system",
+    "arkcompiler/ets_frontend/ets2panda/linter"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
