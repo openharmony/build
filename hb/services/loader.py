@@ -481,10 +481,12 @@ class OHOSLoader(LoadInterface):
     def _generate_auto_install_part(self):
         parts_path_info = self.parts_config_info.get("parts_path_info")
         auto_install_part_list = []
-        for part, path in parts_path_info.items():
-            if str(path).startswith("drivers/interface") or \
-                    str(path).startswith("third_party"):
-                auto_install_part_list.append(part)
+        # auto_install_whitelist
+        self.auto_install_file = os.path.join(self.config.root_path, "out/products_ext/auto_install_whitelist.json")
+        if not os.path.exists(self.auto_install_file):
+            self.auto_install_file = os.path.join(self.config.root_path, 'build/auto_install_whitelist.json')
+        add_parts = read_json_file(self.auto_install_file)
+        auto_install_part_list.extend(add_parts)
         auto_install_list_file = os.path.join(
             self.config_output_dir, "auto_install_parts.json")
         write_json_file(auto_install_list_file, auto_install_part_list)
