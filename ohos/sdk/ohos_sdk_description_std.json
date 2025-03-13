@@ -1315,5 +1315,13 @@
             "linux",
             "windows"
         ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/migration-helper",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/linter:ets2panda_build_linter",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
     }
 ]
