@@ -185,12 +185,13 @@ if (!use_current_sdk) {
 
   group("ohos_sdk_pre") {
     deps = []
-    if (enable_process_notice) {
-      deps += [
-        ":generate_sdk_notice",
-        ":verify_sdk_notice_file",
-      ]
-    }
+
+    # if (enable_process_notice) {
+    #   deps += [
+    #     ":generate_sdk_notice",
+    #     ":verify_sdk_notice_file",
+    #   ]
+    # }
     deps += [ "${generated_files_dir}:generated_ohos_sdk" ]
   }
 
@@ -262,9 +263,10 @@ if (!use_current_sdk) {
 
   group("ohos_sdk") {
     deps = []
-    if (enable_process_notice) {
-      deps += [ ":add_notice_file" ]
-    }
+
+    # if (enable_process_notice) {
+    #   deps += [ ":add_notice_file" ]
+    # }
     deps += [ ":ohos_sdk_pre" ]
   }
 
