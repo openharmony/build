@@ -201,6 +201,7 @@ def parse_arguments() -> argparse.Namespace:
                         help="Flag indicating if the file is a boot abc")
     parser.add_argument("--device-dst-file", type=str, default=None, 
                         help="Path for device dst file. If 'is-boot-abc' is True, this parameter is required")
+    parser.add_argument("--target-name", type=str, help="target name")
     parser.add_argument("--is-stdlib", type=bool, default=False, 
                         help="Flag indicating if the compile target is etsstdlib")
     parser.add_argument("--root-dir", required=False, 
@@ -271,11 +272,15 @@ def restore_arktsconfig(arktsconfig_path: str) -> None:
         shutil.move(backup_path, arktsconfig_path)
 
 
-def add_to_bootpath(device_dst_file: str, bootpath_json_file: str) -> None:
+def add_to_bootpath(device_dst_file: str, bootpath_json_file: str, target_name: str) -> None:
+    print(f"Received target name {target_name}")
     try:
+        directory = os.path.dirname(bootpath_json_file)
+        new_json_file = os.path.join(directory, f"{target_name}_bootpath.json")
+
         data = {}
-        if os.path.exists(bootpath_json_file):
-            with open(bootpath_json_file, "r", encoding="utf-8") as f:
+        if os.path.exists(new_json_file):
+            with open(new_json_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
         current_value = data.get("bootpath", "")
@@ -284,12 +289,12 @@ def add_to_bootpath(device_dst_file: str, bootpath_json_file: str) -> None:
         new_value = ":".join(abc_set)
         data["bootpath"] = new_value
 
-        os.makedirs(os.path.dirname(bootpath_json_file), exist_ok=True)
-
-        with open(bootpath_json_file, "w", encoding="utf-8") as f:
+        os.makedirs(os.path.dirname(new_json_file), exist_ok=True)
+        with open(new_json_file, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
+        print(f"{target_name}_bootpath.json has been created")
     except json.JSONDecodeError as e:
-        print(f"{bootpath_json_file} Invalid JSON format (bootpath): {e}", file=sys.stderr)
+        print(f"{new_json_file} Invalid JSON format (bootpath): {e}", file=sys.stderr)
         sys.exit()
 
 
@@ -408,7 +413,7 @@ def main() -> None:
             execute_ark_link(args.ark_link, args.dst_file, args.cache_path, args.env_path, args.timeout_limit)
 
         if args.is_boot_abc:
-            add_to_bootpath(args.device_dst_file, args.bootpath_json_file)
+            add_to_bootpath(args.device_dst_file, args.bootpath_json_file, args.target_name)
 
         print(f"Compilation succeeded in {time.time() - start_time:.2f} seconds")
         sys.exit(EXIT_CODE["SUCCESS"])
