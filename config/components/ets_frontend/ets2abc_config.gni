@@ -59,8 +59,7 @@ ohos_ets_arkts_deps = "//build/config/components/ets_frontend:ohos_ets_arkts"
 ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
 ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
 
-bootpath_json_file = root_out_dir + "/" +
-                     rebase_path(ets2abc_out_root, root_out_dir) + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
+bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
 
 template("generate_static_abc") {
   dependencies = []
@@ -183,6 +182,8 @@ template("generate_static_abc") {
         args += [
           "--device-dst-file",
           invoker.device_dst_file,
+          "--target-name",
+          "$target_name",
         ]
       }
     }
