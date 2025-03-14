@@ -18,6 +18,7 @@ import argparse
 import os
 
 from kernel_permission import KernelPermission
+from bootpath_collection import BootPathCollection
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
@@ -59,6 +60,7 @@ def main():
     args = parser.parse_args()
 
     KernelPermission.run(args.root_build_dir, args.root_code_dir)
+    BootPathCollection.run(args.root_build_dir, args.root_code_dir)
 
     current_platform_parts = get_platform_parts(args.current_platform,
                                                 args.platforms_parts_file)
