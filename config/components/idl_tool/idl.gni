@@ -118,6 +118,13 @@ template("idl_gen_interface") {
       name = string_replace(name, "_", "", 1)
     }
 
+    # second letter of result is '_'
+    name_split = []
+    name_split = string_split(name, "_")
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
+      name = string_replace(name, "_", "", 1)
+    }
+
     sources_all += [
       "${target_gen_dir}/" + name + "_proxy.cpp",
       "${target_gen_dir}/" + name + "_stub.cpp",
@@ -151,6 +158,14 @@ template("idl_gen_interface") {
     if (name_split[0] == "") {
       name = string_replace(name, "_", "", 1)
     }
+
+    # second letter of result is '_'
+    name_split = []
+    name_split = string_split(name, "_")
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
+      name = string_replace(name, "_", "", 1)
+    }
+
     out_full_name = string_replace(idl_full_name, idl_name, name)
 
     sources_all += [
@@ -182,6 +197,14 @@ template("idl_gen_interface") {
     if (name_split[0] == "") {
       name = string_replace(name, "_", "", 1)
     }
+
+    # second letter of result is '_'
+    name_split = []
+    name_split = string_split(name, "_")
+    if (filter_include(str_lower_list, [ name_split[0] ]) != []) {
+      name = string_replace(name, "_", "", 1)
+    }
+
     out_full_name = string_replace(idl_full_name, idl_name, name)
 
     sources_all += [ "${target_gen_dir}/" + out_full_name + ".cpp" ]
