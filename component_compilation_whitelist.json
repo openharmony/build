@@ -36,7 +36,7 @@
         "//drivers/interface/usb/v1_2:usb_idl_headers_1.2",
         "//drivers/interface/usb/v2_0:usb_idl_headers_2.0",
         "//drivers/interface/user_auth/v3_0:user_auth_idl_headers",
-        "//drivers/interface/wlan/chip/v1_0:chip_idl_headers",
+        "//drivers/interface/wlan/chip/v2_0:chip_idl_headers_2.0",
         "//drivers/interface/wlan/v1_3:wlan_idl_headers",
         "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
         "//drivers/peripheral/input/udriver:hdi_input_udriver",
