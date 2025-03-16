@@ -77,7 +77,7 @@ def build_es2panda_command_stdlib(
         "--ets-module",
         "--gen-stdlib=true",
         "--output=" + dst_path,
-        "--extension=ets",
+        "--extension=sts",
         "--opt-level=2",
     ]
 
