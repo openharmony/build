@@ -302,7 +302,7 @@ def is_target_file(file_name: str) -> bool:
     """
     Check if the given file name is a target file.
     """
-    target_extensions = [".d.ets"]
+    target_extensions = [".d.ets", ".ets"]
     return any(file_name.endswith(ext) for ext in target_extensions)
 
 
