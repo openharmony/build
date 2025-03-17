@@ -12,7 +12,8 @@
     "third_party/musl/temp_idlize",
     "arkcompiler/ets_frontend/ets2panda/driver/build_system",
     "developtools/ace_ets2bundle/koala-wrapper",
-    "developtools/ace_ets2bundle/arkui-plugins"
+    "developtools/ace_ets2bundle/arkui-plugins",
+    "arkcompiler/ets_frontend/ets2panda/linter"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
