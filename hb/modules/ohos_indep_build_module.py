@@ -24,6 +24,8 @@ from util.log_util import LogUtil
 from containers.status import throw_exception
 from resolver.indep_build_args_resolver import get_part_name
 from containers.arg import BuildPhase
+import argparse
+import sys
 
 
 class OHOSIndepBuildModule(IndepBuildModuleInterface):
@@ -51,6 +53,14 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         else:
             raise OHOSException(
                 'OHOSIndepBuildModule has not been instantiated', '0000')
+    
+    @staticmethod
+    def parse_build_args(args):
+        parser = argparse.ArgumentParser(add_help=False)
+        parser.add_argument('-i', action='store_true', help='Src option')
+        parser.add_argument('-t', '--test', action='store_true', help='Test option')
+        parsed, _ = parser.parse_known_args(args)
+        return parsed
 
     @throw_exception
     def run(self):
@@ -59,7 +69,27 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         except OHOSException as exception:
             raise exception
         else:
-            LogUtil.hb_info('{} build success'.format(','.join(get_part_name())))
+            if len(sys.argv) < 2:
+                LogUtil.hb_error("Insufficient arguments")
+                return
+            arg_value = "onlysrc"
+            if sys.argv[1] == 'build':
+                build_args = sys.argv[2:] if len(sys.argv) > 2 else []
+                parsed = self.parse_build_args(build_args)
+
+                has_i = parsed.i
+                has_test = parsed.test
+
+                if has_i and has_test:
+                    arg_value = "both"
+                elif has_test and not has_i:
+                    arg_value = "onlytest"
+            message = {
+                'both': 'build src and test success',
+                'onlytest': 'build test success',
+                'onlysrc': 'build src success'
+            }[arg_value]
+            LogUtil.hb_info(f'{",".join(get_part_name())} {message}')
 
     def _target_compilation(self):
         self._run_hpm()
