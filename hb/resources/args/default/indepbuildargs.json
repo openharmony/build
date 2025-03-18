@@ -84,7 +84,7 @@
   "keep_ninja_going": {
     "arg_name": "--keep-ninja-going",
     "argDefault": false,
-    "arg_help": "Default:''. Help: keep ninja going when error occurred",
+    "arg_help": "Default:''. Help: Continue compiling the remaining parts when error occurred",
     "arg_phase": ["indepCompilation"],
     "arg_type": "bool",
     "arg_attribute": {
@@ -95,17 +95,27 @@
   "gn_args": {
     "arg_name": "--gn-args",
     "argDefault": [],
-    "arg_help": "Default:[]. Help:You use this option to add custom gn args",
+    "arg_help": "Default:[]. Help:Add custom gn args",
     "arg_phase": "indepCompilation",
     "arg_type": "list",
     "arg_attribute": {},
     "resolve_function": "resolve_gn_args",
     "testFunction": ""
   },
+  "ninja_args": {
+    "arg_name": "--ninja-args",
+    "argDefault": [],
+    "arg_help": "Default:[]. Help:Add custom ninja args",
+    "arg_phase": "indepCompilation",
+    "arg_type": "list",
+    "arg_attribute": {},
+    "resolve_function": "resolve_ninja_args",
+    "testFunction": ""
+  },
   "skip_download": {
     "arg_name": "--skip-download",
     "argDefault": false,
-    "arg_help": "Default:false. Help:You use this option to skip hpm download",
+    "arg_help": "Default:false. Help:You can use this option to skip hpm download",
     "arg_phase": "hpmDownload",
     "arg_type": "bool",
     "arg_attribute": {},
@@ -115,31 +125,41 @@
   "build_target": {
     "arg_name": "--build-target",
     "argDefault": [],
-    "arg_help": "Default:false. Help:You use this option to specify a single compilation target",
+    "arg_help": "Default:false. Help:Specify a single compilation target",
     "arg_phase": "indepCompilation",
     "arg_type": "list",
     "arg_attribute": {},
     "resolve_function": "resolve_build_target",
     "testFunction": ""
   },
-  "keep_out": {
-    "arg_name": "--keep-out",
+  "fast_rebuild": {
+    "arg_name": "--fast-rebuild",
     "argDefault": false,
-    "arg_help": "Default:false. Help: keep out dir",
-    "arg_phase": "indepCompilation",
+    "arg_help": "Default:false. Help:Skip hpm download and gn phase, run ninja directly",
+    "arg_phase": ["hpmDownload","indepCompilation"],
     "arg_type": "bool",
     "arg_attribute": {},
-    "resolve_function": "resolve_keep_out",
+    "resolve_function": "resolve_fast_rebuild",
     "testFunction": ""
   },
   "ccache": {
     "arg_name": "--ccache",
     "argDefault": true,
-    "arg_help": "Default:false. Help:You use this option to use build cache",
+    "arg_help": "Default:true. Help:Set whether use build cache or not",
     "arg_phase": "indepCompilation",
     "arg_type": "bool",
     "arg_attribute": {},
     "resolve_function": "resolve_ccache",
+    "testFunction": ""
+  },
+  "export_compile_commands": {
+    "arg_name": "--export-compile-commands",
+    "argDefault": false,
+    "arg_help": "Default:false. Help:Generate compile_commands.json",
+    "arg_phase": "indepCompilation",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_export_compile_commands",
     "testFunction": ""
   }
 }

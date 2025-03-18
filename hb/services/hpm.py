@@ -111,7 +111,7 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        if self.flags_dict.get("skip-download"):
+        if self.flags_dict.get("skip-download") or self.flags_dict.get("fast-rebuild"):
             return
         else:
             self.flags_dict.pop("skip-download")
