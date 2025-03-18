@@ -16,3 +16,4 @@ log_exe_name=true
 handle_segv=0
 detect_stack_use_after_return=0
 print_module_map=1
+memory_debug=1
