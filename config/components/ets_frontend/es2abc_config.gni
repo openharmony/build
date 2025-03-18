@@ -66,7 +66,10 @@ template("es2abc_gen_abc") {
     script = "//build/scripts/generate_js_bytecode.py"
 
     deps = extra_dependencies
-    deps += es2abc_build_deps
+    if (!defined(external_deps)) {
+      external_deps = []
+    }
+    external_deps += [ "ets_frontend:es2panda(${host_toolchain})" ]
 
     args = [
       "--src-js",
