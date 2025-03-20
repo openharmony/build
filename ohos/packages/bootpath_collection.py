@@ -27,14 +27,10 @@ from scripts.util.file_utils import read_json_file
 class BootPathCollection():
 
     @staticmethod
-    def run(out_path, root_path):
-        dest_path = "obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
-        temp = os.path.join(root_path, out_path.lstrip("//"))
-        target_out_path = os.path.join(temp, dest_path)
-        print(f"BootPathCollection root_path {root_path}, out_path {out_path}, target_out_path {target_out_path}")
-
-        file_list = BootPathCollection.collect_list(target_out_path)
-        directory = os.path.dirname(target_out_path)
+    def run(dest_path):
+        origin_path = "obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
+        file_list = BootPathCollection.collect_list(origin_path)
+        directory = os.path.dirname(os.path.join(dest_path, f"framework/bootpath.json"))
         new_json_file = os.path.join(directory, f"bootpath.json")
 
         data = {}
