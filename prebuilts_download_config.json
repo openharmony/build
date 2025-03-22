@@ -10,7 +10,8 @@
     "interface/sdk-js/build-tools",
     "arkcompiler/ets_frontend/arkguard",
     "arkcompiler/ets_frontend/ets2panda/driver/build_system",
-    "arkcompiler/ets_frontend/ets2panda/linter"
+    "arkcompiler/ets_frontend/ets2panda/linter",
+    "arkcompiler/ets_frontend/ets2panda/bindings"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
