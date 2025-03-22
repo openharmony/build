@@ -27,6 +27,7 @@ from scripts.util import build_utils  # noqa: E402
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rules"))
 from categorized_libraries_utils import load_categorized_libraries
 from categorized_libraries_utils import update_module_info
+from bootpath_collection import BootPathCollection
 
 
 def _get_modules_info(system_install_info: dict, depfiles: list):
@@ -283,6 +284,8 @@ def main():
     depfiles.extend([item for item in depfiles if item not in sa_files])
     build_utils.write_depfile(args.depfile, args.install_modules_info_file,
                               depfiles)
+    
+    BootPathCollection.run(args.system_dir)
     return 0
 
 
