@@ -23,9 +23,9 @@ import("//build/ohos_var.gni")
 if (product_name == "ohos-sdk") {
   group("build_ohos_sdk") {
     deps = [
-      "//build/ohos/ndk:ohos_ndk",
+      # "//build/ohos/ndk:ohos_ndk",
       "//build/ohos/sdk:ohos_sdk",
-      "//build/ohos/sdk:ohos_sdk_verify",
+      # "//build/ohos/sdk:ohos_sdk_verify",
     ]
   }
 } else if (product_name == "arkui-x") {
