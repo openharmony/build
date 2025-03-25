@@ -13,7 +13,8 @@
     "arkcompiler/ets_frontend/ets2panda/driver/build_system",
     "developtools/ace_ets2bundle/koala-wrapper",
     "developtools/ace_ets2bundle/arkui-plugins",
-    "arkcompiler/ets_frontend/ets2panda/linter"
+    "arkcompiler/ets_frontend/ets2panda/linter",
+    "arkcompiler/ets_frontend/ets2panda/bindings"
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
