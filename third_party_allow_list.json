@@ -87,6 +87,7 @@
     "ets_utils",
     "image_framework",
     "graphic_2d",
+    "graphics_effect",
     "accessibility",
     "i18n",
     "time_service",
