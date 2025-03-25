@@ -26,21 +26,6 @@ case $3 in
     2) OUT_DIR="test" ;;
 esac
 
-mkdir -p out/preloader
-mkdir -p out/$VARIANTS/$OUT_DIR/
-
-if [[ ! "$@" =~ "--keep-out" ]]; then
-    # keep the logs of hpm
-    find out/$VARIANTS -type f -not -name '*.log' -delete
-    find out/$VARIANTS -type d -empty -delete
-fi
-rm -rf out/preloader/$VARIANTS
-rm -rf .gn
-
-mkdir -p out/$VARIANTS/$OUT_DIR/build_configs/parts_info
-cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/$OUT_DIR/build_configs
-ln -s build/indep_configs/dotfile.gn .gn
-
 export SOURCE_ROOT_DIR="$PWD"
 
 # set python3
@@ -53,8 +38,30 @@ PYTHON3=${PYTHON3_DIR}/bin/python3
 PYTHON=${PYTHON3_DIR}/bin/python
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER} -out ${OUT_DIR}
 
+if [[ "$@" =~ "--fast-rebuild" ]]; then
+    rm -rf .gn
+    ln -s build/indep_configs/dotfile.gn .gn
+    ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS} -out ${OUT_DIR} -t ${TEST_FILTER} --fast-rebuild
+    if [ $? -ne 0 ]; then
+        exit 1
+    fi
+    rm -rf .gn
+    ln -s build/core/gn/dotfile.gn .gn
+    exit 0
+fi
+
+mkdir -p out/preloader
+mkdir -p out/$VARIANTS/$OUT_DIR/
+
+rm -rf out/preloader/$VARIANTS
+rm -rf .gn
+
+mkdir -p out/$VARIANTS/$OUT_DIR/build_configs/parts_info
+cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/$OUT_DIR/build_configs
+ln -s build/indep_configs/dotfile.gn .gn
+
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_components.py -hp $1 -sp $2 -v ${VARIANTS} -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER} -out ${OUT_DIR}
 
 if [ -d "binarys/third_party/rust/crates" ];then
     echo "rust directory exists"
