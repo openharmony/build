@@ -58,13 +58,13 @@ def _search_bundle_path(part_name: str) -> str:
         if not bundle_path:
             bundle_path = ComponentUtil.search_bundle_file(part_name)
         else:
-            print(
+            LogUtil.hb_info(
                 "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
                     part_name, bundle_path, COMPONENTS_PATH_DIR))
     except Exception as e:
         raise OHOSException('Please check the bundle.json file of {} : {}'.format(part_name, e))
     if not bundle_path:
-        print('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(part_name))
+        LogUtil.hb_info('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(part_name))
         sys.exit(1)
     return bundle_path
 
@@ -206,6 +206,16 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         indep_build_module.indep_build.regist_flag('gn-args', target_arg.arg_value)
 
     @staticmethod
+    def resolve_ninja_args(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('ninja-args', target_arg.arg_value)
+    
+    @staticmethod
+    def resolve_export_compile_commands(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('export-compile-commands', target_arg.arg_value)
+        if target_arg.arg_value:
+            LogUtil.hb_info('Perhaps you need to set the parameter --compile-commands-dir={dir of compile_commands.json} in the clangd plugin and restart language server.')
+
+    @staticmethod
     def resolve_skip_download(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.hpm.regist_flag('skip-download', target_arg.arg_value)
 
@@ -214,8 +224,9 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         indep_build_module.indep_build.regist_flag('build-target', target_arg.arg_value)
 
     @staticmethod
-    def resolve_keep_out(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
-        indep_build_module.indep_build.regist_flag('keep-out', target_arg.arg_value)
+    def resolve_fast_rebuild(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('fast-rebuild', target_arg.arg_value)
+        indep_build_module.hpm.regist_flag('fast-rebuild', target_arg.arg_value)
 
     @staticmethod
     def resolve_ccache(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
@@ -276,6 +287,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
             try:
                 subprocess.check_output(cmd, text=True)
             except FileNotFoundError:
-                print("错误：找不到 ccache 命令")
+                LogUtil.hb_info("Error: ccache command not found")
             except subprocess.CalledProcessError as e:
-                print(f"执行 ccache 命令失败: {e}")
+                LogUtil.hb_info(f"Failed to execute ccache command: {e}")
