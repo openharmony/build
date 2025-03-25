@@ -214,7 +214,11 @@ template("idl_gen_interface") {
 
   action("$target_name") {
     inputs = idl_list
-    deps = idl_build_deps
+    if (!defined(external_deps)) {
+      external_deps = []
+    }
+    external_deps += [ "idl_tool:idl(${host_toolchain})" ]
+
     script = "//build/config/components/idl_tool/idl.py"
     args = [
       "--src-idl",

@@ -302,13 +302,21 @@ template("ohos_executable") {
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_exceptions") {
+          configs -= [ "//build/config/compiler:no_exceptions" ]
+        }
+      }
       configs += [ "//build/config/compiler:exceptions" ]
-      configs -= [ "//build/config/compiler:no_exceptions" ]
     }
 
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_rtti") {
+          configs -= [ "//build/config/compiler:no_rtti" ]
+        }
+      }
       configs += [ "//build/config/compiler:rtti" ]
-      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(cflags)) {
@@ -885,13 +893,21 @@ template("ohos_shared_library") {
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_exceptions") {
+          configs -= [ "//build/config/compiler:no_exceptions" ]
+        }
+      }
       configs += [ "//build/config/compiler:exceptions" ]
-      configs -= [ "//build/config/compiler:no_exceptions" ]
     }
 
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_rtti") {
+          configs -= [ "//build/config/compiler:no_rtti" ]
+        }
+      }
       configs += [ "//build/config/compiler:rtti" ]
-      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(cflags)) {
@@ -1377,13 +1393,21 @@ template("ohos_static_library") {
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_exceptions") {
+          configs -= [ "//build/config/compiler:no_exceptions" ]
+        }
+      }
       configs += [ "//build/config/compiler:exceptions" ]
-      configs -= [ "//build/config/compiler:no_exceptions" ]
     }
 
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_rtti") {
+          configs -= [ "//build/config/compiler:no_rtti" ]
+        }
+      }
       configs += [ "//build/config/compiler:rtti" ]
-      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(cflags)) {
@@ -1665,13 +1689,21 @@ template("ohos_source_set") {
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_exceptions") {
+          configs -= [ "//build/config/compiler:no_exceptions" ]
+        }
+      }
       configs += [ "//build/config/compiler:exceptions" ]
-      configs -= [ "//build/config/compiler:no_exceptions" ]
     }
 
     if (defined(invoker.use_rtti) && invoker.use_rtti) {
+      foreach(config, configs) {
+        if (config == "//build/config/compiler:no_rtti") {
+          configs -= [ "//build/config/compiler:no_rtti" ]
+        }
+      }
       configs += [ "//build/config/compiler:rtti" ]
-      configs -= [ "//build/config/compiler:no_rtti" ]
     }
 
     if (!defined(cflags)) {
