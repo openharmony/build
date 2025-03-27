@@ -1412,13 +1412,11 @@ def _generate_public_configs(fp, module):
 
 # 目前特殊处理的依赖关系映射
 _DEPENDENCIES_MAP = {
-    ('bundle_framework', 'appexecfwk_core'): ["ability_base:want", "samgr:samgr_proxy"],
     ('graphic_surface', 'surface'): ["ipc:ipc_core"],
-    ('netmanager_base', 'net_conn_manager_if'): ["ipc:ipc_core"],
-    ('ability_base', 'want'): ["ipc:ipc_core", "json:nlohmann_json_static"],
+    ('netmanager_base', 'net_conn_manager_if'): ["ipc:ipc_core", "samgr:samgr_proxy"],
+    ('ability_base', 'want'): ["ipc:ipc_core"],
     ('ability_base', 'session_info'): ["bundle_framework:appexecfwk_base"],
     ('window_manager', 'libdm'): ["graphic_2d:librender_service_base"],
-    ('enterprise_device_management', 'edmservice_kits'): ["ability_base:want"],
     ('ability_runtime', 'appkit_native'): ["ets_runtime:libark_jsruntime"],
     ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
     ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime", "runtime_core:libarkfile_static",
@@ -1430,19 +1428,19 @@ _DEPENDENCIES_MAP = {
     ('ipc', 'ipc_single'): ["c_utils:utils"],
     ('graphic_2d', 'libcomposer'): ["eventhandler:libeventhandler"],
     ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
+    ('ability_runtime', 'ability_manager'): ["window_manager:libdm"]
     ('graphic_2d', 'librender_service_client'): ["graphic_2d:2d_graphics", "graphic_2d:libcomposer",
-                                                 "image_framework:pixelconvertadapter", "eventhandler:libeventhandler"],
+                                                "eventhandler:libeventhandler", "window_manager:libdm"],
     ('graphic_2d', 'librender_service_base'): ["opengles:libGLES"],
     ('graphic_2d', '2d_graphics'): ["skia:skia_canvaskit", "opengles:libGLES"],
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
     ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
     ('relational_store', 'native_rdb'): ["c_utils:utils"],
-    ('opengles', 'libGLES'): ["egl:libEGL"],
     ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
     ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
     ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
-    ('bundle_framework', 'bundlemgr_mini'): ["bundle_framework:appexecfwk_base"],
     ('media_foundation', 'media_monitor_client'): ["samgr:samgr_proxy"],
+    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkbase_static", "runtime_core:libarkfile_static"],
 }
 
 
