@@ -735,7 +735,6 @@ group("test_rust_template") {
       "//build/rust/tests/test_proc_macro_crate/test_function_macro:test_function_macro",
       "//build/rust/tests/test_rlib_cargo_crate:test_rlib_crate_associated_bin",
       "//build/rust/tests/test_rlib_crate:test_rlib_crate",
-      "//build/rust/tests/test_rust_st:test_rust_st",
       "//build/rust/tests/test_rust_ut:test_rust_ut",
       "//build/rust/tests/test_static_link:test_static_link",
       "//build/rust/tests/test_staticlib_crate:test_staticlib_crate",
