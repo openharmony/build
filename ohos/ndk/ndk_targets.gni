@@ -58,6 +58,7 @@ _ndk_library_targets = [
   "//interface/sdk_c/arkui/ace_engine/native:ace_header",
   "//interface/sdk_c/arkui/ace_engine/native:arkui_header",
   "//interface/sdk_c/arkui/ace_engine/native:libace_ndk",
+  "//interface/sdk_c/ani:ani_header",
   "//interface/sdk_c/arkui/napi:libnapi_ndk",
   "//interface/sdk_c/arkui/napi:napi_header",
   "//interface/sdk_c/arkui/window_manager:window_manager_header",
