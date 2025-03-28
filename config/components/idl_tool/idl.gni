@@ -214,10 +214,14 @@ template("idl_gen_interface") {
 
   action("$target_name") {
     inputs = idl_list
-    if (!defined(external_deps)) {
-      external_deps = []
+    if (is_arkui_x) {
+      deps = idl_build_deps
+    } else {
+      if (!defined(external_deps)) {
+        external_deps = []
+      }
+      external_deps += [ "idl_tool:idl(${host_toolchain})" ]
     }
-    external_deps += [ "idl_tool:idl(${host_toolchain})" ]
 
     script = "//build/config/components/idl_tool/idl.py"
     args = [
