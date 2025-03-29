@@ -1064,7 +1064,7 @@
     },
     {
         "install_dir": "toolchains/modulecheck",
-        "module_label": "//developtools/packing_tool/modulecheck:themeConfig_json",
+        "module_label": "//developtools/packing_tool/modulecheck:themeConfigSchema_json",
         "target_os": [
             "linux",
             "windows",
