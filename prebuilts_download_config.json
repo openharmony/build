@@ -171,6 +171,11 @@
       "src": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk_linux-aarch64-3cec00-20250320",
       "dest": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk",
       "rename": "true"
+    },
+    {
+      "src": "/prebuilts/taihe/ohos/linux-x86_64/taihe_1.0.1_20250329",
+      "dest": "/prebuilts/taihe/ohos/linux-x86_64/taihe",
+      "rename": "true"
     }
   ],
   "linux": {
@@ -229,6 +234,11 @@
           "unzip_dir": "prebuilts/gcc/linux-x86/aarch64",
           "file_path": "/openharmony/compiler/prebuilts_gcc_linux-x86_arm_gcc-linaro-7.5.0-arm-linux-gnueabi/1.0/gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu.tar.xz",
           "unzip_filename": "gcc-linaro-7.5.0-2019.12-x86_64_aarch64-linux-gnu"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/Taihe/1.0.1/taihe_1.0.1_20250329.zip",
+          "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/python",
@@ -379,6 +389,11 @@
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
           "file_path": "/openharmony/compiler/clang/15.0.4-3cec00/linux/libcxx-ndk_linux-x86_64-3cec00-20250320.tar.gz",
           "unzip_filename": "libcxx-ndk"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
+          "file_path": "/openharmony/compiler/Taihe/1.0.1/taihe_1.0.1_20250329.zip",
+          "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/python",
