@@ -318,8 +318,8 @@ def get_key_from_file_name(file_name: str) -> str:
 def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
     """
     Scan the specified directory to find all target files and organize their paths by key.
-    If the first-level directory is 'arkui', the key is the file name.
-    Otherwise, the key is the relative path with '/' replaced by '.'.
+    If the first-level directory is 'arkui' and the second-level directory is 'runtime-api',
+    the key is the file name. Otherwise, the key is the relative path with '/' replaced by '.'.
     """
     paths = {}
     for root, _, files in os.walk(directory):
@@ -330,8 +330,12 @@ def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
             file_name = get_key_from_file_name(file)
             file_abs_path = os.path.abspath(os.path.join(root, file_name))
             file_rel_path = os.path.relpath(file_abs_path, start=directory)
-            first_level_dir = file_rel_path.split(os.sep)[0]
-            if first_level_dir == "arkui":
+            # Split the relative path into components
+            path_components = file_rel_path.split(os.sep)
+            first_level_dir = path_components[0] if len(path_components) > 0 else ""
+            second_level_dir = path_components[1] if len(path_components) > 1 else ""
+            # Determine the key based on directory structure
+            if first_level_dir == "arkui" and second_level_dir == "runtime-api":
                 key = file_name
             else:
                 key = file_rel_path.replace(os.sep, ".")
