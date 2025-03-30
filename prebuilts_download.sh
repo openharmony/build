@@ -205,7 +205,7 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="${PYTHON_PATH}/python3"
 prebuild_pip3_path="${PYTHON_PATH}/pip3"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto cryptography json5\=\=0.9.6 Pillow
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto cryptography json5\=\=0.9.6 Pillow typing_extensions
 if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk-12" && ! -d "${code_dir}/prebuilts/ohos-sdk/12" ]]; then
   $prebuild_python3_path ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-api --api-version 12
   mkdir -p ${code_dir}/prebuilts/ohos-sdk-12
