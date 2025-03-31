@@ -13,11 +13,16 @@
 
 import("//build/ohos.gni")
 
+if (ohos_indep_compiler_enable) {
+  idl_tool = "//binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64"
+} else {
+  idl_tool = "//foundation/ability/idl_tool"
+}
+
 hdf_fwk_path = "//drivers/hdf_core/framework"
 hdf_uhdf_path = "//drivers/hdf_core/adapter/uhdf2"
 idl_tool_path = "//foundation/ability/idl_tool/idl_tool_2"
 
-idl_root = "//foundation/ability/idl_tool"
 idl_build_deps = ""
 
 build_root = "//build"
@@ -40,7 +45,14 @@ if (host_toolchain == toolchain_mac) {
       get_label_info("idl_tool:idl($toolchain_linux)", "root_out_dir")
   idl_build_deps = [ "idl_tool:idl($toolchain_linux)" ]
 }
-idl_build_path = idl_out_root + "/ability/idl_tool"
+
+if (ohos_indep_compiler_enable) {
+  idl_build_path =
+      idl_out_root +
+      "/obj/binarys/foundation/ability/idl_tool/innerapis/idl/clang_x64/libs"
+} else {
+  idl_build_path = idl_out_root + "/ability/idl_tool"
+}
 
 template("hdi") {
   assert(defined(invoker.sources), "sources must be set")
