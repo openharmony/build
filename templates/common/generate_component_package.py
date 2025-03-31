@@ -1204,7 +1204,7 @@ def copy_so_file(args, module, so_path):
             lib_out_dir_with_toolchain = os.path.join(args.get("out_path"), "component_package",
                                        args.get("part_path"), "innerapis", module, toolchain_name, "libs")
             so_path_with_toolchain = os.path.join(args.get("out_path"), toolchain_name, so_path)
-            if toolchain_name in so_path :
+            if toolchain_name in so_path:
                 lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain) or lib_status
             elif os.path.isfile(so_path_with_toolchain):
                 lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
@@ -1427,8 +1427,7 @@ _DEPENDENCIES_MAP = {
     ('ipc', 'ipc_core'): ["c_utils:utils"],
     ('ipc', 'ipc_single'): ["c_utils:utils"],
     ('graphic_2d', 'libcomposer'): ["eventhandler:libeventhandler"],
-    ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
-    ('ability_runtime', 'ability_manager'): ["window_manager:libdm"]
+    ('ability_runtime', 'ability_manager'): ["window_manager:libdm"],
     ('graphic_2d', 'librender_service_client'): ["graphic_2d:2d_graphics", "graphic_2d:libcomposer",
                                                 "eventhandler:libeventhandler", "window_manager:libdm"],
     ('graphic_2d', 'librender_service_base'): ["opengles:libGLES"],
@@ -1437,9 +1436,7 @@ _DEPENDENCIES_MAP = {
     ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
     ('relational_store', 'native_rdb'): ["c_utils:utils"],
     ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
-    ('ability_runtime', 'napi_common'): ["ability_runtime:runtime"],
     ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
-    ('media_foundation', 'media_monitor_client'): ["samgr:samgr_proxy"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkbase_static", "runtime_core:libarkfile_static"],
 }
 
