@@ -14349,7 +14349,7 @@
         "//foundation/multimedia/image_framework/interfaces/kits/js/common:image": [
             "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers"
         ],
-        "//foundation/multimedia/media_library/frameworks/innerkitsimpl/medialibrary_data_extension:medialibrary_ext_hap": [
+        "//foundation/multimedia/media_library/MediaLibraryExt:medialibrary_ext_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
@@ -41933,12 +41933,12 @@
         "//foundation/multimedia/media_foundation/test/unittest:histreamer_unit_test_resource_copy": [
             "//third_party/googletest:gtest_rtti"
         ],
-        "//foundation/multimedia/media_library/frameworks/innerkitsimpl/medialibrary_data_extension:medialibrary_ext_hap": [
+        "//foundation/multimedia/media_library/MediaLibraryExt:medialibrary_ext_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
             "//arkcompiler/ets_frontend/es2panda:es2panda_build"
         ],
-        "//foundation/multimedia/media_library/frameworks/innerkitsimpl/medialibrary_data_extension:medialibrary_ext_hap__js_assets": [
+        "//foundation/multimedia/media_library/MediaLibraryExt:medialibrary_ext_hap__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
             "//third_party/parse5:parse5_ark_hap",
             "//third_party/weex-loader:weex_loader_ark_hap"
