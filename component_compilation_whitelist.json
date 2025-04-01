@@ -43989,7 +43989,9 @@
         ],
         "deps_includes_absolute": [
             "//drivers/hdf_core",
-            "//drivers/peripheral"
+            "//drivers/peripheral",
+            "//third_party/node/src",
+            "//foundation/arkui/napi/"
         ],
         "deps_component_absolute": [
             "//arkcompiler/ets_frontend/es2panda:es2panda",
@@ -44004,7 +44006,9 @@
             "//third_party/weex-loader:weex_loader_ark_hap",
             "//developtools/packing_tool:packing_tool",
             "//third_party/rust/crates/cxx",
-            "//third_party/rust/crates/libc"
+            "//third_party/rust/crates/libc",
+            "//third_party/googletest:gmock_main",
+            "//third_party/googletest:gtest_main"
         ],
         "deps_gni": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni",
