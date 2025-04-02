@@ -39,5 +39,4 @@ if (is_arkui_x) {
   import("//build/templates/rust/rust_template.gni")
 }
 
-import("//build/ohos/taihe_idl/taihe.gni")
 import("//build/templates/idl/ohos_idl.gni")
