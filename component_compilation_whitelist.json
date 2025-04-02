@@ -10133,7 +10133,7 @@
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrappersurface_fuzzer:EGLWrapperSurfaceFuzzTest": [
             "//drivers/peripheral/display/interfaces/include/"
         ],
-        "//foundation/graphic/graphic_2d/text/adapter/skia:skia_paragraph": [
+        "//foundation/graphic/graphic_2d/frameworks/text/adapter/skia:skia_paragraph": [
             "//third_party/skia/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/test/fuzztest/rswindowanimation_fuzzer:RSWindowAnimationFuzzTest": [
@@ -10195,7 +10195,7 @@
         "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
             "//third_party/googletest/googletest/include/"
         ],
-        "//foundation/graphic/graphic_2d/text/test/unittest/skia_txt:rosen_text_skia_txt_test": [
+        "//foundation/graphic/graphic_2d/frameworks/text/test/unittest/skia_txt:rosen_text_skia_txt_test": [
             "//third_party/skia/",
             "//third_party/skia/modules/skparagraph/"
         ],
