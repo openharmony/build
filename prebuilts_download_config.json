@@ -175,11 +175,6 @@
       "src": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk_linux-aarch64-da9259-20250425",
       "dest": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk",
       "rename": "true"
-    },
-    {
-      "src": "/prebuilts/taihe/ohos/linux-x86_64/taihe_1.0.1_20250329",
-      "dest": "/prebuilts/taihe/ohos/linux-x86_64/taihe",
-      "rename": "true"
     }
   ],
   "linux": {
@@ -241,7 +236,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/1.0.1/taihe_1.0.1_20250329.zip",
+          "file_path": "/openharmony/compiler/Taihe/0.9/taihe-v0.9-20250403.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -431,7 +426,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/1.0.1/taihe_1.0.1_20250329.zip",
+          "file_path": "/openharmony/compiler/Taihe/0.9/taihe-v0.9-20250403.tar.gz",
           "unzip_filename": "taihe"
         },
         {
