@@ -18,6 +18,8 @@ declare_args() {
 }
 
 template("ohos_taihe") {
+  assert(defined(invoker.taihe_generated_file_path),
+         "please provide taihe_generated_file_path for taihec")
   forward_variables_from(invoker, [ "taihe_generated_file_path" ])
 
   action(target_name) {
@@ -47,14 +49,14 @@ template("copy_taihe_idl") {
 }
 
 template("taihe_shared_library") {
-  forward_variables_from(invoker,
-                         [
-                           "taihe_generated_file_path",
-                           "part_name",
-                           "subsystem_name",
-                         ])
-
   ohos_shared_library(target_name) {
+    forward_variables_from(invoker,
+                           "*",
+                           [
+                             "sources",
+                             "external_deps",
+                             "include_dirs",
+                           ])
     include_dirs = [
       "$taihe_generated_file_path/include",
       "$taihe_toolchain_path/include",
@@ -70,9 +72,6 @@ template("taihe_shared_library") {
     ]
     sources += invoker.sources
 
-    deps = invoker.deps
-    part_name = "$part_name"
-    subsystem_name = "$subsystem_name"
     external_deps = [
       "runtime_core:ani",
       "runtime_core:libarkruntime",
