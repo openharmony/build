@@ -281,11 +281,11 @@ declare_args() {
 declare_args() {
   target_platform_triple = ""
   if (target_cpu == "arm") {
-	target_platform_triple = "arm-linux-ohos"
-  } else if (target_cpu == "arm64"){
-	target_platform_triple = "aarch64-linux-ohos"
-  } else if (target_cpu == "x86_64"){
-	target_platform_triple = "x86_64-linux-ohos"
+    target_platform_triple = "arm-linux-ohos"
+  } else if (target_cpu == "arm64") {
+    target_platform_triple = "aarch64-linux-ohos"
+  } else if (target_cpu == "x86_64") {
+    target_platform_triple = "x86_64-linux-ohos"
   }
 }
 
