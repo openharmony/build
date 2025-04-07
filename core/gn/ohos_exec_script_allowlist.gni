@@ -173,7 +173,6 @@ ohos_exec_script_config = {
     "//third_party/libwebsockets/BUILD.gn",
     "//third_party/mindspore/BUILD.gn",
     "//third_party/musl/BUILD.gn",
-    "//third_party/openssl/BUILD.gn",
     "//third_party/pcre2/BUILD.gn",
     "//third_party/re2/BUILD.gn",
     "//third_party/selinux/BUILD.gn",
