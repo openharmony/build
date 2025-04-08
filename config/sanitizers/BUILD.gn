@@ -461,16 +461,15 @@ config("safestack_flags") {
 
 config("tsan_flags") {
   if (is_tsan && target_cpu == "arm64" && !is_mingw && !is_win) {
-    if (!defined(tsan_blocklist_path)) {
-      tsan_blocklist_path = rebase_path(
-              "//third_party/node/deps/v8/tools/memory/tsan_v2/ignores.txt",
-              root_build_dir)
-    }
     cflags = [
       "-fsanitize=thread",
-      "-fsanitize-blacklist=$tsan_blocklist_path",
       "-shared-libsan",
     ]
+    if (defined(tsan_blocklist_path)) {
+      cflags += [
+        "-fsanitize-blacklist=$tsan_blocklist_path",
+      ]
+    }
   }
 }
 
