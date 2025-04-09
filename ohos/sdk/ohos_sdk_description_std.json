@@ -1297,7 +1297,8 @@
         "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/build_system:ets2panda_build_system",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "darwin"
         ]
     },
     {
