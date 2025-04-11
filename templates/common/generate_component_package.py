@@ -1204,10 +1204,13 @@ def copy_so_file(args, module, so_path):
             lib_out_dir_with_toolchain = os.path.join(args.get("out_path"), "component_package",
                                        args.get("part_path"), "innerapis", module, toolchain_name, "libs")
             so_path_with_toolchain = os.path.join(args.get("out_path"), toolchain_name, so_path)
+            unzipped_so_path_with_toolchain = so_path_with_toolchain.replace(".z.", ".")
             if toolchain_name in so_path:
                 lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain) or lib_status
             elif os.path.isfile(so_path_with_toolchain):
                 lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
+            elif os.path.isfile(unzipped_so_path_with_toolchain):
+                lib_status = _copy_file(unzipped_so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
     lib_status = _copy_file(so_path_with_out_path, lib_out_dir) or lib_status
     return lib_status
 
@@ -1551,8 +1554,11 @@ def _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file):
 
 
 def _get_toolchain_gn_file(lib_out_dir, out_name):
+    unzipped_out_name = out_name.replace(".z.", ".")
     if os.path.exists(os.path.join(lib_out_dir, out_name)):
         return out_name
+    elif os.path.exists(os.path.join(lib_out_dir, unzipped_out_name)):
+        return unzipped_out_name
     else:
         print('Output file not found in toolchain dir.')
         return ''
