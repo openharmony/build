@@ -18,31 +18,31 @@ import shutil
 import subprocess
 
 INTERFACE_PATH = "interface/sdk-js"
-API_PATH = "api"
-API_GEN_PATH = "build-tools/api"
-CONVERTER_DIR = "build-tools/permissions_converter"
-CONVERTER_TOOL = "build-tools/permissions_converter/convert.js"
+OUT_ROOT = "out/sdk-public"
+OUTPATH = os.path.join(OUT_ROOT, "public_interface/sdk-js")
+API_PATH = os.path.join(OUTPATH, "api")
+API_GEN_PATH = os.path.join(OUTPATH, "build-tools/api")
 
 
-def copy_sdk_interface(source_root: str, project_path: str):
+def copy_sdk_interface(source_root: str):
     source = os.path.join(source_root, INTERFACE_PATH)
-    dest = os.path.join(source_root, project_path)
+    dest = os.path.join(source_root, OUTPATH)
     if os.path.exists(dest) is False:
         shutil.copytree(source, dest)
 
 
-def copy_api(source_root: str, project_path: str):
-    source = os.path.join(source_root, project_path, API_PATH)
-    dest = os.path.join(source_root, project_path, API_GEN_PATH)
+def copy_api(source_root: str):
+    source = os.path.join(source_root, API_PATH)
+    dest = os.path.join(source_root, API_GEN_PATH)
     if os.path.exists(dest) is False:
         shutil.copytree(source, dest)
 
 
-def convert_permission_method(source_root: str, project_path: str, file_name: str, nodejs: str):
-    permission_convert_dir = os.path.join(INTERFACE_PATH, CONVERTER_DIR)
-    permission_convert_tool = os.path.join(INTERFACE_PATH, CONVERTER_TOOL)
+def convert_permission_method(source_root: str, nodejs: str):
+    permission_convert_dir = os.path.join(OUTPATH, "build-tools", "permissions_converter")
+    permission_convert_tool = os.path.join(permission_convert_dir, "convert.js")
     config_file = os.path.join("base/global/system_resources/systemres/main", "module.json")
-    permission_gen_path = os.path.join(project_path, API_GEN_PATH, file_name)
+    permission_gen_path = os.path.join(API_GEN_PATH, "permissions.d.ts")
 
     tool = os.path.abspath(os.path.join(source_root, permission_convert_tool))
     nodejs = os.path.abspath(nodejs)
@@ -54,21 +54,21 @@ def convert_permission_method(source_root: str, project_path: str, file_name: st
     process.wait()
 
 
-def replace_sdk_api_dir(source_root: str, project_path: str, file_name: str):
-    source = os.path.join(source_root, project_path, API_GEN_PATH, file_name)
-    dest = os.path.join(source_root, project_path, API_PATH, file_name)
+def replace_sdk_api_dir(source_root: str):
+    source = os.path.join(source_root, API_GEN_PATH, "permissions.d.ts")
+    dest = os.path.join(source_root, API_PATH, "permissions.d.ts")
     if os.path.exists(dest):
         os.remove(dest)
     shutil.copyfile(source, dest)
 
 
-def parse_step(source_root: str, project_path: str, file_name: str, nodejs: str):
-    copy_sdk_interface(source_root, project_path)
-    copy_api(source_root, project_path)
-    convert_permission_method(source_root, project_path, file_name, nodejs)
-    replace_sdk_api_dir(source_root, project_path, file_name)
+def parse_step(source_root: str, nodejs: str):
+    copy_sdk_interface(source_root)
+    copy_api(source_root)
+    convert_permission_method(source_root, nodejs)
+    replace_sdk_api_dir(source_root)
 
 
-def convert_permissions(root_build_dir: str, project_path: str, file_name: str, node_js: str):
-    parse_step(root_build_dir, project_path, file_name, node_js)
+def convert_permissions(root_build_dir: str, node_js: str):
+    parse_step(root_build_dir, node_js)
     
