@@ -54,23 +54,6 @@ if (!use_current_sdk) {
     ohos_sdk_description_file = ohos_sdk_pub_description_file
   }
 
-  public_sdk_config_parser_arkts = "//build/ohos/sdk/parse_interface_sdk.py"
-  ohos_sdk_pub_description_file_arkts =
-      "//out/sdk-interface/ohos_sdk_pub_description_std.json"
-  public_sdk_args_arkts = [
-    "--sdk-description-file",
-    rebase_path("//build/ohos/sdk/ohos_sdk_description_std.json", root_build_dir),
-    "--root-build-dir",
-    rebase_path("//", root_build_dir),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-    "--output-pub-sdk-desc-file",
-    rebase_path(ohos_sdk_pub_description_file_arkts, root_build_dir),
-    "--sdk-build-public",
-    "${sdk_build_public}",
-  ]
-  exec_script(public_sdk_config_parser_arkts, public_sdk_args_arkts)
-
   generated_sdk_modules_gni = "${generated_files_dir}/ohos_sdk_modules.gni"
   generated_sdk_types_file = "${generated_files_dir}/generated_sdk_types.txt"
 
