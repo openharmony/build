@@ -133,6 +133,7 @@ ohos_exec_script_config = {
     "//kernel/liteos_m/liteos.gni",
     "//kernel/uniproton/BUILD.gn",
     "//kernel/uniproton/uniproton.gni",
+    "//out/sdk-public/public_interface/sdk-js/BUILD.gn",
     "//test/xts/acts/build_lite/BUILD.gn",
     "//test/xts/acts/test_packages.gni",
     "//test/xts/dcts/test_packages.gni",
