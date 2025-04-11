@@ -72,40 +72,35 @@ def replace_sdk_arkts_dir(source_root: str):
 def remove_system_api_method(source_root: str, nodejs: str):
     tool = os.path.join(source_root, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
-    api_dir = os.path.join(source_root,
-                           API_PATH)
-    api_dir = os.path.abspath(api_dir)
-    api_out_dir = os.path.join(source_root,
-                               API_MODIFY_DIR)
-    api_out_dir = os.path.abspath(api_out_dir)
     nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--input", api_dir,
-                         "--output", api_out_dir], stdout=subprocess.PIPE)
+    cmd = "{} {}".format(nodejs, tool)
+    p = subprocess.Popen(cmd, shell=True,
+                        cwd=os.path.abspath(os.path.join(source_root, API_MODIFY_DIR)),
+                        stdout=subprocess.PIPE)
     p.wait()
 
 
-def regenerate_sdk_description_file(source_root: str,
-                                    sdk_description_file: str,
-                                    output_pub_sdk_desc_file: str):
+def regenerate_sdk_description_file(source_root: str, sdk_description_file: str, output_pub_sdk_desc_file: str):
     info_list = read_json_file(sdk_description_file)
     public_info_list = []
     for info in info_list:
         label = str(info.get("module_label"))
         if label in DEL_TARGET:
             continue
+        if label.startswith("//{}".format(INTERFACE_PATH)):
+            label = label.replace(INTERFACE_PATH, os.path.join(OUT_ROOT, "public_interface/sdk-js"))
+            info["module_label"] = label
         public_info_list.append(info)
     write_json_file(output_pub_sdk_desc_file, public_info_list)
 
 
-def parse_step(sdk_description_file: str, source_root: str, nodejs: str,
-               output_pub_sdk_desc_file: str):
+def parse_step(sdk_description_file: str, source_root: str, nodejs: str, output_pub_sdk_desc_file: str):
     copy_sdk_interface(source_root)
     remove_system_api_method(source_root, nodejs)
     replace_sdk_api_dir(source_root)
     replace_sdk_kits_dir(source_root)
     replace_sdk_arkts_dir(source_root)
-    regenerate_sdk_description_file(source_root, sdk_description_file,
-                                    output_pub_sdk_desc_file)
+    regenerate_sdk_description_file(source_root, sdk_description_file, output_pub_sdk_desc_file)
 
 
 def main():
@@ -117,7 +112,7 @@ def main():
 
     options = parser.parse_args()
     parse_step(options.sdk_description_file, options.root_build_dir,
-               options.node_js, options.output_pub_sdk_desc_file)
+            options.node_js, options.output_pub_sdk_desc_file)
 
 
 if __name__ == '__main__':
