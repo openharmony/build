@@ -152,14 +152,17 @@ def gen_default_deps_json(variant, root_path, has_test=False):
     default_deps_file = os.path.join(root_path, "build", "indep_configs", "variants", "common", 'default_deps.json')
     default_deps_json = IoUtil.read_json_file(default_deps_file)
     default_deps_json.append("variants_" + variant)
-
-    part_white_list_path = os.path.join(root_path, "build", "indep_configs", "config",
-                                        "rust_download_part_whitelist.json")
-    part_white_list = IoUtil.read_json_file(part_white_list_path)
-    rust_deps = ['rust', 'rust_cxx', 'rust_libc', 'rust_syn', 'rust_proc_macro2', 'rust_quote', 'rust_unicode_ident', 'rust_bindgen']
+    # Dynamic download whitelist path
+    download_part_whitelist_path = os.path.join(root_path, 'build', 'indep_configs', 'config',
+                                         "download_part_whitelist.json")
+    download_part_whitelist = IoUtil.read_json_file(download_part_whitelist_path)
     for part_name in part_name_list:
-        if part_name in part_white_list:
-            for dep in rust_deps:
+        # Default Dependency List 
+        common_deps = []
+        if part_name in download_part_whitelist["components"]:
+            for dependencie in download_part_whitelist["components"][part_name]["dependencies"]:
+                common_deps += download_part_whitelist["dependencies"][dependencie]
+            for dep in common_deps:
                 default_deps_json.append(dep)
     if has_test:
         default_deps_json.append('developer_test')
