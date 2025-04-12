@@ -1,0 +1,55 @@
+{
+    "dependencies": {
+      "rust_common": [
+        "rust",
+        "rust_cxx",
+        "rust_libc",
+        "rust_syn",
+        "rust_proc_macro2",
+        "rust_quote",
+        "rust_unicode_ident",
+        "rust_bindgen"
+      ],
+      "typescript_common": [
+        "typescript"
+      ]
+    },
+    "components": {
+      "ets_utils": {
+        "dependencies": ["typescript_common"]
+      },
+      "ylong_runtime": {
+        "dependencies": ["rust_common"]
+      },
+      "ylong_json": {
+        "dependencies": ["rust_common"]
+      },
+      "c_utils": {
+        "dependencies": ["rust_common"]
+      },
+      "samgr": {
+        "dependencies": ["rust_common"]
+      },
+      "safwk": {
+        "dependencies": ["rust_common"]
+      },
+      "ipc": {
+        "dependencies": ["rust_common"]
+      },
+      "faultloggerd": {
+        "dependencies": ["rust_common"]
+      },
+      "graphic_2d": {
+        "dependencies": ["rust_common"]
+      },
+      "hitrace": {
+        "dependencies": ["rust_common"]
+      },
+      "code_signature": {
+        "dependencies": ["rust_common"]
+      },
+      "input": {
+        "dependencies": ["rust_common"]
+      }
+    }
+  }
