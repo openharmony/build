@@ -227,8 +227,7 @@
         "module_label": "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda",
         "target_os": [
             "linux",
-            "windows",
-            "darwin"
+            "windows"
         ]
     },
     {
@@ -236,8 +235,7 @@
         "module_label": "//arkcompiler/runtime_core/static_core/static_linker:ark_link",
         "target_os": [
             "linux",
-            "windows",
-            "darwin"
+            "windows"
         ]
     },
     {
@@ -245,8 +243,7 @@
         "module_label": "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase",
         "target_os": [
             "linux",
-            "windows",
-            "darwin"
+            "windows"
         ]
     },
     {
@@ -274,8 +271,7 @@
         "module_label": "//arkcompiler/ets_frontend/ets2panda:libes2panda_public",
         "target_os": [
             "windows",
-            "linux",
-            "darwin"
+            "linux"
         ]
     },
     {
