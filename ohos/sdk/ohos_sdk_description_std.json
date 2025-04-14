@@ -1344,7 +1344,8 @@
         "module_label": "//arkcompiler/ets_frontend/ets2panda/linter:ets2panda_build_linter",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "darwin"
         ]
     },
     {
