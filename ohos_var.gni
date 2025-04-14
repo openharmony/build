@@ -278,6 +278,17 @@ declare_args() {
   window_manager_use_sceneboard = false
 }
 
+declare_args() {
+  target_platform_triple = ""
+  if (target_cpu == "arm") {
+    target_platform_triple = "arm-linux-ohos"
+  } else if (target_cpu == "arm64") {
+    target_platform_triple = "aarch64-linux-ohos"
+  } else if (target_cpu == "x86_64") {
+    target_platform_triple = "x86_64-linux-ohos"
+  }
+}
+
 # Compile and generate output directory
 innersdk_build_out_dir = "innerkits/${target_type}"
 
