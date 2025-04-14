@@ -1353,7 +1353,8 @@
         "module_label": "//arkcompiler/ets_frontend/ets2panda/bindings:ets2panda_build_bindings",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "darwin"
         ]
     }
 ]
