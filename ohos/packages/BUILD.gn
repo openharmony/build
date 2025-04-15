@@ -710,6 +710,7 @@ group("test_example_template") {
       "//build/test/test_example_template/test_ohos_shared_library_testonly:test_ohos_shared_library_testonly",
       "//build/test/test_example_template/test_ohos_source_set:test_ohos_source_set",
       "//build/test/test_example_template/test_ohos_static_library:test_ohos_static_library",
+      "//build/test/test_example_template/test_ohos_shared_headers:test_ohos_shared_headers",
     ]
   }
 }
