@@ -849,12 +849,6 @@ if (is_lite_system) {
     target_triple = "$arch-linux-ohos"
   }
 
-  if (ohos_kernel_type == "liteos_a") {
-    target_triple = "$arch-liteos-ohos"
-  } else if (ohos_kernel_type == "linux") {
-    target_triple = "$arch-linux-ohos"
-  }
-
   if (defined(board_configed_sysroot) && board_configed_sysroot != "") {
     ohos_current_sysroot = board_configed_sysroot
   }
