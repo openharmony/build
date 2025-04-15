@@ -703,6 +703,7 @@ group("test_example_template") {
     deps = [
       "//build/test/test_example_template/test_ohos_executable:test_ohos_executable",
       "//build/test/test_example_template/test_ohos_sa_profile:test_ohos_sa_profile",
+      "//build/test/test_example_template/test_ohos_shared_headers:test_ohos_shared_headers",
       "//build/test/test_example_template/test_ohos_shared_library:test_ohos_shared_library",
       "//build/test/test_example_template/test_ohos_shared_library_module_install_dir:test_ohos_shared_library_module_install_dir",
       "//build/test/test_example_template/test_ohos_shared_library_output_name:test_ohos_shared_library_output_name",
@@ -710,7 +711,6 @@ group("test_example_template") {
       "//build/test/test_example_template/test_ohos_shared_library_testonly:test_ohos_shared_library_testonly",
       "//build/test/test_example_template/test_ohos_source_set:test_ohos_source_set",
       "//build/test/test_example_template/test_ohos_static_library:test_ohos_static_library",
-      "//build/test/test_example_template/test_ohos_shared_headers:test_ohos_shared_headers",
     ]
   }
 }
