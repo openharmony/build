@@ -230,7 +230,7 @@ declare_args() {
 }
 
 # Upgrade Skia version
-use_new_skia = true
+use_new_skia = false
 
 if (defined(build_cross_platform_version) && build_cross_platform_version) {
   use_rosen_drawing = false
