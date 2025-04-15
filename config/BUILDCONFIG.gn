@@ -837,13 +837,13 @@ if (is_lite_system) {
   arch = "arm"
   if (current_cpu == "arm64") {
     arch = "aarch64"
-  }
-
-  if (current_cpu == "loongarch64") {
+  } else if (current_cpu == "riscv32") {
+    arch = "riscv32"
+  } else if (current_cpu == "loongarch64") {
     arch = "loongarch64"
   }
 
-  if (ohos_kernel_type == "liteos_a") {
+  if (ohos_kernel_type == "liteos_a" || ohos_kernel_type == "liteos_m") {
     target_triple = "$arch-liteos-ohos"
   } else if (ohos_kernel_type == "linux") {
     target_triple = "$arch-linux-ohos"
