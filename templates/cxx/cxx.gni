@@ -1847,7 +1847,8 @@ template("ohos_source_set") {
 template("ohos_shared_headers") {
   assert(!defined(invoker.sources), "sources is not allowed to be defined.")
   assert(defined(invoker.include_dirs), "include_dirs is must to be defined.")
-  assert(defined(invoker.subsystem_name), "subsystem_name is must to be defined.")
+  assert(defined(invoker.subsystem_name),
+         "subsystem_name is must to be defined.")
   assert(defined(invoker.part_name), "part_name is must to be defined.")
 
   depsa = []
@@ -1864,6 +1865,7 @@ template("ohos_shared_headers") {
   config("public_config") {
     include_dirs = public_configs_inner
   }
+
   # 调用ohos_shared_library
   ohos_shared_library("${target_name}") {
     deps = depsa
