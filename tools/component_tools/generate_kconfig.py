@@ -18,6 +18,7 @@ limitations under the License.
 import argparse
 import json
 import os
+import stat
 
 KCONFIG_STR = 'config {}\n\
     bool "{}"\n\
@@ -62,7 +63,8 @@ def read_json(file: str):
 
 def write_kconfig(result: str, outdir: str):
     outpath = os.path.join(outdir, "kconfig")
-    with open(outpath, "w") as f:
+    with os.fdopen(os.open(outpath,
+                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as f:
         f.writelines(result)
     print("output file in: ", os.path.abspath(outpath))
 
