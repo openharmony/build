@@ -1843,7 +1843,6 @@ template("ohos_source_set") {
   }
 }
 
-# 只允许include_dirs还有子系统、部件名
 template("ohos_shared_headers") {
   assert(!defined(invoker.sources), "sources is not allowed to be defined.")
   assert(defined(invoker.include_dirs), "include_dirs is must to be defined.")
@@ -1858,15 +1857,14 @@ template("ohos_shared_headers") {
     }
   }
 
-  public_configs_inner = []
+  include_inner = []
   foreach(include_dir, invoker.include_dirs) {
-    public_configs_inner += [ include_dir ]
+    include_inner += [ include_dir ]
   }
   config("public_config") {
-    include_dirs = public_configs_inner
+    include_dirs = include_inner
   }
 
-  # 调用ohos_shared_library
   ohos_shared_library("${target_name}") {
     deps = depsa
     public_configs = [ ":public_config" ]
