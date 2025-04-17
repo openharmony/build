@@ -110,13 +110,12 @@ class SystemUtil(metaclass=NoInstance):
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
-                                    #    encoding='utf-8',
+                                       encoding='utf-8',
                                        env=exec_env,
                                        **kwargs)
-            for line in iter(process.stdout.readline, b''):
+            for line in iter(process.stdout.readline, ''):
                 keep_deal, new_line = HandleKwargs.handle_line(line, raw_kwargs)
                 if keep_deal:
-                    new_line = new_line.decode('utf-8', errors='replace')
                     log_file.write(new_line)
                     HandleKwargs.handle_print(new_line, log_mode)
 
