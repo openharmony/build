@@ -110,7 +110,6 @@ class SystemUtil(metaclass=NoInstance):
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
                                        stderr=subprocess.STDOUT,
-                                    #    encoding='utf-8',
                                        env=exec_env,
                                        **kwargs)
             for line in iter(process.stdout.readline, b''):
