@@ -204,20 +204,19 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
     @staticmethod
     def resolve_gn_args(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.indep_build.regist_flag('gn-args', target_arg.arg_value)
+    
+    @staticmethod
+    def resolve_gn_flags(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('gn-flags', target_arg.arg_value)
 
     @staticmethod
     def resolve_ninja_args(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.indep_build.regist_flag('ninja-args', target_arg.arg_value)
     
     @staticmethod
-    def resolve_export_compile_commands(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
-        indep_build_module.indep_build.regist_flag('export-compile-commands', target_arg.arg_value)
-        if target_arg.arg_value:
-            LogUtil.hb_info('Perhaps you need to set the parameter --compile-commands-dir={dir of compile_commands.json} in the clangd plugin and restart language server.')
-
-    @staticmethod
     def resolve_skip_download(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.hpm.regist_flag('skip-download', target_arg.arg_value)
+        indep_build_module.indep_build.regist_flag('skip-download', target_arg.arg_value)
 
     @staticmethod
     def resolve_build_target(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):

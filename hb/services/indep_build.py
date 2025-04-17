@@ -33,6 +33,11 @@ class IndepBuild(BuildFileGeneratorInterface):
         cmd.extend(flags_list)
         variant = self.flags_dict["variant"]
         logpath = os.path.join('out', variant, 'build.log')
+        if self.flags_dict.get("skip-download") or self.flags_dict.get("fast-rebuild"):
+            if os.path.exists(logpath):
+                mtime = os.stat(logpath).st_mtime
+                os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
+        
         ret_code = SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
                                             after_msg="indep build end")
         if ret_code != 0:
