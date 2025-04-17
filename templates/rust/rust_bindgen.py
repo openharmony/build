@@ -55,7 +55,7 @@ def main():
     args = parser.parse_args()
     ohos_genargs = []
     ohos_genargs.append('--no-layout-tests')
-    ohos_genargs.append('--size_t-is-usize')
+    # ohos_genargs.append('--size_t-is-usize')
     ohos_genargs += ['--rust-target', 'nightly']
     if args.depfile:
         ohos_genargs.append('--depfile')
