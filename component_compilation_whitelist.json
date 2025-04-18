@@ -24575,6 +24575,7 @@
         "//foundation/arkui/ui_lite/ext/home_host:libhome_host_layout": [
             "//third_party/bounds_checking_function:libsec_static",
             "//third_party/freetype:freetype_static",
+            "//third_party/cJSON:cjson_static",
             "//third_party/qrcodegen:qrcodegen_static",
             "//third_party/libjpeg-turbo:turbojpeg_static",
             "//third_party/libpng:libpng"
