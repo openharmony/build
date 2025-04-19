@@ -22,15 +22,14 @@ from util.build_utils import touch, check_instance
 
 
 def read_hap_file(file_path: str):
-    hvigor_compile_hap_allow_info = read_json_file(file_path)
-    if hvigor_compile_hap_allow_info:
-        return hvigor_compile_hap_allow_info
-    else:
+    if not os.path.exists(file_path):
         raise Exception(f'the file: {file_path} is not exist')
+    hvigor_compile_hap_allow_info = read_json_file(file_path)
+    return hvigor_compile_hap_allow_info
 
 
 def check_sdk_version(args, hvigor_compile_hap_allow_info):
-    if not args.sdk_home or hvigor_compile_hap_allow_info is None:
+    if not args.sdk_home or not hvigor_compile_hap_allow_info:
         return 0
 
     sdk_allow_version_list = hvigor_compile_hap_allow_info.get("sdk_version")
@@ -48,7 +47,7 @@ def check_sdk_version(args, hvigor_compile_hap_allow_info):
 
 
 def check_hvigor_version(args, hvigor_compile_hap_allow_info):
-    if not args.hvigor_home or hvigor_compile_hap_allow_info is None:
+    if not args.hvigor_home or not hvigor_compile_hap_allow_info:
         return 0
     
     hvigor_allow_version_list = hvigor_compile_hap_allow_info.get("hvigor_version")
