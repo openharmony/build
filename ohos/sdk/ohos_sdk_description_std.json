@@ -279,16 +279,6 @@
         ]
     },
     {
-        "install_dir": "ets/ets1.2/build-tools/ets-loader/bin/ark/",
-        "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc_ets",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
@@ -327,13 +317,6 @@
     },
     {
         "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/bin",
-        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
-        "target_os": [
-            "darwin"
-        ]
-    },
-    {
-        "install_dir": "ets/ets1.2/build-tools/ets-loader/bin/ark/build-mac/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
         "target_os": [
             "darwin"
