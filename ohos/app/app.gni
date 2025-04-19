@@ -256,7 +256,41 @@ template("ohos_app") {
                            "module_install_dir",
                            "relative_install_dir",
                          ])
+  if (defined(invoker.hvigor_home) || defined(invoker.sdk_home)) {
+    _check_target = "${target_name}__hap_check"
+    target_path = get_label_info(":${target_name}", "label_no_toolchain")
+    action(_check_target) {
+      forward_variables_from(invoker,
+                             [
+                               "sdk_home",
+                               "hvigor_home",
+                             ])
+      script = "//build/scripts/check_hvigor_hap.py"
+      outputs = [ "${target_out_dir}/${target_name}.txt" ]
+      inputs = [ "${preloader_output_dir}/hvigor_compile_hap_whitelist.json" ]
 
+      args = [
+        "--target-path",
+        target_path,
+        "--output",
+        rebase_path(outputs[0], root_build_dir),
+        "--hvigor-compile-hap-allow-file",
+        rebase_path(inputs[0], root_build_dir),
+      ]
+      if (defined(sdk_home) && sdk_home != "") {
+        args += [
+          "--sdk-home",
+          rebase_path(sdk_home, "//"),
+        ]
+      }
+      if (defined(hvigor_home) && hvigor_home != "") {
+        args += [
+          "--hvigor-home",
+          rebase_path(hvigor_home, "//"),
+        ]
+      }
+    }
+  }
   _test_target = defined(testonly) && testonly
   _unsigned_hap_path_list =
       "${target_out_dir}/${target_name}/unsigned_hap_path_list.json"
@@ -401,6 +435,10 @@ template("ohos_app") {
       ":${_collect_target}",
       ":${_notice_target}",
     ]
+
+    if (defined(invoker.hvigor_home) || defined(invoker.sdk_home)) {
+      deps += [ ":${_check_target}" ]
+    }
 
     if (!_test_target && app_need_publicity) {
       if (install_enable) {
