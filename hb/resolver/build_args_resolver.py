@@ -173,6 +173,32 @@ class BuildArgsResolver(ArgsResolverInterface):
         return target_set
 
     @staticmethod
+    def is_self_build(target, build_module: BuildModuleInterface):
+        change_info_file = 'change_info.json'
+        if not os.path.exists(change_info_file):
+            return True
+        change_info = IoUtil.read_json_file(change_info_file)
+        openharmony_fields = [v["name"] for v in change_info.values() if "name" in v]
+        
+        change_files = []
+        file_operations = {
+            "added": lambda x: x,
+            "rename": lambda x: [item for pair in x for item in pair],
+            "modified": lambda x: x,
+            "deleted": lambda x: x
+        }
+        
+        for value in change_info.values():
+            if value.get("name") != target:
+                continue
+            changed_files = value.get("changed_file_list", {})
+            for op, processor in file_operations.items():
+                if "include" in op or "interface" in op:
+                    return True
+            return False
+        return True
+
+    @staticmethod
     def get_tdd_build_target(build_target_arg, build_module: BuildModuleInterface):
         parts_file = os.path.join(CURRENT_OHOS_ROOT, 'test/testfwk/developer_test/precise_compilation/part_tdd.json')
         tdd_manifest_file = os.path.join(CURRENT_OHOS_ROOT, '.repo/manifests/matrix_product.csv')
@@ -188,7 +214,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             for item in parts_data:
                 if item['name'] == target:
-                    new_targets = [prefix + test_target for test_target in item['buildTarget'].split(',')]
+                    if BuildArgsResolver.is_self_build(target, build_module):
+                        new_targets = [prefix + test_target for test_target in item['buildTarget'].split(',')]
+                    else:
+                        new_targets = [prefix + item['buildTarget'].split(',')[0]] 
                     build_targets.extend(new_targets)
                     break
             else:
