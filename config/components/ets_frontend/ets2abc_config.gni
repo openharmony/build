@@ -22,6 +22,10 @@ static_linker_root = "runtime_core"
 static_linker_build_path = ""
 static_linker_build_deps = ""
 static_linker_out_root = ""
+libes2panda_public_build_deps = ""
+ohos_ets_koala_wrapper_deps = ""
+libes2panda_public_build_path = ""
+ohos_ets_libes2panda_public_path = ""
 bootpath_json_file = ""
 
 if (host_toolchain == toolchain_mac) {
@@ -32,6 +36,13 @@ if (host_toolchain == toolchain_mac) {
       get_label_info("$static_linker_root:ark_link($toolchain_mac)",
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_mac)"
+  libes2panda_public_build_deps =
+      [ "$ets2abc_root:libes2panda_public($toolchain_mac)" ]
+  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_mac)"
+  libes2panda_public_build_path =
+      static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
+  ohos_ets_libes2panda_public_path =
+      "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/libes2panda_public.so"
 } else if (host_toolchain == toolchain_win) {
   ets2abc_out_root =
       get_label_info("$ets2abc_root:ets2panda($toolchain_win)", "root_out_dir")
@@ -40,6 +51,13 @@ if (host_toolchain == toolchain_mac) {
       get_label_info("$static_linker_root:ark_link($toolchain_win)",
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_win)"
+  libes2panda_public_build_deps =
+      [ "$ets2abc_root:libes2panda_public($toolchain_win)" ]
+  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_win)"
+  libes2panda_public_build_path =
+      static_linker_out_root +
+      "/arkcompiler/ets_frontend/libes2panda_public.dll"
+  ohos_ets_libes2panda_public_path = "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/libes2panda_public.dll"
 } else {
   ets2abc_out_root = get_label_info("$ets2abc_root:ets2panda($toolchain_linux)",
                                     "root_out_dir")
@@ -48,6 +66,13 @@ if (host_toolchain == toolchain_mac) {
       get_label_info("$static_linker_root:ark_link($toolchain_linux)",
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_linux)"
+  libes2panda_public_build_deps =
+      [ "$ets2abc_root:libes2panda_public($toolchain_linux)" ]
+  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_linux)"
+  libes2panda_public_build_path =
+      static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
+  ohos_ets_libes2panda_public_path =
+      "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/libes2panda_public.so"
 }
 ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
@@ -61,23 +86,21 @@ ohos_ets_es2panda_deps =
     "//build/config/components/ets_frontend:ohos_ets_es2panda"
 ohos_ets_ark_link_deps =
     "//build/config/components/ets_frontend:ohos_ets_ark_link"
-ohos_ets_stdlib_deps_inner =
-    "//build/config/components/ets_frontend:ohos_ets_stdlib"
-ohos_ets_api_deps_inner = "//build/config/components/ets_frontend:ohos_ets_api"
-ohos_ets_arkts_deps_inner =
-    "//build/config/components/ets_frontend:ohos_ets_arkts"
-ohos_ets_kits_deps_inner =
-    "//build/config/components/ets_frontend:ohos_ets_kits"
+ohos_ets_libes2panda_public_deps =
+    "//build/config/components/ets_frontend:ohos_ets_libes2panda_public"
+ohos_ets_build_system_deps = "ets_frontend:ohos_ets_build_system"
+ohos_ets_ui_plugins_deps =
+    "//developtools/ace_ets2bundle/arkui-plugins:ohos_ets_ui_plugins"
 
-ohos_ets_api_tmp_path = "$root_out_dir/ohos_ets_tmp/api"
-ohos_ets_api_arkui_tmp_path = "$root_out_dir/ohos_ets_tmp/api/arkui/component"
-ohos_ets_arkts_tmp_path = "$root_out_dir/ohos_ets_tmp/arkts"
-ohos_ets_kits_tmp_path = "$root_out_dir/ohos_ets_tmp/kits"
-ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
-ohos_ets_api_arkui_path = "$root_out_dir/ohos_ets/api/arkui/component"
-ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
-ohos_ets_kits_path = "$root_out_dir/ohos_ets/kits"
-ohos_ets_inner_path = "$root_out_dir/ohos_ets/inner"
+ohos_ets_api_tmp_path = "$root_build_dir/ohos_ets_tmp/api"
+ohos_ets_api_arkui_tmp_path = "$root_build_dir/ohos_ets_tmp/api/arkui/component"
+ohos_ets_arkts_tmp_path = "$root_build_dir/ohos_ets_tmp/arkts"
+ohos_ets_kits_tmp_path = "$root_build_dir/ohos_ets_tmp/kits"
+ohos_ets_api_path = "$root_build_dir/ohos_ets/api"
+ohos_ets_api_arkui_path = "$root_build_dir/ohos_ets/api/arkui/component"
+ohos_ets_arkts_path = "$root_build_dir/ohos_ets/arkts"
+ohos_ets_kits_path = "$root_build_dir/ohos_ets/kits"
+ohos_ets_inner_path = "$root_build_dir/ohos_ets/inner"
 ohos_ets_es2panda_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/es2panda"
 ohos_ets_ark_link_path =
@@ -89,6 +112,15 @@ ohos_ets_build_system_path =
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
+build_sdk_path = "$root_build_dir/ohos_ets"
+
+if (host_os == "mac") {
+  node_path =
+      "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin"
+} else {
+  node_path =
+      "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin"
+}
 
 if (ohos_indep_compiler_enable) {
   ark_link_target_out_path =
@@ -130,23 +162,81 @@ template("generate_static_abc") {
     external_deps += [ ohos_ets_stdlib_deps ]
 
     args = [
-      "--es2panda",
-      rebase_path("$ohos_ets_es2panda_path"),
-      "--ark-link",
-      rebase_path("$ohos_ets_ark_link_path"),
       "--bootpath-json-file",
       rebase_path("${bootpath_json_file}"),
-      "--env-path",
-      rebase_path("${static_linker_out_root}/arkcompiler/runtime_core/"),
     ]
 
-    if (defined(invoker.base_url)) {
+    ui_enable = "False"
+    if (defined(invoker.ui_enable)) {
+      ui_enable = invoker.ui_enable
+    }
+    args += [
+      "--ui-enable",
+      ui_enable,
+    ]
+
+    if (ui_enable == "False") {
+      args += [
+        "--es2panda",
+        rebase_path("$ohos_ets_es2panda_path"),
+        "--ark-link",
+        rebase_path("$ohos_ets_ark_link_path"),
+        "--env-path",
+        rebase_path("${static_linker_out_root}/arkcompiler/runtime_core/"),
+      ]
+    }
+
+    if (ui_enable == "True") {
+      assert(defined(invoker.files), "files is required!")
+      assert(defined(invoker.base_url), "base_url is required!")
+      deps += [
+        ohos_ets_koala_wrapper_deps,
+        ohos_ets_libes2panda_public_deps,
+        ohos_ets_ui_plugins_deps,
+      ]
       external_deps += [
         ohos_ets_api_deps,
         ohos_ets_arkts_deps,
+        ohos_ets_build_system_deps,
         ohos_ets_kits_deps,
       ]
+      args += [
+        "--base-url",
+        rebase_path("${invoker.base_url}"),
+        "--build-sdk-path",
+        rebase_path("$build_sdk_path"),
+        "--ui-plugin",
+        rebase_path(
+            "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js"),
+        "--memo-plugin",
+        rebase_path(
+            "$build_sdk_path/build-tools/ui-plugins/lib/memo-plugins/index.js"),
+        "--entry-path",
+        rebase_path(
+            "$build_sdk_path/build-tools/driver/build-system/dist/entry.js"),
+        "--env-path",
+        rebase_path("$build_sdk_path/build-tools/ets2panda/lib"),
+        "--node-path",
+        rebase_path("$node_path"),
+      ]
 
+      file_paths = []
+      foreach(path, invoker.files) {
+        file_paths += [ rebase_path(path) ]
+      }
+      args += [ "--files" ] + file_paths
+
+      if (defined(invoker.package)) {
+        args += [
+          "--package",
+          rebase_path(invoker.package),
+        ]
+      }
+    } else if (defined(invoker.base_url)) {
+      external_deps += [
+        ohos_ets_api_deps,
+        ohos_ets_arkts_deps,
+      ]
       args += [
         "--base-url",
         rebase_path("${invoker.base_url}"),
