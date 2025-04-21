@@ -70,7 +70,7 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
     p.wait()
 
 
-def remove_system_api_method(source_root: str, out_path: str, nodejs: str):
+def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
 
     tool = os.path.join(source_root, INTERFACE_PATH,
                         API_MODIFY_DIR, API_MODIFY_TOOL)
@@ -83,8 +83,8 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str):
     api_out_dir = os.path.abspath(api_out_dir)
 
     nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--input", api_dir,
-                         "--output", api_out_dir], stdout=subprocess.PIPE)
+    p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output",
+                          api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
     p.wait()
 
 
@@ -95,9 +95,9 @@ def parse_step(options):
         copy_arkts_api_method(options.root_build_dir,
                               out_path, options.node_js, sdk_type)
 
-        if options.sdk_build_public == "true" and sdk_type != "ets2":
+        if options.sdk_build_public == "true":
             remove_system_api_method(
-                options.root_build_dir, out_path, options.node_js)
+                options.root_build_dir, out_path, options.node_js, sdk_type)
             replace_sdk_dir(options.root_build_dir, os.path.join(
                 out_path, API_GEN_PATH), os.path.join(out_path, API_PATH))
             replace_sdk_dir(options.root_build_dir, os.path.join(
