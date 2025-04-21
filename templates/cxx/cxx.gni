@@ -380,6 +380,30 @@ template("ohos_executable") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (defined(invoker.branch_protector_frt)) {
       if (invoker.branch_protector_frt == "bti" &&
           support_branch_protector_bti) {
@@ -985,6 +1009,30 @@ template("ohos_shared_library") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
@@ -1471,6 +1519,30 @@ template("ohos_static_library") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (defined(invoker.branch_protector_frt)) {
       if (invoker.branch_protector_frt == "bti" &&
           support_branch_protector_bti) {
@@ -1763,6 +1835,30 @@ template("ohos_source_set") {
             }
           }
           configs += [ "//build/config/security:stack_protector_config" ]
+        }
+      }
+    }
+
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
         }
       }
     }

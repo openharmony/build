@@ -73,6 +73,8 @@ config("stack_protector_config") {
 
 config("stack_protector_ret_all_config") {
   cflags = []
+  cflags_c = []
+  cflags_cc = []
   if (is_mac) {
     if (is_debug) {
       cflags += [ "-fstack-protector-strong" ]
@@ -90,6 +92,14 @@ config("stack_protector_ret_all_config") {
           "-fstack-protector-ret-all",
           "--param=ssp-ret-cookie-size=1000",
         ]
+        cflags_c += [
+          "-fstack-protector-ret-all",
+          "--param=ssp-ret-cookie-size=1000",
+        ]
+        cflags_cc += [
+          "-fstack-protector-ret-all",
+          "--param=ssp-ret-cookie-size=1000",
+        ]
       } else {
         cflags += [ "-fstack-protector-strong" ]
       }
@@ -99,6 +109,8 @@ config("stack_protector_ret_all_config") {
 
 config("stack_protector_ret_strong_config") {
   cflags = []
+  cflags_c = []
+  cflags_cc = []
   if (is_mac) {
     if (is_debug) {
       cflags += [ "-fstack-protector-strong" ]
@@ -113,6 +125,8 @@ config("stack_protector_ret_strong_config") {
     } else if (current_os != "aix") {
       if (support_stack_protector_ret == true) {
         cflags += [ "-fstack-protector-ret-strong" ]
+        cflags_c += [ "-fstack-protector-ret-strong" ]
+        cflags_cc += [ "-fstack-protector-ret-strong" ]
       } else {
         cflags += [ "-fstack-protector-strong" ]
       }
