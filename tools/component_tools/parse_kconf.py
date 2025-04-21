@@ -18,6 +18,7 @@ limitations under the License.
 import json
 import argparse
 import os
+import stat
 
 SUBSYS_LIST = "subsystems"
 SUBSYS = "subsystem"
@@ -161,7 +162,8 @@ def generate_config_with_full_deps(deps_path: str, base_product_path: str, confi
         subsystems_list.append(temp)
     result = kconf
     result[SUBSYS_LIST] = subsystems_list
-    with open(out, "w") as f:
+    with os.fdopen(os.open(out,
+                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as f:
         f.write(json.dumps(result, indent=2))
     print("output file in: ", os.path.abspath(out))
 
