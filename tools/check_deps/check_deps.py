@@ -17,6 +17,7 @@ import os
 import json
 import sys
 import argparse
+import stat
 
 
 def read_json_file(input_file: str):
@@ -38,7 +39,8 @@ def write_json_file(output_file: str, content):
     file_dir = os.path.dirname(os.path.abspath(output_file))
     if not os.path.exists(file_dir):
         os.makedirs(file_dir, exist_ok=True)
-    with open(output_file, 'w') as output_f:
+    with os.fdopen(os.open(output_file,
+                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as output_f:
         json.dump(content, output_f, indent=2)
 
 
