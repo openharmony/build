@@ -21,10 +21,10 @@ from utils import (
     get_json,
     get_ninja_args,
     get_gn_args,
+    get_gn_flags,
     is_enable_ccache,
     print_ccache_stats,
     clean_ccache_info,
-    is_export_compile_commands,
 )
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -115,8 +115,8 @@ def _gn_cmd(root_path, variants, out_dir, test_filter):
         "-C",
         f"out/{variants}/{out_dir}",
     ]
-    if is_export_compile_commands():
-        _cmd_list.append("--export-compile-commands")
+    input_gn_flags = get_gn_flags()
+    _cmd_list.extend(input_gn_flags)
 
     print(
         'Executing gn command: {} {} --args="{}" {}'.format(
