@@ -47,6 +47,7 @@ class Outputs:
             output_dir, 'SystemCapability.json')
         self.compile_standard_whitelist_json = os.path.join(output_dir, 'compile_standard_whitelist.json')
         self.compile_env_allowlist_json = os.path.join(output_dir, 'compile_env_allowlist.json')
+        self.hvigor_compile_whitelist_json = os.path.join(output_dir, 'hvigor_compile_hap_whitelist.json')
 
 
 class Dirs:

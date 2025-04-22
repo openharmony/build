@@ -41,6 +41,7 @@ class OHOSPreloader(PreloadInterface):
         self._build_vars = {}
         self._compile_standard_whitelist_info = {}
         self._compile_env_allowlist_info = {}
+        self._hvigor_compile_whitelist_info = {}
 
     def __post_init__(self):
         self._dirs = Dirs(self._config)
@@ -55,6 +56,7 @@ class OHOSPreloader(PreloadInterface):
         self._subsystem_info = self._get_org_subsystem_info()
         self._compile_standard_whitelist_info = self._get_compile_standard_whitelist_info()
         self._compile_env_allowlist_info = self._get_compile_env_allowlist_info()
+        self._hvigor_compile_whitelist_info = self._get_hvigor_compile_whitelist_info()
 
 # generate method
 
@@ -280,6 +282,16 @@ class OHOSPreloader(PreloadInterface):
             )
         )
 
+    def _generate_hvigor_compile_whitelist_json(self):
+        IoUtil.dump_json_file(
+            self._outputs.hvigor_compile_whitelist_json, self._hvigor_compile_whitelist_info
+        )
+        LogUtil.hb_info(
+            "generated hvigor_compile_whitelist info to {}/hvigor_compile_hap_whitelist.json".format(
+                self._dirs.preloader_output_dir
+            )
+        )
+
 # get method
 
     def _get_org_subsystem_info(self) -> dict:
@@ -321,3 +333,16 @@ class OHOSPreloader(PreloadInterface):
 
         allow_env = IoUtil.read_json_file(allow_env_file)
         return allow_env
+
+    def _get_hvigor_compile_whitelist_info(self) -> dict:
+        hvigor_compile_whitelist_file = os.path.join(
+            self._dirs.source_root_dir,
+            "out/products_ext/{}/hvigor_compile_hap_whitelist.json".format(
+                self.config.product
+            ),
+        )
+        hvigor_compile_whitelist = dict()
+        if os.path.exists(hvigor_compile_whitelist_file):
+            hvigor_compile_whitelist = IoUtil.read_json_file(hvigor_compile_whitelist_file)
+
+        return hvigor_compile_whitelist
