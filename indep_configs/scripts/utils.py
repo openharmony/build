@@ -66,11 +66,6 @@ def get_indep_args():
     return None
 
 
-def is_export_compile_commands():
-    data = get_indep_args()
-    return data["export_compile_commands"]["argDefault"]
-
-
 def get_ninja_args():
     """
     Obtain the parameters for the Ninja build system from the independent build parameters.
@@ -80,21 +75,24 @@ def get_ninja_args():
     data = get_indep_args()
     input_ninja_args.extend(data["ninja_args"]["argDefault"])
     if data["keep_ninja_going"]["argDefault"]:
-        input_ninja_args.append("-k10000")
+        input_ninja_args.append("-k100000")
     return input_ninja_args
 
 
 def get_gn_args():
-    """
-    Obtain the parameters for the GN build system from the independent build parameters.
-    :return: A list of GN parameters
-    """
     input_gn_args = []
     data = get_indep_args()
     if data["gn_args"]["argDefault"]:
         input_gn_args.extend(data["gn_args"]["argDefault"])
-
     return input_gn_args
+
+
+def get_gn_flags():
+    input_gn_flags = []
+    data = get_indep_args()
+    if data["gn_flags"]["argDefault"]:
+        input_gn_flags.extend(data["gn_flags"]["argDefault"])
+    return input_gn_flags
 
 
 def get_build_target():
