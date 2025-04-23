@@ -87,7 +87,7 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-5bb798-20240903",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-5bb798-20240903_sp1",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
@@ -216,7 +216,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-5bb798/ohos_arm64/clang_ohos-arm64-5bb798-20240903.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-5bb798_sp1/ohos_arm64/clang_ohos-arm64-5bb798-20240903_sp1.tar.gz",
           "unzip_filename": "llvm"
         },
         {
@@ -328,7 +328,7 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-5bb798/ohos_arm64/clang_ohos-arm64-5bb798-20240903.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-5bb798_sp1/ohos_arm64/clang_ohos-arm64-5bb798-20240903_sp1.tar.gz",
           "unzip_filename": "llvm"
         },
         {
