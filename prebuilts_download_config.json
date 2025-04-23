@@ -239,7 +239,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.16/taihe-v0.16-20250421.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-linux-x86_64-v0.19-20250423.tar.gz",
+          "unzip_filename": "taihe"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-windows-x86_64-v0.19-20250423.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -434,7 +439,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.16/taihe-v0.16-20250421.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-linux-x86_64-v0.19-20250423.tar.gz",
+          "unzip_filename": "taihe"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-windows-x86_64-v0.19-20250423.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -608,6 +618,11 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-nightly-aarch64-apple-darwin.tar.gz",
           "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-darwin-arm64-v0.19-20250423.tar.gz",
+          "unzip_filename": "taihe"
         }
       ],
       "install": [
@@ -649,6 +664,11 @@
           "unzip_dir": "prebuilts/packing_tool",
           "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "unzip_filename": "packing_tool"
+        },
+        {
+          "unzip_dir": "prebuilts/taihe/ohos/darwin-x86_64",
+          "file_path": "/openharmony/compiler/Taihe/0.19/taihe-darwin-x86_64-v0.19-20250423.tar.gz",
+          "unzip_filename": "taihe"
         }
       ],
       "darwin_copy_config": [
