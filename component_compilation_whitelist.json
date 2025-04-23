@@ -10134,7 +10134,8 @@
             "//drivers/peripheral/display/interfaces/include/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/2d_engine/rosen_text/skia_txt:skia_paragraph": [
-            "//third_party/skia/modules/skparagraph/"
+            "//third_party/skia/modules/skparagraph/",
+            "//third_party/skia/m133/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/test/fuzztest/rswindowanimation_fuzzer:RSWindowAnimationFuzzTest": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
