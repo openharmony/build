@@ -30,6 +30,8 @@
         "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
         "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers",
         "//drivers/interface/usb/ddk/v1_1:usb_ddk_idl_headers",
+        "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers_1.0",
+        "//drivers/interface/usb/ddk/v1_1:usb_ddk_idl_headers_1.1",
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
