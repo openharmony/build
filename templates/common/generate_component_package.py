@@ -1075,7 +1075,9 @@ def _copy_dir(src_path, target_path):
                 continue
             if not os.path.exists(target_path):
                 os.makedirs(target_path)
-            shutil.copy2(path, os.path.join(target_path, file))
+            # 打包时存在同名头文件时，使用先遍历到的
+            if not os.path.exists(os.path.join(target_path, file)):
+                shutil.copy2(path, os.path.join(target_path, file))
     return True
   
 
@@ -1103,10 +1105,6 @@ def _copy_includes(args, module, includes: list):
             _sub_include = include.split(f"{part_path}/")[-1]
             split_include = include.split("//")[1]
             real_include_path = os.path.join(args.get("root_path"), split_include)
-            if args.get('part_name') == 'libunwind':
-                _out_dir = os.path.join(toolchain_includes_out_dir, _sub_include)
-                _copy_dir(real_include_path, _out_dir)
-                continue
             _copy_dir(real_include_path, toolchain_includes_out_dir)
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
@@ -1115,10 +1113,6 @@ def _copy_includes(args, module, includes: list):
         _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
         real_include_path = os.path.join(args.get("root_path"), split_include)
-        if args.get('part_name') == 'libunwind':
-            _out_dir = os.path.join(includes_out_dir, _sub_include)
-            _copy_dir(real_include_path, _out_dir)
-            continue
         _copy_dir(real_include_path, includes_out_dir)
     print("_copy_includes has done ")
 
@@ -1372,11 +1366,6 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
     fp.write('    "includes",\n')
-    if module == 'libunwind':
-        fp.write('    "includes/libunwind-1.6.2",\n')
-        fp.write('    "includes/libunwind-1.6.2/src",\n')
-        fp.write('    "includes/libunwind-1.6.2/include",\n')
-        fp.write('    "includes/libunwind-1.6.2/include/tdep-arm",\n')
     if module == 'ability_runtime':
         fp.write('    "includes/context",\n')
         fp.write('    "includes/app",\n')
