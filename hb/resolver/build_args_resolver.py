@@ -178,8 +178,6 @@ class BuildArgsResolver(ArgsResolverInterface):
         if not os.path.exists(change_info_file):
             return True
         change_info = IoUtil.read_json_file(change_info_file)
-        openharmony_fields = [v["name"] for v in change_info.values() if "name" in v]
-        
         change_files = []
         file_operations = {
             "added": lambda x: x,
@@ -193,9 +191,8 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             changed_files = value.get("changed_file_list", {})
             for op, processor in file_operations.items():
-                if "include" in op or "interface" in op:
-                    return True
-            return False
+                if op in changed_files and ("include" in processor(changed_files[op]) or "interface" in processor(changed_files[op])):
+                    return False
         return True
 
     @staticmethod
@@ -214,10 +211,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             for item in parts_data:
                 if item['name'] == target:
-                    if BuildArgsResolver.is_self_build(target, build_module):
-                        new_targets = [prefix + test_target for test_target in item['buildTarget'].split(',')]
-                    else:
-                        new_targets = [prefix + item['buildTarget'].split(',')[0]] 
+                    new_targets = ([prefix + item['selfTarget'].split(',')[0]]
+                                   if BuildArgsResolver.is_self_build(target, build_module)
+                                   else [prefix + item['buildTarget'].split(',')[0]])
                     build_targets.extend(new_targets)
                     break
             else:
