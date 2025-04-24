@@ -158,12 +158,9 @@ def gen_default_deps_json(variant, root_path, has_test=False):
     download_part_whitelist = IoUtil.read_json_file(download_part_whitelist_path)
     for part_name in part_name_list:
         # Default Dependency List 
-        common_deps = []
-        if part_name in download_part_whitelist["components"]:
-            for dependencie in download_part_whitelist["components"][part_name]["dependencies"]:
-                common_deps += download_part_whitelist["dependencies"][dependencie]
-            for dep in common_deps:
-                default_deps_json.append(dep)
+        if part_name in download_part_whitelist.keys():
+            for dependencies_part in download_part_whitelist[part_name]:
+                default_deps_json.append(dependencies_part)
     if has_test:
         default_deps_json.append('developer_test')
 
