@@ -1416,10 +1416,8 @@ _DEPENDENCIES_MAP = {
     ('graphic_2d', 'librender_service_client'): ["eventhandler:libeventhandler", "window_manager:libdm"],
     ('graphic_2d', '2d_graphics'): ["skia:skia_canvaskit"],
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
-    ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
-    ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
     ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
-    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkbase_static", "runtime_core:libarkfile_static"],
+    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
 
