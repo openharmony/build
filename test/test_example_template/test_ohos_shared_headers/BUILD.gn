@@ -19,9 +19,7 @@ ohos_shared_headers("test_ohos_shared_headers") {
 }
 
 config("idl_headers_config") {
-  include_dirs = []
-
-  include_dirs += [
+  include_dirs = [
     "//drivers/hdf_core/interfaces/inner_api/utils",
     "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
     "//drivers/hdf_core/interfaces/inner_api/hdi",
