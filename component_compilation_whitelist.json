@@ -60,6 +60,7 @@
         "//third_party/libxml2:xml2",
         "//third_party/mindspore:mindir",
         "//third_party/musl:musl_all",
+        "//third_party/musl:musl_headers",
         "//third_party/typescript:build_typescript"
     ],
     "all_dependent_configs": [
@@ -12330,6 +12331,7 @@
         "//third_party/libxml2:libxml2_config",
         "//third_party/libxml2:xml2",
         "//third_party/musl:musl_all",
+        "//third_party/musl:musl_headers",
         "//third_party/popt:popt_static",
         "//third_party/typescript:build_typescript",
         "//third_party/weex-loader:weex_loader_ark_hap"
@@ -12895,6 +12897,9 @@
         ],
         "//foundation/communication/bluetooth_service/test/unittest/pan:btfw_pan_unit_test_resource_copy": [
             "//third_party/libxml2:xml2"
+        ],
+        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
+            "//third_party/musl:musl_headers"
         ],
         "//foundation/communication/netmanager_ext/services/networksharemanager:net_tether_manager": [
             "//drivers/interface/usb/v1_0:usb_idl_headers"
@@ -25765,6 +25770,9 @@
         "//foundation/communication/dsoftbus/tests/core/connection/wifi_direct_cpp:WifiDirectRoleOptionTest_resource_copy": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
+            "//third_party/musl:musl_headers"
         ],
         "//foundation/communication/netmanager_base/test/fuzztest/netbasebranch_fuzzer:NetBaseBranchFuzzTest": [
             "//third_party/curl:curl_shared"
