@@ -216,12 +216,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                                    else [prefix + item['buildTarget'].split(',')[0]])
                     build_targets.extend(new_targets)
                     break
-                else:
-                    build_targets = ['build/ohos/packages:build_all_test_pkg']
-                    target_generator = build_module.target_generator
-                    target_generator.regist_arg('use_thin_lto', False)
-                    break
-            if build_targets == ['build/ohos/packages:build_all_test_pkg']:
+            else:
+                build_targets = ['build/ohos/packages:build_all_test_pkg']
+                target_generator = build_module.target_generator
+                target_generator.regist_arg('use_thin_lto', False)
                 break
         return build_targets
 
