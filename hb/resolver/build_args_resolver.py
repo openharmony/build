@@ -221,6 +221,8 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_generator = build_module.target_generator
                     target_generator.regist_arg('use_thin_lto', False)
                     break
+            if build_targets == ['build/ohos/packages:build_all_test_pkg']:
+                break
         return build_targets
 
     @staticmethod
