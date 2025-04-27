@@ -168,7 +168,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         with open(input_file, 'r') as input_f:
             data = csv.DictReader(input_f)
             for csv_row in data:
-                if csv_row.get(config.precise_branch) == 'Y':
+                if csv_row.get(config.precise_branch) == 'Y' or csv_row.get('dayu200_tdd') == 'Y':
                     target_set.add(csv_row['repoistory'])
         return target_set
 
