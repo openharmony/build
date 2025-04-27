@@ -23,10 +23,12 @@ ohos_prebuilt_shared_library("libc++_shared.so") {
   mini_debug = true
   if (target_cpu == "arm") {
     source = "${clang_stl_path}/arm-linux-ohos/libc++_shared.so"
-  } else if (target_cpu == "arm64") {
+  } else if (use_hwasan == false && target_cpu == "arm64") {
     source = "${clang_stl_path}/aarch64-linux-ohos/libc++_shared.so"
   } else if (target_cpu == "x86_64") {
     source = "${clang_stl_path}/x86_64-linux-ohos/libc++_shared.so"
+  } else if (is_asan == true && use_hwasan == true && target_cpu == "arm64") {
+    source = "${clang_stl_path}/aarch64-linux-ohos/hwasan/libc++_shared.so"
   } else {
     source = ""
   }
