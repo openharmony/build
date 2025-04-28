@@ -303,7 +303,7 @@ dist_subsystem_info_file =
 dist_build_install_packages_dir = "${dist_build_out_dir}/packages_to_install"
 dist_subsystem_info_output_file =
     "${dist_build_install_packages_dir}/${dist_subsystem_info_filename}"
-prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/18"
+prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/19"
 
 ramdisk_dir_list = []
 
