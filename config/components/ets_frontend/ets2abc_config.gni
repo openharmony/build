@@ -55,8 +55,10 @@ static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
 
 ohos_ets_api_deps = "//build/config/components/ets_frontend:ohos_ets_api"
+ohos_ets_api_arkui_deps = "//build/config/components/ets_frontend:ohos_ets_api_arkui"
 ohos_ets_arkts_deps = "//build/config/components/ets_frontend:ohos_ets_arkts"
 ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
+ohos_ets_api_arkui_path = "$root_out_dir/ohos_ets/api/arkui/component"
 ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
 ohos_ets_inner_path = "$root_out_dir/ohos_ets/inner"
 
@@ -97,7 +99,7 @@ template("generate_static_abc") {
 
     if (defined(invoker.base_url)) {
       deps += [
-        ohos_ets_api_deps,
+        ohos_ets_api_arkui_deps,
         ohos_ets_arkts_deps,
       ]
       args += [
