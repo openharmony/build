@@ -13,6 +13,8 @@
 
 import("//build/config/clang/clang.gni")
 import("//build/config/python.gni")
+import("//build/config/ohos/config.gni")
+import("//build/config/ohos/musl.gni")
 import("//build/ohos/kernel/kernel.gni")
 import("//build/ohos/notice/notice.gni")
 import("//build/templates/bpf/ohos_bpf_config.gni")
@@ -42,11 +44,11 @@ template("ohos_bpf") {
   assert(subsystem_name != "")
   assert(part_name != "")
   _clang = "${clang_base_path}/bin/clang"
-  _base_dir =
-      get_label_info("//build/templates/bpf:gen_bpf_uapi", "target_out_dir")
   _include_dirs = [
-    "${_base_dir}/${bpf_inc_out_dir}/usr/include",
-    "${_base_dir}/${bpf_inc_out_dir}",
+    "${musl_sysroot}/usr/include/${abi_target}",
+    "//third_party/libbpf/src",
+    "//third_party/libbpf/include",
+    "//third_party/libbpf/include/uapi"
   ]
   if (defined(invoker.include_dirs)) {
     _include_dirs += invoker.include_dirs
@@ -147,7 +149,7 @@ template("ohos_bpf") {
       ":$_module_info_target",
       ":$_notice_target",
       ":${_collect_target}",
-      "//build/templates/bpf:gen_bpf_uapi",
+      "//third_party/musl:musl_headers"
     ]
     if (defined(invoker.deps)) {
       deps += invoker.deps
