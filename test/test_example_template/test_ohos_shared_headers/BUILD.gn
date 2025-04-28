@@ -15,5 +15,7 @@ import("//build/ohos.gni")
 
 ohos_shared_headers("test_ohos_shared_headers") {
   include_dirs = [ "../src" ]
+  part_name = "build_framework"
+  subsystem_name = "build"
   deps = []
 }
