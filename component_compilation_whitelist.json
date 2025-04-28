@@ -12234,37 +12234,11 @@
             "//third_party/glib/glib/",
             "//third_party/glib/"
         ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/mindir:mindir_lib": [
-            "//third_party/flatbuffers/include/",
-            "//third_party/bounds_checking_function/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/common:lite_common_mid_obj": [
-            "//third_party/flatbuffers/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/litert/js_api:mindsporelite_napi": [
-            "//third_party/libuv/include/",
-            "//foundation/arkui/napi/",
-            "//foundation/arkui/napi/interfaces/inner_api/",
-            "//foundation/arkui/napi/interfaces/kits/",
-            "//third_party/node/src/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/litert/kernel/cpu:cpu_kernel_obj": [
-            "//third_party/flatbuffers/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_lib": [
-            "//third_party/flatbuffers/include/",
             "//foundation/ai/neural_network_runtime/"
         ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_ndk": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/flatbuffers/include/",
             "//foundation/ai/neural_network_runtime/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_train_lib": [
-            "//third_party/flatbuffers/include/"
         ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
