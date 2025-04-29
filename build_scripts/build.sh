@@ -117,6 +117,8 @@ EXPECTED_NODE_VERSION="14.21.1"
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
 export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
+export PATH=${SOURCE_ROOT_DIR}/prebuilts/tool/command-line-tools/bin:$PATH
+chmod +777 ${SOURCE_ROOT_DIR}/prebuilts/tool/command-line-tools/hvigor/bin/hvigorw
 echo "[OHOS INFO] Current Node.js version is $(node -v)"
 NODE_VERSION=$(node -v)
 if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
@@ -227,6 +229,14 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* &
     xcache_args="--xcache=false"
   fi
   build_sdk
+  api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+  target_dir="${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/previewer"
+  if [ ! -d "${target_dir}" ]; then
+    mkdir "${target_dir}"
+    cp -r "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/native/oh-uni-package.json" "${target_dir}/"
+    sed -i 's/Native/Previewer/g' "${target_dir}/oh-uni-package.json"
+    sed -i 's/native/previewer/g' "${target_dir}/oh-uni-package.json"
+  fi
   get_api
   if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed, please remove the out/sdk directory and try again!\033[0m"
