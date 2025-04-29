@@ -159,25 +159,14 @@ template("ohos_prebuilt_shared_library") {
       is_passthrough_indirect = true
     }
 
-    _chipsetsdk_tags = [
-      "is_chipsetsdk",
-      "is_chipsetsdk_indirect",
-      "is_chipsetsdk_sp",
-      "is_chipsetsdk_sp_indirect",
-    ]
-
-    _active_tags = []
-    foreach(tag, _chipsetsdk_tags) {
-      if (defined(invoker[tag]) && invoker[tag]) {
-        _active_tags += [tag]
-      }
-    }
-
-    if (_active_tags.length() > 1) {
-      assert(false, 
-            "These tags cannot coexist: " + 
-            string_join(", ", _active_tags) + 
-            ". Only one of them can be set to true.")
+    if (is_chipsetsdk && (is_chipsetsdk_indirect || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk tags cannot coexist with [chipsetsdk_indirect,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp && (is_chipsetsdk || is_chipsetsdk_indirect || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_sp tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_indirect)) {
+      assert(false, "chipsetsdk_sp_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp]")
     }
 
     if (is_platformsdk) {
@@ -505,25 +494,14 @@ template("ohos_prebuilt_rust_library") {
       is_passthrough_indirect = true
     }
 
-    _chipsetsdk_tags = [
-      "is_chipsetsdk",
-      "is_chipsetsdk_indirect",
-      "is_chipsetsdk_sp",
-      "is_chipsetsdk_sp_indirect",
-    ]
-
-    _active_tags = []
-    foreach(tag, _chipsetsdk_tags) {
-      if (defined(invoker[tag]) && invoker[tag]) {
-        _active_tags += [tag]
-      }
-    }
-
-    if (_active_tags.length() > 1) {
-      assert(false, 
-            "These tags cannot coexist: " + 
-            string_join(", ", _active_tags) + 
-            ". Only one of them can be set to true.")
+    if (is_chipsetsdk && (is_chipsetsdk_indirect || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk tags cannot coexist with [chipsetsdk_indirect,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp && (is_chipsetsdk || is_chipsetsdk_indirect || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_sp tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_indirect)) {
+      assert(false, "chipsetsdk_sp_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp]")
     }
 
     if (is_platformsdk) {
