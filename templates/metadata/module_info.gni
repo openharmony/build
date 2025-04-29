@@ -49,6 +49,7 @@ template("generate_module_info") {
                            "subsystem_name",
                            "symlink_ext",
                            "symlink_path",
+                           "softlink_create_path",
                          ])
 
   if (!defined(module_label)) {
@@ -233,6 +234,12 @@ template("generate_module_info") {
       args += [
         "--symlink-path",
         symlink_path,
+      ]
+    }
+    if (defined(softlink_create_path) && softlink_create_path != "") {
+      args += [
+        "--softlink-create-path",
+        softlink_create_path,
       ]
     }
     script = gen_script
