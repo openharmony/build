@@ -5,8 +5,6 @@
     "cJSON",
     "openssl",
     "libxml2",
-    "cups",
-    "cups-filters",
     "libphonenumber",
     "libpng",
     "glib",
