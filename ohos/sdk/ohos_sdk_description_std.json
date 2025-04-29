@@ -696,7 +696,7 @@
         ]
     },
     {
-        "install_dir": "ets/ets1.2/api/arkui/component_bak",
+        "install_dir": "ets/ets1.2/api/arkui/component",
         "module_label": "//interface/sdk-js:ets_component2",
         "target_os": [
             "windows",
