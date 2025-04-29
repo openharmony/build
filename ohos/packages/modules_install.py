@@ -163,6 +163,25 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             os.symlink(symlink_path, dest_file)
             if not os.path.lexists(dest_file):
                 raise FileNotFoundError(f"target symlink {dest_file} to {symlink_path} create failed")
+        # innerapi_tags create softlink for ndk、platformsdk
+        if "softlink_create_path" in module_info:
+            softlink_create_path = module_info.get("softlink_create_path")
+            for dest in dests:
+                replace_subdir = os.path.dirname(dest).split("/")[-1]
+                file_name = os.path.basename(dest)
+                dest_file = os.path.join(platform_installed_path, dest)
+                if replace_subdir in ["llndk", "chipset-sdk", "chipset-sdk-sp"]:
+                    if softlink_create_path == "ndk":
+                        link_path = dest_file.replace(f"{replace_subdir}/{file_name}", f"ndk/{file_name}")
+                    else:
+                        link_path = dest_file.replace(f"{replace_subdir}/{file_name}", f"platformsdk/{file_name}")
+                    if link_path != dest_file:
+                        relative_path = os.path.relpath(os.path.dirname(dest_file), os.path.dirname(link_path))
+                        os.makedirs(os.path.dirname(link_path), exist_ok=True)
+                        src_file = os.path.join(relative_path, file_name)
+                        os.symlink(src_file, link_path)
+                    else:
+                        raise FileExistsError(f"{link_path} create failed, src_file:{dest_file} and {dest_file} is same")
 
     # write install module info to file
     write_json_file(install_modules_info_file, modules_info_dict)

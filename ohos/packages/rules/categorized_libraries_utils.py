@@ -25,21 +25,43 @@ from scripts.util.file_utils import read_json_file  # noqa: E402
 def __get_relative_install_dir(categories):
     is_platforsdk = False
     is_chipsetsdk = False
+    is_chipsetsdk_sp = False
+    is_llndk = False
+    is_ndk = False
+    is_passthrough = False
+    is_passthrough_indirect = False
     for cat in categories:
-        if cat == "ndk":
-            return "ndk"
         if cat.startswith("platformsdk"):
             is_platforsdk = True
         elif cat.startswith("chipsetsdk"):
-            is_chipsetsdk = True
+            if cat.startswith("chipsetsdk_sp"):
+                is_chipsetsdk_sp = True
+            else:
+                is_chipsetsdk = True
         elif cat.startswith("passthrough"):
-            return "chipsetsdk"
-    if is_platforsdk and is_chipsetsdk:
-        return "chipset-pub-sdk"
-    elif is_platforsdk:
-        return "platformsdk"
-    elif is_chipsetsdk:
+            if cat.startswith("passthrought_indirect"):
+                is_passthrough_indirect = True
+            else:
+                is_passthrough = True
+        if cat == "ndk":
+            is_ndk = True
+        if cat == "llndk":
+            is_llndk = True
+    
+    if is_chipsetsdk_sp:
+        return "chipset-sdk-sp"
+    if is_chipsetsdk:
         return "chipset-sdk"
+    if is_llndk:
+        return "llndk"
+    if is_passthrough:
+        return "passthrough"
+    if is_passthrough_indirect:
+        return "passthrough/indirect"
+    if is_ndk:
+        return "ndk"
+    if is_platforsdk:
+        return "platformsdk"
     return ""
 
 
@@ -76,7 +98,8 @@ def update_module_info(module_info, categorized_libraries):
         dir_name = item[:pos]
 
         if dir_name.endswith("chipset-sdk") or dir_name.endswith("platformsdk") \
-        or dir_name.endswith("chipset-pub-sdk") or dir_name.endswith("ndk") or dir_name.endswith("chipsetsdk"):
+        or dir_name.endswith("chipsetsdk") or dir_name.endswith("chipset-sdk-sp") or dir_name.endswith("chipset-pub-sdk") or \
+                dir_name.endswith("passthrough/indirect") or dir_name.endswith("passthrough"):
             dir_name = dir_name[:dir_name.rfind("/")]
         dest.append("{}/{}/{}".format(dir_name, categorized_libraries[label]["relative_install_dir"], lib_name))
     module_info["dest"] = dest
