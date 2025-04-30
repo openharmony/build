@@ -211,9 +211,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             for item in parts_data:
                 if item['name'] == target:
-                    new_targets = ([prefix + item['selfTarget'].split(',')[0]]
+                    new_targets = ([prefix + test_target for test_target in item['selfTarget'].split(',')]
                                    if BuildArgsResolver.is_self_build(target, build_module)
-                                   else [prefix + item['buildTarget'].split(',')[0]])
+                                   else [prefix + test_target for test_target in item['buildTarget'].split(',')])
                     build_targets.extend(new_targets)
                     break
             else:
