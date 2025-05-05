@@ -118,7 +118,7 @@ export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPEC
 export NODE_HOME=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin:$PATH
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/tool/command-line-tools/bin:$PATH
-chmod +777 ${SOURCE_ROOT_DIR}/prebuilts/tool/command-line-tools/hvigor/bin/hvigorw
+chmod +x ${SOURCE_ROOT_DIR}/prebuilts/tool/command-line-tools/hvigor/bin/hvigorw
 echo "[OHOS INFO] Current Node.js version is $(node -v)"
 NODE_VERSION=$(node -v)
 if [ "$NODE_VERSION" != "v$EXPECTED_NODE_VERSION" ]; then
