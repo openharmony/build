@@ -36,8 +36,6 @@
     "libffi",
     "libinput",
     "libnl",
-    "libunwind",
-    "lzma",
     "mtdev",
     "ntfs-3g",
     "pulseaudio",
