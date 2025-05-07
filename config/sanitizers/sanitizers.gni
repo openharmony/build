@@ -137,6 +137,7 @@ if (current_toolchain == host_toolchain || is_v8_host_toolchain) {
   is_ubsan_vptr = false
   msan_track_origins = 0
   sanitizer_coverage_flags = ""
+  use_hwasan = false
   use_afl = false
   use_cfi_diag = false
   use_cfi_recover = false
