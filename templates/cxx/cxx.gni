@@ -1971,6 +1971,7 @@ template("ohos_shared_headers") {
   }
 
   group("${target_name}") {
+    check_flag = false
     deps = deps_inner
     public_configs = [ ":public_config" ]
   }
