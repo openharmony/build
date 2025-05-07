@@ -97,7 +97,6 @@
     "screenlock_mgr",
     "drivers_peripheral_display",
     "graphic_surface",
-    "device_security_level",
     "imf",
     "core_service",
     "player_framework",
