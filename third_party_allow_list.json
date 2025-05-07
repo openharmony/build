@@ -23,7 +23,6 @@
     "bzip2",
     "cares",
     "curl",
-    "libusb",
     "decimal.js",
     "exfatprogs",
     "f2fs-tools",
