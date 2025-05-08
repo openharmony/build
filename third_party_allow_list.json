@@ -44,7 +44,6 @@
     "selinux",
     "bounds_checking_function",
     "e2fsprogs",
-    "libuv",
     "glslang",
     "vk-gl-cts",
     "spirv-tools",
