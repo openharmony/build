@@ -1413,7 +1413,6 @@ _DEPENDENCIES_MAP = {
     ('ipc', 'ipc_core'): ["c_utils:utils"],
     ('graphic_2d', 'librender_service_client'): ["eventhandler:libeventhandler", "window_manager:libdm"],
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
-    ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
