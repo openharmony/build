@@ -240,12 +240,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-linux-x86_64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-linux-x86_64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-windows-x86_64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-windows-x86_64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -430,12 +430,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-linux-x86_64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-linux-x86_64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-windows-x86_64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-windows-x86_64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -607,7 +607,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-darwin-arm64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-darwin-arm64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
@@ -663,7 +663,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.23/taihe-darwin-x86_64-v0.23-20250429.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.25/taihe-darwin-x86_64-v0.25-20250506.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
