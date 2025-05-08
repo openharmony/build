@@ -1404,16 +1404,11 @@ def _generate_public_configs(fp, module):
 
 # 目前特殊处理的依赖关系映射
 _DEPENDENCIES_MAP = {
-    ('graphic_surface', 'surface'): ["ipc:ipc_core"],
-    ('ability_base', 'want'): ["ipc:ipc_core"],
-    ('ability_base', 'session_info'): ["bundle_framework:appexecfwk_base"],
     ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
     ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime"],
     ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi"],
     ('ipc', 'ipc_core'): ["c_utils:utils"],
-    ('graphic_2d', 'librender_service_client'): ["eventhandler:libeventhandler", "window_manager:libdm"],
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
-    ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
