@@ -115,5 +115,6 @@
 
     "c_utils",
     "init",
-    "distributed_notification_service"
+    "distributed_notification_service",
+    "pcre2"
 ]
