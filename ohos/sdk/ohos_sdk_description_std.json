@@ -1186,5 +1186,13 @@
         "target_os": [
             "ohos"
         ]
-   }
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//commonlibrary/c_utils/base:utils",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    }
 ]
