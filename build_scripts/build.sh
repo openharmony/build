@@ -179,6 +179,9 @@ fi
 echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
 
 echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
+api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+api_minor_version=$(grep 'api_minor_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+api_patch_version=$(grep 'api_patch_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 function build_sdk() {
     ROOT_PATH=${SOURCE_ROOT_DIR}
     SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
@@ -199,13 +202,16 @@ function build_sdk() {
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
       pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
-        api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="11"
+        #api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="11"
         mkdir -p $api_version
         for i in */; do
+            echo -e "+++++i = ${i}+++++"
             if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
                 mv $i $api_version
             fi
         done
+        mkdir  $api_version.$api_minor_version.$api_patch_version
+        cp -r $api_version $api_version.$api_minor_version.$api_patch_version
       popd > /dev/null
     popd > /dev/null
 }
@@ -216,7 +222,8 @@ function get_api(){
     mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
   fi
 }
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
+
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
   if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
     ccache_args="--ccache=false"

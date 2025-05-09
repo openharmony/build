@@ -119,8 +119,8 @@ foreach(os, sdk_systems) {
       displayName = "{{ _display_name }}"
       version = current_sdk_version
       apiVersion = "{{ api_version }}"
-      api_minor_version="{{ api_minor_version }}"
-      api_patch_version="{{ api_patch_version }}"
+      apiMinorVersion="{{ api_minor_version }}"
+      apiPatchVersion="{{ api_patch_version }}"
       if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
         platformVersion = platform_version
       }
