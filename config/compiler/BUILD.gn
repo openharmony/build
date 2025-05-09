@@ -595,7 +595,7 @@ config("compiler") {
       if (use_lld) {
         ldflags += [ "-Wl,--lto-O" + lto_opt_level ]
         if (thin_lto_enable_optimizations) {
-          if (is_ohos || is_android) {
+          if (is_android) {
             ldflags += [
               "-Wl,-mllvm",
               "-Wl,-import-instr-limit=5",
