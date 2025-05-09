@@ -23,9 +23,10 @@ WIN_JFFS2_TOOL=mkfs.jffs2.exe
 VFAT_TOOL=mkfs.vfat
 MCOPY_TOOL=mcopy
 EXT4_TOOL=mkfs.ext4
-EXT4_SH=$(dirname $(readlink -f "$0"))/../../../third_party/e2fsprogs/e2fsprogs/contrib/populate-extfs.sh
 INSTALL_E2FSPROGS_SH=$(dirname $(readlink -f "$0"))/../../../third_party/e2fsprogs/install.sh
 INSTALL_E2FSPROGS_PATH=$(dirname $(readlink -f "$0"))/../../../third_party/e2fsprogs
+INSTALL_E2FSPROGS_GEN_PATH=$ROOTFS_DIR/../gen/third_party/e2fsprogs
+EXT4_SH=$INSTALL_E2FSPROGS_GEN_PATH/e2fsprogs/contrib/populate-extfs.sh
 
 tool_check() {
 local ret='0'
@@ -104,7 +105,7 @@ elif [ "${FSTYPE}" = "ext4" ]; then
         COUNT_SIZE="$(expr ${EMMC_ROOTFS_SIZE} \* 1024 \* 2)"
         dd if=/dev/zero of=${ROOTFS_IMG} bs=512 count=${COUNT_SIZE}
         ${EXT4_TOOL} ${ROOTFS_IMG}
-        ${INSTALL_E2FSPROGS_SH} ${INSTALL_E2FSPROGS_PATH}
+        ${INSTALL_E2FSPROGS_SH} ${INSTALL_E2FSPROGS_GEN_PATH} ${INSTALL_E2FSPROGS_PATH}
         ${EXT4_SH} ${ROOTFS_DIR} ${ROOTFS_IMG} ${CONFIG_PATH}
     fi
 else
