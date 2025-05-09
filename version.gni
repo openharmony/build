@@ -15,8 +15,8 @@
 declare_args() {
   sdk_version = "5.1.0.63"
   api_version = "19"
-  api_minor_version = "1"
-  api_patch_version = "1"
+  api_minor_version = "0"
+  api_patch_version = "0"
 
   # Release type, optional values: Betax, RCx...
   release_type = "Beta1"
