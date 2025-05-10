@@ -202,10 +202,8 @@ function build_sdk() {
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
       pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
-        #api_version=$(grep apiVersion toolchains/oh-uni-package.json | awk '{print $2}' | sed -r 's/\",?//g') || api_version="11"
         mkdir -p $api_version
         for i in */; do
-            echo -e "+++++i = ${i}+++++"
             if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
                 mv $i $api_version
             fi
