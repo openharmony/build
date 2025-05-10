@@ -182,6 +182,13 @@ echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
 api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 api_minor_version=$(grep 'api_minor_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 api_patch_version=$(grep 'api_patch_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+if [ "$api_minor_version" = "0" ] && [ "$api_patch_version" = "0" ]; then
+    new_api_version="$api_version"
+elif [ "$api_patch_version" = "0" ]; then
+    new_api_version="${api_version}.${api_minor_version}"
+else
+    new_api_version="${api_version}.${api_minor_version}.${api_patch_version}"
+fi
 function build_sdk() {
     ROOT_PATH=${SOURCE_ROOT_DIR}
     SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
@@ -202,10 +209,10 @@ function build_sdk() {
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
       pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
-        mkdir -p $api_version
+        mkdir -p $new_api_version
         for i in */; do
             if [ -d "$i" ] && [ "$i" != "$api_version/" ]; then
-                mv $i $api_version
+                mv $i $new_api_version
             fi
         done
         mkdir  $api_version.$api_minor_version.$api_patch_version
@@ -221,7 +228,7 @@ function get_api(){
   fi
 }
 
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${new_api_version}" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
   if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
     ccache_args="--ccache=false"
