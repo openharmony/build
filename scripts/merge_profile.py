@@ -56,8 +56,8 @@ def merge_profile(options):
                 f1.close()
         f0.close()
     if (str(all_data.get('app').get('targetAPIVersion')) == options.api_version 
-        and str(all_data.get('app').get('api_minor_version')) == options.api_minor_version
-        and str(all_data.get('app').get('api_patch_version')) == options.api_patch_version):
+        and str(all_data.get('app').get('minorAPIVersion')) == options.api_minor_version
+        and str(all_data.get('app').get('patchAPIVersion')) == options.api_patch_version):
         all_data["app"]["apiReleaseType"] = options.release_type
     else:
         all_data["app"]["apiReleaseType"] = 'Release'
