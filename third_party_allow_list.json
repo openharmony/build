@@ -15,7 +15,6 @@
     "ffmpeg",
     "freetype",
     "libwebsockets",
-    "sqlite",
     "mbedtls",
     "abseil-cpp",
     "astc-encoder",
