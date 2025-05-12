@@ -453,17 +453,27 @@ def build_driver_config(args: argparse.Namespace) -> None:
     """
     Build the driver configuration dictionary based on command-line arguments.
     """
+    paths = {}
+    if args.paths_keys and args.paths_values:
+        if len(args.paths_keys) != len(args.paths_values):
+            raise PathsLengthMismatchError(
+                "paths_keys and paths_values must have the same length"
+            )
+        for key, value in zip(args.paths_keys, args.paths_values):
+            paths[key] = [os.path.abspath(value)]
+
     config = {
         "plugins": {
             "ui_plugin": args.ui_plugin,
             "memo_plugin": args.memo_plugin,
         },
         "compileFiles": args.files,
-        "packageName": "",
+        "packageName": args.package if args.package else "",
         "buildType": "build",
         "buildMode": "Release",
         "moduleRootPath": args.base_url,
         "sourceRoots": ["./"],
+        "paths": paths,
         "loaderOutPath": args.dst_file,
         "cachePath": args.cache_path,
         "buildSdkPath": args.build_sdk_path,
