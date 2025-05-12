@@ -215,8 +215,6 @@ function build_sdk() {
                 mv $i $new_api_version
             fi
         done
-        mkdir  $api_version.$api_minor_version.$api_patch_version
-        cp -r $api_version $api_version.$api_minor_version.$api_patch_version
       popd > /dev/null
     popd > /dev/null
 }
