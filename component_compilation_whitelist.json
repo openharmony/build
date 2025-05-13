@@ -10144,9 +10144,6 @@
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrappersurface_fuzzer:EGLWrapperSurfaceFuzzTest": [
             "//drivers/peripheral/display/interfaces/include/"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/text/adapter/skia:skia_paragraph": [
-            "//third_party/skia/modules/skparagraph/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/test/fuzztest/rswindowanimation_fuzzer:RSWindowAnimationFuzzTest": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
@@ -10171,44 +10168,6 @@
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/utils/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
-            "//third_party/googletest/googletest/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
-            "//third_party/googletest/googletest/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/text/test/unittest/skia_txt:rosen_text_skia_txt_test": [
-            "//third_party/skia/",
-            "//third_party/skia/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/fuzztest/effect/blender_fuzzer:BlenderFuzzTest": [
             "//third_party/skia/",
@@ -31477,66 +31436,6 @@
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test/unittest:rs_client_test_common": [
             "//commonlibrary/c_utils/base:utils",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test_resource_copy": [
             "//third_party/googletest:gtest_main"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/unittest/bitmap:2d_graphics_bitmap_test": [
