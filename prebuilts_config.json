@@ -43,8 +43,8 @@
         {
           "target_os": "linux",
           "target_cpu": "x86_64",
-          "version": "20250410",
-          "url": "openharmony/compiler/gn/20250410/gn-linux-x86-20250410.tar.gz",
+          "version": "20250509",
+          "url": "openharmony/compiler/gn/20250509/gn-linux-x86-20250509.tar.gz",
           "download_dir": ".prebuilts_cache/build-tools/linux-x86/bin/gn",
           "symlink": "prebuilts/build-tools/linux-x86/bin/gn",
           "type": "file"
