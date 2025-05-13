@@ -69,7 +69,6 @@
     "file_api",
     "resource_management",
     "napi",
-    "hdf_core",
     "netmanager_base",
     "input",
     "form_fwk",
