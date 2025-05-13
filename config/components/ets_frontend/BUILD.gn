@@ -36,13 +36,16 @@ action("ohos_ets_api") {
 action("ohos_ets_api_arkui") {
   deps = [ ":ohos_ets_api" ]
   script = "//interface/sdk-js/arkui_transformer.py"
-  
+
   if (host_os == "mac") {
     node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
+    npm_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
   } else {
-    node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
+    node_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
+    npm_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
   }
   args = [
     "--input",
@@ -76,4 +79,35 @@ action("ohos_ets_arkts") {
   ]
 
   outputs = [ "$ohos_ets_arkts_path" ]
+}
+
+action("ohos_ets_kits") {
+  script = "//interface/sdk-js/ohos_copy_ets.py"
+
+  args = [
+    "--input",
+    rebase_path("//interface/sdk-js/kits"),
+    "--output",
+    rebase_path("$ohos_ets_kits_path"),
+    "--type",
+    "ets2",
+    "--source-root-dir",
+    rebase_path("//"),
+    "--node-js",
+    rebase_path(nodejs, root_build_dir),
+  ]
+
+  outputs = [ "$ohos_ets_kits_path" ]
+}
+
+ohos_copy("ohos_ets_ark_link") {
+  external_deps = static_linker_build_deps
+  sources = [ rebase_path("$static_linker_build_path") ]
+  outputs = [ ohos_ets_ark_link_path ]
+}
+
+ohos_copy("ohos_ets_libes2panda_public") {
+  external_deps = libes2panda_public_build_deps
+  sources = [ rebase_path("$libes2panda_public_build_path") ]
+  outputs = [ ohos_ets_libes2panda_public_path ]
 }
