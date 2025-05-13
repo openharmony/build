@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import os
+import argparse
+import ssl
+import sys
+from operater import OperateHanlder
+from pool_downloader import PoolDownloader
+from config_parser import ConfigParser
+import json
+from common_utils import get_code_dir
+
+global_args = None
+
+
+def record_operate(file_path, data):
+    with open(file_path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+
+def _parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--skip-ssl', action='store_true', help='skip ssl authentication')
+    parser.add_argument('--unsafe-perm', action='store_true', help='add "--unsafe-perm" for npm install')
+    parser.add_argument('--disable-rich', action='store_true', help='disable the rich module')
+    parser.add_argument('--enable-symlink', action='store_true', help='enable symlink while copying node_modules')
+    parser.add_argument('--build-arkuix', action='store_true', help='build ArkUI-X SDK')
+    parser.add_argument('--tool-repo', default='https://repo.huaweicloud.com', help='prebuilt file download source')
+    parser.add_argument('--npm-registry', default='https://repo.huaweicloud.com/repository/npm/',
+                        help='npm download source')
+    parser.add_argument('--host-cpu', help='host cpu', required=True)
+    parser.add_argument('--host-platform', help='host platform', required=True)
+    parser.add_argument('--glibc-version', help='glibc version', required=False)
+    parser.add_argument('--config-file', help='prebuilts download config file')
+    parser.add_argument('--type', help='prebuilts download type', default="indep")
+    parser.add_argument('--tag', help='prebuilts download tag', default="base")
+    return parser
+
+
+def main():
+    parser = _parse_args()
+    global global_args
+    global_args = parser.parse_args()
+
+    if global_args.skip_ssl:
+        global_args._create_default_https_context = ssl._create_unverified_context
+    global_args.code_dir = get_code_dir()    
+
+    config_file = os.path.join(os.path.dirname(__file__), "config.json")
+    if global_args.config_file: 
+        config_file = global_args.config_file
+    
+    config_parser = ConfigParser(config_file, global_args)
+    download_operate, other_operate = config_parser.get_operate()
+
+    prebuilts_path = os.path.join(global_args.code_dir, "prebuilts")
+    if not os.path.exists(prebuilts_path):
+        os.makedirs(prebuilts_path)
+
+    record_operate(os.path.join(prebuilts_path, "current_download.json"), download_operate)
+    record_operate(os.path.join(prebuilts_path, "current_operate.json"), other_operate)
+    
+    # 使用线程池下载
+    pool_downloader = PoolDownloader(download_operate, global_args)
+    unchanged = pool_downloader.start()
+    
+    OperateHanlder.run(other_operate, global_args, unchanged)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
