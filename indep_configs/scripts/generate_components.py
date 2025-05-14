@@ -272,7 +272,7 @@ def _components_info_handler(part_name_list, source_code_path: str, hpm_cache_pa
 
 def _out_components_json(components_json, output_path):
     file_name = os.path.join(output_path, "components.json")
-    flags = os.O_WRONLY | os.O_CREAT
+    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
     modes = stat.S_IWUSR | stat.S_IRUSR
     with os.fdopen(os.open(file_name, flags, modes), 'w') as f:
         json.dump(components_json, f, indent=4)

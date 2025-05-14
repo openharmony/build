@@ -61,6 +61,7 @@ class PreloadInterface(ServiceInterface):
         self._generate_systemcapability_json()
         self._generate_compile_standard_whitelist_json()
         self._generate_compile_env_allowlist_json()
+        self._generate_hvigor_compile_whitelist_json()
 
     @abstractmethod
     def _generate_build_prop(self):
@@ -112,4 +113,8 @@ class PreloadInterface(ServiceInterface):
 
     @abstractmethod
     def _generate_compile_env_allowlist_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_hvigor_compile_whitelist_json(self):
         pass

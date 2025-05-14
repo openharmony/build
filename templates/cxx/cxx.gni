@@ -380,6 +380,30 @@ template("ohos_executable") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (defined(invoker.branch_protector_frt)) {
       if (invoker.branch_protector_frt == "bti" &&
           support_branch_protector_bti) {
@@ -985,6 +1009,30 @@ template("ohos_shared_library") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
@@ -1471,6 +1519,30 @@ template("ohos_static_library") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (defined(invoker.branch_protector_frt)) {
       if (invoker.branch_protector_frt == "bti" &&
           support_branch_protector_bti) {
@@ -1767,6 +1839,30 @@ template("ohos_source_set") {
       }
     }
 
+    if (defined(cflags)) {
+      foreach(cflag, cflags) {
+        if (cflag == "-fstack-protector-strong") {
+          cflags -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_c)) {
+      foreach(cflag_c, cflags_c) {
+        if (cflag_c == "-fstack-protector-strong") {
+          cflags_c -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
+    if (defined(cflags_cc)) {
+      foreach(cflag_cc, cflags_cc) {
+        if (cflag_cc == "-fstack-protector-strong") {
+          cflags_cc -= [ "-fstack-protector-strong" ]
+        }
+      }
+    }
+
     if (defined(invoker.branch_protector_frt)) {
       if (invoker.branch_protector_frt == "bti" &&
           support_branch_protector_bti) {
@@ -1840,5 +1936,42 @@ template("ohos_source_set") {
     write_file("${target_out_dir}/${target_name}_deps_data.json",
                target_deps_data,
                "json")
+  }
+}
+
+template("ohos_shared_headers") {
+  assert(!defined(invoker.sources), "sources is not allowed to be defined.")
+  assert(defined(invoker.include_dirs), "include_dirs is must to be defined.")
+  assert(defined(invoker.subsystem_name), "subsystem_name is must to be defined.")
+  assert(defined(invoker.part_name), "part_name is must to be defined.")
+
+  deps_inner = []
+  if (defined(invoker.deps)) {
+    foreach(dep, invoker.deps) {
+      deps_inner += [ dep ]
+    }
+  }
+
+  if (defined(invoker.subsystem_name)) {
+    subsystem_name = invoker.subsystem_name
+  }
+  subsystem_name = ""
+
+  if (defined(invoker.part_name)) {
+    part_name = invoker.part_name
+  }
+  part_name = ""
+
+  include_inner = []
+  foreach(include_dir, invoker.include_dirs) {
+    include_inner += [ include_dir ]
+  }
+  config("public_config") {
+    include_dirs = include_inner
+  }
+
+  group("${target_name}") {
+    deps = deps_inner
+    public_configs = [ ":public_config" ]
   }
 }

@@ -1075,7 +1075,9 @@ def _copy_dir(src_path, target_path):
                 continue
             if not os.path.exists(target_path):
                 os.makedirs(target_path)
-            shutil.copy2(path, os.path.join(target_path, file))
+            # 打包时存在同名头文件时，使用先遍历到的
+            if not os.path.exists(os.path.join(target_path, file)):
+                shutil.copy2(path, os.path.join(target_path, file))
     return True
   
 
@@ -1103,10 +1105,6 @@ def _copy_includes(args, module, includes: list):
             _sub_include = include.split(f"{part_path}/")[-1]
             split_include = include.split("//")[1]
             real_include_path = os.path.join(args.get("root_path"), split_include)
-            if args.get('part_name') == 'libunwind':
-                _out_dir = os.path.join(toolchain_includes_out_dir, _sub_include)
-                _copy_dir(real_include_path, _out_dir)
-                continue
             _copy_dir(real_include_path, toolchain_includes_out_dir)
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
@@ -1115,10 +1113,6 @@ def _copy_includes(args, module, includes: list):
         _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
         real_include_path = os.path.join(args.get("root_path"), split_include)
-        if args.get('part_name') == 'libunwind':
-            _out_dir = os.path.join(includes_out_dir, _sub_include)
-            _copy_dir(real_include_path, _out_dir)
-            continue
         _copy_dir(real_include_path, includes_out_dir)
     print("_copy_includes has done ")
 
@@ -1204,10 +1198,13 @@ def copy_so_file(args, module, so_path):
             lib_out_dir_with_toolchain = os.path.join(args.get("out_path"), "component_package",
                                        args.get("part_path"), "innerapis", module, toolchain_name, "libs")
             so_path_with_toolchain = os.path.join(args.get("out_path"), toolchain_name, so_path)
+            unzipped_so_path_with_toolchain = so_path_with_toolchain.replace(".z.", ".")
             if toolchain_name in so_path:
                 lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain) or lib_status
             elif os.path.isfile(so_path_with_toolchain):
                 lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
+            elif os.path.isfile(unzipped_so_path_with_toolchain):
+                lib_status = _copy_file(unzipped_so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
     lib_status = _copy_file(so_path_with_out_path, lib_out_dir) or lib_status
     return lib_status
 
@@ -1369,11 +1366,6 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
     fp.write('    "includes",\n')
-    if module == 'libunwind':
-        fp.write('    "includes/libunwind-1.6.2",\n')
-        fp.write('    "includes/libunwind-1.6.2/src",\n')
-        fp.write('    "includes/libunwind-1.6.2/include",\n')
-        fp.write('    "includes/libunwind-1.6.2/include/tdep-arm",\n')
     if module == 'ability_runtime':
         fp.write('    "includes/context",\n')
         fp.write('    "includes/app",\n')
@@ -1415,19 +1407,13 @@ _DEPENDENCIES_MAP = {
     ('graphic_surface', 'surface'): ["ipc:ipc_core"],
     ('ability_base', 'want'): ["ipc:ipc_core"],
     ('ability_base', 'session_info'): ["bundle_framework:appexecfwk_base"],
-    ('window_manager', 'libdm'): ["graphic_2d:librender_service_base"],
     ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
     ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime"],
-    ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi", "eventhandler:libeventhandler"],
+    ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi"],
     ('ipc', 'ipc_core'): ["c_utils:utils"],
-    ('ipc', 'ipc_single'): ["c_utils:utils"],
     ('graphic_2d', 'librender_service_client'): ["eventhandler:libeventhandler", "window_manager:libdm"],
-    ('graphic_2d', '2d_graphics'): ["skia:skia_canvaskit"],
     ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
-    ('resource_schedule_service', 'ressched_client'): ["samgr:samgr_proxy"],
-    ('ability_runtime', 'ability_manager'): ["bundle_framework:libappexecfwk_common"],
-    ('access_token', 'libnativetoken'): ["cJSON:cjson_static", "selinux_adapter:librestorecon"],
-    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkbase_static", "runtime_core:libarkfile_static"],
+    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
 
@@ -1546,8 +1532,11 @@ def _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file):
 
 
 def _get_toolchain_gn_file(lib_out_dir, out_name):
+    unzipped_out_name = out_name.replace(".z.", ".")
     if os.path.exists(os.path.join(lib_out_dir, out_name)):
         return out_name
+    elif os.path.exists(os.path.join(lib_out_dir, unzipped_out_name)):
+        return unzipped_out_name
     else:
         print('Output file not found in toolchain dir.')
         return ''
