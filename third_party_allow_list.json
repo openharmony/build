@@ -75,7 +75,6 @@
     "hiview",
     "window_manager",
     "app_file_service",
-    "ets_runtime",
     "ace_engine",
     "background_task_mgr",
     "dfs_service",
