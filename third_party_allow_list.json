@@ -16,7 +16,6 @@
     "libwebsockets",
     "mbedtls",
     "abseil-cpp",
-    "astc-encoder",
     "brotli",
     "bzip2",
     "cares",
