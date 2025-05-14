@@ -16,8 +16,12 @@
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
         "//drivers/interface/input/ddk/v1_1:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
-        "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers",
-        "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers",
+		"//drivers/interface/intelligent_voice/engine/v1_2:intell_voice_engine_idl_headers_1.2",
+		"//drivers/interface/intelligent_voice/engine/v1_1:intell_voice_engine_idl_headers_1.1",
+        "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers_1.0",
+        "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers_1.0",
+		"//drivers/interface/intelligent_voice/trigger/v1_1:intell_voice_trigger_idl_headers_1.1",
+		"//drivers/interface/intelligent_voice/trigger/v1_2:intell_voice_trigger_idl_headers_1.2",
         "//drivers/interface/location/agnss/v2_0:location_agnss_idl_headers",
         "//drivers/interface/location/geofence/v2_0:location_geofence_idl_headers",
         "//drivers/interface/location/gnss/v2_0:location_gnss_idl_headers",
@@ -30,6 +34,8 @@
         "//drivers/interface/ril/v1_3:ril_idl_headers_1.3",
         "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers",
         "//drivers/interface/usb/ddk/v1_1:usb_ddk_idl_headers",
+        "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers_1.0",
+        "//drivers/interface/usb/ddk/v1_1:usb_ddk_idl_headers_1.1",
         "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers",
         "//drivers/interface/usb/v1_0:usb_idl_headers",
         "//drivers/interface/usb/v1_1:usb_idl_headers_1.1",
@@ -58,6 +64,7 @@
         "//third_party/libxml2:xml2",
         "//third_party/mindspore:mindir",
         "//third_party/musl:musl_all",
+        "//third_party/musl:musl_headers",
         "//third_party/typescript:build_typescript"
     ],
     "all_dependent_configs": [
@@ -4870,6 +4877,10 @@
             "//third_party/node/src/"
         ],
         "//foundation/arkui/ui_lite/ext/updater:libupdater_layout": [
+            "//foundation/graphic/graphic_utils_lite/interfaces/innerkits/",
+            "//foundation/graphic/graphic_utils_lite/interfaces/kits/"
+        ],
+        "//foundation/arkui/ui_lite/ext/home_host:libhome_host_layout": [
             "//foundation/graphic/graphic_utils_lite/interfaces/innerkits/",
             "//foundation/graphic/graphic_utils_lite/interfaces/kits/"
         ],
@@ -10133,9 +10144,6 @@
         "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrappersurface_fuzzer:EGLWrapperSurfaceFuzzTest": [
             "//drivers/peripheral/display/interfaces/include/"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/text/adapter/skia:skia_paragraph": [
-            "//third_party/skia/modules/skparagraph/"
-        ],
         "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/test/fuzztest/rswindowanimation_fuzzer:RSWindowAnimationFuzzTest": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
         ],
@@ -10160,44 +10168,6 @@
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/utils/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
-            "//third_party/googletest/googletest/include/",
-            "//third_party/skia/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
-            "//third_party/googletest/googletest/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
-            "//third_party/googletest/googletest/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/text/test/unittest/skia_txt:rosen_text_skia_txt_test": [
-            "//third_party/skia/",
-            "//third_party/skia/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/fuzztest/effect/blender_fuzzer:BlenderFuzzTest": [
             "//third_party/skia/",
@@ -12227,37 +12197,11 @@
             "//third_party/glib/glib/",
             "//third_party/glib/"
         ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/mindir:mindir_lib": [
-            "//third_party/flatbuffers/include/",
-            "//third_party/bounds_checking_function/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/common:lite_common_mid_obj": [
-            "//third_party/flatbuffers/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/litert/js_api:mindsporelite_napi": [
-            "//third_party/libuv/include/",
-            "//foundation/arkui/napi/",
-            "//foundation/arkui/napi/interfaces/inner_api/",
-            "//foundation/arkui/napi/interfaces/kits/",
-            "//third_party/node/src/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite/src/litert/kernel/cpu:cpu_kernel_obj": [
-            "//third_party/flatbuffers/include/",
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
-        ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_lib": [
-            "//third_party/flatbuffers/include/",
             "//foundation/ai/neural_network_runtime/"
         ],
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_ndk": [
-            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/",
-            "//third_party/flatbuffers/include/",
             "//foundation/ai/neural_network_runtime/"
-        ],
-        "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_train_lib": [
-            "//third_party/flatbuffers/include/"
         ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
@@ -12324,6 +12268,7 @@
         "//third_party/libxml2:libxml2_config",
         "//third_party/libxml2:xml2",
         "//third_party/musl:musl_all",
+        "//third_party/musl:musl_headers",
         "//third_party/popt:popt_static",
         "//third_party/typescript:build_typescript",
         "//third_party/weex-loader:weex_loader_ark_hap"
@@ -12889,6 +12834,9 @@
         ],
         "//foundation/communication/bluetooth_service/test/unittest/pan:btfw_pan_unit_test_resource_copy": [
             "//third_party/libxml2:xml2"
+        ],
+        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
+            "//third_party/musl:musl_headers"
         ],
         "//foundation/communication/netmanager_ext/services/networksharemanager:net_tether_manager": [
             "//drivers/interface/usb/v1_0:usb_idl_headers"
@@ -25760,6 +25708,9 @@
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest_main"
         ],
+        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
+            "//third_party/musl:musl_headers"
+        ],
         "//foundation/communication/netmanager_base/test/fuzztest/netbasebranch_fuzzer:NetBaseBranchFuzzTest": [
             "//third_party/curl:curl_shared"
         ],
@@ -31487,66 +31438,6 @@
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
             "//third_party/googletest:gtest_main"
         ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/unittest/bitmap:2d_graphics_bitmap_test": [
             "//third_party/googletest:gtest_main"
         ],
@@ -34727,6 +34618,9 @@
             "//foundation/arkui/ace_engine/ace_config.gni"
         ],
         "//foundation/arkui/ui_lite/ext/updater/": [
+            "//foundation/graphic/graphic_utils_lite/utils.gni"
+        ],
+        "//foundation/arkui/ui_lite/ext/home_host/": [
             "//foundation/graphic/graphic_utils_lite/utils.gni"
         ],
         "//foundation/communication/bluetooth_service/test/example/bluetoothtest/": [

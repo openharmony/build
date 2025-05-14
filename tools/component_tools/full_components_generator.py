@@ -16,6 +16,7 @@ limitations under the License.
 
 """
 import os
+import stat
 import json
 import argparse
 from hb.resources.config import Config
@@ -141,7 +142,8 @@ def main():
     if os.path.isfile(subsystem_json_overlay_path):
         overlay_data = update_components(args.subsys_overlay)
         ret["subsystems"].update(overlay_data.get("subsystems"))
-    with open(args.out, "w") as f:
+    with os.fdopen(os.open(args.out,
+                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as f:
         f.write(json.dumps(ret, indent=2))
     print("file has generated in path: {}".format(args.out))
 

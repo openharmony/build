@@ -21,14 +21,16 @@ import argparse
 import os
 import platform
 import subprocess
+import stat
 
 
 def gen_symbols(tmp_file, sort_lines, symbols_path):
-    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    modes = stat.S_IWUSR | stat.S_IRUSR | stat.S_IWGRP | stat.S_IRGRP
+    with os.fdopen(os.open(tmp_file, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         for item in sort_lines:
             output_file.write('{}\n'.format(item))
 
-    with os.fdopen(os.open(symbols_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(symbols_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         cmd = 'sort {}'.format(tmp_file)
         subprocess.run(cmd.split(), stdout=output_file)
 
@@ -67,10 +69,11 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
 
     tmp_file1 = '{}.tmp1'.format(dynsyms_path)
     tmp_file2 = '{}.tmp2'.format(dynsyms_path)
-    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    modes = stat.S_IWUSR | stat.S_IRUSR | stat.S_IWGRP | stat.S_IRGRP
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         subprocess.run(gen_symbols_cmd.split(), stdout=output_file)
 
-    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT, modes), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
         sort_lines = []
         for line in lines:
@@ -85,10 +88,10 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
 
     tmp_file1 = '{}.tmp1'.format(funcsysms_path)
     tmp_file2 = '{}.tmp2'.format(funcsysms_path)
-    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         subprocess.run(gen_func_symbols_cmd.split(), stdout=output_file)
 
-    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT), 'r', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(tmp_file1, os.O_RDWR | os.O_CREAT, modes), 'r', encoding='utf-8') as output_file:
         lines = output_file.readlines()
         sort_lines = []
         for line in lines:
@@ -101,7 +104,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     os.remove(tmp_file2)
 
 
-    with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT), 'w', encoding='utf-8') as output_file:
+    with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         subprocess.run(gen_keep_symbols_cmd.split(), stdout=output_file)
 
 

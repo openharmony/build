@@ -63,6 +63,11 @@ def delete_directory(dir_path):
         shutil.rmtree(dir_path)
 
 
+def check_instance(check_target, instance_name, check_type):
+    if not isinstance(check_target, check_type):
+        raise Exception(f'{instance_name} config type is not {check_type}')
+
+
 def touch(path, fail_if_missing=False):
     if fail_if_missing and not os.path.exists(path):
         raise Exception(path + ' doesn\'t exist.')
