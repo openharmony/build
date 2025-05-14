@@ -45,6 +45,9 @@ template("copy_taihe_idl") {
     if (defined(invoker.external_deps)) {
       external_deps = invoker.external_deps
     }
+    if (defined(invoker.deps)) {
+      deps = invoker.deps
+    }
   }
 }
 
