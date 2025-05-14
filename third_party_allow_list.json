@@ -87,7 +87,6 @@
     "time_service",
     "preferences",
     "dataclassification",
-    "media_library",
     "call_manager",
     "runtime_core",
     "screenlock_mgr",
