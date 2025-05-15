@@ -1582,115 +1582,16 @@
             "//commonlibrary/c_utils/base/include/"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [
-            "//drivers/peripheral/camera/vdi_base/common/include/",
-            "//drivers/peripheral/camera/vdi_base/interfaces/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_passthrough/",
-            "//drivers/peripheral/camera/test/common/callback/include/",
-            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
-            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/lite/",
-            "//third_party/googletest/googletest/include/",
-            "//drivers/peripheral/camera/base/",
-            "//drivers/peripheral/camera/display/interfaces/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/sink_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/sensor_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/merge_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/config/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
+            "//third_party/googletest/googletest/include/"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core:camera_ipp_algo_example": [
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core": [
             "//commonlibrary/c_utils/base/include/",
             "//device/soc/rockchip/rk3568/hardware/rga/include/",
             "//device/soc/rockchip/rk3568/hardware/mpp/include/",
-            "//third_party/libexif/",
-            "//drivers/peripheral/camera/vdi_base/common/include/",
-            "//drivers/peripheral/camera/vdi_base/interfaces/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
-            "//drivers/peripheral/camera/vdi_base/common/dump/include/"
-        ],
-        "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:camera_host_vdi_impl_1.0": [
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/vdi_base/common/include/",
-            "//drivers/peripheral/camera/vdi_base/common/metadata_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/utils/watchdog/",
-            "//drivers/peripheral/camera/vdi_base/interfaces/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_host/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_device/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/stream_operator/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/src/stream_operator/stream_tunnel/standard/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/offline_stream_operator/",
-            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/standard/",
-            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
-            "//drivers/peripheral/camera/display/interfaces/include/",
-            "//drivers/peripheral/camera/vdi_base/common/dump/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
-        ],
-        "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:camera_host_vdi_impl_1.0_static": [
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/vdi_base/common/include/",
-            "//drivers/peripheral/camera/vdi_base/common/metadata_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/utils/watchdog/",
-            "//drivers/peripheral/camera/vdi_base/interfaces/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_host/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_device/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/stream_operator/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/src/stream_operator/stream_tunnel/standard/",
-            "//drivers/peripheral/camera/vdi_base/v4l2/include/offline_stream_operator/",
-            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
-            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/standard/",
-            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
-            "//drivers/peripheral/camera/display/interfaces/include/",
-            "//drivers/peripheral/camera/vdi_base/common/dump/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
-        ],
-        "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:camera_pipeline_config": [
-            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/config/"
+            "//third_party/libexif/"
         ],
         "//domains/advertising/advertising/common:advertising_common": [
             "//commonlibrary/c_utils/base/include/"
@@ -1705,1971 +1606,6 @@
         "//domains/advertising/oaid/utils:oaid_utils": [
             "//commonlibrary/c_utils/base/include/"
         ],
-        "//drivers/interface/audio/effect/v1_0:effect_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/effect/v1_0:effect_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/effect/v1_0:libeffect_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/effect/v1_0:libeffect_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/v4_0:audio_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/v4_0:audio_idl_headers_4.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/v4_0:libaudio_proxy_4.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/audio/v4_0:libaudio_stub_4.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/battery/v2_0:battery_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/battery/v2_0:battery_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/battery/v2_0:libbattery_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/battery/v2_0:libbattery_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/sequenceable/buffer_producer:libbuffer_producer_sequenceable_1.0": [
-            "//drivers/peripheral/base/"
-        ],
-        "//drivers/interface/camera/v1_0:camera_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_0:camera_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_0:libcamera_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_0:libcamera_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_1:camera_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_1:camera_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_1:libcamera_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_1:libcamera_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_2:camera_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_2:camera_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_2:libcamera_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_2:libcamera_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_3:camera_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_3:camera_idl_headers_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_3:libcamera_proxy_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/camera/v1_3:libcamera_stub_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/image/v2_0:image_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/image/v2_0:image_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/image/v2_0:libimage_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/image/v2_0:libimage_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/v3_0:codec_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/v3_0:codec_idl_headers_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/v3_0:libcodec_proxy_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/codec/v3_0:libcodec_stub_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_0:display_buffer_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_0:libdisplay_buffer_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_0:libdisplay_buffer_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_1:display_buffer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_1:display_buffer_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_1:libdisplay_buffer_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_1:libdisplay_buffer_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_2:display_buffer_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/buffer/v1_2:libdisplay_buffer_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_0:display_composer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_0:display_composer_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_0:libdisplay_composer_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_0:libdisplay_composer_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_1:display_composer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_1:display_composer_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_1:libdisplay_composer_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_1:libdisplay_composer_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_2:display_composer_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_2:display_composer_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_2:libdisplay_composer_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/composer/v1_2:libdisplay_composer_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_0:display_commontype_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_0:libdisplay_commontype_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_0:libdisplay_commontype_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v1_1:libdisplay_commontype_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_0:display_commontype_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_0:libdisplay_commontype_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_0:libdisplay_commontype_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_1:display_commontype_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_1:display_commontype_idl_headers_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_1:libdisplay_commontype_proxy_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/display/graphic/common/v2_1:libdisplay_commontype_stub_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audio/v1_0:daudio_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audio/v1_0:libdaudio_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audio/v1_0:libdaudio_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v1_0:daudioext_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v1_0:libdaudioext_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v1_0:libdaudioext_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v2_0:daudioext_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_audio/audioext/v2_0:libdaudioext_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_camera/v1_1:distributed_camera_provider_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_camera/v1_1:distributed_camera_provider_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_camera/v1_1:libdistributed_camera_provider_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/distributed_camera/v1_1:libdistributed_camera_provider_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/drm/v1_0:drm_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/drm/v1_0:drm_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/drm/v1_0:libdrm_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/drm/v1_0:libdrm_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/face_auth/v2_0:face_auth_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/face_auth/v2_0:libface_auth_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/face_auth/v2_0:libface_auth_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/fingerprint_auth/v2_0:libfingerprint_auth_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/huks/v1_1:huks_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/huks/v1_1:huks_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/huks/v1_1:libhuks_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/ddk/v1_0:libhid_ddk_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/ddk/v1_0:libhid_ddk_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/v1_0:input_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/v1_0:input_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/input/v1_0:libinput_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_0:intell_voice_engine_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_0:libintell_voice_engine_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_1:intell_voice_engine_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_1:intell_voice_engine_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_1:libintell_voice_engine_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_2:intell_voice_engine_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_2:intell_voice_engine_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/engine/v1_2:libintell_voice_engine_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_0:intell_voice_trigger_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_0:libintell_voice_trigger_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_0:libintell_voice_trigger_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_1:intell_voice_trigger_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_1:intell_voice_trigger_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_1:libintell_voice_trigger_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_2:intell_voice_trigger_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_2:intell_voice_trigger_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/intelligent_voice/trigger/v1_2:libintell_voice_trigger_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/light/v1_0:liblight_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/light/v1_0:liblight_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/light/v1_0:light_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/light/v1_0:light_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/memorytracker/v1_0:libmemorytracker_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/memorytracker/v1_0:libmemorytracker_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/memorytracker/v1_0:memorytracker_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_0:libmotion_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_0:libmotion_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_0:motion_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_0:motion_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_1:libmotion_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_1:libmotion_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_1:motion_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/motion/v1_1:motion_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v1_0:libnnrt_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v1_0:libnnrt_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v1_0:nnrt_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v1_0:nnrt_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_0:libnnrt_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_0:libnnrt_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_0:nnrt_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_0:nnrt_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_1:libnnrt_proxy_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_1:libnnrt_stub_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_1:nnrt_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/nnrt/v2_1:nnrt_idl_headers_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/pin_auth/v2_1:libpin_auth_proxy_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/pin_auth/v2_1:libpin_auth_stub_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/pin_auth/v2_1:pin_auth_idl_headers_2.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_0:libpower_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_0:libpower_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_0:power_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_0:power_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_2:libpower_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_2:libpower_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_2:power_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/power/v1_2:power_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/sensor/v2_0:libsensor_proxy_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/sensor/v2_0:libsensor_stub_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/sensor/v2_0:sensor_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/sensor/v2_0:sensor_idl_headers_2.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/thermal/v1_1:libthermal_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/thermal/v1_1:libthermal_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/thermal/v1_1:thermal_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/thermal/v1_1:thermal_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/ddk/v1_0:libusb_ddk_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/ddk/v1_0:libusb_ddk_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/ddk/v1_0:usb_ddk_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/gadget/mtp/v1_0:libusbfn_mtp_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/gadget/mtp/v1_0:libusbfn_mtp_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/gadget/mtp/v1_0:usbfn_mtp_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_0:libusb_proxy_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_0:libusb_stub_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_0:usb_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_0:usb_idl_headers_1.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_1:libusb_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_1:libusb_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_1:usb_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/usb/v1_1:usb_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/user_auth/v3_0:libuser_auth_proxy_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/user_auth/v3_0:libuser_auth_stub_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/user_auth/v3_0:user_auth_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/user_auth/v3_0:user_auth_idl_headers_3.0": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_1:libvibrator_proxy_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_1:libvibrator_stub_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_1:vibrator_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_1:vibrator_idl_headers_1.1": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_2:libvibrator_proxy_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_2:libvibrator_stub_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_2:vibrator_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_2:vibrator_idl_headers_1.2": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_3:libvibrator_proxy_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_3:libvibrator_stub_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_3:vibrator_idl_headers": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
-        "//drivers/interface/vibrator/v1_3:vibrator_idl_headers_1.3": [
-            "//drivers/hdf_core/adapter/uhdf2/include/hdi/",
-            "//drivers/hdf_core/adapter/uhdf2/osal/include/",
-            "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/utils/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
-            "//drivers/hdf_core/interfaces/inner_api/hdi/"
-        ],
         "//drivers/peripheral/audio/test/fuzztest/audio_config_fuzzer/audiocardconfig_fuzzer:AudioCardConfigFuzzTest": [
             "//third_party/alsa-lib/include/"
         ],
@@ -3681,19 +1617,7 @@
         ],
         "//drivers/peripheral/bluetooth/audio/hal/hdi_binder/proxy:audio_bluetooth_hdi_proxy_server": [
             "//third_party/cJSON/",
-            "//drivers/hdf_core/framework/include/utils/",
-            "//drivers/hdf_core/framework/include/",
-            "//third_party/bounds_checking_function/include/",
-            "//drivers/hdf_core/framework/ability/sbuf/include/",
-            "//drivers/hdf_core/framework/utils/include/",
-            "//drivers/hdf_core/framework/core/sec/include/",
-            "//drivers/hdf_core/framework/core/host/include/",
-            "//drivers/hdf_core/framework/core/manager/include/",
-            "//drivers/hdf_core/adapter/uhdf2/include/devhost/",
-            "//drivers/hdf_core/adapter/uhdf2/devhost/include/",
-            "//drivers/hdf_core/adapter/uhdf2/devmgr/include/",
-            "//drivers/hdf_core/adapter/uhdf2/host/include/",
-            "//drivers/hdf_core/adapter/uhdf2/manager/include/"
+            "//third_party/bounds_checking_function/include/"
         ],
         "//drivers/peripheral/bluetooth/audio/hal/hdi_binder/server:audio_bluetooth_hdi_adapter_server": [
             "//third_party/bounds_checking_function/include/"
@@ -3709,32 +1633,11 @@
             "//third_party/openssl/include/",
             "//third_party/cJSON/"
         ],
-        "//drivers/peripheral/location/agnss/hdi_service:libagnss_interface_service_2.0": [
-            "//drivers/peripheral/location/gnss/hdi_service/"
-        ],
-        "//drivers/peripheral/location/geofence/hdi_service:libgeofence_interface_service_2.0": [
-            "//drivers/peripheral/location/gnss/hdi_service/"
-        ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartition_slot_service_1.0": [
             "//base/user_iam/user_auth/common/logs/"
         ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//base/user_iam/user_auth/common/logs/"
-        ],
-        "//drivers/peripheral/usb/ddk:libusb_ddk_host": [
-            "//drivers/hdf_core/framework/model/usb/include/"
-        ],
-        "//drivers/peripheral/usb/ddk:libusb_pnp_manager": [
-            "//drivers/hdf_core/framework/model/usb/include/"
-        ],
-        "//drivers/peripheral/usb/net:libusbhost_ecm": [
-            "//drivers/hdf_core/framework/model/usb/include/"
-        ],
-        "//drivers/peripheral/usb/serial:libusbhost_acm": [
-            "//drivers/hdf_core/framework/model/usb/include/"
-        ],
-        "//drivers/peripheral/usb/serial:libusbhost_acm_rawapi": [
-            "//drivers/hdf_core/framework/model/usb/include/"
         ],
         "//drivers/peripheral/wlan/hostapd/interfaces/hdi_service:libhostapd_interface_service_1.0": [
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
@@ -3854,7 +1757,6 @@
             "//utils/native/base/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//drivers/peripheral/camera/interfaces/metadata/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/CastEngine/castengine_wifi_display/services/mediaplayer:sharing_media_player_srcs": [
@@ -7686,8 +5588,7 @@
         "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_framework/wifi_manage/wifi_native:wifi_native_test": [
             "//third_party/googletest/googlemock/include/",
             "//third_party/googletest/googletest/include/",
-            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/",
-            "//drivers/peripheral/wlan/interfaces/include/"
+            "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/"
         ],
         "//foundation/communication/wifi/wifi/test/wifi_standard/wifi_framework/wifi_manage/wifi_p2p/test:wifi_p2p_test": [
             "//commonlibrary/c_utils/base/include/",
@@ -10123,26 +8024,8 @@
             "//foundation/ability/ability_runtime/interfaces/kits/native/appkit/ability_runtime/context/",
             "//base/security/access_token/frameworks/accesstoken:accesstoken_communication_adapter_cxx/"
         ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrappercontext_fuzzer:EGLWrapperContextFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrapperdisplay_fuzzer:EGLWrapperDisplayFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrapperentry_fuzzer:EGLWrapperEntryFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrapperlayer_fuzzer:EGLWrapperLayerFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrapperloader_fuzzer:EGLWrapperLoaderFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrapperobject_fuzzer:EGLWrapperObjectFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/frameworks/opengl_wrapper/test/fuzztest/eglwrappersurface_fuzzer:EGLWrapperSurfaceFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/"
+        "//foundation/graphic/graphic_2d/frameworks/text/adapter/skia:skia_paragraph": [
+            "//third_party/skia/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/modules/animation/window_animation/test/fuzztest/rswindowanimation_fuzzer:RSWindowAnimationFuzzTest": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/"
@@ -10168,6 +8051,44 @@
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/",
             "//foundation/window/window_manager/utils/include/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
+            "//third_party/googletest/googletest/include/",
+            "//third_party/skia/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
+            "//third_party/googletest/googletest/include/"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
+            "//third_party/googletest/googletest/include/"
+        ],
+        "//foundation/graphic/graphic_2d/frameworks/text/test/unittest/skia_txt:rosen_text_skia_txt_test": [
+            "//third_party/skia/",
+            "//third_party/skia/modules/skparagraph/"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/fuzztest/effect/blender_fuzzer:BlenderFuzzTest": [
             "//third_party/skia/",
@@ -10284,57 +8205,6 @@
         ],
         "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/delegate:RSRenderServiceBaseDelegateTest": [
             "//third_party/skia/src/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RRSAccessibilityTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSAshmemHelperTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSClientTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSEventDetectorTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSEventMgrTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSInnovationTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSJankStatsTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSLogTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSMarshallingHelperTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSNodeStatsTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSProxyTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSRenderServiceConnectHubTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSRenderServiceConnectionProxyTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSSurfaceConverterTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSSurfaceOhosTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSSystemPropertiesTest": [
-            "//drivers/peripheral/display/interfaces/include/"
-        ],
-        "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/platform/ohos:RSVsyncClientTest": [
-            "//drivers/peripheral/display/interfaces/include/"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/render_service/render_service_base/unittest/screen_manager:RSRenderServiceBaseScreenMangerTest": [
             "//third_party/skia/src/"
@@ -10488,9 +8358,6 @@
         "//foundation/multimedia/av_codec/services/engine/codec/video/hcodec:hcodec": [
             "//foundation/multimedia/media_foundation/src/buffer/avbuffer/include/",
             "//third_party/openmax/api/1.1.2/",
-            "//drivers/peripheral/codec/interfaces/include/",
-            "//drivers/hdf_core/interfaces/inner_api/",
-            "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//commonlibrary/memory_utils/libdmabufheap/include/"
         ],
         "//foundation/multimedia/av_codec/services/media_engine/filters:av_codec_media_engine_filters": [
@@ -10676,37 +8543,30 @@
             "//foundation/multimedia/video_processing_engine/interfaces/inner_api/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/helper:hcodec_test_helper": [
-            "//third_party/openmax/api/1.1.2/",
-            "//drivers/peripheral/codec/interfaces/include/"
+            "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hcodec_list_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hcodec_type_converter_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hdecoder_buffer_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hdecoder_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hencoder_buffer_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hcodec_test/unittest:hencoder_unit_test": [
             "//commonlibrary/c_utils/base/include/",
-            "//drivers/peripheral/codec/interfaces/include/",
             "//third_party/openmax/api/1.1.2/"
         ],
         "//foundation/multimedia/av_codec/test/unittest/hls_test:hls_media_downloader_unit_test": [
@@ -11073,304 +8933,145 @@
             "//foundation/graphic/graphic_surface/surface/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//foundation/multimedia/media_library/interfaces/kits/c/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
+            "//foundation/multimedia/media_library/interfaces/kits/c/"
         ],
         "//foundation/multimedia/camera_framework/frameworks/native/camera/test/unittest:camera_framework_deferred_unittest": [
-            "//foundation/graphic/graphic_surface/surface/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
+            "//foundation/graphic/graphic_surface/surface/include/"
         ],
         "//foundation/multimedia/camera_framework/frameworks/native/camera/test/unittest:camera_framework_unittest_v1_1": [
             "//foundation/graphic/graphic_surface/surface/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//foundation/multimedia/media_library/interfaces/kits/c/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
+            "//foundation/multimedia/media_library/interfaces/kits/c/"
         ],
         "//foundation/multimedia/camera_framework/frameworks/native/camera/test/unittest:camera_ndk_unittest_v1_1": [
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//foundation/multimedia/media_library/interfaces/kits/c/",
-            "//foundation/multimedia/image_framework/interfaces/kits/native/include/image/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
+            "//foundation/multimedia/image_framework/interfaces/kits/native/include/image/"
         ],
         "//foundation/multimedia/camera_framework/frameworks/native/camera:camera_framework": [
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/graphic/graphic_2d/utils/buffer_handle/export/",
             "//utils/system/safwk/native/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/"
         ],
         "//foundation/multimedia/camera_framework/frameworks/native/ndk:ohcamera": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/"
         ],
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture": [
             "//foundation/graphic/graphic_surface/surface/include/",
             "//utils/system/safwk/native/include/",
-            "//drivers/peripheral/display/interfaces/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/"
+            "//base/security/access_token/interfaces/innerkits/token_setproc/include/"
         ],
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture_mode": [
             "//foundation/graphic/graphic_surface/surface/include/",
             "//utils/system/safwk/native/include/",
-            "//drivers/peripheral/display/interfaces/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/"
+            "//base/security/access_token/interfaces/innerkits/token_setproc/include/"
         ],
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_capture_video": [
             "//foundation/graphic/graphic_surface/surface/include/",
             "//utils/system/safwk/native/include/",
-            "//drivers/peripheral/display/interfaces/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/"
+            "//base/security/access_token/interfaces/innerkits/token_setproc/include/"
         ],
         "//foundation/multimedia/camera_framework/interfaces/inner_api/native/test:camera_video": [
             "//foundation/graphic/graphic_surface/surface/include/",
             "//utils/system/safwk/native/include/",
-            "//drivers/peripheral/display/interfaces/include/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/server/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/"
+            "//base/security/access_token/interfaces/innerkits/token_setproc/include/"
         ],
         "//foundation/multimedia/camera_framework/interfaces/kits/js/camera_napi:camera_napi": [
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/"
         ],
         "//foundation/multimedia/camera_framework/services/camera_service:camera_service": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
-            "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
-        ],
-        "//foundation/multimedia/camera_framework/services/deferred_processing_service:deferred_processing_service": [
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/"
+            "//base/security/access_token/interfaces/innerkits/accesstoken/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/cameradevice_fuzzer:CameraDeviceFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/camerainput_fuzzer:CameraInputFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/cameralistenerstub_fuzzer:CameraListenerStubFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/capturesession_fuzzer:CaptureSessionFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/cloudenhancesession_fuzzer:CloudEnhanceSessionFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/deferredprocessingstub_fuzzer:DeferredProcessingStubFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/photooutput_fuzzer:PhotoOutputFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/streamcapture_fuzzer:StreamCaptureFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/streamcapturestub_fuzzer:StreamCaptureStubFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/streammetadatastub_fuzzer:StreamMetadataStubFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/streamrepeatstub_fuzzer:StreamRepeatStubFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
         "//foundation/multimedia/camera_framework/test/fuzztest/timelapsephotosession_fuzzer:TimeLapsePhotoSessionFuzzTest": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/graphic/graphic_surface/surface/include/",
             "//foundation/window/window_manager/interfaces/innerkits/dm/",
             "//base/security/access_token/interfaces/innerkits/accesstoken/include/",
-            "//drivers/peripheral/camera/interfaces/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/utils/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/device/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/operator/include/",
-            "//drivers/peripheral/camera/interfaces/hdi_ipc/callback/host/include/",
             "//base/security/access_token/interfaces/innerkits/token_setproc/include/",
             "//utils/system/safwk/native/include/"
         ],
@@ -11493,7 +9194,6 @@
             "//foundation/multimedia/audio_framework/interfaces/inner_api/native/audiocapturer/include/",
             "//foundation/multimedia/audio_framework/frameworks/native/audiostream/include/",
             "//foundation/multimedia/audio_framework/services/audio_service/client/include/",
-            "//drivers/peripheral/base/",
             "//third_party/openmax/api/1.1.2/",
             "//graphic/graphic_surface/interfaces/innerkits/surface/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/"
@@ -11590,7 +9290,6 @@
             "//third_party/e2fsprogs/e2fsprogs/lib/"
         ],
         "//foundation/multimedia/player_framework/frameworks/native/avmetadatahelper/test/unittest:avmetadata_unit_test": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/"
         ],
@@ -11701,7 +9400,6 @@
             "//foundation/multimedia/media_foundation/interface/inner_api/common/"
         ],
         "//foundation/multimedia/player_framework/test/unittest/avmetadatahelper_test:avmetadatahelper_unit_test": [
-            "//drivers/peripheral/display/interfaces/include/",
             "//foundation/multimedia/image_framework/interfaces/innerkits/include/",
             "//foundation/window/window_manager/interfaces/innerkits/wm/"
         ],
@@ -31436,6 +29134,66 @@
         "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/test/unittest:rs_client_test_common": [
             "//commonlibrary/c_utils/base:utils",
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy:samgr_proxy",
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/convert_fuzzer:ConvertFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/fontcollection_fuzzer:FontCollectionFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/linetypography_fuzzer:LineTypographyFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/textlinebase_fuzzer:TextLineBaseFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typography_fuzzer:TypographyFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/fuzztest/adapter/skia_txt/typographycreate_fuzzer:TypographyCreateFuzzTest_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/adapter/skia_txt:rosen_text_adapt_test_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/hm_symbol:hm_symbol_engine_test_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_test:2d_engine_rosen_text_skia_test_resource_copy": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test": [
+            "//third_party/googletest:gtest_main"
+        ],
+        "//foundation/graphic/graphic_2d/rosen/test/2d_engine/unittest/rosen_text/skia_txt:rosen_text_skia_txt_test_resource_copy": [
             "//third_party/googletest:gtest_main"
         ],
         "//foundation/graphic/graphic_2d/rosen/test/2d_graphics/unittest/bitmap:2d_graphics_bitmap_test": [
