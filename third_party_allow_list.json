@@ -86,7 +86,6 @@
     "i18n",
     "time_service",
     "preferences",
-    "dataclassification",
     "call_manager",
     "runtime_core",
     "screenlock_mgr",
