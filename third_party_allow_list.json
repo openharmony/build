@@ -90,7 +90,6 @@
     "call_manager",
     "runtime_core",
     "screenlock_mgr",
-    "device_security_level",
     "imf",
     "core_service",
     "player_framework",
