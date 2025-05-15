@@ -16,10 +16,12 @@
 import os
 import sys
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
 from util.log_util import LogUtil
+from scripts.util.detect_cpu_count import get_cpu_count
 
 _default_subsystem = {"build": "build"}
 
@@ -71,6 +73,14 @@ def _check_path_prefix(paths):
     return len(result) <= 1
 
 
+def scan_task(args):
+    key, paths = args
+    _all_build_config_files = []
+    for _subsystem_path in paths:
+        _all_build_config_files.extend(_scan_build_file(_subsystem_path))
+    return key, _all_build_config_files
+
+
 @throw_exception
 def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
     subsystem_infos = _read_config(subsystem_config_file,
@@ -80,6 +90,8 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
 
     no_src_subsystem = {}
     _build_configs = {}
+    scan_tasks = []
+
     for key, val in subsystem_infos.items():
         _all_build_config_files = []
         if not isinstance(val, list):
@@ -89,22 +101,31 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
                 raise OHOSException(
                     "subsystem '{}' path configuration is incorrect.".format(
                         key), "2013")
-        _info = {'path': val}
-        for _path in val:
-            _subsystem_path = os.path.join(source_root_dir, _path)
-            _build_config_files = _scan_build_file(_subsystem_path)
-            _all_build_config_files.extend(_build_config_files)
-        if _all_build_config_files:
-            _info['build_files'] = _all_build_config_files
-            _build_configs[key] = _info
+        subsystem_paths = [os.path.join(source_root_dir, _path) for _path in val]
+        scan_tasks.append((key, subsystem_paths))
+    try:
+        cpu_cap = get_cpu_count()
+    except OSError:
+        cpu_cap = 8
+    thread_num = cpu_cap * 2
+    LogUtil.hb_info(f'The thread num for subsytem config scan is {thread_num}')
+    with ThreadPoolExecutor(max_workers=thread_num) as executor:
+        results = list(executor.map(scan_task, scan_tasks))
+    for key, build_files in results:
+        if build_files:
+            _build_configs[key] = {
+                "path": list(subsystem_infos[key] if isinstance(subsystem_infos[key], list) else [subsystem_infos[key]]),
+                "build_files": build_files
+            }
         else:
-            no_src_subsystem[key] = val
+            no_src_subsystem[key] = list(subsystem_infos[key] if isinstance(subsystem_infos[key], list) else [subsystem_infos[key]])
 
     scan_result = {
         'source_path': source_root_dir,
         'subsystem': _build_configs,
         'no_src_subsystem': no_src_subsystem
     }
+
     LogUtil.hb_info('subsytem config scan completed')
     return scan_result
 
