@@ -11,8 +11,10 @@ if (!is_llvm_build) {
   default_clang_base_path = "${toolchains_dir}/${host_platform_dir}/llvm"
   clang_lib_path = "${toolchains_dir}/${host_platform_dir}/llvm/lib/clang/${clang_version}/lib"
 } else {
-  default_clang_base_path = "//out/llvm-install"
-  clang_lib_path = "//out/llvm-install/lib/clang/${clang_version}/lib"
+  #default_clang_base_path = "//out/llvm-install"
+  #clang_lib_path = "//out/llvm-install/lib/clang/${clang_version}/lib"
+  default_clang_base_path = "//prebuilts/clang/ohos/linux-x86_64/clang-15.0.4"
+  clang_lib_path = "//prebuilts/clang/ohos/linux-x86_64/clang-15.0.4/lib/clang/15.0.4/lib"
 }
 
 declare_args() {
