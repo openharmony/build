@@ -178,6 +178,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         if not os.path.exists(change_info_file):
             return True
         change_info = IoUtil.read_json_file(change_info_file)
+        print(change_info)
         change_files = []
         file_operations = {
             "added": lambda x: x,
