@@ -627,9 +627,6 @@
         "//base/hiviewdfx/hiview/base/test:SysEventTest": [
             "//third_party/bounds_checking_function/include/"
         ],
-        "//base/hiviewdfx/hiview/plugins/faultlogger/interfaces/js/test/unittest/cpp:faultlogger_test_napi": [
-            "//third_party/node/src/"
-        ],
         "//base/hiviewdfx/hiview/test:ReportXPowerJsEventTest": [
             "//foundation/arkui/napi/test/unittest/engine/",
             "//foundation/arkui/napi/test/unittest/common/"
