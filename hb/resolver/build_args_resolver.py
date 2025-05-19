@@ -178,7 +178,6 @@ class BuildArgsResolver(ArgsResolverInterface):
         if not os.path.exists(change_info_file):
             return True
         change_info = IoUtil.read_json_file(change_info_file)
-        print(change_info)
         change_files = []
         file_operations = {
             "added": lambda x: x,
@@ -192,7 +191,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             changed_files = value.get("changed_file_list", {})
             for op, processor in file_operations.items():
-                if op in changed_files and ("include" in processor(changed_files[op]) or "interface" in processor(changed_files[op])):
+                if op not in changed_files:
+                    continue
+                if any("include" in f or "interface" in f for f in processor(changed_files[op])):
+                    print(processor(changed_files[op]))
                     return False
         return True
 
