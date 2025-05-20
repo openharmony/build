@@ -13,19 +13,49 @@
 # limitations under the License.
 set -e
 
-
 script_path=$(cd $(dirname $0);pwd)
 code_dir=$(dirname ${script_path})
 home_path=$HOME
 config_file="$script_path/prebuilts_config.json"
-# 获取当前系统类型和CPU类型
-target_os=$(uname -s | tr '[:upper:]' '[:lower:]')
-target_cpu=$(uname -m | tr '[:upper:]' '[:lower:]')
+
+case $(uname -s) in
+    Linux)
+        host_platform=linux
+        glibc_version=$(getconf GNU_LIBC_VERSION | grep -oE '[0-9].[0-9]{2}')
+        ;;
+    Darwin)
+        host_platform=darwin
+        ;;
+    *)
+        echo "Unsupported host platform: $(uname -s)"
+        exit 1
+esac
+
+case $(uname -m) in
+    arm64)
+        host_cpu=arm64
+        host_cpu_prefix=arm64
+        ;;
+    aarch64)
+        host_cpu=arm64
+        host_cpu_prefix=aarch64
+        ;;
+    *)
+        host_cpu=x86_64
+        host_cpu_prefix=x86
+esac
+
+if [[ "${glibc_version}" < "2.35" ]]; then
+    glibc_version="--glibc-version GLIBC2.27"
+else
+    glibc_version="--glibc-version GLIBC2.35"
+fi
+
 
 # 运行Python命令
-python3 "${script_path}/prebuilts_config.py" --code_path $code_dir --home_path $home_path --config_file $config_file --repo_https https://repo.huaweicloud.com --target_os $target_os --target_cpu $target_cpu
+python3 "${script_path}/prebuilts_service/main.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu
 
-PYTHON_PATH=$(realpath ${code_dir}/prebuilts/python/${target_os}-*/*/bin | tail -1)
+PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
 while [ $# -gt 0 ]; do
   case "$1" in
