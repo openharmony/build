@@ -25,6 +25,30 @@ sys.path.append(
 from scripts.util import build_utils  # noqa: E402
 
 
+def generate_notice_files(dest_dir, module_info, depfiles):
+    dest = os.path.join(dest, "{}.txt".format(module_info['dest'][0]))
+    target_dir = os.path.join(dest_dir, module_info['dest'][0])
+    module_source = module_info['source']
+    if os.path.isdir(module_source):
+        dest_files = []
+        is_hvigor_hap = False
+        for filename in os.listdir(module_source):
+            if filename.endswith(".hap") or filename.endswith(".hsp"):
+                is_hvigor_hap = True
+                dest_files.append(f"{os.path.join(target_dir, filename)}.txt")
+        if not is_hvigor_hap and os.listdir(module_source):
+            dest_files.append([f"{os.path.join(target_dir, f)}.txt" for f in os.listdir(module_source)])
+    else:
+        dest_files = [dest]
+    for dest_file in dest_files:
+        os.makedirs(os.path.dirname(dest_file), exist_ok=True)
+        shutil.copyfile(module_info['notice'], dest_file)
+        depfiles.append(module_info['notice'])
+        if os.path.isfile("{}.json".format(module_info['notice'])):
+            os.makedirs(os.path.dirname("{}.json".format(dest_file)), exist_ok=True)
+            shutil.copyfile("{}.json".format(module_info['notice']), "{}.json".format(dest_file))
+
+
 def collect_notice_files(options, dest_dir: str, depfiles: str):
     subsystem_info_files = []
     with open(options.install_info_file, 'r') as file:
@@ -50,14 +74,7 @@ def collect_notice_files(options, dest_dir: str, depfiles: str):
                 if os.path.exists(notice_file) is False or os.stat(
                         notice_file).st_size == 0:
                     continue
-                dest = os.path.join(dest_dir,
-                                    "{}.txt".format(module_info['dest'][0]))
-                os.makedirs(os.path.dirname(dest), exist_ok=True)
-                shutil.copyfile(module_info['notice'], dest)
-                depfiles.append(module_info['notice'])
-                if os.path.isfile("{}.json".format(module_info['notice'])):
-                    os.makedirs(os.path.dirname("{}.json".format(dest)), exist_ok=True)
-                    shutil.copyfile("{}.json".format(module_info['notice']), "{}.json".format(dest))
+                generate_notice_files(dest_dir, module_info, depfiles)
 
     notice_files = build_utils.get_all_files(options.notice_root_dir)
     depfiles.extend(notice_files)
