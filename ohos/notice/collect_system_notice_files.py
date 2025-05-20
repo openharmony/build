@@ -26,7 +26,7 @@ from scripts.util import build_utils  # noqa: E402
 
 
 def generate_notice_files(dest_dir, module_info, depfiles):
-    dest = os.path.join(dest, "{}.txt".format(module_info['dest'][0]))
+    dest = os.path.join(dest_dir, "{}.txt".format(module_info['dest'][0]))
     target_dir = os.path.join(dest_dir, module_info['dest'][0])
     module_source = module_info['source']
     if os.path.isdir(module_source):
