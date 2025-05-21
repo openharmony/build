@@ -12,7 +12,6 @@
     "lz4",
     "pcre2",
     "rust_cxx",
-    "rust_libc",
     "nghttp2",
     "FreeBSD",
     "rust_rust-openssl",
