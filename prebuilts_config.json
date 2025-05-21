@@ -340,8 +340,8 @@
           "target_os": "linux",
           "target_cpu": "x86_64",
           "version": "1.72.0",
-          "url": "openharmony/compiler/rust/20240528/rust-nightly-x86_64-unknown-linux-gnu_20240528.tar.gz",
-          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
+          "url": "openharmony/compiler/rust/1.72.0-20250515/rust-nightly-x86_64-unknown-linux-gnu.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu",
           "script": "install_ext.sh",
           "args": [{
             "prefix": "''"
@@ -358,8 +358,8 @@
           "target_os": "linux",
           "target_cpu": "x86_64",
           "version": "1.72.0",
-          "url": "openharmony/compiler/rust/20240528/rust-std-nightly-aarch64-unknown-linux-ohos_20240528.tar.gz",
-          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
+          "url": "openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-aarch64-unknown-linux-ohos.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu",
           "script": "install_ext.sh",
           "args": [{
             "prefix": "''"
@@ -376,8 +376,8 @@
           "target_os": "linux",
           "target_cpu": "x86_64",
           "version": "1.72.0",
-          "url": "openharmony/compiler/rust/20240528/rust-std-nightly-armv7-unknown-linux-ohos_20240528.tar.gz",
-          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
+          "url": "openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-armv7-unknown-linux-ohos.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu",
           "script": "install_ext.sh",
           "args": [{
             "prefix": "''"
@@ -394,8 +394,8 @@
           "target_os": "linux",
           "target_cpu": "x86_64",
           "version": "1.72.0",
-          "url": "openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-unknown-linux-ohos_20240528.tar.gz",
-          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
+          "url": "openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-unknown-linux-ohos.tar.gz",
+          "download_dir": ".prebuilts_cache/rustc/rust-nightly-x86_64-unknown-linux-gnu",
           "script": "install_ext.sh",
           "args": [{
             "prefix": "''"
