@@ -184,6 +184,7 @@ template("ohos_native_stub_library") {
                              "public_configs",
                              "libs",
                              "include_dirs",
+                             "external_deps",
                            ])
     deps = [
       ":$_native_stub_target",
