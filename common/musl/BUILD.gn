@@ -120,20 +120,10 @@ ohos_prebuilt_etc("musl_ld_path_etc_cfg") {
 ohos_prebuilt_shared_library("musl-libcxx.so") {
   enable_strip = true
   mini_debug = true
-  if (target_cpu == "arm") {
-    source = "${clang_base_path}/lib/arm-linux-ohos/libc++.so"
-  } else if (use_hwasan == false && target_cpu == "arm64") {
-    source = "${clang_base_path}/lib/aarch64-linux-ohos/libc++.so"
-  } else if (is_asan == true && use_hwasan == true && target_cpu == "arm64") {
+  if (is_asan == true && use_hwasan == true && target_cpu == "arm64") {
     source = "${clang_base_path}/lib/aarch64-linux-ohos/hwasan/libc++.so"
-  } else if (target_cpu == "x86_64") {
-    source = "${clang_base_path}/lib/x86_64-linux-ohos/libc++.so"
-  } else if (target_cpu == "riscv64") {
-    source = "${clang_base_path}/lib/riscv64-linux-ohos/libc++.so"
-  } else if (target_cpu == "loongarch64") {
-    source = "${clang_base_path}/lib/loongarch64-linux-ohos/libc++.so"
   } else {
-    source = ""
+    source = "${standard_clang_path}/libc++.so"
   }
   deps = [ ":musl-libcxx_unstripped_copy" ]
   install_images = [
@@ -148,18 +138,6 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
 }
 
 copy("musl-libcxx_unstripped_copy") {
-  if (target_cpu == "arm") {
-    sources = [ "${clang_base_path}/lib/arm-linux-ohos/libc++.so" ]
-  } else if (target_cpu == "arm64") {
-    sources = [ "${clang_base_path}/lib/aarch64-linux-ohos/libc++.so" ]
-  } else if (target_cpu == "x86_64") {
-    sources = [ "${clang_base_path}/lib/x86_64-linux-ohos/libc++.so" ]
-  } else if (target_cpu == "riscv64") {
-    sources = [ "${clang_base_path}/lib/riscv64-linux-ohos/libc++.so" ]
-  } else if (target_cpu == "loongarch64") {
-    sources = [ "${clang_base_path}/lib/loongarch64-linux-ohos/libc++.so" ]
-  } else {
-    sources = [ "" ]
-  }
+  sources = [ "${standard_clang_path}/libc++.so" ]
   outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
