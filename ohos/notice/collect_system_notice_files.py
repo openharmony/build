@@ -37,7 +37,7 @@ def generate_notice_files(dest_dir, module_info, depfiles):
                 is_hvigor_hap = True
                 dest_files.append(f"{os.path.join(target_dir, filename)}.txt")
         if not is_hvigor_hap and os.listdir(module_source):
-            dest_files.append([f"{os.path.join(target_dir, f)}.txt" for f in os.listdir(module_source)])
+            dest_files.extend([f"{os.path.join(target_dir, f)}.txt" for f in os.listdir(module_source)])
     else:
         dest_files = [dest]
     for dest_file in dest_files:
