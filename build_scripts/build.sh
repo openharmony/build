@@ -228,6 +228,14 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* &
     xcache_args="--xcache=false"
   fi
   build_sdk
+  api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+  target_dir="${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/previewer"
+  if [ ! -d "${target_dir}" ]; then
+    mkdir "${target_dir}"
+    cp -r "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/native/oh-uni-package.json" "${target_dir}/"
+    sed -i 's/Native/Previewer/g' "${target_dir}/oh-uni-package.json"
+    sed -i 's/native/previewer/g' "${target_dir}/oh-uni-package.json"
+  fi
   get_api
   if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed, please remove the out/sdk directory and try again!\033[0m"
