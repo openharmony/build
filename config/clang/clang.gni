@@ -15,6 +15,34 @@ if (!is_llvm_build) {
   clang_lib_path = "//out/llvm-install/lib/clang/${clang_version}/lib"
 }
 
+if (target_cpu == "arm") {
+  default_standard_clang_path = "${default_clang_base_path}/lib/arm-linux-ohos"
+} else if (target_cpu == "arm64") {
+  default_standard_clang_path = "${default_clang_base_path}/lib/aarch64-linux-ohos"
+} else if (target_cpu == "x86_64") {
+  default_standard_clang_path = "${default_clang_base_path}/lib/x86_64-linux-ohos"
+} else if (target_cpu == "riscv64") {
+  default_standard_clang_path = "${default_clang_base_path}/lib/riscv64-linux-ohos"
+} else if (target_cpu == "loongarch64") {
+  default_standard_clang_path = "${default_clang_base_path}/lib/loongarch64-linux-ohos"
+} else {
+  default_standard_clang_path = ""
+}
+
+if (target_cpu == "arm") {
+  default_runtime_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/arm-linux-ohos"
+} else if (target_cpu == "arm64") {
+  default_runtime_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/aarch64-linux-ohos"
+} else if (target_cpu == "x86_64") {
+  default_runtime_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/x86_64-linux-ohos"
+} else if (target_cpu == "riscv64") {
+  default_runtime_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/riscv64-linux-ohos"
+} else if (target_cpu == "loongarch64") {
+  default_runtime_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/loongarch64-linux-ohos"
+} else {
+  default_runtime_clang_path = ""
+}
+
 declare_args() {
   # Indicates if the build should use the Chrome-specific plugins for enforcing
   # coding guidelines, etc. Only used when compiling with Clang.
@@ -26,4 +54,12 @@ declare_args() {
   clang_lib_base_path = clang_lib_path
 
   clang_stl_path = "${toolchains_dir}/${host_platform_dir}/libcxx-ndk/lib"
+
+  standard_clang_path = default_standard_clang_path
+
+  runtime_clang_path = default_runtime_clang_path
+
+  standard_ohos_clang_path = "${default_clang_base_path}/lib/aarch64-linux-ohos"
+
+  runtime_ohos_clang_path = "${default_clang_base_path}/lib/clang/${clang_version}/lib/aarch64-linux-ohos"
 }
