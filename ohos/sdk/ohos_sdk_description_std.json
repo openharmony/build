@@ -915,6 +915,16 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/rawheap_translate:rawheap_translator",
         "target_os": [
             "linux",

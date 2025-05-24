@@ -146,7 +146,11 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
         for info in info_list:
             install_label_str = str(info.get("install_dir"))
             module_label_str = str(info.get("module_label"))
-            if install_label_str.startswith("ets/ets1.2/") or module_label_str.endswith(":copy_taihe_tools"):
+            if (
+                install_label_str.startswith("ets/ets1.2/") or
+                module_label_str.endswith(":copy_taihe_tools") or
+                module_label_str == "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm"
+            ):
                 continue
             elif install_label_str.startswith("ets/ets1.1/"):
                 info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
