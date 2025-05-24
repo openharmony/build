@@ -161,9 +161,9 @@ def install_hpm_in_other_platform(name: str, operate: dict):
         ["npm", "install", "--prefix", hash_dir], capture_output=True, text=True
     )
     if result.returncode == 0:
-        print("{}目录下npm install完毕".format(hash_dir))
+        print("npm install completed in the {} directory.".format(hash_dir))
     else:
-        print("依赖项安装失败:", result.stderr)
+        print("npm dependency installation failed:", result.stderr)
 
     symlink_src = os.path.join(hash_dir, "node_modules")
     symlink_dest = operate.get("symlink")

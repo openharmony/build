@@ -53,7 +53,7 @@ fi
 
 
 # 运行Python命令
-python3 "${script_path}/prebuilts_service/main.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu
+python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu
 
 PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
