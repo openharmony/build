@@ -376,7 +376,7 @@ def build_config(args: argparse.Namespace) -> None:
             "paths": paths,
             "outDir": args.cache_path,
             "package": args.package if args.package else "",
-            "useEmptyPackage": True
+            "useEmptyPackage": False if args.package else True
         }
     }
 

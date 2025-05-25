@@ -54,11 +54,21 @@ ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
 
-ohos_ets_api_deps = "//build/config/components/ets_frontend:ohos_ets_api"
-ohos_ets_arkts_deps = "//build/config/components/ets_frontend:ohos_ets_arkts"
+ohos_ets_es2panda_deps =
+    "//build/config/components/ets_frontend:ohos_ets_es2panda"
+ohos_ets_ark_link_deps =
+    "//build/config/components/ets_frontend:ohos_ets_ark_link"
+ohos_ets_stdlib_deps = "runtime_core:ohos_ets_stdlib"
+
 ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
 ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
 ohos_ets_inner_path = "$root_out_dir/ohos_ets/inner"
+ohos_ets_es2panda_path =
+    "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/es2panda"
+ohos_ets_ark_link_path =
+    "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/ark_link"
+ohos_ets_stdlib_path =
+    "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
 
 bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
 
@@ -80,15 +90,17 @@ template("generate_static_abc") {
     script = "//build/config/components/ets_frontend/generate_static_abc.py"
 
     deps = dependencies
+    deps += [
+      ohos_ets_ark_link_deps,
+      ohos_ets_es2panda_deps,
+    ]
     external_deps = external_dependencies
-    external_deps += ets2abc_build_deps
-    external_deps += static_linker_build_deps
 
     args = [
       "--es2panda",
-      rebase_path("${ets2abc_build_path}"),
+      rebase_path("$ohos_ets_es2panda_path"),
       "--ark-link",
-      rebase_path("${static_linker_build_path}"),
+      rebase_path("$ohos_ets_ark_link_path"),
       "--bootpath-json-file",
       rebase_path("${bootpath_json_file}"),
       "--env-path",
@@ -96,10 +108,7 @@ template("generate_static_abc") {
     ]
 
     if (defined(invoker.base_url)) {
-      deps += [
-        ohos_ets_api_deps,
-        ohos_ets_arkts_deps,
-      ]
+      external_deps += [ ohos_ets_stdlib_deps ]
       args += [
         "--base-url",
         rebase_path("${invoker.base_url}"),
@@ -110,11 +119,9 @@ template("generate_static_abc") {
         rebase_path("$ohos_ets_arkts_path"),
         rebase_path("$ohos_ets_inner_path"),
         "--std-path",
-        rebase_path(
-            "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib/std"),
+        rebase_path("$ohos_ets_stdlib_path/std"),
         "--escompat-path",
-        rebase_path(
-            "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib/escompat"),
+        rebase_path("$ohos_ets_stdlib_path/escompat"),
       ]
 
       if (defined(invoker.paths_keys) && defined(invoker.paths_values)) {
@@ -153,7 +160,7 @@ template("generate_static_abc") {
       if (defined(invoker.package)) {
         args += [
           "--package",
-          rebase_path(invoker.package),
+          invoker.package,
         ]
       }
     }
