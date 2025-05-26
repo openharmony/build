@@ -1,5 +1,5 @@
 {
-    "download_root": "${code_dir}/../openharmony_prebuilts",
+    "download_root": "~/.prebuilts_cache",
     "tool_list": [
         {
             "name": "ark_js_prebuilts",
