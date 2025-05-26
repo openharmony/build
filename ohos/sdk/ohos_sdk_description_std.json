@@ -104,6 +104,15 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//developtools/global_resource_tool:restool_faq",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//developtools/global_resource_tool:restool",
         "target_os": [
             "windows",
