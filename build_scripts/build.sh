@@ -177,6 +177,7 @@ fi
 echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
 
 echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
+api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 function build_sdk() {
     ROOT_PATH=${SOURCE_ROOT_DIR}
     SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
@@ -206,6 +207,10 @@ function build_sdk() {
         done
         mv $api_version/ets/ets1.1/* $api_version/ets
       popd > /dev/null
+      # 临时添加，因为xts编译失败无法归档ohos-sdk，输出ohos-sdk的md5值，用于验证OHOS-SDK生成是否存在概率问题
+      pushd ${ROOT_PATH}/prebuilts/ohos-sdk/linux/${api_version} > /dev/null
+        find -type f | sort | xargs md5sum
+      popd > dev/null
     popd > /dev/null
 }
 function get_api(){
@@ -215,7 +220,7 @@ function get_api(){
     mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
   fi
 }
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
   echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
   if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
     ccache_args="--ccache=false"
@@ -228,7 +233,6 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux" && "$*" != *ohos-sdk* &
     xcache_args="--xcache=false"
   fi
   build_sdk
-  api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
   target_dir="${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/previewer"
   if [ ! -d "${target_dir}" ]; then
     mkdir "${target_dir}"
