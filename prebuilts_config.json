@@ -314,39 +314,39 @@
             "config": {
                 "linux": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/rust/20240528/rust-std-nightly-aarch64-unknown-linux-ohos_20240528.tar.gz",
+                        "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-aarch64-unknown-linux-ohos.tar.gz",
                         "unzip_filename": "rustc-aarch64-std",
-                        "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos_20240528",
+                        "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos",
                         "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current"
                     },
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/rust/20240528/rust-nightly-x86_64-unknown-linux-gnu_20240528.tar.gz",
-                            "install_dir": "${code_dir}/prebuilts/rustc/rust-nightly-x86_64-unknown-linux-gnu_20240528",
+                            "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-nightly-x86_64-unknown-linux-gnu.tar.gz",
+                            "install_dir": "${code_dir}/prebuilts/rustc/rust-nightly-x86_64-unknown-linux-gnu",
                             "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current",
                             "unzip_filename": "rustc"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/rust/20240528/rust-std-nightly-aarch64-unknown-linux-ohos_20240528.tar.gz",
-                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos_20240528",
+                            "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-aarch64-unknown-linux-ohos.tar.gz",
+                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-aarch64-unknown-linux-ohos",
                             "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current",
                             "unzip_filename": "rustc-aarch64-std"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/rust/20240528/rust-std-nightly-armv7-unknown-linux-ohos_20240528.tar.gz",
-                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-armv7-unknown-linux-ohos_20240528",
+                            "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-armv7-unknown-linux-ohos.tar.gz",
+                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-armv7-unknown-linux-ohos",
                             "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current",
                             "unzip_filename": "rustc-arm-std"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-unknown-linux-ohos_20240528.tar.gz",
-                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-x86_64-unknown-linux-ohos_20240528",
+                            "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-unknown-linux-ohos.tar.gz",
+                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-x86_64-unknown-linux-ohos",
                             "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current",
                             "unzip_filename": "rustc-x86_64-std"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/rust/20240528/rust-std-nightly-x86_64-pc-windows-gnullvm_20240528.tar.gz",
-                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-x86_64-pc-windows-gnullvm_20240528",
+                            "remote_url": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-pc-windows-gnullvm.tar.gz",
+                            "install_dir": "${code_dir}/prebuilts/rustc/rust-std-nightly-x86_64-pc-windows-gnullvm",
                             "destdir": "${code_dir}/prebuilts/rustc/linux-x86_64/current",
                             "unzip_filename": "rustc-x86_64-windows-std",
                             "type": "src"
