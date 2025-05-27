@@ -144,6 +144,7 @@ class Hpm(BuildFileGeneratorInterface):
         self._run_hpm_cmd(hpm_update_cmd)
 
     def _run_hpm_cmd(self, cmd, log_path):
+        print("hpm cmd is:", cmd)
         ret_code = SystemUtil.exec_command(
             cmd,
             log_path=log_path,

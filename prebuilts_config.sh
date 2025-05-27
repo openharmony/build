@@ -18,6 +18,82 @@ code_dir=$(dirname ${script_path})
 home_path=$HOME
 config_file="$script_path/prebuilts_config.json"
 
+
+# 处理命令行参数
+declare -A args
+parse_args(){
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            # 处理长参数（带等号）
+            --*=*)
+                key="${1%%=*}"     # 提取参数名
+                value="${1#*=}"    # 提取参数值
+                args["$key"]="$value"  # 取最后的值
+                shift
+                ;;
+            # 处理长参数（不带等号）
+            --*)
+                key="$1"
+                shift
+                values=()
+                # 收集所有连续的非选项参数作为值
+                while [[ $# -gt 0 && "$1" != -* ]]; do
+                    values+=("$1")
+                    shift
+                done
+                if [[ ${#values[@]} -eq 0 ]]; then
+                    args["$key"]="1"  # 无值参数标记为1
+                else
+                    args["$key"]="${values[*]}"  # 合并为空格分隔的字符串
+                fi
+                ;;
+            # 处理短参数（带等号，如 -k=value）
+            -*=*)
+                key_part="${1%%=*}"    # 提取短参数部分（如 -abc=value → -abc）
+                value="${1#*=}"       # 提取值
+                chars="${key_part:1}" # 去掉前缀的短参数（如 abc）
+                # 处理除最后一个字符外的所有字符（作为无值参数）
+                while [[ ${#chars} -gt 1 ]]; do
+                    args["-${chars:0:1}"]="1"
+                    chars="${chars:1}"
+                done
+                # 最后一个字符作为带值参数
+                args["-${chars}"]="$value"
+                shift
+                ;;
+            # 处理短参数（不带等号）
+            -*)
+                chars="${1:1}"  # 去掉短参数前缀（如 abc）
+                while [[ -n "$chars" ]]; do
+                    key="-${chars:0:1}"
+                    chars="${chars:1}"
+                    # 如果还有剩余字符或后续参数是选项，视为无值参数
+                    if [[ -n "$chars" ]] || [[ $# -gt 1 && "$2" == -* ]]; then
+                        args["$key"]="1"
+                    else
+                        # 否则取下一个参数作为值
+                        args["$key"]="$2"
+                        shift
+                    fi
+                done
+                shift
+                ;;
+            # 不处理其他参数
+            *)
+                shift
+                ;;
+        esac
+    done
+
+    for key in "${!args[@]}"; do
+        # 去除值首位的空格（因追加逻辑可能产生）
+        value="${args[$key]# }"
+        args[$key]=$value
+    done
+}
+
+parse_args "$@"
+
 case $(uname -s) in
     Linux)
         host_platform=linux
@@ -51,9 +127,37 @@ else
     glibc_version="--glibc-version GLIBC2.35"
 fi
 
+if [[ -v args["--pypi-url"] ]]; then
+    pypi_url=${args["--pypi_url"]}
+else
+    pypi_url='http://repo.huaweicloud.com/repository/pypi/simple'
+fi
+
+if [[ -v args["--trusted_host"] ]]; then
+    trusted_host=${args["--trusted_host"]}
+elif [ ! -z "$pypi_url" ];then
+    trusted_host=${pypi_url/#*:\/\//}       # remove prefix part such as http:// https:// etc.
+    trusted_host=${trusted_host/%[:\/]*/}   # remove suffix part including the port number
+else
+    trusted_host='repo.huaweicloud.com'
+fi
+
+
+if [[ -v args["--disable-rich"] ]]; then
+    disable_rich='--disable-rich'
+else
+  set +e
+  pip3 install --trusted-host $trusted_host -i $pypi_url rich;
+  if [ $? -eq 0 ];then
+      echo "rich installed successfully"
+  else
+      disable_rich='--disable-rich'
+  fi
+  set -e
+fi
 
 # 运行Python命令
-python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu
+python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich
 
 PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
