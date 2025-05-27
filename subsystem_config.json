@@ -222,5 +222,9 @@
   "llvmproject": {
     "path": "toolchain/llvm-project",
     "name": "llvmproject"
+  },
+  "sdk": {
+    "path": "interface/sdk-js",
+    "name": "sdk"
   }
 }
