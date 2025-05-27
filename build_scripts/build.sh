@@ -184,7 +184,7 @@ function build_sdk() {
 
     pushd ${ROOT_PATH} > /dev/null
       echo -e "[OHOS INFO] building the latest ohos-sdk..."
-      ./build.py --product-name ohos-sdk $ccache_args $xcache_args --load-test-config=false --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true sdk_platform=linux ndk_platform=linux use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true enable_archive_sdk=false enable_notice_collection=false enable_process_notice=false
+      ./build.py --product-name ohos-sdk $ccache_args $xcache_args --load-test-config=false --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true sdk_platform=linux ndk_platform=linux use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true enable_archive_sdk=false enable_notice_collection=false enable_process_notice=false --gn-args=sdk_build_arkts=true 
       if [[ "$?" -ne 0 ]]; then
         echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed! You can try to use '--no-prebuilt-sdk' to skip the build of ohos-sdk.\033[0m"
         exit 1
