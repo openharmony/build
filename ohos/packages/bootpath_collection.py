@@ -42,12 +42,13 @@ class BootPathCollection():
         abc_set = set(current_value.split(":")) if current_value else set()
         abc_set.update(file_list)
 
-        fix_path = ":".join(f"{fix_order_dict[key]}" for key in fix_order_dict.keys())
+        fix_path = ":".join(str(fix_order_dict.get(key, "")) for key in fix_order_dict.keys())
         data["bootpath"] = fix_path + ":" + ":".join(abc_set)
 
         os.makedirs(directory, exist_ok=True)
 
-        with open(new_json_file, "w", encoding="utf-8") as f:
+        fd = os.open(new_json_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
 
 

@@ -14,96 +14,16 @@
 import("//build/config/components/ets_frontend/ets2abc_config.gni")
 import("//build/ohos_var.gni")
 
-action("ohos_ets_api") {
-  script = "//interface/sdk-js/ohos_copy_ets.py"
-
-  args = [
-    "--input",
-    rebase_path("//interface/sdk-js/api"),
-    "--output",
-    rebase_path("$ohos_ets_api_path"),
-    "--type",
-    "ets2",
-    "--source-root-dir",
-    rebase_path("//"),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-  ]
-
-  outputs = [ "$ohos_ets_api_path" ]
-}
-
-action("ohos_ets_api_arkui") {
-  deps = [ ":ohos_ets_api" ]
-  script = "//interface/sdk-js/arkui_transformer.py"
-
-  if (host_os == "mac") {
-    node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/node"
-    npm_path =
-        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
-  } else {
-    node_path =
-        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
-    npm_path =
-        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
-  }
-  args = [
-    "--input",
-    rebase_path(ohos_ets_api_path + "/@internal/component/ets", root_build_dir),
-    "--output",
-    rebase_path(ohos_ets_api_path + "/arkui/component", root_build_dir),
-    "--source_root_dir",
-    rebase_path("//", root_build_dir),
-    "--npm-path",
-    rebase_path(npm_path, root_build_dir),
-    "--node-js",
-    rebase_path(node_path, root_build_dir),
-  ]
-  outputs = [ "$ohos_ets_api_arkui_path" ]
-}
-
-action("ohos_ets_arkts") {
-  script = "//interface/sdk-js/ohos_copy_ets.py"
-
-  args = [
-    "--input",
-    rebase_path("//interface/sdk-js/arkts"),
-    "--output",
-    rebase_path("$ohos_ets_arkts_path"),
-    "--type",
-    "ets2",
-    "--source-root-dir",
-    rebase_path("//"),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-  ]
-
-  outputs = [ "$ohos_ets_arkts_path" ]
-}
-
-action("ohos_ets_kits") {
-  script = "//interface/sdk-js/ohos_copy_ets.py"
-
-  args = [
-    "--input",
-    rebase_path("//interface/sdk-js/kits"),
-    "--output",
-    rebase_path("$ohos_ets_kits_path"),
-    "--type",
-    "ets2",
-    "--source-root-dir",
-    rebase_path("//"),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-  ]
-
-  outputs = [ "$ohos_ets_kits_path" ]
-}
-
 ohos_copy("ohos_ets_ark_link") {
   external_deps = static_linker_build_deps
   sources = [ rebase_path("$static_linker_build_path") ]
   outputs = [ ohos_ets_ark_link_path ]
+}
+
+ohos_copy("ohos_ets_es2panda") {
+  external_deps = ets2abc_build_deps
+  sources = [ rebase_path("$ets2abc_build_path") ]
+  outputs = [ ohos_ets_es2panda_path ]
 }
 
 ohos_copy("ohos_ets_libes2panda_public") {
