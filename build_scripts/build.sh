@@ -207,7 +207,9 @@ function build_sdk() {
                 mv $i $full_api_version/
             fi
         done
-        cp -r $full_api_version $api_version
+        if [ "$full_api_version" != "$api_version" ]; then
+            cp -r $full_api_version $api_version
+        fi
       popd > /dev/null
     popd > /dev/null
 }
