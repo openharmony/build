@@ -297,6 +297,11 @@
         "unzip_dir": "prebuilts/build-tools/common/nodejs",
         "file_path": "/nodejs/v16.20.2/node-v16.20.2-linux-x64.tar.gz",
         "unzip_filename": "node-v16.20.2-linux-x64"
+      },
+      {
+        "unzip_dir": "prebuilts/build-tools/common/nodejs",
+        "file_path": "/nodejs/v18.20.1/node-v18.20.1-linux-x64.tar.gz",
+        "unzip_filename": "node-v18.20.1-linux-x64"
       }
       ],
       "copy_config": [
@@ -473,9 +478,9 @@
           "unzip_filename": "rustc-x86_64-windows-std"
         },
         {
-          "unzip_dir": "prebuilts/hc_gen",
-          "file_path": "/openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
-          "unzip_filename": "hc-gen"
+          "unzip_dir": "prebuilts/hvigor/5.14.2-td-rc.515/command-line-tools",
+          "file_path": "/openharmony/compiler/hvigor/5.14.2-td-rc.515/command-line-tools.tar",
+          "unzip_filename": "command-line-tools"
         }
       ],
       "install": [
@@ -543,6 +548,11 @@
         "unzip_dir": "prebuilts/build-tools/common/nodejs",
         "file_path": "/nodejs/v16.20.2/node-v16.20.2-darwin-x64.tar.gz",
         "unzip_filename": "node-v16.20.2-darwin-x64"
+      },
+      {
+        "unzip_dir": "prebuilts/build-tools/common/nodejs",
+        "file_path": "/nodejs/v18.20.1/node-v18.20.1-darwin-x64.tar.gz",
+        "unzip_filename": "node-v18.20.1-darwin-x64"
       }
     ],
     "arm64": {

@@ -207,12 +207,12 @@ function build_sdk() {
                 mv $i $full_api_version/
             fi
         done
-        echo -e "$full_api_version"
-        echo -e "$api_version"
-        if [ "$full_api_version" != "$api_version" ]; then
-            cp -r $full_api_version $api_version
-        fi
-        mv $api_version/ets/ets1.1/* $api_version/ets
+        pushd $api_version/ets/ > /dev/null
+          for dir in ./ets1.1/*/; do 
+            dir_name=$(basename "$dir")
+            ln -s "./ets1.1/$dir_name" "$dir_name"
+          done
+        popd > /dev/null
       popd > /dev/null
     popd > /dev/null
 }

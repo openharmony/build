@@ -255,6 +255,7 @@ template("ohos_app") {
                            "install_images",
                            "module_install_dir",
                            "relative_install_dir",
+                           "nodejs_path",
                          ])
   if (defined(invoker.hvigor_home) || defined(invoker.sdk_home)) {
     _check_target = "${target_name}__hap_check"
@@ -297,6 +298,9 @@ template("ohos_app") {
 
   _abs_path = get_path_info("./", "abspath")
   _hap_out_dir = "${target_out_dir}/${target_name}"
+  if (defined(invoker.nodejs_path)) {
+    _nodejs_path = invoker.nodejs_path
+  }
   if (defined(invoker.hap_out_dir)) {
     _hap_out_dir = invoker.hap_out_dir
   }
@@ -428,6 +432,9 @@ template("ohos_app") {
 
   _compile_app_target = "${target_name}_compile_app"
   compile_app(_compile_app_target) {
+    if (defined(_nodejs_path)) {
+      nodejs_path = _nodejs_path
+    }
     build_mode = _js_build_mode
     cwd = _abs_path
     unsigned_hap_path_list = _unsigned_hap_path_list
