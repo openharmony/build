@@ -406,6 +406,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             'build_variant', build_module.args_dict['build_variant'].arg_value)
         if target_generator.args_dict['product_name'] == 'rk3568' and not build_module.loader.args_dict['build_xts']:
             target_generator.regist_arg('ohos_components_checktype', 4)
+            target_generator.regist_arg('ohos_interception_rule_switch', 1023)
             
         for gn_args in target_arg.arg_value:
             try:
