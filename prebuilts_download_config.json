@@ -507,7 +507,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20250528/gn-darwin-x86-20250528.tar.gz",
           "unzip_filename": "gn"
         },
         {
@@ -570,7 +570,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20250528/gn-darwin-x86-20250528.tar.gz",
           "unzip_filename": "gn"
         },
         {
