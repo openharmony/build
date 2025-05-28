@@ -1568,9 +1568,6 @@
         "//developtools/packing_tool/packing_tool/frameworks/test/unittest/shell_command_test:shell_command_test": [
             "//third_party/json/include/"
         ],
-        "//developtools/profiler/hidebug/test/unittest/native:hidebug_test": [
-            "//third_party/googletest/googletest/include/gtest/"
-        ],
         "//developtools/profiler/host/smartperf/client/client_command/test:sp_daemon_ut": [
             "//third_party/googletest/googletest/include/gtest/"
         ],
