@@ -332,7 +332,7 @@ if (ohos_indep_compiler_enable) {
   hap_packing_tool =
       "${root_out_dir}/obj/developtools/packing_tool/jar/app_packing_tool.jar"
 }
-
+default_hvigor_nodejs_version = "v16.20.2"
 nodejs = "//prebuilts/build-tools/common/nodejs/current/bin/node"
 npm = "//prebuilts/build-tools/common/nodejs/current/bin/npm"
 
