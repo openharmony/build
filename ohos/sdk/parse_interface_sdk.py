@@ -39,6 +39,8 @@ KITS_PATH = "kits"
 KITS_GEN_PATH = "build-tools/kits"
 ARKTS_PATH = "arkts"
 ARKTS_GEN_PATH = "build-tools/arkts"
+PARSE_ETS2_API = "arkui_transformer"
+PACKAGE_PATH = "build/arkui_transformer.js"
 
 
 def copy_sdk_interface(source_root: str, out_path: str):
@@ -109,6 +111,29 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
     write_json_file(output_sdk_desc_file, arkts_sdk_info_list)
 
 
+def compile_package(options, out_path: str):
+    tool_path = os.path.abspath(os.path.join(options.root_build_dir, INTERFACE_PATH, API_MODIFY_DIR, PARSE_ETS2_API))
+    npm = os.path.abspath(options.npm_path)
+    package_path = os.path.abspath(os.path.join(tool_path, PACKAGE_PATH))
+    nodejs = os.path.abspath(options.node_js)
+    input_dir = os.path.abspath(os.path.join(options.root_build_dir, out_path, "api/@internal/component/ets"))
+    output = os.path.abspath(os.path.join(options.root_build_dir, "out/arkui_transformer_api"))
+    custom_env = {
+        'PATH': f"{os.path.dirname(os.path.abspath(options.node_js))}:{os.environ.get('PATH')}",
+        'NODE_HOME': os.path.dirname(os.path.abspath(options.node_js)),
+    }
+
+    process = subprocess.run([npm, "run", "compile:arkui"], env=custom_env, cwd=tool_path, shell=False)
+
+    if os.path.exists(package_path):
+        p = subprocess.run([nodejs, package_path, "--input-dir", input_dir, "--target-dir", output], cwd=tool_path,
+                           shell=False)
+    else:
+        print("arkui_transformer: tool path does not exist")
+    
+    return process
+
+
 def parse_step(options):
     for i, out_path in enumerate(OUT_ROOT_LIST):
         sdk_type = OUT_SDK_TYPE[i]
@@ -128,6 +153,9 @@ def parse_step(options):
 
         convert_permissions(options.root_build_dir, out_path,
                             permission_file, options.node_js)
+        
+        if sdk_type == "ets2":
+            compile_package(options, out_path)
 
 
 def main():
@@ -138,6 +166,7 @@ def main():
     parser.add_argument('--output-arkts-sdk-desc-file', required=True)
     parser.add_argument('--sdk-build-public', required=True)
     parser.add_argument('--sdk-build-arkts', required=True)
+    parser.add_argument('--npm-path', required=True)
 
     options = parser.parse_args()
 
