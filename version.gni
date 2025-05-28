@@ -17,7 +17,7 @@ declare_args() {
   api_version = "20"
   api_minor_version = "0"
   api_patch_version = "0"
-  full_api_version = "20"
+  api_full_version = "20"
 
   # Release type, optional values: Betax, RCx...
   release_type = "Canary1"
