@@ -575,15 +575,23 @@ template("app_sign") {
 }
 
 template("compile_app") {
-  forward_variables_from(invoker, [ "testonly" ])
-  nodejs_version = "v16.20.2"
-  if (host_os == "mac") {
-    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-darwin-x64/bin/node"
-  } else if (host_os == "linux" && host_os == "arm64") {
-    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-linux-aarch64/bin/node"
+  forward_variables_from(invoker,
+                         [
+                           "testonly",
+                           "nodejs_path",
+                         ])
+  if (defined(nodejs_path) && nodejs_path != "") {
+    _nodejs = nodejs_path
   } else {
-    _nodejs = "//prebuilts/build-tools/common/nodejs/node-${nodejs_version}-${host_os}-x64/bin/node"
+    if (host_os == "mac") {
+      _nodejs = "//prebuilts/build-tools/common/nodejs/node-${default_hvigor_nodejs_version}-darwin-x64/bin/node"
+    } else if (host_os == "linux" && host_os == "arm64") {
+      _nodejs = "//prebuilts/build-tools/common/nodejs/node-${default_hvigor_nodejs_version}-linux-aarch64/bin/node"
+    } else {
+      _nodejs = "//prebuilts/build-tools/common/nodejs/node-${default_hvigor_nodejs_version}-${host_os}-x64/bin/node"
+    }
   }
+
   action(target_name) {
     forward_variables_from(invoker,
                            [
