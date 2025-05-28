@@ -201,13 +201,13 @@ function build_sdk() {
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
       mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
       pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
-	      mkdir $full_api_version
+        mkdir -p $full_api_version
         for i in */; do
             if [ -d "$i" ] && [ "$i" != "$full_api_version/" ]; then
                 mv $i $full_api_version/
             fi
         done
-	      cp -r $full_api_version $api_version
+        cp -r $full_api_version $api_version
       popd > /dev/null
     popd > /dev/null
 }
