@@ -180,7 +180,7 @@ echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
 
 echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
 api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_version = *"\([^"]*\)".*/\1/p')
-full_api_version=$(grep 'full_api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+full_api_version=$(grep 'api_full_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 function build_sdk() {
     ROOT_PATH=${SOURCE_ROOT_DIR}
     SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
