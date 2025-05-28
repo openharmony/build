@@ -19,6 +19,10 @@ import sys
 import shutil
 import subprocess
 from convert_permissions import convert_permissions
+sys.path.append(
+    os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from scripts.util.file_utils import read_json_file, write_json_file
 
 OUT_ROOT_LIST = ["out/sdk-interface/ets1.1/sdk-js",
                  "out/sdk-interface/ets1.2/sdk-js"]
@@ -88,6 +92,23 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
     p.wait()
 
 
+def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
+    output_sdk_desc_file: str):
+    info_list = read_json_file(sdk_description_file)
+    if sdk_build_arkts != "true":
+        arkts_sdk_info_list = []
+        for info in info_list:
+            install_label_str = str(info.get("install_dir"))
+            if install_label_str.startswith("ets/ets1.2/"):
+                continue
+            elif install_label_str.startswith("ets/ets1.1/"):
+                info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
+            arkts_sdk_info_list.append(info)
+    else:
+        arkts_sdk_info_list = info_list
+    write_json_file(output_sdk_desc_file, arkts_sdk_info_list)
+
+
 def parse_step(options):
     for i, out_path in enumerate(OUT_ROOT_LIST):
         sdk_type = OUT_SDK_TYPE[i]
@@ -114,10 +135,15 @@ def main():
     parser.add_argument('--sdk-description-file', required=True)
     parser.add_argument('--root-build-dir', required=True)
     parser.add_argument('--node-js', required=True)
-    parser.add_argument('--output-pub-sdk-desc-file', required=True)
+    parser.add_argument('--output-arkts-sdk-desc-file', required=True)
     parser.add_argument('--sdk-build-public', required=True)
+    parser.add_argument('--sdk-build-arkts', required=True)
 
     options = parser.parse_args()
+
+    regenerate_sdk_config_file(options.sdk_build_arkts, options.sdk_description_file,
+        options.output_arkts_sdk_desc_file)
+
     parse_step(options)
 
 
