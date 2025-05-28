@@ -205,7 +205,12 @@ function build_sdk() {
                 mv $i $api_version
             fi
         done
-        mv $api_version/ets/ets1.1/* $api_version/ets
+        pushd $api_version/ets/ > /dev/null
+          for dir in ./ets1.1/*/; do 
+            dir_name=$(basename "$dir")
+            ln -s "./ets1.1/$dir_name" "$dir_name"
+          done
+        popd > /dev/null
       popd > /dev/null
       # 临时添加，因为xts编译失败无法归档ohos-sdk，输出ohos-sdk的md5值，用于验证OHOS-SDK生成是否存在概率问题
       pushd ${ROOT_PATH}/prebuilts/ohos-sdk/linux/${api_version} > /dev/null
