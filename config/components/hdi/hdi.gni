@@ -142,6 +142,10 @@ template("hdi") {
   config("$idl_headers_config") {
     include_dirs = hdi_build_info.include_dirs
 
+    if (defined(invoker.public_configs)) {
+      include_dirs += invoker.public_configs
+    }
+
     include_dirs += [
       "$hdf_uhdf_path/ipc/include",
       "//drivers/hdf_core/interfaces/inner_api/utils",
