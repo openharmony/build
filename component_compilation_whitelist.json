@@ -12276,6 +12276,7 @@
         "//arkcompiler/runtime_core/libpandabase:arkbase_public_config",
         "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
         "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
+        "//arkcompiler/runtime_core/static_core/abc2program:arkts_abc2program_public_config",
         "//arkcompiler/runtime_core/static_core/bytecode_optimizer:bytecodeopt_public_config",
         "//arkcompiler/runtime_core/static_core/compiler:arkcompiler_public_config",
         "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
@@ -14477,6 +14478,7 @@
         ],
         "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda": [
             "//arkcompiler/runtime_core/static_core:ark_config",
+            "//arkcompiler/runtime_core/static_core/abc2program:arkts_abc2program_public_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
@@ -14491,6 +14493,7 @@
             "//arkcompiler/runtime_core/static_core/isa:isa_combine"
         ],
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_frontend_static": [
+            "//arkcompiler/runtime_core/static_core/abc2program:arkts_abc2program_public_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
@@ -14499,6 +14502,7 @@
             "//third_party/icu/icu4c:static_icuuc"
         ],
         "//arkcompiler/ets_frontend/ets2panda:libes2panda_public_frontend_static": [
+            "//arkcompiler/runtime_core/static_core/abc2program:arkts_abc2program_public_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
