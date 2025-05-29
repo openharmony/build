@@ -292,9 +292,17 @@ def npm_install(operate: dict, global_args: object, success_installed_npm_config
                 return False, err.decode()
             else:
                 success_installed_npm_config.append(install_path)
+                print(f"{node_modules_path} install over!")
         else:
-            raise Exception(
-                "{} not exist, it shouldn't happen, pls check...".format(full_code_path)
-            )
-        print(f"{node_modules_path} install over!")
+            print(
+                    "npm install path {} not exist, skip".format(full_code_path)
+                )
+            if global_args.type != "indep":
+                print(
+                    "npm install path {} not exist, please check your config file".format(full_code_path)
+                )
+                raise Exception(
+                    "{} not exist, it shouldn't happen, pls check...".format(full_code_path)
+                )
+        
     return True, None
