@@ -394,6 +394,68 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "npm_install",
+            "tag": "base",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "npm_install",
+                    "npm_install_path": [
+                        "${code_dir}/developtools/ace_ets2bundle/compiler",
+                        "${code_dir}/developtools/ace_js2bundle/ace-loader",
+                        "${code_dir}/third_party/jsframework",
+                        "${code_dir}/third_party/parse5/packages/parse5",
+                        "${code_dir}/third_party/weex-loader",
+                        "${code_dir}/arkcompiler/ets_frontend/legacy_bin/api8",
+                        "${code_dir}/interface/sdk-js/build-tools",
+                        "${code_dir}/arkcompiler/ets_frontend/arkguard"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "node_modules_copy",
+            "tag": "base",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "node_modules_copy",
+                    "copy_list": [
+                        {
+                            "src": "${code_dir}/third_party/jsframework/node_modules",
+                            "dest": "${code_dir}/prebuilts/build-tools/common/js-framework/node_modules",
+                            "use_symlink": "True"
+                        },
+                        {
+                            "src": "${code_dir}/arkcompiler/ets_frontend/legacy_bin/api8/node_modules",
+                            "dest": "${code_dir}/prebuilts/build-tools/common/ts2abc/node_modules",
+                            "use_symlink": "True"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit",
+                            "dest": "${code_dir}/developtools/ace_ets2bundle/compiler/node_modules/@ohos/hypium",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit",
+                            "dest": "${code_dir}/developtools/ace_js2bundle/ace-loader/node_modules/@ohos/hypium",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit/",
+                            "dest": "${code_dir}/developtools/ace_ets2bundle/compiler/node_modules/hypium/",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit/",
+                            "dest": "${code_dir}/developtools/ace_js2bundle/ace-loader/node_modules/hypium/",
+                            "use_symlink": "False"
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

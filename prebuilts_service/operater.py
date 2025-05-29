@@ -122,9 +122,10 @@ class OperateHanlder:
 
     @staticmethod
     def _npm_install(operate: dict, max_retry_times=2):
-        # 若不是系统组件，直接返回
-        if not is_system_component():
-            return
+        if OperateHanlder.global_args.type != "indep":
+            # 若不是系统组件，直接返回
+            if not is_system_component():
+                return
         success_installed_npm_config = []
 
         for retry_times in range(max_retry_times + 1):
@@ -161,8 +162,9 @@ class OperateHanlder:
     
     @staticmethod
     def _node_modules_copy(operate: dict):
-        if not is_system_component():
-            return
+        if OperateHanlder.global_args.type != "indep":
+            if not is_system_component():
+                return
         
         copy_list = operate.get("copy_list")
         for copy_config in copy_list:
