@@ -12,7 +12,6 @@
         "//drivers/interface/display/graphic/common/v1_1:display_commontype_idl_headers_1.1",
         "//drivers/interface/face_auth/v2_0:face_auth_idl_headers",
         "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers",
-        "//drivers/interface/huks/v1_1:huks_idl_headers",
         "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers",
         "//drivers/interface/input/ddk/v1_1:hid_ddk_idl_headers",
         "//drivers/interface/input/v1_0:input_idl_headers",
@@ -10184,24 +10183,6 @@
         ],
         "//drivers/peripheral/fingerprint_auth/test/fuzztest/fingerprint_auth/fingerprintauthinterfacestub_fuzzer:FingerprintAuthInterfaceStubFuzzTest": [
             "//drivers/interface/fingerprint_auth/v2_0:fingerprint_auth_idl_headers"
-        ],
-        "//drivers/peripheral/huks/hdi_service:libhuks_hdi_service_1.1": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
-        ],
-        "//drivers/peripheral/huks/test/fuzztest/agreekeyfuzz:huks_hdi_agreekey_fuzz": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
-        ],
-        "//drivers/peripheral/huks/test/fuzztest/generatekeyfuzz:huks_hdi_generatekey_fuzz": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
-        ],
-        "//drivers/peripheral/huks/test/fuzztest/importkeyfuzz:huks_hdi_importkey_fuzz": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
-        ],
-        "//drivers/peripheral/huks/test/fuzztest/importwrappedkeyfuzz:huks_hdi_importwrappedkey_fuzz": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
-        ],
-        "//drivers/peripheral/huks/test/fuzztest/initfuzz:huks_hdi_init_fuzz": [
-            "//drivers/interface/huks/v1_1:huks_idl_headers"
         ],
         "//drivers/peripheral/input/ddk_service/src/emit_event_manager:emit_event_manager": [
             "//drivers/interface/input/ddk/v1_0:hid_ddk_idl_headers"
