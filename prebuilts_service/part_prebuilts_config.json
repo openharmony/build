@@ -1,0 +1,24 @@
+{
+    "categories": {
+        "basic": [
+            "llvm",
+            "gn",
+            "ninja",
+            "node",
+            "python",
+            "hpm",
+            "ark_js_prebuilts",
+            "hc-gen",
+            "OpenHarmonyApplication.pem",
+            "packing_tool",
+            "rustc"
+        ]
+    },
+    "parts": {
+        "demo": {
+            "required_categories": [],
+            "required_tools": [],
+            "exclude_tools": []
+        }
+    }
+}
