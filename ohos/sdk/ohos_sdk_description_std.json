@@ -44,7 +44,7 @@
             "windows"
         ]
     },
-    { 
+    {
         "install_dir": "toolchains",
         "module_label": "//base/update/updater/services/diffpatch:diff",
         "target_os": [
@@ -1077,6 +1077,16 @@
     {
         "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:insightIntentSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:insightIntentInnerSchema_json",
         "target_os": [
             "linux",
             "windows",
