@@ -115,6 +115,7 @@ class Hpm(BuildFileGeneratorInterface):
             return
         else:
             self.flags_dict.pop("skip-download")
+            print("[TIPS] If you want to skip downloading dependencies, please use --skip-download")
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')

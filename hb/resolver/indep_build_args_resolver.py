@@ -291,3 +291,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 LogUtil.hb_info("Error: ccache command not found")
             except subprocess.CalledProcessError as e:
                 LogUtil.hb_info(f"Failed to execute ccache command: {e}")
+    
+    def resolve_prebuilts_download(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.prebuilts.regist_flag('skip-prebuilts', target_arg.arg_value)

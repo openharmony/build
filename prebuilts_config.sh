@@ -156,22 +156,17 @@ else
   set -e
 fi
 
-# 运行Python命令
-python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich
+if [[ -v args["--part-names"] ]]; then
+    part_names="--part-names ${args["--part-names"]}"
+fi
 
+# 运行Python命令
+python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich $part_names
 PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    --download-sdk)       # Download the SDK if this flag is set
+if [[ -v args["--download-sdk"] ]]; then
     DOWNLOAD_SDK=YES
-    ;;
-    *)
-    echo "$0: Warning: unsupported parameter: $1" >&2
-    ;;
-  esac
-  shift
-done
+fi
 
 if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk/linux" ]]; then
   $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version 20

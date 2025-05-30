@@ -43,6 +43,8 @@ def _parse_args():
     parser.add_argument('--config-file', help='prebuilts download config file')
     parser.add_argument('--type', help='prebuilts download type', default="indep")
     parser.add_argument('--tag', help='prebuilts download tag', default="base")
+    parser.add_argument('--part-names', help='current building part', default=None, nargs='+')
+
     return parser
 
 
@@ -60,8 +62,7 @@ def main():
         config_file = global_args.config_file
     
     config_parser = ConfigParser(config_file, global_args)
-    download_operate, other_operate = config_parser.get_operate()
-
+    download_operate, other_operate = config_parser.get_operate(global_args.part_names)
     prebuilts_path = os.path.join(global_args.code_dir, "prebuilts")
     if not os.path.exists(prebuilts_path):
         os.makedirs(prebuilts_path)

@@ -16,6 +16,7 @@ import copy
 import re
 import os
 from common_utils import load_config
+from parse_part_download_config import get_parts_tool_config
 
 
 class ConfigParser:
@@ -33,14 +34,27 @@ class ConfigParser:
         download_root = self.global_config["download_root"]
         self.global_config["download_root"] = os.path.abspath(os.path.expanduser(download_root))
 
-    def get_operate(self) -> tuple:
+    def get_operate(self, part_names = None) -> tuple:
         download_op = []
         other_op = []
         tool_list = self.data["tool_list"]
+        custom_tool_list = None
+        if part_names:
+            # 如果指定了part_names，则只获取指定part的工具
+            custom_tool_list = get_parts_tool_config(part_names)
         for tool in tool_list:
+            if custom_tool_list:
+                if tool.get("name") not in custom_tool_list:
+                    # 如果指定了part_names，则只获取指定part的工具
+                    continue
+                else:
+                    custom_tool_list.remove(tool.get("name"))
             _download, _other = self._get_tool_operate(tool)
             download_op.extend(_download)
             other_op.extend(_other)
+        if custom_tool_list:
+            # 如果还有未处理的工具，则抛出异常
+            raise Exception(f"Error: The following tools are not found in the prebuilts_config.json: {custom_tool_list}")
         return download_op, other_op
 
     def _get_tool_operate(self, tool) -> tuple:

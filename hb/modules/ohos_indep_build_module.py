@@ -31,12 +31,17 @@ import sys
 class OHOSIndepBuildModule(IndepBuildModuleInterface):
     _instance = None
 
-    def __init__(self, args_dict: dict, args_resolver: ArgsResolverInterface, hpm: BuildFileGeneratorInterface,
+    def __init__(self, args_dict: dict, args_resolver: ArgsResolverInterface, prebuilts: BuildFileGeneratorInterface, hpm: BuildFileGeneratorInterface,
                  indep_build: BuildFileGeneratorInterface):
         super().__init__(args_dict, args_resolver)
+        self._prebuilts = prebuilts
         self._hpm = hpm
         self._indep_build = indep_build
         OHOSIndepBuildModule._instance = self
+    
+    @property
+    def prebuilts(self):
+        return self._prebuilts
 
     @property
     def hpm(self):
@@ -92,8 +97,12 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
             LogUtil.hb_info(f'{",".join(get_part_name())} {message}')
 
     def _target_compilation(self):
+        self._run_prebuilts()
         self._run_hpm()
         self._run_indep_build()
+    
+    def _run_prebuilts(self):
+        self._prebuilts.run()
 
     def _run_hpm(self):
         self._run_phase(BuildPhase.HPM_DOWNLOAD)
