@@ -255,7 +255,8 @@ def modify_arktsconfig_with_cache(arktsconfig_path: str, cache_path: str) -> Non
                 config["compilerOptions"]["outDir"] = cache_path
 
         if os.path.exists(arktsconfig_path):
-            with open(arktsconfig_path, "w", encoding="utf-8") as f:
+            fd = os.open(arktsconfig_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
+            with os.fdopen(fd, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=2, ensure_ascii=False)
     except json.JSONDecodeError as e:
         print(f"{arktsconfig_path} Invalid JSON format (cache): {e}", file=sys.stderr)
@@ -290,7 +291,8 @@ def add_to_bootpath(device_dst_file: str, bootpath_json_file: str, target_name: 
         data["bootpath"] = new_value
 
         os.makedirs(os.path.dirname(new_json_file), exist_ok=True)
-        with open(new_json_file, "w", encoding="utf-8") as f:
+        fd = os.open(new_json_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
         print(f"{target_name}_bootpath.json has been created")
     except json.JSONDecodeError as e:
@@ -388,7 +390,8 @@ def build_config(args: argparse.Namespace) -> None:
         config["files"] = args.files
 
     os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
-    with open(args.arktsconfig, 'w', encoding="utf-8") as f:
+    fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
 
