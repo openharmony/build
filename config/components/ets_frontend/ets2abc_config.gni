@@ -54,14 +54,22 @@ ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
 
+ohos_ets_api_deps = "sdk:ohos_ets_api"
+ohos_ets_arkts_deps = "sdk:ohos_ets_arkts"
 ohos_ets_es2panda_deps =
     "//build/config/components/ets_frontend:ohos_ets_es2panda"
 ohos_ets_ark_link_deps =
     "//build/config/components/ets_frontend:ohos_ets_ark_link"
 ohos_ets_stdlib_deps = "runtime_core:ohos_ets_stdlib"
 
+ohos_ets_api_tmp_path = "$root_out_dir/ohos_ets_tmp/api"
+ohos_ets_api_arkui_tmp_path = "$root_out_dir/ohos_ets_tmp/api/arkui/component"
+ohos_ets_arkts_tmp_path = "$root_out_dir/ohos_ets_tmp/arkts"
+ohos_ets_kits_tmp_path = "$root_out_dir/ohos_ets_tmp/kits"
 ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
+ohos_ets_api_arkui_path = "$root_out_dir/ohos_ets/api/arkui/component"
 ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
+ohos_ets_kits_path = "$root_out_dir/ohos_ets/kits"
 ohos_ets_inner_path = "$root_out_dir/ohos_ets/inner"
 ohos_ets_es2panda_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/es2panda"
@@ -109,6 +117,10 @@ template("generate_static_abc") {
     ]
 
     if (defined(invoker.base_url)) {
+      external_deps += [
+        ohos_ets_api_deps,
+        ohos_ets_arkts_deps,
+      ]
       args += [
         "--base-url",
         rebase_path("${invoker.base_url}"),
