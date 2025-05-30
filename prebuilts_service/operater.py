@@ -20,7 +20,7 @@ from common_utils import (
     symlink_src2dest,
     copy_folder,
     remove_dest_path,
-    run_cmd_live,
+    run_cmd_directly,
     install_hpm,
     install_hpm_in_other_platform,
     npm_install,
@@ -104,7 +104,7 @@ class OperateHanlder:
     @staticmethod
     def _shell(operate: dict):
         cmd = operate.get("cmd")
-        run_cmd_live(cmd)
+        run_cmd_directly(cmd)
     
 
     @staticmethod

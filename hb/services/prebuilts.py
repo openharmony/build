@@ -18,7 +18,10 @@
 
 import subprocess
 import sys
-from services.interface.build_file_generator_interface import BuildFileGeneratorInterface
+from services.interface.build_file_generator_interface import (
+    BuildFileGeneratorInterface,
+)
+from util.log_util import LogUtil
 
 
 class PreuiltsService(BuildFileGeneratorInterface):
@@ -26,35 +29,49 @@ class PreuiltsService(BuildFileGeneratorInterface):
     def __init__(self):
         super().__init__()
 
+    def run(self):
+        if not "--open-prebuilts" in sys.argv:
+            return
+        flags_list = self._convert_flags()
+        if "--skip-prebuilts" in flags_list:
+            print("Skip preuilts download")
+            return
+        part_names = self._get_part_names()
+        try:
+            cmd = ["/bin/bash", "build/prebuilts_config.sh", "--part-names"]
+            cmd.extend(part_names)
+            cmd_str = " ".join(cmd)
+            tips = (
+                f"Running cmd: \"{cmd_str}\""
+                + ", you can use --skip-preuilts to skip this step"
+            )
+            LogUtil.hb_info(tips)
+            subprocess.run(
+                cmd, check=True, stdout=None, stderr=None  # 直接输出到终端
+            )  # 直接输出到终端
+        except subprocess.CalledProcessError as e:
+            print(f"{cmd} execute failed: {e.returncode}")
+            raise e
+
     def _get_part_names(self):
         part_name_list = []
         if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):
             for name in sys.argv[2:]:
-                if not name.startswith('-'):
+                if not name.startswith("-"):
                     part_name_list.append(name)
                 else:
                     break
         return part_name_list
 
-        
-    def run(self):
-        if "--skip-prebuilts" in sys.argv:
-            print("Skip preuilts download")
-            return
-        part_names = self._get_part_names()
-        tips = "[TIPS] Running prebuilts_config.sh for parts:" + " ".join(part_names) + ", you can use --skip-preuilts to skip this step"
-        print(tips)
-        try:
-            cmd = [
-                "/bin/bash", 
-                "build/prebuilts_config.sh",
-                "--part-names"
-            ]
-            cmd.extend(part_names)
-            subprocess.run(cmd, 
-                           check=True,
-                           stdout=None,  # 直接输出到终端
-                           stderr=None)  # 直接输出到终端
-        except subprocess.CalledProcessError as e:
-            print(f"{cmd} execute failed: {e.returncode}")
-            raise e
+    def _convert_flags(self) -> list:
+        flags_list = []
+        for key in self.flags_dict.keys():
+            if isinstance(self.flags_dict[key], bool) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+            if isinstance(self.flags_dict[key], str) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+                flags_list.append(f"{self.flags_dict[key]}")
+            if isinstance(self.flags_dict[key], list) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+                flags_list.extend(self.flags_dict[key])
+        return flags_list

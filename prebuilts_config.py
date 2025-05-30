@@ -42,7 +42,6 @@ def _parse_args():
     parser.add_argument('--glibc-version', help='glibc version', required=False)
     parser.add_argument('--config-file', help='prebuilts download config file')
     parser.add_argument('--type', help='prebuilts download type', default="indep")
-    parser.add_argument('--tag', help='prebuilts download tag', default="base")
     parser.add_argument('--part-names', help='current building part', default=None, nargs='+')
 
     return parser

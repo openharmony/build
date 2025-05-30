@@ -102,6 +102,7 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
         self._run_indep_build()
     
     def _run_prebuilts(self):
+        self._run_phase(BuildPhase.PRE_BUILD)
         self._prebuilts.run()
 
     def _run_hpm(self):

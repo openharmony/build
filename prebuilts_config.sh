@@ -250,3 +250,4 @@ done
 }
 copy_inside_cxx
 echo "======copy inside cxx finished!======"
+echo -e "\033[0;33myou can use --skip-prebuilts to skip prebuilts_download step while using hb build command\033[0m"
