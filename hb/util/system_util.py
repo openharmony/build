@@ -112,6 +112,7 @@ class SystemUtil(metaclass=NoInstance):
                                        stderr=subprocess.STDOUT,
                                        encoding='utf-8',
                                        env=exec_env,
+                                       errors="ignore",
                                        **kwargs)
             for line in iter(process.stdout.readline, ''):
                 keep_deal, new_line = HandleKwargs.handle_line(line, raw_kwargs)
