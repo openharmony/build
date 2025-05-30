@@ -394,6 +394,48 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "libcxx-ndk",
+            "tag": "base",
+            "type": "src, indep",
+            "unzip_filename": "libcxx-ndk",
+            "config": {
+                "linux": {
+                    "arm64": {
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/linux_aarch64/libcxx-ndk_linux-aarch64-3cec00-20250320.tar.gz",
+                        "unzip_filename": "libcxx-ndk",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_linux-aarch64-3cec00-20250320"
+                    },
+                    "x86_64": [
+                        {
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/linux/libcxx-ndk_linux-x86_64-3cec00-20250320.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
+                            "rename_src": "${unzip_dir}/libcxx-ndk_linux-x86_64-3cec00-20250320"
+                        }
+                    ]
+                },
+                "darwin": {
+                    "arm64": {
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/darwin_arm64/libcxx-ndk_darwin-arm64-3cec00-20250320.tar.gz",
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-arm64",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-arm64-3cec00-20250320"
+                    },
+                    "x86_64": {
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/darwin_x86_64/libcxx-ndk_darwin-x86_64-3cec00-20250320.tar.gz",
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-x86_64",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-x86_64-3cec00-20250320"
+                    }
+                }
+            },
+            "handle": [
+                {
+                    "type": "move",
+                    "src": "${rename_src}",
+                    "dest": "${unzip_dir}/libcxx-ndk"
+                }
+            ]
         }
     ]
 }
