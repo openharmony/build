@@ -14,40 +14,14 @@
 import("//build/config/components/ets_frontend/ets2abc_config.gni")
 import("//build/ohos_var.gni")
 
-action("ohos_ets_api") {
-  script = "//interface/sdk-js/ohos_copy_ets.py"
-
-  args = [
-    "--input",
-    rebase_path("//interface/sdk-js/api"),
-    "--output",
-    rebase_path("$ohos_ets_api_path"),
-    "--type",
-    "ets2",
-    "--source-root-dir",
-    rebase_path("//"),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-  ]
-
-  outputs = [ "$ohos_ets_api_path" ]
+ohos_copy("ohos_ets_ark_link") {
+  external_deps = static_linker_build_deps
+  sources = [ rebase_path("$static_linker_build_path") ]
+  outputs = [ ohos_ets_ark_link_path ]
 }
 
-action("ohos_ets_arkts") {
-  script = "//interface/sdk-js/ohos_copy_ets.py"
-
-  args = [
-    "--input",
-    rebase_path("//interface/sdk-js/arkts"),
-    "--output",
-    rebase_path("$ohos_ets_arkts_path"),
-    "--type",
-    "ets2",
-    "--source-root-dir",
-    rebase_path("//"),
-    "--node-js",
-    rebase_path(nodejs, root_build_dir),
-  ]
-
-  outputs = [ "$ohos_ets_arkts_path" ]
+ohos_copy("ohos_ets_es2panda") {
+  external_deps = ets2abc_build_deps
+  sources = [ rebase_path("$ets2abc_build_path") ]
+  outputs = [ ohos_ets_es2panda_path ]
 }
