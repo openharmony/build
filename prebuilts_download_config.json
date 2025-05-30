@@ -484,9 +484,9 @@
           "unzip_filename": "rustc-x86_64-windows-std"
         },
         {
-          "unzip_dir": "prebuilts/hc_gen",
-          "file_path": "/openharmony/compiler/hc-gen/linux/hc-gen-20240926.tar.gz",
-          "unzip_filename": "hc-gen"
+          "unzip_dir": "prebuilts/hvigor/5.14.2-td-rc.515/command-line-tools",
+          "file_path": "/openharmony/compiler/hvigor/5.14.2-td-rc.515/command-line-tools.tar",
+          "unzip_filename": "command-line-tools"
         }
       ],
       "install": [
