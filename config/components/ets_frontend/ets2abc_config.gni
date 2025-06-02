@@ -95,6 +95,7 @@ template("generate_static_abc") {
       ohos_ets_es2panda_deps,
     ]
     external_deps = external_dependencies
+    external_deps += [ ohos_ets_stdlib_deps ]
 
     args = [
       "--es2panda",
@@ -108,7 +109,6 @@ template("generate_static_abc") {
     ]
 
     if (defined(invoker.base_url)) {
-      external_deps += [ ohos_ets_stdlib_deps ]
       args += [
         "--base-url",
         rebase_path("${invoker.base_url}"),
