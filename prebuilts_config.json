@@ -434,6 +434,10 @@
                     "type": "move",
                     "src": "${rename_src}",
                     "dest": "${unzip_dir}/libcxx-ndk"
+                }
+            ]
+        },
+        {
             "name": "npm_install",
             "tag": "base",
             "type": "indep",
