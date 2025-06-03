@@ -43,8 +43,6 @@ if (!use_current_sdk) {
       platformVersion = platform_version
     }
     apiVersion = api_version
-    apiMinorVersion = api_minor_version
-    apiPatchVersion = api_patch_version
     fullApiVersion = api_full_version
   }
   write_file(package_info_file, package_info, "json")

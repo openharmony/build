@@ -43,8 +43,6 @@ def main():
     parser.add_argument('--generated-sdk-modules-gni')
     parser.add_argument('--type2displayname')
     parser.add_argument('--api-version')
-    parser.add_argument('--api-minor-version')
-    parser.add_argument('--api-patch-version')
     parser.add_argument('--api-full-version')
     parser.add_argument('--release-type')
     parser.add_argument('--meta-version')
@@ -120,8 +118,6 @@ foreach(os, sdk_systems) {
       displayName = "{{ _display_name }}"
       version = current_sdk_version
       apiVersion = "{{ api_version }}"
-      apiMinorVersion="{{ api_minor_version }}"
-      apiPatchVersion="{{ api_patch_version }}"
       fullApiVersion="{{ api_full_version }}"
       if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
         platformVersion = platform_version
@@ -161,8 +157,6 @@ group("generated_ohos_sdk") {
         sdk_systems=options.sdk_systems,
         display_name=read_display_name(options.type2displayname),
         api_version=options.api_version,
-        api_minor_version=options.api_minor_version,
-        api_patch_version=options.api_patch_version,
         api_full_version=options.api_full_version,
         release_type=options.release_type,
         meta_version=options.meta_version,
