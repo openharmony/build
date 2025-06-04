@@ -207,6 +207,11 @@
           "unzip_dir": "prebuilts/packing_tool",
           "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "unzip_filename": "packing_tool"
+        },
+        {
+          "unzip_dir": "prebuilts/graphics_3d/AGPBinaryCompile",
+          "file_path": "/openharmony/compiler/AGP/AGPBinaryCompile-20250604.tar.gz",
+          "unzip_filename": "AGPBinaryCompile"
         }
       ],
       "linux_copy_config": [
@@ -332,6 +337,11 @@
           "unzip_dir": "prebuilts/packing_tool",
           "file_path": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip",
           "unzip_filename": "packing_tool"
+        },
+        {
+          "unzip_dir": "prebuilts/graphics_3d/AGPBinaryCompile",
+          "file_path": "/openharmony/compiler/AGP/AGPBinaryCompile-20250604.tar.gz",
+          "unzip_filename": "AGPBinaryCompile"
         }
       ],
       "linux_copy_config": [
