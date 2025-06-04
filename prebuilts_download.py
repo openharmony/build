@@ -236,16 +236,23 @@ def _npm_install(args):
     out, err, retcode = _run_cmd(npm_package_lock_cmd)
     if retcode != 0:
         return False, err.decode()
+    procs = []
+    full_code_path_list = []
+    cmd_list = []
     print('start npm install, please wait.')
     for install_info in args.npm_install_config:
         full_code_path = os.path.join(args.code_dir, install_info)
         basename = os.path.basename(full_code_path)
         node_modules_path = os.path.join(full_code_path, "node_modules")
         npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
-
         if os.path.exists(node_modules_path):
             print('remove node_modules %s' % node_modules_path)
             _run_cmd(('rm -rf {}'.format(node_modules_path)))
+    for install_info in args.npm_install_config:
+        full_code_path = os.path.join(args.code_dir, install_info)
+        basename = os.path.basename(full_code_path)
+        node_modules_path = os.path.join(full_code_path, "node_modules")
+        npm_cache_dir = os.path.join('~/.npm/_cacache', basename)
         if os.path.exists(full_code_path):
             cmd = ['timeout', '-s', '9', '90s', npm, 'install', '--registry', args.npm_registry, '--cache', npm_cache_dir]
             if args.host_platform == 'darwin':
@@ -255,12 +262,17 @@ def _npm_install(args):
             proc = subprocess.Popen(cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             # wait proc Popen with 0.1 second
             time.sleep(0.1)
-            out, err = proc.communicate()
-            if proc.returncode:
-                print("in dir:{}, executing:{}".format(full_code_path, ' '.join(cmd)))
-                return False, err.decode()
+            procs.append(proc)
+            full_code_path_list.append(full_code_path)
+            cmd_list.append(cmd)
         else:
             raise Exception("{} not exist, it shouldn't happen, pls check...".format(full_code_path))
+    for ind, proc in enumerate(procs):
+        out, err = proc.communicate()
+        if proc.returncode:
+            print("in dir:{}, executing:{}".format(full_code_path_list[ind], ' '.join(cmd_list[ind])))
+            return False, err.decode()
+
     return True, None
 
 
