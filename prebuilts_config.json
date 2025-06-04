@@ -410,20 +410,6 @@
             ]
         },
         {
-            "name": "init_ohpm",
-            "tag": "base",
-            "type": "src, indep",
-            "handle": [
-                {
-                    "type": "shell",
-                    "cmd": [
-                        "/bin/bash",
-                        "${code_dir}/build/prebuilts_service/shell/init_ohpm.sh"
-                    ]
-                }
-            ]
-        },
-        {
             "name": "npm_install",
             "tag": "base",
             "type": "indep",
