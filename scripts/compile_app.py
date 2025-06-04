@@ -62,7 +62,7 @@ def parse_args(args):
 def get_root_dir():
     current_dir = os.path.dirname(__file__)
     while True:
-        check_path = os.path.join(current_dir, "build", "ohos.gni")
+        check_path = os.path.join(current_dir, ".gn")
         if os.path.exists(check_path):
             return current_dir
         else:
