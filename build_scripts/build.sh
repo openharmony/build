@@ -215,6 +215,7 @@ function build_sdk() {
                 mv $i $new_api_version
             fi
         done
+        mv $api_version/ets/ets1.1/* $api_version/ets
       popd > /dev/null
     popd > /dev/null
 }
