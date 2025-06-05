@@ -59,6 +59,20 @@ def parse_args(args):
     return options
 
 
+def get_root_dir():
+    current_dir = os.path.dirname(__file__)
+    while True:
+        check_path = os.path.join(current_dir, ".gn")
+        if os.path.exists(check_path):
+            return current_dir
+        else:
+            new_dir = os.path.dirname(current_dir)
+            if new_dir == current_dir:
+                raise Exception(f"file {__file__} not in ohos source directory")
+            else:
+                current_dir = new_dir
+
+
 def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     '''
     Set up the application compilation environment and run "ohpm install"
@@ -69,7 +83,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     '''
     print(f"build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
-    root_dir = os.path.dirname(os.path.dirname(cur_dir))
+    root_dir = get_root_dir()
     ohpm_path = os.path.join(root_dir, "prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm")
     if not os.path.exists(ohpm_path):
         ohpm_path = "ohpm"

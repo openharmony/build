@@ -101,7 +101,7 @@ def unzip_inner_packages(target_dir, api_version):
             proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             procs.append(proc)
     for proc in procs:
-        out, error = proc.communicate(timeout=60)
+        out, error = proc.communicate(timeout=120)
 
 
 def main():

@@ -56,7 +56,8 @@ mkdir -p out/$VARIANTS/$OUT_DIR/
 
 rm -rf out/preloader/$VARIANTS
 rm -rf .gn
-
+mkdir -p out/preloader/$VARIANTS
+echo {} > out/preloader/$VARIANTS/hvigor_compile_hap_whitelist.json
 mkdir -p out/$VARIANTS/$OUT_DIR/build_configs/parts_info
 cp -rf build/indep_configs/mapping/component_mapping.json out/$VARIANTS/$OUT_DIR/build_configs
 ln -s build/indep_configs/dotfile.gn .gn
