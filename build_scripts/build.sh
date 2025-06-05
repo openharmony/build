@@ -212,6 +212,7 @@ function build_sdk() {
         if [ "$full_api_version" != "$api_version" ]; then
             cp -r $full_api_version $api_version
         fi
+        mv $api_version/ets/ets1.1/* $api_version/ets
       popd > /dev/null
     popd > /dev/null
 }

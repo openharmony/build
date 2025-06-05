@@ -63,27 +63,27 @@
             "ohos"
         ]
     },
-   {
+    {
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libselinux",
         "target_os": [
             "linux"
         ]
     },
-   {
+    {
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libsepol",
         "target_os": [
             "linux"
-       ]
+        ]
     },
-   {
+    {
         "install_dir": "toolchains",
         "module_label": "//third_party/pcre2:libpcre2",
         "target_os": [
             "linux"
-       ]
-     },
+        ]
+    },
     {
         "install_dir": "toolchains",
         "module_label": "//developtools/hapsigner:lib",
@@ -260,7 +260,17 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc_ets",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets-loader/bin/ark/",
         "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc_ets",
         "target_os": [
             "windows",
@@ -301,7 +311,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
         "target_os": [
             "linux",
@@ -309,14 +319,21 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_win_ets",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets-loader/bin/ark/build-mac/bin",
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_mac_ets",
         "target_os": [
             "darwin"
@@ -472,105 +489,105 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_linux",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_mac",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_linux",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_mac",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_linux",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_mac",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_linux",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_mac",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_linux",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_mac",
         "target_os": [
             "darwin"
@@ -598,39 +615,29 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_ets",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/bin",
         "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_win_ets",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/bin",
         "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_mac_ets",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/api/@internal/full",
-	    "module_label": "//interface/sdk-js:ets_internal_api",
-	    "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "ets/api",
-        "module_label": "//interface/sdk-js:common_api",
+        "install_dir": "ets/ets1.1/api/@internal/full",
+        "module_label": "//interface/sdk-js:ets_internal_api",
         "target_os": [
             "windows",
             "linux",
@@ -639,8 +646,28 @@
         ]
     },
     {
-        "install_dir": "ets/api",
+        "install_dir": "ets/ets1.2/api/@internal/full",
+        "module_label": "//interface/sdk-js:ets_internal_api2",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.1/api",
         "module_label": "//interface/sdk-js:ohos_declaration_ets",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/api",
+        "module_label": "//interface/sdk-js:ohos_declaration_ets2",
         "target_os": [
             "windows",
             "linux",
@@ -678,7 +705,7 @@
         ]
     },
     {
-        "install_dir": "ets/component",
+        "install_dir": "ets/ets1.1/component",
         "module_label": "//interface/sdk-js:ets_component",
         "target_os": [
             "windows",
@@ -688,7 +715,17 @@
         ]
     },
     {
-        "install_dir": "ets/component",
+        "install_dir": "ets/ets1.2/api/arkui/component_bak",
+        "module_label": "//interface/sdk-js:ets_component2",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.1/component",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_component_config",
         "target_os": [
             "windows",
@@ -698,7 +735,7 @@
         ]
     },
     {
-        "install_dir": "ets/component",
+        "install_dir": "ets/ets1.1/component",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_form_config",
         "target_os": [
             "windows",
@@ -708,7 +745,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/form_components",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/form_components",
         "module_label": "//developtools/ace_ets2bundle:form_components",
         "target_os": [
             "windows",
@@ -718,7 +755,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader",
         "module_label": "//developtools/ace_ets2bundle:ets_loader",
         "target_os": [
             "windows",
@@ -728,7 +765,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/lib",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/lib",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_library",
         "target_os": [
             "windows",
@@ -738,7 +775,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/kit_configs",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/kit_configs",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_kit_configs",
         "target_os": [
             "windows",
@@ -748,7 +785,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/components",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/components",
         "module_label": "//developtools/ace_ets2bundle:components",
         "target_os": [
             "windows",
@@ -758,7 +795,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/server",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/server",
         "module_label": "//developtools/ace_ets2bundle:server",
         "target_os": [
             "windows",
@@ -768,7 +805,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/codegen",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/codegen",
         "module_label": "//developtools/ace_ets2bundle:codegen",
         "target_os": [
             "windows",
@@ -778,7 +815,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/declarations",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/declarations",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_declaration",
         "target_os": [
             "windows",
@@ -788,7 +825,7 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/declarations",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/declarations",
         "module_label": "//interface/sdk-js:bundle_api",
         "target_os": [
             "windows",
@@ -798,7 +835,7 @@
         ]
     },
     {
-        "install_dir": "ets/kits",
+        "install_dir": "ets/ets1.1/kits",
         "module_label": "//interface/sdk-js:bundle_kits",
         "target_os": [
             "windows",
@@ -808,8 +845,28 @@
         ]
     },
     {
-        "install_dir": "ets/arkts",
+        "install_dir": "ets/ets1.2/kits",
+        "module_label": "//interface/sdk-js:bundle_kits2",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.1/arkts",
         "module_label": "//interface/sdk-js:bundle_arkts",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/arkts",
+        "module_label": "//interface/sdk-js:bundle_arkts_ets1.2",
         "target_os": [
             "windows",
             "linux",
@@ -907,7 +964,7 @@
         ]
     },
     {
-        "install_dir":"previewer/common/bin/",
+        "install_dir": "previewer/common/bin/",
         "module_label": "//foundation/window/window_manager/previewer:copy_previewer_library",
         "target_os": [
             "windows",
@@ -1082,7 +1139,7 @@
             "ohos"
         ]
     },
-	{
+    {
         "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:moduleSchema_json",
         "target_os": [
@@ -1222,42 +1279,42 @@
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/bin",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/bin",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_compiler_library_darwin",
         "target_os": [
             "darwin"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-win/aot/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-win/aot/src",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins_win",
         "target_os": [
             "windows"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build/aot/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build/aot/src",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins",
         "target_os": [
             "linux"
         ]
     },
     {
-        "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/aot/src",
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/bin/ark/build-mac/aot/src",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/sdk:copy_ark_aot_builtins_mac",
         "target_os": [
             "darwin"
