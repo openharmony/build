@@ -15391,42 +15391,6 @@
         "//base/global/resource_management/test/fuzztest/resmgr_fuzzer:ResmgrFuzzTest_resource_copy": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventAppEventTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventAppEventTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventCacheTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventCacheTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventInnerApiTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventInnerApiTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventNativeTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventNativeTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventUserInfoTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventUserInfoTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventWatcherTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//base/hiviewdfx/hiappevent/test:HiAppEventWatcherTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
-        ],
         "//base/hiviewdfx/hicollie/frameworks/native/test/unittest/common:HandlerCheckerTest": [
             "//third_party/googletest:gtest_main"
         ],
