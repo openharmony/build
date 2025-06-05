@@ -657,26 +657,6 @@
     },
     {
         "install_dir": "ets/ets1.1/api",
-        "module_label": "//interface/sdk-js:common_api",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "ets/ets1.2/api",
-        "module_label": "//interface/sdk-js:common_api2",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "ets/ets1.1/api",
         "module_label": "//interface/sdk-js:ohos_declaration_ets",
         "target_os": [
             "windows",
