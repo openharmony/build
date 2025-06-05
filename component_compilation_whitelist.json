@@ -884,22 +884,6 @@
             "//third_party/json/single_include/",
             "//third_party/jsoncpp/include/"
         ],
-        "//base/powermgr/battery_statistics/test/unittest/src/clienttest:stats_client_test_mock_object": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//base/powermgr/battery_statistics/test/unittest/src/clienttest:stats_client_test_mock_parcel": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//base/powermgr/battery_statistics/test/unittest/src/clienttest:stats_client_test_mock_peer": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//commonlibrary/c_utils/base/include/"
-        ],
-        "//base/powermgr/battery_statistics/test/unittest/src/servicetest:stats_service_test_mock_parcel": [
-            "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
-            "//commonlibrary/c_utils/base/include/"
-        ],
         "//base/powermgr/power_manager/test/unittest/src/servicetest:powermgr_native_mock_parcel_test": [
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/",
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
@@ -907,87 +891,6 @@
         ],
         "//base/powermgr/power_manager/test/unittest/src/servicetest:powermgr_native_test": [
             "//foundation/multimodalinput/input/interfaces/native/innerkits/event/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/systemtest:ThermalLevelEventSystemTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/systemtest:ThermalMgrInterfaceTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:FanFaultDetectTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalActionHubTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalActionReportTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalActionTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalClientApiTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalClientTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalConfigSensorClusterTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalLevelEventTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalListenerTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMgrDumpTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMgrPolicyTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockActionTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxyRemoteTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxySendrequestTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxyTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxyWriteinterfacetokenTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxyWriteremoteobjectTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockProxyWritevectorTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockStubGetdescriptorTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalMockStubTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalObserverTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalPolicyTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalServiceDeathTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalServiceTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
-        ],
-        "//base/powermgr/thermal_manager/test/unittest:ThermalUtilsTest": [
-            "//foundation/ability/ability_runtime/services/appmgr/include/"
         ],
         "//base/print/print_fwk/frameworks/helper/print_helper:print_helper": [
             "//third_party/node/src/",
@@ -9447,9 +9350,6 @@
         "//foundation/resourceschedule/device_usage_statistics/test/unittest:DeviceUsageStatsTest": [
             "//third_party/jsoncpp/include/"
         ],
-        "//foundation/systemabilitymgr/safwk/test/services/safwk/unittest:LocalAbilityManagerTest": [
-            "//foundation/systemabilitymgr/samgr/services/lsamgr/include/"
-        ],
         "//foundation/window/window_manager/dm/test/unittest:dm_unittest_common": [
             "//foundation/graphic/graphic_2d/rosen/modules/render_service_client/"
         ],
@@ -17707,11 +17607,9 @@
             "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/power_manager/test/unittest:test_power_mgr_util": [
-            "//foundation/ability/ability_runtime/interfaces/inner_api/dataobs_manager:dataobs_manager",
             "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/power_manager/test/unittest:test_power_mgr_util_resource_copy": [
-            "//foundation/ability/ability_runtime/interfaces/inner_api/dataobs_manager:dataobs_manager",
             "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/power_manager/test/unittest:test_power_mock_object": [
@@ -17897,12 +17795,10 @@
             "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/thermal_manager/test/unittest:ThermalActionReportTest": [
-            "//third_party/googletest:gtest_main",
-            "//base/powermgr/battery_statistics/utils:batterystats_utils"
+            "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/thermal_manager/test/unittest:ThermalActionReportTest_resource_copy": [
-            "//third_party/googletest:gtest_main",
-            "//base/powermgr/battery_statistics/utils:batterystats_utils"
+            "//third_party/googletest:gtest_main"
         ],
         "//base/powermgr/thermal_manager/test/unittest:ThermalActionTest": [
             "//third_party/googletest:gtest_main"
@@ -31567,12 +31463,6 @@
         ],
         "//foundation/systemabilitymgr/samgr/interfaces/innerkits/common:samgr_common": [
             "//third_party/libxml2:libxml2_config"
-        ],
-        "//foundation/systemabilitymgr/samgr/services/common/test/unittest:ParseUtilTest": [
-            "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/systemabilitymgr/samgr/services/common/test/unittest:ParseUtilTest_resource_copy": [
-            "//third_party/googletest:gtest_main"
         ],
         "//foundation/window/window_manager/dm/test/unittest:dm_unittest_common": [
             "//commonlibrary/c_utils/base:utils",
