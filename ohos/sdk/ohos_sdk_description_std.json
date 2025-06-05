@@ -886,7 +886,7 @@
     },
     {
         "install_dir": "ets/ets1.2/arkts",
-        "module_label": "//interface/sdk-js:bundle_arkts",
+        "module_label": "//interface/sdk-js:bundle_arkts_ets1.2",
         "target_os": [
             "windows",
             "linux",
