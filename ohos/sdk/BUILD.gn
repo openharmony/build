@@ -60,10 +60,13 @@ if (!use_current_sdk) {
 
   if (host_os == "mac") {
     node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
+    npm_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
   } else {
-    node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
+    node_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
+    npm_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
   }
 
   arkts_sdk_args = [
