@@ -243,7 +243,9 @@ def main():
 
     options = parser.parse_args()
 
-    convert_permissions(options.source_root_dir, options.node_js)
+    convert_permissions(options.source_root_dir,
+                        "out/sdk-public/public_interface/sdk-js",
+                        "permissions.d.ts", options.node_js)
 
     data = parse_description_file(options)
 

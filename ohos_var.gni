@@ -29,7 +29,10 @@ declare_args() {
 
 declare_args() {
   sdk_build_public = false
+  sdk_build_arkts = false
   use_current_sdk = false
+  interface_sdk_path_ets1 = "//out/sdk-interface/ets1.1/sdk-js"
+  interface_sdk_path_ets2 = "//out/sdk-interface/ets1.2/sdk-js"
 }
 
 declare_args() {
@@ -305,17 +308,19 @@ dist_subsystem_info_output_file =
     "${dist_build_install_packages_dir}/${dist_subsystem_info_filename}"
 
 if (api_patch_version == "0") {
-    if (api_minor_version == "0") {
-      current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}"
-      prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}"
-    } else {
-      current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
-      prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
-    }
+  if (api_minor_version == "0") {
+    current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}"
+    prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}"
   } else {
-    current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
-    prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
+    current_sdk_home =
+        "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
+    prebuilts_sdk_dir =
+        "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
   }
+} else {
+  current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
+  prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
+}
 
 ramdisk_dir_list = []
 
