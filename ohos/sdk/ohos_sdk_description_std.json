@@ -876,16 +876,6 @@
         ]
     },
     {
-        "install_dir": "ets/ets1.2/api",
-        "module_label": "//interface/sdk-js:ets_component2",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "ets/ets1.1/component",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_component_config",
         "target_os": [
