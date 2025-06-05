@@ -31,7 +31,7 @@ find_root() {
         echo "$found_dir"
         return 0
     else
-        echo "未找到包含 $target 的目录" >&2
+        echo "$target directory not found" >&2
         return 1
     fi
 }
@@ -42,7 +42,7 @@ result_dir=$(find_root "$target_path")
 if [[ $? -eq 0 ]]; then
     code_dir="$result_dir"
 else
-    echo "未找到包含 $target_path 的目录" >&2
+    echo "$target directory not found" >&2
     exit 1
 fi
 # set nodejs and ohpm
