@@ -223,6 +223,33 @@
         ]
     },
     {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/bin",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/bin",
+        "module_label": "//arkcompiler/runtime_core/static_core/static_linker:ark_link",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
     	"install_dir": "js/build-tools/ace-loader/bin/ark/",
 	    "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc",
 	    "target_os": [
@@ -240,6 +267,15 @@
             "linux",
             "darwin",
             "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda:libes2panda_public",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin"
         ]
     },
     {
@@ -304,6 +340,28 @@
     {
         "install_dir": "ets/build-tools/ets-loader/bin/ark/build-mac/bin",
         "module_label": "//arkcompiler/runtime_core/panda_guard:panda_guard_build_mac_ets",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib/stdlib",
+        "module_label": "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib:stdlib_build_win_ets",
+        "target_os": [
+            "windows"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib/stdlib",
+        "module_label": "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib:stdlib_build_ets",
+        "target_os": [
+            "linux",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/lib/stdlib",
+        "module_label": "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib:stdlib_build_mac_ets",
         "target_os": [
             "darwin"
         ]
@@ -1232,6 +1290,33 @@
         "module_label": "//developtools/hapsigner/binary_sign_tool:binary-sign-tool",
         "target_os": [
             "ohos"
+        ]
+    },
+   {
+        "install_dir": "ets/ets1.2/build-tools/driver/build-system",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/build_system:ets2panda_build_system",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/migration-helper",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/linter:ets2panda_build_linter",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/bindings",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/bindings:ets2panda_build_bindings",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
         ]
     }
 ]
