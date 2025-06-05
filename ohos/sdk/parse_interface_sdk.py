@@ -39,6 +39,8 @@ KITS_PATH = "kits"
 KITS_GEN_PATH = "build-tools/kits"
 ARKTS_PATH = "arkts"
 ARKTS_GEN_PATH = "build-tools/arkts"
+PARSE_ETS2_API = "arkui_transformer"
+PACKAGE_PATH = "build/arkui_transformer.js"
 
 
 def copy_sdk_interface(source_root: str, out_path: str):
@@ -91,6 +93,29 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
                           api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
     p.wait()
 
+    
+def compile_package(options, out_path: str):
+    tool_path = os.path.abspath(os.path.join(options.root_build_dir, INTERFACE_PATH, API_MODIFY_DIR, PARSE_ETS2_API))
+    npm = os.path.abspath(options.npm_path)
+    package_path = os.path.abspath(os.path.join(tool_path, PACKAGE_PATH))
+    nodejs = os.path.abspath(options.node_js)
+    input_dir = os.path.abspath(os.path.join(options.root_build_dir, out_path, "api/@internal/component/ets"))
+    output = os.path.abspath(os.path.join(options.root_build_dir, "out/arkui_transformer_api"))
+    custom_env = {
+        'PATH': f"{os.path.dirname(os.path.abspath(options.node_js))}:{os.environ.get('PATH')}",
+        'NODE_HOME': os.path.dirname(os.path.abspath(options.node_js)),
+    }
+
+    process = subprocess.run([npm, "run", "compile:arkui"], env=custom_env, cwd=tool_path, shell=False)
+
+    if os.path.exists(package_path):
+        p = subprocess.run([nodejs, package_path, "--input-dir", input_dir, "--target-dir", output], cwd=tool_path,
+                           shell=False)
+    else:
+        print("arkui_transformer: tool path does not exist")
+    
+    return process
+
 
 def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
     output_sdk_desc_file: str):
@@ -128,6 +153,9 @@ def parse_step(options):
 
         convert_permissions(options.root_build_dir, out_path,
                             permission_file, options.node_js)
+        
+        if sdk_type == "ets2":
+            compile_package(options, out_path)
 
 
 def main():
