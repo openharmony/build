@@ -168,9 +168,35 @@ class BuildArgsResolver(ArgsResolverInterface):
         with open(input_file, 'r') as input_f:
             data = csv.DictReader(input_f)
             for csv_row in data:
-                if csv_row.get(config.precise_branch) == 'Y':
+                if csv_row.get(config.precise_branch) == 'Y' or csv_row.get('dayu200_tdd') == 'Y':
                     target_set.add(csv_row['repoistory'])
         return target_set
+
+    @staticmethod
+    def is_self_build(target, build_module: BuildModuleInterface):
+        change_info_file = 'change_info.json'
+        if not os.path.exists(change_info_file):
+            return True
+        change_info = IoUtil.read_json_file(change_info_file)
+        change_files = []
+        file_operations = {
+            "added": lambda x: x,
+            "rename": lambda x: [item for pair in x for item in pair],
+            "modified": lambda x: x,
+            "deleted": lambda x: x
+        }
+        
+        for value in change_info.values():
+            if value.get("name") != target:
+                continue
+            changed_files = value.get("changed_file_list", {})
+            for op, processor in file_operations.items():
+                if op not in changed_files:
+                    continue
+                if any("include" in f or "interface" in f for f in processor(changed_files[op])):
+                    print(processor(changed_files[op]))
+                    return False
+        return True
 
     @staticmethod
     def get_tdd_build_target(build_target_arg, build_module: BuildModuleInterface):
@@ -188,7 +214,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 continue
             for item in parts_data:
                 if item['name'] == target:
-                    new_targets = [prefix + test_target for test_target in item['buildTarget'].split(',')]
+                    new_targets = ([prefix + test_target for test_target in item['selfTarget'].split(',')]
+                                   if BuildArgsResolver.is_self_build(target, build_module)
+                                   else [prefix + test_target for test_target in item['buildTarget'].split(',')])
                     build_targets.extend(new_targets)
                     break
             else:
@@ -406,6 +434,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             'build_variant', build_module.args_dict['build_variant'].arg_value)
         if target_generator.args_dict['product_name'] == 'rk3568' and not build_module.loader.args_dict['build_xts']:
             target_generator.regist_arg('ohos_components_checktype', 4)
+            target_generator.regist_arg('ohos_interception_rule_switch', 1023)
             
         for gn_args in target_arg.arg_value:
             try:
