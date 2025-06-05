@@ -103,7 +103,7 @@
                 },
                 "darwin": {
                     "x86_64, arm64": {
-                        "remote_url": "/openharmony/compiler/gn/20240416/gn-darwin-x86-20240416.tar.gz",
+                        "remote_url": "/openharmony/compiler/gn/20250529/gn-darwin-x86-20250529.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin"
                     }
                 }
@@ -391,6 +391,110 @@
                         "${install_dir}/install.sh",
                         "--prefix=''",
                         "--destdir=${destdir}"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "libcxx-ndk",
+            "tag": "base",
+            "type": "src, indep",
+            "unzip_filename": "libcxx-ndk",
+            "config": {
+                "linux": {
+                    "arm64": {
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/linux_aarch64/libcxx-ndk_linux-aarch64-3cec00-20250320.tar.gz",
+                        "unzip_filename": "libcxx-ndk",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_linux-aarch64-3cec00-20250320"
+                    },
+                    "x86_64": [
+                        {
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/linux/libcxx-ndk_linux-x86_64-3cec00-20250320.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
+                            "rename_src": "${unzip_dir}/libcxx-ndk_linux-x86_64-3cec00-20250320"
+                        }
+                    ]
+                },
+                "darwin": {
+                    "arm64": {
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/darwin_arm64/libcxx-ndk_darwin-arm64-3cec00-20250320.tar.gz",
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-arm64",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-arm64-3cec00-20250320"
+                    },
+                    "x86_64": {
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-3cec00/darwin_x86_64/libcxx-ndk_darwin-x86_64-3cec00-20250320.tar.gz",
+                        "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-x86_64",
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-x86_64-3cec00-20250320"
+                    }
+                }
+            },
+            "handle": [
+                {
+                    "type": "move",
+                    "src": "${rename_src}",
+                    "dest": "${unzip_dir}/libcxx-ndk"
+                }
+            ]
+        },
+        {
+            "name": "npm_install",
+            "tag": "base",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "npm_install",
+                    "npm_install_path": [
+                        "${code_dir}/developtools/ace_ets2bundle/compiler",
+                        "${code_dir}/developtools/ace_js2bundle/ace-loader",
+                        "${code_dir}/third_party/jsframework",
+                        "${code_dir}/third_party/parse5/packages/parse5",
+                        "${code_dir}/third_party/weex-loader",
+                        "${code_dir}/arkcompiler/ets_frontend/legacy_bin/api8",
+                        "${code_dir}/interface/sdk-js/build-tools",
+                        "${code_dir}/arkcompiler/ets_frontend/arkguard"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "node_modules_copy",
+            "tag": "base",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "node_modules_copy",
+                    "copy_list": [
+                        {
+                            "src": "${code_dir}/third_party/jsframework/node_modules",
+                            "dest": "${code_dir}/prebuilts/build-tools/common/js-framework/node_modules",
+                            "use_symlink": "True"
+                        },
+                        {
+                            "src": "${code_dir}/arkcompiler/ets_frontend/legacy_bin/api8/node_modules",
+                            "dest": "${code_dir}/prebuilts/build-tools/common/ts2abc/node_modules",
+                            "use_symlink": "True"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit",
+                            "dest": "${code_dir}/developtools/ace_ets2bundle/compiler/node_modules/@ohos/hypium",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit",
+                            "dest": "${code_dir}/developtools/ace_js2bundle/ace-loader/node_modules/@ohos/hypium",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit/",
+                            "dest": "${code_dir}/developtools/ace_ets2bundle/compiler/node_modules/hypium/",
+                            "use_symlink": "False"
+                        },
+                        {
+                            "src": "${code_dir}/test/testfwk/arkxtest/jsunit/",
+                            "dest": "${code_dir}/developtools/ace_js2bundle/ace-loader/node_modules/hypium/",
+                            "use_symlink": "False"
+                        }
                     ]
                 }
             ]
