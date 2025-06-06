@@ -460,7 +460,7 @@
         {
             "name": "AGPBinaryCompile",
             "tag": "base",
-            "type": "src",
+            "type": "indep",
             "unzip_filename": "AGPBinaryCompile",
             "config": {
                 "linux": {
