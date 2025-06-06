@@ -47,19 +47,18 @@ def __get_relative_install_dir(categories):
             is_ndk = True
         if cat == "llndk":
             is_llndk = True
-    
+    if is_llndk:
+        return "llndk"
+    if is_ndk:
+        return "ndk"
     if is_chipsetsdk_sp:
         return "chipset-sdk-sp"
     if is_chipsetsdk:
         return "chipset-sdk"
-    if is_llndk:
-        return "llndk"
     if is_passthrough:
         return "passthrough"
     if is_passthrough_indirect:
         return "passthrough/indirect"
-    if is_ndk:
-        return "ndk"
     if is_platforsdk:
         return "platformsdk"
     return ""
