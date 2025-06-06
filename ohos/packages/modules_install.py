@@ -175,6 +175,9 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                         link_path = dest_file.replace(f"{replace_subdir}/{file_name}", f"ndk/{file_name}")
                     else:
                         link_path = dest_file.replace(f"{replace_subdir}/{file_name}", f"platformsdk/{file_name}")
+                    if 'symlink' in module_info:
+                        actual_file_name = module_info.get("symlink")[0]
+                        link_path = link_path.replace(file_name, actual_file_name)
                     if link_path != dest_file:
                         relative_path = os.path.relpath(os.path.dirname(dest_file), os.path.dirname(link_path))
                         os.makedirs(os.path.dirname(link_path), exist_ok=True)
