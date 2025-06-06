@@ -219,23 +219,13 @@ template("ohos_prebuilt_shared_library") {
     foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
       is_ndk = true
     }
-    is_ndk = false
-    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
-      is_ndk = true
-    }
     if (is_ndk) {
       if (is_llndk) {
         softlink_path = ndk_dir
         auto_relative_install_dir = llndk_dir
-      } else if (is_chipsetsdk || is_chipsetsdk_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_dir
-      } else if (is_chipsetsdk_sp || is_chipsetsdk_sp_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_sp_dir
       } else {
         auto_relative_install_dir = ndk_dir
-      }
+      } 
     }
   }
 
@@ -554,23 +544,13 @@ template("ohos_prebuilt_rust_library") {
     foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
       is_ndk = true
     }
-    is_ndk = false
-    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
-      is_ndk = true
-    }
     if (is_ndk) {
       if (is_llndk) {
         softlink_path = ndk_dir
         auto_relative_install_dir = llndk_dir
-      } else if (is_chipsetsdk || is_chipsetsdk_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_dir
-      } else if (is_chipsetsdk_sp || is_chipsetsdk_sp_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_sp_dir
       } else {
         auto_relative_install_dir = ndk_dir
-      }
+      } 
     }
   }
 
