@@ -113,6 +113,18 @@ def run_cmd_live(cmd: list):
         return 1, ""
 
 
+def run_cmd_directly(cmd: list):
+    cmd_str = " ".join(cmd)
+    print(f"run command: {cmd_str}\n")
+    try:
+        subprocess.run(
+            cmd, check=True, stdout=None, stderr=None 
+        )  # 直接输出到终端
+    except subprocess.CalledProcessError as e:
+        print(f"{cmd} execute failed: {e.returncode}")
+        raise e
+
+
 def run_cmd(cmd: list) -> tuple:
     res = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE

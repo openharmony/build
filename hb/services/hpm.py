@@ -31,6 +31,7 @@ from util.system_util import SystemUtil
 from util.component_util import ComponentUtil
 from resources.global_var import CURRENT_OHOS_ROOT, set_hpm_check_info
 from resources.global_var import get_hpm_check_info
+from util.log_util import LogUtil
 
 
 class CMDTYPE(Enum):
@@ -115,6 +116,7 @@ class Hpm(BuildFileGeneratorInterface):
             return
         else:
             self.flags_dict.pop("skip-download")
+            LogUtil.hb_info("Tips: If you want to skip download binary dependencies, please use --skip-download")
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')
@@ -144,7 +146,7 @@ class Hpm(BuildFileGeneratorInterface):
         self._run_hpm_cmd(hpm_update_cmd)
 
     def _run_hpm_cmd(self, cmd, log_path):
-        print("hpm cmd is:", cmd)
+        LogUtil.hb_info(f"Hpm cmd is: {cmd}")
         ret_code = SystemUtil.exec_command(
             cmd,
             log_path=log_path,
