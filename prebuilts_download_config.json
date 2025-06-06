@@ -12,7 +12,10 @@
     "arkcompiler/ets_frontend/ets2panda/driver/build_system",
     "arkcompiler/ets_frontend/ets2panda/linter",
     "arkcompiler/ets_frontend/ets2panda/bindings",
-    "arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts"
+    "arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts",
+    "developtools/ace_ets2bundle/koala-wrapper",
+    "developtools/ace_ets2bundle/arkui-plugins"
+
   ],
   "uninstalled_tools": [
     "prebuilts/build-tools/common/restool"
