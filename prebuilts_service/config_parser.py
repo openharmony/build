@@ -16,6 +16,7 @@ import copy
 import re
 import os
 from common_utils import load_config
+from part_prebuilts_config import get_parts_tag_config
 
 
 class ConfigParser:
@@ -23,7 +24,7 @@ class ConfigParser:
         self.data = load_config(config_file)
         self.current_cpu = global_args.host_cpu
         self.current_os = global_args.host_platform
-        self.input_tag = global_args.tag
+        self.input_tag = "all"
         self.input_type = global_args.type
         self.global_config = {
             "code_dir": global_args.code_dir,
@@ -33,14 +34,17 @@ class ConfigParser:
         download_root = self.global_config["download_root"]
         self.global_config["download_root"] = os.path.abspath(os.path.expanduser(download_root))
 
-    def get_operate(self) -> tuple:
+    def get_operate(self, part_names=None) -> tuple:
         download_op = []
         other_op = []
         tool_list = self.data["tool_list"]
+        parts_configured_tags = get_parts_tag_config(part_names) if part_names else None
+        if parts_configured_tags:
+            self.input_tag = parts_configured_tags
         for tool in tool_list:
             _download, _other = self._get_tool_operate(tool)
             download_op.extend(_download)
-            other_op.extend(_other)
+            other_op.extend(_other) 
         return download_op, other_op
 
     def _get_tool_operate(self, tool) -> tuple:
@@ -199,21 +203,9 @@ class Filter:
         """过滤tag字段"""
         filtered = []
         for config in self.input_configs:
-            tag = config.get("tag")
-            if not tag:
-                filtered.append(config)
-                continue
-            # 配置的tag，转set
-            if isinstance(tag, str):
-                configured_tags = set([t.strip() for t in tag.split(",")])
-            else:
-                configured_tags = set(tag)
-            # 输入的tag，转set
-            input_tags = set([t.strip() for t in input_tag.split(",")])
-
-            # 检查二者是否有交集，有则添加
-            if not input_tags.isdisjoint(configured_tags):
-                filtered.append(config)
+            tool_tag = config["tag"]
+            if input_tag == "all" or tool_tag in input_tag:
+                filtered.append(config)    
         self.input_configs = filtered
         return self
 

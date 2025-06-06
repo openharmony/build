@@ -55,10 +55,10 @@ def _search_bundle_path(part_name: str) -> str:
     bundle_path = None
     try:
         bundle_path = search_bundle_file_from_ccache(part_name)
-        print(f"Searching bundle.json path in ccache, the result for component {part_name} is {bundle_path}")
+        LogUtil.hb_info(f"Searching bundle.json path in ccache")
         if not bundle_path:
             bundle_path = ComponentUtil.search_bundle_file(part_name)
-            print(f"Searching bundle.json path in file, the result for component {part_name} is {bundle_path}")
+            LogUtil.hb_info(f"Searching bundle.json path in source code tree")
         else:
             LogUtil.hb_info(
                 "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
@@ -122,11 +122,11 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 arg_value = IndepBuildArgsResolver.bundle_path_ccache
             else:
                 bundle_path_list = []
-                print("collecting bundle.json, please wait")
+                LogUtil.hb_info("collecting bundle.json, please wait")
                 for part_name in target_arg.arg_value_list:
                     bundle_path = _search_bundle_path(part_name)
                     bundle_path_list.append(bundle_path)
-                print("collect done")
+                LogUtil.hb_info("collect done")
                 arg_value = ','.join(bundle_path_list)
                 IndepBuildArgsResolver.bundle_path_ccache = arg_value
         elif ComponentUtil.is_in_component_dir(os.getcwd()):
@@ -291,3 +291,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 LogUtil.hb_info("Error: ccache command not found")
             except subprocess.CalledProcessError as e:
                 LogUtil.hb_info(f"Failed to execute ccache command: {e}")
+    
+    def resolve_prebuilts_download(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.prebuilts.regist_flag('skip-prebuilts', target_arg.arg_value)
