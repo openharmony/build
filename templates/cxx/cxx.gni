@@ -731,15 +731,9 @@ template("ohos_shared_library") {
       if (is_llndk) {
         softlink_path = ndk_dir
         auto_relative_install_dir = llndk_dir
-      } else if (is_chipsetsdk || is_chipsetsdk_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_dir
-      } else if (is_chipsetsdk_sp || is_chipsetsdk_sp_indirect) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = chipset_sdk_sp_dir
       } else {
         auto_relative_install_dir = ndk_dir
-      }
+      } 
     }
   }
 
