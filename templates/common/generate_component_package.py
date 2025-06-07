@@ -1182,12 +1182,12 @@ def _copy_lib(args, json_data, module):
         if not so_path:
             so_path = json_data.get('out_name')
     if so_path:
-        lib_status = lib_status or copy_so_file(args, module, so_path)
+        lib_status = lib_status or copy_so_file(args, module, so_path, _target_type)
     
     return lib_status
 
 
-def copy_so_file(args, module, so_path):
+def copy_so_file(args, module, so_path, target_type):
     lib_status = False
     out_path = args.get("out_path")
     so_path_with_out_path = os.path.join(out_path, so_path)
@@ -1200,22 +1200,29 @@ def copy_so_file(args, module, so_path):
             so_path_with_toolchain = os.path.join(args.get("out_path"), toolchain_name, so_path)
             unzipped_so_path_with_toolchain = so_path_with_toolchain.replace(".z.", ".")
             if toolchain_name in so_path:
-                lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain) or lib_status
+                lib_status = _copy_file(so_path_with_out_path, lib_out_dir_with_toolchain, target_type) or lib_status
             elif os.path.isfile(so_path_with_toolchain):
-                lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
+                lib_status = _copy_file(so_path_with_toolchain, lib_out_dir_with_toolchain, target_type) or lib_status
             elif os.path.isfile(unzipped_so_path_with_toolchain):
-                lib_status = _copy_file(unzipped_so_path_with_toolchain, lib_out_dir_with_toolchain) or lib_status
-    lib_status = _copy_file(so_path_with_out_path, lib_out_dir) or lib_status
+                lib_status = _copy_file(unzipped_so_path_with_toolchain, lib_out_dir_with_toolchain, target_type) or lib_status
+    lib_status = _copy_file(so_path_with_out_path, lib_out_dir, target_type) or lib_status
     return lib_status
 
 
-def _copy_file(so_path, lib_out_dir):
-    if not os.path.isfile(so_path):
+def _copy_file(so_path, lib_out_dir, target_type=""):
+    if target_type != 'copy' and not os.path.isfile(so_path):
         print("WARNING: {} is not a file!".format(so_path))
         return False
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    shutil.copy(so_path, lib_out_dir)
+    if os.path.exists(lib_out_dir):
+        shutil.rmtree(lib_out_dir)
+    if os.path.isfile(so_path):
+        if not os.path.exists(lib_out_dir):
+            os.makedirs(lib_out_dir)
+            shutil.copy(so_path, lib_out_dir)
+    elif os.path.exists(so_path):
+        dir_name = os.path.basename(so_path)
+        new_lib_out_dir = os.path.join(lib_out_dir, dir_name)
+        shutil.copytree(so_path, new_lib_out_dir)
     return True
 
 
@@ -1442,7 +1449,7 @@ def _generate_other(fp, args, json_data, module):
         so_name = json_data.get('out_name')
         for output in outputs:
             so_name = output.split('/')[-1]
-    if json_data.get('type') == 'copy':
+    if json_data.get('type') == 'copy' and module != 'ipc_core':
         fp.write('  copy_linkable_file = true \n')
     fp.write('  source = "libs/' + so_name + '"\n')
     fp.write('  part_name = "' + args.get("part_name") + '"\n')
