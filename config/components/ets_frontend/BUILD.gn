@@ -15,13 +15,21 @@ import("//build/config/components/ets_frontend/ets2abc_config.gni")
 import("//build/ohos_var.gni")
 
 ohos_copy("ohos_ets_ark_link") {
-  external_deps = static_linker_build_deps
-  sources = [ rebase_path("$static_linker_build_path") ]
+  external_deps = [ static_linker_build_deps ]
+  sources = [ rebase_path("$ark_link_target_out_path") ]
   outputs = [ ohos_ets_ark_link_path ]
 }
 
 ohos_copy("ohos_ets_es2panda") {
-  external_deps = ets2abc_build_deps
-  sources = [ rebase_path("$ets2abc_build_path") ]
+  external_deps = [ ets2abc_build_deps ]
+  sources = [ rebase_path("$ets2panda_target_out_path") ]
   outputs = [ ohos_ets_es2panda_path ]
+}
+
+if (ohos_indep_compiler_enable) {
+  ohos_copy("ohos_ets_stdlib") {
+    external_deps = [ ohos_ets_stdlib_deps ]
+    sources = [ rebase_path("$stdlib_target_out_path") ]
+    outputs = [ ohos_ets_stdlib_path ]
+  }
 }

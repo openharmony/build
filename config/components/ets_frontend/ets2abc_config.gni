@@ -27,40 +27,42 @@ bootpath_json_file = ""
 if (host_toolchain == toolchain_mac) {
   ets2abc_out_root =
       get_label_info("$ets2abc_root:ets2panda($toolchain_mac)", "root_out_dir")
-  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_mac)" ]
+  ets2abc_build_deps = "$ets2abc_root:ets2panda($toolchain_mac)"
   static_linker_out_root =
       get_label_info("$static_linker_root:ark_link($toolchain_mac)",
                      "root_out_dir")
-  static_linker_build_deps = [ "$static_linker_root:ark_link($toolchain_mac)" ]
+  static_linker_build_deps = "$static_linker_root:ark_link($toolchain_mac)"
 } else if (host_toolchain == toolchain_win) {
   ets2abc_out_root =
       get_label_info("$ets2abc_root:ets2panda($toolchain_win)", "root_out_dir")
-  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_win)" ]
+  ets2abc_build_deps = "$ets2abc_root:ets2panda($toolchain_win)"
   static_linker_out_root =
       get_label_info("$static_linker_root:ark_link($toolchain_win)",
                      "root_out_dir")
-  static_linker_build_deps = [ "$static_linker_root:ark_link($toolchain_win)" ]
+  static_linker_build_deps = "$static_linker_root:ark_link($toolchain_win)"
 } else {
   ets2abc_out_root = get_label_info("$ets2abc_root:ets2panda($toolchain_linux)",
                                     "root_out_dir")
-  ets2abc_build_deps = [ "$ets2abc_root:ets2panda($toolchain_linux)" ]
+  ets2abc_build_deps = "$ets2abc_root:ets2panda($toolchain_linux)"
   static_linker_out_root =
       get_label_info("$static_linker_root:ark_link($toolchain_linux)",
                      "root_out_dir")
-  static_linker_build_deps =
-      [ "$static_linker_root:ark_link($toolchain_linux)" ]
+  static_linker_build_deps = "$static_linker_root:ark_link($toolchain_linux)"
 }
 ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
 
+ohos_ets_kits_deps = "sdk:ohos_ets_kits"
 ohos_ets_api_deps = "sdk:ohos_ets_api"
 ohos_ets_arkts_deps = "sdk:ohos_ets_arkts"
+ohos_ets_stdlib_deps = "runtime_core:ohos_ets_stdlib"
 ohos_ets_es2panda_deps =
     "//build/config/components/ets_frontend:ohos_ets_es2panda"
 ohos_ets_ark_link_deps =
     "//build/config/components/ets_frontend:ohos_ets_ark_link"
-ohos_ets_stdlib_deps = "runtime_core:ohos_ets_stdlib"
+ohos_ets_stdlib_deps_inner =
+    "//build/config/components/ets_frontend:ohos_ets_stdlib"
 
 ohos_ets_api_tmp_path = "$root_out_dir/ohos_ets_tmp/api"
 ohos_ets_api_arkui_tmp_path = "$root_out_dir/ohos_ets_tmp/api/arkui/component"
@@ -77,6 +79,21 @@ ohos_ets_ark_link_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/ark_link"
 ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
+
+if (ohos_indep_compiler_enable) {
+  ark_link_target_out_path =
+      get_label_info(static_linker_build_deps, "target_out_dir") +
+      "/clang_x64/libs/ark_link"
+  ets2panda_target_out_path =
+      get_label_info(ets2abc_build_deps, "target_out_dir") +
+      "/clang_x64/libs/es2panda"
+  stdlib_target_out_path =
+      get_label_info(ohos_ets_stdlib_deps, "target_out_dir") + "/libs/stdlib"
+} else {
+  ark_link_target_out_path = "$static_linker_build_path"
+  ets2panda_target_out_path = "$ets2abc_build_path"
+  stdlib_target_out_path = "$ohos_ets_stdlib_path"
+}
 
 bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
 
@@ -103,8 +120,11 @@ template("generate_static_abc") {
       ohos_ets_es2panda_deps,
     ]
     external_deps = external_dependencies
-    external_deps += [ ohos_ets_stdlib_deps ]
-
+    if (ohos_indep_compiler_enable) {
+      deps += [ ohos_ets_stdlib_deps_inner ]
+    } else {
+      external_deps += [ ohos_ets_stdlib_deps ]
+    }
     args = [
       "--es2panda",
       rebase_path("$ohos_ets_es2panda_path"),
@@ -120,6 +140,7 @@ template("generate_static_abc") {
       external_deps += [
         ohos_ets_api_deps,
         ohos_ets_arkts_deps,
+        ohos_ets_kits_deps,
       ]
       args += [
         "--base-url",
