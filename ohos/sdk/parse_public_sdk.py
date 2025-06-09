@@ -72,15 +72,12 @@ def replace_sdk_arkts_dir(source_root: str):
 def remove_system_api_method(source_root: str, nodejs: str):
     tool = os.path.join(source_root, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
-    api_dir = os.path.join(source_root,
-                           API_PATH)
+    api_dir = os.path.join(source_root, API_PATH)
     api_dir = os.path.abspath(api_dir)
-    api_out_dir = os.path.join(source_root,
-                               API_MODIFY_DIR)
+    api_out_dir = os.path.join(source_root, API_MODIFY_DIR)
     api_out_dir = os.path.abspath(api_out_dir)
     nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--input", api_dir,
-                         "--output", api_out_dir], stdout=subprocess.PIPE)
+    p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output", api_out_dir], stdout=subprocess.PIPE)
     p.wait()
 
 
