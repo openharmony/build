@@ -512,6 +512,20 @@
                     ]
                 }
             ]
+        },
+        {
+            "name": "AGPBinaryCompile",
+            "tag": "base",
+            "type": "indep",
+            "unzip_filename": "AGPBinaryCompile",
+            "config": {
+                "linux": {
+                    "x86_64, arm64": {
+                        "remote_url": "/openharmony/compiler/AGP/AGPBinaryCompile-20250604.tar.gz",
+                        "unzip_dir": "${code_dir}/prebuilts/graphics_3d/AGPBinaryCompile"
+                    }
+                }
+            }
         }
     ]
 }
