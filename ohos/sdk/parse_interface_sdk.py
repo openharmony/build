@@ -81,11 +81,9 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
     tool = os.path.join(source_root, INTERFACE_PATH,
                         API_MODIFY_DIR, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
-    api_dir = os.path.join(source_root, out_path,
-                           API_PATH)
+    api_dir = os.path.join(source_root, out_path, API_PATH)
     api_dir = os.path.abspath(api_dir)
-    api_out_dir = os.path.join(source_root, out_path,
-                               API_MODIFY_DIR)
+    api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR)
     api_out_dir = os.path.abspath(api_out_dir)
 
     nodejs = os.path.abspath(nodejs)
@@ -93,7 +91,7 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
                           api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
     p.wait()
 
-    
+
 def compile_package(options, out_path: str):
     tool_path = os.path.abspath(os.path.join(options.root_build_dir, INTERFACE_PATH, API_MODIFY_DIR, PARSE_ETS2_API))
     npm = os.path.abspath(options.npm_path)
@@ -113,12 +111,12 @@ def compile_package(options, out_path: str):
                            shell=False)
     else:
         print("arkui_transformer: tool path does not exist")
-    
+
     return process
 
 
 def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
-    output_sdk_desc_file: str):
+                               output_sdk_desc_file: str):
     info_list = read_json_file(sdk_description_file)
     if sdk_build_arkts != "true":
         arkts_sdk_info_list = []
@@ -153,7 +151,7 @@ def parse_step(options):
 
         convert_permissions(options.root_build_dir, out_path,
                             permission_file, options.node_js)
-        
+
         if sdk_type == "ets2":
             compile_package(options, out_path)
 
@@ -171,7 +169,7 @@ def main():
     options = parser.parse_args()
 
     regenerate_sdk_config_file(options.sdk_build_arkts, options.sdk_description_file,
-        options.output_arkts_sdk_desc_file)
+                               options.output_arkts_sdk_desc_file)
 
     parse_step(options)
 
