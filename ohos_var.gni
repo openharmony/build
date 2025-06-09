@@ -71,6 +71,16 @@ declare_args() {
 
   # chipset passthrough libraries dir
   chipset_passthrough_dir = "chipsetsdk"
+  passthrough_dir = "passthrough"
+  passthrough_indirect_dir = "passthrough/indirect"
+
+  ndk_dir = "ndk"
+  llndk_dir = "llndk"
+  platformsdk_dir = "platformsdk"
+
+  chipset_sdk_dir = "chipset-sdk"
+
+  chipset_sdk_sp_dir = "chipset-sdk-sp"
 
   # check sdk interface
   sdk_interface_check = true
