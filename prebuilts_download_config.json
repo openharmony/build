@@ -322,7 +322,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/linux-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20250606/gn-linux-x86-20250606.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20250610/gn-linux-x86-20250610.tar.gz",
           "unzip_filename": "gn"
         },
         {
