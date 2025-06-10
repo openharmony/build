@@ -60,8 +60,8 @@ def _gen_install_dest(base_dir, module_install_dir, relative_install_dir,
 
 def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, updater_base_dir,
                       updater_vendor_base_dir, sys_prod_base_dir, chip_prod_base_dir,
-                      eng_system_base_dir, eng_chipset_base_dir, source_file_name, install_images,
-                      module_install_dir, relative_install_dir, module_type):
+                      eng_system_base_dir, eng_chipset_base_dir, cloud_rom_base_dir, source_file_name, 
+                      install_images, module_install_dir, relative_install_dir, module_type):
     """Generate module install dir by user config."""
     dests = []
     if module_type == "none":
@@ -94,6 +94,9 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, update
                                      relative_install_dir, module_type)
         elif image == 'eng_chipset':
             dest = _gen_install_dest(eng_chipset_base_dir, module_install_dir,
+                                     relative_install_dir, module_type)
+        elif image == 'cloud_rom':
+            dest = _gen_install_dest(cloud_rom_base_dir, module_install_dir,
                                      relative_install_dir, module_type)
         dests.append(os.path.join(dest, source_file_name))
     return dests
@@ -150,6 +153,7 @@ def main():
     parser.add_argument('--eng_chipset-base-dir', required=True)
     parser.add_argument('--sys_prod-base-dir', required=True)
     parser.add_argument('--chip_prod-base-dir', required=True)
+    parser.add_argument('--cloud_rom-base-dir', required=True)
     parser.add_argument('--label-name', help='module name', required=True)
     parser.add_argument('--target-label', help='target label', required=True)
     parser.add_argument('--type', help='module type', required=True)
@@ -218,7 +222,7 @@ def main():
         install_dests = gen_install_dests(
             args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir, args.updater_base_dir,
             args.updater_vendor_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir,
-            args.eng_system_base_dir, args.eng_chipset_base_dir, source_file_name,
+            args.eng_system_base_dir, args.eng_chipset_base_dir, args.cloud_rom_base_dir, source_file_name,
             args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
 
     module_info_data = gen_module_info(args.type, args.target_label,

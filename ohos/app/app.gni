@@ -352,23 +352,13 @@ template("ohos_app") {
 
   module_label = get_label_info(":${target_name}", "label_with_toolchain")
   _collect_target = "${target_name}__collect"
-  collect_module_target(_collect_target) {
-    forward_variables_from(invoker, [ "install_images" ])
-  }
+  collect_module_target(_collect_target) {}
 
   if (!defined(install_enable)) {
     install_enable = true
   }
 
   if (!_test_target) {
-    if (defined(install_images)) {
-      app_allow_images = [ "system" ]
-      allow_image = filter_exclude(install_images, app_allow_images)
-      assert(
-          allow_image == [],
-          "${module_label} has invaild install_images: ${invoker.install_images}, allowed values: ${app_allow_images}")
-    }
-
     if (defined(module_install_dir)) {
       app_allow_path = [ "app/*" ]
       if (filter_exclude([ module_install_dir ], app_allow_path) != [] ||
