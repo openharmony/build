@@ -55,7 +55,7 @@ def main():
         global_args._create_default_https_context = ssl._create_unverified_context
     global_args.code_dir = get_code_dir()    
 
-    config_file = os.path.join(global_args.code_dir,"build", "prebuilts_config.json")
+    config_file = os.path.join(global_args.code_dir, "build", "prebuilts_config.json")
     if global_args.config_file: 
         config_file = global_args.config_file
     
