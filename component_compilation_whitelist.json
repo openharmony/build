@@ -8549,6 +8549,18 @@
         "//third_party/mindspore/mindspore-src/source/mindspore/lite:mindspore_ndk": [
             "//foundation/ai/neural_network_runtime/"
         ],
+        "//third_party/musl:soft_musl_src_optimize": [
+            "//third_party/optimized-routines/math/",
+            "//third_party/optimized-routines/math/include/"
+        ],
+        "//third_party/musl:soft_musl_src_shared": [
+            "//third_party/optimized-routines/math/",
+            "//third_party/optimized-routines/math/include/"
+        ],
+        "//third_party/musl:soft_musl_src_static": [
+            "//third_party/optimized-routines/math/",
+            "//third_party/optimized-routines/math/include/"
+        ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ]
