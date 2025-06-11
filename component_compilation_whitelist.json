@@ -15239,17 +15239,6 @@
             "//third_party/icu/icu4c:shared_icuuc",
             "//third_party/openssl:libcrypto_shared"
         ],
-        "//developtools/profiler/host/smartperf/client/client_command/test:sp_daemon_ut": [
-            "//third_party/googletest:gtest",
-            "//third_party/libpng:libpng"
-        ],
-        "//developtools/profiler/host/smartperf/client/client_command/test:sp_daemon_ut_resource_copy": [
-            "//third_party/googletest:gtest",
-            "//third_party/libpng:libpng"
-        ],
-        "//developtools/profiler/host/smartperf/client/client_command:SP_daemon": [
-            "//third_party/libpng:libpng"
-        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest",
