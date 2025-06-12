@@ -619,7 +619,7 @@ def _hilog_rust_handle(part_data, module, components_json):
         return public_deps_list
     json_data = _get_json_data(part_data, module)
     _lib_special_handler(part_data.get("part_name"), module, part_data)
-    lib_exists = _copy_lib(part_data, json_data, module)
+    lib_exists, _ = _copy_lib(part_data, json_data, module)
     if lib_exists is False:
         return public_deps_list
     includes = _handle_includes_data(json_data)
@@ -713,7 +713,7 @@ def _hisysevent_rust_handle(part_data, module, components_json):
         return public_deps_list
     json_data = _get_json_data(part_data, module)
     _lib_special_handler(part_data.get("part_name"), module, part_data)
-    lib_exists = _copy_lib(part_data, json_data, module)
+    lib_exists, _ = _copy_lib(part_data, json_data, module)
     if lib_exists is False:
         return public_deps_list
     includes = _handle_includes_data(json_data)
@@ -788,13 +788,13 @@ def _handle_module_runtime_core(args, components_json, module):
         return public_deps_list
     json_data = _get_json_data(args, module)
     _lib_special_handler(args.get("part_name"), module, args)
-    lib_exists = _copy_lib(args, json_data, module)
+    lib_exists, is_ohos_ets_copy = _copy_lib(args, json_data, module)
     if lib_exists is False:
         return public_deps_list
     includes = _handle_includes_data(json_data)
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
-    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list, is_ohos_ets_copy)
     _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 
@@ -1152,9 +1152,11 @@ def replace_default_toolchains_in_output(path, default_toolchain="ohos_clang_arm
 
 def _copy_lib(args, json_data, module):
     so_path = ""
-    lib_status = False
+    lib_status = True
     _target_type = json_data.get('type')
     subsystem_name = args.get("subsystem_name")
+    is_ohos_ets_copy = False
+    ets_outputs = []
 
     # 根据 type 字段和 module 选择正确的 so_path
     if _target_type == 'copy' and module == 'ipc_core':
@@ -1174,17 +1176,23 @@ def _copy_lib(args, json_data, module):
         # 对于非 rust_library 类型，选择不包含 'lib.unstripped' 的路径
         outputs = json_data.get('outputs', [])
         for output in outputs:
-            if '.unstripped' not in output:
+            if 'ohos_ets' in output:
+                is_ohos_ets_copy = True
+                ets_outputs.append(output)
+            elif '.unstripped' not in output:
                 output = replace_default_toolchains_in_output(output)
                 so_path = output
                 break
         # 如果所有路径都包含 'lib.unstripped' 或者没有 outputs，则使用 out_name
         if not so_path:
             so_path = json_data.get('out_name')
-    if so_path:
-        lib_status = lib_status or copy_so_file(args, module, so_path, _target_type)
-    
-    return lib_status
+    if is_ohos_ets_copy:
+        for output in ets_outputs:
+            if not copy_so_file(args, module, output, _target_type):
+                lib_status = False
+    elif so_path:
+        lib_status = copy_so_file(args, module, so_path, _target_type)
+    return lib_status, is_ohos_ets_copy
 
 
 def copy_so_file(args, module, so_path, target_type):
@@ -1343,8 +1351,10 @@ def _copy_readme(args):
             pass
 
 
-def _generate_import(fp):
+def _generate_import(fp, is_ohos_ets_copy=False):
     fp.write('import("//build/ohos.gni")\n')
+    if is_ohos_ets_copy:
+        fp.write('import("//build/templates/common/copy.gni")\n')
 
 
 def _gcc_flags_info_handle(json_data):
@@ -1392,13 +1402,16 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('  }\n')
 
 
-def _generate_prebuilt_target(fp, target_type, module):
+def _generate_prebuilt_target(fp, target_type, module, is_ohos_ets_copy=False):
     if target_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
     elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif module != 'ipc_core' and (target_type == 'etc' or target_type == 'copy'):
-        fp.write('ohos_prebuilt_etc("' + module + '") {\n')
+        if is_ohos_ets_copy:
+            fp.write('ohos_copy("' + module + '") {\n')
+        else:
+            fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     elif target_type == 'rust_library' or target_type == 'rust_proc_macro':
         fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
@@ -1441,19 +1454,37 @@ def _generate_public_deps(fp, module, deps: list, components_json, public_deps_l
     return public_deps_list
 
 
-def _generate_other(fp, args, json_data, module):
+def _find_ohos_ets_dir(outputs):
+    for path in outputs:
+        parts = path.split('/')
+        for part in parts:
+            if "ohos_ets" in part:
+                return '/'.join(parts[:-1])
+    return None
+
+
+def _generate_other(fp, args, json_data, module, is_ohos_ets_copy=False):
     outputs = json_data.get('outputs', [])
-    if json_data.get('type') == 'copy' and module == 'ipc_core':
-        so_name = 'libipc_single.z.so'
+    ohos_ets_dir = _find_ohos_ets_dir(outputs)
+    if is_ohos_ets_copy:
+        sources_arr = [f"libs/{path.split('/')[-1]}" for path in outputs]
+        sources_str = str(sources_arr).replace("'", '"')
+        fp.write(f'  sources = {sources_str}\n')
+        fp.write('  outputs = [ "$root_out_dir/' + ohos_ets_dir + '/{{source_file_part}}" ]\n')
+        fp.write('  part_name = "' + args.get("part_name") + '"\n')
+        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n') 
     else:
-        so_name = json_data.get('out_name')
-        for output in outputs:
-            so_name = output.split('/')[-1]
-    if json_data.get('type') == 'copy' and module != 'ipc_core':
-        fp.write('  copy_linkable_file = true \n')
-    fp.write('  source = "libs/' + so_name + '"\n')
-    fp.write('  part_name = "' + args.get("part_name") + '"\n')
-    fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
+        if json_data.get('type') == 'copy' and module == 'ipc_core':
+            so_name = 'libipc_single.z.so'
+        else:
+            so_name = json_data.get('out_name')
+            for output in outputs:
+                so_name = output.split('/')[-1]
+        if json_data.get('type') == 'copy' and module != 'ipc_core':
+            fp.write('  copy_linkable_file = true \n')
+        fp.write('  source = "libs/' + so_name + '"\n')
+        fp.write('  part_name = "' + args.get("part_name") + '"\n')
+        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
 
 
 def _generate_end(fp):
@@ -1501,21 +1532,21 @@ def _copy_rust_crate_info(fp, json_data):
     fp.write(f'  rust_crate_type = \"{json_data.get("rust_crate_type")}\"\n')
 
 
-def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list):
+def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list, is_ohos_ets_copy=False):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
-    _generate_import(fp)
+    _generate_import(fp, is_ohos_ets_copy)
     _generate_configs(fp, module, json_data, args.get('part_name'))
     _target_type = json_data.get('type')
-    _generate_prebuilt_target(fp, _target_type, module)
+    _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
     _generate_public_configs(fp, module)
     _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list, args)
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
         _generate_rust_deps(fp, json_data, components_json)
-    _generate_other(fp, args, json_data, module)
+    _generate_other(fp, args, json_data, module, is_ohos_ets_copy)
     _generate_end(fp)
     print(f"{module}_generate_build_gn has done ")
     fp.close()
@@ -1602,11 +1633,11 @@ def _handle_module(args, components_json, module):
         return public_deps_list
     json_data = _get_json_data(args, module)
     _lib_special_handler(args.get("part_name"), module, args)
-    _copy_lib(args, json_data, module)
+    libstatus, is_ohos_ets_copy = _copy_lib(args, json_data, module)
     includes = _handle_includes_data(json_data)
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
-    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list, is_ohos_ets_copy)
     _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 

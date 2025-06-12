@@ -25,26 +25,3 @@ ohos_copy("ohos_ets_es2panda") {
   sources = [ rebase_path("$ets2panda_target_out_path") ]
   outputs = [ ohos_ets_es2panda_path ]
 }
-
-if (ohos_indep_compiler_enable) {
-  ohos_copy("ohos_ets_stdlib") {
-    external_deps = [ ohos_ets_stdlib_deps ]
-    sources = [ rebase_path("$stdlib_target_out_path") ]
-    outputs = [ ohos_ets_stdlib_path ]
-  }
-  ohos_copy("ohos_ets_api") {
-    external_deps = [ ohos_ets_api_deps ]
-    sources = [ rebase_path("$api_target_out_path") ]
-    outputs = [ ohos_ets_api_path ]
-  }
-  ohos_copy("ohos_ets_kits") {
-    external_deps = [ ohos_ets_kits_deps ]
-    sources = [ rebase_path("$kits_target_out_path") ]
-    outputs = [ ohos_ets_kits_path ]
-  }
-  ohos_copy("ohos_ets_arkts") {
-    external_deps = [ ohos_ets_arkts_deps ]
-    sources = [ rebase_path("$arkts_target_out_path") ]
-    outputs = [ ohos_ets_arkts_path ]
-  }
-}
