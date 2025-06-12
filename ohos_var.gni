@@ -69,6 +69,9 @@ declare_args() {
   # chip_prod package dir
   chip_prod_base_dir = "chip_prod"
 
+  # cloud_rom package dir
+  cloud_rom_base_dir = "cloud_rom"
+
   # chipset passthrough libraries dir
   chipset_passthrough_dir = "chipsetsdk"
   passthrough_dir = "passthrough"

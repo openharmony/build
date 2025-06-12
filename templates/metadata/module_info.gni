@@ -116,6 +116,8 @@ template("generate_module_info") {
       updater_vendor_base_dir,
       "--chip_prod-base-dir",
       chip_prod_base_dir,
+      "--cloud_rom-base-dir",
+      cloud_rom_base_dir,
       "--type",
       module_type,
       "--target-label",
