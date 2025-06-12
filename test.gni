@@ -188,7 +188,10 @@ template("ohos_unittest") {
     if (defined(invoker.rtti_compile_flag) && invoker.rtti_compile_flag) {
       external_deps += [ "googletest:gtest_rtti_main" ]
     } else {
-      external_deps += [ "googletest:gtest_main" ]
+      external_deps += [
+        "googletest:gtest_main",
+        "googletest:gtest",
+      ]
     }
   }
 }
