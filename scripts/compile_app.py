@@ -222,11 +222,8 @@ def hvigor_write_log(cmd, cwd, env):
 def build_hvigor_cmd(cwd: str, model_version: str, options):
     cmd = ['bash']
     hvigor_version = get_hvigor_version(cwd)
-    if hvigor_version:
-        if options.hvigor_home:
-            cmd.extend([f'{os.path.abspath(options.hvigor_home)}/hvigorw'])
-        else:
-            cmd.extend(['hvigorw'])
+    if options.hvigor_home:
+        cmd.extend([f'{os.path.abspath(options.hvigor_home)}/bin/hvigorw'])
     elif model_version:
         code_home = os.path.dirname(os.path.dirname(options.sdk_home))
         hvigor_home = f"{code_home}/tool/command-line-tools/bin"
@@ -324,7 +321,10 @@ def hvigor_build(cwd: str, options):
     print("[0/0] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
-
+    env['PATH'] = f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}"
+    env['NODE_HOME'] = os.path.dirname(os.path.dirname(os.path.abspath(options.nodejs)))
+    library_path = os.path.join(os.path.abspath(options.sdk_home), '20/ets/ets1.2/build-tools/ets2panda/lib/')
+    env['LD_LIBRARY_PATH'] = library_path
     set_sdk_path(cwd, model_version, options, env)
 
     hvigor_sync(cwd, model_version, env)
