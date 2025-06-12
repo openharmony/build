@@ -359,6 +359,13 @@ template("ohos_app") {
   }
 
   if (!_test_target) {
+    if (defined(install_images)) {
+      app_allow_images = [ "system", "cloud_rom" ]
+      allow_image = filter_exclude(install_images, app_allow_images)
+      assert(
+          allow_image == [],
+          "${module_label} has invaild install_images: ${invoker.install_images}, allowed values: ${app_allow_images}")
+    }
     if (defined(module_install_dir)) {
       app_allow_path = [ "app/*" ]
       if (filter_exclude([ module_install_dir ], app_allow_path) != [] ||
