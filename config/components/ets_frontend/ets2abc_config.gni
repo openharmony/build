@@ -92,21 +92,9 @@ if (ohos_indep_compiler_enable) {
   ets2panda_target_out_path =
       get_label_info(ets2abc_build_deps, "target_out_dir") +
       "/clang_x64/libs/es2panda"
-  stdlib_target_out_path =
-      get_label_info(ohos_ets_stdlib_deps, "target_out_dir") + "/libs/stdlib"
-  api_target_out_path =
-      get_label_info(ohos_ets_api_deps, "target_out_dir") + "/libs/api"
-  kits_target_out_path =
-      get_label_info(ohos_ets_kits_deps, "target_out_dir") + "/libs/kits"
-  arkts_target_out_path =
-      get_label_info(ohos_ets_arkts_deps, "target_out_dir") + "/libs/arkts"
 } else {
   ark_link_target_out_path = "$static_linker_build_path"
   ets2panda_target_out_path = "$ets2abc_build_path"
-  stdlib_target_out_path = "$ohos_ets_stdlib_path"
-  api_target_out_path = "$ohos_ets_api_path"
-  kits_target_out_path = "$ohos_ets_kits_path"
-  arkts_target_out_path = "$ohos_ets_stdlib_path"
 }
 
 bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
@@ -134,11 +122,8 @@ template("generate_static_abc") {
       ohos_ets_es2panda_deps,
     ]
     external_deps = external_dependencies
-    if (ohos_indep_compiler_enable) {
-      deps += [ ohos_ets_stdlib_deps_inner ]
-    } else {
-      external_deps += [ ohos_ets_stdlib_deps ]
-    }
+    external_deps += [ ohos_ets_stdlib_deps ]
+
     args = [
       "--es2panda",
       rebase_path("$ohos_ets_es2panda_path"),
@@ -151,19 +136,11 @@ template("generate_static_abc") {
     ]
 
     if (defined(invoker.base_url)) {
-      if (ohos_indep_compiler_enable) {
-        deps += [
-          ohos_ets_arkts_deps_inner,
-          ohos_ets_kits_deps_inner,
-          ohos_ets_api_deps_inner,
-        ]
-      } else {
-        external_deps += [
-          ohos_ets_api_deps,
-          ohos_ets_arkts_deps,
-          ohos_ets_kits_deps,
-        ]
-      }
+      external_deps += [
+        ohos_ets_api_deps,
+        ohos_ets_arkts_deps,
+        ohos_ets_kits_deps,
+      ]
 
       args += [
         "--base-url",
