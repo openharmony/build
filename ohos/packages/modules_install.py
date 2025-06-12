@@ -292,6 +292,12 @@ def main():
         shutil.rmtree(ramdisk_install_base_dir)
         print('remove ramdisk dir...')
 
+    cloud_rom_install_base_dir = os.path.join(args.platform_installed_path,
+                                            'cloud_rom')
+    if os.path.exists(cloud_rom_install_base_dir):
+        shutil.rmtree(cloud_rom_install_base_dir)
+        print('remove cloud_rom dir...')
+
     print('copy modules...')
     categorized_libraries = load_categorized_libraries(args.categorized_libraries)
     copy_modules(system_install_info, args.install_modules_info_file,
