@@ -1079,7 +1079,20 @@ def _copy_dir(src_path, target_path):
             if not os.path.exists(os.path.join(target_path, file)):
                 shutil.copy2(path, os.path.join(target_path, file))
     return True
-  
+
+
+def _get_target_include(part_name, include):
+    # 需要多层提取include头文件的白名单路径
+    multilayer_include_config_path = os.path.join('build', 'indep_configs', 'config', 'multilayer_include_config.json')
+    with open(multilayer_include_config_path, "r") as f:
+        part_whitch_use_multilayer_include = json.load(f)
+        if part_name in part_whitch_use_multilayer_include:
+            target_include = include.replace("//", "")
+            if target_include.endswith("/"):
+                target_include = target_include[:-1]
+            return target_include
+        else:
+            return ""
 
 
 def _copy_includes(args, module, includes: list):
@@ -1101,19 +1114,27 @@ def _copy_includes(args, module, includes: list):
         else:
             continue
         for include in includes:
+            relative_target_include = _get_target_include(args.get("part_name"), include)
+            toolchain_real_include_out_dir = os.path.join(toolchain_includes_out_dir, relative_target_include)
+            if not os.path.exists(toolchain_real_include_out_dir):
+                os.makedirs(toolchain_real_include_out_dir)
             part_path = args.get("part_path")
             _sub_include = include.split(f"{part_path}/")[-1]
             split_include = include.split("//")[1]
             real_include_path = os.path.join(args.get("root_path"), split_include)
-            _copy_dir(real_include_path, toolchain_includes_out_dir)
+            _copy_dir(real_include_path, toolchain_real_include_out_dir)
     if not os.path.exists(includes_out_dir):
         os.makedirs(includes_out_dir)
     for include in includes:
+        relative_target_include = _get_target_include(args.get("part_name"), include)
+        includes_real_out_dir = os.path.join(includes_out_dir, relative_target_include)
+        if not os.path.exists(includes_real_out_dir):
+                os.makedirs(includes_real_out_dir)
         part_path = args.get("part_path")
         _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
         real_include_path = os.path.join(args.get("root_path"), split_include)
-        _copy_dir(real_include_path, includes_out_dir)
+        _copy_dir(real_include_path, includes_real_out_dir)
     print("_copy_includes has done ")
 
 
@@ -1379,10 +1400,19 @@ def _gcc_flags_info_handle(json_data):
 
 
 def _generate_configs(fp, module, json_data, _part_name):
+    includes = _handle_includes_data(json_data)
+    target_includes = []
+
     fp.write('\nconfig("' + module + '_configs") {\n')
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
-    fp.write('    "includes",\n')
+    for include in includes:
+        target_include = _get_target_include(_part_name, include)
+        if target_include not in target_includes:
+            target_includes.append(target_include)
+    for include_dir in target_includes:
+        include_dir = os.path.join('includes', include_dir)
+        fp.write('    "{}",\n'.format(include_dir))
     if module == 'ability_runtime':
         fp.write('    "includes/context",\n')
         fp.write('    "includes/app",\n')
