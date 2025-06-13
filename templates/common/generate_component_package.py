@@ -1129,7 +1129,7 @@ def _copy_includes(args, module, includes: list):
         relative_target_include = _get_target_include(args.get("part_name"), include)
         includes_real_out_dir = os.path.join(includes_out_dir, relative_target_include)
         if not os.path.exists(includes_real_out_dir):
-                os.makedirs(includes_real_out_dir)
+            os.makedirs(includes_real_out_dir)
         part_path = args.get("part_path")
         _sub_include = include.split(f"{part_path}/")[-1]
         split_include = include.split("//")[1]
