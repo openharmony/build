@@ -24,8 +24,8 @@ sys.path.append(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file, write_json_file
 
-OUT_ROOT_LIST = ["out/sdk-interface/ets1.1/sdk-js",
-                 "out/sdk-interface/ets1.2/sdk-js"]
+OUT_ROOT_LIST = ["ets1.1/sdk-js",
+                 "ets1.2/sdk-js"]
 OUT_SDK_TYPE = ["ets", "ets2"]
 OUT_PERMISSION_FILE = ["permissions.d.ts", "permissions.d.ets"]
 INTERFACE_PATH = "interface/sdk-js"
@@ -78,8 +78,7 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
 
 def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
 
-    tool = os.path.join(source_root, INTERFACE_PATH,
-                        API_MODIFY_DIR, API_MODIFY_TOOL)
+    tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
     api_dir = os.path.join(source_root, out_path,
                            API_PATH)
@@ -100,7 +99,7 @@ def compile_package(options, out_path: str):
     package_path = os.path.abspath(os.path.join(tool_path, PACKAGE_PATH))
     nodejs = os.path.abspath(options.node_js)
     input_dir = os.path.abspath(os.path.join(options.root_build_dir, out_path, "api/@internal/component/ets"))
-    output = os.path.abspath(os.path.join(options.root_build_dir, "out/arkui_transformer_api"))
+    output = os.path.abspath(os.path.join(options.output_interface_sdk, "arkui_transformer_api"))
     custom_env = {
         'PATH': f"{os.path.dirname(os.path.abspath(options.node_js))}:{os.environ.get('PATH')}",
         'NODE_HOME': os.path.dirname(os.path.abspath(options.node_js)),
@@ -138,8 +137,9 @@ def parse_step(options):
     for i, out_path in enumerate(OUT_ROOT_LIST):
         sdk_type = OUT_SDK_TYPE[i]
         permission_file = OUT_PERMISSION_FILE[i]
-        copy_arkts_api_method(options.root_build_dir,
-                              out_path, options.node_js, sdk_type)
+        out_path = os.path.join(options.output_interface_sdk, out_path)
+        out_path = os.path.relpath(out_path, options.root_build_dir)
+        copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type)
 
         if options.sdk_build_public == "true":
             remove_system_api_method(
@@ -167,6 +167,7 @@ def main():
     parser.add_argument('--sdk-build-public', required=True)
     parser.add_argument('--sdk-build-arkts', required=True)
     parser.add_argument('--npm-path', required=True)
+    parser.add_argument('--output-interface-sdk', required=True)
 
     options = parser.parse_args()
 
