@@ -443,6 +443,11 @@
           "unzip_filename": "linux-x86"
         },
         {
+          "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.11.4/windows/python-mingw-x86-3.11.4_20250617.tar.gz",
+          "unzip_filename": "windows-x86"
+        },
+        {
           "unzip_dir": "prebuilts/develop_tools",
           "file_path": "/openharmony/develop_tools/bpftool_v5.10.93_20221114.tar.gz",
           "unzip_filename": "bpftool"
