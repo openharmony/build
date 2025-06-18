@@ -336,8 +336,9 @@ group("soft_shared_libs") {
 def generate_group_musl_headers_block():
     return """
 group("musl_headers") {
-  public_deps = [
+  public_configs = [
     ":musl_common_configs",
+    ":soft_libxnet_configs",
   ]
 }
     """
@@ -379,6 +380,18 @@ def copy_musl_libs_includes(musl_obj_path, innerapi_target_path):
             shutil.copytree(src_folder_path, dst_folder_path_3, dirs_exist_ok=True)
 
 
+def write_musl_bundle(musl_bundle_path):
+    # 向musl的bundle.json文件里写入下面的接口
+    additional_innerkits = [{"name": "//third_party/musl:soft_shared_libs"}, 
+                            {"name": "//third_party/musl:musl_headers"}]
+    with open(musl_bundle_path, "r") as file:
+        musl_bundle_content = json.load(file)
+    musl_innerkits = musl_bundle_content["component"]["build"]["inner_kits"]
+    musl_innerkits.extend(additional_innerkits)
+    with open(musl_bundle_path, "w", encoding='utf-8') as file:
+        json.dump(musl_bundle_content, file, ensure_ascii=False, indent=2) 
+
+
 def process_musl(part_data, parts_path_info, part_name, subsystem_name, components_json):
     musl_obj_path = os.path.join(part_data.get('out_path'), 'obj', 'third_party', 'musl', 'usr')
     musl_dst_path = os.path.join(part_data.get('out_path'), 'component_package', 'third_party', 'musl')
@@ -408,6 +421,8 @@ def process_musl(part_data, parts_path_info, part_name, subsystem_name, componen
     _public_deps_list = []
     # ... Additional logic for processing modules, copying docs, and finishing the component build ...
     _copy_required_docs(part_data, _public_deps_list)
+    musl_bundle_path = os.path.join(musl_dst_path, "bundle.json")
+    write_musl_bundle(musl_bundle_path)
     _finish_component_build(part_data)
 
 
@@ -578,6 +593,33 @@ def process_developer_test(part_data, parts_path_info, part_name, subsystem_name
 
     _copy_license(part_data)
     _copy_readme(part_data)
+    _finish_component_build(part_data)
+
+
+def process_skia(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    skia_piex_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'piex')
+    skia_libjpeg_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'libjpeg-turbo')
+    skia_component_piex_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'piex', 'includes')
+    skia_component_libjpeg_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'libjpeg', 'includes')
+    copy_directory_contents(skia_piex_path, skia_component_piex_path)
+    copy_directory_contents(skia_libjpeg_path, skia_component_libjpeg_path)
+
+    part_path = _get_parts_path(parts_path_info, part_name)
+    if part_path is None:
+        return
+    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
+                      "part_path": part_path})
+    modules = _parse_module_list(part_data)
+    if len(modules) == 0:
+        return
+    is_component_build = False
+    _public_deps_list = []
+    for module in modules:
+        module_deps_list = _handle_module(part_data, components_json, module)
+        if module_deps_list:
+            _public_deps_list.extend(module_deps_list)
+            is_component_build = True
+    _copy_required_docs(part_data, _public_deps_list)
     _finish_component_build(part_data)
 
 
@@ -917,6 +959,7 @@ function_map = {
     "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
     "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
     "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
+    "skia": process_skia,
 }
 
 
@@ -1814,6 +1857,7 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
         "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
         "drivers_interface_usb",  # 同驱动
         "drivers_interface_ril",  # 同驱动
+        "skia",
     ]:
         _process_part(args, parts_path_info, part_name, subsystem_name, components_json)
     else:
