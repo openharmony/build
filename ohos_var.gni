@@ -31,8 +31,9 @@ declare_args() {
   sdk_build_public = false
   sdk_build_arkts = false
   use_current_sdk = false
-  interface_sdk_path_ets1 = "//out/sdk-interface/ets1.1/sdk-js"
-  interface_sdk_path_ets2 = "//out/sdk-interface/ets1.2/sdk-js"
+  interface_sdk_path = "${root_out_dir}/sdk-interface"
+  interface_sdk_path_ets1 = "${root_out_dir}/sdk-interface/ets1.1/sdk-js"
+  interface_sdk_path_ets2 = "${root_out_dir}/sdk-interface/ets1.2/sdk-js"
 }
 
 declare_args() {
