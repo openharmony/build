@@ -133,8 +133,7 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
   ]
   subsystem_name = "build"
   part_name = "build_framework"
-  innerapi_tags = [ "chipsetsdk" ]
-  relative_install_dir = ""
+  innerapi_tags = [ "chipsetsdk_sp" ]
 }
 
 copy("musl-libcxx_unstripped_copy") {

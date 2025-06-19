@@ -36,6 +36,7 @@ ohos_prebuilt_shared_library("libc++_shared.so") {
   install_images = [ "system" ]
   subsystem_name = "build"
   part_name = "build_framework"
+  innerapi_tags = [ "chipsetsdk_sp" ]
   relative_install_dir = ""
 }
 
