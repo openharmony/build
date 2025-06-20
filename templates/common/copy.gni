@@ -223,6 +223,7 @@ template("ohos_copy") {
                              [
                                "testonly",
                                "visibility",
+                               "public_deps",
                                "external_deps",
                                "public_external_deps",
                                "public_configs",
