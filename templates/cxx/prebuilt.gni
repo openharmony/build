@@ -336,8 +336,8 @@ template("ohos_prebuilt_static_library") {
                            [
                              "testonly",
                              "visibility",
-
                              "deps",
+                             "public_deps",
                              "external_deps",
                              "public_external_deps",
                              "public_configs",
