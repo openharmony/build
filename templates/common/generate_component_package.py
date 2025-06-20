@@ -1213,7 +1213,44 @@ def _copy_lib(args, json_data, module):
                 lib_status = False
     elif so_path:
         lib_status = copy_so_file(args, module, so_path, _target_type)
+    if lib_status and _target_type == 'static_library':
+        copy_static_deps_file(args, json_data.get('label'), module, so_path)
     return lib_status, is_ohos_ets_copy
+
+
+def _do_copy_static_deps_file(args, module, out_path, lib_path):
+    lib_status = False
+    static_lib_path = os.path.join(out_path, lib_path)
+    lib_out_dir = os.path.join(out_path, "component_package",
+                                   args.get("part_path"), "innerapis", module, "libs", "deps")
+    lib_status = _copy_file(static_lib_path, lib_out_dir) or lib_status
+    return lib_status
+
+
+def is_not_basic_lib(lib_path):
+    if "obj/third_party/musl" in lib_path or "prebuilts/clang" in lib_path:
+        return False
+    else:
+        return True
+
+
+def copy_static_deps_file(args, label, module, so_path):
+    lib_status = False
+    out_path = args.get("out_path")
+    ninja_file = os.path.join(out_path, "obj", (label.split(':')[0]).split('//')[1], label.split(':')[1] + ".ninja")
+    prefix = "build " + so_path
+    deps_libs = []
+    with open(ninja_file, 'r') as f:
+        for line in f:
+            if line.strip().startswith(prefix):
+                deps_libs = line.strip().split(' ')
+    print("copy static deps: ", end="")
+    for lib in deps_libs:
+        if lib.endswith(".a") and lib != so_path and is_not_basic_lib(lib):
+            print(os.path.basename(lib), end=", ")
+            lib_status = _do_copy_static_deps_file(args, module, out_path, lib) or lib_status
+    print()
+    return lib_status
 
 
 def copy_so_file(args, module, so_path, target_type):
@@ -1239,6 +1276,14 @@ def copy_so_file(args, module, so_path, target_type):
 
 
 def _copy_file(so_path, lib_out_dir, target_type=""):
+    if lib_out_dir.endswith("deps") or lib_out_dir.endswith("deps/"):
+        if not os.path.isfile(so_path):
+            print("WARNING: {} is not a file!".format(so_path))
+            return False
+        if not os.path.exists(lib_out_dir):
+            os.makedirs(lib_out_dir)
+        shutil.copy(so_path, lib_out_dir)
+        return True
     if target_type != 'copy' and not os.path.isfile(so_path):
         print("WARNING: {} is not a file!".format(so_path))
         return False
@@ -1562,9 +1607,38 @@ def _copy_rust_crate_info(fp, json_data):
     fp.write(f'  rust_crate_type = \"{json_data.get("rust_crate_type")}\"\n')
 
 
+def _generate_static_deps(fp, deps: list):
+    if not deps:
+        return
+    fp.write('  public_deps = [\n')
+    for dep in deps:
+        fp.write(f"""    ":{dep}", \n""")
+    fp.write('  ]\n')
+
+
+def _get_deps_static_lib(args, module):
+    files = []
+    static_deps_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
+                           "innerapis", module, "libs", "deps")
+    if os.path.exists(static_deps_path):
+        files = [f for f in os.listdir(static_deps_path) if os.path.isfile(os.path.join(static_deps_path, f))]
+    return files
+
+
+def _generate_inner_static_deps(fp, args, deps: list):
+    for dep in deps:
+        fp.write('\n')
+        fp.write('ohos_prebuilt_static_library("' + dep + '") {\n')
+        fp.write('  source = "libs/deps/' + dep + '"\n')
+        fp.write('  part_name = "' + args.get("part_name") + '"\n')
+        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
+        fp.write('}')
+
+
 def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list, is_ohos_ets_copy=False):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
+    static_deps_files = _get_deps_static_lib(args, module)
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
     _generate_import(fp, is_ohos_ets_copy)
@@ -1573,11 +1647,13 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
     _generate_public_configs(fp, module)
     _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list, args)
+    _generate_static_deps(fp, static_deps_files)
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
         _generate_rust_deps(fp, json_data, components_json)
     _generate_other(fp, args, json_data, module, is_ohos_ets_copy)
     _generate_end(fp)
+    _generate_inner_static_deps(fp, args, static_deps_files)
     print(f"{module}_generate_build_gn has done ")
     fp.close()
     return _list
