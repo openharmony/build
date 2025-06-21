@@ -239,12 +239,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-linux-x86_64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-linux-x86_64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-windows-x86_64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-windows-x86_64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -439,12 +439,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-linux-x86_64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-linux-x86_64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-windows-x86_64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-windows-x86_64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -616,7 +616,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-darwin-arm64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-darwin-arm64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
@@ -662,7 +662,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.31.1/taihe-darwin-x86_64-v0.31.1-20250610.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-darwin-x86_64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
