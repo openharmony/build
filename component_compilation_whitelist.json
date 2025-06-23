@@ -5298,72 +5298,6 @@
         "//base/web/webview/interfaces/kits/napi/js:webview_abc": [
             "//arkcompiler/ets_frontend/es2panda:es2panda"
         ],
-        "//commonlibrary/c_utils/base/test/unittest/rust:rust_utils_directory_test": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//commonlibrary/c_utils/base/test/unittest/rust:rust_utils_directory_test_resource_copy": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//commonlibrary/c_utils/base/test/unittest/rust:rust_utils_file_test": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//commonlibrary/c_utils/base/test/unittest/rust:rust_utils_file_test_resource_copy": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//commonlibrary/c_utils/base:utils_rust": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//commonlibrary/c_utils/base:utils_static_cxx_rust": [
-            "//third_party/rust/crates/cxx:cxx_cppdeps"
-        ],
-        "//commonlibrary/rust/ylong_http/ylong_http_client:rust_ylong_http_client_test_ut": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_http/ylong_http_client:rust_ylong_http_client_test_ut_resource_copy": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_http/ylong_http_client:ylong_http_client_inner": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_json:lib": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_json:rust_ylong_json_unit_test": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_json:rust_ylong_json_unit_test_resource_copy": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_runtime_test_sdv": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_runtime_test_sdv_resource_copy": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_runtime_test_ut": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_runtime_test_ut_resource_copy": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_signal_test_sdv": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/test:rust_ylong_signal_test_sdv_resource_copy": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/ylong_io:ylong_io": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/ylong_runtime:ylong_runtime": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/ylong_runtime:ylong_runtime_static": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//commonlibrary/rust/ylong_runtime/ylong_signal:ylong_signal": [
-            "//third_party/rust/crates/libc:lib"
-        ],
         "//developtools/packing_tool/packing_tool/frameworks/test/unittest/app_packager_test/appPackagerHapTest:appPackagerHapTest": [
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
         ],
@@ -7933,9 +7867,6 @@
         "//foundation/filemanagement/app_file_service/test/unittest/resource/bundle_dependencies/fileShareB:fileshareb__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
-        "//foundation/filemanagement/file_api/interfaces/kits/rust:rust_file": [
-            "//third_party/rust/crates/libc:lib"
-        ],
         "//foundation/filemanagement/user_file_service/services:external_file_manager_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
@@ -8093,24 +8024,6 @@
         "//foundation/resourceschedule/work_scheduler/interfaces/test/unittest/work_scheduler_jsunittest:WorkSchedulerJsTest__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
-        "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/rust/tests:rust_safwk_ut_test": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/rust/tests:rust_safwk_ut_test_resource_copy": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/rust:system_ability_fwk_rust": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//foundation/systemabilitymgr/safwk/interfaces/innerkits/safwk/rust:system_ability_fwk_rust_cxx": [
-            "//third_party/rust/crates/cxx:cxx_cppdeps"
-        ],
-        "//foundation/systemabilitymgr/samgr/interfaces/innerkits/rust:samgr_rust": [
-            "//third_party/rust/crates/cxx:lib"
-        ],
-        "//foundation/systemabilitymgr/samgr/interfaces/innerkits/rust:samgr_rust_cpp": [
-            "//third_party/rust/crates/cxx:cxx_cppdeps"
-        ],
         "//test/ostest/wukong/test:wukong_ut": [
             "//third_party/googletest:gtest",
             "//third_party/libpng:libpng"
@@ -8209,12 +8122,6 @@
         ],
         "//third_party/jsframework:gen_snapshot": [
             "//third_party/css-what:css_what_sources"
-        ],
-        "//third_party/rust/crates/rust-openssl/openssl-sys:lib_sys": [
-            "//third_party/rust/crates/libc:lib"
-        ],
-        "//third_party/rust/crates/rust-openssl/openssl:lib": [
-            "//third_party/rust/crates/libc:lib"
         ],
         "//vendor/hihope/rk3568/hals/audio:hdi_service_st": [
             "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
