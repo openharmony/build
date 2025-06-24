@@ -25,8 +25,10 @@ from common_utils import (
     install_hpm_in_other_platform,
     npm_install,
     is_system_component,
+    get_code_dir,
 )
 import re
+import platform
 
 
 class OperateHanlder:
@@ -185,3 +187,42 @@ class OperateHanlder:
                 shutil.copytree(src_dir, dest_dir, symlinks=True)
                 print(f"copy {src_dir} ---> dest: {dest_dir}")
             
+    @staticmethod
+    def _download_sdk(operate: dict):
+        # 获取操作系统信息
+        system = platform.system()
+        if system == "Linux":
+            host_platform = "linux"
+        elif system == "Darwin":
+            host_platform = "darwin"
+        else:
+            print(f"Unsupported host platform: {system}")
+            exit(1)
+
+        # 获取 CPU 架构信息
+        machine = platform.machine()
+        if machine == "arm64":
+            host_cpu_prefix = "arm64"
+        elif machine == "aarch64":
+            host_cpu_prefix = "aarch64"
+        else:
+            host_cpu_prefix = "x86"
+
+        # 假设 code_dir 是当前目录，可根据实际情况修改
+        code_dir = get_code_dir()
+        prebuilts_python_dir = os.path.join(code_dir, "prebuilts", "python", f"{host_platform}-{host_cpu_prefix}")
+        python_dirs = [os.path.join(prebuilts_python_dir, d) for d in os.listdir(prebuilts_python_dir) if os.path.isdir(os.path.join(prebuilts_python_dir, d))]
+        python_dirs.sort(reverse=True)
+        if python_dirs:
+            python_path = os.path.join(python_dirs[0], "bin")
+        else:
+            raise Exception("python path not exist")
+        ohos_sdk_linux_dir = os.path.join(code_dir, "prebuilts", "ohos-sdk", "linux")
+        if not os.path.isdir(ohos_sdk_linux_dir):
+            python_executable = os.path.join(python_path, "python3")
+            script_path = os.path.join(code_dir, "build", "scripts", "download_sdk.py")
+            try:
+                subprocess.run([python_executable, script_path, "--branch", "master", "--product-name", operate.get("sdk_name"), "--api-version", str(operate.get("version"))], check=True)
+
+            except subprocess.CalledProcessError as e:
+                print(f"Error running download_sdk.py: {e}")
