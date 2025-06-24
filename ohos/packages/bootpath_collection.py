@@ -42,7 +42,7 @@ class BootPathCollection():
         abc_set = set(current_value.split(":")) if current_value else set()
         abc_set.update(file_list)
 
-        fix_path = ":".join(str(fix_order_dict.get(key, "")) for key in fix_order_dict.keys())
+        fix_path = ":".join(str(fix_order_dict.get(key, "")) for key in fix_order_dict.keys() if fix_order_dict[key] != "")
         data["bootpath"] = fix_path + ":" + ":".join(abc_set)
 
         os.makedirs(directory, exist_ok=True)
