@@ -41,10 +41,6 @@ ARKTS_PATH = "arkts"
 ARKTS_GEN_PATH = "build-tools/arkts"
 PARSE_ETS2_API = "arkui_transformer"
 PACKAGE_PATH = "build/arkui_transformer.js"
-TYPE_MODIFY_TOOL = "intToNumber.js"
-TYPE_CHANGE_DIR = "type-change"
-TYPE_CHANGE_API_GEN_PATH = "build-tools/type-change/api"
-TYPE_CHANGE_ARKTS_GEN_PATH = "build-tools/type-change/arkts"
 
 
 def copy_sdk_interface(source_root: str, out_path: str):
@@ -111,22 +107,6 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
     else:
         arkts_sdk_info_list = info_list
     write_json_file(output_sdk_desc_file, arkts_sdk_info_list)
-    
-
-def change_int_to_number(source_root: str, out_path: str, nodejs: str, sdk_type: str):
-
-    tool = os.path.join(source_root, INTERFACE_PATH,
-                        API_MODIFY_DIR, TYPE_MODIFY_TOOL)
-    tool = os.path.abspath(tool)
-    api_dir = os.path.join(source_root, out_path)
-    api_dir = os.path.abspath(api_dir)
-    api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR, TYPE_CHANGE_DIR)
-    api_out_dir = os.path.abspath(api_out_dir)
-
-    nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--path", api_dir, "--output",
-                          api_out_dir], stdout=subprocess.PIPE)
-    p.wait()
 
 
 def compile_package(options, out_path: str):
@@ -173,14 +153,6 @@ def parse_step(options):
         convert_permissions(options.root_build_dir, out_path,
                             permission_file, options.node_js)
         
-        if sdk_type == "ets":
-            change_int_to_number(
-                options.root_build_dir, out_path, options.node_js, sdk_type)
-            replace_sdk_dir(options.root_build_dir, os.path.join(
-                out_path, TYPE_CHANGE_API_GEN_PATH), os.path.join(out_path, API_PATH))
-            replace_sdk_dir(options.root_build_dir, os.path.join(
-                out_path, TYPE_CHANGE_ARKTS_GEN_PATH), os.path.join(out_path, ARKTS_PATH))
-
         if sdk_type == "ets2":
             compile_package(options, out_path)
 
