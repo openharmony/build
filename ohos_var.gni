@@ -125,7 +125,7 @@ declare_args() {
   osp_scan_dirs = "third_party:kernel:device:drivers"
 
   # sepcify opensource scan license, separated by a colon
-  osp_scan_licenses = "GPL:LGPL"
+  osp_scan_licenses = "GPL:LGPL:MPL:EPL:CDDL"
 
   # Collecting but not pacaking open-source packages for post processing
   osp_only_collect_file = false
