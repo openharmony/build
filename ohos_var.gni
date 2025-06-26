@@ -34,6 +34,8 @@ declare_args() {
   interface_sdk_path = "${root_out_dir}/sdk-interface"
   interface_sdk_path_ets1 = "${root_out_dir}/sdk-interface/ets1.1/sdk-js"
   interface_sdk_path_ets2 = "${root_out_dir}/sdk-interface/ets1.2/sdk-js"
+  interface_sdk_path_ets1_interop = "${root_out_dir}/sdk-interface/ets1.1interop"
+  interface_sdk_path_ets2_interop = "${root_out_dir}/sdk-interface/ets1.2interop"
 }
 
 declare_args() {
