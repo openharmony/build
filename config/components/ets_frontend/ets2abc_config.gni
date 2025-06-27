@@ -218,8 +218,17 @@ template("generate_static_abc") {
       if (defined(invoker.package)) {
         args += [
           "--package",
-          rebase_path(invoker.package),
+          invoker.package,
         ]
+      }
+
+      if (defined(invoker.paths_keys) && defined(invoker.paths_values)) {
+        args += [ "--paths-keys" ] + invoker.paths_keys
+        paths_values = []
+        foreach(path, invoker.paths_values) {
+          paths_values += [ rebase_path(path) ]
+        }
+        args += [ "--paths-values" ] + paths_values
       }
     } else if (defined(invoker.base_url)) {
       external_deps += [
