@@ -774,7 +774,7 @@ def _generate_runtime_core_build_gn():
     _generate_configs(fp, module)
     _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
     _generate_public_configs(fp, module)
-    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list)
+    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list)
     _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     print("_generate_build_gn has done ")
@@ -1218,11 +1218,11 @@ def _copy_lib(args, json_data, module):
     return lib_status, is_ohos_ets_copy
 
 
-def _do_copy_static_deps_file(args, module, out_path, lib_path):
+def _do_copy_static_deps_file(args, out_path, lib_path, toolchain):
     lib_status = False
     static_lib_path = os.path.join(out_path, lib_path)
     lib_out_dir = os.path.join(out_path, "component_package",
-                                   args.get("part_path"), "innerapis", module, "libs", "deps")
+                                   args.get("part_path"), "common", toolchain, "deps")
     lib_status = _copy_file(static_lib_path, lib_out_dir) or lib_status
     return lib_status
 
@@ -1234,22 +1234,35 @@ def is_not_basic_lib(lib_path):
         return True
 
 
-def copy_static_deps_file(args, label, module, so_path):
-    lib_status = False
-    out_path = args.get("out_path")
-    ninja_file = os.path.join(out_path, "obj", (label.split(':')[0]).split('//')[1], label.split(':')[1] + ".ninja")
-    prefix = "build " + so_path
-    deps_libs = []
+def read_deps_from_ninja_file(ninja_file, prefix):
+    print("ninja file: ", ninja_file)
     with open(ninja_file, 'r') as f:
         for line in f:
             if line.strip().startswith(prefix):
                 deps_libs = line.strip().split(' ')
-    print("copy static deps: ", end="")
-    for lib in deps_libs:
-        if lib.endswith(".a") and lib != so_path and is_not_basic_lib(lib):
-            print(os.path.basename(lib), end=", ")
-            lib_status = _do_copy_static_deps_file(args, module, out_path, lib) or lib_status
-    print()
+                return deps_libs
+    return []
+
+
+def copy_static_deps_file(args, label, module, so_path):
+    toolchains = set(args.get("toolchain_info").keys())
+    toolchains.add("")
+    lib_status = False
+    out_path = args.get("out_path")
+    for toolchain in toolchains:
+        ninja_file = os.path.join(out_path, toolchain, "obj", (label.split(':')[0]).split('//')[1], label.split(':')[1] + ".ninja")
+        if not os.path.exists(ninja_file):
+            continue
+        prefix = "build " + os.path.join(toolchain, so_path)
+        deps_libs = read_deps_from_ninja_file(ninja_file, prefix)
+        static_deps = []
+        toolchain_module = toolchain + "_" + module
+        for lib in deps_libs:
+            if lib.endswith(".a") and lib != so_path and is_not_basic_lib(lib):
+                static_deps.append(os.path.basename(lib))
+                lib_status = _do_copy_static_deps_file(args, out_path, lib, toolchain) or lib_status
+        args.get("static_deps")[toolchain_module] = static_deps
+        print("copy static deps: ", static_deps)
     return lib_status
 
 
@@ -1276,6 +1289,7 @@ def copy_so_file(args, module, so_path, target_type):
 
 
 def _copy_file(so_path, lib_out_dir, target_type=""):
+    # 处理静态库依赖
     if lib_out_dir.endswith("deps") or lib_out_dir.endswith("deps/"):
         if not os.path.isfile(so_path):
             print("WARNING: {} is not a file!".format(so_path))
@@ -1514,7 +1528,7 @@ def _public_deps_special_handler(module, args):
     return _DEPENDENCIES_MAP.get((_part_name, module), [])
 
 
-def _generate_public_deps(fp, module, deps: list, components_json, public_deps_list: list, args):
+def _generate_public_external_deps(fp, module, deps: list, components_json, public_deps_list: list, args):
     fp.write('  public_external_deps = [\n')
     for dep in deps:
         public_external_deps = _get_public_external_deps(components_json, dep)
@@ -1607,38 +1621,56 @@ def _copy_rust_crate_info(fp, json_data):
     fp.write(f'  rust_crate_type = \"{json_data.get("rust_crate_type")}\"\n')
 
 
-def _generate_static_deps(fp, deps: list):
+def _get_static_deps(args, module, toolchain):
+    default_toolchain_module = toolchain + "_" + module
+    return args.get("static_deps").get(default_toolchain_module, [])
+
+
+def _generate_static_public_deps_string(args, deps: list, toolchain: str):
+    public_deps_str = ""
     if not deps:
-        return
-    fp.write('  public_deps = [\n')
+        return ""
+    public_deps_str += '  public_deps = [\n'
     for dep in deps:
-        fp.write(f"""    ":{dep}", \n""")
-    fp.write('  ]\n')
+        public_deps_str += f"""    ":{dep}", \n"""
+    public_deps_str += '  ]\n'
+    return public_deps_str
 
 
-def _get_deps_static_lib(args, module):
-    files = []
-    static_deps_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
-                           "innerapis", module, "libs", "deps")
-    if os.path.exists(static_deps_path):
-        files = [f for f in os.listdir(static_deps_path) if os.path.isfile(os.path.join(static_deps_path, f))]
-    return files
-
-
-def _generate_inner_static_deps(fp, args, deps: list):
+def _generate_static_deps_target_string(args, deps: list, toolchain: str):
+    # target_path: part_name/innerapis/${innerapi_name}/${toolchain}/BUILD.gn
+    # static_lib_path: part_name/common/${toolchain}/deps
+    if toolchain:
+        source_prefix = os.path.join("../../../common", toolchain, "deps/")
+    else:
+        source_prefix = os.path.join("../../common", toolchain, "deps/")
+    output_prefix = os.path.join("common", toolchain, "deps/")
+    target_string = ""
     for dep in deps:
-        fp.write('\n')
-        fp.write('ohos_prebuilt_static_library("' + dep + '") {\n')
-        fp.write('  source = "libs/deps/' + dep + '"\n')
-        fp.write('  part_name = "' + args.get("part_name") + '"\n')
-        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
-        fp.write('}')
+        target_string += '\n'
+        target_string += 'ohos_prebuilt_static_library("' + dep + '") {\n'
+        target_string += '  source = "' + source_prefix + dep + '"\n'
+        target_string += '  output = "' + output_prefix + dep + '"\n'
+        target_string += '  part_name = "' + args.get("part_name") + '"\n'
+        target_string += '  subsystem_name = "' + args.get("subsystem_name") + '"\n'
+        target_string += '}'
+    return target_string
+
+
+def _generate_static_deps_target(fp, args, deps: list, toolchain):
+    target_string = _generate_static_deps_target_string(args, deps, toolchain)
+    fp.write(target_string)
+
+
+def _generate_static_public_deps(fp, args, deps: list, toolchain):
+    public_deps_string = _generate_static_public_deps_string(args, deps, toolchain)
+    fp.write(public_deps_string)
 
 
 def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list, is_ohos_ets_copy=False):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
-    static_deps_files = _get_deps_static_lib(args, module)
+    static_deps_files = _get_static_deps(args, module, "") # 处理静态库依赖
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
     _generate_import(fp, is_ohos_ets_copy)
@@ -1646,25 +1678,36 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     _target_type = json_data.get('type')
     _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
     _generate_public_configs(fp, module)
-    _list = _generate_public_deps(fp, module, deps, components_json, public_deps_list, args)
-    _generate_static_deps(fp, static_deps_files)
+    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list, args)
+    _generate_static_public_deps(fp, args, static_deps_files, "") # 处理静态库依赖
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
         _generate_rust_deps(fp, json_data, components_json)
     _generate_other(fp, args, json_data, module, is_ohos_ets_copy)
     _generate_end(fp)
-    _generate_inner_static_deps(fp, args, static_deps_files)
+    _generate_static_deps_target(fp, args, static_deps_files, "") # 处理静态库依赖
     print(f"{module}_generate_build_gn has done ")
     fp.close()
     return _list
 
 
-def _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file):
-    if os.path.isfile(gn_path) and file_name:
+def _toolchain_gn_modify(args, module, toolchain_name, gn_path, so_name, toolchain_gn_file):
+    if os.path.isfile(gn_path) and so_name:
         with open(gn_path, 'r') as f:
             _gn = f.read()
             pattern = r"libs/(.*.)"
-            toolchain_gn = re.sub(pattern, 'libs/' + file_name + '\"', _gn)
+            toolchain_gn = re.sub(pattern, 'libs/' + so_name + '\"', _gn)
+            # 处理静态库依赖传递
+            static_deps = _get_static_deps(args, module, toolchain_name)
+            public_deps_str = _generate_static_public_deps_string(args, static_deps, toolchain_name)
+            static_deps_target_str = _generate_static_deps_target_string(args, static_deps, toolchain_name)
+            public_deps_pattern = r"  public_deps\s*=\s*\[\s*([^]]*)\s*\]"
+            toolchain_gn = re.sub(public_deps_pattern, public_deps_str, toolchain_gn, re.DOTALL)
+            static_deps_target_pattern = re.compile(r'ohos_prebuilt_static_library\("([^"]+\.a)"\)\s*\{[^}]*\}', re.DOTALL)
+            toolchain_gn = static_deps_target_pattern.sub("", toolchain_gn)
+            # toolchain_gn = re.sub(r"[\n]{2,}", "\n", toolchain_gn, re.DOTALL) # 删除多余换行符
+            toolchain_gn += "\n"
+            toolchain_gn += static_deps_target_str
         fd = os.open(toolchain_gn_file, os.O_WRONLY | os.O_CREAT, mode=0o640)
         fp = os.fdopen(fd, 'w')
         fp.write(toolchain_gn)
@@ -1688,14 +1731,14 @@ def _toolchain_gn_copy(args, module, out_name):
     for i in args.get("toolchain_info").keys():
         lib_out_dir = os.path.join(args.get("out_path"), "component_package",
                                    args.get("part_path"), "innerapis", module, i, "libs")
-        file_name = _get_toolchain_gn_file(lib_out_dir, out_name)
-        if not file_name:
+        so_name = _get_toolchain_gn_file(lib_out_dir, out_name)
+        if not so_name:
             continue
         toolchain_gn_file = os.path.join(args.get("out_path"), "component_package",
                                          args.get("part_path"), "innerapis", module, i, "BUILD.gn")
         if not os.path.exists(toolchain_gn_file):
             os.mknod(toolchain_gn_file)
-        _toolchain_gn_modify(gn_path, file_name, toolchain_gn_file)
+        _toolchain_gn_modify(args, module, i, gn_path, so_name, toolchain_gn_file)
 
 
 def _parse_module_list(args):
@@ -1970,7 +2013,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     args = {"out_path": out_path, "root_path": root_path,
             "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
             "build_type": build_type, "organization_name": organization_name,
-            "toolchain_info": toolchain_info
+            "toolchain_info": toolchain_info,
+            "static_deps": {}
             }
     for key, value in part_subsystem.items():
         part_name = key
