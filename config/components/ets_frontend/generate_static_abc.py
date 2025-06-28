@@ -463,10 +463,7 @@ def build_driver_config(args: argparse.Namespace) -> None:
             paths[key] = [os.path.abspath(value)]
 
     config = {
-        "plugins": {
-            "ui_plugin": args.ui_plugin,
-            "memo_plugin": args.memo_plugin,
-        },
+        "plugins": {},
         "compileFiles": args.files,
         "packageName": args.package if args.package else "",
         "buildType": "build",
@@ -481,6 +478,14 @@ def build_driver_config(args: argparse.Namespace) -> None:
         "frameworkMode": True,
         "useEmptyPackage": True,
     }
+
+    plugins = {}
+    if args.ui_plugin is not None:
+        plugins["ui_plugin"] = args.ui_plugin
+    if args.memo_plugin is not None:
+        plugins["memo_plugin"] = args.memo_plugin
+    if plugins:
+        config["plugins"] = plugins
 
     if args.panda_stdlib_path:
         config["pandaStdlibPath"] = args.panda_stdlib_path

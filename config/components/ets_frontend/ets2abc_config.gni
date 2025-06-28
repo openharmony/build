@@ -205,9 +205,6 @@ template("generate_static_abc") {
         rebase_path("${invoker.base_url}"),
         "--build-sdk-path",
         rebase_path("$build_sdk_path"),
-        "--ui-plugin",
-        rebase_path(
-            "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js"),
         "--memo-plugin",
         rebase_path(
             "$build_sdk_path/build-tools/ui-plugins/lib/memo-plugins/index.js"),
@@ -219,6 +216,20 @@ template("generate_static_abc") {
         "--node-path",
         rebase_path("$node_path"),
       ]
+
+      only_memo = "False"
+      if (defined(invoker.only_memo)) {
+        only_memo = invoker.only_memo
+      }
+
+      # if set only_memo, skip other plugins
+      if (only_memo != "True") {
+        args += [
+          "--ui-plugin",
+          rebase_path(
+              "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js")
+        ]
+      }
 
       file_paths = []
       foreach(path, invoker.files) {
