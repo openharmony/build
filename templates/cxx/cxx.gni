@@ -785,6 +785,7 @@ template("ohos_shared_library") {
         valid_tags = [
           "ndk",
           "chipsetsdk",
+          "chipsetsdk_sp",
           "chipsetsdk_indirect",
           "platformsdk",
           "platformsdk_indirect",
