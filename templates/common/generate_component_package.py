@@ -1545,8 +1545,6 @@ _DEPENDENCIES_MAP = {
     ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
     ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime"],
     ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi"],
-    ('ipc', 'ipc_core'): ["c_utils:utils"],
-    ('input', 'libmmi-client'): ["eventhandler:libeventhandler"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
