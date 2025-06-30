@@ -761,6 +761,7 @@ template("ohos_shared_library") {
           "hdi_proxy",
           "innerapi",
           "napi",
+          "ani",
         ]
         foreach(t, filter_include(valid_types, [ invoker.shlib_type ])) {
           if (t == invoker.shlib_type) {
@@ -1202,6 +1203,15 @@ template("ohos_shared_library") {
       if (!defined(invoker.version_script)) {
         _version_script =
             rebase_path("//build/templates/cxx/napi.versionscript")
+        inputs += [ _version_script ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
+      }
+    }
+
+    # Set version_script for ani libraries
+    if (defined(invoker.shlib_type) && invoker.shlib_type == "ani") {
+      if (!defined(invoker.version_script)) {
+        _version_script = rebase_path("//build/templates/cxx/ani.versionscript")
         inputs += [ _version_script ]
         ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
