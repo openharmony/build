@@ -1213,7 +1213,7 @@ template("ohos_shared_library") {
       if (!defined(invoker.version_script)) {
         _version_script = rebase_path("//build/templates/cxx/ani.versionscript")
         inputs += [ _version_script ]
-        ldflags += [ "-WL,--version-script=${_version_script}" ]
+        ldflags += [ "-Wl,--version-script=${_version_script}" ]
       }
     }
 
