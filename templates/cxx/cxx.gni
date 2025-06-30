@@ -442,9 +442,9 @@ template("ohos_executable") {
 
     deps += [ ":${_collect_target}" ]
 
-    if (defined(lib_dirs)){
+    if (defined(lib_dirs)) {
       not_allow_lib_dirs = filter_exclude(lib_dirs, valid_dirs)
-      if defined(lib_dirs_whitelist){
+      if (defined(lib_dirs_whitelist)) {
         not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
       }
       assert(not_allow_lib_dirs == [],
