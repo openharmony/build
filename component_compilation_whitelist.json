@@ -813,36 +813,7 @@
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/src/utils/",
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/wpa_supplicant/",
             "//third_party/wpa_supplicant/wpa_supplicant-2.9_standard/wpa_supplicant_lib/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/common:cast_engine_common_sources": [
-            "//third_party/json/single_include/nlohmann/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/device_manager:cast_discovery": [
-            "//third_party/json/single_include/nlohmann/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/channel:cast_session_channel": [
-            "//foundation/communication/dsoftbus/sdk/transmission/trans_channel/udp/file/include/",
-            "//foundation/communication/dsoftbus/interfaces/inner_kits/transport/",
-            "//foundation/communication/dsoftbus/dsoftbus_enhance/interfaces/kits/transport/",
-            "//foundation/communication/dsoftbus/dsoftbus_enhance/sdk/transmission/trans_channel/udp/file/include/",
-            "//foundation/communication/dsoftbus/sdk/transmission/trans_channel/udp/common/include/",
-            "//foundation/communication/dsoftbus/sdk/transmission/session/include/",
-            "//foundation/communication/dsoftbus/core/common/include/",
-            "//foundation/communication/dsoftbus/adapter/common/include/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/stream:cast_session_stream": [
-            "//third_party/json/single_include/nlohmann/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
-            "//third_party/glib/glib/",
-            "//third_party/glib/"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session:cast_session": [
-            "//third_party/jsoncpp/include/",
-            "//third_party/glib/glib/",
-            "//third_party/glib/",
-            "//third_party/json/single_include/nlohmann/"
-        ],
+        ], 
         "//foundation/CastEngine/castengine_wifi_display/interfaces/innerkits/native/wfd:sharingwfd_client": [
             "//foundation/systemabilitymgr/samgr/interfaces/innerkits/samgr_proxy/include/",
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include/",
@@ -13197,22 +13168,8 @@
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0"
         ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/device_manager:cast_discovery": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/rtsp:cast_session_rtsp": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
         "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
-            "//third_party/glib:glib_packages",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session:cast_session": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service:cast_engine_service": [
-            "//third_party/openssl:libcrypto_shared"
+            "//third_party/glib:glib_packages"
         ],
         "//foundation/CastEngine/castengine_wifi_display/services/configuration:sharing_configure_srcs": [
             "//third_party/jsoncpp:jsoncpp"
