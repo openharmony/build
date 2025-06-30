@@ -152,8 +152,8 @@ make_mixed_asan_img() {
         sed -i '/LD_PRELOAD/d' system/etc/init/asan.cfg
     fi
     test -f system/etc/selinux/config && sed -i 's,enforcing,permissive,g' $_
-    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/d;s/^\(\s*namespace.default.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
-    sed -i '/^\s*namespace.default.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/\1\/asan\/\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.*.asan.lib.paths\s*=/d;s/^\(\s*namespace.*.\)\(lib.paths\s*=.*\)$/&\n\1asan.\2/g' system/etc/ld-musl-namespace-*.ini
+    sed -i '/^\s*namespace.*.asan.lib.paths\s*=/s/\/\(system\|vendor\)\/\([^:]*:\?\)/\/\1\/asan\/\2/g' system/etc/ld-musl-namespace-*.ini
     if [ "$asan_in_data" = true ]; then
         for d in data/asan/*; do ln -snf /$d ${d#data/asan/}/asan; done
     else
@@ -247,7 +247,7 @@ collect_all_artifacts() {
     cp -al "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
     cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
     cp -al ../../{exe,lib}.unstripped images/unstripped/nonasan/
-    cp system/lib*/libc++.so images/unstripped/nonasan/lib.unstripped/
+    # cp system/lib*/libc++.so images/unstripped/nonasan/lib.unstripped/
     # mixed asan images
     mv system*.img vendor*.img images/
 }
