@@ -247,7 +247,6 @@ collect_all_artifacts() {
     cp -al "$asan_dir"/../../{exe,lib}.unstripped images/unstripped/asan/
     cp "$asan_dir"/../../libclang_rt.asan.so images/unstripped/asan/lib.unstripped/
     cp -al ../../{exe,lib}.unstripped images/unstripped/nonasan/
-    # cp system/lib*/libc++.so images/unstripped/nonasan/lib.unstripped/
     # mixed asan images
     mv system*.img vendor*.img images/
 }
