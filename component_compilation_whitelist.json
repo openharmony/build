@@ -3674,9 +3674,6 @@
         "//drivers/peripheral/wlan/hdi_service/service_extend:libwlan_service_extend": [
             "//drivers/interface/wlan/v1_3:wlan_idl_headers"
         ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
-            "//third_party/glib:glib_packages"
-        ],
         "//foundation/ability/form_fwk/test/unittest/fms_form_host_callback_test:FmsFormHostCallbackTest": [
             "//foundation/ability/ability_runtime/services/abilitymgr:abilityms_target"
         ],
@@ -10081,23 +10078,6 @@
         ],
         "//drivers/peripheral/partitionslot/hdi_service:libpartitionslot_driver": [
             "//drivers/interface/partitionslot/v1_0:libpartitionslot_stub_1.0"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/device_manager:cast_discovery": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/rtsp:cast_session_rtsp": [
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session/src/utils:cast_session_utils": [
-            "//third_party/glib:glib_packages",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service/src/session:cast_session": [
-            "//third_party/jsoncpp:jsoncpp",
-            "//third_party/openssl:libcrypto_shared"
-        ],
-        "//foundation/CastEngine/castengine_cast_framework/service:cast_engine_service": [
-            "//third_party/openssl:libcrypto_shared"
         ],
         "//foundation/CastEngine/castengine_wifi_display/services/configuration:sharing_configure_srcs": [
             "//third_party/jsoncpp:jsoncpp"
