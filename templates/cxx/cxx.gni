@@ -1689,7 +1689,7 @@ template("ohos_static_library") {
     }
 
     if (defined(lib_dirs)) {
-      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_dirs)
+      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_lib_dirs_list)
       if (defined(lib_dirs_whitelist)) {
         not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
       }
