@@ -35,6 +35,11 @@ debug_level_configs = [
   "//build/config/compiler:no_optimize",
 ]
 
+valid_lib_dirs_list = [
+  "*llvm*",
+  "*clang*"
+]
+
 template("ohos_executable") {
   assert(!defined(invoker.output_dir),
          "output_dir is not allowed to be defined.")
@@ -437,6 +442,14 @@ template("ohos_executable") {
 
     deps += [ ":${_collect_target}" ]
 
+    if (defined(lib_dirs)) {
+      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_lib_dirs_list)
+      if (defined(lib_dirs_whitelist)) {
+        not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
+      }
+      assert(not_allow_lib_dirs == [],
+              "${target_name} has invalid lib_dirs value: $not_allow_lib_dirs")
+    }
     if (!defined(libs)) {
       libs = []
     }
@@ -1242,6 +1255,14 @@ template("ohos_shared_library") {
       ]
     }
 
+    if (defined(lib_dirs)) {
+      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_lib_dirs_list)
+      if (defined(lib_dirs_whitelist)) {
+        not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
+      }
+      assert(not_allow_lib_dirs == [],
+              "${target_name} has invalid lib_dirs value: $not_allow_lib_dirs")
+    }
     if (!defined(libs)) {
       libs = []
     }
@@ -1666,6 +1687,15 @@ template("ohos_static_library") {
     if (!_test_target) {
       deps += [ ":$_notice_target" ]
     }
+
+    if (defined(lib_dirs)) {
+      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_lib_dirs_list)
+      if (defined(lib_dirs_whitelist)) {
+        not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
+      }
+      assert(not_allow_lib_dirs == [],
+              "${target_name} has invalid lib_dirs value: $not_allow_lib_dirs")
+    }
     if (!defined(libs)) {
       libs = []
     }
@@ -1987,6 +2017,14 @@ template("ohos_source_set") {
       deps += [ ":$_notice_target" ]
     }
 
+    if (defined(lib_dirs)) {
+      not_allow_lib_dirs = filter_exclude(lib_dirs, valid_lib_dirs_list)
+      if (defined(lib_dirs_whitelist)) {
+        not_allow_lib_dirs = filter_exclude(not_allow_lib_dirs, lib_dirs_whitelist)
+      }
+      assert(not_allow_lib_dirs == [],
+              "${target_name} has invalid lib_dirs value: $not_allow_lib_dirs")
+    }
     if (!defined(libs)) {
       libs = []
     }
