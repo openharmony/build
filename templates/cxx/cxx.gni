@@ -35,7 +35,7 @@ debug_level_configs = [
   "//build/config/compiler:no_optimize",
 ]
 
-valid_dirs = [
+valid_lib_dirs_list = [
   "*llvm*",
   "*clang*"
 ]
