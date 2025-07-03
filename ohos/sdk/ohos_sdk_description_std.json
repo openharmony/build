@@ -764,6 +764,16 @@
         ]
     },
     {
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/insight_intents",
+        "module_label": "//developtools/ace_ets2bundle:insight_intents",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "ets/ets1.1/build-tools/ets-loader",
         "module_label": "//developtools/ace_ets2bundle:ets_loader",
         "target_os": [
