@@ -1,0 +1,204 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("ark_root.gni")
+
+use_pbqp = false
+ark_subsystem_name = "arkcompiler"
+ark_part_name = "runtime_core"
+platform_libs = []
+platform_ldflags = []
+if (current_toolchain == host_toolchain && !is_mac) {
+  platform_ldflags = [ "-static-libstdc++" ]
+}
+hiviewdfx_ext_deps = []
+enable_hilog =
+    !ark_standalone_build && is_standard_system && current_os == "ohos" &&
+    (current_cpu == "arm64" || current_cpu == "arm")
+
+if (enable_hilog) {
+  hiviewdfx_ext_deps += [ "hilog:libhilog" ]
+}
+
+isa_gen_dir = get_label_info("$ark_root/isa:isa_combine", "target_gen_dir")
+ark_isa_yaml = "$isa_gen_dir/isa.yaml"
+
+enable_bytecode_optimizer = true
+zlib_dep = "zlib:libz"
+icui18n_dep = "icu:shared_icui18n"
+icuuc_dep = "icu:shared_icuuc"
+vixl_dep = "vixl:libvixl"
+sdk_libc_secshared_dep = "bounds_checking_function:libsec_static"
+sdk_libc_secshared_ext_dep = "bounds_checking_function:libsec_static"
+is_mob = !is_standard_system && (current_cpu != "arm" || is_wearable_product)
+
+# Generate file for a template and YAML data provided.
+#
+# Mandatory arguments:
+# data -- a list of data sources, YAML files
+# template_file -- template full name
+# output_file -- output file full name
+# api -- a list of Ruby scripts that provide data-querying API for templates
+#   (Nth script from 'api' should parse Nth YAML file from 'data')
+#
+# Optional arguments:
+# extra_dependencies -- a list of files that should be considered as dependencies, must be lable
+# requires -- if defined, will require additional Ruby files for template generation, must be list
+
+template("ark_gen_file") {
+  assert(defined(invoker.data), "data is required!")
+  assert(defined(invoker.api), "api is required!")
+  assert(defined(invoker.template_file), "template_file is required!")
+  assert(defined(invoker.output_file), "output_file is required!")
+
+  extra_dependencies = []
+  if (defined(invoker.extra_dependencies)) {
+    extra_dependencies += invoker.extra_dependencies
+  }
+
+  positional_argv = []
+  if (defined(invoker.extra_argv)) {
+    positional_argv += invoker.extra_argv
+  }
+  keyword_argv = [
+    "--template",
+    rebase_path(invoker.template_file, root_build_dir),
+    "--data",
+    string_join(",", rebase_path(invoker.data, root_build_dir)),
+    "--api",
+    string_join(",", rebase_path(invoker.api, root_build_dir)),
+    "--output",
+    rebase_path(invoker.output_file),
+  ]
+  if (defined(invoker.requires)) {
+    keyword_argv += [
+      "--require",
+      string_join(",", rebase_path(invoker.requires, root_build_dir)),
+    ]
+  }
+
+  action("$target_name") {
+    script = "$ark_root/isa/gen.rb"
+
+    # rerun action when data file or template file update
+    if (defined(ohos_indep_compiler_enable) && !ohos_indep_compiler_enable) {
+      inputs = [ invoker.template_file ] + invoker.data
+    }
+    outputs = [ invoker.output_file ]
+    args = positional_argv + keyword_argv
+    deps = extra_dependencies
+    if (defined(invoker.external_dependencies)) {
+      external_deps = invoker.external_dependencies
+    }
+  }
+}
+
+# Generate files based on templates and YAML data provided.
+# Adds targets for every template. Also adds a target for the whole function invocation
+# with name ${data_name}_gen_${PROJECT_NAME} for ease of declaring dependencies on generated files.
+#
+# Mandatory arguments:
+# * data -- a list of data sources, YAML files
+# * template_files -- a list of templates to generate files
+# * api -- a list of Ruby scripts that provide data-querying API for templates
+#   (Nth script from 'api' should parse Nth YAML file from 'data')
+#
+# Optional arguments:
+# * sources -- a directory with templates, default is ${PROJECT_SOURCE_DIR}/templates
+# * destination -- a directory for output files, default is ${PANDA_BINARY_ROOT}
+# * extra_dependencies -- a list of files that should be considered as dependencies
+# * requires -- if defined, will require additional Ruby files for template generation, must be list
+# * extra_argv -- a list of positional arguments that could be accessed in '.erb' files via ARGV[]
+# * external_dependencies -- a list of files that should be considered as cross-component dependencies
+template("ark_gen") {
+  assert(defined(invoker.data), "data files were not passed to ark_gen")
+  assert(defined(invoker.api), "ruby api files were not passed to ark_gen")
+  assert(defined(invoker.template_files),
+         "template_files were not passed to ark_gen")
+
+  if (defined(invoker.sources)) {
+    dir = invoker.sources
+  } else {
+    dir = "templates"
+  }
+
+  if (defined(invoker.destination)) {
+    destination = invoker.destination
+  } else {
+    destination = target_out_dir
+  }
+
+  foreach(t, invoker.template_files) {
+    name = string_replace(t, ".erb", "")
+    output = "${destination}/${name}"
+    name = string_replace(name, ".", "_")
+    name = string_replace(name, "/", "_")
+    target = "${target_name}_${name}"
+
+    ark_gen_file(target) {
+      data = invoker.data
+      template_file = "${dir}/${t}"
+      output_file = output
+      api = invoker.api
+      if (defined(invoker.requires)) {
+        requires = invoker.requires
+      }
+      if (defined(invoker.extra_dependencies)) {
+        extra_dependencies = invoker.extra_dependencies
+      }
+      if (defined(invoker.external_dependencies)) {
+        external_dependencies = invoker.external_dependencies
+      }
+      if (defined(invoker.extra_argv)) {
+        extra_argv = invoker.extra_argv
+      }
+    }
+  }
+}
+
+# Calls `ark_gen` for ISA YAML.
+# Adds targets for every template. Also adds a target for the whole function invocation
+# with name isa_gen_${PROJECT_NAME} for ease of declaring dependencies on generated files.
+#
+# Mandatory arguments:
+# * template_files -- a list of templates to generate files
+#
+# Optional arguments:
+# * sources -- a directory with templates, default is ${PROJECT_SOURCE_DIR}/templates
+# * destination -- a directory for output files, default is ${target_out_dir}
+# * requires -- if defined, will require additional Ruby files for template generation, must be list
+# * extra_dependencies -- a list of files that should be considered as dependencies lable, must be list, not used
+template("ark_isa_gen") {
+  isa_api = [ "$ark_root/isa/isapi.rb" ]
+  dependencies_ = []
+  external_dependencies_ = [ "runtime_core:isa_combine_static_etc" ]
+  if (defined(invoker.extra_dependencies)) {
+    dependencies_ += invoker.extra_dependencies
+  }
+
+  ark_gen("$target_name") {
+    isa_combine_static_etc_out_dir =
+        get_label_info("$ark_root/isa:isa_combine_static_etc", "target_out_dir")
+    data = [ "$isa_combine_static_etc_out_dir/$ark_isa_yaml" ]
+    template_files = invoker.template_files
+    sources = invoker.sources
+    destination = invoker.destination
+    api = isa_api
+    if (defined(invoker.requires)) {
+      requires = invoker.requires
+    }
+    extra_dependencies = dependencies_
+    external_dependencies = external_dependencies_
+  }
+}
