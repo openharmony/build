@@ -245,10 +245,6 @@ if (defined(build_cross_platform_version) && build_cross_platform_version) {
   use_rosen_drawing = true
 }
 
-declare_args() {
-  ark_hybrid = false
-}
-
 # support changing the ohpm registry and using hvigor cache
 declare_args() {
   ohpm_registry = ""
