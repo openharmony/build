@@ -38,7 +38,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 
 
 #### 场景2：CPU架构无关配置 <a name="section-download-basic-demo-02"></a>
-若工具包不依赖CPU架构（如纯脚本工具），可省略架构标识
+若工具包不依赖CPU架构（如纯脚本工具），可做如下配置：
 ``` json
 {
     "name": "ark_js_prebuilts",
@@ -46,9 +46,12 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
     "type": "src, indep",
     "config": {
         "linux": {
-            "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
-            "unzip_dir": "${code_dir}/prebuilts/ark_tools",
-            "unzip_filename": "ark_js_prebuilts"
+            "all_cpu": {
+                "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
+                "unzip_dir": "${code_dir}/prebuilts/ark_tools",
+                "unzip_filename": "ark_js_prebuilts"
+            }
+            
         }
     }
 }
@@ -56,15 +59,21 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 
 
 #### 场景3：跨平台配置 <a name="section-download-basic-demo-03"></a>
-若工具包同时兼容多操作系统和CPU架构，配置进一步简化：
+若工具包和操作系统和CPU架构无关，可做如下配置：
 ```json
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
     "type": "src, indep",
-    "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
-    "unzip_dir": "${code_dir}/prebuilts/ark_tools",
-    "unzip_filename": "ark_js_prebuilts"
+    "config": {
+        "all_os":{
+            "all_cpu": {
+                "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
+                "unzip_dir": "${code_dir}/prebuilts/ark_tools",
+                "unzip_filename": "ark_js_prebuilts"
+            }
+        }
+    }
 }
 ```
 
