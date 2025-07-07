@@ -133,7 +133,7 @@ cat $HOME/.npmrc | grep 'lockfile=false' > /dev/null || echo 'lockfile=false' >>
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
   pushd ${TOOLS_INSTALL_DIR} > /dev/null
-    OHPM_HOME=${SOURCE_ROOT_DIR}/prebuilts/hvigor/5.14.2-td-rc.515/command-line-tools/ohpm/bin
+    OHPM_HOME=${SOURCE_ROOT_DIR}/prebuilts/command-line-tools/ohpm/bin
     chmod +x ${OHPM_HOME}/ohpm
     export PATH=${OHPM_HOME}:$PATH
     chmod +x ${OHPM_HOME}/init
