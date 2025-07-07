@@ -1301,8 +1301,12 @@ def copy_static_deps_file(args, label, module, so_path):
         static_deps = []
         toolchain_module = toolchain + "_" + module
         for lib in deps_libs:
+            lib_name = os.path.basename(lib)
+            if lib_name in static_deps:
+                print("lib_name: {} already in static_deps".format(lib_name))
+                continue
             if lib.endswith(".a") and lib != so_path and is_not_basic_lib(lib):
-                static_deps.append(os.path.basename(lib))
+                static_deps.append(lib_name)
                 lib_status = _do_copy_static_deps_file(args, out_path, lib, toolchain) or lib_status
         args.get("static_deps")[toolchain_module] = static_deps
         print("copy static deps: ", static_deps)
