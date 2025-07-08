@@ -2931,18 +2931,6 @@
         "//test/xts/device_attest/test/performancetest:test_devattestservice_performance": [
             "//third_party/googletest/include/"
         ],
-        "//third_party/musl:soft_musl_src_optimize": [
-            "//third_party/optimized-routines/math/",
-            "//third_party/optimized-routines/math/include/"
-        ],
-        "//third_party/musl:soft_musl_src_shared": [
-            "//third_party/optimized-routines/math/",
-            "//third_party/optimized-routines/math/include/"
-        ],
-        "//third_party/musl:soft_musl_src_static": [
-            "//third_party/optimized-routines/math/",
-            "//third_party/optimized-routines/math/include/"
-        ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ]
