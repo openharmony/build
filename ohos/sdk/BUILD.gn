@@ -58,21 +58,13 @@ if (!use_current_sdk) {
   ohos_sdk_arkts_description_file =
       "${interface_sdk_path}/ohos_sdk_pub_description_std.json"
 
-  if (host_os == "mac") {
-    node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin/npm"
-  } else {
-    node_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/node"
-    npm_path = "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin/npm"
-  }
-
   arkts_sdk_args = [
     "--sdk-description-file",
     rebase_path(ohos_sdk_description_file, root_build_dir),
     "--root-build-dir",
     rebase_path("//", root_build_dir),
     "--node-js",
-    rebase_path(node_path, root_build_dir),
+    rebase_path(nodejs, root_build_dir),
     "--output-arkts-sdk-desc-file",
     rebase_path(ohos_sdk_arkts_description_file, root_build_dir),
     "--sdk-build-public",
@@ -80,7 +72,7 @@ if (!use_current_sdk) {
     "--sdk-build-arkts",
     "${sdk_build_arkts}",
     "--npm-path",
-    rebase_path(npm_path, root_build_dir),
+    rebase_path(npm, root_build_dir),
     "--output-interface-sdk",
     rebase_path(interface_sdk_path, root_build_dir),
   ]
