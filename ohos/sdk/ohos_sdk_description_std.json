@@ -1375,6 +1375,7 @@
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/hapsigner/binary_sign_tool:binary-sign-tool",
         "target_os": [
+            "linux",
             "ohos"
         ]
     },
