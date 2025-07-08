@@ -194,9 +194,6 @@ template("generate_static_abc") {
         rebase_path("${invoker.base_url}"),
         "--build-sdk-path",
         rebase_path("$build_sdk_path"),
-        "--ui-plugin",
-        rebase_path(
-            "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js"),
         "--memo-plugin",
         rebase_path(
             "$build_sdk_path/build-tools/ui-plugins/lib/memo-plugins/index.js"),
@@ -209,6 +206,20 @@ template("generate_static_abc") {
         rebase_path("$node_path"),
       ]
 
+      only_memo = "False"
+      if (defined(invoker.only_memo)) {
+        only_memo = invoker.only_memo
+      }
+
+      # if set only_memo, skip other plugins
+      if (only_memo != "True") {
+        args += [
+          "--ui-plugin",
+          rebase_path(
+              "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js")
+        ]
+      }
+
       file_paths = []
       foreach(path, invoker.files) {
         file_paths += [ rebase_path(path) ]
@@ -218,8 +229,17 @@ template("generate_static_abc") {
       if (defined(invoker.package)) {
         args += [
           "--package",
-          rebase_path(invoker.package),
+          invoker.package,
         ]
+      }
+
+      if (defined(invoker.paths_keys) && defined(invoker.paths_values)) {
+        args += [ "--paths-keys" ] + invoker.paths_keys
+        paths_values = []
+        foreach(path, invoker.paths_values) {
+          paths_values += [ rebase_path(path) ]
+        }
+        args += [ "--paths-values" ] + paths_values
       }
     } else if (defined(invoker.base_url)) {
       external_deps += [
