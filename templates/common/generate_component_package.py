@@ -1557,8 +1557,6 @@ def _generate_public_configs(fp, module):
 # 目前特殊处理的依赖关系映射
 _DEPENDENCIES_MAP = {
     ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
-    ('napi', 'ace_napi'): ["ets_runtime:libark_jsruntime"],
-    ('ability_runtime', 'abilitykit_native'): ["ipc:ipc_napi"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
