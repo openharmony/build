@@ -1,15 +1,7 @@
 [
   "googletest",
   "benchmark",
-  "musl",
-  "rust",
-  "developer_test",
-  "drivers_interface_display",
-  "skia",
-  "hilog",
-  "runtime_core",
   "hisysevent",
-  "drivers_interface_usb",
-  "rust_cxx",
-  "rust_bindgen"
+  "rust_bindgen",
+  "css-what"
 ]
