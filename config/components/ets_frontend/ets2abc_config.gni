@@ -93,17 +93,17 @@ ohos_ets_build_system_deps = "ets_frontend:ohos_ets_build_system"
 ohos_ets_ui_plugins_deps =
     "//developtools/ace_ets2bundle/arkui-plugins:ohos_ets_ui_plugins"
 
-ohos_ets_api_tmp_path = "$root_out_dir/ohos_ets_tmp/api"
-ohos_ets_api_arkui_tmp_path = "$root_out_dir/ohos_ets_tmp/api/arkui/component"
-ohos_ets_arkts_tmp_path = "$root_out_dir/ohos_ets_tmp/arkts"
-ohos_ets_kits_tmp_path = "$root_out_dir/ohos_ets_tmp/kits"
-ohos_ets_api_path = "$root_out_dir/ohos_ets/api"
-ohos_ets_api_arkui_path = "$root_out_dir/ohos_ets/api/arkui/component"
-ohos_ets_arkts_path = "$root_out_dir/ohos_ets/arkts"
-ohos_ets_kits_path = "$root_out_dir/ohos_ets/kits"
+ohos_ets_api_tmp_path = "$root_build_dir/ohos_ets_tmp/api"
+ohos_ets_api_arkui_tmp_path = "$root_build_dir/ohos_ets_tmp/api/arkui/component"
+ohos_ets_arkts_tmp_path = "$root_build_dir/ohos_ets_tmp/arkts"
+ohos_ets_kits_tmp_path = "$root_build_dir/ohos_ets_tmp/kits"
+ohos_ets_api_path = "$root_build_dir/ohos_ets/api"
+ohos_ets_api_arkui_path = "$root_build_dir/ohos_ets/api/arkui/component"
+ohos_ets_arkts_path = "$root_build_dir/ohos_ets/arkts"
+ohos_ets_kits_path = "$root_build_dir/ohos_ets/kits"
 ohos_ets_build_system_path =
-    "$root_out_dir/ohos_ets/build-tools/driver/build-system"
-ohos_ets_ui_plugins_path = "$root_out_dir/ohos_ets/build-tools/ui-plugins"
+    "$root_build_dir/ohos_ets/build-tools/driver/build-system"
+ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
 ohos_ets_es2panda_path =
@@ -112,8 +112,8 @@ ohos_ets_ark_link_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/ark_link"
 ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
-ohos_ets_inner_path = "$root_out_dir/ohos_ets/inner"
-build_sdk_path = "$root_out_dir/ohos_ets"
+ohos_ets_inner_path = "$root_build_dir/ohos_ets/inner"
+build_sdk_path = "$root_build_dir/ohos_ets"
 
 if (host_os == "mac") {
   node_path =
