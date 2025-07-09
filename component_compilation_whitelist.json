@@ -4295,38 +4295,6 @@
         "//arkcompiler/ets_runtime/ecmascript/compiler/tests:TypedArrayLoweringTest_resource_copy": [
             "//arkcompiler/runtime_core/libpandafile:libarkfile_static"
         ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_001_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_001_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_002_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_002_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_003_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_003_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_004_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/containers/tests:Containers_004_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
         "//arkcompiler/ets_runtime/ecmascript/debugger/tests:RuntimeDebuggerTest": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
@@ -4335,105 +4303,13 @@
         "//arkcompiler/ets_runtime/ecmascript/debugger/tests:RuntimeDebuggerTest_resource_copy": [
             "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/cpu_profiler/tests:CpuProfilerTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/cpu_profiler/tests:CpuProfilerTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HProfTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HProfTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapDumpTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapDumpTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapSamplingTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapSamplingTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapSnapShotTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapSnapShotTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerFirstTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerFirstTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerSecondTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerSecondTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerThirdTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:HeapTrackerThirdTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:JSMetadataTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:JSMetadataTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:RawHeapTranslateTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/tests:RawHeapTranslateTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
         "//arkcompiler/ets_runtime/ecmascript/dfx/stackinfo/tests:JsStackInfoTest": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/dfx/stackinfo/tests:JsStackInfoTest_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/extractortool/tests:ExtractorToolTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/extractortool/tests:ExtractorToolTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/jit/tests:JIT_001_Test": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
@@ -4442,119 +4318,31 @@
         "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests:JSPandaFileTest": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/jspandafile/tests:JSPandaFileTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/module/tests:ModuleTest": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/module/tests:ModuleTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc",
             "//arkcompiler/runtime_core/assembler:libarkassembler_static"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:FFIWorkLoadTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:FFIWorkLoadTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
         ],
         "//arkcompiler/ets_runtime/ecmascript/napi/test:JsnapiSample": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/napi/test:JsnapiSample_resource_copy": [
-            "//arkcompiler/runtime_core/assembler:libarkassembler_static",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_001_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_001_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_002_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_002_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_003_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_003_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_004_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_004_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_Sendable_Test": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/napi/test:Jsnapi_Sendable_Test_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:libarkassembler_static"
         ],
         "//arkcompiler/ets_runtime/ecmascript/ohos/tests:CrashTest": [
-            "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/ohos/tests:CrashTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:arkassembler_public_config"
         ],
         "//arkcompiler/ets_runtime/ecmascript/ohos/tests:OhosTest": [
-            "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/ohos/tests:OhosTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/serializer/tests:SerializerTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/serializer/tests:SerializerTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/snapshot/tests:SnapshotTest": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
-        ],
-        "//arkcompiler/ets_runtime/ecmascript/snapshot/tests:SnapshotTest_resource_copy": [
-            "//third_party/icu/icu4c:shared_icui18n",
-            "//third_party/icu/icu4c:shared_icuuc"
+            "//arkcompiler/runtime_core/assembler:arkassembler_public_config"
         ],
         "//arkcompiler/ets_runtime/test/executiontest:ThreadTerminationTest": [
             "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
