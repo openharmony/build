@@ -261,7 +261,11 @@ group("common_deps") {
   }
 
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
-    public_deps += [ "//third_party/musl:soft_shared_libs" ]
+    if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
+      external_deps = [ "musl:soft_shared_libs" ]
+    } else {
+      public_deps += [ "//third_party/musl:soft_shared_libs" ]
+    }
   }
 
   if (is_ohos && ohos_indep_compiler_enable &&
@@ -297,13 +301,21 @@ group("rust_proc_macro_deps") {
 
 group("static_library_deps") {
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
-    public_deps = [ "//third_party/musl:musl_headers" ]
-  }
+    if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
+      external_deps = [ "musl:musl_headers" ]
+    } else {
+      public_deps = [ "//third_party/musl:musl_headers" ]
+    }
+   }
 }
 
 group("source_set_deps") {
   if (use_musl && current_toolchain != host_toolchain && !is_mingw) {
-    public_deps = [ "//third_party/musl:musl_headers" ]
+    if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
+      external_deps = [ "musl:musl_headers" ]
+    } else {
+      public_deps = [ "//third_party/musl:musl_headers" ]
+    }
   }
 }
 
