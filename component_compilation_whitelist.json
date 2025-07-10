@@ -62,7 +62,6 @@
     ],
     "all_dependent_configs": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
-        "//arkcompiler/ets_runtime:libark_jsruntime_sources",
         "//base/hiviewdfx/hisysevent/interfaces/native/innerkits/hisysevent:libhisysevent",
         "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler",
         "//commonlibrary/c_utils/base:utils",
@@ -83,7 +82,6 @@
     "includes_over_range": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
         "//arkcompiler/ets_runtime:libark_jsruntime_static",
-        "//arkcompiler/ets_runtime:libark_jsruntime_sources",
         "//arkcompiler/runtime_core/assembler:libarkassembler_static",
         "//arkcompiler/runtime_core/libpandabase:libarkbase_static",
         "//arkcompiler/runtime_core/libpandafile:libarkfile_runtime_static",
