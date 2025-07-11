@@ -568,6 +568,11 @@
         "unzip_dir": "prebuilts/build-tools/common/nodejs",
         "file_path": "/nodejs/v18.20.1/node-v18.20.1-darwin-x64.tar.gz",
         "unzip_filename": "node-v18.20.1-darwin-x64"
+      },     
+      {
+        "unzip_dir": "prebuilts/build-tools/common/nodejs",
+        "file_path": "/nodejs/v16.20.2/node-v16.20.2-darwin-arm64.tar.gz",
+        "unzip_filename": "node-v16.20.2-darwin-arm64"
       }
     ],
     "arm64": {
