@@ -895,6 +895,16 @@
     },
     {
         "install_dir": "toolchains",
+        "module_label": "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
         "module_label": "//arkcompiler/ets_runtime/ecmascript/dfx/hprof/rawheap_translate:rawheap_translator",
         "target_os": [
             "linux",
@@ -931,6 +941,15 @@
     {
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool:app_check_tool",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/bin",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/dependency_analyzer:dependency_analyzer",
         "target_os": [
             "linux",
             "windows",
@@ -1407,6 +1426,15 @@
     {
         "install_dir": "ets/ets1.2/build-tools/ui-plugins/",
         "module_label": "//developtools/ace_ets2bundle/arkui-plugins:ui_plugin",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//arkcompiler/runtime_core/taihe:copy_taihe_tools",
         "target_os": [
             "linux",
             "windows",
