@@ -396,9 +396,18 @@
             ]
         },
         {
-            "name": "init_ohpm",
+            "name": "hvigor",
             "tag": "base",
             "type": "src, indep",
+            "config": {
+                "linux": {
+                    "x86_64": {
+                        "unzip_dir": "prebuilts/tool/command-line-tools",
+                        "remote_url": "/harmonyos/compiler/hvigor/5.0.3.906/command-line-tools.tar",
+                        "unzip_filename": "hvigor"
+                    }
+                }
+            },
             "handle": [
                 {
                     "type": "shell",
