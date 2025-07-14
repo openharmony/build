@@ -163,6 +163,9 @@
             "//third_party/icu/icu4c/source/i18n/",
             "//third_party/icu/icu4c/source/"
         ],
+		"//arkcompiler/runtime_core/static_core/libllvmbackend:bitcode": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
         "//arkcompiler/ets_frontend/merge_abc:assembly_proto_static": [
             "//arkcompiler/runtime_core/",
             "//arkcompiler/runtime_core/assembler/",
