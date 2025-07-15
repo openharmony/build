@@ -481,11 +481,6 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-pc-windows-gnullvm.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
-        },
-        {
-          "unzip_dir": "prebuilts/hvigor/5.14.2-td-rc.515/command-line-tools",
-          "file_path": "/openharmony/compiler/hvigor/5.14.2-td-rc.515/command-line-tools.tar",
-          "unzip_filename": "command-line-tools"
         }
       ],
       "install": [
