@@ -11,12 +11,12 @@
     "dlp_manager":[
         "sdk",
         "app",
-        "ohpm"
+        "hvigor"
     ],
     "permission_manager":[
         "sdk",
         "app",
-        "ohpm"
+        "hvigor"
     ],
     "app_domain_verify":[
         "taihe"
@@ -42,7 +42,7 @@
     ],
     "bundle_tool":[
         "app",
-        "ohpm"
+        "hvigor"
     ],
     "bundle_framework":[
         "app",
@@ -57,7 +57,7 @@
     ],
     "power_manager":[
         "app",
-        "ohpm",
+        "hvigor",
         "sdk"
     ],
     "ability_runtime":[
@@ -121,7 +121,7 @@
     "wifi":[
         "sdk",
         "app",
-        "ohpm"
+        "hvigor"
     ],
     "netstack":[
         "rust"
