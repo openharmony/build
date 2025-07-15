@@ -156,7 +156,10 @@ class ConfigParser:
 
 
 class Filter:
-    def __init__(self, configs=[]):
+    def __init__(self, configs):
+        if configs is None:
+            self.input_configs = []
+            return
         self.input_configs = copy.deepcopy(configs)
 
     @classmethod
