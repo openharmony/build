@@ -3,7 +3,7 @@
     "tool_list": [
         {
             "name": "ark_js_prebuilts",
-            "tag": "base",
+            "tag": "ark_js",
             "type": "src, indep",
             "config": {
                 "linux": {
@@ -111,7 +111,7 @@
         },
         {
             "name": "hc-gen",
-            "tag": "base",
+            "tag": "hc-gen",
             "type": "src, indep",
             "config": {
                 "linux": {
@@ -125,7 +125,7 @@
         },
         {
             "name": "OpenHarmonyApplication.pem",
-            "tag": "base",
+            "tag": "app",
             "type": "indep",
             "config": {
                 "linux": {
@@ -223,7 +223,7 @@
         },
         {
             "name": "packing_tool",
-            "tag": "base",
+            "tag": "packing_tool",
             "type": "src, indep",
             "config": {
                 "linux, darwin": {
@@ -308,7 +308,7 @@
         },
         {
             "name": "rustc",
-            "tag": "base",
+            "tag": "rust",
             "type": "src, indep",
             "unzip_dir": "${code_dir}/prebuilts/rustc",
             "config": {
@@ -397,7 +397,7 @@
         },
         {
             "name": "hvigor",
-            "tag": "base",
+            "tag": "hvigor",
             "type": "src, indep",
             "config": {
                 "linux": {
@@ -462,7 +462,7 @@
         },
         {
             "name": "npm_install",
-            "tag": "base",
+            "tag": "npm_install",
             "type": "indep",
             "handle": [
                 {
@@ -482,7 +482,7 @@
         },
         {
             "name": "node_modules_copy",
-            "tag": "base",
+            "tag": "npm_install",
             "type": "indep",
             "handle": [
                 {
@@ -524,7 +524,7 @@
         },
         {
             "name": "AGPBinaryCompile",
-            "tag": "base",
+            "tag": "AGP",
             "type": "indep",
             "unzip_filename": "AGPBinaryCompile",
             "config": {
@@ -538,7 +538,7 @@
         },
         {
             "name": "taihe",
-            "tag": "base",
+            "tag": "taihe",
             "type": "indep",
             "unzip_filename": "taihe",
             "config": {
@@ -551,6 +551,18 @@
                     ]
                 }
             }
+        },
+		{
+            "name": "sdk",
+            "tag": "sdk",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "download_sdk",
+                    "sdk_name": "ohos-sdk-full-linux",
+                    "version": 20
+                }
+            ]
         }
     ]
 }

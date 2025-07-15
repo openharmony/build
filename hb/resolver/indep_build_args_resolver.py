@@ -55,10 +55,8 @@ def _search_bundle_path(part_name: str) -> str:
     bundle_path = None
     try:
         bundle_path = search_bundle_file_from_ccache(part_name)
-        LogUtil.hb_info(f"Searching bundle.json path in ccache")
         if not bundle_path:
             bundle_path = ComponentUtil.search_bundle_file(part_name)
-            LogUtil.hb_info(f"Searching bundle.json path in source code tree")
         else:
             LogUtil.hb_info(
                 "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
