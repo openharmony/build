@@ -23,17 +23,20 @@ template("ohos_taihe") {
   forward_variables_from(invoker, [ "taihe_generated_file_path" ])
 
   action(target_name) {
-    script = "$taihe_toolchain_path/bin/taihec"
+    script = "${taihe_toolchain_path}/bin/taihec"
     args = [
+      rebase_path("${taihe_toolchain_path}/lib/taihe/stdlib/taihe.platform.ani.taihe"),
       "-I",
       rebase_path("$taihe_file_path", root_build_dir),
       "-O",
       rebase_path("$taihe_generated_file_path", root_build_dir),
-      "-a",
-      "--ani",
+      "-G",
+      "cpp-author",
+      "ani-bridge",
     ]
     deps = invoker.deps
-    outputs = invoker.outputs
+    outputs = [ "$taihe_generated_file_path/src/taihe.platform.ani.abi.c" ]
+    outputs += invoker.outputs
   }
 }
 
@@ -69,9 +72,9 @@ template("taihe_shared_library") {
     }
 
     sources = [
-      "$taihe_toolchain_path/src/taihe/runtime/object.c",
+      "$taihe_toolchain_path/src/taihe/runtime/object.cpp",
       "$taihe_toolchain_path/src/taihe/runtime/runtime.cpp",
-      "$taihe_toolchain_path/src/taihe/runtime/string.c",
+      "$taihe_toolchain_path/src/taihe/runtime/string.cpp",
     ]
     sources += invoker.sources
 
