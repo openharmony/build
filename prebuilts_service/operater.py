@@ -25,11 +25,13 @@ from common_utils import (
     install_hpm_in_other_platform,
     npm_install,
     is_system_component,
+    get_code_dir,
     check_hpm_version,
     save_data,
     load_config,
 )
 import re
+import platform
 from collections import OrderedDict
 
 
@@ -57,7 +59,7 @@ class OperateHanlder:
     @staticmethod
     def run(operate_list: list, global_args, unchanged_list: tuple = ()):
         OperateHanlder.global_args = global_args
-        # read and reset processed record 
+        # read and reset processed record
         process_result_file = os.path.join(global_args.code_dir, "prebuilts/.local_data/processed.json")
         if os.path.exists(process_result_file):
             processed_dict = load_config(process_result_file)
@@ -66,7 +68,7 @@ class OperateHanlder:
         for key in processed_dict.keys():
             if key not in unchanged_list:
                 processed_dict[key] = False
-        
+
         # group operate_list by process item
         item_steps_dict = OrderedDict()
         for current_operate in operate_list:
@@ -76,7 +78,7 @@ class OperateHanlder:
                 item_steps_dict[current_process_item] = [current_operate]
             else:
                 item_steps_dict[current_process_item].append(current_operate)
-                    
+
         # process each item
         for process_item, step_list in item_steps_dict.items():
             process_item_without_suffix = re.sub(r"(\.[A-Za-z]+)+$", "", process_item).strip("_")
@@ -223,3 +225,42 @@ class OperateHanlder:
                 shutil.copytree(src_dir, dest_dir, symlinks=True)
                 print(f"copy {src_dir} ---> dest: {dest_dir}")
             
+    @staticmethod
+    def _download_sdk(operate: dict):
+        # 获取操作系统信息
+        system = platform.system()
+        if system == "Linux":
+            host_platform = "linux"
+        elif system == "Darwin":
+            host_platform = "darwin"
+        else:
+            print(f"Unsupported host platform: {system}")
+            exit(1)
+
+        # 获取 CPU 架构信息
+        machine = platform.machine()
+        if machine == "arm64":
+            host_cpu_prefix = "arm64"
+        elif machine == "aarch64":
+            host_cpu_prefix = "aarch64"
+        else:
+            host_cpu_prefix = "x86"
+
+        # 假设 code_dir 是当前目录，可根据实际情况修改
+        code_dir = get_code_dir()
+        prebuilts_python_dir = os.path.join(code_dir, "prebuilts", "python", f"{host_platform}-{host_cpu_prefix}")
+        python_dirs = [os.path.join(prebuilts_python_dir, d) for d in os.listdir(prebuilts_python_dir) if os.path.isdir(os.path.join(prebuilts_python_dir, d))]
+        python_dirs.sort(reverse=True)
+        if python_dirs:
+            python_path = os.path.join(python_dirs[0], "bin")
+        else:
+            raise Exception("python path not exist")
+        ohos_sdk_linux_dir = os.path.join(code_dir, "prebuilts", "ohos-sdk", "linux")
+        if not os.path.isdir(ohos_sdk_linux_dir):
+            python_executable = os.path.join(python_path, "python3")
+            script_path = os.path.join(code_dir, "build", "scripts", "download_sdk.py")
+            try:
+                subprocess.run([python_executable, script_path, "--branch", "master", "--product-name", operate.get("sdk_name"), "--api-version", str(operate.get("version"))], check=True)
+
+            except subprocess.CalledProcessError as e:
+                print(f"Error running download_sdk.py: {e}")
