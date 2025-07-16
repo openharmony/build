@@ -72,7 +72,6 @@ class OperateHanlder:
         # group operate_list by process item
         item_steps_dict = OrderedDict()
         for current_operate in operate_list:
-            # current_process_item = ${tool_name}_${tar_name}
             current_process_item = re.match(r"(.*)_\d$", current_operate.get("step_id")).group(1)
             if current_process_item not in item_steps_dict:
                 item_steps_dict[current_process_item] = [current_operate]
