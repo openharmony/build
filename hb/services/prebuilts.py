@@ -62,29 +62,6 @@ class PreuiltsService(BuildFileGeneratorInterface):
             print(f"{cmd} execute failed: {e.returncode}")
             raise e
 
-    def _get_part_names(self):
-        part_name_list = []
-        if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):
-            for name in sys.argv[2:]:
-                if not name.startswith("-"):
-                    part_name_list.append(name)
-                else:
-                    break
-        return part_name_list
-
-    def _convert_flags(self) -> list:
-        flags_list = []
-        for key in self.flags_dict.keys():
-            if isinstance(self.flags_dict[key], bool) and self.flags_dict[key]:
-                flags_list.append(f"--{key}")
-            if isinstance(self.flags_dict[key], str) and self.flags_dict[key]:
-                flags_list.append(f"--{key}")
-                flags_list.append(f"{self.flags_dict[key]}")
-            if isinstance(self.flags_dict[key], list) and self.flags_dict[key]:
-                flags_list.append(f"--{key}")
-                flags_list.extend(self.flags_dict[key])
-        return flags_list
-
     def check_whether_need_update(self) -> bool:
         last_update = self.read_last_update().get("last_update", 0)
         if not last_update:
@@ -153,3 +130,26 @@ class PreuiltsService(BuildFileGeneratorInterface):
             if mtime > last_update:
                 return True
         return False
+
+    def _get_part_names(self):
+        part_name_list = []
+        if len(sys.argv) > 2 and not sys.argv[2].startswith("-"):
+            for name in sys.argv[2:]:
+                if not name.startswith("-"):
+                    part_name_list.append(name)
+                else:
+                    break
+        return part_name_list
+
+    def _convert_flags(self) -> list:
+        flags_list = []
+        for key in self.flags_dict.keys():
+            if isinstance(self.flags_dict[key], bool) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+            if isinstance(self.flags_dict[key], str) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+                flags_list.append(f"{self.flags_dict[key]}")
+            if isinstance(self.flags_dict[key], list) and self.flags_dict[key]:
+                flags_list.append(f"--{key}")
+                flags_list.extend(self.flags_dict[key])
+        return flags_list
