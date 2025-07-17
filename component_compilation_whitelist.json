@@ -33,7 +33,14 @@
         "//third_party/libexif:libexif",
         "//third_party/zlib:libz",
         "//third_party/zlib:libz_crc",
-        "//third_party/zlib:shared_libz"
+        "//third_party/zlib:shared_libz",
+        "//third_party/re2:re2",
+        "//third_party/grpc:grpc",
+        "//third_party/grpc:grpcxx",
+        "//third_party/grpc:gpr",
+        "//third_party/grpc:grpc_cpp_plugin",
+        "//third_party/grpc:grpc_plugin_support",
+        "//third_party/grpc:grpcpp"
     ],
     "innerapi_public_deps_inner": {
         "//drivers/interface/camera/v1_0:libcamera_proxy_1.0": [
