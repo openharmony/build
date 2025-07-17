@@ -174,95 +174,82 @@ fi
 echo -e "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"
 
 echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
-api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_version = *"\([^"]*\)".*/\1/p')
-full_api_version=$(grep 'api_full_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
-function build_sdk() {
-    ROOT_PATH=${SOURCE_ROOT_DIR}
-    SDK_PREBUILTS_PATH=${ROOT_PATH}/prebuilts/ohos-sdk
-
-    pushd ${ROOT_PATH} > /dev/null
-      echo -e "[OHOS INFO] building the latest ohos-sdk..."
-      ./build.py --product-name ohos-sdk $ccache_args $xcache_args --load-test-config=false --get-warning-list=false --stat-ccache=false --compute-overlap-rate=false --deps-guard=false --generate-ninja-trace=false --gn-args skip_generate_module_list_file=true sdk_platform=linux ndk_platform=linux use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true enable_archive_sdk=false enable_notice_collection=false enable_process_notice=false
-      if [[ "$?" -ne 0 ]]; then
-        echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed! You can try to use '--no-prebuilt-sdk' to skip the build of ohos-sdk.\033[0m"
-        exit 1
-      fi
-      if [ -d "${ROOT_PATH}/prebuilts/ohos-sdk/linux" ]; then
-          rm -rf ${ROOT_PATH}/prebuilts/ohos-sdk/linux
-      fi
-      mkdir -p ${SDK_PREBUILTS_PATH}
-      mv ${ROOT_PATH}/out/sdk/ohos-sdk/linux ${SDK_PREBUILTS_PATH}/
-      mkdir -p ${SDK_PREBUILTS_PATH}/linux/native
-      mv ${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/* ${SDK_PREBUILTS_PATH}/linux/native/
-      mv ${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/* ${SDK_PREBUILTS_PATH}/linux/native/
-      pushd ${SDK_PREBUILTS_PATH}/linux > /dev/null
-        mkdir -p $full_api_version
-        for i in */; do
-            if [ -d "$i" ] && [ "$i" != "$full_api_version/" ]; then
-                mv $i $full_api_version/
-            fi
-        done
-        pushd $api_version/ets/ > /dev/null
-          for dir in ./ets1.1/*/; do 
-            dir_name=$(basename "$dir")
-            ln -s "./ets1.1/$dir_name" "$dir_name"
-          done
-        popd > /dev/null
-      popd > /dev/null
-    popd > /dev/null
-}
-function get_api(){
-  current_dir=$(pwd)
-  if [ -d "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12" ]; then
-    mkdir -p $current_dir/prebuilts/ohos-sdk/linux/12
-    mv "$current_dir/prebuilts/ohos-sdk-12/ohos-sdk/linux/12/"* "$current_dir/prebuilts/ohos-sdk/linux/12/"
-  fi
-}
-
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${full_api_version}" && "$*" != *ohos-sdk* && "$*" != *"--no-prebuilt-sdk"* || "${@}" =~ "--prebuilt-sdk" ]]; then
-  echo -e "\033[33m[OHOS INFO] The OHOS-SDK was not detected, so the SDK compilation will be prioritized automatically. You can also control whether to execute this process by using '--no-prebuilt-sdk' and '--prebuilt-sdk'.\033[0m"
-  if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
-    ccache_args="--ccache=false"
-  else
-    ccache_args="--ccache=true"
-  fi
-  if [[ "${@}" =~ "--xcache=true" || "${@}" =~ "--xcache true" || "${@}" =~ "--xcache" ]]; then
-    xcache_args="--xcache=true"
-  else
-    xcache_args="--xcache=false"
-  fi
-  build_sdk
-  api_version=$(grep 'api_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
-  target_dir="${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/previewer"
-  if [ ! -d "${target_dir}" ]; then
-    mkdir "${target_dir}"
-    cp -r "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}/native/oh-uni-package.json" "${target_dir}/"
-    sed -i 's/Native/Previewer/g' "${target_dir}/oh-uni-package.json"
-    sed -i 's/native/previewer/g' "${target_dir}/oh-uni-package.json"
-  fi
-  get_api
-  if [[ "$?" -ne 0 ]]; then
-    echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed, please remove the out/sdk directory and try again!\033[0m"
-    exit 1
-  fi
-fi
 
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
 
-flag=true
-args_list=$@
-for var in $@
-do
-  OPTIONS=${var%%=*}
-  PARAM=${var#*=}
-  if [[ "$OPTIONS" == "using_hb_new" && "$PARAM" == "false" ]]; then
-    flag=false
-    ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/entry.py --source-root-dir ${SOURCE_ROOT_DIR} $args_list
-    break
-  fi
+if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
+  ccache_args="--ccache=false"
+else
+  ccache_args="--ccache=true"
+fi
+if [[ "${@}" =~ "--xcache=true" || "${@}" =~ "--xcache true" || "${@}" =~ "--xcache" ]]; then
+  xcache_args="--xcache=true"
+else
+  xcache_args="--xcache=false"
+fi
+
+api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_version = *"\([^"]*\)".*/\1/p')
+full_api_version=$(grep 'api_full_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
+using_hb_new=true
+fetching_prebuilt_sdk_gn_args=false
+need_prebuilt_sdk=true
+force_prebuilt_sdk=false
+prebuilt_sdk_gn_args=()
+args_list=()
+
+for arg in "$@"; do
+    case "$arg" in
+        --using_hb_new=*)
+            value="${arg#*=}"
+            if [[ "$value" == "false" ]]; then
+                using_hb_new=false
+                python3 "${SOURCE_ROOT_DIR}/build/scripts/entry.py" --source-root-dir "${SOURCE_ROOT_DIR}" "$@"
+                exit $?
+            fi
+            args_list+=("$arg")
+            ;;
+        --prebuilts-sdk-gn-args)
+            fetching_prebuilt_sdk_gn_args=true
+            ;;
+        ohos-sdk|--no-prebuilt-sdk)
+            need_prebuilt_sdk=false
+            args_list+=("$arg")
+            ;;
+        --prebuilt-sdk)
+            force_prebuilt_sdk=true
+            ;;
+        *)
+            echo "arg:$arg"
+            if [[ "$fetching_prebuilt_sdk_gn_args" == "true" ]]; then
+              prebuilt_sdk_gn_args+=("$arg")
+            else
+              args_list+=("$arg")
+            fi
+            ;;
+    esac
+    shift
 done
-if [[ ${flag} == "true" ]]; then
-  ${PYTHON3} ${SOURCE_ROOT_DIR}/build/hb/main.py build $args_list
+
+echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
+echo "args_list:${args_list[@]}"
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${full_api_version}" && "${need_prebuilt_sdk}" == "true" || "${force_prebuilt_sdk}" == "true" ]]; then
+  "${SOURCE_ROOT_DIR}/build/build_scripts/build_ohos_sdk.sh" \
+      "${SOURCE_ROOT_DIR}" \
+      "${PYTHON3_DIR}" \
+      "${HOST_OS}" \
+      "${ccache_args}" \
+      "${xcache_args}" \
+      "${full_api_version}" \
+      "${api_version}" \
+      "${prebuilt_sdk_gn_args[@]}"
+  if [[ "$?" -ne 0 ]]; then
+      echo -e "\033[31m[OHOS ERROR] prebuilt ohos-sdk failed! Try using '--no-prebuilt-sdk' to skip.\033[0m"
+      exit 1
+  fi
+fi
+
+if [[ "$using_hb_new" == "true" ]]; then
+  python3 "${SOURCE_ROOT_DIR}/build/hb/main.py" build "${args_list[@]}"
 fi
 
 if [[ "$?" -ne 0 ]]; then
