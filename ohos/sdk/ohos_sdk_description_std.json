@@ -1367,6 +1367,15 @@
         ]
     },
     {
+        "install_dir": "ets/ets1.2/build-tools/ui-plugins/lib",
+        "module_label": "//interface/sdk-js:api_check_plugin",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/ets1.2/build-tools/migration-helper",
         "module_label": "//arkcompiler/ets_frontend/ets2panda/linter:ets2panda_build_linter",
         "target_os": [
