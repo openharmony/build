@@ -26,39 +26,72 @@ from common_utils import (
     npm_install,
     is_system_component,
     get_code_dir,
+    check_hpm_version,
+    save_data,
+    load_config,
 )
 import re
 import platform
+from collections import OrderedDict
 
 
 class OperateHanlder:
     global_args = None
 
     @staticmethod
-    def run(operate_list: list, global_args, unchanged_list: tuple = ()):
-        ignore_list = []
-        OperateHanlder.global_args = global_args
-        pre_process_tool = ""
-        for operate in operate_list:
+    def process_step(process_item: str, step_list: list, unchanged_list: list, processed_dict: dict):
+        process_result_file = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/.local_data/processed.json")
+        for step in step_list:
             try:
-                current_tool = re.match(r"(.*)_\d$", operate.get("step_id")).group(1)
-                shot_name = re.sub(r"(\.[A-Za-z]+)+$", "", current_tool).strip("_")
-
-                if current_tool != pre_process_tool:
-                    print(f"\n==> process {shot_name}")
-                    pre_process_tool = current_tool
-
-                if current_tool in ignore_list:
-                    continue
-
-                getattr(OperateHanlder, "_" + operate.get("type"))(operate)
+                getattr(OperateHanlder, "_" + step.get("type"))(step)
             except Exception as e:
-                if current_tool in unchanged_list:
-                    ignore_list.append(current_tool)
-                    print(f"<== ignore process {shot_name}")
+                # if the process item is already being processed, but not being recorded(that means prebuilts/processed.json is not exist),
+                # in this situation, we just check if the process item is in unchanged_list,
+                # if it is, then we don't need to process it again, we can just mark it as processed.
+                if process_item in unchanged_list:
+                    processed_dict[process_item] = True
+                    break
+                # If an error occurs, save the processed status
+                processed_dict[process_item] = False
+                save_data(process_result_file, processed_dict)
+                raise e
+
+    @staticmethod
+    def run(operate_list: list, global_args, unchanged_list: tuple = ()):
+        OperateHanlder.global_args = global_args
+        # read and reset processed record
+        process_result_file = os.path.join(global_args.code_dir, "prebuilts/.local_data/processed.json")
+        if os.path.exists(process_result_file):
+            processed_dict = load_config(process_result_file)
+        else:
+            processed_dict = dict()
+        for key in processed_dict.keys():
+            if key not in unchanged_list:
+                processed_dict[key] = False
+
+        # group operate_list by process item
+        item_steps_dict = OrderedDict()
+        for current_operate in operate_list:
+            current_process_item = re.match(r"(.*)_\d$", current_operate.get("step_id")).group(1)
+            if current_process_item not in item_steps_dict:
+                item_steps_dict[current_process_item] = [current_operate]
+            else:
+                item_steps_dict[current_process_item].append(current_operate)
+
+        # process each item
+        for process_item, step_list in item_steps_dict.items():
+            process_item_without_suffix = re.sub(r"(\.[A-Za-z]+)+$", "", process_item).strip("_")
+            # If the process item is in unchanged_list and has been processed, skip it
+            if process_item in unchanged_list:
+                if process_item in processed_dict and processed_dict[process_item]:
+                    print(f"==> {process_item_without_suffix} is unchanged, skip")
                     continue
-                else:
-                    raise e
+            print(f"\n==> process {process_item_without_suffix}")
+            processed_dict[process_item] = False
+            OperateHanlder.process_step(process_item, step_list, unchanged_list, processed_dict)
+            processed_dict[process_item] = True
+        # save the processed status of each item
+        save_data(process_result_file, processed_dict)
 
     @staticmethod
     def _symlink(operate: dict):
@@ -111,9 +144,13 @@ class OperateHanlder:
 
     @staticmethod
     def _hpm_download(operate: dict):
+        hpm_path = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/hpm/node_modules/.bin/hpm")
+        npm_tool_path = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/build-tools/common/nodejs/current/bin/npm")
+        if check_hpm_version(hpm_path, npm_tool_path):
+            print("hpm version is ok, skip hpm download")
+            return
         name = operate.get("name")
         download_dir = operate.get("download_dir")
-        npm_tool_path = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/build-tools/common/nodejs/current/bin/npm")
         symlink_dest = operate.get("symlink")
         if "@ohos/hpm-cli" == name:
             install_hpm(npm_tool_path, download_dir)
