@@ -242,10 +242,6 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${full_api_version}" && 
       "${full_api_version}" \
       "${api_version}" \
       "${prebuilt_sdk_gn_args[@]}"
-  if [[ "$?" -ne 0 ]]; then
-      echo -e "\033[31m[OHOS ERROR] prebuilt ohos-sdk failed! Try using '--no-prebuilt-sdk' to skip.\033[0m"
-      exit 1
-  fi
 fi
 
 if [[ "$using_hb_new" == "true" ]]; then
