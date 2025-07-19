@@ -134,6 +134,7 @@ def get_hvigor_version(cwd: str):
 def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
     hvigor_version = get_hvigor_version(cwd)
     model_version = get_integrated_project_config(cwd)
+    product_value = options.product
     if options.test_hap:
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
@@ -146,10 +147,10 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
-                new_src_path, 'build/default/outputs/default')
+                new_src_path, f'build/{product_value}/outputs/default')
         else:
             unsigned_hap_path = os.path.join(
-                cwd, src_path, 'build/default/outputs/default')
+                cwd, src_path, f'build/{product_value}/outputs/default')
     return unsigned_hap_path
 
 
