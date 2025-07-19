@@ -54,6 +54,7 @@ def parse_args(args):
     parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
+    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
 
     options = parser.parse_args(args)
     return options
@@ -238,15 +239,16 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
     elif options.ohos_app_enable_ubsan:
         cmd.extend(['-p', 'ohos-enable-ubsan=true'])
     
+    product_value = options.product
     if options.test_hap:
         cmd.extend(['--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap'])
     elif options.build_modules:
         cmd.extend(['assembleHap', '--mode',
-               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)])
+               'module', '-p', f'product={product_value}', '-p', 'module=' + ','.join(options.build_modules)])
     else:
         cmd.extend(['--mode',
-               options.build_level, '-p', 'product=default', options.assemble_type])
+               options.build_level, '-p', f'product={product_value}', options.assemble_type])
 
     if options.enable_debug:
         cmd.extend(['-p', 'debuggable=true'])
