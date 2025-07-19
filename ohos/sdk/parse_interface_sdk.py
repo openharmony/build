@@ -127,7 +127,7 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
             install_label_str = str(info.get("install_dir"))
             if install_label_str.startswith("ets/ets1.2/"):
                 continue
-            elif install_label_str.startswith("ets/ets1.1/build-tools/ets1.1interop"):
+            elif install_label_str.startswith("ets/ets1.1/build-tools/interop"):
                 continue
             elif install_label_str.startswith("ets/ets1.1/"):
                 info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
