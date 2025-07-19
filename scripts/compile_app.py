@@ -135,6 +135,8 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
     hvigor_version = get_hvigor_version(cwd)
     model_version = get_integrated_project_config(cwd)
     product_value = options.product
+    if product_value is None:
+        product_value = 'default'
     if options.test_hap:
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
@@ -240,7 +242,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
     elif options.ohos_app_enable_ubsan:
         cmd.extend(['-p', 'ohos-enable-ubsan=true'])
     
-    product_value = options.product
+    product_value = options.product if options.product else 'default'
     if options.test_hap:
         cmd.extend(['--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap'])
