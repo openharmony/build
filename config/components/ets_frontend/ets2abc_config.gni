@@ -84,6 +84,11 @@ ohos_ets_ark_link_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/ark_link"
 ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
+ohos_ets_build_system_path =
+    "$root_build_dir/ohos_ets/build-tools/driver/build-system"
+ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
+ohos_ets_koala_wrapper_path =
+    "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
 
 if (ohos_indep_compiler_enable) {
   ark_link_target_out_path =
