@@ -31,15 +31,23 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--strip', required=True)
     parser.add_argument('--mini-debug', required=False)
+    parser.add_argument('--adlt-llvm-tool', required=False)
     args = parser.parse_args()
     copy_strip(args)
     if args.mini_debug == "true":
         ohos_root_path = os.path.join(os.path.dirname(__file__), '../../..')
         script_path = os.path.join(os.path.dirname(__file__), '../../../build/toolchain/mini_debug_info.py')
         clang_base_path = os.path.join(os.path.dirname(__file__), '../../../prebuilts/clang/ohos')
-        subprocess.call(
-                ['python3', script_path, '--unstripped-path', args.input, '--stripped-path', args.output,
-                '--root-path', ohos_root_path, '--clang-base-dir', clang_base_path])
+        cmd_args = [
+            'python3', script_path,
+            '--unstripped-path', args.input,
+            '--stripped-path', args.output,
+            '--root-path', ohos_root_path,
+            '--clang-base-dir', clang_base_path
+        ]
+        if args.adlt_llvm_tool:
+            cmd_args.extend(['--adlt-llvm-tool', args.adlt_llvm_tool])
+        subprocess.call(cmd_args)
     return 0
 
 if __name__ == '__main__':
