@@ -458,6 +458,12 @@ template("ohos_app") {
         not_needed(invoker, [ "publicity_file" ])
       }
     }
+
+    product = "default"
+    if (defined(invoker.product) && invoker.product != "") {
+      product = invoker.product
+    }
+
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
