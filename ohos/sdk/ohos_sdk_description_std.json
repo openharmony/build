@@ -764,6 +764,16 @@
         ]
     },
     {
+        "install_dir": "ets/ets1.1/build-tools/ets-loader/insight_intents",
+        "module_label": "//developtools/ace_ets2bundle:insight_intents",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "ets/ets1.1/build-tools/ets-loader",
         "module_label": "//developtools/ace_ets2bundle:ets_loader",
         "target_os": [
@@ -931,6 +941,15 @@
     {
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/packing_tool:app_check_tool",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/ets1.2/build-tools/ets2panda/bin",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/dependency_analyzer:dependency_analyzer",
         "target_os": [
             "linux",
             "windows",
@@ -1365,6 +1384,7 @@
         "install_dir": "toolchains/lib",
         "module_label": "//developtools/hapsigner/binary_sign_tool:binary-sign-tool",
         "target_os": [
+            "linux",
             "ohos"
         ]
     },
@@ -1407,6 +1427,15 @@
     {
         "install_dir": "ets/ets1.2/build-tools/ui-plugins/",
         "module_label": "//developtools/ace_ets2bundle/arkui-plugins:ui_plugin",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//arkcompiler/runtime_core/taihe:copy_taihe_tools",
         "target_os": [
             "linux",
             "windows",

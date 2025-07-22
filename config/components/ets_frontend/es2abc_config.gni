@@ -72,7 +72,13 @@ template("es2abc_gen_abc") {
       if (!defined(external_deps)) {
         external_deps = []
       }
-      external_deps += [ "ets_frontend:es2panda(${host_toolchain})" ]
+      if (host_toolchain == toolchain_mac) {
+        external_deps = ["ets_frontend:es2panda($toolchain_mac)"]
+      } else if (host_toolchain == toolchain_win) {
+        external_deps = ["ets_frontend:es2panda(${host_toolchain})"]
+      } else {
+        external_deps = ["ets_frontend:es2panda($toolchain_linux)"]
+      }
     }
 
     args = [
@@ -134,7 +140,15 @@ template("es2abc_gen_newest_abc") {
     script = "//build/scripts/generate_js_bytecode.py"
 
     deps = extra_dependencies
-    deps += es2abc_build_deps
+    if (host_toolchain == toolchain_mac) {
+      external_deps = ["ets_frontend:es2panda($toolchain_mac)"]
+    } else if (host_toolchain == toolchain_win) {
+      external_deps = ["ets_frontend:es2panda(${host_toolchain})"]
+    } else if (ark_standalone_build) {
+      deps += es2abc_build_deps
+    } else {
+      external_deps = ["ets_frontend:es2panda($toolchain_linux)"]
+    }
 
     args = [
       "--src-js",

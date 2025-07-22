@@ -107,5 +107,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "\033[0;33myou can use --skip-download to skip download binary dependencies while using hb build command\033[0m"
-
 exit 0

@@ -58,6 +58,11 @@ def parse_args():
                              'its value will be the path of input file if not specified')
     parser.add_argument("--enable-annotations", action='store_true',
                         help='whether annotations are enabled or not')
+    parser.add_argument("--enable-release-column", action='store_true',
+                        help='enable column number information for bytecode instructions in non-debug mode.')
+    
+    parser.add_argument("--enable-ets-implements", action='store_true',
+                        help='whether ets implements are enabled or not'),
     arguments = parser.parse_args()
     return arguments
 
@@ -107,6 +112,12 @@ def gen_abc_info(input_arguments):
     if input_arguments.enable_annotations:
         src_index = cmd.index(input_arguments.src_js)
         cmd.insert(src_index, '--enable-annotations')
+    if input_arguments.enable_release_column:
+        src_index = cmd.index(input_arguments.src_js)
+        cmd.insert(src_index, '--enable-release-column')
+    if input_arguments.enable_ets_implements:
+        src_index = cmd.index(input_arguments.src_js)
+        cmd.insert(src_index, '--enable-ets-implements')
         # insert d.ts option to cmd later
     cmd.append("--target-api-sub-version=beta3")
 

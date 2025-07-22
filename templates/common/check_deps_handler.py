@@ -70,7 +70,7 @@ def get_path_from_label(label: str):
     return label.lstrip('//').split(':')[0]
 
 
-def get_path_from_module_list(cur_part_name: str, depfiles:list) -> str:
+def get_path_from_module_list(cur_part_name: str, depfiles: list) -> list:
     parts_module_lists = []
     parts_modules_file = "build_configs/parts_info/parts_modules_info.json"
     parts_modules_info = read_json_file(parts_modules_file)
@@ -87,18 +87,26 @@ def get_path_from_module_list(cur_part_name: str, depfiles:list) -> str:
     return parts_path
 
 
-def get_part_pattern(cur_part_name: str, parts_path_info: dict, path_parts_info: dict, depfiles: list) -> list:
+def get_part_pattern(cur_part_name: str, parts_path_info: dict, path_parts_info: dict, depfiles: list,
+                     component_path_file: str) -> list:
     """get all part path from part info"""
     part_pattern = []
     part_path = parts_path_info.get(cur_part_name)
     if part_path is None:
         return part_pattern
 
-    path_to_part = path_parts_info.get(part_path)
+    path_to_part = path_parts_info.get(part_path, [])
     if len(path_to_part) == 1:
         part_pattern.append(part_path)
     else:
         part_pattern.extend(get_path_from_module_list(cur_part_name, depfiles))
+
+    if not os.path.exists(component_path_file):
+        return part_pattern
+
+    component_path_info: dict[str, list[str]] = read_json_file(component_path_file)
+    module_paths = component_path_info.get(part_path, [])
+    part_pattern.extend(module_paths)
 
     return part_pattern
 
@@ -176,8 +184,9 @@ def check(args) -> list:
     compile_standard_allow_file = args.compile_standard_allow_file
     compile_standard_allow_info = read_json_file(compile_standard_allow_file)
     parts_path_info, path_parts_info = load_part_info(depfiles)
+    component_path_file = os.path.join(args.source_root_dir, "out/products_ext/component_multipath_dict.json")
 
-    part_pattern = get_part_pattern(args.part_name, parts_path_info, path_parts_info, depfiles)
+    part_pattern = get_part_pattern(args.part_name, parts_path_info, path_parts_info, depfiles, component_path_file)
     if not part_pattern:
         gn_allow_list = compile_standard_allow_info.get("gn_part_or_subsystem_error", [])
         message = "part_name: '{}' path is not exist, please check target: '{}'".format(

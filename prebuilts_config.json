@@ -3,7 +3,7 @@
     "tool_list": [
         {
             "name": "ark_js_prebuilts",
-            "tag": "base",
+            "tag": "ark_js",
             "type": "src, indep",
             "config": {
                 "linux": {
@@ -34,41 +34,41 @@
             "config": {
                 "linux": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/linux_aarch64/clang_linux_aarch64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/linux_aarch64/clang_linux_aarch64-e5b635-20250626.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
-                        "rename_src": "${unzip_dir}/clang_linux_aarch64-2db1e1-20250605",
+                        "rename_src": "${unzip_dir}/clang_linux_aarch64-e5b635-20250626",
                         "type": "src"
                     },
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/ohos_arm64/clang_ohos-arm64-2db1e1-20250605.tar.gz",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/ohos_arm64/clang_ohos-arm64-e5b635-20250626.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/ohos-arm64",
-                            "rename_src": "${unzip_dir}/clang_ohos-arm64-2db1e1-20250605",
+                            "rename_src": "${unzip_dir}/clang_ohos-arm64-e5b635-20250626",
                             "type": "src"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/windows/clang_windows-x86_64-2db1e1-20250605.tar.gz",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/windows/clang_windows-x86_64-e5b635-20250626.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/windows-x86_64",
-                            "rename_src": "${unzip_dir}/clang_windows-x86_64-2db1e1-20250605",
+                            "rename_src": "${unzip_dir}/clang_windows-x86_64-e5b635-20250626",
                             "type": "src"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/linux/clang_linux-x86_64-2db1e1-20250605.tar.gz",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/linux/clang_linux-x86_64-e5b635-20250626.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
-                            "rename_src": "${unzip_dir}/clang_linux-x86_64-2db1e1-20250605"
+                            "rename_src": "${unzip_dir}/clang_linux-x86_64-e5b635-20250626"
                         }
                     ]
                 },
                 "darwin": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/darwin_arm64/clang_darwin-arm64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/darwin_arm64/clang_darwin-arm64-e5b635-20250626.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-arm64",
-                        "rename_src": "${unzip_dir}/clang_darwin-arm64-2db1e1-20250605"
+                        "rename_src": "${unzip_dir}/clang_darwin-arm64-e5b635-20250626"
                     },
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/darwin_x86_64/clang_darwin-x86_64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/darwin_x86_64/clang_darwin-x86_64-e5b635-20250626.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-x86_64",
-                        "rename_src": "${unzip_dir}/clang_darwin-x86_64-2db1e1-20250605"
+                        "rename_src": "${unzip_dir}/clang_darwin-x86_64-e5b635-20250626"
                     }
                 }
             },
@@ -93,7 +93,7 @@
             "config": {
                 "linux": {
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/gn/20250610/gn-linux-x86-20250610.tar.gz",
+                        "remote_url": "/openharmony/compiler/gn/20250620/gn-linux-x86-20250620.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin"
                     },
                     "arm64": {
@@ -111,7 +111,7 @@
         },
         {
             "name": "hc-gen",
-            "tag": "base",
+            "tag": "hc-gen",
             "type": "src, indep",
             "config": {
                 "linux": {
@@ -125,7 +125,7 @@
         },
         {
             "name": "OpenHarmonyApplication.pem",
-            "tag": "base",
+            "tag": "app",
             "type": "indep",
             "config": {
                 "linux": {
@@ -223,7 +223,7 @@
         },
         {
             "name": "packing_tool",
-            "tag": "base",
+            "tag": "packing_tool",
             "type": "src, indep",
             "config": {
                 "linux, darwin": {
@@ -308,7 +308,7 @@
         },
         {
             "name": "rustc",
-            "tag": "base",
+            "tag": "rust",
             "type": "src, indep",
             "unzip_dir": "${code_dir}/prebuilts/rustc",
             "config": {
@@ -396,9 +396,18 @@
             ]
         },
         {
-            "name": "init_ohpm",
-            "tag": "base",
+            "name": "hvigor",
+            "tag": "hvigor",
             "type": "src, indep",
+            "config": {
+                "linux": {
+                    "x86_64": {
+                        "unzip_dir": "prebuilts/tool/command-line-tools",
+                        "remote_url": "/harmonyos/compiler/hvigor/5.0.3.906/command-line-tools.tar",
+                        "unzip_filename": "hvigor"
+                    }
+                }
+            },
             "handle": [
                 {
                     "type": "shell",
@@ -418,28 +427,28 @@
                 "linux": {
                     "arm64": {
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/linux_aarch64/libcxx-ndk_linux-aarch64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/linux_aarch64/libcxx-ndk_linux-aarch64-e5b635-20250626.tar.gz",
                         "unzip_filename": "libcxx-ndk",
-                        "rename_src": "${unzip_dir}/libcxx-ndk_linux-aarch64-2db1e1-20250605"
+                        "rename_src": "${unzip_dir}/libcxx-ndk_linux-aarch64-e5b635-20250626"
                     },
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/linux/libcxx-ndk_linux-x86_64-2db1e1-20250605.tar.gz",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/linux/libcxx-ndk_linux-x86_64-e5b635-20250626.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
-                            "rename_src": "${unzip_dir}/libcxx-ndk_linux-x86_64-2db1e1-20250605"
+                            "rename_src": "${unzip_dir}/libcxx-ndk_linux-x86_64-e5b635-20250626"
                         }
                     ]
                 },
                 "darwin": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/darwin_arm64/libcxx-ndk_darwin-arm64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/darwin_arm64/libcxx-ndk_darwin-arm64-e5b635-20250626.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-arm64",
-                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-arm64-2db1e1-20250605"
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-arm64-e5b635-20250626"
                     },
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/clang/15.0.4-2db1e1/darwin_x86_64/libcxx-ndk_darwin-x86_64-2db1e1-20250605.tar.gz",
+                        "remote_url": "/openharmony/compiler/clang/15.0.4-e5b635/darwin_x86_64/libcxx-ndk_darwin-x86_64-e5b635-20250626.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/clang/ohos/darwin-x86_64",
-                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-x86_64-2db1e1-20250605"
+                        "rename_src": "${unzip_dir}/libcxx-ndk_darwin-x86_64-e5b635-20250626"
                     }
                 }
             },
@@ -453,7 +462,7 @@
         },
         {
             "name": "npm_install",
-            "tag": "base",
+            "tag": "npm_install",
             "type": "indep",
             "handle": [
                 {
@@ -473,7 +482,7 @@
         },
         {
             "name": "node_modules_copy",
-            "tag": "base",
+            "tag": "npm_install",
             "type": "indep",
             "handle": [
                 {
@@ -515,7 +524,7 @@
         },
         {
             "name": "AGPBinaryCompile",
-            "tag": "base",
+            "tag": "AGP",
             "type": "indep",
             "unzip_filename": "AGPBinaryCompile",
             "config": {
@@ -529,19 +538,31 @@
         },
         {
             "name": "taihe",
-            "tag": "base",
+            "tag": "taihe",
             "type": "indep",
             "unzip_filename": "taihe",
             "config": {
                 "linux": {
                     "x86_64, arm64": [
                         {
-                            "remote_url": "/openharmony/compiler/Taihe/0.11/taihe-v0.11-20250410.tar.gz",
+                            "remote_url": "/openharmony/compiler/Taihe/0.34.1/taihe-linux-x86_64-v0.34.1-20250623.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/linux-x86_64"
                         }
                     ]
                 }
             }
+        },
+		{
+            "name": "sdk",
+            "tag": "sdk",
+            "type": "indep",
+            "handle": [
+                {
+                    "type": "download_sdk",
+                    "sdk_name": "ohos-sdk-full-linux",
+                    "version": 20
+                }
+            ]
         }
     ]
 }
