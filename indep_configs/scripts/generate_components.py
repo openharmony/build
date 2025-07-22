@@ -182,7 +182,7 @@ def _gen_components_info(components_json, bundle_json, part_name, src_build_name
         else:
             innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis", innerapi_name), innerapi_name)
         innerapi_value_list.append({"name": innerapi_name, "label": innerapi_label})
-        if innerapi_name in _part_toolchain_map_dict.keys():
+        if innerapi_name in _part_toolchain_map_dict.keys() and part_name not in src_build_name_list:
             _name = innerapi_name
             innerapi_name = f"{innerapi_name}({_part_toolchain_map_dict[_name]['toolchain_value']})"
             innerapi_label = "{}:{}".format(os.path.join("//binarys", path, "innerapis",
