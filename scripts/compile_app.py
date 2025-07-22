@@ -54,6 +54,7 @@ def parse_args(args):
     parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
+    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
 
     options = parser.parse_args(args)
     return options
@@ -84,7 +85,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     print(f"build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
     root_dir = get_root_dir()
-    ohpm_path = os.path.join(root_dir, "prebuilts/build-tools/common/oh-command-line-tools/ohpm/bin/ohpm")
+    ohpm_path = os.path.join(root_dir, "prebuilts/tool/command-line-tools/ohpm/bin/ohpm")
     if not os.path.exists(ohpm_path):
         ohpm_path = "ohpm"
     with open(build_profile, 'r') as input_f:
@@ -133,6 +134,9 @@ def get_hvigor_version(cwd: str):
 def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
     hvigor_version = get_hvigor_version(cwd)
     model_version = get_integrated_project_config(cwd)
+    product_value = options.product
+    if product_value is None:
+        product_value = 'default'
     if options.test_hap:
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
@@ -145,10 +149,10 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
-                new_src_path, 'build/default/outputs/default')
+                new_src_path, f'build/{product_value}/outputs/default')
         else:
             unsigned_hap_path = os.path.join(
-                cwd, src_path, 'build/default/outputs/default')
+                cwd, src_path, f'build/{product_value}/outputs/default')
     return unsigned_hap_path
 
 
@@ -238,15 +242,16 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
     elif options.ohos_app_enable_ubsan:
         cmd.extend(['-p', 'ohos-enable-ubsan=true'])
     
+    product_value = options.product if options.product else 'default'
     if options.test_hap:
         cmd.extend(['--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap'])
     elif options.build_modules:
         cmd.extend(['assembleHap', '--mode',
-               'module', '-p', 'product=default', '-p', 'module=' + ','.join(options.build_modules)])
+               'module', '-p', f'product={product_value}', '-p', 'module=' + ','.join(options.build_modules)])
     else:
         cmd.extend(['--mode',
-               options.build_level, '-p', 'product=default', options.assemble_type])
+               options.build_level, '-p', f'product={product_value}', options.assemble_type])
 
     if options.enable_debug:
         cmd.extend(['-p', 'debuggable=true'])

@@ -46,9 +46,9 @@ class Hpm(BuildFileGeneratorInterface):
 
     def __init__(self):
         super().__init__()
-        self._regist_hpm_path()
 
     def run(self):
+        self._regist_hpm_path()
         self.execute_hpm_cmd(CMDTYPE.BUILD)
 
     @throw_exception
