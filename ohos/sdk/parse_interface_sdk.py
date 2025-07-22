@@ -138,7 +138,6 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
     
 
 def change_int_to_number(source_root: str, out_path: str, nodejs: str, sdk_type: str):
-
     tool = os.path.join(source_root, INTERFACE_PATH,
                         API_MODIFY_DIR, TYPE_MODIFY_TOOL)
     tool = os.path.abspath(tool)
@@ -148,9 +147,14 @@ def change_int_to_number(source_root: str, out_path: str, nodejs: str, sdk_type:
     api_out_dir = os.path.abspath(api_out_dir)
 
     nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--path", api_dir, "--output",
-                          api_out_dir], stdout=subprocess.PIPE)
-    p.wait()
+    process_list = []
+    # 根据规格并发执行文本处理逻辑
+    for index in range(10):
+        process_list.append(subprocess.Popen([nodejs, tool, "--path", api_dir, "--output", api_out_dir, "--index",
+                          str(index)], stdout=subprocess.PIPE))
+
+    for process_obj in process_list:
+        process_obj.wait()
 
 
 def parse_step(options):
