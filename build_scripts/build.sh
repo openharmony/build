@@ -135,7 +135,12 @@ cat $HOME/.npmrc | grep 'lockfile=false' > /dev/null || echo 'lockfile=false' >>
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
   pushd ${TOOLS_INSTALL_DIR} > /dev/null
-    OHPM_HOME=${SOURCE_ROOT_DIR}/prebuilts/command-line-tools/ohpm/bin
+    if [[ ! -f "${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
+      echo "[OHOS INFO] download oh-command-line-tools"
+      wget https://repo.huaweicloud.com/harmonyos/ohpm/5.0.2/oh-command-line-tools-20240715.zip -O ohcommandline-tools-linux.zip
+      unzip ohcommandline-tools-linux.zip
+    fi
+    OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin
     chmod +x ${OHPM_HOME}/ohpm
     export PATH=${OHPM_HOME}:$PATH
     chmod +x ${OHPM_HOME}/init
