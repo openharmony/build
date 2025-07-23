@@ -128,6 +128,121 @@ template("ohos_rust_library") {
       module_source_dir = get_label_info(":${_main_target_name}", "dir")
     }
   }
+  
+  # auto set auto_relative_install_dir by innerapi_tags
+  if (defined(invoker.innerapi_tags)) {
+    is_chipsetsdk = false
+    is_platformsdk = false
+    is_platformsdk_indirect = false
+    is_passthrough = false
+    is_passthrough_indirect = false
+    is_llndk = false
+    is_chipsetsdk_indirect = false
+    is_chipsetsdk_sp = false
+    is_chipsetsdk_sp_indirect = false
+
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "llndk" ])) {
+      is_llndk = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk" ])) {
+      is_chipsetsdk = true
+    }
+    foreach(tag,
+            filter_include(invoker.innerapi_tags, [ "chipsetsdk_indirect" ])) {
+      is_chipsetsdk_indirect = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "chipsetsdk_sp" ])) {
+      is_chipsetsdk_sp = true
+    }
+    foreach(
+        tag,
+        filter_include(invoker.innerapi_tags, [ "chipsetsdk_sp_indirect" ])) {
+      is_chipsetsdk_sp_indirect = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "platformsdk" ])) {
+      is_platformsdk = true
+    }
+    foreach(tag,
+            filter_include(invoker.innerapi_tags, [ "platformsdk_indirect" ])) {
+      is_platformsdk_indirect = true
+    }
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "passthrough" ])) {
+      is_passthrough = true
+    }
+    foreach(tag,
+            filter_include(invoker.innerapi_tags, [ "passthrough_indirect" ])) {
+      is_passthrough_indirect = true
+    }
+
+    if (is_chipsetsdk && (is_chipsetsdk_indirect || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk tags cannot coexist with [chipsetsdk_indirect,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_sp,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp && (is_chipsetsdk || is_chipsetsdk_indirect || is_chipsetsdk_sp_indirect)) {
+      assert(false, "chipsetsdk_sp tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp_indirect]")
+    } else if (is_chipsetsdk_sp_indirect && (is_chipsetsdk || is_chipsetsdk_sp || is_chipsetsdk_indirect)) {
+      assert(false, "chipsetsdk_sp_indirect tags cannot coexist with [chipsetsdk,chipsetsdk_indirect,chipsetsdk_sp]")
+    }
+
+    if (is_platformsdk) {
+      auto_relative_install_dir = platformsdk_dir
+    }
+
+    if (is_platformsdk_indirect) {
+      auto_relative_install_dir = platformsdk_dir
+    }
+
+    if (is_chipsetsdk) {
+      auto_relative_install_dir = chipset_sdk_dir
+      if (is_platformsdk || is_platformsdk_indirect) {
+        softlink_path = platformsdk_dir
+      }
+    }
+
+    if (is_chipsetsdk_indirect) {
+      auto_relative_install_dir = chipset_sdk_dir
+      if (is_platformsdk || is_platformsdk_indirect) {
+        softlink_path = platformsdk_dir
+      }
+    }
+
+    if (is_chipsetsdk_sp) {
+      auto_relative_install_dir = chipset_sdk_sp_dir
+      if (is_platformsdk || is_platformsdk_indirect) {
+        softlink_path = platformsdk_dir
+      }
+    }
+
+    if (is_chipsetsdk_sp_indirect) {
+      auto_relative_install_dir = chipset_sdk_sp_dir
+      if (is_platformsdk || is_platformsdk_indirect) {
+        softlink_path = platformsdk_dir
+      }
+    }
+
+    if (is_passthrough) {
+      auto_relative_install_dir = passthrough_dir
+    }
+    if (is_passthrough_indirect) {
+      auto_relative_install_dir = passthrough_indirect_dir
+    }
+
+    if (is_llndk) {
+      auto_relative_install_dir = llndk_dir
+    }
+    is_ndk = false
+    foreach(tag, filter_include(invoker.innerapi_tags, [ "ndk" ])) {
+      is_ndk = true
+    }
+    if (is_ndk) {
+      if (is_llndk) {
+        softlink_path = ndk_dir
+        auto_relative_install_dir = llndk_dir
+      } else {
+        auto_relative_install_dir = ndk_dir
+      } 
+    }
+  }
 
   target_label = get_label_info(":${target_name}", "label_with_toolchain")
   target_toolchain = get_label_info(target_label, "toolchain")
@@ -168,8 +283,19 @@ template("ohos_rust_library") {
         module_install_dir = invoker.module_install_dir
       }
 
+      # update relative_install_dir if auto_relative_install_dir defined
+      if (defined(auto_relative_install_dir)) {
+        relative_install_dir = auto_relative_install_dir
+      }
+
       if (defined(invoker.relative_install_dir)) {
         relative_install_dir = invoker.relative_install_dir
+      }
+
+      if (defined(invoker.innerapi_tags)) {
+        if (defined(softlink_path) && softlink_path != "") {
+          softlink_create_path = softlink_path
+        }
       }
 
       if (defined(invoker.symlink_target_name)) {
@@ -180,6 +306,32 @@ template("ohos_rust_library") {
         output_prefix_override = invoker.output_prefix_override
       }
       notice = "$target_out_dir/$ohos_module_name.notice.txt"
+
+      if (defined(invoker.innerapi_tags)) {
+        invalid = false
+        valid_tags = [
+          "ndk",
+          "llndk",
+          "chipsetsdk",
+          "chipsetsdk_indirect",
+          "chipsetsdk_sp",
+          "chipsetsdk_sp_indirect",
+          "platformsdk",
+          "platformsdk_indirect",
+          "passthrough",
+          "passthrough_indirect",
+          "sasdk",
+        ]
+        foreach(tag, filter_exclude(invoker.innerapi_tags, valid_tags)) {
+          if (tag != "") {
+            invalid = true
+          }
+        }
+        innerapi_tags = invoker.innerapi_tags
+        assert(
+            invalid != true,
+            "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
+      }
     }
   }
 
