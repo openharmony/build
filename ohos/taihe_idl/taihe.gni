@@ -25,7 +25,8 @@ template("ohos_taihe") {
   action(target_name) {
     script = "${taihe_toolchain_path}/bin/taihec"
     args = [
-      rebase_path("${taihe_toolchain_path}/lib/taihe/stdlib/taihe.platform.ani.taihe"),
+      rebase_path(
+          "${taihe_toolchain_path}/lib/taihe/stdlib/taihe.platform.ani.taihe"),
       "-I",
       rebase_path("$taihe_file_path", root_build_dir),
       "-O",
@@ -34,9 +35,23 @@ template("ohos_taihe") {
       "cpp-author",
       "ani-bridge",
     ]
-    deps = invoker.deps
+
+    if (defined(invoker.module_prefix)) {
+      args += [ "-Carkts:module-prefix=${invoker.module_prefix}" ]
+    }
+
+    if (defined(invoker.path_prefix)) {
+      args += [ "-Carkts:path-prefix=${invoker.path_prefix}" ]
+    }
+
+    if (defined(invoker.deps)) {
+      deps = invoker.deps
+    }
+
     outputs = [ "$taihe_generated_file_path/src/taihe.platform.ani.abi.c" ]
-    outputs += invoker.outputs
+    if (defined(invoker.outputs)) {
+      outputs += invoker.outputs
+    }
   }
 }
 
