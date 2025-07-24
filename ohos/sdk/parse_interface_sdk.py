@@ -32,6 +32,7 @@ INTERFACE_PATH = "interface/sdk-js"
 OUT_ROOT = "out/sdk-public"
 API_MODIFY_DIR = "build-tools"
 API_MODIFY_TOOL = "delete_systemapi_plugin.js"
+INTEROP_POSTPROCESS_TOOL = "delete_label_noninterop.js"
 ETS_MODIFY_TOOL = "handleApiFiles.js"
 API_PATH = "api"
 API_GEN_PATH = "build-tools/api"
@@ -83,6 +84,20 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
 def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
 
     tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, API_MODIFY_TOOL)
+    tool = os.path.abspath(tool)
+    api_dir = os.path.join(source_root, out_path, API_PATH)
+    api_dir = os.path.abspath(api_dir)
+    api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR)
+    api_out_dir = os.path.abspath(api_out_dir)
+
+    nodejs = os.path.abspath(nodejs)
+    p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output",
+                          api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
+    p.wait()
+    
+
+def delete_label_noninterop(source_root: str, out_path: str, nodejs: str, sdk_type: str):
+    tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, INTEROP_POSTPROCESS_TOOL)
     tool = os.path.abspath(tool)
     api_dir = os.path.join(source_root, out_path, API_PATH)
     api_dir = os.path.abspath(api_dir)
