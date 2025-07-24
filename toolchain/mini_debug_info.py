@@ -35,7 +35,7 @@ def gen_symbols(tmp_file, sort_lines, symbols_path):
         subprocess.run(cmd.split(), stdout=output_file)
 
 
-def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_base_dir):
+def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_base_dir, adlt_llvm_tool):
     # temporary file path
     dynsyms_path = stripped_binary_path + ".dynsyms"
     funcsysms_path = stripped_binary_path + ".funcsyms"
@@ -50,6 +50,8 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
         clang_base_dir, host_platform + '-' + host_cpu, 'llvm/bin')
     if not os.path.exists(llvm_dir_path):
         llvm_dir_path = os.path.join(root_path, 'out/llvm-install/bin')
+    if adlt_llvm_tool:
+        llvm_dir_path = adlt_llvm_tool    
     llvm_nm_path = os.path.join(llvm_dir_path, "llvm-nm")
     llvm_objcopy_path = os.path.join(llvm_dir_path, "llvm-objcopy")
 
@@ -135,10 +137,11 @@ def main():
     parser.add_argument("--root-path",
                         help="root path is used to search llvm toolchain")
     parser.add_argument("--clang-base-dir", help="")
+    parser.add_argument("--adlt-llvm-tool", help="")
     args = parser.parse_args()
 
     create_mini_debug_info(args.unstripped_path,
-                           args.stripped_path, args.root_path, args.clang_base_dir)
+                           args.stripped_path, args.root_path, args.clang_base_dir, args.adlt_llvm_tool)
 
 
 if __name__ == "__main__":
