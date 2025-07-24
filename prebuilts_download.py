@@ -263,6 +263,7 @@ def _npm_install(args):
             raise Exception("{} not exist, it shouldn't happen, pls check...".format(full_code_path))
     
     if args.parallel_install:
+        print('run npm install in parallel mode, please wait.')
         procs = []
         for index, install_cmd in enumerate(install_cmds):
             proc = subprocess.Popen(install_cmd, cwd=full_code_paths[index], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -277,6 +278,7 @@ def _npm_install(args):
             args.success_installed.append(full_code_paths[index])
 
     else:
+        print('run npm install in serial mode, please wait.')
         for index, install_cmd in enumerate(install_cmds):
             proc = subprocess.Popen(install_cmd, cwd=full_code_paths[index], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print('run npm install in {}'.format(full_code_paths[index]))
