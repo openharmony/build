@@ -76,8 +76,9 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
                         ETS_MODIFY_TOOL)
     tool = os.path.abspath(tool)
     nodejs = os.path.abspath(nodejs)
-    p = subprocess.Popen([nodejs, tool, "--path", input_path, "--output",
-                         output_path, "--type", sdk_type, "--isPublic", is_public], stdout=subprocess.PIPE)
+    p = subprocess.Popen([nodejs, tool, "--path", input_path, "--output", output_path,
+                          "--type", sdk_type, "--isPublic", is_public, "--create-keep-file", "true"],
+                        stdout=subprocess.PIPE)
     p.wait()
 
 
