@@ -12,13 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-cleanup(){
-    rm -rf .gn
-    ln -s build/core/gn/dotfile.gn .gn
-}
-
-trap cleanup EXIT
-
 set -e
 echo $1 $2 $3
 TEST_FILTER=$3
@@ -105,6 +98,9 @@ ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${
 if [ $? -ne 0 ]; then
   exit 1
 fi
+
+rm -rf .gn
+ln -s build/core/gn/dotfile.gn .gn
 
 echo -e "\033[0;33myou can use --skip-download to skip download binary dependencies while using hb build command\033[0m"
 exit 0
