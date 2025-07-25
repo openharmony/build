@@ -272,7 +272,7 @@ def _npm_install(args):
         for index, proc in enumerate(procs):
             out, err = proc.communicate()
             if proc.returncode:
-                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmd[index])))
+                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmds[index])))
                 return False, err.decode()
             args.success_installed.append(full_code_paths[index])
 
@@ -283,7 +283,7 @@ def _npm_install(args):
             time.sleep(0.1)
             out, err = proc.communicate()
             if proc.returncode:
-                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmd[index])))
+                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmds[index])))
                 return False, err.decode()
             args.success_installed.append(full_code_paths[index])
     return True, None
