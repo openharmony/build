@@ -49,6 +49,7 @@
         "rockchip_products",
         "selinux",
         "selinux_adapter",
+        "libffi",
         "rust_cxx"
       ],
       "third_party": [
