@@ -50,7 +50,8 @@
         "selinux",
         "selinux_adapter",
         "libffi",
-        "rust_cxx"
+        "rust_cxx",
+        "ace_ets2bundle"
       ],
       "third_party": [
         "bounds_checking_function",
