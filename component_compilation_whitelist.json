@@ -1,5 +1,13 @@
 {
     "innerapi_not_lib": [
+        "//arkcompiler/ets_frontend/arkguard:build_arkguard",
+        "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+        "//arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts:build_declgen",
+        "//interface/sdk-js:bundle_arkts",
+        "//interface/sdk-js:bundle_kits",
+        "//interface/sdk-js:ets_component",
+        "//interface/sdk-js:ets_internal_api",
+        "//interface/sdk-js:ohos_declaration_ets",
         "//arkcompiler/ets_frontend/es2panda:es2panda_build",
         "//arkcompiler/runtime_core/isa:isa_combine",
         "//developtools/packing_tool:packing_tool",
@@ -3005,9 +3013,32 @@
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
         "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
-        "//third_party/musl:musl_headers"
+        "//third_party/musl:musl_headers",
+        "//arkcompiler/ets_frontend/arkguard:build_arkguard",
+        "//arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts:build_declgen",
+        "//developtools/ace_ets2bundle:ets_loader_ark_hap",
+        "//interface/sdk-js:bundle_arkts",
+        "//interface/sdk-js:bundle_kits",
+        "//interface/sdk-js:ets_component",
+        "//interface/sdk-js:ets_internal_api",
+        "//interface/sdk-js:ohos_declaration_ets"
     ],
     "deps_not_lib": {
+        "//developtools/ace_ets2bundle:install_arkguard_tsc_declgen": [
+            "//arkcompiler/ets_frontend/arkguard:build_arkguard",
+            "//arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts:build_declgen"
+        ],
+        "//developtools/ace_ets2bundle:build_ets_loader_library": [
+            "//interface/sdk-js:ohos_declaration_ets",
+            "//interface/sdk-js:ets_component",
+            "//interface/sdk-js:bundle_kits",
+            "//interface/sdk-js:bundle_arkts",
+            "//interface/sdk-js:ets_internal_api"
+        ],
+        "//developtools/ace_ets2bundle:ohos_declaration_ets_ark": [
+            "//interface/sdk-js:ohos_declaration_ets",
+            "//interface/sdk-js:ets_component"
+        ],
         "//applications/standard/applications_auth_widget:auth_widget": [
             "//developtools/packing_tool:packing_tool"
         ],
@@ -4252,6 +4283,21 @@
         ]
     },
     "target_absolute_deps_other": {
+        "//developtools/ace_ets2bundle:install_arkguard_tsc_declgen": [
+            "//arkcompiler/ets_frontend/arkguard:build_arkguard",
+            "//arkcompiler/runtime_core/static_core/plugins/ets/tools/declgen_ts2sts:build_declgen"
+        ],
+        "//developtools/ace_ets2bundle:ohos_declaration_ets_ark": [
+            "//interface/sdk-js:ohos_declaration_ets",
+            "//interface/sdk-js:ets_component"
+        ],
+        "//developtools/ace_ets2bundle:build_ets_loader_library": [
+            "//interface/sdk-js:ohos_declaration_ets",
+            "//interface/sdk-js:ets_component",
+            "//interface/sdk-js:bundle_kits",
+            "//interface/sdk-js:bundle_arkts",
+            "//interface/sdk-js:ets_internal_api"
+        ],
         "//applications/standard/applications_auth_widget:auth_widget": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
@@ -7971,6 +8017,10 @@
         ]
     },
     "import_other": {
+        "//developtools/ace_ets2bundle/": [
+            "//foundation/arkui/ace_engine/ace_config.gni",
+            "//interface/sdk-js/interface_config.gni"
+        ],
         "//applications/standard/contacts_data/contacts/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -8059,6 +8109,20 @@
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf/": [
             "//drivers/hdf_core/adapter/uhdf2/hcs/hcs.gni"
+        ]
+    },
+    "fuzzy_match": {
+        "deps_not_lib": [
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap"
+        ],
+        "deps_includes_absolute": [
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap"
+        ],
+        "deps_component_absolute": [
+            "//developtools/ace_ets2bundle:ets_loader_ark_hap"
+        ],
+        "deps_gni": [
+            "//device/board/hihope/rk3568/config.gni"
         ]
     }
 }
