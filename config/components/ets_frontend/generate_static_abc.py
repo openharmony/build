@@ -21,7 +21,7 @@ import shutil
 import subprocess
 import sys
 import time
-from typing import Dict, List, Optional
+from typing import Dict, List, Tuple
 
 
 EXIT_CODE = {
@@ -54,32 +54,16 @@ class PathsLengthMismatchError(Exception):
     """Exception raised when paths_keys and paths_values have different lengths."""
 
 
-def set_environment(env_path: str, node_path: Optional[str] = None) -> Dict[str, str]:
+def set_environment(env_path: str) -> Dict[str, str]:
     """Create environment variables with updated LD_LIBRARY_PATH."""
     env = os.environ.copy()
     env["LD_LIBRARY_PATH"] = env_path
-    if node_path is not None:
-        env["PATH"] = f"{node_path}:{env['PATH']}"
     return env
 
 
 def build_es2panda_command(es2panda_path: str, arktsconfig: str) -> List[str]:
     """Construct es2panda command arguments."""
     return [es2panda_path, "--arktsconfig", arktsconfig, "--ets-module"]
-
-
-def build_driver_command(entry_path: str, build_config_path: str) -> List[str]:
-    """Construct driver command arguments."""
-    return ["node", entry_path, build_config_path]
-
-
-def execute_driver(
-    entry_path: str, build_config_path: str, env_path: str, node_path: str, timeout: str
-) -> str:
-    """Execute es2panda compilation process."""
-    cmd = build_driver_command(entry_path, build_config_path)
-    env = set_environment(env_path, node_path)
-    return run_subprocess(cmd, timeout, env)
 
 
 def build_es2panda_command_stdlib(
@@ -194,92 +178,54 @@ def execute_ark_link(
     return run_subprocess(cmd, timeout, env)
 
 
-def create_base_parser() -> argparse.ArgumentParser:
-    """Create and configure the base argument parser."""
-    parser = argparse.ArgumentParser()
-    add_required_arguments(parser)
-    add_optional_arguments(parser)
-    add_ui_arguments(parser)
-    return parser
-
-
-def add_required_arguments(parser: argparse.ArgumentParser) -> None:
-    """Add required arguments to the parser."""
-    parser.add_argument("--dst-file", type=str, required=True,
-                      help="Path for final dst file")
-    parser.add_argument("--env-path", type=str, required=True,
-                      help="Value for LD_LIBRARY_PATH environment variable")
-    parser.add_argument("--bootpath-json-file", type=str, required=True,
-                      help="bootpath.json file records the path in device for boot abc files")
-
-
-def add_optional_arguments(parser: argparse.ArgumentParser) -> None:
-    """Add optional arguments to the parser."""
-    parser.add_argument("--arktsconfig", type=str, required=False,
-                    help="Path to arktsconfig.json configuration file")
-    parser.add_argument("--es2panda", type=str, required=False,
-                      help="Path to es2panda executable")
-    parser.add_argument("--ark-link", type=str, required=False,
-                      help="Path to ark_link executable")
-    parser.add_argument("--timeout-limit", type=str, default="12000",
-                      help="Process timeout in seconds (default: 12000)")
-    parser.add_argument("--cache-path", type=str, default=None,
-                      help="Path to cache directory")
-    parser.add_argument("--is-boot-abc", type=bool, default=False,
-                      help="Flag indicating if the file is a boot abc")
-    parser.add_argument("--device-dst-file", type=str, default=None,
-                      help="Path for device dst file. Required if 'is-boot-abc' is True")
-    parser.add_argument("--target-name", type=str,
-                      help="target name")
-    parser.add_argument("--is-stdlib", type=bool, default=False,
-                      help="Flag indicating if the compile target is etsstdlib")
-    parser.add_argument("--root-dir", required=False,
-                      help="Root directory for the project")
-    parser.add_argument("--base-url", required=False,
-                      help="Base URL for the project")
-    parser.add_argument("--package", required=False,
-                      help="Package name for the project")
-    parser.add_argument("--std-path", required=False,
-                      help="Path to the standard library")
-    parser.add_argument("--escompat-path", required=False,
-                      help="Path to the escompat library")
-    parser.add_argument("--scan-path", nargs="+", required=False,
-                      help="List of directories to scan for target files")
-    parser.add_argument("--include", nargs="+", required=False,
-                      help="List of file patterns to include in the compilation")
-    parser.add_argument("--exclude", nargs="+", required=False,
-                      help="List of file patterns to exclude from the compilation")
-    parser.add_argument("--files", nargs="+", required=False,
-                      help="List of specific files to compile")
-    parser.add_argument("--paths-keys", nargs="+", required=False,
-                      help="List of keys for custom paths")
-    parser.add_argument("--paths-values", nargs="+", required=False,
-                      help="List of values for custom paths. Each value corresponds to a key in --paths-keys")
-
-
-def add_ui_arguments(parser: argparse.ArgumentParser) -> None:
-    """Add UI-related arguments to the parser."""
-    parser.add_argument("--ui-enable", default=False, required=False,
-                      help="Flag indicating if the compile supports ui syntax")
-    parser.add_argument("--build-sdk-path", default=None, required=False,
-                      help="Path for sdk. Required if 'ui-enable' is True")
-    parser.add_argument("--panda-stdlib-path", default=None, required=False,
-                      help="Path for stdlib")
-    parser.add_argument("--ui-plugin", default=None, required=False,
-                      help="Path for ui plugin. Required if 'ui-enable' is True")
-    parser.add_argument("--memo-plugin", default=None, required=False,
-                      help="Path for memo plugin. Required if 'ui-enable' is True")
-    parser.add_argument("--entry-path", default=None, required=False,
-                      help="Path for driver entry. Required if 'ui-enable' is True")
-    parser.add_argument("--driver-config-path", default=None, required=False,
-                    help="Path for driver config. Required if 'ui-enable' is True")
-    parser.add_argument("--node-path", default=None, required=False,
-                    help="Path for node")
-
-
 def parse_arguments() -> argparse.Namespace:
     """Configure and parse command line arguments."""
-    parser = create_base_parser()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--es2panda", type=str, required=True,
+                        help="Path to es2panda executable")
+    parser.add_argument("--ark-link", type=str, required=True, 
+                        help="Path to ark_link executable")
+    parser.add_argument("--arktsconfig", type=str, required=True, 
+                        help="Path to arktsconfig.json configuration file")
+    parser.add_argument("--dst-file", type=str, required=True, 
+                        help="Path for final dst file")
+    parser.add_argument("--env-path", type=str, required=True, 
+                        help="Value for LD_LIBRARY_PATH environment variable")
+    parser.add_argument("--timeout-limit", type=str, default="12000", 
+                        help="Process timeout in seconds (default: 12000)")
+    parser.add_argument("--cache-path", type=str, default=None, 
+                        help="Path to cache directory")
+    parser.add_argument("--bootpath-json-file", type=str, required=True, 
+                        help="bootpath.json file records the path in device for boot abc files")
+    parser.add_argument("--is-boot-abc", type=bool, default=False, 
+                        help="Flag indicating if the file is a boot abc")
+    parser.add_argument("--device-dst-file", type=str, default=None, 
+                        help="Path for device dst file. If 'is-boot-abc' is True, this parameter is required")
+    parser.add_argument("--target-name", type=str, help="target name")
+    parser.add_argument("--is-stdlib", type=bool, default=False, 
+                        help="Flag indicating if the compile target is etsstdlib")
+    parser.add_argument("--root-dir", required=False, 
+                        help="Root directory for the project")
+    parser.add_argument("--base-url", required=False, 
+                        help="Base URL for the project")
+    parser.add_argument("--package", required=False, 
+                        help="Package name for the project")
+    parser.add_argument("--std-path", required=False, 
+                        help="Path to the standard library")
+    parser.add_argument("--escompat-path", required=False, 
+                        help="Path to the escompat library")
+    parser.add_argument("--scan-path", nargs="+", required=False, 
+                        help="List of directories to scan for target files")
+    parser.add_argument("--include", nargs="+", required=False, 
+                        help="List of file patterns to include in the compilation")
+    parser.add_argument("--exclude", nargs="+", required=False, 
+                        help="List of file patterns to exclude from the compilation")
+    parser.add_argument("--files", nargs="+", required=False, 
+                        help="List of specific files to compile")
+    parser.add_argument("--paths-keys", nargs="+", required=False, 
+                        help="List of keys for custom paths")
+    parser.add_argument("--paths-values", nargs="+", required=False,
+                        help="List of values for custom paths. Each value corresponds to a key in --paths-keys")
     return parser.parse_args()
 
 
@@ -449,64 +395,11 @@ def build_config(args: argparse.Namespace) -> None:
         json.dump(config, f, indent=2, ensure_ascii=False)
 
 
-def build_driver_config(args: argparse.Namespace) -> None:
-    """
-    Build the driver configuration dictionary based on command-line arguments.
-    """
-    paths = {}
-    if args.paths_keys and args.paths_values:
-        if len(args.paths_keys) != len(args.paths_values):
-            raise PathsLengthMismatchError(
-                "paths_keys and paths_values must have the same length"
-            )
-        for key, value in zip(args.paths_keys, args.paths_values):
-            paths[key] = [os.path.abspath(value)]
-
-    config = {
-        "plugins": {},
-        "compileFiles": args.files,
-        "packageName": args.package if args.package else "",
-        "buildType": "build",
-        "buildMode": "Release",
-        "moduleRootPath": args.base_url,
-        "sourceRoots": ["./"],
-        "paths": paths,
-        "loaderOutPath": args.dst_file,
-        "cachePath": args.cache_path,
-        "buildSdkPath": args.build_sdk_path,
-        "dependentModuleList": [],
-        "frameworkMode": True,
-        "useEmptyPackage": True,
-    }
-
-    plugins = {}
-    if args.ui_plugin is not None:
-        plugins["ui_plugin"] = args.ui_plugin
-    if args.memo_plugin is not None:
-        plugins["memo_plugin"] = args.memo_plugin
-    if plugins:
-        config["plugins"] = plugins
-
-    if args.panda_stdlib_path:
-        config["pandaStdlibPath"] = args.panda_stdlib_path
-    if args.paths_keys:
-        config["pathsKeys"] = args.paths_keys
-    if args.paths_values:
-        config["pathsValues"] = args.paths_values
-
-    os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
-    fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
-    with os.fdopen(fd, "w", encoding="utf-8") as f:
-        json.dump(config, f, indent=2, ensure_ascii=False)
-
-
 def handle_configuration(args: argparse.Namespace) -> None:
     """
     Handle the configuration setup based on command-line arguments.
     """
-    if args.ui_enable == "True":
-        build_driver_config(args)
-    elif args.base_url:
+    if args.base_url:
         build_config(args)
     else:
         modify_arktsconfig_with_cache(args.arktsconfig, args.cache_path)
@@ -520,9 +413,7 @@ def main() -> None:
     try:
         handle_configuration(args)
 
-        if args.ui_enable == "True":
-            execute_driver(args.entry_path, args.arktsconfig, args.env_path, args.node_path, args.timeout_limit)
-        elif args.is_stdlib:
+        if args.is_stdlib:
             execute_es2panda_stdlib(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit, args.dst_file)
         else:
             execute_es2panda(args.es2panda, args.arktsconfig, args.env_path, args.timeout_limit)
