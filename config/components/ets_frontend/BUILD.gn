@@ -27,7 +27,7 @@ ohos_copy("ohos_ets_es2panda") {
 }
 
 ohos_copy("ohos_ets_libes2panda_public") {
-  external_deps = libes2panda_public_build_deps
-  sources = [ rebase_path("$libes2panda_public_build_path") ]
+  external_deps = [ libes2panda_public_build_deps ]
+  sources = [ rebase_path("$libes2panda_public_out_path") ]
   outputs = [ ohos_ets_libes2panda_public_path ]
 }
