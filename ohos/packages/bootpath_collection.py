@@ -42,8 +42,9 @@ class BootPathCollection():
         abc_set = set(current_value.split(":")) if current_value else set()
         abc_set.update(file_list)
 
-        fix_path = ":".join(str(fix_order_dict.get(key, "")) for key in fix_order_dict.keys())
-        data["bootpath"] = fix_path + ":" + ":".join(abc_set)
+        fix_path = ":".join(str(fix_order_dict.get(key, "")) for key in fix_order_dict.keys() if fix_order_dict.get(key, "") != "")
+        file_path = ":".join(sorted(list(abc_set)))
+        data["bootpath"] = fix_path + ":" + file_path
 
         os.makedirs(directory, exist_ok=True)
 
@@ -61,6 +62,7 @@ class BootPathCollection():
             "ets2abc_etsstdlib_bootabc_bootpath.json": "",
             "base_sdk_bootpath.json": "",
             "ets2abc_commonsdk_bootpath.json": "",
+            "resource_bootpath.json": "",
             "arkoala_bootpath.json": "/system/framework/arkoala.abc"
         }
         rest_file_list = []
