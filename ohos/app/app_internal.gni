@@ -616,6 +616,7 @@ template("compile_app") {
                              "build_modules",
                              "hvigor_home",
                              "product",
+                             "module_target",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [ unsigned_hap_path_list ]
@@ -635,6 +636,8 @@ template("compile_app") {
       ohpm_registry,
       "--product",
       product,
+      "--module-target",
+      module_target,
     ]
 
     if (defined(hvigor_home) && hvigor_home != "") {
