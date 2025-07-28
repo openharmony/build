@@ -214,6 +214,9 @@ template("idl_gen_interface") {
 
   action("$target_name") {
     inputs = idl_list
+    if (defined(invoker.inputs)) {
+      inputs += invoker.inputs
+    }
     if (is_arkui_x) {
       deps = idl_build_deps
     } else {
