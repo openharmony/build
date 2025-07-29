@@ -55,6 +55,7 @@ def parse_args(args):
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
+    parser.add_argument('--module-target', help='set module target of unsigned hap path')
 
     options = parser.parse_args(args)
     return options
@@ -146,13 +147,14 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
             unsigned_hap_path = os.path.join(
                 cwd, src_path, 'build/default/outputs/ohosTest')
     else:
+        module_target = options.module_target
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
-                new_src_path, f'build/{product_value}/outputs/default')
+                new_src_path, f'build/{product_value}/outputs/{module_target}')
         else:
             unsigned_hap_path = os.path.join(
-                cwd, src_path, f'build/{product_value}/outputs/default')
+                cwd, src_path, f'build/{product_value}/outputs/{module_target}')
     return unsigned_hap_path
 
 
@@ -169,6 +171,8 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
+            if module.get('name') not in options.build_modules and not options.test_hap:
+                continue
             src_path = module.get('srcPath')
             project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
             unsigned_hap_path = get_unsigned_hap_path(project_name, src_path, cwd, options)
