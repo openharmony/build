@@ -171,7 +171,7 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
-            if module.get('name') not in options.build_modules:
+            if module.get('name') not in options.build_modules and not options.test_hap:
                 continue
             src_path = module.get('srcPath')
             project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
