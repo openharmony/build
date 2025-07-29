@@ -427,10 +427,10 @@
         "//arkcompiler/runtime_core/static_core/libpandabase:libarktsbase_static": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_frontend_set_static": [
+        "//arkcompiler/runtime_core/static_core/libarkfile:libarktsfile_frontend_set_static": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
-        "//arkcompiler/runtime_core/static_core/libpandafile:libarktsfile_static": [
+        "//arkcompiler/runtime_core/static_core/libarkfile:libarktsfile_static": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ],
         "//arkcompiler/runtime_core/static_core/libziparchive:libarktsziparchive_frontend_set_static": [
@@ -6415,7 +6415,7 @@
         "//arkcompiler/runtime_core/static_core/bytecode_optimizer:bytecodeopt_public_config",
         "//arkcompiler/runtime_core/static_core/compiler:arkcompiler_public_config",
         "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
-        "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
+        "//arkcompiler/runtime_core/static_core/libarkfile:arkfile_public_config",
         "//arkcompiler/runtime_core/static_core/runtime:arkruntime_public_config",
         "//arkcompiler/runtime_core/static_core:ark_config",
         "//arkcompiler/runtime_core:ark_config",
@@ -7087,7 +7087,7 @@
         "//arkcompiler/ets_frontend/ets2panda/aot:ets2panda": [
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
-            "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
+            "//arkcompiler/runtime_core/static_core/libarkfile:arkfile_public_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
             "//arkcompiler/runtime_core/static_core/bytecode_optimizer:bytecodeopt_public_config",
             "//arkcompiler/runtime_core/static_core/compiler:arkcompiler_public_config",
@@ -7103,7 +7103,7 @@
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
-            "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
+            "//arkcompiler/runtime_core/static_core/libarkfile:arkfile_public_config",
             "//third_party/icu/icu4c:static_icui18n",
             "//third_party/icu/icu4c:static_icuuc"
         ],
@@ -7111,7 +7111,7 @@
             "//arkcompiler/runtime_core/static_core/assembler:arkassembler_public_config",
             "//arkcompiler/runtime_core/static_core:ark_config",
             "//arkcompiler/runtime_core/static_core/libpandabase:arkbase_public_config",
-            "//arkcompiler/runtime_core/static_core/libpandafile:arkfile_public_config",
+            "//arkcompiler/runtime_core/static_core/libarkfile:arkfile_public_config",
             "//arkcompiler/runtime_core/static_core/bytecode_optimizer:bytecodeopt_public_config",
             "//arkcompiler/runtime_core/static_core/compiler:arkcompiler_public_config",
             "//arkcompiler/runtime_core/static_core/runtime:arkruntime_public_config"
