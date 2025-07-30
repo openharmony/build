@@ -112,17 +112,15 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        if self.flags_dict.get("skip-download") or self.flags_dict.get("fast-rebuild"):
+        if self._check_skip_download():
+            LogUtil.hb_info("Skip download binary dependencies")
             return
         else:
-            self.flags_dict.pop("skip-download")
+            self._pop_useless_flags()
             LogUtil.hb_info("Tips: If you want to skip download binary dependencies, please use --skip-download")
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')
-            if os.path.exists(logpath):
-                mtime = os.stat(logpath).st_mtime
-                os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
             self._run_hpm_cmd(hpm_build_cmd, log_path=logpath)
 
     @throw_exception
@@ -247,3 +245,20 @@ class Hpm(BuildFileGeneratorInterface):
                 illegal_components.append(component)
         if illegal_components:
             raise OHOSException('ERROR argument "--parts": Invalid parts "{}". '.format(illegal_components))
+
+    def _check_skip_download(self):
+        if self.flags_dict.get("skip-download"):
+            return True
+        if self.flags_dict.get("fast-rebuild"):
+            return True
+        if self.flags_dict.get("local-repo"):
+            return True
+        return False
+    
+    def _pop_useless_flags(self):
+        if "skip-download" in self.flags_dict:
+            self.flags_dict.pop("skip-download")
+        if "fast-rebuild" in self.flags_dict:
+            self.flags_dict.pop("fast-rebuild")
+        if "local-repo" in self.flags_dict:
+            self.flags_dict.pop("local-repo")
