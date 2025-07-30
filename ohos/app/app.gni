@@ -464,11 +464,6 @@ template("ohos_app") {
       product = invoker.product
     }
 
-    module_target = "default"
-    if (defined(invoker.module_target)) {
-      module_target = invoker.module_target
-    }
-
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
