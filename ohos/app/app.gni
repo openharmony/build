@@ -469,6 +469,11 @@ template("ohos_app") {
       module_target = invoker.module_target
     }
 
+    modules_filter = false
+    if (defined(invoker.modules_filter) && invoker.modules_filter) {
+      module_filter = true
+    }
+
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
