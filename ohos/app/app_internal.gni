@@ -617,6 +617,7 @@ template("compile_app") {
                              "hvigor_home",
                              "product",
                              "module_target",
+                             "modules_filter",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [ unsigned_hap_path_list ]
@@ -639,6 +640,10 @@ template("compile_app") {
       "--module-target",
       module_target,
     ]
+
+    if (defined(modules_filter) && modules_filter) {
+      args += [ "--modules-filter" ]
+    }
 
     if (defined(hvigor_home) && hvigor_home != "") {
       args += [
