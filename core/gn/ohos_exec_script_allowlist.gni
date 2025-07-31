@@ -159,7 +159,6 @@ ohos_exec_script_config = {
     "//third_party/flutter/skia/third_party/externals/angle2/build_overrides/build.gni",
     "//third_party/flutter/skia/third_party/externals/angle2/dotfile_settings.gni",
     "//third_party/flutter/skia/third_party/externals/angle2/third_party/vulkan-validation-layers/BUILD.gn",
-    "//third_party/glib/BUILD.gn",
     "//third_party/gn/examples/ios/build/BUILD.gn",
     "//third_party/gn/examples/ios/build/config/ios/sdk_info.gni",
     "//third_party/gn/examples/ios/build/toolchain/ios/BUILD.gn",
