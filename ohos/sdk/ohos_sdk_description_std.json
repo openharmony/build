@@ -715,36 +715,6 @@
         ]
     },
     {
-        "install_dir": "ets/ets1.1/build-tools/interop",
-        "module_label": "//interface/sdk-js:build_dynamic_sdk_interop",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "ets/ets1.2/build-tools/interop/declaration",
-        "module_label": "//interface/sdk-js:build_static_declaration_sdk_interop",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
-        "install_dir": "ets/ets1.2/build-tools/interop/bridge",
-        "module_label": "//interface/sdk-js:build_static_bridge_sdk_interop",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos"
-        ]
-    },
-    {
         "install_dir": "js/api/@internal/full",
         "module_label": "//interface/sdk-js:internal_full",
         "target_os": [
