@@ -20,9 +20,8 @@ function prebuilt_sdk() {
     local current_platform="$3"
     local ccache_args="$4"
     local xcache_args="$5"
-    local full_api_version="$6"
-    local api_version="$7"
-    shift 7
+    local api_version="$6"
+    shift 6
     local _sdk_gn_args=("$@")
 
     local ROOT_PATH="${source_root_dir}"
@@ -57,9 +56,9 @@ function prebuilt_sdk() {
         mv "${ROOT_PATH}/out/sdk/sdk-native/os-irrelevant/"* "${SDK_PREBUILTS_PATH}/linux/native/"
         mv "${ROOT_PATH}/out/sdk/sdk-native/os-specific/linux/"* "${SDK_PREBUILTS_PATH}/linux/native/"
         pushd "${SDK_PREBUILTS_PATH}/linux" > /dev/null
-            mkdir -p "${full_api_version}"
+            mkdir -p "${api_version}"
             for dir in */; do
-                [[ -d "${dir}" && "${dir}" != "${full_api_version}/" ]] && mv "${dir}" "${full_api_version}/"
+                [[ -d "${dir}" && "${dir}" != "${api_version}/" ]] && mv "${dir}" "${api_version}/"
             done
         popd > /dev/null
     popd > /dev/null
@@ -80,8 +79,8 @@ function prebuilt_sdk() {
 }
 
 function main() {
-    if [[ $# -lt 7 ]]; then
-        echo "Usage: $0 <source_root_dir> <ccache_args> <xcache_args> <full_api_version> <api_version> [prebuilt_sdk_gn_args...]"
+    if [[ $# -lt 6 ]]; then
+        echo "Usage: $0 <source_root_dir> <ccache_args> <xcache_args> <api_version> <api_version> [prebuilt_sdk_gn_args...]"
         exit 1
     fi
 
@@ -90,9 +89,8 @@ function main() {
     local current_platform="$3"
     local ccache_args="$4"
     local xcache_args="$5"
-    local full_api_version="$6"
-    local api_version="$7"
-    shift 7
+    local api_version="$6"
+    shift 6
 
     local _sdk_gn_args=("$@")
 
@@ -102,7 +100,6 @@ function main() {
         "${current_platform}" \
         "${ccache_args}" \
         "${xcache_args}" \
-        "${full_api_version}" \
         "${api_version}" \
         "${_sdk_gn_args[@]}"
 }
