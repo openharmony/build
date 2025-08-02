@@ -587,7 +587,6 @@ template("current_ndk") {
       platformVersion = platform_version
     }
     apiVersion = api_version
-    fullApiVersion = api_full_version
   }
   write_file(package_info_file, package_info, "json")
 

@@ -128,8 +128,6 @@ if (!use_current_sdk) {
     rebase_path("./type_to_display_name.json", root_build_dir),
     "--api-version",
     api_version,
-    "--api-full-version",
-    api_full_version,
     "--release-type",
     release_type,
     "--meta-version",

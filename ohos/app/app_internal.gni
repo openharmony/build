@@ -52,10 +52,6 @@ template("merge_profile") {
       release_type,
       "--api-version",
       api_version,
-      "--api-minor-version",
-      api_minor_version,
-      "--api-patch-version",
-      api_patch_version,
     ]
     outputs = [ generated_profile ]
   }
