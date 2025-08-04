@@ -618,6 +618,7 @@ template("compile_app") {
                              "product",
                              "module_target",
                              "modules_filter",
+                             "ohos_test_coverage",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [ unsigned_hap_path_list ]
@@ -643,6 +644,10 @@ template("compile_app") {
 
     if (defined(modules_filter) && modules_filter) {
       args += [ "--modules-filter" ]
+    }
+
+    if (defined(ohos_test_coverage) && ohos_test_coverage) {
+      args += [ "--ohos-test-coverage" ]
     }
 
     if (defined(hvigor_home) && hvigor_home != "") {
