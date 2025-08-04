@@ -57,7 +57,7 @@ def parse_args(args):
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
     parser.add_argument('--module-target', help='set module target of unsigned hap path')
     parser.add_argument('--modules-filter', help='if enable filter unsigned hap or hsp packages', action='store_true')
-    parser.add_argument('--ohos-test-coverage', help='set Inserting piles when hvigor test', action='store_true')
+    parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
 
     options = parser.parse_args(args)
     return options
