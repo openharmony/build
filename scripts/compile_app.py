@@ -57,6 +57,7 @@ def parse_args(args):
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
     parser.add_argument('--module-target', help='set module target of unsigned hap path')
     parser.add_argument('--modules-filter', help='if enable filter unsigned hap or hsp packages', action='store_true')
+    parser.add_argument('--ohos-test-coverage', help='set Inserting piles when hvigor test', action='store_true')
 
     options = parser.parse_args(args)
     return options
@@ -272,6 +273,9 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'buildMode=release'])
     else:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
+
+    if options.ohos_test_coverage:
+        cmd.extend(['-p', 'ohos-test-coverage=true'])
     
     if options.target_app_dir and options.target_app_dir != "":
         if (hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version:
