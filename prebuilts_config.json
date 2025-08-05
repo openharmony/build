@@ -243,21 +243,21 @@
             "config": {
                 "linux": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
+                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20250804.tar.gz",
                         "unzip_filename": "linux-arm64"
                     },
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20250219.tar.gz",
+                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20250804.tar.gz",
                         "unzip_filename": "linux-x86"
                     }
                 },
                 "darwin": {
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250228.tar.gz",
+                        "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250804.tar.gz",
                         "unzip_filename": "darwin-x86"
                     },
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20250228.tar.gz",
+                        "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20250804.tar.gz",
                         "unzip_filename": "darwin-arm64"
                     }
                 }
