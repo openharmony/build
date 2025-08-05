@@ -83,6 +83,8 @@ function init_ohpm() {
     echo "[OHOS INFO] installing pnpm..."
     npm install --silent > /dev/null
   popd > /dev/null
+  HVIGORW_HOME=${TOOLS_INSTALL_DIR}/../../tool/command-line-tools/hvigor/bin/hvigorw
+  chmod +x ${HVIGORW_HOME}
   mkdir -p $HOME/.ohpm
   echo '{"devDependencies":{"@ohos/hypium":"1.0.6"}}' > $HOME/.ohpm/oh-package.json5
   pushd $HOME/.ohpm > /dev/null
