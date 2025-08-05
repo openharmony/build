@@ -473,6 +473,11 @@ template("ohos_app") {
     if (defined(invoker.modules_filter) && invoker.modules_filter) {
       module_filter = true
     }
+    
+    ohos_test_coverage = false
+    if (defined(invoker.ohos_test_coverage) && invoker.ohos_test_coverage) {
+      ohos_test_coverage = invoker.ohos_test_coverage
+    }
 
     if (defined(invoker.deps)) {
       deps += invoker.deps
