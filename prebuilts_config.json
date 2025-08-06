@@ -243,7 +243,7 @@
             "config": {
                 "linux": {
                     "arm64": {
-                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20250804.tar.gz",
+                        "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
                         "unzip_filename": "linux-arm64"
                     },
                     "x86_64": {
