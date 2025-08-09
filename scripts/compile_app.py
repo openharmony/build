@@ -265,7 +265,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'debuggable=false'])
 
     if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
-        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
+        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache', options.cwd)
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
 
