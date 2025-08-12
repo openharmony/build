@@ -189,7 +189,6 @@ else
 fi
 
 api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_version = *"\([^"]*\)".*/\1/p')
-full_api_version=$(grep 'api_full_version =' build/version.gni | awk -F'"' '{print $2}' | sed -r 's/\"//g')
 using_hb_new=true
 fetching_prebuilt_sdk_gn_args=false
 need_prebuilt_sdk=true
@@ -232,14 +231,13 @@ done
 
 echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
 echo "args_list:${args_list[@]}"
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${full_api_version}" && "${need_prebuilt_sdk}" == "true" || "${force_prebuilt_sdk}" == "true" ]]; then
+if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "${need_prebuilt_sdk}" == "true" || "${force_prebuilt_sdk}" == "true" ]]; then
   "${SOURCE_ROOT_DIR}/build/build_scripts/build_ohos_sdk.sh" \
       "${SOURCE_ROOT_DIR}" \
       "${PYTHON3_DIR}" \
       "${HOST_OS}" \
       "${ccache_args}" \
       "${xcache_args}" \
-      "${full_api_version}" \
       "${api_version}" \
       "${prebuilt_sdk_gn_args[@]}"
 fi

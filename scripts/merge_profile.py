@@ -35,8 +35,6 @@ def parse_args(args):
     parser.add_option('--generated-profile', help='path to generated profile')
     parser.add_option('--release-type', help='release type')
     parser.add_option('--api-version', help='api version')
-    parser.add_option('--api-minor-version', help='api minor version')
-    parser.add_option('--api-patch-version', help='api patch version')
     options, _ = parser.parse_args(args)
     options.resources_dir = build_utils.parse_gn_list(options.resources_dir)
     return options
@@ -55,9 +53,7 @@ def merge_profile(options):
                 all_data["module"] = module_data
                 f1.close()
         f0.close()
-    if (str(all_data.get('app').get('targetAPIVersion')) == options.api_version 
-        and str(all_data.get('app').get('targetMinorAPIVersion')) == options.api_minor_version
-        and str(all_data.get('app').get('targetPatchAPIVersion')) == options.api_patch_version):
+    if str(all_data.get('app').get('targetAPIVersion')) == options.api_version:
         all_data["app"]["apiReleaseType"] = options.release_type
     else:
         all_data["app"]["apiReleaseType"] = 'Release'
