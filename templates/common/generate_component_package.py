@@ -623,6 +623,92 @@ def process_skia(part_data, parts_path_info, part_name, subsystem_name, componen
     _finish_component_build(part_data)
 
 
+def process_variants_default(part_data, parts_path_info, part_name, subsystem_name, components_json):
+    # 减少代码重复调用
+    preloader_path = os.path.join(part_data.get('root_path'), 'out', 'preloader', 'rk3568')
+    variants_default_source_files = [
+        os.path.join(preloader_path, 'build_config.json'),
+        os.path.join(part_data.get('root_path'), 'build', 'indep_configs', 'variants', 'common', 'default_deps.json'),
+        os.path.join(preloader_path, 'features.json'),
+        os.path.join(preloader_path, 'parts_config.json'),
+        os.path.join(preloader_path, 'system', 'etc', 'syscap.json'),
+        os.path.join(preloader_path, 'system', 'etc', 'param', 'syscap.para'),
+        os.path.join(preloader_path, 'system', 'etc', 'SystemCapability.json')
+    ]
+
+    variants_root = os.path.join(part_data.get('out_path'), 'component_package', 'variants', 'variants_default')
+    variants_component_path = os.path.join(variants_root, 'config')
+    try:
+        os.makedirs(variants_component_path, exist_ok=True)
+        for source_file in variants_default_source_files:
+            if not os.path.exists(source_file):
+                raise FileNotFoundError(f"Source file not found: {source_file}")
+            shutil.copy2(source_file, variants_component_path)
+        print("All confiauration files copied successfully")
+    
+        # 处理bundle.json文件和license文件，readme文件
+        bundle_content = generate_variants_default_bundle_info()
+        bundle_path = os.path.join(variants_root, 'bundle.json')
+        _create_bundle_json(bundle_path, bundle_content)
+
+        # 创建LICENSE文件、readme.md
+        variants_default_license_path = os.path.join(variants_root, 'LICENSE')
+        variants_default_readme_path = os.path.join(variants_root, 'README.md')
+        with open(variants_default_license_path, 'w') as file:
+            file.write("license")
+        with open(variants_default_readme_path, 'w') as file:
+            file.write("readme")
+
+        _finish_component_build(part_data)
+    except Exception as e:
+        print(f"Error processing variants_default: {str(e)}")
+        raise
+
+
+def generate_variants_default_bundle_info():
+    return {
+        "name": "@ohos/variants_default",
+        "description": "",
+        "version": "3.1.0-snapshot",
+        "license": "Apache License 2.0",
+        "publishAs": "binary",
+        "segment": {
+            "destPath": "variants/variants_default"
+        },
+        "dirs": {
+            "config": [
+                "config/*"
+            ]
+        },
+        "scripts": {},
+        "component": {
+            "name": "variants_default",
+            "subsystem": "build",
+            "syscap": [],
+            "features": [],
+            "adapted_system_type": [],
+            "rom": "",
+            "ram": "",
+            "deps": {
+                "components": [
+                    "musl",
+                    "linux",
+                    "googletest"
+                ],
+                "third_party": []
+            },
+            "build": {
+                "sub_component": [],
+                "inner_kits": [],
+                "test": []
+            }
+        },
+        "os": "linux",
+        "buildArch": "x86",
+        "dependencies": {}
+    }
+
+
 def write_hilog_gn(part_data, module):
     gn_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"),
                            "innerapis", module, "BUILD.gn")
@@ -960,6 +1046,7 @@ function_map = {
     "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
     "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
     "skia": process_skia,
+    "variants_default": process_variants_default,
 }
 
 
@@ -1977,6 +2064,7 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
         "drivers_interface_usb",  # 同驱动
         "drivers_interface_ril",  # 同驱动
         "skia",
+        "variants_default",
     ]:
         _process_part(args, parts_path_info, part_name, subsystem_name, components_json)
     else:
@@ -1995,6 +2083,28 @@ def _get_exclusion_list(root_path):
     except Exception as e:
         print(f"{part_black_list_path}: \n {e}")
     return data
+
+
+def additional_comoponents_json():
+    return {"rust": {
+        "innerapis": [],
+        "path": "third_party/rust",
+        "subsystem": "thirdparty",
+        "variants": []
+    },
+        "developer_test": {
+            "innerapis": [],
+            "path": "test/testfwk/developer_test",
+            "subsystem": "testfwk",
+            "variants": []
+        },
+        "variants_default": {
+        "innerapis": [],
+        "path": "variants/variants_default",
+        "subsystem": "build",
+        "variants": []
+        },
+    }
 
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
@@ -2018,19 +2128,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
     """
     start_time = time.time()
     components_json = _get_components_json(out_path)
-    components_json.update({"rust": {
-        "innerapis": [],
-        "path": "third_party/rust",
-        "subsystem": "thirdparty",
-        "variants": []
-    },
-        "developer_test": {
-            "innerapis": [],
-            "path": "test/testfwk/developer_test",
-            "subsystem": "testfwk",
-            "variants": []
-        }
-    })
+    additional_comoponents_json_data = additional_comoponents_json()
+    components_json.update(additional_comoponents_json_data)
     part_subsystem = _get_part_subsystem(components_json)
     parts_path_info = _get_parts_path_info(components_json)
     hpm_packages_path = _make_hpm_packages_dir(root_path)
