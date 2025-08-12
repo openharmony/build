@@ -32,10 +32,13 @@ class IoUtil(metaclass=NoInstance):
     def read_json_file(input_file: str) -> dict:
         if not os.path.isfile(input_file):
             raise OHOSException(f'{input_file} not found', '0008')
-
-        with open(input_file, 'rb') as input_f:
-            data = json.load(input_f)
-            return data
+        try:
+            with open(input_file, 'rb') as input_f:
+                data = json.load(input_f)
+                return data
+        except json.JSONDecodeError as e:
+            print(f'Error reading JSON file {input_file}')
+            raise e
 
     @staticmethod
     def dump_json_file(dump_file: str, json_data: dict or list):
