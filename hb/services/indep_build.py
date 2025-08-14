@@ -37,11 +37,9 @@ class IndepBuild(BuildFileGeneratorInterface):
             if os.path.exists(logpath):
                 mtime = os.stat(logpath).st_mtime
                 os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
-        
-        ret_code = SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
+        cmd_str = " ".join(cmd)
+        SystemUtil.exec_command(cmd, log_path=logpath, pre_msg=f"Executing indep build script: {cmd_str}",
                                             after_msg="indep build end")
-        if ret_code != 0:
-            raise OHOSException(f'ERROR: build_indep.sh encountered a problem, please check, cmd: {cmd}', '0001')
 
     def _convert_flags(self) -> list:
         flags_list = []
