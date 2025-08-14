@@ -4,8 +4,7 @@
         "//arkcompiler/runtime_core/isa:isa_combine",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
-        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
-        "//third_party/musl:musl_headers"
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
     ],
     "all_dependent_configs": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
@@ -3004,8 +3003,7 @@
         "//arkcompiler/runtime_core:ark_config",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
-        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
-        "//third_party/musl:musl_headers"
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
     ],
     "deps_not_lib": {
         "//applications/standard/applications_auth_widget:auth_widget": [
@@ -4063,9 +4061,6 @@
         ],
         "//foundation/bundlemanager/distributed_bundle_framework/services/dbms/test/sceneProject/unittest/system_module:distributed_system_module": [
             "//developtools/packing_tool:packing_tool"
-        ],
-        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
-            "//third_party/musl:musl_headers"
         ],
         "//foundation/communication/netmanager_ext/frameworks/vpn_dialog/dialog_ui/vpn_dialog:dialog_hap": [
             "//developtools/packing_tool:packing_tool"
@@ -7452,9 +7447,6 @@
         ],
         "//foundation/bundlemanager/ecological_rule_manager/test/unittest:EcologicalRuleMgrServiceClientTest_resource_copy": [
             "//third_party/googletest:gtest_main"
-        ],
-        "//foundation/communication/netmanager_base/services/netmanagernative/bpf:netsys": [
-            "//third_party/musl:musl_headers"
         ],
         "//foundation/communication/netmanager_ext/frameworks/vpn_dialog/dialog_ui/vpn_dialog:dialog_hap": [
             "//developtools/packing_tool:packing_tool",
