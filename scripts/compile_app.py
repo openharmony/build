@@ -54,8 +54,8 @@ def parse_args(args):
     parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
-    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
     parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
+    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
 
     options = parser.parse_args(args)
     return options
@@ -177,7 +177,7 @@ def split_build_modules(build_modules: list):
     return new_build_modules
 
 
-def get_target_by_module(module, options):
+def get_target_by_module(module: str, options):
     new_build_modules = split_build_modules(options.build_modules)
     for item in new_build_modules:
         if item["module"] == module:
