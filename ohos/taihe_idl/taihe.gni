@@ -12,8 +12,6 @@
 # limitations under the License.
 import("//build/ohos.gni")
 
-taihe_copy_array = []
-
 declare_args() {
   taihe_file_path = "$root_out_dir/taihe"
   taihe_toolchain_path = "//prebuilts/taihe/ohos/linux-x86_64/taihe"
@@ -25,8 +23,9 @@ template("ohos_taihe") {
   forward_variables_from(invoker, [ "taihe_generated_file_path" ])
 
   action(target_name) {
-    script = "${taihe_toolchain_path}/bin/taihec"
+    script = rebase_path("//build/ohos/taihe_idl/taihe_retry.sh")
     args = [
+      rebase_path("${taihe_toolchain_path}/bin/taihec"),
       rebase_path(
           "${taihe_toolchain_path}/lib/taihe/stdlib/taihe.platform.ani.taihe"),
       "-I",
@@ -46,9 +45,8 @@ template("ohos_taihe") {
       args += [ "-Carkts:path-prefix=${invoker.path_prefix}" ]
     }
 
-    deps = taihe_copy_array
     if (defined(invoker.deps)) {
-      deps += invoker.deps
+      deps = invoker.deps
     }
 
     outputs = [ "$taihe_generated_file_path/src/taihe.platform.ani.abi.c" ]
