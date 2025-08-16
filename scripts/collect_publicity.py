@@ -18,7 +18,7 @@ import os
 import sys
 import shutil
 
-from util.build_utils import touch
+from util.build_utils import touch, write_depfile
 
 
 def parse_args(args):
@@ -26,6 +26,7 @@ def parse_args(args):
 
     parser.add_argument("--source", help="specify publicity xml")
     parser.add_argument("--output", required=True, help="specify publicity output")
+    parser.add_argument("--depfile", required=False, help="")
 
     options = parser.parse_args(args)
     return options
@@ -34,6 +35,7 @@ def parse_args(args):
 def main(args):
     options = parse_args(args)
 
+    _dep_files = []
     dest_dir = os.path.dirname(options.output)
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir, exist_ok=True)
@@ -41,12 +43,16 @@ def main(args):
     if os.path.exists(options.output):
         os.unlink(options.output)
 
-    if not options.source:
+    if options.source:
+        _dep_files.append(options.source)
+        shutil.copy2(options.source, options.output)
+    else:
         # touch an empty publicity.xml
         touch(options.output)
-        return 0
 
-    shutil.copy2(options.source, options.output)
+    if options.depfile:
+        write_depfile(options.depfile, options.output, _dep_files, add_pydeps=False)
+
     return 0
 
 

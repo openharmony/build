@@ -20,10 +20,10 @@ import argparse
 import check_deps_handler
 import check_external_deps
 import check_part_subsystem_name
-sys.path.append(
-    os.path.dirname(os.path.dirname(os.path.dirname(
-        os.path.abspath(__file__)))))
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util.build_utils import write_depfile, add_depfile_option, touch  # noqa: E402
+from scripts.util.file_utils import read_json_file  # noqa: E402
 
 
 def parse_args():
@@ -43,25 +43,46 @@ def parse_args():
     return args
 
 
+def get_depfile_info(part_name: str, source_root_dir: str) -> list:
+    depfile = []
+    parts_path_file = 'build_configs/parts_info/parts_path_info.json'
+    parts_path_info = read_json_file(parts_path_file)
+    if not parts_path_info:
+        raise Exception("read pre_build parts_path_info failed")
+
+    part_path = parts_path_info.get(part_name)
+    if not part_path:
+        return depfile
+
+    bundle_json_file = os.path.join(source_root_dir, part_path, "bundle.json")
+    if os.path.exists(bundle_json_file):
+        depfile.append(bundle_json_file)
+
+    return depfile
+
+
 def main():
     args = parse_args()
 
-    depfiles = []
+    add_depfile = False
     if not args.skip_check_subsystem:
-        _depfile = check_part_subsystem_name.check(args)
-        depfiles.extend(_depfile)
+        check_part_subsystem_name.check(args)
+        add_depfile = True
 
     if args.deps:
-        _depfile = check_deps_handler.check(args)
-        depfiles.extend(_depfile)
+        check_deps_handler.check(args)
+        add_depfile = True
 
     if args.external_deps:
-        _depfile = check_external_deps.check(args)
-        depfiles.extend(_depfile)
+        check_external_deps.check(args)
+        add_depfile = True
 
-    if depfiles:
-        depfiles = list(set(depfiles))
-        write_depfile(args.depfile, args.output, depfiles)
+    depfiles = []
+    if add_depfile:
+        depfiles.extend(get_depfile_info(args.part_name, args.source_root_dir))
+
+    if args.depfile:
+        write_depfile(args.depfile, args.output, depfiles, add_pydeps=False)
 
     touch(args.output)
 

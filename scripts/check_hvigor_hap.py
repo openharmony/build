@@ -18,7 +18,7 @@ import os
 import sys
 
 from util.file_utils import read_json_file
-from util.build_utils import touch, check_instance
+from util.build_utils import touch, check_instance, write_depfile
 
 
 def read_hap_file(file_path: str):
@@ -49,7 +49,7 @@ def check_sdk_version(args, hvigor_compile_hap_allow_info):
 def check_hvigor_version(args, hvigor_compile_hap_allow_info):
     if not args.hvigor_home or not hvigor_compile_hap_allow_info:
         return 0
-    
+
     hvigor_allow_version_list = hvigor_compile_hap_allow_info.get("hvigor_version")
     check_instance(hvigor_allow_version_list, "hvigor_version", dict)
 
@@ -57,10 +57,10 @@ def check_hvigor_version(args, hvigor_compile_hap_allow_info):
     
     if args.hvigor_home not in hvigor_allow_version_list:
         return 0
-    
+
     if args.target_path not in hvigor_allow_version_list.get(args.hvigor_home):
         raise Exception(message)
-    
+
     return 0
 
 
@@ -71,6 +71,7 @@ def main():
     parser.add_argument('--hvigor-compile-hap-allow-file', required=True)
     parser.add_argument('--sdk-home', help='sdk home')
     parser.add_argument('--hvigor-home', help='hvigor home')
+    parser.add_argument('--depfile', required=False)
     args = parser.parse_args()
 
     # read hvigor compile hap allow list file
@@ -83,6 +84,9 @@ def main():
     check_hvigor_version(args, hvigor_compile_hap_allow_info)
 
     touch(args.output)
+    if args.depfile:
+        _dep_files = [args.hvigor_compile_hap_allow_file]
+        write_depfile(args.depfile, args.output, _dep_files, add_pydeps=False)
 
     return 0
 
