@@ -139,7 +139,6 @@ def get_unsigned_hap_path(module: str, src_path: str, cwd: str, options):
     product_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
     model_version = get_integrated_project_config(cwd)
     product_value = options.product if options.product else 'default'
-    module_target = get_target_by_module(module, options)
     if product_value is None:
         product_value = 'default'
     if options.test_hap:
@@ -151,7 +150,7 @@ def get_unsigned_hap_path(module: str, src_path: str, cwd: str, options):
             unsigned_hap_path = os.path.join(
                 cwd, src_path, 'build/default/outputs/ohosTest')
     else:
-        module_target = options.module_target
+        module_target = get_target_by_module(module, options)
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
