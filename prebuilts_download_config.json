@@ -491,6 +491,21 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-pc-windows-gnullvm.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
+        },
+		{
+          "unzip_dir": "prebuilts/python_llvm",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
+          "unzip_filename": "linux-arm64"
+        },
+		{
+          "unzip_dir": "prebuilts/python_llvm",
+          "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20250807.tar.gz",
+          "unzip_filename": "linux-x86"
+        },
+		{
+          "unzip_dir": "prebuilts/python_llvm",
+          "file_path": "/openharmony/compiler/python/3.11.4/windows/python-mingw-x86-3.11.4_20250617.tar.gz",
+          "unzip_filename": "windows-x86"
         }
       ],
       "install": [
@@ -609,6 +624,11 @@
           "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20250804.tar.gz",
           "unzip_filename": "darwin-arm64"
         },
+		{
+          "unzip_dir": "prebuilts/python_llvm",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20250804.tar.gz",
+          "unzip_filename": "darwin-arm64"
+        },
         {
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-nightly-aarch64-apple-darwin.tar.gz",
@@ -679,6 +699,11 @@
         },
         {
           "unzip_dir": "prebuilts/python",
+          "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250804.tar.gz",
+          "unzip_filename": "darwin-x86"
+        },
+		{
+          "unzip_dir": "prebuilts/python_llvm",
           "file_path": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20250804.tar.gz",
           "unzip_filename": "darwin-x86"
         },
