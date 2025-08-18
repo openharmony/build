@@ -103,6 +103,16 @@
         ]
     },
     {
+        "install_dir": "toolchains/rescheck",
+        "module_label": "//developtools/global_resource_tool:restool_ids_schema",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//developtools/global_resource_tool:restool_faq",
         "target_os": [
