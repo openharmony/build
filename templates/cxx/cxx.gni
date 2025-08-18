@@ -2060,6 +2060,23 @@ template("ohos_shared_headers") {
     part_name = invoker.part_name
   }
 
+   _main_target_name = target_name
+   _notice_target = "${_main_target_name}__notice"
+   collect_notice(_notice_target) {
+     forward_variables_from(invoker,
+                            [
+                              "testonly",
+                              "license_as_sources",
+                              "license_file",
+                            ])
+
+     module_name = _main_target_name
+     module_source_dir = get_label_info(":${_main_target_name}", "dir")
+  }
+
+  deps_inner += [ ":$_notice_target" ]
+
+
   not_needed([ "subsystem_name", "part_name" ])
 
   include_inner = []
