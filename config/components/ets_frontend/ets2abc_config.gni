@@ -215,6 +215,10 @@ template("generate_static_abc") {
         rebase_path("$build_sdk_path/build-tools/ets2panda/lib"),
         "--node-path",
         rebase_path("$node_path"),
+        "--scan-path",
+        rebase_path("$ohos_ets_api_path"),
+        rebase_path("$ohos_ets_arkts_path"),
+        rebase_path("$ohos_ets_kits_path"),
       ]
 
       only_memo = "False"
