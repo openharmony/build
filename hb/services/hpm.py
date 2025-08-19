@@ -146,19 +146,17 @@ class Hpm(BuildFileGeneratorInterface):
         self._run_hpm_cmd(hpm_update_cmd)
 
     def _run_hpm_cmd(self, cmd, log_path):
-        LogUtil.hb_info(f"Hpm cmd is: {cmd}")
-        ret_code = SystemUtil.exec_command(
+        cmd_str = " ".join(cmd)
+        SystemUtil.exec_command(
             cmd,
             log_path=log_path,
-            pre_msg="start run hpm command",
+            pre_msg=f"Executing hpm command: {cmd_str}",
             after_msg="end hpm command",
             custom_line_handle=self._custom_line_handle,
         )
         hpm_info = get_hpm_check_info()
         if hpm_info:
             print(hpm_info)
-        if ret_code != 0:
-            raise OHOSException(f"ERROR: hpm command failed, cmd: {cmd}", "0001")
 
 
     def _custom_line_handle(self, line):
