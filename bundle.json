@@ -22,7 +22,8 @@
     "description": "build_framework component set",
     "subsystem": "build",
     "features": [
-      "build_framework_feature_verify = ture"
+      "build_framework_feature_verify = ture",
+      "build_build_framework_compiler_optimize_level"
     ],
     "adapted_system_type": [
       "standard",
