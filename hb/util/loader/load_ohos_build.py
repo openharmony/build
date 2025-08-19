@@ -710,6 +710,9 @@ def _output_all_components_info(parts_config_dict, parts_info_output_path):
     if 'parts_path_info' not in parts_config_dict:
         return
     parts_path_info = parts_config_dict.get('parts_path_info')
+    if 'parts_deps' not in parts_config_dict:
+        return
+    parts_deps_info = parts_config_dict.get('parts_deps')
 
     components = {}
 
@@ -728,6 +731,10 @@ def _output_all_components_info(parts_config_dict, parts_info_output_path):
                 break
         else:
             print("Warning: component %s has no subsystem info." % name)
+
+        if name in parts_deps_info:
+            if parts_deps_info[name] and 'components' in parts_deps_info[name]:
+                component['deps_components'] = parts_deps_info[name]['components']
 
         if val:
             for k, v in val.items():
