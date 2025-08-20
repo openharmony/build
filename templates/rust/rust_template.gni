@@ -176,6 +176,16 @@ template("rust_target") {
     _rustenv += invoker.rustenv
   }
 
+  _version_script = ""
+  if (defined(invoker.version_script)) {
+    _version_script = rebase_path("//build/templates/cxx/ani.versionscript")
+  } else if (defined(invoker.shlib_type) && invoker.shlib_type == "ani") {
+    _version_script = rebase_path("//build/templates/cxx/ani.versionscript")
+  }
+  if (_version_script != "") {
+    _rustflags += [ "-Clink-arg=-Wl,--version-script=${_version_script}", "-Clink-arg=-Wl,--undefined-version" ]
+  }
+
   assert(defined(invoker.sources), "sources must be listed")
 
   _rust_deps = _deps
