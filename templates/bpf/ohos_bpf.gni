@@ -148,9 +148,9 @@ template("ohos_bpf") {
     deps = [
       ":$_module_info_target",
       ":$_notice_target",
-      ":${_collect_target}",
-      "//third_party/musl:musl_headers"
+      ":${_collect_target}"
     ]
+    external_deps = [ "musl:musl_headers" ]
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }

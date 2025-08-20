@@ -11,23 +11,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# OHOS version
-declare_args() {
-  sdk_version = "6.0.0.46"
-  api_version = "20"
-
-  # Release type, optional values: Betax, RCx...
-  release_type = "Beta1"
-  meta_version = "3.0.0"
-  platform_version = "4.0.0"
-}
-
-# ohos SDK version
-declare_args() {
-  current_sdk_version = sdk_version
-}
-
-# ohos NDK version
-declare_args() {
-  current_ndk_version = current_sdk_version
-}
+sdk_type = "ets"

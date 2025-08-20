@@ -62,7 +62,7 @@ def _search_bundle_path(part_name: str) -> str:
                 "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
                     part_name, bundle_path, COMPONENTS_PATH_DIR))
     except Exception as e:
-        raise OHOSException('Please check the bundle.json file of {} : {}'.format(part_name, e))
+        raise OHOSException('Please check the bundle.json files you updated : {}'.format(e))
     if not bundle_path:
         LogUtil.hb_info('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(part_name))
         sys.exit(1)

@@ -56,6 +56,8 @@ def parse_args(args):
     parser.add_argument('--target-app-dir', help='target output dir')
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
     parser.add_argument('--module-target', help='set module target of unsigned hap path')
+    parser.add_argument('--modules-filter', help='if enable filter unsigned hap or hsp packages', action='store_true')
+    parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
 
     options = parser.parse_args(args)
     return options
@@ -171,7 +173,7 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
-            if module.get('name') not in options.build_modules and not options.test_hap:
+            if options.modules_filter and module.get('name') not in options.build_modules:
                 continue
             src_path = module.get('srcPath')
             project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
@@ -263,7 +265,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'debuggable=false'])
 
     if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
-        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache')
+        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache', options.cwd)
         os.makedirs(hvigor_cache_dir, exist_ok=True)
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
 
@@ -271,6 +273,9 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['-p', 'buildMode=release'])
     else:
         cmd.extend(['-p', 'hvigor-obfuscation=false'])
+
+    if options.ohos_test_coverage:
+        cmd.extend(['-p', 'ohos-test-coverage=true'])
     
     if options.target_app_dir and options.target_app_dir != "":
         if (hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version:

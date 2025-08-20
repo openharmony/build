@@ -59,7 +59,7 @@ def main():
     config_file = os.path.join(global_args.code_dir, "build", "prebuilts_config.json")
     if global_args.config_file: 
         config_file = global_args.config_file
-    
+    print(f"start parse config file {config_file}")
     config_parser = ConfigParser(config_file, global_args)
     download_operate, other_operate = config_parser.get_operate(global_args.part_names)
     prebuilts_path = os.path.join(global_args.code_dir, "prebuilts")
@@ -67,9 +67,12 @@ def main():
         os.makedirs(prebuilts_path)
    
     # 使用线程池下载
+    print(f"start download prebuilts, tool list is:")
+    for item in download_operate:
+        print(item.get("remote_url"))
     pool_downloader = PoolDownloader(download_operate, global_args)
-    unchanged = pool_downloader.start()
-    
+    unchanged = pool_downloader.start()    
+    print(f"start handle other operate")
     OperateHanlder.run(other_operate, global_args, unchanged)
 
 
