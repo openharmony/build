@@ -1261,7 +1261,7 @@ config("optimize") {
   if (optimize_for_size && !is_nacl) {
     # Favor size over speed.
     if (is_clang) {
-      cflags = [ build_build_framework_compiler_optimize_level ] + common_optimize_on_cflags
+      cflags = [ build_framework_compiler_optimize_level ] + common_optimize_on_cflags
     } else {
       cflags = [ "-Os" ] + common_optimize_on_cflags
     }

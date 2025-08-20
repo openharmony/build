@@ -15,5 +15,5 @@ declare_args() {
   build_variant = "root"
   root_perf_main = "main"
   device_type = "default"
-  build_build_framework_compiler_optimize_level = "-O2"
+  build_framework_compiler_optimize_level = "-O2"
 }

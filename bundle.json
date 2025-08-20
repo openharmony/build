@@ -23,7 +23,7 @@
     "subsystem": "build",
     "features": [
       "build_framework_feature_verify = ture",
-      "build_build_framework_compiler_optimize_level"
+      "build_framework_compiler_optimize_level"
     ],
     "adapted_system_type": [
       "standard",
