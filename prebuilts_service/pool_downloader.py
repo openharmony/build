@@ -29,8 +29,7 @@ import traceback
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from multiprocessing import cpu_count
-from urllib.request import urlopen
-from functools import partial
+import requests
 
 
 class PoolDownloader:
@@ -94,7 +93,7 @@ class PoolDownloader:
         unzip_dir = operate.get("unzip_dir")
         unzip_filename = operate.get("unzip_filename")
         local_path = get_local_path(download_root, remote_url)
-
+        self._adaptive_print(f"start deal {remote_url}")
         mark_file_exist, mark_file_path = check_sha256_by_mark(remote_url, unzip_dir, unzip_filename)
         # 检查解压的文件是否和远程一致
         if mark_file_exist:
@@ -127,6 +126,7 @@ class PoolDownloader:
             self._adaptive_print("Start decompression {}".format(local_path))
             extract_compress_files_and_gen_mark(local_path, unzip_dir, mark_file_path)
             self._adaptive_print(f"{local_path} extracted to {unzip_dir}")
+
 
     def _try_download(self, remote_url: str, local_path: str):
         max_retry_times = 3
@@ -161,17 +161,20 @@ class PoolDownloader:
     def _download_remote_file(self, remote_url: str, local_path: str, progress_task_id):
         buffer_size = 32768
         progress = self.progress
-        with urlopen(remote_url) as response:
-            total_size = int(response.info().get("Content-Length", 0))
-
+        # 使用requests库进行下载
+        with requests.get(remote_url, stream=True, timeout=(30, 600)) as response:
+            response.raise_for_status()  # 检查HTTP错误
+            
+            total_size = int(response.headers.get("Content-Length", 0))
             if progress:
                 progress.update(progress_task_id, total=total_size)
                 progress.start_task(progress_task_id)
 
             with open(local_path, "wb") as dest_file:
-                for data in iter(partial(response.read, buffer_size), b""):
-                    dest_file.write(data)
-                    self._update_progress(progress_task_id, len(data))
+                for chunk in response.iter_content(chunk_size=buffer_size):
+                    if chunk:  # 过滤掉保持连接的chunk
+                        dest_file.write(chunk)
+                        self._update_progress(progress_task_id, len(chunk))
         self._adaptive_print(f"Downloaded {local_path}")
 
     def _update_progress(self, task_id, advance):

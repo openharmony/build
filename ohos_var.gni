@@ -321,20 +321,8 @@ dist_build_install_packages_dir = "${dist_build_out_dir}/packages_to_install"
 dist_subsystem_info_output_file =
     "${dist_build_install_packages_dir}/${dist_subsystem_info_filename}"
 
-if (api_patch_version == "0") {
-  if (api_minor_version == "0") {
-    current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}"
-    prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}"
-  } else {
-    current_sdk_home =
-        "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
-    prebuilts_sdk_dir =
-        "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}"
-  }
-} else {
-  current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
-  prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}.${api_minor_version}.${api_patch_version}"
-}
+current_sdk_home = "//prebuilts/ohos-sdk/linux/${api_version}"
+prebuilts_sdk_dir = "//prebuilts/ohos-sdk/linux/${api_version}"
 
 ramdisk_dir_list = []
 
