@@ -21,6 +21,7 @@ sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util.file_utils import write_json_file  # noqa: E402
+from scripts.util.build_utils import write_depfile  # noqa: E402
 
 
 def get_source_name(module_type, name, prefix_override, suffix,
@@ -194,6 +195,7 @@ def main():
                         dest='prefix_override',
                         action='store_false')
     parser.set_defaults(prefix_override=False)
+    parser.add_argument('--depfile', required=False)
     args = parser.parse_args()
 
     module_source = ''
@@ -234,6 +236,10 @@ def main():
 
     # write module info file
     write_json_file(args.output_file, module_info_data)
+
+    if args.depfile:
+        _dep_files = []
+        write_depfile(args.depfile, args.output_file, _dep_files, add_pydeps=False)
     return 0
 
 

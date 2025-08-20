@@ -19,6 +19,7 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
+from scripts.util.build_utils import write_depfile  # noqa: E402 E501
 
 
 # read subsystem module, generate subsystem install list and deps list.
@@ -124,6 +125,14 @@ def main():
                     args.sdk_modules_info_file, args.output_install_file,
                     args.output_deps_file, args.output_host_file,
                     args.current_toolchain, args.host_toolchain)
+
+    if args.depfile:
+        _dep_files = [args.input_file]
+        if os.path.exists(args.sdk_modules_info_file):
+            _dep_files.append(args.sdk_modules_info_file)
+
+        write_depfile(args.depfile, args.output_install_file, _dep_files, add_pydeps=False)
+
     return 0
 
 

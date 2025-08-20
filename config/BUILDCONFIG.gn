@@ -101,6 +101,14 @@ declare_args() {
   rustc_codecheck = false
 }
 
+declare_args() {
+  # Whether to use the sandbox
+  use_sandbox = false
+
+  # enable sandbox debug mode
+  sandbox_debug = false
+}
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
@@ -1069,13 +1077,13 @@ foreach(_target_type, target_type_list) {
   }
 }
 
-if (is_lite_system && current_os == "ohos") {
-  _target_type_list = [
-    "action",
-    "action_foreach",
-  ]
+action_target_type_list = [
+  "action",
+  "action_foreach",
+]
 
-  foreach(_target_type, _target_type_list) {
+if (is_lite_system && current_os == "ohos") {
+  foreach(_target_type, action_target_type_list) {
     template(_target_type) {
       target(_target_type, target_name) {
         forward_variables_from(invoker, "*", [ "no_default_deps" ])
@@ -1084,6 +1092,99 @@ if (is_lite_system && current_os == "ohos") {
         }
         if (!defined(invoker.no_default_deps) || !invoker.no_default_deps) {
           deps += [ "//third_party/musl:sysroot_lite" ]
+        }
+      }
+    }
+  }
+}
+
+import("//build/sandbox/sandbox.gni")
+
+if (is_standard_system && use_sandbox) {
+  no_sandbox_script_list =
+      rebase_path(sandbox_config.no_sandbox_script_list, "//")
+
+  foreach(_target_type, action_target_type_list) {
+    template(_target_type) {
+      script_path = rebase_path(invoker.script, "//")
+      target_label = get_label_info(":${target_name}", "label_no_toolchain")
+
+      if (sandbox_debug) {
+        print("action label: ${target_label}, script: ${script_path}")
+      }
+
+      if (filter_include(no_sandbox_script_list, [ script_path ]) != []) {
+        target(_target_type, target_name) {
+          forward_variables_from(invoker, "*", [ "no_default_deps" ])
+          if (!defined(depfile) ||
+              filter_include(args, [ rebase_path(depfile, root_build_dir) ]) ==
+              []) {
+            # Trusted script that do not use the sandbox need to configure the depfile field and pass to script
+            print("WARNING: ${target_label} not set depfile or not pass args")
+          } else {
+            not_needed([ "target_label" ])
+          }
+        }
+      } else {
+        metadata_target = "${target_name}__sandbox_metadata"
+        metadata_file = "${target_out_dir}/${metadata_target}.json"
+
+        target(_target_type, target_name) {
+          forward_variables_from(invoker,
+                                 [
+                                   "testonly",
+                                   "visibility",
+                                   "outputs",
+                                 ])
+          forward_variables_from(invoker,
+                                 "*",
+                                 [
+                                   "no_default_deps",
+                                   "script",
+                                   "args",
+                                 ])
+
+          script = sandbox_config.sandbox_script
+          args = [
+            "--sandbox-metadata",
+            rebase_path(metadata_file, root_build_dir),
+            "--script-file",
+            rebase_path(invoker.script, root_build_dir),
+          ]
+
+          if (sandbox_debug) {
+            args += [ "--debug" ]
+          }
+
+          if (defined(invoker.args) && invoker.args != []) {
+            args += [ "--" ]
+            args += invoker.args
+          }
+
+          if (!defined(deps)) {
+            deps = []
+          }
+          deps += [ ":${metadata_target}" ]
+        }
+
+        action_output =
+            rebase_path(get_target_outputs(":${target_name}"), root_build_dir)
+        sandbox_metadata("${metadata_target}") {
+          forward_variables_from(invoker,
+                                 [
+                                   "custom_mount_dir",
+                                   "inputs",
+                                   "sources",
+                                 ])
+          if (defined(invoker.depfile)) {
+            depfile = invoker.depfile
+          } else {
+            if (_target_type == "action_foreach") {
+              depfile = "${target_gen_dir}/{{source_name_part}}__sandbox.d"
+            } else {
+              depfile = "${target_gen_dir}/${target_name}__sandbox.d"
+            }
+          }
         }
       }
     }

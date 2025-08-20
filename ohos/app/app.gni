@@ -213,9 +213,10 @@ if (app_need_publicity) {
 
     action(target_name) {
       script = "//build/scripts/collect_publicity.py"
-      module_type = "app"
+      depfile = "${target_gen_dir}/${target_name}.d"
       if (defined(module_install_dir)) {
         not_needed([ "relative_install_dir" ])
+        module_type = "app"
         install_dir = string_replace(module_install_dir, "${module_type}/", "")
       } else if (defined(relative_install_dir)) {
         install_dir = relative_install_dir
@@ -227,7 +228,10 @@ if (app_need_publicity) {
         print(
             "${invoker.module_label} not set install dir, empty install dir is invalid.")
       }
-      args = []
+      args = [
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
+      ]
       if (defined(invoker.publicity_file)) {
         inputs = [ invoker.publicity_file ]
         source = inputs[0]
@@ -269,8 +273,10 @@ template("ohos_app") {
       script = "//build/scripts/check_hvigor_hap.py"
       outputs = [ "${target_out_dir}/${target_name}.txt" ]
       inputs = [ "${preloader_output_dir}/hvigor_compile_hap_whitelist.json" ]
-
+      depfile = "${target_gen_dir}/${target_name}.d"
       args = [
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
         "--target-path",
         target_path,
         "--output",
@@ -356,7 +362,8 @@ template("ohos_app") {
 
   module_label = get_label_info(":${target_name}", "label_with_toolchain")
   _collect_target = "${target_name}__collect"
-  collect_module_target(_collect_target) {}
+  collect_module_target(_collect_target) {
+  }
 
   if (!defined(install_enable)) {
     install_enable = true
@@ -364,7 +371,10 @@ template("ohos_app") {
 
   if (!_test_target) {
     if (defined(install_images)) {
-      app_allow_images = [ "system", "cloud_rom" ]
+      app_allow_images = [
+        "system",
+        "cloud_rom",
+      ]
       allow_image = filter_exclude(install_images, app_allow_images)
       assert(
           allow_image == [],
@@ -473,7 +483,7 @@ template("ohos_app") {
     if (defined(invoker.modules_filter) && invoker.modules_filter) {
       module_filter = true
     }
-    
+
     ohos_test_coverage = false
     if (defined(invoker.ohos_test_coverage) && invoker.ohos_test_coverage) {
       ohos_test_coverage = invoker.ohos_test_coverage
