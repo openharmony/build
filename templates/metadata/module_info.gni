@@ -97,6 +97,7 @@ template("generate_module_info") {
   }
 
   action(target_name) {
+    depfile = "${target_gen_dir}/${target_name}.d"
     args = [
       "--system-base-dir",
       system_base_dir,
@@ -128,6 +129,8 @@ template("generate_module_info") {
       module_name,
       "--output-file",
       rebase_path(output_file, "$root_build_dir"),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
     ]
 
     if (module_install_name != "") {

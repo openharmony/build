@@ -183,7 +183,10 @@ template("_ohos_subsystem_sdk") {
         sdk_build_file,
         sdk_info_file,
       ]
+      depfile = "${target_gen_dir}/${target_name}.d"
       args = [
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
         "--input-file",
         rebase_path(subsystem_sdk_desc_file, root_build_dir),
         "--sdk-out-dir",
