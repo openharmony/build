@@ -863,6 +863,7 @@ template("ohos_shared_library") {
 
       if (defined(invoker.shlib_type) && invoker.shlib_type == "ani") {
         module_install_dir = ""
+        softlink_create_path = ""
         relative_install_dir = "modules/ani"
       }
 
