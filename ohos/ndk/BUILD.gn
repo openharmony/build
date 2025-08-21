@@ -164,6 +164,7 @@ if (!use_current_sdk) {
 }
 
 ohos_ndk_copy("ndk_cmake_files") {
+  clear_dest  = false
   dest_dir = "$ndk_os_irrelevant_out_dir/build"
   sources = [ "./cmake" ]
 }
