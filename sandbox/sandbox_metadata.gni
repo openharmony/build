@@ -1,0 +1,51 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+sandbox_config = {
+  sandbox_script = "//build/sandbox/sandbox.sh"
+  no_sandbox_script_list = []
+}
+
+template("sandbox_metadata") {
+  forward_variables_from(invoker,
+                         [
+                           "custom_mount_dir",
+                           "inputs",
+                           "sources",
+                         ])
+
+  group(target_name) {
+    # filled metadata required for sandbox_script, you can filled more
+    depfile_path = rebase_path(invoker.depfile, root_build_dir)
+
+    metadata_info = {
+      depfile_path = depfile_path
+      outputs = invoker.action_output
+      target_label = invoker.target_label
+    }
+
+    if (defined(inputs) && inputs != []) {
+      metadata_info.inputs = rebase_path(inputs, root_build_dir)
+    }
+
+    if (defined(sources) && sources != []) {
+      metadata_info.sources = rebase_path(sources, root_build_dir)
+    }
+
+    if (defined(custom_mount_dir) && custom_mount_dir != []) {
+      metadata_info.custom_mount_dir =
+          rebase_path(custom_mount_dir, root_build_dir)
+    }
+    write_file(invoker.metadata_file, metadata_info, "json")
+  }
+}

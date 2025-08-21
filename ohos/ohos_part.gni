@@ -110,11 +110,14 @@ template("ohos_part") {
     deps = [ ":${part_name}_info" ]
     script = "//build/ohos/generate_part_info.py"
     sources = [ part_modules_info_file ]
+    depfile = "${target_gen_dir}/${target_name}.d"
     outputs = [
       part_install_modules_file,
       part_dep_modules_file,
     ]
     args = [
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
       "--part-name",
       part_name,
       "--origin-part-name",

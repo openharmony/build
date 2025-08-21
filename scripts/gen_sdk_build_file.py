@@ -233,11 +233,17 @@ def main():
     parser.set_defaults(generate_sig=False)
     parser.add_argument('--signature-file-check-dir', help='', required=False)
     parser.add_argument('--signature-file-gen-dir', help='', required=False)
+    parser.add_argument('--depfile', help='', required=False)
     args = parser.parse_args()
 
     generate_sdk(args.input_file, args.sdk_out_dir, args.output_build_file,
                  args.sdk_info_file, args.generate_sig,
                  args.signature_file_check_dir, args.signature_file_gen_dir)
+
+    if args.depfile:
+        _dep_files = []
+        _dep_files.append(args.input_file)
+        build_utils.write_depfile(args.depfile, args.output_build_file, _dep_files, add_pydeps=False)
     return 0
 
 

@@ -3114,7 +3114,7 @@
         "//developtools/profiler/hidebug/test/unittest/js:HidebugJsTest": [
             "//developtools/packing_tool:packing_tool"
         ],
-        "//developtools/profiler/host/smartperf/client/client_ui:SmartPerf": [
+        "//developtools/smartperf_host/smartperf_device/device_ui:SmartPerf": [
             "//developtools/packing_tool:packing_tool"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:build_camera_host_config": [
@@ -5164,11 +5164,11 @@
         "//developtools/profiler/hidebug/test/unittest/js:HidebugJsTest__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
-        "//developtools/profiler/host/smartperf/client/client_ui:SmartPerf": [
+        "//developtools/smartperf_host/smartperf_device/device_ui:SmartPerf": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
         ],
-        "//developtools/profiler/host/smartperf/client/client_ui:SmartPerf__js_assets": [
+        "//developtools/smartperf_host/smartperf_device/device_ui:SmartPerf__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [

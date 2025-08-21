@@ -104,7 +104,7 @@ def get_license_from_readme(readme_path: str):
             notice_files.append(content.get('License File').strip())
             notice_names.append(content.get('Name').strip())
             notice_versions.append(content.get('Version Number').strip())
-            
+
         if notice_files is None:
             raise Exception("Error: value of notice file is empty in {}.".format(
                 readme_path))
@@ -137,7 +137,7 @@ def add_path_to_module_notice(module_notice_info, module_notice_info_list, optio
                 module_notice_info["Path"] = module_path.replace("../", "")
 
 
-def do_collect_notice_files(options, depfiles: str):
+def do_collect_notice_files(options, depfiles: list):
     module_notice_info_list = []
     module_notice_info = {}
     notice_file = options.license_file
@@ -178,7 +178,7 @@ def do_collect_notice_files(options, depfiles: str):
         else:
             module_notice_info['Software'] = ""
             module_notice_info['Version'] = ""
-    
+
     add_path_to_module_notice(module_notice_info, module_notice_info_list, options)
 
     if notice_file:
@@ -203,10 +203,10 @@ def write_file_content(notice_files, options, output, notice_info_json, module_n
                 build_utils.touch(output)
             write_notice_to_output(notice_file, output)
             write_json_file(notice_info_json, module_notice_info_list)
+            depfiles.append(notice_file)
         else:
             build_utils.touch(output)
             build_utils.touch(notice_info_json)
-        depfiles.append(notice_file)
 
 
 def write_notice_to_output(notice_file, output):
@@ -263,4 +263,3 @@ def main(args):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
-

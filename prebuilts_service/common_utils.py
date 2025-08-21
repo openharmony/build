@@ -137,8 +137,8 @@ def check_hpm_version(hpm_path: str, npm_path: str) -> bool:
         out, _ = proc.communicate(timeout=10)
     except subprocess.TimeoutExpired:
         proc.kill()
+    latest_hpm_version = ""
     if proc.returncode == 0:
-        latest_hpm_version = ""
         pattern = r'^@ohos/hpm-cli\s*\|(?:[^|]*\|){3}([^|]*)'
         for line in out.splitlines():
             match = re.match(pattern, line)
