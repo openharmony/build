@@ -162,7 +162,7 @@ class PoolDownloader:
         buffer_size = 32768
         progress = self.progress
         # 使用requests库进行下载
-        with requests.get(remote_url, stream=True, timeout=(30, 300)) as response:
+        with requests.get(remote_url, stream=True, timeout=(30, 600)) as response:
             response.raise_for_status()  # 检查HTTP错误
             
             total_size = int(response.headers.get("Content-Length", 0))
