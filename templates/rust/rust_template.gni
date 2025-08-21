@@ -876,6 +876,11 @@ template("ohos_rust_proc_macro") {
         relative_install_dir = invoker.relative_install_dir
       }
 
+      if (defined(invoker.shlib_type) && invoker.shlib_type == "ani") {
+        module_install_dir = ""
+        relative_install_dir = "modules/ani"
+      }
+
       if (defined(invoker.symlink_target_name)) {
         symlink_target_name = invoker.symlink_target_name
       }
