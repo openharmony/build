@@ -861,6 +861,12 @@ template("ohos_shared_library") {
         relative_install_dir = invoker.relative_install_dir
       }
 
+      if (defined(invoker.shlib_type) && invoker.shlib_type == "ani") {
+        module_install_dir = ""
+        softlink_create_path = ""
+        relative_install_dir = "modules/ani"
+      }
+
       if (defined(invoker.innerapi_tags)) {
         if (defined(softlink_path) && softlink_path != "") {
           softlink_create_path = softlink_path
