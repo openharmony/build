@@ -54,10 +54,8 @@ def parse_args(args):
     parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
-    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
-    parser.add_argument('--module-target', help='set module target of unsigned hap path')
-    parser.add_argument('--modules-filter', help='if enable filter unsigned hap or hsp packages', action='store_true')
     parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
+    parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
 
     options = parser.parse_args(args)
     return options
@@ -102,6 +100,8 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
             'NODE_HOME': os.path.dirname(os.path.abspath(options.nodejs)),
         }
         os.chdir(cwd)
+        if os.path.exists(os.path.join(cwd, 'oh_modules')):
+            shutil.rmtree(os.path.join(cwd, 'oh_modules'), ignore_errors=True)
         if os.path.exists(os.path.join(cwd, 'hvigorw')):
             subprocess.run(['chmod', '+x', 'hvigorw'])
         if os.path.exists(os.path.join(cwd, '.arkui-x/android/gradlew')):
@@ -134,10 +134,11 @@ def get_hvigor_version(cwd: str):
     return hvigor_version
 
 
-def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
+def get_unsigned_hap_path(module: str, src_path: str, cwd: str, options):
     hvigor_version = get_hvigor_version(cwd)
+    product_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
     model_version = get_integrated_project_config(cwd)
-    product_value = options.product
+    product_value = options.product if options.product else 'default'
     if product_value is None:
         product_value = 'default'
     if options.test_hap:
@@ -149,7 +150,7 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
             unsigned_hap_path = os.path.join(
                 cwd, src_path, 'build/default/outputs/ohosTest')
     else:
-        module_target = options.module_target
+        module_target = get_target_by_module(module, options)
         if options.target_app_dir and ((hvigor_version and float(hvigor_version[:3]) > 4.1) or model_version):
             new_src_path = os.path.join(options.target_out_dir, options.target_app_dir, project_name, src_path)
             unsigned_hap_path = os.path.join(
@@ -158,6 +159,29 @@ def get_unsigned_hap_path(project_name: str, src_path: str, cwd: str, options):
             unsigned_hap_path = os.path.join(
                 cwd, src_path, f'build/{product_value}/outputs/{module_target}')
     return unsigned_hap_path
+
+
+def split_build_modules(build_modules: list):
+    new_build_modules = []
+    if not build_modules:
+        return new_build_modules
+    for item in build_modules:
+        target = "default"
+        module = item
+        if "@" in item:
+            split_item = item.split("@")
+            module = split_item[0]
+            target = split_item[1]
+        new_build_modules.append({"module": module, "target": target})
+    return new_build_modules
+
+
+def get_target_by_module(module: str, options):
+    new_build_modules = split_build_modules(options.build_modules)
+    for item in new_build_modules:
+        if item["module"] == module:
+            return item["target"]
+    return "default"
 
 
 def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
@@ -173,17 +197,17 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
         for module in modules_list:
-            if options.modules_filter and module.get('name') not in options.build_modules:
-                continue
             src_path = module.get('srcPath')
-            project_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
-            unsigned_hap_path = get_unsigned_hap_path(project_name, src_path, cwd, options)
+            module_name = module.get("name")
+            unsigned_hap_path = get_unsigned_hap_path(module_name, src_path, cwd, options)
             hap_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hap')
+            if hap_file:
+                unsigned_hap_path_list.extend(hap_file)
             hsp_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hsp')
-            unsigned_hap_path_list.extend(hap_file)
-            unsigned_hap_path_list.extend(hsp_file)
+            if hsp_file:
+                unsigned_hap_path_list.extend(hsp_file)
         unsigned_hap_path_json['unsigned_hap_path_list'] = unsigned_hap_path_list
     file_utils.write_json_file(options.output_file, unsigned_hap_path_json)
 
@@ -253,7 +277,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         cmd.extend(['--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap'])
     elif options.build_modules:
-        cmd.extend(['assembleHap', '--mode',
+        cmd.extend([options.assemble_type, '--mode',
                'module', '-p', f'product={product_value}', '-p', 'module=' + ','.join(options.build_modules)])
     else:
         cmd.extend(['--mode',
