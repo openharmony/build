@@ -474,16 +474,6 @@ template("ohos_app") {
       product = invoker.product
     }
 
-    module_target = "default"
-    if (defined(invoker.module_target)) {
-      module_target = invoker.module_target
-    }
-
-    modules_filter = false
-    if (defined(invoker.modules_filter) && invoker.modules_filter) {
-      module_filter = true
-    }
-
     ohos_test_coverage = false
     if (defined(invoker.ohos_test_coverage) && invoker.ohos_test_coverage) {
       ohos_test_coverage = invoker.ohos_test_coverage
