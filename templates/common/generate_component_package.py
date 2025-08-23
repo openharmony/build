@@ -45,6 +45,8 @@ def _get_args():
                         help="build_arch_arg. default: x86", )
     parser.add_argument("-lt", "--local_test", default=0, type=int,
                         help="local test ,default: not local , 0", )
+    parser.add_argument("-origin", "--build-origin", default="", type=str,
+                        help="Origin marker for HPM package", )
     args = parser.parse_args()
     return args
 
@@ -2050,12 +2052,27 @@ def _get_component_check(local_test) -> list:
     return check_list
 
 
+def generate_made_in_mark_file(args):
+    from datetime import datetime
+    import pytz
+    str_time = datetime.now(pytz.timezone('Asia/Shanghai')).strftime("%Y_%m_%d_%H_%M_%S")
+    build_origin = args.get("build_origin", "")
+    if not build_origin:
+        return
+    mark_file = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), f"made_in_{build_origin}")
+    basic_dir = os.path.dirname(mark_file)
+    os.makedirs(basic_dir, exist_ok=True)
+    with open(f"{mark_file}_{str_time}", 'w') as f:
+        f.write(f"the hpm package is made in {build_origin}, {str_time}")
+
+
 def _package_interface(args, parts_path_info, part_name, subsystem_name, components_json):
     part_path = _get_parts_path(parts_path_info, part_name)
     if part_path is None:
         return
     args.update({"subsystem_name": subsystem_name, "part_name": part_name,
                  "part_path": part_path})
+    generate_made_in_mark_file(args)
     if part_name in [
         "musl",  # 从obj/third_party/musl/usr 下提取到includes和libs
         "developer_test",  # 同rust
@@ -2108,7 +2125,7 @@ def additional_comoponents_json():
 
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
-                               os_arg='linux', build_arch_arg='x86', local_test=0):
+                               os_arg='linux', build_arch_arg='x86', local_test=0, build_origin=''):
     """
 
     Args:
@@ -2123,6 +2140,7 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         os_arg: default : linux
         build_arch_arg:  default : x86
         local_test: 1 to open local test , default 0 to close
+        build_origin: Origin marker for HPM package
     Returns:
 
     """
@@ -2157,7 +2175,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
             "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
             "build_type": build_type, "organization_name": organization_name,
             "toolchain_info": toolchain_info,
-            "static_deps": {}
+            "static_deps": {},
+            "build_origin": build_origin
             }
     for key, value in part_subsystem.items():
         part_name = key
@@ -2179,7 +2198,8 @@ def main():
                                organization_name=py_args.organization_name,
                                os_arg=py_args.os_arg,
                                build_arch_arg=py_args.build_arch,
-                               local_test=py_args.local_test)
+                               local_test=py_args.local_test,
+                               build_origin=py_args.build_origin)
 
 
 if __name__ == '__main__':
