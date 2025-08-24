@@ -249,8 +249,8 @@ def add_optional_arguments(parser: argparse.ArgumentParser) -> None:
                       help="List of file patterns to include in the compilation")
     parser.add_argument("--exclude", nargs="+", required=False,
                       help="List of file patterns to exclude from the compilation")
-    parser.add_argument("--files", nargs="+", required=False,
-                      help="List of specific files to compile")
+    parser.add_argument("--files", required=False,
+                      help="File containing a list of specific files to compile")
     parser.add_argument("--paths-keys", nargs="+", required=False,
                       help="List of keys for custom paths")
     parser.add_argument("--paths-values", nargs="+", required=False,
@@ -441,7 +441,12 @@ def build_config(args: argparse.Namespace) -> None:
     if args.exclude:
         config["exclude"] = args.exclude
     if args.files:
-        config["files"] = args.files
+        if not os.path.exists(args.files):
+            print(f"[IO ERROR] File not found: {args.files}", file=sys.stderr)
+            sys.exit()
+        fd = os.open(args.files, os.O_RDONLY)
+        with os.fdopen(fd, 'r') as f:
+            config["files"] = [line.strip() for line in f.readlines()]
 
     os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
     fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
@@ -464,7 +469,6 @@ def build_driver_config(args: argparse.Namespace) -> None:
 
     config = {
         "plugins": {},
-        "compileFiles": args.files,
         "packageName": args.package if args.package else "",
         "buildType": "build",
         "buildMode": "Release",
@@ -494,6 +498,13 @@ def build_driver_config(args: argparse.Namespace) -> None:
         config["pathsKeys"] = args.paths_keys
     if args.paths_values:
         config["pathsValues"] = args.paths_values
+    if args.files:
+        if not os.path.exists(args.files):
+            print(f"[IO ERROR] File not found: {args.files}", file=sys.stderr)
+            sys.exit()
+        fd = os.open(args.files, os.O_RDONLY)
+        with os.fdopen(fd, 'r') as f:
+            config["compileFiles"] = [line.strip() for line in f.readlines()]
 
     os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
     fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)

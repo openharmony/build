@@ -248,7 +248,9 @@ template("generate_static_abc") {
       foreach(path, invoker.files) {
         file_paths += [ rebase_path(path) ]
       }
-      args += [ "--files" ] + file_paths
+      file_list_file = "${target_out_dir}/${target_name}_file_list.txt"
+      write_file(file_list_file, file_paths)
+      args += [ "--files", rebase_path(file_list_file) ]
 
       if (defined(invoker.package)) {
         args += [
@@ -315,7 +317,9 @@ template("generate_static_abc") {
         foreach(path, invoker.files) {
           file_paths += [ rebase_path(path) ]
         }
-        args += [ "--files" ] + file_paths
+        file_list_file = "${target_out_dir}/${target_name}_file_list.txt"
+        write_file(file_list_file, file_paths)
+        args += [ "--files", rebase_path(file_list_file) ]
       }
 
       if (defined(invoker.package)) {
