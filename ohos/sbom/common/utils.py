@@ -51,7 +51,7 @@ def remove_empty(obj: Any) -> Any:
         return obj
 
 
-def generate_purl(type: str, namespace: str, name: str,
+def generate_purl(pkg_type: str, namespace: str, name: str,
                   version: str = None, qualifiers: dict = None,
                   subpath: str = None) -> str:
     """
@@ -59,7 +59,7 @@ def generate_purl(type: str, namespace: str, name: str,
     """
     try:
         purl = PackageURL(
-            type=type,
+            type=pkg_type,
             namespace=namespace,
             name=name,
             version=version,

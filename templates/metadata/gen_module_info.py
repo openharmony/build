@@ -13,9 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import argparse
 import os
+import sys
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -28,7 +28,7 @@ def get_source_name(module_type, name, prefix_override, suffix,
                     alternative_suffix):
     """Generate source file name by type."""
     if (module_type == 'lib'
-            or module_type == 'lib64') and not prefix_override:
+        or module_type == 'lib64') and not prefix_override:
         if not name.startswith('lib'):
             name = 'lib' + name
     alias = ''
@@ -61,7 +61,7 @@ def _gen_install_dest(base_dir, module_install_dir, relative_install_dir,
 
 def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, updater_base_dir,
                       updater_vendor_base_dir, sys_prod_base_dir, chip_prod_base_dir,
-                      eng_system_base_dir, eng_chipset_base_dir, cloud_rom_base_dir, source_file_name, 
+                      eng_system_base_dir, eng_chipset_base_dir, cloud_rom_base_dir, source_file_name,
                       install_images, module_install_dir, relative_install_dir, module_type):
     """Generate module install dir by user config."""
     dests = []
@@ -102,6 +102,7 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, update
         dests.append(os.path.join(dest, source_file_name))
     return dests
 
+
 def gen_module_info_data(args):
     module_source = ''
     module_alt_source = ''
@@ -139,6 +140,7 @@ def gen_module_info_data(args):
                                        args.install_enable, args.collect,
                                        args.notice, args)
     return module_info_data
+
 
 def gen_module_info(module_type, module_label, module_name, source_dir,
                     module_source, module_alt_source, install_dests,
@@ -178,6 +180,7 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
     if args.softlink_create_path:
         data['softlink_create_path'] = args.softlink_create_path
     return data
+
 
 def create_module_info_parser():
     parser = argparse.ArgumentParser()
@@ -245,6 +248,7 @@ def main():
         _dep_files = []
         write_depfile(args.depfile, args.output_file, _dep_files, add_pydeps=False)
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())
