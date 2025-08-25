@@ -163,14 +163,15 @@ class SBOMGenerator:
 
     def _add_install_dest_file(self):
         target_name_map_file = self.file_dependence_analyzer.get_target_name_map_file()
-        for target_name, dest_list in self._install_target_name_dest_map.items():  # 使用更清晰的命名
+
+        for target_name, dest_list in self._install_target_name_dest_map.items():
             file_list = target_name_map_file.get(target_name, [])
-            stripped_file_list = [f for f in file_list if f.is_stripped]
             if not file_list:
                 continue
+
+            stripped_file_list = [f for f in file_list if f.is_stripped]
             for dest in dest_list:
                 dest_file = File(dest, None)
-
                 if len(stripped_file_list) == 1:
                     dest_file.add_dependency(RelationshipType.COPY_OF, stripped_file_list[0])
                 else:
@@ -179,15 +180,14 @@ class SBOMGenerator:
                         f for f in stripped_file_list
                         if os.path.basename(f.relative_path) == dest_filename
                     ]
-                    if matched_files:
+
+                    if not matched_files:
+                        print(f"Warning: Files on the image failed to match with Targets: {dest}")
+                    else:
                         for src_file in matched_files:
                             dest_file.add_dependency(RelationshipType.COPY_OF, src_file)
-                    else:
-                        print("Warning: Files on the image failed to match with Targets: {}".format(dest))
-                        pass
                 self._file_dep_filter[dest] = dest_file
-                file_id = dest
-                self._file_ref_map[dest] = file_id
+                self._file_ref_map[dest] = dest
 
     def _extract_scanner_info(self, file_path: Union[str, Path]) -> Dict:
         """
