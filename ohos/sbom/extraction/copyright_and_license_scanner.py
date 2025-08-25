@@ -16,111 +16,19 @@ class CopyrightDetector:
     @classmethod
     def find_copyrights(cls, texts: List[str]) -> List[Dict]:
         """
-        Extract complete copyright information, preserving the original output format:
-        - statement: Full copyright text
-        - year: Year string (e.g., "1998-2010, 2014")
-        - holder: Holder string (e.g., "Gilles Vollant, Mathias Svensson")
-
-        Supported formats:
-          - Copyright (C) 1998-2010 Gilles Vollant
-          - (C) 2007-2008 Even Rouault
-          - © 2009-2010 Mathias Svensson
-        Automatically filter out:
-          - URLs: (http://...)
-          - Project names: (minizip)
-          - Reference statements: "see copyright notice"
+        Extract complete copyright information, preserving the original output format.
+        Returns list of dicts with keys: statement, year, holder.
         """
         results = []
         seen = set()
-
-        year_range_pattern = re.compile(r'\b(\d{4})\s*[-–]\s*(\d{4})\b')
-        year_single_pattern = re.compile(r'\b\d{4}\b')
 
         for text in texts:
             if not text or not isinstance(text, str):
                 continue
 
-            potential_pattern = r'(?i)\b(?:Copyright\s*(?:\(C\))?|\(C\)|©)[^\r\n]*(?:\r\n?|\n|$)'
-            matches = re.findall(potential_pattern, text)
-
-            for block in matches:
-                block = block.strip()
-                if not block:
-                    continue
-
-                if not re.search(r'\b\d{4}\b', block):
-                    continue
-
-                years = set()
-
-                for match in year_range_pattern.finditer(block):
-                    years.add(match.group(0).strip())
-
-                all_single_years = year_single_pattern.findall(block)
-                all_ranges = year_range_pattern.findall(block)
-
-                for year_str in all_single_years:
-                    try:
-                        year_val = int(year_str)
-                    except ValueError:
-                        continue
-                    in_range = any(
-                        int(start) <= year_val <= int(end)
-                        for start, end in all_ranges
-                    )
-                    if not in_range:
-                        years.add(year_str)
-
-                year_str_output = ", ".join(sorted(years, key=lambda y: ('-' not in y, y)))
-
-                holder_text = block
-
-                holder_text = re.sub(r'(?i)\bCopyright\s*(?:\(C\))?\b', '', holder_text)
-                holder_text = re.sub(r'\(C\)', '', holder_text)
-                holder_text = re.sub(r'©', '', holder_text)
-
-                holder_text = re.sub(r'\b\d{4}\s*[-–]\s*\d{4}\b', '', holder_text)
-                holder_text = re.sub(r'\b\d{4}\b', '', holder_text)
-
-                holder_text = re.sub(r'\(\s*https?://[^\s)]+\s*\)', '', holder_text)  # ( http://... )
-                holder_text = re.sub(r'\(\s*[a-z][a-z0-9\-]*\s*\)', '', holder_text)  # (minizip), (project)
-                holder_text = re.sub(r'\(\s*(?:Inc|Ltd|Co|Corp|LLC|GmbH|Foundation)\.?\s*\)', '', holder_text,
-                                     flags=re.I)
-
-                holder_text = re.sub(r'https?://[^\s]+', '', holder_text)
-                holder_text = re.sub(r'\b[\w.-]+@[\w.-]+\b', '', holder_text)
-
-                holder_text = re.sub(r'[^\w\s\-.,&()]', ' ', holder_text)
-                holder_text = re.sub(r'\s+', ' ', holder_text).strip()
-
-                holder_text = re.sub(r'\(\s*\)', '', holder_text)
-                holder_text = re.sub(r'\s+', ' ', holder_text).strip()
-
-                holders = []
-                parts = re.split(r'[,;]|\s+and\s+|&', holder_text, flags=re.I)
-                for part in parts:
-                    part = re.sub(r'^\s*(?:and|&|,|\.)\s*|\s*(?:and|&|,|\.)\s*$', '', part, flags=re.I)
-                    part = re.sub(r'\(\s*\)', '', part)
-                    part = part.strip()
-                    if not part:
-                        continue
-                    if re.search(
-                            r'\b(?:modification|project|info|read|support|unzip|zip|license|version|'
-                            r'part of|conditions|distribution|use|see|notice|rights reserved|developer|'
-                            r'maintainer|author|team)\b',
-                            part, re.I
-                    ):
-                        continue
-                    holders.append(part)
-
-                unique_holders = sorted(set(h for h in holders if h))
-                holder_str_output = ", ".join(unique_holders) if unique_holders else ""
-
-                holder_str_output = re.sub(r'\s*[-–—]\s*$', '', holder_str_output)
-                holder_str_output = re.sub(r'\s*[-–—]\s*http\S*$', '', holder_str_output)
-                holder_str_output = re.sub(r'\s+http\S+', '', holder_str_output)
-                holder_str_output = re.sub(r'\s*,\s*$', '', holder_str_output).strip()
-                holder_str_output = re.sub(r'\s+and\s+$', '', holder_str_output, flags=re.I).strip()
+            for block in cls._find_copyright_blocks(text):
+                year_str_output = cls._extract_years(block)
+                holder_str_output = cls._extract_holder(block)
 
                 if not year_str_output and not holder_str_output:
                     continue
@@ -137,6 +45,120 @@ class CopyrightDetector:
                 })
 
         return results
+
+    @classmethod
+    def _find_copyright_blocks(cls, text: str) -> List[str]:
+        """Find potential copyright blocks in text."""
+        potential_pattern = r'(?i)\b(?:Copyright\s*(?:\(C\))?|\(C\)|©)[^\r\n]*(?:\r\n?|\n|$)'
+        matches = re.findall(potential_pattern, text)
+        return [block.strip() for block in matches if block.strip() and re.search(r'\b\d{4}\b', block)]
+
+    @classmethod
+    def _extract_years(cls, block: str) -> str:
+        """Extract and format years from copyright block."""
+        year_range_pattern = re.compile(r'\b(\d{4})\s*[-–]\s*(\d{4})\b')
+        year_single_pattern = re.compile(r'\b\d{4}\b')
+
+        years = set()
+        all_ranges = year_range_pattern.findall(block)
+        all_single_years = year_single_pattern.findall(block)
+
+        # Add year ranges
+        for match in year_range_pattern.finditer(block):
+            years.add(match.group(0).strip())
+
+        # Add single years not already in ranges
+        for year_str in all_single_years:
+            try:
+                year_val = int(year_str)
+            except ValueError:
+                continue
+            in_range = any(
+                int(start) <= year_val <= int(end)
+                for start, end in all_ranges
+            )
+            if not in_range:
+                years.add(year_str)
+
+        return ", ".join(sorted(years, key=lambda y: ('-' not in y, y)))
+
+    @classmethod
+    def _extract_holder(cls, block: str) -> str:
+        """Extract and format copyright holder from block."""
+        holder_text = cls._clean_copyright_markers(block)
+        holder_text = cls._clean_years(holder_text)
+        holder_text = cls._clean_urls_and_references(holder_text)
+        holder_text = cls._normalize_text(holder_text)
+
+        holders = cls._split_and_filter_holders(holder_text)
+        unique_holders = sorted(set(h for h in holders if h))
+
+        return cls._format_final_holder(", ".join(unique_holders) if unique_holders else "")
+
+    @classmethod
+    def _clean_copyright_markers(cls, text: str) -> str:
+        """Remove copyright markers from text."""
+        text = re.sub(r'(?i)\bCopyright\s*(?:\(C\))?\b', '', text)
+        text = re.sub(r'\(C\)', '', text)
+        return re.sub(r'©', '', text)
+
+    @classmethod
+    def _clean_years(cls, text: str) -> str:
+        """Remove year information from text."""
+        text = re.sub(r'\b\d{4}\s*[-–]\s*\d{4}\b', '', text)
+        return re.sub(r'\b\d{4}\b', '', text)
+
+    @classmethod
+    def _clean_urls_and_references(cls, text: str) -> str:
+        """Remove URLs and reference statements from text."""
+        text = re.sub(r'\(\s*https?://[^\s)]+\s*\)', '', text)  # ( http://... )
+        text = re.sub(r'\(\s*[a-z][a-z0-9\-]*\s*\)', '', text)  # (minizip), (project)
+        text = re.sub(r'\(\s*(?:Inc|Ltd|Co|Corp|LLC|GmbH|Foundation)\.?\s*\)', '', text, flags=re.I)
+        text = re.sub(r'https?://[^\s]+', '', text)
+        return re.sub(r'\b[\w.-]+@[\w.-]+\b', '', text)
+
+    @classmethod
+    def _normalize_text(cls, text: str) -> str:
+        """Normalize text by removing special characters and extra spaces."""
+        text = re.sub(r'[^\w\s\-.,&()]', ' ', text)
+        text = re.sub(r'\s+', ' ', text).strip()
+        text = re.sub(r'\(\s*\)', '', text)
+        return re.sub(r'\s+', ' ', text).strip()
+
+    @classmethod
+    def _split_and_filter_holders(cls, text: str) -> List[str]:
+        """Split holder text and filter out invalid parts."""
+        holders = []
+        parts = re.split(r'[,;]|\s+and\s+|&', text, flags=re.I)
+
+        for part in parts:
+            part = re.sub(r'^\s*(?:and|&|,|\.)\s*|\s*(?:and|&|,|\.)\s*$', '', part, flags=re.I)
+            part = re.sub(r'\(\s*\)', '', part)
+            part = part.strip()
+
+            if part and not cls._is_invalid_holder_part(part):
+                holders.append(part)
+
+        return holders
+
+    @classmethod
+    def _is_invalid_holder_part(cls, part: str) -> bool:
+        """Check if a holder part should be filtered out."""
+        return bool(re.search(
+            r'\b(?:modification|project|info|read|support|unzip|zip|license|version|'
+            r'part of|conditions|distribution|use|see|notice|rights reserved|developer|'
+            r'maintainer|author|team)\b',
+            part, re.I
+        ))
+
+    @classmethod
+    def _format_final_holder(cls, holder: str) -> str:
+        """Apply final formatting to holder string."""
+        holder = re.sub(r'\s*[-–—]\s*$', '', holder)
+        holder = re.sub(r'\s*[-–—]\s*http\S*$', '', holder)
+        holder = re.sub(r'\s+http\S+', '', holder)
+        holder = re.sub(r'\s*,\s*$', '', holder).strip()
+        return re.sub(r'\s+and\s+$', '', holder, flags=re.I).strip()
 
 
 class LicenseDetector:
@@ -255,49 +277,6 @@ class FileScanner:
             "content_type": "Text",
             "content": content
         }
-
-
-class DirectoryScanner:
-
-    def __init__(self):
-        self.file_scanner = FileScanner()
-
-    def scan(self, dir_path: Union[str, Path], recursive: bool = False) -> Dict:
-        path = Path(dir_path)
-        if not path.is_dir():
-            raise ValueError(f"Invalid directory: {path}")
-
-        results = {
-            "path": str(path),
-            "file_count": 0,
-            "licenses": {},
-            "copyright_holders": {},
-            "files": []
-        }
-
-        scan_iter = path.rglob('*') if recursive else path.glob('*')
-
-        for item in scan_iter:
-            if item.is_file():
-                results["file_count"] += 1
-                file_result = self.file_scanner.scan(item)
-
-                for lic in file_result["licenses"]:
-                    results["licenses"][lic] = results["licenses"].get(lic, 0) + 1
-
-                for cp in file_result["copyrights"]:
-                    holder = cp["holder"]
-                    if holder:
-                        results["copyright_holders"][holder] = results["copyright_holders"].get(holder, 0) + 1
-
-                if not file_result["licenses"] or not file_result["copyrights"]:
-                    results["files"].append({
-                        "path": str(item),
-                        "missing_license": not bool(file_result["licenses"]),
-                        "missing_copyright": not bool(file_result["copyrights"])
-                    })
-
-        return results
 
 
 class LicenseFileScanner:

@@ -1,7 +1,7 @@
 import os
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Dict, List, Union, Set
+from typing import Dict, List, Union, Set, Optional
 
 from ohos.sbom.analysis.depend_graph import DependGraphAnalyzer
 from ohos.sbom.analysis.file_dependency import FileDependencyAnalyzer
@@ -24,12 +24,12 @@ class SBOMGenerator:
     def __init__(self, args: ArgumentParser):
         self.args = args
         self.source_ninja_json = None
-        self._install_target_name_dest_map: Dict[str, List[str]] = {}
+        self.manifest = None
         self.file_dependence_analyzer = None
+        self._install_target_name_dest_map: Dict[str, List[str]] = {}
         self._file_ref_map: Dict[str, str] = {}
         self._file_dep_filter: Dict[str, File] = {}
         self.sbom_builder: SBOMMetaDataBuilder = SBOMMetaDataBuilder()
-        self.manifest = None
         self.license_scanner = LicenseFileScanner()
         self.file_scanner = FileScanner()
         self.init()
@@ -74,13 +74,9 @@ class SBOMGenerator:
             for relationship_type in RelationshipType:
                 original_deps = file.get_dependencies(relationship_type)
                 new_deps = set()
-
+                # Substitute intermediate files with original source references
                 for dep in original_deps:
-                    replacement = map_source_file.get(dep.relative_path)
-                    if replacement is not None:
-                        new_deps.update(replacement)
-                    else:
-                        new_deps.add(dep)
+                    new_deps.update(map_source_file.get(dep.relative_path, {dep}))
                 file.set_dependencies(relationship_type, new_deps)
             self._file_dep_filter[path] = file
 
@@ -88,6 +84,82 @@ class SBOMGenerator:
 
         print(f"Filtered {len(self._file_dep_filter)} files starting with '//'")
         print(f"Built file_ref_map with {len(self._file_ref_map)} entries")
+
+    def build_file_information(self):
+        all_files = self._file_dep_filter
+
+        for file_path, file_obj in all_files.items():
+            file_id = self._file_ref_map[file_path]
+            file_scanner_ret = self._extract_scanner_info(file_path)
+            file = (FileBuilder()
+                    .with_file_name(os.path.basename(file_path))
+                    .with_file_id(file_id)
+                    .with_file_author(file_scanner_ret["fileAuthor"])
+                    .with_copyright_text(file_scanner_ret["copyright_text"])
+                    )
+
+            self.sbom_builder.add_file(file)
+
+        for file_path, file_obj in all_files.items():
+            for relationship_type in RelationshipType:
+                dep_file_id_list = []
+                dependencies = file_obj.get_dependencies(relationship_type)
+                if len(dependencies) == 0:
+                    continue
+                file_id = self._file_ref_map[file_path]
+                for dep in dependencies:
+                    dep_id = self._file_ref_map[dep.relative_path]
+                    dep_file_id_list.append(dep_id)
+                relationship_builder = (RelationshipBuilder().with_relationship_type(relationship_type)
+                                        .with_bom_ref(file_id)
+                                        .with_depends_on(dep_file_id_list)
+                                        )
+                self.sbom_builder.add_relationship(relationship_builder)
+
+    def build_package_information(self):
+        """Build package information and dependencies for SBOM generation."""
+        pdb = ProjectDependencyAnalyzer()
+        pdb.build([file for file in self._file_dep_filter.values()])
+        all_project_dependence = pdb.get_project_dependence()
+
+        project_bom_refs = self._build_main_packages(all_project_dependence)
+        self._build_dependencies(all_project_dependence, project_bom_refs)
+
+    def build_document_information(self):
+        doc_builder = self.sbom_builder.start_document()
+        doc_builder.with_name(f"{self.args.product}-{self.manifest.default['revision']}").end()
+
+    def build_sbom(self) -> SBOMMetaData:
+        print("Building file information...")
+        self.build_file_information()
+        print("Building package information...")
+        self.build_package_information()
+        print("Building document information...")
+        self.build_document_information()
+        print("Generating final SBOM metadata ...")
+        sbom_meta_data = self.sbom_builder.build(validate=False)
+        print("Generation completed:")
+        print("• Packages:", len(sbom_meta_data.packages))
+        print("• Files:", len(sbom_meta_data.files))
+        print("• Relationships:", len(sbom_meta_data.relationships))
+        return sbom_meta_data
+
+    def _get_file_reference(self, dep: File) -> Optional[str]:
+        """Get the file reference for a file dependency."""
+        return self._file_ref_map.get(dep.relative_path)
+
+    def _get_project_license(self, source_project) -> str:
+        """Get the license for a project, defaulting to NOASSERTION if not found."""
+        license_scanner_ret = self.license_scanner.scan(source_project.path)
+        return license_scanner_ret[0]["license_type"] if len(license_scanner_ret) >= 1 else NOASSERTION
+
+    def _add_relationship(self, source_bom_ref: str, depends_on_refs: List[str], rel_type: RelationshipType) -> None:
+        """Add a relationship to the SBOM builder."""
+        rb = (RelationshipBuilder()
+              .with_bom_ref(source_bom_ref)
+              .with_depends_on(depends_on_refs)
+              .with_relationship_type(rel_type))
+        self.sbom_builder.add_relationship(rb)
 
     def _add_install_dest_file(self):
         target_name_map_file = self.file_dependence_analyzer.get_target_name_map_file()
@@ -168,132 +240,97 @@ class SBOMGenerator:
             "fileAuthor": file_author
         }
 
-    def build_file_information(self):
-        all_files = self._file_dep_filter
-
-        for file_path, file_obj in all_files.items():
-            file_id = self._file_ref_map[file_path]
-            file_scanner_ret = self._extract_scanner_info(file_path)
-            file = (FileBuilder()
-                    .with_file_name(os.path.basename(file_path))
-                    .with_file_id(file_id)
-                    .with_file_author(file_scanner_ret["fileAuthor"])
-                    .with_copyright_text(file_scanner_ret["copyright_text"])
-                    )
-
-            self.sbom_builder.add_file(file)
-
-        for file_path, file_obj in all_files.items():
-            for relationship_type in RelationshipType:
-                dep_file_id_list = []
-                dependencies = file_obj.get_dependencies(relationship_type)
-                if len(dependencies) == 0:
-                    continue
-                file_id = self._file_ref_map[file_path]
-                for dep in dependencies:
-                    dep_id = self._file_ref_map[dep.relative_path]
-                    dep_file_id_list.append(dep_id)
-                relationship_builder = (RelationshipBuilder().with_relationship_type(relationship_type)
-                                        .with_bom_ref(file_id)
-                                        .with_depends_on(dep_file_id_list)
-                                        )
-                self.sbom_builder.add_relationship(relationship_builder)
-
-    def build_package_information(self):
-        pdb = ProjectDependencyAnalyzer()
-        pdb.build([file for file in self._file_dep_filter.values()])
-        all_project_dependence = pdb.get_project_dependence()
-
-        project_bom_refs = {}
-
-        package_version = self.manifest.default["revision"]
+    def _build_dependencies(self, all_project_dependence: Dict, project_bom_refs: Dict) -> None:
+        """Build dependency relationships for all projects."""
         for name, project_dependence in all_project_dependence.items():
-            source_project = project_dependence.source_project
-            purl = self.manifest.purl_of(source_project)
-            url = self.manifest.remote_url_of(source_project)
-            parsed_license = NOASSERTION
-            license_scanner_ret = self.license_scanner.scan(source_project.path)
-            if len(license_scanner_ret) >= 1:
-                parsed_license = license_scanner_ret[0]["license_type"]
-            pb = (PackageBuilder()
-                  .with_name(name)
-                  .with_purl(purl)
-                  .with_bom_ref(purl)
-                  .with_type(source_project.type)
-                  .with_supplier("Organization: OpenHarmony")
-                  .with_group("OpenHarmony")
-                  .with_license_declared(parsed_license)
-                  .with_version(package_version)
-                  .with_download_location(commit_url_of(url, source_project.revision))
-                  .with_type(source_project.type)
-                  .with_comp_platform(self.args.platform)
-                  )
-
-            self.sbom_builder.add_package(pb)
-            project_bom_refs[source_project.name] = purl
-        for name, project_dependence in all_project_dependence.items():
-            source_bom_ref = project_bom_refs[project_dependence.source_project.name]
+            source_bom_ref = project_bom_refs.get(project_dependence.source_project.name)
+            if not source_bom_ref:
+                continue
 
             for rel_type in RelationshipType:
                 dependencies = project_dependence.get_dependencies(rel_type)
                 if not dependencies:
                     continue
-                depends_on_refs = []
-                for dep in dependencies:
-                    if isinstance(dep, Project):
-                        if dep.name in project_bom_refs:
-                            depends_on_refs.append(project_bom_refs[dep.name])
-                    elif isinstance(dep, OpenSource):
-                        purl = generate_purl(
-                            type=get_purl_type_from_url(dep.upstream_url),
-                            namespace="upstream",
-                            name=dep.name,
-                            version=dep.version_number,
-                        )
-                        if purl in project_bom_refs:
-                            continue
-                        pb = (PackageBuilder()
-                              .with_name(dep.name)
-                              .with_purl(purl)
-                              .with_bom_ref(purl)
-                              .with_license_concluded(dep.license)
-                              .with_version(dep.version_number)
-                              .with_download_location(dep.upstream_url)
-                              .with_type("library")
-                              )
 
-                        self.sbom_builder.add_package(pb)
-                        depends_on_refs.append(purl)
-                    elif hasattr(dep, "name") and dep.name in project_bom_refs:
-                        depends_on_refs.append(project_bom_refs[dep.name])
-                    elif isinstance(dep, File):
-                        file_id = self._file_ref_map.get(dep.relative_path, None)
-                        if file_id is None:
-                            continue
-                        depends_on_refs.append(file_id)
-
+                depends_on_refs = self._process_dependencies(dependencies, project_bom_refs)
                 if depends_on_refs:
-                    rb = (RelationshipBuilder()
-                          .with_bom_ref(source_bom_ref)
-                          .with_depends_on(depends_on_refs)
-                          .with_relationship_type(rel_type))
-                    self.sbom_builder.add_relationship(rb)
+                    self._add_relationship(source_bom_ref, depends_on_refs, rel_type)
 
-    def build_document_information(self):
-        doc_builder = self.sbom_builder.start_document()
-        doc_builder.with_name(f"{self.args.product}-{self.manifest.default['revision']}").end()
+    def _process_dependencies(self, dependencies: List, project_bom_refs: Dict) -> List[str]:
+        """Process dependencies and return list of bom_refs."""
+        depends_on_refs = []
 
-    def build_sbom(self) -> SBOMMetaData:
-        print("Building file information...")
-        self.build_file_information()
-        print("Building package information...")
-        self.build_package_information()
-        print("Building document information...")
-        self.build_document_information()
-        print("Generating final SBOM metadata ...")
-        sbom_meta_data = self.sbom_builder.build(validate=False)
-        print("Generation completed:")
-        print("• Packages:", len(sbom_meta_data.packages))
-        print("• Files:", len(sbom_meta_data.files))
-        print("• Relationships:", len(sbom_meta_data.relationships))
-        return sbom_meta_data
+        for dep in dependencies:
+            if isinstance(dep, Project):
+                if dep.name in project_bom_refs:
+                    depends_on_refs.append(project_bom_refs[dep.name])
+            elif isinstance(dep, OpenSource):
+                depends_on_refs.append(self._process_opensource_dependency(dep, project_bom_refs))
+            elif hasattr(dep, "name") and dep.name in project_bom_refs:
+                depends_on_refs.append(project_bom_refs[dep.name])
+            elif isinstance(dep, File):
+                file_ref = self._get_file_reference(dep)
+                if file_ref:
+                    depends_on_refs.append(file_ref)
+
+        return depends_on_refs
+
+    def _build_main_packages(self, all_project_dependence: Dict) -> Dict:
+        """Build main package information and return bom_refs mapping."""
+        project_bom_refs = {}
+        package_version = self.manifest.default["revision"]
+
+        for name, project_dependence in all_project_dependence.items():
+            source_project = project_dependence.source_project
+            purl = self.manifest.purl_of(source_project)
+            project_bom_refs[source_project.name] = purl
+
+            pb = self._create_main_package_builder(
+                name=name,
+                source_project=source_project,
+                purl=purl,
+                package_version=package_version
+            )
+            self.sbom_builder.add_package(pb)
+
+        return project_bom_refs
+
+    def _process_opensource_dependency(self, dep: OpenSource, project_bom_refs: Dict) -> str:
+        """Process an open source dependency and return its bom_ref."""
+        purl = generate_purl(
+            pkg_type=get_purl_type_from_url(dep.upstream_url),
+            namespace="upstream",
+            name=dep.name,
+            version=dep.version_number,
+        )
+
+        if purl not in project_bom_refs:
+            pb = (PackageBuilder()
+                  .with_name(dep.name)
+                  .with_purl(purl)
+                  .with_bom_ref(purl)
+                  .with_license_concluded(dep.license)
+                  .with_version(dep.version_number)
+                  .with_download_location(dep.upstream_url)
+                  .with_type("library"))
+            self.sbom_builder.add_package(pb)
+
+        return purl
+
+    def _create_main_package_builder(self, name: str, source_project, purl: str, package_version: str):
+        """Create a PackageBuilder for main project packages."""
+        url = self.manifest.remote_url_of(source_project)
+        parsed_license = self._get_project_license(source_project)
+
+        return (PackageBuilder()
+                .with_name(name)
+                .with_purl(purl)
+                .with_bom_ref(purl)
+                .with_type(source_project.type)
+                .with_supplier("Organization: OpenHarmony")
+                .with_group("OpenHarmony")
+                .with_license_declared(parsed_license)
+                .with_version(package_version)
+                .with_download_location(commit_url_of(url, source_project.revision))
+                .with_type(source_project.type)
+                .with_comp_platform(self.args.platform))

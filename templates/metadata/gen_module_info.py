@@ -13,21 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
 import argparse
 import os
+import sys
 
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__)))))
 from scripts.util.file_utils import write_json_file  # noqa: E402
+from scripts.util.build_utils import write_depfile  # noqa: E402
 
 
 def get_source_name(module_type, name, prefix_override, suffix,
                     alternative_suffix):
     """Generate source file name by type."""
     if (module_type == 'lib'
-            or module_type == 'lib64') and not prefix_override:
+        or module_type == 'lib64') and not prefix_override:
         if not name.startswith('lib'):
             name = 'lib' + name
     alias = ''
@@ -60,7 +61,7 @@ def _gen_install_dest(base_dir, module_install_dir, relative_install_dir,
 
 def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, updater_base_dir,
                       updater_vendor_base_dir, sys_prod_base_dir, chip_prod_base_dir,
-                      eng_system_base_dir, eng_chipset_base_dir, cloud_rom_base_dir, source_file_name, 
+                      eng_system_base_dir, eng_chipset_base_dir, cloud_rom_base_dir, source_file_name,
                       install_images, module_install_dir, relative_install_dir, module_type):
     """Generate module install dir by user config."""
     dests = []
@@ -100,6 +101,45 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, update
                                      relative_install_dir, module_type)
         dests.append(os.path.join(dest, source_file_name))
     return dests
+
+
+def gen_module_info_data(args):
+    module_source = ''
+    module_alt_source = ''
+    source_file_name = ''
+    if args.prebuilt:
+        source_file_name = os.path.basename(args.module_source)
+        module_source = args.module_source
+        if module_source.startswith("//"):
+            module_source = module_source[2:]
+    # when the app is compiled by hvigor, that means module_type == "app" and suffix == "".
+    elif args.type == "app" and not args.suffix:
+        source_file_name = ""
+        alt_source_file_name = ""
+        module_source = args.install_name
+        module_alt_source = alt_source_file_name
+    else:
+        source_file_name, alt_source_file_name = get_source_name(
+            args.type, args.install_name, args.prefix_override, args.suffix,
+            args.alternative_suffix)
+        module_source = source_file_name
+        module_alt_source = alt_source_file_name
+
+    install_dests = []
+    if args.install_images:
+        install_dests = gen_install_dests(
+            args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir, args.updater_base_dir,
+            args.updater_vendor_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir,
+            args.eng_system_base_dir, args.eng_chipset_base_dir, args.cloud_rom_base_dir, source_file_name,
+            args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
+
+    module_info_data = gen_module_info(args.type, args.target_label,
+                                       args.label_name, args.source_dir,
+                                       module_source, module_alt_source,
+                                       install_dests, args.symlink_target,
+                                       args.install_enable, args.collect,
+                                       args.notice, args)
+    return module_info_data
 
 
 def gen_module_info(module_type, module_label, module_name, source_dir,
@@ -142,7 +182,7 @@ def gen_module_info(module_type, module_label, module_name, source_dir,
     return data
 
 
-def main():
+def create_module_info_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--system-base-dir', required=True)
     parser.add_argument('--ramdisk-base-dir', required=True)
@@ -194,46 +234,19 @@ def main():
                         dest='prefix_override',
                         action='store_false')
     parser.set_defaults(prefix_override=False)
-    args = parser.parse_args()
+    parser.add_argument('--depfile', required=False)
+    return parser
 
-    module_source = ''
-    module_alt_source = ''
-    source_file_name = ''
-    if args.prebuilt:
-        source_file_name = os.path.basename(args.module_source)
-        module_source = args.module_source
-        if module_source.startswith("//"):
-            module_source = module_source[2:]
-    # when the app is compiled by hvigor, that means module_type == "app" and suffix == "". 
-    elif args.type == "app" and not args.suffix:
-        source_file_name = ""
-        alt_source_file_name = ""
-        module_source = args.install_name
-        module_alt_source = alt_source_file_name
-    else:
-        source_file_name, alt_source_file_name = get_source_name(
-            args.type, args.install_name, args.prefix_override, args.suffix,
-            args.alternative_suffix)
-        module_source = source_file_name
-        module_alt_source = alt_source_file_name
 
-    install_dests = []
-    if args.install_images:
-        install_dests = gen_install_dests(
-            args.system_base_dir, args.ramdisk_base_dir, args.vendor_base_dir, args.updater_base_dir,
-            args.updater_vendor_base_dir, args.sys_prod_base_dir, args.chip_prod_base_dir,
-            args.eng_system_base_dir, args.eng_chipset_base_dir, args.cloud_rom_base_dir, source_file_name,
-            args.install_images, args.module_install_dir, args.relative_install_dir, args.type)
-
-    module_info_data = gen_module_info(args.type, args.target_label,
-                                       args.label_name, args.source_dir,
-                                       module_source, module_alt_source,
-                                       install_dests, args.symlink_target,
-                                       args.install_enable, args.collect,
-                                       args.notice, args)
+def main():
+    args = create_module_info_parser().parse_args()
 
     # write module info file
-    write_json_file(args.output_file, module_info_data)
+    write_json_file(args.output_file, gen_module_info_data(args))
+
+    if args.depfile:
+        _dep_files = []
+        write_depfile(args.depfile, args.output_file, _dep_files, add_pydeps=False)
     return 0
 
 
