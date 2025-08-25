@@ -229,6 +229,24 @@ for arg in "$@"; do
     shift
 done
 
+generate_sbom="true"
+for var in "$@"; do
+    OPTIONS=${var%%=*}
+    PARAM=${var#*=}
+    if [[ "$OPTIONS" == "--generate-sbom" ]]; then
+        if [[ "$PARAM" == "false" ]]; then
+            generate_sbom="false"
+        else
+            generate_sbom="true"
+        fi
+        break
+    fi
+done
+if [[ "${generate_sbom}" == "true" ]]; then
+    args_list+=("--gn-flags=--ide=json")
+    args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
+fi
+
 echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
 echo "args_list:${args_list[@]}"
 if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "${need_prebuilt_sdk}" == "true" || "${force_prebuilt_sdk}" == "true" ]]; then
