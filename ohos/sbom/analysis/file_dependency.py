@@ -29,14 +29,6 @@ class FileDependencyAnalyzer:
     def get_target_name_map_file(self) -> Dict[str, List[str]]:
         return self._target_name_map_file
 
-    def _get_or_create_file(self, relative_path):
-        if relative_path in self._file_dependencies:
-            file = self._file_dependencies[relative_path]
-        else:
-            file = File(relative_path, None)
-            self._file_dependencies[relative_path] = file
-        return file
-
     def build_all_install_deps_optimized(self, install_targets: List[str]):
         virtual_root = "__ALL_INSTALL_ROOT__"
 
@@ -55,92 +47,6 @@ class FileDependencyAnalyzer:
 
         finally:
             self._depend_graph.remove_virtual_root(virtual_root)
-
-    def _is_metadata_generator_target(self, target_name: str) -> bool:
-        core_name = target_name.split('(', 1)[0]
-
-        metadata_suffixes = (
-            '__notice',
-            '__check',
-            '_info',
-            'notice.txt',
-            '_notice'
-        )
-
-        return core_name.endswith(metadata_suffixes)
-
-    def _pre_visit_callback(self, node: str, depth: int, parent: Optional[str]) -> bool:
-        target = self._depend_graph.get_target(node)
-
-        if target.target_name in self._target_name_map_file:
-            return True
-
-        if self._is_metadata_generator_target(target.target_name):
-            return False
-
-        self._target_name_map_file[target.target_name] = []
-
-        outputs = getattr(target, 'outputs', None) or []
-        created_any = False
-
-        for output in outputs:
-            if not output:
-                continue
-            if output in self._file_dependencies or 'unstripped' in output:
-                continue
-            output_file = File(output, target)
-            self._file_dependencies[output] = output_file
-            self._target_name_map_file[target.target_name].append(output_file)
-            created_any = True
-
-        if not created_any and hasattr(target, 'source_outputs') and target.source_outputs:
-            for output_list in target.source_outputs.values():
-                if not output_list:
-                    continue
-                primary_output = output_list[0]
-                if not primary_output or primary_output in self._file_dependencies or 'unstripped' in primary_output:
-                    continue
-                output_file = File(primary_output, target)
-                self._file_dependencies[primary_output] = output_file
-                self._target_name_map_file[target.target_name].append(output_file)
-                created_any = True
-
-        return True
-
-    def _post_visit_callback(self, node: str, depth: int, parent: Optional[str]) -> None:
-
-        target = self._depend_graph.get_target(node)
-        if self._is_metadata_generator_target(target.target_name):
-            return
-        outputs = self.extract_outputs_and_source_outputs(target)
-        target_type = target.type
-        if target_type == 'copy':
-            self._handle_copy(target, outputs)
-        elif target_type == 'group':
-            return
-        elif target_type == 'source_set':
-            self._handle_source_set(target, outputs)
-        elif target_type == 'executable':
-            self._handle_executable(target, outputs)
-        elif target_type == 'shared_library':
-            self._handle_shared_library(target, outputs)
-        elif target_type == 'action':
-            self._handle_action(target, outputs)
-        elif target_type == 'action_foreach':
-            self._handle_action_foreach(target, outputs)
-        elif target_type == 'generated_file':
-            self._handle_executable(target, outputs)
-        elif target_type == 'rust_library':
-            self._handle_rust_library(target, outputs)
-        elif target_type == 'rust_proc_macro':
-            self._handle_rust_proc_macro(target, outputs)
-        elif target_type == 'static_library':
-            self._handle_static_library(target, outputs)
-        elif target_type == 'virtual_root':
-            return
-        else:
-            print(f"Error: unknown target type '{target_type}' for target '{target.target_name}'")
-            return
 
     def extract_outputs_and_source_outputs(self, target: Target) -> list:
         raw_outputs = getattr(target, 'outputs', None)
@@ -198,109 +104,144 @@ class FileDependencyAnalyzer:
             print(f"Error processing target '{getattr(target, 'target_name', 'unknown')}': {e}")
 
     def process_libs_dependencies(self, target: Target, outputs: list):
-
+        """
+        Process library dependencies from the target's 'libs' field and link them to output files.
+        Handles both static and dynamic libraries with appropriate relationship types.
+        """
         try:
-            lib_list = getattr(target, 'libs', None) or []
+            # Extract and normalize the 'libs' list from the target
+            lib_list = getattr(target, 'libs', None)
+            if not lib_list:
+                return
             if isinstance(lib_list, str):
                 lib_list = [lib_list]
             elif not isinstance(lib_list, (list, tuple)):
-                lib_list = []
+                return
 
+            # Clean up library names (strip whitespace and remove empty entries)
             libs = [lib.strip() for lib in lib_list if isinstance(lib, str) and lib.strip()]
 
+            # Parse dependencies into static and dynamic libraries
             dep_result = self.extract_libs_dependencies(libs)
-            for out in outputs:
-                if out not in self._file_dependencies:
-                    continue
-                output_file = self._file_dependencies[out]
 
+            # Determine if the target is a linking target (shared lib, executable, etc.)
+            is_link_target = target.type in ('shared_library', 'rust_proc_macro', 'executable','rust_library')
+
+            # Process each output file
+            for out in outputs:
+                output_file = self._file_dependencies.get(out)
+                if not output_file:
+                    continue  # Skip if output file is not tracked
+
+                # Handle static library dependencies
                 for static_lib in dep_result.get('static', []):
                     lib_file = self._file_dependencies.setdefault(
                         static_lib,
                         File(static_lib, None, file_type=FileType.STATIC_LIBRARY)
                     )
-                    if (target.type == 'shared_library' or target.type == 'rust_proc_macro'
-                            or target.type == 'executable'):
-                        output_file.add_dependency(RelationshipType.STATIC_LINK, lib_file)
-                    else:
-                        output_file.add_dependency(RelationshipType.DEPENDS_ON, lib_file)
+                    rel_type = RelationshipType.STATIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
+                    output_file.add_dependency(rel_type, lib_file)
 
+                # Handle dynamic library dependencies
                 for dynamic_lib in dep_result.get('dynamic', []):
                     lib_file = self._file_dependencies.setdefault(
                         dynamic_lib,
                         File(dynamic_lib, None, file_type=FileType.SHARED_LIBRARY)
                     )
-                    if (target.type == 'shared_library' or target.type == 'rust_proc_macro'
-                            or target.type == 'executable'):
-                        output_file.add_dependency(RelationshipType.DYNAMIC_LINK, lib_file)
-                    else:
-                        output_file.add_dependency(RelationshipType.DEPENDS_ON, lib_file)
+                    rel_type = RelationshipType.DYNAMIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
+                    output_file.add_dependency(rel_type, lib_file)
 
         except Exception as e:
             print(f"Error processing libs for target '{getattr(target, 'target_name', 'unknown')}': {e}")
 
     def process_ldflags_dependencies(self, target: Target, outputs: list):
+        """
+        Process library dependencies extracted from the target's 'ldflags'.
+        Resolves static and dynamic libraries specified via -l, .a/.so paths, or linker flags.
+        Links them to output files with appropriate relationship types.
+        """
         try:
-            ldflags_list = getattr(target, 'ldflags', None) or []
+            # Extract and normalize ldflags from target
+            ldflags_list = getattr(target, 'ldflags', None)
+            if not ldflags_list:
+                return
             if isinstance(ldflags_list, str):
                 ldflags_list = [ldflags_list]
             elif not isinstance(ldflags_list, (list, tuple)):
-                ldflags_list = []
+                return
 
-            ldflags = [ldflag.strip() for ldflag in ldflags_list if isinstance(ldflag, str) and ldflag.strip()]
+            # Clean up flags: strip and filter valid strings
+            ldflags = [flag.strip() for flag in ldflags_list if isinstance(flag, str) and flag.strip()]
 
+            # Parse dependencies from ldflags
             dep_result = self.extract_ldflags_dependencies(ldflags)
-            for out in outputs:
-                if out not in self._file_dependencies:
-                    continue
-                output_file = self._file_dependencies[out]
 
+            # Determine if the target is a linking target (shared lib, executable, etc.)
+            is_link_target = target.type in ('shared_library', 'rust_proc_macro', 'executable','rust_library')
+
+            # Process each output file
+            for out in outputs:
+                output_file = self._file_dependencies.get(out)
+                if not output_file:
+                    continue  # Skip if output is not tracked
+
+                # Handle static library dependencies
                 for static_lib in dep_result.get('static', []):
                     lib_file = self._file_dependencies.setdefault(
                         static_lib,
                         File(static_lib, None, file_type=FileType.STATIC_LIBRARY)
                     )
-                    if (target.type == 'shared_library' or target.type == 'rust_proc_macro'
-                            or target.type == 'executable'):
-                        output_file.add_dependency(RelationshipType.STATIC_LINK, lib_file)
-                    else:
-                        output_file.add_dependency(RelationshipType.DEPENDS_ON, lib_file)
+                    rel_type = RelationshipType.STATIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
+                    output_file.add_dependency(rel_type, lib_file)
 
+                # Handle dynamic library dependencies
                 for dynamic_lib in dep_result.get('dynamic', []):
                     lib_file = self._file_dependencies.setdefault(
                         dynamic_lib,
                         File(dynamic_lib, None, file_type=FileType.SHARED_LIBRARY)
                     )
-                    if (target.type == 'shared_library' or target.type == 'rust_proc_macro'
-                            or target.type == 'executable'):
-                        output_file.add_dependency(RelationshipType.DYNAMIC_LINK, lib_file)
-                    else:
-                        output_file.add_dependency(RelationshipType.DEPENDS_ON, lib_file)
+                    rel_type = RelationshipType.DYNAMIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
+                    output_file.add_dependency(rel_type, lib_file)
 
         except Exception as e:
             print(f"Error processing libs for executable '{getattr(target, 'target_name', 'unknown')}': {e}")
 
     def extract_deps(self, target: Target, outputs):
+        """
+        Extract and process dependencies from the target's 'deps' field.
+        For each dependency:
+          - Resolve the target in the dependency graph
+          - Skip metadata generator targets
+          - Link output files using appropriate file types
+        All errors are logged but do not block processing of other deps.
+        """
         try:
-            dep_list = getattr(target, 'deps', None) or []
+            # Extract and normalize the 'deps' list
+            dep_list = getattr(target, 'deps', None)
+            if not dep_list:
+                return
             if isinstance(dep_list, str):
                 dep_list = [dep_list]
             elif not isinstance(dep_list, (list, tuple)):
-                dep_list = []
+                return
+
+            # Process each dependency
             for dep in dep_list:
                 try:
                     dep_target = self._depend_graph.get_target(dep)
                     if not dep_target:
-                        continue
+                        continue  # Skip if target not found
 
+                    # Skip metadata generator targets
                     if self._is_metadata_generator_target(dep_target.target_name):
                         continue
 
+                    # Get output files of the dependency
                     dep_out_file_list = self._target_name_map_file.get(dep_target.target_name, [])
-
                     if not dep_out_file_list:
-                        continue
+                        continue  # No output files to link
 
+                    # Link dependency outputs to current target outputs
                     for out in outputs or []:
                         if out not in self._file_dependencies:
                             self._file_dependencies[out] = File(out, target)
@@ -310,7 +251,8 @@ class FileDependencyAnalyzer:
 
                 except Exception as e:
                     print(f"Error processing dep '{dep}': {e}")
-                    continue
+                    continue  # Continue with next dependency
+
         except Exception as e:
             print(f"Error processing deps for executable '{getattr(target, 'target_name', 'unknown')}': {e}")
 
@@ -348,7 +290,6 @@ class FileDependencyAnalyzer:
         }
 
     def extract_ldflags_dependencies(self, ldflags: List[str]) -> Dict[str, List[str]]:
-
         static_libs = []
         dynamic_libs = []
         is_static_mode = False
@@ -359,95 +300,44 @@ class FileDependencyAnalyzer:
             if not flag:
                 i += 1
                 continue
-            if flag == "-Wl,-Bstatic":
+
+            if flag in ("-Wl,-Bstatic", "-static"):
                 is_static_mode = True
-            elif flag == "-Wl,-Bdynamic":
-                is_static_mode = False
-            elif flag == "-static":
-                is_static_mode = True
-            elif flag == "-shared":
+            elif flag in ("-Wl,-Bdynamic", "-shared"):
                 is_static_mode = False
 
             elif flag.startswith("-l"):
-                lib_name = flag[2:]
-                if lib_name.startswith('lib'):
-                    base = lib_name
-                else:
-                    base = f"lib{lib_name}"
-
-                if is_static_mode:
-                    static_libs.append(f"{base}.a")
-                else:
-                    dynamic_libs.append(f"{base}.so")
+                self._handle_library_flag(flag[2:], is_static_mode, static_libs, dynamic_libs)
 
             elif flag == "-l" and i + 1 < len(ldflags):
                 lib_name = ldflags[i + 1].strip()
                 if lib_name:
-                    base = lib_name if lib_name.startswith('lib') else f"lib{lib_name}"
-                    if is_static_mode:
-                        static_libs.append(f"{base}.a")
-                    else:
-                        dynamic_libs.append(f"{base}.so")
+                    self._handle_library_flag(lib_name, is_static_mode, static_libs, dynamic_libs)
                 i += 1
 
             elif flag.startswith('-Wl,--exclude-libs='):
-                parts = flag.split('=', 2)
-                if len(parts) >= 3:
-                    lib_path = parts[2]
-                    basename = os.path.basename(lib_path)
-                    if basename.endswith('.a'):
-                        static_libs.append(basename)
+                self._handle_exclude_libs(flag, static_libs)
 
-            elif flag.endswith('.a') or flag.endswith('.so') or '.so.' in flag:
-                basename = os.path.basename(flag)
-                if '.so.' in basename:
-                    stem = basename.split('.so.')[0]
-                    basename = f"{stem}.so"
-                elif basename.endswith('.so'):
-                    pass
-                elif basename.endswith('.a'):
-                    pass
-                else:
-                    basename = f"{basename}.so"
-
+            elif self._is_library_path(flag):
+                basename = self._normalize_library_path(flag)
                 if basename.endswith('.a'):
                     static_libs.append(basename)
                 else:
                     dynamic_libs.append(basename)
 
-            # 6. -stdlib, -rtlib
             elif flag.startswith("-stdlib="):
                 lib_name = flag.split("=", 1)[1]
-                base = lib_name if lib_name.startswith('lib') else f"lib{lib_name}"
-                name = f"{base}.a" if is_static_mode else f"{base}.so"
-                if is_static_mode:
-                    static_libs.append(name)
-                else:
-                    dynamic_libs.append(name)
+                self._add_lib(lib_name, is_static_mode, static_libs, dynamic_libs)
 
             elif flag.startswith("-rtlib="):
                 lib_name = flag.split("=", 1)[1]
-                base = f"lib{lib_name}_rt"
-                name = f"{base}.a" if is_static_mode else f"{base}.so"
-                if is_static_mode:
-                    static_libs.append(name)
-                else:
-                    dynamic_libs.append(name)
+                self._add_lib(f"{lib_name}_rt", is_static_mode, static_libs, dynamic_libs)
 
             i += 1
 
-        def unique(lst):
-            seen = set()
-            result = []
-            for x in lst:
-                if x not in seen:
-                    seen.add(x)
-                    result.append(x)
-            return result
-
         return {
-            "static": unique(static_libs),
-            "dynamic": unique(dynamic_libs)
+            "static": self._unique(static_libs),
+            "dynamic": self._unique(dynamic_libs)
         }
 
     def get_source_list(self, target: Target) -> list:
@@ -470,6 +360,142 @@ class FileDependencyAnalyzer:
             out for out in outputs
             if isinstance(out, str) and out.strip() and Path(out).stem not in source_stems
         ]
+
+    def _post_visit_callback(self, node: str, depth: int, parent: Optional[str]) -> None:
+
+        target = self._depend_graph.get_target(node)
+        if self._is_metadata_generator_target(target.target_name):
+            return
+        outputs = self.extract_outputs_and_source_outputs(target)
+        target_type = target.type
+        if target_type == 'copy':
+            self._handle_copy(target, outputs)
+        elif target_type == 'group':
+            return
+        elif target_type == 'source_set':
+            self._handle_source_set(target, outputs)
+        elif target_type == 'executable':
+            self._handle_executable(target, outputs)
+        elif target_type == 'shared_library':
+            self._handle_shared_library(target, outputs)
+        elif target_type == 'action':
+            self._handle_action(target, outputs)
+        elif target_type == 'action_foreach':
+            self._handle_action_foreach(target, outputs)
+        elif target_type == 'generated_file':
+            self._handle_executable(target, outputs)
+        elif target_type == 'rust_library':
+            self._handle_rust_library(target, outputs)
+        elif target_type == 'rust_proc_macro':
+            self._handle_rust_proc_macro(target, outputs)
+        elif target_type == 'static_library':
+            self._handle_static_library(target, outputs)
+        elif target_type == 'virtual_root':
+            return
+        else:
+            print(f"Error: unknown target type '{target_type}' for target '{target.target_name}'")
+            return
+
+    def _pre_visit_callback(self, node: str, depth: int, parent: Optional[str]) -> bool:
+        target = self._depend_graph.get_target(node)
+
+        if target.target_name in self._target_name_map_file:
+            return True
+
+        if self._is_metadata_generator_target(target.target_name):
+            return False
+
+        self._target_name_map_file[target.target_name] = []
+
+        outputs = getattr(target, 'outputs', None) or []
+        created_any = False
+
+        for output in outputs:
+            if not output:
+                continue
+            if output in self._file_dependencies or 'unstripped' in output:
+                continue
+            output_file = File(output, target)
+            self._file_dependencies[output] = output_file
+            self._target_name_map_file[target.target_name].append(output_file)
+            created_any = True
+
+        if not created_any and hasattr(target, 'source_outputs') and target.source_outputs:
+            for output_list in target.source_outputs.values():
+                if not output_list:
+                    continue
+                primary_output = output_list[0]
+                if not primary_output or primary_output in self._file_dependencies or 'unstripped' in primary_output:
+                    continue
+                output_file = File(primary_output, target)
+                self._file_dependencies[primary_output] = output_file
+                self._target_name_map_file[target.target_name].append(output_file)
+                created_any = True
+
+        return True
+
+    def _is_metadata_generator_target(self, target_name: str) -> bool:
+        core_name = target_name.split('(', 1)[0]
+
+        metadata_suffixes = (
+            '__notice',
+            '__check',
+            '_info',
+            'notice.txt',
+            '_notice'
+        )
+
+        return core_name.endswith(metadata_suffixes)
+
+    def _get_or_create_file(self, relative_path):
+        if relative_path in self._file_dependencies:
+            file = self._file_dependencies[relative_path]
+        else:
+            file = File(relative_path, None)
+            self._file_dependencies[relative_path] = file
+        return file
+
+    def _handle_library_flag(self, lib_name: str, is_static_mode: bool, static_libs: list, dynamic_libs: list):
+        base = lib_name if lib_name.startswith('lib') else f"lib{lib_name}"
+        if is_static_mode:
+            static_libs.append(f"{base}.a")
+        else:
+            dynamic_libs.append(f"{base}.so")
+
+    def _handle_exclude_libs(self, flag: str, static_libs: list):
+        parts = flag.split('=', 2)
+        if len(parts) >= 3:
+            lib_path = parts[2]
+            basename = os.path.basename(lib_path)
+            if basename.endswith('.a'):
+                static_libs.append(basename)
+
+    def _is_library_path(self, flag: str) -> bool:
+        return flag.endswith('.a') or flag.endswith('.so') or '.so.' in flag
+
+    def _normalize_library_path(self, flag: str) -> str:
+        basename = os.path.basename(flag)
+        if '.so.' in basename:
+            stem = basename.split('.so.')[0]
+            return f"{stem}.so"
+        return basename
+
+    def _add_lib(self, lib_name: str, is_static_mode: bool, static_libs: list, dynamic_libs: list):
+        """根据模式添加标准库（如 -stdlib=, -rtlib=）"""
+        base = lib_name if lib_name.startswith('lib') else f"lib{lib_name}"
+        if is_static_mode:
+            static_libs.append(f"{base}.a")
+        else:
+            dynamic_libs.append(f"{base}.so")
+
+    def _unique(self, lst: list) -> list:
+        seen = set()
+        result = []
+        for x in lst:
+            if x not in seen:
+                seen.add(x)
+                result.append(x)
+        return result
 
     def _handle_copy(self, target: Target, outputs):
         source_list = getattr(target, 'sources', None) or getattr(target, 'source', None)
