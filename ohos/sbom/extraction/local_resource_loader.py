@@ -243,27 +243,6 @@ class LocalResourceLoader:
         """Internal method to add cached object by name."""
         cls._resource_cache[obj_name] = obj
 
-    @staticmethod
-    def _validate_directory(path: Union[str, Path], description: str) -> Path:
-        """
-        Validate that a path exists and is a directory.
-
-        Args:
-            path: Path to validate (str or Path)
-            description: Description of path for error messages
-
-        Returns:
-            Resolved absolute Path object
-        """
-        resolved_path = Path(path).resolve()
-
-        if not resolved_path.exists():
-            raise ValueError(f"{description} does not exist: {resolved_path}")
-        if not resolved_path.is_dir():
-            raise ValueError(f"{description} is not a directory: {resolved_path}")
-
-        return resolved_path
-
     @classmethod
     def _find_latest_manifest(cls) -> Optional[Path]:
         """
@@ -298,3 +277,24 @@ class LocalResourceLoader:
             return None
 
         return max(manifest_files, key=lambda x: x[0])[1]
+
+    @classmethod
+    def _validate_directory(cls, path: Union[str, Path], description: str) -> Path:
+        """
+        Validate that a path exists and is a directory.
+
+        Args:
+            path: Path to validate (str or Path)
+            description: Description of path for error messages
+
+        Returns:
+            Resolved absolute Path object
+        """
+        resolved_path = Path(path).resolve()
+
+        if not resolved_path.exists():
+            raise ValueError(f"{description} does not exist: {resolved_path}")
+        if not resolved_path.is_dir():
+            raise ValueError(f"{description} is not a directory: {resolved_path}")
+
+        return resolved_path

@@ -28,6 +28,48 @@ class ProjectDependencyAnalyzer:
         self._built = True
         return self._format_result()
 
+    def get_file_project_mapping(self) -> Dict[str, str]:
+        mapping = {}
+        for file, target_name in self._file_to_target_name.items():
+            project = self._target_to_project.get(target_name)
+            if project:
+                mapping[file.relative_path] = project.name
+        return mapping
+
+    def get_project_files(self) -> Dict[str, List[str]]:
+        project_files = defaultdict(list)
+        for file, target_name in self._file_to_target_name.items():
+            project = self._target_to_project.get(target_name)
+            if project:
+                project_files[project.name].append(file.relative_path)
+        return dict(project_files)
+
+    def get_project_dependence(self) -> Dict[str, ProjectDependence]:
+        if not self._built:
+            raise RuntimeError("The build() method must be called first to construct the dependency relationships")
+        return self._project_dependency
+
+    def to_dict(self) -> Dict[str, Any]:
+        if not self._built:
+            raise RuntimeError("The build() method must be called first to construct the dependency relationships")
+
+        manifest_info = {
+            "remotes": [{"name": r.name, "fetch": r.fetch} for r in self.manifest.remotes],
+            "default": self.manifest.default,
+            "projects": [p.name for p in self.manifest.projects]
+        }
+
+        return {
+            "manifest": manifest_info,
+            "file_project_mapping": self.get_file_project_mapping(),
+            "project_files": self.get_project_files(),
+            "project_dependencies": [pd.to_dict() for pd in self._project_dependency.values()],
+            "upstream_packages": {
+                project_name: [pkg.to_dict() for pkg in pkgs]
+                for project_name, pkgs in self._project_to_upstream.items()
+            }
+        }
+
     def _reset(self):
         self._file_to_target_name.clear()
         self._target_to_project.clear()
@@ -107,45 +149,3 @@ class ProjectDependencyAnalyzer:
                     deps[key] = sorted({getattr(obj, "name", str(obj)) for obj in objs})
             result[name] = deps
         return result
-
-    def get_file_project_mapping(self) -> Dict[str, str]:
-        mapping = {}
-        for file, target_name in self._file_to_target_name.items():
-            project = self._target_to_project.get(target_name)
-            if project:
-                mapping[file.relative_path] = project.name
-        return mapping
-
-    def get_project_files(self) -> Dict[str, List[str]]:
-        project_files = defaultdict(list)
-        for file, target_name in self._file_to_target_name.items():
-            project = self._target_to_project.get(target_name)
-            if project:
-                project_files[project.name].append(file.relative_path)
-        return dict(project_files)
-
-    def get_project_dependence(self) -> Dict[str, ProjectDependence]:
-        if not self._built:
-            raise RuntimeError("The build() method must be called first to construct the dependency relationships")
-        return self._project_dependency
-
-    def to_dict(self) -> Dict[str, Any]:
-        if not self._built:
-            raise RuntimeError("The build() method must be called first to construct the dependency relationships")
-
-        manifest_info = {
-            "remotes": [{"name": r.name, "fetch": r.fetch} for r in self.manifest.remotes],
-            "default": self.manifest.default,
-            "projects": [p.name for p in self.manifest.projects]
-        }
-
-        return {
-            "manifest": manifest_info,
-            "file_project_mapping": self.get_file_project_mapping(),
-            "project_files": self.get_project_files(),
-            "project_dependencies": [pd.to_dict() for pd in self._project_dependency.values()],
-            "upstream_packages": {
-                project_name: [pkg.to_dict() for pkg in pkgs]
-                for project_name, pkgs in self._project_to_upstream.items()
-            }
-        }

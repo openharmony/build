@@ -22,23 +22,6 @@ class RelationshipBuilder(ConfigurableBuilder):
         self._depends_on: List[str] = []
         self._relationship_type: Optional[RelationshipType] = None
 
-    def _build_instance(self) -> Relationship:
-        """
-        Construct the Relationship instance with current configuration.
-
-        Returns:
-            Relationship: A new Relationship instance with all configured values
-
-        Note:
-            Uses deepcopy for collection fields to prevent reference sharing
-        """
-        return Relationship(
-            bom_ref=self._bom_ref,
-            depends_on=deepcopy(self._depends_on),
-            relationship_type=self._relationship_type
-        )
-
-    # Fluent interface methods
     def with_bom_ref(self, bom_ref: str) -> 'RelationshipBuilder':
         """
         Set the source component reference for this relationship.
@@ -111,3 +94,19 @@ class RelationshipBuilder(ConfigurableBuilder):
         """
         self._relationship_type = RelationshipType(relationship_type)
         return self
+
+    def _build_instance(self) -> Relationship:
+        """
+        Construct the Relationship instance with current configuration.
+
+        Returns:
+            Relationship: A new Relationship instance with all configured values
+
+        Note:
+            Uses deepcopy for collection fields to prevent reference sharing
+        """
+        return Relationship(
+            bom_ref=self._bom_ref,
+            depends_on=deepcopy(self._depends_on),
+            relationship_type=self._relationship_type
+        )

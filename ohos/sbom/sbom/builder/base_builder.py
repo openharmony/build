@@ -84,6 +84,18 @@ class ConfigurableBuilder(BaseBuilder):
             self._validate()
         return self._build_instance()
 
+    def get_property_value(self, property_name: str) -> Any:
+        """
+        Safely get an internal property value.
+
+        Args:
+            property_name: The property name (e.g. 'serial_number')
+
+        Returns:
+            Any: The property value or None if not set
+        """
+        return getattr(self, f"_{property_name}", None)
+
     def _fill_defaults(self) -> None:
         """Fill default values for all unset fields."""
         if self._config_mgr is None:
@@ -115,18 +127,6 @@ class ConfigurableBuilder(BaseBuilder):
     def _build_instance(self):
         """Subclasses must implement actual instance construction."""
         pass
-
-    def get_property_value(self, property_name: str) -> Any:
-        """
-        Safely get an internal property value.
-
-        Args:
-            property_name: The property name (e.g. 'serial_number')
-
-        Returns:
-            Any: The property value or None if not set
-        """
-        return getattr(self, f"_{property_name}", None)
 
 
 class CompositeBuilder(BaseBuilder):
