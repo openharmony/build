@@ -245,6 +245,8 @@ done
 if [[ "${generate_sbom}" == "true" ]]; then
     args_list+=("--gn-flags=--ide=json")
     args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
+    prebuilt_sdk_gn_args+=("--gn-flags=--ide=json")
+    prebuilt_sdk_gn_args+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
 fi
 
 echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
@@ -257,6 +259,7 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "${ne
       "${ccache_args}" \
       "${xcache_args}" \
       "${api_version}" \
+      "${generate_sbom}" \
       "${prebuilt_sdk_gn_args[@]}"
 fi
 
