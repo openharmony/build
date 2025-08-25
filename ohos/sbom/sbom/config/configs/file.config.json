@@ -36,10 +36,23 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["SOURCE", "BINARY", "TEXT", "IMAGE", "AUDIO", "VIDEO", "APPLICATION", "ML_MODEL", "SBOM", "OTHER"]
+        "enum": [
+          "SOURCE",
+          "BINARY",
+          "TEXT",
+          "IMAGE",
+          "AUDIO",
+          "VIDEO",
+          "APPLICATION",
+          "ML_MODEL",
+          "SBOM",
+          "OTHER"
+        ]
       },
       "description": "Array of file types",
-      "example": ["SOURCE"]
+      "example": [
+        "SOURCE"
+      ]
     },
     {
       "property": "checksums",
@@ -50,8 +63,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "alg": { "type": "string" },
-          "content": { "type": "string" }
+          "alg": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
         }
       },
       "description": "Checksum information of the file",
@@ -81,7 +98,9 @@
         "type": "string"
       },
       "description": "Array of license information declared in the file",
-      "example": ["Apache-2.0"]
+      "example": [
+        "Apache-2.0"
+      ]
     },
     {
       "property": "copyright_text",

@@ -96,21 +96,37 @@
       "property": "authors",
       "json_key": "authors",
       "required": true,
-      "default": ["OpenHarmony SBOM Tool"],
+      "default": [
+        "OpenHarmony SBOM Tool"
+      ],
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "List of BOM authors",
-      "example": ["Zhang San", "Li Si"]
+      "example": [
+        "Zhang San",
+        "Li Si"
+      ]
     },
     {
       "property": "lifecycles",
       "json_key": "lifecycles",
       "required": false,
-      "default": ["build"],
+      "default": [
+        "build"
+      ],
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Lifecycle phases",
-      "example": ["design", "development", "build", "operations"]
+      "example": [
+        "design",
+        "development",
+        "build",
+        "operations"
+      ]
     },
     {
       "property": "properties",
@@ -121,8 +137,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "name": { "type": "string" },
-          "value": { "type": "string" }
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
         }
       },
       "description": "List of custom key-value pair properties",
@@ -148,9 +168,15 @@
       "items": {
         "type": "object",
         "properties": {
-          "vendor": { "type": "string" },
-          "name": { "type": "string" },
-          "version": { "type": "string" }
+          "vendor": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
         }
       },
       "description": "List of SBOM generation tool information",

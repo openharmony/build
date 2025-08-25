@@ -17,6 +17,7 @@ def set_path(args):
     LocalResourceLoader.set_source_root(args.source_root_dir)
     LocalResourceLoader.set_out_root(args.out_dir)
 
+
 def generate_sbom(args):
     sbom_meta_data = SBOMGenerator(args).build_sbom()
     spdx_data = SBOMConverter(sbom_meta_data).convert(SBOMFormat.SPDX)
