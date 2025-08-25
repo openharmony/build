@@ -109,8 +109,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "alg": { "type": "string" },
-          "content": { "type": "string" }
+          "alg": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
         }
       },
       "description": "List of cryptographic hashes for integrity verification",
