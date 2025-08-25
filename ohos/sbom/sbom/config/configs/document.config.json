@@ -1,0 +1,175 @@
+{
+  "section": "Document Creation Information",
+  "fields": [
+    {
+      "property": "serial_number",
+      "json_key": "serialNumber",
+      "required": true,
+      "default": "urn:uuid:{uuid}",
+      "type": "string",
+      "description": "A unique identifier for this SBOM document in URN UUID format",
+      "example": "urn:uuid:b4f2954f-a96d-4578-9509-1ae2d6476209"
+    },
+    {
+      "property": "doc_id",
+      "json_key": "docId",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Unique identifier for the document itself, used for SPDX references",
+      "example": "SPDXRef-DOCUMENT"
+    },
+    {
+      "property": "name",
+      "json_key": "name",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Document Name",
+      "example": "SPDX-Tools-v2.0"
+    },
+    {
+      "property": "document_namespace",
+      "json_key": "documentNamespace",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Document namespace, must be a unique URI identifying the document source",
+      "example": "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301"
+    },
+    {
+      "property": "version",
+      "json_key": "version",
+      "required": true,
+      "default": "1.0",
+      "type": "string",
+      "description": "Version of the meta data standard file",
+      "example": "1.2"
+    },
+    {
+      "property": "bom_format",
+      "json_key": "bomFormat",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Standard specification used",
+      "example": "CycloneDX"
+    },
+    {
+      "property": "spec_version",
+      "json_key": "specVersion",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Version number of the specification standard",
+      "example": "1"
+    },
+    {
+      "property": "data_license",
+      "json_key": "dataLicense",
+      "required": true,
+      "default": "CC0-1.0",
+      "type": "string",
+      "description": "License for the document itself",
+      "example": "CC0-1.0"
+    },
+    {
+      "property": "license_list_version",
+      "json_key": "licenseListVersion",
+      "required": false,
+      "default": "3.2.1",
+      "type": "string",
+      "description": "Version of the License List being used",
+      "example": "3.21"
+    },
+    {
+      "property": "timestamp",
+      "json_key": "timestamp",
+      "required": true,
+      "default": "{now_utc_iso}",
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of BOM generation in ISO 8601 format",
+      "example": "2020-08-02T21:27:04Z"
+    },
+    {
+      "property": "authors",
+      "json_key": "authors",
+      "required": true,
+      "default": ["OpenHarmony SBOM Tool"],
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of BOM authors",
+      "example": ["Zhang San", "Li Si"]
+    },
+    {
+      "property": "lifecycles",
+      "json_key": "lifecycles",
+      "required": false,
+      "default": ["build"],
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Lifecycle phases",
+      "example": ["design", "development", "build", "operations"]
+    },
+    {
+      "property": "properties",
+      "json_key": "properties",
+      "required": false,
+      "default": null,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "value": { "type": "string" }
+        }
+      },
+      "description": "List of custom key-value pair properties",
+      "example": [
+        {
+          "name": "cli:version",
+          "value": "1.2.0"
+        }
+      ]
+    },
+    {
+      "property": "tools",
+      "json_key": "tools",
+      "required": false,
+      "default": [
+        {
+          "vendor": "Organization: OpenHarmony",
+          "name": "OpenHarmony SBOM Tool",
+          "version": "1.0"
+        }
+      ],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "vendor": { "type": "string" },
+          "name": { "type": "string" },
+          "version": { "type": "string" }
+        }
+      },
+      "description": "List of SBOM generation tool information",
+      "example": [
+        {
+          "vendor": "cyclonedx",
+          "name": "cyclonedx-php-composer",
+          "version": "1.0"
+        }
+      ]
+    },
+    {
+      "property": "doc_comments",
+      "json_key": "docComments",
+      "required": false,
+      "default": null,
+      "type": "string",
+      "description": "Document comments",
+      "example": "This document was created using SPDX 2.0 using licenses from the web site."
+    }
+  ]
+}
