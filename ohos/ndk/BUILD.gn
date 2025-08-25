@@ -164,8 +164,11 @@ if (!use_current_sdk) {
 }
 
 ohos_ndk_copy("ndk_cmake_files") {
-  dest_dir = "$ndk_os_irrelevant_out_dir/build"
-  sources = [ "./cmake" ]
+  dest_dir = "$ndk_os_irrelevant_out_dir/build/cmake"
+  sources = [
+    "./cmake/ohos.toolchain.cmake",
+    "./cmake/sdk_native_platforms.cmake",
+  ]
 }
 
 if (host_os == "mac") {
