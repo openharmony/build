@@ -21,7 +21,8 @@ function prebuilt_sdk() {
     local ccache_args="$4"
     local xcache_args="$5"
     local api_version="$6"
-    shift 6
+    local generate_sbom="$7"
+    shift 7
     local _sdk_gn_args=("$@")
 
     local ROOT_PATH="${source_root_dir}"
@@ -44,6 +45,7 @@ function prebuilt_sdk() {
             --compute-overlap-rate=false \
             --deps-guard=false \
             --generate-ninja-trace=false \
+            --generate-sbom=${generate_sbom} \
             --gn-args "skip_generate_module_list_file=true sdk_platform=${current_platform} ndk_platform=${current_platform} use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true enable_archive_sdk=false enable_notice_collection=false enable_process_notice=false ${_sdk_gn_args[*]}"
         if [[ "$?" -ne 0 ]]; then
             echo -e "\033[31m[OHOS ERROR] ohos-sdk build failed! Try using '--no-prebuilts-sdk' to skip.\033[0m"
