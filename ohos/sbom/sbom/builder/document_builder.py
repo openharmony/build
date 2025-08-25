@@ -34,34 +34,6 @@ class DocumentBuilder(ConfigurableBuilder):
         self._tools: List[Dict[str, str]] = []
         self._doc_comments: Optional[str] = None
 
-    def _build_instance(self) -> Document:
-        """
-        Construct the Document instance with current configuration.
-
-        Returns:
-            Document: A new Document instance with all configured values
-
-        Note:
-            Uses deepcopy for all collection-type fields to prevent reference sharing
-        """
-        return Document(
-            version=self._version,
-            bom_format=self._bom_format,
-            spec_version=self._spec_version,
-            data_license=self._data_license,
-            serial_number=self._serial_number,
-            timestamp=self._timestamp,
-            authors=deepcopy(self._authors),
-            doc_id=self._doc_id,
-            name=self._name,
-            document_namespace=self._document_namespace,
-            license_list_version=self._license_list_version,
-            lifecycles=deepcopy(self._lifecycles),
-            properties=deepcopy(self._properties),
-            tools=deepcopy(self._tools),
-            doc_comments=deepcopy(self._doc_comments),
-        )
-
     def with_version(self, version: str) -> 'DocumentBuilder':
         """
         Set the document version.
@@ -321,3 +293,31 @@ class DocumentBuilder(ConfigurableBuilder):
         """
         self._doc_comments = comments
         return self
+
+    def _build_instance(self) -> Document:
+        """
+        Construct the Document instance with current configuration.
+
+        Returns:
+            Document: A new Document instance with all configured values
+
+        Note:
+            Uses deepcopy for all collection-type fields to prevent reference sharing
+        """
+        return Document(
+            version=self._version,
+            bom_format=self._bom_format,
+            spec_version=self._spec_version,
+            data_license=self._data_license,
+            serial_number=self._serial_number,
+            timestamp=self._timestamp,
+            authors=deepcopy(self._authors),
+            doc_id=self._doc_id,
+            name=self._name,
+            document_namespace=self._document_namespace,
+            license_list_version=self._license_list_version,
+            lifecycles=deepcopy(self._lifecycles),
+            properties=deepcopy(self._properties),
+            tools=deepcopy(self._tools),
+            doc_comments=deepcopy(self._doc_comments),
+        )

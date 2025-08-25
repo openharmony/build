@@ -23,9 +23,7 @@ class FileType(Enum):
     TEXT = 'txt'
     JSON = 'json'
 
-    # 包文件
     HAP = 'hap'
-    APK = 'apk'
     IPA = 'ipa'
     ZIP = 'zip'
     TAR = 'tar'
@@ -68,8 +66,8 @@ class FileType(Enum):
     @property
     def is_package(self) -> bool:
         return self in {
-            FileType.HAP, FileType.APK, FileType.IPA,
-            FileType.ZIP, FileType.TAR, FileType.GZ, FileType.BZ2
+            FileType.HAP, FileType.IPA, FileType.ZIP,
+            FileType.TAR, FileType.GZ, FileType.BZ2
         }
 
     @property
@@ -113,6 +111,52 @@ class File:
     @property
     def source_target(self) -> 'Target':
         return self._source_target
+
+    @property
+    def is_final_artifact(self) -> bool:
+        return (self.is_shared_library or
+                self.is_bytecode or
+                self.is_package)
+
+    @property
+    def is_stripped(self):
+        return "unstripped/" not in self.relative_path
+
+    @property
+    def is_source_code(self) -> bool:
+        return self._file_type.is_source_code if self._file_type else False
+
+    @property
+    def is_object_file(self) -> bool:
+        return self._file_type == FileType.OBJECT_FILE if self._file_type else False
+
+    @property
+    def is_intermediate(self) -> bool:
+        return self._file_type.is_intermediate if self._file_type else False
+
+    @property
+    def is_bytecode(self) -> bool:
+        return self._file_type == FileType.ABC if self._file_type else False
+
+    @property
+    def is_library(self) -> bool:
+        return self._file_type.is_library if self._file_type else False
+
+    @property
+    def is_static_library(self) -> bool:
+        return self._file_type.is_static_library if self._file_type else False
+
+    @property
+    def is_shared_library(self) -> bool:
+        return self._file_type.is_shared_library if self._file_type else False
+
+    @property
+    def is_data_file(self) -> bool:
+        return self._file_type.is_data_file if self._file_type else False
+
+    @property
+    def is_package(self) -> bool:
+        return self._file_type.is_package if self._file_type else False
 
     def add_dependency(self, dep_type: RelationshipType, target: 'File') -> None:
         if dep_type not in self._dependencies:
@@ -179,53 +223,27 @@ class File:
             return name
         return None
 
-    @property
-    def is_final_artifact(self) -> bool:
-        return (self.is_shared_library or
-                self.is_bytecode or
-                self.is_package)
+    def to_dict(self) -> Dict[str, Any]:
+        source_target_name = None
+        source_target_type = None
+        if self._source_target is not None:
+            source_target_name = getattr(self._source_target, 'target_name', None)
+            source_target_type = getattr(self._source_target, 'type', None)
 
-    def is_stripped(self):
-        return "unstripped/" not in self.relative_path
+        dependencies = {}
+        for dep_type, file_set in self._dependencies.items():
+            path_list = [f.relative_path for f in file_set if hasattr(f, 'relative_path')]
+            dependencies[dep_type.value] = path_list
 
-    def is_unstripped(self):
-        return not self.is_stripped()
+        file_type_name = self.get_file_type_name()
 
-    @property
-    def is_source_code(self) -> bool:
-        return self._file_type.is_source_code if self._file_type else False
-
-    @property
-    def is_object_file(self) -> bool:
-        return self._file_type == FileType.OBJECT_FILE if self._file_type else False
-
-    @property
-    def is_intermediate(self) -> bool:
-        return self._file_type.is_intermediate if self._file_type else False
-
-    @property
-    def is_bytecode(self) -> bool:
-        return self._file_type == FileType.ABC if self._file_type else False
-
-    @property
-    def is_library(self) -> bool:
-        return self._file_type.is_library if self._file_type else False
-
-    @property
-    def is_static_library(self) -> bool:
-        return self._file_type.is_static_library if self._file_type else False
-
-    @property
-    def is_shared_library(self) -> bool:
-        return self._file_type.is_shared_library if self._file_type else False
-
-    @property
-    def is_data_file(self) -> bool:
-        return self._file_type.is_data_file if self._file_type else False
-
-    @property
-    def is_package(self) -> bool:
-        return self._file_type.is_package if self._file_type else False
+        return {
+            "source_target_type": source_target_type,
+            "file_type": file_type_name,
+            "relative_path": self.relative_path,
+            "source_target": source_target_name,
+            "dependencies": dependencies
+        }
 
     def _determine_file_type(self) -> Optional[FileType]:
         if not self._relative_path:
@@ -258,25 +276,3 @@ class File:
             return FileType.WINDOWS_LIB
 
         return FileType.UNKNOWN
-
-    def to_dict(self) -> Dict[str, Any]:
-        source_target_name = None
-        source_target_type = None
-        if self._source_target is not None:
-            source_target_name = getattr(self._source_target, 'target_name', None)
-            source_target_type = getattr(self._source_target, 'type', None)
-
-        dependencies = {}
-        for dep_type, file_set in self._dependencies.items():
-            path_list = [f.relative_path for f in file_set if hasattr(f, 'relative_path')]
-            dependencies[dep_type.value] = path_list
-
-        file_type_name = self.get_file_type_name()
-
-        return {
-            "source_target_type": source_target_type,
-            "file_type": file_type_name,
-            "relative_path": self.relative_path,
-            "source_target": source_target_name,
-            "dependencies": dependencies
-        }

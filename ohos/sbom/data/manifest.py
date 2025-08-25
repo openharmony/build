@@ -82,6 +82,9 @@ class Project:
             return "framework"
         return "library"
 
+    def add_linkfile(self, src, dest):
+        self._linkfiles.append({"src": src, "dest": dest})
+
     @staticmethod
     def from_element(element):
         name = element.attrib.get("name", "")
@@ -100,9 +103,6 @@ class Project:
                 project.add_linkfile(src, dest)
 
         return project
-
-    def add_linkfile(self, src, dest):
-        self._linkfiles.append({"src": src, "dest": dest})
 
 
 class Manifest:
@@ -123,6 +123,15 @@ class Manifest:
     @property
     def projects(self):
         return self._projects
+
+    def add_remote(self, remote):
+        self._remotes.append(remote)
+
+    def set_default(self, remote, revision, sync_j):
+        self._default = {"remote": remote, "revision": revision, "sync-j": sync_j}
+
+    def add_project(self, project):
+        self._projects.append(project)
 
     def remote_url_of(self, project, target_remote: Remote = None):
         if not project or not hasattr(project, 'name'):
@@ -173,15 +182,6 @@ class Manifest:
             name=project.name,
             version=project.revision,
         )
-
-    def add_remote(self, remote):
-        self._remotes.append(remote)
-
-    def set_default(self, remote, revision, sync_j):
-        self._default = {"remote": remote, "revision": revision, "sync-j": sync_j}
-
-    def add_project(self, project):
-        self._projects.append(project)
 
     def find_project(self, src: Optional[Union[str, Target]]) -> Optional[Project]:
         if isinstance(src, str):
