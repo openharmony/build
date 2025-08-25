@@ -23,14 +23,6 @@ class NinjaJson:
     def filter_targets(self, predicate: Callable[['Target'], bool]) -> List['Target']:
         return [t for t in self._targets.values() if predicate(t)]
 
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'NinjaJson':
-        return cls(
-            _build_setting=BuildSetting.from_dict(data.get("build_settings", {})),
-            _targets={name: Target.from_dict(name, tdict)
-                      for name, tdict in data.get("targets", {}).items()},
-        )
-
     def to_dict(self) -> Dict[str, Any]:
         return {
             "build_settings": asdict(self._build_setting),
@@ -39,3 +31,11 @@ class NinjaJson:
                 for name, target in self._targets.items()
             }
         }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'NinjaJson':
+        return cls(
+            _build_setting=BuildSetting.from_dict(data.get("build_settings", {})),
+            _targets={name: Target.from_dict(name, tdict)
+                      for name, tdict in data.get("targets", {}).items()},
+        )

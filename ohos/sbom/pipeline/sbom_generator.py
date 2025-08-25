@@ -93,7 +93,7 @@ class SBOMGenerator:
         target_name_map_file = self.file_dependence_analyzer.get_target_name_map_file()
         for target_name, dest_list in self._install_target_name_dest_map.items():  # 使用更清晰的命名
             file_list = target_name_map_file.get(target_name, [])
-            stripped_file_list = [f for f in file_list if f.is_stripped()]
+            stripped_file_list = [f for f in file_list if f.is_stripped]
             if not file_list:
                 continue
             for dest in dest_list:
@@ -135,8 +135,8 @@ class SBOMGenerator:
         authors = set()
         copyright_text = NOASSERTION
 
-        INVALID_PREFIXES = ('by ', 'copyright', 'all rights', 'distributed', 'licensed')
-        MIN_LEN, MAX_LEN = 2, 50
+        invalid_prefixes = ('by ', 'copyright', 'all rights', 'distributed', 'licensed')
+        min_len, max_len = 2, 50
 
         for cp in copyrights:
             if isinstance(cp, dict):
@@ -150,9 +150,9 @@ class SBOMGenerator:
                     filtered_holders = []
                     for h in holders:
                         h_lower = h.lower()
-                        if (h_lower.startswith(INVALID_PREFIXES) or
-                                len(h) < MIN_LEN or
-                                len(h) > MAX_LEN or
+                        if (h_lower.startswith(invalid_prefixes) or
+                                len(h) < min_len or
+                                len(h) > max_len or
                                 '.' in h and h.count('.') > 2):
                             continue
                         filtered_holders.append(h)

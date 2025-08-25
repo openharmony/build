@@ -22,12 +22,6 @@ class Target:
     libs: List[str] = field(default_factory=list)
     ldflags: List[str] = field(default_factory=list)
 
-    @classmethod
-    def from_dict(cls, target_name: str, d: Dict[str, Any]) -> "Target":
-        allowed = {f.name for f in cls.__dataclass_fields__.values()}
-        return cls(target_name=target_name,
-                   **{k: v for k, v in d.items() if k in allowed})
-
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
@@ -35,3 +29,9 @@ class Target:
         data = asdict(self)
         data.pop('target_name', None)
         return data
+
+    @classmethod
+    def from_dict(cls, target_name: str, d: Dict[str, Any]) -> "Target":
+        allowed = {f.name for f in cls.__dataclass_fields__.values()}
+        return cls(target_name=target_name,
+                   **{k: v for k, v in d.items() if k in allowed})
