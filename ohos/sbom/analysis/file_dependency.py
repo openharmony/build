@@ -124,9 +124,6 @@ class FileDependencyAnalyzer:
             # Parse dependencies into static and dynamic libraries
             dep_result = self.extract_libs_dependencies(libs)
 
-            # Determine if the target is a linking target (shared lib, executable, etc.)
-            is_link_target = target.type in ('shared_library', 'rust_proc_macro', 'executable','rust_library')
-
             # Process each output file
             for out in outputs:
                 output_file = self._file_dependencies.get(out)
@@ -139,8 +136,7 @@ class FileDependencyAnalyzer:
                         static_lib,
                         File(static_lib, None, file_type=FileType.STATIC_LIBRARY)
                     )
-                    rel_type = RelationshipType.STATIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
-                    output_file.add_dependency(rel_type, lib_file)
+                    output_file.add_dependency_by_file_type(lib_file)
 
                 # Handle dynamic library dependencies
                 for dynamic_lib in dep_result.get('dynamic', []):
@@ -148,8 +144,7 @@ class FileDependencyAnalyzer:
                         dynamic_lib,
                         File(dynamic_lib, None, file_type=FileType.SHARED_LIBRARY)
                     )
-                    rel_type = RelationshipType.DYNAMIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
-                    output_file.add_dependency(rel_type, lib_file)
+                    output_file.add_dependency_by_file_type(lib_file)
 
         except Exception as e:
             print(f"Error processing libs for target '{getattr(target, 'target_name', 'unknown')}': {e}")
@@ -176,9 +171,6 @@ class FileDependencyAnalyzer:
             # Parse dependencies from ldflags
             dep_result = self.extract_ldflags_dependencies(ldflags)
 
-            # Determine if the target is a linking target (shared lib, executable, etc.)
-            is_link_target = target.type in ('shared_library', 'rust_proc_macro', 'executable','rust_library')
-
             # Process each output file
             for out in outputs:
                 output_file = self._file_dependencies.get(out)
@@ -191,8 +183,7 @@ class FileDependencyAnalyzer:
                         static_lib,
                         File(static_lib, None, file_type=FileType.STATIC_LIBRARY)
                     )
-                    rel_type = RelationshipType.STATIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
-                    output_file.add_dependency(rel_type, lib_file)
+                    output_file.add_dependency_by_file_type(lib_file)
 
                 # Handle dynamic library dependencies
                 for dynamic_lib in dep_result.get('dynamic', []):
@@ -200,8 +191,7 @@ class FileDependencyAnalyzer:
                         dynamic_lib,
                         File(dynamic_lib, None, file_type=FileType.SHARED_LIBRARY)
                     )
-                    rel_type = RelationshipType.DYNAMIC_LINK if is_link_target else RelationshipType.DEPENDS_ON
-                    output_file.add_dependency(rel_type, lib_file)
+                    output_file.add_dependency_by_file_type(lib_file)
 
         except Exception as e:
             print(f"Error processing libs for executable '{getattr(target, 'target_name', 'unknown')}': {e}")
@@ -245,10 +235,8 @@ class FileDependencyAnalyzer:
                     for out in outputs or []:
                         if out not in self._file_dependencies:
                             self._file_dependencies[out] = File(out, target)
-
                         file_out = self._file_dependencies[out]
                         file_out.add_dependency_list_by_file_type(dep_out_file_list)
-
                 except Exception as e:
                     print(f"Error processing dep '{dep}': {e}")
                     continue  # Continue with next dependency

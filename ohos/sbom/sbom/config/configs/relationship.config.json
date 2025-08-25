@@ -20,7 +20,9 @@
         "type": "string"
       },
       "description": "List of reference identifiers of other components or services that the current component or service depends on",
-      "example": ["pkg:generic/zlib@1.2.11"]
+      "example": [
+        "pkg:generic/zlib@1.2.11"
+      ]
     },
     {
       "property": "relationship_type",
