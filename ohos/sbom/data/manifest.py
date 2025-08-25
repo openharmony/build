@@ -177,7 +177,7 @@ class Manifest:
 
         url = self.remote_url_of(project, target_remote)
         return generate_purl(
-            type=get_purl_type_from_url(url),
+            pkg_type=get_purl_type_from_url(url),
             namespace="OpenHarmony",
             name=project.name,
             version=project.revision,

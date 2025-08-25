@@ -119,16 +119,7 @@ class ProjectDependencyAnalyzer:
                 # skip RelationshipType.OTHER
                 if relation_type == RelationshipType.OTHER:
                     continue
-                for dep_file in file.get_dependencies(relation_type):
-                    dep_project = self._get_file_project(dep_file)
-                    if not dep_project or dep_project.name == current_project.name:
-                        continue
-                    dep_key = (current_project.name, dep_project.name)
-                    if dep_key in processed_deps:
-                        continue
-                    pd_src = self._get_or_create_dependency(current_project)
-                    pd_src.add_dependency(RelationshipType.DEPENDS_ON, dep_project)
-                    processed_deps.add(dep_key)
+                self._process_dependencies_for_relation(file, relation_type, current_project, processed_deps)
 
     def _build_upstream_dependencies(self):
         for project in self._target_to_project.values():
@@ -138,6 +129,20 @@ class ProjectDependencyAnalyzer:
             pd = self._get_or_create_dependency(project)
             pd.add_dependency_list(RelationshipType.VARIANT_OF, upstream_pkgs)
             self._project_to_upstream[project.name] = upstream_pkgs
+
+    def _process_dependencies_for_relation(self, file, relation_type, current_project, processed_deps):
+        for dep_file in file.get_dependencies(relation_type):
+            dep_project = self._get_file_project(dep_file)
+            if not dep_project or dep_project.name == current_project.name:
+                continue
+
+            dep_key = (current_project.name, dep_project.name)
+            if dep_key in processed_deps:
+                continue
+
+            pd_src = self._get_or_create_dependency(current_project)
+            pd_src.add_dependency(RelationshipType.DEPENDS_ON, dep_project)
+            processed_deps.add(dep_key)
 
     def _format_result(self) -> Dict[str, Dict[str, List[str]]]:
         result = {}
