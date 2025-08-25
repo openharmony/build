@@ -27,26 +27,15 @@ class FileBuilder(ConfigurableBuilder):
         self._license_info_in_files: List[str] = []
         self._copyright_text: Optional[str] = None
 
-    def _build_instance(self) -> File:
+    @property
+    def file_id(self) -> str:
         """
-        Construct the File instance with current configuration.
+        Get the current file identifier.
 
         Returns:
-            File: A new File instance with all configured values
-
-        Note:
-            Uses deepcopy for all collection-type fields to prevent reference sharing
+            str: The file ID string or None if not set
         """
-        return File(
-            file_name=self._file_name,
-            file_author=deepcopy(self._file_author),
-            file_id=self._file_id,
-            file_types=deepcopy(self._file_types),
-            checksums=deepcopy(self._checksums),
-            license_concluded=self._license_concluded,
-            license_info_in_files=deepcopy(self._license_info_in_files),
-            copyright_text=deepcopy(self._copyright_text)
-        )
+        return self._file_id
 
     def with_file_name(self, file_name: str) -> 'FileBuilder':
         """
@@ -196,12 +185,23 @@ class FileBuilder(ConfigurableBuilder):
         self._copyright_text = copyright_text
         return self
 
-    @property
-    def file_id(self) -> str:
+    def _build_instance(self) -> File:
         """
-        Get the current file identifier.
+        Construct the File instance with current configuration.
 
         Returns:
-            str: The file ID string or None if not set
+            File: A new File instance with all configured values
+
+        Note:
+            Uses deepcopy for all collection-type fields to prevent reference sharing
         """
-        return self._file_id
+        return File(
+            file_name=self._file_name,
+            file_author=deepcopy(self._file_author),
+            file_id=self._file_id,
+            file_types=deepcopy(self._file_types),
+            checksums=deepcopy(self._checksums),
+            license_concluded=self._license_concluded,
+            license_info_in_files=deepcopy(self._license_info_in_files),
+            copyright_text=deepcopy(self._copyright_text)
+        )

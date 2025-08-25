@@ -22,36 +22,6 @@ class DependGraphAnalyzer:
 
         self._graph = self._build_graph(targets)
 
-    @staticmethod
-    def _build_graph(targets: List[Target]) -> DiGraph:
-        g = nx.DiGraph()
-        for t in targets:
-            g.add_node(t.target_name, data=t)
-        target_names = {t.target_name for t in targets}
-        for t in targets:
-            for dep in t.deps:
-                if dep in target_names:
-                    g.add_edge(t.target_name, dep)
-        return g
-
-    def add_virtual_root(self, root_name: str, children: List[str]):
-        virtual_target = type("VirtualTarget", (), {
-            "target_name": root_name,
-            "type": "virtual_root",
-            "outputs": [],
-            "source_outputs": {}
-        })()
-        self._graph.add_node(root_name, data=virtual_target)
-
-        for child in children:
-            if child not in self._graph:
-                raise ValueError(f"virtual root '{child}' not exist in graph")
-            self._graph.add_edge(root_name, child)
-
-    def remove_virtual_root(self, root_name: str):
-        if root_name in self._graph:
-            self._graph.remove_node(root_name)
-
     @property
     def graph(self) -> DiGraph:
         return self._graph
@@ -82,6 +52,24 @@ class DependGraphAnalyzer:
 
     def sub_graph(self, nodes: Iterable[str]):
         return self._graph.subgraph(nodes).copy()
+
+    def add_virtual_root(self, root_name: str, children: List[str]):
+        virtual_target = type("VirtualTarget", (), {
+            "target_name": root_name,
+            "type": "virtual_root",
+            "outputs": [],
+            "source_outputs": {}
+        })()
+        self._graph.add_node(root_name, data=virtual_target)
+
+        for child in children:
+            if child not in self._graph:
+                raise ValueError(f"virtual root '{child}' not exist in graph")
+            self._graph.add_edge(root_name, child)
+
+    def remove_virtual_root(self, root_name: str):
+        if root_name in self._graph:
+            self._graph.remove_node(root_name)
 
     def depend_subgraph(
             self,
@@ -195,3 +183,15 @@ class DependGraphAnalyzer:
                         raise RuntimeError(f"post_visit execute failed: {e}") from e
 
         return traversal_order
+
+    @staticmethod
+    def _build_graph(targets: List[Target]) -> DiGraph:
+        g = nx.DiGraph()
+        for t in targets:
+            g.add_node(t.target_name, data=t)
+        target_names = {t.target_name for t in targets}
+        for t in targets:
+            for dep in t.deps:
+                if dep in target_names:
+                    g.add_edge(t.target_name, dep)
+        return g

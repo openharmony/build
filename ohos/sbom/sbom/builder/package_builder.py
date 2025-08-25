@@ -32,31 +32,15 @@ class PackageBuilder(ConfigurableBuilder):
         self._hashes: List[Hash] = []
         self._comp_platform: Optional[str] = None
 
-    def _build_instance(self) -> Package:
+    @property
+    def bom_ref(self) -> str:
         """
-        Construct the Package instance with current configuration.
+        Get the current BOM reference identifier.
 
         Returns:
-            Package: A new Package instance with all configured values
-
-        Note:
-            Uses deepcopy for all collection-type and string fields to prevent reference sharing
+            str: The BOM reference string or None if not set
         """
-        return Package(
-            type=self._type,
-            supplier=self._supplier,
-            group=self._group,
-            name=self._name,
-            version=self._version,
-            purl=self._purl,
-            license_concluded=self._license_concluded,
-            license_declared=self._license_declared,
-            bom_ref=self._bom_ref,
-            comp_platform=self._comp_platform,
-            com_copyright=deepcopy(self._com_copyright),
-            download_location=deepcopy(self._download_location),
-            hashes=deepcopy(self._hashes),
-        )
+        return self._bom_ref
 
     def with_type(self, type_: Literal["library", "application", "framework"]) -> 'PackageBuilder':
         """
@@ -252,12 +236,28 @@ class PackageBuilder(ConfigurableBuilder):
         self._comp_platform = platform
         return self
 
-    @property
-    def bom_ref(self) -> str:
+    def _build_instance(self) -> Package:
         """
-        Get the current BOM reference identifier.
+        Construct the Package instance with current configuration.
 
         Returns:
-            str: The BOM reference string or None if not set
+            Package: A new Package instance with all configured values
+
+        Note:
+            Uses deepcopy for all collection-type and string fields to prevent reference sharing
         """
-        return self._bom_ref
+        return Package(
+            type=self._type,
+            supplier=self._supplier,
+            group=self._group,
+            name=self._name,
+            version=self._version,
+            purl=self._purl,
+            license_concluded=self._license_concluded,
+            license_declared=self._license_declared,
+            bom_ref=self._bom_ref,
+            comp_platform=self._comp_platform,
+            com_copyright=deepcopy(self._com_copyright),
+            download_location=deepcopy(self._download_location),
+            hashes=deepcopy(self._hashes),
+        )

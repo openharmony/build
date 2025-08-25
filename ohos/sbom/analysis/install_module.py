@@ -56,6 +56,19 @@ class InstallModuleAnalyzer:
         enabled_modules = set(self.get_enabled_modules(install_enable=True))
         return self._nj.filter_targets(lambda t: t.target_name in enabled_modules)
 
+    def generate_module_info(self, target: Union[Target, str]) -> Optional[Dict[str, Any]]:
+        if isinstance(target, str):
+            target = next((t for t in self._nj.all_targets() if t.target_name == target), None)
+            if not target:
+                print(f"[Error] not found analyze target: {target}")
+                return None
+        create_module_info_parser()
+        args = target.args
+
+        args = create_module_info_parser().parse_args(args)
+        module_info_data = gen_module_info_data(args)
+        return module_info_data
+
     def _match_all(self):
         results: Dict[str, InstallMatchResult] = {}
         build_dir = self._nj.build_setting.build_dir
@@ -84,19 +97,6 @@ class InstallModuleAnalyzer:
             if len(dedup) != len(modules):
                 print(f"[Warning] {src.target_name} install_modules not match all outputs")
         self._matched_install_module = results
-
-    def generate_module_info(self, target: Union[Target, str]) -> Optional[Dict[str, Any]]:
-        if isinstance(target, str):
-            target = next((t for t in self._nj.all_targets() if t.target_name == target), None)
-            if not target:
-                print(f"[Error] not found analyze target: {target}")
-                return None
-        create_module_info_parser()
-        args = target.args
-
-        args = create_module_info_parser().parse_args(args)
-        module_info_data = gen_module_info_data(args)
-        return module_info_data
 
     def _analysis_all_install_enable(self):
         install_results: Dict[str, bool] = {}
