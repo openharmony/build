@@ -197,9 +197,13 @@ class SBOMGenerator:
             file_path (str or Path): Path to the file being scanned.
 
         Returns:
-            Dict: A dictionary containing concluded license, license info,
-                  copyright text, and aggregated author/holder information.
+            Dict: A dictionary containing:
+                - concluded_license: The primary license (first in list) or NOASSERTION
+                - license_info_in_files: List of detected licenses or [NOASSERTION]
+                - copyright_text: Copyright statement if found
+                - fileAuthor: Comma-separated list of filtered authors/holders
         """
+        # Scan the file and extract results
         ret = self.file_scanner.scan(file_path)
         licenses = ret.get("licenses", [])
         copyrights = ret.get("copyrights", [])
@@ -207,30 +211,32 @@ class SBOMGenerator:
         authors = set()
         copyright_text = NOASSERTION
 
+        # Define filtering rules for invalid holder patterns
         invalid_prefixes = ('by ', 'copyright', 'all rights', 'distributed', 'licensed')
         min_len, max_len = 2, 50
 
+        # Process each copyright entry
         for cp in copyrights:
-            if isinstance(cp, dict):
-                if copyright_text == NOASSERTION and cp.get("statement"):
-                    copyright_text = cp["statement"]
+            if not isinstance(cp, dict):
+                continue
 
-                holder = cp.get("holder", "").strip()
-                if holder:
-                    holders = [h.strip() for h in holder.split(",") if h.strip()]
+            # Extract copyright statement (use first non-empty one)
+            if copyright_text == NOASSERTION:
+                statement = cp.get("statement")
+                if statement:
+                    copyright_text = statement
 
-                    filtered_holders = []
-                    for h in holders:
-                        h_lower = h.lower()
-                        if (h_lower.startswith(invalid_prefixes) or
-                                len(h) < min_len or
-                                len(h) > max_len or
-                                '.' in h and h.count('.') > 2):
-                            continue
-                        filtered_holders.append(h)
+            # Extract and normalize holder
+            holder = cp.get("holder", "").strip()
+            if not holder:
+                continue
 
-                    authors.update(filtered_holders)
+            # Split comma-separated holders and clean them
+            holders = [h.strip() for h in holder.split(",") if h.strip()]
+            filtered_holders = self._filter_holders(holders, invalid_prefixes, min_len, max_len)
+            authors.update(filtered_holders)
 
+        # Format final author string
         file_author = ", ".join(sorted(authors)) if authors else NOASSERTION
 
         return {
@@ -239,6 +245,19 @@ class SBOMGenerator:
             "copyright_text": copyright_text,
             "fileAuthor": file_author
         }
+
+    def _filter_holders(self, holders: List[str], invalid_prefixes: tuple, min_len: int, max_len: int) -> List[str]:
+        """Filter out invalid holders based on prefix, length, and format."""
+        filtered = []
+        for h in holders:
+            h_lower = h.lower()
+            if (h_lower.startswith(invalid_prefixes) or
+                    len(h) < min_len or
+                    len(h) > max_len or
+                    ('.' in h and h.count('.') > 2)):
+                continue
+            filtered.append(h)
+        return filtered
 
     def _build_dependencies(self, all_project_dependence: Dict, project_bom_refs: Dict) -> None:
         """Build dependency relationships for all projects."""
