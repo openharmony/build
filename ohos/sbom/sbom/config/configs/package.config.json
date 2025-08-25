@@ -1,0 +1,134 @@
+{
+  "section": "Package Information",
+  "fields": [
+    {
+      "property": "type",
+      "json_key": "type",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Type of the component",
+      "example": "library"
+    },
+    {
+      "property": "supplier",
+      "json_key": "supplier",
+      "required": true,
+      "default": "NOASSERTION",
+      "type": "string",
+      "description": "Supplier or vendor of the component",
+      "example": "Person: Jane Doe (jane.doe@example.com)"
+    },
+    {
+      "property": "group",
+      "json_key": "group",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Group identifier for the component",
+      "example": "org.gnu"
+    },
+    {
+      "property": "name",
+      "json_key": "name",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Name of the component",
+      "example": "glibc"
+    },
+    {
+      "property": "version",
+      "json_key": "version",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Version identifier of the component",
+      "example": "2.3.1"
+    },
+    {
+      "property": "purl",
+      "json_key": "purl",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Package URL (purl) - unique identifier for the component",
+      "example": "pkg:generic/glibc@2.3.1"
+    },
+    {
+      "property": "license_concluded",
+      "json_key": "licenseConcluded",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "License actually used",
+      "example": "LGPL-2.0"
+    },
+    {
+      "property": "license_declared",
+      "json_key": "licenseDeclared",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "License declared by the author",
+      "example": "LGPL-2.0"
+    },
+    {
+      "property": "com_copyright",
+      "json_key": "comCopyright",
+      "required": false,
+      "default": null,
+      "type": "string",
+      "description": "Copyright notice text",
+      "example": "Copyright 2008-2010 John Smith"
+    },
+    {
+      "property": "bom_ref",
+      "json_key": "bom-ref",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Internal unique identifier",
+      "example": "pkg:generic/glibc@2.3.1"
+    },
+    {
+      "property": "download_location",
+      "json_key": "downloadLocation",
+      "required": false,
+      "default": null,
+      "type": "string",
+      "description": "Primary download location URL for the component",
+      "example": "https://gitee.com/openharmony/build"
+    },
+    {
+      "property": "hashes",
+      "json_key": "hashes",
+      "required": true,
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alg": { "type": "string" },
+          "content": { "type": "string" }
+        }
+      },
+      "description": "List of cryptographic hashes for integrity verification",
+      "example": [
+        {
+          "alg": "MD5",
+          "content": "26c2b6f7bc704ccadc64c83995e0ff7f"
+        }
+      ]
+    },
+    {
+      "property": "comp_platform",
+      "json_key": "compPlatform",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Target platform architecture for the component",
+      "example": "x86_64"
+    }
+  ]
+}

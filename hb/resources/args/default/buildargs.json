@@ -532,5 +532,15 @@
     "arg_attribute": {},
     "resolve_function": "resolve_deps_guard",
     "testFunction": "testDepsGuard"
+  },
+  "generate_sbom": {
+    "arg_name": "--generate-sbom",
+    "argDefault": true,
+    "arg_help": "Default:True. Help:generate SBOM, and generate sbom in ${HOME}/.sbom dir",
+    "arg_phase": "postTargetGenerate",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_generate_sbom",
+    "testFunction": "testGenerateSbom"
   }
 }
