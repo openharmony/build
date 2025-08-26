@@ -20,6 +20,9 @@ from services.interface.build_file_generator_interface import BuildFileGenerator
 from util.system_util import SystemUtil
 from exceptions.ohos_exception import OHOSException
 import os
+from util.log_util import LogUtil
+import json
+import shutil
 
 
 class IndepBuild(BuildFileGeneratorInterface):
@@ -33,17 +36,17 @@ class IndepBuild(BuildFileGeneratorInterface):
         cmd.extend(flags_list)
         variant = self.flags_dict["variant"]
         logpath = os.path.join('out', variant, 'build.log')
-        if self.flags_dict.get("skip-download") or self.flags_dict.get("fast-rebuild"):
-            if os.path.exists(logpath):
-                mtime = os.stat(logpath).st_mtime
-                os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
-        cmd_str = " ".join(cmd)
-        SystemUtil.exec_command(cmd, log_path=logpath, pre_msg=f"Executing indep build script: {cmd_str}",
+        SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
                                             after_msg="indep build end")
 
     def _convert_flags(self) -> list:
         flags_list = []
-        flags_list.append(os.path.join(os.path.expanduser("~"), ".hpm/.hpmcache"))
+        if self.flags_dict["local-repo"]:
+            flags_list.append(self.flags_dict["local-repo"])
+            self._generate_dependences_json(self.flags_dict["local-repo"])
+            self.flags_dict.pop("local-repo")
+        else:
+            flags_list.append(os.path.join(os.path.expanduser("~"), ".hpm/.hpmcache"))
         flags_list.append(self.flags_dict["path"])
         build_type = self.flags_dict["buildType"]
         if build_type == "both":
@@ -67,3 +70,58 @@ class IndepBuild(BuildFileGeneratorInterface):
                 flags_list.append(f"--{key}")
                 flags_list.extend(self.flags_dict[key])
         return flags_list
+
+    def _generate_dependences_json(self, local_repo: str):
+        if not os.path.exists(local_repo):
+            raise Exception(f"ERROR: local repo {local_repo} does not exist, please check")
+
+        dependences_json = os.path.join(local_repo, "dependences.json")
+        dirname = os.path.basename(local_repo)
+        if os.path.exists(dependences_json) and dirname == ".hpmcache":
+            LogUtil.hb_info(f"use dependences.json under .hpmcache, skip generating")
+            return
+        
+        dependences_dict = dict()
+        binarys_path = os.path.join(local_repo, "binarys")
+        flag_path = os.path.join(binarys_path, "binarys_flag")
+        if os.path.exists(binarys_path):
+            if os.path.exists(flag_path):
+                LogUtil.hb_info(f"remove {binarys_path}")
+                shutil.rmtree(binarys_path)
+            else:
+                renamed_path = os.path.join(local_repo, "renamed_binarys")
+                if os.path.exists(renamed_path):
+                    LogUtil.hb_info(f"remove {renamed_path}")
+                    shutil.rmtree(renamed_path)
+                LogUtil.hb_info(f"rename {binarys_path} to {renamed_path}")
+                shutil.move(binarys_path, renamed_path)
+        LogUtil.hb_info(f"create {binarys_path}")
+        os.makedirs(binarys_path)
+
+        for item in os.listdir(local_repo):
+            if item == "binarys":
+                continue
+            item_path = os.path.join(local_repo, item)
+            if os.path.isdir(item_path):
+                os.symlink(item_path, os.path.join(binarys_path, item))
+            open(flag_path, "w").close()
+        
+        ignore_directories = ['innerapis', 'common', 'binarys']
+        for root, dirs, files in os.walk(local_repo):
+            dirs[:] = [d for d in dirs if d not in ignore_directories]
+            for file_name in files:
+                if file_name == "bundle.json":
+                    self._update_dependences_dict(local_repo, root, file_name, dependences_dict)
+        LogUtil.hb_info(f"generating {dependences_json}")
+        with open(dependences_json, 'w') as f:
+            json.dump(dependences_dict, f, indent=4)
+    
+    def _update_dependences_dict(self, local_repo: str, root: str, file_name: str, dependences_dict: dict):
+        bundle_json_path = os.path.join(root, file_name)
+        with open(bundle_json_path, 'r') as f:
+            bundle_data = json.load(f)
+            component_name = bundle_data["component"]["name"]
+            relative_path = os.path.relpath(root, local_repo)
+            dependences_dict[component_name] = {
+                "installPath": "/" + relative_path
+            }
