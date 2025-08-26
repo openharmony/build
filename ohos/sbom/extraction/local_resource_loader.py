@@ -1,3 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#
+# Copyright (c) 2025 Northeastern University
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import json
 import os
 import re
@@ -150,7 +168,7 @@ class LocalResourceLoader:
         if not manifest_path:
             raise FileNotFoundError(
                 f"No valid manifest file found in directory: "
-                f"{Path(cls._source_root) / '.repo' / 'manifests' / 'tag'}"
+                f"{Path(cls._out_root) / 'sbom' / 'manifests'}"
             )
 
         try:
@@ -246,17 +264,17 @@ class LocalResourceLoader:
     @classmethod
     def _find_latest_manifest(cls) -> Optional[Path]:
         """
-        Find the latest manifest file in .repo/manifests/tag/ directory.
+        Find the latest manifest file in out/product/sbom/manifests directory.
 
         Looks for files matching pattern: manifest_tag_YYYYMMDD_HHMMSS.xml
 
         Returns:
             Path to latest manifest file, or None if none found
         """
-        if not cls._source_root:
-            raise RuntimeError("Source root directory not set. Call set_source_root() first.")
+        if not cls._out_root:
+            raise RuntimeError("Out root directory not set. Call set_out_root() first.")
 
-        tag_dir = Path(cls._source_root) / ".repo" / "manifests" / "tag"
+        tag_dir = Path(cls._out_root) / "sbom" / "manifests"
 
         if not tag_dir.exists() or not tag_dir.is_dir():
             print(f"Warning: Manifest tag directory not found: {tag_dir}")
