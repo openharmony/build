@@ -236,69 +236,92 @@ class File:
         }
 
     def _determine_file_type(self) -> Optional[FileType]:
+        """
+        Determines the file type based on the file extension and special naming patterns.
+
+        Returns:
+            The corresponding FileType enum value, or None if path is invalid.
+        """
         if not self._relative_path:
             return None
 
-        ext = Path(self._relative_path).suffix.lower().lstrip('.')
+        path = Path(self._relative_path)
+        ext = path.suffix.lower().lstrip('.')
 
-        if ext.startswith('so'):
-            return FileType.SHARED_LIBRARY
-
+        # Special case: handle compressed archives like .tar.gz, .tar.bz2, .zip.gz
         if ext in ['gz', 'bz2']:
-            stem_ext = Path(self._relative_path).stem.split('.')[-1].lower()
-            if stem_ext in ['tar', 'zip']:
-                return FileType(stem_ext)
+            stem_ext = path.stem.split('.')[-1].lower()
+            if stem_ext == 'tar':
+                return FileType.TAR
+            if stem_ext == 'zip':
+                return FileType.ZIP
+            # Fall through to let the general logic handle plain .gz or .bz2 files
 
-        if 'obj/' in self._relative_path and self._relative_path.endswith('.o'):
+        # Handle object files: any file with extension '.o' is considered an object file
+        if ext == 'o':
             return FileType.OBJECT_FILE
 
+        # General matching: check if the extension matches any known FileType value
         for item in FileType:
             if item.value == ext:
                 return item
-
-        if self._relative_path.endswith('.a'):
-            return FileType.STATIC_LIBRARY
-        if self._relative_path.endswith('.so'):
-            return FileType.SHARED_LIBRARY
-        if self._relative_path.endswith('.dll'):
-            return FileType.WINDOWS_DLL
-        if self._relative_path.endswith('.lib'):
-            return FileType.WINDOWS_LIB
 
         return FileType.UNKNOWN
 
     def _determine_dependency_type(self, file: 'File') -> RelationshipType:
         """Determine the appropriate relationship type based on self and file types."""
         if self.is_shared_library or (hasattr(self, 'source_target') and self.source_target.type == 'executable'):
-            if file.is_static_library:
-                return RelationshipType.STATIC_LINK
-            elif file.is_shared_library:
-                return RelationshipType.DYNAMIC_LINK
-            elif file.is_source_code or file.is_intermediate:
-                return RelationshipType.GENERATED_FROM
+            return self._handle_shared_library_or_executable_dep(file)
+        if self.is_static_library:
+            return self._handle_static_library_dep(file)
+        if self.is_data_file:
+            return self._handle_data_file_dep(file)
+        if self.is_package:
+            return self._handle_package_dep(file)
+        if self.is_intermediate:
+            return self._handle_intermediate_file_dep(file)
+        if self.is_bytecode:
+            return self._handle_bytecode_file_dep(file)
+        return RelationshipType.DEPENDS_ON
 
-        elif self.is_static_library:
-            if file.is_shared_library or file.is_static_library:
-                return RelationshipType.DEPENDS_ON
-            elif file.is_source_code or file.is_intermediate:
-                return RelationshipType.GENERATED_FROM
-
-        elif self.is_data_file:
-            if file.is_source_code or file.is_intermediate:
-                return RelationshipType.GENERATED_FROM
-
-        elif self.is_package:
+    def _handle_shared_library_or_executable_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for shared libraries or files from executables."""
+        if file.is_static_library:
+            return RelationshipType.STATIC_LINK
+        if file.is_shared_library:
+            return RelationshipType.DYNAMIC_LINK
+        if file.is_source_code or file.is_intermediate:
             return RelationshipType.GENERATED_FROM
+        return RelationshipType.DEPENDS_ON
 
-        elif self.is_intermediate:
-            if file.is_source_code:
-                return RelationshipType.GENERATED_FROM
-            elif file.is_intermediate and file.relative_path.endswith('.o'):
-                return RelationshipType.OTHER
+    def _handle_static_library_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for static libraries."""
+        if file.is_shared_library or file.is_static_library:
+            return RelationshipType.DEPENDS_ON
+        if file.is_source_code or file.is_intermediate:
+            return RelationshipType.GENERATED_FROM
+        return RelationshipType.DEPENDS_ON
 
-        elif self.is_bytecode:
-            if file.is_source_code or file.is_intermediate:
-                return RelationshipType.GENERATED_FROM
+    def _handle_data_file_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for data files."""
+        if file.is_source_code or file.is_intermediate:
+            return RelationshipType.GENERATED_FROM
+        return RelationshipType.DEPENDS_ON
 
-        # default fallback
+    def _handle_package_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for package files."""
+        return RelationshipType.GENERATED_FROM
+
+    def _handle_intermediate_file_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for intermediate files (e.g., .o)."""
+        if file.is_source_code:
+            return RelationshipType.GENERATED_FROM
+        if file.is_intermediate and file.relative_path.endswith('.o'):
+            return RelationshipType.OTHER
+        return RelationshipType.DEPENDS_ON
+
+    def _handle_bytecode_file_dep(self, file: 'File') -> RelationshipType:
+        """Handle deps for bytecode files."""
+        if file.is_source_code or file.is_intermediate:
+            return RelationshipType.GENERATED_FROM
         return RelationshipType.DEPENDS_ON
