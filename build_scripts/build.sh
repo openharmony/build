@@ -245,8 +245,6 @@ done
 if [[ "${generate_sbom}" == "true" ]]; then
     args_list+=("--gn-flags=--ide=json")
     args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
-    prebuilt_sdk_gn_args+=("--gn-flags=--ide=json")
-    prebuilt_sdk_gn_args+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
 fi
 
 echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"

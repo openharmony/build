@@ -1,3 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#
+# Copyright (c) 2025 Northeastern University
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 import xml.etree.ElementTree as ET
 from typing import Optional, Union
 
@@ -82,9 +100,6 @@ class Project:
             return "framework"
         return "library"
 
-    def add_linkfile(self, src, dest):
-        self._linkfiles.append({"src": src, "dest": dest})
-
     @staticmethod
     def from_element(element):
         name = element.attrib.get("name", "")
@@ -103,6 +118,9 @@ class Project:
                 project.add_linkfile(src, dest)
 
         return project
+
+    def add_linkfile(self, src, dest):
+        self._linkfiles.append({"src": src, "dest": dest})
 
 
 class Manifest:
@@ -123,6 +141,53 @@ class Manifest:
     @property
     def projects(self):
         return self._projects
+
+    @staticmethod
+    def from_file(file_path):
+        tree = ET.parse(file_path)
+        root = tree.getroot()
+
+        manifest = Manifest()
+
+        # Parse remote elements
+        for remote_element in root.findall("remote"):
+            remote = Remote.from_element(remote_element)
+            manifest.add_remote(remote)
+
+        # Parse default element
+        default_element = root.find("default")
+        if default_element is not None:
+            remote = default_element.attrib["remote"]
+            revision = default_element.attrib["revision"]
+            sync_j = default_element.attrib["sync-j"]
+            manifest.set_default(remote, revision, sync_j)
+
+        # Parse project elements
+        for project_element in root.findall("project"):
+            project = Project.from_element(project_element)
+            manifest.add_project(project)
+
+        return manifest
+
+    def find_project(self, src: Optional[Union[str, Target]]) -> Optional[Project]:
+        if isinstance(src, str):
+            target_name = src
+        else:
+            target_name = src.target_name
+        if not target_name.startswith("//"):
+            return None
+        path_part = target_name[2:].split(":")[0]
+        matched_projects = []
+        for project in self._projects:
+            project_path = project.path
+            if path_part.startswith(project_path):
+                matched_projects.append((project, len(project_path)))
+
+        if matched_projects:
+            matched_projects.sort(key=lambda x: -x[1])
+            return matched_projects[0][0]
+        else:
+            return None
 
     def add_remote(self, remote):
         self._remotes.append(remote)
@@ -182,50 +247,3 @@ class Manifest:
             name=project.name,
             version=project.revision,
         )
-
-    def find_project(self, src: Optional[Union[str, Target]]) -> Optional[Project]:
-        if isinstance(src, str):
-            target_name = src
-        else:
-            target_name = src.target_name
-        if not target_name.startswith("//"):
-            return None
-        path_part = target_name[2:].split(":")[0]
-        matched_projects = []
-        for project in self._projects:
-            project_path = project.path
-            if path_part.startswith(project_path):
-                matched_projects.append((project, len(project_path)))
-
-        if matched_projects:
-            matched_projects.sort(key=lambda x: -x[1])
-            return matched_projects[0][0]
-        else:
-            return None
-
-    @staticmethod
-    def from_file(file_path):
-        tree = ET.parse(file_path)
-        root = tree.getroot()
-
-        manifest = Manifest()
-
-        # Parse remote elements
-        for remote_element in root.findall("remote"):
-            remote = Remote.from_element(remote_element)
-            manifest.add_remote(remote)
-
-        # Parse default element
-        default_element = root.find("default")
-        if default_element is not None:
-            remote = default_element.attrib["remote"]
-            revision = default_element.attrib["revision"]
-            sync_j = default_element.attrib["sync-j"]
-            manifest.set_default(remote, revision, sync_j)
-
-        # Parse project elements
-        for project_element in root.findall("project"):
-            project = Project.from_element(project_element)
-            manifest.add_project(project)
-
-        return manifest
