@@ -249,12 +249,8 @@ class FileDependencyAnalyzer:
                     if not dep_out_file_list:
                         continue  # No output files to link
 
-                    # Link dependency outputs to current target outputs
-                    for out in outputs or []:
-                        if out not in self._file_dependencies:
-                            self._file_dependencies[out] = File(out, target)
-                        file_out = self._file_dependencies[out]
-                        file_out.add_dependency_list_by_file_type(dep_out_file_list)
+                    self._link_dependency_outputs(outputs, dep_out_file_list, target)
+
                 except Exception as e:
                     print(f"Error processing dep '{dep}': {e}")
                     continue  # Continue with next dependency
@@ -440,6 +436,19 @@ class FileDependencyAnalyzer:
 
         return True
 
+    def _link_dependency_outputs(
+            self,
+            outputs: list,
+            dep_out_file_list: list,
+            target: Target
+    ):
+        """Link dependency output files to current target's output files."""
+        for out in outputs or []:
+            if out not in self._file_dependencies:
+                self._file_dependencies[out] = File(out, target)
+            file_out = self._file_dependencies[out]
+            file_out.add_dependency_list_by_file_type(dep_out_file_list)
+
     def _is_metadata_generator_target(self, target_name: str) -> bool:
         core_name = target_name.split('(', 1)[0]
 
@@ -487,7 +496,6 @@ class FileDependencyAnalyzer:
         return basename
 
     def _add_lib(self, lib_name: str, is_static_mode: bool, static_libs: list, dynamic_libs: list):
-        """根据模式添加标准库（如 -stdlib=, -rtlib=）"""
         base = lib_name if lib_name.startswith('lib') else f"lib{lib_name}"
         if is_static_mode:
             static_libs.append(f"{base}.a")
