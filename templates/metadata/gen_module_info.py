@@ -210,9 +210,7 @@ def create_module_info_parser():
     parser.add_argument('--no-prebuilt', dest='prebuilt', action='store_false')
     parser.set_defaults(prebuilt=False)
     parser.add_argument('--module-source', help='', required=False)
-    parser.add_argument('--install-enable',
-                        dest='install_enable',
-                        action='store_false')
+    parser.add_argument('--install-enable', dest='install_enable', action='store_false')
     parser.set_defaults(install_enable=True)
     parser.add_argument('--collect', dest='collect', action='store_true')
     parser.add_argument('--notice', help='path to notice')
@@ -227,12 +225,8 @@ def create_module_info_parser():
     parser.add_argument('--symlink-path', help='', required=False, default='')
     parser.add_argument('--softlink-create-path', help='', required=False, default='')
     parser.add_argument('--version_script', help='', required=False, default='')
-    parser.add_argument('--prefix-override',
-                        dest='prefix_override',
-                        action='store_true')
-    parser.add_argument('--no-prefix-override',
-                        dest='prefix_override',
-                        action='store_false')
+    parser.add_argument('--prefix-override', dest='prefix_override', action='store_true')
+    parser.add_argument('--no-prefix-override', dest='prefix_override', action='store_false')
     parser.set_defaults(prefix_override=False)
     parser.add_argument('--depfile', required=False)
     return parser
