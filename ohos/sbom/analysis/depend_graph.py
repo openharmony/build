@@ -192,11 +192,7 @@ class DependGraphAnalyzer:
                     self._push_neighbors(node=node, depth=depth, parent=parent, visited=visited,
                                          neighbor_func=neighbor_func, stack=stack)
             else:
-                if post_visit is not None:
-                    try:
-                        post_visit(node, depth, parent)
-                    except Exception as e:
-                        raise RuntimeError(f"post_visit execute failed: {e}") from e
+                self._process_node_post(node=node, depth=depth, parent=parent, post_visit=post_visit)
 
         return traversal_order
 
@@ -242,3 +238,17 @@ class DependGraphAnalyzer:
         for neighbor in reversed(neighbors):
             if neighbor not in visited:
                 stack.append((neighbor, depth + 1, parent, False))
+
+    def _process_node_post(
+            self,
+            node: str,
+            depth: int,
+            parent: Optional[str],
+            post_visit: Optional[Callable[[str, int, Optional[str]], None]]
+    ):
+        """Handle post-visit logic."""
+        if post_visit is not None:
+            try:
+                post_visit(node, depth, parent)
+            except Exception as e:
+                raise RuntimeError(f"post_visit execute failed: {e}") from e
