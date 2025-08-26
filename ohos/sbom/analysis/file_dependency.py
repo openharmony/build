@@ -235,25 +235,7 @@ class FileDependencyAnalyzer:
 
             # Process each dependency
             for dep in dep_list:
-                try:
-                    dep_target = self._depend_graph.get_target(dep)
-                    if not dep_target:
-                        continue  # Skip if target not found
-
-                    # Skip metadata generator targets
-                    if self._is_metadata_generator_target(dep_target.target_name):
-                        continue
-
-                    # Get output files of the dependency
-                    dep_out_file_list = self._target_name_map_file.get(dep_target.target_name, [])
-                    if not dep_out_file_list:
-                        continue  # No output files to link
-
-                    self._link_dependency_outputs(outputs, dep_out_file_list, target)
-
-                except Exception as e:
-                    print(f"Error processing dep '{dep}': {e}")
-                    continue  # Continue with next dependency
+                self._process_single_dep(dep, outputs, target)
 
         except Exception as e:
             print(f"Error processing deps for executable '{getattr(target, 'target_name', 'unknown')}': {e}")
@@ -448,6 +430,25 @@ class FileDependencyAnalyzer:
                 self._file_dependencies[out] = File(out, target)
             file_out = self._file_dependencies[out]
             file_out.add_dependency_list_by_file_type(dep_out_file_list)
+
+    def _process_single_dep(self, dep, outputs, target):
+        """Helper to process one dependency, avoids deep nesting."""
+        try:
+            dep_target = self._depend_graph.get_target(dep)
+            if not dep_target:
+                return
+
+            if self._is_metadata_generator_target(dep_target.target_name):
+                return
+
+            dep_out_file_list = self._target_name_map_file.get(dep_target.target_name, [])
+            if not dep_out_file_list:
+                return
+
+            self._link_dependency_outputs(outputs, dep_out_file_list, target)
+
+        except Exception as e:
+            print(f"Error processing dep '{dep}': {e}")
 
     def _is_metadata_generator_target(self, target_name: str) -> bool:
         core_name = target_name.split('(', 1)[0]

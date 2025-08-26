@@ -42,6 +42,10 @@ class Hash:
     alg: str
     content: str
 
+    def __json__(self) -> Dict[str, str]:
+        """Support JSON module serialization."""
+        return self.to_dict()
+
     @classmethod
     def from_dict(cls, data: Dict[str, str]) -> 'Hash':
         """Create Hash from dictionary."""
@@ -56,10 +60,6 @@ class Hash:
             "alg": self.alg,
             "content": self.content
         }
-
-    def __json__(self) -> Dict[str, str]:
-        """Support JSON module serialization."""
-        return self.to_dict()
 
 
 class RelationshipType(Enum):
