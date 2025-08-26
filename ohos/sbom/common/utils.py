@@ -186,6 +186,8 @@ def commit_url_of(url: str, commit_id: str) -> str:
             return f"{base_url}/tree/{commit_id}"
         elif "github.com" in host:
             return f"{base_url}/tree/{commit_id}"
+        elif "gitcode.com" in host:
+            return f"{base_url}/tree/{commit_id}"
         else:
             return original_url
 
