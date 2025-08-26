@@ -1,3 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+#
+# Copyright (c) 2025 Northeastern University
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum
@@ -386,6 +404,16 @@ class SBOMMetaData:
     files: List[File] = field(default_factory=list)
     relationships: List[Relationship] = field(default_factory=list)
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'SBOMMetaData':
+        """Create SBOMMetaData from dictionary."""
+        return cls(
+            document=Document.from_dict(data.get('document', {})),
+            packages=[Package.from_dict(p) for p in data.get('packages', [])],
+            files=[File.from_dict(f) for f in data.get('files', [])],
+            relationships=[Relationship.from_dict(r) for r in data.get('relationships', [])]
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert complete SBOM to ordered dictionary.
@@ -400,13 +428,3 @@ class SBOMMetaData:
             ("relationships", [rel.to_dict() for rel in self.relationships])
         ])
         return remove_empty(data)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'SBOMMetaData':
-        """Create SBOMMetaData from dictionary."""
-        return cls(
-            document=Document.from_dict(data.get('document', {})),
-            packages=[Package.from_dict(p) for p in data.get('packages', [])],
-            files=[File.from_dict(f) for f in data.get('files', [])],
-            relationships=[Relationship.from_dict(r) for r in data.get('relationships', [])]
-        )
