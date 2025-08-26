@@ -44,18 +44,6 @@ class DependGraphAnalyzer:
     def graph(self) -> DiGraph:
         return self._graph
 
-    def nodes(self) -> List[str]:
-        return list(self._graph.nodes)
-
-    def edges(self) -> List[Tuple[str, str]]:
-        return list(self._graph.edges)
-
-    def get_target(self, name: str) -> Target:
-        return self._graph.nodes[name]["data"]
-
-    def predecessors(self, name: str) -> List[str]:
-        return list(self._graph.predecessors(name))
-
     @staticmethod
     def _build_graph(targets: List[Target]) -> DiGraph:
         g = nx.DiGraph()
@@ -67,6 +55,18 @@ class DependGraphAnalyzer:
                 if dep in target_names:
                     g.add_edge(t.target_name, dep)
         return g
+
+    def nodes(self) -> List[str]:
+        return list(self._graph.nodes)
+
+    def edges(self) -> List[Tuple[str, str]]:
+        return list(self._graph.edges)
+
+    def get_target(self, name: str) -> Target:
+        return self._graph.nodes[name]["data"]
+
+    def predecessors(self, name: str) -> List[str]:
+        return list(self._graph.predecessors(name))
 
     def successors(self, name: str) -> List[str]:
         return list(self._graph.successors(name))
