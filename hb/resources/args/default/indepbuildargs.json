@@ -171,5 +171,15 @@
     "arg_attribute": {},
     "resolve_function": "resolve_ccache",
     "testFunction": ""
+  },
+  "local_binarys": {
+    "arg_name": "--local-binary",
+    "argDefault": "",
+    "arg_help": "Default:''. Help:Set local binarys path, so that you can use local packages instead of downloading from remote",
+    "arg_phase": ["hpmDownload","indepCompilation"],
+    "arg_type": "str",
+    "arg_attribute": {},
+    "resolve_function": "resolve_local_repo",
+    "testFunction": ""
   }
 }
