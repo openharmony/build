@@ -533,14 +533,14 @@
     "resolve_function": "resolve_deps_guard",
     "testFunction": "testDepsGuard"
   },
-  "generate_sbom": {
-    "arg_name": "--generate-sbom",
+  "sbom": {
+    "arg_name": "--sbom",
     "argDefault": true,
-    "arg_help": "Default:True. Help:generate SBOM, and generate sbom in ${HOME}/.sbom dir",
+    "arg_help": "Default:True. Help:generate sbom, and generate sbom in output dir",
     "arg_phase": "postTargetGenerate",
     "arg_type": "bool",
     "arg_attribute": {},
-    "resolve_function": "resolve_generate_sbom",
-    "testFunction": "testGenerateSbom"
+    "resolve_function": "resolve_sbom",
+    "testFunction": "testSbom"
   }
 }
