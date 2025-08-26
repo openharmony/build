@@ -233,7 +233,7 @@ generate_sbom="true"
 for var in "$@"; do
     OPTIONS=${var%%=*}
     PARAM=${var#*=}
-    if [[ "$OPTIONS" == "--generate-sbom" ]]; then
+    if [[ "$OPTIONS" == "--sbom" ]]; then
         if [[ "$PARAM" == "false" ]]; then
             generate_sbom="false"
         else
