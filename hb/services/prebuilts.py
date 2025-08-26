@@ -37,14 +37,14 @@ class PreuiltsService(BuildFileGeneratorInterface):
     def run(self):
         if not "--enable-prebuilts" in sys.argv:
             return
-        if not self.check_whether_need_update():
+        part_names = self._get_part_names()
+        if not self.check_whether_need_update(part_names):
             LogUtil.hb_info("you have already execute prebuilts download step and no configs changed, skip this step")
             return        
         flags_list = self._convert_flags()
         if "--skip-prebuilts" in flags_list:
             print("Skip preuilts download")
             return
-        part_names = self._get_part_names()
         try:
             cmd = ["/bin/bash", "build/prebuilts_config.sh", "--part-names"]
             cmd.extend(part_names)
@@ -56,23 +56,30 @@ class PreuiltsService(BuildFileGeneratorInterface):
             LogUtil.hb_info(tips)
             subprocess.run(
                 cmd, check=True, stdout=None, stderr=None  # 直接输出到终端
-            )  # 直接输出到终端
-            self.write_last_update({"last_update": time.time()})
+            )
+            self.write_last_update({"last_update_time": time.time(), "parts": part_names})
         except subprocess.CalledProcessError as e:
             print(f"{cmd} execute failed: {e.returncode}")
             raise e
 
-    def check_whether_need_update(self) -> bool:
-        last_update = self.read_last_update().get("last_update", 0)
-        if not last_update:
+    def check_whether_need_update(self, part_names) -> bool:
+        last_update = self.read_last_update()
+        last_update_time = last_update.get("last_update_time", 0)
+        last_update_parts = last_update.get("parts", [])
+        # 判断是否有上次下载记录，没有则需要重新执行预下载
+        if not last_update_time:
             LogUtil.hb_info("No last update record found, will update prebuilts")
             return True
         else:
+            # 判断预下载相关的配置文件和脚本是否有变更，若有则需要重新执行预下载
             if self.check_file_changes():
                 LogUtil.hb_info("Prebuilts config file has changed, will update prebuilts")
                 return True
-            else:
-                return False
+            # 判断独立编译的部件是否有变更，若有则需要重新执行预下载
+            if part_names and not set(part_names).issubset(set(last_update_parts)):
+                LogUtil.hb_info("The specified part names have changed, will update prebuilts")
+                return True
+            return False
 
     def read_last_update(self):
         if not os.path.exists(self.last_update):
