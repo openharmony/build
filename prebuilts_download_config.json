@@ -492,6 +492,21 @@
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-pc-windows-gnullvm.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
         },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/linux-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-linux-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-linux-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/windows-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-windows-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-windows-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
+        },
 		{
           "unzip_dir": "prebuilts/python_llvm",
           "file_path": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
@@ -638,6 +653,16 @@
           "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
           "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-darwin-arm64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/mac-aarch64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-aarch64-1.0.0.zip",
+          "unzip_filename": "cangjie-mac-aarch64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
         }
       ],
       "install": [
@@ -711,6 +736,16 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-nightly-x86_64-apple-darwin.tar.gz",
           "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/mac-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-mac-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
         }
       ],
       "install": [
