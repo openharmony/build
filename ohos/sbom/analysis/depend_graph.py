@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-from typing import List, Iterable, Tuple, Union, Optional, Callable
+from typing import List, Iterable, Tuple, Union, Optional, Callable, Set
 
 import networkx as nx
 from networkx import DiGraph
@@ -185,26 +185,12 @@ class DependGraphAnalyzer:
                 continue
 
             if not is_processed:
-                if node in visited:
-                    continue
-                visited.add(node)
-                traversal_order.append(node)
-
-                continue_traverse = True
-                if pre_visit is not None:
-                    try:
-                        continue_traverse = pre_visit(node, depth, parent)
-                    except Exception as e:
-                        raise RuntimeError(f"pre_visit execute failed: {e}") from e
-
-                stack.append((node, depth, parent, True))
-
+                continue_traverse = self._process_node_pre(node=node, depth=depth, parent=parent, visited=visited,
+                                                           traversal_order=traversal_order, stack=stack,
+                                                           pre_visit=pre_visit)
                 if continue_traverse:
-                    neighbors = neighbor_func(node)
-                    for neighbor in reversed(neighbors):
-                        if neighbor not in visited:
-                            stack.append((neighbor, depth + 1, node, False))
-
+                    self._push_neighbors(node=node, depth=depth, parent=parent, visited=visited,
+                                         neighbor_func=neighbor_func, stack=stack)
             else:
                 if post_visit is not None:
                     try:
@@ -213,3 +199,46 @@ class DependGraphAnalyzer:
                         raise RuntimeError(f"post_visit execute failed: {e}") from e
 
         return traversal_order
+
+    def _process_node_pre(
+            self,
+            node: str,
+            depth: int,
+            parent: Optional[str],
+            visited: Set[str],
+            traversal_order: List[str],
+            stack: List[Tuple[str, int, Optional[str], bool]],
+            pre_visit: Optional[Callable[[str, int, Optional[str]], bool]]
+    ) -> bool:
+        """Handle pre-visit logic and return whether to continue traversing children."""
+        if node in visited:
+            return False
+        visited.add(node)
+        traversal_order.append(node)
+
+        continue_traverse = True
+        if pre_visit is not None:
+            try:
+                continue_traverse = pre_visit(node, depth, parent)
+            except Exception as e:
+                raise RuntimeError(f"pre_visit execute failed: {e}") from e
+
+        # Push node back for post-processing
+        stack.append((node, depth, parent, True))
+
+        return continue_traverse
+
+    def _push_neighbors(
+            self,
+            node: str,
+            depth: int,
+            parent: Optional[str],
+            visited: Set[str],
+            neighbor_func: Callable[[str], List[str]],
+            stack: List[Tuple[str, int, Optional[str], bool]]
+    ):
+        """Push unvisited neighbors onto the stack in reverse order."""
+        neighbors = neighbor_func(node)
+        for neighbor in reversed(neighbors):
+            if neighbor not in visited:
+                stack.append((neighbor, depth + 1, parent, False))
