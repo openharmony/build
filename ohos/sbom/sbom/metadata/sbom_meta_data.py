@@ -42,6 +42,14 @@ class Hash:
     alg: str
     content: str
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, str]) -> 'Hash':
+        """Create Hash from dictionary."""
+        return cls(
+            alg=data.get('alg', ''),
+            content=data.get('content', '')
+        )
+
     def to_dict(self) -> Dict[str, str]:
         """Convert to dictionary representation."""
         return {
@@ -52,14 +60,6 @@ class Hash:
     def __json__(self) -> Dict[str, str]:
         """Support JSON module serialization."""
         return self.to_dict()
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, str]) -> 'Hash':
-        """Create Hash from dictionary."""
-        return cls(
-            alg=data.get('alg', ''),
-            content=data.get('content', '')
-        )
 
 
 class RelationshipType(Enum):
@@ -148,6 +148,27 @@ class Document:
     tools: List[Dict[str, str]] = field(default_factory=list)
     doc_comments: Optional[str] = None
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Document':
+        """Create Document from dictionary."""
+        return cls(
+            serial_number=data.get('serialNumber', ''),
+            version=data.get('version', ''),
+            bom_format=data.get('bomFormat', ''),
+            spec_version=data.get('specVersion', ''),
+            data_license=data.get('dataLicense', ''),
+            timestamp=data.get('timestamp', ''),
+            authors=data.get('authors', []),
+            doc_id=data.get('docId'),
+            name=data.get('name'),
+            document_namespace=data.get('documentNamespace'),
+            license_list_version=data.get('licenseListVersion'),
+            lifecycles=data.get('lifecycles', []),
+            properties=data.get('properties', {}),
+            tools=data.get('tools', []),
+            doc_comments=data.get('docComments')
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert to ordered dictionary following standard field order.
@@ -173,27 +194,6 @@ class Document:
             ("docComments", self.doc_comments)
         ])
         return remove_empty(data)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Document':
-        """Create Document from dictionary."""
-        return cls(
-            serial_number=data.get('serialNumber', ''),
-            version=data.get('version', ''),
-            bom_format=data.get('bomFormat', ''),
-            spec_version=data.get('specVersion', ''),
-            data_license=data.get('dataLicense', ''),
-            timestamp=data.get('timestamp', ''),
-            authors=data.get('authors', []),
-            doc_id=data.get('docId'),
-            name=data.get('name'),
-            document_namespace=data.get('documentNamespace'),
-            license_list_version=data.get('licenseListVersion'),
-            lifecycles=data.get('lifecycles', []),
-            properties=data.get('properties', {}),
-            tools=data.get('tools', []),
-            doc_comments=data.get('docComments')
-        )
 
 
 # ---------------------------
@@ -237,6 +237,25 @@ class Package:
     download_location: Optional[str] = None
     hashes: List[Hash] = field(default_factory=list)
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Package':
+        """Create Package from dictionary."""
+        return cls(
+            type=data.get('type', ''),
+            supplier=data.get('supplier', ''),
+            group=data.get('group', ''),
+            name=data.get('name', ''),
+            version=data.get('version', ''),
+            purl=data.get('purl', ''),
+            license_concluded=data.get('licenseConcluded', ''),
+            license_declared=data.get('licenseDeclared', ''),
+            bom_ref=data.get('bom-ref', ''),
+            comp_platform=data.get('compPlatform', ''),
+            com_copyright=data.get('comCopyright'),
+            download_location=data.get('downloadLocation'),
+            hashes=[Hash.from_dict(h) for h in data.get('hashes', [])]
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert to ordered dictionary following standard field order.
@@ -260,25 +279,6 @@ class Package:
             ("compPlatform", self.comp_platform)
         ])
         return remove_empty(data)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Package':
-        """Create Package from dictionary."""
-        return cls(
-            type=data.get('type', ''),
-            supplier=data.get('supplier', ''),
-            group=data.get('group', ''),
-            name=data.get('name', ''),
-            version=data.get('version', ''),
-            purl=data.get('purl', ''),
-            license_concluded=data.get('licenseConcluded', ''),
-            license_declared=data.get('licenseDeclared', ''),
-            bom_ref=data.get('bom-ref', ''),
-            comp_platform=data.get('compPlatform', ''),
-            com_copyright=data.get('comCopyright'),
-            download_location=data.get('downloadLocation'),
-            hashes=[Hash.from_dict(h) for h in data.get('hashes', [])]
-        )
 
 
 # ---------------------------
@@ -310,6 +310,20 @@ class File:
     license_info_in_files: List[str] = field(default_factory=list)
     copyright_text: Optional[str] = None
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'File':
+        """Create File from dictionary."""
+        return cls(
+            file_name=data.get('fileName', ''),
+            file_id=data.get('fileId', ''),
+            checksums=[Hash.from_dict(h) for h in data.get('checksums', [])],
+            license_concluded=data.get('licenseConcluded', ''),
+            file_types=data.get('fileTypes', []),
+            file_author=data.get('fileAuthor'),
+            license_info_in_files=data.get('licenseInfoInFiles', []),
+            copyright_text=data.get('copyrightText')
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert to ordered dictionary following standard field order.
@@ -329,20 +343,6 @@ class File:
         ])
         return remove_empty(data)
 
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'File':
-        """Create File from dictionary."""
-        return cls(
-            file_name=data.get('fileName', ''),
-            file_id=data.get('fileId', ''),
-            checksums=[Hash.from_dict(h) for h in data.get('checksums', [])],
-            license_concluded=data.get('licenseConcluded', ''),
-            file_types=data.get('fileTypes', []),
-            file_author=data.get('fileAuthor'),
-            license_info_in_files=data.get('licenseInfoInFiles', []),
-            copyright_text=data.get('copyrightText')
-        )
-
 
 # ---------------------------
 # Relationship Information
@@ -361,6 +361,15 @@ class Relationship:
     depends_on: List[str]
     relationship_type: RelationshipType
 
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'Relationship':
+        """Create Relationship from dictionary."""
+        return cls(
+            bom_ref=data.get('bom-ref', ''),
+            depends_on=data.get('dependsOn', []),
+            relationship_type=RelationshipType.from_str(data.get('relationshipType', 'OTHER'))
+        )
+
     def to_dict(self) -> Dict[str, Any]:
         """
         Convert to ordered dictionary following standard field order.
@@ -374,15 +383,6 @@ class Relationship:
             ("relationshipType", self.relationship_type.value)
         ])
         return remove_empty(data)
-
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Relationship':
-        """Create Relationship from dictionary."""
-        return cls(
-            bom_ref=data.get('bom-ref', ''),
-            depends_on=data.get('dependsOn', []),
-            relationship_type=RelationshipType.from_str(data.get('relationshipType', 'OTHER'))
-        )
 
 
 # ---------------------------
