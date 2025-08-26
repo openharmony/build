@@ -163,16 +163,6 @@ class CompositeBuilder(BaseBuilder):
         """
         self._children.append(builder)
 
-    def _fill_defaults(self):
-        """
-        Perform hierarchical validation with clear error reporting.
-
-        Raises:
-            ValueError: If any child builder validation fails, with detailed messages
-        """
-        for child in self._children:
-            child._fill_defaults()  # pylint: disable=protected-access
-
     @abstractmethod
     def _build_instance(self) -> Dict[str, Any]:
         """
@@ -182,6 +172,16 @@ class CompositeBuilder(BaseBuilder):
             Dict[str, Any]: The composite result
         """
         pass
+
+    def _fill_defaults(self):
+        """
+        Perform hierarchical validation with clear error reporting.
+
+        Raises:
+            ValueError: If any child builder validation fails, with detailed messages
+        """
+        for child in self._children:
+            child._fill_defaults()  # pylint: disable=protected-access
 
     def _validate(self) -> None:
         """
