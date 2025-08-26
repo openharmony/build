@@ -193,19 +193,23 @@ class SBOMGenerator:
                 if len(stripped_file_list) == 1:
                     dest_file.add_dependency(RelationshipType.COPY_OF, stripped_file_list[0])
                 else:
-                    dest_filename = os.path.basename(dest)
-                    matched_files = [
-                        f for f in stripped_file_list
-                        if os.path.basename(f.relative_path) == dest_filename
-                    ]
-
-                    if not matched_files:
-                        print(f"Warning: Files on the image failed to match with Targets: {dest}")
-                    else:
-                        for src_file in matched_files:
-                            dest_file.add_dependency(RelationshipType.COPY_OF, src_file)
+                    self._handle_multiple_sources(dest, stripped_file_list, dest_file)
                 self._file_dep_filter[dest] = dest_file
                 self._file_ref_map[dest] = dest
+
+    def _handle_multiple_sources(self, dest: str, stripped_file_list, dest_file):
+        """Handle case where multiple source files may match the destination."""
+        dest_filename = os.path.basename(dest)
+        matched_files = [
+            f for f in stripped_file_list
+            if os.path.basename(f.relative_path) == dest_filename
+        ]
+
+        if not matched_files:
+            print(f"Warning: Files on the image failed to match with Targets: {dest}")
+        else:
+            for src_file in matched_files:
+                dest_file.add_dependency(RelationshipType.COPY_OF, src_file)
 
     def _extract_scanner_info(self, file_path: Union[str, Path]) -> Dict:
         """

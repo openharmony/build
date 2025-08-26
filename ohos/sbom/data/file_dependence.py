@@ -197,37 +197,7 @@ class File:
     def add_dependency_by_file_type(self, file: 'File') -> None:
         dependency_type = RelationshipType.DEPENDS_ON
         try:
-            if self.is_shared_library or (hasattr(self, 'source_target') and self.source_target.type == 'executable'):
-                if file.is_static_library:
-                    dependency_type = RelationshipType.STATIC_LINK
-                elif file.is_shared_library:
-                    dependency_type = RelationshipType.DYNAMIC_LINK
-                elif file.is_source_code or file.is_intermediate:
-                    dependency_type = RelationshipType.GENERATED_FROM
-
-            elif self.is_static_library:
-                if file.is_shared_library or file.is_static_library:
-                    dependency_type = RelationshipType.DEPENDS_ON
-                elif file.is_source_code or file.is_intermediate:
-                    dependency_type = RelationshipType.GENERATED_FROM
-
-            elif self.is_data_file:
-                if file.is_source_code or file.is_intermediate:
-                    dependency_type = RelationshipType.GENERATED_FROM
-
-            elif self.is_package:
-                dependency_type = RelationshipType.GENERATED_FROM
-
-            elif self.is_intermediate:
-                if file.is_source_code:
-                    dependency_type = RelationshipType.GENERATED_FROM
-                elif file.is_intermediate and file.relative_path.endswith('.o'):
-                    dependency_type = RelationshipType.OTHER
-
-            elif self.is_bytecode:
-                if file.is_source_code or file.is_intermediate:
-                    dependency_type = RelationshipType.GENERATED_FROM
-
+            dependency_type = self._determine_dependency_type(file)
         except Exception as e:
             print(f"Error occurred when adding dependency: {e}")
         finally:
@@ -296,3 +266,39 @@ class File:
             return FileType.WINDOWS_LIB
 
         return FileType.UNKNOWN
+
+    def _determine_dependency_type(self, file: 'File') -> RelationshipType:
+        """Determine the appropriate relationship type based on self and file types."""
+        if self.is_shared_library or (hasattr(self, 'source_target') and self.source_target.type == 'executable'):
+            if file.is_static_library:
+                return RelationshipType.STATIC_LINK
+            elif file.is_shared_library:
+                return RelationshipType.DYNAMIC_LINK
+            elif file.is_source_code or file.is_intermediate:
+                return RelationshipType.GENERATED_FROM
+
+        elif self.is_static_library:
+            if file.is_shared_library or file.is_static_library:
+                return RelationshipType.DEPENDS_ON
+            elif file.is_source_code or file.is_intermediate:
+                return RelationshipType.GENERATED_FROM
+
+        elif self.is_data_file:
+            if file.is_source_code or file.is_intermediate:
+                return RelationshipType.GENERATED_FROM
+
+        elif self.is_package:
+            return RelationshipType.GENERATED_FROM
+
+        elif self.is_intermediate:
+            if file.is_source_code:
+                return RelationshipType.GENERATED_FROM
+            elif file.is_intermediate and file.relative_path.endswith('.o'):
+                return RelationshipType.OTHER
+
+        elif self.is_bytecode:
+            if file.is_source_code or file.is_intermediate:
+                return RelationshipType.GENERATED_FROM
+
+        # default fallback
+        return RelationshipType.DEPENDS_ON
