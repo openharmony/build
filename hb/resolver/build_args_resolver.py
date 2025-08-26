@@ -931,8 +931,8 @@ class BuildArgsResolver(ArgsResolverInterface):
             Arg.clean_args_file()
 
     @staticmethod
-    def resolve_generate_sbom(target_arg: Arg, build_module: BuildModuleInterface):
-        """resolve '--generate-sbom' arg
+    def resolve_sbom(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--sbom' arg
         :param target_arg: arg object which is used to get arg value.
         :param build_module [maybe unused]: build module object which is used to get other services.
         :phase: postTargetGenerate.

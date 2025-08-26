@@ -50,7 +50,7 @@ function prebuilt_sdk() {
             --compute-overlap-rate=false \
             --deps-guard=false \
             --generate-ninja-trace=false \
-            --generate-sbom=${generate_sbom} \
+            --sbom=${generate_sbom} \
             ${sbom_gn_args[@]} \
             --gn-args "skip_generate_module_list_file=true sdk_platform=${current_platform} ndk_platform=${current_platform} use_cfi=false use_thin_lto=false enable_lto_O0=true sdk_check_flag=false enable_ndk_doxygen=false archive_ndk=false sdk_for_hap_build=true enable_archive_sdk=false enable_notice_collection=false enable_process_notice=false ${_sdk_gn_args[*]}"
         if [[ "$?" -ne 0 ]]; then
