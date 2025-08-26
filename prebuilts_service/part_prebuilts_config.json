@@ -58,7 +58,8 @@
     "power_manager":[
         "app",
         "hvigor",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "ability_runtime":[
         "app",
@@ -71,6 +72,24 @@
     "pasteboard":[
         "app",
         "sdk"
+    ],
+    "distributed_notification_service":[
+        "app",
+        "sdk"
+    ],
+    "init":[
+        "taihe"
+    ],
+    "usb_manager":[
+        "app",
+        "sdk",
+        "taihe"
+    ],
+    "image_framework":[
+        "taihe"
+    ],
+    "bluetooth":[
+        "taihe"
     ],
     "hiprofiler":[
         "sdk",
