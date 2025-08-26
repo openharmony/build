@@ -254,7 +254,6 @@ class LicenseDetector:
                 print(f"[Debug] License parse failed: {e}")
                 pass
             except Exception as e:
-                print(f"[Warning] Unexpected error during license parsing: {type(e).__name__}: {e}")
                 pass
 
         best_match = (NOASSERTION, 0.0)
