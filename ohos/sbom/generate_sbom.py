@@ -18,6 +18,7 @@
 
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime
@@ -89,14 +90,50 @@ def set_path(args):
 
 
 def generate_sbom(args):
-    sbom_meta_data = SBOMGenerator(args).build_sbom()
-    spdx_data = SBOMConverter(sbom_meta_data).convert(SBOMFormat.SPDX)
+    """
+    Generate SBOM (Software Bill of Materials) and clean up temporary files afterward.
+    """
+    # Define the output directory for SBOM artifacts
     sbom_dir = os.path.join(args.out_dir, "sbom")
     os.makedirs(sbom_dir, exist_ok=True)
-    output_file_meta_data = os.path.join(sbom_dir, "sbom_meta_data.json")
-    output_file_spdx = os.path.join(sbom_dir, "spdx.json")
-    write_json(sbom_meta_data.to_dict(), output_file_meta_data)
-    write_json(spdx_data, output_file_spdx)
+
+    # Paths to temporary files/directories to be cleaned up
+    manifests_dir = os.path.join(sbom_dir, "manifests")
+    gn_gen_file = os.path.join(sbom_dir, "gn_gen.json")
+
+    try:
+        # Generate SBOM metadata using the provided arguments
+        sbom_meta_data = SBOMGenerator(args).build_sbom()
+
+        # Convert SBOM metadata to SPDX format
+        spdx_data = SBOMConverter(sbom_meta_data).convert(SBOMFormat.SPDX)
+
+        # Define output file paths
+        output_file_meta_data = os.path.join(sbom_dir, "sbom_meta_data.json")
+        output_file_spdx = os.path.join(sbom_dir, "spdx.json")
+
+        # Write SBOM metadata and SPDX data to JSON files
+        write_json(sbom_meta_data.to_dict(), output_file_meta_data)
+        write_json(spdx_data, output_file_spdx)
+
+    finally:
+        # Ensure cleanup runs regardless of success or failure
+
+        # Remove the 'manifest' directory if it exists
+        if os.path.exists(manifests_dir) and os.path.isdir(manifests_dir):
+            try:
+                shutil.rmtree(manifests_dir)
+                print(f"Cleaned up directory: {manifests_dir}")
+            except Exception as e:
+                print(f"Failed to delete directory {manifests_dir}: {e}")
+
+        # Remove the 'gn_gen.json' file if it exists
+        if os.path.exists(gn_gen_file) and os.path.isfile(gn_gen_file):
+            try:
+                os.remove(gn_gen_file)
+                print(f"Cleaned up file: {gn_gen_file}")
+            except Exception as e:
+                print(f"Failed to delete file {gn_gen_file}: {e}")
 
 
 def main():
