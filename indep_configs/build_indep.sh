@@ -91,10 +91,23 @@ fi
  
 if [ -d "binarys/third_party/typescript" ];then
     echo "typescript directory exists"
+    typescript_tgz_path="binarys/third_party/typescript/innerapis/build_typescript_etc/libs/ohos-typescript-4.9.5-r4.tgz"
+    if [ -f $typescript_tgz_path ]; then
+        echo "ohos-typescript-4.9.5-r4.tgz exists, starting extraction..."
+        tar -zxvf "$typescript_tgz_path" -C "binarys/third_party/typescript/innerapis/build_typescript_etc/libs/"
+        if [ $? -eq 0 ]; then
+            echo "Extraction completed successfully"
+        else
+            echo "Error: Failed to extract the tgz file"
+        fi
+    else
+        echo "Error: ohos-typescript-4.9.5-r4.tgz does not exists"
+    fi
     if [ ! -d "third_party/typescript" ]; then
         echo "third_party/typescript not exist, copy from binarys."
         mkdir -p  "third_party"
         cp -r binarys/third_party/typescript third_party
+        cp -r binarys/third_party/typescript/innerapis/build_typescript_etc/libs/package/* third_party/typescript/
     fi
 fi
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/generate_target_build_gn.py -p $2 -rp ${SOURCE_ROOT_DIR} -t ${TEST_FILTER}
