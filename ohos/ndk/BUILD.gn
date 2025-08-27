@@ -71,24 +71,28 @@ if (!use_current_sdk) {
     }
   }
 
-  action_with_pydeps("_clean_ndk_ani") {
-    deps = [ ":_collect_ndk_syscap" ]
-    script = "//interface/sdk_c/build-tools/clean_ndk_ani.py"
-    outputs = [ "${ndk_os_irrelevant_out_dir}/clean_ndk_ani.json" ]
-    _native_syscap_config_file =
-        "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
-    args = [
-      "--ndk-header-path",
-      rebase_path("$ndk_headers_out_dir", root_build_dir),
-      "--system-capability-header-config",
-      rebase_path(_native_syscap_config_file, root_build_dir),
-    ]
+  if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
+    action_with_pydeps("_clean_ndk_ani") {
+      deps = [ ":_collect_ndk_syscap" ]
+      script = "//interface/sdk_c/build-tools/clean_ndk_ani.py"
+      outputs = [ "${ndk_os_irrelevant_out_dir}/clean_ndk_ani.json" ]
+      _native_syscap_config_file =
+          "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
+      args = [
+        "--ndk-header-path",
+        rebase_path("$ndk_headers_out_dir", root_build_dir),
+        "--system-capability-header-config",
+        rebase_path(_native_syscap_config_file, root_build_dir),
+      ]
+    }
   }
 
   group("all_ndk_targets") {
     deps = [ ":_collect_ndk_syscap" ]
-    if (!sdk_build_arkts) {
-      deps += [ ":_clean_ndk_ani" ]
+    if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
+      if (!sdk_build_arkts) {
+        deps += [ ":_clean_ndk_ani" ]
+      }
     }
   }
 
