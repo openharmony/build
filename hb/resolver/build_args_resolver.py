@@ -22,6 +22,7 @@ import sys
 import stat
 import subprocess
 import csv
+from concurrent.futures import ThreadPoolExecutor
 
 from datetime import datetime
 from distutils.spawn import find_executable
@@ -948,7 +949,9 @@ class BuildArgsResolver(ArgsResolverInterface):
                 "--product", config.product,
                 "--platform", config.platform
             ]
-            SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[postTargetGenerate]")
+            executor = ThreadPoolExecutor(max_workers=1)
+            executor.submit(SystemUtil.exec_command, cmd, log_path=config.log_path, log_stage='[postTargetGenerate]')
+            executor.shutdown(wait=False)
 
     # PlaceHolder
     @staticmethod
