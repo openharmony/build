@@ -6,5 +6,6 @@
   "ets_frontend",
   "libxml2",
   "idl_tool",
-  "sdk"
+  "sdk",
+  "ace_ets2bundle"
 ]
