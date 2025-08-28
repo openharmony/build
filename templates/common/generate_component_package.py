@@ -624,7 +624,6 @@ def process_skia(part_data, parts_path_info, part_name, subsystem_name, componen
 
 
 def process_variants_default(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    # 减少代码重复调用
     preloader_path = os.path.join(part_data.get('root_path'), 'out', 'preloader', 'rk3568')
     variants_default_source_files = [
         os.path.join(preloader_path, 'build_config.json'),
@@ -646,12 +645,10 @@ def process_variants_default(part_data, parts_path_info, part_name, subsystem_na
             shutil.copy2(source_file, variants_component_path)
         print("All confiauration files copied successfully")
     
-        # 处理bundle.json文件和license文件，readme文件
         bundle_content = generate_variants_default_bundle_info()
         bundle_path = os.path.join(variants_root, 'bundle.json')
         _create_bundle_json(bundle_path, bundle_content)
 
-        # 创建LICENSE文件、readme.md
         variants_default_license_path = os.path.join(variants_root, 'LICENSE')
         variants_default_readme_path = os.path.join(variants_root, 'README.md')
         with open(variants_default_license_path, 'w') as file:
@@ -1041,10 +1038,7 @@ def process_drivers_interface_ril(part_data, parts_path_info, part_name, subsyst
 function_map = {
     'musl': process_musl,
     "developer_test": process_developer_test,  # 同rust
-    "drivers_interface_display": process_drivers_interface_display,  # 驱动的, 新建一个libs目录/ innerapi同名文件
     "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
-    "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
-    "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
     "skia": process_skia,
     "variants_default": process_variants_default,
 }
@@ -1625,9 +1619,25 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('  }\n')
 
 
+def _generate_group_configs(fp, module, json_data, _part_name):
+    includes = _handle_includes_data(json_data)
+    target_includes = []
+    fp.write('  include_dirs = [\n')
+    for include in includes:
+        target_include = _get_target_include(_part_name, include)
+        if target_include not in target_includes:
+            target_includes.append(target_include)
+    for include_dir in target_includes:
+        include_dir = os.path.join('includes', include_dir)
+        fp.write('    "{}",\n'.format(include_dir))
+    fp.write('  ]\n')
+
+
 def _generate_prebuilt_target(fp, target_type, module, is_ohos_ets_copy=False):
     if target_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
+    elif target_type == 'group':
+        fp.write('\nohos_shared_headers("' + module + '") {\n')
     elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif module != 'ipc_core' and (target_type == 'etc' or target_type == 'copy'):
@@ -1701,7 +1711,8 @@ def _generate_other(fp, args, json_data, module, is_ohos_ets_copy=False):
                 so_name = output.split('/')[-1]
         if json_data.get('type') == 'copy' and module != 'ipc_core':
             fp.write('  copy_linkable_file = true \n')
-        fp.write('  source = "libs/' + so_name + '"\n')
+        if json_data.get('type') != 'group':
+            fp.write('  source = "libs/' + so_name + '"\n')
         fp.write('  part_name = "' + args.get("part_name") + '"\n')
         fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
 
@@ -1803,12 +1814,19 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     static_deps_files = _get_static_deps(args, module, "") # 处理静态库依赖
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
-    _generate_import(fp, is_ohos_ets_copy)
-    _generate_configs(fp, module, json_data, args.get('part_name'))
     _target_type = json_data.get('type')
+    _generate_import(fp, is_ohos_ets_copy)
+    if _target_type != "group":
+        _generate_configs(fp, module, json_data, args.get('part_name'))
     _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
-    _generate_public_configs(fp, module)
-    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list, args)
+    if _target_type == "group":
+        _generate_group_configs(fp, module, json_data, args.get('part_name'))
+    else:
+        _generate_public_configs(fp, module)    # 写入public_configs的,group就不写入
+    if _target_type != "group":    
+        _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list, args)
+    else:
+        _list = public_deps_list
     _generate_static_public_deps(fp, args, static_deps_files, "") # 处理静态库依赖
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
@@ -2059,10 +2077,7 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
     if part_name in [
         "musl",  # 从obj/third_party/musl/usr 下提取到includes和libs
         "developer_test",  # 同rust
-        "drivers_interface_display",  # 驱动的, 新建一个libs目录/ innerapi同名文件
         "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
-        "drivers_interface_usb",  # 同驱动
-        "drivers_interface_ril",  # 同驱动
         "skia",
         "variants_default",
     ]:
