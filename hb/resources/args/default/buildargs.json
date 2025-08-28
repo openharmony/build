@@ -535,7 +535,7 @@
   },
   "sbom": {
     "arg_name": "--sbom",
-    "argDefault": true,
+    "argDefault": false,
     "arg_help": "Default:True. Help:generate sbom, and generate sbom in output dir",
     "arg_phase": "postTargetGenerate",
     "arg_type": "bool",
