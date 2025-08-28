@@ -208,9 +208,9 @@ function build_sdk() {
             fi
         done
         pushd $api_version/ets/ > /dev/null
-          for dir in ./ets1.1/*/; do 
+          for dir in ./dynamic/*/; do 
             dir_name=$(basename "$dir")
-            ln -s "./ets1.1/$dir_name" "$dir_name"
+            ln -s "./dynamic/$dir_name" "$dir_name"
           done
         popd > /dev/null
       popd > /dev/null

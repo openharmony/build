@@ -24,8 +24,8 @@ sys.path.append(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from scripts.util.file_utils import read_json_file, write_json_file
 
-OUT_ROOT_LIST = ["ets1.1/sdk-js",
-                 "ets1.2/sdk-js"]
+OUT_ROOT_LIST = ["dynamic/sdk-js",
+                 "static/sdk-js"]
 OUT_SDK_TYPE = ["ets", "ets2"]
 OUT_PERMISSION_FILE = ["permissions.d.ts", "permissions.d.ets"]
 INTERFACE_PATH = "interface/sdk-js"
@@ -141,12 +141,12 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
         arkts_sdk_info_list = []
         for info in info_list:
             install_label_str = str(info.get("install_dir"))
-            if install_label_str.startswith("ets/ets1.2/"):
+            if install_label_str.startswith("ets/static/"):
                 continue
-            elif install_label_str.startswith("ets/ets1.1/build-tools/interop"):
+            elif install_label_str.startswith("ets/dynamic/build-tools/interop"):
                 continue
-            elif install_label_str.startswith("ets/ets1.1/"):
-                info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
+            elif install_label_str.startswith("ets/dynamic/"):
+                info["install_dir"] = str(info.get("install_dir")).replace("ets/dynamic/", "ets/")
             arkts_sdk_info_list.append(info)
     else:
         arkts_sdk_info_list = info_list
