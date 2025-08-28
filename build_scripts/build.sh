@@ -229,7 +229,7 @@ for arg in "$@"; do
     shift
 done
 
-generate_sbom="true"
+generate_sbom="false"
 for var in "$@"; do
     OPTIONS=${var%%=*}
     PARAM=${var#*=}
