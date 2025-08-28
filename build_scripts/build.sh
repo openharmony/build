@@ -214,6 +214,14 @@ for arg in "$@"; do
             need_prebuilt_sdk=false
             args_list+=("$arg")
             ;;
+        --sbom|--sbom=*)
+            if [[ "$arg" == "--sbom" ]] || [[ "${arg#--sbom=}" != "false" ]]; then
+                generate_sbom=true
+            else
+                generate_sbom=false
+            fi
+            args_list+=("$arg")
+            ;;
         --prebuilt-sdk)
             force_prebuilt_sdk=true
             ;;
@@ -229,19 +237,6 @@ for arg in "$@"; do
     shift
 done
 
-generate_sbom="false"
-for var in "$@"; do
-    OPTIONS=${var%%=*}
-    PARAM=${var#*=}
-    if [[ "$OPTIONS" == "--sbom" ]]; then
-        if [[ "$PARAM" == "false" ]]; then
-            generate_sbom="false"
-        else
-            generate_sbom="true"
-        fi
-        break
-    fi
-done
 if [[ "${generate_sbom}" == "true" ]]; then
     args_list+=("--gn-flags=--ide=json")
     args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
