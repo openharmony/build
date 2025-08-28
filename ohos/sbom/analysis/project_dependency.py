@@ -122,10 +122,7 @@ class ProjectDependencyAnalyzer:
             if not project:
                 continue
             pd = self._get_or_create_dependency(project)
-            if file.is_library or file.is_intermediate:
-                pd.add_dependency(RelationshipType.GENERATES, file)
-            else:
-                pd.add_dependency(RelationshipType.CONTAINS, file)
+            pd.add_dependency(RelationshipType.GENERATES, file)
 
     def _build_project_dependencies(self, all_files: List[File]):
         processed_deps: Set[Tuple[str, str]] = set()
