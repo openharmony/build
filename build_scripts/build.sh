@@ -192,6 +192,7 @@ api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_versi
 using_hb_new=true
 fetching_prebuilt_sdk_gn_args=false
 need_prebuilt_sdk=true
+generate_sbom=false
 force_prebuilt_sdk=false
 prebuilt_sdk_gn_args=()
 args_list=()
@@ -217,8 +218,8 @@ for arg in "$@"; do
         --sbom|--sbom=*)
             if [[ "$arg" == "--sbom" ]] || [[ "${arg#--sbom=}" != "false" ]]; then
                 generate_sbom=true
-            else
-                generate_sbom=false
+                    args_list+=("--gn-flags=--ide=json")
+                    args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
             fi
             args_list+=("$arg")
             ;;
@@ -236,11 +237,6 @@ for arg in "$@"; do
     esac
     shift
 done
-
-if [[ "${generate_sbom}" == "true" ]]; then
-    args_list+=("--gn-flags=--ide=json")
-    args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
-fi
 
 echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
 echo "args_list:${args_list[@]}"
