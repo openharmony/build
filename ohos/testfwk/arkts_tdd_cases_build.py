@@ -95,18 +95,6 @@ def build_ets_files(target_path, sources, output_dir):
     """
     Compile test case ETS files.
     """
-    logging.info(f"Starting ETS test file compilation, target_path={target_path}")
-    foundation_marker = "/foundation/"
-    foundation_index = target_path.find(foundation_marker)
-
-    if foundation_index == -1:
-        error_msg = f"Path does not contain '/foundation/', current path: {target_path}"
-        logging.error(error_msg)
-        raise FileNotFoundError(error_msg)
-
-    foundation_base = target_path[foundation_index + 1:]
-    target_path = get_path_code_directory(foundation_base)
-
     # Parse source file list
     test_files_list = [f.strip() for f in sources.split(',') if f.strip()]
     test_files = [os.path.join(target_path, file) for file in test_files_list]
