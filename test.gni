@@ -870,7 +870,7 @@ template("ohos_arkts_unittest") {
     "part_name",
     "subsystem_name",
     "sources",
-    "external_deps", # 可选,但是需要显示传入
+    "external_deps",
   ])
   
   assert(defined(module_out_path), "module_out_path must be defined.")
@@ -894,7 +894,6 @@ template("ohos_arkts_unittest") {
 
   test_output_dir = "$root_out_dir/tests/arktstdd/$module_out_path"
 
-  # 将 _target_path 设置为当前 GN 配置文件所在的目录
   _current_gn_dir = get_label_info(":$target_name", "dir")
   _target_path = "${_current_gn_dir}"
 
@@ -908,7 +907,6 @@ template("ohos_arkts_unittest") {
     _sources_str = _sources_str + "," + src
   }
 
-  #编译用例
   action(target_name) {
     script = rebase_path("//build/ohos/testfwk/arkts_tdd_cases_build.py")
     outputs = [ "$target_out_dir/$target_name.out" ]
