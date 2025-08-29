@@ -861,3 +861,77 @@ template("ohos_rust_systemtest") {
     ]
   }
 }
+
+#arkts1.2 api test template
+template("ohos_arkts_unittest") {
+  forward_variables_from(invoker, [
+    "module_out_path",
+    "test_files",
+    "part_name",
+    "subsystem_name",
+    "sources",
+    "external_deps", # 可选,但是需要显示传入
+  ])
+  
+  assert(defined(module_out_path), "module_out_path must be defined.")
+  assert(defined(test_files), "test_files must be defined.")
+  assert(defined(part_name), "part_name must be defined.")
+  assert(defined(subsystem_name), "subsystem_name must be defined.")
+  assert(defined(sources), "sources must be defined.")
+
+  _deps = []
+  if (defined(invoker.deps)) {
+    _deps += invoker.deps
+  }
+  _external_deps = []
+  if (defined(external_deps)) {
+    _external_deps += external_deps
+  }
+  
+  _hap_name = target_name
+
+  hypium_output_dir = "$root_out_dir/tests/arktstdd/hypium"
+
+  test_output_dir = "$root_out_dir/tests/arktstdd/$module_out_path"
+
+  # 将 _target_path 设置为当前 GN 配置文件所在的目录
+  _current_gn_dir = get_label_info(":$target_name", "dir")
+  _target_path = "${_current_gn_dir}"
+
+  _test_files_str = ""
+  foreach(test_file, test_files) {
+    _test_files_str = _test_files_str + "," + test_file
+  }
+  
+  _sources_str = ""
+  foreach(src, sources) {
+    _sources_str = _sources_str + "," + src
+  }
+
+  #编译用例
+  action(target_name) {
+    script = rebase_path("//build/ohos/testfwk/arkts_tdd_cases_build.py")
+    outputs = [ "$target_out_dir/$target_name.out" ]
+    args = [
+      "--test_files",
+      _test_files_str,
+      "--target_path",
+      rebase_path(_target_path, root_build_dir),
+      "--part_name",
+      part_name,
+      "--subsystem_name",
+      subsystem_name,
+      "--hap_name",
+      _hap_name,
+      "--output_dir",
+      rebase_path(test_output_dir, root_build_dir),
+      "--hypium_output_dir",
+      rebase_path(hypium_output_dir, root_build_dir),
+      "--sources",
+      _sources_str,
+    ]
+    deps = _deps
+    external_deps = _external_deps
+    testonly = true
+  }
+}
