@@ -22,7 +22,7 @@ import os
 
 from containers.colors import Colors
 from hb.helper.no_instance import NoInstance
-from resources.global_var import STATUS_FILE
+from resources.global_var import STATUS_FILE, NINJA_DESCRIPTION
 from util.io_util import IoUtil
 from exceptions.ohos_exception import OHOSException
 
@@ -160,7 +160,7 @@ class LogUtil(metaclass=NoInstance):
         is_ninja_failed = False
         with open(log_path, 'rt', encoding='utf-8') as log_file:
             data = log_file.read()
-        failed_pattern = re.compile(r'(ninja: error:.*?)\n', re.DOTALL)
+        failed_pattern = re.compile(r'(ninja: (?:error|fatal):.*?)\n', re.DOTALL)
         failed_log = failed_pattern.findall(data)
         if failed_log:
             is_ninja_failed = True
@@ -180,14 +180,14 @@ class LogUtil(metaclass=NoInstance):
         is_compiler_failed = False
         with open(log_path, 'rt', encoding='utf-8') as log_file:
             data = log_file.read()
-        failed_pattern = re.compile(
-            r'(\[\d+/\d+\].*?)(?=\[\d+/\d+\]|'
-            'ninja: build stopped)', re.DOTALL)
+        description_str = "|".join(re.escape(k) for k in NINJA_DESCRIPTION)
+        prefix = rf'(?:\[\d+/\d+\]\s+\b(?:{description_str}))\b'
+        failed_pattern = re.compile(rf'({prefix}.*?)(?={prefix}|ninja: build stopped)', re.DOTALL)
         failed_log = failed_pattern.findall(data)
         if failed_log:
             is_compiler_failed = True
         for log in failed_log:
-            if 'FAILED:' in log:
+            if any(line.startswith("FAILED:") for line in log.splitlines()):
                 LogUtil.hb_error(log)
                 with open(error_log, 'at', encoding='utf-8') as log_file:
                     log_file.write(log)

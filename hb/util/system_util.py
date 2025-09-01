@@ -19,13 +19,15 @@
 import os
 import re
 import subprocess
+import copy
 
 from datetime import datetime
 
+from resources.global_var import CURRENT_BUILD_DIR, CURRENT_OHOS_ROOT
+from util.io_util import IoUtil
 from util.log_util import LogUtil
 from hb.helper.no_instance import NoInstance
 from containers.status import throw_exception
-import copy
 
 
 class HandleKwargs(metaclass=NoInstance):
@@ -106,6 +108,7 @@ class SystemUtil(metaclass=NoInstance):
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
         HandleKwargs.before_msg(raw_kwargs)
+        hidden_pattern = SensitiveHidden.load_sensitive_conf()
         with open(log_path, 'at', encoding='utf-8') as log_file:
             process = subprocess.Popen(cmd,
                                        stdout=subprocess.PIPE,
@@ -114,7 +117,8 @@ class SystemUtil(metaclass=NoInstance):
                                        env=exec_env,
                                        errors="ignore",
                                        **kwargs)
-            for line in iter(process.stdout.readline, ''):
+            for _line in iter(process.stdout.readline, ''):
+                line = SensitiveHidden.hidden_sensitive_info(hidden_pattern, _line)
                 keep_deal, new_line = HandleKwargs.handle_line(line, raw_kwargs)
                 if keep_deal:
                     log_file.write(new_line)
@@ -160,3 +164,64 @@ class ExecEnviron:
         if self._env is not None:
             allowed_env = {k: v for k, v in self._env.items() if k in allowed_vars}
             self._env = allowed_env
+
+
+class SensitiveHidden:
+    @staticmethod
+    def determine_conf_file():
+        config_file = os.path.join(CURRENT_BUILD_DIR, "sensitive_info_config.json")
+        sensitive_config_ext = os.path.join(CURRENT_OHOS_ROOT, "out/products_ext/sensitive_info_config.json")
+        if os.path.exists(sensitive_config_ext):
+            config_file = sensitive_config_ext
+
+        return config_file
+
+    @staticmethod
+    def parse_sensitive_conf(sensitive_config_file: str) -> set:
+        hidden_pattern = set()
+
+        if not os.path.isfile(sensitive_config_file):
+            return hidden_pattern
+
+        config = IoUtil.read_json_file(sensitive_config_file)
+        hidden_pattern.update(config.get("keywords", []))
+
+        for var_name in config.get("env_vars", []):
+            env_value = os.getenv(var_name)
+            if env_value:
+                hidden_pattern.add(env_value)
+
+        for pattern_str in config.get("regex_patterns", []):
+            try:
+                # compile regex ignore case
+                hidden_pattern.add(re.compile(pattern_str, re.IGNORECASE))
+            except re.error as e:
+                raise ValueError(f"invalid regex pattern '{pattern_str}': {e}") from e
+
+        return hidden_pattern
+
+    @staticmethod
+    def load_sensitive_conf() -> set:
+        config_file = SensitiveHidden.determine_conf_file()
+
+        try:
+            hidden_pattern = SensitiveHidden.parse_sensitive_conf(config_file)
+        except Exception as e:
+            raise ValueError(f"{config_file} is invalid file, please check: {e}") from e
+
+        return hidden_pattern
+
+    @staticmethod
+    def hidden_sensitive_info(hidden_pattern: set, text: str, replace_text: str = "******") -> str:
+        if not hidden_pattern:
+            return text
+        hidden_text = text
+        for pattern in hidden_pattern:
+            if isinstance(pattern, str):
+                hidden_text = hidden_text.replace(pattern, replace_text)
+            elif isinstance(pattern, re.Pattern):
+                hidden_text = pattern.sub(replace_text, hidden_text)
+            else:
+                continue
+
+        return hidden_text
