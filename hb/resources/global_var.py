@@ -92,6 +92,28 @@ COMPONENTS_PATH_DIR = os.path.join(CURRENT_OHOS_ROOT, 'out/components_path.json'
 
 HPM_CHECK_INFO = ""
 
+NINJA_DESCRIPTION = {
+    "ASM",
+    "CC",
+    "CXX",
+    "clang",
+    "clang++",
+    "cross compiler",
+    "gcc",
+    "iccarm",
+    "LLVM",
+    "OBJC",
+    "OBJCXX",
+    "AR",
+    "LINK",
+    "SOLINK",
+    "SOLINK_MODULE",
+    "RUST",
+    "ACTION",
+    "COPY",
+    "STAMP",
+}
+
 
 def set_hpm_check_info(info):
     global HPM_CHECK_INFO
