@@ -1,0 +1,149 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+
+if (host_os == "mac") {
+  if (host_cpu == "arm64") {
+    cjc_host_arch = "mac-aarch64"
+    build_tools_arch = "darwin_aarch64"
+  } else if (host_cpu == "x64") {
+    cjc_host_arch = "mac-x64"
+    build_tools_arch = "darwin_x86_64"
+  } else {
+    assert(false && "unsupported host ${host_os}-${host_cpu}")
+  }
+} else if (host_os == "linux") {
+  if (host_cpu == "x64") {
+    cjc_host_arch = "linux-x64"
+    build_tools_arch = "linux_x86_64"
+  } else {
+    assert(false && "unsupported host ${host_os}-${host_cpu}")
+  }
+}
+
+cjc_cangjie_sdk_path = "//prebuilts/cangjie_sdk"
+cjc_cangjie_compiler_home_path =
+    "${cjc_cangjie_sdk_path}/${cjc_host_arch}/cangjie"  # TODO
+
+cjc_wrapper = rebase_path("cjc_wrapper.py")
+cjc_bin = rebase_path("${cjc_cangjie_compiler_home_path}/bin/cjc")
+
+cjc_toolchain_ohos_arm64 = {
+  target_platform = "aarch64-linux-ohos"
+  dyn_extension = ".so"
+  static_extension = ".a"
+  exe_extension = ""
+}
+
+cjc_toolchain_ohos_x86_64 = {
+  target_platform = "x86_64-linux-ohos"
+  dyn_extension = ".so"
+  static_extension = ".a"
+  exe_extension = ""
+}
+
+cjc_toolchain_mingw_x86_64 = {
+  target_platform = "x86_64-w64-mingw32"
+  dyn_extension = ".dll"
+  static_extension = ".a"
+  exe_extension = ".exe"
+  cjc_args = [ "--link-options=--no-insert-timestamp" ]
+}
+
+cjc_toolchain_linux_x86_64 = {
+  target_platform = "x86_64-linux-gnu"
+  dyn_extension = ".so"
+  static_extension = ".a"
+  exe_extension = ""
+  cjc_args = []
+}
+
+cjc_toolchain_mac_arm64 = {
+  target_platform = "aarch64-apple-darwin"
+  dyn_extension = ".dylib"
+  static_extension = ".a"
+  exe_extension = ""
+  cjc_args = []
+}
+
+cjc_toolchain_mac_x86_64 = {
+  target_platform = "x86_64-apple-darwin"
+  dyn_extension = ".dylib"
+  static_extension = ".a"
+  exe_extension = ""
+  cjc_args = []
+}
+
+if (is_ohos) {
+  if (current_cpu == "arm64") {
+    cjc_toolchain = cjc_toolchain_ohos_arm64
+  } else if (current_cpu == "x86_64") {
+    cjc_toolchain = cjc_toolchain_ohos_x86_64
+  } else {
+    print("unsupported ohos platform ${current_cpu}")
+    assert(false)
+  }
+
+  clang_abs = rebase_path(default_clang_base_path)
+  clang_lib_abs = rebase_path(clang_lib_path)
+  musl_abs = rebase_path("${root_build_dir}/obj/third_party/musl")
+  musl_lib_abs = "${musl_abs}/usr/lib/${cjc_toolchain.target_platform}"
+
+  cjc_toolchain.cjc_args = [
+    "-B",
+    "${clang_abs}/bin",
+    "-B",
+    "${musl_lib_abs}",
+    "-L",
+    "${musl_lib_abs}",
+    "-L",
+    "${clang_abs}/lib/${cjc_toolchain.target_platform}",
+    "-L",
+    "${clang_lib_abs}/${cjc_toolchain.target_platform}",
+    "--sysroot",
+    "${musl_lib_abs}",
+  ]
+} else if (is_mingw) {
+  if (current_cpu == "x86_64") {
+    cjc_toolchain = cjc_toolchain_mingw_x86_64
+  } else {
+    print("unsupported mingw platform ${current_cpu}")
+    assert(false)
+  }
+} else if (host_os == "mac") {
+  if (host_cpu == "x64") {
+    cjc_toolchain = cjc_toolchain_mac_x86_64
+  } else if (host_cpu == "arm64") {
+    cjc_toolchain = cjc_toolchain_mac_arm64
+  } else {
+    print("unsupported mac platform ${host_cpu}")
+    assert(false)
+  }
+} else if (is_linux) {
+  if (host_cpu == "x64") {
+    cjc_toolchain = cjc_toolchain_linux_x86_64
+  } else {
+    print("unsupported linux platform ${host_cpu}")
+    assert(false)
+  }
+} else {
+  assert(false && "unsupported platform")
+}
+
+if (!is_mingw && !is_mac) {
+  cjc_toolchain.cjc_args += [
+    "--link-options=-z now",
+    "-s",
+  ]
+}
