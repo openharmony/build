@@ -892,23 +892,6 @@ def process_hisysevent(part_data, parts_path_info, part_name, subsystem_name, co
         _finish_component_build(part_data)
 
 
-def _generate_runtime_core_build_gn():
-    gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
-                           "innerapis", module, "BUILD.gn")
-    fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
-    fp = os.fdopen(fd, 'w')
-    _generate_import(fp)
-    _generate_configs(fp, module)
-    _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
-    _generate_public_configs(fp, module)
-    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list)
-    _generate_other(fp, args, json_data, module)
-    _generate_end(fp)
-    print("_generate_build_gn has done ")
-    fp.close()
-    return _list
-
-
 def _handle_module_runtime_core(args, components_json, module):
     public_deps_list = []
     if _is_innerkit(components_json, args.get("part_name"), module) == False:
@@ -944,93 +927,6 @@ def process_runtime_core(part_data, parts_path_info, part_name, subsystem_name, 
         if module_deps_list:
             _public_deps_list.extend(module_deps_list)
             is_component_build = True
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
-def process_drivers_interface_display(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "display_commontype_idl_headers", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libdisplay_commontype_idl_headers')
-    with open(file_path, 'wb') as file:
-        pass
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
-def process_drivers_interface_usb(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "usb_idl_headers_1.1", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libusb_idl_headers_1.1')
-    with open(file_path, 'wb') as file:
-        pass
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
-def process_drivers_interface_ril(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "ril_idl_headers", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libril_idl_headers')
-    with open(file_path, 'wb') as file:
-        pass
     if is_component_build:
         _copy_required_docs(part_data, _public_deps_list)
         _finish_component_build(part_data)
