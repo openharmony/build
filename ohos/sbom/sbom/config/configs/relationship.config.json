@@ -1,0 +1,50 @@
+{
+  "section": "Relationships",
+  "fields": [
+    {
+      "property": "bom_ref",
+      "json_key": "bom-ref",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "The reference identifier for the current component or service",
+      "example": "pkg:generic/glibc@2.3.1"
+    },
+    {
+      "property": "depends_on",
+      "json_key": "dependsOn",
+      "required": true,
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of reference identifiers of other components or services that the current component or service depends on",
+      "example": [
+        "pkg:generic/zlib@1.2.11"
+      ]
+    },
+    {
+      "property": "relationship_type",
+      "json_key": "relationshipType",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "enum": [
+        "CONTAINS",
+        "CONTAINED_BY",
+        "DEPENDS_ON",
+        "DEPENDENCY_OF",
+        "GENERATES",
+        "GENERATED_FROM",
+        "VARIANT_OF",
+        "COPY_OF",
+        "DYNAMIC_LINK",
+        "STATIC_LINK",
+        "OTHER"
+      ],
+      "description": "Dependency type",
+      "example": "DEPENDS_ON"
+    }
+  ]
+}
