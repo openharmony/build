@@ -173,13 +173,13 @@
     "testFunction": ""
   },
   "local_binarys": {
-    "arg_name": "--local-binary",
+    "arg_name": "--local-binarys",
     "argDefault": "",
     "arg_help": "Default:''. Help:Set local binarys path, so that you can use local packages instead of downloading from remote",
     "arg_phase": ["hpmDownload","indepCompilation"],
     "arg_type": "str",
     "arg_attribute": {},
-    "resolve_function": "resolve_local_repo",
+    "resolve_function": "resolve_local_binarys",
     "testFunction": ""
   }
 }
