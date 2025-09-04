@@ -94,62 +94,62 @@
       "dest": "/prebuilts/gcc/linux-x86/arm/gcc-linaro-7.5.0-arm-linux-gnueabi"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/clang_ohos-arm64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/clang_windows-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/clang_linux-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/clang_darwin-arm64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/clang_darwin-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx_ndk_ohos-arm64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/ohos-arm64/libcxx_ndk_ohos-arm64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/ohos-arm64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk_windows-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/windows-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk_linux-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/linux-x86_64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk_darwin-arm64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/darwin-arm64/libcxx-ndk",
       "rename": "true"
     },
     {
-      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk_darwin-x86_64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/darwin-x86_64/libcxx-ndk",
       "rename": "true"
     },
@@ -168,14 +168,14 @@
       "symlink_dest":"/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-aarch64/clang_linux_aarch64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/linux-aarch64/clang_linux_aarch64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/linux-aarch64/llvm",
       "rename": "true",
       "symlink_src": "/lib/clang/15.0.4",
       "symlink_dest": "/lib/clang/current"
     },
     {
-      "src": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk_linux-aarch64-bb5cdf-20250726",
+      "src": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk_linux-aarch64-115b62-20250811",
       "dest": "/prebuilts/clang/ohos/linux-aarch64/libcxx-ndk",
       "rename": "true"
     }
@@ -219,12 +219,12 @@
       "linux_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-aarch64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/linux_aarch64/clang_linux_aarch64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/linux_aarch64/clang_linux_aarch64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-aarch64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/linux_aarch64/libcxx-ndk_linux-aarch64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/linux_aarch64/libcxx-ndk_linux-aarch64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -409,32 +409,32 @@
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/ohos_arm64/clang_ohos-arm64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/ohos_arm64/clang_ohos-arm64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/ohos-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/ohos_arm64/libcxx_ndk_ohos-arm64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/ohos_arm64/libcxx_ndk_ohos-arm64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/windows/clang_windows-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/windows/clang_windows-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/windows/libcxx-ndk_windows-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/windows/libcxx-ndk_windows-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/linux/clang_linux-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/linux/clang_linux-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/linux/libcxx-ndk_linux-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/linux/libcxx-ndk_linux-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -491,6 +491,21 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-std-nightly-x86_64-pc-windows-gnullvm.tar.gz",
           "unzip_filename": "rustc-x86_64-windows-std"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/linux-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-linux-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-linux-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/windows-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-windows-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-windows-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
         },
 		{
           "unzip_dir": "prebuilts/python_llvm",
@@ -611,12 +626,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/darwin_arm64/clang_darwin-arm64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/darwin_arm64/clang_darwin-arm64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/darwin_arm64/libcxx-ndk_darwin-arm64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/darwin_arm64/libcxx-ndk_darwin-arm64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -638,6 +653,16 @@
           "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
           "file_path": "/openharmony/compiler/Taihe/0.34.1/taihe-darwin-arm64-v0.34.1-20250623.tar.gz",
           "unzip_filename": "taihe"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/mac-aarch64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-aarch64-1.0.0.zip",
+          "unzip_filename": "cangjie-mac-aarch64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
         }
       ],
       "install": [
@@ -689,12 +714,12 @@
       "darwin_copy_config": [
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/darwin_x86_64/clang_darwin-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/darwin_x86_64/clang_darwin-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "llvm"
         },
         {
           "unzip_dir": "prebuilts/clang/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/clang/15.0.4-bb5cdf/darwin_x86_64/libcxx-ndk_darwin-x86_64-bb5cdf-20250726.tar.gz",
+          "file_path": "/openharmony/compiler/clang/15.0.4-115b62/darwin_x86_64/libcxx-ndk_darwin-x86_64-115b62-20250811.tar.gz",
           "unzip_filename": "libcxx-ndk"
         },
         {
@@ -711,6 +736,16 @@
           "unzip_dir": "prebuilts/rustc",
           "file_path": "/openharmony/compiler/rust/1.72.0-20250515/rust-nightly-x86_64-apple-darwin.tar.gz",
           "unzip_filename": "rustc"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/mac-x64",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-x64-1.0.0.zip",
+          "unzip_filename": "cangjie-mac-x64"
+        },
+        {
+          "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "unzip_filename": "cangjie-api-tools"
         }
       ],
       "install": [
