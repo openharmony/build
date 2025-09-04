@@ -1,7 +1,6 @@
 [
   "googletest",
   "benchmark",
-  "hisysevent",
   "rust_bindgen",
   "css-what"
 ]

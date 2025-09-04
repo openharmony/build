@@ -30,67 +30,102 @@ class ConfigParser:
             "code_dir": global_args.code_dir,
             "download_root": self.data["download_root"]
         }
-        VarParser.parse_vars(self.global_config, [])
-        download_root = self.global_config["download_root"]
-        self.global_config["download_root"] = os.path.abspath(os.path.expanduser(download_root))
+        self._parse_global_config()
 
     def get_operate(self, part_names=None) -> tuple:
         download_op = []
         other_op = []
         tool_list = self.data["tool_list"]
+        # 独立编译按需下载
         parts_configured_tags = get_parts_tag_config(part_names) if part_names else None
         if parts_configured_tags:
             self.input_tag = parts_configured_tags
+        # 获取下载操作和其他操作
         for tool in tool_list:
-            _download, _other = self._get_tool_operate(tool)
+            tool_basic_config = self._parse_tool_basic_config(tool)
+            tool_basic_config = self._merge_configs(self.global_config, tool_basic_config)
+            if not self._apply_filters([tool_basic_config]):
+                continue
+            _download, _other = self._get_tool_operate(tool_basic_config, tool.get("config"), tool.get("handle", []))
             download_op.extend(_download)
             other_op.extend(_other) 
         return download_op, other_op
+    
+    def _parse_global_config(self):
+        # 解析全局配置中的变量
+        VarParser.parse_vars(self.global_config, self.global_config)
+        download_root = self.global_config["download_root"]
+        self.global_config["download_root"] = os.path.abspath(os.path.expanduser(download_root))
 
-    def _get_tool_operate(self, tool) -> tuple:
-        tool_matched, unified_tool_basic_config = self._is_tool_matched(tool)
-        if not tool_matched:
-            return [], []
-
-        matched_platform_configs = Filter.filter_platform(self.current_os, self.current_cpu, tool.get("config"))
-        for config in matched_platform_configs:
-            VarParser.parse_vars(config, [unified_tool_basic_config, self.global_config])
-        unified_platform_configs = []
+    def _get_tool_operate(self, tool_basic_config: dict, platform_config: dict, handle_config: list) -> tuple:
+        matched_platform_configs = self._match_platform(self.current_os, self.current_cpu, platform_config)
+        self._parse_platform_config(matched_platform_configs, tool_basic_config)
+        platform_configs = []
         for conf in matched_platform_configs:
-            unified_platform_configs.append(self._unify_config(self.global_config, unified_tool_basic_config, conf))
-        unified_platform_configs = Filter(unified_platform_configs).apply_filters(self.input_tag, self.input_type)
-
-        handle = tool.get("handle", [])
-
-        if unified_platform_configs:
-            # 有平台配置则只使用平台配置
-            download_operate, other_operate = self._generate_tool_operate(unified_platform_configs, handle)
-        else:
-            # 没有平台配置则使用工具配置
-            download_operate, other_operate = self._generate_tool_operate([unified_tool_basic_config], handle)
-
+            config = self._merge_configs(tool_basic_config, conf)
+            platform_configs.append(config)
+        platform_configs = self._apply_filters(platform_configs)
+        handle = handle_config
+        download_operate, other_operate = self._generate_tool_operate(tool_basic_config, platform_configs, handle)
         # 删除存在未知变量的配置
         return VarParser.remove_undefined(download_operate), VarParser.remove_undefined(other_operate)
 
-    def _is_tool_matched(self, tool):
+    def _parse_tool_basic_config(self, tool):
         tool_basic_config = {key: tool[key] for key in tool if key not in {"config", "handle"}}
-        VarParser.parse_vars(tool_basic_config, [self.global_config])
-        unified_tool_basic_config = self._unify_config(self.global_config, tool_basic_config)
-        if not Filter([unified_tool_basic_config]).apply_filters(self.input_tag, self.input_type):
-            return False, []
-        else:
-            return True, unified_tool_basic_config
+        VarParser.parse_vars(tool_basic_config, tool_basic_config)
+        VarParser.parse_vars(tool_basic_config, self.global_config)
+        return tool_basic_config
+    
+    def _parse_platform_config(self, matched_platform_configs: list, tool_basic_config: dict):
+        for config in matched_platform_configs:
+            VarParser.parse_vars(config, config)
+            VarParser.parse_vars(config, tool_basic_config)
 
-    def _generate_tool_operate(self, outer_configs: list, handles: list) -> tuple:
-        if not outer_configs:
-            return [], []
+    def _apply_filters(self, configs: list):
+        return Filter(configs).apply_filters(self.input_tag, self.input_type)
+    
+    def _match_platform(self, input_os: str, input_cpu: str, config: dict) -> list:
+        """获取匹配当前操作系统的配置"""
+        if not config:
+            return []
+        filtered = []
 
+        matched_os = self._match_os(input_os, config)
+        for os_item in matched_os:
+            cpu_config = config[os_item]
+            matched_cpu = self._match_cpu(input_cpu, cpu_config)
+            for cpu_item in matched_cpu:
+                platform_configs = cpu_config[cpu_item]
+                # 配置内部可以是一个配置，也可以是一个配置列表
+                if not isinstance(platform_configs, list):
+                    platform_configs = [platform_configs]
+                filtered.extend(platform_configs)
+        return filtered
+
+    def _match_os(self, input_os: str, os_config: dict) -> list:
+        matched_os = []
+        for os_key in os_config:
+            # 逗号分割操作系统名
+            configured_os_list = [o.strip() for o in os_key.split(",")]
+            if input_os in configured_os_list or configured_os_list == ["all_os"]:
+                matched_os.append(os_key)
+        return matched_os
+    
+    def _match_cpu(self, input_cpu: str, cpu_config: dict) -> list:
+        matched_cpu = []
+        for cpu_str in cpu_config:
+            configured_cpu_list = [c.strip() for c in cpu_str.split(",")]
+            if input_cpu in configured_cpu_list or configured_cpu_list == ["all_cpu"]:
+                matched_cpu.append(cpu_str)
+        return matched_cpu
+
+    def _generate_tool_operate(self, tool_basic_config: dict, platform_configs: list, handles: list) -> tuple:
         download_operate = []
         other_operate = []
 
-        # 根据配置，自动生成下载操作
-        for config in outer_configs:
-            if config.get("remote_url"):
+        # 根据平台配置生成下载操作
+        for config in platform_configs:
+            if config.get("remote_url") and config.get("unzip_dir") and config.get("unzip_filename"):
                 download_config = self._generate_download_config(config)
                 download_operate.append(download_config)
 
@@ -98,12 +133,13 @@ class ConfigParser:
         if not handles:
             return download_operate, []
 
-        operates = self._generate_handles(outer_configs, handles)
-        # 区分下载操作和其他操作
+        configs = platform_configs if platform_configs else [tool_basic_config]
+        operates = self._generate_handles(configs, handles)
+        # handle中不允许配置下载操作
         other_operate = []
         for operate in operates:
             if operate["type"] == "download":
-                download_operate.append(operate)
+                pass
             else:
                 other_operate.append(operate)
 
@@ -127,7 +163,8 @@ class ConfigParser:
                 # 不能改变原来的handle
                 new_handle = copy.deepcopy(handle)
                 # 解析handle中的变量
-                VarParser.parse_vars(new_handle, [config])
+                VarParser.parse_vars(new_handle, new_handle)
+                VarParser.parse_vars(new_handle, config)
                 # 生成操作id
                 new_handle["tool_name"] = config.get("name")
                 new_handle["step_id"] = step_id
@@ -148,7 +185,7 @@ class ConfigParser:
             print(f"error config: {config}")
             raise e
 
-    def _unify_config(self, *additional_configs) -> dict:
+    def _merge_configs(self, *additional_configs) -> dict:
         unified_config = dict()
         for config in additional_configs:
             unified_config.update(config)
@@ -162,43 +199,6 @@ class Filter:
             return
         self.input_configs = copy.deepcopy(configs)
 
-    @classmethod
-    def filter_platform(cls, current_os: str, current_cpu: str, config: dict) -> list:
-        """获取匹配当前操作系统的配置"""
-        if not config:
-            return []
-
-        filtered = []
-
-        for os_key, os_config in config.items():
-            # 逗号分割操作系统名
-            configured_os_list = [o.strip() for o in os_key.split(",")]
-            if current_os in configured_os_list:
-                # 不配cpu场景
-                if isinstance(os_config, list):
-                    filtered.extend(os_config)
-                    continue
-                # 不配cpu, 仅有一个配置项场景
-                if isinstance(os_config, dict) and "remote_url" in os_config:
-                    filtered.extend(os_config)
-                    continue
-                # 配cpu场景
-                filtered.extend(cls.filter_cpu(current_cpu, os_config))
-        return filtered
-
-    @classmethod
-    def filter_cpu(cls, current_cpu: str, os_config: dict) -> list:
-        filtered = []
-        for cpu_str in os_config:
-            configured_cpu_list = [c.strip() for c in cpu_str.split(",")]
-            if current_cpu in configured_cpu_list:
-                cpu_config = os_config[cpu_str]
-                # cpu配置内部可以是一个配置，也可以是一个配置列表
-                if not isinstance(cpu_config, list):
-                    cpu_config = [cpu_config]
-                filtered.extend(cpu_config)
-        return filtered
-    
     def apply_filters(self, input_tag: str, input_type: str):
         return self.filter_tag(input_tag).filter_type(input_type).result()
 
@@ -265,31 +265,24 @@ class VarParser:
             return False
 
     @classmethod
-    def parse_vars(cls, data: dict, dictionarys: list):
+    def parse_vars(cls, data: any, dictionary: dict) -> any:
         """
-        解析config中的变量, 先自解析, 再按顺序查字典
-        :param config: 需要进行变量解析的配置
-        :param dictionarys: 字典列表
+        用dictionary字典中的值替换data中的变量,data可以为列表、字典、字符串等类型, 变量使用${var_name}形式
+        若data是字符串, 则返回新值, 否则, 更改原值
+        return: 更改之后的值
         """
-        cls.replace_vars_in_data(data, data)
-        for dic in dictionarys:
-            cls.replace_vars_in_data(data, dic)
-
-    @classmethod
-    def replace_vars_in_data(cls, data: any, dictionary: dict) -> any:
-        """用dictionary字典中的值替换data中的变量,data可以为列表、字典、字符串等类型, 变量使用${var_name}形式"""
         if isinstance(data, str):
             return cls.replace_vars_in_string(data, dictionary)
         elif isinstance(data, dict):
             for k in list(data.keys()):
                 original_value = data[k]
-                new_value = cls.replace_vars_in_data(original_value, dictionary)
+                new_value = cls.parse_vars(original_value, dictionary)
                 if new_value is not original_value:  # 仅当original_value为字符串时成立
                     data[k] = new_value
         elif isinstance(data, list):
             for i in range(len(data)):
                 original_value = data[i]
-                new_value = cls.replace_vars_in_data(original_value, dictionary)
+                new_value = cls.parse_vars(original_value, dictionary)
                 if new_value is not original_value:
                     data[i] = new_value
         else:
@@ -300,13 +293,11 @@ class VarParser:
     def replace_vars_in_string(cls, s: str, dictionary: dict) -> str:
 
         """用dictionary字典中的值替换字符串s中的变量, 变量使用${var_name}形式"""
-
-        replaced_var_names = set()  # 避免循环依赖
-
+        ref_dict = dict()
         while True:
             try:
                 replaced = cls.var_pattern.sub(
-                    lambda matched_var: cls._replace_var_with_dict_value(matched_var, dictionary, replaced_var_names),
+                    lambda matched_var: cls._replace_var_with_dict_value(matched_var, dictionary, ref_dict),
                     s)
                 if replaced == s:
                     break
@@ -317,10 +308,28 @@ class VarParser:
         return s
 
     @classmethod
-    def _replace_var_with_dict_value(cls, matched_var, dictionary, replaced_var_names):
+    def _replace_var_with_dict_value(cls, matched_var, dictionary, ref_dict):
         var_name = matched_var.group()[2:-1]
-        if var_name in replaced_var_names:
-            raise ValueError(f"Variable \"{var_name}\" is being replaced again.")
         if dictionary.get(var_name):
-            replaced_var_names.add(var_name)
-        return dictionary.get(var_name, matched_var.group())  # 找得到就替换，找不到就保留原始值
+            cls._update_ref_dict(ref_dict, var_name, dictionary.get(var_name))
+            return dictionary.get(var_name) # 找得到就替换
+        else:
+            return matched_var.group() # 找不到就保留原始值
+    
+    @classmethod
+    def _update_ref_dict(cls, ref_dict, var_name, var_value):
+        if var_name not in ref_dict:
+            ref_dict[var_name] = []
+        ref_vars = cls.var_pattern.findall(var_value)
+        for var in ref_vars:
+            name = var[2:-1]
+            ref_dict[var_name].append(name)
+        # 检测循环依赖
+        cls._check_cycle_rely(ref_dict, var_name)
+
+    @classmethod
+    def _check_cycle_rely(cls, ref_dict, var_name):
+        ref_list = ref_dict.get(var_name, [])
+        for ref_var in ref_list:
+            if var_name in ref_dict.get(ref_var, []):
+                raise ValueError(f"Cycle dependency exists between {var_name} and {ref_var}")
