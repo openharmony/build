@@ -60,6 +60,7 @@ Note:If the text contains special characters, please escape them according to th
 			<policy name="projectPolicy" desc="">
 				<policyitem type="license" name="BSDStyleLicense" path=".*" desc="Some chromium build code is modified and used in the build repository, and the license and copyright information are retained."/>
 				<policyitem type="license" name="BSD-3-Clause" path=".*" desc="Some chromium build code is modified and used in the build repository, and the license and copyright information are retained."/>
+				<policyitem type="copyright" name="Northeastern University" path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc=""/>
 			</policy>
 		</policylist>
 		<filefilterlist>

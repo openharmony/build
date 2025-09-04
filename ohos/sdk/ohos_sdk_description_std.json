@@ -103,6 +103,16 @@
         ]
     },
     {
+        "install_dir": "toolchains/rescheck",
+        "module_label": "//developtools/global_resource_tool:restool_ids_schema",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//developtools/global_resource_tool:restool_faq",
         "target_os": [
@@ -1011,6 +1021,23 @@
     {
         "install_dir": "previewer/common/bin",
         "module_label": "//foundation/arkui/ace_engine/adapter/preview/sdk:copy_preview_shared_library",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin/",
+        "module_label": "//arkcompiler/toolchain/adapter:copy_simulator_debug",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//arkcompiler/toolchain/adapter:copy_previewer_debug",
         "target_os": [
             "windows",
             "darwin",

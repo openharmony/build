@@ -45,6 +45,8 @@ def _get_args():
                         help="build_arch_arg. default: x86", )
     parser.add_argument("-lt", "--local_test", default=0, type=int,
                         help="local test ,default: not local , 0", )
+    parser.add_argument("-origin", "--build-origin", default="", type=str,
+                        help="Origin marker for HPM package", )
     args = parser.parse_args()
     return args
 
@@ -624,7 +626,6 @@ def process_skia(part_data, parts_path_info, part_name, subsystem_name, componen
 
 
 def process_variants_default(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    # 减少代码重复调用
     preloader_path = os.path.join(part_data.get('root_path'), 'out', 'preloader', 'rk3568')
     variants_default_source_files = [
         os.path.join(preloader_path, 'build_config.json'),
@@ -646,12 +647,10 @@ def process_variants_default(part_data, parts_path_info, part_name, subsystem_na
             shutil.copy2(source_file, variants_component_path)
         print("All confiauration files copied successfully")
     
-        # 处理bundle.json文件和license文件，readme文件
         bundle_content = generate_variants_default_bundle_info()
         bundle_path = os.path.join(variants_root, 'bundle.json')
         _create_bundle_json(bundle_path, bundle_content)
 
-        # 创建LICENSE文件、readme.md
         variants_default_license_path = os.path.join(variants_root, 'LICENSE')
         variants_default_readme_path = os.path.join(variants_root, 'README.md')
         with open(variants_default_license_path, 'w') as file:
@@ -893,23 +892,6 @@ def process_hisysevent(part_data, parts_path_info, part_name, subsystem_name, co
         _finish_component_build(part_data)
 
 
-def _generate_runtime_core_build_gn():
-    gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
-                           "innerapis", module, "BUILD.gn")
-    fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
-    fp = os.fdopen(fd, 'w')
-    _generate_import(fp)
-    _generate_configs(fp, module)
-    _generate_prebuilt_shared_library(fp, json_data.get('type'), module)
-    _generate_public_configs(fp, module)
-    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list)
-    _generate_other(fp, args, json_data, module)
-    _generate_end(fp)
-    print("_generate_build_gn has done ")
-    fp.close()
-    return _list
-
-
 def _handle_module_runtime_core(args, components_json, module):
     public_deps_list = []
     if _is_innerkit(components_json, args.get("part_name"), module) == False:
@@ -950,101 +932,11 @@ def process_runtime_core(part_data, parts_path_info, part_name, subsystem_name, 
         _finish_component_build(part_data)
 
 
-def process_drivers_interface_display(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "display_commontype_idl_headers", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libdisplay_commontype_idl_headers')
-    with open(file_path, 'wb') as file:
-        pass
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
-def process_drivers_interface_usb(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "usb_idl_headers_1.1", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libusb_idl_headers_1.1')
-    with open(file_path, 'wb') as file:
-        pass
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
-def process_drivers_interface_ril(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    part_path = _get_parts_path(parts_path_info, part_name)
-    if part_path is None:
-        return
-    part_data.update({"subsystem_name": subsystem_name, "part_name": part_name,
-                      "part_path": part_path})
-    modules = _parse_module_list(part_data)
-    print('modules', modules)
-    if len(modules) == 0:
-        return
-    is_component_build = False
-    _public_deps_list = []
-    for module in modules:
-        module_deps_list = _handle_module(part_data, components_json, module)
-        if module_deps_list:
-            _public_deps_list.extend(module_deps_list)
-            is_component_build = True
-    lib_out_dir = os.path.join(part_data.get("out_path"), "component_package",
-                               part_data.get("part_path"), "innerapis", "ril_idl_headers", "libs")
-    if not os.path.exists(lib_out_dir):
-        os.makedirs(lib_out_dir)
-    file_path = os.path.join(lib_out_dir, 'libril_idl_headers')
-    with open(file_path, 'wb') as file:
-        pass
-    if is_component_build:
-        _copy_required_docs(part_data, _public_deps_list)
-        _finish_component_build(part_data)
-
-
 # 函数映射字典
 function_map = {
     'musl': process_musl,
     "developer_test": process_developer_test,  # 同rust
-    "drivers_interface_display": process_drivers_interface_display,  # 驱动的, 新建一个libs目录/ innerapi同名文件
     "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
-    "drivers_interface_usb": process_drivers_interface_usb,  # 同驱动
-    "drivers_interface_ril": process_drivers_interface_ril,  # 同驱动
     "skia": process_skia,
     "variants_default": process_variants_default,
 }
@@ -1625,9 +1517,25 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('  }\n')
 
 
+def _generate_group_configs(fp, module, json_data, _part_name):
+    includes = _handle_includes_data(json_data)
+    target_includes = []
+    fp.write('  include_dirs = [\n')
+    for include in includes:
+        target_include = _get_target_include(_part_name, include)
+        if target_include not in target_includes:
+            target_includes.append(target_include)
+    for include_dir in target_includes:
+        include_dir = os.path.join('includes', include_dir)
+        fp.write('    "{}",\n'.format(include_dir))
+    fp.write('  ]\n')
+
+
 def _generate_prebuilt_target(fp, target_type, module, is_ohos_ets_copy=False):
     if target_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
+    elif target_type == 'group':
+        fp.write('\nohos_shared_headers("' + module + '") {\n')
     elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
     elif module != 'ipc_core' and (target_type == 'etc' or target_type == 'copy'):
@@ -1647,7 +1555,6 @@ def _generate_public_configs(fp, module):
 
 # 目前特殊处理的依赖关系映射
 _DEPENDENCIES_MAP = {
-    ('samgr', 'samgr_proxy'): ["ipc:ipc_core"],
     ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
@@ -1701,7 +1608,8 @@ def _generate_other(fp, args, json_data, module, is_ohos_ets_copy=False):
                 so_name = output.split('/')[-1]
         if json_data.get('type') == 'copy' and module != 'ipc_core':
             fp.write('  copy_linkable_file = true \n')
-        fp.write('  source = "libs/' + so_name + '"\n')
+        if json_data.get('type') != 'group':
+            fp.write('  source = "libs/' + so_name + '"\n')
         fp.write('  part_name = "' + args.get("part_name") + '"\n')
         fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
 
@@ -1803,12 +1711,19 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     static_deps_files = _get_static_deps(args, module, "") # 处理静态库依赖
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
-    _generate_import(fp, is_ohos_ets_copy)
-    _generate_configs(fp, module, json_data, args.get('part_name'))
     _target_type = json_data.get('type')
+    _generate_import(fp, is_ohos_ets_copy)
+    if _target_type != "group":
+        _generate_configs(fp, module, json_data, args.get('part_name'))
     _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
-    _generate_public_configs(fp, module)
-    _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list, args)
+    if _target_type == "group":
+        _generate_group_configs(fp, module, json_data, args.get('part_name'))
+    else:
+        _generate_public_configs(fp, module)    # 写入public_configs的,group就不写入
+    if _target_type != "group":    
+        _list = _generate_public_external_deps(fp, module, deps, components_json, public_deps_list, args)
+    else:
+        _list = public_deps_list
     _generate_static_public_deps(fp, args, static_deps_files, "") # 处理静态库依赖
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
@@ -2050,19 +1965,31 @@ def _get_component_check(local_test) -> list:
     return check_list
 
 
+def generate_made_in_mark_file(args):
+    from datetime import datetime
+    import pytz
+    str_time = datetime.now(pytz.timezone('Asia/Shanghai')).strftime("%Y_%m_%d_%H_%M_%S")
+    build_origin = args.get("build_origin", "")
+    if not build_origin:
+        return
+    mark_file = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), f"made_in_{build_origin}")
+    basic_dir = os.path.dirname(mark_file)
+    os.makedirs(basic_dir, exist_ok=True)
+    with open(f"{mark_file}_{str_time}", 'w') as f:
+        f.write(f"the hpm package is made in {build_origin}, {str_time}")
+
+
 def _package_interface(args, parts_path_info, part_name, subsystem_name, components_json):
     part_path = _get_parts_path(parts_path_info, part_name)
     if part_path is None:
         return
     args.update({"subsystem_name": subsystem_name, "part_name": part_name,
                  "part_path": part_path})
+    generate_made_in_mark_file(args)
     if part_name in [
         "musl",  # 从obj/third_party/musl/usr 下提取到includes和libs
         "developer_test",  # 同rust
-        "drivers_interface_display",  # 驱动的, 新建一个libs目录/ innerapi同名文件
         "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
-        "drivers_interface_usb",  # 同驱动
-        "drivers_interface_ril",  # 同驱动
         "skia",
         "variants_default",
     ]:
@@ -2108,7 +2035,7 @@ def additional_comoponents_json():
 
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
-                               os_arg='linux', build_arch_arg='x86', local_test=0):
+                               os_arg='linux', build_arch_arg='x86', local_test=0, build_origin=''):
     """
 
     Args:
@@ -2123,6 +2050,7 @@ def generate_component_package(out_path, root_path, components_list=None, build_
         os_arg: default : linux
         build_arch_arg:  default : x86
         local_test: 1 to open local test , default 0 to close
+        build_origin: Origin marker for HPM package
     Returns:
 
     """
@@ -2157,7 +2085,8 @@ def generate_component_package(out_path, root_path, components_list=None, build_
             "os": os_arg, "buildArch": build_arch_arg, "hpm_packages_path": hpm_packages_path,
             "build_type": build_type, "organization_name": organization_name,
             "toolchain_info": toolchain_info,
-            "static_deps": {}
+            "static_deps": {},
+            "build_origin": build_origin
             }
     for key, value in part_subsystem.items():
         part_name = key
@@ -2179,7 +2108,8 @@ def main():
                                organization_name=py_args.organization_name,
                                os_arg=py_args.os_arg,
                                build_arch_arg=py_args.build_arch,
-                               local_test=py_args.local_test)
+                               local_test=py_args.local_test,
+                               build_origin=py_args.build_origin)
 
 
 if __name__ == '__main__':

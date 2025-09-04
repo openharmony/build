@@ -22,6 +22,7 @@ import sys
 import stat
 import subprocess
 import csv
+from concurrent.futures import ThreadPoolExecutor
 
 from datetime import datetime
 from distutils.spawn import find_executable
@@ -965,6 +966,28 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         if target_arg.arg_value:
             Arg.clean_args_file()
+
+    @staticmethod
+    def resolve_sbom(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--sbom' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetGenerate.
+        """
+        if target_arg.arg_value:
+            config = Config()
+            cmd = [
+                'python3',
+                '{}/build/ohos/sbom/generate_sbom.py'.format(
+                    config.root_path),
+                "--source-root-dir", config.root_path,
+                "--out-dir", config.out_path,
+                "--product", config.product,
+                "--platform", config.platform
+            ]
+            executor = ThreadPoolExecutor(max_workers=1)
+            executor.submit(SystemUtil.exec_command, cmd, log_path=config.log_path, log_stage='[postTargetGenerate]')
+            executor.shutdown(wait=False)
 
     # PlaceHolder
     @staticmethod
