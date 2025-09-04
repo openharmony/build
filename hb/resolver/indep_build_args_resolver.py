@@ -295,6 +295,6 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
     def resolve_prebuilts_download(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.prebuilts.regist_flag('skip-prebuilts', target_arg.arg_value)
     
-    def resolve_local_repo(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+    def resolve_local_binarys(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.indep_build.regist_flag('local-binarys', target_arg.arg_value)
         indep_build_module.hpm.regist_flag('local-binarys', target_arg.arg_value)
