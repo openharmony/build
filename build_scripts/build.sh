@@ -192,6 +192,7 @@ api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_versi
 using_hb_new=true
 fetching_prebuilt_sdk_gn_args=false
 need_prebuilt_sdk=true
+generate_sbom=false
 force_prebuilt_sdk=false
 prebuilt_sdk_gn_args=()
 args_list=()
@@ -212,6 +213,14 @@ for arg in "$@"; do
             ;;
         ohos-sdk|--no-prebuilt-sdk)
             need_prebuilt_sdk=false
+            args_list+=("$arg")
+            ;;
+        --sbom|--sbom=*)
+            if [[ "$arg" == "--sbom" ]] || [[ "${arg#--sbom=}" != "false" ]]; then
+                generate_sbom=true
+                    args_list+=("--gn-flags=--ide=json")
+                    args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
+            fi
             args_list+=("$arg")
             ;;
         --prebuilt-sdk)
@@ -239,6 +248,7 @@ if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "${ne
       "${ccache_args}" \
       "${xcache_args}" \
       "${api_version}" \
+      "${generate_sbom}" \
       "${prebuilt_sdk_gn_args[@]}"
 fi
 

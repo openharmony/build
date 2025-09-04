@@ -181,11 +181,19 @@ def process_build_target_list(build_target_list, module_to_path, deps_list):
         if item.startswith("//"):
             # 如果是全路径，直接添加
             add_to_deps_list(deps_list, item)
+        elif os.sep in item:
+            if item.startswith('/'):
+                add_to_deps_list(deps_list, item)
+            else:
+                add_to_deps_list(deps_list, "//" + item)
         else:
             # 如果不是全路径，查找对应的module
             fullpath = module_to_path.get(item)
             if fullpath:
                 add_to_deps_list(deps_list, fullpath)
+            else:
+                raise Exception(f"Error: The build target {item} was not found in the build configuration of bundle.json. " + 
+                                "If you really want to specify this target for building, please use the full path.")
     return deps_list
 
 

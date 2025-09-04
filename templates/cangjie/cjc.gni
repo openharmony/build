@@ -1,0 +1,139 @@
+# Copyright (c) 2025 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+import("cj_compiler.gni")
+
+template("ohos_cangjie_library") {
+  if (!defined(invoker.output_type)) {
+    assert(false && "output_type is required")
+  }
+
+  cj_target(target_name) {
+    output_type = invoker.output_type
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "cj_deps",
+                             "cj_external_deps",
+                             "external_deps",
+                             "cjc_args",
+                             "part_name",
+                             "subsystem_name",
+                             "sources",
+                           ])
+    if (!defined(cjc_args)) {
+      cjc_args = []
+    }
+    if (defined(invoker.compilation_config)) {
+      cjc_args += [ "--cfg=${invoker.compilation_config}" ]
+    }
+  }
+}
+
+template("ohos_cangjie_shared_library") {
+  ohos_cangjie_library(target_name) {
+    output_type = "dylib"
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "external_deps",
+                             "part_name",
+                             "subsystem_name",
+                             "cj_deps",
+                             "cj_external_deps",
+                             "sources",
+                             "cjc_args",
+                             "compilation_config"
+                           ])
+
+    if (!defined(cjc_args)) {
+      cjc_args = []
+    }
+    if (!(build_ohos_sdk && is_ohos) && !is_asan) {
+      cjc_args += [ "--link-options=--no-undefined" ]
+    }
+  }
+}
+
+template("ohos_cangjie_static_library") {
+  ohos_cangjie_library(target_name) {
+    output_type = "staticlib"
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "cj_deps",
+                             "cj_external_deps",
+                             "external_deps",
+                             "cjc_args",
+                             "part_name",
+                             "subsystem_name",
+                             "sources",
+                             "compilation_config"
+                           ])
+  }
+}
+
+template("ohos_cangjie_macro_library") {
+  ohos_cangjie_library(target_name) {
+    output_type = "macro"
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "cj_deps",
+                             "cj_external_deps",
+                             "external_deps",
+                             "cjc_args",
+                             "part_name",
+                             "subsystem_name",
+                             "sources",
+                             "compilation_config"
+                           ])
+  }
+}
+
+template("ohos_cangjie_unittest") {
+  cj_target(target_name) {
+    output_type = "test"
+    forward_variables_from(invoker,
+                           [
+                             "deps",
+                             "cj_deps",
+                             "cj_external_deps",
+                             "external_deps",
+                             "cjc_args",
+                             "part_name",
+                             "subsystem_name",
+                             "sources",
+                           ])
+    if (!defined(cjc_args)) {
+      cjc_args = []
+    }
+
+    if (target_cpu == "arm") {
+      platform_cj_sdk = "/system/lib/platform/cjsdk"
+    } else if (target_cpu == "arm64" || target_cpu == "x86_64") {
+      platform_cj_sdk = "/system/lib64/platform/cjsdk"
+    }
+
+    cjc_args += [
+      "--link-options=-rpath=${platform_cj_sdk}:${platform_cj_sdk}/runtime",
+      "--dy-std",
+      "--dy-libs"
+    ]
+
+    if (defined(invoker.compilation_config)) {
+      cjc_args += [ "--cfg=${invoker.compilation_config}" ]
+    }
+  }
+}

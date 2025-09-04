@@ -220,6 +220,8 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
 
     @staticmethod
     def resolve_build_target(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        if "--build-target" in sys.argv and not target_arg.arg_value:
+            raise OHOSException("ERROR argument \"--build-target\": no build target. ")
         indep_build_module.indep_build.regist_flag('build-target', target_arg.arg_value)
 
     @staticmethod

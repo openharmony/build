@@ -1,0 +1,115 @@
+{
+  "section": "File Information",
+  "fields": [
+    {
+      "property": "file_name",
+      "json_key": "fileName",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "File name",
+      "example": "foo.c"
+    },
+    {
+      "property": "file_author",
+      "json_key": "fileAuthor",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Author of the file",
+      "example": "Person: John Doe (john.doe@example.com)"
+    },
+    {
+      "property": "file_id",
+      "json_key": "fileId",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "File identifier",
+      "example": "file-001"
+    },
+    {
+      "property": "file_types",
+      "json_key": "fileTypes",
+      "required": false,
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SOURCE",
+          "BINARY",
+          "TEXT",
+          "IMAGE",
+          "AUDIO",
+          "VIDEO",
+          "APPLICATION",
+          "ML_MODEL",
+          "SBOM",
+          "OTHER"
+        ]
+      },
+      "description": "Array of file types",
+      "example": [
+        "SOURCE"
+      ]
+    },
+    {
+      "property": "checksums",
+      "json_key": "checksums",
+      "required": true,
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "alg": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Checksum information of the file",
+      "example": [
+        {
+          "alg": "SHA256",
+          "content": "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae"
+        }
+      ]
+    },
+    {
+      "property": "license_concluded",
+      "json_key": "licenseConcluded",
+      "required": true,
+      "default": null,
+      "type": "string",
+      "description": "Concluded license",
+      "example": "Apache-2.0"
+    },
+    {
+      "property": "license_info_in_files",
+      "json_key": "licenseInfoInFiles",
+      "required": false,
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of license information declared in the file",
+      "example": [
+        "Apache-2.0"
+      ]
+    },
+    {
+      "property": "copyright_text",
+      "json_key": "copyrightText",
+      "required": false,
+      "default": null,
+      "type": "string",
+      "description": "Copyright notice",
+      "example": "Copyright 2025 Example Inc."
+    }
+  ]
+}

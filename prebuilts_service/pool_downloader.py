@@ -169,13 +169,15 @@ class PoolDownloader:
             if progress:
                 progress.update(progress_task_id, total=total_size)
                 progress.start_task(progress_task_id)
-
-            with open(local_path, "wb") as dest_file:
-                for chunk in response.iter_content(chunk_size=buffer_size):
-                    if chunk:  # 过滤掉保持连接的chunk
-                        dest_file.write(chunk)
-                        self._update_progress(progress_task_id, len(chunk))
+            self._save_to_local(response, local_path, buffer_size, progress_task_id)
         self._adaptive_print(f"Downloaded {local_path}")
+
+    def _save_to_local(self, response: requests.Response, local_path: str, buffer_size: int, progress_task_id):
+        with os.fdopen(os.open(local_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, mode=0o640), 'wb') as dest_file:
+            for chunk in response.iter_content(chunk_size=buffer_size):
+                if chunk:  # 过滤掉保持连接的chunk
+                    dest_file.write(chunk)
+                    self._update_progress(progress_task_id, len(chunk))
 
     def _update_progress(self, task_id, advance):
         if self.progress:
