@@ -161,7 +161,7 @@ def main():
                 if os.path.exists(os.path.join(save_path2, os.path.basename(download_url))):
                     os.remove(os.path.join(
                         save_path2, os.path.basename(download_url)))
-                Exception("Unable to download {}".format(download_url))
+                raise Exception("Unable to download {}".format(download_url))
 
             extract_file(os.path.join(
                 save_path2, os.path.basename(download_url)))
