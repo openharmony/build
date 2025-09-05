@@ -99,7 +99,7 @@ class Hpm(BuildFileGeneratorInterface):
         elif os.path.exists(os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")):
             self.exec = os.path.join(CURRENT_OHOS_ROOT, "prebuilts/hpm/node_modules/.bin/hpm")
         else:
-            print("There is no hpm executable file: please execute 'bash build/prebuilt_config.sh' ")
+            print("There is no hpm executable file: please execute 'bash build/prebuilts_config.sh' ")
             raise OHOSException(
                 'There is no hpm executable file at {}'.format(hpm_path), '0001')
 

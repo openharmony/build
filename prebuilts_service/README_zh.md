@@ -46,7 +46,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
     "type": "src, indep",
     "config": {
         "linux": {
-            "all_cpu": {
+            "any": {
                 "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
                 "unzip_dir": "${code_dir}/prebuilts/ark_tools",
                 "unzip_filename": "ark_js_prebuilts"
@@ -66,8 +66,8 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
     "tag": "base",
     "type": "src, indep",
     "config": {
-        "all_os":{
-            "all_cpu": {
+        "any":{
+            "any": {
                 "remote_url": "/openharmony/compiler/llvm_prebuilt_libs/ark_js_prebuilts_20230713.tar.gz",
                 "unzip_dir": "${code_dir}/prebuilts/ark_tools",
                 "unzip_filename": "ark_js_prebuilts"

@@ -107,7 +107,7 @@ class ConfigParser:
         for os_key in os_config:
             # 逗号分割操作系统名
             configured_os_list = [o.strip() for o in os_key.split(",")]
-            if input_os in configured_os_list or configured_os_list == ["all_os"]:
+            if input_os in configured_os_list or configured_os_list == ["any"]:
                 matched_os.append(os_key)
         return matched_os
     
@@ -115,7 +115,7 @@ class ConfigParser:
         matched_cpu = []
         for cpu_str in cpu_config:
             configured_cpu_list = [c.strip() for c in cpu_str.split(",")]
-            if input_cpu in configured_cpu_list or configured_cpu_list == ["all_cpu"]:
+            if input_cpu in configured_cpu_list or configured_cpu_list == ["any"]:
                 matched_cpu.append(cpu_str)
         return matched_cpu
 
