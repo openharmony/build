@@ -64,12 +64,7 @@ cat $HOME/.npmrc | grep 'lockfile=false' > /dev/null || echo 'lockfile=false' >>
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${code_dir}/prebuilts/build-tools/common"
   pushd ${TOOLS_INSTALL_DIR} > /dev/null
-    if [[ ! -f "${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin/ohpm" ]]; then
-      echo "[OHOS INFO] download oh-command-line-tools"
-      wget https://repo.huaweicloud.com/harmonyos/ohpm/5.0.2/oh-command-line-tools-20240715.zip -O ohcommandline-tools-linux.zip
-      unzip ohcommandline-tools-linux.zip
-    fi
-    OHPM_HOME=${TOOLS_INSTALL_DIR}/oh-command-line-tools/ohpm/bin
+    OHPM_HOME=${TOOLS_INSTALL_DIR}/../../tool/command-line-tools/ohpm/bin
     chmod +x ${OHPM_HOME}/ohpm
     export PATH=${OHPM_HOME}:$PATH
     chmod +x ${OHPM_HOME}/init
@@ -88,6 +83,8 @@ function init_ohpm() {
     echo "[OHOS INFO] installing pnpm..."
     npm install --silent > /dev/null
   popd > /dev/null
+  HVIGORW_HOME=${TOOLS_INSTALL_DIR}/../../tool/command-line-tools/hvigor/bin/hvigorw
+  chmod +x ${HVIGORW_HOME}
   mkdir -p $HOME/.ohpm
   echo '{"devDependencies":{"@ohos/hypium":"1.0.6"}}' > $HOME/.ohpm/oh-package.json5
   pushd $HOME/.ohpm > /dev/null
