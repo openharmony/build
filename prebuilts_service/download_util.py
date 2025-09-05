@@ -18,6 +18,7 @@ import os
 from common_utils import run_cmd
 import threading
 import hashlib
+import time
 
 
 remote_sha256_cache = dict()
@@ -82,6 +83,7 @@ def get_remote_sha256(remote_url: str) -> str:
     """
     从远程.sha256文件中获取哈希值
     """
+    start_time = time.time()
     with _cache_lock:  # 加锁检查缓存
         if remote_url in remote_sha256_cache:
             return remote_sha256_cache[remote_url]
@@ -92,6 +94,10 @@ def get_remote_sha256(remote_url: str) -> str:
 
     with _cache_lock:  # 加锁更新缓存
         remote_sha256_cache[remote_url] = remote_sha256
+    endtime = time.time()
+    cost_time = endtime - start_time
+    remote_file_name = os.path.basename(remote_url)
+    print(f"get remote sha256 for {remote_file_name} end, cost time: {cost_time}")
     return remote_sha256
 
 

@@ -55,16 +55,14 @@ def _search_bundle_path(part_name: str) -> str:
     bundle_path = None
     try:
         bundle_path = search_bundle_file_from_ccache(part_name)
-        LogUtil.hb_info(f"Searching bundle.json path in ccache")
         if not bundle_path:
             bundle_path = ComponentUtil.search_bundle_file(part_name)
-            LogUtil.hb_info(f"Searching bundle.json path in source code tree")
         else:
             LogUtil.hb_info(
                 "The bundle.json path of component {} is {}, if it's incorrect, please delete {} and try again. ".format(
                     part_name, bundle_path, COMPONENTS_PATH_DIR))
     except Exception as e:
-        raise OHOSException('Please check the bundle.json file of {} : {}'.format(part_name, e))
+        raise OHOSException('Please check the bundle.json files you updated : {}'.format(e))
     if not bundle_path:
         LogUtil.hb_info('ERROR argument "hb build <part_name>": Invalid part_name "{}". '.format(part_name))
         sys.exit(1)
@@ -222,6 +220,8 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
 
     @staticmethod
     def resolve_build_target(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        if "--build-target" in sys.argv and not target_arg.arg_value:
+            raise OHOSException("ERROR argument \"--build-target\": no build target. ")
         indep_build_module.indep_build.regist_flag('build-target', target_arg.arg_value)
 
     @staticmethod
@@ -294,3 +294,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
     
     def resolve_prebuilts_download(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
         indep_build_module.prebuilts.regist_flag('skip-prebuilts', target_arg.arg_value)
+    
+    def resolve_local_binarys(self, target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
+        indep_build_module.indep_build.regist_flag('local-binarys', target_arg.arg_value)
+        indep_build_module.hpm.regist_flag('local-binarys', target_arg.arg_value)

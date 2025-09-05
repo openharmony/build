@@ -46,9 +46,9 @@ class Hpm(BuildFileGeneratorInterface):
 
     def __init__(self):
         super().__init__()
-        self._regist_hpm_path()
 
     def run(self):
+        self._regist_hpm_path()
         self.execute_hpm_cmd(CMDTYPE.BUILD)
 
     @throw_exception
@@ -112,17 +112,15 @@ class Hpm(BuildFileGeneratorInterface):
 
     @throw_exception
     def _execute_hpm_build_cmd(self, **kwargs):
-        if self.flags_dict.get("skip-download") or self.flags_dict.get("fast-rebuild"):
+        if self._check_skip_download():
+            LogUtil.hb_info("Skip download binary dependencies")
             return
         else:
-            self.flags_dict.pop("skip-download")
+            self._pop_useless_flags()
             LogUtil.hb_info("Tips: If you want to skip download binary dependencies, please use --skip-download")
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')
-            if os.path.exists(logpath):
-                mtime = os.stat(logpath).st_mtime
-                os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
             self._run_hpm_cmd(hpm_build_cmd, log_path=logpath)
 
     @throw_exception
@@ -146,19 +144,17 @@ class Hpm(BuildFileGeneratorInterface):
         self._run_hpm_cmd(hpm_update_cmd)
 
     def _run_hpm_cmd(self, cmd, log_path):
-        LogUtil.hb_info(f"Hpm cmd is: {cmd}")
-        ret_code = SystemUtil.exec_command(
+        cmd_str = " ".join(cmd)
+        SystemUtil.exec_command(
             cmd,
             log_path=log_path,
-            pre_msg="start run hpm command",
+            pre_msg=f"Executing hpm command: {cmd_str}",
             after_msg="end hpm command",
             custom_line_handle=self._custom_line_handle,
         )
         hpm_info = get_hpm_check_info()
         if hpm_info:
             print(hpm_info)
-        if ret_code != 0:
-            raise OHOSException(f"ERROR: hpm command failed, cmd: {cmd}", "0001")
 
 
     def _custom_line_handle(self, line):
@@ -247,3 +243,20 @@ class Hpm(BuildFileGeneratorInterface):
                 illegal_components.append(component)
         if illegal_components:
             raise OHOSException('ERROR argument "--parts": Invalid parts "{}". '.format(illegal_components))
+
+    def _check_skip_download(self):
+        if self.flags_dict.get("skip-download"):
+            return True
+        if self.flags_dict.get("fast-rebuild"):
+            return True
+        if self.flags_dict.get("local-binarys"):
+            return True
+        return False
+    
+    def _pop_useless_flags(self):
+        if "skip-download" in self.flags_dict:
+            self.flags_dict.pop("skip-download")
+        if "fast-rebuild" in self.flags_dict:
+            self.flags_dict.pop("fast-rebuild")
+        if "local-binarys" in self.flags_dict:
+            self.flags_dict.pop("local-binarys")
