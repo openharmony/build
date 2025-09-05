@@ -24,6 +24,9 @@
     "distributed_bundle_framework":[
         "app"
     ],
+    "syscap_codec":[
+        "taihe"
+    ],
     "device_usage_statistics":[
         "app",
         "sdk"
@@ -63,6 +66,7 @@
     ],
     "ability_runtime":[
         "app",
+        "hvigor",
         "sdk"
     ],
     "form_fwk":[
@@ -120,10 +124,17 @@
     ],
     "location":[
         "sdk",
+        "taihe",
         "app"
     ],
     "updater":[
         "rust"
+    ],
+    "display_manager":[
+        "taihe"
+    ],
+    "core_service":[
+        "app"
     ],
     "media_library":[
         "sdk",
@@ -140,7 +151,8 @@
     "wifi":[
         "sdk",
         "app",
-        "hvigor"
+        "hvigor",
+        "taihe"
     ],
     "netstack":[
         "rust"
@@ -165,9 +177,15 @@
         "sdk",
         "app"
     ],
+    "user_auth_framework":[
+        "taihe"
+    ],
     "distributed_hardware_fwk":[
         "app",
         "sdk"
+    ],
+    "file_api":[
+        "rust"
     ],
     "jsvm":[
         "ark_js"
