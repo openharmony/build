@@ -129,8 +129,9 @@ def _recurrent_search_bundle_file(path: str):
 def get_all_bundle_path(path):
     bundles_path = {}
     for root, dirnames, filenames in os.walk(path):
-        if root == os.path.join(path, "out") or root == os.path.join(path, ".repo"):
-            continue
+        if root == path:
+            # ignore out, .repo, binarys, prebuilts, kernel directory in top level
+            dirnames[:] = [d for d in dirnames if d not in ["out", ".repo", "binarys", "prebuilts", "kernel"]]
         for filename in filenames:
             if filename == "bundle.json":
                 bundle_json = os.path.join(root, filename)

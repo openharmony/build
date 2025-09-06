@@ -16,5 +16,7 @@
   "file_api": ["typescript"],
   "asset": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
   "request": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
-  "datamgr_service": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen", "ylong_runtime"]
+  "datamgr_service": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen", "ylong_runtime"],
+  "netstack": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen", "ylong_runtime"],
+  "ylong_http": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"]
 }

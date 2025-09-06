@@ -24,6 +24,7 @@ def get_parts_tag_config(part_names: list) -> set:
     all_required_tags = set()
     for part in part_names:
         all_required_tags.update(_get_tags_by_part(config_data, part))
+    all_required_tags.add("base")
     print(
         "Required tags for parts {}: {}".format(
             ",".join(part_names), sorted(all_required_tags)
