@@ -25,13 +25,13 @@ from util.log_util import LogUtil
 import os
 import json
 import time
+from resources.global_var import CURRENT_OHOS_ROOT
 
 
 class PreuiltsService(BuildFileGeneratorInterface):
 
     def __init__(self):
-        ohos_dir = self.get_ohos_dir()
-        self.last_update = os.path.join(ohos_dir, "prebuilts/.local_data/last_update.json")
+        self.last_update = os.path.join(CURRENT_OHOS_ROOT, "prebuilts/.local_data/last_update.json")
         super().__init__()
 
     def run(self):
@@ -99,26 +99,16 @@ class PreuiltsService(BuildFileGeneratorInterface):
         except Exception as e:
             LogUtil.hb_error(f"Failed to write last update file: {e}")
 
-    def get_ohos_dir(self):
-        cur_dir = os.getcwd()
-        while cur_dir != "/":
-            global_var = os.path.join(
-                cur_dir, 'build', 'hb', 'resources', 'global_var.py')
-            if os.path.exists(global_var):
-                return cur_dir
-            cur_dir = os.path.dirname(cur_dir)
-        raise Exception("you must run this script in ohos dir")
-
     def get_preguilt_download_related_files_mtimes(self) -> dict:
-        dir_path = os.path.join(self.get_ohos_dir(), "build/prebuilts_service")
+        dir_path = os.path.join(CURRENT_OHOS_ROOT, "build/prebuilts_service")
         mtimes = {}
         for root, _, files in os.walk(dir_path):
             for file in files:
                 file_path = os.path.join(root, file)
                 mtimes[file_path] = os.path.getmtime(file_path)
-        prebuilts_config_json_path = os.path.join(self.get_ohos_dir(), "build/prebuilts_config.json")
-        prebuilts_config_py_path = os.path.join(self.get_ohos_dir(), "build/prebuilts_config.py")
-        prebuilts_config_shell_path = os.path.join(self.get_ohos_dir(), "build/prebuilts_config.sh")
+        prebuilts_config_json_path = os.path.join(CURRENT_OHOS_ROOT, "build/prebuilts_config.json")
+        prebuilts_config_py_path = os.path.join(CURRENT_OHOS_ROOT, "build/prebuilts_config.py")
+        prebuilts_config_shell_path = os.path.join(CURRENT_OHOS_ROOT, "build/prebuilts_config.sh")
         mtimes.update({prebuilts_config_json_path: os.path.getmtime(prebuilts_config_json_path)})
         mtimes.update({prebuilts_config_py_path: os.path.getmtime(prebuilts_config_py_path)})
         mtimes.update({prebuilts_config_shell_path: os.path.getmtime(prebuilts_config_shell_path)})

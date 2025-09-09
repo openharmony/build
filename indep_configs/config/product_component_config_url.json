@@ -1,0 +1,7 @@
+{
+    "default":[
+        "https://gitee.com/openharmony/vendor_hihope/raw/master/rk3568/config.json",
+        "https://gitee.com/openharmony/productdefine_common/raw/master/inherit/rich.json",
+        "https://gitee.com/openharmony/productdefine_common/raw/master/inherit/chipset_common.json"
+    ]
+}
