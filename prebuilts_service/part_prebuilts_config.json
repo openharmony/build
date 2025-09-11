@@ -239,5 +239,8 @@
     ],
     "battery_manager":[
         "taihe"
+    ],
+    "data_share":[
+        "app"
     ]
 }
