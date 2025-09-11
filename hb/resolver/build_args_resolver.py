@@ -227,6 +227,7 @@ class BuildArgsResolver(ArgsResolverInterface):
                 break
         return build_targets
 
+    @staticmethod
     def get_target(target):
         if target.startswith("//"):
             return target[2:]
