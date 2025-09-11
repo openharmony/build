@@ -107,7 +107,8 @@
         "app"
     ],
     "request":[
-        "rust"
+        "rust",
+        "app"
     ],
     "imf":[
         "sdk",
@@ -120,7 +121,8 @@
         "rust"
     ],
     "datamgr_service":[
-        "rust"
+        "rust",
+        "app"
     ],
     "location":[
         "sdk",
@@ -216,5 +218,23 @@
     "faultloggerd":[
         "rust",
         "sdk"
+    ],
+    "audio_framework":[
+        "app"
+    ],
+    "miscdevice":[
+        "app"
+    ],
+    "hiview":[
+        "app"
+    ],
+    "av_session":[
+        "app"
+    ],
+    "udmf":[
+        "app"
+    ],
+    "sqlite":[
+        "app"
     ]
 }

@@ -131,7 +131,7 @@ class PreuiltsService(BuildFileGeneratorInterface):
         :param prev_mtimes: last known modification times of files in the directory 
         :return: if the directory has changed, and the current modification times of files in the directory
         """
-        last_update = self.read_last_update().get("last_update", 0)
+        last_update = self.read_last_update().get("last_update_time", 0)
         current_mtimes = self.get_preguilt_download_related_files_mtimes()
         for _, mtime in current_mtimes.items():
             if mtime > last_update:
