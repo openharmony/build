@@ -249,7 +249,7 @@ class BuildArgsResolver(ArgsResolverInterface):
             return cleaned_lines
     
         except Exception as e:
-            print(f"处理文件出错: {e}")
+            print(f"file error: {e}")
             return ""
 
     @staticmethod
