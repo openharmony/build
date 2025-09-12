@@ -228,6 +228,32 @@ class BuildArgsResolver(ArgsResolverInterface):
         return build_targets
 
     @staticmethod
+    def get_target(target):
+        if target.startswith("//"):
+            return target[2:]
+        else:
+            return target
+
+    @staticmethod
+    def get_precise_build_target(precise_target_file, build_module: BuildModuleInterface):
+        try:
+            with open(precise_target_file, 'r') as file:
+                lines = file.readlines()
+        
+            cleaned_lines = []
+            for line in lines:
+                stripped_line = line.strip()
+                if stripped_line:
+                    cleaned_lines.append(BuildArgsResolver.get_target(stripped_line))
+        
+            build_target = ','.join(cleaned_lines)
+            return cleaned_lines
+    
+        except Exception as e:
+            print(f"file error: {e}")
+            return ""
+
+    @staticmethod
     @throw_exception
     def resolve_build_target(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--build-target' arg.
@@ -240,6 +266,15 @@ class BuildArgsResolver(ArgsResolverInterface):
         build_executor = build_module.target_compiler
         target_list = []
         test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
+        precise_build_target = ""
+        target_generator = build_module.target_generator
+
+        precise_config_file = "developtools/integration_verification/tools/precise_build/precise_build_config.json"
+        precise_config = IoUtil.read_json_file(precise_config_file)
+        precise_target_file = precise_config.get('precise_result_path')
+        if os.path.exists(os.path.join("out/rk3568", precise_target_file)):
+            precise_build_target = BuildArgsResolver.get_precise_build_target(os.path.join("out/rk3568", precise_target_file), build_module)
+
         if len(target_arg.arg_value):
             for target_name in target_arg.arg_value:
                 if target_name.endswith('make_test') or target_name.split(':')[-1] in test_target_list:
@@ -248,6 +283,8 @@ class BuildArgsResolver(ArgsResolverInterface):
                     target_list.append(target_name)
                 elif target_name.startswith('TDD'):
                     target_list.extend(BuildArgsResolver.get_tdd_build_target(target_name, build_module))
+                elif target_name == "precise_module_build":
+                    target_list.extend(precise_build_target)
                 else:
                     target_list.append(target_name)
         else:
