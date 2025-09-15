@@ -49,7 +49,8 @@
     ],
     "bundle_framework":[
         "app",
-        "sdk"
+        "sdk",
+        "hvigor"
     ],
     "device_manager":[
         "app",
@@ -207,7 +208,8 @@
         "rust"
     ],
     "hisysevent":[
-        "rust"
+        "rust",
+        "app"
     ],
     "c_utils":[
         "rust"
@@ -245,6 +247,24 @@
         "hvigor"
     ],
     "relational_store":[
+        "app"
+    ],
+    "sensor":[
+        "app"
+    ],
+    "app_file_service":[
+        "app"
+    ],
+    "time_service":[
+        "app"
+    ],
+    "hiappevent":[
+        "app"
+    ],
+    "ylong_http":[
+        "rust"
+    ],
+    "enterprise_device_management":[
         "app"
     ]
 }
