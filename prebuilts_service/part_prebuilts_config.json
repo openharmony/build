@@ -266,5 +266,8 @@
     ],
     "enterprise_device_management":[
         "app"
+    ],
+    "external_device_manager":[
+        "app"
     ]
 }
