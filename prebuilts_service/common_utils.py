@@ -20,6 +20,7 @@ import pathlib
 import time
 import json
 import importlib
+import re
 
 
 def get_code_dir():
@@ -50,6 +51,12 @@ def import_rich_module():
         module.TimeRemainingColumn(),
     )
     return progress
+
+
+def save_data(file_path: str, data):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "w") as f:
+        json.dump(data, f, indent=4)
 
 
 def load_config(config_file: str):
@@ -86,33 +93,6 @@ def symlink_src2dest(src_dir: str, dest_dir: str):
     print("symlink {} ---> {}".format(src_dir, dest_dir))
 
 
-def run_cmd_live(cmd: list):
-    cmd_str = " ".join(cmd)
-    print(f"run command: {cmd_str}\n")
-    try:
-        process = subprocess.Popen(
-            cmd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True
-        )
-
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                print(output.strip())
-
-        return_code = process.poll()
-        if return_code != 0:
-            print(f"命令执行失败，返回码: {return_code}")
-        return return_code, ""
-    except Exception as e:
-        print(f"执行命令时出错: {e}")
-        return 1, ""
-
-
 def run_cmd_directly(cmd: list):
     cmd_str = " ".join(cmd)
     print(f"run command: {cmd_str}\n")
@@ -129,7 +109,7 @@ def run_cmd(cmd: list) -> tuple:
     res = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
-    sout, serr = res.communicate()
+    sout, serr = res.communicate(timeout=300)
     return sout.rstrip().decode("utf-8"), serr, res.returncode
 
 
@@ -143,6 +123,33 @@ def is_system_component() -> bool:
             ("arkcompiler",)
         ]
     )
+
+
+def check_hpm_version(hpm_path: str, npm_path: str) -> bool:
+    if not os.path.exists(hpm_path):
+        print(f"hpm not found at {hpm_path}, now install.")
+        return False
+    local_hpm_version = subprocess.run([hpm_path, "-V"], capture_output=True, text=True).stdout.strip()
+    cmd = npm_path + " search hpm-cli --registry https://registry.npmjs.org/"
+    cmd = cmd.split()
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    try:
+        out, _ = proc.communicate(timeout=10)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+    latest_hpm_version = ""
+    if proc.returncode == 0:
+        pattern = r'^@ohos/hpm-cli\s*\|(?:[^|]*\|){3}([^|]*)'
+        for line in out.splitlines():
+            match = re.match(pattern, line)
+            if match:
+                latest_hpm_version = match.group(1).strip()
+                break
+        if latest_hpm_version and latest_hpm_version == local_hpm_version:
+            print(f"local hpm version: {local_hpm_version}, remote latest hpm version: {latest_hpm_version}")
+            return True
+    print(f"local hpm version: {local_hpm_version}, remote latest hpm version: {latest_hpm_version}")
+    return False
 
 
 def install_hpm_in_other_platform(name: str, operate: dict):
