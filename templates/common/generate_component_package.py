@@ -1189,6 +1189,10 @@ def _toolchain_static_file_path_mapping(subsystem_name, args, i):
     return toolchain_path
 
 
+def remove_prefix_if_present(path, prefix="ohos_clang_arm64/"):
+    return path[len(prefix):] if path.startswith(prefix) else path
+
+
 def replace_default_toolchains_in_output(path, default_toolchain="ohos_clang_arm64/"):
     return path.replace(default_toolchain, "")
 
@@ -1396,7 +1400,9 @@ def _copy_bundlejson(args, public_deps_list):
             if args.get('organization_name'):
                 _name_pattern = r'@(.*.)/'
                 bundle_data['name'] = re.sub(_name_pattern, '@' + args.get('organization_name') + '/',
-                                             bundle_data['name'])
+                                             bundle_data['name'].split('/')[-1])
+                bundle_data['name'] = f"@{args.get('organization_name')}/{bundle_data['name']}"
+                print(bundle_data['name'])
             if bundle_data.get('scripts'):
                 bundle_data.update({'scripts': {}})
             if bundle_data.get('licensePath'):
@@ -1578,6 +1584,16 @@ def _generate_public_external_deps(fp, module, deps: list, components_json, publ
     fp.write('  ]\n')
 
     return public_deps_list
+
+
+def _get_rust_external_deps(components_json: dict, dep):
+    matching_results = []
+    for key, value in components_json.items():
+        for innerapi in value.get("innerapis", []):
+            if innerapi.get("label") == dep:
+                label_field = innerapi["label"].split(":")[1]
+                return (key, label_field)
+    return None
 
 
 def _find_ohos_ets_dir(outputs):
