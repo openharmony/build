@@ -34,11 +34,17 @@ def _run_cmd(cmd: list):
     process = subprocess.Popen(
         cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding="utf-8"
     )
-    for line in iter(process.stdout.readline, ""):
+    while True:
+        line = process.stdout.readline()
+        if not line and process.poll() is not None:
+            break
         print(line, end="")
-    process_status = process.poll()
-    if process_status:
-        sys.exit(process_status)
+    remaining_output, _ = process.communicate()
+    if remaining_output:
+        print(remaining_output, end='', flush=True)
+    exit_code = process.returncode
+    if exit_code:
+        sys.exit(exit_code)
 
 
 def _get_args():

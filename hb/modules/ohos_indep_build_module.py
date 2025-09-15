@@ -26,6 +26,7 @@ from resolver.indep_build_args_resolver import get_part_name
 from containers.arg import BuildPhase
 import argparse
 import sys
+import os
 
 
 class OHOSIndepBuildModule(IndepBuildModuleInterface):
@@ -97,9 +98,17 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
             LogUtil.hb_info(f'{",".join(get_part_name())} {message}')
 
     def _target_compilation(self):
+        self._rename_buildlog()
         self._run_prebuilts()
         self._run_hpm()
         self._run_indep_build()
+
+    def _rename_buildlog(self):
+        variant = self.args_dict.get("variant").arg_value
+        logpath = os.path.join('out', variant, 'build.log')
+        if os.path.exists(logpath):
+            mtime = os.stat(logpath).st_mtime
+            os.rename(logpath, '{}/build.{}.log'.format(os.path.dirname(logpath), mtime))
     
     def _run_prebuilts(self):
         self._run_phase(BuildPhase.PRE_BUILD)

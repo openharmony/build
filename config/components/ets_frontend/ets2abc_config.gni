@@ -37,8 +37,9 @@ if (host_toolchain == toolchain_mac) {
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_mac)"
   libes2panda_public_build_deps =
-      [ "$ets2abc_root:libes2panda_public($toolchain_mac)" ]
-  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_mac)"
+      "$ets2abc_root:libes2panda_public($toolchain_mac)"
+  ohos_ets_koala_wrapper_deps =
+      "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_mac)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -52,8 +53,9 @@ if (host_toolchain == toolchain_mac) {
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_win)"
   libes2panda_public_build_deps =
-      [ "$ets2abc_root:libes2panda_public($toolchain_win)" ]
-  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_win)"
+      "$ets2abc_root:libes2panda_public($toolchain_win)"
+  ohos_ets_koala_wrapper_deps =
+      "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_win)"
   libes2panda_public_build_path =
       static_linker_out_root +
       "/arkcompiler/ets_frontend/libes2panda_public.dll"
@@ -67,8 +69,9 @@ if (host_toolchain == toolchain_mac) {
                      "root_out_dir")
   static_linker_build_deps = "$static_linker_root:ark_link($toolchain_linux)"
   libes2panda_public_build_deps =
-      [ "$ets2abc_root:libes2panda_public($toolchain_linux)" ]
-  ohos_ets_koala_wrapper_deps = "//developtools/ace_ets2bundle/koala-wrapper:ohos_ets_koala_wrapper($toolchain_linux)"
+      "$ets2abc_root:libes2panda_public($toolchain_linux)"
+  ohos_ets_koala_wrapper_deps =
+      "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_linux)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -89,8 +92,7 @@ ohos_ets_ark_link_deps =
 ohos_ets_libes2panda_public_deps =
     "//build/config/components/ets_frontend:ohos_ets_libes2panda_public"
 ohos_ets_build_system_deps = "ets_frontend:ohos_ets_build_system"
-ohos_ets_ui_plugins_deps =
-    "//developtools/ace_ets2bundle/arkui-plugins:ohos_ets_ui_plugins"
+ohos_ets_ui_plugins_deps = "ace_ets2bundle:ohos_ets_ui_plugins"
 
 ohos_ets_api_tmp_path = "$root_build_dir/ohos_ets_tmp/api"
 ohos_ets_api_arkui_tmp_path = "$root_build_dir/ohos_ets_tmp/api/arkui/component"
@@ -129,9 +131,13 @@ if (ohos_indep_compiler_enable) {
   ets2panda_target_out_path =
       get_label_info(ets2abc_build_deps, "target_out_dir") +
       "/clang_x64/libs/es2panda"
+  libes2panda_public_out_path =
+      get_label_info(libes2panda_public_build_deps, "target_out_dir") +
+      "/clang_x64/libs/libes2panda_public.so"
 } else {
   ark_link_target_out_path = "$static_linker_build_path"
   ets2panda_target_out_path = "$ets2abc_build_path"
+  libes2panda_public_out_path = "$libes2panda_public_build_path"
 }
 
 bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
@@ -189,16 +195,30 @@ template("generate_static_abc") {
     if (ui_enable == "True") {
       assert(defined(invoker.files), "files is required!")
       assert(defined(invoker.base_url), "base_url is required!")
-      deps += [
-        ohos_ets_koala_wrapper_deps,
-        ohos_ets_libes2panda_public_deps,
-        ohos_ets_ui_plugins_deps,
-      ]
+      deps += [ ohos_ets_libes2panda_public_deps ]
       external_deps += [
         ohos_ets_api_deps,
         ohos_ets_arkts_deps,
         ohos_ets_build_system_deps,
         ohos_ets_kits_deps,
+        ohos_ets_koala_wrapper_deps,
+        ohos_ets_ui_plugins_deps,
+      ]
+      args += [
+        "--base-url",
+        rebase_path("${invoker.base_url}"),
+        "--build-sdk-path",
+        rebase_path("$build_sdk_path"),
+        "--memo-plugin",
+        rebase_path(
+            "$build_sdk_path/build-tools/ui-plugins/lib/memo-plugins/index.js"),
+        "--entry-path",
+        rebase_path(
+            "$build_sdk_path/build-tools/driver/build-system/dist/entry.js"),
+        "--env-path",
+        rebase_path("$build_sdk_path/build-tools/ets2panda/lib"),
+        "--node-path",
+        rebase_path("$node_path"),
       ]
       args += [
         "--base-url",
@@ -232,7 +252,7 @@ template("generate_static_abc") {
         args += [
           "--ui-plugin",
           rebase_path(
-              "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js")
+              "$build_sdk_path/build-tools/ui-plugins/lib/ui-plugins/index.js"),
         ]
       }
 
