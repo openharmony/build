@@ -19,6 +19,7 @@ import sys
 import subprocess
 import shutil
 import json5
+import uuid
 
 from util import build_utils
 from util import file_utils
@@ -75,7 +76,7 @@ def get_root_dir():
                 current_dir = new_dir
 
 
-def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
+def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_value: str):
     '''
     Set up the application compilation environment and run "ohpm install"
     :param build_profile: module compilation information file
@@ -83,7 +84,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     :param ohpm_registry: ohpm registry
     :return: None
     '''
-    print(f"build_profile:{build_profile}; cwd:{cwd}")
+    print(f"[{hash_value}] build_profile:{build_profile}; cwd:{cwd}")
     cur_dir = os.getcwd()
     root_dir = get_root_dir()
     ohpm_path = os.path.join(root_dir, "prebuilts/tool/command-line-tools/ohpm/bin/ohpm")
@@ -118,26 +119,26 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options):
     os.chdir(cur_dir)
 
 
-def get_integrated_project_config(cwd: str):
-    print(f"[0/0] project dir: {cwd}")
+def get_integrated_project_config(cwd: str, hash_value: str):
+    print(f"[0/0] [{hash_value}] project dir: {cwd}")
     with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
         hvigor_info = json5.load(input_f)
         model_version = hvigor_info.get('modelVersion')
     return model_version
 
 
-def get_hvigor_version(cwd: str):
-    print(f"[0/0] project dir: {cwd}")
+def get_hvigor_version(cwd: str, hash_value: str):
+    print(f"[0/0] [{hash_value}] project dir: {cwd}")
     with open(os.path.join(cwd, 'hvigor/hvigor-config.json5'), 'r') as input_f:
         hvigor_info = json5.load(input_f)
         hvigor_version = hvigor_info.get('hvigorVersion')
     return hvigor_version
 
 
-def get_unsigned_hap_path(module: str, src_path: str, cwd: str, options):
-    hvigor_version = get_hvigor_version(cwd)
+def get_unsigned_hap_path(module: str, src_path: str, cwd: str, options, hash_value: str):
+    hvigor_version = get_hvigor_version(cwd, hash_value)
     product_name = options.build_profile.replace("/build-profile.json5", "").split("/")[-1]
-    model_version = get_integrated_project_config(cwd)
+    model_version = get_integrated_project_config(cwd, hash_value)
     product_value = options.product if options.product else 'default'
     if product_value is None:
         product_value = 'default'
@@ -184,7 +185,7 @@ def get_target_by_module(module: str, options):
     return "default"
 
 
-def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
+def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options, hash_value: str):
     '''
     Generate unsigned_hap_path_list
     :param build_profile: module compilation information file
@@ -199,7 +200,7 @@ def gen_unsigned_hap_path_json(build_profile: str, cwd: str, options):
         for module in modules_list:
             src_path = module.get('srcPath')
             module_name = module.get("name")
-            unsigned_hap_path = get_unsigned_hap_path(module_name, src_path, cwd, options)
+            unsigned_hap_path = get_unsigned_hap_path(module_name, src_path, cwd, options, hash_value)
             hap_file = build_utils.find_in_directory(
                 unsigned_hap_path, '*-unsigned.hap')
             if hap_file:
@@ -232,7 +233,7 @@ def copy_libs(cwd: str, system_lib_module_info_list: list, ohos_app_abi: str, mo
             shutil.copyfile(lib_path, dest)
 
 
-def hvigor_write_log(cmd, cwd, env):
+def hvigor_write_log(cmd, cwd, env, hash_value):
     proc = subprocess.Popen(cmd, 
                             cwd=cwd, 
                             env=env,
@@ -241,21 +242,21 @@ def hvigor_write_log(cmd, cwd, env):
                             encoding='utf-8')
     stdout, stderr = proc.communicate()
     for line in stdout.splitlines():
-        print(f"[1/1] Hvigor info: {line}")
+        print(f"[1/1] [{hash_value}] Hvigor info: {line}")
     for line in stderr.splitlines():
-        print(f"[2/2] Hvigor warning: {line}")
+        print(f"[2/2] [{hash_value}] Hvigor warning: {line}")
     os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
     with open(os.path.join(cwd, 'build', 'build.log'), 'w') as f:
         f.write(f'{stdout}\n')
         f.write(f'{stderr}\n')
     if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
         raise Exception('ReturnCode:{}. Hvigor build failed: {}'.format(proc.returncode, stderr))
-    print("[0/0] Hvigor build end")
+    print(f"[0/0] [{hash_value}] Hvigor build end")
 
 
-def build_hvigor_cmd(cwd: str, model_version: str, options):
+def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     cmd = ['bash']
-    hvigor_version = get_hvigor_version(cwd)
+    hvigor_version = get_hvigor_version(cwd, hash_val)
     if options.hvigor_home:
         cmd.extend([f'{os.path.abspath(options.hvigor_home)}/bin/hvigorw'])
     elif model_version:
@@ -309,7 +310,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options):
         
     cmd.extend(['--no-daemon'])
     
-    print("[0/0] hvigor cmd: " + ' '.join(cmd))
+    print(f"[0/0] [{hash_val}] hvigor cmd: " + ' '.join(cmd))
     return cmd
 
 
@@ -344,19 +345,19 @@ def hvigor_sync(cwd: str, model_version: str, env):
                    stderr=subprocess.DEVNULL)
 
 
-def hvigor_build(cwd: str, options):
+def hvigor_build(cwd: str, options, hash_value: str):
     '''
     Run hvigorw to build the app or hap
     :param cwd: app project directory
     :param options: command line parameters
     :return: None
     '''
-    model_version = get_integrated_project_config(cwd)
-    print(f"[0/0] model_version: {model_version}")
+    model_version = get_integrated_project_config(cwd, hash_value)
+    print(f"[0/0] [{hash_value}] model_version: {model_version}")
 
-    cmd = build_hvigor_cmd(cwd, model_version, options)
+    cmd = build_hvigor_cmd(cwd, model_version, options, hash_value)
 
-    print("[0/0] Hvigor clean start")
+    print(f"[0/0] [{hash_value}] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
     env['PATH'] = f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}"
@@ -367,8 +368,8 @@ def hvigor_build(cwd: str, options):
 
     hvigor_sync(cwd, model_version, env)
     
-    print("[0/0] Hvigor build start")
-    hvigor_write_log(cmd, cwd, env)
+    print(f"[0/0] [{hash_value}] Hvigor build start")
+    hvigor_write_log(cmd, cwd, env, hash_value)
 
 
 def main(args):
