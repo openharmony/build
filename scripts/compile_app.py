@@ -375,6 +375,8 @@ def hvigor_build(cwd: str, options, hash_value: str):
 def main(args):
     options = parse_args(args)
     cwd = os.path.abspath(options.cwd)
+    hash_result = uuid.uuid4()
+    hash_value = str(hash_result).split("-")[0]
 
     # copy system lib deps to app libs dir
     if options.system_lib_module_info_list:
@@ -388,14 +390,14 @@ def main(args):
     os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
 
     # generate unsigned_hap_path_list and run ohpm install
-    make_env(options.build_profile, cwd, options.ohpm_registry, options)
+    make_env(options.build_profile, cwd, options.ohpm_registry, options, hash_value)
 
     # invoke hvigor to build hap or app
-    hvigor_build(cwd, options)
+    hvigor_build(cwd, options, hash_value)
 
     # generate a json file to record the path of all unsigned haps, and When signing hap later, 
     # this json file will serve as input to provide path information for each unsigned hap.
-    gen_unsigned_hap_path_json(options.build_profile, cwd, options)
+    gen_unsigned_hap_path_json(options.build_profile, cwd, options, hash_value)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
