@@ -307,7 +307,7 @@ declare_args() {
 }
 
 declare_args() {
-    remove_exe = false
+    remove_unstripped_exe = false
 }
 # Compile and generate output directory
 innersdk_build_out_dir = "innerkits/${target_type}"
