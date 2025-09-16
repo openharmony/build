@@ -67,10 +67,7 @@ def main():
     parser.add_argument('command', nargs='+', help='Linking command')
     parser.add_argument('--mini-debug', action='store_true', default=False, help='Add .gnu_debugdata section for stripped sofile')
     parser.add_argument('--clang-base-dir', help='')
-    parser.add_argument('--remove-exe',
-                        action='store_true',
-                        default=False,
-                        help='remove exe.unstripped after used')
+    parser.add_argument('--remove-unstripped-exe', action='store_true', default=False, help='remove exe.unstripped after used')
     args = parser.parse_args()
     # Work-around for gold being slow-by-default. http://crbug.com/632230
     fast_env = dict(os.environ)
@@ -99,7 +96,7 @@ def main():
             wrapper_utils.command_to_run(
                 ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
                 '--root-path', ohos_root_path, '--clang-base-dir', args.clang_base_dir]))
-    if args.remove_exe:
+    if args.remove_unstripped_exe:
         os.remove(args.unstripped_file)
     return result
 
