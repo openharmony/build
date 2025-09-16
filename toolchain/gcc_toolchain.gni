@@ -615,7 +615,7 @@ template("gcc_toolchain") {
         command = "$command --mini-debug"
       }
       if (remove_unstripped_exe) {
-        command = "$command --remove-exe"
+        command = "$command --remove-unstripped-exe"
       }
       command = "$command -- $link_command"
       description = "LINK $outfile"
