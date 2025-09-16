@@ -11,6 +11,7 @@ import("//build/config/v8_target_cpu.gni")
 import("//build/toolchain/cc_wrapper.gni")
 import("//build/toolchain/clang_static_analyzer.gni")
 import("//build/toolchain/toolchain.gni")
+import("//build/ohos_var.gni")
 
 if (defined(remote_execution) && remote_execution) {
   import("${rbe_path}/rbe.gni")
@@ -613,6 +614,9 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         command = "$command --mini-debug"
       }
+      if (remove_exe) {
+        command = "$command --remove-exe"
+      }
       command = "$command -- $link_command"
       description = "LINK $outfile"
       rspfile_content = "{{inputs}}"
@@ -887,3 +891,4 @@ template("clang_toolchain") {
     }
   }
 }
+
