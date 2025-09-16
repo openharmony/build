@@ -605,7 +605,7 @@
                 "linux": {
                     "x86_64, arm64": [
                         {
-                            "remote_url": "/openharmony/compiler/Taihe/0.34.1/taihe-linux-x86_64-v0.34.1-20250623.tar.gz",
+                            "remote_url": "/openharmony/compiler/Taihe/0.48/taihe-linux-x86_64-0.48.0-20250912.tar.gz",
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/linux-x86_64"
                         }
                     ]

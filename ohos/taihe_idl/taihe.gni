@@ -26,8 +26,6 @@ template("ohos_taihe") {
     script = rebase_path("//build/ohos/taihe_idl/taihe_retry.sh")
     args = [
       rebase_path("${taihe_toolchain_path}/bin/taihec"),
-      rebase_path(
-          "${taihe_toolchain_path}/lib/taihe/stdlib/taihe.platform.ani.taihe"),
       "-I",
       rebase_path("$taihe_file_path", root_build_dir),
       "-O",
