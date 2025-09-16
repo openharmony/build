@@ -145,7 +145,8 @@ def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
         arkts_sdk_info_list = []
         for info in info_list:
             install_label_str = str(info.get("install_dir"))
-            if install_label_str.startswith("ets/ets1.2/"):
+            module_label_str = str(info.get("module_label"))
+            if install_label_str.startswith("ets/ets1.2/") or module_label_str.endswith(":copy_taihe_tools"):
                 continue
             elif install_label_str.startswith("ets/ets1.1/"):
                 info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
