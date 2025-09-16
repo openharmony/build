@@ -273,5 +273,8 @@
     ],
     "screenlock_mgr":[
         "app"
+    ],
+    "kv_store":[
+        "app"
     ]
 }
