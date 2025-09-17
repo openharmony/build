@@ -1442,6 +1442,15 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/libarkts/",
+        "module_label": "//developtools/ace_ets2bundle/ets1.2/libarkts:libarkts-sdk",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//arkcompiler/runtime_core/taihe:copy_taihe_tools",
         "target_os": [
