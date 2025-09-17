@@ -202,7 +202,8 @@
     ],
     "hitrace":[
         "rust",
-        "sdk"
+        "sdk",
+        "app"
     ],
     "hicollie":[
         "rust"
@@ -265,7 +266,8 @@
         "rust"
     ],
     "enterprise_device_management":[
-        "app"
+        "app",
+        "ohpm"
     ],
     "external_device_manager":[
         "app",
