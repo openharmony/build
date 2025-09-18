@@ -145,7 +145,10 @@ template("ohos_abc") {
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    deps += es2abc_build_deps
+	if(!defined(external_deps)){
+      external_deps = []
+    }
+    external_deps += es2abc_build_deps
     if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
