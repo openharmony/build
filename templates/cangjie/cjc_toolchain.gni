@@ -113,6 +113,8 @@ if (is_ohos) {
     "${clang_lib_abs}/${cjc_toolchain.target_platform}",
     "--sysroot",
     "${musl_lib_abs}",
+    "-L",
+    rebase_path("${root_out_dir}/obj/third_party/musl/usr/lib/${cjc_toolchain.target_platform}"),
   ]
 } else if (is_mingw) {
   if (current_cpu == "x86_64") {
