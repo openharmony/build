@@ -145,7 +145,7 @@ template("ohos_abc") {
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-	if(!defined(external_deps)){
+	  if (defined(invoker.external_deps)) {
       external_deps = []
     }
     external_deps += es2abc_build_deps
