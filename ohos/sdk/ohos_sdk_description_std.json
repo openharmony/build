@@ -1433,15 +1433,6 @@
         ]
     },
     {
-        "install_dir": "ets/ets1.2/build-tools/libarkts/",
-        "module_label": "//developtools/ace_ets2bundle/ets1.2/libarkts:libarkts-sdk",
-        "target_os": [
-            "linux",
-            "windows",
-            "darwin"
-        ]
-    },
-    {
         "install_dir": "ets/ets1.2/build-tools/ui-plugins/",
         "module_label": "//developtools/ace_ets2bundle/arkui-plugins:ui_plugin",
         "target_os": [
