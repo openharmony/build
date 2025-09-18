@@ -226,5 +226,9 @@
   "sdk": {
     "path": "interface/sdk-js",
     "name": "sdk"
+  },
+  "game": {
+    "path": "domains/game",
+    "name": "game"
   }
 }
