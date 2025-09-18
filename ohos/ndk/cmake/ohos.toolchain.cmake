@@ -290,9 +290,9 @@ set(CMAKE_EXE_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create ex
 set(CMAKE_EXE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 
 if(DEFINED OHOS_COMPATIBLE_SDK_VERSION)
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} - ldeviceinfo_ndk.z" CACHE STRING "Global shared linker flags" FORCE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} - ldeviceinfo_ndk.z" CACHE STRING "Global executable linker flags" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} - ldeviceinfo_ndk.z" CACHE STRING "Global module linker flags" FORCE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global shared linker flags" FORCE)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global executable linker flags" FORCE)
+  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global module linker flags" FORCE)
 endif()
 
 # set the executable suffix
