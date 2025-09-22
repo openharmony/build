@@ -161,9 +161,13 @@ def _copy_test_binarys(test_check, variants, hpm_cache_path, dependences_json):
                             os.path.join(googletest_link_path, 'innerapis'))
 
 
-def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict):
+def _gen_components_info(components_json, bundle_json, part_name, src_build_name_list, _part_toolchain_map_dict, dst_dict=None):
     subsystem = bundle_json["component"]["subsystem"]
-    path = bundle_json["segment"]["destPath"]
+    # 修正部件的destPath值
+    if dst_dict and part_name in dst_dict:
+        path = dst_dict[part_name]
+    else:
+        path = bundle_json["segment"]["destPath"]
     try:
         component = bundle_json["component"]["build"]["inner_kits"]
     except KeyError:
@@ -245,11 +249,16 @@ def _components_info_handler(part_name_list, source_code_path: str, hpm_cache_pa
         _get_src_part_name(_get_src_bundle_path(src_path))[0]: _get_src_part_name(_get_src_bundle_path(src_path))[1]
         for src_path in source_code_path_list
     }
+
+    dst_dict = dict() # 部件真实destPath值
+    for part_name, src_bundle_path in src_bundle_path_dict.items():
+        dst_dict.update({part_name: os.path.relpath(os.path.dirname(src_bundle_path), root_path)})
+
     # 更新构建名称列表并生成组件信息
     src_build_name_list.extend(src_bundle_path_dict.keys())
     for src_part_name, src_bundle_path in src_bundle_path_dict.items():
         components_json = _gen_components_info(components_json, utils.get_json(src_bundle_path), src_part_name,
-                                               src_build_name_list, _part_toolchain_map_dict)
+                                               src_build_name_list, _part_toolchain_map_dict, dst_dict)
 
     # 处理构建框架
     build_framework_bundle_path = os.path.join(root_path, "build", "bundle.json")
