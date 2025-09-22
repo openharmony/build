@@ -47,7 +47,7 @@ if (!use_current_sdk) {
   write_file(package_info_file, package_info, "json")
 
   action_with_pydeps("_collect_ndk_syscap") {
-    deps = all_ndk_targets_list
+    deps = [ ":_parse_ndk_headers" ]
     script = "//build/ohos/ndk/collect_ndk_syscap.py"
     depfile = "$target_gen_dir/$target_name.d"
     _ndk_syscap_desc_file =
@@ -71,11 +71,21 @@ if (!use_current_sdk) {
     }
   }
 
+  action_with_pydeps("_parse_ndk_headers") {
+    deps = all_ndk_targets_list
+    script = "//interface/sdk_c/build-tools/parse_ndk_headers.py"
+    outputs = [ "${ndk_os_irrelevant_out_dir}/parse_ndk_headers.tmp" ]
+    args = [
+      "--input",
+      rebase_path("$ndk_headers_out_dir", root_build_dir),
+    ]
+  }
+
   if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
     action_with_pydeps("_clean_ndk_ani") {
       deps = [ ":_collect_ndk_syscap" ]
       script = "//interface/sdk_c/build-tools/clean_ndk_ani.py"
-      outputs = [ "${ndk_os_irrelevant_out_dir}/clean_ndk_ani.json" ]
+      outputs = [ "${ndk_os_irrelevant_out_dir}/clean_ndk_ani_header.tmp" ]
       _native_syscap_config_file =
           "${ndk_os_irrelevant_out_dir}/nativeapi_syscap_config.json"
       args = [
