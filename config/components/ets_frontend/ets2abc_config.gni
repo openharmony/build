@@ -117,8 +117,13 @@ ohos_ets_koala_wrapper_path =
 build_sdk_path = "$root_build_dir/ohos_ets"
 
 if (host_os == "mac") {
-  node_path =
-      "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin"
+  if (host_cpu == "arm64") {
+    node_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-arm64/bin"
+  } else {
+    node_path =
+        "//prebuilts/build-tools/common/nodejs/node-v16.20.2-darwin-x64/bin"
+  }
 } else {
   node_path =
       "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin"
