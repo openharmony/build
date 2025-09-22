@@ -22,6 +22,7 @@ import os
 import platform
 import subprocess
 import stat
+import re
 
 
 def gen_symbols(tmp_file, sort_lines, symbols_path):
@@ -33,6 +34,29 @@ def gen_symbols(tmp_file, sort_lines, symbols_path):
     with os.fdopen(os.open(symbols_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
         cmd = 'sort {}'.format(tmp_file)
         subprocess.run(cmd.split(), stdout=output_file)
+
+
+def remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path):
+    modes = stat.S_IWUSR | stat.S_IRUSR | stat.S_IWGRP | stat.S_IRGRP
+    pattern = re.compile(r'(__[0-9A-F])$')
+    symbols_to_rename = []
+
+    with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT, modes), 'r', encoding='utf-8') as output_file:
+        for line in output_file:
+            line = line.strip()
+            if pattern.search(line):
+                symbols_to_rename.append(line)
+
+    if symbols_to_rename:
+        rename_rules_path = keep_path + ".rename"
+        with os.fdopen(os.open(rename_rules_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
+            for symbol in symbols_to_rename:
+                new_name = pattern.sub('', symbol)
+                if new_name != symbol:
+                    output_file.write('{} {}\n'.format(symbol, new_name))
+
+        rename_cmd = llvm_objcopy_path + " --redefine-syms=" + rename_rules_path + " " + mini_debug_path
+        return rename_cmd, rename_rules_path
 
 
 def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_base_dir, adlt_llvm_tool):
@@ -51,11 +75,12 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     if not os.path.exists(llvm_dir_path):
         llvm_dir_path = os.path.join(root_path, 'out/llvm-install/bin')
     if adlt_llvm_tool:
-        llvm_dir_path = adlt_llvm_tool    
+        llvm_dir_path = adlt_llvm_tool
     llvm_nm_path = os.path.join(llvm_dir_path, "llvm-nm")
     llvm_objcopy_path = os.path.join(llvm_dir_path, "llvm-objcopy")
 
     cmd_list = []
+    file_list = []
 
     gen_symbols_cmd = llvm_nm_path + " -D " + binary_path + " --format=posix --defined-only"
     gen_func_symbols_cmd = llvm_nm_path + " " + binary_path + " --format=posix --defined-only"
@@ -112,6 +137,10 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
 
     cmd_list.append(gen_keep_debug_cmd)
     cmd_list.append(gen_mini_debug_cmd)
+    if adlt_llvm_tool:
+        rename_cmd, rename_rules_path = remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path)
+        cmd_list.append(rename_cmd)
+        file_list.append(rename_rules_path)
     cmd_list.append(compress_debuginfo)
     cmd_list.append(gen_stripped_binary)
 
@@ -121,11 +150,13 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
         subprocess.call(cmd.split(), shell=False)
 
     # remove temporary file
-    os.remove(dynsyms_path)
-    os.remove(funcsysms_path)
-    os.remove(keep_path)
-    os.remove(debug_path)
-    os.remove(mini_debug_path + ".xz")
+    file_list.append(dynsyms_path)
+    file_list.append(funcsysms_path)
+    file_list.append(keep_path)
+    file_list.append(debug_path)
+    file_list.append(mini_debug_path + ".xz")
+    for file in file_list:
+        os.remove(file)
 
 
 def main():
