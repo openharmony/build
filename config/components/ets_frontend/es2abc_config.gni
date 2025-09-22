@@ -67,7 +67,7 @@ template("es2abc_gen_abc") {
 
     deps = extra_dependencies
     if (is_arkui_x) {
-      deps += es2abc_build_deps
+      deps += "//arkcompiler/ets_frontend/es2panda:es2panda"
     } else {
       if (!defined(external_deps)) {
         external_deps = []
@@ -145,7 +145,7 @@ template("es2abc_gen_newest_abc") {
     } else if (host_toolchain == toolchain_win) {
       external_deps = ["ets_frontend:es2panda(${host_toolchain})"]
     } else if (ark_standalone_build) {
-      deps += es2abc_build_deps
+      deps += "//arkcompiler/ets_frontend/es2panda:es2panda"
     } else {
       external_deps = ["ets_frontend:es2panda($toolchain_linux)"]
     }
