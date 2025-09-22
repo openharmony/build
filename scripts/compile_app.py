@@ -324,7 +324,7 @@ def hvigor_build(cwd: str, options, hash_value: str):
     env['CI'] = 'true'
     env['PATH'] = f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}"
     env['NODE_HOME'] = os.path.dirname(os.path.dirname(os.path.abspath(options.nodejs)))
-    library_path = os.path.join(os.path.abspath(options.sdk_home), '20/ets/ets1.2/build-tools/ets2panda/lib/')
+    library_path = os.path.join(os.path.abspath(options.sdk_home), '20/ets/static/build-tools/ets2panda/lib/')
     env['LD_LIBRARY_PATH'] = library_path
     set_sdk_path(cwd, model_version, options, env)
 
