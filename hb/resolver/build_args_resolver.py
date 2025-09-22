@@ -266,14 +266,14 @@ class BuildArgsResolver(ArgsResolverInterface):
         build_executor = build_module.target_compiler
         target_list = []
         test_target_list = ['build_all_test_pkg', 'package_testcase', 'package_testcase_mlf']
-        precise_build_target = ""
-        target_generator = build_module.target_generator
-
-        precise_config_file = "developtools/integration_verification/tools/precise_build/precise_build_config.json"
-        precise_config = IoUtil.read_json_file(precise_config_file)
-        precise_target_file = precise_config.get('precise_result_path')
-        if os.path.exists(os.path.join("out/rk3568", precise_target_file)):
-            precise_build_target = BuildArgsResolver.get_precise_build_target(os.path.join("out/rk3568", precise_target_file), build_module)
+        if "precise_module_build" in target_arg.arg_value:
+            precise_build_target = ""
+            target_generator = build_module.target_generator
+            precise_config_file = "developtools/integration_verification/tools/precise_build/precise_build_config.json"
+            precise_config = IoUtil.read_json_file(precise_config_file)
+            precise_target_file = precise_config.get('precise_result_path')
+            if os.path.exists(os.path.join("out/rk3568", precise_target_file)):
+                precise_build_target = BuildArgsResolver.get_precise_build_target(os.path.join("out/rk3568", precise_target_file), build_module)
 
         if len(target_arg.arg_value):
             for target_name in target_arg.arg_value:
