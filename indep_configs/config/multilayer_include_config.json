@@ -1,5 +1,6 @@
 [
     "camera_framework",
     "graphic_2d",
-    "player_framework"
+    "player_framework",
+    "os_account"
 ]

@@ -76,7 +76,8 @@
     ],
     "pasteboard":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "distributed_notification_service":[
         "app",
@@ -109,7 +110,8 @@
     ],
     "request":[
         "rust",
-        "app"
+        "app",
+        "taihe"
     ],
     "imf":[
         "sdk",
@@ -123,7 +125,8 @@
     ],
     "datamgr_service":[
         "rust",
-        "app"
+        "app",
+        "taihe"
     ],
     "location":[
         "sdk",
@@ -165,7 +168,8 @@
         "app"
     ],
     "ipc":[
-        "rust"
+        "rust",
+        "taihe"
     ],
     "rust_libc":[
         "rust"
@@ -174,7 +178,8 @@
         "sdk"
     ],
     "graphic_3d":[
-        "AGP"
+        "AGP",
+        "taihe"
     ],
     "user_file_service":[
         "sdk",
@@ -185,7 +190,8 @@
     ],
     "distributed_hardware_fwk":[
         "app",
-        "sdk"
+        "sdk",
+        "hvigor"
     ],
     "file_api":[
         "rust"
@@ -216,17 +222,20 @@
         "rust"
     ],
     "input":[
-        "rust"
+        "rust",
+        "taihe"
     ],
     "faultloggerd":[
         "rust",
         "sdk"
     ],
     "audio_framework":[
-        "app"
+        "app",
+        "taihe"
     ],
     "miscdevice":[
-        "app"
+        "app",
+        "taihe"
     ],
     "hiview":[
         "app"
@@ -235,7 +244,8 @@
         "app"
     ],
     "udmf":[
-        "app"
+        "app",
+        "taihe"
     ],
     "sqlite":[
         "app"
@@ -251,13 +261,15 @@
         "app"
     ],
     "sensor":[
-        "app"
+        "app",
+        "taihe"
     ],
     "app_file_service":[
         "app"
     ],
     "time_service":[
-        "app"
+        "app",
+        "taihe"
     ],
     "hiappevent":[
         "app"
@@ -267,7 +279,7 @@
     ],
     "enterprise_device_management":[
         "app",
-        "ohpm"
+        "hvigor"
     ],
     "external_device_manager":[
         "app",
@@ -277,6 +289,23 @@
         "app"
     ],
     "kv_store":[
+        "app",
+        "taihe"
+    ],
+    "drm_framework":[
+        "taihe"
+    ],
+    "device_status":[
+        "taihe"
+    ],
+    "certificate_framework":[
+        "taihe"
+    ],
+    "graphic_2d":[
+        "taihe"
+    ],
+    "preferences":[
+        "taihe",
         "app"
     ]
 }

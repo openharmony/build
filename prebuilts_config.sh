@@ -170,7 +170,7 @@ fi
 
 if ! [[ -v args["--part-names"] ]]; then
     if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk/linux" ]]; then
-    $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version 20
+    $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version 21
     fi
 fi
 
