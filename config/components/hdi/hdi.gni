@@ -64,6 +64,7 @@ template("hdi") {
   if (defined(invoker.module_name)) {
     print(invoker.module_name)
   }
+  not_needed(invoker, ["no_other_header_files"])
 
   # system type
   system = "full"
@@ -146,12 +147,14 @@ template("hdi") {
       include_dirs += invoker.public_configs
     }
 
-    include_dirs += [
-      "$hdf_uhdf_path/ipc/include",
-      "//drivers/hdf_core/interfaces/inner_api/utils",
-      "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
-      "//drivers/hdf_core/interfaces/inner_api/hdi",
-    ]
+    if (defined(invoker.no_other_header_files) == false) {
+      include_dirs += [
+        "$hdf_uhdf_path/ipc/include",
+        "//drivers/hdf_core/interfaces/inner_api/utils",
+        "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+        "//drivers/hdf_core/interfaces/inner_api/hdi",
+      ]
+    }
   }
 
   action("idl_gen") {
@@ -367,12 +370,14 @@ template("hdi") {
   # this target has been replaced by 'idl_headers_target', please use 'idl_headers_target'
   ohos_shared_headers("$target_name" + "_idl_headers") {
     include_dirs = hdi_build_info.include_dirs
-    include_dirs += [
-    "$hdf_uhdf_path/ipc/include",
-    "//drivers/hdf_core/interfaces/inner_api/utils",
-    "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
-    "//drivers/hdf_core/interfaces/inner_api/hdi",
-    ]
+    if (defined(invoker.no_other_header_files) == false) {
+      include_dirs += [
+        "$hdf_uhdf_path/ipc/include",
+        "//drivers/hdf_core/interfaces/inner_api/utils",
+        "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+        "//drivers/hdf_core/interfaces/inner_api/hdi",
+      ]
+    }
     deps = [ ":idl_gen" ]
     subsystem_name = invoker.subsystem_name
     part_name = invoker.part_name
@@ -383,12 +388,14 @@ template("hdi") {
   idl_headers_target = target_name + "_idl_headers_" + hdi_build_info.version
   ohos_shared_headers(idl_headers_target) {
     include_dirs = hdi_build_info.include_dirs
-    include_dirs += [
-      "$hdf_uhdf_path/ipc/include",
-      "//drivers/hdf_core/interfaces/inner_api/utils",
-      "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
-      "//drivers/hdf_core/interfaces/inner_api/hdi",
-    ]
+    if (defined(invoker.no_other_header_files) == false) {
+      include_dirs += [
+        "$hdf_uhdf_path/ipc/include",
+        "//drivers/hdf_core/interfaces/inner_api/utils",
+        "//drivers/hdf_core/interfaces/inner_api/osal/uhdf",
+        "//drivers/hdf_core/interfaces/inner_api/hdi",
+      ]
+    }
     deps = [ ":idl_gen" ]
     deps += hdi_build_info.header_deps
     subsystem_name = invoker.subsystem_name
