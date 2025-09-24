@@ -60,6 +60,10 @@ def _get_all_config_files(hisysevent_config_info: dict, src_part_list: list,
 def _get_install_info(hisysevent_config_files: str, output_path: str,
                       config_install_dest_dir: str):
     install_info_list = []
+
+    if config_install_dest_dir.startswith("vendor"):
+        return install_info_list
+
     if hisysevent_config_files:
         hisysevent_merge_result_file = merge_hisysevent_config(
             hisysevent_config_files, output_path)
