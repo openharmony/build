@@ -114,6 +114,7 @@ ohos_ets_build_system_path =
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
+ohos_ets_libarkts_path = "$root_build_dir/ohos_ets/build-tools/libarkts"
 build_sdk_path = "$root_build_dir/ohos_ets"
 
 if (host_os == "mac") {
