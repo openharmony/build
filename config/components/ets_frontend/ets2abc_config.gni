@@ -92,6 +92,7 @@ ohos_ets_ark_link_deps =
 ohos_ets_libes2panda_public_deps =
     "//build/config/components/ets_frontend:ohos_ets_libes2panda_public"
 ohos_ets_build_system_deps = "ets_frontend:ohos_ets_build_system"
+ohos_ets_dependency_analyzer_deps = "ets_frontend:ohos_ets_dependency_analyzer"
 ohos_ets_ui_plugins_deps = "ace_ets2bundle:ohos_ets_ui_plugins"
 
 ohos_ets_api_tmp_path = "$root_build_dir/ohos_ets_tmp/api"
@@ -111,6 +112,8 @@ ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
 ohos_ets_build_system_path =
     "$root_build_dir/ohos_ets/build-tools/driver/build-system"
+ohos_ets_dependency_analyzer_path = 
+    "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/dependency_analyzer"
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
