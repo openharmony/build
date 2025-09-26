@@ -145,10 +145,20 @@ template("ohos_abc") {
     if (defined(invoker.deps)) {
       deps += invoker.deps
     }
-    if (!defined(invoker.external_deps)) {
-      external_deps = []
+    if (is_arkui_x) {
+      deps += es2abc_build_deps
+    } else {
+      if (!defined(external_deps)) {
+        external_deps = []
+      }
+      if (host_toolchain == toolchain_mac) {
+        external_deps = ["ets_frontend:es2panda($toolchain_mac)"]
+      } else if (host_toolchain == toolchain_win) {
+        external_deps = ["ets_frontend:es2panda(${host_toolchain})"]
+      } else {
+        external_deps = ["ets_frontend:es2panda($toolchain_linux)"]
+      }
     }
-    external_deps += es2abc_build_deps
     if (is_use_check_deps && !_test_target) {
       deps += [ ":$_check_target" ]
     }
