@@ -147,7 +147,7 @@
             "config": {
                 "linux": {
                     "x86_64": {
-                        "remote_url": "/openharmony/compiler/gn/20250912/gn-linux-x86-20250912.tar.gz",
+                        "remote_url": "/openharmony/compiler/gn/20251013/gn-linux-x86-20251013.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin"
                     },
                     "arm64": {
