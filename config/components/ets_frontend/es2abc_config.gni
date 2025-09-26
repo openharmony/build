@@ -13,7 +13,7 @@
 
 import("//build/config/components/ets_frontend/ets_frontend_config.gni")
 
-es2abc_root = "ets_frontend"
+es2abc_root = "//arkcompiler/ets_frontend/es2panda"
 es2abc_build_path = ""
 es2abc_build_deps = []
 es2abc_out_root = ""
@@ -67,7 +67,7 @@ template("es2abc_gen_abc") {
 
     deps = extra_dependencies
     if (is_arkui_x) {
-      deps += "//arkcompiler/ets_frontend/es2panda:es2panda"
+      deps += es2abc_build_deps
     } else {
       if (!defined(external_deps)) {
         external_deps = []
@@ -145,7 +145,7 @@ template("es2abc_gen_newest_abc") {
     } else if (host_toolchain == toolchain_win) {
       external_deps = ["ets_frontend:es2panda(${host_toolchain})"]
     } else if (ark_standalone_build) {
-      deps += "//arkcompiler/ets_frontend/es2panda:es2panda"
+      deps += es2abc_build_deps
     } else {
       external_deps = ["ets_frontend:es2panda($toolchain_linux)"]
     }
