@@ -102,10 +102,6 @@ def main():
     warningMessage = {
         "'As' expression for cast is deprecated for numeric types.":"'As' expression for cast is deprecated for numeric types.",
         # "IMPROPER_NUMERIC_CAST":"'As' expression for cast is deprecated for numeric types.",
-        # '"globalThis" is not supported': '"globalThis" is not supported',
-        # "Function may throw error, caller should handle it with 'try-catch' or declare '@throws'": "Function may throw error, caller should handle it with 'try-catch' or declare '@throws'",
-        # "'inputEventClient' is system api": "'inputEventClient' is system api",
-        # "Function on with this assembly signature already declared": "Function on with this assembly signature already declared",
     }
     parser = argparse.ArgumentParser()
     parser.add_argument("--log-path")
@@ -121,8 +117,7 @@ def main():
     log_path = args.log_path # build.log的文件路径
     ctw_count = []          # build.log中的ctw数量统计
     ctw_raw = {}            # build.log中的warning信息
-    ctw_whitelist_path = args.whitelist_dir # 白名单文件路径
-    # kind = args.kind                      # rk3568和xts输出的warning信息格式不同，匹配ctw的代码存在差异
+    ctw_whitelist_path = args.whitelist_dir # 白名单文件路径                  
     gen_whitelist = args.gen_whitelist      # 是否生成白名单
     xts_suitetype = args.xts_suitetype      # 生成白名单时会人工添加xts_suitetype参数
     if xts_suitetype is None:               # xts构建时xts_suitetype从环境变量获取
@@ -132,6 +127,7 @@ def main():
     build_target = args.build_target
     gn_args = args.gn_args
     
+    # rk3568和xts输出的warning信息格式不同，匹配ctw的代码存在差异
     # 只有rk3568需要检测新增warning，sdk不需要
     if product_name != "rk3568":
         print("no need to check new warning")
