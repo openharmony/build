@@ -1443,7 +1443,7 @@
     },
     {
         "install_dir": "ets/static/build-tools/libarkts/",
-        "module_label": "//developtools/ace_ets2bundle/ets1.2/libarkts:libarkts-sdk",
+        "module_label": "//developtools/ace_ets2bundle/ets1.2:ets2panda_libarkts",
         "target_os": [
             "linux",
             "windows",
