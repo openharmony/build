@@ -344,7 +344,3 @@
     RequestPermissionOnSettingStaticTest.test.ets: 1
     HttpResponseCache.test.ets: 1
     HttpRequestOptions.test.ets: 8
-    SecurityCryptoFwSymEncryptAndDecrypt.test.ets: 11
-    SecurityCryptoHmacSync.test.ets: 2
-    hkdfUtils.ets: 1
-    scryptUtils.ets: 1
