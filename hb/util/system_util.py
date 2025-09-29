@@ -32,16 +32,17 @@ from containers.status import throw_exception
 
 class HandleKwargs(metaclass=NoInstance):
     compile_item_pattern = re.compile(r'\[\d+/\d+\].+')
-    key_word_register_list = ["pre_msg", "log_stage", "after_msg", "log_filter", "custom_line_handle"]
-    filter_print = False
+    custom_kwargs = ["pre_msg", "log_stage", "after_msg", "log_filter", "custom_line_handle"]
+    enable_message_filter = False
 
     @staticmethod
-    def remove_registry_kwargs(kw_dict):
-        for item in HandleKwargs.key_word_register_list:
+    def get_env_kwargs(kw_dict):
+        for item in HandleKwargs.custom_kwargs:
             kw_dict.pop(item, "")
+        return kw_dict
 
     @staticmethod
-    def before_msg(kw_dict):
+    def print_pre_msg(kw_dict):
         pre_msg = kw_dict.get('pre_msg', '')
         if pre_msg:
             LogUtil.hb_info(pre_msg)
@@ -59,7 +60,7 @@ class HandleKwargs(metaclass=NoInstance):
         return cmd
 
     @staticmethod
-    def after_msg(kw_dict):
+    def print_post_msg(kw_dict):
         after_msg = kw_dict.get('after_msg', '')
         if after_msg:
             LogUtil.hb_info(after_msg)
@@ -79,13 +80,13 @@ class HandleKwargs(metaclass=NoInstance):
             return True, line
 
     @staticmethod
-    def set_filter_print(log_mode, kw_dict):
+    def update_filter_status(log_mode, kw_dict):
         if kw_dict.get('log_filter', False) or log_mode == 'silent':
-            HandleKwargs.filter_print = True
+            HandleKwargs.enable_message_filter = True
 
     @staticmethod
-    def handle_print(line, log_mode):
-        if HandleKwargs.filter_print:
+    def print_line(line, log_mode):
+        if HandleKwargs.enable_message_filter:
             info = re.findall(HandleKwargs.compile_item_pattern, line)
             if len(info):
                 LogUtil.hb_info(info[0], mode=log_mode)
@@ -97,17 +98,18 @@ class SystemUtil(metaclass=NoInstance):
     @staticmethod
     def exec_command(cmd: list, log_path='out/build.log', exec_env=None, log_mode='normal',
                      **kwargs):
-        raw_kwargs = copy.deepcopy(kwargs)
-        HandleKwargs.remove_registry_kwargs(kwargs)
+        custom_kwargs = copy.deepcopy(kwargs)
+        env_kwargs = HandleKwargs.get_env_kwargs(kwargs)
 
-        HandleKwargs.set_log_stage(raw_kwargs)
-        HandleKwargs.set_filter_print(log_mode, raw_kwargs)
+        HandleKwargs.enable_message_filter = False
+        HandleKwargs.set_log_stage(custom_kwargs)
+        HandleKwargs.update_filter_status(log_mode, custom_kwargs)
         cmd = HandleKwargs.remove_useless_space(cmd)
 
         if not os.path.exists(os.path.dirname(log_path)):
             os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
-        HandleKwargs.before_msg(raw_kwargs)
+        HandleKwargs.print_pre_msg(custom_kwargs)
         hidden_pattern = SensitiveHidden.load_sensitive_conf()
         with open(log_path, 'at', encoding='utf-8') as log_file:
             process = subprocess.Popen(cmd,
@@ -116,17 +118,17 @@ class SystemUtil(metaclass=NoInstance):
                                        encoding='utf-8',
                                        env=exec_env,
                                        errors="ignore",
-                                       **kwargs)
+                                       **env_kwargs)
             for _line in iter(process.stdout.readline, ''):
                 line = SensitiveHidden.hidden_sensitive_info(hidden_pattern, _line)
-                keep_deal, new_line = HandleKwargs.handle_line(line, raw_kwargs)
+                keep_deal, new_line = HandleKwargs.handle_line(line, custom_kwargs)
                 if keep_deal:
                     log_file.write(new_line)
-                    HandleKwargs.handle_print(new_line, log_mode)
+                    HandleKwargs.print_line(new_line, log_mode)
 
         process.wait()
-        HandleKwargs.after_msg(raw_kwargs)
-        HandleKwargs.clear_log_stage(raw_kwargs)
+        HandleKwargs.print_post_msg(custom_kwargs)
+        HandleKwargs.clear_log_stage(custom_kwargs)
 
         ret_code = process.returncode
         if ret_code != 0:
