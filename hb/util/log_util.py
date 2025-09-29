@@ -175,14 +175,26 @@ class LogUtil(metaclass=NoInstance):
                     error_log, log_path), return_status_code)
 
     @staticmethod
-    def get_compiler_failed_log(log_path):
+    def get_compiler_failed_pattern(cmd: list):
+        # in verbose mode, output commands instead of descriptions.
+        if any(flag in cmd for flag in ("-v", "--verbose")):
+            prefix = r"\[\d+/\d+]"
+        else:
+            description_str = "|".join(re.escape(k) for k in NINJA_DESCRIPTION)
+            prefix = rf'(?:\[\d+/\d+\]\s+\b(?:{description_str}))\b'
+
+        pattern_str = rf'({prefix}.*?)(?={prefix}|ninja: build stopped)'
+        failed_pattern = re.compile(pattern_str, re.DOTALL)
+
+        return failed_pattern
+
+    @staticmethod
+    def get_compiler_failed_log(log_path, cmd: list):
         error_log = os.path.join(os.path.dirname(log_path), 'error.log')
         is_compiler_failed = False
         with open(log_path, 'rt', encoding='utf-8') as log_file:
             data = log_file.read()
-        description_str = "|".join(re.escape(k) for k in NINJA_DESCRIPTION)
-        prefix = rf'(?:\[\d+/\d+\]\s+\b(?:{description_str}))\b'
-        failed_pattern = re.compile(rf'({prefix}.*?)(?={prefix}|ninja: build stopped)', re.DOTALL)
+        failed_pattern = LogUtil.get_compiler_failed_pattern(cmd)
         failed_log = failed_pattern.findall(data)
         if failed_log:
             is_compiler_failed = True
@@ -198,7 +210,7 @@ class LogUtil(metaclass=NoInstance):
                     error_log, log_path), return_status_code)
 
     @staticmethod
-    def get_failed_log(log_path):
+    def get_failed_log(log_path, cmd: list):
         last_error_log = os.path.join(os.path.dirname(log_path), 'error.log')
         if os.path.exists(last_error_log):
             mtime = os.stat(last_error_log).st_mtime
@@ -206,6 +218,6 @@ class LogUtil(metaclass=NoInstance):
                 last_error_log, '{}/error.{}.log'.format(os.path.dirname(last_error_log), mtime))
         LogUtil.get_gn_failed_log(log_path)
         LogUtil.get_ninja_failed_log(log_path)
-        LogUtil.get_compiler_failed_log(log_path)
+        LogUtil.get_compiler_failed_log(log_path, cmd)
         raise OHOSException(
             'BUILD Failed! Please check build log for more information: {}'.format(log_path))
