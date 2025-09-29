@@ -132,7 +132,7 @@ class SystemUtil(metaclass=NoInstance):
         if ret_code != 0:
             cmd_str = " ".join(cmd)
             LogUtil.hb_error(f"command failed: \"{cmd_str}\" , ret_code: {ret_code}")
-            LogUtil.get_failed_log(log_path)
+            LogUtil.get_failed_log(log_path, cmd)
 
     @staticmethod
     def get_current_time(time_type: str = 'default'):
