@@ -8,9 +8,7 @@
     ],
     "all_dependent_configs": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
-        "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler",
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_napi_common:ipc_napi",
-        "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single"
+        "//base/notification/eventhandler/frameworks/eventhandler:libeventhandler"
     ],
     "includes_over_range": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
