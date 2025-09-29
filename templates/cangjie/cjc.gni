@@ -31,6 +31,7 @@ template("ohos_cangjie_library") {
                              "part_name",
                              "subsystem_name",
                              "sources",
+                             "output_name"
                            ])
     if (!defined(cjc_args)) {
       cjc_args = []
@@ -52,7 +53,8 @@ template("ohos_cangjie_shared_library") {
                              "cj_external_deps",
                              "sources",
                              "cjc_args",
-                             "compilation_config"
+                             "compilation_config",
+                             "output_name"
                            ])
 
     not_needed(invoker, ["deps", "external_deps"])
@@ -92,7 +94,8 @@ template("ohos_cangjie_static_library") {
                              "part_name",
                              "subsystem_name",
                              "sources",
-                             "compilation_config"
+                             "compilation_config",
+                             "output_name"
                            ])
   }
 }
@@ -110,7 +113,8 @@ template("ohos_cangjie_macro_library") {
                              "part_name",
                              "subsystem_name",
                              "sources",
-                             "compilation_config"
+                             "compilation_config",
+                             "output_name"
                            ])
   }
 }
@@ -128,6 +132,7 @@ template("ohos_cangjie_unittest") {
                              "part_name",
                              "subsystem_name",
                              "sources",
+                             "output_name"
                            ])
     if (!defined(cjc_args)) {
       cjc_args = []

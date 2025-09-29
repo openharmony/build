@@ -89,13 +89,17 @@ template("_cj_target") {
     }
   }
 
+  package_name = target_name
   outname_ = target_name
+  if (defined(invoker.output_name)) {
+    outname_ = invoker.output_name
+  }
   base_outdir = "${root_out_dir}/cangjie_libraries"
   base_outdir_abs = rebase_path(base_outdir)
 
   outdir = base_outdir
-  if (outname_ != "ohos") {
-    module_name = string_split(outname_, ".")
+  if (package_name != "ohos") {
+    module_name = string_split(package_name, ".")
     outdir = "${base_outdir}/${module_name[0]}"
   }
   outdir_abs = rebase_path(outdir)
@@ -138,7 +142,7 @@ template("_cj_target") {
 
   outputs_ = [ "${outdir}/${outfile_name}" ]
   if (is_library) {
-    outputs_ += [ "${outdir}/${outname_}.cjo" ]
+    outputs_ += [ "${outdir}/${package_name}.cjo" ]
   }
 
   cjc_args_ += [ "--target=${cjc_toolchain.target_platform}" ]
@@ -166,9 +170,21 @@ template("_cj_target") {
 
   cjc_args_ += cjc_args
 
+  _cangjie_deps_config = "${target_out_dir}/${target_name}__deps_config.json"
+  generated_file("${target_name}__deps_config") {
+    deps = invoker.deps
+    output_conversion = "json"
+    outputs = [ _cangjie_deps_config ]
+
+    data_keys = [ "cangjie_deps" ]
+  }
+
   save_config = {
+    package_name = package_name
     outname = outname_
     output_type = output_type
+    cjc_toolchain_config = cjc_toolchain
+    cangjie_deps_config = rebase_path(_cangjie_deps_config)
     outfile = "${outdir_abs}/${outfile_name}"
     import_path = base_outdir_abs
     args = cjc_args_
@@ -182,6 +198,7 @@ template("_cj_target") {
     if (external_deps_ != []) {
       external_deps = external_deps_
     }
+
     cjc_deps = []
     foreach(dep, cj_deps) {
       t_name = get_label_info(dep, "name")
@@ -271,7 +288,7 @@ template("_cj_target") {
       prebuilt = true
       deps = [ ":${compile_target_name}" ]
       sources = [ outputs_[1] ]
-      outputs = [ "${target_out_dir}/${outname_}.cjo" ]
+      outputs = [ "${target_out_dir}/${package_name}.cjo" ]
     }
   }
 }
