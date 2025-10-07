@@ -91,7 +91,7 @@ class Main():
     def main():
         main = Main()
 
-        if len(sys.argv) > 1 and sys.argv[1] == 'build':
+        if len(sys.argv) > 1 and sys.argv[1] == 'build' and '-i' not in sys.argv:
             is_indep_args, component_name_list = ArgsResolver.is_indep_args(sys.argv[2:])
             # 将源码编译的命令转成独立编译
             if is_indep_args:
