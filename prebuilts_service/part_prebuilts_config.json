@@ -45,12 +45,14 @@
     ],
     "bundle_tool":[
         "app",
-        "hvigor"
+        "hvigor",
+        "base"
     ],
     "bundle_framework":[
         "app",
         "sdk",
-        "hvigor"
+        "hvigor",
+        "base"
     ],
     "device_manager":[
         "app",
@@ -115,7 +117,8 @@
     ],
     "imf":[
         "sdk",
-        "app"
+        "app",
+        "taihe"
     ],
     "safwk":[
         "rust"
@@ -227,7 +230,8 @@
     ],
     "faultloggerd":[
         "rust",
-        "sdk"
+        "sdk",
+        "app"
     ],
     "audio_framework":[
         "app",
@@ -241,7 +245,8 @@
         "app"
     ],
     "av_session":[
-        "app"
+        "app",
+        "taihe"
     ],
     "udmf":[
         "app",
@@ -258,7 +263,8 @@
         "hvigor"
     ],
     "relational_store":[
-        "app"
+        "app",
+        "taihe"
     ],
     "sensor":[
         "app",
@@ -307,5 +313,15 @@
     "preferences":[
         "taihe",
         "app"
+    ],
+    "camera_framework":[
+        "taihe"
+    ],
+    "player_framework":[
+        "taihe"
+    ],
+    "hiperf":[
+        "app",
+        "sdk"
     ]
 }

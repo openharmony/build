@@ -620,7 +620,7 @@
                 {
                     "type": "download_sdk",
                     "sdk_name": "ohos-sdk-full-linux",
-                    "version": 21
+                    "version": 22
                 }
             ]
         }
