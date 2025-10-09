@@ -592,7 +592,7 @@ config("compiler") {
       if (use_lld) {
         ldflags += [
           "-Wl,--thinlto-jobs=16",
-          "-Wl,--thinlto-cache-dir=" + $cache_path,
+          "-Wl,--thinlto-cache-dir=$cache_path",
         ]
       } else {
         ldflags += [ "-Wl,-plugin-opt,jobs=16" ]
