@@ -604,7 +604,7 @@
         },
         {
           "unzip_dir": "prebuilts/build-tools/darwin-x86/bin",
-          "file_path": "/openharmony/compiler/gn/20250529/gn-darwin-x86-20250529.tar.gz",
+          "file_path": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz",
           "unzip_filename": "gn"
         },
         {
