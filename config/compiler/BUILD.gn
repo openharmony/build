@@ -120,6 +120,8 @@ declare_args() {
 
   # By default only the binaries in official builds get build IDs.
   force_local_build_id = true
+
+  use_thinlto_cache = false
 }
 
 declare_args() {
