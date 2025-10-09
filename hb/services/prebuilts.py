@@ -38,6 +38,9 @@ class PreuiltsService(BuildFileGeneratorInterface):
         if not "--enable-prebuilts" in sys.argv:
             return
         part_names = self._get_part_names()
+        if not part_names:
+            LogUtil.hb_error("no specify part names found")
+            sys.exit(1)
         if not self.check_whether_need_update(part_names):
             LogUtil.hb_info("you have already execute prebuilts download step and no configs changed, skip this step")
             return        
@@ -57,28 +60,33 @@ class PreuiltsService(BuildFileGeneratorInterface):
             subprocess.run(
                 cmd, check=True, stdout=None, stderr=None  # 直接输出到终端
             )
-            self.write_last_update({"last_update_time": time.time(), "parts": part_names})
+            current_time = time.time()
+            record = {}
+            for name in part_names:
+                record[name] = current_time
+            self.write_last_update(record)
         except subprocess.CalledProcessError as e:
             print(f"{cmd} execute failed: {e.returncode}")
             raise e
 
     def check_whether_need_update(self, part_names) -> bool:
         last_update = self.read_last_update()
-        last_update_time = last_update.get("last_update_time", 0)
-        last_update_parts = last_update.get("parts", [])
         # 判断是否有上次下载记录，没有则需要重新执行预下载
-        if not last_update_time:
+        if not last_update:
             LogUtil.hb_info("No last update record found, will update prebuilts")
             return True
         else:
-            # 判断预下载相关的配置文件和脚本是否有变更，若有则需要重新执行预下载
-            if self.check_file_changes():
-                LogUtil.hb_info("Prebuilts config file has changed, will update prebuilts")
-                return True
+            recorded_parts = list(last_update.keys())
             # 判断独立编译的部件是否有变更，若有则需要重新执行预下载
-            if part_names and not set(part_names).issubset(set(last_update_parts)):
+            if not set(part_names).issubset(set(recorded_parts)):
                 LogUtil.hb_info("The specified part names have changed, will update prebuilts")
                 return True
+            min_time = min([last_update[part] for part in part_names])
+            # 判断预下载相关的配置文件和脚本是否有变更，若有则需要重新执行预下载
+            if self.check_file_changes(min_time):
+                LogUtil.hb_info("Prebuilts config file has changed, will update prebuilts")
+                return True
+            
             return False
 
     def read_last_update(self):
@@ -92,12 +100,15 @@ class PreuiltsService(BuildFileGeneratorInterface):
             return {}
     
     def write_last_update(self, data):
-        os.makedirs(os.path.dirname(self.last_update), exist_ok=True)
-        try:
+        if not os.path.exists(self.last_update):
+            os.makedirs(os.path.dirname(self.last_update), exist_ok=True)
             with open(self.last_update, 'w') as f:
                 json.dump(data, f, indent=4)
-        except Exception as e:
-            LogUtil.hb_error(f"Failed to write last update file: {e}")
+        else:
+            existing_data = self.read_last_update()
+            existing_data.update(data)
+            with open(self.last_update, 'w') as f:
+                json.dump(existing_data, f, indent=4)
 
     def get_ohos_dir(self):
         cur_dir = os.getcwd()
@@ -124,17 +135,16 @@ class PreuiltsService(BuildFileGeneratorInterface):
         mtimes.update({prebuilts_config_shell_path: os.path.getmtime(prebuilts_config_shell_path)})
         return mtimes
 
-    def check_file_changes(self) -> bool:
+    def check_file_changes(self, last_update_time) -> bool:
         """
         check if the directory has changed by comparing file modification times.
         :param dir_path: directory
         :param prev_mtimes: last known modification times of files in the directory 
         :return: if the directory has changed, and the current modification times of files in the directory
         """
-        last_update = self.read_last_update().get("last_update_time", 0)
         current_mtimes = self.get_preguilt_download_related_files_mtimes()
         for _, mtime in current_mtimes.items():
-            if mtime > last_update:
+            if mtime > last_update_time:
                 return True
         return False
 
