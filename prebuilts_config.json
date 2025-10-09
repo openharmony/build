@@ -157,7 +157,7 @@
                 },
                 "darwin": {
                     "x86_64, arm64": {
-                        "remote_url": "/openharmony/compiler/gn/20250529/gn-darwin-x86-20250529.tar.gz",
+                        "remote_url": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz",
                         "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin"
                     }
                 }
