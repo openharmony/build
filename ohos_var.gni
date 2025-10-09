@@ -259,6 +259,7 @@ if (defined(build_cross_platform_version) && build_cross_platform_version) {
 declare_args() {
   ohpm_registry = ""
   use_hvigor_cache = false
+  use_thinlto_cache = false
   hvigor_obfuscation = true
   ohos_app_enable_ubsan = false
   ohos_app_enable_asan = false
