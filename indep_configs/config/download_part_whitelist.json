@@ -1,7 +1,7 @@
 {
   "ets_utils": ["typescript"],
   "ylong_runtime": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
-  "ylong_json": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
+  "ylong_json": ["rust", "rust_cxx", "rust_libc", "rust_bindgen"],
   "c_utils": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
   "samgr": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen", "ylong_runtime"],
   "safwk": ["rust", "rust_cxx", "rust_libc", "rust_syn", "rust_proc_macro2", "rust_quote", "rust_unicode_ident", "rust_bindgen"],
