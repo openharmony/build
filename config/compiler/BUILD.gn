@@ -585,8 +585,8 @@ config("compiler") {
       # Limit the parallelism to avoid too aggressive competition between
       # linker jobs. This is still suboptimal to a potential dynamic
       # resource allocation scheme, but should be good enough.
-      home_path = getenv("HOME")
       if (use_thinlto_cache) {
+        home_path = getenv("HOME")
         cache_path = "$home_path/thinlto-cache"
       } else {
         cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
