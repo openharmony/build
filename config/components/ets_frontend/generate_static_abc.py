@@ -477,6 +477,7 @@ def build_driver_config(args: argparse.Namespace) -> None:
         "dependentModuleList": [],
         "frameworkMode": True,
         "useEmptyPackage": True,
+        "externalApiPaths": args.scan_path
     }
 
     plugins = {}
