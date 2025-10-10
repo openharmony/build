@@ -18,6 +18,8 @@
 import os
 import re
 import sys
+import json
+import urllib.request
 
 from resources.global_var import CURRENT_OHOS_ROOT
 from resources.global_var import COMPONENTS_PATH_DIR
@@ -77,6 +79,13 @@ class ComponentUtil():
         default_deps_path = os.path.join(
             CURRENT_OHOS_ROOT, 'out', 'preloader', 'default_deps.json')
         return default_deps_path
+    
+    @staticmethod
+    def get_product_component_path(product_name: str):
+        gen_product_component_list(product_name)
+        product_components_out_file = os.path.join(CURRENT_OHOS_ROOT, "out", "preloader", "product_components.json")
+        return product_components_out_file
+
 
     @staticmethod
     @throw_exception
@@ -168,3 +177,32 @@ def gen_default_deps_json(variant, root_path, has_test=False):
     preloader_path = os.path.join(root_path, "out", "preloader")
     os.makedirs(preloader_path, exist_ok=True)
     IoUtil.dump_json_file(default_deps_out_file, default_deps_json)
+
+
+def gen_product_component_list(product_name: str):
+    config_path = os.path.join(CURRENT_OHOS_ROOT, "build", "indep_configs", "config", "product_component_url_config.json")
+    component_url_list = IoUtil.read_json_file(config_path).get(product_name, [])
+    
+    component_list = set()
+    for url in component_url_list:
+        try:
+            response = urllib.request.urlopen(url, timeout=10)
+            data = json.loads(response.read().decode("utf-8"))
+            read_component(component_list, data)
+        except Exception as e:
+            raise OHOSException(f"Failed to download or parse component config from {url}: {e}", "0000")
+    product_components_out_file = os.path.join(CURRENT_OHOS_ROOT, "out", "preloader", "product_components.json")
+    os.makedirs(os.path.dirname(product_components_out_file), exist_ok=True)
+    IoUtil.dump_json_file(product_components_out_file, list(component_list))
+
+
+def read_component(res_set, data):
+    if isinstance(data, dict):
+        for key in data:
+            if key == "component":
+                res_set.add(data[key])
+            else:
+                read_component(res_set , data[key])
+    elif isinstance(data, list):
+        for item in data:
+            read_component(res_set , item)

@@ -1,0 +1,7 @@
+{
+    "standard":[
+        "https://raw.gitcode.com/openharmony/vendor_hihope/raw/master/rk3568/config.json",
+        "https://raw.gitcode.com/openharmony/productdefine_common/raw/master/inherit/rich.json",
+        "https://raw.gitcode.com/openharmony/productdefine_common/raw/master/inherit/chipset_common.json"
+    ]
+}
