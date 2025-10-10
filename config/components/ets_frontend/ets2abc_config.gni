@@ -124,10 +124,15 @@ if (host_os == "mac") {
       "//prebuilts/build-tools/common/nodejs/node-v16.20.2-linux-x64/bin"
 }
 
-if (ohos_indep_compiler_enable) {
+if (ohos_indep_compiler_enable && !path_exists("//arkcompiler/runtime_core")) {
   ark_link_target_out_path =
       get_label_info(static_linker_build_deps, "target_out_dir") +
       "/clang_x64/libs/ark_link"
+} else {
+  ark_link_target_out_path = "$static_linker_build_path"
+}
+
+if (ohos_indep_compiler_enable && !path_exists("//arkcompiler/ets_frontend")) {
   ets2panda_target_out_path =
       get_label_info(ets2abc_build_deps, "target_out_dir") +
       "/clang_x64/libs/es2panda"
@@ -135,7 +140,6 @@ if (ohos_indep_compiler_enable) {
       get_label_info(libes2panda_public_build_deps, "target_out_dir") +
       "/clang_x64/libs/libes2panda_public.so"
 } else {
-  ark_link_target_out_path = "$static_linker_build_path"
   ets2panda_target_out_path = "$ets2abc_build_path"
   libes2panda_public_out_path = "$libes2panda_public_build_path"
 }
