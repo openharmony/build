@@ -22,6 +22,9 @@ import json
 import time
 import re
 import urllib.request
+from datetime import datetime
+from pathlib import Path
+import xml.etree.ElementTree as ET
 
 
 def _get_args():
@@ -1981,18 +1984,114 @@ def _get_component_check(local_test) -> list:
     return check_list
 
 
+def get_all_xml_files(entry_file_path, basic_dir, visited):
+    """递归获取所有子xml文件"""
+    xml_files = set()
+    tree = ET.parse(entry_file_path)
+    root = tree.getroot()
+    for child in root:
+        if child.tag == 'include':
+            include_file = child.get('name')
+            file_path = os.path.join(basic_dir, include_file)
+            if not file_path in visited:
+                xml_files.add(file_path)
+                # 递归处理子xml文件
+                child_xml_files = get_all_xml_files(file_path, basic_dir, visited)
+                xml_files.update(child_xml_files)
+    return xml_files
+
+
+def get_xml_projects(xml_path):
+    """递归提取project元素"""
+    projects = []
+    tree = ET.parse(xml_path)
+    root = tree.getroot()
+    for child in root:
+        if child.tag == 'project':
+            project_info = {
+                'name': child.get('name', ''),
+                'path': child.get('path', ''),
+                'revision': child.get('revision', '')
+            }
+            projects.append(project_info)
+    return projects
+
+
+def judge_revision_is_master(entry_manifest_path):
+    """解析manifest.xml文件，提取project信息, 读取revision是否是master"""
+    basic_dir = os.path.join(os.path.dirname(entry_manifest_path), "manifests")
+    # 递归获取所有子xml文件
+    visited = set()
+    visited.add(entry_manifest_path)
+    all_xml_files = get_all_xml_files(entry_manifest_path, basic_dir, visited)
+    all_xml_files.add(entry_manifest_path)
+
+    all_projects = []
+    for xml_file in all_xml_files:
+        projects = get_xml_projects(xml_file)
+        all_projects.extend(projects)
+    revision = all_projects[0].get('revision', '')
+    revision_is_master = revision.lower() == 'master'
+    return revision_is_master
+
+
 def generate_made_in_mark_file(args):
-    from datetime import datetime
-    import pytz
-    str_time = datetime.now(pytz.timezone('Asia/Shanghai')).strftime("%Y_%m_%d_%H_%M_%S")
+
     build_origin = args.get("build_origin", "")
-    if not build_origin:
-        return
-    mark_file = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), f"made_in_{build_origin}")
+    
+    if "code_sync_time" in args:
+        modify_datetime = args["code_sync_time"]
+        revision_is_master = args["revision_is_master"]
+    else:
+        src_root_path = args.get("root_path", "")
+        if not src_root_path:
+            return
+        src_root_path = os.path.abspath(src_root_path)
+        repo_path = os.path.join(src_root_path, ".repo")
+        while not os.path.exists(repo_path):
+            new_src_root_path = os.path.dirname(src_root_path)
+            repo_path = os.path.join(new_src_root_path, ".repo")
+            if new_src_root_path == src_root_path:
+                print("Error: Can't find .repo directory in any parent directory.")
+                return
+            src_root_path = new_src_root_path
+
+        
+        manifest_path = os.path.join(src_root_path, ".repo", "manifest.xml")
+        revision_is_master = judge_revision_is_master(manifest_path)
+
+        if revision_is_master:
+            # 如果revision是master, 那么获取最后一次执行reop sync的时间
+            file_path = os.path.join(src_root_path, ".repo", ".repo_fetchtimes.json")
+        else:
+            # 如果revision不是master, 那么获取manifest.xml的最后修改时间，作为代码tag点
+            file_path = manifest_path
+            
+        file = Path(file_path)
+
+        if not file.exists():
+            print(f"错误：文件 '{file_path}' 不存在")
+            return
+        try:
+            # 获取最后修改时间（时间戳）
+            modify_timestamp = file.stat().st_mtime
+            # 转换为datetime对象（带时区信息）
+            modify_datetime = datetime.fromtimestamp(modify_timestamp)
+            args["code_sync_time"] = modify_datetime
+            args["revision_is_master"] = revision_is_master
+        except Exception as e:
+            print(f"获取文件时间时出错：{str(e)}")
+
+    # 格式化输出
+    simpilify_formatted_time = modify_datetime.strftime("%Y%m%d%H%M%S")
+    standard_formatted_time = modify_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    mark_file = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), f"package_made_info_{simpilify_formatted_time}")
     basic_dir = os.path.dirname(mark_file)
     os.makedirs(basic_dir, exist_ok=True)
-    with open(f"{mark_file}_{str_time}", 'w') as f:
-        f.write(f"the hpm package is made in {build_origin}, {str_time}")
+    with open(f"{mark_file}", 'w') as f:
+        if not build_origin:
+            build_origin = "unknown location"
+        f.write(f"The hpm package is made in an {build_origin},\nThe code synchronization time is : {standard_formatted_time},\nUse master revision: {revision_is_master}\n")
 
 
 def _package_interface(args, parts_path_info, part_name, subsystem_name, components_json):
