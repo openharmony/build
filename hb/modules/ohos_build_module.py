@@ -29,6 +29,7 @@ from util.system_util import SystemUtil
 from util.log_util import LogUtil
 from containers.status import throw_exception
 from util.monitor import Monitor
+from dfx.build_tracker import build_tracker
 
 
 class OHOSBuildModule(BuildModuleInterface):
@@ -75,6 +76,11 @@ class OHOSBuildModule(BuildModuleInterface):
     def _prebuild(self):
         self._run_phase(BuildPhase.PRE_BUILD)
 
+    @build_tracker(
+        event_name="_preload",
+        build_type="build",
+        args_key="args_dict",
+    )
     def _preload(self):
         self._run_phase(BuildPhase.PRE_LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').arg_value:
@@ -82,6 +88,11 @@ class OHOSBuildModule(BuildModuleInterface):
             self.preloader.run()
             LogUtil.clear_stage()
 
+    @build_tracker(
+        event_name="_load",
+        build_type="build",
+        args_key="args_dict",
+    )
     def _load(self):
         self._run_phase(BuildPhase.LOAD)
         if self.args_dict.get('fast_rebuild', None) and not self.args_dict.get('fast_rebuild').arg_value:
@@ -92,6 +103,11 @@ class OHOSBuildModule(BuildModuleInterface):
     def _pre_target_generate(self):
         self._run_phase(BuildPhase.PRE_TARGET_GENERATE)
 
+    @build_tracker(
+        event_name="_target_generate",
+        build_type="build",
+        args_key="args_dict",
+    )
     def _target_generate(self):
         self._run_phase(BuildPhase.TARGET_GENERATE)
         if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("fast_rebuild").arg_value:
@@ -105,6 +121,11 @@ class OHOSBuildModule(BuildModuleInterface):
     def _pre_target_compilation(self):
         self._run_phase(BuildPhase.PRE_TARGET_COMPILATION)
 
+    @build_tracker(
+        event_name="_target_compilation",
+        build_type="build",
+        args_key="args_dict",
+    )
     def _target_compilation(self):
         self._run_phase(BuildPhase.TARGET_COMPILATION)
         if not self.args_dict.get("build_only_load").arg_value and not self.args_dict.get("build_only_gn").arg_value:
@@ -112,6 +133,11 @@ class OHOSBuildModule(BuildModuleInterface):
             self.target_compiler.run()
             LogUtil.clear_stage()
 
+    @build_tracker(
+        event_name="_post_target_compilation",
+        build_type="build",
+        args_key="args_dict",
+    )
     def _post_target_compilation(self):
         self._run_phase(BuildPhase.POST_TARGET_COMPILATION)
 
