@@ -1,0 +1,19 @@
+{
+    "4.0": {
+        "default": {
+            "nodejs_home": "14.21.1"
+        }
+    },
+    "5.x": {
+        "default": {
+            "nodejs_home": "18.20.1",
+            "hvigor_home": "prebuilts/build-tools/common/oh-command-line-tools"
+        }
+    },
+    "6.x": {
+        "default": {
+            "nodejs_home": "18.20.1",
+            "hvigor_home": "prebuilts/oh-command-line-tools/hvigor"
+        }
+    }
+}
