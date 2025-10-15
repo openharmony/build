@@ -296,7 +296,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
         code_home = os.path.dirname(os.path.dirname(options.sdk_home))
         cmd.extend([f'{hvigor_home}/hvigorw'])
         if hvigor_home_config:
-            hvigor_home = hvigor_home_config
+            hvigor_home = os.path.join(code_home, hvigor_home_config)
         else:
             hvigor_home = f"{code_home}/tool/command-line-tools/bin"
         
