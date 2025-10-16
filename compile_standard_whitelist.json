@@ -310,7 +310,8 @@
         "//third_party/flutter/build/skia:ace_fontmgr_standard",
         "//third_party/flutter/build/skia:skia_shared",
         "//third_party/vk-gl-cts/framework/platform/ohos/rosen_context:rosen_context",
-        "//third_party/vk-gl-cts/framework/platform:libdeqp_ohos_platform"
+        "//third_party/vk-gl-cts/framework/platform:libdeqp_ohos_platform",
+        "//ide/tools/previewer:lite_previewer"
     ],
     "external_deps_added_self_part_module": [
         "//build/rust/tests/test_bin_crate:test_bin_crate",
