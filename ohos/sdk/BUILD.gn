@@ -79,6 +79,22 @@ if (!use_current_sdk) {
   exec_script(arkts_sdk_config_parser, arkts_sdk_args)
   ohos_sdk_description_file = ohos_sdk_arkts_description_file
 
+  ohos_public_sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
+  if (!sdk_build_cangjie) {
+    output_sdk_delivery_list = "${interface_sdk_path}/ohos_public_sdk_delivery_list.json"
+    cangjie_sdk_config_proc = "//build/ohos/sdk/remove_cangjie_ohos_sdk_config.py"
+    cangjie_sdk_args = [
+      "--sdk-description-file",
+      rebase_path(ohos_sdk_description_file, root_build_dir),
+      "--sdk-delivery-list",
+      rebase_path(ohos_public_sdk_delivery_list, root_build_dir),
+      "--output-sdk-delivery-list",
+      rebase_path(output_sdk_delivery_list, root_build_dir),
+    ]
+    exec_script(cangjie_sdk_config_proc, cangjie_sdk_args)
+    ohos_public_sdk_delivery_list = output_sdk_delivery_list
+  }
+
   generated_sdk_modules_gni = "${generated_files_dir}/ohos_sdk_modules.gni"
   generated_sdk_types_file = "${generated_files_dir}/generated_sdk_types.txt"
 
@@ -219,7 +235,7 @@ if (!use_current_sdk) {
     deps += [ "${generated_files_dir}:generated_ohos_sdk" ]
   }
 
-  sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
+  sdk_delivery_list = ohos_public_sdk_delivery_list
   action("check_sdk_completeness") {
     deps = [
       ":ohos_sdk",
