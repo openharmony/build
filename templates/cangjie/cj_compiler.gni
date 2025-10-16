@@ -82,7 +82,12 @@ template("_cj_target") {
       trimpath,
     ]
 
-    cjc_args_ += [ "-O2" ]
+    # cjc only support O0 on arm
+    if (current_cpu == "arm") {
+      cjc_args_ += [ "-O0" ]
+    } else {
+      cjc_args_ += [ "-O2" ]
+    }
 
     if (use_clang_coverage) {
       cjc_args_ += [ "-lclang_rt.profile" ]
