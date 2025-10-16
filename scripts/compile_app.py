@@ -294,11 +294,11 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     elif model_version:
         hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
         code_home = os.path.dirname(os.path.dirname(options.sdk_home))
-        cmd.extend([f'{hvigor_home}/hvigorw'])
         if hvigor_home_config:
             hvigor_home = os.path.join(code_home, hvigor_home_config)
         else:
             hvigor_home = f"{code_home}/tool/command-line-tools/bin"
+        cmd.extend([f'{hvigor_home}/hvigorw'])
         
     else:
         cmd.extend(['./hvigorw'])
