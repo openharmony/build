@@ -17,7 +17,6 @@ import("cjc_toolchain.gni")
 declare_args() {
   # Enable cjc Source-based Code Coverage.
   use_cjc_coverage = false
-  build_ohos_split_test = false
 }
 
 template("_cj_target") {
