@@ -121,7 +121,7 @@ class Hpm(BuildFileGeneratorInterface):
             hpm_build_cmd = [self.exec, "build"] + self._convert_flags()
             variant = hpm_build_cmd[hpm_build_cmd.index("--variant") + 1]
             logpath = os.path.join('out', variant, 'build.log')
-            self._run_hpm_cmd(hpm_build_cmd, log_path=logpath)
+            self._run_hpm_cmd(hpm_build_cmd, log_path=logpath, max_try=3)
 
     @throw_exception
     def _execute_hpm_install_cmd(self, **kwargs):
@@ -143,7 +143,7 @@ class Hpm(BuildFileGeneratorInterface):
         hpm_update_cmd = [self.exec, "update"] + self._convert_flags()
         self._run_hpm_cmd(hpm_update_cmd)
 
-    def _run_hpm_cmd(self, cmd, log_path):
+    def _run_hpm_cmd(self, cmd, log_path, max_try=1):
         cmd_str = " ".join(cmd)
         SystemUtil.exec_command(
             cmd,
@@ -151,6 +151,7 @@ class Hpm(BuildFileGeneratorInterface):
             pre_msg=f"Executing hpm command: {cmd_str}",
             after_msg="end hpm command",
             custom_line_handle=self._custom_line_handle,
+            max_try=max_try
         )
         hpm_info = get_hpm_check_info()
         if hpm_info:
