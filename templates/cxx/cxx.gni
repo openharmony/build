@@ -21,6 +21,11 @@ import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
+  # test label
+  test_label_type = ""
+}
+
+declare_args() {
   # Compile with no sanitize check, for local debug only
   allow_sanitize_debug = false
 }
@@ -449,6 +454,9 @@ template("ohos_executable") {
       if (defined(build_ext_path)) {
         visibility += [ "${build_ext_path}/*" ]
       }
+      if (test_label_type != "") {
+        visibility += [ "${root_build_dir}/build_configs/:*" ]
+      }
     }
 
     if (defined(invoker.static_link) && invoker.static_link) {
@@ -511,8 +519,15 @@ template("ohos_executable") {
         toolchain = current_toolchain
         toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
       }
+      test_info = []
+      if (_test_target) {
+        if (test_label_type != "" && string_replace(test_label_type, part_name, "") != test_label_type) {
+            test_info += [ get_label_info(":${target_name}", "label_with_toolchain") ]
+        }
+      }
       metadata = {
         install_modules = [ install_module_info ]
+        test_list_info = test_info
       }
     }
     if (!_test_target) {
