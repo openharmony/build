@@ -31,7 +31,7 @@ template("ohos_cangjie_library") {
                              "part_name",
                              "subsystem_name",
                              "sources",
-                             "output_name"
+                             "output_name",
                            ])
     if (!defined(cjc_args)) {
       cjc_args = []
@@ -54,10 +54,14 @@ template("ohos_cangjie_shared_library") {
                              "sources",
                              "cjc_args",
                              "compilation_config",
-                             "output_name"
+                             "output_name",
                            ])
 
-    not_needed(invoker, ["deps", "external_deps"])
+    not_needed(invoker,
+               [
+                 "deps",
+                 "external_deps",
+               ])
 
     deps = []
     if (defined(invoker.deps)) {
@@ -95,7 +99,7 @@ template("ohos_cangjie_static_library") {
                              "subsystem_name",
                              "sources",
                              "compilation_config",
-                             "output_name"
+                             "output_name",
                            ])
   }
 }
@@ -114,7 +118,7 @@ template("ohos_cangjie_macro_library") {
                              "subsystem_name",
                              "sources",
                              "compilation_config",
-                             "output_name"
+                             "output_name",
                            ])
   }
 }
@@ -132,7 +136,7 @@ template("ohos_cangjie_unittest") {
                              "part_name",
                              "subsystem_name",
                              "sources",
-                             "output_name"
+                             "output_name",
                            ])
     if (!defined(cjc_args)) {
       cjc_args = []
@@ -147,7 +151,7 @@ template("ohos_cangjie_unittest") {
     cjc_args += [
       "--link-options=-rpath=${platform_cj_sdk}:${platform_cj_sdk}/runtime",
       "--dy-std",
-      "--dy-libs"
+      "--dy-libs",
     ]
 
     if (defined(invoker.compilation_config)) {
