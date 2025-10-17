@@ -13,6 +13,7 @@
 
 import("//build/config/python.gni")
 import("${root_build_dir}/build_configs/parts_list.gni")
+import("${root_build_dir}/build_configs/parts_tests_list.gni")
 
 # build target type
 target_type = "${target_os}-${target_cpu}"
@@ -94,4 +95,17 @@ action_with_pydeps("merge_all_parts") {
     "--all-subsystem-info-file",
     rebase_path(all_subsystem_info_file, root_build_dir),
   ]
+}
+
+test_filter_info_file = "${root_build_dir}/build_configs/test_filter_info.json"
+
+generated_file("test_filter_info") {
+  testonly = true
+  deps = []
+  foreach(part_label, parts_test_list) {
+    deps += [ get_label_info(part_label, "label_with_toolchain") ]
+  }
+  outputs = [ test_filter_info_file ]
+  data_keys = [ "test_list_info" ]
+  output_conversion = "json"
 }
