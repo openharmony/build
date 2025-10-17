@@ -11,8 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("cjc_toolchain.gni")
 import("//build/config/ohos/musl.gni")
+import("cjc_toolchain.gni")
 
 declare_args() {
   # Enable cjc Source-based Code Coverage.
@@ -29,7 +29,6 @@ template("_cj_target") {
                            "sources",
                            "part_name",
                            "subsystem_name",
-                           "enable_reflect",
                          ])
   if (!defined(invoker.output_type)) {
     assert(false && "output_type is required")
@@ -46,7 +45,7 @@ template("_cj_target") {
     assert(false &&
            "output_type must be one of [test, macro, dylib, staticlib, exe]")
   }
-  
+
   is_cj_test_ = output_type == "test"
   if (!defined(cjc_args)) {
     cjc_args = []
@@ -58,9 +57,6 @@ template("_cj_target") {
       "--dy-std",
       "--dy-libs",
     ]
-  }
-  if (!defined(enable_reflect) || enable_reflect == "false") {
-    cjc_args_ += [ "--disable-reflection" ]
   }
 
   sources_ = sources
@@ -84,7 +80,10 @@ template("_cj_target") {
 
     # cjc only support O0 on arm
     if (current_cpu == "arm") {
-      cjc_args_ += [ "-O0" ]
+      cjc_args_ += [ 
+        "-O0",
+        "--disable-reflection",
+      ]
     } else {
       cjc_args_ += [ "-O2" ]
     }
@@ -112,11 +111,10 @@ template("_cj_target") {
   is_library = false
   if (output_type == "macro") {
     cjc_args_ += [ "--compile-macro" ]
-    outfile_name =
-        "lib-macro_${outname_}${cjc_toolchain.dyn_extension}"
+    outfile_name = "lib-macro_${outname_}${cjc_toolchain.dyn_extension}"
     cjc_args_ += [
-        "--output-dir",
-        outdir_abs,
+      "--output-dir",
+      outdir_abs,
     ]
     is_library = true
   } else if (output_type == "test") {
@@ -130,12 +128,10 @@ template("_cj_target") {
     cjc_args_ += [ "--output-type=${output_type}" ]
     if (output_type == "dylib") {
       is_library = true
-      outfile_name =
-          "lib${outname_}${cjc_toolchain.dyn_extension}"
+      outfile_name = "lib${outname_}${cjc_toolchain.dyn_extension}"
     } else if (output_type == "staticlib") {
       is_library = true
-      outfile_name =
-          "lib${outname_}${cjc_toolchain.static_extension}"
+      outfile_name = "lib${outname_}${cjc_toolchain.static_extension}"
     } else if (output_type == "exe") {
       outfile_name = "${outname_}${cjc_toolchain.exe_extension}"
     }
