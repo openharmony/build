@@ -47,6 +47,8 @@ template("ohos_cangjie_shared_library") {
     output_type = "dylib"
     forward_variables_from(invoker,
                            [
+                             "deps",
+                             "external_deps",
                              "part_name",
                              "subsystem_name",
                              "cj_deps",
@@ -57,29 +59,10 @@ template("ohos_cangjie_shared_library") {
                              "output_name",
                            ])
 
-    not_needed(invoker,
-               [
-                 "deps",
-                 "external_deps",
-               ])
-
-    deps = []
-    if (defined(invoker.deps)) {
-      if (!build_ohos_split_test) {
-        deps += invoker.deps
-      }
-    }
-
-    if (defined(invoker.external_deps)) {
-      if (!build_ohos_split_test) {
-        external_deps = invoker.external_deps
-      }
-    }
-
     if (!defined(cjc_args)) {
       cjc_args = []
     }
-    if (!(build_ohos_sdk && is_ohos) && !is_asan && !build_ohos_split_test) {
+    if (!(build_ohos_sdk && is_ohos) && !is_asan) {
       cjc_args += [ "--link-options=--no-undefined" ]
     }
   }
