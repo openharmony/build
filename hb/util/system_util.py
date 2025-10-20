@@ -32,7 +32,7 @@ from containers.status import throw_exception
 
 class HandleKwargs(metaclass=NoInstance):
     compile_item_pattern = re.compile(r'\[\d+/\d+\].+')
-    custom_kwargs = ["pre_msg", "log_stage", "after_msg", "log_filter", "custom_line_handle"]
+    custom_kwargs = ["max_try", "pre_msg", "log_stage", "after_msg", "log_filter", "custom_line_handle"]
     enable_message_filter = False
 
     @staticmethod
@@ -111,26 +111,31 @@ class SystemUtil(metaclass=NoInstance):
 
         HandleKwargs.print_pre_msg(custom_kwargs)
         hidden_pattern = SensitiveHidden.load_sensitive_conf()
-        with open(log_path, 'at', encoding='utf-8') as log_file:
-            process = subprocess.Popen(cmd,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.STDOUT,
-                                       encoding='utf-8',
-                                       env=exec_env,
-                                       errors="ignore",
-                                       **env_kwargs)
-            for _line in iter(process.stdout.readline, ''):
-                line = SensitiveHidden.hidden_sensitive_info(hidden_pattern, _line)
-                keep_deal, new_line = HandleKwargs.handle_line(line, custom_kwargs)
-                if keep_deal:
-                    log_file.write(new_line)
-                    HandleKwargs.print_line(new_line, log_mode)
-
-        process.wait()
+        max_try = custom_kwargs.get("max_try", 1)
+        while max_try > 0:
+            with open(log_path, 'at', encoding='utf-8') as log_file:
+                process = subprocess.Popen(cmd,
+                                        stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT,
+                                        encoding='utf-8',
+                                        env=exec_env,
+                                        errors="ignore",
+                                        **env_kwargs)
+                for _line in iter(process.stdout.readline, ''):
+                    line = SensitiveHidden.hidden_sensitive_info(hidden_pattern, _line)
+                    keep_deal, new_line = HandleKwargs.handle_line(line, custom_kwargs)
+                    if keep_deal:
+                        log_file.write(new_line)
+                        HandleKwargs.print_line(new_line, log_mode)
+            process.wait()
+            ret_code = process.returncode
+            if ret_code == 0:
+                break
+            else:
+                max_try -= 1
         HandleKwargs.print_post_msg(custom_kwargs)
         HandleKwargs.clear_log_stage(custom_kwargs)
 
-        ret_code = process.returncode
         if ret_code != 0:
             cmd_str = " ".join(cmd)
             LogUtil.hb_error(f"command failed: \"{cmd_str}\" , ret_code: {ret_code}")
