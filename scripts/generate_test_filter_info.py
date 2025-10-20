@@ -37,7 +37,7 @@ def main():
     test_filter_info = read_json_file(test_filter_info_file)
     if test_filter_info:
         test_list_content = '"{}",'.format('",\n  "'.join(test_filter_info))
-        write_file(parts_test_gni_file, PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
+        write_file(parts_test_filter_list_file, PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
 
     return 0
 
