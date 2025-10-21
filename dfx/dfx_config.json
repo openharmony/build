@@ -1,0 +1,6 @@
+{
+  "build_dfx_enable": "", 
+  "trace_log_dir": "out/rk3568/dfx",
+  "trace_log_upload_api": ""
+}
+
