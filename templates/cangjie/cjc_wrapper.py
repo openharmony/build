@@ -74,6 +74,7 @@ def get_external_module_info(depname, part_configs, cmd_options):
     target_outdir = "{}/obj/{}/{}_module_info.json".format(cmd_options.root_out_dir, pathname, path_and_component[1])
     return target_outdir
 
+
 def get_deps_form_cangjie_deps_config_meta(cangjie_deps_config, cjc_toolchain_config):
     if not os.path.exists(cangjie_deps_config):
         return []
@@ -91,6 +92,7 @@ def get_deps_form_cangjie_deps_config_meta(cangjie_deps_config, cjc_toolchain_co
                     source_file = "{}/{}".format(dep["out_dir"], obj)
                     args.append("--link-options={}".format(source_file))
     return args
+
 
 def build_args(config, options):
     args = [options.cjc]
