@@ -631,6 +631,8 @@ template("compile_app") {
       rebase_path(unsigned_hap_path_list, root_build_dir),
       "--ohpm-registry",
       ohpm_registry,
+      "--host-os",
+      host_os
     ]
 
     if (defined(hvigor_home) && hvigor_home != "") {
