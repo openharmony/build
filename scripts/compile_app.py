@@ -383,7 +383,7 @@ def main(args):
         with open("../../build/scripts/app_config.json", 'r') as file:
             config = json.load(file)
         hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
-        nodejs_home = node_home_config if node_home_config else options.nodejs
+        nodejs_home = get_node_path(node_home_config) if node_home_config else options.nodejs
     else:
         nodejs_home = options.nodejs
 
