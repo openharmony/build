@@ -244,11 +244,11 @@ def get_node_path(nodejs_home_config: str, options):
         return None
     host_os = options.host_os
     if host_os == "mac":
-        return f"//prebuilts/build-tools/common/nodejs/node-{nodejs_home_config}-darwin-x64/bin/node"
+        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-darwin-x64/bin/node"
     elif host_os == "linux" and host_os == "arm64":
-        return f"//prebuilts/build-tools/common/nodejs/node-{nodejs_home_config}-linux-aarch64/bin/node"
+        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-linux-aarch64/bin/node"
     else:
-        return f"//prebuilts/build-tools/common/nodejs/node-{nodejs_home_config}-{host_os}-x64/bin/node"
+        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-{host_os}-x64/bin/node"
 
 
 def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
