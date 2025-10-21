@@ -137,6 +137,8 @@ class PartObject(object):
         label = kit_lib.get('name')
         if label is None:
             raise Exception("kits lib config incorrect, required for name.")
+        if kit_lib.get('host_only'):
+            label = f"{label}($host_toolchain)"
         lib_config.append('      type = "{}"'.format(lib_type))
         lib_config.append('      name = "{}"'.format(label))
         if lib_type == 'so' and 'header' in kit_lib:
