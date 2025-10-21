@@ -29,6 +29,7 @@ from functools import partial
 from urllib.request import urlopen
 import urllib.error
 from scripts.util.file_utils import read_json_file
+from dfx.build_tracker import build_tracker
 
 
 def _run_cmd(cmd: str):
@@ -163,6 +164,10 @@ def _is_system_component() -> bool:
         return False
 
 
+@build_tracker(
+    event_name="_hwcloud_download",
+    build_type="prebuild",
+)
 def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str, glibc_version: str):
     try:
         cnt = cpu_count()
@@ -219,6 +224,11 @@ def _hwcloud_download(args, config: dict, bin_dir: str, code_dir: str, glibc_ver
                 print('{}, download and decompress completed'.format(tasks.get(task)))
 
 
+@build_tracker(
+    event_name="_npm_install",
+    build_type="prebuild",
+    args_key="args",
+)
 def _npm_install(args):
     node_path = 'prebuilts/build-tools/common/nodejs/current/bin'
     os.environ['PATH'] = '{}/{}:{}'.format(args.code_dir, node_path, os.environ.get('PATH'))
