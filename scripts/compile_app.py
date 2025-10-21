@@ -243,19 +243,21 @@ def get_node_path(nodejs_home_config: str, options):
     if nodejs_home_config == None:
         return None
     host_os = options.host_os
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
     if host_os == "mac":
-        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-darwin-x64/bin/node"
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-darwin-x64/bin/node")
     elif host_os == "linux" and host_os == "arm64":
-        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-linux-aarch64/bin/node"
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-linux-aarch64/bin/node")
     else:
-        return f"../../prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-{host_os}-x64/bin/node"
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-{host_os}-x64/bin/node")
 
 
 def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     cmd = ['bash']
     hvigor_version = get_hvigor_version(cwd, hash_val)
     nodejs_home = None
-    with open("../../build/scripts/app_config.json", 'r') as file:
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
+    with open(os.path.join(code_home, "build/scripts/app_config.json"), 'r') as file:
         config = json.load(file)
     if options.hvigor_home:
         cmd.extend([f'{os.path.abspath(options.hvigor_home)}/bin/hvigorw'])
@@ -379,8 +381,9 @@ def main(args):
     hash_value = str(hash_result).split("-")[0]
     model_version = get_integrated_project_config(cwd, hash_value)
     print(model_version)
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
     if model_version:
-        with open("../../build/scripts/app_config.json", 'r') as file:
+        with open(os.path.join(code_home, "build/scripts/app_config.json"), 'r') as file:
             config = json.load(file)
         hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
         nodejs_home = get_node_path(node_home_config, options) if node_home_config else options.nodejs
