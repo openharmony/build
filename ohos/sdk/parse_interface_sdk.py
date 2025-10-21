@@ -76,7 +76,7 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
     p.wait()
 
 
-def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
+def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str, build_sdk_path: str):
 
     tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
@@ -84,10 +84,11 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
     api_dir = os.path.abspath(api_dir)
     api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR)
     api_out_dir = os.path.abspath(api_out_dir)
+    build_sdk_path = os.path.abspath(build_sdk_path)
 
     nodejs = os.path.abspath(nodejs)
     p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output",
-                          api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
+                          api_out_dir, "--type", sdk_type, "--build-sdk-path", build_sdk_path], stdout=subprocess.PIPE)
     p.wait()
 
 
@@ -144,7 +145,7 @@ def parse_step(options):
 
         if options.sdk_build_public == "true":
             remove_system_api_method(
-                options.root_build_dir, out_path, options.node_js, sdk_type)
+                options.root_build_dir, out_path, options.node_js, sdk_type, options.build_sdk_path)
             replace_sdk_dir(options.root_build_dir, os.path.join(
                 out_path, API_GEN_PATH), os.path.join(out_path, API_PATH))
             replace_sdk_dir(options.root_build_dir, os.path.join(
@@ -175,6 +176,7 @@ def main():
     parser.add_argument('--sdk-build-arkts', required=True)
     parser.add_argument('--npm-path', required=True)
     parser.add_argument('--output-interface-sdk', required=True)
+    parser.add_argument('--build-sdk-path', required=True)
 
     options = parser.parse_args()
 
