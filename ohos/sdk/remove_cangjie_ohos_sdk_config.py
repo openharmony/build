@@ -43,6 +43,8 @@ def remove_cangjie_form_sdk_delivery_list(sdk_delivery_list: str, output_sdk_del
         ]
 
     write_json_file(output_sdk_delivery_list, data)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--sdk-description-file', required=True)
