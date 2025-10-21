@@ -293,11 +293,11 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
         cmd.extend([f'{os.path.abspath(options.hvigor_home)}/bin/hvigorw'])
     elif model_version:
         hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
-        code_home = os.path.dirname(os.path.dirname(options.sdk_home))
+        prebuilts_home = os.path.dirname(os.path.dirname(options.sdk_home))
         if hvigor_home_config:
-            hvigor_home = os.path.join(code_home, hvigor_home_config)
+            hvigor_home = os.path.join(os.path.dirname(prebuilts_home), hvigor_home_config)
         else:
-            hvigor_home = f"{code_home}/tool/command-line-tools/bin"
+            hvigor_home = f"{prebuilts_home}/tool/command-line-tools/bin"
         cmd.extend([f'{hvigor_home}/hvigorw'])
         
     else:
@@ -421,7 +421,7 @@ def main(args):
         with open("../../build/scripts/app_config.json", 'r') as file:
             config = json.load(file)
         hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
-        nodejs_home = node_home_config if node_home_config else options.nodejs
+        nodejs_home = get_node_path(node_home_config, options) if node_home_config else options.nodejs
     else:
         nodejs_home = options.nodejs
 
