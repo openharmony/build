@@ -118,12 +118,17 @@ def gen_targets_gn(parts_targets, config_output_dir):
 
     parts_test_gni_file = os.path.join(config_output_dir,
                                        'parts_test_list.gni')
+    parts_test_filter_gni_file = os.path.join(config_output_dir,
+                                           'parts_test_filter_list.gni')
     if parts_test_list:
         test_list_content = '"{}",'.format('",\n  "'.join(parts_test_list))
     else:
         test_list_content = ''
-    write_file(parts_test_gni_file,
-               PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
+    if os.path.exists(parts_test_filter_gni_file):
+        shutil.copy2(parts_test_filter_gni_file, parts_test_gni_file)
+    else:
+        write_file(parts_test_gni_file,
+                   PARTS_TEST_GNI_TEMPLATE.format(test_list_content))
     LogUtil.hb_info(
         "generate parts test gni file to '{}/parts_test_list.gni'".format(
           config_output_dir), mode=Config.log_mode)
