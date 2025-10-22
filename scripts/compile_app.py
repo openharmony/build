@@ -261,13 +261,13 @@ def get_hvigor_home_from_config(model_version, config):
     major_version = parts[0]
     minor_version = parts[1] if len(parts) > 1 else None
     if model_version in config:
-        return config[model_version].get('hvigor_home'), config[model_version].get('nodejs_home')
+        return config[model_version].get('hvigor_home'), config[model_version].get('nodejs_version')
     key = f"{major_version}.x"
     if key in config:
         specific_config = config[key].get(model_version, {})
         if 'hvigor_home' in specific_config:
-            return specific_config['hvigor_home'], specific_config['nodejs_home']
-        return config[key].get('default', {}).get('hvigor_home'), config[key].get('default', {}).get('nodejs_home')
+            return specific_config['hvigor_home'], specific_config['nodejs_version']
+        return config[key].get('default', {}).get('hvigor_home'), config[key].get('default', {}).get('nodejs_version')
     return None, None
 
 
@@ -299,8 +299,8 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
         if hvigor_home_config:
             hvigor_home = os.path.join(os.path.dirname(prebuilts_home), hvigor_home_config)
         else:
-            hvigor_home = f"{prebuilts_home}/tool/command-line-tools/bin"
-        cmd.extend([f'{hvigor_home}/hvigorw'])
+            hvigor_home = f"{prebuilts_home}/tool/command-line-tools"
+        cmd.extend([f'{hvigor_home}/bin/hvigorw'])
         
     else:
         cmd.extend(['./hvigorw'])
