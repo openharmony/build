@@ -208,7 +208,7 @@ def hvigor_write_log(cmd, cwd, env, hash_value):
                             stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE,
                             encoding='utf-8')
-    stdout, stderr = proc.communicate(timeout)
+    stdout, stderr = proc.communicate()
     for line in stdout.splitlines():
         print(f"[1/1] [{hash_value}] Hvigor info: {line}")
     for line in stderr.splitlines():
