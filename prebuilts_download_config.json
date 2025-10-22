@@ -498,6 +498,11 @@
           "unzip_filename": "cangjie-linux-x64"
         },
         {
+          "unzip_dir": "prebuilts/cangjie_sdk/linux-x64-hwasan",
+          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-linux-x64-1.0.0-hwasan.zip",
+          "unzip_filename": "cangjie-linux-x64-hwasan"
+        },
+        {
           "unzip_dir": "prebuilts/cangjie_sdk/windows-x64",
           "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-windows-x64-1.0.0.zip",
           "unzip_filename": "cangjie-windows-x64"
@@ -505,7 +510,7 @@
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
           "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
-          "unzip_filename": "cangjie-api-tools"
+          "unzip_filename": "build-tools"
         },
 		{
           "unzip_dir": "prebuilts/python_llvm",
@@ -662,7 +667,7 @@
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
           "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
-          "unzip_filename": "cangjie-api-tools"
+          "unzip_filename": "build-tools"
         }
       ],
       "install": [
@@ -745,7 +750,7 @@
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
           "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
-          "unzip_filename": "cangjie-api-tools"
+          "unzip_filename": "build-tools"
         }
       ],
       "install": [

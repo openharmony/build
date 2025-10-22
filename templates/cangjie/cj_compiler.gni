@@ -11,8 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("cjc_toolchain.gni")
 import("//build/config/ohos/musl.gni")
+import("cjc_toolchain.gni")
 
 declare_args() {
   # Enable cjc Source-based Code Coverage.
@@ -28,7 +28,6 @@ template("_cj_target") {
                            "sources",
                            "part_name",
                            "subsystem_name",
-                           "enable_reflect",
                          ])
   if (!defined(invoker.output_type)) {
     assert(false && "output_type is required")
@@ -45,7 +44,7 @@ template("_cj_target") {
     assert(false &&
            "output_type must be one of [test, macro, dylib, staticlib, exe]")
   }
-  
+
   is_cj_test_ = output_type == "test"
   if (!defined(cjc_args)) {
     cjc_args = []
@@ -57,9 +56,6 @@ template("_cj_target") {
       "--dy-std",
       "--dy-libs",
     ]
-  }
-  if (!defined(enable_reflect) || enable_reflect == "false") {
-    cjc_args_ += [ "--disable-reflection" ]
   }
 
   sources_ = sources
@@ -81,20 +77,32 @@ template("_cj_target") {
       trimpath,
     ]
 
-    cjc_args_ += [ "-O2" ]
+    # cjc only support O0 on arm
+    if (current_cpu == "arm") {
+      cjc_args_ += [ 
+        "-O0",
+        "--disable-reflection",
+      ]
+    } else {
+      cjc_args_ += [ "-O2" ]
+    }
 
     if (use_clang_coverage) {
       cjc_args_ += [ "-lclang_rt.profile" ]
     }
   }
 
+  package_name = target_name
   outname_ = target_name
+  if (defined(invoker.output_name)) {
+    outname_ = invoker.output_name
+  }
   base_outdir = "${root_out_dir}/cangjie_libraries"
   base_outdir_abs = rebase_path(base_outdir)
 
   outdir = base_outdir
-  if (outname_ != "ohos") {
-    module_name = string_split(outname_, ".")
+  if (package_name != "ohos") {
+    module_name = string_split(package_name, ".")
     outdir = "${base_outdir}/${module_name[0]}"
   }
   outdir_abs = rebase_path(outdir)
@@ -102,11 +110,10 @@ template("_cj_target") {
   is_library = false
   if (output_type == "macro") {
     cjc_args_ += [ "--compile-macro" ]
-    outfile_name =
-        "lib-macro_${outname_}${cjc_toolchain.dyn_extension}"
+    outfile_name = "lib-macro_${outname_}${cjc_toolchain.dyn_extension}"
     cjc_args_ += [
-        "--output-dir",
-        outdir_abs,
+      "--output-dir",
+      outdir_abs,
     ]
     is_library = true
   } else if (output_type == "test") {
@@ -120,12 +127,10 @@ template("_cj_target") {
     cjc_args_ += [ "--output-type=${output_type}" ]
     if (output_type == "dylib") {
       is_library = true
-      outfile_name =
-          "lib${outname_}${cjc_toolchain.dyn_extension}"
+      outfile_name = "lib${outname_}${cjc_toolchain.dyn_extension}"
     } else if (output_type == "staticlib") {
       is_library = true
-      outfile_name =
-          "lib${outname_}${cjc_toolchain.static_extension}"
+      outfile_name = "lib${outname_}${cjc_toolchain.static_extension}"
     } else if (output_type == "exe") {
       outfile_name = "${outname_}${cjc_toolchain.exe_extension}"
     }
@@ -137,7 +142,7 @@ template("_cj_target") {
 
   outputs_ = [ "${outdir}/${outfile_name}" ]
   if (is_library) {
-    outputs_ += [ "${outdir}/${outname_}.cjo" ]
+    outputs_ += [ "${outdir}/${package_name}.cjo" ]
   }
 
   cjc_args_ += [ "--target=${cjc_toolchain.target_platform}" ]
@@ -165,9 +170,21 @@ template("_cj_target") {
 
   cjc_args_ += cjc_args
 
+  _cangjie_deps_config = "${target_out_dir}/${target_name}__deps_config.json"
+  generated_file("${target_name}__deps_config") {
+    deps = invoker.deps
+    output_conversion = "json"
+    outputs = [ _cangjie_deps_config ]
+
+    data_keys = [ "cangjie_deps" ]
+  }
+
   save_config = {
+    package_name = package_name
     outname = outname_
     output_type = output_type
+    cjc_toolchain_config = cjc_toolchain
+    cangjie_deps_config = rebase_path(_cangjie_deps_config)
     outfile = "${outdir_abs}/${outfile_name}"
     import_path = base_outdir_abs
     args = cjc_args_
@@ -181,6 +198,7 @@ template("_cj_target") {
     if (external_deps_ != []) {
       external_deps = external_deps_
     }
+
     cjc_deps = []
     foreach(dep, cj_deps) {
       t_name = get_label_info(dep, "name")
@@ -270,7 +288,7 @@ template("_cj_target") {
       prebuilt = true
       deps = [ ":${compile_target_name}" ]
       sources = [ outputs_[1] ]
-      outputs = [ "${target_out_dir}/${outname_}.cjo" ]
+      outputs = [ "${target_out_dir}/${package_name}.cjo" ]
     }
   }
 }

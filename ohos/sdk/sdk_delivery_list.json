@@ -6,7 +6,8 @@
       "darwin/js/",
       "darwin/native/",
       "darwin/previewer/",
-      "darwin/toolchains/"
+      "darwin/toolchains/",
+      "darwin/cangjie/"
     ]
   },
   "linux": {
@@ -16,7 +17,8 @@
       "linux/js/",
       "linux/native/",
       "linux/previewer/",
-      "linux/toolchains/"
+      "linux/toolchains/",
+      "linux/cangjie/"
     ]
   },
   "windows": {
@@ -26,7 +28,8 @@
       "windows/js/",
       "windows/native/",
       "windows/previewer/",
-      "windows/toolchains/"
+      "windows/toolchains/",
+      "windows/cangjie/"
     ]
   },
   "ohos": {
@@ -36,7 +39,8 @@
       "ohos/js/",
       "ohos/native/",
       "ohos/previewer/",
-      "ohos/toolchains/"
+      "ohos/toolchains/",
+      "ohos/cangjie/"
     ]
   }
 }

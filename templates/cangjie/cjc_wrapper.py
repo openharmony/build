@@ -75,6 +75,25 @@ def get_external_module_info(depname, part_configs, cmd_options):
     return target_outdir
 
 
+def get_deps_form_cangjie_deps_config_meta(cangjie_deps_config, cjc_toolchain_config):
+    if not os.path.exists(cangjie_deps_config):
+        return []
+    args = []
+    with open(cangjie_deps_config, 'r') as file:
+        dep_config = json.load(file)
+        args = []
+        for dep in dep_config:
+            if dep["type"] == "static_library":
+                source_file = "{}/lib{}{}".format(dep["out_dir"], dep["output_name"], cjc_toolchain_config["static_extension"])
+                args.append("--link-options={}".format(source_file))
+            elif dep["type"] == "source_set":
+                output_objs = dep["outputs"]
+                for obj in output_objs:
+                    source_file = "{}/{}".format(dep["out_dir"], obj)
+                    args.append("--link-options={}".format(source_file))
+    return args
+
+
 def build_args(config, options):
     args = [options.cjc]
     args += config["args"]
@@ -89,8 +108,9 @@ def build_args(config, options):
                 # link c targets by full path, but cj targets are not, because full path targets must define 'SONAME',
                 # otherwise target so be linked by full path, and won't work once moved.
                 module_info = json.load(file)
-                source_file = "{}/{}".format(options.root_out_dir, module_info["source"])
-                args.append("--link-options={}".format(source_file))
+                if module_info["type"] != "unknown":
+                    source_file = "{}/{}".format(options.root_out_dir, module_info["source"])
+                    args.append("--link-options={}".format(source_file))
 
     for module_info_file in config["native_deps"]:
         if not os.path.exists(module_info_file):
@@ -113,6 +133,11 @@ def build_args(config, options):
             if outtype != "macro" and outtype != "test" and outtype != "exe":
                 args.append("-L{}".format(outdir))
                 args.append("-l{}".format(outfile))
+
+    cangjie_deps_config = config["cangjie_deps_config"]
+    cjc_toolchain_config = config["cjc_toolchain_config"]
+    args.extend(get_deps_form_cangjie_deps_config_meta(config["cangjie_deps_config"], config["cjc_toolchain_config"]))
+
     return (args, os.path.dirname(config["outfile"]))
 
 if __name__ == "__main__":
