@@ -35,18 +35,30 @@ def get_source_from_module_info_file(module_info_file: str):
     return source, notice
 
 
+def clear_copy_symlinks_dest_dir(copy_infos: dict):
+    for cp_info in copy_infos:
+        copy_with_symlinks = cp_info.get("copy_with_symlinks")
+        if copy_with_symlinks:
+            dest = cp_info.get('dest')
+            build_utils.delete_directory(dest)
+            build_utils.make_directory(dest)
+
+
 def do_copy_and_stamp(copy_infos: dict, options, depfile_deps: list):
     notice_tuples = []
+    clear_copy_symlinks_dest_dir(copy_infos)
+
     for cp_info in copy_infos:
         source = cp_info.get('source')
         dest = cp_info.get('dest')
         notice = cp_info.get('notice')
         install_dir = cp_info.get('install_dir')
+        copy_with_symlinks = cp_info.get("copy_with_symlinks")
         if os.path.isdir(source):
             if os.listdir(source):
                 files = build_utils.get_all_files(source)
                 if files:
-                    shutil.copytree(source, dest, dirs_exist_ok=True)
+                    shutil.copytree(source, dest, symlinks=copy_with_symlinks, dirs_exist_ok=True)
                     depfile_deps.update(build_utils.get_all_files(source))
                 else:
                     # Skip empty directories.
@@ -125,8 +137,9 @@ def main():
                                     os.path.basename(source))
                 copy_infos.append({'source': source,
                                    'notice': notice,
-                                  'dest': dest,
-                                   'install_dir': item.get('install_dir')})
+                                   'dest': dest,
+                                   'install_dir': item.get('install_dir'),
+                                   'copy_with_symlinks': item.get('copy_with_symlinks')})
 
     do_copy_and_stamp(copy_infos, options, depfile_deps)
 

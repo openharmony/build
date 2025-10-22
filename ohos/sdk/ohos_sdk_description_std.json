@@ -1,5 +1,32 @@
 [
     {
+        "install_dir": "cangjie/api",
+        "module_label": "//interface/sdk_cangjie:sdk_api",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "cangjie/build-tools",
+        "copy_with_symlinks": true,
+        "module_label": "//interface/sdk_cangjie:sdk_compiler",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "cangjie/build-tools/modules",
+        "module_label": "//interface/sdk_cangjie:sdk_compiler_modules",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "toolchains",
         "module_label": "//developtools/syscap_codec:syscap_tool_bin",
         "target_os": [

@@ -30,6 +30,7 @@ declare_args() {
 declare_args() {
   sdk_build_public = false
   sdk_build_arkts = false
+  sdk_build_cangjie = false
   use_current_sdk = false
   interface_sdk_path = "${root_out_dir}/sdk-interface"
   interface_sdk_path_ets1 = "${root_out_dir}/sdk-interface/ets1.1/sdk-js"

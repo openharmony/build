@@ -46,6 +46,13 @@ cjc_toolchain_ohos_arm64 = {
   exe_extension = ""
 }
 
+cjc_toolchain_ohos_arm = {
+  target_platform = "arm-linux-ohos"
+  dyn_extension = ".so"
+  static_extension = ".a"
+  exe_extension = ""
+}
+
 cjc_toolchain_ohos_x86_64 = {
   target_platform = "x86_64-linux-ohos"
   dyn_extension = ".so"
@@ -88,6 +95,8 @@ cjc_toolchain_mac_x86_64 = {
 if (is_ohos) {
   if (current_cpu == "arm64") {
     cjc_toolchain = cjc_toolchain_ohos_arm64
+  } else if (current_cpu == "arm") {
+    cjc_toolchain = cjc_toolchain_ohos_arm
   } else if (current_cpu == "x86_64") {
     cjc_toolchain = cjc_toolchain_ohos_x86_64
   } else {
@@ -113,6 +122,9 @@ if (is_ohos) {
     "${clang_lib_abs}/${cjc_toolchain.target_platform}",
     "--sysroot",
     "${musl_lib_abs}",
+    "-L",
+    rebase_path(
+        "${root_out_dir}/obj/third_party/musl/usr/lib/${cjc_toolchain.target_platform}"),
   ]
 } else if (is_mingw) {
   if (current_cpu == "x86_64") {

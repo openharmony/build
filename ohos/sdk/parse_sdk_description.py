@@ -33,7 +33,7 @@ sys.path.insert(1, os.path.join(os.path.abspath(
                    '..', '..', '..')), 'third_party'))
 from jinja2 import Template  # noqa: E402  # pylint: disable=F0401
 
-KEYS = ['target_os', 'install_dir', 'module_label', 'build_only']
+KEYS = ['target_os', 'install_dir', 'module_label', 'build_only', 'copy_with_symlinks']
 
 
 class SdkTargets:
@@ -188,6 +188,7 @@ def parse_description_file(options):
         label = d.get('module_label')
         install_dir = d.get('install_dir')
         build_only = d.get('build_only')
+        copy_with_symlinks = d.get('copy_with_symlinks', False)
 
         # skip labels that we cannot find.
         rebased_build_gn = build_utils.rebase_path(
@@ -217,7 +218,8 @@ def parse_description_file(options):
         for label, install_dir in zip(module_labels, install_dirs):
             install_info = {
                 'label': label,
-                'install_dir': install_dir
+                'install_dir': install_dir,
+                'copy_with_symlinks': copy_with_symlinks,
             }
             module_install_infos.append(install_info)
 
