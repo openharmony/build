@@ -29,19 +29,23 @@
     ],
     "device_usage_statistics":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "resource_schedule_service":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "background_task_mgr":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "work_scheduler":[ 
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "bundle_tool":[
         "app",
@@ -83,7 +87,8 @@
     ],
     "distributed_notification_service":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "init":[
         "taihe"
@@ -323,5 +328,14 @@
     "hiperf":[
         "app",
         "sdk"
+    ],
+    "data_object":[
+        "app"
+    ],
+    "device_standby":[
+        "taihe"
+    ],
+    "thermal_manager":[
+        "taihe"
     ]
 }
