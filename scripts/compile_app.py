@@ -268,7 +268,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
             hvigor_home = os.path.join(os.path.dirname(prebuilts_home), hvigor_home_config)
         else:
             hvigor_home = f"{prebuilts_home}/tool/command-line-tools"
-        cmd.extend([f'{hvigor_home}bin/hvigorw'])
+        cmd.extend([f'{hvigor_home}/bin/hvigorw'])
     else:
         cmd.extend(['./hvigorw'])
     
