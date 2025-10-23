@@ -19,6 +19,10 @@ import sys
 import shutil
 import subprocess
 from convert_permissions import convert_permissions
+sys.path.append(
+    os.path.dirname(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from scripts.util.file_utils import read_json_file, write_json_file
 
 OUT_ROOT_LIST = ["ets1.1/sdk-js",
                  "ets1.2/sdk-js"]
@@ -76,7 +80,7 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
     p.wait()
 
 
-def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str, build_sdk_path: str):
+def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
 
     tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, API_MODIFY_TOOL)
     tool = os.path.abspath(tool)
@@ -84,11 +88,10 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
     api_dir = os.path.abspath(api_dir)
     api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR)
     api_out_dir = os.path.abspath(api_out_dir)
-    build_sdk_path = os.path.abspath(build_sdk_path)
 
     nodejs = os.path.abspath(nodejs)
     p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output",
-                          api_out_dir, "--type", sdk_type, "--build-sdk-path", build_sdk_path], stdout=subprocess.PIPE)
+                          api_out_dir, "--type", sdk_type], stdout=subprocess.PIPE)
     p.wait()
 
 
@@ -135,6 +138,28 @@ def change_int_to_number(source_root: str, out_path: str, nodejs: str, sdk_type:
         process_obj.wait()
 
 
+def regenerate_sdk_config_file(sdk_build_arkts: str, sdk_description_file: str,
+                               output_sdk_desc_file: str):
+    info_list = read_json_file(sdk_description_file)
+    if sdk_build_arkts != "true":
+        arkts_sdk_info_list = []
+        for info in info_list:
+            install_label_str = str(info.get("install_dir"))
+            module_label_str = str(info.get("module_label"))
+            if (
+                install_label_str.startswith("ets/ets1.2/") or
+                module_label_str.endswith(":copy_taihe_tools") or
+                module_label_str == "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm"
+            ):
+                continue
+            elif install_label_str.startswith("ets/ets1.1/"):
+                info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
+            arkts_sdk_info_list.append(info)
+    else:
+        arkts_sdk_info_list = info_list
+    write_json_file(output_sdk_desc_file, arkts_sdk_info_list)
+
+
 def parse_step(options):
     for i, out_path in enumerate(OUT_ROOT_LIST):
         sdk_type = OUT_SDK_TYPE[i]
@@ -145,7 +170,7 @@ def parse_step(options):
 
         if options.sdk_build_public == "true":
             remove_system_api_method(
-                options.root_build_dir, out_path, options.node_js, sdk_type, options.build_sdk_path)
+                options.root_build_dir, out_path, options.node_js, sdk_type)
             replace_sdk_dir(options.root_build_dir, os.path.join(
                 out_path, API_GEN_PATH), os.path.join(out_path, API_PATH))
             replace_sdk_dir(options.root_build_dir, os.path.join(
@@ -170,15 +195,19 @@ def parse_step(options):
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--sdk-description-file', required=True)
     parser.add_argument('--root-build-dir', required=True)
     parser.add_argument('--node-js', required=True)
+    parser.add_argument('--output-arkts-sdk-desc-file', required=True)
     parser.add_argument('--sdk-build-public', required=True)
     parser.add_argument('--sdk-build-arkts', required=True)
     parser.add_argument('--npm-path', required=True)
     parser.add_argument('--output-interface-sdk', required=True)
-    parser.add_argument('--build-sdk-path', required=True)
 
     options = parser.parse_args()
+
+    regenerate_sdk_config_file(options.sdk_build_arkts, options.sdk_description_file,
+                               options.output_arkts_sdk_desc_file)
 
     parse_step(options)
 

@@ -36,19 +36,45 @@ if (!use_current_sdk) {
     ohos_sdk_description_file = hap_build_sdk_description_file
   }
 
-  arkts_sdk_config_parser = "//build/ohos/sdk/parse_description.py"
+  if (sdk_build_public) {
+    public_sdk_config_parser = "//build/ohos/sdk/parse_public_sdk.py"
+    ohos_sdk_pub_description_file =
+        "//out/sdk-public/ohos_sdk_pub_description_std.json"
+    public_sdk_args = [
+      "--sdk-description-file",
+      rebase_path(ohos_sdk_description_file, root_build_dir),
+      "--root-build-dir",
+      rebase_path("//", root_build_dir),
+      "--node-js",
+      rebase_path(nodejs, root_build_dir),
+      "--output-pub-sdk-desc-file",
+      rebase_path(ohos_sdk_pub_description_file, root_build_dir),
+    ]
+    exec_script(public_sdk_config_parser, public_sdk_args)
+    ohos_sdk_description_file = ohos_sdk_pub_description_file
+  }
+
+  arkts_sdk_config_parser = "//build/ohos/sdk/parse_interface_sdk.py"
   ohos_sdk_arkts_description_file =
       "${interface_sdk_path}/ohos_sdk_pub_description_std.json"
 
   arkts_sdk_args = [
     "--sdk-description-file",
     rebase_path(ohos_sdk_description_file, root_build_dir),
+    "--root-build-dir",
+    rebase_path("//", root_build_dir),
+    "--node-js",
+    rebase_path(nodejs, root_build_dir),
     "--output-arkts-sdk-desc-file",
     rebase_path(ohos_sdk_arkts_description_file, root_build_dir),
     "--sdk-build-public",
     "${sdk_build_public}",
     "--sdk-build-arkts",
     "${sdk_build_arkts}",
+    "--npm-path",
+    rebase_path(npm, root_build_dir),
+    "--output-interface-sdk",
+    rebase_path(interface_sdk_path, root_build_dir),
   ]
   exec_script(arkts_sdk_config_parser, arkts_sdk_args)
   ohos_sdk_description_file = ohos_sdk_arkts_description_file
