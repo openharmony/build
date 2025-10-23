@@ -23,7 +23,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "config": {
         "linux": {
             "x86_64": { 
@@ -43,7 +43,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "config": {
         "linux": {
             "any": {
@@ -64,7 +64,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "config": {
         "any":{
             "any": {
@@ -84,7 +84,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "llvm",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "config": {
         "linux": {
             "x86_64": [
@@ -118,7 +118,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "config": {
         "linux": {
             "x86_64": {
@@ -143,7 +143,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "ark_js_prebuilts",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "unzip_dir": "${code_dir}/prebuilts/ark_tools",
     "unzip_filename": "ark_js_prebuilts",
     "config": {
@@ -195,7 +195,7 @@ unzip_filename|解压后的顶层目录名（用于版本管理和旧文件清�
 {
     "name": "node",
     "tag": "base",
-    "type": "src, indep",
+    "build_type": "src, indep",
     "unzip_dir": "${code_dir}/prebuilts/build-tools/common/nodejs",
     "config": {
         "linux": {
