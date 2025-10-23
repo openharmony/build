@@ -18,6 +18,7 @@ import os
 import sys
 import subprocess
 import shutil
+import json
 import json5
 import uuid
 
@@ -57,6 +58,7 @@ def parse_args(args):
     parser.add_argument('--target-app-dir', help='target output dir')
     parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
+    parser.add_argument('--host-os', help='host os')
 
     options = parser.parse_args(args)
     return options
@@ -76,7 +78,7 @@ def get_root_dir():
                 current_dir = new_dir
 
 
-def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_value: str):
+def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_value: str, node_home: str):
     '''
     Set up the application compilation environment and run "ohpm install"
     :param build_profile: module compilation information file
@@ -97,8 +99,8 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_val
         if ohpm_registry:
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
         env = {
-            'PATH': f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}",
-            'NODE_HOME': os.path.dirname(os.path.abspath(options.nodejs)),
+            'PATH': f"{os.path.dirname(os.path.abspath(node_home))}:{os.environ.get('PATH')}",
+            'NODE_HOME': os.path.dirname(os.path.abspath(node_home)),
         }
         os.chdir(cwd)
         if os.path.exists(os.path.join(cwd, 'oh_modules')):
@@ -254,15 +256,52 @@ def hvigor_write_log(cmd, cwd, env, hash_value):
     print(f"[0/0] [{hash_value}] Hvigor build end")
 
 
+def get_hvigor_home_from_config(model_version, config):
+    parts = model_version.split('.')
+    major_version = parts[0]
+    minor_version = parts[1] if len(parts) > 1 else None
+    if model_version in config:
+        return config[model_version].get('hvigor_home'), config[model_version].get('nodejs_version')
+    key = f"{major_version}.x"
+    if key in config:
+        specific_config = config[key].get(model_version, {})
+        if 'hvigor_home' in specific_config:
+            return specific_config['hvigor_home'], specific_config['nodejs_version']
+        return config[key].get('default', {}).get('hvigor_home'), config[key].get('default', {}).get('nodejs_version')
+    return None, None
+
+
+def get_node_path(nodejs_home_config: str, options):
+    if nodejs_home_config == None:
+        return None
+    host_os = options.host_os
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
+    if host_os == "mac":
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-darwin-x64/bin/node")
+    elif host_os == "linux" and host_os == "arm64":
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-linux-aarch64/bin/node")
+    else:
+        return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-{host_os}-x64/bin/node")
+
+
 def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     cmd = ['bash']
     hvigor_version = get_hvigor_version(cwd, hash_val)
+    nodejs_home = None
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
+    with open(os.path.join(code_home, "build/scripts/app_config.json"), 'r') as file:
+        config = json.load(file)
     if options.hvigor_home:
         cmd.extend([f'{os.path.abspath(options.hvigor_home)}/bin/hvigorw'])
     elif model_version:
-        code_home = os.path.dirname(os.path.dirname(options.sdk_home))
-        hvigor_home = f"{code_home}/tool/command-line-tools/bin"
-        cmd.extend([f'{hvigor_home}/hvigorw'])
+        hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
+        prebuilts_home = os.path.dirname(os.path.dirname(options.sdk_home))
+        if hvigor_home_config:
+            hvigor_home = os.path.join(os.path.dirname(prebuilts_home), hvigor_home_config)
+        else:
+            hvigor_home = f"{prebuilts_home}/tool/command-line-tools"
+        cmd.extend([f'{hvigor_home}/bin/hvigorw'])
+        
     else:
         cmd.extend(['./hvigorw'])
     
@@ -314,17 +353,17 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     return cmd
 
 
-def set_sdk_path(cwd: str, model_version: str, options, env):
+def set_sdk_path(cwd: str, model_version: str, options, env, node_home):
     if 'sdk.dir' not in options.sdk_type_name and model_version:
         write_env_sdk(options, env)
     else:
-        write_local_properties(cwd, options)
+        write_local_properties(cwd, options, node_home)
 
 
-def write_local_properties(cwd: str, options):
+def write_local_properties(cwd: str, options, node_home: str):
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
-        os.path.dirname(os.path.dirname(options.nodejs)))
+        os.path.dirname(os.path.dirname(node_home)))
     with open(os.path.join(cwd, 'local.properties'), 'w') as f:
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
@@ -345,7 +384,7 @@ def hvigor_sync(cwd: str, model_version: str, env):
                    stderr=subprocess.DEVNULL)
 
 
-def hvigor_build(cwd: str, options, hash_value: str):
+def hvigor_build(cwd: str, options, hash_value: str, node_home: str):
     '''
     Run hvigorw to build the app or hap
     :param cwd: app project directory
@@ -360,11 +399,12 @@ def hvigor_build(cwd: str, options, hash_value: str):
     print(f"[0/0] [{hash_value}] Hvigor clean start")
     env = os.environ.copy()
     env['CI'] = 'true'
-    env['PATH'] = f"{os.path.dirname(os.path.abspath(options.nodejs))}:{os.environ.get('PATH')}"
-    env['NODE_HOME'] = os.path.dirname(os.path.dirname(os.path.abspath(options.nodejs)))
+    
+    env['PATH'] = f"{os.path.dirname(os.path.abspath(node_home))}:{os.environ.get('PATH')}"
+    env['NODE_HOME'] = os.path.dirname(os.path.dirname(os.path.abspath(node_home)))
     library_path = os.path.join(os.path.abspath(options.sdk_home), '20/ets/ets1.2/build-tools/ets2panda/lib/')
     env['LD_LIBRARY_PATH'] = library_path
-    set_sdk_path(cwd, model_version, options, env)
+    set_sdk_path(cwd, model_version, options, env, node_home)
 
     hvigor_sync(cwd, model_version, env)
     
@@ -377,6 +417,17 @@ def main(args):
     cwd = os.path.abspath(options.cwd)
     hash_result = uuid.uuid4()
     hash_value = str(hash_result).split("-")[0]
+    model_version = get_integrated_project_config(cwd, hash_value)
+    print(model_version)
+    code_home = os.path.dirname(os.path.dirname(os.path.dirname(options.sdk_home)))
+    
+    if model_version:
+        with open(os.path.join(code_home, "build/scripts/app_config.json"), 'r') as file:
+            config = json.load(file)
+        hvigor_home_config, node_home_config = get_hvigor_home_from_config(model_version, config)
+        nodejs_home = get_node_path(node_home_config, options) if node_home_config else options.nodejs
+    else:
+        nodejs_home = options.nodejs
 
     # copy system lib deps to app libs dir
     if options.system_lib_module_info_list:
@@ -390,10 +441,10 @@ def main(args):
     os.environ['PATH'] = f'{cwd}/.arkui-x/android:{os.environ.get("PATH")}'
 
     # generate unsigned_hap_path_list and run ohpm install
-    make_env(options.build_profile, cwd, options.ohpm_registry, options, hash_value)
+    make_env(options.build_profile, cwd, options.ohpm_registry, options, hash_value, nodejs_home)
 
     # invoke hvigor to build hap or app
-    hvigor_build(cwd, options, hash_value)
+    hvigor_build(cwd, options, hash_value, nodejs_home)
 
     # generate a json file to record the path of all unsigned haps, and When signing hap later, 
     # this json file will serve as input to provide path information for each unsigned hap.
