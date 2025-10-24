@@ -631,8 +631,6 @@ template("compile_app") {
       ohpm_registry,
       "--product",
       product,
-      "--host-os",
-      host_os
     ]
 
     if (defined(ohos_test_coverage) && ohos_test_coverage) {
