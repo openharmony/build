@@ -1,0 +1,19 @@
+{
+    "4.0": {
+        "default": {
+            "nodejs_version": "14.21.1"
+        }
+    },
+    "5.x": {
+        "default": {
+            "nodejs_version": "18.20.1",
+            "hvigor_home": "prebuilts/tool/command-line-tools/hvigor"
+        }
+    },
+    "6.x": {
+        "default": {
+            "nodejs_version": "18.20.1",
+            "hvigor_home": "prebuilts/command-line-tools/hvigor"
+        }
+    }
+}
