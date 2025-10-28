@@ -455,7 +455,7 @@ template("ohos_executable") {
         visibility += [ "${build_ext_path}/*" ]
       }
       if (test_label_type != "") {
-        visibility += [ "${root_build_dir}/build_configs/:*" ]
+        visibility += [ "${root_build_dir}/build_configs/*" ]
       }
     }
 

@@ -59,7 +59,7 @@ def replace_sdk_dir(root_build_dir: str, from_path: str, to_path: str):
     shutil.copytree(source, dest)
 
 
-def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str):
+def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str,  is_public: str):
     input_path = os.path.join(source_root, INTERFACE_PATH)
     input_path = os.path.abspath(input_path)
     output_path = os.path.join(source_root, out_path)
@@ -72,7 +72,7 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
     tool = os.path.abspath(tool)
     nodejs = os.path.abspath(nodejs)
     p = subprocess.Popen([nodejs, tool, "--path", input_path, "--output", output_path, "--type",
-                          sdk_type, "--create-keep-file", "true"], stdout=subprocess.PIPE)
+                          sdk_type, "--isPublic", is_public, "--create-keep-file", "true"], stdout=subprocess.PIPE)
     p.wait()
 
 
@@ -141,7 +141,7 @@ def parse_step(options):
         permission_file = OUT_PERMISSION_FILE[i]
         out_path = os.path.join(options.output_interface_sdk, out_path)
         out_path = os.path.relpath(out_path, options.root_build_dir)
-        copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type)
+        copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type, options.sdk_build_public)
 
         if options.sdk_build_public == "true":
             remove_system_api_method(
