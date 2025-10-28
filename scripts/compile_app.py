@@ -100,7 +100,7 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_val
             ohpm_install_cmd.append('--registry=' + ohpm_registry)
         env = {
             'PATH': f"{os.path.dirname(os.path.abspath(node_home))}:{os.environ.get('PATH')}",
-            'NODE_HOME': os.path.dirname(os.path.abspath(onode_home)),
+            'NODE_HOME': os.path.dirname(os.path.abspath(node_home)),
         }
         os.chdir(cwd)
         if os.path.exists(os.path.join(cwd, 'oh_modules')):
