@@ -115,6 +115,20 @@ ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/variants_info_handler.
 # gn and ninja command
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/indep_configs/scripts/gn_ninja_cmd.py -rp ${SOURCE_ROOT_DIR} -v ${VARIANTS} -out ${OUT_DIR} -t ${TEST_FILTER}
 
+if [[ "$@" =~ "--product-name" ]]; then
+    for ((i=1; i<=$#; i++)); do
+        if [[ "${!i}" == "--product-name" ]]; then
+            next_index=$((i + 1))
+            if [[ $next_index -le $# ]]; then
+                cp -r out/$VARIANTS/$OUT_DIR out/${!next_index}
+                exit 0
+            fi
+        fi
+    done
+else
+    exit 0
+fi
+
 if [ $? -ne 0 ]; then
   exit 1
 fi
