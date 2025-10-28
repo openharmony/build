@@ -283,7 +283,7 @@
                         {
                             "unzip_dir": "${code_dir}/prebuilts/packing_tool",
                             "unzip_filename": "packing_tool",
-                            "remote_url": "/harmonyos/compiler/packing_tool/packing_tool_libs_20250215.zip"
+                            "remote_url": "/harmonyos/compiler/packing_tool/packing_tool_libs_202501022.zip"
                         }
                     ]
                 }
