@@ -3057,7 +3057,7 @@
         "//base/inputmethod/imf/test/unittest/resource/bundle_dependencies/newTestIme:newTestIme": [
             "//developtools/packing_tool:packing_tool"
         ],
-        "//base/location/services/location_ui:location_dialog_hap": [
+        "//base/location/location/services/location_ui:location_dialog_hap": [
             "//developtools/packing_tool:packing_tool"
         ],
         "//base/notification/distributed_notification_service/services/dialog_ui/enable_notification_dialog:enable_notification_dialog_hap": [
@@ -4686,11 +4686,11 @@
         "//base/inputmethod/imf/test/unittest/resource/bundle_dependencies/newTestIme:newTestIme__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
-        "//base/location/services/location_ui:location_dialog_hap": [
+        "//base/location/location/services/location_ui:location_dialog_hap": [
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
         ],
-        "//base/location/services/location_ui:location_dialog_hap__js_assets": [
+        "//base/location/location/services/location_ui:location_dialog_hap__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
         "//base/notification/distributed_notification_service/services/dialog_ui/enable_notification_dialog:enable_notification_dialog_hap": [
