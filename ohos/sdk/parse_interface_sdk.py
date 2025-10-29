@@ -20,8 +20,8 @@ import shutil
 import subprocess
 from convert_permissions import convert_permissions
 
-OUT_ROOT_LIST = ["ets1.1/sdk-js",
-                 "ets1.2/sdk-js"]
+OUT_ROOT_LIST = ["dynamic/sdk-js",
+                 "static/sdk-js"]
 OUT_SDK_TYPE = ["ets", "ets2"]
 OUT_PERMISSION_FILE = ["permissions.d.ts", "permissions.d.ets"]
 INTERFACE_PATH = "interface/sdk-js"
