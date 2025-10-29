@@ -123,7 +123,7 @@ class OperateHanlder:
     def _move(operate: dict):
         src = operate.get("src")
         dest = operate.get("dest")
-
+    
         filetype = operate.get("filetype", None)
         if filetype:
             file_list = os.listdir(src)
@@ -135,17 +135,17 @@ class OperateHanlder:
         else:
             shutil.move(src, dest)
             print(f"move {src} ---> dest: {dest}")
-
+    
     @staticmethod
     def _shell(operate: dict):
         cmd = operate.get("cmd")
         run_cmd_directly(cmd)
+    
 
     @staticmethod
     def _hpm_download(operate: dict):
         hpm_path = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/hpm/node_modules/.bin/hpm")
-        npm_tool_path = os.path.join(OperateHanlder.global_args.code_dir,
-                                     "prebuilts/build-tools/common/nodejs/current/bin/npm")
+        npm_tool_path = os.path.join(OperateHanlder.global_args.code_dir, "prebuilts/build-tools/common/nodejs/current/bin/npm")
         if check_hpm_version(hpm_path, npm_tool_path):
             print("hpm version is ok, skip hpm download")
             return
@@ -161,22 +161,21 @@ class OperateHanlder:
 
     @staticmethod
     def _npm_install(operate: dict, max_retry_times=2):
-        if OperateHanlder.global_args.build_type != "indep":
+        if OperateHanlder.global_args.type != "indep":
             # 若不是系统组件，直接返回
             if not is_system_component():
                 return
-        OperateHanlder.global_args.success_installed = []
-        OperateHanlder.global_args.parallel_install = True
+        success_installed_npm_config = []
+
         for retry_times in range(max_retry_times + 1):
             try:
-                result, error = npm_install(operate, OperateHanlder.global_args)
+                result, error = npm_install(operate, OperateHanlder.global_args, success_installed_npm_config)
                 if result:
                     return
                 print("npm install error, error info: %s", error)
             except Exception as e:
                 print("An unexpected error occurred during npm install: %s", str(e))
                 error = str(e)
-            OperateHanlder.global_args.parallel_install = False
 
         # 重试次数超过最大限制，处理错误日志
         for error_info in error.split("\n"):
@@ -199,13 +198,13 @@ class OperateHanlder:
 
         # 抛出最终异常
         raise Exception("npm install error with three times, prebuilts download exit")
-
+    
     @staticmethod
     def _node_modules_copy(operate: dict):
-        if OperateHanlder.global_args.build_type != "indep":
+        if OperateHanlder.global_args.type != "indep":
             if not is_system_component():
                 return
-
+        
         copy_list = operate.get("copy_list")
         for copy_config in copy_list:
             src_dir = copy_config.get("src")
@@ -224,7 +223,7 @@ class OperateHanlder:
             else:
                 shutil.copytree(src_dir, dest_dir, symlinks=True)
                 print(f"copy {src_dir} ---> dest: {dest_dir}")
-
+            
     @staticmethod
     def _download_sdk(operate: dict):
         # 获取操作系统信息
@@ -249,8 +248,7 @@ class OperateHanlder:
         # 假设 code_dir 是当前目录，可根据实际情况修改
         code_dir = get_code_dir()
         prebuilts_python_dir = os.path.join(code_dir, "prebuilts", "python", f"{host_platform}-{host_cpu_prefix}")
-        python_dirs = [os.path.join(prebuilts_python_dir, d) for d in os.listdir(prebuilts_python_dir) if
-                       os.path.isdir(os.path.join(prebuilts_python_dir, d))]
+        python_dirs = [os.path.join(prebuilts_python_dir, d) for d in os.listdir(prebuilts_python_dir) if os.path.isdir(os.path.join(prebuilts_python_dir, d))]
         python_dirs.sort(reverse=True)
         if python_dirs:
             python_path = os.path.join(python_dirs[0], "bin")
@@ -261,9 +259,7 @@ class OperateHanlder:
             python_executable = os.path.join(python_path, "python3")
             script_path = os.path.join(code_dir, "build", "scripts", "download_sdk.py")
             try:
-                subprocess.run(
-                    [python_executable, script_path, "--branch", "master", "--product-name", operate.get("sdk_name"),
-                     "--api-version", str(operate.get("version"))], check=True)
+                subprocess.run([python_executable, script_path, "--branch", "master", "--product-name", operate.get("sdk_name"), "--api-version", str(operate.get("version"))], check=True)
 
             except subprocess.CalledProcessError as e:
                 print(f"Error running download_sdk.py: {e}")
