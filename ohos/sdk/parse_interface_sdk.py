@@ -29,6 +29,7 @@ OUT_ROOT = "out/sdk-public"
 API_MODIFY_DIR = "build-tools"
 API_MODIFY_TOOL = "delete_systemapi_plugin.js"
 ETS_MODIFY_TOOL = "handleApiFiles.js"
+CHECK_API_VERSION_TOOL = "checkApiVersion.js"
 API_PATH = "api"
 API_GEN_PATH = "build-tools/api"
 KITS_PATH = "kits"
@@ -74,6 +75,29 @@ def copy_arkts_api_method(source_root: str, out_path: str, nodejs: str, sdk_type
     p = subprocess.Popen([nodejs, tool, "--path", input_path, "--output", output_path, "--type",
                           sdk_type, "--isPublic", is_public, "--create-keep-file", "true"], stdout=subprocess.PIPE)
     p.wait()
+
+
+# API_LEVEL校验
+def check_api_version_method(source_root: str, api_root: str, sdk_version: str, nodejs: str):
+    input_path = os.path.join(source_root, api_root)
+    input_path = os.path.abspath(input_path)
+    tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, CHECK_API_VERSION_TOOL)
+    tool = os.path.abspath(tool)
+    nodejs = os.path.abspath(nodejs)
+
+    p = subprocess.Popen([nodejs, tool, "--path", input_path, "--versionNumber", sdk_version],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, stderr = p.communicate()
+    check_result = stdout.decode()
+
+    p.wait()
+
+    # 创建转换表，过滤文本中的换行、空格等字符
+    custom_rules = str.maketrans("", "", " \n\t\r")
+
+    if check_result.translate(custom_rules) != "":
+        raise ValueError(check_result)
 
 
 def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_type: str, build_sdk_path: str):
@@ -143,6 +167,10 @@ def parse_step(options):
         out_path = os.path.relpath(out_path, options.root_build_dir)
         copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type, options.sdk_build_public)
 
+        if sdk_type == "ets" and options.sdk_check_level == "true":
+            # 仅在编译dynamic时校验API版本
+            check_api_version_method(options.root_build_dir, out_path, options.sdk_api_version, options.node_js)
+
         if options.sdk_build_public == "true":
             remove_system_api_method(
                 options.root_build_dir, out_path, options.node_js, sdk_type, options.build_sdk_path)
@@ -177,6 +205,8 @@ def main():
     parser.add_argument('--npm-path', required=True)
     parser.add_argument('--output-interface-sdk', required=True)
     parser.add_argument('--build-sdk-path', required=True)
+    parser.add_argument('--sdk-check-level', required=True)
+    parser.add_argument('--sdk-api-version', required=True)
 
     options = parser.parse_args()
 

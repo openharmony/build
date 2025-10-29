@@ -55,8 +55,10 @@ if (!use_current_sdk) {
 
   ohos_public_sdk_delivery_list = "//build/ohos/sdk/sdk_delivery_list.json"
   if (!sdk_build_cangjie) {
-    output_sdk_delivery_list = "${interface_sdk_path}/ohos_public_sdk_delivery_list.json"
-    cangjie_sdk_config_proc = "//build/ohos/sdk/remove_cangjie_ohos_sdk_config.py"
+    output_sdk_delivery_list =
+        "${interface_sdk_path}/ohos_public_sdk_delivery_list.json"
+    cangjie_sdk_config_proc =
+        "//build/ohos/sdk/remove_cangjie_ohos_sdk_config.py"
     cangjie_sdk_args = [
       "--sdk-description-file",
       rebase_path(ohos_sdk_description_file, root_build_dir),
