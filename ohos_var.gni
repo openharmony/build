@@ -33,8 +33,8 @@ declare_args() {
   sdk_build_cangjie = false
   use_current_sdk = false
   interface_sdk_path = "${root_out_dir}/sdk-interface"
-  interface_sdk_path_ets1 = "${root_out_dir}/sdk-interface/ets1.1/sdk-js"
-  interface_sdk_path_ets2 = "${root_out_dir}/sdk-interface/ets1.2/sdk-js"
+  interface_sdk_path_ets1 = "${root_out_dir}/sdk-interface/dynamic/sdk-js"
+  interface_sdk_path_ets2 = "${root_out_dir}/sdk-interface/static/sdk-js"
 }
 
 declare_args() {
@@ -308,8 +308,9 @@ declare_args() {
 }
 
 declare_args() {
-    remove_unstripped_exe = false
+  remove_unstripped_exe = false
 }
+
 # Compile and generate output directory
 innersdk_build_out_dir = "innerkits/${target_type}"
 

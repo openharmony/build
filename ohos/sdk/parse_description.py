@@ -37,12 +37,12 @@ def regenerate_sdk_config_file(options):
             continue
         if sdk_build_arkts != "true":
             install_label_str = str(info.get("install_dir"))
-            if install_label_str.startswith("ets/ets1.2/"):
+            if install_label_str.startswith("ets/static/"):
                 continue
-            elif install_label_str.startswith("ets/ets1.1/build-tools/interop"):
+            elif install_label_str.startswith("ets/dynamic/build-tools/interop"):
                 continue
-            elif install_label_str.startswith("ets/ets1.1/"):
-                info["install_dir"] = str(info.get("install_dir")).replace("ets/ets1.1/", "ets/")
+            elif install_label_str.startswith("ets/dynamic/"):
+                info["install_dir"] = str(info.get("install_dir")).replace("ets/dynamic/", "ets/")
         arkts_sdk_info_list.append(info)
     write_json_file(output_sdk_desc_file, arkts_sdk_info_list)
 
