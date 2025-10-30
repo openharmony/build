@@ -494,22 +494,22 @@
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/linux-x64",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-linux-x64-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-linux-x64-1.0.5.zip",
           "unzip_filename": "cangjie-linux-x64"
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/linux-x64-hwasan",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-linux-x64-1.0.0-hwasan.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-linux-x64-1.0.5-hwasan.zip",
           "unzip_filename": "cangjie-linux-x64-hwasan"
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/windows-x64",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-windows-x64-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-windows-x64-1.0.5.zip",
           "unzip_filename": "cangjie-windows-x64"
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-api-tools-1.0.5.zip",
           "unzip_filename": "build-tools"
         },
 		{
@@ -661,12 +661,12 @@
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/mac-aarch64",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-aarch64-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-mac-aarch64-1.0.5.zip",
           "unzip_filename": "cangjie-mac-aarch64"
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-api-tools-1.0.5.zip",
           "unzip_filename": "build-tools"
         }
       ],
@@ -744,12 +744,12 @@
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/mac-x64",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-mac-x64-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-mac-x64-1.0.5.zip",
           "unzip_filename": "cangjie-mac-x64"
         },
         {
           "unzip_dir": "prebuilts/cangjie_sdk/build-tools",
-          "file_path": "/openharmony/compiler/cangjie/1.0.0/cangjie-api-tools-1.0.0.zip",
+          "file_path": "/openharmony/compiler/cangjie/1.0.5/cangjie-api-tools-1.0.5.zip",
           "unzip_filename": "build-tools"
         }
       ],
