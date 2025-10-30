@@ -183,7 +183,9 @@
         "rust"
     ],
     "user_certificate_manager":[
-        "sdk"
+        "sdk",
+        "app",
+        "hvigor"
     ],
     "graphic_3d":[
         "AGP",
@@ -336,6 +338,9 @@
         "taihe"
     ],
     "thermal_manager":[
+        "taihe"
+    ],
+    "storage_service":[
         "taihe"
     ]
 }
