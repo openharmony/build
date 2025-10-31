@@ -14,6 +14,7 @@
 import("//build/config/python.gni")
 import("${root_build_dir}/build_configs/parts_list.gni")
 import("${root_build_dir}/build_configs/parts_test_list.gni")
+import("//build/ohos_var.gni")
 
 # build target type
 target_type = "${target_os}-${target_cpu}"
