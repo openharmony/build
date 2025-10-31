@@ -58,30 +58,17 @@ def update_crt(command):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--strip',
-                        help='The strip binary to run',
-                        metavar='PATH')
-    parser.add_argument('--unstripped-file',
-                        help='Executable file produced by linking command',
-                        metavar='FILE')
-    parser.add_argument('--map-file',
-                        help=('Use --Wl,-Map to generate a map file. Will be '
-                              'gzipped if extension ends with .gz'),
-                        metavar='FILE')
-    parser.add_argument('--output',
-                        required=True,
-                        help='Final output executable file',
-                        metavar='FILE')
-    parser.add_argument('--clang_rt_dso_path',
-                        help=('Clang asan runtime shared library'))
+    parser.add_argument('--strip', help='The strip binary to run', metavar='PATH')
+    parser.add_argument('--unstripped-file', help='Executable file produced by linking command', metavar='FILE')
+    parser.add_argument('--map-file', help=('Use --Wl,-Map to generate a map file. Will be gzipped if extension ends with .gz'), 
+        metavar='FILE')
+    parser.add_argument('--output', required=True, help='Final output executable file', metavar='FILE')
+    parser.add_argument('--clang_rt_dso_path', help=('Clang asan runtime shared library'))
     parser.add_argument('command', nargs='+', help='Linking command')
-    parser.add_argument('--mini-debug',
-                        action='store_true',
-                        default=False,
-                        help='Add .gnu_debugdata section for stripped sofile')
+    parser.add_argument('--mini-debug', action='store_true', default=False, help='Add .gnu_debugdata section for stripped sofile')
     parser.add_argument('--clang-base-dir', help='')
+    parser.add_argument('--remove-unstripped-exe', action='store_true', default=False, help='remove exe.unstripped after used')
     args = parser.parse_args()
-
     # Work-around for gold being slow-by-default. http://crbug.com/632230
     fast_env = dict(os.environ)
     fast_env['LC_ALL'] = 'C'
@@ -95,13 +82,11 @@ def main():
         command, env=fast_env, map_file=args.map_file)
     if result != 0:
         return result
-
     # Finally, strip the linked executable (if desired).
     if args.strip:
         result = subprocess.call(
             command_to_run(
                 [args.strip, '-o', args.output, args.unstripped_file]))
-
     if args.mini_debug and not args.unstripped_file.endswith(".exe") and not args.unstripped_file.endswith(".dll"):
         unstripped_libfile = os.path.abspath(args.unstripped_file)
         script_path = os.path.join(
@@ -111,9 +96,11 @@ def main():
             wrapper_utils.command_to_run(
                 ['python3', script_path, '--unstripped-path', unstripped_libfile, '--stripped-path', args.output,
                 '--root-path', ohos_root_path, '--clang-base-dir', args.clang_base_dir]))
-
+    if args.remove_unstripped_exe:
+        os.remove(args.unstripped_file)
     return result
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
