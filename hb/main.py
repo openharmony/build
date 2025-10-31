@@ -21,6 +21,9 @@ import os
 import sys
 import subprocess
 import json
+import shutil
+import glob
+import platform
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
@@ -41,6 +44,7 @@ from services.hpm import Hpm
 from services.indep_build import IndepBuild
 from services.prebuilts import PreuiltsService
 from services.hdc import Hdc
+from services.prebuilt_sdk import PrebuiltSdk
 
 from resolver.build_args_resolver import BuildArgsResolver
 from resolver.set_args_resolver import SetArgsResolver
@@ -147,11 +151,20 @@ class Main():
                                        'bin')
         os.environ['PATH'] = prebuilts_cache_path + os.pathsep + nodejs_bin_path + os.pathsep + os.environ['PATH']
 
+    def _prebuild_ohos_sdk(self, args_dict: dict):
+        prebuilt_sdk_service = PrebuiltSdk(args_dict=args_dict)
+        if prebuilt_sdk_service.should_build_sdk(args_dict):
+            prebuilt_sdk_service.run()
+
     def _init_build_module(self) -> BuildModuleInterface:
         args_dict = Arg.parse_all_args(ModuleType.BUILD)
 
+        if args_dict.get("product_name").arg_value != 'ohos-sdk' and args_dict.get("no_prebuilt_sdk").arg_value != True:
+            self._prebuild_ohos_sdk(args_dict)
+
         if args_dict.get("product_name").arg_value != '':
             set_args_dict = Arg.parse_all_args(ModuleType.SET)
+            set_args_dict.get("product_name").arg_value = args_dict.get("product_name").arg_value
             set_args_resolver = SetArgsResolver(set_args_dict)
             ohos_set_module = OHOSSetModule(set_args_dict, set_args_resolver, "")
             ohos_set_module.set_product()
