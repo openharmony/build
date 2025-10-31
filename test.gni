@@ -482,6 +482,8 @@ template("ohos_js_test") {
       "$root_out_dir/tests/${invoker.test_type}/${invoker.module_out_path}"
   _module_list_file = "$root_out_dir/module_list_files/${invoker.module_out_path}/$target_name.mlf"
 
+  test_type = invoker.test_type
+
   write_file("$_test_output_dir/${target_name}_path.txt",
              get_label_info(":$target_name", "dir"),
              "string")
