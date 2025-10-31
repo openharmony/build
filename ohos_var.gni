@@ -15,6 +15,11 @@ import("//build/common.gni")
 import("//build/version.gni")
 
 declare_args() {
+  # test label
+  test_label_type = ""
+}
+
+declare_args() {
   # build ohos version
   build_public_version = true
 }
