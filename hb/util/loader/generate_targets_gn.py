@@ -125,7 +125,7 @@ def gen_targets_gn(parts_targets, config_output_dir):
     else:
         test_list_content = ''
     if os.path.exists(parts_test_filter_gni_file):
-        shutil.copy2(parts_test_filter_gni_file, parts_test_gni_file)
+        shutil.move(parts_test_filter_gni_file, parts_test_gni_file)
     else:
         write_file(parts_test_gni_file,
                    PARTS_TEST_GNI_TEMPLATE.format(test_list_content))

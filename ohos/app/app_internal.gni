@@ -294,9 +294,18 @@ template("package_app") {
       }
     }
 
+    _test_target = defined(invoker.test_type) && invoker.test_type != "" && defined(testonly) && testonly
+
     if (defined(install_module_info)) {
+      test_info = []
+      if (_test_target) {
+        if (test_label_type != "" && string_replace(test_label_type, invoker.test_type, "") != test_label_type) {
+            test_info += [ install_module_info.module_def ]
+        }
+      }
       metadata = {
         install_modules = [ install_module_info ]
+        test_list_info = test_info
       }
     }
     if (defined(enable_ark) && enable_ark) {
@@ -561,9 +570,18 @@ template("app_sign") {
       }
     }
 
+    _test_target = defined(invoker.test_type) && invoker.test_type != "" && defined(testonly) && testonly
+
     if (defined(install_module_info)) {
+      test_info = []
+      if (_test_target) {
+        if (test_label_type != "" && string_replace(test_label_type, invoker.test_type, "") != test_label_type) {
+            test_info += [ install_module_info.module_def ]
+        }
+      }
       metadata = {
         install_modules = [ install_module_info ]
+        test_list_info = test_info
       }
     }
   }
