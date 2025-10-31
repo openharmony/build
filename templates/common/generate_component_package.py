@@ -901,13 +901,13 @@ def _handle_module_runtime_core(args, components_json, module):
         return public_deps_list
     json_data = _get_json_data(args, module)
     _lib_special_handler(args.get("part_name"), module, args)
-    lib_exists, is_ohos_ets_copy = _copy_lib(args, json_data, module)
+    lib_exists = _copy_lib(args, json_data, module)
     if lib_exists is False:
         return public_deps_list
     includes = _handle_includes_data(json_data)
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
-    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list, is_ohos_ets_copy)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
     _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 
@@ -1205,8 +1205,6 @@ def _copy_lib(args, json_data, module):
     lib_status = True
     _target_type = json_data.get('type')
     subsystem_name = args.get("subsystem_name")
-    is_ohos_ets_copy = False
-    ets_outputs = []
 
     # 根据 type 字段和 module 选择正确的 so_path
     if _target_type == 'copy' and module == 'ipc_core':
@@ -1226,25 +1224,24 @@ def _copy_lib(args, json_data, module):
         # 对于非 rust_library 类型，选择不包含 'lib.unstripped' 的路径
         outputs = json_data.get('outputs', [])
         for output in outputs:
-            if 'ohos_ets' in output:
-                is_ohos_ets_copy = True
-                ets_outputs.append(output)
-            elif '.unstripped' not in output:
+            if '.unstripped' not in output:
                 output = replace_default_toolchains_in_output(output)
                 so_path = output
                 break
         # 如果所有路径都包含 'lib.unstripped' 或者没有 outputs，则使用 out_name
         if not so_path:
             so_path = json_data.get('out_name')
-    if is_ohos_ets_copy:
-        for output in ets_outputs:
+    # 判断类型是 ohos_copy类型的
+    if _target_type == "copy" and json_data.get("module_type") == "unknown":
+        outputs = json_data.get("outputs", [])
+        for output in outputs:
             if not copy_so_file(args, module, output, _target_type):
                 lib_status = False
     elif so_path:
         lib_status = copy_so_file(args, module, so_path, _target_type)
     if lib_status and _target_type == 'static_library':
         copy_static_deps_file(args, json_data.get('label'), module, so_path)
-    return lib_status, is_ohos_ets_copy
+    return lib_status
 
 
 def _do_copy_static_deps_file(args, out_path, lib_path, toolchain):
@@ -1335,10 +1332,14 @@ def _copy_file(so_path, lib_out_dir, target_type=""):
         print("WARNING: {} is not a file!".format(so_path))
         return False
     if os.path.exists(lib_out_dir):
-        shutil.rmtree(lib_out_dir)
+        if os.path.exists(os.path.join(lib_out_dir, so_path.split('/')[-1])) and os.path.isfile(os.path.join(lib_out_dir, so_path.split('/')[-1])):
+            print(f"存在同名文件，已删除")
+            os.remove(os.path.join(lib_out_dir, so_path.split('/')[-1]))
     if os.path.isfile(so_path):
         if not os.path.exists(lib_out_dir):
             os.makedirs(lib_out_dir)
+            shutil.copy(so_path, lib_out_dir)
+        else:
             shutil.copy(so_path, lib_out_dir)
     elif os.path.exists(so_path):
         dir_name = os.path.basename(so_path)
@@ -1466,15 +1467,15 @@ def _copy_readme(args):
             pass
 
 
-def _generate_import(fp, is_ohos_ets_copy=False):
+def _generate_import(fp, json_data):
     fp.write('import("//build/ohos.gni")\n')
-    if is_ohos_ets_copy:
+    if json_data.get("type") == "copy":
         fp.write('import("//build/templates/common/copy.gni")\n')
 
 
 def _gcc_flags_info_handle(json_data):
     def should_process_key(k):
-        return k not in ["label", "include_dirs"]
+        return k not in ["label", "include_dirs", "visibility"]
 
     def process_config(config):
         result = {}
@@ -1540,18 +1541,20 @@ def _generate_group_configs(fp, module, json_data, _part_name):
     fp.write('  ]\n')
 
 
-def _generate_prebuilt_target(fp, target_type, module, is_ohos_ets_copy=False):
+def _generate_prebuilt_target(fp, json_data, module):
+    target_type = json_data.get("type")
     if target_type == 'static_library':
         fp.write('ohos_prebuilt_static_library("' + module + '") {\n')
     elif target_type == 'group':
         fp.write('\nohos_shared_headers("' + module + '") {\n')
     elif target_type == 'executable':
         fp.write('ohos_prebuilt_executable("' + module + '") {\n')
-    elif module != 'ipc_core' and (target_type == 'etc' or target_type == 'copy'):
-        if is_ohos_ets_copy:
-            fp.write('ohos_copy("' + module + '") {\n')
-        else:
+    elif module != 'ipc_core' and target_type == 'copy':
+        module_type = json_data.get("module_type")
+        if module_type == "etc":
             fp.write('ohos_prebuilt_etc("' + module + '") {\n')
+        elif module_type == "unknown":
+            fp.write('ohos_copy("' + module + '") {\n')
     elif target_type == 'rust_library' or target_type == 'rust_proc_macro':
         fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
@@ -1599,35 +1602,35 @@ def _get_rust_external_deps(components_json: dict, dep):
     return None
 
 
-def _find_ohos_ets_dir(outputs):
+def _find_outputs_dir(outputs):
     for path in outputs:
         parts = path.split('/')
-        for part in parts:
-            if "ohos_ets" in part:
-                return '/'.join(parts[:-1])
+        return '/'.join(parts[:-1])
     return None
 
 
-def _generate_other(fp, args, json_data, module, is_ohos_ets_copy=False):
+def _generate_other(fp, args, json_data, module):
     outputs = json_data.get('outputs', [])
-    ohos_ets_dir = _find_ohos_ets_dir(outputs)
-    if is_ohos_ets_copy:
+    outputs_dir = _find_outputs_dir(outputs)
+    _target_type = json_data.get("type")
+    if _target_type == "copy" and json_data.get("module_type") == "unknown" and module != "ipc_core":
         sources_arr = [f"libs/{path.split('/')[-1]}" for path in outputs]
         sources_str = str(sources_arr).replace("'", '"')
+        fp.write('  copy_linkable_file = true \n')
         fp.write(f'  sources = {sources_str}\n')
-        fp.write('  outputs = [ "$root_out_dir/' + ohos_ets_dir + '/{{source_file_part}}" ]\n')
+        fp.write('  outputs = [ "$root_build_dir/' + outputs_dir + '/{{source_file_part}}" ]\n')
         fp.write('  part_name = "' + args.get("part_name") + '"\n')
-        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n') 
+        fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
     else:
-        if json_data.get('type') == 'copy' and module == 'ipc_core':
+        if _target_type == 'copy' and module == 'ipc_core':
             so_name = 'libipc_single.z.so'
         else:
             so_name = json_data.get('out_name')
             for output in outputs:
                 so_name = output.split('/')[-1]
-        if json_data.get('type') == 'copy' and module != 'ipc_core':
+        if _target_type == 'copy' and module != 'ipc_core':
             fp.write('  copy_linkable_file = true \n')
-        if json_data.get('type') != 'group':
+        if _target_type != 'group':
             fp.write('  source = "libs/' + so_name + '"\n')
         fp.write('  part_name = "' + args.get("part_name") + '"\n')
         fp.write('  subsystem_name = "' + args.get("subsystem_name") + '"\n')
@@ -1724,17 +1727,17 @@ def _generate_static_public_deps(fp, args, deps: list, toolchain):
     fp.write(public_deps_string)
 
 
-def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list, is_ohos_ets_copy=False):
+def _generate_build_gn(args, module, json_data, deps: list, components_json, public_deps_list):
     gn_path = os.path.join(args.get("out_path"), "component_package", args.get("part_path"),
                            "innerapis", module, "BUILD.gn")
     static_deps_files = _get_static_deps(args, module, "") # 处理静态库依赖
     fd = os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640)
     fp = os.fdopen(fd, 'w')
     _target_type = json_data.get('type')
-    _generate_import(fp, is_ohos_ets_copy)
+    _generate_import(fp, json_data)
     if _target_type != "group":
         _generate_configs(fp, module, json_data, args.get('part_name'))
-    _generate_prebuilt_target(fp, _target_type, module, is_ohos_ets_copy)
+    _generate_prebuilt_target(fp, json_data, module)
     if _target_type == "group":
         _generate_group_configs(fp, module, json_data, args.get('part_name'))
     else:
@@ -1747,7 +1750,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
     if _target_type == "rust_library" or _target_type == "rust_proc_macro":
         _copy_rust_crate_info(fp, json_data)
         _generate_rust_deps(fp, json_data, components_json)
-    _generate_other(fp, args, json_data, module, is_ohos_ets_copy)
+    _generate_other(fp, args, json_data, module)
     _generate_end(fp)
     _generate_static_deps_target(fp, args, static_deps_files, "") # 处理静态库依赖
     print(f"{module}_generate_build_gn has done ")
@@ -1846,11 +1849,11 @@ def _handle_module(args, components_json, module):
         return public_deps_list
     json_data = _get_json_data(args, module)
     _lib_special_handler(args.get("part_name"), module, args)
-    libstatus, is_ohos_ets_copy = _copy_lib(args, json_data, module)
+    libstatus = _copy_lib(args, json_data, module)
     includes = _handle_includes_data(json_data)
     deps = _handle_deps_data(json_data)
     _copy_includes(args, module, includes)
-    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list, is_ohos_ets_copy)
+    _list = _generate_build_gn(args, module, json_data, deps, components_json, public_deps_list)
     _toolchain_gn_copy(args, module, json_data['out_name'])
     return _list
 
