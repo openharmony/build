@@ -229,6 +229,7 @@ template("ohos_copy") {
                                "public_configs",
                                "sources",
                                "outputs",
+                               "module_type",
                                "copy_linkable_file",
                                "rust_crate_name",
                                "rust_crate_type",
@@ -242,6 +243,12 @@ template("ohos_copy") {
         }
       }
 
+      if (defined(invoker.module_type)) {
+        _module_type = invoker.module_type
+      } else {
+        _module_type = "unknown"
+      }
+
       if (!_bypass_module_info_generation) {
         _install_module_info = {
           module_def = _target_label
@@ -253,11 +260,14 @@ template("ohos_copy") {
           part_name = _part_name
           toolchain = current_toolchain
           toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+          module_type = _module_type
         }
 
         metadata = {
           install_modules = [ _install_module_info ]
         }
+      } else {
+        not_needed([ "_module_type" ])
       }
     }
   }
