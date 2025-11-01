@@ -123,11 +123,6 @@ def compile_package(options, out_path: str):
     nodejs = os.path.abspath(options.node_js)
     input_dir = os.path.abspath(os.path.join(options.root_build_dir, out_path, "api/@internal/component/ets"))
     output = os.path.abspath(os.path.join(options.output_interface_sdk, "arkui_transformer_api"))
-
-    if not os.path.exists(input_dir):
-        os.makedirs(output, exist_ok=True)
-        return
-
     custom_env = {
         'PATH': f"{os.path.dirname(os.path.abspath(options.node_js))}:{os.environ.get('PATH')}",
         'NODE_HOME': os.path.dirname(os.path.abspath(options.node_js)),
