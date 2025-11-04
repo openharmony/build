@@ -18,21 +18,20 @@ code_dir=$(dirname ${script_path})
 home_path=$HOME
 config_file="$script_path/prebuilts_config.json"
 
-
 # 处理命令行参数
 declare -A args
 parse_args(){
     while [[ $# -gt 0 ]]; do
         case "$1" in
             # 处理长参数（带等号）
-            --*=*)
+            --*=* | -*=*)
                 key="${1%%=*}"     # 提取参数名
                 value="${1#*=}"    # 提取参数值
                 args["$key"]="$value"  # 取最后的值
                 shift
                 ;;
             # 处理长参数（不带等号）
-            --*)
+            --* | -*)
                 key="$1"
                 shift
                 values=()
@@ -46,37 +45,6 @@ parse_args(){
                 else
                     args["$key"]="${values[*]}"  # 合并为空格分隔的字符串
                 fi
-                ;;
-            # 处理短参数（带等号，如 -k=value）
-            -*=*)
-                key_part="${1%%=*}"    # 提取短参数部分（如 -abc=value → -abc）
-                value="${1#*=}"       # 提取值
-                chars="${key_part:1}" # 去掉前缀的短参数（如 abc）
-                # 处理除最后一个字符外的所有字符（作为无值参数）
-                while [[ ${#chars} -gt 1 ]]; do
-                    args["-${chars:0:1}"]="1"
-                    chars="${chars:1}"
-                done
-                # 最后一个字符作为带值参数
-                args["-${chars}"]="$value"
-                shift
-                ;;
-            # 处理短参数（不带等号）
-            -*)
-                chars="${1:1}"  # 去掉短参数前缀（如 abc）
-                while [[ -n "$chars" ]]; do
-                    key="-${chars:0:1}"
-                    chars="${chars:1}"
-                    # 如果还有剩余字符或后续参数是选项，视为无值参数
-                    if [[ -n "$chars" ]] || [[ $# -gt 1 && "$2" == -* ]]; then
-                        args["$key"]="1"
-                    else
-                        # 否则取下一个参数作为值
-                        args["$key"]="$2"
-                        shift
-                    fi
-                done
-                shift
                 ;;
             # 不处理其他参数
             *)
@@ -142,6 +110,28 @@ else
     trusted_host='repo.huaweicloud.com'
 fi
 
+clean_oh_env(){
+    set +e
+    if [ $USE_VENV -eq 0 ]; then
+        deactivate
+        rm -rf oh_venv
+    fi
+    set -e
+}
+
+trap clean_oh_env EXIT
+
+set +e
+python3 -m venv oh_venv
+if [ $? -ne 0 ]; then
+        echo "create venv failed. ignore it."
+        USE_VENV=1
+    else
+        USE_VENV=0
+        source oh_venv/bin/activate
+        pip3 install --upgrade pip
+fi
+set -e
 
 if [[ -v args["--disable-rich"] ]]; then
     disable_rich='--disable-rich'
@@ -161,7 +151,10 @@ if [[ -v args["--part-names"] ]]; then
 fi
 
 # 运行Python命令
-python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich $part_names
+type="--build-type indep"
+pip3 install --trusted-host $trusted_host -i $pypi_url requests
+python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich $part_names $type
+
 PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
 if [[ -v args["--download-sdk"] ]]; then
