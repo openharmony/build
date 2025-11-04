@@ -112,7 +112,7 @@ ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
 ohos_ets_build_system_path =
     "$root_build_dir/ohos_ets/build-tools/driver/build-system"
-ohos_ets_dependency_analyzer_path = 
+ohos_ets_dependency_analyzer_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/dependency_analyzer"
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
@@ -248,8 +248,10 @@ template("generate_static_abc") {
         rebase_path("$ohos_ets_api_path"),
         rebase_path("$ohos_ets_arkts_path"),
         rebase_path("$ohos_ets_kits_path"),
-        rebase_path("$ohos_ets_inner_path"),
       ]
+      if (defined(invoker.enable_inner_path) && invoker.enable_inner_path) {
+        args += [ rebase_path("$ohos_ets_inner_path") ]
+      }
 
       only_memo = "False"
       if (defined(invoker.only_memo)) {
