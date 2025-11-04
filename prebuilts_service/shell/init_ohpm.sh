@@ -46,8 +46,34 @@ else
     exit 1
 fi
 # set nodejs and ohpm
+case $(uname -m) in
+    *x86_64)
+        node_prefix="x64"
+        ;;
+    *arm* | *aarch64)
+        node_prefix="aarch64"
+        ;;
+    *)
+        echo "\033[31m[OHOS ERROR] Unsupported host arch: $(uname -m)\033[0m"
+        RET=1
+        exit $RET
+esac
+
+case $(uname -s) in
+    Darwin)
+
+        NODE_PLATFORM="darwin-x64"
+        ;;
+    Linux)
+        NODE_PLATFORM="linux-$node_prefix"
+        ;;
+    *)
+        echo "\033[31m[OHOS ERROR] Unsupported host platform: $(uname -s)\033[0m"
+        RET=1
+        exit $RET
+esac
+
 EXPECTED_NODE_VERSION="14.21.1"
-NODE_PLATFORM="linux-x64"
 
 export PATH=${code_dir}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
 echo ${code_dir}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin
