@@ -141,28 +141,3 @@ class ArgsResolver(ArgsResolverInterface):
                     deepest_bundle = bundle_path
         
         return deepest_bundle
-
-    @staticmethod
-    def get_indep_args(sys_argv, component_name_list) -> list:
-        new_args = []
-        added_components = False
-        added_i = False
-        
-        for arg in sys_argv:
-            if arg == '--product-name':
-                sys_argv.remove(sys_argv[sys_argv.index(arg) + 1])
-                continue
-            
-            if arg == '--build-target':
-                if not added_components:
-                    new_args.extend(component_name_list)
-                    added_components = True
-                if not added_i:
-                    new_args.append('-i')
-                    added_i = True
-                sys_argv.remove(sys_argv[sys_argv.index(arg) + 1])
-                continue
-            
-            new_args.append(arg)
-        
-        return new_args
