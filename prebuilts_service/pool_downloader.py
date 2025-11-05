@@ -127,6 +127,7 @@ class PoolDownloader:
             extract_compress_files_and_gen_mark(local_path, unzip_dir, mark_file_path)
             self._adaptive_print(f"{local_path} extracted to {unzip_dir}")
 
+
     def _try_download(self, remote_url: str, local_path: str):
         max_retry_times = 3
         # 创建下载目录
@@ -160,14 +161,10 @@ class PoolDownloader:
     def _download_remote_file(self, remote_url: str, local_path: str, progress_task_id):
         buffer_size = 32768
         progress = self.progress
-        if self.global_args.skip_ssl:
-            ssl_verify = False
-        else:
-            ssl_verify = True
         # 使用requests库进行下载
-        with requests.get(remote_url, stream=True, timeout=(30, 600), verify=ssl_verify) as response:
+        with requests.get(remote_url, stream=True, timeout=(30, 600)) as response:
             response.raise_for_status()  # 检查HTTP错误
-
+            
             total_size = int(response.headers.get("Content-Length", 0))
             if progress:
                 progress.update(progress_task_id, total=total_size)

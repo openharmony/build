@@ -98,7 +98,7 @@ def run_cmd_directly(cmd: list):
     print(f"run command: {cmd_str}\n")
     try:
         subprocess.run(
-            cmd, check=True, stdout=None, stderr=None
+            cmd, check=True, stdout=None, stderr=None 
         )  # 直接输出到终端
     except subprocess.CalledProcessError as e:
         print(f"{cmd} execute failed: {e.returncode}")
@@ -210,11 +210,6 @@ def install_hpm_in_other_platform(name: str, operate: dict):
 
 
 def install_hpm(npm_tool_path: str, hpm_install_dir: str):
-    npm_config_path = os.path.abspath(os.path.join(os.path.expanduser("~"), ".npmrc"))
-    config_exist = False
-    if os.path.exists(npm_config_path):
-        config_exist = True
-        os.rename(npm_config_path, npm_config_path + ".bak")
     content = """\
 package-lock=true
 registry=http://repo.huaweicloud.com/repository/npm
@@ -223,7 +218,7 @@ lockfile=false
 """
     with os.fdopen(
             os.open(
-                npm_config_path,
+                os.path.join(os.path.expanduser("~"), ".npmrc"),
                 os.O_WRONLY | os.O_CREAT,
                 mode=0o640,
             ),
@@ -256,9 +251,6 @@ lockfile=false
             hpm_install_dir,
         ]
     )
-    if config_exist:
-        os.remove(npm_config_path)
-        os.rename(npm_config_path + ".bak", npm_config_path)
 
 
 def npm_config(npm_tool_path: str, global_args: object) -> tuple:
@@ -280,7 +272,7 @@ def npm_config(npm_tool_path: str, global_args: object) -> tuple:
     return True, None
 
 
-def npm_install(operate: dict, global_args: object) -> tuple:
+def npm_install(operate: dict, global_args: object, success_installed_npm_config: list) -> tuple:
     install_list = operate.get("npm_install_path")
     npm_tool_path = os.path.join(global_args.code_dir, "prebuilts/build-tools/common/nodejs/current/bin/npm")
 
@@ -288,13 +280,9 @@ def npm_install(operate: dict, global_args: object) -> tuple:
     if not preset_is_ok:
         return preset_is_ok, err
 
-    install_cmds = []
-    full_code_paths = []
-
     print("start npm install, please wait.")
     for install_path in install_list:
-        if install_path in global_args.success_installed:
-            print('{} has been installed, skip'.format(full_code_path))
+        if install_path in success_installed_npm_config:
             continue
         full_code_path = install_path
         basename = os.path.basename(full_code_path)
@@ -312,43 +300,28 @@ def npm_install(operate: dict, global_args: object) -> tuple:
                 cmd = [npm_tool_path, "install", "--registry", global_args.npm_registry, "--cache", npm_cache_dir]
             if global_args.unsafe_perm:
                 cmd.append("--unsafe-perm")
-            install_cmds.append(cmd)
-            full_code_paths.append(full_code_path)
+            proc = subprocess.Popen(
+                cmd, cwd=full_code_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+            # wait proc Popen with 0.1 second
+            time.sleep(0.1)
+            _, err = proc.communicate()
+            if proc.returncode:
+                print("in dir:{}, executing:{}".format(full_code_path, " ".join(cmd)))
+                return False, err.decode()
+            else:
+                success_installed_npm_config.append(install_path)
+                print(f"{node_modules_path} install over!")
         else:
             print(
-                "npm install path {} not exist, skip".format(full_code_path)
-            )
-            if global_args.build_type != "indep":
-                raise Exception(
-                    "npm install path {} not exist, it shouldn't happen, pls check...".format(full_code_path)
+                    "npm install path {} not exist, skip".format(full_code_path)
                 )
-
-    if global_args.parallel_install:
-        print('run npm install in parallel mode, please wait.')
-        procs = []
-        for index, install_cmd in enumerate(install_cmds):
-            proc = subprocess.Popen(install_cmd, cwd=full_code_paths[index], stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
-            print('run npm install in {}'.format(full_code_paths[index]))
-            time.sleep(0.1)
-            procs.append(proc)
-        for index, proc in enumerate(procs):
-            out, err = proc.communicate()
-            if proc.returncode:
-                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmds[index])))
-                return False, err.decode()
-            global_args.success_installed.append(full_code_paths[index])
-
-    else:
-        print('run npm install in serial mode, please wait.')
-        for index, install_cmd in enumerate(install_cmds):
-            proc = subprocess.Popen(install_cmd, cwd=full_code_paths[index], stdout=subprocess.PIPE,
-                                    stderr=subprocess.PIPE)
-            print('run npm install in {}'.format(full_code_paths[index]))
-            time.sleep(0.1)
-            out, err = proc.communicate()
-            if proc.returncode:
-                print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmds[index])))
-                return False, err.decode()
-            global_args.success_installed.append(full_code_paths[index])
+            if global_args.type != "indep":
+                print(
+                    "npm install path {} not exist, please check your config file".format(full_code_path)
+                )
+                raise Exception(
+                    "{} not exist, it shouldn't happen, pls check...".format(full_code_path)
+                )
+        
     return True, None
