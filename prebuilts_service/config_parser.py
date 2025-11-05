@@ -17,7 +17,6 @@ import re
 import os
 from common_utils import load_config
 from part_prebuilts_config import get_parts_tag_config
-from pathlib import Path
 
 
 class ConfigParser:
@@ -26,11 +25,10 @@ class ConfigParser:
         self.current_cpu = global_args.host_cpu
         self.current_os = global_args.host_platform
         self.input_tag = "all"
-        self.build_type = global_args.build_type
+        self.input_type = global_args.type
         self.global_config = {
             "code_dir": global_args.code_dir,
-            "download_root": self.data["download_root"].get(self.build_type),
-            "current_build_type": self.build_type,
+            "download_root": self.data["download_root"]
         }
         self._parse_global_config()
 
@@ -50,9 +48,9 @@ class ConfigParser:
                 continue
             _download, _other = self._get_tool_operate(tool_basic_config, tool.get("config"), tool.get("handle", []))
             download_op.extend(_download)
-            other_op.extend(_other)
+            other_op.extend(_other) 
         return download_op, other_op
-
+    
     def _parse_global_config(self):
         # 解析全局配置中的变量
         VarParser.parse_vars(self.global_config, self.global_config)
@@ -77,15 +75,15 @@ class ConfigParser:
         VarParser.parse_vars(tool_basic_config, tool_basic_config)
         VarParser.parse_vars(tool_basic_config, self.global_config)
         return tool_basic_config
-
+    
     def _parse_platform_config(self, matched_platform_configs: list, tool_basic_config: dict):
         for config in matched_platform_configs:
             VarParser.parse_vars(config, config)
             VarParser.parse_vars(config, tool_basic_config)
 
     def _apply_filters(self, configs: list):
-        return Filter(configs).apply_filters(self.input_tag, self.build_type)
-
+        return Filter(configs).apply_filters(self.input_tag, self.input_type)
+    
     def _match_platform(self, input_os: str, input_cpu: str, config: dict) -> list:
         """获取匹配当前操作系统的配置"""
         if not config:
@@ -112,7 +110,7 @@ class ConfigParser:
             if input_os in configured_os_list or configured_os_list == ["any"]:
                 matched_os.append(os_key)
         return matched_os
-
+    
     def _match_cpu(self, input_cpu: str, cpu_config: dict) -> list:
         matched_cpu = []
         for cpu_str in cpu_config:
@@ -156,14 +154,9 @@ class ConfigParser:
         operate_list = []
         for config in outer_configs:
             special_handle = config.get("handle_index")
-            skip_handle = config.get("skip_handle", False)
             count = 0
             for index, handle in enumerate(handles):
-                if not self._check_handle_condition(handle, config):
-                    continue
                 if special_handle and index not in special_handle:
-                    continue
-                if skip_handle:
                     continue
                 step_id = "_".join([config.get("name"), os.path.basename(config.get("remote_url", "")), str(count)])
                 count += 1
@@ -177,21 +170,6 @@ class ConfigParser:
                 new_handle["step_id"] = step_id
                 operate_list.append(new_handle)
         return operate_list
-
-    def _check_handle_condition(self, handle: dict, config: dict) -> bool:
-        when = handle.get("when")
-        if when:
-            try:
-                when_result = _safe_eval(when, config)
-                handle.pop("when")
-                if not isinstance(when_result, bool):
-                    print(f"when表达式 {when} 的结果不是布尔值")
-                    return False
-                return when_result
-            except Exception as e:
-                print(f"eval when {when} failed, error: {e}")
-                return False
-        return True
 
     def _generate_download_config(self, config):
         try:
@@ -221,8 +199,8 @@ class Filter:
             return
         self.input_configs = copy.deepcopy(configs)
 
-    def apply_filters(self, input_tag: str, build_type: str):
-        return self.filter_tag(input_tag).filter_build_type(build_type).result()
+    def apply_filters(self, input_tag: str, input_type: str):
+        return self.filter_tag(input_tag).filter_type(input_type).result()
 
     def filter_tag(self, input_tag: str) -> 'Filter':
         """过滤tag字段"""
@@ -230,28 +208,28 @@ class Filter:
         for config in self.input_configs:
             tool_tag = config["tag"]
             if input_tag == "all" or tool_tag in input_tag:
-                filtered.append(config)
+                filtered.append(config)    
         self.input_configs = filtered
         return self
 
-    def filter_build_type(self, build_type: str) -> 'Filter':
-        """过滤build_type字段"""
+    def filter_type(self, input_type: str) -> 'Filter':
+        """过滤type字段"""
         filtered = []
         for config in self.input_configs:
-            _build_type = config.get("build_type")
-            if not _build_type:
+            _type = config.get("type")
+            if not _type:
                 filtered.append(config)
                 continue
-            # 配置的build_type，转set
-            if isinstance(_build_type, str):
-                configured_build_types = set([t.strip() for t in _build_type.split(",")])
+            # 配置的type，转set
+            if isinstance(_type, str):
+                configured_types = set([t.strip() for t in _type.split(",")])
             else:
-                configured_build_types = set(_build_type)
-            # 输入的build_type，转set
-            input_build_type = set([t.strip() for t in build_type.split(",")])
+                configured_types = set(_type)
+            # 输入的type，转set
+            input_types = set([t.strip() for t in input_type.split(",")])
 
             # 检查二者是否有交集，有则添加
-            if not input_build_type.isdisjoint(configured_build_types):
+            if not input_types.isdisjoint(configured_types):
                 filtered.append(config)
         self.input_configs = filtered
         return self
@@ -334,10 +312,10 @@ class VarParser:
         var_name = matched_var.group()[2:-1]
         if dictionary.get(var_name):
             cls._update_ref_dict(ref_dict, var_name, dictionary.get(var_name))
-            return dictionary.get(var_name)  # 找得到就替换
+            return dictionary.get(var_name) # 找得到就替换
         else:
-            return matched_var.group()  # 找不到就保留原始值
-
+            return matched_var.group() # 找不到就保留原始值
+    
     @classmethod
     def _update_ref_dict(cls, ref_dict, var_name, var_value):
         if var_name not in ref_dict:
@@ -355,34 +333,3 @@ class VarParser:
         for ref_var in ref_list:
             if var_name in ref_dict.get(ref_var, []):
                 raise ValueError(f"Cycle dependency exists between {var_name} and {ref_var}")
-
-
-def _check_file_exists(file_path: str) -> bool:
-    """检查文件是否存在"""
-    path = Path(file_path)
-    return path.exists()
-
-
-def _safe_eval(expression, dictionary=None):
-    """安全的求值函数"""
-    if dictionary is None:
-        dictionary = {}
-
-    safe_globals = {
-        '__builtins__': {},
-        "if_exists": _check_file_exists,
-    }
-    safe_globals.update(dictionary)
-
-    # 额外的安全检查
-    forbidden_strings = [
-        'import', '__', 'open', 'file', 'exec', 'eval',
-        'compile', 'class', 'globals', 'locals'
-    ]
-
-    expression_lower = expression.lower()
-    for forbidden in forbidden_strings:
-        if forbidden in expression_lower:
-            raise Exception(f"表达式中包含禁止的内容: {forbidden}")
-
-    return eval(expression, safe_globals)

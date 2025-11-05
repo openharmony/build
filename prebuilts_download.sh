@@ -160,29 +160,6 @@ else
     build_arkuix=''
 fi
 
-clean_oh_env(){
-    set +e
-    if [ $USE_VENV -eq 0 ]; then
-        deactivate
-        rm -rf oh_venv
-    fi
-    set -e
-}
-
-trap clean_oh_env EXIT
-
-set +e
-python3 -m venv oh_venv
-if [ $? -ne 0 ]; then
-        echo "create venv failed. ignore it."
-        USE_VENV=1
-    else
-        USE_VENV=0
-        source oh_venv/bin/activate
-        pip3 install --upgrade pip
-fi
-set -e
-
 if [ "X${DISABLE_RICH}" == "XYES" ];then
   disable_rich='--disable-rich'
 else
@@ -208,15 +185,7 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
 fi
-type="--build-type src"
-config_file="--config-file ${code_dir}/build/prebuilts_config.json"
-pip3 install --trusted-host $trusted_host -i $pypi_url requests
-if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
-        python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file
-    else
-        python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
-fi
-
+python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
 if [ -f "${code_dir}/prebuilts/cmake/linux-${host_cpu_prefix}/bin/ninja" ];then
     rm -rf "${code_dir}/prebuilts/cmake/linux-${host_cpu_prefix}/bin/ninja"
 fi
