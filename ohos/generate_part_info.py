@@ -59,11 +59,14 @@ def gen_output_file(part_name: str, origin_part_name: str, all_modules_file: str
         modules_def[module_def] = ''
         thirdparty = info.get('subsystem_name')
         _part_name = info.get('part_name')
+        toolchain = info.get('toolchain')
         if thirdparty == 'thirdparty' and not _part_name.startswith('rust_'):
-            thirdparty_module_list.append(info)
+            if toolchain == '' or toolchain == current_toolchain:
+                thirdparty_module_list.append(info)
             external_module_list.append(info)
         if str(module_def).startswith("//drivers/interface"):
-            hdi_module_list.append(info)
+            if toolchain == '' or toolchain == current_toolchain:
+                hdi_module_list.append(info)
             external_module_list.append(info)
         _module_part_name = info.get('part_name')
         if _module_part_name not in modules_info_dict:
