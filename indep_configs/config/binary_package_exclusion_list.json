@@ -2,5 +2,6 @@
   "googletest",
   "benchmark",
   "rust_bindgen",
-  "css-what"
+  "css-what",
+  "jsframework"
 ]
