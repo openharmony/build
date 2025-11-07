@@ -342,5 +342,8 @@
     ],
     "storage_service":[
         "taihe"
+    ],
+    "face_auth":[
+        "taihe"
     ]
 }

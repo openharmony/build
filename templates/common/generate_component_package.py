@@ -50,6 +50,10 @@ def _get_args():
                         help="local test ,default: not local , 0", )
     parser.add_argument("-origin", "--build-origin", default="", type=str,
                         help="Origin marker for HPM package", )
+    parser.add_argument("-branch", "--code_branch", default="master", type=str,
+                        help="The branch where the code is located")
+    parser.add_argument("-variant", "--variant", default="standard", type=str,
+                        help="The form of binary packages")
     args = parser.parse_args()
     return args
 
@@ -510,8 +514,8 @@ def generate_developer_test_bundle_base_info():
         "repository": "",
         "dirs": {"./": ["*"]},
         "scripts": {},
-        "os": "linux",
-        "buildArch": "x86"
+        "os": "ohos",
+        "buildArch": "arm"
     }
 
 
@@ -594,6 +598,8 @@ def process_developer_test(part_data, parts_path_info, part_name, subsystem_name
     gn_path = os.path.join(dst_path, "bundle.json")
 
     bundle_content = _generate_developer_test_bundle_content()
+    bundle_content.update({"branch": part_data["code_branch"]})
+    bundle_content.update({"variant": part_data["variant"]})
     _create_bundle_json(gn_path, bundle_content)
 
     _copy_license(part_data)
@@ -628,9 +634,9 @@ def process_skia(part_data, parts_path_info, part_name, subsystem_name, componen
     _finish_component_build(part_data)
 
 
-def process_variants_default(part_data, parts_path_info, part_name, subsystem_name, components_json):
+def process_variants_standard(part_data, parts_path_info, part_name, subsystem_name, components_json):
     preloader_path = os.path.join(part_data.get('root_path'), 'out', 'preloader', 'rk3568')
-    variants_default_source_files = [
+    variants_standard_source_files = [
         os.path.join(preloader_path, 'build_config.json'),
         os.path.join(part_data.get('root_path'), 'build', 'indep_configs', 'variants', 'common', 'default_deps.json'),
         os.path.join(preloader_path, 'features.json'),
@@ -640,42 +646,44 @@ def process_variants_default(part_data, parts_path_info, part_name, subsystem_na
         os.path.join(preloader_path, 'system', 'etc', 'SystemCapability.json')
     ]
 
-    variants_root = os.path.join(part_data.get('out_path'), 'component_package', 'variants', 'variants_default')
+    variants_root = os.path.join(part_data.get('out_path'), 'component_package', 'variants', 'variants_standard')
     variants_component_path = os.path.join(variants_root, 'config')
     try:
         os.makedirs(variants_component_path, exist_ok=True)
-        for source_file in variants_default_source_files:
+        for source_file in variants_standard_source_files:
             if not os.path.exists(source_file):
                 raise FileNotFoundError(f"Source file not found: {source_file}")
             shutil.copy2(source_file, variants_component_path)
         print("All confiauration files copied successfully")
     
-        bundle_content = generate_variants_default_bundle_info()
+        bundle_content = generate_variants_standard_bundle_info()
+        bundle_content.update({"branch": part_data["code_branch"]})
+        bundle_content.update({"variant": part_data["variant"]})
         bundle_path = os.path.join(variants_root, 'bundle.json')
         _create_bundle_json(bundle_path, bundle_content)
 
-        variants_default_license_path = os.path.join(variants_root, 'LICENSE')
-        variants_default_readme_path = os.path.join(variants_root, 'README.md')
-        with open(variants_default_license_path, 'w') as file:
+        variants_standard_license_path = os.path.join(variants_root, 'LICENSE')
+        variants_standard_readme_path = os.path.join(variants_root, 'README.md')
+        with open(variants_standard_license_path, 'w') as file:
             file.write("license")
-        with open(variants_default_readme_path, 'w') as file:
+        with open(variants_standard_readme_path, 'w') as file:
             file.write("readme")
 
         _finish_component_build(part_data)
     except Exception as e:
-        print(f"Error processing variants_default: {str(e)}")
+        print(f"Error processing variants_standard: {str(e)}")
         raise
 
 
-def generate_variants_default_bundle_info():
+def generate_variants_standard_bundle_info():
     return {
-        "name": "@ohos/variants_default",
+        "name": "@ohos/variants_standard",
         "description": "",
         "version": "3.1.0-snapshot",
         "license": "Apache License 2.0",
         "publishAs": "binary",
         "segment": {
-            "destPath": "variants/variants_default"
+            "destPath": "variants/variants_standard"
         },
         "dirs": {
             "config": [
@@ -684,7 +692,7 @@ def generate_variants_default_bundle_info():
         },
         "scripts": {},
         "component": {
-            "name": "variants_default",
+            "name": "variants_standard",
             "subsystem": "build",
             "syscap": [],
             "features": [],
@@ -705,8 +713,8 @@ def generate_variants_default_bundle_info():
                 "test": []
             }
         },
-        "os": "linux",
-        "buildArch": "x86",
+        "os": "ohos",
+        "buildArch": "arm",
         "dependencies": {}
     }
 
@@ -941,7 +949,7 @@ function_map = {
     "developer_test": process_developer_test,  # 同rust
     "runtime_core": process_runtime_core,  # 编译参数, 所有下面的innerapi的cflags都不
     "skia": process_skia,
-    "variants_default": process_variants_default,
+    "variants_standard": process_variants_standard,
 }
 
 
@@ -1387,6 +1395,8 @@ def _copy_bundlejson(args, public_deps_list):
             bundle_data['publishAs'] = 'binary'
             bundle_data.update({'os': args.get('os')})
             bundle_data.update({'buildArch': args.get('buildArch')})
+            bundle_data.update({'branch': args.get('code_branch')})
+            bundle_data.update({'variant': args.get('variant')})
             dirs = _dirs_handler(bundlejson_out)
             bundle_data['dirs'] = dirs
             bundle_data['version'] = str(bundle_data['version'])
@@ -1555,6 +1565,8 @@ def _generate_prebuilt_target(fp, json_data, module):
             fp.write('ohos_prebuilt_etc("' + module + '") {\n')
         elif module_type == "unknown":
             fp.write('ohos_copy("' + module + '") {\n')
+        else:
+            fp.write('ohos_prebuilt_etc("' + module + '") {\n')
     elif target_type == 'rust_library' or target_type == 'rust_proc_macro':
         fp.write('ohos_prebuilt_rust_library("' + module + '") {\n')
     else:
@@ -2109,7 +2121,7 @@ def _package_interface(args, parts_path_info, part_name, subsystem_name, compone
         "developer_test",  # 同rust
         "runtime_core",  # 编译参数, 所有下面的innerapi的cflags都不
         "skia",
-        "variants_default",
+        "variants_standard",
     ]:
         _process_part(args, parts_path_info, part_name, subsystem_name, components_json)
     else:
@@ -2143,9 +2155,9 @@ def additional_comoponents_json():
             "subsystem": "testfwk",
             "variants": []
         },
-        "variants_default": {
+        "variants_standard": {
         "innerapis": [],
-        "path": "variants/variants_default",
+        "path": "variants/variants_standard",
         "subsystem": "build",
         "variants": []
         },
@@ -2153,7 +2165,7 @@ def additional_comoponents_json():
 
 
 def generate_component_package(out_path, root_path, components_list=None, build_type=0, organization_name='ohos',
-                               os_arg='linux', build_arch_arg='x86', local_test=0, build_origin=''):
+                               os_arg='linux', build_arch_arg='x86', local_test=0, build_origin='', code_branch='', variant=''):
     """
 
     Args:
@@ -2204,7 +2216,9 @@ def generate_component_package(out_path, root_path, components_list=None, build_
             "build_type": build_type, "organization_name": organization_name,
             "toolchain_info": toolchain_info,
             "static_deps": {},
-            "build_origin": build_origin
+            "build_origin": build_origin,
+            "code_branch": code_branch,
+            "variant": variant
             }
     for key, value in part_subsystem.items():
         part_name = key
@@ -2227,7 +2241,9 @@ def main():
                                os_arg=py_args.os_arg,
                                build_arch_arg=py_args.build_arch,
                                local_test=py_args.local_test,
-                               build_origin=py_args.build_origin)
+                               build_origin=py_args.build_origin,
+                               code_branch=py_args.code_branch,
+                               variant=py_args.variant)
 
 
 if __name__ == '__main__':
