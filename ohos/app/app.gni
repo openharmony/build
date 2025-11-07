@@ -260,6 +260,7 @@ template("ohos_app") {
                            "module_install_dir",
                            "relative_install_dir",
                            "nodejs_path",
+                           "visibility",
                          ])
   if (defined(invoker.hvigor_home) || defined(invoker.sdk_home)) {
     _check_target = "${target_name}__hap_check"
@@ -524,6 +525,13 @@ template("ohos_app") {
     }
     write_file(_hap_list, _hap_list_json, "json")
   }
+
+  if (defined(visibility) && visibility != []) {
+    if (test_label_type != "") {
+       visibility += [ "${root_build_dir}/build_configs/*" ]
+    }
+  }
+
   app_sign(target_name) {
     forward_variables_from(invoker,
                            [
@@ -535,6 +543,7 @@ template("ohos_app") {
                              "key_alias",
                              "certificate_file",
                              "compatible_version",
+                             "test_type",
                            ])
     unsigned_hap_path_list = _unsigned_hap_path_list
     deps = [
@@ -576,6 +585,7 @@ template("ohos_hap") {
                            "install_images",
                            "module_install_dir",
                            "relative_install_dir",
+                           "visibility",
                          ])
   assert(defined(invoker.hap_profile),
          "hap_profile must be defined for ohos_hap")
@@ -771,6 +781,12 @@ template("ohos_hap") {
     notice = "$target_out_dir/$_main_target_name.notice.txt"
   }
 
+  if (defined(visibility) && visibility != []) {
+    if (test_label_type != "") {
+       visibility += [ "${root_build_dir}/build_configs/*" ]
+    }
+  }
+
   package_app(target_name) {
     forward_variables_from(invoker,
                            [
@@ -784,6 +800,7 @@ template("ohos_hap") {
                              "key_alias",
                              "certificate_file",
                              "compatible_version",
+                             "test_type",
                            ])
     deps = [
       ":$_js_assets_target",

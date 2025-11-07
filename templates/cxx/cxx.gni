@@ -21,11 +21,6 @@ import("//build/templates/common/collect_target.gni")
 import("//build/templates/metadata/module_info.gni")
 
 declare_args() {
-  # test label
-  test_label_type = ""
-}
-
-declare_args() {
   # Compile with no sanitize check, for local debug only
   allow_sanitize_debug = false
 }
