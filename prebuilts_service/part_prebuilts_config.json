@@ -201,7 +201,8 @@
     "distributed_hardware_fwk":[
         "app",
         "sdk",
-        "hvigor"
+        "hvigor",
+        "taihe"
     ],
     "file_api":[
         "rust"
