@@ -141,3 +141,20 @@ class ArgsResolver(ArgsResolverInterface):
                     deepest_bundle = bundle_path
         
         return deepest_bundle
+
+    @staticmethod
+    def get_retain_args(sys_argv) -> list:
+        new_args = []
+        i = 0
+        while i < len(sys_argv):
+            arg = sys_argv[i]
+            if arg == '--product-name':
+                i += 2
+                continue
+            elif arg == '--build-target':
+                i += 2
+                continue
+            else:
+                new_args.append(arg)
+                i += 1
+        return new_args
