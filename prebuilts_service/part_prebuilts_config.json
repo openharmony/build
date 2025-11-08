@@ -346,5 +346,8 @@
     ],
     "face_auth":[
         "taihe"
+    ],
+    "battery_statistics":[
+        "taihe"
     ]
 }
