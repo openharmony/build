@@ -344,6 +344,9 @@
     "storage_service":[
         "taihe"
     ],
+    "contacts_data":[
+        "app"
+    ],
     "face_auth":[
         "taihe"
     ]
