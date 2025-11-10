@@ -227,8 +227,10 @@ template("generate_static_abc") {
         rebase_path("$ohos_ets_api_path"),
         rebase_path("$ohos_ets_arkts_path"),
         rebase_path("$ohos_ets_kits_path"),
-        rebase_path("$ohos_ets_inner_path"),
       ]
+      if (defined(invoker.enable_inner_path) && invoker.enable_inner_path) {
+        args += [ rebase_path("$ohos_ets_inner_path") ]
+      }
 
       only_memo = "False"
       if (defined(invoker.only_memo)) {
