@@ -294,7 +294,7 @@ def npm_install(operate: dict, global_args: object) -> tuple:
     print("start npm install, please wait.")
     for install_path in install_list:
         if install_path in global_args.success_installed:
-            print('{} has been installed, skip'.format(full_code_path))
+            print('{} has been installed, skip'.format(install_path))
             continue
         full_code_path = install_path
         basename = os.path.basename(full_code_path)
@@ -306,7 +306,7 @@ def npm_install(operate: dict, global_args: object) -> tuple:
             run_cmd(("rm -rf {}".format(node_modules_path)).split())
 
         if os.path.exists(full_code_path):
-            cmd = ["timeout", "-s", "9", "90s", npm_tool_path, "install", "--registry", global_args.npm_registry,
+            cmd = ["timeout", "-s", "9", "180s", npm_tool_path, "install", "--registry", global_args.npm_registry,
                    "--cache", npm_cache_dir]
             if global_args.host_platform == "darwin":
                 cmd = [npm_tool_path, "install", "--registry", global_args.npm_registry, "--cache", npm_cache_dir]
