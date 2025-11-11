@@ -321,6 +321,11 @@
           "unzip_filename": "hvigor"
         },
         {
+          "unzip_dir": "prebuilts/command-line-tools",
+          "file_path": "/harmonyos/compiler/hvigor/6.0.0.868/command-line-tools.tar",
+          "unzip_filename": "hvigor"
+        },
+        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-ohos-3.28.2-20240827.tar.gz",
           "unzip_filename": "ohos"
