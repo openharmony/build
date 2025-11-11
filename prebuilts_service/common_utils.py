@@ -265,7 +265,7 @@ def npm_config(npm_tool_path: str, global_args: object) -> tuple:
     node_path = os.path.dirname(npm_tool_path)
     os.environ["PATH"] = "{}:{}".format(node_path, os.environ.get("PATH"))
     if global_args.skip_ssl:
-        skip_ssl_cmd = "{} config set strict-ssl false;".format(npm_tool_path).split()
+        skip_ssl_cmd = "{} config set strict-ssl false".format(npm_tool_path).split()
         _, err, retcode = run_cmd(skip_ssl_cmd)
         if retcode != 0:
             return False, err.decode()
