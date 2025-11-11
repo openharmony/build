@@ -97,7 +97,8 @@ def get_remote_sha256(remote_url: str) -> str:
     endtime = time.time()
     cost_time = endtime - start_time
     remote_file_name = os.path.basename(remote_url)
-    print(f"get remote sha256 for {remote_file_name} end, cost time: {cost_time}")
+    if cost_time > 3:
+        print(f"get remote sha256 for {remote_file_name} cost time: {cost_time}")
     return remote_sha256
 
 

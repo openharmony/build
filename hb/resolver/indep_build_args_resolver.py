@@ -156,9 +156,11 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
         if target_arg.arg_value:
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps(target_arg.arg_value,
                                                                                      True if '-t' in sys.argv else False))
+            build_executor.regist_flag('productComponents', ComponentUtil.get_product_component_path(target_arg.arg_value))
             arg_value = target_arg.arg_value
         else:
             build_executor.regist_flag('defaultDeps', ComponentUtil.get_default_deps("argDefault"))
+            build_executor.regist_flag('productComponents', ComponentUtil.get_product_component_path("default"))
             args_dict = Arg.read_args_file(ModuleType.ENV)
             arg_value = args_dict.get("variant").get("argDefault")
 
