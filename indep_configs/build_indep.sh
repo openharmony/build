@@ -22,7 +22,7 @@ trap cleanup EXIT
 set -e
 echo $1 $2 $3
 TEST_FILTER=$3
-VARIANTS="default"
+VARIANTS="standard"
 if [ -n "$4" ]; then
   VARIANTS=$4
 fi

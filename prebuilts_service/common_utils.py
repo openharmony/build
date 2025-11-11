@@ -245,6 +245,7 @@ lockfile=false
         f.write("{}\n")
     node_bin_path = os.path.dirname(npm_tool_path)
     os.environ["PATH"] = f"{node_bin_path}:{os.environ['PATH']}"
+    os.environ["TMPDIR"] = "~/tmp"
     subprocess.run(
         [
             npm_tool_path,
