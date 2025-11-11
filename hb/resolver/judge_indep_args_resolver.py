@@ -19,6 +19,7 @@
 import os
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from util.io_util import IoUtil
+from typing import Tuple, List
 from resources.global_var import CURRENT_BUILD_DIR, CURRENT_OHOS_ROOT
 
 class ArgsResolver(ArgsResolverInterface):
@@ -52,7 +53,7 @@ class ArgsResolver(ArgsResolverInterface):
         return IoUtil.read_json_file(whitelist_path)
 
     @staticmethod
-    def is_indep_args(input_args) -> tuple[bool, list]:
+    def is_indep_args(input_args) -> Tuple[bool, List]:
         whitelist = ArgsResolver.read_indep_whitelist()
         parsed_args = ArgsResolver.parse_command_args(input_args)
         
@@ -148,12 +149,10 @@ class ArgsResolver(ArgsResolverInterface):
         i = 0
         while i < len(sys_argv):
             arg = sys_argv[i]
-            if arg == '--product-name':
+            if arg == '--build-target':
                 i += 2
                 continue
-            elif arg == '--build-target':
-                i += 2
-                continue
+            # 保留其他参数
             else:
                 new_args.append(arg)
                 i += 1
