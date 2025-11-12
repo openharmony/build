@@ -995,6 +995,16 @@
         ]
     },
     {
+        "install_dir": "toolchains/lib",
+        "module_label": "//base/security/access_token/frameworks/common:permission_definitions_in_sdk",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/ets2panda/bin",
         "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/dependency_analyzer:dependency_analyzer",
         "target_os": [
