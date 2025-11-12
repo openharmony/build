@@ -129,7 +129,7 @@ if [ $? -ne 0 ]; then
     else
         USE_VENV=0
         source oh_venv/bin/activate
-        pip3 install --upgrade pip
+        pip3 install --trusted-host $trusted_host -i $pypi_url --upgrade pip
 fi
 set -e
 
