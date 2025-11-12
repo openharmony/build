@@ -31,3 +31,9 @@ ohos_copy("ohos_ets_libes2panda_public") {
   sources = [ rebase_path("$libes2panda_public_out_path") ]
   outputs = [ ohos_ets_libes2panda_public_path ]
 }
+
+ohos_copy("ohos_ets_etsstdlib") {
+  external_deps = [ etsstdlib_deps ]
+  sources = [ rebase_path("$etsstdlib_path") ]
+  outputs = [ ohos_ets_etsstdlib ]
+}
