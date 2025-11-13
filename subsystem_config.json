@@ -230,5 +230,13 @@
   "game": {
     "path": "domains/game",
     "name": "game"
+  },
+  "soc_p7885": {
+    "path": "device/soc/unisoc/p7885",
+    "name": "soc_p7885"
+  },
+  "closed_p7885": {
+    "path": "unisoc_p7885_property/third_kit",
+    "name": "closed_p7885"
   }
 }
