@@ -32,12 +32,16 @@ def regenerate_sdk_config_file(options):
     info_list = read_json_file(sdk_description_file)
     arkts_sdk_info_list = []
     for info in info_list:
-        label = str(info.get("module_label"))
-        if label in DEL_TARGET and sdk_build_public == "true":
+        module_label_str = str(info.get("module_label"))
+        if module_label_str in DEL_TARGET and sdk_build_public == "true":
             continue
         if sdk_build_arkts != "true":
             install_label_str = str(info.get("install_dir"))
-            if install_label_str.startswith("ets/static/"):
+            if (
+                install_label_str.startswith("ets/static/") or
+                module_label_str.endswith(":copy_taihe_tools") or
+                module_label_str == "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm"
+            ):
                 continue
             elif install_label_str.startswith("ets/dynamic/build-tools/interop"):
                 continue
