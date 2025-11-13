@@ -49,6 +49,11 @@ if (product_name == "ohos-sdk") {
   if (!is_llvm_build) {
     group("images") {
       deps = [ "//build/ohos/images:make_images" ]
+      if (product_name == "wukong100") {
+        deps += [
+          "//device/board/${device_company}/${product_name}:make_custom_image"
+        ]
+      }
     }
   }
 
