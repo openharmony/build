@@ -1579,7 +1579,6 @@ def _generate_public_configs(fp, module):
 
 # 目前特殊处理的依赖关系映射
 _DEPENDENCIES_MAP = {
-    ('ets_runtime', 'libark_jsruntime'): ["runtime_core:libarkfile_static"],
 }
 
 
