@@ -132,10 +132,10 @@ class IndepBuild(BuildFileGeneratorInterface):
             }
 
     def _get_product_name(self):
-        orig_argv = sys.orig_argv
-        for i in range(len(orig_argv)):
-            if orig_argv[i] == '--product-name':
-                if i + 1 < len(orig_argv):
-                    return orig_argv[i + 1]
+        argv = sys.argv
+        for i in range(len(argv)):
+            if argv[i] == '--product-name':
+                if i + 1 < len(argv):
+                    return argv[i + 1]
                 return None
         return None

@@ -91,11 +91,14 @@ class Main():
     def main():
         main = Main()
 
-        if len(sys.argv) > 1 and sys.argv[1] == 'build' and '-i' not in sys.argv:
+        # escape arg
+        if '--no-indep' in sys.argv:
+            sys.argv.remove('--no-indep')
+        elif len(sys.argv) > 1 and sys.argv[1] == 'build' and '-i' not in sys.argv:
             is_indep_args, component_name_list = ArgsResolver.is_indep_args(sys.argv[2:])
             # 将源码编译的命令转成独立编译
             if is_indep_args:
-                sys.argv[2:] = ArgsResolver.get_indep_args(sys.argv[2:], component_name_list)
+                sys.argv[2:] = component_name_list + ['-i'] + ArgsResolver.get_retain_args(sys.argv[2:])
 
         module_initializers = {
             'build': main._init_indep_build_module if main._is_indep_build() else main._init_build_module,
