@@ -19,6 +19,7 @@
 import os
 from resolver.interface.args_resolver_interface import ArgsResolverInterface
 from util.io_util import IoUtil
+from typing import Tuple, List
 from resources.global_var import CURRENT_BUILD_DIR, CURRENT_OHOS_ROOT
 
 class ArgsResolver(ArgsResolverInterface):
@@ -52,7 +53,7 @@ class ArgsResolver(ArgsResolverInterface):
         return IoUtil.read_json_file(whitelist_path)
 
     @staticmethod
-    def is_indep_args(input_args) -> tuple[bool, list]:
+    def is_indep_args(input_args) -> Tuple[bool, List]:
         whitelist = ArgsResolver.read_indep_whitelist()
         parsed_args = ArgsResolver.parse_command_args(input_args)
         
@@ -143,26 +144,16 @@ class ArgsResolver(ArgsResolverInterface):
         return deepest_bundle
 
     @staticmethod
-    def get_indep_args(sys_argv, component_name_list) -> list:
+    def get_retain_args(sys_argv) -> list:
         new_args = []
-        added_components = False
-        added_i = False
-        
-        for arg in sys_argv:
-            if arg == '--product-name':
-                sys_argv.remove(sys_argv[sys_argv.index(arg) + 1])
-                continue
-            
+        i = 0
+        while i < len(sys_argv):
+            arg = sys_argv[i]
             if arg == '--build-target':
-                if not added_components:
-                    new_args.extend(component_name_list)
-                    added_components = True
-                if not added_i:
-                    new_args.append('-i')
-                    added_i = True
-                sys_argv.remove(sys_argv[sys_argv.index(arg) + 1])
+                i += 2
                 continue
-            
-            new_args.append(arg)
-        
+            # 保留其他参数
+            else:
+                new_args.append(arg)
+                i += 1
         return new_args
