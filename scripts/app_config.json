@@ -13,7 +13,7 @@
     "6.x": {
         "default": {
             "nodejs_version": "18.20.1",
-            "hvigor_home": "prebuilts/command-line-tools/hvigor"
+            "hvigor_home": "prebuilts/tool/command-line-tools/6.x/hvigor"
         }
     }
 }
