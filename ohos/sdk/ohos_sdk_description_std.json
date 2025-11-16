@@ -393,6 +393,16 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/ets2panda/lib/",
+        "module_label": "//arkcompiler/runtime_core/static_core/plugins/ets:etsstdlib_abc",
+        "target_os": [
+            "windows",
+            "linux",
+            "ohos",
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_js2abc_api8_linux",
         "target_os": [
