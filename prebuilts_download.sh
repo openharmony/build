@@ -238,7 +238,7 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="${PYTHON_PATH}/python3"
 prebuild_pip3_path="${PYTHON_PATH}/pip3"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml\>\=6.0.2 requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto\>\=1.5.1 cryptography\>\=44.0.2 json5\=\=0.9.6 typing_extensions\>\=4.13.2 networkx\=\=3.2.1 packageurl-python\=\=0.9.8 license-expression\=\=30.4.4 psutil
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml\>\=6.0.2 requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto\>\=1.5.1 cryptography\>\=44.0.2 json5\=\=0.9.6 typing_extensions\>\=4.13.2 networkx\=\=3.2.1 packageurl-python\=\=0.9.8 license-expression\=\=30.4.4 libclang\=\=15.0.6.1 psutil
 if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk-12" && ! -d "${code_dir}/prebuilts/ohos-sdk/12" ]]; then
   $prebuild_python3_path ${code_dir}/build/scripts/download_sdk.py --branch OpenHarmony-5.0.0-Release --product-name ohos-sdk-full-5.0.0 --api-version 12
   mkdir -p ${code_dir}/prebuilts/ohos-sdk-12
