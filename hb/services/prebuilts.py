@@ -35,8 +35,6 @@ class PreuiltsService(BuildFileGeneratorInterface):
         super().__init__()
 
     def run(self):
-        if not "--enable-prebuilts" in sys.argv:
-            return
         part_names = self._get_part_names()
         if not part_names:
             LogUtil.hb_error("no specify part names found")
