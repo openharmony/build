@@ -78,6 +78,8 @@ if (!use_current_sdk) {
     args = [
       "--input",
       rebase_path("$ndk_headers_out_dir", root_build_dir),
+      "--sdk-api-version",
+      "${sdk_build_check_level}",
     ]
   }
 
