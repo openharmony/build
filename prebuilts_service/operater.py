@@ -80,7 +80,10 @@ class OperateHanlder:
 
         # process each item
         for process_item, step_list in item_steps_dict.items():
-            process_item_without_suffix = re.sub(r"(\.[A-Za-z]+)+$", "", process_item).strip("_")
+            try:
+                process_item_without_suffix = process_item.split(".")[0].strip("_")
+            except IndexError as e:
+                raise e
             # If the process item is in unchanged_list and has been processed, skip it
             if process_item in unchanged_list:
                 if process_item in processed_dict and processed_dict[process_item]:

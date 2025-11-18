@@ -371,7 +371,9 @@ def generate_gn_file_content(part_data):
 
 
 def write_gn_file(gn_path, content):
-    with open(gn_path, 'w') as gn_file:
+    flag = os.O_WRONLY | os.O_CREAT
+    mode = stat.S_IWUSR | stat.S_IRUSR
+    with os.fdopen(open(gn_path, flag, mode), 'w') as gn_file:
         gn_file.write(content)
 
 
@@ -397,7 +399,9 @@ def write_musl_bundle(musl_bundle_path):
         musl_bundle_content = json.load(file)
     musl_innerkits = musl_bundle_content["component"]["build"]["inner_kits"]
     musl_innerkits.extend(additional_innerkits)
-    with open(musl_bundle_path, "w", encoding='utf-8') as file:
+    flag = os.O_WRONLY | os.O_CREAT
+    mode = stat.S_IWUSR | stat.S_IRUSR
+    with os.fdopen(open(musl_bundle_path, flag, mode, encoding="utf-8"),"w") as file:
         json.dump(musl_bundle_content, file, ensure_ascii=False, indent=2) 
 
 
