@@ -404,10 +404,12 @@ def _create_datapart_json(alternative, changed):
     json_str = json.dumps(data, indent=4)
     output_dir = os.path.join(CURRENT_DIRECTORY, 'out')
     output_file = 'dataPart.json'
+    flag = os.O_WRONLY | os.O_CREAT
+    mode = stat.S_IWUSR | stat.S_IRUSR
     output_path = os.path.join(output_dir, output_file)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    with open(output_path, 'w') as f:
+    with os.fdopen(open(output_path, flag, mode), 'w') as f:
         f.write(json_str)
 
 

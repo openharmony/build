@@ -15,6 +15,7 @@
 
 import importlib
 import os
+import stat
 from common_utils import run_cmd
 import threading
 import hashlib
@@ -151,5 +152,7 @@ def extract_compress_files_and_gen_mark(source_file: str, unzip_dir: str, mark_f
         print("解压失败，错误信息：", err)
         return
     else:
-        with open(mark_file_path, "w") as f:
+        flag = os.O_WRONLY | os.O_CREAT
+        mode = stat.S_IWUSR | stat.S_IRUSR
+        with os.fdopen(open(mark_file_path, flag, mode), "w") as f:
             f.write("0")
