@@ -193,7 +193,8 @@
     ],
     "user_file_service":[
         "sdk",
-        "app"
+        "app",
+        "taihe"
     ],
     "user_auth_framework":[
         "taihe"
