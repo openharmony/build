@@ -89,8 +89,12 @@ def copy_folder(src: str, dest: str):
 def symlink_src2dest(src_dir: str, dest_dir: str):
     remove_dest_path(dest_dir)
     os.makedirs(os.path.dirname(dest_dir), exist_ok=True)
-    os.symlink(src_dir, dest_dir)
-    print("symlink {} ---> {}".format(src_dir, dest_dir))
+    cwd = os.getcwd()
+    relative_dst = os.path.relpath(dest_dir, cwd)
+    dst_parent = os.path.dirname(relative_dst)
+    relative_src = os.path.relpath(src_dir, dst_parent)
+    os.symlink(relative_src, relative_dst)
+    print("symlink {} ---> {}".format(relative_dst, relative_src))
 
 
 def run_cmd_directly(cmd: list):
