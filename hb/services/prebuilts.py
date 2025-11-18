@@ -94,7 +94,7 @@ class PreuiltsService(BuildFileGeneratorInterface):
         try:
             flag = os.O_RDONLY
             mode = stat.S_IWUSR | stat.S_IRUSR
-            with os.fdopen(open(self.last_update, flag, mode), 'r') as f:
+            with os.fdopen(os.open(self.last_update, flag, mode), 'r') as f:
                 return json.load(f)
         except Exception as e:
             LogUtil.hb_error(f"Failed to read last update file: {e}")
@@ -106,12 +106,12 @@ class PreuiltsService(BuildFileGeneratorInterface):
         if not os.path.exists(self.last_update):
             os.makedirs(os.path.dirname(self.last_update), exist_ok=True)
             
-            with os.fdopen(open(self.last_update, flag, mode), 'w') as f:
+            with os.fdopen(os.open(self.last_update, flag, mode), 'w') as f:
                 json.dump(data, f, indent=4)
         else:
             existing_data = self.read_last_update()
             existing_data.update(data)
-            with os.fdopen(open(self.last_update, flag, mode), 'w') as f:
+            with os.fdopen(os.open(self.last_update, flag, mode), 'w') as f:
                 json.dump(existing_data, f, indent=4)
 
     def get_preguilt_download_related_files_mtimes(self) -> dict:

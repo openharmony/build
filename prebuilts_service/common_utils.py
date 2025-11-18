@@ -58,7 +58,7 @@ def save_data(file_path: str, data):
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     flag = os.O_WRONLY | os.O_CREAT
     mode = stat.S_IWUSR | stat.S_IRUSR
-    with os.fdopen(open(file_path, flag, mode), "w") as f:
+    with os.fdopen(os.open(file_path, flag, mode), "w") as f:
         json.dump(data, f, indent=4)
 
 
