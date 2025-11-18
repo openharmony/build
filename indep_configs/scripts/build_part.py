@@ -409,7 +409,7 @@ def _create_datapart_json(alternative, changed):
     output_path = os.path.join(output_dir, output_file)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    with os.fdopen(open(output_path, flag, mode), 'w') as f:
+    with os.fdopen(os.open(output_path, flag, mode), 'w') as f:
         f.write(json_str)
 
 

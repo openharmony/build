@@ -122,7 +122,7 @@ class IndepBuild(BuildFileGeneratorInterface):
                 os.symlink(item_path, os.path.join(binarys_path, item))
             flag = os.O_WRONLY | os.O_CREAT
             mode = stat.S_IWUSR | stat.S_IRUSR
-            with os.fdopen(open(flag_path, flag, mode), "w"):
+            with os.fdopen(os.open(flag_path, flag, mode), "w"):
                 pass
         
         ignore_directories = ['innerapis', 'common', 'binarys']
