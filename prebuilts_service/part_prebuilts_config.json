@@ -353,7 +353,7 @@
     "battery_statistics":[
         "taihe"
     ],
-    "third_party_mindspore":[
+    "mindspore":[
         "taihe"
     ]
 }
