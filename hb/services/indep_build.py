@@ -20,6 +20,7 @@ from services.interface.build_file_generator_interface import BuildFileGenerator
 from util.system_util import SystemUtil
 from exceptions.ohos_exception import OHOSException
 import os
+import stat
 from util.log_util import LogUtil
 import json
 import shutil
@@ -39,31 +40,41 @@ class IndepBuild(BuildFileGeneratorInterface):
         if product_name != None:
             cmd.append("--product-name")
             cmd.append(product_name)
-        variant = self.flags_dict["variant"]
+        try:
+            variant = self.flags_dict["variant"]
+        except KeyError as e:
+            raise e
         logpath = os.path.join('out', variant, 'build.log')
         SystemUtil.exec_command(cmd, log_path=logpath, pre_msg="run indep build",
                                             after_msg="indep build end")
 
     def _convert_flags(self) -> list:
         flags_list = []
-        if self.flags_dict["local-binarys"]:
-            flags_list.append(self.flags_dict["local-binarys"])
-            self._generate_dependences_json(self.flags_dict["local-binarys"])
-            self.flags_dict.pop("local-binarys")
-        else:
-            flags_list.append(os.path.join(os.path.expanduser("~"), ".hpm/.hpmcache"))
-        flags_list.append(self.flags_dict["path"])
-        build_type = self.flags_dict["buildType"]
-        if build_type == "both":
-            flags_list.append("1")
-        elif build_type == "onlytest":
-            flags_list.append("2")
-        else:
-            flags_list.append("0")
-        variant = self.flags_dict["variant"]
-        flags_list.append(variant)
-        self.flags_dict.pop("buildType")
-        self.flags_dict.pop("path")
+        try:
+            if self.flags_dict.get("local-binarys", ""):
+                flags_list.append(self.flags_dict["local-binarys"])
+                self._generate_dependences_json(self.flags_dict["local-binarys"])
+                self.flags_dict.pop("local-binarys")
+            else:
+                flags_list.append(os.path.join(os.path.expanduser("~"), ".hpm/.hpmcache"))
+            flags_list.append(self.flags_dict["path"])
+            build_type = self.flags_dict["buildType"]
+        
+            if build_type == "both":
+                flags_list.append("1")
+            elif build_type == "onlytest":
+                flags_list.append("2")
+            else:
+                flags_list.append("0")
+                variant = self.flags_dict["variant"]
+    
+            flags_list.append(variant)
+            self.flags_dict.pop("buildType")
+            self.flags_dict.pop("path")
+        except KeyError as e:
+            raise e
+        except Exception as e:
+            raise e
 
         for key in self.flags_dict.keys():
             if isinstance(self.flags_dict[key], bool) and self.flags_dict[key]:
@@ -109,7 +120,10 @@ class IndepBuild(BuildFileGeneratorInterface):
             item_path = os.path.join(local_binarys, item)
             if os.path.isdir(item_path):
                 os.symlink(item_path, os.path.join(binarys_path, item))
-            open(flag_path, "w").close()
+            flag = os.O_WRONLY | os.O_CREAT
+            mode = stat.S_IWUSR | stat.S_IRUSR
+            with os.fdopen(os.open(flag_path, flag, mode), "w"):
+                pass
         
         ignore_directories = ['innerapis', 'common', 'binarys']
         for root, dirs, files in os.walk(local_binarys):

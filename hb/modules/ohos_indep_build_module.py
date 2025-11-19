@@ -90,12 +90,15 @@ class OHOSIndepBuildModule(IndepBuildModuleInterface):
                     arg_value = "both"
                 elif has_test and not has_i:
                     arg_value = "onlytest"
-            message = {
-                'both': 'build src and test success',
-                'onlytest': 'build test success',
-                'onlysrc': 'build src success'
-            }[arg_value]
-            LogUtil.hb_info(f'{",".join(get_part_name())} {message}')
+            try:
+                message = {
+                    'both': 'build src and test success',
+                    'onlytest': 'build test success',
+                    'onlysrc': 'build src success'
+                }[arg_value]
+                LogUtil.hb_info(f'{",".join(get_part_name())} {message}')
+            except KeyError as e:
+                raise e
 
     def _target_compilation(self):
         self._rename_buildlog()
