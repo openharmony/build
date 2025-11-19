@@ -681,9 +681,9 @@
             "darwin"
         ]
     },
-    {
-        "install_dir": "ets/dynamic/api/@internal/full",
-        "module_label": "//interface/sdk-js:ets_internal_api",
+{
+        "install_dir": "ets/dynamic/build-tools/interop",
+        "module_label": "//interface/sdk-js:build_dynamic_sdk_interop",
         "target_os": [
             "windows",
             "linux",
@@ -692,8 +692,18 @@
         ]
     },
     {
-        "install_dir": "ets/static/api/@internal/full",
-        "module_label": "//interface/sdk-js:ets_internal_api_static",
+        "install_dir": "ets/static/build-tools/interop/declaration",
+        "module_label": "//interface/sdk-js:build_static_declaration_sdk_interop",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/interop/bridge",
+        "module_label": "//interface/sdk-js:build_static_bridge_sdk_interop",
         "target_os": [
             "windows",
             "linux",
@@ -703,7 +713,7 @@
     },
     {
         "install_dir": "ets/dynamic/api",
-        "module_label": "//interface/sdk-js:ohos_declaration_ets",
+        "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_api",
         "target_os": [
             "windows",
             "linux",
@@ -713,7 +723,57 @@
     },
     {
         "install_dir": "ets/static/api",
-        "module_label": "//interface/sdk-js:ohos_declaration_ets_static",
+        "module_label": "//interface/sdk-js:ohos_build_static_sdk_api",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+   {
+        "install_dir": "ets/dynamic/component",
+        "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_component",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/dynamic/kits",
+        "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_kits",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/static/kits",
+        "module_label": "//interface/sdk-js:ohos_build_static_sdk_kits",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/dynamic/arkts",
+        "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_arkts",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/static/arkts",
+        "module_label": "//interface/sdk-js:ohos_build_static_sdk_arkts",
         "target_os": [
             "windows",
             "linux",
