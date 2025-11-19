@@ -224,7 +224,7 @@
     "name": "llvmproject"
   },  
   "sdk": {
-    "path": "interface/sdk-js",
+    "path": "interface",
     "name": "sdk"
   },
   "game": {

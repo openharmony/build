@@ -35,13 +35,48 @@ def get_source_from_module_info_file(module_info_file: str):
     return source, notice
 
 
+def remove_symlinks_in_dir(dest_dir: str):
+    """Remove all symbolic links under dest_dir (files and symlinked dirs).
+
+    This keeps real files and directories intact but removes symlinks so that
+    subsequent copytree operations with dirs_exist_ok=True won't fail due to
+    existing symlink entries.
+    """
+    if not os.path.exists(dest_dir):
+        return
+
+    # Walk top-down so we can remove symlinked dirs and avoid descending into them
+    for root, dirs, files in os.walk(dest_dir, topdown=True, followlinks=False):
+        # Remove symlinked directories and prevent os.walk from descending into them
+        for d in list(dirs):
+            path = os.path.join(root, d)
+            try:
+                if os.path.islink(path):
+                    os.unlink(path)
+                    # remove from dirs so walk won't enter it
+                    dirs.remove(d)
+            except OSError:
+                # ignore errors and continue
+                pass
+
+        # Remove symlinked files
+        for f in files:
+            path = os.path.join(root, f)
+            try:
+                if os.path.islink(path):
+                    os.unlink(path)
+            except OSError:
+                pass
+
+
 def clear_copy_symlinks_dest_dir(copy_infos: dict):
     for cp_info in copy_infos:
         copy_with_symlinks = cp_info.get("copy_with_symlinks")
         if copy_with_symlinks:
             dest = cp_info.get('dest')
-            build_utils.delete_directory(dest)
             build_utils.make_directory(dest)
+            # Remove only symbolic links under dest (files and symlinked dirs)
+            remove_symlinks_in_dir(dest)
 
 
 def do_copy_and_stamp(copy_infos: dict, options, depfile_deps: list):
