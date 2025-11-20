@@ -66,8 +66,7 @@ class IndepBuild(BuildFileGeneratorInterface):
                 flags_list.append("2")
             else:
                 flags_list.append("0")
-                variant = self.flags_dict["variant"]
-    
+            variant = self.flags_dict["variant"]
             flags_list.append(variant)
             self.flags_dict.pop("buildType")
             self.flags_dict.pop("path")
