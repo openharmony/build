@@ -401,7 +401,7 @@ def write_musl_bundle(musl_bundle_path):
     musl_innerkits.extend(additional_innerkits)
     flag = os.O_WRONLY | os.O_CREAT
     mode = stat.S_IWUSR | stat.S_IRUSR
-    with os.fdopen(os.open(musl_bundle_path, flag, mode, encoding="utf-8"),"w") as file:
+    with os.fdopen(os.open(musl_bundle_path, flag, mode),"w") as file:
         json.dump(musl_bundle_content, file, ensure_ascii=False, indent=2) 
 
 
