@@ -434,7 +434,7 @@ def main():
     elif args.config_file:
         config_file = args.config_file
     else:
-        config_file = os.path.join(args.code_dir, 'build/prebuilts_download_config.json')
+        raise Exception("No prebuilts download configuration file specified.")
     config_info = read_json_file(config_file)
     if _is_system_component():
         args.npm_install_config = config_info.get('npm_install_path')
