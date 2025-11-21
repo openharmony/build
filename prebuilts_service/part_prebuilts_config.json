@@ -356,5 +356,8 @@
     ],
     "mindspore":[
         "taihe"
+    ],
+    "ace_engine":[
+        "app"
     ]
 }
