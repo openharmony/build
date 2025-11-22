@@ -24,6 +24,7 @@ from prebuilts_service.pool_downloader import PoolDownloader
 from prebuilts_service.config_parser import ConfigParser
 import json
 from prebuilts_service.common_utils import get_code_dir
+from dfx.build_tracker import build_tracker
 
 global_args = None
 
@@ -48,6 +49,10 @@ def _parse_args():
     return parser
 
 
+@build_tracker(
+    event_name="_build_main",
+    build_type="prebuild"
+)
 def main():
     parser = _parse_args()
     global global_args

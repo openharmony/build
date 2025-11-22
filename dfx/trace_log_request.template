@@ -1,0 +1,21 @@
+{
+  "userId": "{{ user_id }}",
+  "gitUserEmail": "{{ git_user_email }}",
+  "codeRepo": "{{ code_repo }}",
+  "userSource": "{{ user_source }}",
+  "hostCpuInfo": "{{ host_cpu_info }}",
+  "hostMemInfo": "{{ host_mem_info }}",
+  "hostIp": "{{ host_ip }}",
+  "buildTrace": "{{ build_trace_id }}",
+  "buildTarget": "{{ build_target }}",
+  "buildType": "{{ build_type }}",
+  "buildCommand": "{{ build_command }}",
+  "buildProductType": "{{ build_product_type }}",
+  "buildCpuUsage": "{{ build_cpu_usage }}",
+  "buildTimeCost": "{{ build_time_cost }}",
+  "buildTimeCostDetail": "{{ build_time_cost_detail }}",
+  "buildResult": "{{ build_result }}",
+  "buildErrorLog": "{{ build_error_log }}",
+  "buildStartTime": "{{ build_start_time }}",
+  "buildEndTime": "{{ build_end_time }}"
+}

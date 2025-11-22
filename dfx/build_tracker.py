@@ -22,10 +22,12 @@ import time
 import random
 import threading
 import os
+import sys
 from pathlib import Path
 from datetime import datetime
 from typing import Callable, Any, Optional, Dict
 from dfx.build_trace_handler import event_handler
+from dfx import dfx_info, dfx_error
 import argparse
 
 
@@ -43,7 +45,7 @@ class BuildTracker:
                 if BUILD_DFX_ENABLE in (None, ""):
                     BUILD_DFX_ENABLE = os.environ.get("BUILD_DFX_ENABLE", "").lower() == "true"
         except Exception as e:
-            print(f"Error loading config file: {e}")
+            dfx_error(f"Error loading config file: {e}")
             TRACE_LOG_DIR = None
             BUILD_DFX_ENABLE = os.environ.get("BUILD_DFX_ENABLE", "").lower() == "true"
         base_path = Path(__file__).parent.parent.parent
@@ -135,7 +137,7 @@ class BuildTracker:
         try:
             event_handler(tracking_data, trace_log_file)
         except Exception as e:
-            print(f"Error recording tracking event: {str(e)}")
+            dfx_error(f"Error recording tracking event: {str(e)}")
 
     @staticmethod
     def args_info_parse(args, args_key=None):
@@ -153,7 +155,7 @@ class BuildTracker:
                     break
         else:
             args_list.append(args)
-        print(args_list)
+        dfx_info(args_list)
         args_info = (
             json.dumps(
                 args_list,
@@ -165,6 +167,15 @@ class BuildTracker:
         )
         return args_info
 
+    @staticmethod
+    def check_build_status(tracking_data: Dict, event_name: str, build_type: str, result: Any) -> Dict:
+        tracking_data["status"] = "success"
+        if event_name == "_build_main" and build_type == "build":
+            if result != 0:
+                tracking_data["status"] = "failed"
+                tracking_data["error_message"] = f"Build failed with exit code {result}"
+        return tracking_data
+    
     @staticmethod
     def build_tracker(
         event_name: str,
@@ -191,13 +202,18 @@ class BuildTracker:
 
                 args_info = BuildTracker.args_info_parse(args, args_key)
                 tracking_data["args_info"] = args_info
+                args_list = sys.argv[2:] if len(sys.argv) > 2 else []
+                tracking_data["raw_args"] = args_list
+
                 try:
                     result = func(*args, **kwargs)
-                    tracking_data["status"] = "success"
+                    # 使用新方法检查构建状态
+                    tracking_data = BuildTracker.check_build_status(tracking_data, event_name, build_type, result)
                     return result
                 except Exception as e:
                     tracking_data["status"] = "failed"
                     tracking_data["error_message"] = str(e)
+                    raise e
                 finally:
                     tracking_data["end_time"] = time.time()
                     tracking_data["execution_time"] = tracking_data["end_time"] - tracking_data["start_time"]
