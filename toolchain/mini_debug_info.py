@@ -38,7 +38,7 @@ def gen_symbols(tmp_file, sort_lines, symbols_path):
 
 def remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path):
     modes = stat.S_IWUSR | stat.S_IRUSR | stat.S_IWGRP | stat.S_IRGRP
-    pattern = re.compile(r'(__[0-9A-F])$')
+    pattern = re.compile(r'(__[0-9A-F]{1,2})$')
     symbols_to_rename = []
 
     with os.fdopen(os.open(keep_path, os.O_RDWR | os.O_CREAT, modes), 'r', encoding='utf-8') as output_file:
@@ -138,6 +138,8 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     cmd_list.append(gen_keep_debug_cmd)
     cmd_list.append(gen_mini_debug_cmd)
     if adlt_llvm_tool:
+        remove_adlt_section_cmd = llvm_objcopy_path + "--remove-section .adlt* --remove-section .bolt.remap " + mini_debug_path
+        cmd_list.append(remove_adlt_section_cmd)
         rename_cmd, rename_rules_path = remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path)
         cmd_list.append(rename_cmd)
         file_list.append(rename_rules_path)
