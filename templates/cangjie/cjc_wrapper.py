@@ -128,14 +128,12 @@ def build_args(config, options):
             source_file = target_config["outfile"]
             outdir = os.path.dirname(source_file)
             outfile = re.sub(r'^lib', "", os.path.basename(source_file))
-            outfile = re.sub(r'\.(so|a|dll)$', "", outfile)
+            outfile = re.sub(r'\.(so|a|dll|dylib)$', "", outfile)
             args.append("--import-path={}".format(target_config["import_path"]))
             if outtype != "macro" and outtype != "test" and outtype != "exe":
                 args.append("-L{}".format(outdir))
                 args.append("-l{}".format(outfile))
 
-    cangjie_deps_config = config["cangjie_deps_config"]
-    cjc_toolchain_config = config["cjc_toolchain_config"]
     args.extend(get_deps_form_cangjie_deps_config_meta(config["cangjie_deps_config"], config["cjc_toolchain_config"]))
 
     return (args, os.path.dirname(config["outfile"]))

@@ -47,8 +47,6 @@ template("ohos_cangjie_shared_library") {
     output_type = "dylib"
     forward_variables_from(invoker,
                            [
-                             "deps",
-                             "external_deps",
                              "part_name",
                              "subsystem_name",
                              "cj_deps",
@@ -62,8 +60,39 @@ template("ohos_cangjie_shared_library") {
     if (!defined(cjc_args)) {
       cjc_args = []
     }
-    if (!(build_ohos_sdk && is_ohos) && !is_asan) {
+
+    if (!(build_ohos_sdk && (is_ohos || is_mac)) && !is_asan) {
       cjc_args += [ "--link-options=--no-undefined" ]
+    }
+
+    deps = []
+    if (defined(invoker.deps)) {
+      if (build_ohos_sdk) {
+        foreach(label, invoker.deps) {
+          subsystem_part = []
+          subsystem_part = string_split(label, ":")
+          libname = subsystem_part[1]
+          deps += ["//interface/sdk_cangjie/build-tools/lib/mocks:${libname}"]
+        }
+      } else {
+        deps += invoker.deps
+      }
+    }
+
+    if (defined(invoker.external_deps)) {
+      if (build_ohos_sdk) {
+          foreach(label, invoker.external_deps) {
+            subsystem_part = []
+            subsystem_part = string_split(label, ":")
+            libname = subsystem_part[1]
+            if (libname == "libhilog") {
+              libname = "hilog"
+            }
+            deps += ["//interface/sdk_cangjie/build-tools/lib/mocks:${libname}"]
+          }
+      } else {
+        external_deps = invoker.external_deps
+      }
     }
   }
 }
@@ -139,6 +168,105 @@ template("ohos_cangjie_unittest") {
 
     if (defined(invoker.compilation_config)) {
       cjc_args += [ "--cfg=${invoker.compilation_config}" ]
+    }
+  }
+}
+
+# for sdk
+template("_copy_cangjie_sdk_api_lib") {
+  forward_variables_from(invoker, [ 
+    "toolchain",
+    "inputs",
+    "dyn_extension",
+    "platform",
+    "module_name",
+  ])
+
+  ohos_copy(target_name) {
+    deps = []
+    sources = []
+    foreach(package, inputs) {
+      deps += [ 
+        "${package}(${toolchain})",
+        "${package}_cjo(${toolchain})"
+      ]
+      t_out = get_label_info("${package}(${toolchain})", "target_out_dir")
+      t_name = get_label_info("${package}(${toolchain})", "name")
+
+      sources += [
+        "${t_out}/lib${t_name}${dyn_extension}",
+        "${t_out}/${t_name}.cjo",
+      ]
+    }
+    outputs = [
+      "${root_out_dir}/obj/interface/sdk_cangjie/cangjie_sdk/api/lib/${platform}/${module_name}/{{source_file_part}}",
+    ]
+  }
+}
+
+cangjie_sdk_toolchain = {
+  windows = "//build/toolchain/mingw:mingw_x86_64"
+  ohos_aarch64 = "//build/toolchain/ohos:ohos_clang_arm64"
+  ohos_arm = "//build/toolchain/ohos:ohos_clang_arm"
+  ohos_x86_64 = "//build/toolchain/ohos:ohos_clang_x86_64"
+  if (host_cpu == "arm64") {
+    mac = "//build/toolchain/mac:clang_arm64"
+  } else {
+    mac = "//build/toolchain/mac:clang_x64"
+  }
+}
+
+cangjie_sdk_platform = {
+  windows = "windows_x86_64_cjnative"
+  ohos_aarch64 = "linux_ohos_aarch64_cjnative"
+  ohos_x86_64 = "linux_ohos_x86_64_cjnative"
+  if (host_cpu == "arm64") {
+    mac = "darwin_aarch64_cjnative"
+  } else {
+    mac = "darwin_x86_64_cjnative"
+  }
+}
+
+template("copy_ohos_cangjie_sdk_api_lib") {
+  forward_variables_from(invoker, [ 
+    "ohos_inputs",
+    "kit_inputs",
+  ])
+  target_toolchain = get_label_info(":${target_name}", "toolchain")
+  if (target_toolchain == cangjie_sdk_toolchain.windows) {
+    target_platform = cangjie_sdk_platform.windows
+    target_dyn_extension = ".dll"
+  } else if (target_toolchain == cangjie_sdk_toolchain.mac) {
+    target_platform = cangjie_sdk_platform.mac
+    target_dyn_extension = ".dylib"
+  } else if (target_toolchain == cangjie_sdk_toolchain.ohos_aarch64) {
+    target_platform = cangjie_sdk_platform.ohos_aarch64
+    target_dyn_extension = ".so"
+  } else if (target_toolchain == cangjie_sdk_toolchain.ohos_arm) {
+    target_platform = cangjie_sdk_platform.ohos_arm
+    target_dyn_extension = ".so"
+  } else if (target_toolchain == cangjie_sdk_toolchain.ohos_x86_64) {
+    target_platform = cangjie_sdk_platform.ohos_x86_64
+    target_dyn_extension = ".so"
+  } else {
+    assert(false && "unsupported toolchain ${target_toolchain}")
+  }
+
+  _copy_cangjie_sdk_api_lib("${target_name}") {
+    toolchain = target_toolchain
+    platform = target_platform
+    dyn_extension = target_dyn_extension
+    inputs = ohos_inputs
+    module_name = "ohos"
+  }
+
+  if (defined(kit_inputs)) {
+    _copy_cangjie_sdk_api_lib("${target_name}_kit") {
+      toolchain = target_toolchain
+      platform = target_platform
+      dyn_extension = target_dyn_extension
+      inputs = kit_inputs
+      module_name = "kit"
     }
   }
 }

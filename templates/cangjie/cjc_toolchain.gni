@@ -34,7 +34,7 @@ if (host_os == "mac") {
 
 cjc_cangjie_sdk_path = "//prebuilts/cangjie_sdk"
 cjc_cangjie_compiler_home_path =
-    "${cjc_cangjie_sdk_path}/${cjc_host_arch}/cangjie"  # TODO
+    "${cjc_cangjie_sdk_path}/${cjc_host_arch}/cangjie"
 
 cjc_wrapper = rebase_path("cjc_wrapper.py")
 cjc_bin = rebase_path("${cjc_cangjie_compiler_home_path}/bin/cjc")
