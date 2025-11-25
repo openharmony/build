@@ -357,6 +357,9 @@
     "mindspore":[
         "taihe"
     ],
+    "intelligent_voice_framework":[
+        "taihe"
+    ],
     "ace_engine":[
         "app"
     ]
