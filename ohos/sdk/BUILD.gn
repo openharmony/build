@@ -290,6 +290,8 @@ if (!use_current_sdk) {
     args = [
       "--sdk-out-dir",
       rebase_path(ohos_sdk_out_dir, root_build_dir),
+      "--cert-path",
+      cert_path,
     ]
     outputs = [ "$target_out_dir/$target_name.stamp" ]
   }

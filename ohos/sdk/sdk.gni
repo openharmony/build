@@ -36,6 +36,7 @@ declare_args() {
 
 declare_args() {
   enable_sign = false
+  cert_path = ""
 }
 
 sdk_toolchains = {
