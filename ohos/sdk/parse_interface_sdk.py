@@ -172,7 +172,13 @@ def parse_step(options):
         out_path = os.path.relpath(out_path, options.root_build_dir)
         copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type, options.sdk_build_public)
 
-        if sdk_type == "ets" and options.sdk_check_level == "true":
+        # 转换sdk_check_level为数值int类型，防止传入有误参数
+        sdk_check_version = 0
+        try:
+            sdk_check_version = int(options.sdk_check_level)
+        except BaseException as e:
+            raise ValueError("sdk_check_level数值有误，请传入正确数值")
+        if sdk_type == "ets" and sdk_check_version != 0:
             # 仅在编译dynamic时校验API版本
             check_api_version_method(options.root_build_dir, out_path, options.sdk_api_version, options.node_js)
 
