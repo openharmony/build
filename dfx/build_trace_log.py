@@ -22,6 +22,13 @@ import subprocess
 import json
 from datetime import datetime
 from pathlib import Path
+import xml.etree.ElementTree as ET
+from typing import Dict, List, Tuple, Optional, Set
+import re
+import sys
+from dfx import dfx_info, dfx_error
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class BuildTraceLog:
     def __init__(self):
@@ -43,7 +50,9 @@ class BuildTraceLog:
 
         # 构建配置信息
         self.build_type = None               # 构建类型
-        self.build_args = None            # 构建命令
+        self.build_args = None            # 构建参数
+        self.build_target = None           # 构建目标
+        self.build_command = None          # 构建命令
         self.build_product_type = None       # 构建产品类型
 
         # 构建资源使用情况
@@ -72,6 +81,8 @@ class BuildTraceLog:
             "build_end_time": self.build_end_time,
             "build_trace_id": self.build_trace_id,
             "build_type": self.build_type,
+            "build_target": self.build_target,
+            "build_command": self.build_command,
             "build_args": self.build_args,
             "build_product_type": self.build_product_type,
             "build_cpu_usage": self.build_cpu_usage,
@@ -121,7 +132,7 @@ class BuildTraceLog:
     def _get_code_repo(self):
         # 使用repo info | grep "Manifest branch"命令获取仓库信息
         # 使用shell=True来支持管道命令
-        result = subprocess.check_output('repo info | grep "Manifest branch"', 
+        result = subprocess.check_output('repo info -o | grep "Manifest branch"', 
                                        shell=True, 
                                        stderr=subprocess.STDOUT, 
                                        universal_newlines=True).strip()
@@ -208,10 +219,18 @@ class BuildTraceLog:
         self._get_code_repo()
         return self
 
-    def from_build_traces_log(self, log_file_path: str) -> 'BuildTraceLog':
+    def from_build_traces_log(self, log_file_path: str) -> bool:
         try:
             # 解析日志文件
-            parsed_data = self._parse_build_traces(log_file_path)
+            build_success_flag, parsed_data = self._parse_build_traces(log_file_path)
+
+            if not build_success_flag:
+                dfx_info(
+                    f"Build failed, stop parsing build_traces log file {log_file_path}"
+                )
+                if log_file_path:
+                    os.remove(log_file_path)
+                return False
 
             # 填充基本信息
             if parsed_data['trace_id']:
@@ -220,19 +239,16 @@ class BuildTraceLog:
             # 提取构建开始和结束时间
             events = parsed_data['events']
             if events:
-                if events[0].get("start_time"):
-                    self.build_start_time = datetime.fromtimestamp(
-                        events[0]["start_time"]
-                    ).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-                
-                if events[0].get("build_type"):
-                    self.build_type = events[0]["build_type"]
+                for event in events:
+                    if event.get("event_name") == "_build_main":
+                        self.build_start_time = datetime.fromtimestamp(
+                            event["start_time"]
+                        ).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
 
-                last_event = events[-1]
-                if last_event.get('end_time'):
-                    self.build_end_time = datetime.fromtimestamp(
-                        last_event["end_time"]
-                    ).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                        self.build_end_time = datetime.fromtimestamp(
+                            event["end_time"]
+                        ).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                        break
 
             # 提取构建资源使用情况 - 只保留平均值
             self.build_cpu_usage = parsed_data['cpu_avg']
@@ -240,10 +256,6 @@ class BuildTraceLog:
 
             # 提取各函数执行时间详情
             self.build_time_cost_detail = parsed_data['execution_times']
-
-            # 计算总构建耗时
-            if self.build_time_cost_detail:
-                self.build_time_cost = sum(self.build_time_cost_detail.values())
 
             # 判断构建结果（假设如果有error类型的事件，则构建失败）
             has_error = any(event.get("status") == "failed" for event in events)
@@ -256,6 +268,14 @@ class BuildTraceLog:
 
             # 从args_info中提取构建配置信息
             for event in events:
+                if "raw_args" in event and event["raw_args"] and not self.build_command:
+                    raw_args = event.get("raw_args", [])
+                    if raw_args:
+                        self.build_command = "./build.sh " + " ".join(raw_args)
+                    else:
+                        self.build_command = "unknown command"
+                    self.build_target = self._parse_build_target()
+
                 if 'args_info' in event and event['args_info']:
                     try:
                         # 尝试解析args_info
@@ -271,21 +291,58 @@ class BuildTraceLog:
                                 "product_name"
                             ].replace("product_name=", "")
 
-                        # 如果已经提取了所需信息，可以提前退出
-                        if self.build_type and self.build_product_type:
-                            break
                     except (json.JSONDecodeError, TypeError):
                         continue
+                
+                if "build_type" in event and not self.build_type:
+                    self.build_type = event["build_type"]
+                
+                # 如果已经提取了所需信息，可以提前退出
+                if self.build_type and self.build_product_type and self.build_command and self.build_target:
+                    break
 
         except Exception as e:
-            print(f"Failed to parse build_traces log file {log_file_path}: {str(e)}")
+            dfx_info(f"Failed to parse build_traces log file {log_file_path}: {str(e)}")
             # 设置错误日志
             self.build_error_log = str(e)
             self.build_result = 'failed'
+            return False
 
-        return self
+        return True
 
-    def _parse_build_traces(self, log_file_path: str) -> dict:
+    def _parse_build_target(self) -> str:
+        pattern = r'--build-target\s+([^"\'\s]+)'
+        match = re.search(pattern, self.build_command)
+
+        if not match:
+            return "all"
+
+        target_str = match.group(1).strip()
+        target_list = [item.strip() for item in target_str.split(",") if item.strip()]
+
+        MANIFEST_PATH = Path(__file__).parent.parent.parent / ".repo" / "manifests" / "ohos" / "ohos.xml"
+        if not MANIFEST_PATH.exists():
+            return "all"
+
+        name_path_dict = get_name_path_dict(MANIFEST_PATH)
+
+        match_result, all_matched_names = approx_match_target_to_names(
+            target_list=target_list,
+            name_path_dict=name_path_dict,
+            min_match_frags=2,  # 可调整为1（更宽松）或3（更严格）
+        )
+        dfx_info(f"target_list: {target_list}")
+        dfx_info(f"match_result: {match_result}")
+
+        if len(all_matched_names) == 0:
+            return target_str
+
+        return ", ".join(sorted(all_matched_names))
+
+    def _parse_build_traces(self, log_file_path: str) -> Tuple[bool, Dict]:
+
+        build_success = False
+
         result = {
             'trace_id': None,
             'events': [],
@@ -320,12 +377,20 @@ class BuildTraceLog:
                                 mem_values_mb.append(event.get("memory_mb"))
                             if "memory_percent" in event:
                                 mem_values_percent.append(event.get("memory_percent"))
-
-                        if event.get('status') == 'success' and 'execution_time' in event and 'function' in event:
-                            func_name = event['function']
-                            if func_name not in result['execution_times']:
-                                result['execution_times'][func_name] = []
-                            result['execution_times'][func_name].append(event['execution_time'])
+                        else:
+                            if event.get('status') == 'success' and 'execution_time' in event and 'event_name' in event:
+                                event_name = event["event_name"]
+                                if event_name == '_build_main':
+                                    build_success = True
+                                    self.build_start_time = event.get("start_time")
+                                    self.build_end_time = event.get("end_time")
+                                    self.build_time_cost = event.get("execution_time")
+                                else:
+                                    if event_name not in result["execution_times"]:
+                                        result["execution_times"][event_name] = []
+                                    result["execution_times"][event_name].append(
+                                        event["execution_time"]
+                                    )
 
                     except json.JSONDecodeError:
                         continue
@@ -342,11 +407,109 @@ class BuildTraceLog:
                     result["execution_times"][func_name] = sum(times) / len(times)
 
         except FileNotFoundError:
-            print(f"Warning: Log file not found: {log_file_path}")
+            dfx_info(f"Warning: Log file not found: {log_file_path}")
         except Exception as e:
-            print(f"Parsing build_traces log file {log_file_path} failed: {str(e)}")
+            dfx_info(f"Parsing build_traces log file {log_file_path} failed: {str(e)}")
 
-        return result
+        return build_success, result
+
+
+def get_name_path_dict(manifest_path: str) -> Optional[Dict[str, str]]:
+    """读取 manifest.xml，返回 {name: path} 字典（复用稳定逻辑）"""
+    try:
+        tree = ET.parse(manifest_path)
+        root = tree.getroot()
+        name_path_dict = {}
+        for project in root.findall("project"):
+            project_name = project.get("name")
+            project_path = project.get("path")
+            if project_name and project_path:
+                name_path_dict[project_name] = project_path
+            else:
+                missing_attr = "name" if not project_name else "path"
+                dfx_info(f"警告：跳过缺失 {missing_attr} 的 project")
+        return name_path_dict
+    except Exception as e:
+        dfx_info(f"读取 manifest 失败：{e}")
+        return None
+
+
+def _split_path_to_fragments(path: str) -> List[str]:
+    """拆解路径为纯净的路径片段（过滤空值、.、..、文件后缀）"""
+    # 分割路径（兼容 / 开头或结尾的情况）
+    fragments = [f.strip() for f in path.split("/") if f.strip()]
+    # 过滤无效片段（.、..）
+    valid_fragments = []
+    for frag in fragments:
+        if frag in (".", "..", ""):
+            continue
+        valid_fragments.append(frag)  # 统一小写，忽略大小写
+    return valid_fragments
+
+
+def _calc_path_similarity(target_frags: List[str], path_frags: List[str]) -> int:
+    """计算路径片段的重合度（返回公共连续片段数，核心近似匹配逻辑）"""
+    max_match = 0
+    # 遍历 target 片段，找与 path 片段的最长连续重合
+    for i in range(len(target_frags)):
+        match_count = 0
+        for j in range(len(path_frags)):
+            # 从 target[i] 和 path[j] 开始比对连续片段
+            if target_frags[i] == path_frags[j]:
+                match_count = 1
+                # 继续比对后续连续片段
+                k = 1
+                while (i + k < len(target_frags)) and (j + k < len(path_frags)):
+                    if target_frags[i + k] == path_frags[j + k]:
+                        match_count += 1
+                        k += 1
+                    else:
+                        break
+                # 更新最大连续重合数
+                if match_count > max_match:
+                    max_match = match_count
+    return max_match
+
+
+def approx_match_target_to_names(
+    target_list: List[str],
+    name_path_dict: Dict[str, str],
+    min_match_frags: int = 2,
+) -> Tuple[Dict[str, List[str]], Set[str]]:
+    
+    match_result: Dict[str, List[str]] = {target: [] for target in target_list}
+    all_matched_names: Set[str] = set()
+
+    if not target_list:
+        dfx_info("警告：target 数组为空")
+        return match_result, all_matched_names
+
+    # 预处理所有 target，拆解为路径片段（忽略文件名和后缀）
+    target_frags_map = {
+        target: _split_path_to_fragments(target) for target in target_list
+    }
+
+    # 遍历每个 target 进行匹配
+    for target, target_frags in target_frags_map.items():
+        target = target.strip()
+        if not target or len(target_frags) < 1:
+            continue
+
+        # 遍历每个 project 的 path，计算路径重合度
+        for name, path in name_path_dict.items():
+            path_frags = _split_path_to_fragments(path)
+            if len(path_frags) < 1:
+                continue
+
+            # 计算最大连续重合片段数
+            max_match = _calc_path_similarity(target_frags, path_frags)
+
+            # 达到最小重合片段数，判定为近似匹配
+            if max_match >= min_match_frags:
+                match_result[target].append(name)
+                all_matched_names.add(name)
+
+    return match_result, all_matched_names
 
 
 def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
@@ -356,21 +519,30 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
         if log_file:
             latest_log_file = log_file
             if not os.path.exists(latest_log_file):
-                print(f"Warning: Specified log file does not exist: {latest_log_file}")
+                dfx_info(
+                    f"Warning: Specified log file does not exist: {latest_log_file}"
+                )
                 return None
         else:
             log_files = [os.path.join(log_dir, f) for f in os.listdir(log_dir) if f.startswith('build_traces_') and f.endswith('.log')]
             if not log_files:
-                print(f"Warning: No build_traces log file found in directory {log_dir}")
+                dfx_info(
+                    f"Warning: No build_traces log file found in directory {log_dir}"
+                )
                 return None
-            latest_log_file = max(log_files, key=os.path.getctime)
+            latest_log_file = max(log_files, key=os.path.getmtime)
+            
+        dfx_info(f"Processing log file: {latest_log_file}")
 
-        print(f"Processing log file: {latest_log_file}")
-        trace_log.from_build_traces_log(latest_log_file)
-
-        result_dict = trace_log.to_dict()
-
-        if output_format == 'json':
+        # 如果配置了上传API，执行上传
+        if is_upload_configured():
+            # 导入upload_build_trace_log函数
+            from dfx.build_trace_uploader import upload_build_trace_log
+            ret = upload_build_trace_log(log_file=latest_log_file)
+            dfx_info(f"Upload build trace log: {ret.get('message', 'Success')}")
+        elif output_format == 'json':
+            trace_log.from_build_traces_log(latest_log_file)
+            result_dict = trace_log.to_dict()
             import datetime
             timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
             default_output_dir = Path(__file__).parent.parent.parent / "out" / "dfx"
@@ -385,24 +557,44 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
             with open(json_file_path, 'w', encoding='utf-8') as f:
                 json.dump(result_dict, f, ensure_ascii=False, indent=2, default=str)
 
-            print(f"JSON result saved to: {json_file_path}")
+            dfx_info(f"JSON result saved to: {json_file_path}")
             return result_dict
         else:
             # 输出文本格式
-            print(trace_log)
-            print("\nBuild trace log processing completed!")
+            dfx_info(trace_log)
+            dfx_info("\nBuild trace log processing completed!")
             return None
 
     except Exception as e:
-        print(f"Build trace log processing failed: {str(e)}")
+        dfx_error(f"Build trace log processing failed: {str(e)}")
         return None
     finally:
-        if 'latest_log_file' in locals():
-            print(f"Removing log file: {latest_log_file}")
+        if log_file:
+            dfx_info(f"Removing log file: {log_file}")
             try:
                 os.remove(latest_log_file)
             except:
                 pass
+
+        # 检查是否配置了上传API
+def is_upload_configured():
+    # 检查环境变量
+    api_url = os.environ.get('DFX_TRACE_LOG_UPLOAD_API')
+    if api_url:
+        return True
+    
+    # 检查配置文件
+    try:
+        config_path = Path(__file__).parent / 'dfx_config.json'
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                if config.get('trace_log_upload_api'):
+                    return True
+    except Exception:
+        pass
+    
+    return False
 
 
 if __name__ == '__main__':

@@ -22,11 +22,13 @@ import sys
 import subprocess
 import json
 
+
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))  # ohos/build/hb dir
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # ohos/build dir
 sys.path.append(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lite'))  # ohos/build/lite dir
-
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lite'))  
+# ohos/build/lite dir
+from dfx.build_tracker import build_tracker
 from containers.arg import Arg, ModuleType
 from containers.status import throw_exception, judge_indep
 from resources.global_var import ARGS_DIR
@@ -86,8 +88,13 @@ from util.system_util import SystemUtil
 
 
 class Main():
+
     @staticmethod
     @throw_exception
+    @build_tracker(
+        event_name="_build_main",
+        build_type="build",
+    )
     def main():
         main = Main()
 
@@ -199,7 +206,7 @@ class Main():
         generate_ninja = Gn()
         tool_args_resolever = ToolArgsResolver(args_dict)
         return OHOSToolModule(args_dict, tool_args_resolever, generate_ninja)
-    
+
     def _indep_build_command_format_check(self) -> bool:
         return "-i" in sys.argv[2:-1] and sys.argv[sys.argv.index("-i") + 1][0] != '-'
 
