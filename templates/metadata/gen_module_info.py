@@ -99,6 +99,9 @@ def gen_install_dests(system_base_dir, ramdisk_base_dir, vendor_base_dir, update
         elif image == 'cloud_rom':
             dest = _gen_install_dest(cloud_rom_base_dir, module_install_dir,
                                      relative_install_dir, module_type)
+        elif image == 'system_arm64e':
+            dest = _gen_install_dest("system_arm64e", module_install_dir,
+                                     relative_install_dir, module_type)
         dests.append(os.path.join(dest, source_file_name))
     return dests
 
