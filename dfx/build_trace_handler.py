@@ -24,6 +24,7 @@ import atexit
 from typing import Any, Dict, Optional
 from pathlib import Path
 from dfx.build_trace_log import process_build_trace_log
+from dfx import dfx_info
 
 
 class AsyncTraceHandler:
@@ -79,7 +80,7 @@ class AsyncTraceHandler:
                     except queue.Empty:
                         continue
         except Exception as e:
-            print(f"Async log worker failed: {str(e)}")
+            dfx_info(f"Async log worker failed: {str(e)}")
 
     def event_handler(self, data: Dict[str, Any]) -> None:
         try:
@@ -89,9 +90,9 @@ class AsyncTraceHandler:
                 try:
                     self.queue.put(data, block=True, timeout=0.1)
                 except queue.Full:
-                    print(f"Warning: Log queue is full, dropping log data: {data}")
+                    dfx_info(f"Warning: Log queue is full, dropping log data: {data}")
         except Exception as e:
-            print(f"Error: Failed to queue log data: {str(e)}")
+            dfx_info(f"Error: Failed to queue log data: {str(e)}")
 
     def shutdown(self, wait: bool = True, timeout: Optional[float] = None) -> None:
         self._stop_event.set()
@@ -116,10 +117,8 @@ def event_handler(data: Dict[str, Any], trace_log_file: Path) -> None:
 def _shutdown_handler():
     try:
         if AsyncTraceHandler._instance:
-            process_build_trace_log(
-                output_format="json", log_file=AsyncTraceHandler._instance.log_file_path
-            )
-
+            # 直接调用process_build_trace_log，它现在会内部处理上传或本地保存的逻辑
+            process_build_trace_log(log_file=AsyncTraceHandler._instance.log_file_path)
             AsyncTraceHandler._instance.shutdown()
     except Exception:
         pass

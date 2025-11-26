@@ -30,6 +30,7 @@ import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from multiprocessing import cpu_count
 import requests
+from dfx.build_tracker import build_tracker
 
 
 class PoolDownloader:
@@ -43,6 +44,11 @@ class PoolDownloader:
         self.lock = threading.Lock()
         self.unchanged_tool_list = []
 
+
+    @build_tracker(
+        event_name="_hwcloud_download",
+        build_type="prebuild"
+    )
     def start(self) -> list:
         if self.progress:
             with self.progress:

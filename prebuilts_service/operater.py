@@ -33,6 +33,7 @@ from common_utils import (
 import re
 import platform
 from collections import OrderedDict
+from dfx.build_tracker import build_tracker
 
 
 class OperateHanlder:
@@ -163,6 +164,10 @@ class OperateHanlder:
             install_hpm_in_other_platform(name, operate)
 
     @staticmethod
+    @build_tracker(
+        event_name="_npm_install",
+        build_type="prebuild"
+    )
     def _npm_install(operate: dict, max_retry_times=2):
         if OperateHanlder.global_args.build_type != "indep":
             # 若不是系统组件，直接返回
