@@ -17,6 +17,7 @@ import("cjc_toolchain.gni")
 declare_args() {
   # Enable cjc Source-based Code Coverage.
   use_cjc_coverage = false
+  enable_cjc_mock = false
 }
 
 template("_cj_target") {
@@ -62,6 +63,10 @@ template("_cj_target") {
   sources = []
   foreach(src, sources_) {
     cjc_args_ += [ rebase_path(src) ]
+  }
+
+  if (enable_cjc_mock == true) {
+    cjc_args_ += [ "--mock=on" ]
   }
 
   # coverage support
