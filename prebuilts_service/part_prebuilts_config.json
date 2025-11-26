@@ -60,7 +60,8 @@
     ],
     "device_manager":[
         "app",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "wallpaper_mgr":[
         "app"
@@ -361,6 +362,16 @@
         "taihe"
     ],
     "ace_engine":[
-        "app"
+        "app",
+        "hvigor"
+    ],
+    "webview":[
+        "hvigor"
+    ],
+    "ets_runtime":[
+        "ark_js"
+    ],
+    "os_account":[
+        "taihe"
     ]
 }
