@@ -119,9 +119,7 @@ class IndepBuild(BuildFileGeneratorInterface):
             item_path = os.path.join(local_binarys, item)
             if os.path.isdir(item_path):
                 os.symlink(item_path, os.path.join(binarys_path, item))
-            flag = os.O_WRONLY | os.O_CREAT
-            mode = stat.S_IWUSR | stat.S_IRUSR
-            with os.fdopen(os.open(flag_path, flag, mode), "w"):
+            with os.fdopen(os.open(flag_path, os.O_WRONLY|os.O_CREAT, mode=0o640), "w"):
                 pass
         
         ignore_directories = ['innerapis', 'common', 'binarys']
@@ -131,12 +129,12 @@ class IndepBuild(BuildFileGeneratorInterface):
                 if file_name == "bundle.json":
                     self._update_dependences_dict(local_binarys, root, file_name, dependences_dict)
         LogUtil.hb_info(f"generating {dependences_json}")
-        with open(dependences_json, 'w') as f:
+        with os.fdopen(os.open(dependences_json, os.O_WRONLY|os.O_CREAT, mode=0o640), "w") as f:
             json.dump(dependences_dict, f, indent=4)
     
     def _update_dependences_dict(self, local_binarys: str, root: str, file_name: str, dependences_dict: dict):
         bundle_json_path = os.path.join(root, file_name)
-        with open(bundle_json_path, 'r') as f:
+        with os.fdopen(os.open(bundle_json_path, os.O_RDONLY), "r") as f:
             bundle_data = json.load(f)
             component_name = bundle_data["component"]["name"]
             relative_path = os.path.relpath(root, local_binarys)

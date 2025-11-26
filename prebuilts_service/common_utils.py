@@ -63,7 +63,7 @@ def save_data(file_path: str, data):
 
 
 def load_config(config_file: str):
-    with open(config_file, "r", encoding="utf-8") as r:
+    with os.fdopen(os.open(config_file, os.O_RDONLY), "r") as r:
         config = json.load(r)
         return config
 
