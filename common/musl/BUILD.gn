@@ -57,6 +57,10 @@ if (target_cpu == "riscv64") {
 } else {
   ohos_prebuilt_shared_library("ld-musl-arm.so.1") {
     deps = [ "//third_party/musl:soft_create_linker" ]
+    if (musl_arch == "aarch64") {
+      deps += [ "//third_party/musl:soft_create_linker_sp" ]
+      support_arm64e = true 
+    }
     if (is_asan || is_tsan) {
       asan = "-asan"
     } else {
@@ -131,6 +135,7 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     "updater",
     "ramdisk",
   ]
+  support_arm64e = true
   subsystem_name = "build"
   part_name = "build_framework"
   innerapi_tags = [ "chipsetsdk_sp" ]

@@ -55,6 +55,18 @@ generated_file("generate_host_info") {
   output_conversion = "json"
 }
 
+arm64e_file = "${root_build_dir}/all_arm64e_parts_host.json"
+
+generated_file("generate_arm64e_info") {
+  deps = []
+  foreach(part_label, parts_list) {
+    deps += [ get_label_info(part_label, "label_with_toolchain") ]
+  }
+  outputs = [ arm64e_file ]
+  data_keys = [ "arm64e_install_modules" ]
+  output_conversion = "json"
+}
+
 action_with_pydeps("gen_binary_installed_info") {
   deps = [ ":generate_src_installed_info" ]
   script = "//build/ohos/common/binary_install_info.py"
