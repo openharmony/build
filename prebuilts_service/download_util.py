@@ -57,7 +57,7 @@ def check_sha256_by_mark(remote_url, unzip_dir: str, unzip_filename: str) -> tup
 
 def file_sha256(file_path):
     sha = hashlib.sha256()
-    with open(file_path, "rb") as f:
+    with os.fdopen(os.open(file_path, os.O_RDONLY), "rb") as f:
         while chunk := f.read(8192):  # 分块读取大文件，避免内存问题
             sha.update(chunk)
     return sha.hexdigest()
