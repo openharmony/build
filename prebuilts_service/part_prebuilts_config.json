@@ -281,7 +281,8 @@
         "taihe"
     ],
     "app_file_service":[
-        "app"
+        "app",
+        "taihe"
     ],
     "time_service":[
         "app",
