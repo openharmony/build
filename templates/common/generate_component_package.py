@@ -371,9 +371,7 @@ def generate_gn_file_content(part_data):
 
 
 def write_gn_file(gn_path, content):
-    flag = os.O_WRONLY | os.O_CREAT
-    mode = stat.S_IWUSR | stat.S_IRUSR
-    with os.fdopen(os.open(gn_path, flag, mode), 'w') as gn_file:
+    with os.fdopen(os.open(gn_path, os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as gn_file:
         gn_file.write(content)
 
 
@@ -395,13 +393,11 @@ def write_musl_bundle(musl_bundle_path):
     # 向musl的bundle.json文件里写入下面的接口
     additional_innerkits = [{"name": "//third_party/musl:soft_shared_libs"}, 
                             {"name": "//third_party/musl:musl_headers"}]
-    with open(musl_bundle_path, "r") as file:
+    with os.fdopen(os.open(musl_bundle_path, os.O_RDONLY), "r") as file:
         musl_bundle_content = json.load(file)
     musl_innerkits = musl_bundle_content["component"]["build"]["inner_kits"]
     musl_innerkits.extend(additional_innerkits)
-    flag = os.O_WRONLY | os.O_CREAT
-    mode = stat.S_IWUSR | stat.S_IRUSR
-    with os.fdopen(os.open(musl_bundle_path, flag, mode),"w") as file:
+    with os.fdopen(os.open(musl_bundle_path, os.O_WRONLY | os.O_CREAT, mode=0o640),"w") as file:
         json.dump(musl_bundle_content, file, ensure_ascii=False, indent=2) 
 
 
@@ -441,7 +437,7 @@ def process_musl(part_data, parts_path_info, part_name, subsystem_name, componen
 
 def _create_bundle_json(bundle_path, bundle_content):
     bundle = {}
-    with open(bundle_path, "w", encoding="utf-8") as f1:
+    with os.fdopen(os.open(bundle_path, os.O_WRONLY|os.O_CREAT, mode=0o640), "w", encoding="utf-8") as f1:
         json.dump(bundle_content, f1, indent=2)
 
 
@@ -668,11 +664,10 @@ def process_variants_standard(part_data, parts_path_info, part_name, subsystem_n
 
         variants_standard_license_path = os.path.join(variants_root, 'LICENSE')
         variants_standard_readme_path = os.path.join(variants_root, 'README.md')
-        with open(variants_standard_license_path, 'w') as file:
+        with os.fdopen(os.open(variants_standard_license_path, os.O_WRONLY|os.O_CREAT, mode=0o640), "w") as file:
             file.write("license")
-        with open(variants_standard_readme_path, 'w') as file:
+        with os.fdopen(os.open(variants_standard_readme_path, os.O_WRONLY|os.O_CREAT, mode=0o640), "w") as file:
             file.write("readme")
-
         _finish_component_build(part_data)
     except Exception as e:
         print(f"Error processing variants_standard: {str(e)}")
@@ -1008,7 +1003,7 @@ def _is_innerkit(data, part, module):
 def _get_components_json(out_path):
     jsondata = ""
     json_path = os.path.join(out_path + "/build_configs/parts_info/components.json")
-    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+    with os.fdopen(os.open(json_path, os.O_RDONLY),
                    'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
@@ -1030,7 +1025,7 @@ def _get_external_public_config(_path, _config_name):
     out_path = py_args.out_path
     _json_path = os.path.join(out_path, 'external_public_configs', _path, f'{_config_name}.json')
     try:
-        with os.fdopen(os.open(_json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+        with os.fdopen(os.open(_json_path, os.O_RDONLY),
                        'r', encoding='utf-8') as f:
             jsondata = json.load(f)
     except Exception as e:
@@ -1061,7 +1056,7 @@ def _handle_two_layer_json(json_key, json_data, desc_list):
 def _get_json_data(args, module):
     json_path = os.path.join(args.get("out_path"),
                              args.get("subsystem_name"), args.get("part_name"), "publicinfo", module + ".json")
-    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+    with os.fdopen(os.open(json_path, os.O_RDONLY),
                    'r', encoding='utf-8') as f:
         try:
             file_content = f.read()
@@ -1121,7 +1116,7 @@ def _copy_dir(src_path, target_path):
 def _get_target_include(part_name, include):
     # 需要多层提取include头文件的白名单路径
     multilayer_include_config_path = os.path.join('build', 'indep_configs', 'config', 'multilayer_include_config.json')
-    with open(multilayer_include_config_path, "r") as f:
+    with os.fdopen(os.open(multilayer_include_config_path, os.O_RDONLY), "r") as f:
         part_whitch_use_multilayer_include = json.load(f)
         if part_name in part_whitch_use_multilayer_include:
             target_include = include.replace("//", "")
@@ -1274,7 +1269,7 @@ def is_not_basic_lib(lib_path):
 
 def read_deps_from_ninja_file(ninja_file, prefix):
     print("ninja file: ", ninja_file)
-    with open(ninja_file, 'r') as f:
+    with os.fdopen(os.open(ninja_file, os.O_RDONLY), 'r') as f:
         for line in f:
             if line.strip().startswith(prefix):
                 deps_libs = line.strip().split(' ')
@@ -1394,7 +1389,7 @@ def _copy_bundlejson(args, public_deps_list):
             dependencies_dict.update({_public_dep: "*"})
             sorted_dict = dict(sorted(dependencies_dict.items()))
     if os.path.isfile(bundlejson):
-        with open(bundlejson, 'r') as f:
+        with os.fdopen(os.open(bundlejson, os.O_RDONLY), 'r') as f:
             bundle_data = json.load(f)
             bundle_data['publishAs'] = 'binary'
             bundle_data.update({'os': args.get('os')})
@@ -1448,7 +1443,7 @@ def _copy_license(args):
         license_default = os.path.join(args.get("root_path"), "build", "LICENSE")
         shutil.copy(license_default, license_out)
         bundlejson_out = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), 'bundle.json')
-        with open(bundlejson_out, 'r') as f:
+        with os.fdopen(os.open(bundlejson_out, os.O_RDONLY), 'r') as f:
             bundle_data = json.load(f)
             bundle_data.update({"license": "Apache License 2.0"})
         if os.path.isfile(bundlejson_out):
@@ -1775,7 +1770,7 @@ def _generate_build_gn(args, module, json_data, deps: list, components_json, pub
 
 def _toolchain_gn_modify(args, module, toolchain_name, gn_path, so_name, toolchain_gn_file):
     if os.path.isfile(gn_path) and so_name:
-        with open(gn_path, 'r') as f:
+        with os.fdopen(os.open(gn_path, os.O_RDONLY), 'r') as f:
             _gn = f.read()
             pattern = r"libs/(.*.)"
             toolchain_gn = re.sub(pattern, 'libs/' + so_name + '\"', _gn)
@@ -1926,7 +1921,7 @@ def _get_parts_path_info(components_json):
 def _get_toolchain_info(root_path):
     jsondata = ""
     json_path = os.path.join(root_path + "/build/indep_configs/variants/common/toolchain.json")
-    with os.fdopen(os.open(json_path, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+    with os.fdopen(os.open(json_path, os.O_RDONLY),
                    'r', encoding='utf-8') as f:
         try:
             jsondata = json.load(f)
@@ -2106,7 +2101,7 @@ def generate_made_in_mark_file(args):
     mark_file = os.path.join(args.get("out_path"), "component_package", args.get("part_path"), f"package_made_info_{simpilify_formatted_time}")
     basic_dir = os.path.dirname(mark_file)
     os.makedirs(basic_dir, exist_ok=True)
-    with open(f"{mark_file}", 'w') as f:
+    with os.fdopen(os.open(f"{mark_file}", os.O_WRONLY | os.O_CREAT, mode=0o640), 'w') as f:
         if not build_origin:
             build_origin = "unknown location"
         f.write(f"The hpm package is made in an {build_origin},\nThe code synchronization time is : {standard_formatted_time},\nUse master revision: {revision_is_master}\n")
@@ -2136,7 +2131,7 @@ def _get_exclusion_list(root_path):
                                         "binary_package_exclusion_list.json")
     data = []
     try:
-        with open(part_black_list_path, 'r') as f:
+        with os.fdopen(os.open(part_black_list_path, os.O_RDONLY), 'r') as f:
             data = json.load(f)
     except FileNotFoundError:
         print(f"can not find file: {part_black_list_path}.")
