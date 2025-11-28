@@ -66,10 +66,11 @@ def _get_post_process_modules_info(post_process_modules_info_files: list, depfil
 
 
 def copy_modules(system_install_info: dict, install_modules_info_file: str,
-                 modules_info_file: str, module_list_file: str,
-                 post_process_modules_info_files: list, platform_installed_path: str,
+                 modules_info_file: str, module_list_file: str, arm64e_modules_info_file: str,
+                 arm64e_whitelist_file: str, post_process_modules_info_files: list, platform_installed_path: str,
                  host_toolchain, additional_system_files: dict, depfiles: list, categorized_libraries: dict):
     output_result = []
+    arm64e_output_result = []
     dest_list = []
     symlink_dest = []
 
@@ -82,7 +83,13 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
         if not install:
             continue
         update_module_info(module_info, categorized_libraries)
-        output_result.append(module_info)
+        arm64e_whitelist = read_json_file(arm64e_whitelist_file)
+        if "ohos_clang_arm64e" in module_info.get("label", []) and arm64e_whitelist:
+            for label in arm64e_whitelist:
+                if label in module_info.get('label', []):
+                    arm64e_output_result.append(module_info)
+        else:
+            output_result.append(module_info)
 
     # get post process modules info
     post_process_modules = _get_post_process_modules_info(
@@ -95,9 +102,11 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
 
     for source, system_path in additional_system_files:
         shutil.copy(source, os.path.join(platform_installed_path, system_path))
+    
+    all_target_result = output_result + arm64e_output_result
 
     # copy modules
-    for module_info in output_result:
+    for module_info in all_target_result:
         if module_info.get('type') == 'none':
             continue
         # copy module lib
@@ -196,12 +205,18 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
     # output module list to file
     write_file(module_list_file, '\n'.join(dest_list))
 
+    # write pac only module info file
+    if arm64e_output_result:
+        write_json_file(arm64e_modules_info_file, arm64e_output_result)
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--system-install-info-file', required=True)
     parser.add_argument('--install-modules-info-file', required=True)
     parser.add_argument('--modules-info-file', required=True)
+    parser.add_argument('--arm64e-modules-info-file', required=True)
+    parser.add_argument('--arm64e-whitelist-file', required=True)
     parser.add_argument('--modules-list-file', required=True)
     parser.add_argument('--platform-installed-path', required=True)
     parser.add_argument('--system-dir', required=True)
@@ -298,10 +313,17 @@ def main():
         shutil.rmtree(cloud_rom_install_base_dir)
         print('remove cloud_rom dir...')
 
+    arm64e_install_base_dir = os.path.join(args.platform_installed_path,
+                                            'system_arm64e')
+    if os.path.exists(arm64e_install_base_dir):
+        shutil.rmtree(arm64e_install_base_dir)
+        print('remove system_arm64e dir...')
+
     print('copy modules...')
     categorized_libraries = load_categorized_libraries(args.categorized_libraries)
     copy_modules(system_install_info, args.install_modules_info_file,
                  args.modules_info_file, args.modules_list_file,
+                 args.arm64e_modules_info_file, args.arm64e_whitelist_file,
                  args.post_process_modules_info_files,
                  args.platform_installed_path, args.host_toolchain,
                  additional_system_files, depfiles, categorized_libraries)

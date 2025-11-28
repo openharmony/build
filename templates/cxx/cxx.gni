@@ -605,6 +605,11 @@ template("ohos_shared_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  support_arm64e = false
+  if (defined(invoker.support_arm64e) && invoker.support_arm64e) {
+    support_arm64e = true
+  }
+
   module_label = get_label_info(":${target_name}", "label_with_toolchain")
   _collect_target = "${target_name}__collect"
   collect_module_target(_collect_target) {
@@ -838,6 +843,11 @@ template("ohos_shared_library") {
         module_install_images += invoker.install_images
       }
 
+      if (support_arm64e && current_toolchain == "$arm64e_toolchain") {
+        module_install_images = []
+        module_install_images = [ "system_arm64e" ]
+      }
+
       module_output_extension = shlib_extension
       if (defined(invoker.output_extension)) {
         module_output_extension = "." + invoker.output_extension
@@ -995,7 +1005,14 @@ template("ohos_shared_library") {
                              "stack_protector_ret",
                              "branch_protector_ret",
                              "branch_protector_frt",
+                             "support_arm64e",
                            ])
+    if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
+      if (!defined(data_deps)) {
+        data_deps = []
+      }
+      data_deps += [ ":${target_name}($arm64e_toolchain)" ]
+    }
     output_dir = output_dir
 
     if (!defined(inputs)) {
@@ -1314,8 +1331,24 @@ template("ohos_shared_library") {
       toolchain = current_toolchain
       toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
     }
+    generate_arm64e_info = []
+    if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
+      arm64e_install_module_info = {
+        module_def = target_label
+        module_info_file =
+            rebase_path(get_label_info(module_def, "target_out_dir"),
+                        root_build_dir) + "/${target_name}_module_info.json"
+        subsystem_name = subsystem_name
+        part_name = part_name
+        toolchain = current_toolchain
+        toolchain_out_dir = rebase_path(root_out_dir, root_build_dir)
+      }
+      generate_arm64e_info = [ arm64e_install_module_info ]
+    }
+
     metadata = {
       install_modules = [ install_module_info ]
+      arm64e_install_modules = generate_arm64e_info
     }
     if (defined(is_debug) && !is_debug && enable_debug_components != "") {
       foreach(component_name, debug_components) {
@@ -1438,6 +1471,11 @@ template("ohos_static_library") {
   assert(subsystem_name != "")
   assert(part_name != "")
 
+  support_arm64e = false
+  if (defined(invoker.support_arm64e) && invoker.support_arm64e) {
+    support_arm64e = true
+  }
+
   if (is_use_check_deps && !_test_target) {
     _check_target = "${target_name}__check"
     target_path = get_label_info(":${target_name}", "label_no_toolchain")
@@ -1536,7 +1574,15 @@ template("ohos_static_library") {
                              "stack_protector_ret",
                              "branch_protector_ret",
                              "branch_protector_frt",
+                             "support_arm64e",
                            ])
+
+    if (support_arm64e && current_toolchain == "$arm64e_toolchain") {
+      if (!defined(data_deps)) {
+        data_deps = []
+      }
+      data_deps += [ ":${target_name}($arm64e_toolchain)" ]
+    }
     if (defined(invoker.configs)) {
       configs += invoker.configs
     }

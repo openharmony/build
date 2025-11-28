@@ -271,6 +271,7 @@ foreach(_platform, target_platform_list) {
 
   system_install_modules = "${current_platform_dir}/system_install_modules.json"
   system_module_info_list = "${current_platform_dir}/system_module_info.json"
+  system_arm64e_modules_info = "${current_platform_dir}/system_arm64e_module_info.json"
   system_modules_list = "${current_platform_dir}/system_modules_list.txt"
   _system_image_zipfile = "${current_platform_dir}/system.zip"
   _host_toolchain = "$host_toolchain"
@@ -295,6 +296,7 @@ foreach(_platform, target_platform_list) {
     outputs = [
       system_install_modules,
       system_module_info_list,
+      system_arm64e_modules_info,
       system_modules_list,
       _system_image_zipfile,
     ]
@@ -306,6 +308,10 @@ foreach(_platform, target_platform_list) {
       rebase_path(system_install_modules, root_build_dir),
       "--modules-info-file",
       rebase_path(system_module_info_list, root_build_dir),
+      "--arm64e-modules-info-file",
+      rebase_path(system_arm64e_modules_info, root_build_dir),
+      "--arm64e-whitelist-file",
+      rebase_path("//build/system_arm64e_whitelist.json", root_build_dir),
       "--modules-list-file",
       rebase_path(system_modules_list, root_build_dir),
       "--platform-installed-path",

@@ -97,6 +97,9 @@ declare_args() {
 
   chipset_sdk_sp_dir = "chipset-sdk-sp"
 
+  # arm64e toolchain
+  arm64e_toolchain = "//build/toolchain/ohos:ohos_clang_arm64e"
+
   # check sdk interface
   sdk_interface_check = true
 

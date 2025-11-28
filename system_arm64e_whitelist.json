@@ -1,0 +1,4 @@
+[
+    "//build/common/musl:ld-musl-arm.so.1",
+    "//build/common/musl:musl-libcxx.so"
+]

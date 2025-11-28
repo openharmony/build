@@ -16,10 +16,29 @@ import("//build/templates/common/copy.gni")
 template("ohos_prebuilt_executable") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
+  source = invoker.source
+  support_arm64e = (defined(invoker.support_arm64e) && invoker.support_arm64e)
+
   if (defined(invoker.output)) {
     _copy_output = "${target_out_dir}/${invoker.output}"
   } else {
-    _copy_output = "${target_out_dir}/${invoker.source}"
+    if (support_arm64e && current_toolchain == "${arm64e_toolchain}") {
+      source_parts = string_split(invoker.source, "/")
+      length = 0
+      foreach(i, source_parts) {
+        length += 1
+      }
+      file_name = source_parts[length - 1]
+      source = string_replace(invoker.source, file_name, "arm64e/$file_name")
+      _copy_output = "${target_out_dir}/${source}"
+
+      if (defined(invoker.install_images)) {
+        invoker.install_images = []
+        invoker.install_images = [ "system_arm64e" ]
+      }
+    } else {
+      _copy_output = "${target_out_dir}/${invoker.source}"
+    }
   }
 
   if (!defined(invoker.deps)) {
@@ -79,7 +98,7 @@ template("ohos_prebuilt_executable") {
                              "license_file",
                              "license_as_sources",
                            ])
-    sources = [ invoker.source ]
+    sources = [ source ]
     outputs = [ _copy_output ]
     module_type = "bin"
     prebuilt = true
@@ -91,16 +110,40 @@ template("ohos_prebuilt_executable") {
     if (defined(invoker.install_enable)) {
       install_enable = invoker.install_enable
     }
+
+    if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
+      if (!defined(deps)) {
+        deps = []
+      }
+      deps += [ ":${target_name}($arm64e_toolchain)" ]
+    }
   }
 }
 
 template("ohos_prebuilt_shared_library") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
 
+  source = invoker.source
+  support_arm64e = (defined(invoker.support_arm64e) && invoker.support_arm64e)
+  if (current_toolchain == "${arm64e_toolchain}" && support_arm64e) {
+    source_parts = string_split(invoker.source, "/")
+    length = 0
+    foreach(i, source_parts) {
+      length += 1
+    }
+    file_name = source_parts[length - 1]
+    source = string_replace(invoker.source, file_name, "arm64e/$file_name")
+
+    if (defined(invoker.install_images)) {
+      invoker.install_images = []
+      invoker.install_images = [ "system_arm64e" ]
+    }
+  }
+
   if (defined(invoker.output)) {
     _copy_output = "${target_out_dir}/${invoker.output}"
   } else {
-    _copy_output = "${target_out_dir}/${invoker.source}"
+    _copy_output = "${target_out_dir}/${source}"
   }
   config("${target_name}__config") {
     libs = [ _copy_output ]
@@ -248,7 +291,7 @@ template("ohos_prebuilt_shared_library") {
     prebuilt = true
     stable = invoker.stable
     toolchain = get_label_info(":${target_name}", "toolchain")
-    source_path = rebase_path(invoker.source, root_build_dir)
+    source_path = rebase_path(source, root_build_dir)
     output_path = rebase_path(_copy_output, root_build_dir)
   }
   write_file("${target_out_dir}/${target_name}_deps_data.json",
@@ -279,7 +322,7 @@ template("ohos_prebuilt_shared_library") {
                              "license_file",
                              "license_as_sources",
                            ])
-    sources = [ invoker.source ]
+    sources = [ source ]
     outputs = [ _copy_output ]
     module_type = "lib"
     prebuilt = true
@@ -317,16 +360,35 @@ template("ohos_prebuilt_shared_library") {
       public_configs = []
     }
     public_configs += [ ":${target_name}__config" ]
+    if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
+      if (!defined(deps)) {
+        deps = []
+      }
+      deps += [ ":${target_name}($arm64e_toolchain)" ]
+    }
   }
 }
 
 template("ohos_prebuilt_static_library") {
   assert(defined(invoker.source), "source must be defined for ${target_name}.")
+  source = invoker.source
+  support_arm64e = (defined(invoker.support_arm64e) && invoker.support_arm64e)
 
   if (defined(invoker.output)) {
     _copy_output = "${target_out_dir}/${invoker.output}"
   } else {
-    _copy_output = "${target_out_dir}/${invoker.source}"
+    if (support_arm64e && current_toolchain == "${arm64e_toolchain}") {
+      source_parts = string_split(invoker.source, "/")
+      length = 0
+      foreach(i, source_parts) {
+        length += 1
+      }
+      file_name = source_parts[length - 1]
+      source = string_replace(invoker.source, file_name, "arm64e/$file_name")
+      _copy_output = "${target_out_dir}/${source}"
+    } else {
+      _copy_output = "${target_out_dir}/${invoker.source}"
+    }
   }
   config("${target_name}__config") {
     libs = [ _copy_output ]
@@ -349,13 +411,19 @@ template("ohos_prebuilt_static_library") {
                              "license_file",
                              "license_as_sources",
                            ])
-    sources = [ invoker.source ]
+    sources = [ source ]
     outputs = [ _copy_output ]
     bypass_module_info_generation = true
     if (!defined(public_configs)) {
       public_configs = []
     }
     public_configs += [ ":${target_name}__config" ]
+    if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
+      if (!defined(deps)) {
+        deps = []
+      }
+      deps += [ ":${target_name}($arm64e_toolchain)" ]
+    }
   }
 }
 

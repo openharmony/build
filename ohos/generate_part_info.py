@@ -86,6 +86,8 @@ def gen_output_file(part_name: str, origin_part_name: str, all_modules_file: str
         toolchain = install_module.get('toolchain')
         if toolchain == '' or toolchain == current_toolchain:
             part_install_modules.append(install_module)
+        elif toolchain.endswith("ohos_clang_arm64e"):
+            part_install_modules.append(install_module)
         else:
             if toolchain == host_toolchain:
                 part_host_modules.append(install_module)
