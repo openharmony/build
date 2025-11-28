@@ -1028,6 +1028,23 @@
         ]
     },
     {
+        "install_dir": "previewer/common/bin/",
+        "module_label": "//arkcompiler/toolchain/adapter:copy_simulator_debug",
+        "target_os": [
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "previewer/common/bin",
+        "module_label": "//arkcompiler/toolchain/adapter:copy_previewer_debug",
+        "target_os": [
+            "windows",
+            "darwin",
+            "linux"
+        ]
+    },
+    {
         "install_dir": "previewer/common/bin",
         "module_label": "//base/global/system_resources:copy_preview_fonts",
         "target_os": [
