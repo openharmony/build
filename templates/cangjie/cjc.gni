@@ -155,9 +155,9 @@ template("ohos_cangjie_unittest") {
     }
 
     if (target_cpu == "arm") {
-      platform_cj_sdk = "/system/lib/platform/cjsdk"
+      platform_cj_sdk = "/system/lib/platformsdk/cjsdk"
     } else if (target_cpu == "arm64" || target_cpu == "x86_64") {
-      platform_cj_sdk = "/system/lib64/platform/cjsdk"
+      platform_cj_sdk = "/system/lib64/platformsdk/cjsdk"
     }
 
     cjc_args += [
