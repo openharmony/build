@@ -138,7 +138,7 @@ def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_b
     cmd_list.append(gen_keep_debug_cmd)
     cmd_list.append(gen_mini_debug_cmd)
     if adlt_llvm_tool:
-        remove_adlt_section_cmd = llvm_objcopy_path + "--remove-section .adlt* --remove-section .bolt.remap " + mini_debug_path
+        remove_adlt_section_cmd = llvm_objcopy_path + " --remove-section .adlt* --remove-section .bolt.remap " + mini_debug_path
         cmd_list.append(remove_adlt_section_cmd)
         rename_cmd, rename_rules_path = remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path)
         cmd_list.append(rename_cmd)
