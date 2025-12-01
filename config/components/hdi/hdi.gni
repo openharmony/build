@@ -222,12 +222,12 @@ template("hdi") {
           "c_utils:utils",
           "hdf_core:libhdi_base",
           "hilog:libhilog",
+          "hdf_core:libpub_utils",
         ]
         if (mode == "ipc") {
           external_deps += [
             "hdf_core:libhdf_utils",
             "hdf_core:libhdi",
-            "hdf_core:libpub_utils",
           ]
 
           if (invoker.language == "c") {
