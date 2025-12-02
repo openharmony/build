@@ -240,12 +240,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-linux-x86_64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-linux-x86_64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-windows-x86_64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-windows-x86_64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -440,12 +440,12 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/linux-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-linux-x86_64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-linux-x86_64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/windows-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-windows-x86_64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-windows-x86_64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         },
         {
@@ -627,7 +627,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-arm64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-darwin-arm64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-darwin-arm64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
@@ -673,7 +673,7 @@
         },
         {
           "unzip_dir": "prebuilts/taihe/ohos/darwin-x86_64",
-          "file_path": "/openharmony/compiler/Taihe/0.55.1/taihe-darwin-x86_64-0.55.1-20251119.tar.gz",
+          "file_path": "/openharmony/compiler/Taihe/0.56.2/taihe-darwin-x86_64-0.56.2-20251129.tar.gz",
           "unzip_filename": "taihe"
         }
       ],
