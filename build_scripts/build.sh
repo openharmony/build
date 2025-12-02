@@ -177,24 +177,7 @@ echo -e "\033[32m[OHOS INFO] Start building...\033[0m\n"
 
 ${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/tools_checker.py
 
-if [[ "${@}" =~ "--ccache=false" || "${@}" =~ "--ccache false" ]]; then
-  ccache_args="--ccache=false"
-else
-  ccache_args="--ccache=true"
-fi
-if [[ "${@}" =~ "--xcache=true" || "${@}" =~ "--xcache true" || "${@}" =~ "--xcache" ]]; then
-  xcache_args="--xcache=true"
-else
-  xcache_args="--xcache=false"
-fi
-
-api_version=$(grep -m1 'api_version =' build/version.gni | sed -n 's/.*api_version = *"\([^"]*\)".*/\1/p')
 using_hb_new=true
-fetching_prebuilt_sdk_gn_args=false
-need_prebuilt_sdk=true
-generate_sbom=false
-force_prebuilt_sdk=false
-prebuilt_sdk_gn_args=()
 args_list=()
 
 for arg in "$@"; do
@@ -208,49 +191,12 @@ for arg in "$@"; do
             fi
             args_list+=("$arg")
             ;;
-        --prebuilts-sdk-gn-args)
-            fetching_prebuilt_sdk_gn_args=true
-            ;;
-        ohos-sdk|--no-prebuilt-sdk)
-            need_prebuilt_sdk=false
-            args_list+=("$arg")
-            ;;
-        --sbom|--sbom=*)
-            if [[ "$arg" == "--sbom" ]] || [[ "${arg#--sbom=}" != "false" ]]; then
-                generate_sbom=true
-                    args_list+=("--gn-flags=--ide=json")
-                    args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
-            fi
-            args_list+=("$arg")
-            ;;
-        --prebuilt-sdk)
-            force_prebuilt_sdk=true
-            ;;
         *)
-            echo "arg:$arg"
-            if [[ "$fetching_prebuilt_sdk_gn_args" == "true" ]]; then
-              prebuilt_sdk_gn_args+=("$arg")
-            else
-              args_list+=("$arg")
-            fi
+            args_list+=("$arg")
             ;;
     esac
     shift
 done
-
-echo "prebuilts_sdk_gn_args:${prebuilt_sdk_gn_args[@]}"
-echo "args_list:${args_list[@]}"
-if [[ ! -d "${SOURCE_ROOT_DIR}/prebuilts/ohos-sdk/linux/${api_version}" && "${need_prebuilt_sdk}" == "true" || "${force_prebuilt_sdk}" == "true" ]]; then
-  "${SOURCE_ROOT_DIR}/build/build_scripts/build_ohos_sdk.sh" \
-      "${SOURCE_ROOT_DIR}" \
-      "${PYTHON3_DIR}" \
-      "${HOST_OS}" \
-      "${ccache_args}" \
-      "${xcache_args}" \
-      "${api_version}" \
-      "${generate_sbom}" \
-      "${prebuilt_sdk_gn_args[@]}"
-fi
 
 if [[ "$using_hb_new" == "true" ]]; then
   python3 "${SOURCE_ROOT_DIR}/build/hb/main.py" build "${args_list[@]}"
