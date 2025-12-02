@@ -123,6 +123,12 @@ Use hb to start the compilation and construction task flow as follows:
             -f, --full-compilation
                                     Default:[]. Help:You can use it to start full code compilation. The default compilation target is images. Use this option to add 'make_all' and 'make_test' to the build
                                     process.
+            --no-prebuilt-sdk {True,False,true,false}
+                                    Default:False. Help:You can use it to skip the precompilation of ohos-sdk.
+            --prebuilt-sdk {True,False,true,false}
+                                    Default:True. Help:You can use it to precompile ohos-sdk.
+            --prebuilts-sdk-gn-args [GN_ARGS ...]
+                                    Default:[]. Help:You can use it to pass parameters for the precompilation of ohos-sdk phase, you could use this option like this 'hb build --prebuilts-sdk-gn-args is_debug=true'
             --strict-mode {True,False,true,false}
                                     Default:False. Help:Check all produce of each phase to early terminates a potentially problematic compilation.
             --scalable-build {True,False,true,false}
