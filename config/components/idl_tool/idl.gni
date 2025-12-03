@@ -60,6 +60,11 @@ template("idl_gen_interface") {
   idl_list = []
   idl_callback_list = []
   idl_common_list = []
+  idl_inner = false
+  
+  if (defined(invoker.idl_inner) && idl_inner){
+    idl_inner = true
+  }
 
   if (defined(invoker.sources)) {
     not_needed(invoker, [ "src_idl" ])
@@ -243,7 +248,7 @@ template("idl_gen_interface") {
     if (defined(invoker.inputs)) {
       inputs += invoker.inputs
     }
-    if (is_arkui_x) {
+    if (is_arkui_x || idl_inner) {
       deps = idl_build_deps
     } else {
       if (!defined(external_deps)) {
