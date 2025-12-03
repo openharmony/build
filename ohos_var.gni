@@ -33,6 +33,13 @@ declare_args() {
 }
 
 declare_args() {
+  # Whether to enable LSE Tuned, which is an optimization for ARMv8.1+
+  # platforms that enables the always beneficial instructions from the LSE
+  # instruction extension.
+  armv8_1_lse_tuning_optimization = false
+}
+
+declare_args() {
   sdk_build_public = false
   sdk_build_arkts = false
   sdk_build_check_level = 0
