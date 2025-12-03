@@ -397,7 +397,7 @@ def write_musl_bundle(musl_bundle_path):
         musl_bundle_content = json.load(file)
     musl_innerkits = musl_bundle_content["component"]["build"]["inner_kits"]
     musl_innerkits.extend(additional_innerkits)
-    with os.fdopen(os.open(musl_bundle_path, os.O_WRONLY | os.O_CREAT, mode=0o640),"w") as file:
+    with os.fdopen(os.open(musl_bundle_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, mode=0o644),"w", encoding='utf-8') as file:
         json.dump(musl_bundle_content, file, ensure_ascii=False, indent=2) 
 
 
