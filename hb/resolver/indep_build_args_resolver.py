@@ -147,7 +147,7 @@ class IndepBuildArgsResolver(ArgsResolverInterface):
                 raise OHOSException('ERROR argument "hb build <part_name>": no part_name . ')
         hpm_executor.regist_flag('path', arg_value)
         indep_build_executor.regist_flag('path', arg_value)
-        Arg.write_args_file("part", arg_value, ModuleType.INDEP_BUILD)
+        Arg.write_args_file("part", ",".join(target_arg.arg_value_list), ModuleType.INDEP_BUILD)
 
     @staticmethod
     def resolve_variant(target_arg: Arg, indep_build_module: IndepBuildModuleInterface):
