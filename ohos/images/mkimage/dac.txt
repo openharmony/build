@@ -65,3 +65,4 @@ system/lib/ld-musl-loongarch64.so.1,00755,      0,          2000,       0
 updater/lib/ld-musl-loongarch64.so.1,00755,      0,          2000,       0
 system/etc/communication/softbus/softbus_trans_permission.json,        00400,      1024,          1024,          0
 system/etc/communication/softbus/softbus_lnn_permission.json,          00400,      1024,          1024,          0
+system/etc/communication/softbus/softbus_rpc_sa_permission.json,       00400,      1024,          1024,          0
