@@ -24,6 +24,7 @@ static_linker_build_deps = ""
 static_linker_out_root = ""
 libes2panda_public_build_deps = ""
 ohos_ets_koala_wrapper_deps = ""
+ohos_ets_libarkts_deps = ""
 libes2panda_public_build_path = ""
 ohos_ets_libes2panda_public_path = ""
 bootpath_json_file = ""
@@ -40,6 +41,8 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_mac)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_mac)"
+  ohos_ets_libarkts_deps =
+      "ace_ets2bundle:ohos_ets_libarkts($toolchain_mac)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -56,6 +59,8 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_win)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_win)"
+  ohos_ets_libarkts_deps =
+      "ace_ets2bundle:ohos_ets_libarkts($toolchain_win)"
   libes2panda_public_build_path =
       static_linker_out_root +
       "/arkcompiler/ets_frontend/libes2panda_public.dll"
@@ -72,6 +77,8 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_linux)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_linux)"
+  ohos_ets_libarkts_deps =
+      "ace_ets2bundle:ohos_ets_libarkts($toolchain_linux)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -218,6 +225,7 @@ template("generate_static_abc") {
         ohos_ets_build_system_deps,
         ohos_ets_kits_deps,
         ohos_ets_koala_wrapper_deps,
+        ohos_ets_libarkts_deps,
         ohos_ets_ui_plugins_deps,
       ]
       args += [
