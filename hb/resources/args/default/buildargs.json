@@ -169,36 +169,6 @@
     "resolve_function": "resolve_full_compilation",
     "testFunction": "testFullCompilation"
   },
-  "no_prebuilt_sdk": {
-    "arg_name": "--no-prebuilt-sdk",
-    "argDefault": false,
-    "arg_help": "Default:False. Help:You can use it to skip the precompilation of ohos-sdk.",
-    "arg_phase": "prebuild",
-    "arg_type": "bool",
-    "arg_attribute": {},
-    "resolve_function": "resolve_no_prebuilt_sdk",
-    "testFunction": "testNoPrebuiltSdk"
-  },
-  "prebuilt_sdk": {
-    "arg_name": "--prebuilt-sdk",
-    "argDefault": true,
-    "arg_help": "Default:True. Help:You can use it to execute precompilation of ohos-sdk.",
-    "arg_phase": "prebuild",
-    "arg_type": "bool",
-    "arg_attribute": {},
-    "resolve_function": "resolve_prebuilt_sdk",
-    "testFunction": "testPrebuiltSdk"
-  },
-  "prebuilts_sdk_gn_args": {
-    "arg_name": "--prebuilts-sdk-gn-args",
-    "argDefault": [],
-    "arg_help": "Default:[]. Help:You can use it to pass parameters for the prebuilt-sdk phase, but you need to follow the specified command format. eg. --prebuilts-sdk-gn-args sdk_build_arkts=true ",
-    "arg_phase": "prebuild",
-    "arg_type": "list",
-    "arg_attribute": {},
-    "resolve_function": "resolve_prebuilts_sdk_gn_args",
-    "testFunction": "testPrebuiltsSdkGnArgs"
-  },
   "strict_mode": {
     "arg_name": "--strict-mode",
     "argDefault": false,
