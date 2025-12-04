@@ -29,6 +29,7 @@ template("_cj_target") {
                            "sources",
                            "part_name",
                            "subsystem_name",
+                           "data_deps",
                          ])
   if (!defined(invoker.output_type)) {
     assert(false && "output_type is required")
@@ -241,6 +242,9 @@ template("_cj_target") {
     }
     outputs = outputs_
     deps = deps_
+    if (defined(data_deps)) {
+      deps += data_deps
+    }
     external_deps = external_deps_
     deps += cj_deps
     external_deps += cj_external_deps
