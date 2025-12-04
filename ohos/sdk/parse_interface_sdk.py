@@ -178,7 +178,7 @@ def parse_step(options):
             sdk_check_version = int(options.sdk_check_level)
         except BaseException as e:
             raise ValueError("sdk_check_level数值有误，请传入正确数值")
-        if sdk_type == "ets" and sdk_check_version != 0:
+        if sdk_check_version != 0:
             # 仅在编译dynamic时校验API版本
             check_api_version_method(options.root_build_dir, out_path, options.sdk_api_version, options.node_js)
 
