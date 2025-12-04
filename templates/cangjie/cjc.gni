@@ -32,6 +32,7 @@ template("ohos_cangjie_library") {
                              "subsystem_name",
                              "sources",
                              "output_name",
+                             "data_deps",
                            ])
     if (!defined(cjc_args)) {
       cjc_args = []
@@ -55,6 +56,7 @@ template("ohos_cangjie_shared_library") {
                              "cjc_args",
                              "compilation_config",
                              "output_name",
+                             "data_deps",
                            ])
 
     if (!defined(cjc_args)) {
