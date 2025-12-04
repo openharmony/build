@@ -528,28 +528,6 @@ class BuildArgsResolver(ArgsResolverInterface):
 
     @staticmethod
     @throw_exception
-    def resolve_prebuilts_sdk_gn_args(target_arg: Arg, build_module: BuildModuleInterface):
-        """resolve '--prebuilts-sdk-gn-args' arg
-        :param target_arg: arg object which is used to get arg value.
-        :param build_module [unused]: build module object which is used to get other services.
-        :phase: prebuild.
-        """
-        normalized_args = []
-        for arg in target_arg.arg_value:
-            if not isinstance(arg, str):
-                continue
-            item = arg.strip().strip("'").strip('"')
-            if not item:
-                continue
-            if '=' not in item:
-                raise OHOSException(f"Invalid prebuilts-sdk-gn-args: '{arg}', expect key=value", "0001")
-            normalized_args.append(item)
-
-        target_arg.arg_value = normalized_args
-        return
-    
-    @staticmethod
-    @throw_exception
     def resolve_strict_mode(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--strict-mode' arg.
         :param target_arg: arg object which is used to get arg value.
@@ -1050,14 +1028,4 @@ class BuildArgsResolver(ArgsResolverInterface):
     # PlaceHolder
     @staticmethod
     def resolve_fast_rebuild(target_arg: Arg, build_module: BuildModuleInterface):
-        return
-
-    # PlaceHolder
-    @staticmethod
-    def resolve_no_prebuilt_sdk(target_arg: Arg, build_module: BuildModuleInterface):
-        return
-    
-    # PlaceHolder
-    @staticmethod
-    def resolve_prebuilt_sdk(target_arg: Arg, build_module: BuildModuleInterface):
         return
