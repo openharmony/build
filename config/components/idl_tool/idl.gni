@@ -62,7 +62,7 @@ template("idl_gen_interface") {
   idl_common_list = []
   idl_inner = false
   
-  if (defined(invoker.idl_inner) && idl_inner){
+  if (defined(invoker.idl_inner) && invoker.idl_inner == true){
     idl_inner = true
   }
 
