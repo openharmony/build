@@ -25,6 +25,7 @@ from utils import (
     is_enable_ccache,
     print_ccache_stats,
     clean_ccache_info,
+    get_ohos_indep_compiler_components,
 )
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -106,6 +107,10 @@ def _gn_cmd(root_path, variants, out_dir, test_filter):
     _args_list.extend(_features_info)
     if is_enable_ccache():
         _args_list.append(f"ohos_build_enable_ccache=true")
+    
+    ohos_indep_compiler_components = get_ohos_indep_compiler_components()
+    if ohos_indep_compiler_components:
+         _args_list.append(f'ohos_indep_compiler_components="{ohos_indep_compiler_components}"')
 
     # Add 'use_thin_lto=false' to _args_list if test_filter equals 2
     if test_filter in (1, 2):

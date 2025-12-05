@@ -145,3 +145,13 @@ def clean_ccache_info():
             print("Error: ccache command not found")
         except subprocess.CalledProcessError as e:
             print(f"Failed to execute ccache command: {e}")
+
+def get_ohos_indep_compiler_components():
+    """
+    :return: independent build components
+    """
+    ohos_indep_compiler_components = ""
+    data = get_indep_args()
+    if data["part"]["argDefault"]:
+        ohos_indep_compiler_components = data["part"]["argDefault"]
+    return ohos_indep_compiler_components
