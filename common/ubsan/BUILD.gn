@@ -58,7 +58,7 @@ if (is_ohos) {
     deps = [ ":ubsan_minimal_unstripped_copy" ]
     innerapi_tags = [
       "platformsdk",
-      "chipsetsdk",
+      "chipsetsdk_sp",
     ]
     subsystem_name = "build"
     part_name = "build_framework"
