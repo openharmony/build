@@ -57,6 +57,30 @@ class AsyncTraceHandler:
             cls._instance = cls(log_file_path)
         return cls._instance
 
+    def event_handler(self, data: Dict[str, Any]) -> None:
+        try:
+            try:
+                self.queue.put(data, block=False)
+            except queue.Full:
+                try:
+                    self.queue.put(data, block=True, timeout=0.1)
+                except queue.Full:
+                    dfx_info(f"Warning: Log queue is full, dropping log data: {data}")
+        except Exception as e:
+            dfx_info(f"Error: Failed to queue log data: {str(e)}")
+
+    def shutdown(self, wait: bool = True, timeout: Optional[float] = None) -> None:
+        self._stop_event.set()
+
+        if wait:
+            try:
+                self.queue.join()
+            except Exception:
+                pass
+
+        if self.worker_thread.is_alive():
+            self.worker_thread.join(timeout=timeout)
+    
     def _worker(self) -> None:
         try:
             with open(self.log_file_path, 'a', encoding='utf-8') as log_file:
@@ -81,30 +105,6 @@ class AsyncTraceHandler:
                         continue
         except Exception as e:
             dfx_info(f"Async log worker failed: {str(e)}")
-
-    def event_handler(self, data: Dict[str, Any]) -> None:
-        try:
-            try:
-                self.queue.put(data, block=False)
-            except queue.Full:
-                try:
-                    self.queue.put(data, block=True, timeout=0.1)
-                except queue.Full:
-                    dfx_info(f"Warning: Log queue is full, dropping log data: {data}")
-        except Exception as e:
-            dfx_info(f"Error: Failed to queue log data: {str(e)}")
-
-    def shutdown(self, wait: bool = True, timeout: Optional[float] = None) -> None:
-        self._stop_event.set()
-
-        if wait:
-            try:
-                self.queue.join()
-            except Exception:
-                pass
-
-        if self.worker_thread.is_alive():
-            self.worker_thread.join(timeout=timeout)
 
 
 # Exposed event_handler function

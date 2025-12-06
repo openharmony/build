@@ -23,6 +23,8 @@ import json
 import time
 from pathlib import Path
 from typing import Dict, Any, Optional
+from dfx.build_trace_log import BuildTraceLog
+from dfx import dfx_info, dfx_error
 
 CODE_ROOT = Path(__file__).parent.parent.parent
 # 将 os.path.join 替换为 pathlib 的 / 操作符
@@ -32,7 +34,6 @@ sys.path.insert(1, third_party_path)
 try:
 
     from jinja2 import Template, FileSystemLoader, Environment, exceptions
-
     JINJA2_AVAILABLE = True
 except ImportError:
     dfx_info("Warning: Jinja2 library not found. Template support will be disabled.")
@@ -40,10 +41,7 @@ except ImportError:
 
 while third_party_path in sys.path:
     sys.path.remove(third_party_path)
-import requests
 
-from dfx.build_trace_log import BuildTraceLog
-from dfx import dfx_info, dfx_error
 
 
 class TraceLogUploader:
@@ -62,7 +60,88 @@ class TraceLogUploader:
         self.extra_header_values = None
         self._load_config()
 
-    # 修改_load_config方法，支持从环境变量读取配置
+    def upload_trace_log_from_file(self, log_file_path: str) -> Dict[str, Any]:
+        try:
+            # 检查文件是否存在
+            # 将 os.path.exists 替换为 Path.exists()
+            if not Path(log_file_path).exists():
+                return {
+                    "success": False,
+                    "message": f"Log file not found: {log_file_path}",
+                }
+
+            # 创建BuildTraceLog对象并解析日志文件
+            trace_log = BuildTraceLog()
+            flag = trace_log.from_build_traces_log(log_file_path)
+            
+            if flag:
+                return self.upload_trace_log(trace_log)
+            else:
+                return {
+                    "success": False,
+                    "message": f"Failed to parse log file: {log_file_path}",
+                }
+
+        except Exception as e:
+            error_msg = f"Failed to process log file: {str(e)}"
+            dfx_error(error_msg)
+            return {"success": False, "message": error_msg}
+
+    def upload_trace_log(self, trace_log: BuildTraceLog) -> Dict[str, Any]:
+        # 检查上传API是否配置
+        if not self.upload_api_url:
+            return {
+                "success": False,
+                "message": "Upload API URL is not configured in dfx_config.json or environment variable DFX_TRACE_LOG_UPLOAD_API",
+            }
+
+        try:
+            # 准备额外请求头
+            self._prepare_extra_headers()
+            # 准备请求体
+            request_body = self._prepare_request_body(trace_log)
+            dfx_info(f"Preparing to upload trace log data to {self.upload_api_url}")
+            dfx_info(f"Request body: {request_body}")
+            # 记录是否使用了模板
+            if self.request_template:
+                dfx_info(f"Using template {self.template_file} for request body")
+            else:
+                dfx_info("Using default request body structure")
+
+            import requests
+            # 发送POST请求
+            response = requests.post(
+                self.upload_api_url,
+                headers=self.headers,
+                json=request_body,
+                timeout=self.timeout,
+            )
+
+
+            # 解析响应结果
+            result = response.json()
+            if result.get("code") == 200:
+                return {
+                    "success": True,
+                    "message": "Trace log uploaded successfully",
+                    "response": result,
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"Upload failed: {result.get('data', 'Unknown error')}",
+                    "response": result,
+                }
+
+        except requests.exceptions.RequestException as e:
+            error_msg = f"Request failed: {str(e)}"
+            dfx_error(error_msg)
+            return {"success": False, "message": error_msg}
+        except Exception as e:
+            error_msg = f"Upload failed: {str(e)}"
+            dfx_error(error_msg)
+            return {"success": False, "message": error_msg}
+
     def _load_config(self):
         """加载配置文件，如果配置文件中没有配置，则从环境变量中读取"""
         config_file_loaded = False
@@ -219,87 +298,6 @@ class TraceLogUploader:
         }
 
         return request_body
-
-    def upload_trace_log(self, trace_log: BuildTraceLog) -> Dict[str, Any]:
-        # 检查上传API是否配置
-        if not self.upload_api_url:
-            return {
-                "success": False,
-                "message": "Upload API URL is not configured in dfx_config.json or environment variable DFX_TRACE_LOG_UPLOAD_API",
-            }
-
-        try:
-            # 准备额外请求头
-            self._prepare_extra_headers()
-            # 准备请求体
-            request_body = self._prepare_request_body(trace_log)
-            dfx_info(f"Preparing to upload trace log data to {self.upload_api_url}")
-            dfx_info(f"Request body: {request_body}")
-            # 记录是否使用了模板
-            if self.request_template:
-                dfx_info(f"Using template {self.template_file} for request body")
-            else:
-                dfx_info("Using default request body structure")
-
-            # 发送POST请求
-            response = requests.post(
-                self.upload_api_url,
-                headers=self.headers,
-                json=request_body,
-                timeout=self.timeout,
-            )
-
-
-            # 解析响应结果
-            result = response.json()
-            if result.get("code") == 200:
-                return {
-                    "success": True,
-                    "message": "Trace log uploaded successfully",
-                    "response": result,
-                }
-            else:
-                return {
-                    "success": False,
-                    "message": f"Upload failed: {result.get('data', 'Unknown error')}",
-                    "response": result,
-                }
-
-        except requests.exceptions.RequestException as e:
-            error_msg = f"Request failed: {str(e)}"
-            dfx_error(error_msg)
-            return {"success": False, "message": error_msg}
-        except Exception as e:
-            error_msg = f"Upload failed: {str(e)}"
-            dfx_error(error_msg)
-            return {"success": False, "message": error_msg}
-
-    def upload_trace_log_from_file(self, log_file_path: str) -> Dict[str, Any]:
-        try:
-            # 检查文件是否存在
-            # 将 os.path.exists 替换为 Path.exists()
-            if not Path(log_file_path).exists():
-                return {
-                    "success": False,
-                    "message": f"Log file not found: {log_file_path}",
-                }
-
-            # 创建BuildTraceLog对象并解析日志文件
-            trace_log = BuildTraceLog()
-            flag = trace_log.from_build_traces_log(log_file_path)
-            
-            if flag:
-                return self.upload_trace_log(trace_log)
-            else:
-                return {
-                    "success": False,
-                    "message": f"Failed to parse log file: {log_file_path}",
-                }
-
-        except Exception as e:
-            error_msg = f"Failed to process log file: {str(e)}"
-            dfx_error(error_msg)
-            return {"success": False, "message": error_msg}
 
 
 def upload_build_trace_log(
