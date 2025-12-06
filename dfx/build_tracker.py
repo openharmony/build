@@ -87,58 +87,7 @@ class BuildTracker:
                 self._monitor_thread.start()
             else:
                 self._monitor_thread = None
-
-    @classmethod
-    def get_instance(cls, build_type=""):
-        if cls._instance is None:
-            cls._instance = cls(build_type)
-        return cls._instance
-
-    def generate_trace_id(self):
-        timestamp_part = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
-        random_part = str(random.randint(100, 999))
-        return f"{timestamp_part}{random_part}"
-
-    def monitor_current_process(self, trace_id="", trace_log_file=None, interval=2):
-        import psutil
-
-        pid = os.getpid()
-        process = psutil.Process(pid)
-        try:
-            while True:
-                cpu_usage = psutil.cpu_percent(interval=10, percpu=False)
-                memory_info = process.memory_info()
-                memory_percent = psutil.virtual_memory().percent
-                memory_usage = memory_info.rss / (1024 * 1024)
-                tracking_data = {
-                    "trace_id": trace_id,
-                    "event_name": "monitor_current_process",
-                    "cpu_usage": cpu_usage,
-                    "memory_mb": memory_usage,
-                    "memory_percent": memory_percent,
-                    "start_time": time.time(),
-                }
-                BuildTracker._record_tracking_event(tracking_data=tracking_data, trace_log_file=trace_log_file)
-                time.sleep(interval)
-        except Exception as e:
-            raise Exception(f"Current process monitor thread error: {str(e)}")
-
-    @classmethod
-    def get_instance(cls, build_type=""):
-        if cls._instance is None:
-            cls._instance = cls(build_type)
-        return cls._instance
-
-    @staticmethod
-    def _record_tracking_event(
-        tracking_data: Dict,
-        trace_log_file=None
-    ):
-        try:
-            event_handler(tracking_data, trace_log_file)
-        except Exception as e:
-            dfx_error(f"Error recording tracking event: {str(e)}")
-
+  
     @staticmethod
     def args_info_parse(args, args_key=None):
         args_list = []
@@ -222,6 +171,51 @@ class BuildTracker:
             return wrapper
 
         return decorator
+
+    @staticmethod
+    def _record_tracking_event(
+        tracking_data: Dict,
+        trace_log_file=None
+    ):
+        try:
+            event_handler(tracking_data, trace_log_file)
+        except Exception as e:
+            dfx_error(f"Error recording tracking event: {str(e)}")
+
+    @classmethod
+    def get_instance(cls, build_type=""):
+        if cls._instance is None:
+            cls._instance = cls(build_type)
+        return cls._instance
+
+    def generate_trace_id(self):
+        timestamp_part = datetime.now().strftime("%Y%m%d%H%M%S%f")[:-3]
+        random_part = str(random.randint(100, 999))
+        return f"{timestamp_part}{random_part}"
+
+    def monitor_current_process(self, trace_id="", trace_log_file=None, interval=2):
+        import psutil
+
+        pid = os.getpid()
+        process = psutil.Process(pid)
+        try:
+            while True:
+                cpu_usage = psutil.cpu_percent(interval=10, percpu=False)
+                memory_info = process.memory_info()
+                memory_percent = psutil.virtual_memory().percent
+                memory_usage = memory_info.rss / (1024 * 1024)
+                tracking_data = {
+                    "trace_id": trace_id,
+                    "event_name": "monitor_current_process",
+                    "cpu_usage": cpu_usage,
+                    "memory_mb": memory_usage,
+                    "memory_percent": memory_percent,
+                    "start_time": time.time(),
+                }
+                BuildTracker._record_tracking_event(tracking_data=tracking_data, trace_log_file=trace_log_file)
+                time.sleep(interval)
+        except Exception as e:
+            raise Exception(f"Current process monitor thread error: {str(e)}")
 
 
 def build_tracker(
