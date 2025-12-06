@@ -30,6 +30,7 @@ from dfx import dfx_info, dfx_error
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+
 class BuildTraceLog:
     def __init__(self):
         # 用户相关信息
@@ -67,6 +68,21 @@ class BuildTraceLog:
         self.initialize_host_info()
         self.initialize_git_info()
 
+    def __str__(self):
+        result = []
+        result.append("TraceLog Info:")
+        result.append(f"User Info: user_id={self.user_id}, git_user_email={self.git_user_email}, code_repo={self.code_repo}")
+        result.append(f"Host Info: cpu={self.host_cpu_info}, mem={self.host_mem_info}, ip={self.host_ip}")
+        result.append(f"Build Time: start={self.build_start_time}, end={self.build_end_time}, cost={self.build_time_cost}")
+        result.append(
+            f"Build Config: type={self.build_type}, args={self.build_args}, product={self.build_product_type}"
+        )
+        result.append(f"Resource Usage: CPU={self.build_cpu_usage}%, Memory={self.build_mem_usage}MB")
+        result.append(f"Build Result: {self.build_result}")
+        if self.build_error_log:
+            result.append(f"Error Log: {self.build_error_log}")
+        return "\n".join(result)
+
     def to_dict(self):
         """将TraceLog对象转换为字典格式"""
         return {
@@ -97,115 +113,6 @@ class BuildTraceLog:
         for key, value in data_dict.items():
             if hasattr(self, key):
                 setattr(self, key, value)
-        return self
-
-    def __str__(self):
-        result = []
-        result.append("TraceLog Info:")
-        result.append(f"User Info: user_id={self.user_id}, git_user_email={self.git_user_email}, code_repo={self.code_repo}")
-        result.append(f"Host Info: cpu={self.host_cpu_info}, mem={self.host_mem_info}, ip={self.host_ip}")
-        result.append(f"Build Time: start={self.build_start_time}, end={self.build_end_time}, cost={self.build_time_cost}")
-        result.append(
-            f"Build Config: type={self.build_type}, args={self.build_args}, product={self.build_product_type}"
-        )
-        result.append(f"Resource Usage: CPU={self.build_cpu_usage}%, Memory={self.build_mem_usage}MB")
-        result.append(f"Build Result: {self.build_result}")
-        if self.build_error_log:
-            result.append(f"Error Log: {self.build_error_log}")
-        return "\n".join(result)
-
-    def _get_user_info_from_git(self):
-        # 获取git用户名 (user.name) 作为user_id
-        user_name = subprocess.check_output(['git', 'config', 'user.name'], 
-                                         stderr=subprocess.STDOUT, 
-                                         universal_newlines=True).strip()
-        self.user_id = user_name
-
-        # 获取git用户邮箱
-        email = subprocess.check_output(['git', 'config', 'user.email'], 
-                                      stderr=subprocess.STDOUT, 
-                                      universal_newlines=True).strip()
-        self.git_user_email = email
-
-        return self
-
-    def _get_code_repo(self):
-        # 使用repo info | grep "Manifest branch"命令获取仓库信息
-        # 使用shell=True来支持管道命令
-        result = subprocess.check_output('repo info -o | grep "Manifest branch"', 
-                                       shell=True, 
-                                       stderr=subprocess.STDOUT, 
-                                       universal_newlines=True).strip()
-
-        # 提取Manifest branch信息
-        if result:
-            # 例如：Manifest branch: refs/heads/master
-            self.code_repo = result
-        else:
-            raise Exception("Failed to get Manifest branch information: empty result")
-        return self
-
-    def _get_cpu_info(self):
-        # 获取CPU型号
-        cpu_model = subprocess.check_output("cat /proc/cpuinfo | grep 'model name' | head -n 1 | cut -d: -f2 | tr -s ' '",
-                                          shell=True,
-                                          stderr=subprocess.STDOUT,
-                                          universal_newlines=True).strip()
-
-        # 获取CPU核心数
-        cpu_cores = subprocess.check_output("nproc",
-                                          shell=True,
-                                          stderr=subprocess.STDOUT,
-                                          universal_newlines=True).strip()
-
-        self.host_cpu_info = f"CPU Model: {cpu_model}, Cores: {cpu_cores}"
-        return self
-
-    def _get_memory_info(self):
-        # 使用free命令获取内存信息
-        free_output = subprocess.check_output("free -h",
-                                            shell=True,
-                                            stderr=subprocess.STDOUT,
-                                            universal_newlines=True)
-
-        # 解析总内存信息
-        for line in free_output.split('\n'):
-            if line.startswith('Mem:'):
-                # 例如: Mem:          15Gi       1.2Gi       9.4Gi        50Mi       4.4Gi        13Gi
-                parts = line.split()
-                if len(parts) > 1:
-                    self.host_mem_info = f"Total Memory: {parts[1]}"
-                    break
-
-        if not self.host_mem_info:
-            raise Exception("Failed to get memory information")
-
-        return self
-
-    def _get_host_ip(self):
-        try:
-            # 使用hostname -I命令直接获取所有IPv4地址
-            result = subprocess.check_output("hostname -I",
-                                           shell=True,
-                                           stderr=subprocess.STDOUT,
-                                           universal_newlines=True).strip()
-
-            # 提取第一个非回环地址的IP
-            ip_addresses = result.split()
-            if ip_addresses:
-                # 优先选择第一个不是127.0.0.1的IP
-                for ip in ip_addresses:
-                    if not ip.startswith('127.'):
-                        self.host_ip = ip
-                        break
-                # 如果没有找到非回环地址，使用第一个IP
-                if not self.host_ip and ip_addresses:
-                    self.host_ip = ip_addresses[0]
-            else:
-                raise Exception("Failed to get host IP address: empty result")
-        except Exception as e:
-            raise Exception(f"Failed to get host IP address: {str(e)}")
-
         return self
 
     def initialize_host_info(self):
@@ -310,6 +217,74 @@ class BuildTraceLog:
 
         return True
 
+    def _get_user_info_from_git(self):
+        # 获取git用户名 (user.name) 作为user_id
+        user_name = subprocess.check_output(['git', 'config', 'user.name'], 
+                                         stderr=subprocess.STDOUT, 
+                                         universal_newlines=True).strip()
+        self.user_id = user_name
+
+        # 获取git用户邮箱
+        email = subprocess.check_output(['git', 'config', 'user.email'], 
+                                      stderr=subprocess.STDOUT, 
+                                      universal_newlines=True).strip()
+        self.git_user_email = email
+
+        return self
+
+    def _get_code_repo(self):
+        # 使用repo info | grep "Manifest branch"命令获取仓库信息
+        # 使用shell=True来支持管道命令
+        result = subprocess.check_output('repo info -o | grep "Manifest branch"', 
+                                       shell=True, 
+                                       stderr=subprocess.STDOUT, 
+                                       universal_newlines=True).strip()
+
+        # 提取Manifest branch信息
+        if result:
+            # 例如：Manifest branch: refs/heads/master
+            self.code_repo = result
+        else:
+            raise Exception("Failed to get Manifest branch information: empty result")
+        return self
+
+    def _get_cpu_info(self):
+        # 获取CPU型号
+        cpu_model = subprocess.check_output("cat /proc/cpuinfo | grep 'model name' | head -n 1 | cut -d: -f2 | tr -s ' '",
+                                          shell=True,
+                                          stderr=subprocess.STDOUT,
+                                          universal_newlines=True).strip()
+
+        # 获取CPU核心数
+        cpu_cores = subprocess.check_output("nproc",
+                                          shell=True,
+                                          stderr=subprocess.STDOUT,
+                                          universal_newlines=True).strip()
+
+        self.host_cpu_info = f"CPU Model: {cpu_model}, Cores: {cpu_cores}"
+        return self
+
+    def _get_memory_info(self):
+        # 使用free命令获取内存信息
+        free_output = subprocess.check_output("free -h",
+                                            shell=True,
+                                            stderr=subprocess.STDOUT,
+                                            universal_newlines=True)
+
+        # 解析总内存信息
+        for line in free_output.split('\n'):
+            if line.startswith('Mem:'):
+                # 例如: Mem:          15Gi       1.2Gi       9.4Gi        50Mi       4.4Gi        13Gi
+                parts = line.split()
+                if len(parts) > 1:
+                    self.host_mem_info = f"Total Memory: {parts[1]}"
+                    break
+
+        if not self.host_mem_info:
+            raise Exception("Failed to get memory information")
+
+        return self
+
     def _parse_build_target(self) -> str:
         pattern = r'--build-target\s+([^"\'\s]+)'
         match = re.search(pattern, self.build_command)
@@ -412,6 +387,32 @@ class BuildTraceLog:
             dfx_info(f"Parsing build_traces log file {log_file_path} failed: {str(e)}")
 
         return build_success, result
+
+    def _get_host_ip(self):
+        try:
+            # 使用hostname -I命令直接获取所有IPv4地址
+            result = subprocess.check_output("hostname -I",
+                                           shell=True,
+                                           stderr=subprocess.STDOUT,
+                                           universal_newlines=True).strip()
+
+            # 提取第一个非回环地址的IP
+            ip_addresses = result.split()
+            if ip_addresses:
+                # 优先选择第一个不是127.0.0.1的IP
+                for ip in ip_addresses:
+                    if not ip.startswith('127.'):
+                        self.host_ip = ip
+                        break
+                # 如果没有找到非回环地址，使用第一个IP
+                if not self.host_ip and ip_addresses:
+                    self.host_ip = ip_addresses[0]
+            else:
+                raise Exception("Failed to get host IP address: empty result")
+        except Exception as e:
+            raise Exception(f"Failed to get host IP address: {str(e)}")
+
+        return self
 
 
 def get_name_path_dict(manifest_path: str) -> Optional[Dict[str, str]]:
@@ -543,7 +544,6 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
         elif output_format == 'json':
             trace_log.from_build_traces_log(latest_log_file)
             result_dict = trace_log.to_dict()
-            import datetime
             timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
             default_output_dir = Path(__file__).parent.parent.parent / "out" / "dfx"
             output_dir = (
@@ -552,8 +552,6 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
                 or default_output_dir
             )
             json_file_path = output_dir / f"build_trace_result_{timestamp}.json"
-
-            import json
             with open(json_file_path, 'w', encoding='utf-8') as f:
                 json.dump(result_dict, f, ensure_ascii=False, indent=2, default=str)
 
@@ -576,7 +574,8 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
             except:
                 pass
 
-        # 检查是否配置了上传API
+
+# 检查是否配置了上传API
 def is_upload_configured():
     # 检查环境变量
     api_url = os.environ.get('DFX_TRACE_LOG_UPLOAD_API')
