@@ -16,56 +16,42 @@
 # limitations under the License.
 #
 
-import json
-from pathlib import Path
+from .dfx_config_manager import get_config_manager, reload_config as reload_dfx_config
 
-# 全局调试开关状态
-_DEBUG_ENABLED = False
-
-# 加载配置文件路径
-_CONFIG_PATH = Path(__file__).parent / 'dfx_config.json'
+# Get initial debug state from config manager
+_DEBUG_ENABLED = get_config_manager().build_dfx_debug_enable
 
 
 def _load_debug_config():
-    """加载调试配置"""
+    """Load debug configuration"""
     global _DEBUG_ENABLED
-    try:
-        if _CONFIG_PATH.exists():
-            with open(_CONFIG_PATH, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-                _DEBUG_ENABLED = config.get('build_dfx_debug_enable', 'false').lower() == 'true'
-    except Exception:
-        # 如果配置加载失败，默认关闭调试
-        _DEBUG_ENABLED = False
-
-
-# 初始化时加载配置
-_load_debug_config()
+    _DEBUG_ENABLED = get_config_manager().build_dfx_debug_enable
 
 
 def dfx_info(*args, **kwargs):
-    """根据配置决定是否输出打印信息"""
+    """Print information based on configuration settings"""
     if _DEBUG_ENABLED:
         print('[DFX INFO]', *args, **kwargs)
 
 
 def dfx_error(*args, **kwargs):
-    """根据配置决定是否输出打印信息"""
+    """Print error information based on configuration settings"""
     if _DEBUG_ENABLED:
         print("[DFX ERROR]", *args, **kwargs)
 
 
 def dfx_debug(*args, **kwargs):
-    """仅在调试模式下输出，带[DEBUG]前缀"""
+    """Print debug information only in debug mode with [DEBUG] prefix"""
     if _DEBUG_ENABLED:
         print('[DFX DEBUG]', *args, **kwargs)
 
 
 def is_debug_enabled():
-    """检查调试模式是否启用"""
+    """Check if debug mode is enabled"""
     return _DEBUG_ENABLED
 
 
 def reload_config():
-    """重新加载配置"""
+    """Reload configuration"""
+    reload_dfx_config()
     _load_debug_config()

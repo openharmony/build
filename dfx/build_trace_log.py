@@ -33,38 +33,38 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class BuildTraceLog:
     def __init__(self):
-        # 用户相关信息
-        self.user_id = None                  # 用户ID
-        self.git_user_email = None           # Git用户邮箱
-        self.code_repo = None                # 代码仓库
-        self.user_source = None              # 用户来源
+        # User related information
+        self.user_id = None                  # User ID
+        self.git_user_email = None           # Git user email
+        self.code_repo = None                # Code repository
+        self.user_source = None              # User source
 
-        # 主机信息
-        self.host_cpu_info = None            # 主机CPU信息
-        self.host_mem_info = None            # 主机内存信息
-        self.host_ip = None                  # 主机IP地址
+        # Host information
+        self.host_cpu_info = None            # Host CPU information
+        self.host_mem_info = None            # Host memory information
+        self.host_ip = None                  # Host IP address
 
-        # 构建时间信息
-        self.build_start_time = None         # 构建开始时间
-        self.build_end_time = None           # 构建结束时间
-        self.build_trace_id = None           # 构建跟踪ID
+        # Build time information
+        self.build_start_time = None         # Build start time
+        self.build_end_time = None           # Build end time
+        self.build_trace_id = None           # Build trace ID
 
-        # 构建配置信息
-        self.build_type = None               # 构建类型
-        self.build_args = None            # 构建参数
-        self.build_target = None           # 构建目标
-        self.build_command = None          # 构建命令
-        self.build_product_type = None       # 构建产品类型
+        # Build configuration information
+        self.build_type = None               # Build type
+        self.build_args = None            # Build arguments
+        self.build_target = None           # Build target
+        self.build_command = None          # Build command
+        self.build_product_type = None       # Build product type
 
-        # 构建资源使用情况
-        self.build_cpu_usage = None          # 构建CPU使用率平均值
-        self.build_mem_usage = None          # 构建内存使用率平均值(MB)
-        self.build_time_cost = None          # 构建耗时
-        self.build_time_cost_detail = None   # 构建耗时详情
+        # Build resource usage
+        self.build_cpu_usage = None          # Average CPU usage during build
+        self.build_mem_usage = None          # Average memory usage during build (MB)
+        self.build_time_cost = None          # Build time cost
+        self.build_time_cost_detail = None   # Detailed build time cost
 
-        # 构建结果信息
-        self.build_result = None             # 构建结果
-        self.build_error_log = None          # 构建错误日志
+        # Build result information
+        self.build_result = None             # Build result
+        self.build_error_log = None          # Build error log
         self.initialize_host_info()
         self.initialize_git_info()
 
@@ -84,7 +84,7 @@ class BuildTraceLog:
         return "\n".join(result)
 
     def to_dict(self):
-        """将TraceLog对象转换为字典格式"""
+        """Convert TraceLog object to dictionary format"""
         return {
             "user_id": self.user_id,
             "git_user_email": self.git_user_email,
@@ -128,7 +128,7 @@ class BuildTraceLog:
 
     def from_build_traces_log(self, log_file_path: str) -> bool:
         try:
-            # 解析日志文件
+            # Parse log file
             build_success_flag, parsed_data = self._parse_build_traces(log_file_path)
 
             if not build_success_flag:
@@ -139,11 +139,11 @@ class BuildTraceLog:
                     os.remove(log_file_path)
                 return False
 
-            # 填充基本信息
+            # Fill basic information
             if parsed_data['trace_id']:
                 self.build_trace_id = parsed_data['trace_id']
 
-            # 提取构建开始和结束时间
+            # Extract build start and end times
             events = parsed_data['events']
             if events:
                 for event in events:
@@ -157,23 +157,23 @@ class BuildTraceLog:
                         ).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
                         break
 
-            # 提取构建资源使用情况 - 只保留平均值
+            # Extract build resource usage - keep average values only
             self.build_cpu_usage = parsed_data['cpu_avg']
             self.build_mem_usage = parsed_data['mem_avg_mb']
 
-            # 提取各函数执行时间详情
+            # Extract detailed execution times for each function
             self.build_time_cost_detail = parsed_data['execution_times']
 
-            # 判断构建结果（假设如果有error类型的事件，则构建失败）
+            # Determine build result (assume build failed if there are error events)
             has_error = any(event.get("status") == "failed" for event in events)
             self.build_result = 'success' if not has_error else 'failed'
 
-            # 如果有错误事件，提取错误信息
+            # Extract error information if there are error events
             if has_error:
                 error_events = [event for event in events if event.get("status") == "failed"]
                 self.build_error_log = json.dumps(error_events, ensure_ascii=False, default=str)
 
-            # 从args_info中提取构建配置信息
+            # Extract build configuration information from args_info
             for event in events:
                 if "raw_args" in event and event["raw_args"] and not self.build_command:
                     raw_args = event.get("raw_args", [])
@@ -185,14 +185,14 @@ class BuildTraceLog:
 
                 if 'args_info' in event and event['args_info']:
                     try:
-                        # 尝试解析args_info
+                        # Try to parse args_info
                         self.build_args = (
                             json.loads(event["args_info"])
                             if isinstance(event["args_info"], str)
                             else event["args_info"]
                         )
 
-                        # 提取构建产品类型
+                        # Extract build product type
                         if "product_name" in self.build_args[0] and not self.build_product_type:
                             self.build_product_type = self.build_args[0][
                                 "product_name"
@@ -204,13 +204,13 @@ class BuildTraceLog:
                 if "build_type" in event and not self.build_type:
                     self.build_type = event["build_type"]
                 
-                # 如果已经提取了所需信息，可以提前退出
+                # Exit early if required information has been extracted
                 if self.build_type and self.build_product_type and self.build_command and self.build_target:
                     break
 
         except Exception as e:
             dfx_info(f"Failed to parse build_traces log file {log_file_path}: {str(e)}")
-            # 设置错误日志
+            # Set error log
             self.build_error_log = str(e)
             self.build_result = 'failed'
             return False
@@ -218,13 +218,13 @@ class BuildTraceLog:
         return True
 
     def _get_user_info_from_git(self):
-        # 获取git用户名 (user.name) 作为user_id
+        # Get git username (user.name) as user_id
         user_name = subprocess.check_output(['git', 'config', 'user.name'], 
                                          stderr=subprocess.STDOUT, 
                                          universal_newlines=True).strip()
         self.user_id = user_name
 
-        # 获取git用户邮箱
+        # Get git user email
         email = subprocess.check_output(['git', 'config', 'user.email'], 
                                       stderr=subprocess.STDOUT, 
                                       universal_newlines=True).strip()
@@ -233,29 +233,29 @@ class BuildTraceLog:
         return self
 
     def _get_code_repo(self):
-        # 使用repo info | grep "Manifest branch"命令获取仓库信息
-        # 使用shell=True来支持管道命令
+        # Get repository information using repo info | grep "Manifest branch" command
+        # Use shell=True to support pipe commands
         result = subprocess.check_output('repo info -o | grep "Manifest branch"', 
                                        shell=True, 
                                        stderr=subprocess.STDOUT, 
                                        universal_newlines=True).strip()
 
-        # 提取Manifest branch信息
+        # Extract Manifest branch information
         if result:
-            # 例如：Manifest branch: refs/heads/master
+            # Example: Manifest branch: refs/heads/master
             self.code_repo = result
         else:
             raise Exception("Failed to get Manifest branch information: empty result")
         return self
 
     def _get_cpu_info(self):
-        # 获取CPU型号
+        # Get CPU model
         cpu_model = subprocess.check_output("cat /proc/cpuinfo | grep 'model name' | head -n 1 | cut -d: -f2 | tr -s ' '",
                                           shell=True,
                                           stderr=subprocess.STDOUT,
                                           universal_newlines=True).strip()
 
-        # 获取CPU核心数
+        # Get CPU core count
         cpu_cores = subprocess.check_output("nproc",
                                           shell=True,
                                           stderr=subprocess.STDOUT,
@@ -265,16 +265,16 @@ class BuildTraceLog:
         return self
 
     def _get_memory_info(self):
-        # 使用free命令获取内存信息
+        # Get memory information using free command
         free_output = subprocess.check_output("free -h",
                                             shell=True,
                                             stderr=subprocess.STDOUT,
                                             universal_newlines=True)
 
-        # 解析总内存信息
+        # Parse total memory information
         for line in free_output.split('\n'):
             if line.startswith('Mem:'):
-                # 例如: Mem:          15Gi       1.2Gi       9.4Gi        50Mi       4.4Gi        13Gi
+                # Example: Mem:          15Gi       1.2Gi       9.4Gi        50Mi       4.4Gi        13Gi
                 parts = line.split()
                 if len(parts) > 1:
                     self.host_mem_info = f"Total Memory: {parts[1]}"
@@ -304,7 +304,7 @@ class BuildTraceLog:
         match_result, all_matched_names = approx_match_target_to_names(
             target_list=target_list,
             name_path_dict=name_path_dict,
-            min_match_frags=2,  # 可调整为1（更宽松）或3（更严格）
+            min_match_frags=2,  # Can be adjusted to 1 (more lenient) or 3 (stricter)
         )
         dfx_info(f"target_list: {target_list}")
         dfx_info(f"match_result: {match_result}")
@@ -322,11 +322,11 @@ class BuildTraceLog:
             'trace_id': None,
             'events': [],
             'execution_times': {},
-            'cpu_avg': 0.0,  # CPU使用率平均值
-            'mem_avg_mb': 0.0  # 内存使用量平均值(MB)
+            'cpu_avg': 0.0,  # CPU usage average
+            'mem_avg_mb': 0.0  # Memory usage average (MB)
         }
 
-        # 用于计算平均值的临时变量
+        # Temporary variables for calculating averages
         cpu_values = []
         mem_values_mb = []
         mem_values_percent = []
@@ -390,21 +390,21 @@ class BuildTraceLog:
 
     def _get_host_ip(self):
         try:
-            # 使用hostname -I命令直接获取所有IPv4地址
+            # Use hostname -I command to directly get all IPv4 addresses
             result = subprocess.check_output("hostname -I",
                                            shell=True,
                                            stderr=subprocess.STDOUT,
                                            universal_newlines=True).strip()
 
-            # 提取第一个非回环地址的IP
+            # Extract first non-loopback IP address
             ip_addresses = result.split()
             if ip_addresses:
-                # 优先选择第一个不是127.0.0.1的IP
+                # Prefer first IP that is not 127.0.0.1
                 for ip in ip_addresses:
                     if not ip.startswith('127.'):
                         self.host_ip = ip
                         break
-                # 如果没有找到非回环地址，使用第一个IP
+                # If no non-loopback address found, use first IP
                 if not self.host_ip and ip_addresses:
                     self.host_ip = ip_addresses[0]
             else:
@@ -416,7 +416,7 @@ class BuildTraceLog:
 
 
 def get_name_path_dict(manifest_path: str) -> Optional[Dict[str, str]]:
-    """读取 manifest.xml，返回 {name: path} 字典（复用稳定逻辑）"""
+    """Read manifest.xml and return {name: path} dictionary (reuse stable logic)"""
     try:
         tree = ET.parse(manifest_path)
         root = tree.getroot()
@@ -428,37 +428,37 @@ def get_name_path_dict(manifest_path: str) -> Optional[Dict[str, str]]:
                 name_path_dict[project_name] = project_path
             else:
                 missing_attr = "name" if not project_name else "path"
-                dfx_info(f"警告：跳过缺失 {missing_attr} 的 project")
+                dfx_info(f"Warning: Skipping project missing {missing_attr}")
         return name_path_dict
     except Exception as e:
-        dfx_info(f"读取 manifest 失败：{e}")
+        dfx_info(f"Failed to read manifest: {e}")
         return None
 
 
 def _split_path_to_fragments(path: str) -> List[str]:
-    """拆解路径为纯净的路径片段（过滤空值、.、..、文件后缀）"""
-    # 分割路径（兼容 / 开头或结尾的情况）
+    """Split path into clean path fragments (filter empty values, ., .., file extensions)"""
+    # Split path (compatible with / at beginning or end)
     fragments = [f.strip() for f in path.split("/") if f.strip()]
-    # 过滤无效片段（.、..）
+    # Filter invalid fragments (., ..)
     valid_fragments = []
     for frag in fragments:
         if frag in (".", "..", ""):
             continue
-        valid_fragments.append(frag)  # 统一小写，忽略大小写
+        valid_fragments.append(frag)  # Convert to lowercase, ignore case
     return valid_fragments
 
 
 def _calc_path_similarity(target_frags: List[str], path_frags: List[str]) -> int:
-    """计算路径片段的重合度（返回公共连续片段数，核心近似匹配逻辑）"""
+    """Calculate path fragment overlap (returns common consecutive fragment count, core approximate matching logic)"""
     max_match = 0
-    # 遍历 target 片段，找与 path 片段的最长连续重合
-    for i in range(len(target_frags)):
+    # Iterate through target fragments to find longest consecutive overlap with path fragments
+    for i, target_frag in enumerate(target_frags):
         match_count = 0
-        for j in range(len(path_frags)):
-            # 从 target[i] 和 path[j] 开始比对连续片段
-            if target_frags[i] == path_frags[j]:
+        for j, path_frag in enumerate(path_frags):
+            # Start comparing consecutive fragments from target[i] and path[j]
+            if target_frag == path_frag:
                 match_count = 1
-                # 继续比对后续连续片段
+                # Continue comparing subsequent consecutive fragments
                 k = 1
                 while (i + k < len(target_frags)) and (j + k < len(path_frags)):
                     if target_frags[i + k] == path_frags[j + k]:
@@ -466,7 +466,7 @@ def _calc_path_similarity(target_frags: List[str], path_frags: List[str]) -> int
                         k += 1
                     else:
                         break
-                # 更新最大连续重合数
+                # Update maximum consecutive overlap count
                 if match_count > max_match:
                     max_match = match_count
     return max_match
@@ -482,30 +482,30 @@ def approx_match_target_to_names(
     all_matched_names: Set[str] = set()
 
     if not target_list:
-        dfx_info("警告：target 数组为空")
+        dfx_info("Warning: target array is empty")
         return match_result, all_matched_names
 
-    # 预处理所有 target，拆解为路径片段（忽略文件名和后缀）
+    # Preprocess all targets, split into path fragments (ignore filenames and extensions)
     target_frags_map = {
         target: _split_path_to_fragments(target) for target in target_list
     }
 
-    # 遍历每个 target 进行匹配
+    # Iterate through each target for matching
     for target, target_frags in target_frags_map.items():
         target = target.strip()
         if not target or len(target_frags) < 1:
             continue
 
-        # 遍历每个 project 的 path，计算路径重合度
+        # Iterate through each project's path, calculate path overlap
         for name, path in name_path_dict.items():
             path_frags = _split_path_to_fragments(path)
             if len(path_frags) < 1:
                 continue
 
-            # 计算最大连续重合片段数
+            # Calculate maximum consecutive fragment overlap
             max_match = _calc_path_similarity(target_frags, path_frags)
 
-            # 达到最小重合片段数，判定为近似匹配
+            # Reached minimum fragment overlap, determine as approximate match
             if max_match >= min_match_frags:
                 match_result[target].append(name)
                 all_matched_names.add(name)
@@ -535,9 +535,9 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
             
         dfx_info(f"Processing log file: {latest_log_file}")
 
-        # 如果配置了上传API，执行上传
+        # If upload API is configured, perform upload
         if is_upload_configured():
-            # 导入upload_build_trace_log函数
+            # Import upload_build_trace_log function
             from dfx.build_trace_uploader import upload_build_trace_log
             ret = upload_build_trace_log(log_file=latest_log_file)
             dfx_info(f"Upload build trace log: {ret.get('message', 'Success')}")
@@ -558,7 +558,7 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
             dfx_info(f"JSON result saved to: {json_file_path}")
             return result_dict
         else:
-            # 输出文本格式
+            # Output text format
             dfx_info(trace_log)
             dfx_info("\nBuild trace log processing completed!")
             return None
@@ -575,54 +575,45 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
                 pass
 
 
-# 检查是否配置了上传API
+# Check if upload API is configured
 def is_upload_configured():
-    # 检查环境变量
-    api_url = os.environ.get('DFX_TRACE_LOG_UPLOAD_API')
-    if api_url:
-        return True
-    
-    # 检查配置文件
+    from .dfx_config_manager import get_config_manager
+
     try:
-        config_path = Path(__file__).parent / 'dfx_config.json'
-        if config_path.exists():
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-                if config.get('trace_log_upload_api'):
-                    return True
+        config_manager = get_config_manager()
+        api_url = config_manager.trace_log_upload_api
+        return bool(api_url)
     except Exception:
-        pass
-    
-    return False
+        return False
 
 
 if __name__ == '__main__':
     import argparse
     
     def main():
-        # 创建命令行参数解析器
+        # Create command line argument parser
         parser = argparse.ArgumentParser(description='Parse build trace log file and output build information')
-        
-        # 添加日志文件路径参数
-        parser.add_argument('-d', '--dir', 
+
+        # Add log file path parameter
+        parser.add_argument('-d', '--dir',
                             default=Path(__file__).parent.parent.parent / 'out' /'dfx',
                             help='Path to build_traces log folder (default: %(default)s)')
-        
-        # 添加输出格式参数
-        parser.add_argument('-o', '--output', 
-                            choices=['text', 'json'], 
-                            default='text', 
+
+        # Add output format parameter
+        parser.add_argument('-o', '--output',
+                            choices=['text', 'json'],
+                            default='text',
                             help='Output format (text or json, default: %(default)s)')
-        
-        # 添加可选的日志文件名参数
-        parser.add_argument('-f', '--file', 
+
+        # Add optional log file name parameter
+        parser.add_argument('-f', '--file',
                             help='Path to specific build_traces log file (default: %(default)s)')
-        
-        # 解析命令行参数
+
+        # Parse command line arguments
         args = parser.parse_args()
-        
-        # 调用公共方法处理日志
+
+        # Call common method to process logs
         process_build_trace_log(args.dir, args.output, args.file)
-    
-    # 调用主函数
+
+    # Call main function
     main()
