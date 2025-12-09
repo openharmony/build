@@ -1,9 +1,10 @@
 {
-  "build_dfx_enable": "", 
+  "build_dfx_enable": "",
   "build_dfx_debug_enable": "false",
   "trace_log_dir": "out/dfx",
   "trace_log_upload_api": "",
   "extra_request_header_fields": "",
-  "extra_request_header_values": ""
+  "extra_request_header_values": "",
+  "extra_request_header_fields_encrypted": "",
+  "extra_request_header_encryption_key": ""
 }
-
