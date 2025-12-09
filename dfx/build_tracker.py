@@ -17,17 +17,18 @@
 #
 
 import functools
-import json
 import time
 import random
 import threading
 import os
 import sys
+import json
 from pathlib import Path
 from datetime import datetime
 from typing import Callable, Any, Optional, Dict
 from dfx.build_trace_handler import event_handler
 from dfx import dfx_info, dfx_error
+from dfx.dfx_config_manager import get_config_manager
 import argparse
 
 
@@ -35,40 +36,34 @@ class BuildTracker:
 
     _instance = None
     event_handler = event_handler
-    config_path = os.path.join(os.path.dirname(__file__), "dfx_config.json")
-    if os.path.exists(config_path):
-        try:
-            with open(config_path, "r", encoding="utf-8") as f:
-                config = json.load(f)
-                TRACE_LOG_DIR = config.get("trace_log_dir",  os.environ.get('TRACE_LOG_DIR', 'out/dfx'))
-                BUILD_DFX_ENABLE = config.get("build_dfx_enable")
-                if BUILD_DFX_ENABLE in (None, ""):
-                    BUILD_DFX_ENABLE = os.environ.get("BUILD_DFX_ENABLE", "").lower() == "true"
-        except Exception as e:
-            dfx_error(f"Error loading config file: {e}")
-            TRACE_LOG_DIR = None
-            BUILD_DFX_ENABLE = os.environ.get("BUILD_DFX_ENABLE", "").lower() == "true"
-        base_path = Path(__file__).parent.parent.parent
-        if TRACE_LOG_DIR:
-            trace_log_dir_path = Path(TRACE_LOG_DIR)
-            if trace_log_dir_path.is_absolute():
-                log_dir = trace_log_dir_path
-            else:
-                log_dir = base_path / TRACE_LOG_DIR
-        else:
-            log_dir = base_path / "out" / "dfx"
-        if not os.path.exists(log_dir):
-            os.makedirs(log_dir, exist_ok=True)
 
-        BUILD_TRACE_LOG_DIR = log_dir
+    # Initialize configuration using DFXConfigManager
+    config_manager = get_config_manager()
+    TRACE_LOG_DIR = config_manager.trace_log_dir
+    BUILD_DFX_ENABLE = config_manager.build_dfx_enable_bool
+
+    base_path = Path(__file__).parent.parent.parent
+    if TRACE_LOG_DIR:
+        trace_log_dir_path = Path(TRACE_LOG_DIR)
+        if trace_log_dir_path.is_absolute():
+            log_dir = trace_log_dir_path
+        else:
+            log_dir = base_path / TRACE_LOG_DIR
+    else:
+        log_dir = base_path / "out" / "dfx"
+
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir, exist_ok=True)
+
+    BUILD_TRACE_LOG_DIR = log_dir
 
     def __new__(cls, build_type=""):
         if cls._instance is None:
             cls._instance = super(BuildTracker, cls).__new__(cls)
             cls._instance._initialized = False
-            cls._instance._build_type = build_type  # 存储build_type
+            cls._instance._build_type = build_type  # Store build_type
         else:
-            # 如果实例已存在但build_type不同，更新build_type
+            # If instance exists but build_type is different, update build_type
             cls._instance._build_type = build_type
         return cls._instance
 
@@ -79,7 +74,7 @@ class BuildTracker:
                 BuildTracker.BUILD_TRACE_LOG_DIR / f"build_traces_{self.trace_id}.log"
             )
             self._initialized = True
-            # 只有当 build_type 为 "build" 时才创建并启动监控线程
+            # Only create and start monitoring thread when build_type is "build"
             if build_type == "build":
                 self._monitor_thread = threading.Thread(
                     target=self.monitor_current_process, args=(self.trace_id, self.trace_log_file, 15), daemon=True
@@ -137,7 +132,7 @@ class BuildTracker:
 
             @functools.wraps(func)
             def wrapper(*args: Any, **kwargs: Any) -> Any:
-                # 获取实例时传入build_type
+                # Get instance with build_type parameter
                 tracker = BuildTracker.get_instance(build_type)
                 start_time = time.time()
 
@@ -156,7 +151,7 @@ class BuildTracker:
 
                 try:
                     result = func(*args, **kwargs)
-                    # 使用新方法检查构建状态
+                    # Use new method to check build status
                     tracking_data = BuildTracker.check_build_status(tracking_data, event_name, build_type, result)
                     return result
                 except Exception as e:
@@ -215,7 +210,7 @@ class BuildTracker:
                 BuildTracker._record_tracking_event(tracking_data=tracking_data, trace_log_file=trace_log_file)
                 time.sleep(interval)
         except Exception as e:
-            raise Exception(f"Current process monitor thread error: {str(e)}")
+            raise Exception(f"Process monitor thread error: {str(e)}")
 
 
 def build_tracker(

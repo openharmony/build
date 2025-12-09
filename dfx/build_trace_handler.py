@@ -117,7 +117,7 @@ def event_handler(data: Dict[str, Any], trace_log_file: Path) -> None:
 def _shutdown_handler():
     try:
         if AsyncTraceHandler._instance:
-            # 直接调用process_build_trace_log，它现在会内部处理上传或本地保存的逻辑
+            # Directly call process_build_trace_log, which now handles upload or local save logic internally
             process_build_trace_log(log_file=AsyncTraceHandler._instance.log_file_path)
             AsyncTraceHandler._instance.shutdown()
     except Exception:
