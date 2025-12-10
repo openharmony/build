@@ -14,12 +14,22 @@
 import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 
+declare_args() {
+  build_rust_test_enable = false
+  if (defined(global_parts_info) &&
+  defined(global_parts_info.thirdparty_rust_cxx)) {
+    build_rust_test_enable = true
+  }
+}
+
 group("tests") {
   deps = [
-    ":cxx_test_host_and_target",
     "test_cdylib_crate:test_cdylib_crate(${host_toolchain})",
     "test_proc_macro_crate:test_proc_macro_crate(${host_toolchain})",
   ]
+  if (build_rust_test_enable) {
+    deps += [ ":cxx_test_host_and_target" ]
+  }
   deps += [
     "//build/rust/tests/test_cdylib_crate",
     "//build/rust/tests/test_staticlib_crate",
@@ -61,24 +71,26 @@ group("cargo_crate_test") {
   }
 }
 
-group("cxx_test_host_and_target") {
-  deps = [
-    "//build/rust/tests/test_cxx:test_cxx_exe",
-    "//build/rust/tests/test_cxx:test_cxx_exe(${host_toolchain})",
-  ]
-  if (!use_clang_coverage && !use_libfuzzer) {
-    deps += [
-      "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
-      "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
-      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
-      "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
-      "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
-      "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
-      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
-      "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
-      "//build/rust/tests/test_cxx_rust:test_cxx_rust",
-      "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
+if (build_rust_test_enable) {
+  group("cxx_test_host_and_target") {
+    deps = [
+      "//build/rust/tests/test_cxx:test_cxx_exe",
+      "//build/rust/tests/test_cxx:test_cxx_exe(${host_toolchain})",
     ]
+    if (!use_clang_coverage && !use_libfuzzer) {
+      deps += [
+        "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c",
+        "//build/rust/tests/test_bindgen_test/test_for_extern_c:test_extern_c(${host_toolchain})",
+        "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h",
+        "//build/rust/tests/test_bindgen_test/test_for_h:bindgen_test_for_h(${host_toolchain})",
+        "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test",
+        "//build/rust/tests/test_bindgen_test/test_for_hello_world:bindgen_test(${host_toolchain})",
+        "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp",
+        "//build/rust/tests/test_bindgen_test/test_for_hpp:bindgen_test_hpp(${host_toolchain})",
+        "//build/rust/tests/test_cxx_rust:test_cxx_rust",
+        "//build/rust/tests/test_cxx_rust:test_cxx_rust(${host_toolchain})",
+      ]
+    }
   }
 }
 
