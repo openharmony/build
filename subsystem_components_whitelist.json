@@ -1,6 +1,7 @@
 {
   "developer_test": "testfwk",
   "acts": "xts",
+  "acts_devices": "xts",
   "hats": "xts",
   "dcts": "xts",
   "hits": "xts",
