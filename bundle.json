@@ -51,6 +51,7 @@
         "selinux",
         "selinux_adapter",
         "libffi",
+        "rust_bindgen",
         "rust_cxx",
         "ace_ets2bundle"
       ],
