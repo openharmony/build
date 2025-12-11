@@ -4119,6 +4119,12 @@
         "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data:module_CloudConfigEtsTest": [
             "//developtools/packing_tool:packing_tool"
         ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_no_permission:module_CloudConfigNoPermissionEtsTest": [
+            "//developtools/packing_tool:packing_tool"
+        ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_system:module_CloudConfigSystemEtsTest": [
+            "//developtools/packing_tool:packing_tool"
+        ],
         "//foundation/distributeddatamgr/relational_store/test/ets/relational_store:module_ActsRelationalStoreEtsTest": [
             "//developtools/packing_tool:packing_tool"
         ],
@@ -7582,7 +7588,21 @@
             "//developtools/packing_tool:packing_tool",
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
         ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_no_permission:module_CloudConfigNoPermissionEtsTest": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
+        ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_system:module_CloudConfigSystemEtsTest": [
+            "//developtools/packing_tool:packing_tool",
+            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
+        ],
         "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data:module_CloudConfigEtsTest__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
+        ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_no_permission:module_CloudConfigNoPermissionEtsTest__js_assets": [
+            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
+        ],
+        "//foundation/distributeddatamgr/relational_store/test/ets/cloud_data_system:module_CloudConfigSystemEtsTest__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
         "//foundation/distributeddatamgr/relational_store/test/ets/relational_store:module_ActsRelationalStoreEtsTest": [
