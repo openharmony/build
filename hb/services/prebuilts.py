@@ -101,12 +101,12 @@ class PreuiltsService(BuildFileGeneratorInterface):
     def write_last_update(self, data):
         if not os.path.exists(self.last_update):
             os.makedirs(os.path.dirname(self.last_update), exist_ok=True)
-            with os.fdopen(os.open(self.last_update, os.O_WRONLY|os.O_CREAT, mode=0o640), "w") as f:
+            with os.fdopen(os.open(self.last_update, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, mode=0o640), "w") as f:
                 json.dump(data, f, indent=4)
         else:
             existing_data = self.read_last_update()
             existing_data.update(data)
-            with os.fdopen(os.open(self.last_update, os.O_WRONLY|os.O_CREAT, mode=0o640), "w") as f:
+            with os.fdopen(os.open(self.last_update, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, mode=0o640), "w") as f:
                 json.dump(existing_data, f, indent=4)
 
     def get_preguilt_download_related_files_mtimes(self) -> dict:
