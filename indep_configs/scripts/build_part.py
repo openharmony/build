@@ -404,7 +404,7 @@ def _create_datapart_json(alternative, changed):
     json_str = json.dumps(data, indent=4)
     output_dir = os.path.join(CURRENT_DIRECTORY, 'out')
     output_file = 'dataPart.json'
-    flag = os.O_WRONLY | os.O_CREAT
+    flag = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
     mode = stat.S_IWUSR | stat.S_IRUSR
     output_path = os.path.join(output_dir, output_file)
     if not os.path.exists(output_dir):
