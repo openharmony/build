@@ -56,7 +56,7 @@ def import_rich_module():
 
 def save_data(file_path: str, data):
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    flag = os.O_WRONLY | os.O_CREAT
+    flag = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
     mode = stat.S_IWUSR | stat.S_IRUSR
     with os.fdopen(os.open(file_path, flag, mode), "w") as f:
         json.dump(data, f, indent=4)
