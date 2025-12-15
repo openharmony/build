@@ -21,6 +21,7 @@ import subprocess
 import shutil
 import platform
 import re
+import stat
 from containers.arg import Arg
 from services.interface.prebuilt_sdk_interface import PrebuiltSdkInterface
 from resources.global_var import CURRENT_OHOS_ROOT
@@ -47,8 +48,8 @@ class PrebuiltSdk(PrebuiltSdkInterface):
         if os.path.exists(sdk_path):
             return False
 
-        if args_dict.get("prebuilt_sdk").arg_value is True:
-            return True
+        if args_dict.get("prebuilt_sdk").arg_value is False:
+            return False
 
         return True
 
@@ -245,7 +246,8 @@ class PrebuiltSdk(PrebuiltSdkInterface):
                 content = content.replace('Native', 'Previewer')
                 content = content.replace('native', 'previewer')
 
-                with open(target_package, 'w', encoding='utf-8') as f:
+                with os.fdopen(os.open(target_package, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, mode=0o644),
+                                    "w", encoding='utf-8') as f:
                     f.write(content)
 
         except Exception as e:
