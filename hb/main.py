@@ -166,8 +166,7 @@ class Main():
     def _init_build_module(self) -> BuildModuleInterface:
         args_dict = Arg.parse_all_args(ModuleType.BUILD)
 
-        if args_dict.get("product_name").arg_value != 'ohos-sdk' and args_dict.get("no_prebuilt_sdk").arg_value != True:
-            self._prebuild_ohos_sdk(args_dict)
+        self._prebuild_ohos_sdk(args_dict)
 
         if args_dict.get("product_name").arg_value != '':
             set_args_dict = Arg.parse_all_args(ModuleType.SET)

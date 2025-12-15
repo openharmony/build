@@ -198,6 +198,10 @@ for arg in "$@"; do
     shift
 done
 
+if [[ "$*" != *ohos-sdk* ]]; then
+  args_list+=("--prebuilt-sdk=true")
+fi
+
 if [[ "$using_hb_new" == "true" ]]; then
   python3 "${SOURCE_ROOT_DIR}/build/hb/main.py" build "${args_list[@]}"
 fi

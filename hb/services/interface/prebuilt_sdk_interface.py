@@ -27,6 +27,13 @@ class PrebuiltSdkInterface(ServiceInterface):
         super().__init__()
         self._config = Config()
 
+    @property
+    def config(self):
+        return self._config
+
+    def run(self):
+        pass
+
     @abstractmethod
     def should_build_sdk(self, args_dict) -> bool:
         pass
@@ -46,10 +53,3 @@ class PrebuiltSdkInterface(ServiceInterface):
     @abstractmethod
     def _migrate_legacy_sdk(self) -> None:
         pass
-
-    def run(self):
-        pass
-
-    @property
-    def config(self):
-        return self._config
