@@ -279,7 +279,7 @@ if [[ "$?" -ne 0 ]]; then
     exit 1
 fi
 
-${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/check_ets_warning/check_ets_warning.py --log-path=${SOURCE_ROOT_DIR}/out/rk3568/build.log --whitelist-dir=${SOURCE_ROOT_DIR}/build/scripts/check_ets_warning $args_list
+${PYTHON3} ${SOURCE_ROOT_DIR}/build/scripts/check_ets_warning/check_ets_warning.py --log-path=${SOURCE_ROOT_DIR}/out/rk3568/build.log --whitelist-dir=${SOURCE_ROOT_DIR}/arkcompiler/ets_frontend/ets2panda/scripts/check_ets_warning $args_list
 if [[ "$?" -ne 0 ]]; then
     echo -e "\033[31m=====build ${product_name} error=====\033[0m"
     exit 1
