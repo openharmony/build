@@ -530,6 +530,10 @@ def main() -> None:
     args = parse_arguments()
 
     try:
+        if os.path.exists(args.cache_path):
+            shutil.rmtree(args.cache_path)
+        os.makedirs(args.cache_path, exist_ok=True)
+
         handle_configuration(args)
 
         if args.ui_enable == "True":
