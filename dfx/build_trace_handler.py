@@ -83,7 +83,8 @@ class AsyncTraceHandler:
     
     def _worker(self) -> None:
         try:
-            with open(self.log_file_path, 'a', encoding='utf-8') as log_file:
+            fd = os.open(self.log_file_path, os.O_CREAT | os.O_WRONLY | os.O_APPEND, 0o644)
+            with os.fdopen(fd, 'a', encoding='utf-8') as log_file:
                 while not self._stop_event.is_set() or not self.queue.empty():
                     try:
                         log_data = self.queue.get(timeout=0.1)
