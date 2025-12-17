@@ -18,6 +18,7 @@
 
 
 import os
+import stat
 import subprocess
 import json
 from datetime import datetime
@@ -140,11 +141,11 @@ class BuildTraceLog:
                 return False
 
             # Fill basic information
-            if parsed_data['trace_id']:
-                self.build_trace_id = parsed_data['trace_id']
+            if parsed_data.get('trace_id'):
+                self.build_trace_id = parsed_data.get('trace_id')
 
             # Extract build start and end times
-            events = parsed_data['events']
+            events = parsed_data.get('events')
             if events:
                 for event in events:
                     if event.get("event_name") == "_build_main":
@@ -158,11 +159,11 @@ class BuildTraceLog:
                         break
 
             # Extract build resource usage - keep average values only
-            self.build_cpu_usage = parsed_data['cpu_avg']
-            self.build_mem_usage = parsed_data['mem_avg_mb']
+            self.build_cpu_usage = parsed_data.get('cpu_avg')
+            self.build_mem_usage = parsed_data.get('mem_avg_mb')
 
             # Extract detailed execution times for each function
-            self.build_time_cost_detail = parsed_data['execution_times']
+            self.build_time_cost_detail = parsed_data.get('execution_times')
 
             # Determine build result (assume build failed if there are error events)
             has_error = any(event.get("status") == "failed" for event in events)
@@ -221,13 +222,13 @@ class BuildTraceLog:
         # Get git username (user.name) as user_id
         user_name = subprocess.check_output(['git', 'config', 'user.name'], 
                                          stderr=subprocess.STDOUT, 
-                                         universal_newlines=True).strip()
+                                         text=True).strip()
         self.user_id = user_name
 
         # Get git user email
         email = subprocess.check_output(['git', 'config', 'user.email'], 
                                       stderr=subprocess.STDOUT, 
-                                      universal_newlines=True).strip()
+                                      text=True).strip()
         self.git_user_email = email
 
         return self
@@ -235,10 +236,11 @@ class BuildTraceLog:
     def _get_code_repo(self):
         # Get repository information using repo info | grep "Manifest branch" command
         # Use shell=True to support pipe commands
-        result = subprocess.check_output('repo info -o | grep "Manifest branch"', 
-                                       shell=True, 
+        result = subprocess.check_output(['repo' 'info' '-o'], 
                                        stderr=subprocess.STDOUT, 
-                                       universal_newlines=True).strip()
+                                       text=True)
+        filtered_lines = [line for line in result.splitlines if 'Manifest branch' in line]
+        result = '\n'.join(filtered_lines).strip()
 
         # Extract Manifest branch information
         if result:
@@ -250,26 +252,28 @@ class BuildTraceLog:
 
     def _get_cpu_info(self):
         # Get CPU model
-        cpu_model = subprocess.check_output("cat /proc/cpuinfo | grep 'model name' | head -n 1 | cut -d: -f2 | tr -s ' '",
-                                          shell=True,
-                                          stderr=subprocess.STDOUT,
-                                          universal_newlines=True).strip()
+        try:
+            with open('/proc/cpuinfo', 'r', encoding='utf-8') as f:
+                for line in f:
+                    if line.startswith('model name'):
+                        cpu_model = line.split(':')[1].strip()
+                        break
+        except FileNotFoundError:
+            cpu_model = 'Unknown'
 
         # Get CPU core count
-        cpu_cores = subprocess.check_output("nproc",
-                                          shell=True,
+        cpu_cores = subprocess.check_output(["nproc"],
                                           stderr=subprocess.STDOUT,
-                                          universal_newlines=True).strip()
+                                          text=True).strip()
 
         self.host_cpu_info = f"CPU Model: {cpu_model}, Cores: {cpu_cores}"
         return self
 
     def _get_memory_info(self):
         # Get memory information using free command
-        free_output = subprocess.check_output("free -h",
-                                            shell=True,
+        free_output = subprocess.check_output(["free", "-h"],
                                             stderr=subprocess.STDOUT,
-                                            universal_newlines=True)
+                                            text=True)
 
         # Parse total memory information
         for line in free_output.split('\n'):
@@ -391,10 +395,9 @@ class BuildTraceLog:
     def _get_host_ip(self):
         try:
             # Use hostname -I command to directly get all IPv4 addresses
-            result = subprocess.check_output("hostname -I",
-                                           shell=True,
+            result = subprocess.check_output(["hostname" "-I"],
                                            stderr=subprocess.STDOUT,
-                                           universal_newlines=True).strip()
+                                           text=True).strip()
 
             # Extract first non-loopback IP address
             ip_addresses = result.split()
@@ -552,7 +555,7 @@ def process_build_trace_log(log_dir=None, output_format='text', log_file=None):
                 or default_output_dir
             )
             json_file_path = output_dir / f"build_trace_result_{timestamp}.json"
-            with open(json_file_path, 'w', encoding='utf-8') as f:
+            with os.fdopen(os.open(json_file_path, os.O_CREAT | os.O_WRONLY | os.O_TRUNC, 0o644), 'w', encoding='utf-8') as f:
                 json.dump(result_dict, f, ensure_ascii=False, indent=2, default=str)
 
             dfx_info(f"JSON result saved to: {json_file_path}")
