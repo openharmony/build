@@ -150,10 +150,16 @@ if [[ -v args["--part-names"] ]]; then
     part_names="--part-names ${args["--part-names"]}"
 fi
 
+if [[ -v args["--skip-ssl"] ]] || [[ -v args["-skip-ssl"] ]]; then
+    skip_ssl="--skip-ssl"
+else
+    skip_ssl=""
+fi
+
 # 运行Python命令
 type="--build-type indep"
 pip3 install --trusted-host $trusted_host -i $pypi_url requests
-python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich $part_names $type
+python3 "${script_path}/prebuilts_config.py" $glibc_version --config-file $config_file --host-platform $host_platform --host-cpu $host_cpu $disable_rich $part_names $type $skip_ssl
 
 PYTHON_PATH=$(realpath $code_dir/prebuilts/python/${host_platform}-${host_cpu_prefix}/*/bin | tail -1)
 
