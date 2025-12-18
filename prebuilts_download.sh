@@ -210,7 +210,7 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
 fi
 type="--build-type src"
 config_file="--config-file ${code_dir}/build/prebuilts_config.json"
-pip3 install --trusted-host $trusted_host -i $pypi_url requests\>\=2.32.1 cryptography\>\=44.0.2
+pip3 install --trusted-host $trusted_host -i $pypi_url requests cryptography
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
         python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file
     else
