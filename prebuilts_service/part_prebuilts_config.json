@@ -336,7 +336,8 @@
         "sdk"
     ],
     "data_object":[
-        "app"
+        "app",
+        "taihe"
     ],
     "device_standby":[
         "taihe"
