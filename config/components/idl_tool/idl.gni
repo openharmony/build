@@ -60,7 +60,11 @@ template("idl_gen_interface") {
   idl_list = []
   idl_callback_list = []
   idl_common_list = []
-  idl_inner = false
+  if (is_arkui_x){
+    not_needed(["idl_inner"])
+  } else {
+    idl_inner = false
+  }
   
   if (defined(invoker.idl_inner) && invoker.idl_inner == true){
     idl_inner = true
