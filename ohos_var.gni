@@ -90,7 +90,7 @@ declare_args() {
   passthrough_indirect_dir = "passthrough/indirect"
 
   ndk_dir = "ndk"
-  llndk_dir = "llndk"
+  llndk_dir = ""
   platformsdk_dir = "platformsdk"
 
   chipset_sdk_dir = "chipset-sdk"
