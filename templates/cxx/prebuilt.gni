@@ -263,12 +263,7 @@ template("ohos_prebuilt_shared_library") {
       is_ndk = true
     }
     if (is_ndk) {
-      if (is_llndk) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = llndk_dir
-      } else {
-        auto_relative_install_dir = ndk_dir
-      } 
+      auto_relative_install_dir = ndk_dir
     }
   }
 
@@ -613,12 +608,7 @@ template("ohos_prebuilt_rust_library") {
       is_ndk = true
     }
     if (is_ndk) {
-      if (is_llndk) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = llndk_dir
-      } else {
-        auto_relative_install_dir = ndk_dir
-      } 
+      auto_relative_install_dir = ndk_dir
     }
   }
 

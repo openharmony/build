@@ -180,7 +180,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                 replace_subdir = os.path.dirname(dest).split("/")[-1]
                 file_name = os.path.basename(dest)
                 dest_file = os.path.join(platform_installed_path, dest)
-                if replace_subdir in ["llndk", "chipset-sdk", "chipset-sdk-sp"]:
+                if replace_subdir in ["chipset-sdk", "chipset-sdk-sp"]:
                     if softlink_create_path == "ndk":
                         link_path = dest_file.replace(f"{replace_subdir}/{file_name}", f"ndk/{file_name}")
                     else:
