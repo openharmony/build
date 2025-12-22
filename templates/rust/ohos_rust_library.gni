@@ -235,12 +235,7 @@ template("ohos_rust_library") {
       is_ndk = true
     }
     if (is_ndk) {
-      if (is_llndk) {
-        softlink_path = ndk_dir
-        auto_relative_install_dir = llndk_dir
-      } else {
-        auto_relative_install_dir = ndk_dir
-      } 
+      auto_relative_install_dir = ndk_dir
     }
   }
 
@@ -284,7 +279,7 @@ template("ohos_rust_library") {
       }
 
       # update relative_install_dir if auto_relative_install_dir defined
-      if (defined(auto_relative_install_dir)) {
+      if (defined(auto_relative_install_dir) && auto_relative_install_dir != "") {
         relative_install_dir = auto_relative_install_dir
       }
 
