@@ -223,7 +223,6 @@ def link_abc_files(output_dir, hap_name, target_path, hypium_output_dir, test_fi
 # swap hypium directory
 # ==========================
 def swap_hypium_tools(src_path, dest_path):
-    """交换两个目录的内容，规避源码与测试框架重名问题"""
     abs_src_path = get_path_code_directory(src_path)
     abs_dest_path = get_path_code_directory(dest_path)
     temp_dir = abs_dest_path.rstrip('/')+ "_temp_swap"
