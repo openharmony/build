@@ -87,7 +87,7 @@ template("taihe_shared_library") {
 
     sources = [
       "$taihe_toolchain_path/src/taihe/runtime/object.cpp",
-      "$taihe_toolchain_path/src/taihe/runtime/runtime.cpp",
+      "$taihe_toolchain_path/src/taihe/runtime/runtime_ani.cpp",
       "$taihe_toolchain_path/src/taihe/runtime/string.cpp",
     ]
     sources += invoker.sources
