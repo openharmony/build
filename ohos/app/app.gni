@@ -44,7 +44,7 @@ template("ohos_app_scope") {
     app_profile = invoker.app_profile
   }
   group(target_name) {
-    public_deps = [ ":$_metadata_target" ]
+    deps = [ ":$_metadata_target" ]
   }
 }
 
@@ -109,7 +109,7 @@ template("ohos_js_assets") {
     }
   }
   group(target_name) {
-    public_deps = [ ":$_metadata_target" ]
+    deps = [ ":$_metadata_target" ]
   }
 }
 
@@ -193,8 +193,8 @@ template("ohos_resources") {
   }
 
   group(target_name) {
-    public_deps = [ ":$_metadata_target" ]
-    deps = [
+    deps = [ ":$_metadata_target" ]
+    deps += [
       ":$_compile_profile_target",
       ":$_compile_resources_target",
     ]
