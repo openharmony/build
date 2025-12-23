@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # coding=utf-8
-import argparse
 #
 # Copyright (c) 2025 Huawei Device Co., Ltd.
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +19,8 @@ import os
 import sys
 import json
 import subprocess
+import argparse
+import shutil
 
 
 # ==========================
@@ -27,6 +28,8 @@ import subprocess
 # ==========================
 ES2PANDAPATH = "arkcompiler/runtime_core/static_core/out/bin/es2panda"
 ARKLINKPATH = "arkcompiler/runtime_core/static_core/out/bin/ark_link"
+HYPIUMPATH = "test/testfwk/arkxtest/jsunit/src_static/"
+DESTHYPIUMPATH = "test/testfwk/developer_test/libs/destHypium"
 
 
 # ==========================
@@ -156,7 +159,7 @@ def load_abc_from_src_json(target_path, test_files):
         return abc_files
 
     try:
-        with open(src_json_path, 'r', encoding='utf-8') as f:
+        with os.fdopen(os.open(src_json_path, os.O_RDONLY), 'r', encoding='utf-8') as f:
             src_data = json.load(f)
         logging.info(f"Successfully loaded src.json: {src_json_path}")
     except json.JSONDecodeError as e:
@@ -217,6 +220,24 @@ def link_abc_files(output_dir, hap_name, target_path, hypium_output_dir, test_fi
 
 
 # ==========================
+# swap hypium directory
+# ==========================
+def swap_hypium_tools(src_path, dest_path):
+    abs_src_path = get_path_code_directory(src_path)
+    abs_dest_path = get_path_code_directory(dest_path)
+    temp_dir = abs_dest_path.rstrip('/')+ "_temp_swap"
+
+    if os.path.exists(abs_dest_path):
+        shutil.move(abs_dest_path, temp_dir)
+
+    if os.path.exists(abs_src_path):
+        shutil.move(abs_src_path, abs_dest_path)
+
+    if os.path.exists(temp_dir):
+        shutil.move(temp_dir, abs_src_path)
+
+
+# ==========================
 # Main Entry Point
 # ==========================
 def main():
@@ -235,8 +256,10 @@ def main():
     # Start build pipeline
     try:
         logging.info("Starting build pipeline")
+        swap_hypium_tools(HYPIUMPATH, DESTHYPIUMPATH)
         build_ets_files(args.target_path, args.sources, args.output_dir)
         link_abc_files(args.output_dir, args.hap_name, args.target_path, args.hypium_output_dir, args.test_files)
+        swap_hypium_tools(DESTHYPIUMPATH, HYPIUMPATH)
         logging.info("Build completed successfully!")
     except Exception as e:
         logging.critical(f"Build process failed unexpectedly: {str(e)}")
