@@ -149,7 +149,7 @@ def main():
                 break
 
             if product['obsPath'] and os.path.exists(default_save_path):
-                download_url = 'http://download.ci.openharmony.cn/{}'.format(product['obsPath'])
+                download_url = 'https://cidownload.openharmony.cn/{}'.format(product['obsPath'])
                 save_path2 = default_save_path
 
             try:
