@@ -165,7 +165,6 @@ template("ohos_cangjie_unittest") {
     cjc_args += [
       "--link-options=-rpath=${platform_cj_sdk}:${platform_cj_sdk}/runtime",
       "--dy-std",
-      "--dy-libs",
     ]
 
     if (defined(invoker.compilation_config)) {
