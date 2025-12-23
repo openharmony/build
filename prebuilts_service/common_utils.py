@@ -334,7 +334,6 @@ def npm_install(operate: dict, global_args: object) -> tuple:
     if global_args.parallel_install:
         print('run npm install in parallel mode, please wait.')
         procs = []
-        errs = []
         for index, install_cmd in enumerate(install_cmds):
             proc = subprocess.Popen(install_cmd, cwd=full_code_paths[index], stdout=subprocess.PIPE,
                                     stderr=subprocess.PIPE)
@@ -342,14 +341,12 @@ def npm_install(operate: dict, global_args: object) -> tuple:
             time.sleep(0.1)
             procs.append(proc)
         for index, proc in enumerate(procs):
-            _, err = proc.communicate()
-            errs.append(err)
-            if not proc.returncode:
-                global_args.success_installed.append(full_code_paths[index])
-        for index, proc in enumerate(procs):
+            out, err = proc.communicate()
             if proc.returncode:
                 print("in dir:{}, executing:{}".format(full_code_paths[index], ' '.join(install_cmds[index])))
-                return False, errs[index].decode()
+                return False, err.decode()
+            global_args.success_installed.append(full_code_paths[index])
+
     else:
         print('run npm install in serial mode, please wait.')
         for index, install_cmd in enumerate(install_cmds):
