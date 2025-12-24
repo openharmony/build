@@ -3,6 +3,7 @@
   "acts": "xts",
   "acts_devices": "xts",
   "hats": "xts",
+  "hats_ext": "xts",
   "dcts": "xts",
   "hits": "xts",
   "tools": "xts",
