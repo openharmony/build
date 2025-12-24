@@ -75,7 +75,8 @@
     "ability_runtime":[
         "app",
         "hvigor",
-        "sdk"
+        "sdk",
+        "taihe"
     ],
     "form_fwk":[
         "app",
