@@ -289,6 +289,16 @@
       ],
       "copy_config": [
         {
+          "unzip_dir": "prebuilts/arkcompiler",
+          "file_path": "/openharmony/compiler/jsvm/arkcompiler_jsvm_5.1.0_20251222.tar.gz",
+          "unzip_filename": "jsvm"
+        },
+        {
+          "unzip_dir": "prebuilts/arkcompiler",
+          "file_path": "/openharmony/compiler/jsvm/llvm-linux-19.1.7-x86_64.tar.gz",
+          "unzip_filename": "jsvm"
+        },
+        {
           "unzip_dir": "prebuilts/cmake",
           "file_path": "/openharmony/compiler/cmake/3.28.2/cmake-linux-x86-3.28.2.tar.gz",
           "unzip_filename": "linux-x86"
