@@ -265,6 +265,11 @@ template("ohos_executable") {
   }
 
   executable("${target_name}") {
+    original_configs = configs
+    configs = []
+    configs += [ ":$_sanitize_config_target" ]
+    configs += original_configs
+
     forward_variables_from(invoker,
                            "*",
                            [
@@ -298,7 +303,6 @@ template("ohos_executable") {
     if (defined(invoker.remove_configs)) {
       configs -= invoker.remove_configs
     }
-    configs += [ ":$_sanitize_config_target" ]
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
@@ -975,6 +979,11 @@ template("ohos_shared_library") {
   }
 
   shared_library("${target_name}") {
+    original_configs = configs
+    configs = []
+    configs += [ ":$_sanitize_config_target" ]
+    configs += original_configs
+
     forward_variables_from(invoker,
                            "*",
                            [
@@ -1025,7 +1034,6 @@ template("ohos_shared_library") {
       configs -= invoker.remove_configs
     }
 
-    configs += [ ":$_sanitize_config_target" ]
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
@@ -1552,6 +1560,11 @@ template("ohos_static_library") {
   }
 
   static_library(target_name) {
+    original_configs = configs
+    configs = []
+    configs += [ ":$_sanitize_config_target" ]
+    configs += original_configs
+
     forward_variables_from(invoker,
                            "*",
                            [
@@ -1587,7 +1600,6 @@ template("ohos_static_library") {
     if (is_standard_system) {
       configs -= [ "//build/config/compiler:thin_archive" ]
     }
-    configs += [ ":$_sanitize_config_target" ]
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
@@ -1883,6 +1895,11 @@ template("ohos_source_set") {
   }
 
   source_set(target_name) {
+    original_configs = configs
+    configs = []
+    configs += [ ":$_sanitize_config_target" ]
+    configs += original_configs
+
     forward_variables_from(invoker,
                            "*",
                            [
@@ -1908,7 +1925,6 @@ template("ohos_source_set") {
       configs -= invoker.remove_configs
     }
 
-    configs += [ ":$_sanitize_config_target" ]
     configs += [ ":$_security_config_target" ]
 
     if (defined(invoker.use_exceptions) && invoker.use_exceptions) {
