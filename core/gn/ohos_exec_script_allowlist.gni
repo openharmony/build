@@ -63,6 +63,7 @@ ohos_exec_script_config = {
     "//device/board/bearpi/bearpi_hm_micro/liteos_a/BUILD.gn",
     "//device/board/hihope/dayu210/camera/vdi_impl/v4l2/BUILD.gn",
     "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/BUILD.gn",
+    "//device/board/bearkey/bq3588/camera/vdi_impl/v4l2/BUILD.gn",
     "//device/board/hisilicon/hispark_aries/liteos_a/BUILD.gn",
     "//device/board/hisilicon/hispark_taurus/camera/BUILD.gn",
     "//device/board/hisilicon/hispark_taurus/liteos_a/BUILD.gn",
