@@ -7,6 +7,7 @@ import("//build/config/clang/clang.gni")
 import("//build/config/compiler/compiler.gni")
 import("//build/config/coverage/coverage.gni")
 import("//build/config/sanitizers/sanitizers.gni")
+import("//build/ohos_var.gni")
 import("//build/toolchain/cc_wrapper.gni")
 import("//build/toolchain/toolchain.gni")
 import("//build/common.gni")
@@ -747,11 +748,19 @@ config("compiler_cpu_abi") {
           "-mfloat-abi=$arm_float_abi",
           "-mfpu=$arm_fpu",
         ]
+        if (is_ohos && is_clang && target_cpu == "arm64" && enhanced_opt &&
+            enable_enhanced_opt && armv8_1_lse_tuning_optimization) {
+          cflags += [ "-mlse-tuned" ]
+        }
       }
       if (is_linux) {
         cflags += [ "-Wno-error=unused-command-line-argument" ]
       }
       ldflags += [ "-march=$arm_arch" ]
+      if (is_ohos && is_clang && target_cpu == "arm64" && enhanced_opt &&
+          enable_enhanced_opt && armv8_1_lse_tuning_optimization) {
+        ldflags += [ "-mlse-tuned" ]
+      }
     } else if (current_cpu == "riscv64") {
       if (is_clang && !is_android && !is_ohos && !is_nacl) {
         cflags += [ "--target=riscv64-linux-gnu" ]
