@@ -287,6 +287,71 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/ets2panda/bin",
+        "module_label": "//arkcompiler/runtime_core/ark_guard:ark_guard",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//third_party/zlib:shared_libz",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/assembler:libarkassembler",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/assembler:libarktsassembler",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/compiler:libarktscompiler",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/abc2program:arkts_abc2program",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/bytecode_optimizer:libarktsbytecodeopt",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/libarkfile:libarktsfile",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ets2panda/lib",
+        "module_label": "//arkcompiler/runtime_core/static_core/libziparchive:libarktsziparchive",
+        "target_os": [
+            "darwin"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/ets2panda/lib",
         "module_label": "//arkcompiler/runtime_core/static_core/libarkbase:libarktsbase",
         "target_os": [
