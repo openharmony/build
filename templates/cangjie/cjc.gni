@@ -220,6 +220,7 @@ cangjie_sdk_toolchain = {
 cangjie_sdk_platform = {
   windows = "windows_x86_64_cjnative"
   ohos_aarch64 = "linux_ohos_aarch64_cjnative"
+  ohos_arm = "linux_ohos_arm_cjnative"
   ohos_x86_64 = "linux_ohos_x86_64_cjnative"
   if (host_cpu == "arm64") {
     mac = "darwin_aarch64_cjnative"
