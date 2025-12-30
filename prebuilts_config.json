@@ -169,16 +169,16 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/ohos/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/ohos/ninja-ohos-1.12.0-20240827.tar.gz",
+                            "remote_url": "/openharmony/compiler/ninja/1.12.0/ohos/ninja-ohos-1.12.0-20251227.tar.gz",
                             "build_type": "src"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20240523.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-x86-1.12.0-20251118.tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/windows-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240523.tar.gz",
+                            "remote_url": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20251011.tar.gz",
                             "build_type": "src"
                         }
                     ]
@@ -193,7 +193,7 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/darwin/x86/ninja-darwin-x86-1.12.0-20240829.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.12.0/darwin/x86/ninja-darwin-x86-1.12.0-20251011.tar.gz"
                         }
                     ]
                 }
