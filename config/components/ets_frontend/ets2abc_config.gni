@@ -81,6 +81,12 @@ ets2abc_build_path = ets2abc_out_root + "/arkcompiler/ets_frontend/es2panda"
 static_linker_build_path =
     static_linker_out_root + "/arkcompiler/runtime_core/ark_link"
 
+build_sdk_path = "$root_build_dir/ohos_ets"
+
+ohos_ets_etsstdlib_deps = "runtime_core:ohos_ets_etsstdlib_abc"
+ohos_ets_etsstdlib_path =
+    "$build_sdk_path/build-tools/ets2panda/lib/etsstdlib.abc"
+
 ohos_ets_kits_deps = "sdk:ohos_ets_kits"
 ohos_ets_api_deps = "sdk:ohos_ets_api"
 ohos_ets_arkts_deps = "sdk:ohos_ets_arkts"
@@ -112,12 +118,11 @@ ohos_ets_stdlib_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/lib/stdlib"
 ohos_ets_build_system_path =
     "$root_build_dir/ohos_ets/build-tools/driver/build-system"
-ohos_ets_dependency_analyzer_path = 
+ohos_ets_dependency_analyzer_path =
     "$root_build_dir/ohos_ets/build-tools/ets2panda/bin/dependency_analyzer"
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
-build_sdk_path = "$root_build_dir/ohos_ets"
 
 if (host_os == "mac") {
   node_path =
@@ -172,7 +177,10 @@ template("generate_static_abc") {
       ohos_ets_es2panda_deps,
     ]
     external_deps = external_dependencies
-    external_deps += [ ohos_ets_stdlib_deps ]
+    external_deps += [
+      ohos_ets_etsstdlib_deps,
+      ohos_ets_stdlib_deps,
+    ]
 
     args = [
       "--bootpath-json-file",
@@ -255,7 +263,10 @@ template("generate_static_abc") {
       }
       file_list_file = "${target_out_dir}/${target_name}_file_list.txt"
       write_file(file_list_file, file_paths)
-      args += [ "--files", rebase_path(file_list_file) ]
+      args += [
+        "--files",
+        rebase_path(file_list_file),
+      ]
 
       if (defined(invoker.package)) {
         args += [
@@ -324,7 +335,10 @@ template("generate_static_abc") {
         }
         file_list_file = "${target_out_dir}/${target_name}_file_list.txt"
         write_file(file_list_file, file_paths)
-        args += [ "--files", rebase_path(file_list_file) ]
+        args += [
+          "--files",
+          rebase_path(file_list_file),
+        ]
       }
 
       if (defined(invoker.package)) {
