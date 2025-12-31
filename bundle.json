@@ -76,7 +76,7 @@
         "//build/rust:default",
         "//third_party/f2fs-tools:f2fs-tools_host_toolchain"
       ],
-      "inner_api": [
+      "inner_kits": [
         {
           "name": "//build/rust:libstd.dylib.so",
           "header": {
