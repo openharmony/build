@@ -587,8 +587,8 @@ config("compiler") {
       # linker jobs. This is still suboptimal to a potential dynamic
       # resource allocation scheme, but should be good enough.
       if (use_thinlto_cache) {
-        home_path = getenv("HOME")
-        cache_path = "$home_path/thinlto-cache"
+        cache_base = getenv("CACHE_BASE")
+        cache_path = "$cache_base/../thinlto-cache"
       } else {
         cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
@@ -596,6 +596,7 @@ config("compiler") {
         ldflags += [
           "-Wl,--thinlto-jobs=16",
           "-Wl,--thinlto-cache-dir=$cache_path",
+          "-Wl,--thinlto-cache-policy=cache_size_bytes=50g",
         ]
       } else {
         ldflags += [ "-Wl,-plugin-opt,jobs=16" ]
