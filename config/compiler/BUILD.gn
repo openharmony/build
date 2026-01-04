@@ -179,8 +179,8 @@ config("default_include_dirs") {
 }
 
 declare_args() {
-  # set thinlto cache default size 50g
-  thinlto_cache_policy = "cache_size_bytes=50g"
+  # set thinlto cache default size 100g
+  thinlto_cache_policy = "cache_size_bytes=100g"
 }
 
 # compiler ---------------------------------------------------------------------
