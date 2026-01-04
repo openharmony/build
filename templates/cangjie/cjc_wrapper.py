@@ -41,8 +41,15 @@ def build_run_cjc_command(cmd_options):
         else:
             child = subprocess.Popen(args, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = child.communicate()
+        decoded_stdout = stdout.decode()
+        decoded_stderr = stderr.decode()
+        if decoded_stdout and decoded_stdout.strip():
+            print(f"[STDOUT] from cjc (command: {' '.join(args)}):")
+            print(decoded_stdout)
+        if decoded_stderr:
+            print(f"[STDERR] from cjc (command: {' '.join(args)}):", file=os.sys.stderr)
+            print(decoded_stderr, file=os.sys.stderr)
         if child.returncode != 0:
-            print(stdout.decode(), stderr.decode())
             raise Exception("failed to run cjc: {}".format(" ".join(args)))
 
 

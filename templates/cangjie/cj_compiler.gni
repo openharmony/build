@@ -56,7 +56,6 @@ template("_cj_target") {
   if (output_type == "dylib") {
     cjc_args_ += [
       "--dy-std",
-      "--dy-libs",
     ]
   }
 
