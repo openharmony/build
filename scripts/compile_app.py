@@ -284,6 +284,20 @@ def get_node_path(nodejs_home_config: str, options):
         return os.path.join(code_home, f"prebuilts/build-tools/common/nodejs/node-v{nodejs_home_config}-{host_os}-x64/bin/node")
 
 
+def get_hvigor_cache_dir(options, cache_base: str) -> str:
+    real_cwd = os.path.realpath(options.cwd)
+    real_root = os.path.realpath(options.root_dir)
+    if os.path.commonpath([real_root, real_cwd]) == real_root:
+        rel_cwd = os.path.relpath(real_cwd, real_root)
+    else:
+        rel_cwd = uuid.uuid5(uuid.NAMESPACE_URL, real_cwd).hex
+
+    hvigor_cache_dir = os.path.join(cache_base, 'hvigor_cache', rel_cwd)
+    os.makedirs(hvigor_cache_dir, exist_ok=True)
+
+    return hvigor_cache_dir
+
+
 def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
     cmd = ['bash']
     hvigor_version = get_hvigor_version(cwd, hash_val)
@@ -329,8 +343,7 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
         cmd.extend(['-p', 'debuggable=false'])
 
     if options.use_hvigor_cache and os.environ.get('CACHE_BASE'):
-        hvigor_cache_dir = os.path.join(os.environ.get('CACHE_BASE'), 'hvigor_cache', options.cwd)
-        os.makedirs(hvigor_cache_dir, exist_ok=True)
+        hvigor_cache_dir = get_hvigor_cache_dir(options, os.environ.get('CACHE_BASE'))
         cmd.extend(['-p', f'build-cache-dir={hvigor_cache_dir}'])
 
     if options.hvigor_obfuscation:
