@@ -16,7 +16,7 @@ import("//build/ohos_var.gni")
 
 declare_args() {
   build_rust_test_enable = false
-  if (defined(global_parts_info) &&
+  if (!ohos_indep_compiler_enable && defined(global_parts_info) &&
   defined(global_parts_info.thirdparty_rust_cxx)) {
     build_rust_test_enable = true
   }
