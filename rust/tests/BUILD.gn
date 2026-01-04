@@ -15,10 +15,10 @@ import("//build/ohos.gni")
 import("//build/ohos_var.gni")
 
 declare_args() {
-  build_rust_test_enable = false
+  build_rust_test_enable = true
   if (defined(global_parts_info) &&
-  defined(global_parts_info.thirdparty_rust_cxx)) {
-    build_rust_test_enable = true
+  !defined(global_parts_info.thirdparty_rust_cxx)) {
+    build_rust_test_enable = false
   }
 }
 
