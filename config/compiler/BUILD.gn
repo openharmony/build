@@ -178,6 +178,11 @@ config("default_include_dirs") {
   ]
 }
 
+declare_args() {
+  # set thinlto cache default size 50g
+  thinlto_cache_policy = "cache_size_bytes=50g"
+}
+
 # compiler ---------------------------------------------------------------------
 #
 # Base compiler configuration.
@@ -588,15 +593,15 @@ config("compiler") {
       # resource allocation scheme, but should be good enough.
       if (use_thinlto_cache) {
         cache_base = getenv("CACHE_BASE")
-        thinlto_cache_path = "$cache_base/../thinlto-cache"
+        thinlto_cache_dir = "$cache_base/thinlto-cache"
       } else {
-        thinlto_cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
+        thinlto_cache_dir = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
       if (use_lld) {
         ldflags += [
           "-Wl,--thinlto-jobs=16",
-          "-Wl,--thinlto-cache-dir=$thinlto_cache_path",
-          "-Wl,--thinlto-cache-policy=cache_size_bytes=50g",
+          "-Wl,--thinlto-cache-dir=$thinlto_cache_dir",
+          "-Wl,--thinlto-cache-policy=$thinlto_cache_policy",
         ]
       } else {
         ldflags += [ "-Wl,-plugin-opt,jobs=16" ]
