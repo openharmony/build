@@ -593,7 +593,7 @@ config("compiler") {
       # resource allocation scheme, but should be good enough.
       if (use_thinlto_cache) {
         cache_base = getenv("CACHE_BASE")
-        thinlto_cache_dir = "$cache_base/../thinlto-cache"
+        thinlto_cache_dir = "$cache_base/thinlto-cache"
       } else {
         thinlto_cache_dir = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
