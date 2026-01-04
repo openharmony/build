@@ -58,9 +58,16 @@ template("rust_bindgen") {
     }
 
     ohos_bindgen_target = "rust_bindgen:bindgen($host_toolchain)"
-    ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "root_out_dir")
-    ohos_bindgen_executable =
-        "${ohos_bindgen_obj_dir}/thirdparty/rust_bindgen/bindgen"
+    
+    if (ohos_indep_compiler_enable) {
+      ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "target_out_dir")
+      ohos_bindgen_executable =
+          "${ohos_bindgen_obj_dir}/clang_x64/libs/bindgen"
+    }  else {
+      ohos_bindgen_obj_dir = get_label_info(ohos_bindgen_target, "root_out_dir")
+      ohos_bindgen_executable =
+          "${ohos_bindgen_obj_dir}/thirdparty/rust_bindgen/bindgen"
+    }
 
     llvm_config_path = "$default_clang_base_path/bin/llvm-config"
     clang_path = "$default_clang_base_path/bin/clang"
