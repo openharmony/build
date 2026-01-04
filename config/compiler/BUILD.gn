@@ -588,14 +588,14 @@ config("compiler") {
       # resource allocation scheme, but should be good enough.
       if (use_thinlto_cache) {
         cache_base = getenv("CACHE_BASE")
-        cache_path = "$cache_base/../thinlto-cache"
+        thinlto_cache_path = "$cache_base/../thinlto-cache"
       } else {
-        cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
+        thinlto_cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
       if (use_lld) {
         ldflags += [
           "-Wl,--thinlto-jobs=16",
-          "-Wl,--thinlto-cache-dir=$cache_path",
+          "-Wl,--thinlto-cache-dir=$thinlto_cache_path",
           "-Wl,--thinlto-cache-policy=cache_size_bytes=50g",
         ]
       } else {
