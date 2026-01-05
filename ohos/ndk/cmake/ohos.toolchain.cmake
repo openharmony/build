@@ -110,11 +110,25 @@ else()
   message(FATAL_ERROR "unrecognized ${OHOS_ARCH}")
 endif()
 
+# Convert OHOS_COMPATIBLE_SDK_VERSION to standard format
 if(DEFINED OHOS_COMPATIBLE_SDK_VERSION)
-  if(DEFINED DISTRIBUTEOS_COMPATIBLE_SDK_VERSION)
-    set(OHOS_LLVM "${OHOS_LLVM}${OHOS_COMPATIBLE_SDK_VERSION}.${DISTRIBUTEOS_COMPATIBLE_SDK_VERSION}")
+  # Case 1: x.y.z(w) format, convert to w.0.0, e.g., 6.0.0(21) -> 21.0.0
+  if("${OHOS_COMPATIBLE_SDK_VERSION}" MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+\\.?\\(?([0-9]+)\\)?$")
+    string(REGEX MATCH "\\(([0-9]+)\\)" _MATCH_GROUP "${OHOS_COMPATIBLE_SDK_VERSION}")
+    if(CMAKE_MATCH_1)
+      set(OHOS_COMPATIBLE_SDK_VERSION "${CMAKE_MATCH_1}.0.0")
+    endif()
+  # Case 2: w format (single number), convert to w.0.0, e.g., 21 -> 21.0.0
+  elseif("${OHOS_COMPATIBLE_SDK_VERSION}" MATCHES "^[0-9]+$")
+    set(OHOS_COMPATIBLE_SDK_VERSION "${OHOS_COMPATIBLE_SDK_VERSION}.0.0")
+  # Case 3: x.y.z format, no conversion needed
+  elseif("${OHOS_COMPATIBLE_SDK_VERSION}" MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+    # Keep the original value, no conversion
+  # Case 4: Other formats, print warning and set to empty
   else()
-    set(OHOS_LLVM "${OHOS_LLVM}${OHOS_COMPATIBLE_SDK_VERSION}")
+    message(WARNING "Invalid OHOS_COMPATIBLE_SDK_VERSION format: ${OHOS_COMPATIBLE_SDK_VERSION}. "
+                    "Expected formats: x.y.z(w), w, or x.y.z. Setting to empty.")
+    set(OHOS_COMPATIBLE_SDK_VERSION "")
   endif()
 endif()
 
