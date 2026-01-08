@@ -83,6 +83,12 @@ def get_license_from_readme(readme_path: str):
 
     if len(contents) <= 1:
         notice_file = contents[0].get('License File').strip()
+        notice_files = []
+        if "," in notice_file:
+            notice_files = [file.strip() for file in notice_file.split(",")
+        else:
+            notice_files = [notice_file]
+
         notice_name = contents[0].get('Name').strip()
         notice_version = contents[0].get('Version Number').strip()
         if notice_file is None:
@@ -95,13 +101,20 @@ def get_license_from_readme(readme_path: str):
             raise Exception("Error: Version Number of notice file is empty in {}.".format(
                 readme_path))
 
-        return os.path.join(os.path.dirname(readme_path), notice_file), notice_name, notice_version
+        return [os.path.join(os.path.dirname(readme_path), notice_file) for file in notice_files], notice_name, notice_version
     else:
         notice_files = []
         notice_names = []
         notice_versions = []
         for content in contents:
-            notice_files.append(content.get('License File').strip())
+            notice_file = content.get('License File').strip()
+            if "," in notice_file:
+                notice_files_list = [file.strip() for file in notice_file.split(",")]
+                notice_file = ",".join(os.path.join(os.path.dirname(readme_path), file) for file in notice_files_list])
+            else:
+                notice_file = os.path.join(os.path.dirname(readme_path), notice_file)
+
+            notice_files.append()
             notice_names.append(content.get('Name').strip())
             notice_versions.append(content.get('Version Number').strip())
 
@@ -115,8 +128,7 @@ def get_license_from_readme(readme_path: str):
             raise Exception("Error: Version Number of notice file is empty in {}.".format(
                 readme_path))
 
-        return [os.path.join(os.path.dirname(readme_path), file) for file in notice_files], \
-            notice_names, notice_versions
+        return notice_files, notice_names, notice_versions
 
 
 def add_path_to_module_notice(module_notice_info, module_notice_info_list, options):
@@ -194,6 +206,9 @@ def do_collect_notice_files(options, depfiles: list):
 
 
 def write_file_content(notice_files, options, output, notice_info_json, module_notice_info_list, depfiles):
+    # support increamental compile
+    if os.path.exists(output):
+        os.unlink(output)
     for notice_file in notice_files:
         notice_file = notice_file.strip()
         if not os.path.exists(notice_file):
@@ -217,7 +232,7 @@ def write_notice_to_output(notice_file, output):
                    'r', encoding='utf-8', errors='ignore') as output_data_flow:
         output_file_content = output_data_flow.read()
     if license_content not in output_file_content:
-        with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR),
+        with os.fdopen(os.open(output, os.O_RDWR | os.O_CREAT | os.O_TRUNC, stat.S_IWUSR | stat.S_IRUSR),
                        'a', encoding='utf-8') as testfwk_info_file:
             testfwk_info_file.write(f"{license_content}\n")
             testfwk_info_file.close()
