@@ -110,7 +110,7 @@ def get_license_from_readme(readme_path: str):
             notice_file = content.get('License File').strip()
             if "," in notice_file:
                 notice_files_list = [file.strip() for file in notice_file.split(",")]
-                notice_file = ",".join(os.path.join(os.path.dirname(readme_path), file) for file in notice_files_list])
+                notice_file = ",".join([os.path.join(os.path.dirname(readme_path), file) for file in notice_files_list])
             else:
                 notice_file = os.path.join(os.path.dirname(readme_path), notice_file)
 
