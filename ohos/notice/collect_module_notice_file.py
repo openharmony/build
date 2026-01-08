@@ -85,7 +85,7 @@ def get_license_from_readme(readme_path: str):
         notice_file = contents[0].get('License File').strip()
         notice_files = []
         if "," in notice_file:
-            notice_files = [file.strip() for file in notice_file.split(",")
+            notice_files = [file.strip() for file in notice_file.split(",")]
         else:
             notice_files = [notice_file]
 
@@ -114,7 +114,7 @@ def get_license_from_readme(readme_path: str):
             else:
                 notice_file = os.path.join(os.path.dirname(readme_path), notice_file)
 
-            notice_files.append()
+            notice_files.append(notice_file)
             notice_names.append(content.get('Name').strip())
             notice_versions.append(content.get('Version Number').strip())
 
