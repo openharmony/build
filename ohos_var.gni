@@ -289,6 +289,8 @@ declare_args() {
 # enhance some optimizations
 declare_args() {
   enhanced_opt = true
+  enable_affine_global_reordering = false
+  enable_thinlto_nca = false
 }
 
 # build target type

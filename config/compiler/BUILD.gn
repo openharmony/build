@@ -551,7 +551,14 @@ config("compiler") {
     ldflags += [ "-stdlib=libc++" ]
   }
 
-  # Add flags for link-time optimization. These flags enable
+  # Add flags for LLD optimizations, which can be applied in FullLTO mode also.
+  if (is_ohos && is_clang && use_lld && enhanced_opt && enable_enhanced_opt) {
+    if (enable_affine_global_reordering) {
+      ldflags += [ "-Wl,--reorder-affine-globals" ]
+    }
+  }
+
+  # Add flags for ThinLTO optimization. These flags enable
   # optimizations/transformations that require whole-program visibility at link
   # time, so they need to be applied to all translation units, and we may end up
   # with miscompiles if only part of the program is compiled with LTO flags. For
@@ -614,6 +621,11 @@ config("compiler") {
               "-Wl,-mllvm",
               "-Wl,-import-instr-limit=5",
             ]
+          }
+        }
+        if (is_ohos && enhanced_opt && enable_enhanced_opt) {
+          if (enable_thinlto_nca) {
+            ldflags += [ "-Wl,-mllvm,-enable-name-collision-analysis" ]
           }
         }
       } else {
