@@ -178,6 +178,11 @@ config("default_include_dirs") {
   ]
 }
 
+declare_args() {
+  # set thinlto cache default size 100g
+  thinlto_cache_policy = "cache_size_bytes=100g"
+}
+
 # compiler ---------------------------------------------------------------------
 #
 # Base compiler configuration.
@@ -587,15 +592,16 @@ config("compiler") {
       # linker jobs. This is still suboptimal to a potential dynamic
       # resource allocation scheme, but should be good enough.
       if (use_thinlto_cache) {
-        home_path = getenv("HOME")
-        cache_path = "$home_path/thinlto-cache"
+        cache_base = getenv("CACHE_BASE")
+        thinlto_cache_dir = "$cache_base/thinlto-cache"
       } else {
-        cache_path = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
+        thinlto_cache_dir = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
       if (use_lld) {
         ldflags += [
           "-Wl,--thinlto-jobs=16",
-          "-Wl,--thinlto-cache-dir=$cache_path",
+          "-Wl,--thinlto-cache-dir=$thinlto_cache_dir",
+          "-Wl,--thinlto-cache-policy=$thinlto_cache_policy",
         ]
       } else {
         ldflags += [ "-Wl,-plugin-opt,jobs=16" ]
