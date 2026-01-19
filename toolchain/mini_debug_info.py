@@ -47,16 +47,15 @@ def remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path):
             if pattern.search(line):
                 symbols_to_rename.append(line)
 
-    if symbols_to_rename:
-        rename_rules_path = keep_path + ".rename"
-        with os.fdopen(os.open(rename_rules_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
-            for symbol in symbols_to_rename:
-                new_name = pattern.sub('', symbol)
-                if new_name != symbol:
-                    output_file.write('{} {}\n'.format(symbol, new_name))
+    rename_rules_path = keep_path + ".rename"
+    with os.fdopen(os.open(rename_rules_path, os.O_RDWR | os.O_CREAT, modes), 'w', encoding='utf-8') as output_file:
+        for symbol in symbols_to_rename:
+            new_name = pattern.sub('', symbol)
+            if new_name != symbol:
+                output_file.write('{} {}\n'.format(symbol, new_name))
 
-        rename_cmd = llvm_objcopy_path + " --redefine-syms=" + rename_rules_path + " " + mini_debug_path
-        return rename_cmd, rename_rules_path
+    rename_cmd = llvm_objcopy_path + " --redefine-syms=" + rename_rules_path + " " + mini_debug_path
+    return rename_cmd, rename_rules_path
 
 
 def create_mini_debug_info(binary_path, stripped_binary_path, root_path, clang_base_dir, adlt_llvm_tool):
