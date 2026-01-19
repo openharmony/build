@@ -142,6 +142,11 @@ def build_args(config, options):
                 args.append("-l{}".format(outfile))
 
     args.extend(get_deps_form_cangjie_deps_config_meta(config["cangjie_deps_config"], config["cjc_toolchain_config"]))
+    toolchain_config = config["cjc_toolchain_config"]
+    if toolchain_config["target_platform"] == "aarch64-apple-darwin" and toolchain_config["dyn_extension"] == ".dylib":
+        outname = config["outname"]
+        args.append(f"--link-options=-install_name @rpath/lib{outname}.dylib")
+        args.append(f"--link-options=-rpath @loader_path")
 
     return (args, os.path.dirname(config["outfile"]))
 
