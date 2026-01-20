@@ -148,12 +148,16 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             symlink_dest = module_info.get('symlink')
             for dest in dests:
                 symlink_src_file = os.path.basename(dest)
+                symlink_src_file_path = os.path.join(platform_installed_path, dest)
                 for name in symlink_dest:
                     symlink_dest_dir = os.path.dirname(dest)
                     symlink_dest_file = os.path.join(platform_installed_path,
                                                      symlink_dest_dir, name)
+                    src_file_relpath = os.path.relpath(symlink_src_file_path, os.path.dirname(symlink_dest_file))
+                    if not os.path.exists(os.path.dirname(symlink_dest_file)):
+                        os.makedirs(os.path.dirname(symlink_dest_file), exist_ok=True)
                     if not os.path.exists(symlink_dest_file):
-                        os.symlink(symlink_src_file, symlink_dest_file)
+                        os.symlink(src_file_relpath, symlink_dest_file)
         if 'symlink_ext' in module_info:
             symlink_ext = module_info.get('symlink_ext')
             for dest in dests:
