@@ -119,7 +119,7 @@ def main():
         last_hour = (datetime.datetime.now() +
                      datetime.timedelta(days=-30)).strftime('%Y%m%d%H%M%S')
 
-        url = "http://ci.openharmony.cn/api/daily_build/build/tasks"
+        url = "http://dcp.openharmony.cn/api/daily_build/build/tasks"
         myobj = {"pageNum": 1,
                  "pageSize": 1000,
                  "startTime": "",
@@ -137,7 +137,7 @@ def main():
         x = requests.post(url, json=myobj)
         data = json.loads(x.text)
     except BaseException:
-        Exception("Unable to establish connection with ci.openharmony.cn")
+        Exception("Unable to establish connection with dcp.openharmony.cn")
 
     products_list = data['data']['dailyBuildVos']
     for product in products_list:
@@ -149,7 +149,7 @@ def main():
                 break
 
             if product['obsPath'] and os.path.exists(default_save_path):
-                download_url = 'http://download.ci.openharmony.cn/{}'.format(product['obsPath'])
+                download_url = 'https://cidownload.openharmony.cn/{}'.format(product['obsPath'])
                 save_path2 = default_save_path
 
             try:
