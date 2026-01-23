@@ -75,7 +75,8 @@ class BootPathCollection():
                 elif "_bootpath" in _filename:
                     # other bootpath.json, stores in rest_file_list
                     content = read_json_file(os.path.join(root, _filename))
-                    rest_file_list.append(content["bootpath"])
+                    for value in content["bootpath"].split(":"):
+                        rest_file_list.append(value)
         
         return fix_order_dict, rest_file_list
 
