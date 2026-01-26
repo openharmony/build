@@ -185,7 +185,7 @@ ohos_prebuilt_shared_library("musl-libcxx.so_arm64e") {
   } else {
     source = "${standard_clang_path}/arm64e/libc++.so"
   }
-  deps = [ ":musl-libcxx_unstripped_copy" ]
+  deps = [ ":musl-libcxx_arm64e_unstripped_copy" ]
   install_images = [
     "system_arm64e"
   ]
@@ -199,3 +199,7 @@ copy("musl-libcxx_unstripped_copy") {
   outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
 
+copy("musl-libcxx_arm64e_unstripped_copy") {
+  sources = [ "${standard_clang_path}/arm64e/libc++.so" ]
+  outputs = [ root_out_dir + "/lib.unstripped/clang/arm64e/{{source_file_part}}" ]
+}
