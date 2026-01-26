@@ -27,8 +27,16 @@ group("musl_install") {
       ":ld-musl-riscv64.so.1",
       ":musl-libc.so",
     ]
+  } else if (musl_arch == "aarch64") {
+    deps += [
+      ":ld-musl-arm.so.1",
+      ":ld-musl-arm.so.1_arm64e",
+      ":musl-libcxx.so_arm64e",
+    ]
   } else {
-    deps += [ ":ld-musl-arm.so.1" ]
+    deps += [
+      ":ld-musl-arm.so.1" 
+    ]
   }
 }
 
@@ -59,7 +67,6 @@ if (target_cpu == "riscv64") {
     deps = [ "//third_party/musl:soft_create_linker" ]
     if (musl_arch == "aarch64") {
       deps += [ "//third_party/musl:soft_create_linker_sp" ]
-      support_arm64e = true 
     }
     if (is_asan || is_tsan) {
       asan = "-asan"
@@ -84,6 +91,36 @@ if (target_cpu == "riscv64") {
     subsystem_name = "build"
     part_name = "build_framework"
     module_install_dir = "lib"
+  }
+  
+  if (musl_arch == "aarch64") {
+    ohos_prebuilt_shared_library("ld-musl-arm.so.1_arm64e") {
+      deps = [ "//third_party/musl:soft_create_linker" ]
+      if (musl_arch == "aarch64") {
+        deps += [ "//third_party/musl:soft_create_linker_sp" ]
+      }
+      if (is_asan || is_tsan) {
+        asan = "-asan"
+      } else {
+        asan = ""
+      }
+
+      _musl_linker_so =
+          "${root_out_dir}/common/common/libc/./ld-musl-${musl_arch}${asan}.so.1"
+      source = _musl_linker_so
+      install_enable = true
+      install_images = [
+        "system_arm64e"
+      ]
+      if (target_cpu == "arm") {
+        symlink_ext = [ "lib/libc.so" ]
+      } else if (target_cpu == "arm64" || target_cpu == "x86_64") {
+        symlink_ext = [ "lib64/libc.so" ]
+      }
+      subsystem_name = "build"
+      part_name = "build_framework"
+      module_install_dir = "lib"
+    }
   }
 }
 
@@ -135,7 +172,23 @@ ohos_prebuilt_shared_library("musl-libcxx.so") {
     "updater",
     "ramdisk",
   ]
-  support_arm64e = true
+  subsystem_name = "build"
+  part_name = "build_framework"
+  innerapi_tags = [ "chipsetsdk_sp" ]
+}
+
+ohos_prebuilt_shared_library("musl-libcxx.so_arm64e") {
+  enable_strip = true
+  mini_debug = true
+  if (is_asan == true && use_hwasan == true && target_cpu == "arm64") {
+    source = "${clang_base_path}/lib/aarch64-linux-ohos/hwasan/arm64e/libc++.so"
+  } else {
+    source = "${standard_clang_path}/arm64e/libc++.so"
+  }
+  deps = [ ":musl-libcxx_unstripped_copy" ]
+  install_images = [
+    "system_arm64e"
+  ]
   subsystem_name = "build"
   part_name = "build_framework"
   innerapi_tags = [ "chipsetsdk_sp" ]
@@ -145,3 +198,4 @@ copy("musl-libcxx_unstripped_copy") {
   sources = [ "${standard_clang_path}/libc++.so" ]
   outputs = [ root_out_dir + "/lib.unstripped/clang/{{source_file_part}}" ]
 }
+
