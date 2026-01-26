@@ -84,7 +84,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             continue
         update_module_info(module_info, categorized_libraries)
         arm64e_whitelist = read_json_file(arm64e_whitelist_file)
-        if ("arm64e" in module_info.get("label", []) and arm64e_whitelist:
+        if "arm64e" in module_info.get("label", []) and arm64e_whitelist:
             for label in arm64e_whitelist:
                 if label in module_info.get('label', []):
                     arm64e_output_result.append(module_info)
