@@ -51,8 +51,8 @@
                             "build_type": "src"
                         },
                         {
-                            "remote_url": "/nodejs/v16.20.2/node-v16.20.2-darwin-arm64.tar.gz",
-                            "unzip_filename": "node-v16.20.2-darwin-arm64"
+                            "remote_url": "/nodejs/v18.20.1/node-v18.20.1-darwin-arm64.tar.gz",
+                            "unzip_filename": "node-v18.20.1-darwin-arm64"
                         }
                     ]
                 }
