@@ -13,10 +13,14 @@
 import("//build/ohos.gni")
 import("//build/ohos/taihe_idl/taihe_args.gni")
 
+_build_taihe_out_dir = get_label_info("taihe_ffi_gen:build_taihe_wrapper", "target_out_dir")
+
 declare_args() {
   taihe_file_path = "$root_out_dir/taihe"
-  taihe_toolchain_path = "//prebuilts/taihe/ohos/linux-x86_64/taihe"
+  taihe_toolchain_path = "${_build_taihe_out_dir}/dist/taihe-linux-x86_64"
+  taihe_source_code_path = "//arkcompiler/taihe_ffi_gen"
 }
+
 
 template("ohos_taihe") {
   assert(defined(invoker.taihe_generated_file_path),
@@ -29,12 +33,22 @@ template("ohos_taihe") {
   }
 
   if (taihe_template_bypass) {
-    not_needed(invoker, [ "deps", "external_deps", "module_prefix", "path_prefix" ])
+    not_needed(invoker,
+               [
+                 "deps",
+                 "external_deps",
+                 "module_prefix",
+                 "path_prefix",
+               ])
     action(target_name) {
       script = rebase_path("//build/scripts/touch_outputs.py")
       args = rebase_path(_taihe_outputs, root_build_dir)
       outputs = _taihe_outputs
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
     action(target_name) {
@@ -63,16 +77,22 @@ template("ohos_taihe") {
         args += [ "-Carkts:path-prefix=${invoker.path_prefix}" ]
       }
 
+      external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
+
       if (defined(invoker.deps)) {
         deps = invoker.deps
       }
 
       if (defined(invoker.external_deps)) {
-        external_deps = invoker.external_deps
+        external_deps += invoker.external_deps
       }
 
       outputs = _taihe_outputs
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   }
 }
@@ -80,9 +100,18 @@ template("ohos_taihe") {
 template("copy_taihe_idl") {
   assert(defined(invoker.sources), "please provide sources for copy")
   if (taihe_template_bypass) {
-    not_needed(invoker, [ "sources", "deps", "external_deps" ])
+    not_needed(invoker,
+               [
+                 "sources",
+                 "deps",
+                 "external_deps",
+               ])
     group(target_name) {
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
     ohos_copy(target_name) {
@@ -94,7 +123,11 @@ template("copy_taihe_idl") {
       if (defined(invoker.deps)) {
         deps = invoker.deps
       }
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   }
 }
@@ -103,7 +136,11 @@ template("taihe_shared_library") {
   if (taihe_template_bypass) {
     not_needed(invoker, "*")
     group(target_name) {
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
     ohos_shared_library(target_name) {
@@ -123,9 +160,9 @@ template("taihe_shared_library") {
       }
 
       sources = [
-        "$taihe_toolchain_path/src/taihe/runtime/object.cpp",
-        "$taihe_toolchain_path/src/taihe/runtime/runtime_ani.cpp",
-        "$taihe_toolchain_path/src/taihe/runtime/string.cpp",
+        "$taihe_source_code_path/runtime/src/object.cpp",
+        "$taihe_source_code_path/runtime/src/runtime_ani.cpp",
+        "$taihe_source_code_path/runtime/src/string.cpp",
       ]
       sources += invoker.sources
 
