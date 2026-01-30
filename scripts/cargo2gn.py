@@ -833,7 +833,7 @@ class Runner(object):
             if '[workspace]\n' in cargo_toml_lines:
                 print('WARNING: found [workspace] in Cargo.toml')
             else:
-                with os.fdopen(os.open(cargo_toml, os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                with os.fdopen(os.open(cargo_toml, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                                         stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                                 'w') as out_file:
                     out_file.write('[workspace]\n')
@@ -841,7 +841,7 @@ class Runner(object):
         self.deal_cargo_cmd(cargo_out)
         # restore original Cargo.toml
         if is_add_workspace:
-            with os.fdopen(os.open(cargo_toml, os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+            with os.fdopen(os.open(cargo_toml, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                                     stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                                 'w') as out_file:
                 out_file.writelines(cargo_toml_lines)
@@ -1008,7 +1008,7 @@ class Runner(object):
         self.gn_files.add(name)
         if os.path.exists(name):
             os.remove(name)
-        with os.fdopen(os.open(name, os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+        with os.fdopen(os.open(name, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                                 stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                         'w') as outfile:
             outfile.write(BUILD_GN_HEADER)

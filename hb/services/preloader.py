@@ -103,7 +103,7 @@ class OHOSPreloader(PreloadInterface):
                 raise Exception("part feature '{key}:{val}' type not support.")
             attr_list.append(_item)
         with os.fdopen(os.open(self._outputs.build_gnargs_prop,
-                                os.O_WDWR | os.O_CREAT | os.O_TRUNC, 
+                                os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 
                                 stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                         'w') as fobj:
             fobj.write('\n'.join(attr_list))
@@ -197,7 +197,7 @@ class OHOSPreloader(PreloadInterface):
         for key, value in self._build_vars.items():
             build_vars_list.append('{}={}'.format(key, value))
         with os.fdopen(os.open(self._outputs.build_prop,
-                                os.O_WDWR | os.O_CREAT | os.O_TRUNC, 
+                                os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 
                                 stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                         'w') as fobj:
             fobj.write('\n'.join(build_vars_list))

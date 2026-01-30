@@ -123,7 +123,7 @@ def build_ace(cmd: str, options, js2abc: bool, loader_home: str, assets_dir: str
         ability_dir = os.path.relpath(assets_dir[asset_index], loader_home)
         my_env["aceModuleRoot"] = ability_dir
         if options.js_sources_file:
-            with os.fdopen(os.open(options.js_sources_file, os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+            with os.fdopen(os.open(options.js_sources_file, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                                     stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                             'wb') as js_sources_file:
                 sources = get_all_js_sources(ability_dir)

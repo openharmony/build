@@ -16,6 +16,7 @@
 from email.policy import default
 import optparse
 import os
+import stat
 import sys
 import shutil
 import json
@@ -58,7 +59,7 @@ def merge_profile(options):
     else:
         all_data["app"]["apiReleaseType"] = 'Release'
     with os.fdopen(os.open(options.generated_profile,
-                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                             stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                     'w') as f3:
         json.dump(all_data, f3, indent=4, ensure_ascii=False)

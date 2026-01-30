@@ -40,7 +40,7 @@ def write_json_file(output_file: str, content):
     if not os.path.exists(file_dir):
         os.makedirs(file_dir, exist_ok=True)
     with os.fdopen(os.open(output_file,
-                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                             stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                     'w') as output_f:
         json.dump(content, output_f, indent=2)
