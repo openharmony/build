@@ -57,9 +57,11 @@ def merge_profile(options):
         all_data["app"]["apiReleaseType"] = options.release_type
     else:
         all_data["app"]["apiReleaseType"] = 'Release'
-    f3 = open(options.generated_profile, "w")
-    json.dump(all_data, f3, indent=4, ensure_ascii=False)
-    f3.close()
+    with os.fdopen(os.open(options.generated_profile,
+                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                    'w') as f3:
+        json.dump(all_data, f3, indent=4, ensure_ascii=False)
 
 
 def main(args):

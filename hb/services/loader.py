@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import os
+import stat
 import json
 import copy
 
@@ -387,7 +388,9 @@ class OHOSLoader(LoadInterface):
             os.mkdir(os.path.join(system_etc_path, "param/"))
         target_syscap_for_init_file = os.path.join(
             system_etc_path, "param/syscap.para")
-        with open(target_syscap_for_init_file, "w") as file:
+        with os.fdopen(os.open(target_syscap_for_init_file,
+                                os.O_WDWR | os.O_CREAT | os.O_TRUNC, 
+                                stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH), 'w') as file:
             file.writelines(sorted(target_syscap_for_init_list))
         LogUtil.hb_info("generate target syscap for init list to '{}'".format(
             target_syscap_for_init_file), mode=self.config.log_mode)
