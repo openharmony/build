@@ -62,7 +62,7 @@ def do_dos2unix(in_file: str, out_file: str):
         contents = contents[len(codecs.BOM_UTF8):]
     contents = re.sub(r'\r\n', '\n', contents.decode())
     with os.fdopen(os.open(out_file,
-                        os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                        os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                         stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),'w') as fout:
         fout.write(contents)
 
@@ -128,7 +128,7 @@ def main():
 
     os.makedirs(os.path.dirname(options.output), exist_ok=True)
     with os.fdopen(os.open(options.output,
-                        os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                        os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                         stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),'w') as f:
         f.write(ndk_contents)
 

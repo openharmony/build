@@ -250,7 +250,7 @@ def hvigor_write_log(cmd, cwd, env, hash_value):
         print(f"[2/2] [{hash_value}] Hvigor warning: {line}")
     os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
     with os.fdopen(os.open(os.path.join(cwd, 'build', 'build.log'),
-                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                             stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                     'w') as f:
         f.write(f'{stdout}\n')
@@ -382,7 +382,7 @@ def write_local_properties(cwd: str, options, node_home: str):
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(node_home)))
     with os.fdopen(os.open(os.path.join(cwd, 'local.properties'),
-                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
                             stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
                     'w') as f:
         for sdk_type in options.sdk_type_name:
