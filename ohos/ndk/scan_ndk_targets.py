@@ -22,6 +22,7 @@ import glob
 import re
 import errno
 import codecs
+import stat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util import build_utils  # noqa: E402,E501 pylint: disable=E0401,C0413
@@ -60,7 +61,9 @@ def do_dos2unix(in_file: str, out_file: str):
     if contents.startswith(codecs.BOM_UTF8):
         contents = contents[len(codecs.BOM_UTF8):]
     contents = re.sub(r'\r\n', '\n', contents.decode())
-    with open(out_file, 'w') as fout:
+    with os.fdopen(os.open(out_file,
+                        os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                        stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),'w') as fout:
         fout.write(contents)
 
 
@@ -124,7 +127,9 @@ def main():
     ndk_contents = ALL_NDK_TARGETS_TEMPLATE.format('\n'.join(ndk_targets))
 
     os.makedirs(os.path.dirname(options.output), exist_ok=True)
-    with open(options.output, 'w') as f:
+    with os.fdopen(os.open(options.output,
+                        os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                        stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),'w') as f:
         f.write(ndk_contents)
 
     # Call gn format to make the output gn file prettier.

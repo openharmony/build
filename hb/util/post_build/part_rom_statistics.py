@@ -17,6 +17,7 @@ limitations under the License.
 """
 
 import os
+import stat
 import re
 import json
 
@@ -158,7 +159,9 @@ def actual_rom_statistics(out_path):
     rom_statistics["parts_info"] = part_info_list
     json_path = os.path.join(out_path, 'rom_statistics_table.json')
     json_str = json.dumps(rom_statistics, indent=4)
-    with open(json_path, 'w') as json_file:
+    with os.fdopen(os.open(json_path,
+                            os.O_RDWR | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH), 'w') as json_file:
         json_file.write(json_str)
     
 

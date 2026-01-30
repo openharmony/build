@@ -143,7 +143,9 @@ def main():
         overlay_data = update_components(args.subsys_overlay)
         ret["subsystems"].update(overlay_data.get("subsystems"))
     with os.fdopen(os.open(args.out,
-                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as f:
+                            os.O_WDWR | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                    'w') as f:
         f.write(json.dumps(ret, indent=2))
     print("file has generated in path: {}".format(args.out))
 

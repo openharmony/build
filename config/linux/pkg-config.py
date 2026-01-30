@@ -49,7 +49,7 @@ def set_config_path(options: OptionParser) -> str:
     """
 
     sysroot = options.sysroot
-    assert sysroot
+    print("sysroot is: {}".format(sysroot))
 
     # Compute the library path name based on the architecture.
     arch = options.arch

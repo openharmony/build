@@ -17,6 +17,7 @@ import optparse
 import os
 import sys
 import subprocess
+import stat
 
 sys.path.append(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
 from scripts.util import build_utils  # noqa: E402
@@ -46,7 +47,10 @@ def check_ndk_header(headers: list, output: str):
         command = cmd_list + [file]
         result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if result.returncode != 0:
-            with open(r'Error.txt', 'a', encoding='utf-8') as fs:
+            with os.fdopen(os.open(r'Error.txt',
+                                os.O_WRONLY | os.O_CREAT | os.O_APPEND,
+                                mode=stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH  ),
+                        'a', encoding='utf-8') as fs:
                 fs.write(f'Error: {result.stderr.decode()}')
     
     build_utils.touch(output)
