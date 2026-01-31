@@ -34,7 +34,7 @@ template("hc_gen") {
                            "list lines")
 
   target(target_type, target_name) {
-    external_deps = [ "hdf_core:hc_gen" ]
+    external_deps = [ "drivers_tools:hc_gen" ]
     script = "/usr/bin/env"
     if (defined(ohos_lite)) {
       script = "//build/lite/run_shell_cmd.py"
@@ -79,7 +79,7 @@ template("hc_gen") {
     }
 
     hc_gen_path =
-        rebase_path(get_label_info("hdf_core:hc_gen", "target_out_dir"))
+        rebase_path(get_label_info("drivers_tools:hc_gen", "target_out_dir"))
     if (ohos_indep_compiler_enable) {
       hc_gen_path += "/libs"
     }
