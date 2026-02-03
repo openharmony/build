@@ -16,6 +16,7 @@
 import argparse
 import os
 import sys
+import stat
 import subprocess
 import shutil
 import json
@@ -248,7 +249,10 @@ def hvigor_write_log(cmd, cwd, env, hash_value):
     for line in stderr.splitlines():
         print(f"[2/2] [{hash_value}] Hvigor warning: {line}")
     os.makedirs(os.path.join(cwd, 'build'), exist_ok=True)
-    with open(os.path.join(cwd, 'build', 'build.log'), 'w') as f:
+    with os.fdopen(os.open(os.path.join(cwd, 'build', 'build.log'),
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                    'w') as f:
         f.write(f'{stdout}\n')
         f.write(f'{stderr}\n')
     if proc.returncode or "ERROR: BUILD FAILED" in stderr or "ERROR: BUILD FAILED" in stdout:
@@ -377,7 +381,10 @@ def write_local_properties(cwd: str, options, node_home: str):
     sdk_dir = options.sdk_home
     nodejs_dir = os.path.abspath(
         os.path.dirname(os.path.dirname(node_home)))
-    with open(os.path.join(cwd, 'local.properties'), 'w') as f:
+    with os.fdopen(os.open(os.path.join(cwd, 'local.properties'),
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                    'w') as f:
         for sdk_type in options.sdk_type_name:
             f.write(f'{sdk_type}={sdk_dir}\n')
         f.write(f'nodejs.dir={nodejs_dir}\n')

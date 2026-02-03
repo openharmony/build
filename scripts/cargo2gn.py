@@ -19,6 +19,7 @@ from __future__ import print_function
 import os
 import os.path
 import sys
+import stat
 import argparse
 import glob
 import json
@@ -477,7 +478,10 @@ class Crate(object):
         if should_merge or should_merge_test:
             self.runner.init_gn_file(outfile_name)
             # to write debug info
-            with open(outfile_name, 'a') as outfile:
+            with os.fdopen(os.open(outfile_name,
+                                    os.O_WRONLY | os.O_CREAT | os.O_APPEND,
+                                    stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH),
+                            'a') as outfile:
                 self.outfile = outfile
                 other.outfile = outfile
                 self.execute_merge(other, should_merge_test)
@@ -535,7 +539,10 @@ class Crate(object):
     def dump(self):
         """Dump all error/debug/module code to the output .gn file."""
         self.runner.init_gn_file(self.outfile_name)
-        with open(self.outfile_name, 'a') as outfile:
+        with os.fdopen(os.open(self.outfile_name,
+                                os.O_WRONLY | os.O_CREAT | os.O_APPEND,
+                                stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH),
+                        'a') as outfile:
             self.outfile = outfile
             if self.error_infos:
                 self.dump_line()
@@ -826,13 +833,17 @@ class Runner(object):
             if '[workspace]\n' in cargo_toml_lines:
                 print('WARNING: found [workspace] in Cargo.toml')
             else:
-                with open(cargo_toml, 'w') as out_file:
+                with os.fdopen(os.open(cargo_toml, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                                        stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                                'w') as out_file:
                     out_file.write('[workspace]\n')
                     is_add_workspace = True
         self.deal_cargo_cmd(cargo_out)
         # restore original Cargo.toml
         if is_add_workspace:
-            with open(cargo_toml, 'w') as out_file:
+            with os.fdopen(os.open(cargo_toml, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                                    stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                                'w') as out_file:
                 out_file.writelines(cargo_toml_lines)
         if not self.dry_run:
             if not have_cargo_lock:  # restore to no Cargo.lock state
@@ -864,7 +875,10 @@ class Runner(object):
         if self.dry_run:
             print('Dry-run skip:', cargo_cmd)
         else:
-            with open(cargo_out, 'a') as file:
+            with os.fdopen(os.open(cargo_out,
+                                    os.O_WRONLY | os.O_CREAT | os.O_APPEND,
+                                    stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH),
+                            'a') as file:
                 file.write('### Running: ' + ''.join(cargo_cmd) + '\n')
             ret = subprocess.run(cargo_cmd, shell=False)
             if ret.returncode != 0:
@@ -981,7 +995,9 @@ class Runner(object):
 
     def append_to_gn(self, line: str):
         self.init_gn_file('BUILD.gn')
-        with open('BUILD.gn', 'a') as outfile:
+        with os.fdopen(os.open('BUILD.gn',os.O_WRONLY | os.O_CREAT | os.O_APPEND,
+                                stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IROTH),
+                        'a') as outfile:
             outfile.write(line)
         print(line)
 
@@ -992,7 +1008,9 @@ class Runner(object):
         self.gn_files.add(name)
         if os.path.exists(name):
             os.remove(name)
-        with open(name, 'w') as outfile:
+        with os.fdopen(os.open(name, os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                                stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                        'w') as outfile:
             outfile.write(BUILD_GN_HEADER)
             outfile.write('\n')
             outfile.write('import("%s")\n' % IMPORT_CONTENT)
