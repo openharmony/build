@@ -163,7 +163,9 @@ def generate_config_with_full_deps(deps_path: str, base_product_path: str, confi
     result = kconf
     result[SUBSYS_LIST] = subsystems_list
     with os.fdopen(os.open(out,
-                               os.O_RDWR | os.O_CREAT, stat.S_IWUSR | stat.S_IRUSR), 'w') as f:
+                            os.O_WRONLY | os.O_CREAT | os.O_TRUNC,
+                            stat.S_IWUSR | stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH),
+                    'w') as f:
         f.write(json.dumps(result, indent=2))
     print("output file in: ", os.path.abspath(out))
 
