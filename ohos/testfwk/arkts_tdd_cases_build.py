@@ -28,8 +28,7 @@ import shutil
 # ==========================
 ES2PANDAPATH = "arkcompiler/runtime_core/static_core/out/bin/es2panda"
 ARKLINKPATH = "arkcompiler/runtime_core/static_core/out/bin/ark_link"
-HYPIUMPATH = "test/testfwk/arkxtest/jsunit/src_static/"
-DESTHYPIUMPATH = "test/testfwk/developer_test/libs/destHypium"
+CONFIGPATH = "arkcompiler/runtime_core/static_core/out/bin/arktsconfig.json"
 
 
 # ==========================
@@ -50,7 +49,7 @@ def get_path_code_directory(after_dir):
 # ==========================
 # Build Tools
 # ==========================
-def build_tools(compile_filelist, output_dir):
+def build_tools(compile_filelist, output_dir, arktsconfig):
     """
     Compile ETS files into ABC format.
     """
@@ -69,7 +68,12 @@ def build_tools(compile_filelist, output_dir):
             base_name = os.path.splitext(file_name)[0]
             output_filepath = os.path.join(output_dir, f"{base_name}.abc")
 
-            command = [abs_es2panda_path, ets_file, f"--output={output_filepath}"]
+            if arktsconfig == CONFIGPATH:
+                command = [abs_es2panda_path, ets_file, f"--output={output_filepath}"]
+            else:
+                arktsconfig_path = get_path_code_directory(arktsconfig)
+                command = [abs_es2panda_path, ets_file, f"--output={output_filepath}",
+                           f"--arktsconfig={arktsconfig_path}"]
             logging.info(f"Executing compile command: {' '.join(command)}")
 
             result = subprocess.run(
@@ -94,7 +98,7 @@ def build_tools(compile_filelist, output_dir):
 # ==========================
 # Main Build Flow
 # ==========================
-def build_ets_files(target_path, sources, output_dir):
+def build_ets_files(target_path, sources, output_dir, arktsconfig):
     """
     Compile test case ETS files.
     """
@@ -103,7 +107,7 @@ def build_ets_files(target_path, sources, output_dir):
     test_files = [os.path.join(target_path, file) for file in test_files_list]
 
     logging.info(f"Files to be compiled: {test_files}")
-    build_tools(test_files, output_dir)
+    build_tools(test_files, output_dir, arktsconfig)
 
 
 def collect_abc_files(output_dir, target_path, hypium_output_dir, test_files):
@@ -220,24 +224,6 @@ def link_abc_files(output_dir, hap_name, target_path, hypium_output_dir, test_fi
 
 
 # ==========================
-# swap hypium directory
-# ==========================
-def swap_hypium_tools(src_path, dest_path):
-    abs_src_path = get_path_code_directory(src_path)
-    abs_dest_path = get_path_code_directory(dest_path)
-    temp_dir = abs_dest_path.rstrip('/')+ "_temp_swap"
-
-    if os.path.exists(abs_dest_path):
-        shutil.move(abs_dest_path, temp_dir)
-
-    if os.path.exists(abs_src_path):
-        shutil.move(abs_src_path, abs_dest_path)
-
-    if os.path.exists(temp_dir):
-        shutil.move(temp_dir, abs_src_path)
-
-
-# ==========================
 # Main Entry Point
 # ==========================
 def main():
@@ -250,16 +236,15 @@ def main():
     parser.add_argument("--sources", required=True, help="List of ETS source files (comma-separated)")
     parser.add_argument("--subsystem_name", required=True, help="subsystem name")
     parser.add_argument("--part_name", required=True, help="part name")
+    parser.add_argument("--arktsconfig", required=True, help="arktsconfig file")
 
     args = parser.parse_args()
 
     # Start build pipeline
     try:
         logging.info("Starting build pipeline")
-        swap_hypium_tools(HYPIUMPATH, DESTHYPIUMPATH)
-        build_ets_files(args.target_path, args.sources, args.output_dir)
+        build_ets_files(args.target_path, args.sources, args.output_dir, args.arktsconfig)
         link_abc_files(args.output_dir, args.hap_name, args.target_path, args.hypium_output_dir, args.test_files)
-        swap_hypium_tools(DESTHYPIUMPATH, HYPIUMPATH)
         logging.info("Build completed successfully!")
     except Exception as e:
         logging.critical(f"Build process failed unexpectedly: {str(e)}")
