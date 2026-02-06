@@ -889,6 +889,10 @@ template("ohos_arkts_unittest") {
   if (defined(external_deps)) {
     _external_deps += external_deps
   }
+  _arktsconfig = "arkcompiler/runtime_core/static_core/out/bin/arktsconfig.json"
+  if (defined(invoker.arktsconfig)) {
+    _arktsconfig = invoker.arktsconfig
+  }
   
   _hap_name = target_name
 
@@ -929,6 +933,8 @@ template("ohos_arkts_unittest") {
       rebase_path(hypium_output_dir, root_build_dir),
       "--sources",
       _sources_str,
+      "--arktsconfig",
+      _arktsconfig
     ]
     deps = _deps
     external_deps = _external_deps
