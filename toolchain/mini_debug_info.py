@@ -40,7 +40,7 @@ def gen_symbols(tmp_file, sort_lines, symbols_path):
 
 def remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path):
     modes = stat.S_IWUSR | stat.S_IRUSR | stat.S_IWGRP | stat.S_IRGRP
-    pattern = re.compile(r'(__[0-9A-F]{1,2})$')
+    pattern = re.compile(r'__(?:[0-9A-F]{1,4})((?:\.(?:cold|org|bolt)\.0)?)$')
     symbols_to_rename = []
 
     with os.fdopen(os.open(keep_path, os.O_RDONLY), 'r', encoding='utf-8') as output_file:
@@ -53,7 +53,7 @@ def remove_adlt_postfix(llvm_objcopy_path, keep_path, mini_debug_path):
     with os.fdopen(os.open(rename_rules_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, modes),
                     'w', encoding='utf-8') as output_file:
         for symbol in symbols_to_rename:
-            new_name = pattern.sub('', symbol)
+            new_name = pattern.sub(r'\1', symbol)
             if new_name != symbol:
                 output_file.write('{} {}\n'.format(symbol, new_name))
 
