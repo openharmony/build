@@ -126,6 +126,13 @@ if (!use_current_sdk) {
     meta_version,
   ]
 
+  if (point_split) {
+    generate_args += [
+      "--api-full-version",
+      api_full_version
+    ]
+  }
+
   foreach(os, sdk_systems) {
     generate_args += [
       "--sdk-systems",

@@ -36,7 +36,10 @@ declare_args() {
 
 declare_args() {
   enable_sign = false
-  cert_path = ""
+}
+
+declare_args() {
+  point_split = false
 }
 
 sdk_toolchains = {

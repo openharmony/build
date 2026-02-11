@@ -43,6 +43,7 @@ def main():
     parser.add_argument('--generated-sdk-modules-gni')
     parser.add_argument('--type2displayname')
     parser.add_argument('--api-version')
+    parser.add_argument('--api-full-version', default='')
     parser.add_argument('--release-type')
     parser.add_argument('--meta-version')
     parser.add_argument('--sdk-class')
@@ -51,6 +52,8 @@ def main():
     parser.add_argument('--output', required=True)
 
     options = parser.parse_args()
+
+    api_version = options.api_full_version if options.api_full_version else options.api_version
 
     template = Template("""#Generated code, DONOT modify it.
 import("//build/ohos/build_var.gni")
@@ -154,7 +157,7 @@ group("generated_ohos_sdk") {
         current_dir=options.current_dir,
         sdk_systems=options.sdk_systems,
         display_name=read_display_name(options.type2displayname),
-        api_version=options.api_version,
+        api_version=api_version,
         release_type=options.release_type,
         meta_version=options.meta_version,
         generated_sdk_modules_gni=options.generated_sdk_modules_gni,
