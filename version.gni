@@ -34,24 +34,3 @@ declare_args() {
 declare_args() {
   current_ndk_version = current_sdk_version
 }
-
-  api_version = "23"
-  api_minor_version = "0"
-  api_patch_version = "0"
-  api_full_version = "23.0.0"
-
-  # Release type, optional values: Betax, RCx...
-  release_type = "Beta1"
-  meta_version = "3.0.0"
-  platform_version = "4.0.0"
-}
-
-# ohos SDK version
-declare_args() {
-  current_sdk_version = sdk_version
-}
-
-# ohos NDK version
-declare_args() {
-  current_ndk_version = current_sdk_version
-}
