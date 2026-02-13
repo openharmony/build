@@ -28,6 +28,9 @@ declare_args() {
 if (use_current_sdk) {
   # native_dir is native current-sdk release dir, all things redefine base the value.
   native_dir = "base-current-sdk/linux/${api_version}/native"
+  if (point_split) {
+    native_dir = "base-current-sdk/linux/${api_full_version}/native"
+  }
 
   ndk_os_irrelevant_out_dir = "$root_out_dir/${native_dir}"
   ndk_os_specific_out_dir = "$root_out_dir/${native_dir}"
@@ -587,6 +590,9 @@ template("current_ndk") {
       platformVersion = platform_version
     }
     apiVersion = api_version
+    if (point_split) {
+      apiVersion = api_full_version
+    }
   }
   write_file(package_info_file, package_info, "json")
 
