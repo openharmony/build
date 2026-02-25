@@ -112,6 +112,25 @@ fi
 
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/${HOST_DIR}/bin:${PYTHON3_DIR}/bin:$PATH
 
+pushd ${SOURCE_ROOT_DIR}/third_party/ninja > /dev/null
+  ./configure.py --bootstrap
+  strip ninja && chmod +x ninja
+  cp -rf ninja ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin
+popd > /dev/null
+
+pushd ${SOURCE_ROOT_DIR}/third_party/gn > /dev/null
+  python3 ./build/gen.py --out-path out; ../ninja/ninja -C out
+  pushd ${SOURCE_ROOT_DIR}/third_party/gn/out > /dev/null
+    strip gn && chmod +x gn
+    cp -rf gn ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin/
+  popd > /dev/null
+popd > /dev/null
+
+pushd ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin > /dev/null
+  ./ninja --version
+  ./gn --version
+popd > /dev/null
+
 # set nodejs and ohpm
 EXPECTED_NODE_VERSION="14.21.1"
 export PATH=${SOURCE_ROOT_DIR}/prebuilts/build-tools/common/nodejs/node-v${EXPECTED_NODE_VERSION}-${NODE_PLATFORM}/bin:$PATH
