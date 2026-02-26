@@ -1607,6 +1607,14 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/libarkts/",
+        "module_label": "//developtools/ace_ets2bundle/ets1.2:ets2panda_libarkts",
+        "target_os": [
+            "linux",
+            "windows"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/ui-plugins/lib",
         "module_label": "//interface/sdk-js:api_check_plugin",
         "target_os": [

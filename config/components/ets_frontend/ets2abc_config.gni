@@ -24,6 +24,7 @@ static_linker_build_deps = ""
 static_linker_out_root = ""
 libes2panda_public_build_deps = ""
 ohos_ets_koala_wrapper_deps = ""
+ohos_ets_libarkts_deps = ""
 libes2panda_public_build_path = ""
 ohos_ets_libes2panda_public_path = ""
 bootpath_json_file = ""
@@ -40,6 +41,7 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_mac)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_mac)"
+  ohos_ets_libarkts_deps = "ace_ets2bundle:ohos_ets_libarkts($toolchain_mac)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -56,6 +58,7 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_win)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_win)"
+  ohos_ets_libarkts_deps = "ace_ets2bundle:ohos_ets_libarkts($toolchain_win)"
   libes2panda_public_build_path =
       static_linker_out_root +
       "/arkcompiler/ets_frontend/libes2panda_public.dll"
@@ -72,6 +75,7 @@ if (host_toolchain == toolchain_mac) {
       "$ets2abc_root:libes2panda_public($toolchain_linux)"
   ohos_ets_koala_wrapper_deps =
       "ace_ets2bundle:ohos_ets_koala_wrapper($toolchain_linux)"
+  ohos_ets_libarkts_deps = "ace_ets2bundle:ohos_ets_libarkts($toolchain_linux)"
   libes2panda_public_build_path =
       static_linker_out_root + "/arkcompiler/ets_frontend/libes2panda_public.so"
   ohos_ets_libes2panda_public_path =
@@ -123,6 +127,7 @@ ohos_ets_dependency_analyzer_path =
 ohos_ets_ui_plugins_path = "$root_build_dir/ohos_ets/build-tools/ui-plugins"
 ohos_ets_koala_wrapper_path =
     "$root_build_dir/ohos_ets/build-tools/koala-wrapper"
+ohos_ets_libarkts_path = "$root_build_dir/ohos_ets/build-tools/libarkts"
 
 if (host_os == "mac") {
   if (host_cpu == "arm64") {
@@ -224,6 +229,9 @@ template("generate_static_abc") {
         ohos_ets_koala_wrapper_deps,
         ohos_ets_ui_plugins_deps,
       ]
+      if (!is_mac) {
+        external_deps += [ ohos_ets_libarkts_deps ]
+      }
       args += [
         "--base-url",
         rebase_path("${invoker.base_url}"),
