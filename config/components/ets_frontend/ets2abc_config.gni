@@ -142,7 +142,7 @@ if (host_os == "mac") {
       "//prebuilts/build-tools/common/nodejs/node-v18.20.1-linux-x64/bin"
 }
 
-if (ohos_indep_compiler_enable && !(string_replace(ohos_indep_compiler_components, "runtime_core", "") == ohos_indep_compiler_components)) {
+if (ohos_indep_compiler_enable && (string_replace(ohos_indep_compiler_components, "runtime_core", "") == ohos_indep_compiler_components)) {
   ark_link_target_out_path =
       get_label_info(static_linker_build_deps, "target_out_dir") +
       "/clang_x64/libs/ark_link"
@@ -150,7 +150,7 @@ if (ohos_indep_compiler_enable && !(string_replace(ohos_indep_compiler_component
   ark_link_target_out_path = "$static_linker_build_path"
 }
 
-if (ohos_indep_compiler_enable && !(string_replace(ohos_indep_compiler_components, "ets_frontend", "") == ohos_indep_compiler_components)) {
+if (ohos_indep_compiler_enable && (string_replace(ohos_indep_compiler_components, "ets_frontend", "") == ohos_indep_compiler_components)) {
   ets2panda_target_out_path =
       get_label_info(ets2abc_build_deps, "target_out_dir") +
       "/clang_x64/libs/es2panda"
