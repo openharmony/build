@@ -9,6 +9,7 @@
 
 import gzip
 import os
+import sys
 import subprocess
 import shutil
 import threading
@@ -94,3 +95,16 @@ def capture_command_stderr(command, env=None):
     child = subprocess.Popen(command, stderr=subprocess.PIPE, env=env)
     _, stderr = child.communicate()
     return child.returncode, stderr
+
+
+def remove_duplicate_static_deps():
+  new_sys_argv = sys.argv.copy()
+  static_deps = []
+  for item in sys.argv:
+    if item.endswith(".a") and "/common/deps" in item:
+      static_lib_name = os.path.basename(item)
+      if static_lib_name not in static_deps:
+        static_deps.append(static_lib_name)
+      else:
+        new_sys_argv.remove(item)
+  sys.argv = new_sys_argv
