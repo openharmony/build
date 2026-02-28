@@ -70,6 +70,7 @@ ohos_exec_script_config = {
     "//device/soc/unisoc/p7885/hardware/wcn/BUILD.gn",
     "//device/soc/unisoc/p7885/modules/BUILD.gn",
     "//device/soc/unisoc/p7885/hardware/location/BUILD.gn",
+    "//device/soc/unisoc/p7885/hardware/camera_unisoc/soc_p7885/isp_lib/BUILD.gn",
     "//device/board/hisilicon/hispark_aries/liteos_a/BUILD.gn",
     "//device/board/hisilicon/hispark_taurus/camera/BUILD.gn",
     "//device/board/hisilicon/hispark_taurus/liteos_a/BUILD.gn",
