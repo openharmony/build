@@ -169,7 +169,12 @@ fi
 
 if ! [[ -v args["--part-names"] ]]; then
     if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk/linux" ]]; then
-    $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version 23
+        grep_sdk_name=$(grep -n "sdk_name" ${code_dir}/build/prebuilts_config.json)
+        line_of_sdk_name=$(echo $grep_sdk_name | awk -F':' '{print $1}')
+        version_line=$((line_of_sdk_name + 1))
+        sdk_version_content=$(sed -n ${version_line}p ${code_dir}/build/prebuilts_config.json)
+        sdk_version=$(echo $sdk_version_content | awk -F':' '{print $2}')
+        $PYTHON_PATH/python3 ${code_dir}/build/scripts/download_sdk.py --branch master --product-name ohos-sdk-full-linux --api-version $sdk_version
     fi
 fi
 
