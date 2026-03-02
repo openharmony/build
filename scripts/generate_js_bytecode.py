@@ -2,7 +2,7 @@
 # coding: utf-8
 
 """
-Copyright (c) 2021 Huawei Device Co., Ltd.
+Copyright (c) 2021-2026 Huawei Device Co., Ltd.
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -60,7 +60,9 @@ def parse_args():
                         help='whether annotations are enabled or not')
     parser.add_argument("--enable-release-column", action='store_true',
                         help='enable column number information for bytecode instructions in non-debug mode.')
-    
+    parser.add_argument("--enable-callable-name", action='store_true',
+                        help='whether to include the function name in call instructions, ' +
+                             'only available for API24 and above.')
     parser.add_argument("--enable-ets-implements", action='store_true',
                         help='whether ets implements are enabled or not'),
     arguments = parser.parse_args()
@@ -115,6 +117,9 @@ def gen_abc_info(input_arguments):
     if input_arguments.enable_release_column:
         src_index = cmd.index(input_arguments.src_js)
         cmd.insert(src_index, '--enable-release-column')
+    if input_arguments.enable_callable_name:
+        src_index = cmd.index(input_arguments.src_js)
+        cmd.insert(src_index, '--enable-callable-name')
     if input_arguments.enable_ets_implements:
         src_index = cmd.index(input_arguments.src_js)
         cmd.insert(src_index, '--enable-ets-implements')
