@@ -610,10 +610,13 @@ def process_developer_test(part_data, parts_path_info, part_name, subsystem_name
 def process_skia(part_data, parts_path_info, part_name, subsystem_name, components_json):
     skia_piex_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'piex')
     skia_libjpeg_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'libjpeg-turbo')
+    skia_m133_dng_sdk_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'm133', 'third_party', 'externals', 'dng_sdk', 'source')
     skia_component_piex_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'piex', 'includes')
     skia_component_libjpeg_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'libjpeg', 'includes')
+    skia_component_dng_sdk_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'dng_sdk', 'includes')
     copy_directory_contents(skia_piex_path, skia_component_piex_path)
     copy_directory_contents(skia_libjpeg_path, skia_component_libjpeg_path)
+    copy_directory_contents(skia_m133_dng_sdk_path, skia_component_dng_sdk_path)
 
     part_path = _get_parts_path(parts_path_info, part_name)
     if part_path is None:
@@ -1510,6 +1513,8 @@ def _generate_configs(fp, module, json_data, _part_name):
     fp.write('\nconfig("' + module + '_configs") {\n')
     fp.write('  visibility = [ ":*" ]\n')
     fp.write('  include_dirs = [\n')
+    if module == 'dng_sdk':
+ 	    fp.write('    "includes",\n')
     for include in includes:
         target_include = _get_target_include(_part_name, include)
         if target_include not in target_includes:
@@ -1521,9 +1526,6 @@ def _generate_configs(fp, module, json_data, _part_name):
         fp.write('    "includes/context",\n')
         fp.write('    "includes/app",\n')
     fp.write('  ]\n')
-    if _part_name == 'runtime_core':
-        fp.write('  }\n')
-        return
     _flags_info = _gcc_flags_info_handle(json_data)
     if _flags_info:
         for k, _list in _flags_info.items():
