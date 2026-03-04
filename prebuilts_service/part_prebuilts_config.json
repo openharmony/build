@@ -64,7 +64,8 @@
         "taihe"
     ],
     "wallpaper_mgr":[
-        "app"
+        "app",
+        "taihe"
     ],
     "power_manager":[
         "app",
@@ -208,7 +209,8 @@
         "taihe"
     ],
     "file_api":[
-        "rust"
+        "rust",
+        "taihe"
     ],
     "jsvm":[
         "ark_js"
@@ -350,7 +352,8 @@
         "taihe"
     ],
     "contacts_data":[
-        "app"
+        "app",
+        "hvigor"
     ],
     "face_auth":[
         "taihe"
@@ -366,7 +369,8 @@
     ],
     "ace_engine":[
         "app",
-        "hvigor"
+        "hvigor",
+        "npm_install"
     ],
     "webview":[
         "hvigor"
@@ -376,5 +380,32 @@
     ],
     "os_account":[
         "taihe"
+    ],
+    "dmsfwk":[
+        "taihe"
+    ],
+    "asset":[
+        "rust"
+    ],
+    "mechbody_controller":[
+        "taihe"
+    ],
+    "video_processing_engine":[
+        "taihe"
+    ],
+    "dsoftbus":[
+        "taihe"
+    ],
+    "update_service":[
+        "taihe"
+    ],
+    "companion_device_auth":[
+        "taihe",
+        "rust"
+    ],
+    "selectionfwk":[
+        "taihe",
+        "app",
+        "hvigor"
     ]
 }
