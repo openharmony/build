@@ -68,7 +68,7 @@
         {
             "name": "cmake",
             "tag": "base",
-            "build_type": "src",
+            "build_type": "src, indep",
             "unzip_dir": "${code_dir}/prebuilts/cmake",
             "config": {
                 "linux": {
@@ -76,24 +76,24 @@
                         {
                             "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-linux-aarch64-3.28.2-20241210.tar.gz",
                             "unzip_filename": "linux",
-                            "build_type": "src"
+                            "build_type": "src, indep"
                         }
                     ],
                     "x86_64": [
                         {
                             "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-linux-x86-3.28.2.tar.gz",
                             "unzip_filename": "linux-x86",
-                            "build_type": "src"
+                            "build_type": "src, indep"
                         },
                         {
                             "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-ohos-3.28.2-20240827.tar.gz",
                             "unzip_filename": "ohos",
-                            "build_type": "src"
+                            "build_type": "src, indep"
                         },
                         {
                             "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-windows-x86-3.28.2.tar.gz",
                             "unzip_filename": "windows-x86",
-                            "build_type": "src"
+                            "build_type": "src, indep"
                         }
                     ]
                 },
