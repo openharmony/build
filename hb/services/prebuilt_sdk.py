@@ -103,13 +103,6 @@ class PrebuiltSdk(PrebuiltSdkInterface):
                 f"--sbom={build_args['generate_sbom']}",
             ]
 
-            # Add SBOM related gn flags
-            if build_args['generate_sbom']:
-                cmd.extend([
-                    '--gn-flags=--ide=json',
-                    '--gn-flags=--json-file-name=sbom/gn_gen.json'
-                ])
-
             # Add gn args
             gn_args_str = ' '.join(build_args['gn_args_parts'])
             cmd.extend(['--gn-args', gn_args_str])

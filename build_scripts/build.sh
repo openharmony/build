@@ -191,6 +191,13 @@ for arg in "$@"; do
             fi
             args_list+=("$arg")
             ;;
+        --sbom|--sbom=*)
+            if [[ "$arg" == "--sbom" ]] || [[ "${arg#--sbom=}" != "false" ]]; then
+                args_list+=("--gn-flags=--ide=json")
+                args_list+=("--gn-flags=--json-file-name=sbom/gn_gen.json")
+            fi
+            args_list+=("$arg")
+            ;;
         *)
             args_list+=("$arg")
             ;;
