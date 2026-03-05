@@ -767,6 +767,16 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/interop/declaration/api",
+        "module_label": "//interface/sdk-js:build_static_predefined_declaration_sdk_interop",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/interop/declaration",
         "module_label": "//interface/sdk-js:build_static_declaration_sdk_interop",
         "target_os": [
