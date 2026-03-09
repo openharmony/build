@@ -117,6 +117,13 @@ declare_args() {
 
   # The global switch of cfi debug mode.
   cfi_debug = false
+
+  # Policy of security-related compilation configs, based on device performance.
+  #   "high":     High-load security policy enabled. Suitable for High-performance devices.
+  #   "standard": Standard security policy enabled. Suitable for Mid-performance devices.
+  #   "basic":    Basic security policy enabled. Suitable for Low-performance devices.
+  #               High-load features like CFI are disabled with this value.
+  build_framework_security_configs_policy = "high"
 }
 
 is_v8_host_toolchain =
@@ -347,24 +354,37 @@ template("ohos_sanitizer_config") {
       _cfi = use_cfi && defined(sanitize.cfi) && sanitize.cfi && !is_asan &&
              !is_tsan
       if (_cfi) {
-        if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
-          configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]
-        } else {
-          configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+        _cfi_enable = true
+        if (build_framework_security_configs_policy == "basic") {
+          if (defined(sanitize.cfi_policy) && sanitize.cfi_policy == "adaptive") {
+            _cfi_enable = false
+          }
         }
-        if (!defined(sanitize.cfi_check_std) || !sanitize.cfi_check_std) {
-          configs += [ "//build/config/sanitizers:cfi_config_skip_std" ]
+        if (_cfi_enable) {
+          if (defined(sanitize.cfi_cross_dso) && sanitize.cfi_cross_dso) {
+            configs += [ "//build/config/sanitizers:cfi_cross_dso_" + _mode ]
+          } else {
+            configs += [ "//build/config/sanitizers:cfi_config_" + _mode ]
+          }
+          if (!defined(sanitize.cfi_check_std) || !sanitize.cfi_check_std) {
+            configs += [ "//build/config/sanitizers:cfi_config_skip_std" ]
+          }
+          if (defined(sanitize.cfi_no_nvcall) && sanitize.cfi_no_nvcall) {
+            configs += [ "//build/config/sanitizers:cfi_no_nvcall" ]
+          }
+          if (defined(sanitize.cfi_vcall_icall_only) &&
+              sanitize.cfi_vcall_icall_only) {
+            configs += [ "//build/config/sanitizers:cfi_no_all" ]
+            configs += [ "//build/config/sanitizers:cfi_vcall" ]
+            configs += [ "//build/config/sanitizers:cfi_icall" ]
+          }
+          configs += [ "//build/config/sanitizers:cfi_trap_function_flags" ]
         }
-        if (defined(sanitize.cfi_no_nvcall) && sanitize.cfi_no_nvcall) {
-          configs += [ "//build/config/sanitizers:cfi_no_nvcall" ]
+      } else {
+        if (defined(sanitize.cfi_policy)) {
+          # Still keep the '-flto' flag to reduce binary size and memory usage
+          cflags = [ "-flto" ]
         }
-        if (defined(sanitize.cfi_vcall_icall_only) &&
-            sanitize.cfi_vcall_icall_only) {
-          configs += [ "//build/config/sanitizers:cfi_no_all" ]
-          configs += [ "//build/config/sanitizers:cfi_vcall" ]
-          configs += [ "//build/config/sanitizers:cfi_icall" ]
-        }
-        configs += [ "//build/config/sanitizers:cfi_trap_function_flags" ]
       }
       configs += [ "//build/config/sanitizers:compiler_rt_" + _mode ]
     }
