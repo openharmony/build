@@ -933,7 +933,7 @@ template("ohos_arkts_unittest") {
   action(target_name) {
     script = rebase_path("//build/ohos/testfwk/arkts_tdd_cases_build.py")
     outputs = [ "$target_out_dir/$target_name.out" ]
-        ui_enable = "False"
+    ui_enable = "False"
     if (defined(invoker.ui_enable)) {
       ui_enable = invoker.ui_enable
     }
