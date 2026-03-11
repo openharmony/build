@@ -1031,7 +1031,7 @@ template("ohos_arkts_unittest") {
       rebase_path(dst_file),
     ]
 
-    args = [
+    args += [
       "--test_files",
       _test_files_str,
       "--target_path",
