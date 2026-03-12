@@ -756,7 +756,7 @@
             "darwin"
         ]
     },
-{
+    {
         "install_dir": "ets/dynamic/build-tools/interop",
         "module_label": "//interface/sdk-js:build_dynamic_sdk_interop",
         "target_os": [
@@ -767,8 +767,28 @@
         ]
     },
     {
+        "install_dir": "ets/dynamic/build-tools/interop/api",
+        "module_label": "//interface/sdk-js:build_dynamic_sdk_predefined_interop",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/interop/declaration/api",
         "module_label": "//interface/sdk-js:build_static_predefined_declaration_sdk_interop",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/interop/bridge/api",
+        "module_label": "//interface/sdk-js:build_static_predefined_bridge_sdk_interop",
         "target_os": [
             "windows",
             "linux",
