@@ -865,6 +865,23 @@ template("ohos_rust_systemtest") {
 }
 
 #arkts1.2 api test template
+ohos_ets_build_system_deps = "ets_frontend:ohos_ets_build_system"
+if (path_exists("//developtools/ace_ets2bundle")) {
+    ohos_ets_ui_plugins_deps = "ace_ets2bundle:ohos_ets_ui_plugins"
+}
+
+build_sdk_path = "$root_build_dir/ohos_ets"
+
+ohos_ets_kits_deps = "sdk:ohos_ets_kits"
+ohos_ets_api_deps = "sdk:ohos_ets_api"
+ohos_ets_arkts_deps = "sdk:ohos_ets_arkts"
+
+ohos_ets_api_path = "$root_build_dir/ohos_ets/api"
+ohos_ets_arkts_path = "$root_build_dir/ohos_ets/arkts"
+ohos_ets_kits_path = "$root_build_dir/ohos_ets/kits"
+
+node_path = "//prebuilts/build-tools/common/nodejs/node-v18.20.1-linux-x64/bin"
+
 template("ohos_arkts_unittest") {
   forward_variables_from(invoker, [
     "module_out_path",
@@ -916,7 +933,105 @@ template("ohos_arkts_unittest") {
   action(target_name) {
     script = rebase_path("//build/ohos/testfwk/arkts_tdd_cases_build.py")
     outputs = [ "$target_out_dir/$target_name.out" ]
+    ui_enable = "False"
+    if (defined(invoker.ui_enable)) {
+      ui_enable = invoker.ui_enable
+    }
+
     args = [
+      "--ui_enable",
+      ui_enable,
+    ]
+
+    if (ui_enable == "True") {
+      _arktsconfig = "$target_out_dir/arktsconfig_$target_name.json"
+      assert(defined(invoker.base_url), "base_url is required!")
+      _external_deps += [
+        ohos_ets_api_deps,
+        ohos_ets_arkts_deps,
+        ohos_ets_build_system_deps,
+        ohos_ets_kits_deps,
+        ohos_ets_ui_plugins_deps,
+      ]
+
+      final_base_url = invoker.base_url
+      if (final_base_url == "./arkui-preprocessed") {
+         final_base_url = "//foundation/arkui/ace_engine/frameworks/bridge/arkts_frontend/koala_projects/arkoala-arkts/arkui-preprocessed"
+      }
+
+      args += [
+        "--base_url",
+        rebase_path("${final_base_url}"),
+        "--build_sdk_path",
+        rebase_path("$build_sdk_path"),
+        "--memo_plugin",
+        rebase_path(
+            "$build_sdk_path/build-tools/ui-plugins/lib/memo-plugins/index.js"),
+        "--entry_path",
+        rebase_path(
+            "$build_sdk_path/build-tools/driver/build-system/dist/entry.js"),
+        "--env_path",
+        rebase_path("$build_sdk_path/build-tools/ets2panda/lib"),
+        "--node_path",
+        rebase_path("$node_path"),
+        "--scan_path",
+        rebase_path("$ohos_ets_api_path"),
+        rebase_path("$ohos_ets_arkts_path"),
+        rebase_path("$ohos_ets_kits_path"),
+      ]
+
+      base_path = "//foundation/arkui/ace_engine/frameworks/bridge/arkts_frontend/koala_projects/arkoala-arkts/"
+      if (defined(invoker.files)) {
+        file_paths = []
+        foreach(path, invoker.files) {
+          if (invoker.base_url == "./arkui-preprocessed") {
+          file_paths += [ rebase_path(base_path + path) ]
+          } else {
+          file_paths += [ rebase_path(path) ]
+          }
+        }
+        file_list_file = "${target_out_dir}/${target_name}_file_list.txt"
+        write_file(file_list_file, file_paths)
+        args += [ "--files", rebase_path(file_list_file) ]
+      }
+
+      if (defined(invoker.package)) {
+        args += [
+          "--package",
+          invoker.package,
+        ]
+      }
+      if (defined(invoker.paths_keys) && defined(invoker.paths_values)) {
+        args += [ "--paths_keys" ] + invoker.paths_keys
+        paths_values = []
+        foreach(path, invoker.paths_values) {
+          if (invoker.base_url == "./arkui-preprocessed") {
+            paths_values += [ rebase_path(base_path + path) ]
+          } else {
+             paths_values += [ rebase_path(path) ]
+          }
+        }
+        args += [ "--paths_values" ] + paths_values
+      }
+    }
+
+    cache_path = "$target_out_dir/$target_name/cache"
+    if (defined(invoker.cache_path)) {
+      cache_path = invoker.cache_path
+    }
+    args += [
+      "--cache_path",
+      rebase_path(cache_path),
+    ]
+
+    build_out_path = test_output_dir
+    dst_file = "$build_out_path/${target_name}.abc"
+    args += [
+      "--dst_file",
+      rebase_path(dst_file),
+    ]
+
+    args += [
       "--test_files",
       _test_files_str,
       "--target_path",
@@ -934,7 +1049,7 @@ template("ohos_arkts_unittest") {
       "--sources",
       _sources_str,
       "--arktsconfig",
-      _arktsconfig
+      rebase_path(_arktsconfig)
     ]
     deps = _deps
     external_deps = _external_deps
