@@ -57,6 +57,7 @@ def update_crt(command):
 
 
 def main():
+    wrapper_utils.remove_duplicate_static_deps()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--strip', help='The strip binary to run', metavar='PATH')
     parser.add_argument('--unstripped-file', help='Executable file produced by linking command', metavar='FILE')
