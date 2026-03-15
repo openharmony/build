@@ -185,7 +185,8 @@ ohos_prebuilt_shared_library("musl-libcxx.so_arm64e") {
   if (is_asan == true && use_hwasan == true && target_cpu == "arm64") {
     source = "${clang_base_path}/lib/aarch64-linux-ohos/hwasan/arm64e/libc++.so"
   } else {
-    source = "${standard_clang_path}/arm64e/libc++.so"
+    source = "${standard_clang_path}/libc++.so"
+    output = "${standard_clang_path}/arm64e/libc++.so"
   }
   deps = [ ":musl-libcxx_arm64e_unstripped_copy" ]
   install_images = [
@@ -202,6 +203,6 @@ copy("musl-libcxx_unstripped_copy") {
 }
 
 copy("musl-libcxx_arm64e_unstripped_copy") {
-  sources = [ "${standard_clang_path}/arm64e/libc++.so" ]
+  sources = [ "${standard_clang_path}/libc++.so" ]
   outputs = [ root_out_dir + "/lib.unstripped/clang/arm64e/{{source_file_part}}" ]
 }
