@@ -53,7 +53,7 @@ def main():
 
     options = parser.parse_args()
 
-    api_version = options.api_full_version if options.api_full_version else options.api_version
+    platform_version = options.api_full_version if options.api_full_version else options.api_version
 
     template = Template("""#Generated code, DONOT modify it.
 import("//build/ohos/build_var.gni")
@@ -120,6 +120,7 @@ foreach(os, sdk_systems) {
       displayName = "{{ _display_name }}"
       version = current_sdk_version
       apiVersion = "{{ api_version }}"
+      platformVersion = "{{ platform_version }}"
       if (defined(ext_ndk_config_file) && ext_ndk_config_file != "") {
         platformVersion = platform_version
       }
@@ -157,7 +158,8 @@ group("generated_ohos_sdk") {
         current_dir=options.current_dir,
         sdk_systems=options.sdk_systems,
         display_name=read_display_name(options.type2displayname),
-        api_version=api_version,
+        api_version=options.api_version,
+        platform_version=platform_version,
         release_type=options.release_type,
         meta_version=options.meta_version,
         generated_sdk_modules_gni=options.generated_sdk_modules_gni,
