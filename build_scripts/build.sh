@@ -128,7 +128,6 @@ popd > /dev/null
 
 pushd ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin > /dev/null
   ./ninja --version
-
   ./gn --version
 popd > /dev/null
 
