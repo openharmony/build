@@ -47,6 +47,10 @@ template("ohos_taihe") {
       deps = invoker.deps
     }
 
+    if (defined(invoker.external_deps)) {
+      external_deps = invoker.external_deps
+    }
+
     outputs = [ "$taihe_generated_file_path/src/taihe.platform.ani.abi.c" ]
     if (defined(invoker.outputs)) {
       outputs += invoker.outputs
