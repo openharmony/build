@@ -32,6 +32,7 @@ template("ohos_taihe") {
       rebase_path("$taihe_generated_file_path", root_build_dir),
       "-G",
       "cpp-author",
+      "-G",
       "ani-bridge",
     ]
 
