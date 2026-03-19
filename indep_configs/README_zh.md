@@ -51,28 +51,31 @@ repo.harmonyos.com
 
 **准备开发环境**
 
+
 https://gitcode.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-pkg-prepare.md
 
 ubuntu版本至少为22.04
 
 **安装库和工具集**
+
 https://gitcode.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-pkg-install-package.md
 
 
 **安装hb工具**
+
 https://gitcode.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-pkg-install-tool.md
 
-```
-若hb工具安装出现问题可尝试如下步骤:
-首先需要保证python以及python3均指向大于等于python3.8的版本
-删除旧的hb:
+```shell
+# 若hb工具安装出现问题可尝试如下步骤:
+# 首先需要保证python以及python3均指向大于等于python3.8的版本
+# 删除旧的hb:
 rm -rf ~/.local/lib/python{版本号}/site-packages/hb
 rm -rf ~/.local/bin/hb
-安装修的hb:
+# 安装修的hb:
 python3 -m pip install --default-timeout=300 --user build/hb --index-url https://mirrors.huaweicloud.com/repository/pypi/simple
 python3 -m pip install jinja2 --index-url https://mirrors.huaweicloud.com/repository/pypi/simple
-配置环境变量:
-在~./bashrc添加PATH=~/.local/bin:$PATH
+# 配置环境变量:
+# 在~/.bashrc添加PATH=~/.local/bin:$PATH
 source ~/.bashrc
 ```
 
@@ -82,29 +85,29 @@ source ~/.bashrc
 以syscap_codec部件为例，进行独立编译，执行如下步骤
 
 **初始化repo**
-```
+```shell
 mkdir code
 cd code 
 repo init -u https://gitcode.com/openharmony/manifest.git -b master --no-repo-verify
 ```
 
 **拉build仓**
-```
+```shell
 repo sync -c build
 ```
 
 **拉编译仓**
-```
+```shell
 repo sync -c developtools_syscap_codec
 ```
 
 **执行独立编译预下载**
-```
+```shell
 bash build/prebuilts_config.sh --download-sdk
 ```
 
 **进行独立编译**
-```
+```shell
 hb build syscap_codec -i
 ```
 
