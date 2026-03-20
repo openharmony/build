@@ -1847,7 +1847,7 @@
     },
     {
         "install_dir": "toolchains",
-        "module_label": "//arkcompiler/runtime_core/taihe:copy_taihe_tools",
+        "module_label": "//arkcompiler/taihe_ffi_gen:copy_taihe_tools",
         "target_os": [
             "linux",
             "windows",
