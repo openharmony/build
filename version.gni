@@ -20,9 +20,9 @@ declare_args() {
   api_full_version = "26.0.0"
 
   # Release type, optional values: Betax, RCx...
-  release_type = "Beta1"
+  release_type = "Beta"
   meta_version = "3.0.0"
-  platform_version = "4.0.0"
+  platform_version = "26.0.0"
 }
 
 # ohos SDK version
