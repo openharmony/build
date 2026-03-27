@@ -29,6 +29,7 @@ OUT_ROOT = "out/sdk-public"
 API_MODIFY_DIR = "build-tools"
 API_MODIFY_TOOL = "delete_systemapi_plugin.js"
 ETS_MODIFY_TOOL = "handleApiFiles.js"
+ANNOTATION_MODIFY_TOOL = 'adjust_api_annotation.js'
 CHECK_API_VERSION_TOOL = "checkApiVersion.js"
 API_PATH = "api"
 API_GEN_PATH = "build-tools/api"
@@ -117,6 +118,18 @@ def remove_system_api_method(source_root: str, out_path: str, nodejs: str, sdk_t
                           api_out_dir, "--type", sdk_type, "--build-sdk-path", build_sdk_path], stdout=subprocess.PIPE)
     p.wait()
 
+def adjust_annotation_method(source_root: str, out_path: str, nodejs: str):
+    tool = os.path.join(source_root, INTERFACE_PATH, API_MODIFY_DIR, ANNOTATION_MODIFY_TOOL)
+    tool = os.path.abspath(tool)
+    api_dir = os.path.join(source_root, out_path, API_PATH)
+    api_dir = os.path.abspath(api_dir)
+    api_out_dir = os.path.join(source_root, out_path, API_MODIFY_DIR)
+    api_out_dir = os.path.abspath(api_out_dir)
+
+    nodejs = os.path.abspath(nodejs)
+    p = subprocess.Popen([nodejs, tool, "--input", api_dir, "--output",
+                          api_out_dir], stdout=subprocess.PIPE)
+    p.wait()
 
 def change_int_to_number(source_root: str, out_path: str, nodejs: str, sdk_type: str):
     tool = os.path.join(source_root, INTERFACE_PATH,
@@ -166,9 +179,14 @@ def parse_step(options):
                 out_path, KITS_GEN_PATH), os.path.join(out_path, KITS_PATH))
             replace_sdk_dir(options.root_build_dir, os.path.join(
                 out_path, ARKTS_GEN_PATH), os.path.join(out_path, ARKTS_PATH))
-
+        adjust_annotation_method(
+            options.root_build_dir, out_path, options.node_js)
+        replace_sdk_dir(options.root_build_dir, os.path.join(
+            out_path, API_GEN_PATH), os.path.join(out_path, API_PATH))
+        replace_sdk_dir(options.root_build_dir, os.path.join(
+            out_path, ARKTS_GEN_PATH), os.path.join(out_path, ARKTS_PATH))
         convert_permissions(options.root_build_dir, out_path,
-                            permission_file, options.node_js)
+            permission_file, options.node_js)
 
         if sdk_type == "ets":
             change_int_to_number(
