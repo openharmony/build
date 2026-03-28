@@ -298,20 +298,21 @@ set(CMAKE_ASM_FLAGS_RELEASE "" CACHE STRING "Flags for release variant builds.")
 set(CMAKE_ASM_FLAGS_RELEASE "${OHOS_RELEASE_COMPILER_FLAGS} ${CMAKE_ASM_FLAGS_RELEASE}")
 
 # set the link flags
+# Include deviceinfo_ndk.z if OHOS_COMPATIBLE_SDK_VERSION is defined, to avoid accumulation
+if(DEFINED OHOS_COMPATIBLE_SDK_VERSION AND NOT "${OHOS_COMPATIBLE_SDK_VERSION}" STREQUAL "")
+  set(_DEVICEINFO_LIB -ldeviceinfo_ndk.z)
+else()
+  set(_DEVICEINFO_LIB "")
+endif()
+
 set(CMAKE_SHARED_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create shared libraries.")
-set(CMAKE_SHARED_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
+set(CMAKE_SHARED_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${_DEVICEINFO_LIB}" CACHE STRING "Linker flags to be used to create shared libraries." FORCE)
 
 set(CMAKE_MODULE_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create modules.")
-set(CMAKE_MODULE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
+set(CMAKE_MODULE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${_DEVICEINFO_LIB}" CACHE STRING "Linker flags to be used to create modules." FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create executables.")
-set(CMAKE_EXE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
-
-if(DEFINED OHOS_COMPATIBLE_SDK_VERSION)
-  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global shared linker flags" FORCE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global executable linker flags" FORCE)
-  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -ldeviceinfo_ndk.z" CACHE STRING "Global module linker flags" FORCE)
-endif()
+set(CMAKE_EXE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS} ${_DEVICEINFO_LIB}" CACHE STRING "Linker flags to be used to create executables." FORCE)
 
 # set the executable suffix
 set(HOST_SYSTEM_EXE_SUFFIX)
@@ -337,3 +338,5 @@ set(OHOS_RANLIB "${TOOLCHAIN_BIN_PATH}/llvm-ranlib${HOST_SYSTEM_EXE_SUFFIX}")
 set(CMAKE_AR                "${OHOS_AR}" CACHE FILEPATH "Archiver")
 set(CMAKE_RANLIB            "${OHOS_RANLIB}" CACHE FILEPATH "Ranlib")
 set(UNIX TRUE CACHE BOOL FROCE)
+
+
