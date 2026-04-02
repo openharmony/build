@@ -489,11 +489,11 @@
                     "any": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/linux-x86_64",
-                            "remote_url": "/openharmony/compiler/Taihe/1.6.2/taihe-linux-x86_64-1.6.2-20260317.tar.gz"
+                            "remote_url": "/openharmony/compiler/Taihe/1.7.2/taihe-linux-x86_64-1.7.2-20260328.tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/windows-x86_64",
-                            "remote_url": "/openharmony/compiler/Taihe/1.6.2/taihe-windows-x86_64-1.6.2-20260317.tar.gz",
+                            "remote_url": "/openharmony/compiler/Taihe/1.7.2/taihe-windows-x86_64-1.7.2-20260328.tar.gz",
                             "build_type": "src"
                         }
                     ]
@@ -502,14 +502,14 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/darwin-arm64",
-                            "remote_url": "/openharmony/compiler/Taihe/1.6.2/taihe-darwin-arm64-1.6.2-20260317.tar.gz",
+                            "remote_url": "/openharmony/compiler/Taihe/1.7.2/taihe-darwin-arm64-1.7.2-20260328.tar.gz",
                             "build_type": "src"
                         }
                     ],
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/taihe/ohos/darwin-x86_64",
-                            "remote_url": "/openharmony/compiler/Taihe/1.6.2/taihe-darwin-x86_64-1.6.2-20260317.tar.gz",
+                            "remote_url": "/openharmony/compiler/Taihe/1.7.2/taihe-darwin-x86_64-1.7.2-20260328.tar.gz",
                             "build_type": "src"
                         }
                     ]
