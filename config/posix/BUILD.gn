@@ -88,12 +88,13 @@ config("runtime_library") {
     # Add C++ include paths for cross-compilation toolchains
     if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
       # Cross-compiling for linux-arm64: use C++ headers from prebuilt aarch64 GCC toolchain
+      _aarch64_gcc_toolchain = "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu"
       sysroot_flags += [
         "-isystem" + rebase_path(
-                "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/aarch64-none-linux-gnu/include/c++/13.3.1",
+                "${_aarch64_gcc_toolchain}/aarch64-none-linux-gnu/include/c++/13.3.1",
                 root_build_dir),
         "-isystem" + rebase_path(
-                "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/aarch64-none-linux-gnu/include/c++/13.3.1/aarch64-none-linux-gnu",
+                "${_aarch64_gcc_toolchain}/aarch64-none-linux-gnu/include/c++/13.3.1/aarch64-none-linux-gnu",
                 root_build_dir),
       ]
     } else {
@@ -110,7 +111,8 @@ config("runtime_library") {
 
     # Add GCC library path for cross-compilation (for crtbeginS.o, crtendS.o, libgcc, etc.)
     if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
-      gcc_lib_path = "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/lib/gcc/aarch64-none-linux-gnu/13.3.1"
+      gcc_lib_path =
+          "${_aarch64_gcc_toolchain}/lib/gcc/aarch64-none-linux-gnu/13.3.1"
       ldflags += [
         "-L" + rebase_path(gcc_lib_path, root_build_dir),
         "-L" + rebase_path("${link_sysroot}/lib", root_build_dir),

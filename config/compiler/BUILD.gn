@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build/common.gni")
 import("//build/config/c++/c++.gni")
 import("//build/config/clang/clang.gni")
 import("//build/config/compiler/compiler.gni")
@@ -10,7 +11,6 @@ import("//build/config/sanitizers/sanitizers.gni")
 import("//build/ohos_var.gni")
 import("//build/toolchain/cc_wrapper.gni")
 import("//build/toolchain/toolchain.gni")
-import("//build/common.gni")
 
 import("//build/misc/overrides/build.gni")
 
@@ -358,10 +358,8 @@ config("compiler") {
   if (is_linux && current_cpu == "arm64" && host_cpu != "arm64" && is_clang) {
     # Cross-compilation for aarch64 on x64 host: add --gcc-toolchain flag
     # so clang can find crtbeginS.o, libgcc, and the linker.
-    aarch64_gcc_base =
-        "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu"
-    _rebased_aarch64_gcc_base =
-        rebase_path(aarch64_gcc_base, root_build_dir)
+    aarch64_gcc_base = "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu"
+    _rebased_aarch64_gcc_base = rebase_path(aarch64_gcc_base, root_build_dir)
     ldflags += [ "--gcc-toolchain=$_rebased_aarch64_gcc_base" ]
     cflags += [ "--gcc-toolchain=$_rebased_aarch64_gcc_base" ]
   }
@@ -606,7 +604,8 @@ config("compiler") {
         cache_base = getenv("CACHE_BASE")
         thinlto_cache_dir = "$cache_base/thinlto-cache"
       } else {
-        thinlto_cache_dir = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
+        thinlto_cache_dir =
+            rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
       if (use_lld) {
         ldflags += [
@@ -1294,7 +1293,8 @@ config("optimize") {
   if (optimize_for_size && !is_nacl) {
     # Favor size over speed.
     if (is_clang) {
-      cflags = [ build_framework_compiler_optimize_level ] + common_optimize_on_cflags
+      cflags = [ build_framework_compiler_optimize_level ] +
+               common_optimize_on_cflags
     } else {
       cflags = [ "-Os" ] + common_optimize_on_cflags
     }
