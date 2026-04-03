@@ -118,13 +118,13 @@ pushd ${SOURCE_ROOT_DIR}/third_party/ninja > /dev/null
   cp -rf ninja ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin
 popd > /dev/null
 
-pushd ${SOURCE_ROOT_DIR}/third_party/gn > /dev/null
-  python3 ./build/gen.py --out-path out; ../ninja/ninja -C out
-  pushd ${SOURCE_ROOT_DIR}/third_party/gn/out > /dev/null
-    strip gn && chmod +x gn
-    cp -rf gn ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin/
-  popd > /dev/null
-popd > /dev/null
+#pushd ${SOURCE_ROOT_DIR}/third_party/gn > /dev/null
+#  python3 ./build/gen.py --out-path out; ../ninja/ninja -C out
+#  pushd ${SOURCE_ROOT_DIR}/third_party/gn/out > /dev/null
+#    strip gn && chmod +x gn
+#    cp -rf gn ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin/
+#  popd > /dev/null
+#popd > /dev/null
 
 pushd ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin > /dev/null
   ./ninja --version
