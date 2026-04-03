@@ -21,6 +21,16 @@
       "linux/cangjie/"
     ]
   },
+  "linux-arm64": {
+    "checkFiles": [],
+    "checkDirectories": [
+      "linux-arm64/ets/",
+      "linux-arm64/js/",
+      "linux-arm64/native/",
+      "linux-arm64/toolchains/",
+      "linux-arm64/cangjie/"
+    ]
+  },
   "windows": {
     "checkFiles": [],
     "checkDirectories": [

@@ -94,6 +94,11 @@
                             "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-windows-x86-3.28.2.tar.gz",
                             "unzip_filename": "windows-x86",
                             "build_type": "src, indep"
+                        },
+                        {
+                            "remote_url": "/openharmony/compiler/cmake/3.28.2/cmake-linux-aarch64-3.28.2-20241210.tar.gz",
+                            "unzip_filename": "linux-aarch64",
+                            "build_type": "src, indep"
                         }
                     ]
                 },
@@ -133,6 +138,10 @@
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
                             "remote_url": "/openharmony/compiler/gn/20260228/gn-linux-x86-20260228.tar.gz"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
+                            "remote_url": "/openharmony/compiler/gn/20240530/gn-linux-aarch64-20240530.tar.gz"
                         }
                     ]
                 },
@@ -180,6 +189,10 @@
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/windows-x86/bin",
                             "remote_url": "/openharmony/compiler/ninja/1.12.0/windows/ninja-windows-x86-1.12.0-20240523.tar.gz",
                             "build_type": "src"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
+                            "remote_url": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-aarch64-1.12.0-20241210.tar.gz"
                         }
                     ]
                 },
@@ -325,6 +338,11 @@
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
                             "remote_url": "/openharmony/compiler/clang/15.0.4-0e01a0/linux/clang_linux-x86_64-0e01a0-20260313.tar.gz",
                             "rename_src": "${unzip_dir}/clang_linux-x86_64-0e01a0-20260313"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-0e01a0/linux_aarch64/clang_linux_aarch64-0e01a0-20260313.tar.gz",
+                            "rename_src": "${unzip_dir}/clang_linux_aarch64-0e01a0-20260313"
                         }
                     ]
                 },
@@ -389,6 +407,11 @@
                             "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-x86_64",
                             "remote_url": "/openharmony/compiler/clang/15.0.4-0e01a0/linux/libcxx-ndk_linux-x86_64-0e01a0-20260313.tar.gz",
                             "rename_src": "${unzip_dir}/libcxx-ndk_linux-x86_64-0e01a0-20260313"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/clang/ohos/linux-aarch64",
+                            "remote_url": "/openharmony/compiler/clang/15.0.4-0e01a0/linux_aarch64/libcxx-ndk_linux-aarch64-0e01a0-20260313.tar.gz",
+                            "rename_src": "${unzip_dir}/libcxx-ndk_linux-aarch64-0e01a0-20260313"
                         }
                     ]
                 },
@@ -1030,6 +1053,46 @@
                     "version": 24
                 }
             ]
+        },
+        {
+            "name": "arm-linux-gnueabihf-gcc",
+            "tag": "base",
+            "build_type": "src",
+            "config": {
+                "linux": {
+                    "arm64": [
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
+                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
+                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
+                            "build_type": "src"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-linux-gnueabihf-gcc-arm",
+                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-arm/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
+                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
+                            "build_type": "src"
+                        }
+                    ],
+                    "x86_64": [
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
+                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
+                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
+                            "rename_src": "${unzip_dir}/${unzip_filename}",
+                            "rename_dest": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
+                            "build_type": "src"
+                        },
+                        {
+                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-linux-gnueabihf-gcc-arm",
+                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-arm/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
+                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
+                            "build_type": "src"
+                        }
+                    ]
+                }
+            },
+            "handle": []
         }
     ]
 }

@@ -83,23 +83,39 @@ config("runtime_library") {
   if (!is_mac && sysroot != "") {
     # Pass the sysroot to all C compiler variants, the assembler, and linker.
     sysroot_flags = [ "--sysroot=" + rebase_path(sysroot, root_build_dir) ]
-    if (is_linux) {
-      # This is here so that all files get recompiled after a sysroot roll and
-      # when turning the sysroot on or off. (defines are passed via the command
-      # line, and build system rebuilds things when their commandline
-      # changes). Nothing should ever read this define.
-      sysroot_hash =
-          exec_script("//build/linux/sysroot_scripts/install-sysroot.py",
-                      [ "--print-hash=$current_cpu" ],
-                      "trim string",
-                      [ "//build/linux/sysroot_scripts/sysroots.json" ])
-      defines += [ "CR_SYSROOT_HASH=$sysroot_hash" ]
-    }
     asmflags += sysroot_flags
+
+    # Add C++ include paths for cross-compilation toolchains
+    if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
+      # Cross-compiling for linux-arm64: use C++ headers from prebuilt aarch64 GCC toolchain
+      sysroot_flags += [
+        "-isystem" + rebase_path(
+                "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/aarch64-none-linux-gnu/include/c++/13.3.1",
+                root_build_dir),
+        "-isystem" + rebase_path(
+                "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/aarch64-none-linux-gnu/include/c++/13.3.1/aarch64-none-linux-gnu",
+                root_build_dir),
+      ]
+    } else {
+      sysroot_flags += [
+        "-isystem" + rebase_path("$sysroot/include/c++/11", root_build_dir),
+        "-isystem" + rebase_path("$sysroot/include/c++/11/aarch64-linux-gnu",
+                                 root_build_dir),
+      ]
+    }
 
     link_sysroot_flags =
         [ "--sysroot=" + rebase_path(link_sysroot, root_build_dir) ]
     ldflags += link_sysroot_flags
+
+    # Add GCC library path for cross-compilation (for crtbeginS.o, crtendS.o, libgcc, etc.)
+    if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
+      gcc_lib_path = "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/lib/gcc/aarch64-none-linux-gnu/13.3.1"
+      ldflags += [
+        "-L" + rebase_path(gcc_lib_path, root_build_dir),
+        "-L" + rebase_path("${link_sysroot}/lib", root_build_dir),
+      ]
+    }
 
     # When use_custom_libcxx=true, some -isystem flags get passed to
     # cflags_cc to set up libc++ include paths.  We want to make sure

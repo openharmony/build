@@ -68,23 +68,25 @@ import("{{ generated_sdk_modules_gni }}")
     group("{{ _sdk_type }}") {
       public_deps = []
         {% for os in sdk_systems %}
-        public_deps += [":{{ _sdk_type }}_{{ os }}"]
+        {% set _os = os.replace('-', '_') %}
+        public_deps += [":{{ _sdk_type }}_{{ _os }}"]
         {% endfor %}
     }
 
     {% for os in sdk_systems %}
-    make_{{ os }}_sdk_modules("{{ _sdk_type }}_{{ os }}") {
+    {% set _os = os.replace('-', '_') %}
+    make_{{ _os }}_sdk_modules("{{ _sdk_type }}_{{ _os }}") {
       {% if use_current_sdk %}
       sdk_class = "{{ sdk_class }}"
       {% endif %}
       sdk_type = "{{ sdk_type }}"
-      sdk_modules = {{ _sdk_type }}s.{{ os }}
+      sdk_modules = {{ _sdk_type }}s.{{ _os }}
       {% if release_type != "" %}
       zipfile_name =
-          "${sdk_type}-${{ "{" }}sdk_system_{{ os }}{{ "}" }}-${arch}-${current_sdk_version}-${release_type}.zip"
+          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-${arch}-${current_sdk_version}-${release_type}.zip"
       {% else %}
       zipfile_name =
-          "${sdk_type}-${{ "{" }}sdk_system_{{ os }}{{ "}" }}-${arch}-${current_sdk_version}.zip"
+          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-${arch}-${current_sdk_version}.zip"
       {% endif %}
     }
     {% endfor %}
