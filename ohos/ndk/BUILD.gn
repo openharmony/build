@@ -235,6 +235,33 @@ if (host_os == "mac") {
     sources = [ "./OHOS.cmake" ]
     outputs = [ "$ndk_ohos_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
+
+  # Copy cmake for linux-arm64 (cross-compilation from linux-x64 host)
+  ohos_ndk_copy("copy_linux_arm64_cmake_bin") {
+    dest_dir = "$ndk_linux_arm64_tools_out_dir/cmake"
+    sources = [
+      "//prebuilts/cmake/linux-aarch64/bin",
+      "//prebuilts/cmake/linux-aarch64/doc",
+      "//prebuilts/cmake/linux-aarch64/man",
+      "//prebuilts/cmake/linux-aarch64/share",
+    ]
+    license_file = "//prebuilts/cmake/linux-aarch64/Copyright.txt"
+  }
+
+  # Copy ninja for linux-arm64 SDK
+  copy("copy_linux_arm64_ninja") {
+    sources = [ "//prebuilts/build-tools/linux-aarch64/bin/ninja" ]
+    outputs = [ "$ndk_linux_arm64_tools_out_dir/cmake/bin/ninja" ]
+  }
+
+  copy("copy_linux_arm64_ohos_cmake") {
+    deps = [
+      ":copy_linux_arm64_cmake_bin",
+      ":copy_linux_arm64_ninja",
+    ]
+    sources = [ "./OHOS.cmake" ]
+    outputs = [ "$ndk_linux_arm64_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
+  }
 }
 
 if (!use_current_sdk) {
@@ -290,6 +317,7 @@ if (!use_current_sdk) {
         deps += [ ":archive_linux_ndk" ]
       } else {
         deps += [
+          ":archive_linux_arm64_ndk",
           ":archive_linux_ndk",
           ":archive_ohos_ndk",
           ":archive_windows_ndk",
@@ -438,5 +466,39 @@ if (!use_current_sdk) {
           root_build_dir),
     ]
     outputs = [ _output ]
+  }
+
+  if (host_os == "linux" && host_cpu != "arm64") {
+    action_with_pydeps("archive_linux_arm64_ndk") {
+      deps = ndk_targets + [ ":copy_linux_arm64_ohos_cmake" ]
+      script = "//build/ohos/ndk/archive_ndk.py"
+      depfile = "$target_gen_dir/$target_name.d"
+      _output = "$ohos_sdk_out_dir/${linux_arm64_system}/${ndk_zip_prefix}-${linux_arm64_system}-${arch}-${current_ndk_version}"
+      if (release_type != "") {
+        _output += "-${release_type}.zip"
+      } else {
+        _output += ".zip"
+      }
+
+      args = [
+        "--os-irrelevant-dir",
+        rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+        "--output",
+        rebase_path(_output, root_build_dir),
+        "--depfile",
+        rebase_path(depfile, root_build_dir),
+        "--notice-file",
+        rebase_path(ndk_notice_txt, root_build_dir),
+        "--os-specific-dir",
+        rebase_path("$ndk_linux_arm64_specific_out_dir", root_build_dir),
+        "--prefix",
+        ndk_zip_prefix,
+        "--record-path",
+        rebase_path(
+            "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+            root_build_dir),
+      ]
+      outputs = [ _output ]
+    }
   }
 }

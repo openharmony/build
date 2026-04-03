@@ -27,6 +27,10 @@ if (current_os == target_os && current_cpu == target_cpu &&
 } else if (is_ios) {
   import("//build_plugins/config/ios/ios_sdk.gni")
   sysroot = ios_sdk_path
+} else if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
+  # Cross-compiling for linux-arm64 on a non-arm64 host.
+  # Use sysroot from the prebuilt aarch64 GCC toolchain.
+  sysroot = "//prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/aarch64-none-linux-gnu/libc"
 } else {
   sysroot = ""
 }
