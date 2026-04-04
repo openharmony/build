@@ -248,15 +248,15 @@ if (host_os == "mac") {
     license_file = "//prebuilts/cmake/linux-aarch64/Copyright.txt"
   }
 
-  # Copy ninja for linux-arm64 SDK
+  # Copy ninja for linux-arm64 SDK (must run after copy_linux_arm64_cmake_bin due to --clear)
   copy("copy_linux_arm64_ninja") {
+    deps = [ ":copy_linux_arm64_cmake_bin" ]
     sources = [ "//prebuilts/build-tools/linux-aarch64/bin/ninja" ]
     outputs = [ "$ndk_linux_arm64_tools_out_dir/cmake/bin/ninja" ]
   }
 
   copy("copy_linux_arm64_ohos_cmake") {
     deps = [
-      ":copy_linux_arm64_cmake_bin",
       ":copy_linux_arm64_ninja",
     ]
     sources = [ "./OHOS.cmake" ]

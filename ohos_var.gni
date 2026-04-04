@@ -178,7 +178,6 @@ declare_args() {
   # Build ohos sdk compatibility jar
   build_bc_sdk = false
 
-  # Which OS the generated SDK works on. possible values: 'win/mac/linux/arm64/default'
   sdk_platform = "default"
 }
 
@@ -186,7 +185,6 @@ declare_args() {
   # Build ohos NDK
   build_ohos_ndk = false
 
-  # Which OS the generated NDK works on. possible values: 'win/mac/linux/arm64/default'
   ndk_platform = "default"
 
   # Whether to archive or not, set to false in debug to save ndk build time.
