@@ -71,14 +71,6 @@ if (build_default_sdk_target) {
     sdk_systems = [ sdk_system_darwin ]
   } else if (host_os == "linux" && host_cpu == "arm64") {
     sdk_systems = [ sdk_system_linux ]
-  } else if (host_os == "linux" && host_cpu == "x64") {
-    # On linux-x64 host, build both linux-x64 and linux-arm64 SDKs
-    sdk_systems = [
-      sdk_system_windows,
-      sdk_system_linux,
-      sdk_system_linux_arm64,
-      sdk_system_ohos,
-    ]
   } else {
     sdk_systems = [
       sdk_system_windows,
@@ -96,9 +88,9 @@ if (build_default_sdk_target) {
   }
   if (build_linux_sdk_target) {
     sdk_systems += [ sdk_system_linux ]
-    if (host_os == "linux" && host_cpu == "x64") {
-      sdk_systems += [ sdk_system_linux_arm64 ]
-    }
+  }
+  if (build_linux_arm64_sdk_target) {
+    sdk_systems += [ sdk_system_linux_arm64 ]
   }
   if (build_ohos_sdk_target) {
     sdk_systems += [ sdk_system_ohos ]

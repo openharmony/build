@@ -317,7 +317,6 @@ if (!use_current_sdk) {
         deps += [ ":archive_linux_ndk" ]
       } else {
         deps += [
-          ":archive_linux_arm64_ndk",
           ":archive_linux_ndk",
           ":archive_ohos_ndk",
           ":archive_windows_ndk",
@@ -332,6 +331,9 @@ if (!use_current_sdk) {
     }
     if (build_linux_ndk_target) {
       deps += [ ":archive_linux_ndk" ]
+    }
+    if (build_linux_arm64_ndk_target) {
+      deps += [ ":archive_linux_arm64_ndk" ]
     }
     if (build_ohos_ndk_target) {
       deps += [ ":archive_ohos_ndk" ]
