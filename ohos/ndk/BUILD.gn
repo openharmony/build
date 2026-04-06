@@ -256,9 +256,7 @@ if (host_os == "mac") {
   }
 
   copy("copy_linux_arm64_ohos_cmake") {
-    deps = [
-      ":copy_linux_arm64_ninja",
-    ]
+    deps = [ ":copy_linux_arm64_ninja" ]
     sources = [ "./OHOS.cmake" ]
     outputs = [ "$ndk_linux_arm64_tools_out_dir/cmake/share/cmake-3.28/Modules/Platform/{{source_file_part}}" ]
   }
