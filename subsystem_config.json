@@ -127,6 +127,10 @@
     "path": "foundation/multimodalinput",
     "name": "multimodalinput"
   },
+  "officeservice": {
+    "path": "foundation/officeservice",
+    "name": "officeservice"
+  },
   "telephony": {
     "path": "base/telephony",
     "name": "telephony"
