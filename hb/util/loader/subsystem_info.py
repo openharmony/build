@@ -63,7 +63,7 @@ def merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, key):
 
 
 def get_subsystem_info(subsystem_config_file, example_subsystem_file,
-                       source_root_dir, config_output_path, os_level):
+                       source_root_dir, config_output_path, enable_scan_optimization):
     if not subsystem_config_file:
         subsystem_config_file = 'build/subsystem_config.json'
 
@@ -71,7 +71,8 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
     output_dir_realpath = os.path.join(source_root_dir, config_output_path)
     subsystem_configs = subsystem_scan.scan(subsystem_config_file,
                                             example_subsystem_file,
-                                            source_root_dir)
+                                            source_root_dir,
+                                            enable_scan_optimization)
     config = Config()
     subsystem_config_overlay_file = os.path.join(
         config.product_path, "subsystem_config_overlay.json")
@@ -79,7 +80,8 @@ def get_subsystem_info(subsystem_config_file, example_subsystem_file,
         subsystem_config_overlay = {}
         subsystem_config_overlay = subsystem_scan.scan(subsystem_config_overlay_file,
                                                        example_subsystem_file,
-                                                       source_root_dir)
+                                                       source_root_dir,
+                                                       enable_scan_optimization)
         merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, 'subsystem')
         merge_subsystem_overlay(subsystem_configs, subsystem_config_overlay, 'no_src_subsystem')
 
