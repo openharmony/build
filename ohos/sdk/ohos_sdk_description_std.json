@@ -5,7 +5,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -15,7 +16,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -33,7 +35,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -43,7 +46,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -52,7 +56,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -60,7 +65,8 @@
         "module_label": "//third_party/glslang:glslang_validator",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "linux_arm64"
         ]
     },
     {
@@ -68,7 +74,8 @@
         "module_label": "//third_party/glslang:spirv-remap",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "linux_arm64"
         ]
     },
     {
@@ -77,7 +84,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -87,28 +95,32 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libselinux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
         "install_dir": "toolchains",
         "module_label": "//third_party/selinux:libsepol",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
         "install_dir": "toolchains",
         "module_label": "//third_party/pcre2:libpcre2",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -117,7 +129,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -126,7 +139,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -136,7 +150,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -145,7 +160,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -155,7 +171,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -165,7 +182,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -175,7 +193,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -185,7 +204,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -195,7 +215,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -205,7 +226,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -215,7 +237,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -225,7 +248,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -235,7 +259,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -245,7 +270,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -255,7 +281,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -265,7 +292,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -274,7 +302,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -283,7 +312,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -292,7 +322,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -357,17 +388,19 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
-    	"install_dir": "js/build-tools/ace-loader/bin/ark/",
-	    "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc",
-	    "target_os": [
+        "install_dir": "js/build-tools/ace-loader/bin/ark/",
+        "module_label": "//arkcompiler/ets_frontend/es2panda:panda_es2abc",
+        "target_os": [
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -377,7 +410,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -387,7 +421,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -396,7 +431,8 @@
         "target_os": [
             "windows",
             "linux",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -404,7 +440,8 @@
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build",
         "target_os": [
             "linux",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -426,7 +463,8 @@
         "module_label": "//arkcompiler/ets_frontend/es2panda:es2abc_build_ets",
         "target_os": [
             "linux",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -455,7 +493,8 @@
         "module_label": "//arkcompiler/runtime_core/panda_guard:panda_guard_build_ets",
         "target_os": [
             "linux",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -484,7 +523,8 @@
         "module_label": "//arkcompiler/runtime_core/static_core/plugins/ets/stdlib:stdlib_build_ets",
         "target_os": [
             "linux",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -501,14 +541,16 @@
             "windows",
             "linux",
             "ohos",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_js2abc_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -529,7 +571,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_ts2abc_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -550,7 +593,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -571,7 +615,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_package-lock_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -592,7 +637,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:js_node_modules_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -613,7 +659,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/legacy_api8/bin",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_js2abc_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -634,7 +681,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/legacy_api8/src",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_ts2abc_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -655,7 +703,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -676,7 +725,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_package-lock_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -697,7 +747,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/legacy_api8",
         "module_label": "//arkcompiler/ets_frontend/legacy_bin:ets_node_modules_api8_linux",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -718,7 +769,8 @@
         "install_dir": "js/build-tools/ace-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -739,7 +791,8 @@
         "install_dir": "ets/dynamic/build-tools/ets-loader/bin/ark/build/bin",
         "module_label": "//arkcompiler/ets_frontend/merge_abc:merge_abc_build_ets",
         "target_os": [
-            "linux"
+            "linux",
+            "linux_arm64"
         ]
     },
     {
@@ -763,7 +816,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -773,7 +827,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -783,7 +838,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -793,7 +849,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -803,7 +860,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -813,7 +871,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -823,7 +882,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -833,17 +893,19 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
-   {
+    {
         "install_dir": "ets/dynamic/component",
         "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_component",
         "target_os": [
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -853,7 +915,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -863,7 +926,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -873,7 +937,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -883,7 +948,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -893,7 +959,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -903,7 +970,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -912,7 +980,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -922,7 +991,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -932,7 +1002,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -942,7 +1013,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -952,7 +1024,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -962,7 +1035,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -972,7 +1046,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -982,7 +1057,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -992,7 +1068,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1002,7 +1079,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1012,7 +1090,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1022,7 +1101,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1032,7 +1112,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1042,7 +1123,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1052,7 +1134,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1062,7 +1145,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1072,7 +1156,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1082,7 +1167,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1092,7 +1178,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1102,7 +1189,8 @@
             "windows",
             "linux",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1112,7 +1200,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1121,7 +1210,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1137,7 +1227,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1146,7 +1237,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1156,7 +1248,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1165,7 +1258,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1305,7 +1399,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1315,7 +1410,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1325,7 +1421,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1335,7 +1432,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1344,7 +1442,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1353,7 +1452,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1363,7 +1463,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1373,7 +1474,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1383,7 +1485,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1393,7 +1496,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1413,7 +1517,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1423,7 +1528,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1433,7 +1539,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1443,7 +1550,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1453,7 +1561,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1463,7 +1572,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1473,7 +1583,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1483,7 +1594,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1493,7 +1605,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1503,7 +1616,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1513,7 +1627,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1523,7 +1638,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1533,7 +1649,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1543,7 +1660,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1553,7 +1671,8 @@
             "linux",
             "windows",
             "darwin",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
     {
@@ -1562,7 +1681,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1652,16 +1772,18 @@
         "module_label": "//developtools/hapsigner/binary_sign_tool:binary-sign-tool",
         "target_os": [
             "linux",
-            "ohos"
+            "ohos",
+            "linux_arm64"
         ]
     },
-   {
+    {
         "install_dir": "ets/static/build-tools/driver/build-system",
         "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/build_system:ets2panda_build_system",
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1669,7 +1791,8 @@
         "module_label": "//developtools/ace_ets2bundle/ets1.2:ets2panda_libarkts",
         "target_os": [
             "linux",
-            "windows"
+            "windows",
+            "linux_arm64"
         ]
     },
     {
@@ -1678,7 +1801,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1687,7 +1811,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1696,7 +1821,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1705,7 +1831,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1714,7 +1841,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1723,7 +1851,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {
@@ -1732,7 +1861,8 @@
         "target_os": [
             "linux",
             "windows",
-            "darwin"
+            "darwin",
+            "linux_arm64"
         ]
     },
     {

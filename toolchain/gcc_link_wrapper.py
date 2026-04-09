@@ -88,7 +88,7 @@ def main():
         result = subprocess.call(
             command_to_run(
                 [args.strip, '-o', args.output, args.unstripped_file]))
-    if args.mini_debug and not args.unstripped_file.endswith(".exe") and not args.unstripped_file.endswith(".dll"):
+    if args.mini_debug and args.unstripped_file and not args.unstripped_file.endswith(".exe") and not args.unstripped_file.endswith(".dll"):
         unstripped_libfile = os.path.abspath(args.unstripped_file)
         script_path = os.path.join(
             os.path.dirname(__file__), 'mini_debug_info.py')
