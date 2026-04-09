@@ -1502,6 +1502,16 @@
     },
     {
         "install_dir": "toolchains/modulecheck",
+        "module_label": "//developtools/packing_tool/modulecheck:agentCardSchema_json",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos"
+        ]
+    },
+    {
+        "install_dir": "toolchains/modulecheck",
         "module_label": "//developtools/packing_tool/modulecheck:moduleSchema_json",
         "target_os": [
             "linux",

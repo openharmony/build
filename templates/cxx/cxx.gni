@@ -419,10 +419,20 @@ template("ohos_executable") {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
-      cflags += [ "-mbranch-protection=bti" ]
+      if (support_branch_protector_pac_ret) {
+        cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
+        ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
+      } else {
+        cflags += [ "-mbranch-protection=bti" ]
+      }
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+    } else if (!bti && !pac_ret && support_branch_protector_pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret-strong+b-key" ]
+      ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
     }
 
     if (!defined(deps)) {
@@ -1149,10 +1159,20 @@ template("ohos_shared_library") {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
-      cflags += [ "-mbranch-protection=bti" ]
+      if (support_branch_protector_pac_ret) {
+        cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
+        ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
+      } else {
+        cflags += [ "-mbranch-protection=bti" ]
+      }
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+    } else if (!bti && !pac_ret && support_branch_protector_pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret-strong+b-key" ]
+      ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
     }
 
     # check whether to add adlt configs
@@ -1708,10 +1728,20 @@ template("ohos_static_library") {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
-      cflags += [ "-mbranch-protection=bti" ]
+      if (support_branch_protector_pac_ret) {
+        cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
+        ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
+      } else {
+        cflags += [ "-mbranch-protection=bti" ]
+      }
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+    } else if (!bti && !pac_ret && support_branch_protector_pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret-strong+b-key" ]
+      ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
     }
 
     if (defined(invoker.no_default_deps)) {
@@ -2029,10 +2059,20 @@ template("ohos_source_set") {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (bti && !pac_ret) {
-      cflags += [ "-mbranch-protection=bti" ]
+      if (support_branch_protector_pac_ret) {
+        cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
+        ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
+      } else {
+        cflags += [ "-mbranch-protection=bti" ]
+      }
       ldflags += [ "-Wl,-z,force-bti" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
+    } else if (!bti && !pac_ret && support_branch_protector_pac_ret) {
+      cflags += [ "-mbranch-protection=pac-ret-strong+b-key" ]
+      ldflags += [ "-Wl,--load-pass-plugin=" +
+                    rebase_path("${default_clang_base_path}/plugins/PAC/lib/libPacRetStrongPass.so", root_build_dir)]
     }
 
     if (defined(invoker.no_default_deps)) {
