@@ -77,6 +77,8 @@ def add_target(item: dict, target: str, sdk_systems: list):
             item.get('targets').get('darwin').add_target('"%s",' % target)
         elif _os == 'ohos' or _os == 'Ohos':
             item.get('targets').get('ohos').add_target('"%s",' % target)
+        elif _os == 'linux_arm64' or _os == 'Linux_arm64':
+            item.get('targets').get('linux_arm64').add_target('"%s",' % target)
 
 
 def write_sdk_build_gni(sdk_targets: list, build_only_targets: list, gni: str):
@@ -156,7 +158,7 @@ def expand_platform_targets(options, label: str, install_dir: str):
             for c in variant
         ]
     else:
-        return [label], [install_dir]    
+        return [label], [install_dir]
 
 
 def add_sdk_targets(sdk_type, sdk_targets):
@@ -166,7 +168,8 @@ def add_sdk_targets(sdk_type, sdk_targets):
             'linux': SdkTargets('linux'),
             'windows': SdkTargets('windows'),
             'darwin': SdkTargets('darwin'),
-            'ohos': SdkTargets('ohos')
+            'ohos': SdkTargets('ohos'),
+            'linux_arm64': SdkTargets('linux_arm64')
         }
     })
 
