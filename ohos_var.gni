@@ -421,6 +421,10 @@ declare_args() {
   build_ohos_ndk_target = false
 }
 
+declare_args() {
+  make_pac_format_image = false
+}
+
 python_script = "//build/scripts/is_substring.py"
 
 if (exec_script(python_script,
