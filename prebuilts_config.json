@@ -200,13 +200,13 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.13.2/darwin/arm/ninja-darwin-arm-1.13.2-20260325.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/darwin/arm/ninja-darwin-arm-1.13.2-20260410.tar.gz"
                         }
                     ],
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.13.2/darwin/x86/ninja-darwin-x86-1.13.2-20260324.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/darwin/x86/ninja-darwin-x86-1.13.2-20260410.tar.gz"
                         }
                     ]
                 }
