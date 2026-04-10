@@ -420,7 +420,7 @@ declare_args() {
 }
 
 declare_args() {
-  make_7885_image = false
+  make_pac_format_image = false
 }
 
 python_script = "//build/scripts/is_substring.py"
