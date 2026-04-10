@@ -50,7 +50,7 @@ if (product_name == "ohos-sdk") {
     group("images") {
       deps = [ "//build/ohos/images:make_images" ]
       if(make_pac_format_image) {
-        deps += [ "//device/board/${device_company}/${product_name}:make_custom_image" ]
+        deps += [ "//device/board/${device_company}/${product_name}:make_pac_format_image" ]
       }
     }
   }
