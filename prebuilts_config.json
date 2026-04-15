@@ -137,7 +137,7 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260228/gn-linux-x86-20260228.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260414/gn-linux-x86-20260414.tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
@@ -149,13 +149,13 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260325/gn-darwin-arm-20260325.tar.gz"
                         }
                     ],
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260324/gn-darwin-x86-20260324.tar.gz"
                         }
                     ]
                 }
