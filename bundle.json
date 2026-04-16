@@ -24,7 +24,8 @@
     "features": [
       "build_framework_feature_verify = ture",
       "build_framework_compiler_optimize_level",
-      "build_framework_security_configs_policy"
+      "build_framework_security_configs_policy",
+      "build_framework_pac_configs_policy"
     ],
     "adapted_system_type": [
       "standard",
