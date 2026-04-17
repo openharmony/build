@@ -83,20 +83,24 @@ config("runtime_library") {
   if (!is_mac && sysroot != "") {
     # Pass the sysroot to all C compiler variants, the assembler, and linker.
     sysroot_flags = [ "--sysroot=" + rebase_path(sysroot, root_build_dir) ]
-    asmflags += sysroot_flags
-
-    if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
-      sysroot_flags += [
-        "-isystem" + rebase_path("$sysroot/include/c++/11", root_build_dir),
-        "-isystem" + rebase_path("$sysroot/include/c++/11/aarch64-linux-gnu",
-                                 root_build_dir),
-      ]
+    if (is_linux) { 
+      # This is here so that all files get recompiled after a sysroot roll and 
+      # when turning the sysroot on or off. (defines are passed via the command 
+      # line, and build system rebuilds things when their commandline 
+      # changes). Nothing should ever read this define. 
+      sysroot_hash = 
+          exec_script("//build/linux/sysroot_scripts/install-sysroot.py", 
+                      [ "--print-hash=$current_cpu" ], 
+                      "trim string", 
+                      [ "//build/linux/sysroot_scripts/sysroots.json" ]) 
+      defines += [ "CR_SYSROOT_HASH=$sysroot_hash" ] 
     }
+    asmflags += sysroot_flags
 
     link_sysroot_flags =
         [ "--sysroot=" + rebase_path(link_sysroot, root_build_dir) ]
     ldflags += link_sysroot_flags
-    
+
     # When use_custom_libcxx=true, some -isystem flags get passed to
     # cflags_cc to set up libc++ include paths.  We want to make sure
     # the sysroot includes take lower precedence than the libc++
