@@ -96,16 +96,7 @@ config("runtime_library") {
     link_sysroot_flags =
         [ "--sysroot=" + rebase_path(link_sysroot, root_build_dir) ]
     ldflags += link_sysroot_flags
-
-    # Add GCC library path for cross-compilation (for crtbeginS.o, crtendS.o, libgcc, etc.)
-    if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
-      gcc_lib_path = "${_aarch64_gcc_toolchain}/lib/gcc-cross/aarch64-linux-gnu/11"
-      ldflags += [
-        "-L" + rebase_path(gcc_lib_path, root_build_dir),
-        "-L" + rebase_path("${link_sysroot}/lib", root_build_dir),
-      ]
-    }
-
+    
     # When use_custom_libcxx=true, some -isystem flags get passed to
     # cflags_cc to set up libc++ include paths.  We want to make sure
     # the sysroot includes take lower precedence than the libc++
