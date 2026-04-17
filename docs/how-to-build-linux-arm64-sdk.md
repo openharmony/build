@@ -1,6 +1,6 @@
-# Linux ARM64 SDK/NDK 交叉编译指南
+# Linux ARM64 SDK 交叉编译指南
 
-本文档说明如何在 x86_64 主机上交叉编译 linux-arm64 平台的 OpenHarmony SDK 和 NDK。
+本文档说明如何在 x86_64 主机上交叉编译 linux-arm64 平台的 OpenHarmony SDK。
 
 ## 环境要求
 
@@ -13,7 +13,6 @@
 ### 操作系统
 
 - Ubuntu 22.04 LTS（推荐）
-- 其他 Linux 发行版需确保 glibc 版本兼容
 
 ### 安装交叉编译工具链
 
@@ -40,18 +39,6 @@ ls /usr/aarch64-linux-gnu/include/c++/
 ./build.sh --product-name ohos-sdk --build-target ohos_sdk --gn-args sdk_platform=arm64
 ```
 
-### 编译 linux-arm64 NDK
-
-```bash
-./build.sh --product-name ohos-sdk --build-target ohos_ndk --gn-args ndk_platform=arm64
-```
-
-### 同时编译 SDK 和 NDK
-
-```bash
-./build.sh --product-name ohos-sdk --build-target ohos_sdk --build-target ohos_ndk --gn-args sdk_platform=arm64 ndk_platform=arm64
-```
-
 ## 产物路径
 
 编译完成后，产物位于：
@@ -68,8 +55,6 @@ linux-arm64/
 │   ├── llvm/              # LLVM 工具链
 │   │   ├── bin/           # 编译器等工具
 │   │   ├── lib/           # 库文件
-│   │   │   └── aarch64-linux-ohos/
-│   │   │       └── c++/   # libc++ 库
 │   │   └── include/       # 头文件
 │   ├── sysroot/           # 系统根目录
 │   └── build-tools/       # 构建工具（cmake, ninja 等）
@@ -80,10 +65,9 @@ linux-arm64/
 
 | 文件路径 | 说明 |
 |---------|------|
-| `build/ohos_var.gni` | sdk_platform/ndk_platform 参数定义 |
+| `build/ohos_var.gni` | sdk_platform 参数定义 |
 | `build/ohos/sdk/sdk.gni` | SDK 平台列表控制 |
-| `build/ohos/ndk/BUILD.gn` | NDK 构建目标 |
 | `build/config/sysroot.gni` | 交叉编译 sysroot 配置 |
 | `build/config/posix/BUILD.gn` | 交叉编译头文件和库路径 |
 | `build/toolchain/linux/BUILD.gn` | 工具链前缀配置 |
-| `build/prebuilts_download.sh` | 预置包下载及 libcxx-ndk c++ 子目录创建 |
+| `build/prebuilts_download.sh` | 预置包下载 |
