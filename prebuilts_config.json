@@ -558,7 +558,7 @@
                     ],
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.12.10_20260414.tar.gz",
                             "unzip_filename": "linux-x86"
                         },
                         {
@@ -918,7 +918,7 @@
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.12.10_20260414.tar.gz",
                             "unzip_filename": "linux-x86"
                         },
                         {
