@@ -8300,18 +8300,14 @@
             "//base/telephony/core_service/telephony_core_service.gni"
         ],
         "//build/config/": [
-            "//device/board/hihope/rk3568/config.gni"
-        ],
-        "//build/config/": [
+            "//device/board/hihope/rk3568/config.gni",
             "//device/board/hihope/rk3568_plus/config.gni"
         ],
         "//build/config/ohos/": [
             "//third_party/musl/musl_config.gni"
         ],
         "//build/config/sanitizers/": [
-            "//vendor/hihope/rk3568/security_config/sanitizer_check_list.gni"
-        ],
-        "//build/config/sanitizers/": [
+            "//vendor/hihope/rk3568/security_config/sanitizer_check_list.gni",
             "//vendor/hihope/rk3568_plus/security_config/sanitizer_check_list.gni"
         ],
         "//device/board/hihope/rk3568/": [
