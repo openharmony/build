@@ -3209,19 +3209,7 @@
         "//arkcompiler/runtime_core:ark_config",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
-        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
-    ],
-    "innerapi_not_declare": [
-        "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap",
-        "//arkcompiler/ets_frontend/es2panda:es2abc_js_file",
-        "//arkcompiler/ets_frontend/es2panda:es2panda_build",
-        "//arkcompiler/runtime_core/assembler:arkassembler_public_config",
-        "//arkcompiler/runtime_core/isa:isa_combine",
-        "//arkcompiler/runtime_core/libpandabase:arkbase_public_config",
-        "//arkcompiler/runtime_core/libpandafile:arkfile_public_config",
-        "//arkcompiler/runtime_core:ark_config",
-        "//developtools/packing_tool:packing_tool",
-        "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
         "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568_plus:hdi_service_hardwaredependence"
     ],
     "deps_not_lib": {
