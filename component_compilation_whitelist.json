@@ -4,7 +4,8 @@
         "//arkcompiler/runtime_core/isa:isa_combine",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
-        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568_plus:hdi_service_hardwaredependence"
     ],
     "all_dependent_configs": [
         "//arkcompiler/ets_runtime:libark_jsruntime",
@@ -353,7 +354,43 @@
             "//base/hiviewdfx/interfaces/innerkits/libhilog/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/device_manager:camera_device_manager": [
+            "//base/hiviewdfx/interfaces/innerkits/libhilog/include/",
+            "//commonlibrary/c_utils/base/include/"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [
+            "//drivers/peripheral/camera/vdi_base/common/include/",
+            "//drivers/peripheral/camera/vdi_base/interfaces/",
+            "//drivers/peripheral/camera/interfaces/include/",
+            "//drivers/peripheral/camera/interfaces/hdi_passthrough/",
+            "//drivers/peripheral/camera/test/common/callback/include/",
+            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
+            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/lite/",
+            "//third_party/googletest/googletest/include/",
+            "//drivers/peripheral/camera/base/",
+            "//drivers/peripheral/camera/display/interfaces/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/sink_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/sensor_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/merge_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/config/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [
             "//drivers/peripheral/camera/vdi_base/common/include/",
             "//drivers/peripheral/camera/vdi_base/interfaces/",
             "//drivers/peripheral/camera/interfaces/include/",
@@ -389,6 +426,10 @@
             "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/",
             "//commonlibrary/c_utils/base/include/"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core:camera_ipp_algo_example": [
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/",
+            "//commonlibrary/c_utils/base/include/"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core": [
             "//commonlibrary/c_utils/base/include/",
             "//device/soc/rockchip/rk3568/hardware/rga/include/",
@@ -399,7 +440,48 @@
             "//drivers/peripheral/camera/vdi_base/v4l2/include/",
             "//drivers/peripheral/camera/vdi_base/common/dump/include/"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core": [
+            "//commonlibrary/c_utils/base/include/",
+            "//device/soc/rockchip/rk3568_plus/hardware/rga/include/",
+            "//device/soc/rockchip/rk3568_plus/hardware/mpp/include/",
+            "//third_party/libexif/",
+            "//drivers/peripheral/camera/vdi_base/common/include/",
+            "//drivers/peripheral/camera/vdi_base/interfaces/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
+            "//drivers/peripheral/camera/vdi_base/common/dump/include/"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:camera_host_vdi_impl_1.0": [
+            "//drivers/peripheral/camera/interfaces/include/",
+            "//drivers/peripheral/camera/vdi_base/common/include/",
+            "//drivers/peripheral/camera/vdi_base/common/metadata_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/utils/watchdog/",
+            "//drivers/peripheral/camera/vdi_base/interfaces/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_host/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_device/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/stream_operator/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/src/stream_operator/stream_tunnel/standard/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/offline_stream_operator/",
+            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/standard/",
+            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
+            "//drivers/peripheral/camera/display/interfaces/include/",
+            "//drivers/peripheral/camera/vdi_base/common/dump/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:camera_host_vdi_impl_1.0": [
             "//drivers/peripheral/camera/interfaces/include/",
             "//drivers/peripheral/camera/vdi_base/common/include/",
             "//drivers/peripheral/camera/vdi_base/common/metadata_manager/include/",
@@ -461,7 +543,41 @@
             "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
             "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:camera_host_vdi_impl_1.0_static": [
+            "//drivers/peripheral/camera/interfaces/include/",
+            "//drivers/peripheral/camera/vdi_base/common/include/",
+            "//drivers/peripheral/camera/vdi_base/common/metadata_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/utils/watchdog/",
+            "//drivers/peripheral/camera/vdi_base/interfaces/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_host/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/camera_device/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/stream_operator/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/src/stream_operator/stream_tunnel/standard/",
+            "//drivers/peripheral/camera/vdi_base/v4l2/include/offline_stream_operator/",
+            "//drivers/peripheral/camera/vdi_base/common/device_manager/include/",
+            "//drivers/peripheral/camera/vdi_base/common/buffer_manager/src/buffer_adapter/standard/",
+            "//drivers/peripheral/camera/vdi_base/common/utils/event/",
+            "//drivers/peripheral/camera/display/interfaces/include/",
+            "//drivers/peripheral/camera/vdi_base/common/dump/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/utils/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/host_stream/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/node_base/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/nodes/src/dummy_node/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/include/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/builder/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/dispatcher/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/parser/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/",
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/ipp/include/"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:camera_pipeline_config": [
+            "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/config/"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:camera_pipeline_config": [
             "//drivers/peripheral/camera/vdi_base/common/pipeline_core/pipeline_impl/src/strategy/config/"
         ],
         "//drivers/interface/audio/effect/v1_0:effect_idl_headers": [
@@ -3077,6 +3193,9 @@
         ],
         "//vendor/hihope/rk3568/bluetooth:libbt_vendor": [
             "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
+        ],
+        "//vendor/hihope/rk3568_plus/bluetooth:libbt_vendor": [
+            "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/"
         ]
     },
     "innerapi_not_declare": [
@@ -3090,7 +3209,8 @@
         "//arkcompiler/runtime_core:ark_config",
         "//developtools/packing_tool:packing_tool",
         "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen",
-        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence",
+        "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568_plus:hdi_service_hardwaredependence"
     ],
     "deps_not_lib": {
         "//applications/standard/auth_widget:auth_widget": [
@@ -3207,10 +3327,19 @@
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:build_camera_host_config": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:build_camera_host_config": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:build_ipp_algo_config": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:build_ipp_algo_config": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:generate_source": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:generate_source": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//drivers/external_device_manager/test/unittest/device_manager_js_test:DeviceManagerJsTest": [
@@ -4329,13 +4458,25 @@
         "//vendor/hihope/rk3568/hals/audio:hdi_service_st": [
             "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
         ],
+        "//vendor/hihope/rk3568_plus/hals/audio:hdi_service_st": [
+            "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568_plus:hdi_service_hardwaredependence"
+        ],
         "//vendor/hihope/rk3568/hals/codec:build_codec_adapter_capabilities": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//vendor/hihope/rk3568_plus/hals/codec:build_codec_adapter_capabilities": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:build_hcs": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
+        "//vendor/hihope/rk3568_plus/hdf_config/uhdf:build_hcs": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:gen_start_cfg": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//vendor/hihope/rk3568_plus/hdf_config/uhdf:gen_start_cfg": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ]
     },
@@ -5269,7 +5410,17 @@
             "//third_party/googletest:gtest",
             "//third_party/googletest:gtest_main"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut": [
+            "//third_party/googletest:gmock_main",
+            "//third_party/googletest:gtest",
+            "//third_party/googletest:gtest_main"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut_resource_copy": [
+            "//third_party/googletest:gmock_main",
+            "//third_party/googletest:gtest",
+            "//third_party/googletest:gtest_main"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core/test/unittest:camera_pipeline_core_test_ut_resource_copy": [
             "//third_party/googletest:gmock_main",
             "//third_party/googletest:gtest",
             "//third_party/googletest:gtest_main"
@@ -5277,13 +5428,25 @@
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core": [
             "//third_party/libjpeg-turbo:turbojpeg_static"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core:camera_pipeline_core": [
+            "//third_party/libjpeg-turbo:turbojpeg_static"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:build_camera_host_config": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:build_camera_host_config": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:build_ipp_algo_config": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:build_ipp_algo_config": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2:generate_source": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2:generate_source": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//drivers/external_device_manager/test/unittest/device_manager_js_test:DeviceManagerJsTest": [
@@ -8059,13 +8222,25 @@
         "//vendor/hihope/rk3568/hals/audio:hdi_service_st": [
             "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568:hdi_service_hardwaredependence"
         ],
+        "//vendor/hihope/rk3568_plus/hals/audio:hdi_service_st": [
+            "//drivers/peripheral/audio/test/systemtest/hdi_service/rk3568_plus:hdi_service_hardwaredependence"
+        ],
         "//vendor/hihope/rk3568/hals/codec:build_codec_adapter_capabilities": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//vendor/hihope/rk3568_plus/hals/codec:build_codec_adapter_capabilities": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:build_hcs": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ],
+        "//vendor/hihope/rk3568_plus/hdf_config/uhdf:build_hcs": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
         "//vendor/hihope/rk3568/hdf_config/uhdf:gen_start_cfg": [
+            "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
+        ],
+        "//vendor/hihope/rk3568_plus/hdf_config/uhdf:gen_start_cfg": [
             "//drivers/hdf_core/framework/tools/hc-gen:build_hc_gen"
         ]
     },
@@ -8113,18 +8288,28 @@
             "//base/telephony/core_service/telephony_core_service.gni"
         ],
         "//build/config/": [
-            "//device/board/hihope/rk3568/config.gni"
+            "//device/board/hihope/rk3568/config.gni",
+            "//device/board/hihope/rk3568_plus/config.gni"
         ],
         "//build/config/ohos/": [
             "//third_party/musl/musl_config.gni"
         ],
         "//build/config/sanitizers/": [
-            "//vendor/hihope/rk3568/security_config/sanitizer_check_list.gni"
+            "//vendor/hihope/rk3568/security_config/sanitizer_check_list.gni",
+            "//vendor/hihope/rk3568_plus/security_config/sanitizer_check_list.gni"
         ],
         "//device/board/hihope/rk3568/": [
             "//device/soc/rockchip/rk3568/soc.gni"
         ],
+        "//device/board/hihope/rk3568_plus/": [
+            "//device/soc/rockchip/rk3568_plus/soc.gni"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
+            "//drivers/peripheral/camera/camera.gni",
+            "//drivers/hdf_core/framework/tools/hc-gen/hc_gen.gni"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/": [
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
             "//drivers/peripheral/camera/camera.gni",
             "//drivers/hdf_core/framework/tools/hc-gen/hc_gen.gni"
@@ -8132,11 +8317,22 @@
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/device_manager/": [
             "//drivers/peripheral/camera/camera.gni"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/device_manager/": [
+            "//drivers/peripheral/camera/camera.gni"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/": [
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
             "//drivers/peripheral/camera/camera.gni"
         ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
+            "//drivers/peripheral/camera/camera.gni"
+        ],
         "//device/board/hihope/rk3568/camera/vdi_impl/v4l2/pipeline_core/test/unittest/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
+            "//drivers/peripheral/camera/camera.gni"
+        ],
+        "//device/board/hihope/rk3568_plus/camera/vdi_impl/v4l2/pipeline_core/test/unittest/": [
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
             "//drivers/peripheral/camera/camera.gni"
         ],
@@ -8156,7 +8352,14 @@
             "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
             "//drivers/hdf_core/framework/tools/hc-gen/hc_gen.gni"
         ],
+        "//vendor/hihope/rk3568_plus/hals/codec/": [
+            "//drivers/hdf_core/adapter/uhdf2/uhdf.gni",
+            "//drivers/hdf_core/framework/tools/hc-gen/hc_gen.gni"
+        ],
         "//vendor/hihope/rk3568/hdf_config/uhdf/": [
+            "//drivers/hdf_core/adapter/uhdf2/hcs/hcs.gni"
+        ],
+        "//vendor/hihope/rk3568_plus/hdf_config/uhdf/": [
             "//drivers/hdf_core/adapter/uhdf2/hcs/hcs.gni"
         ]
     },
