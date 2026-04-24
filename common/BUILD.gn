@@ -23,6 +23,7 @@ group("common_packages") {
   deps += [
     "asan:asan.options",
     "asan:libclang_rt.asan.so",
+    "asan:libclang_rt.memgraph.so",
   ]
 
   if (target_cpu == "arm64") {

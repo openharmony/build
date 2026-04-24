@@ -49,6 +49,7 @@ windows_system = "windows"
 linux_system = "linux"
 darwin_system = "darwin"
 ohos_system = "ohos"
+linux_arm64_system = "linux-arm64"
 
 if (use_current_sdk) {
   ndk_windows_specific_out_dir =
@@ -58,11 +59,15 @@ if (use_current_sdk) {
   ndk_linux_specific_out_dir = "${ndk_os_specific_out_dir}"
   ndk_ohos_specific_out_dir =
       "${ndk_os_specific_out_dir}/.others/${ohos_system}"
+  ndk_linux_arm64_specific_out_dir =
+      "${ndk_os_specific_out_dir}/.others/${linux_arm64_system}"
 } else {
   ndk_windows_specific_out_dir = "${ndk_os_specific_out_dir}/${windows_system}"
   ndk_darwin_specific_out_dir = "${ndk_os_specific_out_dir}/${darwin_system}"
   ndk_linux_specific_out_dir = "${ndk_os_specific_out_dir}/${linux_system}"
   ndk_ohos_specific_out_dir = "${ndk_os_specific_out_dir}/${ohos_system}"
+  ndk_linux_arm64_specific_out_dir =
+      "${ndk_os_specific_out_dir}/${linux_arm64_system}"
 }
 
 ndk_windows_toolchains_out_dir = "${ndk_windows_specific_out_dir}/llvm"
@@ -76,6 +81,10 @@ ndk_linux_tools_out_dir = "${ndk_linux_specific_out_dir}/build-tools"
 
 ndk_ohos_toolchains_out_dir = "${ndk_ohos_specific_out_dir}/llvm"
 ndk_ohos_tools_out_dir = "${ndk_ohos_specific_out_dir}/build-tools"
+
+ndk_linux_arm64_toolchains_out_dir = "${ndk_linux_arm64_specific_out_dir}/llvm"
+ndk_linux_arm64_tools_out_dir =
+    "${ndk_linux_arm64_specific_out_dir}/build-tools"
 
 # Generate NDK library from NDK description file.
 #

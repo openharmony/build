@@ -51,6 +51,10 @@ template("ohos_taihe") {
         "ani-bridge",
       ]
 
+      if (!defined(invoker.enable_exceptions) || !invoker.enable_exceptions) {
+        args += [ "-Cnoexcept-all" ]
+      }
+
       if (defined(invoker.module_prefix)) {
         args += [ "-Carkts:module-prefix=${invoker.module_prefix}" ]
       }
