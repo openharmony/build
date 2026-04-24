@@ -43,6 +43,18 @@ ohos_prebuilt_shared_library("libclang_rt.hwasan.so") {
   part_name = "build_framework"
 }
 
+ohos_prebuilt_shared_library("libclang_rt.memgraph.so") {
+  enable_strip = true
+  mini_debug = true
+  source = "${runtime_ohos_clang_path}/libclang_rt.memgraph.so"
+  install_images = [
+    "system",
+    "updater",
+  ]
+  subsystem_name = "build"
+  part_name = "build_framework"
+}
+
 ohos_prebuilt_shared_library("libclang_rt.tsan.so") {
   enable_strip = true
   mini_debug = true

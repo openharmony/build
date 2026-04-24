@@ -25,6 +25,7 @@ sdk_system_windows = "windows"
 sdk_system_linux = "linux"
 sdk_system_darwin = "darwin"
 sdk_system_ohos = "ohos"
+sdk_system_linux_arm64 = "linux-arm64"
 
 ohos_sdk_out_dir = "$product_output_dir/${product_name}"
 ohos_sdk_copy_dir = "$root_build_dir/${product_name}"
@@ -46,6 +47,7 @@ declare_args() {
 sdk_toolchains = {
   windows = "//build/toolchain/mingw:mingw_x86_64"
   ohos = "//build/toolchain/ohos:ohos_clang_arm64"
+  linux_arm64 = "//build/toolchain/linux:clang_arm64"
 
   if (host_cpu == "arm64") {
     linux = "//build/toolchain/linux:clang_arm64"
@@ -56,7 +58,7 @@ sdk_toolchains = {
   }
 }
 
-if (host_cpu == "arm64") {
+if (current_cpu == "arm64") {
   arch = "arm64"
 } else if (host_cpu == "riscv64") {
   arch = "riscv64"
@@ -86,6 +88,9 @@ if (build_default_sdk_target) {
   }
   if (build_linux_sdk_target) {
     sdk_systems += [ sdk_system_linux ]
+  }
+  if (build_linux_arm64_sdk_target) {
+    sdk_systems += [ sdk_system_linux_arm64 ]
   }
   if (build_ohos_sdk_target) {
     sdk_systems += [ sdk_system_ohos ]
@@ -253,6 +258,22 @@ template("make_linux_sdk_modules") {
                            ])
     sdk_toolchain = sdk_toolchains.linux
     sdk_system = sdk_system_linux
+  }
+}
+
+template("make_linux_arm64_sdk_modules") {
+  make_sdk_modules(target_name) {
+    forward_variables_from(invoker,
+                           [
+                             "testonly",
+                             "zipfile_name",
+                             "sdk_modules",
+                             "sdk_type",
+                             "sdk_class",
+                             "deps",
+                           ])
+    sdk_toolchain = sdk_toolchains.linux_arm64
+    sdk_system = sdk_system_linux_arm64
   }
 }
 
