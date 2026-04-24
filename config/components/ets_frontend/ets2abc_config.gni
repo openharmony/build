@@ -12,7 +12,16 @@
 # limitations under the License.
 
 import("//build/config/components/ets_frontend/ets_frontend_config.gni")
+import("//build/ohos/taihe_idl/taihe_args.gni")
 import("//build/ohos_var.gni")
+
+declare_args() {
+  ets_static_abc_bypass = !support_jsapi
+}
+
+if (!support_jsapi) {
+  ets_static_abc_bypass = true
+}
 
 ets2abc_root = "ets_frontend"
 ets2abc_build_path = ""
@@ -165,37 +174,64 @@ if (ohos_indep_compiler_enable && (string_replace(ohos_indep_compiler_components
 bootpath_json_file = root_out_dir + "/obj/arkcompiler/ets_frontend/ets2panda/aot/build/config/components/ets_frontend/bootpath.json"
 
 template("generate_static_abc") {
-  dependencies = []
-  external_dependencies = []
-  if (defined(invoker.dependencies)) {
-    dependencies += invoker.dependencies
+  _dst_file = "$target_out_dir/$target_name.abc"
+  if (defined(invoker.dst_file)) {
+    _dst_file = invoker.dst_file
   }
-  if (defined(invoker.external_dependencies)) {
-    external_dependencies += invoker.external_dependencies
+  _outputs = []
+  if (defined(invoker.out_puts)) {
+    _outputs = invoker.out_puts
+  } else {
+    _outputs = [ _dst_file ]
   }
-
-  action("$target_name") {
-    if (defined(invoker.extra_visibility)) {
-      visibility = invoker.extra_visibility
+  _is_static_abc_bypass_target = ets_static_abc_bypass
+  if (!_is_static_abc_bypass_target && taihe_template_bypass &&
+      defined(invoker.base_url) &&
+      string_replace(invoker.base_url, "$root_out_dir/taihe", "") !=
+          invoker.base_url) {
+    _is_static_abc_bypass_target = true
+  }
+  if (_is_static_abc_bypass_target) {
+    not_needed(invoker, "*")
+    action("$target_name") {
+      if (defined(invoker.extra_visibility)) {
+        visibility = invoker.extra_visibility
+      }
+      script = "//build/scripts/touch_outputs.py"
+      args = rebase_path(_outputs, root_build_dir)
+      outputs = _outputs
     }
+  } else {
+    dependencies = []
+    external_dependencies = []
+    if (defined(invoker.dependencies)) {
+      dependencies += invoker.dependencies
+    }
+    if (defined(invoker.external_dependencies)) {
+      external_dependencies += invoker.external_dependencies
+    }
+    action("$target_name") {
+      if (defined(invoker.extra_visibility)) {
+        visibility = invoker.extra_visibility
+      }
 
-    script = "//build/config/components/ets_frontend/generate_static_abc.py"
+      script = "//build/config/components/ets_frontend/generate_static_abc.py"
 
-    deps = dependencies
-    deps += [
-      ohos_ets_ark_link_deps,
-      ohos_ets_es2panda_deps,
-    ]
-    external_deps = external_dependencies
-    external_deps += [
-      ohos_ets_etsstdlib_deps,
-      ohos_ets_stdlib_deps,
-    ]
+      deps = dependencies
+      deps += [
+        ohos_ets_ark_link_deps,
+        ohos_ets_es2panda_deps,
+      ]
+      external_deps = external_dependencies
+      external_deps += [
+        ohos_ets_etsstdlib_deps,
+        ohos_ets_stdlib_deps,
+      ]
 
-    args = [
-      "--bootpath-json-file",
-      rebase_path("${bootpath_json_file}"),
-    ]
+      args = [
+        "--bootpath-json-file",
+        rebase_path("${bootpath_json_file}"),
+      ]
 
     ui_enable = "False"
     if (defined(invoker.ui_enable)) {
@@ -412,23 +448,17 @@ template("generate_static_abc") {
       rebase_path(arktsconfig),
     ]
 
-    dst_file = "$target_out_dir/$target_name.abc"
-    if (defined(invoker.dst_file)) {
-      dst_file = invoker.dst_file
-    }
-    args += [
-      "--dst-file",
-      rebase_path(dst_file),
-    ]
+      dst_file = _dst_file
+      args += [
+        "--dst-file",
+        rebase_path(dst_file),
+      ]
 
-    if (defined(invoker.in_puts)) {
-      inputs = invoker.in_puts
-    }
+      if (defined(invoker.in_puts)) {
+        inputs = invoker.in_puts
+      }
 
-    if (defined(invoker.out_puts)) {
-      outputs = invoker.out_puts
-    } else {
-      outputs = [ dst_file ]
+      outputs = _outputs
     }
   }
 }
