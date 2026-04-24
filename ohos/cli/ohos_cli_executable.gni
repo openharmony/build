@@ -1,0 +1,134 @@
+# Copyright (c) 2026 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/config/python.gni")
+import("//build/templates/cxx/cxx.gni")
+import("//build/templates/common/copy.gni")
+
+# ohos_cli_executable template
+# Build CLI tools with config.json support
+template("ohos_cli_executable") {
+  assert(defined(invoker.cli_config_file),
+         "ohos_cli_executable must specify 'cli_config_file'")
+  assert(defined(invoker.subsystem_name) && defined(invoker.part_name),
+         "ohos_cli_executable must specify both 'subsystem_name' and 'part_name'")
+  assert(!defined(invoker.output_name),
+         "ohos_cli_executable does not support 'output_name'; require target_name == config.name")
+
+  _tool_name = target_name
+  _config_file = invoker.cli_config_file
+  _subsystem_name = invoker.subsystem_name
+  _part_name = invoker.part_name
+
+  # Step 1: Validate config file and generate exported config.
+  _info_output_dir = "${root_out_dir}/cli_profile/inputs/${_part_name}"
+  _config_output_dir = "${root_out_dir}/cli_profile/configs/${_part_name}"
+  _output_info_file = "${_info_output_dir}/${_tool_name}_info.json"
+  _output_config_file = "${_config_output_dir}/${_tool_name}.json"
+  _final_executable_path = "/system/bin/cli_tool/executable/${_tool_name}"
+
+  action_with_pydeps("${_tool_name}_validate") {
+    script = "//build/ohos/cli/cli_profile.py"
+    sources = [ _config_file ]
+    outputs = [
+      _output_info_file,
+      _output_config_file,
+    ]
+    args = [
+      "--config-file",
+      rebase_path(_config_file, root_build_dir),
+      "--tool-name",
+      _tool_name,
+      "--output-info-file",
+      rebase_path(_output_info_file, root_build_dir),
+      "--subsystem-name",
+      _subsystem_name,
+      "--part-name",
+      _part_name,
+      "--final-executable",
+      _final_executable_path,
+      "--output-config-file",
+      rebase_path(_output_config_file, root_build_dir),
+    ]
+  }
+
+  # Step 2: Build executable.
+  _exec_target = "${_tool_name}_exec"
+  ohos_executable(_exec_target) {
+    forward_variables_from(invoker, "*", [ "cli_config_file", "output_name" ])
+    deps = []
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    deps += [ ":${_tool_name}_validate" ]
+
+    output_name = _tool_name
+    if (!defined(module_install_dir)) {
+      module_install_dir = "bin/cli_tool/executable"
+    }
+  }
+
+  # Step 2.5: Copy module_info to the wrapper target name.
+  _exec_module_info_file = "${target_out_dir}/${_exec_target}_module_info.json"
+  _target_module_info_file = "${target_out_dir}/${_tool_name}_module_info.json"
+
+  action_with_pydeps("${_tool_name}_copy_module_info") {
+    script = "//build/ohos/cli/copy_module_info.py"
+    deps = [ ":${_exec_target}_info" ]
+    sources = [ _exec_module_info_file ]
+    outputs = [ _target_module_info_file ]
+    args = [
+      "--src",
+      rebase_path(_exec_module_info_file, root_build_dir),
+      "--dst",
+      rebase_path(_target_module_info_file, root_build_dir),
+    ]
+  }
+
+  # Step 3: Install exported config file directly.
+  _config_install_target = "${_tool_name}_config"
+  _config_installed_output = "${target_out_dir}/${_tool_name}.json"
+  ohos_copy(_config_install_target) {
+    subsystem_name = _subsystem_name
+    part_name = _part_name
+    deps = [ ":${_tool_name}_validate" ]
+    sources = [ _output_config_file ]
+    outputs = [ _config_installed_output ]
+    module_type = "etc"
+    install_enable = true
+    module_install_dir = "bin/cli_tool/configs"
+    module_install_name = "${_tool_name}.json"
+  }
+
+  group(target_name) {
+    forward_variables_from(invoker, [ "testonly", "visibility" ])
+    deps = [
+      ":${_exec_target}",
+      ":${_tool_name}_copy_module_info",
+      ":${_config_install_target}",
+    ]
+  }
+
+  _executable_path = "${root_out_dir}/bin/${_tool_name}"
+  module_label = get_label_info(":${target_name}", "label_with_toolchain")
+  target_deps_data = {
+    label = module_label
+    type = "bin"
+    prebuilt = false
+    output_path = rebase_path(_executable_path, root_build_dir)
+    install_info_file = rebase_path(_output_info_file, root_build_dir)
+  }
+  write_file("${target_out_dir}/${target_name}_deps_data.json",
+             target_deps_data,
+             "json")
+}
