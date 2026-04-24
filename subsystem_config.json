@@ -127,6 +127,10 @@
     "path": "foundation/multimodalinput",
     "name": "multimodalinput"
   },
+  "officeservice": {
+    "path": "foundation/officeservice",
+    "name": "officeservice"
+  },
   "telephony": {
     "path": "base/telephony",
     "name": "telephony"
@@ -230,5 +234,9 @@
   "game": {
     "path": "domains/game",
     "name": "game"
+  },
+  "soc_p7885": {
+    "path": "device/soc/unisoc/p7885",
+    "name": "soc_p7885"
   }
 }

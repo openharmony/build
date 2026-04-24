@@ -255,7 +255,8 @@
         "taihe"
     ],
     "hiview":[
-        "app"
+        "app",
+        "sdk"
     ],
     "av_session":[
         "app",

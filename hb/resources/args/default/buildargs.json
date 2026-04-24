@@ -279,6 +279,16 @@
     "resolve_function": "resolve_skip_partlist_check",
     "testFunction": "testSkipPartlistCheck"
   },
+  "enable_scan_optimization": {
+    "arg_name": "--enable-scan-optimization",
+    "argDefault": false,
+    "arg_help": "Default:False. Help: Enable subsystem scanning optimization",
+    "arg_phase": "load",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_enable_scan_optimization",
+    "testFunction": "testEnableScanOptimization"
+  },
   "build_type": {
     "arg_name": "--build-type",
     "argDefault": "release",

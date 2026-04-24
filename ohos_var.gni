@@ -407,6 +407,7 @@ declare_args() {
   build_default_sdk_target = false
   build_mac_sdk_target = false
   build_linux_sdk_target = false
+  build_linux_arm64_sdk_target = false
   build_windows_sdk_target = false
   build_ohos_sdk_target = false
 }
@@ -415,8 +416,13 @@ declare_args() {
   build_default_ndk_target = false
   build_mac_ndk_target = false
   build_linux_ndk_target = false
+  build_linux_arm64_ndk_target = false
   build_windows_ndk_target = false
   build_ohos_ndk_target = false
+}
+
+declare_args() {
+  make_pac_format_image = false
 }
 
 python_script = "//build/scripts/is_substring.py"
@@ -455,6 +461,15 @@ if (exec_script(python_script,
                 ],
                 "string") == "True") {
   build_linux_sdk_target = true
+}
+
+if (exec_script(python_script,
+                [
+                  sdk_platform,
+                  "arm64",
+                ],
+                "string") == "True") {
+  build_linux_arm64_sdk_target = true
 }
 
 if (exec_script(python_script,
@@ -500,6 +515,15 @@ if (exec_script(python_script,
                 ],
                 "string") == "True") {
   build_linux_ndk_target = true
+}
+
+if (exec_script(python_script,
+                [
+                  ndk_platform,
+                  "arm64",
+                ],
+                "string") == "True") {
+  build_linux_arm64_ndk_target = true
 }
 
 if (exec_script(python_script,
