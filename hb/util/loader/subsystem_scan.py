@@ -16,11 +16,14 @@
 import os
 import sys
 import argparse
+import multiprocessing
+import time
 from concurrent.futures import ThreadPoolExecutor
 from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 from scripts.util.file_utils import read_json_file, write_json_file  # noqa: E402 E501
 from util.log_util import LogUtil
+from util.progress_spinner import progress_spinner
 from scripts.util.detect_cpu_count import get_cpu_count
 
 _default_subsystem = {"build": "build"}
@@ -51,15 +54,31 @@ def _read_config(subsystem_config_file, example_subsystem_file):
     return subsystem_info
 
 
-def _scan_build_file(subsystem_path):
+def _scan_build_file(subsystem_path, enable_depth_optimization):
     _files = []
     _bundle_files = []
+    _ignore_dirs = [ '.git', '.gitee', '.github', 'doc', 'docs', 'node_modules']
+    max_depth = 5
+    bundle_dirs = set()
+
     for root, dirs, files in os.walk(subsystem_path):
+        dirs[:] = [d for d in dirs if d not in _ignore_dirs]
         for name in files:
             if name == 'ohos.build':
                 _files.append(os.path.join(root, name))
+                bundle_dirs.add(root)
             elif name == 'bundle.json':
                 _bundle_files.append(os.path.join(root, name))
+                bundle_dirs.add(root)
+
+        current_depth = root[len(os.path.normpath(subsystem_path)):].count(os.sep)
+        if enable_depth_optimization and current_depth >= max_depth:
+            for _bundle_dir in bundle_dirs:
+                _bundle_dir += os.sep
+                if root.startswith(_bundle_dir):
+                    del dirs[:]
+                    break
+
     if _bundle_files:
         _files.extend(_bundle_files)
     return _files
@@ -74,26 +93,18 @@ def _check_path_prefix(paths):
 
 
 def scan_task(args):
-    key, paths = args
+    key, path, enable_optimization = args
     _all_build_config_files = []
-    for _subsystem_path in paths:
-        _all_build_config_files.extend(_scan_build_file(_subsystem_path))
+    _all_build_config_files.extend(_scan_build_file(path, enable_optimization))
     return key, _all_build_config_files
 
 
 @throw_exception
-def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
-    subsystem_infos = _read_config(subsystem_config_file,
-                                   example_subsystem_file)
-    # add common subsystem info
-    subsystem_infos.update(_default_subsystem)
-
-    no_src_subsystem = {}
-    _build_configs = {}
+@progress_spinner("subsystem config scanning ...")
+def scan_subsystem_info(source_root_dir, subsystem_infos, enable_scan_optimization):
     scan_tasks = []
 
     for key, val in subsystem_infos.items():
-        _all_build_config_files = []
         if not isinstance(val, list):
             val = [val]
         else:
@@ -101,17 +112,33 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
                 raise OHOSException(
                     "subsystem '{}' path configuration is incorrect.".format(
                         key), "2013")
-        subsystem_paths = [os.path.join(source_root_dir, _path) for _path in val]
-        scan_tasks.append((key, subsystem_paths))
-    try:
-        cpu_cap = get_cpu_count()
-    except OSError:
-        cpu_cap = 8
-    thread_num = cpu_cap * 2
-    LogUtil.hb_info(f'The thread num for subsytem config scan is {thread_num}')
-    with ThreadPoolExecutor(max_workers=thread_num) as executor:
-        results = list(executor.map(scan_task, scan_tasks))
+        for _path in val:
+            subsystem_path = os.path.join(source_root_dir, _path)
+            scan_tasks.append((key, subsystem_path, enable_scan_optimization))
+
+    with multiprocessing.Pool() as pool:
+        results = list(pool.imap_unordered(scan_task, scan_tasks, chunksize=1))
+
+    return results
+
+
+def scan(subsystem_config_file, example_subsystem_file, source_root_dir, enable_scan_optimization):
+    s_time = time.monotonic()
+    subsystem_infos = _read_config(subsystem_config_file,
+                                   example_subsystem_file)
+    # add common subsystem info
+    subsystem_infos.update(_default_subsystem)
+
+    no_src_subsystem = {}
+    _build_configs = {}
+    results = scan_subsystem_info(source_root_dir, subsystem_infos, enable_scan_optimization)
+
+    merged = {}
     for key, build_files in results:
+        merged.setdefault(key, [])
+        merged[key].extend(build_files)
+
+    for key, build_files in merged.items():
         if build_files:
             _build_configs[key] = {
                 "path": list(subsystem_infos[key] if isinstance(subsystem_infos[key], list) else [subsystem_infos[key]]),
@@ -126,9 +153,9 @@ def scan(subsystem_config_file, example_subsystem_file, source_root_dir):
         'no_src_subsystem': no_src_subsystem
     }
 
-    LogUtil.hb_info('subsytem config scan completed')
+    e_time = time.monotonic()
+    LogUtil.hb_info('subsytem config scan completed costed is {} s'.format(round(e_time - s_time, 2)))
     return scan_result
-
 
 def main():
     parser = argparse.ArgumentParser()
@@ -137,10 +164,11 @@ def main():
     parser.add_argument('--example-subsystem-file', required=False)
     parser.add_argument('--source-root-dir', required=True)
     parser.add_argument('--output-dir', required=True)
+    parser.add_argument('--enable-scan-optimization', action='store_true')
     args = parser.parse_args()
 
     build_configs = scan(args.subsystem_config_file,
-                         args.example_subsystem_file, args.source_root_dir)
+                         args.example_subsystem_file, args.source_root_dir, args.enable_scan_optimization)
 
     build_configs_file = os.path.join(args.output_dir,
                                       "subsystem_build_config.json")

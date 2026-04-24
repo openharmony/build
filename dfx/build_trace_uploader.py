@@ -26,7 +26,6 @@ from typing import Dict, Any, Optional
 from dfx.build_trace_log import BuildTraceLog
 from dfx import dfx_info, dfx_error
 from dfx.dfx_config_manager import get_config_manager
-from .crypto_utils import create_crypto_utils_from_config
 
 CODE_ROOT = Path(__file__).parent.parent.parent
 # Replace os.path.join with pathlib's / operator
@@ -154,17 +153,27 @@ class TraceLogUploader:
             # Get upload API URL
             self.upload_api_url = config_manager.trace_log_upload_api
 
-            # Load configuration for crypto utils
-            config_for_crypto = {
-                "extra_request_header_fields_encrypted": config_manager.extra_request_header_fields_encrypted,
-                "extra_request_header_encryption_key": config_manager.extra_request_header_encryption_key,
-            }
-            self.crypto_utils = create_crypto_utils_from_config(config_for_crypto)
-
             # Get header fields and values
             raw_header_fields = config_manager.extra_request_header_fields
             raw_header_values = config_manager.extra_request_header_values
 
+            # Import crypto_utils only if extra_request_header_encryption_key has value
+            encryption_key = config_manager.extra_request_header_encryption_key
+            if encryption_key and config_manager.extra_request_header_fields_encrypted:
+                try:
+                    from .crypto_utils import create_crypto_utils_from_config
+                    config_for_crypto = {
+                        "extra_request_header_fields_encrypted": True,
+                        "extra_request_header_encryption_key": encryption_key,
+                    }
+                    self.crypto_utils = create_crypto_utils_from_config(config_for_crypto)
+                except ImportError:
+                    dfx_error("WARNING: crypto_utils module not available, encryption disabled")
+                    self.crypto_utils = None
+            else:
+                self.crypto_utils = None
+
+            # Process header encryption/decryption
             if self.crypto_utils and config_manager.extra_request_header_fields_encrypted:
                 self.extra_header_fields, self.extra_header_values = \
                     self.crypto_utils.decrypt_headers(raw_header_fields, raw_header_values)

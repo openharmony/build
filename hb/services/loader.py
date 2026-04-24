@@ -59,6 +59,7 @@ class OHOSLoader(LoadInterface):
         self.subsystem_configs = ""
         self._subsystem_info = ""
         self.skip_partlist_check = ""
+        self.enable_scan_optimization = ""
 
     def __post_init__(self):
         self.source_root_dir = self.config.root_path + '/'
@@ -104,13 +105,14 @@ class OHOSLoader(LoadInterface):
         self.ignore_api_check = self.args_dict.get('ignore_api_check')
         self.load_test_config = self.args_dict.get('load_test_config')
         self.skip_partlist_check = self.args_dict.get('skip_partlist_check')
+        self.enable_scan_optimization = self.args_dict.get('enable_scan_optimization')
 
         self._subsystem_info = subsystem_info.get_subsystem_info(
             self.subsystem_config_file,
             self.example_subsystem_file,
             self.source_root_dir,
             self.config_output_relpath,
-            self.os_level)
+            self.enable_scan_optimization)
         overrided_components = self._override_components()
 
         self._platforms_info = platforms_loader.get_platforms_info(
@@ -866,6 +868,7 @@ class OHOSLoader(LoadInterface):
         args.append('ignore_api_check={}'.format(self.ignore_api_check))
         args.append('scalable_build={}'.format(self.scalable_build))
         args.append('skip_partlist_check={}'.format(self.skip_partlist_check))
+        args.append('enable_scan_optimization={}'.format(self.enable_scan_optimization))
         LogUtil.write_log(self.config.log_path,
                           'loader args:{}'.format(args), 'info')
 
