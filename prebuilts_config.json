@@ -137,7 +137,7 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260424/gn-linux-x86-20260424.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260228/gn-linux-x86-20260228.tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
@@ -149,13 +149,13 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260325/gn-darwin-arm-20260325.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz"
                         }
                     ],
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260324/gn-darwin-x86-20260324.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20250929/gn-darwin-x86-20250929.tar.gz"
                         }
                     ]
                 }
@@ -1054,46 +1054,6 @@
                     "version": 26
                 }
             ]
-        },
-        {
-            "name": "arm-linux-gnueabihf-gcc",
-            "tag": "base",
-            "build_type": "src",
-            "config": {
-                "linux": {
-                    "arm64": [
-                        {
-                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
-                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
-                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
-                            "build_type": "src"
-                        },
-                        {
-                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-linux-gnueabihf-gcc-arm",
-                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-arm/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
-                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
-                            "build_type": "src"
-                        }
-                    ],
-                    "x86_64": [
-                        {
-                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
-                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
-                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz",
-                            "rename_src": "${unzip_dir}/${unzip_filename}",
-                            "rename_dest": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64",
-                            "build_type": "src"
-                        },
-                        {
-                            "unzip_dir": "${code_dir}/prebuilts/arm-linux-gnueabihf-gcc/arm-linux-gnueabihf-gcc-arm",
-                            "remote_url": "/openharmony/compiler/arm-linux-gnueabihf-gcc/arm-gnu-toolchain-13.3.rel1-x86_64-arm/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
-                            "unzip_filename": "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz",
-                            "build_type": "src"
-                        }
-                    ]
-                }
-            },
-            "handle": []
         }
     ]
 }
