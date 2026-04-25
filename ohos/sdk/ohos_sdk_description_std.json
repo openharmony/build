@@ -1873,5 +1873,38 @@
             "darwin",
             "linux"
         ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//arkcompiler/jsvm:js_rawheap_translator",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos",
+            "linux_arm64"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//arkcompiler/jsvm:t1",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos",
+            "linux_arm64"
+        ]
+    },
+    {
+        "install_dir": "toolchains",
+        "module_label": "//arkcompiler/jsvm:t2",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "ohos",
+            "linux_arm64"
+        ]
     }
 ]

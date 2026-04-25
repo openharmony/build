@@ -1054,6 +1054,43 @@
                     "version": 26
                 }
             ]
+        },
+        {
+            "name": "js_rawheap_translator",
+            "tag": "js_rawheap_translator",
+            "build_type": "src, indep",
+            "config": {
+                "any": {
+                    "any": [
+                        {
+                            "remote_url": "/openharmony/compiler/jsvm/js_rawheap_translator_linux_20260601.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/js_rawheap_translator",
+                            "unzip_filename": "linux"
+                        },
+                        {
+                            "remote_url": "/openharmony/compiler/jsvm/js_rawheap_translator_windows_20260601.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/js_rawheap_translator",
+                            "unzip_filename": "windows"
+                        },
+                        {
+                            "remote_url": "/openharmony/compiler/jsvm/js_rawheap_translator_darwin_20260601.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/js_rawheap_translator",
+                            "unzip_filename": "darwin"
+                        },
+                        {
+                            "remote_url": "/openharmony/compiler/jsvm/js_rawheap_translator_ohos_20260604.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/js_rawheap_translator",
+                            "unzip_filename": "ohos"
+                        },
+                        {
+                            "remote_url": "/openharmony/compiler/jsvm/js_rawheap_translator_linux_arm64_20260604.tar.gz",
+                            "unzip_dir": "${code_dir}/prebuilts/js_rawheap_translator",
+                            "unzip_filename": "linux_arm64"
+                        }
+                    ]
+                }
+            },
+            "handle": []
         }
     ]
 }
