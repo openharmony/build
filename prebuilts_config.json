@@ -149,7 +149,7 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/darwin-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260325/gn-darwin-arm-20260325.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260325/gn-darwin-x86-20260325.tar.gz"
                         }
                     ],
                     "x86_64": [
