@@ -291,6 +291,7 @@ def npm_config(npm_tool_path: str, global_args: object) -> tuple:
 def npm_install(operate: dict, global_args: object) -> tuple:
     install_list = operate.get("npm_install_path")
     npm_tool_path = os.path.join(global_args.code_dir, "prebuilts/build-tools/common/nodejs/current/bin/npm")
+    npm_timeout = os.environ.get("OHOS_NPM_INSTALL_TIMEOUT", "1200s")
 
     preset_is_ok, err = npm_config(npm_tool_path, global_args)
     if not preset_is_ok:
@@ -314,7 +315,7 @@ def npm_install(operate: dict, global_args: object) -> tuple:
             run_cmd(("rm -rf {}".format(node_modules_path)).split())
 
         if os.path.exists(full_code_path):
-            cmd = ["timeout", "-s", "9", "180s", npm_tool_path, "install", "--registry", global_args.npm_registry,
+            cmd = ["timeout", "-s", "9", npm_timeout, npm_tool_path, "install", "--registry", global_args.npm_registry,
                    "--cache", npm_cache_dir]
             if global_args.host_platform == "darwin":
                 cmd = [npm_tool_path, "install", "--registry", global_args.npm_registry, "--cache", npm_cache_dir]
