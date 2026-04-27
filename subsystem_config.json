@@ -147,6 +147,10 @@
     "path": "base/usb",
     "name": "usb"
   },
+  "busmanager": {
+    "path": "base/busmanager",
+    "name": "busmanager"
+  },
   "applications": {
     "path": "applications",
     "name": "applications"
