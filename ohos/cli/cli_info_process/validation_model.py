@@ -46,37 +46,42 @@ SUPPORTED_TOP_LEVEL_FIELDS = {
     "description",
     "executablePath",
     "requirePermissions",
-    "timeout",
     "eventTypes",
     "eventSchemas",
     "hasSubcommands",
     "inputSchema",
     "outputSchema",
-    "argMapping",
     "subcommands",
 }
 
 SUPPORTED_SUBCOMMAND_FIELDS = {
     "description",
     "requirePermissions",
-    "timeout",
     "inputSchema",
     "outputSchema",
     "eventTypes",
     "eventSchemas",
-    "argMapping",
 }
 
 SUPPORTED_SCHEMA_TYPES = {"string", "number", "integer", "boolean", "array", "object"}
 
-SUPPORTED_STRING_FORMATS = {"ipv4", "ipv6", "hostname", "email", "uri", "date", "date-time"}
+SUPPORTED_STRING_FORMATS = {
+    "ipv4",
+    "ipv6",
+    "hostname",
+    "email",
+    "uri",
+    "date",
+    "date-time",
+}
 
 SCHEMA_ALLOWED_KEYS = {
-    "string": {"type", "description", "default", "minLength", "maxLength", "pattern", "format"},
+    "string": {"type", "description", "default", "enum", "minLength", "maxLength", "pattern", "format"},
     "number": {
         "type",
         "description",
         "default",
+        "enum",
         "minimum",
         "maximum",
         "exclusiveMinimum",
@@ -87,6 +92,7 @@ SCHEMA_ALLOWED_KEYS = {
         "type",
         "description",
         "default",
+        "enum",
         "minimum",
         "maximum",
         "exclusiveMinimum",
@@ -95,30 +101,18 @@ SCHEMA_ALLOWED_KEYS = {
     },
     "boolean": {"type", "description", "default"},
     "array": {"type", "description", "default", "items", "minItems", "maxItems", "uniqueItems"},
-    "object": {
-        "type",
-        "description",
-        "properties",
-        "required",
-    },
+    "object": {"type", "description", "default", "properties", "required"},
 }
 
-BUILTIN_EVENT_TYPES = {"stdout", "stderr", "exit", "error"}
-RESERVED_EVENT_TYPES = BUILTIN_EVENT_TYPES
-
-SUPPORTED_MAPPING_TYPES = {"flag", "positional", "flattened", "jsonString", "mixed"}
-
-ALLOWED_MAPPING_KEYS = {
-    "flag": {"type", "templates"},
-    "positional": {"type", "order"},
-    "flattened": {"type", "separator", "templates"},
-    "jsonString": {"type", "templates"},
-    "mixed": {"type", "mappings"},
-}
+RESERVED_EVENT_TYPES = {"result"}
 
 
 def is_integer_value(value: Any) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
+
+
+def is_number_value(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
 def json_pointer(parent: str, child: str) -> str:

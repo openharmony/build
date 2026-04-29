@@ -15,9 +15,7 @@
 
 from __future__ import annotations
 
-import json
 import re
-from dataclasses import dataclass
 from typing import Any
 
 try:
@@ -27,6 +25,7 @@ try:
         SUPPORTED_STRING_FORMATS,
         ValidationResult,
         is_integer_value,
+        is_number_value,
         json_pointer,
     )
 except ImportError:
@@ -36,155 +35,46 @@ except ImportError:
         SUPPORTED_STRING_FORMATS,
         ValidationResult,
         is_integer_value,
+        is_number_value,
         json_pointer,
     )
 
 
-@dataclass(frozen=True)
-class NumericBoundsCodes:
-    min_code: str
-    exclusive_code: str
-    range_code: str
-    exclusive_range_code: str
-
-
-def validate_schema_node(schema: Any, path: str, result: ValidationResult) -> None:
+def validate_schema_node(
+    schema: Any,
+    path: str,
+    result: ValidationResult,
+    *,
+    skip_paths: set[str] | None = None,
+    restrict_array_items_simple: bool = False,
+) -> None:
     if not isinstance(schema, dict):
         result.add_issue("SCH001", path, "schema node must be an object")
         return
 
-    _validate_reserved_schema_keywords(schema, path, result)
-    if _has_unsupported_union_keyword(schema):
-        return
-
-    if "type" not in schema:
-        result.add_issue("SCH002", path, "schema node must define type")
-        return
-
-    schema_type = schema["type"]
-    if schema_type not in SUPPORTED_SCHEMA_TYPES:
-        result.add_issue(
-            "SCH003",
-            json_pointer(path, "type"),
-            f"unsupported schema type: {schema_type!r}",
-        )
+    schema_type = _validate_schema_type(schema, path, result)
+    if schema_type is None:
         return
 
     _validate_schema_keywords(schema, schema_type, path, result)
-    _validate_schema_common_fields(schema, schema_type, path, result)
-    _dispatch_schema_validation(schema, schema_type, path, result)
-
-
-def validate_string_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    min_len = schema.get("minLength")
-    max_len = schema.get("maxLength")
-    if min_len is not None and not (is_integer_value(min_len) and min_len >= 0):
-        result.add_issue("SCH101", json_pointer(path, "minLength"), "minLength must be an integer >= 0")
-    if max_len is not None and not (is_integer_value(max_len) and max_len >= 0):
-        result.add_issue("SCH102", json_pointer(path, "maxLength"), "maxLength must be an integer >= 0")
-    if is_integer_value(min_len) and is_integer_value(max_len) and min_len > max_len:
-        result.add_issue("SCH103", path, "minLength must not be greater than maxLength")
-    if "pattern" in schema:
-        pattern = schema["pattern"]
-        if not isinstance(pattern, str):
-            result.add_issue("SCH104", json_pointer(path, "pattern"), "pattern must be a string")
-        else:
-            try:
-                re.compile(pattern)
-            except re.error as exc:
-                result.add_issue("SCH104", json_pointer(path, "pattern"), f"invalid regex pattern: {exc}")
-    if "format" in schema and schema["format"] not in SUPPORTED_STRING_FORMATS:
-        result.add_issue("SCH105", json_pointer(path, "format"), "unsupported string format")
-
-
-def validate_number_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    codes = NumericBoundsCodes("SCH201", "SCH202", "SCH203", "SCH204")
-    validate_numeric_bounds(schema, path, result, codes, allow_float=True)
-    multiple = schema.get("multipleOf")
-    is_valid_number = isinstance(multiple, (int, float)) and not isinstance(multiple, bool)
-    if multiple is not None and not (is_valid_number and multiple > 0):
-        result.add_issue("SCH205", json_pointer(path, "multipleOf"), "multipleOf must be a positive number")
-
-
-def validate_integer_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    for key in ("minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf"):
-        if key in schema and not is_integer_value(schema[key]):
-            result.add_issue("SCH301", json_pointer(path, key), f"{key} must be an integer")
-    minimum = schema.get("minimum")
-    maximum = schema.get("maximum")
-    if is_integer_value(minimum) and is_integer_value(maximum) and minimum > maximum:
-        result.add_issue("SCH303", path, "minimum must not be greater than maximum")
-    multiple = schema.get("multipleOf")
-    if multiple is not None and not (is_integer_value(multiple) and multiple > 0):
-        result.add_issue("SCH302", json_pointer(path, "multipleOf"), "multipleOf must be an integer > 0")
-
-
-def validate_boolean_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    invalid_keys = set(schema.keys()) - SCHEMA_ALLOWED_KEYS["boolean"]
-    for key in invalid_keys:
-        result.add_issue("SCH401", json_pointer(path, key), f"{key} is not allowed for boolean schema")
-    if "default" in schema and not isinstance(schema["default"], bool):
-        result.add_issue("SCH402", json_pointer(path, "default"), "default must be boolean")
-
-
-def validate_array_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    items = schema.get("items")
-    _validate_array_items(schema, path, result)
-    _validate_array_size_rules(schema, path, result)
-    _validate_array_uniqueness_rule(schema, path, result)
-    _validate_array_default(schema.get("default"), items, schema.get("uniqueItems"), path, result)
-
-
-def validate_object_schema(schema: dict, path: str, result: ValidationResult) -> None:
-    if "properties" not in schema:
-        result.add_issue("SCH606", json_pointer(path, "properties"), "object schema must define properties")
-        properties = None
-    else:
-        properties = schema.get("properties")
-    properties = _normalize_object_properties(properties, path, result)
-    _validate_object_property_schemas(properties, path, result)
-    _validate_object_required(schema.get("required"), properties, path, result)
-
-
-def validate_numeric_bounds(
-    schema: dict,
-    path: str,
-    result: ValidationResult,
-    codes: NumericBoundsCodes,
-    allow_float: bool,
-) -> None:
-    numeric_types = (int, float) if allow_float else (int,)
-    for key in ("minimum", "maximum"):
-        value = schema.get(key)
-        if key in schema and not (isinstance(value, numeric_types) and not isinstance(value, bool)):
-            result.add_issue(codes.min_code, json_pointer(path, key), f"{key} must be numeric")
-    for key in ("exclusiveMinimum", "exclusiveMaximum"):
-        value = schema.get(key)
-        if key in schema and not (isinstance(value, numeric_types) and not isinstance(value, bool)):
-            result.add_issue(codes.exclusive_code, json_pointer(path, key), f"{key} must be numeric")
-    minimum = schema.get("minimum")
-    maximum = schema.get("maximum")
-    if _is_numeric(minimum) and _is_numeric(maximum) and minimum > maximum:
-        result.add_issue(codes.range_code, path, "minimum must not be greater than maximum")
-    ex_min = schema.get("exclusiveMinimum")
-    ex_max = schema.get("exclusiveMaximum")
-    if _is_numeric(ex_min) and _is_numeric(ex_max) and ex_min >= ex_max:
-        result.add_issue(
-            codes.exclusive_range_code,
-            path,
-            "exclusiveMinimum must be less than exclusiveMaximum",
-        )
-
-
-def _is_numeric(value: Any) -> bool:
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    _validate_description(schema, path, result)
+    _validate_default(schema, schema_type, path, result)
+    _validate_enum(schema, schema_type, path, result)
+    _validate_type_specific_rules(
+        schema,
+        schema_type,
+        path,
+        result,
+        skip_paths or set(),
+        restrict_array_items_simple,
+    )
 
 
 def value_matches_schema_type(value: Any, schema_type: str) -> bool:
     if schema_type == "string":
         return isinstance(value, str)
     if schema_type == "number":
-        return _is_numeric(value)
+        return is_number_value(value)
     if schema_type == "integer":
         return is_integer_value(value)
     if schema_type == "boolean":
@@ -196,43 +86,35 @@ def value_matches_schema_type(value: Any, schema_type: str) -> bool:
     return False
 
 
-def _validate_reserved_schema_keywords(schema: dict, path: str, result: ValidationResult) -> None:
-    if "enum" in schema:
-        result.add_issue(
-            "SCH007",
-            json_pointer(path, "enum"),
-            "enum is reserved by design but not supported in the current version",
-        )
-
-    for key in ("oneOf", "anyOf", "allOf"):
-        if key in schema:
+def validate_input_schema(schema: Any, path: str, result: ValidationResult) -> None:
+    validate_schema_node(schema, path, result, restrict_array_items_simple=True)
+    if not isinstance(schema, dict):
+        return
+    if schema.get("type") != "object":
+        result.add_issue("SCH_INPUT_002", json_pointer(path, "type"), "inputSchema root type must be object")
+    properties = schema.get("properties")
+    if not isinstance(properties, dict):
+        result.add_issue("SCH_INPUT_003", json_pointer(path, "properties"), "inputSchema properties must be object")
+        return
+    for key, subschema in properties.items():
+        if isinstance(subschema, dict) and subschema.get("type") == "object":
+            prop_path = json_pointer(json_pointer(path, "properties"), key)
             result.add_issue(
-                "SCH008",
-                json_pointer(path, key),
-                "union schema is reserved by design but not supported in the current version",
+                "SCH_INPUT_004",
+                json_pointer(prop_path, "type"),
+                "inputSchema parameter does not support object type",
             )
 
 
-def _has_unsupported_union_keyword(schema: dict) -> bool:
-    return any(key in schema for key in ("oneOf", "anyOf", "allOf"))
-
-
-def resolve_schema_path_detail(input_schema: dict, path_parts: list[str]) -> tuple[str, dict | None]:
-    current = input_schema
-    for index, part in enumerate(path_parts):
-        if not isinstance(current, dict):
-            return ("invalid_node", None)
-        if current.get("type") != "object":
-            return ("intermediate_not_object", None)
-        properties = current.get("properties")
-        if not isinstance(properties, dict):
-            return ("invalid_node", None)
-        if part not in properties:
-            return ("leaf_missing", None) if index == len(path_parts) - 1 else ("path_missing", None)
-        current = properties[part]
-    if isinstance(current, dict):
-        return ("ok", current)
-    return ("leaf_missing", None)
+def _validate_schema_type(schema: dict[str, Any], path: str, result: ValidationResult) -> str | None:
+    if "type" not in schema:
+        result.add_issue("SCH002", path, "schema node must define type")
+        return None
+    schema_type = schema.get("type")
+    if schema_type not in SUPPORTED_SCHEMA_TYPES:
+        result.add_issue("SCH003", json_pointer(path, "type"), "unsupported schema type")
+        return None
+    return schema_type
 
 
 def _validate_schema_keywords(
@@ -241,75 +123,214 @@ def _validate_schema_keywords(
     path: str,
     result: ValidationResult,
 ) -> None:
-    reserved_keywords = {"enum", "oneOf", "anyOf", "allOf"}
-    for key in schema.keys():
-        if key in reserved_keywords:
+    allowed_keys = SCHEMA_ALLOWED_KEYS[schema_type]
+    for key in schema:
+        if key in allowed_keys:
             continue
-        if key not in SCHEMA_ALLOWED_KEYS[schema_type]:
-            message = f"unsupported schema keyword for {schema_type}"
-            result.add_issue("SCH004", json_pointer(path, key), message)
+        issue_code = "SCH401" if schema_type == "boolean" else "SCH004"
+        result.add_issue(issue_code, json_pointer(path, key), f"unsupported schema keyword for {schema_type}")
 
 
-def _validate_schema_common_fields(
+def _validate_description(schema: dict[str, Any], path: str, result: ValidationResult) -> None:
+    if "description" in schema and not isinstance(schema.get("description"), str):
+        result.add_issue("SCH005", json_pointer(path, "description"), "description must be string")
+
+
+def _validate_default(
     schema: dict[str, Any],
     schema_type: str,
     path: str,
     result: ValidationResult,
 ) -> None:
-    if "description" in schema and not isinstance(schema["description"], str):
-        result.add_issue("SCH005", json_pointer(path, "description"), "description must be a string")
-    if "default" in schema and not value_matches_schema_type(schema["default"], schema_type):
+    if "default" not in schema:
+        return
+    default_value = schema.get("default")
+    if schema_type == "boolean":
+        if not isinstance(default_value, bool):
+            result.add_issue("SCH402", json_pointer(path, "default"), "default must be boolean")
+        return
+    if schema_type == "array":
+        if not isinstance(default_value, list):
+            result.add_issue("SCH506", json_pointer(path, "default"), "default must be array")
+        return
+    if not value_matches_schema_type(default_value, schema_type):
         result.add_issue("SCH006", json_pointer(path, "default"), "default type does not match schema type")
 
 
-def _dispatch_schema_validation(
+def _validate_enum(
     schema: dict[str, Any],
     schema_type: str,
     path: str,
     result: ValidationResult,
 ) -> None:
+    if "enum" not in schema:
+        return
+    enum_value = schema.get("enum")
+    enum_path = json_pointer(path, "enum")
+    if not isinstance(enum_value, list) or not enum_value:
+        result.add_issue("SCH007", enum_path, "enum must be a non-empty array")
+        return
+    for index, item in enumerate(enum_value):
+        if value_matches_schema_type(item, schema_type):
+            continue
+        item_path = json_pointer(enum_path, str(index))
+        result.add_issue("SCH007", item_path, "enum item type does not match schema type")
+
+
+def _validate_type_specific_rules(
+    schema: dict[str, Any],
+    schema_type: str,
+    path: str,
+    result: ValidationResult,
+    skip_paths: set[str],
+    restrict_array_items_simple: bool,
+) -> None:
     validators = {
-        "string": validate_string_schema,
-        "number": validate_number_schema,
-        "integer": validate_integer_schema,
-        "boolean": validate_boolean_schema,
-        "array": validate_array_schema,
-        "object": validate_object_schema,
+        "string": _validate_string_schema,
+        "number": _validate_number_schema,
+        "integer": _validate_integer_schema,
+        "boolean": _validate_boolean_schema,
+        "array": _validate_array_schema,
+        "object": _validate_object_schema,
     }
-    validators[schema_type](schema, path, result)
+    validators[schema_type](schema, path, result, skip_paths, restrict_array_items_simple)
 
 
-def _validate_array_items(schema: dict[str, Any], path: str, result: ValidationResult) -> None:
-    if "items" not in schema:
-        result.add_issue("SCH501", path, "array schema must define items")
+def _validate_string_schema(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    _: set[str],
+    __: bool,
+) -> None:
+    min_length = schema.get("minLength")
+    max_length = schema.get("maxLength")
+    if min_length is not None and not (is_integer_value(min_length) and min_length >= 0):
+        result.add_issue("SCH101", json_pointer(path, "minLength"), "minLength must be integer >= 0")
+    if max_length is not None and not (is_integer_value(max_length) and max_length >= 0):
+        result.add_issue("SCH102", json_pointer(path, "maxLength"), "maxLength must be integer >= 0")
+    if is_integer_value(min_length) and is_integer_value(max_length) and min_length > max_length:
+        result.add_issue("SCH103", path, "minLength must not be greater than maxLength")
+    _validate_pattern(schema.get("pattern"), path, result)
+    _validate_format(schema.get("format"), path, result)
+
+
+def _validate_pattern(pattern: Any, path: str, result: ValidationResult) -> None:
+    if pattern is None:
         return
-    items = schema["items"]
+    if not isinstance(pattern, str):
+        result.add_issue("SCH104", json_pointer(path, "pattern"), "pattern must be string")
+        return
+    try:
+        re.compile(pattern)
+    except re.error:
+        result.add_issue("SCH104", json_pointer(path, "pattern"), "pattern must be a valid regex")
+
+
+def _validate_format(format_value: Any, path: str, result: ValidationResult) -> None:
+    if format_value is None:
+        return
+    if format_value not in SUPPORTED_STRING_FORMATS:
+        result.add_issue("SCH105", json_pointer(path, "format"), "unsupported string format")
+
+
+def _validate_number_schema(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    _: set[str],
+    __: bool,
+) -> None:
+    _validate_numeric_keyword(schema, path, result, ("minimum", "maximum"), "SCH201", is_number_value)
+    _validate_numeric_keyword(
+        schema,
+        path,
+        result,
+        ("exclusiveMinimum", "exclusiveMaximum"),
+        "SCH202",
+        is_number_value,
+    )
+    _validate_range_pair(schema, path, result, "minimum", "maximum", "SCH203", lambda left, right: left > right)
+    _validate_range_pair(
+        schema,
+        path,
+        result,
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "SCH204",
+        lambda left, right: left >= right,
+    )
+    multiple_of = schema.get("multipleOf")
+    if multiple_of is not None and not (is_number_value(multiple_of) and multiple_of > 0):
+        result.add_issue("SCH205", json_pointer(path, "multipleOf"), "multipleOf must be a positive number")
+
+
+def _validate_integer_schema(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    _: set[str],
+    __: bool,
+) -> None:
+    keys = ("minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf")
+    _validate_numeric_keyword(schema, path, result, keys, "SCH301", is_integer_value)
+    multiple_of = schema.get("multipleOf")
+    if multiple_of is not None and not (is_integer_value(multiple_of) and multiple_of > 0):
+        result.add_issue("SCH302", json_pointer(path, "multipleOf"), "multipleOf must be integer > 0")
+    _validate_range_pair(schema, path, result, "minimum", "maximum", "SCH303", lambda left, right: left > right)
+    _validate_range_pair(
+        schema,
+        path,
+        result,
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "SCH304",
+        lambda left, right: left >= right,
+    )
+
+
+def _validate_boolean_schema(
+    _: dict[str, Any],
+    __: str,
+    ___: ValidationResult,
+    ____: set[str],
+    _____: bool,
+) -> None:
+    return
+
+
+def _validate_array_schema(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    _: set[str],
+    restrict_array_items_simple: bool,
+) -> None:
+    items = schema.get("items")
     items_path = json_pointer(path, "items")
-    if not isinstance(items, dict):
+    if "items" not in schema:
+        result.add_issue("SCH501", items_path, "array schema must define items")
+    elif not isinstance(items, dict):
         result.add_issue("SCH502", items_path, "items must be a schema object")
-        return
-    validate_schema_node(items, items_path, result)
-    item_type = items.get("type")
-    simple_types = {"boolean", "integer", "number", "string"}
-    if item_type in SUPPORTED_SCHEMA_TYPES and item_type not in simple_types:
-        message = "array items.type must be one of boolean, integer, number, string"
-        result.add_issue("SCH507", json_pointer(items_path, "type"), message)
+    else:
+        validate_schema_node(items, items_path, result, restrict_array_items_simple=restrict_array_items_simple)
+        if restrict_array_items_simple and items.get("type") not in {"boolean", "integer", "number", "string"}:
+            result.add_issue("SCH507", json_pointer(items_path, "type"), "array items.type is not supported")
+    _validate_array_size(schema, path, result)
+    if "uniqueItems" in schema and not isinstance(schema.get("uniqueItems"), bool):
+        result.add_issue("SCH505", json_pointer(path, "uniqueItems"), "uniqueItems must be boolean")
+    _validate_array_default(schema.get("default"), items, schema.get("uniqueItems"), path, result)
 
 
-def _validate_array_size_rules(schema: dict[str, Any], path: str, result: ValidationResult) -> None:
+def _validate_array_size(schema: dict[str, Any], path: str, result: ValidationResult) -> None:
     min_items = schema.get("minItems")
     max_items = schema.get("maxItems")
     if min_items is not None and not (is_integer_value(min_items) and min_items >= 0):
-        result.add_issue("SCH503", json_pointer(path, "minItems"), "minItems must be an integer >= 0")
+        result.add_issue("SCH503", json_pointer(path, "minItems"), "minItems must be integer >= 0")
     if max_items is not None and not (is_integer_value(max_items) and max_items >= 0):
-        result.add_issue("SCH503", json_pointer(path, "maxItems"), "maxItems must be an integer >= 0")
+        result.add_issue("SCH503", json_pointer(path, "maxItems"), "maxItems must be integer >= 0")
     if is_integer_value(min_items) and is_integer_value(max_items) and min_items > max_items:
         result.add_issue("SCH504", path, "minItems must not be greater than maxItems")
-
-
-def _validate_array_uniqueness_rule(schema: dict[str, Any], path: str, result: ValidationResult) -> None:
-    if "uniqueItems" in schema and not isinstance(schema["uniqueItems"], bool):
-        result.add_issue("SCH505", json_pointer(path, "uniqueItems"), "uniqueItems must be boolean")
 
 
 def _validate_array_default(
@@ -319,33 +340,27 @@ def _validate_array_default(
     path: str,
     result: ValidationResult,
 ) -> None:
-    if default_value is None:
+    if default_value is None or not isinstance(default_value, list) or not isinstance(items, dict):
         return
-    if not isinstance(default_value, list):
-        result.add_issue("SCH506", json_pointer(path, "default"), "default must be an array")
-        return
-    if not isinstance(items, dict):
-        return
-    _validate_array_default_item_types(default_value, items.get("type"), path, result)
+    item_type = items.get("type")
+    if item_type in SUPPORTED_SCHEMA_TYPES:
+        _validate_array_default_items(default_value, item_type, path, result)
     if unique_items is True:
         _validate_array_default_uniqueness(default_value, path, result)
 
 
-def _validate_array_default_item_types(
+def _validate_array_default_items(
     default_value: list[Any],
-    item_type: Any,
+    item_type: str,
     path: str,
     result: ValidationResult,
 ) -> None:
-    if item_type not in SUPPORTED_SCHEMA_TYPES:
-        return
     default_path = json_pointer(path, "default")
     for index, item in enumerate(default_value):
         if value_matches_schema_type(item, item_type):
             continue
         item_path = json_pointer(default_path, str(index))
-        message = f"default array item type does not match items.type {item_type!r}"
-        result.add_issue("SCH508", item_path, message)
+        result.add_issue("SCH508", item_path, "default array item type does not match items.type")
 
 
 def _validate_array_default_uniqueness(
@@ -353,65 +368,111 @@ def _validate_array_default_uniqueness(
     path: str,
     result: ValidationResult,
 ) -> None:
-    try:
-        seen: set[str] = set()
-        default_path = json_pointer(path, "default")
-        for index, item in enumerate(default_value):
-            marker = json.dumps(item, ensure_ascii=False, sort_keys=True)
-            if marker in seen:
-                item_path = json_pointer(default_path, str(index))
-                message = "default array must not contain duplicates when uniqueItems is true"
-                result.add_issue("SCH509", item_path, message)
-            seen.add(marker)
-    except TypeError:
-        return
+    seen: set[Any] = set()
+    default_path = json_pointer(path, "default")
+    for index, item in enumerate(default_value):
+        marker = _freeze_value(item)
+        if marker in seen:
+            item_path = json_pointer(default_path, str(index))
+            result.add_issue("SCH509", item_path, "default array must not contain duplicates")
+        seen.add(marker)
 
 
-def _normalize_object_properties(
+def _validate_object_schema(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    skip_paths: set[str],
+    restrict_array_items_simple: bool,
+) -> None:
+    properties_path = json_pointer(path, "properties")
+    properties = schema.get("properties")
+    if "properties" not in schema:
+        result.add_issue("SCH606", properties_path, "object schema must define properties")
+        properties = None
+    elif not isinstance(properties, dict):
+        result.add_issue("SCH601", properties_path, "properties must be object")
+        properties = None
+    _validate_object_properties(properties, properties_path, result, skip_paths, restrict_array_items_simple)
+    _validate_required(schema.get("required"), properties, path, result)
+
+
+def _validate_object_properties(
     properties: Any,
-    path: str,
+    properties_path: str,
     result: ValidationResult,
-) -> dict[str, Any] | None:
-    if properties is None:
-        return None
-    if isinstance(properties, dict):
-        return properties
-    result.add_issue("SCH601", json_pointer(path, "properties"), "properties must be an object")
-    return None
-
-
-def _validate_object_property_schemas(
-    properties: dict[str, Any] | None,
-    path: str,
-    result: ValidationResult,
+    skip_paths: set[str],
+    restrict_array_items_simple: bool,
 ) -> None:
     if not isinstance(properties, dict):
         return
-    properties_path = json_pointer(path, "properties")
     for key, subschema in properties.items():
-        subschema_path = json_pointer(properties_path, key)
-        if not isinstance(subschema, dict):
-            result.add_issue("SCH602", subschema_path, "property schema must be an object")
+        prop_path = json_pointer(properties_path, key)
+        if prop_path in skip_paths:
             continue
-        validate_schema_node(subschema, subschema_path, result)
+        if not isinstance(subschema, dict):
+            result.add_issue("SCH602", prop_path, "property schema must be an object")
+            continue
+        validate_schema_node(
+            subschema,
+            prop_path,
+            result,
+            skip_paths=skip_paths,
+            restrict_array_items_simple=restrict_array_items_simple,
+        )
 
 
-def _validate_object_required(
-    required: Any,
-    properties: dict[str, Any] | None,
-    path: str,
-    result: ValidationResult,
-) -> None:
+def _validate_required(required: Any, properties: Any, path: str, result: ValidationResult) -> None:
     if required is None:
         return
     required_path = json_pointer(path, "required")
-    if not (isinstance(required, list) and all(isinstance(item, str) for item in required)):
+    if not isinstance(required, list) or not all(isinstance(item, str) for item in required):
         result.add_issue("SCH603", required_path, "required must be a string array")
         return
     seen: set[str] = set()
     for item in required:
         if item in seen:
-            result.add_issue("SCH605", required_path, "required entries must be unique")
+            result.add_issue("SCH605", required_path, "required must not contain duplicates")
         seen.add(item)
-        if not isinstance(properties, dict) or item not in properties:
-            result.add_issue("SCH604", required_path, f"required field '{item}' is not defined")
+        if isinstance(properties, dict) and item in properties:
+            continue
+        result.add_issue("SCH604", required_path, f"required field '{item}' is not defined in properties")
+
+
+def _validate_numeric_keyword(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    keys: tuple[str, ...],
+    issue_code: str,
+    matcher,
+) -> None:
+    for key in keys:
+        value = schema.get(key)
+        if key in schema and not matcher(value):
+            result.add_issue(issue_code, json_pointer(path, key), f"{key} has invalid type")
+
+
+def _validate_range_pair(
+    schema: dict[str, Any],
+    path: str,
+    result: ValidationResult,
+    left_key: str,
+    right_key: str,
+    issue_code: str,
+    comparator,
+) -> None:
+    left_value = schema.get(left_key)
+    right_value = schema.get(right_key)
+    if not (is_number_value(left_value) and is_number_value(right_value)):
+        return
+    if comparator(left_value, right_value):
+        result.add_issue(issue_code, path, f"{left_key} and {right_key} relationship is invalid")
+
+
+def _freeze_value(value: Any) -> Any:
+    if isinstance(value, list):
+        return tuple(_freeze_value(item) for item in value)
+    if isinstance(value, dict):
+        return tuple(sorted((key, _freeze_value(item)) for key, item in value.items()))
+    return value
