@@ -942,6 +942,12 @@ template("ohos_shared_library") {
             "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
       }
 
+      if (defined(shlib_type) && shlib_type == "ani") {
+        if (!defined(relative_install_dir)) {
+          relative_install_dir = "module/ani"
+        }
+      }
+      
       if (defined(invoker.version_script)) {
         version_script = rebase_path(invoker.version_script, root_build_dir)
       }
