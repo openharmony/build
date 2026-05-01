@@ -31,13 +31,18 @@ class ValidationResult:
     file: str
     valid: bool = True
     issues: list[ValidationIssue] = field(default_factory=list)
+    warnings: list[ValidationIssue] = field(default_factory=list)
 
     def add_issue(self, code: str, path: str, message: str) -> None:
         self.valid = False
         self.issues.append(ValidationIssue(code=code, path=path, message=message))
 
+    def add_warning(self, code: str, path: str, message: str) -> None:
+        self.warnings.append(ValidationIssue(code=code, path=path, message=message))
+
     def sort_issues(self) -> None:
         self.issues.sort(key=lambda issue: (issue.path, issue.code, issue.message))
+        self.warnings.sort(key=lambda issue: (issue.path, issue.code, issue.message))
 
 
 SUPPORTED_TOP_LEVEL_FIELDS = {
@@ -48,6 +53,7 @@ SUPPORTED_TOP_LEVEL_FIELDS = {
     "requirePermissions",
     "eventTypes",
     "eventSchemas",
+    "hasSubCommand",
     "hasSubcommands",
     "inputSchema",
     "outputSchema",

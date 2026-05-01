@@ -64,7 +64,9 @@ def validate_top_level(data: dict[str, Any], result: ValidationResult) -> None:
     )
     _validate_event_types(data.get("eventTypes"), "/eventTypes", "TOP_eventTypes", result)
     _validate_event_schemas(data.get("eventSchemas"), "/eventSchemas", "TOP_eventSchemas", result)
+    _validate_optional_boolean(data, "hasSubCommand", "TOP_hasSubCommand_001", result)
     _validate_optional_boolean(data, "hasSubcommands", "TOP_hasSubcommands_001", result)
+    _warn_legacy_has_subcommands(data, result)
     _validate_input_schema_field(data, "/inputSchema", "TOP_inputSchema_001", result)
     _validate_output_schema_field(data, "/outputSchema", "TOP_outputSchema", result)
     _validate_top_level_relationships(data, result)
@@ -335,12 +337,42 @@ def _validate_output_schema_field(
 
 
 def _validate_top_level_relationships(data: dict[str, Any], result: ValidationResult) -> None:
-    has_subcommands = data.get("hasSubcommands")
+    has_subcommands, issue_path = _resolve_has_subcommand_value(data, result)
     subcommands_defined = "subcommands" in data
     if has_subcommands is True and not subcommands_defined:
-        result.add_issue("TOP_hasSubcommands_101", "/hasSubcommands", "hasSubcommands=true requires subcommands")
+        result.add_issue("TOP_hasSubCommand_101", issue_path, "hasSubCommand=true requires subcommands")
     if subcommands_defined and has_subcommands is not True:
-        result.add_issue("TOP_hasSubcommands_102", "/subcommands", "subcommands requires hasSubcommands=true")
+        result.add_issue("TOP_hasSubCommand_102", "/subcommands", "subcommands requires hasSubCommand=true")
+
+
+def _warn_legacy_has_subcommands(data: dict[str, Any], result: ValidationResult) -> None:
+    if "hasSubcommands" not in data:
+        return
+    result.add_warning(
+        "TOP_hasSubcommands_WARN_001",
+        "/hasSubcommands",
+        "legacy field 'hasSubcommands' is deprecated; use 'hasSubCommand' instead",
+    )
+    if (
+        "hasSubCommand" in data
+        and isinstance(data.get("hasSubCommand"), bool)
+        and isinstance(data.get("hasSubcommands"), bool)
+        and data.get("hasSubCommand") != data.get("hasSubcommands")
+    ):
+        result.add_warning(
+            "TOP_hasSubcommands_WARN_002",
+            "/hasSubcommands",
+            "legacy field 'hasSubcommands' conflicts with 'hasSubCommand' and will be ignored",
+        )
+
+
+def _resolve_has_subcommand_value(data: dict[str, Any], result: ValidationResult) -> tuple[Any, str]:
+    del result
+    if "hasSubCommand" in data:
+        return data.get("hasSubCommand"), "/hasSubCommand"
+    if "hasSubcommands" in data:
+        return data.get("hasSubcommands"), "/hasSubcommands"
+    return None, "/hasSubCommand"
 
 
 def _validate_event_relationships(
