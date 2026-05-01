@@ -39,9 +39,11 @@ def validate_config_result(config_file: str):
 
 
 def format_result_text(result) -> str:
-    lines = [f"[FAIL] {result.file}"]
+    lines = [f"[{'PASS' if result.valid else 'FAIL'}] {result.file}"]
     for issue in result.issues:
         lines.append(f"  - {issue.code} {issue.path}: {issue.message}")
+    for warning in result.warnings:
+        lines.append(f"  ! {warning.code} {warning.path}: {warning.message}")
     return "\n".join(lines)
 
 
@@ -52,6 +54,10 @@ def format_result_json(result) -> str:
         "issues": [
             {"code": issue.code, "path": issue.path, "message": issue.message}
             for issue in result.issues
+        ],
+        "warnings": [
+            {"code": warning.code, "path": warning.path, "message": warning.message}
+            for warning in result.warnings
         ],
     }
     return json.dumps(payload, ensure_ascii=False, indent=2)
@@ -77,11 +83,16 @@ def main() -> int:
         return 1
 
     print(f"Validation successful: {data['name']}")
-    if data.get("hasSubCommand"):
+    has_subcommand = data.get("hasSubCommand")
+    if has_subcommand is None:
+        has_subcommand = data.get("hasSubcommands")
+    if has_subcommand:
         print("  Type: Subcommand tool")
         print(f"  Subcommands: {', '.join(data['subcommands'].keys())}")
     else:
         print("  Type: Simple tool")
+    for warning in result.warnings:
+        print(f"  ! {warning.code} {warning.path}: {warning.message}")
 
     if args.output_file:
         Path(args.output_file).write_text("validated\n", encoding="utf-8")
