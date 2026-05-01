@@ -48,7 +48,7 @@ SUPPORTED_TOP_LEVEL_FIELDS = {
     "requirePermissions",
     "eventTypes",
     "eventSchemas",
-    "hasSubcommands",
+    "hasSubCommand",
     "inputSchema",
     "outputSchema",
     "subcommands",

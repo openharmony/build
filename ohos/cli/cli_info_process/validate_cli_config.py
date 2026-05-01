@@ -77,7 +77,7 @@ def main() -> int:
         return 1
 
     print(f"Validation successful: {data['name']}")
-    if data.get("hasSubcommands"):
+    if data.get("hasSubCommand"):
         print("  Type: Subcommand tool")
         print(f"  Subcommands: {', '.join(data['subcommands'].keys())}")
     else:
