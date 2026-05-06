@@ -324,19 +324,19 @@ def main():
     sys_cfg_folder = opts[0][1]
     if not os.path.exists(sys_cfg_folder):
         print("Process field check skipped: file [{}] not exist".format(sys_cfg_folder))
-        return
+    else:
+        iterate_cfg_folder(sys_cfg_folder)
 
     vendor_cfg_folder = opts[1][1]
     if not os.path.exists(vendor_cfg_folder):
         print("Process field check skipped: file [{}] not exist".format(vendor_cfg_folder))
-        return
+    else:
+        iterate_cfg_folder(vendor_cfg_folder)
 
     privilege_process_path = opts[2][1]
 
     critical_process_path = opts[3][1]
 
-    iterate_cfg_folder(sys_cfg_folder)
-    iterate_cfg_folder(vendor_cfg_folder)
     validate_cfg_file(privilege_process_path, critical_process_path, None)
 
     return
