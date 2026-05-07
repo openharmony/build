@@ -40,6 +40,11 @@ declare_args() {
 }
 
 declare_args() {
+  # Whether to enable rcpc instruction set extension
+  enable_rcpc = false
+}
+
+declare_args() {
   sdk_build_public = false
   sdk_build_arkts = false
   sdk_build_check_level = 0
