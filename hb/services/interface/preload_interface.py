@@ -56,6 +56,7 @@ class PreloadInterface(ServiceInterface):
         self._generate_features_json()
         self._generate_syscap_json()
         self._generate_exclusion_modules_json()
+        self._generate_dependency_pruning_json()
         self._generate_platforms_build()
         self._generate_subsystem_config_json()
         self._generate_systemcapability_json()
@@ -93,6 +94,10 @@ class PreloadInterface(ServiceInterface):
 
     @abstractmethod
     def _generate_exclusion_modules_json(self):
+        pass
+
+    @abstractmethod
+    def _generate_dependency_pruning_json(self):
         pass
 
     @abstractmethod

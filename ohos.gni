@@ -32,7 +32,9 @@ import("//build/templates/cxx/prebuilt.gni")
 if (is_arkui_x) {
   import("//build_plugins/templates/java/rules.gni")
 } else {
-  import("//build/templates/bpf/ohos_bpf.gni")
+  if (!is_host_product) {
+    import("//build/templates/bpf/ohos_bpf.gni")
+  }
   import("//build/templates/rust/ohos_cargo_crate.gni")
   import("//build/templates/rust/rust_bindgen.gni")
   import("//build/templates/rust/rust_cxx.gni")

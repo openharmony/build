@@ -79,6 +79,8 @@ class OHOSLoader(LoadInterface):
             self.config.root_path, 'out/preloader', self.config.product, 'platforms.build')
         self.exclusion_modules_config_file = os.path.join(
             self.config.root_path, 'out/preloader', self.config.product, 'exclusion_modules.json')
+        self.dependency_pruning_config_file = os.path.join(
+            self.config.root_path, 'out/preloader', self.config.product, 'dependency_pruning.json')
         self.example_subsystem_file = os.path.join(
             self.config.root_path, 'build', 'subsystem_config_example.json')
         self.parts_src_file = os.path.join(
@@ -134,6 +136,7 @@ class OHOSLoader(LoadInterface):
             self.target_arch,
             self.ignore_api_check,
             self.exclusion_modules_config_file,
+            self.dependency_pruning_config_file,
             self.load_test_config,
             overrided_components,
             bundle_subsystem_allow_list,
@@ -810,14 +813,40 @@ class OHOSLoader(LoadInterface):
         return _parts_variants_info
 
     def _get_real_part_name(self, original_part_name: str, current_platform: str, parts_variants: dict):
-        part_info = parts_variants.get(original_part_name)
+        resolved_part_name = self._resolve_part_name_alias(
+            original_part_name, parts_variants)
+        if resolved_part_name is None:
+            return None, None
+        part_info = parts_variants.get(resolved_part_name)
         if part_info is None:
             return None, None
         if current_platform in part_info and current_platform != 'phone':
-            real_name = '{}_{}'.format(original_part_name, current_platform)
+            real_name = '{}_{}'.format(resolved_part_name, current_platform)
         else:
-            real_name = original_part_name
-        return real_name, original_part_name
+            real_name = resolved_part_name
+        return real_name, resolved_part_name
+
+    def _resolve_part_name_alias(self, declared_part_name: str, parts_variants: dict):
+        if self.config.compile_mode != 'host':
+            if declared_part_name in parts_variants:
+                return declared_part_name
+            return None
+        if declared_part_name in parts_variants:
+            return declared_part_name
+
+        name_segments = declared_part_name.split('_')
+        candidates = []
+        for index in range(1, len(name_segments)):
+            candidate = '_'.join(name_segments[index:])
+            if candidate in parts_variants:
+                candidates.append(candidate)
+
+        if len(candidates) == 1:
+            LogUtil.hb_warning(
+                "Resolved declared part '{}' to source part '{}'".format(
+                    declared_part_name, candidates[0]))
+            return candidates[0]
+        return None
 
     '''Description: called by _out_infos_for_testfwk, output information by platform
     @parameter:none
