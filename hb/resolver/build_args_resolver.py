@@ -82,6 +82,10 @@ class BuildArgsResolver(ArgsResolverInterface):
                     'custom_toolchain',
                     f'//build/toolchain/linux:clang_{host_toolchain_cpu}')
         else:
+            target_generator.regist_arg('product_path', config.product_path) 
+            target_generator.regist_arg( 
+                'product_config_path', config.product_config_path)
+
             target_generator.regist_arg('device_name', config.board)
             target_generator.regist_arg('device_path', config.device_path)
             target_generator.regist_arg('device_company', config.device_company)
