@@ -129,6 +129,14 @@ template("taihe_shared_library") {
       ]
       sources += invoker.sources
 
+      if (!defined(defines)) {
+        defines = []
+      }
+
+      if (defined(invoker.enable_perf_trace)) {
+        defines += [ "TH_ANI_ENABLE_PERF_TRACE" ]
+      }
+
       external_deps = [
         "runtime_core:ani",
         "runtime_core:libarkruntime",
