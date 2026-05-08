@@ -30,6 +30,17 @@ from hb.helper.no_instance import NoInstance
 class ProductUtil(metaclass=NoInstance):
 
     @staticmethod
+    def get_default_host_target_os() -> str:
+        return 'linux'
+
+    @staticmethod
+    def get_default_host_target_cpu() -> str:
+        config = Config()
+        if config.platform == 'Linux' and os.uname().machine in ('aarch64', 'arm64'):
+            return 'arm64'
+        return 'x86_64'
+
+    @staticmethod
     def get_products():
         config = Config()
         # ext products configuration
@@ -70,7 +81,8 @@ class ProductUtil(metaclass=NoInstance):
                                     'subsystem_config_overlay_json':
                                     subsystem_config_overlay_path,
                                     'config': config_path,
-                                    'component_type': info.get('component_type', '')
+                                    'component_type': info.get('component_type', ''),
+                                    'compile_mode': info.get('compile_mode', 'cross')
                                 }
                             else:
                                 yield {
@@ -84,7 +96,8 @@ class ProductUtil(metaclass=NoInstance):
                                     'subsystem_config_json':
                                     info.get('subsystem_config_json'),
                                     'config': config_path,
-                                    'component_type': info.get('component_type', '')
+                                    'component_type': info.get('component_type', ''),
+                                    'compile_mode': info.get('compile_mode', 'cross')
                                 }
         if config.vendor_path != '':
             for company in os.listdir(config.vendor_path):
@@ -108,7 +121,8 @@ class ProductUtil(metaclass=NoInstance):
                                 'version': info.get('version', '3.0'),
                                 'os_level': info.get('type', "mini"),
                                 'config': config_path,
-                                'component_type': info.get('component_type', '')
+                                'component_type': info.get('component_type', ''),
+                                'compile_mode': info.get('compile_mode', 'cross')
                             }
         bip_path = config.built_in_product_path
         for item in os.listdir(bip_path):
@@ -127,7 +141,8 @@ class ProductUtil(metaclass=NoInstance):
                     'version': info.get('version', '2.0'),
                     'os_level': info.get('type', 'standard'),
                     'config': config_path,
-                    'component_type': info.get('component_type', '')
+                    'component_type': info.get('component_type', ''),
+                    'compile_mode': info.get('compile_mode', 'cross')
                 }
 
         bipl_path = config.built_in_product_path_for_llvm
@@ -148,7 +163,8 @@ class ProductUtil(metaclass=NoInstance):
                         'version': info.get('version', '2.0'),
                         'os_level': info.get('type', 'standard'),
                         'config': config_path,
-                        'component_type': info.get('component_type', '')
+                        'component_type': info.get('component_type', ''),
+                        'compile_mode': info.get('compile_mode', 'cross')
                     }
 
     @staticmethod
@@ -157,8 +173,26 @@ class ProductUtil(metaclass=NoInstance):
         info = IoUtil.read_json_file(product_json)
         config = Config()
         version = info.get('version', '3.0')
+        compile_mode = info.get('compile_mode', 'cross')
 
         if version == '3.0':
+            if compile_mode == 'host':
+                target_os = info.get('host_target_os',
+                                     ProductUtil.get_default_host_target_os())
+                host_target_cpu = info.get('host_target_cpu',
+                                           ProductUtil.get_default_host_target_cpu())
+                return {
+                    'board': info.get('board', ''),
+                    'kernel': info.get('kernel_type', ''),
+                    'kernel_version': info.get('kernel_version', ''),
+                    'company': info.get('device_company', ''),
+                    'board_path': '',
+                    'board_config_path': None,
+                    'target_cpu': host_target_cpu,
+                    'target_os': target_os,
+                    'support_cpu': info.get('support_cpu', ''),
+                    'compile_mode': compile_mode,
+                }
             device_company = info.get('device_company')
             board = info.get('board')
             _board_path = info.get('board_path')
@@ -188,6 +222,7 @@ class ProductUtil(metaclass=NoInstance):
                 'target_cpu': info.get('target_cpu'),
                 'target_os': info.get('target_os'),
                 'support_cpu': info.get('support_cpu'),
+                'compile_mode': compile_mode,
             }
         else:
             raise OHOSException(f'wrong version number in {product_json}')
@@ -374,7 +409,7 @@ def _from_ss_to_parts(subsystems: dict):
                 for key, val in com.items():
                     if key in ['component', 'features', 'syscap', 'exclusions']:
                         continue
-                    parts.get('{}:{}'.format(ss_name, com_name)).update(key=val)
+                    parts.get('{}:{}'.format(ss_name, com_name))[key] = val
     return parts
 
 

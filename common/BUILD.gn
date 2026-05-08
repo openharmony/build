@@ -15,38 +15,52 @@ import("//build/config/ohos/config.gni")
 import("//build/config/sanitizers/sanitizers.gni")
 import("//build/ohos.gni")
 
-group("common_packages") {
-  deps = [ "musl:musl_install" ]
-
-  deps += [ "libcpp:libcpp_install" ]
-
-  deps += [
-    "asan:asan.options",
-    "asan:libclang_rt.asan.so",
-    "asan:libclang_rt.memgraph.so",
-  ]
-
-  if (target_cpu == "arm64") {
+group("common_cross_packages") {
+  deps = []
+  if (!is_host_product) {
     deps += [
-      "asan:libclang_rt.hwasan.so",
-      "asan:libclang_rt.tsan.so",
-      "asan:tsan.options",
+      "musl:musl_install",
+      "libcpp:libcpp_install",
+      "asan:asan.options",
+      "asan:libclang_rt.asan.so",
+      "asan:libclang_rt.memgraph.so",
     ]
+
+    if (target_cpu == "arm64") {
+      deps += [
+        "asan:libclang_rt.hwasan.so",
+        "asan:libclang_rt.tsan.so",
+        "asan:tsan.options",
+      ]
+    }
+
+    if (is_asan) {
+      deps += [ "asan:asan.cfg" ]
+    } else if (is_tsan) {
+      deps += [
+        "asan:asan.cfg",
+        "asan:libclang_rt.tsan.so",
+      ]
+    } else {
+      # ubsan.cfg defines the log_path, different with asan.cfg
+      deps += [
+        "ubsan:libclang_rt.ubsan_minimal.so",
+        "ubsan:libclang_rt.ubsan_standalone.so",
+        "ubsan:ubsan.cfg",
+      ]
+    }
   }
+}
 
-  if (is_asan) {
-    deps += [ "asan:asan.cfg" ]
-  } else if (is_tsan) {
-    deps += [
-      "asan:asan.cfg",
-      "asan:libclang_rt.tsan.so",
-    ]
+group("common_host_packages") {
+  deps = [ "//build/rust:default" ]
+}
+
+group("common_packages") {
+  deps = []
+  if (is_host_product) {
+    deps += [ ":common_host_packages" ]
   } else {
-    # ubsan.cfg defines the log_path, different with asan.cfg
-    deps += [
-      "ubsan:libclang_rt.ubsan_minimal.so",
-      "ubsan:libclang_rt.ubsan_standalone.so",
-      "ubsan:ubsan.cfg",
-    ]
+    deps += [ ":common_cross_packages" ]
   }
 }

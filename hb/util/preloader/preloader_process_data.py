@@ -19,6 +19,7 @@ import os
 from resources.config import Config
 from util.log_util import LogUtil
 from util.io_util import IoUtil
+from util.product_util import ProductUtil
 from util.preloader.parse_vendor_product_config import get_vendor_parts_list
 
 
@@ -38,6 +39,8 @@ class Outputs:
         self.syscap_json = os.path.join(output_dir, 'syscap.json')
         self.exclusion_modules_json = os.path.join(output_dir,
                                                    'exclusion_modules.json')
+        self.dependency_pruning_json = os.path.join(
+            output_dir, 'dependency_pruning.json')
         self.subsystem_config_json = os.path.join(output_dir,
                                                   'subsystem_config.json')
         self.subsystem_config_overlay_json = os.path.join(output_dir,
@@ -103,6 +106,9 @@ class Product():
         self._version = self._config.get('version', '3.0')
         self._do_parse()
 
+    def _is_host_product(self) -> bool:
+        return self._config.get('compile_mode', 'cross') == 'host'
+
     # parse product configuration, then generate parts list and build vars
     def _do_parse(self):
         self._update_syscap_info()
@@ -139,10 +145,14 @@ class Product():
                 self._device_info = self._get_device_info_v2(
                     device_name, self._dirs.built_in_device_dir)
         else:
-            device_name = self._config.get('board')
-            if device_name:
-                self._device_name = device_name
+            if self._is_host_product():
+                self._device_name = ""
                 self._device_info = self._get_device_info_v3(self._config)
+            else:
+                device_name = self._config.get('board')
+                if device_name:
+                    self._device_name = device_name
+                    self._device_info = self._get_device_info_v3(self._config)
         if self._ohos_config.target_cpu:
             self._device_info["target_cpu"] = self._ohos_config.target_cpu
         if self._ohos_config.target_os:
@@ -189,16 +199,20 @@ class Product():
                 all_parts.update(self._get_product_specific_parts())
 
                 device_name = self._config.get('board')
-                if device_name:
+                if device_name and not self._is_host_product():
                     all_parts.update(self._get_device_specific_parts())
             self._parts.update(all_parts)
 
     # Update the _build_vars based on the product configuration in the vendor warehouse
     def _update_build_vars(self):
         config = self._config
-        build_vars = {}
+        build_vars = {
+            'is_host_product': self._is_host_product(),
+            'product_path': self._ohos_config.gn_product_path,
+            'product_config_path': self._ohos_config.product_config_path,
+        }
         if self._version == "1.0":
-            build_vars = {"os_level": 'large'}
+            build_vars["os_level"] = 'large'
         else:
             if self._version == "2.0":
                 build_vars['os_level'] = config.get("type", "standard")
@@ -210,7 +224,7 @@ class Product():
                 build_vars['product_company'] = config.get('product_company')
             else:
                 build_vars['os_level'] = config.get('type', 'mini')
-                build_vars['device_name'] = config.get('board')
+                build_vars['device_name'] = config.get('board', '')
                 if config.get('product_company'):
                     build_vars['product_company'] = config.get(
                         'product_company')
@@ -221,6 +235,7 @@ class Product():
                 else:
                     build_vars['product_company'] = config.get(
                         'device_company')
+            build_vars['compile_mode'] = config.get('compile_mode', 'cross')
             build_vars['product_name'] = config.get('product_name')
             if 'ext_root_proc_conf_path' in config:
                 ext_root_proc_conf_path = os.path.join(
@@ -275,6 +290,8 @@ class Product():
         build_vars.update(self._device_info)
         if build_vars['os_level'] == 'mini' or build_vars['os_level'] == 'small':
             toolchain_label = ""
+        elif self._is_host_product():
+            toolchain_label = ""
         else:
             toolchain_label = '//build/toolchain/{0}:{0}_clang_{1}'.format(
                 self._device_info.get('target_os'), self._device_info.get('target_cpu'))
@@ -304,6 +321,16 @@ class Product():
 
     # Generate build_info needed for V3 configuration
     def _get_device_info_v3(self, config) -> dict:
+        if self._is_host_product():
+            target_os = config.get('host_target_os',
+                                   config.get('target_os',
+                                              ProductUtil.get_default_host_target_os()))
+            target_cpu = config.get('host_target_cpu',
+                                    ProductUtil.get_default_host_target_cpu())
+            return {
+                'target_os': target_os,
+                'target_cpu': target_cpu,
+            }
         # NOTE:
         # Product_name, device_company are necessary for
         # config.json, DON NOT use .get to replace []
@@ -340,6 +367,8 @@ class Product():
 
     def _get_device_specific_parts(self) -> dict:
         info = {}
+        if self._is_host_product():
+            return info
         if self._device_info and self._device_info.get('device_build_path'):
             subsystem_name = 'device_{}'.format(self._device_name)
             part_name = subsystem_name
@@ -348,6 +377,8 @@ class Product():
 
     def _get_device_specific_subsystem(self) -> dict:
         info = {}
+        if self._is_host_product():
+            return info
         subsystem_name = 'device_{}'.format(self._device_name)
         if self._device_info and self._device_info.get('device_build_path'):
             info[subsystem_name] = {
@@ -389,6 +420,8 @@ class Product():
         return ret
 
     def _get_product_specific_parts(self) -> dict:
+        if self._is_host_product():
+            return {}
         part_name = 'product_{}'.format(self._name)
         subsystem_name = part_name
         info = {}

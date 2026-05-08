@@ -175,6 +175,18 @@ class OHOSPreloader(PreloadInterface):
             'generated exclusion modules info to {}/exclusion_modules.json'.format(
                 self._dirs.preloader_output_dir), mode=self.config.log_mode)
 
+    def _generate_dependency_pruning_json(self):
+        dependency_pruning = {}
+        for _part_name, vals in self._all_parts.items():
+            _prune_deps = vals.get('prune_deps')
+            if _prune_deps:
+                dependency_pruning[_part_name] = _prune_deps
+        IoUtil.dump_json_file(
+            self._outputs.dependency_pruning_json, dependency_pruning)
+        LogUtil.hb_info(
+            'generated dependency pruning info to {}/dependency_pruning.json'.format(
+                self._dirs.preloader_output_dir), mode=self.config.log_mode)
+
     '''Description: generate build config info to "out/preloader/product_name/build_config.json"
     @parameter:none
     @return :none

@@ -406,7 +406,8 @@ class LoadBuildConfig(object):
     def __init__(self, source_root_dir, subsystem_build_info,
                  config_output_dir, variant_toolchains, subsystem_name,
                  target_arch, ignored_subsystems, exclusion_modules_config_file,
-                 load_test_config, overrided_components, bundle_subsystem_allow_list):
+                 dependency_pruning_config_file, load_test_config,
+                 overrided_components, bundle_subsystem_allow_list):
         self._source_root_dir = source_root_dir
         self._build_info = subsystem_build_info
         self._config_output_relpath = config_output_dir
@@ -425,6 +426,7 @@ class LoadBuildConfig(object):
         self._parts_module_list = {}
         self._parts_deps = {}
         self._exclusion_modules_config_file = exclusion_modules_config_file
+        self._dependency_pruning_config_file = dependency_pruning_config_file
         self._load_test_config = load_test_config
         self._overrided_components = overrided_components
         self._bundle_subsystem_allow_list = bundle_subsystem_allow_list
@@ -604,6 +606,7 @@ class LoadBuildConfig(object):
             if _build_file.endswith('bundle.json'):
                 bundle_part_obj = load_bundle_file.BundlePartObj(
                     _build_file, self._exclusion_modules_config_file,
+                    self._dependency_pruning_config_file,
                     self._load_test_config)
                 _parts_config = bundle_part_obj.to_ohos_build()
             else:
@@ -884,6 +887,7 @@ def get_parts_info(source_root_dir,
                    target_arch,
                    ignored_subsystems,
                    exclusion_modules_config_file,
+                   dependency_pruning_config_file,
                    load_test_config,
                    overrided_components,
                    bundle_subsystem_allow_list,
@@ -913,6 +917,7 @@ def get_parts_info(source_root_dir,
                                        variant_toolchains, subsystem_name,
                                        target_arch, ignored_subsystems,
                                        exclusion_modules_config_file,
+                                       dependency_pruning_config_file,
                                        load_test_config, overrided_components,
                                        bundle_subsystem_allow_list)
         # xts subsystem special handling, device_attest and

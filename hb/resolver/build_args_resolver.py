@@ -66,24 +66,34 @@ class BuildArgsResolver(ArgsResolverInterface):
         config = Config()
         target_generator = build_module.target_generator
         target_generator.regist_arg('product_name', config.product)
-        target_generator.regist_arg('product_path', config.product_path)
-        target_generator.regist_arg(
-            'product_config_path', config.product_config_path)
-
-        target_generator.regist_arg('device_name', config.board)
-        target_generator.regist_arg('device_path', config.device_path)
-        target_generator.regist_arg('device_company', config.device_company)
-        target_generator.regist_arg(
-            'device_config_path', config.device_config_path)
 
         target_generator.regist_arg('target_cpu', config.target_cpu)
+        target_generator.regist_arg('target_os', config.target_os)
         target_generator.regist_arg('precise_branch', config.precise_branch)
         target_generator.regist_arg(
             'is_{}_system'.format(config.os_level), True)
+        if config.compile_mode == 'host':
+            target_generator.regist_arg('use_musl', False)
+            if config.target_os == 'linux':
+                host_toolchain_cpu = config.target_cpu
+                if host_toolchain_cpu == 'x86_64':
+                    host_toolchain_cpu = 'x64'
+                target_generator.regist_arg(
+                    'custom_toolchain',
+                    f'//build/toolchain/linux:clang_{host_toolchain_cpu}')
+        else:
+            target_generator.regist_arg('product_path', config.product_path) 
+            target_generator.regist_arg( 
+                'product_config_path', config.product_config_path)
 
-        target_generator.regist_arg('ohos_kernel_type', config.kernel)
-        target_generator.regist_arg('ohos_build_compiler_specified',
-                                    ProductUtil.get_compiler(config.device_path))
+            target_generator.regist_arg('device_name', config.board)
+            target_generator.regist_arg('device_path', config.device_path)
+            target_generator.regist_arg('device_company', config.device_company)
+            target_generator.regist_arg(
+                'device_config_path', config.device_config_path)
+            target_generator.regist_arg('ohos_kernel_type', config.kernel)
+            target_generator.regist_arg('ohos_build_compiler_specified',
+                                        ProductUtil.get_compiler(config.device_path))
 
         target_generator.regist_arg('ohos_build_time',
                                     SystemUtil.get_current_time(time_type='timestamp'))
@@ -94,7 +104,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         for key, value in features_dict.items():
             target_generator.regist_arg(key, value)
 
-        if ProductUtil.get_compiler(config.device_path) == 'clang':
+        if config.compile_mode != 'host' and ProductUtil.get_compiler(config.device_path) == 'clang':
             target_generator.regist_arg(
                 'ohos_build_compiler_dir', config.clang_path)
 
@@ -958,7 +968,7 @@ class BuildArgsResolver(ArgsResolverInterface):
         """
         if target_arg.arg_value:
             config = Config()
-            if config.os_level == "standard":
+            if config.os_level == "standard" and config.compile_mode != 'host':
                 sys.path.append(os.path.join(
                     config.root_path, "developtools/integration_verification/tools/deps_guard"))
                 from deps_guard import deps_guard
