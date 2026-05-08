@@ -13,6 +13,7 @@
 
 import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
+import("//build/ohos_var.gni")
 import("//build/ohos/sdk/sdk.gni")
 
 if (!use_current_sdk) {
@@ -76,13 +77,15 @@ if (!use_current_sdk) {
 
   action_with_pydeps("_parse_ndk_headers") {
     deps = all_ndk_targets_list
-    script = "//interface/sdk_c/build-tools/parse_ndk_headers.py"
+    script = "//interface/sdk_c/build-tools/parse_native_headers.py"
     outputs = [ "${ndk_os_irrelevant_out_dir}/parse_ndk_headers.tmp" ]
     args = [
       "--input",
       rebase_path("$ndk_headers_out_dir", root_build_dir),
       "--sdk-api-version",
       "${sdk_build_check_level}",
+      "--sdk-build-public",
+      "${sdk_build_public}",
     ]
   }
 
