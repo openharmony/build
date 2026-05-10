@@ -13,8 +13,8 @@
 
 import("//build/config/python.gni")
 import("//build/ohos/ndk/ndk.gni")
-import("//build/ohos_var.gni")
 import("//build/ohos/sdk/sdk.gni")
+import("//build/ohos_var.gni")
 
 if (!use_current_sdk) {
   package_info_name = "oh-uni-package"
