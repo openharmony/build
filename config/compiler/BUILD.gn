@@ -937,7 +937,7 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
-    if (use_musl) {
+    if (use_musl || is_host_product) {
       cflags += [
         "-Wno-error=c99-designator",
         "-Wno-error=anon-enum-enum-conversion",
