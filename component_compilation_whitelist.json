@@ -39,6 +39,9 @@
         "//third_party/grpc:grpcpp"
     ],
     "innerapi_public_deps_inner": {
+        "//developtools/packing_tool:packing_tool_external": [
+            "//developtools/packing_tool:packing_tool"
+        ],
         "//drivers/interface/camera/v1_0:libcamera_proxy_1.0": [
             "//drivers/interface/camera/sequenceable/buffer_producer:libbuffer_producer_sequenceable_1.0"
         ],
@@ -8118,6 +8121,9 @@
         ]
     },
     "import_other": {
+        "//developtools/ace_js2bundle/": ["//foundation/arkui/ace_engine/ace_config.gni"],
+        "//third_party/parse5/": ["//foundation/arkui/ace_engine/ace_config.gni"],
+        "//third_party/weex-loader/": ["//foundation/arkui/ace_engine/ace_config.gni"],
         "//applications/standard/contacts_data/contacts/": [
             "//arkcompiler/ets_frontend/es2panda/es2abc_config.gni"
         ],
@@ -14666,7 +14672,11 @@
             "window_manager",
             "zlib",
             "skia",
-            "runtime_core"
+            "runtime_core",
+            "ace_js2bundle",
+            "parse5",
+            "weex-loader",
+            "packing_tool"
         ],
         "lib_dirs": [
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/lib/",
