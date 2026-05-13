@@ -471,37 +471,35 @@ if (!use_current_sdk) {
     outputs = [ _output ]
   }
 
-  if (host_os == "linux" && host_cpu != "arm64") {
-    action_with_pydeps("archive_linux_arm64_ndk") {
-      deps = ndk_targets + [ ":copy_linux_arm64_ohos_cmake" ]
-      script = "//build/ohos/ndk/archive_ndk.py"
-      depfile = "$target_gen_dir/$target_name.d"
-      _output = "$ohos_sdk_out_dir/${linux_arm64_system}/${ndk_zip_prefix}-${linux_arm64_system}-${arch}-${current_ndk_version}"
-      if (release_type != "") {
-        _output += "-${release_type}.zip"
-      } else {
-        _output += ".zip"
-      }
-
-      args = [
-        "--os-irrelevant-dir",
-        rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
-        "--output",
-        rebase_path(_output, root_build_dir),
-        "--depfile",
-        rebase_path(depfile, root_build_dir),
-        "--notice-file",
-        rebase_path(ndk_notice_txt, root_build_dir),
-        "--os-specific-dir",
-        rebase_path("$ndk_linux_arm64_specific_out_dir", root_build_dir),
-        "--prefix",
-        ndk_zip_prefix,
-        "--record-path",
-        rebase_path(
-            "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
-            root_build_dir),
-      ]
-      outputs = [ _output ]
+  action_with_pydeps("archive_linux_arm64_ndk") {
+    deps = ndk_targets
+    script = "//build/ohos/ndk/archive_ndk.py"
+    depfile = "$target_gen_dir/$target_name.d"
+    _output = "$ohos_sdk_out_dir/${linux_arm64_system}/${ndk_zip_prefix}-${linux_arm64_system}-${arch}-${current_ndk_version}"
+    if (release_type != "") {
+      _output += "-${release_type}.zip"
+    } else {
+      _output += ".zip"
     }
+
+    args = [
+      "--os-irrelevant-dir",
+      rebase_path(ndk_os_irrelevant_out_dir, root_build_dir),
+      "--output",
+      rebase_path(_output, root_build_dir),
+      "--depfile",
+      rebase_path(depfile, root_build_dir),
+      "--notice-file",
+      rebase_path(ndk_notice_txt, root_build_dir),
+      "--os-specific-dir",
+      rebase_path("$ndk_linux_arm64_specific_out_dir", root_build_dir),
+      "--prefix",
+      ndk_zip_prefix,
+      "--record-path",
+      rebase_path(
+          "$target_gen_dir/" + get_path_info(_output, "file") + ".md5.stamp",
+          root_build_dir),
+    ]
+    outputs = [ _output ]
   }
 }
