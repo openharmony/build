@@ -1,4 +1,6 @@
 {
+  "device_arm64_virt": "device_arm64_virt",
+  "product_arm64_virt": "product_arm64_virt",
   "developer_test": "testfwk",
   "acts": "xts",
   "acts_devices": "xts",
