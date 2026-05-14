@@ -1,7 +1,4 @@
 {
-    "crypto_framework":[     
-        "taihe"
-    ],
     "ylong_runtime":[
         "rust"
     ],
@@ -18,34 +15,24 @@
         "app",
         "hvigor"
     ],
-    "app_domain_verify":[
-        "taihe"
-    ],
     "distributed_bundle_framework":[
         "app"
     ],
-    "syscap_codec":[
-        "taihe"
-    ],
     "device_usage_statistics":[
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "resource_schedule_service":[
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "background_task_mgr":[
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "work_scheduler":[ 
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "bundle_tool":[
         "app",
@@ -60,24 +47,20 @@
     ],
     "device_manager":[
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "wallpaper_mgr":[
-        "app",
-        "taihe"
+        "app"
     ],
     "power_manager":[
         "app",
         "hvigor",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "ability_runtime":[
         "app",
         "hvigor",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "form_fwk":[
         "app",
@@ -85,27 +68,15 @@
     ],
     "pasteboard":[
         "app",
-        "sdk",
-        "taihe"
+        "sdk"
     ],
     "distributed_notification_service":[
         "app",
-        "sdk",
-        "taihe"
-    ],
-    "init":[
-        "taihe"
+        "sdk"
     ],
     "usb_manager":[
         "app",
-        "sdk",
-        "taihe"
-    ],
-    "image_framework":[
-        "taihe"
-    ],
-    "bluetooth":[
-        "taihe"
+        "sdk"
     ],
     "hiprofiler":[
         "sdk",
@@ -120,13 +91,11 @@
     ],
     "request":[
         "rust",
-        "app",
-        "taihe"
+        "app"
     ],
     "imf":[
         "sdk",
-        "app",
-        "taihe"
+        "app"
     ],
     "safwk":[
         "rust"
@@ -136,19 +105,14 @@
     ],
     "datamgr_service":[
         "rust",
-        "app",
-        "taihe"
+        "app"
     ],
     "location":[
         "sdk",
-        "taihe",
         "app"
     ],
     "updater":[
         "rust"
-    ],
-    "display_manager":[
-        "taihe"
     ],
     "core_service":[
         "app"
@@ -168,8 +132,7 @@
     "wifi":[
         "sdk",
         "app",
-        "hvigor",
-        "taihe"
+        "hvigor"
     ],
     "netstack":[
         "rust"
@@ -179,8 +142,7 @@
         "app"
     ],
     "ipc":[
-        "rust",
-        "taihe"
+        "rust"
     ],
     "rust_libc":[
         "rust"
@@ -191,26 +153,19 @@
         "hvigor"
     ],
     "graphic_3d":[
-        "AGP",
-        "taihe"
+        "AGP"
     ],
     "user_file_service":[
         "sdk",
-        "app",
-        "taihe"
-    ],
-    "user_auth_framework":[
-        "taihe"
+        "app"
     ],
     "distributed_hardware_fwk":[
         "app",
         "sdk",
-        "hvigor",
-        "taihe"
+        "hvigor"
     ],
     "file_api":[
-        "rust",
-        "taihe"
+        "rust"
     ],
     "jsvm":[
         "ark_js"
@@ -238,8 +193,7 @@
         "rust"
     ],
     "input":[
-        "rust",
-        "taihe"
+        "rust"
     ],
     "faultloggerd":[
         "rust",
@@ -247,50 +201,39 @@
         "app"
     ],
     "audio_framework":[
-        "app",
-        "taihe"
+        "app"
     ],
     "miscdevice":[
-        "app",
-        "taihe"
+        "app"
     ],
     "hiview":[
         "app",
         "sdk"
     ],
     "av_session":[
-        "app",
-        "taihe"
+        "app"
     ],
     "udmf":[
-        "app",
-        "taihe"
+        "app"
     ],
     "sqlite":[
         "app"
-    ],
-    "battery_manager":[
-        "taihe"
     ],
     "data_share":[
         "app",
         "hvigor"
     ],
     "relational_store":[
-        "app",
-        "taihe"
+        "app"
     ],
     "sensor":[
-        "app",
-        "taihe"
+        "app"
     ],
     "app_file_service":[
-        "app",
-        "taihe"
+        "app"
     ],
     "time_service":[
-        "app",
-        "taihe"
+        "app"
     ],
     "hiappevent":[
         "app"
@@ -303,70 +246,24 @@
         "hvigor"
     ],
     "external_device_manager":[
-        "app",
-        "taihe"
+        "app"
     ],
     "screenlock_mgr":[
         "app"
     ],
     "kv_store":[
-        "app",
-        "taihe"
-    ],
-    "drm_framework":[
-        "taihe"
-    ],
-    "device_status":[
-        "taihe"
-    ],
-    "certificate_framework":[
-        "taihe"
-    ],
-    "graphic_2d":[
-        "taihe"
-    ],
-    "preferences":[
-        "taihe",
         "app"
-    ],
-    "camera_framework":[
-        "taihe"
-    ],
-    "player_framework":[
-        "taihe"
     ],
     "hiperf":[
         "app",
         "sdk"
     ],
     "data_object":[
-        "app",
-        "taihe"
-    ],
-    "device_standby":[
-        "taihe"
-    ],
-    "thermal_manager":[
-        "taihe"
-    ],
-    "storage_service":[
-        "taihe"
+        "app"
     ],
     "contacts_data":[
         "app",
         "hvigor"
-    ],
-    "face_auth":[
-        "taihe"
-    ],
-    "battery_statistics":[
-        "taihe"
-    ],
-    "mindspore":[
-        "taihe"
-    ],
-    "intelligent_voice_framework":[
-        "taihe"
     ],
     "ace_engine":[
         "app",
@@ -379,33 +276,13 @@
     "ets_runtime":[
         "ark_js"
     ],
-    "os_account":[
-        "taihe"
-    ],
-    "dmsfwk":[
-        "taihe"
-    ],
     "asset":[
         "rust"
     ],
-    "mechbody_controller":[
-        "taihe"
-    ],
-    "video_processing_engine":[
-        "taihe"
-    ],
-    "dsoftbus":[
-        "taihe"
-    ],
-    "update_service":[
-        "taihe"
-    ],
     "companion_device_auth":[
-        "taihe",
         "rust"
     ],
     "selectionfwk":[
-        "taihe",
         "app",
         "hvigor"
     ]
