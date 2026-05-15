@@ -110,8 +110,15 @@ class PoolDownloader:
                 self.unchanged_tool_list.append(operate.get("name") + "_" + os.path.basename(remote_url))
         else:
             # 不一致则先删除产物
+            if "merged_download_config" in operate:
+                # 和prebuilts_config.py中的merge_same_remote_download_item函数呼应
+                for item in operate["merged_download_config"]:
+                    item_unzip_dir = item["unzip_dir"]
+                    item_unzip_filename = item["unzip_filename"]
+                    run_cmd(["rm", "-rf", '{}/{}'.format(item_unzip_dir, item_unzip_filename)])
+            else:
+                run_cmd(["rm", "-rf", '{}/{}'.format(unzip_dir, unzip_filename)])
             run_cmd(["rm", "-rf"] + glob.glob(f"{unzip_dir}/*.{unzip_filename}.mark", recursive=False))
-            run_cmd(["rm", "-rf", '{}/{}'.format(unzip_dir, unzip_filename)])
             # 校验压缩包
             if os.path.exists(local_path):
                 check_result = check_sha256(remote_url, local_path)
@@ -130,7 +137,12 @@ class PoolDownloader:
 
             # 解压缩包
             self._adaptive_print("Start decompression {}".format(local_path))
-            extract_compress_files_and_gen_mark(local_path, unzip_dir, mark_file_path)
+            if "merged_download_config" in operate:
+                for item in operate["merged_download_config"]:
+                    item_unzip_dir = item["unzip_dir"]
+                    extract_compress_files_and_gen_mark(local_path, item_unzip_dir, mark_file_path)
+            else:
+                extract_compress_files_and_gen_mark(local_path, unzip_dir, mark_file_path)
             self._adaptive_print(f"{local_path} extracted to {unzip_dir}")
 
     def _try_download(self, remote_url: str, local_path: str):
