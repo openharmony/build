@@ -137,6 +137,10 @@ template("taihe_shared_library") {
         defines += [ "TH_ANI_ENABLE_PERF_TRACE" ]
       }
 
+      if (defined(invoker.enable_checked_call)) {
+        defines += [ "TH_ANI_ENABLE_CHECKED_CALL" ]
+      }
+
       external_deps = [
         "runtime_core:ani",
         "runtime_core:libarkruntime",
