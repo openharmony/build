@@ -50,9 +50,9 @@ def _parse_args():
 
 
 def merge_same_remote_download_item(download_operate):
-    # 将同一下载地址，不同解压路径的下载项，合并到一起，一次下载，多处解压
     remote_operate_map = {}
     after_merged = []
+
     for item in download_operate:
         remote_url = item["remote_url"]
         if remote_url not in remote_operate_map:
@@ -60,18 +60,20 @@ def merge_same_remote_download_item(download_operate):
             after_merged.append(item)
         else:
             exist_download_item = remote_operate_map[remote_url]
-            merged_config = exist_download_item.setdefault("merged_download_config", [])
-            merged_config.append({
-                "name": exist_download_item.get("name"),
-                "unzip_dir": exist_download_item.get("unzip_dir"),
-                "unzip_filename": exist_download_item.get("unzip_filename"),
-            })
-            merged_config.append({
+            if "merged_download_config" not in exist_download_item:
+                exist_download_item["merged_download_config"] = [{
+                    "name": exist_download_item.get("name"),
+                    "unzip_dir": exist_download_item.get("unzip_dir"),
+                    "unzip_filename": exist_download_item.get("unzip_filename"),
+                }]
+            exist_download_item["merged_download_config"].append({
                 "name": item.get("name"),
                 "unzip_dir": item.get("unzip_dir"),
                 "unzip_filename": item.get("unzip_filename"),
             })
+
     print(f"start download prebuilts, total {len(after_merged)}")
+
     for item in after_merged:
         print("remote_url:", item["remote_url"])
         if "merged_download_config" not in item:
@@ -79,6 +81,7 @@ def merge_same_remote_download_item(download_operate):
         else:
             for unzip_item in item["merged_download_config"]:
                 print(f"name: {unzip_item.get('name')}, unzip_dir: {unzip_item.get('unzip_dir')}")
+
     return after_merged
 
 
