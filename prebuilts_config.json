@@ -172,7 +172,7 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-aarch64-1.13.2-20260408.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-aarch64-1.13.2-20260423.tar.gz"
                         }
                     ],
                     "x86_64": [
@@ -550,7 +550,7 @@
                 "linux": {
                     "arm64": [
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/linux/python-linux-arm64-3.12.10_20260423.tar.gz",
                             "unzip_filename": "linux-arm64",
                             "rename_src": "${code_dir}/prebuilts/python/linux-arm64",
                             "rename_dest": "${code_dir}/prebuilts/python/linux-aarch64"
@@ -558,11 +558,11 @@
                     ],
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/linux/python-linux-x86-GLIBC2.27-3.12.10_20260414.tar.gz",
                             "unzip_filename": "linux-x86"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/windows/python-mingw-x86-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260420.tar.gz",
                             "unzip_filename": "windows-x86",
                             "build_type": "src",
                             "skip_handle": true
@@ -572,13 +572,13 @@
                 "darwin": {
                     "arm64": [
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/darwin/python-darwin-arm64-3.12.10_20260420.tar.gz",
                             "unzip_filename": "darwin-arm64"
                         }
                     ],
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/darwin/python-darwin-x86-3.12.10_20260420.tar.gz",
                             "unzip_filename": "darwin-x86"
                         }
                     ]
@@ -586,14 +586,14 @@
             },
             "handle": [
                 {
+                    "type": "symlink",
+                    "src": "${unzip_dir}/${unzip_filename}/3.12.10",
+                    "dest": "${unzip_dir}/${unzip_filename}/current"
+                },
+                {
                     "type": "move",
                     "src": "${rename_src}",
                     "dest": "${rename_dest}"
-                },
-                {
-                    "type": "symlink",
-                    "src": "${unzip_dir}/${unzip_filename}/3.11.4",
-                    "dest": "${unzip_dir}/${unzip_filename}/current"
                 },
                 {
                     "type": "shell",
@@ -913,17 +913,17 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-arm64-3.11.4_20240715.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/linux/python-linux-arm64-3.12.10_20260423.tar.gz",
                             "unzip_filename": "linux-arm64"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/linux/python-linux-x86-GLIBC2.27-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/linux/python-linux-x86-GLIBC2.27-3.12.10_20260414.tar.gz",
                             "unzip_filename": "linux-x86"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/windows/python-mingw-x86-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260420.tar.gz",
                             "unzip_filename": "windows-x86"
                         }
                     ]
@@ -932,14 +932,14 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-arm64-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/darwin/python-darwin-arm64-3.12.10_20260420.tar.gz",
                             "unzip_filename": "darwin-arm64"
                         }
                     ],
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.11.4/darwin/python-darwin-x86-3.11.4_20251107.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/darwin/python-darwin-x86-3.12.10_20260420.tar.gz",
                             "unzip_filename": "darwin-x86"
                         }
                     ]
