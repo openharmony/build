@@ -40,11 +40,6 @@ declare_args() {
 }
 
 declare_args() {
-  # Whether to enable rcpc instruction set extension
-  enable_rcpc = false
-}
-
-declare_args() {
   sdk_build_public = false
   sdk_build_arkts = false
   sdk_build_check_level = 0
@@ -294,8 +289,9 @@ declare_args() {
 # enhance some optimizations
 declare_args() {
   enhanced_opt = true
-  enable_affine_global_reordering = false
-  enable_thinlto_nca = false
+  build_framework_enable_global_reordering = false
+  build_framework_enable_rcpc = false
+  build_framework_enable_thinlto_nca = false
 }
 
 # build target type
