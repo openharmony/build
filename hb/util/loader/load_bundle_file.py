@@ -18,6 +18,9 @@ import os
 import copy
 from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
+from resources.config import Config
+from util.io_util import IoUtil
+from util.log_util import LogUtil
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scripts.util import file_utils  # noqa: E402
 
@@ -29,7 +32,28 @@ class BundlePartObj(object):
         self._exclusion_modules_config_file = exclusion_modules_config_file
         self._dependency_pruning_config_file = dependency_pruning_config_file
         self._load_test_config = load_test_config
+        self._condition_context = self._build_condition_context()
+        self._matched_condition_keys = set()
         self._loading_config()
+
+    def _build_condition_context(self):
+        config_info = {}
+        try:
+            config_info = IoUtil.read_json_file(Config().config_json)
+        except Exception:
+            config_info = {}
+
+        config = Config()
+        context = dict(config_info)
+        for key in (
+                'compile_mode', 'target_os', 'target_cpu', 'os_level',
+                'product', 'board', 'device_path', 'product_path'):
+            value = getattr(config, key, None)
+            if value is not None:
+                context[key] = value
+
+        context['is_host_product'] = context.get('compile_mode') == 'host'
+        return context
 
     @throw_exception
     def _loading_config(self):
@@ -80,6 +104,63 @@ class BundlePartObj(object):
             if module_name not in pruning_names
         ]
 
+    def _get_conditions(self, bundle_build):
+        conditions = bundle_build.get('conditions')
+        if conditions is None:
+            return {}
+        if not isinstance(conditions, dict):
+            LogUtil.hb_warning(
+                "ignore invalid 'component.build.conditions' in '{}'".format(
+                    self._build_config_file))
+            return {}
+        return conditions
+
+    def _match_conditions(self, item_key, condition_expr):
+        if not isinstance(condition_expr, dict):
+            LogUtil.hb_warning(
+                "ignore invalid condition for '{}' in '{}'".format(
+                    item_key, self._build_config_file))
+            return False
+
+        for attr_name, expected_value in condition_expr.items():
+            if attr_name not in self._condition_context:
+                LogUtil.hb_warning(
+                    "condition attribute '{}' for '{}' in '{}' "
+                    "is undefined in current build context".format(
+                        attr_name, item_key, self._build_config_file))
+                return False
+
+            actual_value = self._condition_context.get(attr_name)
+            if isinstance(expected_value, list):
+                if actual_value not in expected_value:
+                    return False
+            elif actual_value != expected_value:
+                return False
+        return True
+
+    def _apply_conditions(self, items, key_getter):
+        if not items:
+            return items
+
+        bundle_build = self.bundle_info.get('component', {}).get('build', {})
+        conditions = self._get_conditions(bundle_build)
+        if not conditions:
+            return items
+
+        filtered_items = []
+        seen_keys = set()
+        for item in items:
+            item_key = key_getter(item)
+            seen_keys.add(item_key)
+            condition_expr = conditions.get(item_key)
+            if condition_expr is None:
+                filtered_items.append(item)
+                continue
+            self._matched_condition_keys.add(item_key)
+            if self._match_conditions(item_key, condition_expr):
+                filtered_items.append(item)
+        return filtered_items
+
     @throw_exception
     def _check_format(self):
         _tip_info = "bundle.json info is incorrect in '{}'".format(
@@ -123,8 +204,11 @@ class BundlePartObj(object):
         _part_info = {}
         module_list = []
         if _component_info.get('build').__contains__('sub_component'):
-            _part_info['module_list'] = self._apply_module_pruning(
+            sub_component_list = self._apply_conditions(
                 _component_info.get('build').get('sub_component'),
+                lambda item: item)
+            _part_info['module_list'] = self._apply_module_pruning(
+                sub_component_list,
                 _pruning_rule.get('sub_component', []))
         elif _component_info.get('build').__contains__('modules'):
             _part_info['module_list'] = self._apply_module_pruning(
@@ -141,11 +225,22 @@ class BundlePartObj(object):
             _part_info['module_list'] = self._apply_module_pruning(
                 module_list, _pruning_rule.get('group_type', []))
         if 'inner_kits' in _bundle_build:
-            _part_info['inner_kits'] = _bundle_build.get('inner_kits')
+            inner_kits = self._apply_conditions(
+                _bundle_build.get('inner_kits'),
+                lambda item: item.get('name'))
+            if inner_kits:
+                _part_info['inner_kits'] = inner_kits
         elif 'inner_api' in _bundle_build:
-            _part_info['inner_kits'] = _bundle_build.get('inner_api')
+            inner_api = self._apply_conditions(
+                _bundle_build.get('inner_api'),
+                lambda item: item.get('name'))
+            if inner_api:
+                _part_info['inner_kits'] = inner_api
         if 'test' in _bundle_build and self._load_test_config:
-            _part_info['test_list'] = _bundle_build.get('test')
+            test_list = self._apply_conditions(
+                _bundle_build.get('test'), lambda item: item)
+            if test_list:
+                _part_info['test_list'] = test_list
         if 'features' in _component_info:
             _part_info['feature_list'] = _component_info.get('features')
         if 'syscap' in _component_info:
@@ -156,5 +251,14 @@ class BundlePartObj(object):
         _part_info['part_deps'] = self._apply_dependency_pruning(
             _subsystem_name, _part_name, _component_info.get('deps', {}))
         _part_info['part_deps']['build_config_file'] = self._build_config_file
+
+        conditions = self._get_conditions(_bundle_build)
+        for item_key in conditions.keys():
+            if item_key not in self._matched_condition_keys:
+                LogUtil.hb_warning(
+                    "condition target '{}' in '{}' does not exist in "
+                    "'sub_component', 'inner_kits', 'inner_api' or 'test'".format(
+                        item_key, self._build_config_file))
+
         _ohos_build_info['parts'] = {_part_name: _part_info}
         return _ohos_build_info
