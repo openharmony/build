@@ -21,7 +21,6 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 | target_os | string | 目标操作系统 | "ohos", "linux" |
 | target_cpu | string | 目标CPU架构 | "arm64", "x86_64" |
 | os_level | string | 系统级别 | "mini", "small", "standard" |
-| is_host_product | boolean | 是否为宿主产品 | true, false |
 
 ## 配置格式
 

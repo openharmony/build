@@ -50,7 +50,6 @@ class BundlePartObj(object):
             if value is not None:
                 context[key] = value
 
-        context['is_host_product'] = context.get('compile_mode') == 'host'
         return context
 
     @throw_exception
