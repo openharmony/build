@@ -553,7 +553,7 @@ config("compiler") {
 
   # Add flags for LLD optimizations, which can be applied in FullLTO mode also.
   if (is_ohos && is_clang && use_lld && enhanced_opt && enable_enhanced_opt) {
-    if (enable_affine_global_reordering) {
+    if (build_framework_enable_global_reordering) {
       ldflags += [ "-Wl,--reorder-affine-globals" ]
     }
   }
@@ -624,7 +624,7 @@ config("compiler") {
           }
         }
         if (is_ohos && enhanced_opt && enable_enhanced_opt) {
-          if (enable_thinlto_nca) {
+          if (build_framework_enable_thinlto_nca) {
             ldflags += [ "-Wl,-mllvm,-enable-name-collision-analysis" ]
           }
         }
@@ -779,7 +779,7 @@ config("compiler_cpu_abi") {
         ldflags += [ "-mlse-tuned" ]
       }
       if(is_ohos && is_clang && enhanced_opt && enable_enhanced_opt &&
-         enable_rcpc) {
+         build_framework_enable_rcpc) {
         cflags += [ "-march=${arm_arch}+rcpc" ]
         ldflags += [ "-march=${arm_arch}+rcpc" ]
       }
