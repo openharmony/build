@@ -211,17 +211,22 @@ class BundlePartObj(object):
                 sub_component_list,
                 _pruning_rule.get('sub_component', []))
         elif _component_info.get('build').__contains__('modules'):
-            _part_info['module_list'] = self._apply_module_pruning(
+            modules_list = self._apply_conditions(
                 _component_info.get('build').get('modules'),
+                lambda item: item)
+            _part_info['module_list'] = self._apply_module_pruning(
+                modules_list,
                 _pruning_rule.get('modules', []))
         elif _component_info.get('build').__contains__('group_type'):
             _module_groups = _component_info.get('build').get('group_type')
             for _group_type, _module_list in _module_groups.items():
                 _key = '{}:{}'.format(_subsystem_name, _part_name)
+                filtered_group_modules = self._apply_conditions(
+                    _module_list, lambda item: item)
                 if not _exclusion_modules_info.get(_key):
-                    module_list.extend(_module_list)
+                    module_list.extend(filtered_group_modules)
                 elif _group_type not in _exclusion_modules_info.get(_key):
-                    module_list.extend(_module_list)
+                    module_list.extend(filtered_group_modules)
             _part_info['module_list'] = self._apply_module_pruning(
                 module_list, _pruning_rule.get('group_type', []))
         if 'inner_kits' in _bundle_build:
@@ -257,7 +262,8 @@ class BundlePartObj(object):
             if item_key not in self._matched_condition_keys:
                 LogUtil.hb_warning(
                     "condition target '{}' in '{}' does not exist in "
-                    "'sub_component', 'inner_kits', 'inner_api' or 'test'".format(
+                    "'sub_component', 'modules', 'group_type', 'inner_kits', "
+                    "'inner_api' or 'test'".format(
                         item_key, self._build_config_file))
 
         _ohos_build_info['parts'] = {_part_name: _part_info}
