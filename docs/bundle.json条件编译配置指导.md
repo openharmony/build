@@ -6,7 +6,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 
 ## 功能特性
 
-- 支持多种构建条件属性：compile_mode、target_os、target_cpu、os_level、product、board 等
+- 支持多种构建条件属性：compile_mode、target_os、target_cpu、os_level 等
 - 可应用于 sub_component、modules、group_type、inner_kits、inner_api、test 等配置项
 - 支持单值和列表值匹配
 - 提供清晰的警告信息，帮助定位配置问题
@@ -21,10 +21,6 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 | target_os | string | 目标操作系统 | "ohos", "linux" |
 | target_cpu | string | 目标CPU架构 | "arm64", "x86_64" |
 | os_level | string | 系统级别 | "mini", "small", "standard" |
-| product | string | 产品名称 | "phone", "tablet" |
-| board | string | 开发板名称 | "rk3568", "qemu-arm64-virt" |
-| device_path | string | 设备路径 | "/path/to/device" |
-| product_path | string | 产品路径 | "/path/to/product" |
 | is_host_product | boolean | 是否为宿主产品 | true, false |
 
 ## 配置格式
@@ -103,7 +99,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 
 ### 场景2：inner_kits 条件导出
 
-根据产品类型导出不同的 inner_kits：
+根据系统级别导出不同的 inner_kits：
 
 ```json
 {
@@ -112,7 +108,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
     "build": {
       "conditions": {
         "advanced_codec_kit": {
-          "product": ["phone", "tablet"]
+          "os_level": "standard"
         }
       },
       "inner_kits": [
@@ -202,7 +198,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
       },
       "conditions": {
         "gpu_accelerated": {
-          "product": ["phone", "tablet", "ivicro"]
+          "target_os": "ohos"
         }
       }
     }
@@ -288,8 +284,8 @@ condition target 'non_existent_item' in 'bundle.json' does not exist in
         "arm64_module": {
           "target_cpu": ["arm64", "arm"]
         },
-        "phone_kit": {
-          "product": "phone"
+        "standard_kit": {
+          "os_level": "standard"
         },
         "standard_test": {
           "compile_mode": "target",
@@ -308,8 +304,8 @@ condition target 'non_existent_item' in 'bundle.json' does not exist in
           "header": "./include/common.h"
         },
         {
-          "name": "phone_kit",
-          "header": "./include/phone.h"
+          "name": "standard_kit",
+          "header": "./include/standard.h"
         }
       ],
       "test": [

@@ -45,9 +45,7 @@ class BundlePartObj(object):
 
         config = Config()
         context = dict(config_info)
-        for key in (
-                'compile_mode', 'target_os', 'target_cpu', 'os_level',
-                'product', 'board', 'device_path', 'product_path'):
+        for key in ('compile_mode', 'target_os', 'target_cpu', 'os_level'):
             value = getattr(config, key, None)
             if value is not None:
                 context[key] = value
