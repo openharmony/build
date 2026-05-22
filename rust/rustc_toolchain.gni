@@ -54,9 +54,12 @@ clippy_driver = "${rust_bin}/clippy-driver"
 stdlib_host_path = "${rust_path}/lib"
 
 clang = rebase_path("${default_clang_base_path}/bin/clang", root_build_dir)
-musl_path = rebase_path("${musl_sysroot}", root_build_dir)
-if (defined(abi_target)) {
-  musllib = rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+if (use_musl) {
+  musl_path = rebase_path("${musl_sysroot}", root_build_dir)
+  if (defined(abi_target)) {
+    musllib =
+        rebase_path("${musl_sysroot}/usr/lib/${abi_target}", root_build_dir)
+  }
 }
 if (host_cpu == "arm64") {
   llvm_strip =

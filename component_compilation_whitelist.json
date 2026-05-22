@@ -4221,9 +4221,6 @@
         "//foundation/distributeddatamgr/data_share/test/native/resource/errorcode_ext_bundle:errorcode_ext": [
             "//developtools/packing_tool:packing_tool"
         ],
-        "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test/testCloud:testCloud": [
-            "//developtools/packing_tool:packing_tool"
-        ],
         "//foundation/distributeddatamgr/kv_store/test/unittest/distributedKVStore:KvStoreJsTest": [
             "//developtools/packing_tool:packing_tool"
         ],
@@ -7646,13 +7643,6 @@
             "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
         ],
         "//foundation/distributeddatamgr/data_share/test/native/resource/errorcode_ext_bundle:errorcode_ext__js_assets": [
-            "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
-        ],
-        "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test/testCloud:testCloud": [
-            "//developtools/packing_tool:packing_tool",
-            "//arkcompiler/ets_frontend/es2panda:es2abc_js_file"
-        ],
-        "//foundation/distributeddatamgr/datamgr_service/services/distributeddataservice/service/test/testCloud:testCloud__js_assets": [
             "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap"
         ],
         "//foundation/distributeddatamgr/kv_store/test/unittest/distributedKVStore:KvStoreJsTest": [
@@ -11911,39 +11901,6 @@
         "//foundation/graphic/graphic_surface/buffer_handle/test/unittest:BufferHandleTest": [
             "//foundation/graphic/graphic_surface/buffer_handle:buffer_handle"
         ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/geaibarshaderfilter_fuzzer:GEAIBarShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/geexternaldynamicloader_fuzzer:GEExternalDynamicLoaderFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gegreyshaderfilter_fuzzer:GEGreyShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gekawaseblurshaderfilter_fuzzer:GEKawaseBlurShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gelineargradientblurshaderfilter_fuzzer:GELinearGradientBlurShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gemagnifiershaderfilter_fuzzer:GEMagnifierShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gemesablurshaderfilter_fuzzer:GEMesaBlurShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gerender_fuzzer:GERenderFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gevisualeffect_fuzzer:GEVisualEffectFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gevisualeffectcontainer_fuzzer:GEVisualEffectContainerFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
-        "//foundation/graphic/graphics_effect/test/fuzztest/gewaterrippleshaderfilter_fuzzer:GEWaterRippleShaderFilterFuzzTest": [
-            "//foundation/graphic/graphics_effect:graphics_effect_core"
-        ],
         "//foundation/multimedia/av_codec/test/unittest/avmuxer_test:avmuxer_capi_unit_test": [
             "//foundation/multimedia/av_codec/interfaces/inner_api/native:av_codec_client"
         ],
@@ -13808,12 +13765,6 @@
         ],
         "//foundation/graphic/graphic_surface/surface:surface": [
             "//foundation/communication/ipc/interfaces/innerkits/ipc_single:ipc_single"
-        ],
-        "//foundation/graphic/graphics_effect:mock_utils": [
-            "//third_party/bounds_checking_function:libsec_shared"
-        ],
-        "//foundation/graphic/graphics_effect:utils": [
-            "//commonlibrary/c_utils/base:utils"
         ],
         "//foundation/multimedia/audio_framework/frameworks/native/audioclock:audio_clock": [
             "//third_party/bounds_checking_function:libsec_shared"

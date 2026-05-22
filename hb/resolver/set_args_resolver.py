@@ -52,6 +52,7 @@ class SetArgsResolver(ArgsResolverInterface):
         config.os_level = product_info.get('os_level')
         config.product_json = product_info.get('config')
         config.component_type = product_info.get('component_type')
+        config.compile_mode = product_info.get('compile_mode', 'cross')
         if product_info.get('product_config_path'):
             config.product_config_path = product_info.get(
                 'product_config_path')
@@ -67,12 +68,16 @@ class SetArgsResolver(ArgsResolverInterface):
         kernel_version = device_info.get('kernel_version')
         config.device_company = device_info.get('company')
         board_path = device_info.get('board_path')
+        compile_mode = device_info.get('compile_mode', config.compile_mode)
 
         if product_info.get('build_out_path'):
             config.out_path = os.path.join(config.root_path,
                                            product_info.get('build_out_path'))
         else:
-            if config.os_level == 'standard':
+            if compile_mode == 'host':
+                config.out_path = os.path.join(config.root_path, 'out',
+                                               'host', config.product)
+            elif config.os_level == 'standard':
                 config.out_path = os.path.join(config.root_path, 'out',
                                                config.board)
             else:
@@ -94,7 +99,9 @@ class SetArgsResolver(ArgsResolverInterface):
             else:
                 config.subsystem_config_overlay_json = subsystem_config_overlay_path
 
-        if config.version == '2.0':
+        if compile_mode == 'host':
+            config.device_path = ''
+        elif config.version == '2.0':
             config.device_path = board_path
         else:
             if config.os_level == "standard":
@@ -103,7 +110,9 @@ class SetArgsResolver(ArgsResolverInterface):
                 config.device_path = DeviceUtil.get_device_path(
                     board_path, config.kernel, kernel_version)
 
-        if device_info.get('board_config_path'):
+        if compile_mode == 'host':
+            config.device_config_path = ''
+        elif device_info.get('board_config_path'):
             config.device_config_path = device_info.get('board_config_path')
         else:
             config.device_config_path = config.device_path

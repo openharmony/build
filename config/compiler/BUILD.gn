@@ -2,6 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+import("//build/common.gni")
 import("//build/config/c++/c++.gni")
 import("//build/config/clang/clang.gni")
 import("//build/config/compiler/compiler.gni")
@@ -10,7 +11,6 @@ import("//build/config/sanitizers/sanitizers.gni")
 import("//build/ohos_var.gni")
 import("//build/toolchain/cc_wrapper.gni")
 import("//build/toolchain/toolchain.gni")
-import("//build/common.gni")
 
 import("//build/misc/overrides/build.gni")
 
@@ -353,8 +353,6 @@ config("compiler") {
     }
   }
 
-  # Linux-specific compiler flags setup.
-  # ------------------------------------
   if (is_android && is_clang) {
     _rebased_aosp_toolchain_root =
         rebase_path(aosp_toolchain_root, root_build_dir)
@@ -553,7 +551,14 @@ config("compiler") {
     ldflags += [ "-stdlib=libc++" ]
   }
 
-  # Add flags for link-time optimization. These flags enable
+  # Add flags for LLD optimizations, which can be applied in FullLTO mode also.
+  if (is_ohos && is_clang && use_lld && enhanced_opt && enable_enhanced_opt) {
+    if (build_framework_enable_global_reordering) {
+      ldflags += [ "-Wl,--reorder-affine-globals" ]
+    }
+  }
+
+  # Add flags for ThinLTO optimization. These flags enable
   # optimizations/transformations that require whole-program visibility at link
   # time, so they need to be applied to all translation units, and we may end up
   # with miscompiles if only part of the program is compiled with LTO flags. For
@@ -595,7 +600,8 @@ config("compiler") {
         cache_base = getenv("CACHE_BASE")
         thinlto_cache_dir = "$cache_base/thinlto-cache"
       } else {
-        thinlto_cache_dir = rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
+        thinlto_cache_dir =
+            rebase_path("$root_out_dir/thinlto-cache", root_build_dir)
       }
       if (use_lld) {
         ldflags += [
@@ -615,6 +621,11 @@ config("compiler") {
               "-Wl,-mllvm",
               "-Wl,-import-instr-limit=5",
             ]
+          }
+        }
+        if (is_ohos && enhanced_opt && enable_enhanced_opt) {
+          if (build_framework_enable_thinlto_nca) {
+            ldflags += [ "-Wl,-mllvm,-enable-name-collision-analysis" ]
           }
         }
       } else {
@@ -766,6 +777,11 @@ config("compiler_cpu_abi") {
       if (is_ohos && is_clang && target_cpu == "arm64" && enhanced_opt &&
           enable_enhanced_opt && armv8_1_lse_tuning_optimization) {
         ldflags += [ "-mlse-tuned" ]
+      }
+      if(is_ohos && is_clang && enhanced_opt && enable_enhanced_opt &&
+         build_framework_enable_rcpc) {
+        cflags += [ "-march=${arm_arch}+rcpc" ]
+        ldflags += [ "-march=${arm_arch}+rcpc" ]
       }
     } else if (current_cpu == "riscv64") {
       if (is_clang && !is_android && !is_ohos && !is_nacl) {
@@ -938,7 +954,7 @@ config("default_warnings") {
       "-Wno-c++11-narrowing",
       "-Wno-unneeded-internal-declaration",
     ]
-    if (use_musl) {
+    if (use_musl || is_host_product) {
       cflags += [
         "-Wno-error=c99-designator",
         "-Wno-error=anon-enum-enum-conversion",
@@ -1283,7 +1299,8 @@ config("optimize") {
   if (optimize_for_size && !is_nacl) {
     # Favor size over speed.
     if (is_clang) {
-      cflags = [ build_framework_compiler_optimize_level ] + common_optimize_on_cflags
+      cflags = [ build_framework_compiler_optimize_level ] +
+               common_optimize_on_cflags
     } else {
       cflags = [ "-Os" ] + common_optimize_on_cflags
     }

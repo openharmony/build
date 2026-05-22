@@ -68,7 +68,8 @@ def _get_post_process_modules_info(post_process_modules_info_files: list, depfil
 def copy_modules(system_install_info: dict, install_modules_info_file: str,
                  modules_info_file: str, module_list_file: str, arm64e_modules_info_file: str,
                  arm64e_whitelist_file: str, post_process_modules_info_files: list, platform_installed_path: str,
-                 host_toolchain, additional_system_files: dict, depfiles: list, categorized_libraries: dict):
+                 host_toolchain, is_host_product: bool, additional_system_files: dict,
+                 depfiles: list, categorized_libraries: dict):
     output_result = []
     arm64e_output_result = []
     dest_list = []
@@ -111,7 +112,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
             continue
         # copy module lib
         label = module_info.get('label')
-        if label and host_toolchain in label:
+        if not is_host_product and label and host_toolchain in label:
             continue
         source = module_info.get('source')
         dests = module_info.get('dest')
@@ -229,6 +230,7 @@ def main():
     parser.add_argument('--depfile', required=True)
     parser.add_argument('--system-image-zipfile', required=True)
     parser.add_argument('--host-toolchain', required=True)
+    parser.add_argument('--is-host-product', required=False, default='False')
     parser.add_argument('--categorized-libraries', required=False)
     parser.add_argument(
         '--additional-system-files',
@@ -240,6 +242,7 @@ def main():
                         nargs='*',
                         default=[])
     args = parser.parse_args()
+    is_host_product = str(args.is_host_product).lower() == 'true'
 
     additional_system_files = []
     for tuples in args.additional_system_files or []:
@@ -330,7 +333,8 @@ def main():
                  args.arm64e_modules_info_file, args.arm64e_whitelist_file,
                  args.post_process_modules_info_files,
                  args.platform_installed_path, args.host_toolchain,
-                 additional_system_files, depfiles, categorized_libraries)
+                 is_host_product, additional_system_files, depfiles,
+                 categorized_libraries)
 
     if os.path.exists(args.system_image_zipfile):
         os.unlink(args.system_image_zipfile)

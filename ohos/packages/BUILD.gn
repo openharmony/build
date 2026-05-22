@@ -22,6 +22,7 @@ import("//build/ohos/hisysevent/hisysevent.gni")
 
 # import target_platform_list
 import("${build_configs_path}/platforms_list.gni")
+product_path = product_build_config.product_path
 yml_file = rebase_path(product_path) + "/fs.yml"
 is_exist_yml_file = exec_script(rebase_path("//build/ohos/file_exists.py"),
                                 [
@@ -301,6 +302,11 @@ foreach(_platform, target_platform_list) {
       _system_image_zipfile,
     ]
 
+    _is_host_product_arg = "false"
+    if (is_host_product) {
+      _is_host_product_arg = "true"
+    }
+
     args = [
       "--system-install-info-file",
       rebase_path(_system_install_info_file, root_build_dir),
@@ -328,6 +334,8 @@ foreach(_platform, target_platform_list) {
       rebase_path(_system_image_zipfile, root_build_dir),
       "--host-toolchain",
       _host_toolchain,
+      "--is-host-product",
+      _is_host_product_arg,
     ]
 
     _additional_system_files = []

@@ -39,6 +39,10 @@
         "//vendor/hihope/ipcamera/bluetooth:libbt_vendor"
     ],
     "deps_added_external_part_module": [
+        "//device/qemu/common/virt_full/hardware/display:display_composer_vendor",
+        "//device/qemu/common/virt_full/hardware/display:libdisplay_buffer_vdi_impl",
+        "//device/qemu/common/virt_full/hardware/display:libdisplay_buffer_vendor",
+        "//device/qemu/common/virt_full/hardware/display:libdisplay_composer_vdi_impl",
         "//arkcompiler/toolchain/inspector:ark_debugger_static",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger",
         "//arkcompiler/toolchain/tooling:libark_ecma_debugger_set",

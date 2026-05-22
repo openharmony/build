@@ -83,17 +83,17 @@ config("runtime_library") {
   if (!is_mac && sysroot != "") {
     # Pass the sysroot to all C compiler variants, the assembler, and linker.
     sysroot_flags = [ "--sysroot=" + rebase_path(sysroot, root_build_dir) ]
-    if (is_linux) {
-      # This is here so that all files get recompiled after a sysroot roll and
-      # when turning the sysroot on or off. (defines are passed via the command
-      # line, and build system rebuilds things when their commandline
-      # changes). Nothing should ever read this define.
-      sysroot_hash =
-          exec_script("//build/linux/sysroot_scripts/install-sysroot.py",
-                      [ "--print-hash=$current_cpu" ],
-                      "trim string",
-                      [ "//build/linux/sysroot_scripts/sysroots.json" ])
-      defines += [ "CR_SYSROOT_HASH=$sysroot_hash" ]
+    if (is_linux) { 
+      # This is here so that all files get recompiled after a sysroot roll and 
+      # when turning the sysroot on or off. (defines are passed via the command 
+      # line, and build system rebuilds things when their commandline 
+      # changes). Nothing should ever read this define. 
+      sysroot_hash = 
+          exec_script("//build/linux/sysroot_scripts/install-sysroot.py", 
+                      [ "--print-hash=$current_cpu" ], 
+                      "trim string", 
+                      [ "//build/linux/sysroot_scripts/sysroots.json" ]) 
+      defines += [ "CR_SYSROOT_HASH=$sysroot_hash" ] 
     }
     asmflags += sysroot_flags
 
@@ -130,5 +130,32 @@ config("runtime_library") {
         "-Wl,-rpath-link=" + ld_path,
       ]
     }
+  }
+
+  
+  # Cross-compilation for linux-arm64 using system toolchain (no sysroot needed)
+  if (is_linux && current_cpu == "arm64" && host_cpu != "arm64" && sysroot == "") {
+    _aarch64_gcc_version = exec_script("/bin/sh",
+                                       [
+                                         "-c",
+                                         "ls -d /usr/aarch64-linux-gnu/include/c++/*/ 2>/dev/null | head -1 | xargs basename",
+                                       ],
+                                       "trim string")
+    _aarch64_include_flags = [
+      "-isystem/usr/aarch64-linux-gnu/include",
+      "-isystem/usr/aarch64-linux-gnu/include/c++/${_aarch64_gcc_version}",
+      "-isystem/usr/aarch64-linux-gnu/include/c++/${_aarch64_gcc_version}/aarch64-linux-gnu",
+    ]
+    asmflags += _aarch64_include_flags
+    cflags_c += _aarch64_include_flags
+    cflags_cc += _aarch64_include_flags
+    cflags_objc += _aarch64_include_flags
+    cflags_objcc += _aarch64_include_flags
+
+    # Add GCC library path (crtbeginS.o, crtendS.o, libgcc, etc.)
+    ldflags += [
+      "-L/usr/lib/gcc-cross/aarch64-linux-gnu/${_aarch64_gcc_version}",
+      "-L/usr/aarch64-linux-gnu/lib",
+    ]
   }
 }

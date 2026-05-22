@@ -54,6 +54,7 @@ class Config(metaclass=Singleton):
         self._target_cpu = ""
         self._out_path = ""
         self._compile_config = ""
+        self._compile_mode = ""
         self._component_type = ""
         self._device_config_path = ""
         self._product_config_path = ""
@@ -109,6 +110,15 @@ class Config(metaclass=Singleton):
     def compile_config(self, value: str):
         self._compile_config = value
         self.config_update('compile_config', self._compile_config)
+
+    @property
+    def compile_mode(self):
+        return self._compile_mode
+
+    @compile_mode.setter
+    def compile_mode(self, value: str):
+        self._compile_mode = value
+        self.config_update('compile_mode', self._compile_mode)
 
     @property
     def os_level(self):
@@ -389,6 +399,7 @@ class Config(metaclass=Singleton):
         self.target_cpu = config_content.get('target_cpu', None)
         self.out_path = config_content.get('out_path', None)
         self.compile_config = config_content.get('compile_config', None)
+        self.compile_mode = config_content.get('compile_mode', None)
         self.component_type = config_content.get('component_type', None)
         self.device_config_path = config_content.get('device_config_path',
                                                      None)

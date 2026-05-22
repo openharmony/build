@@ -99,6 +99,17 @@ def do_copy_and_stamp(copy_infos: dict, options, depfile_deps: list):
                     # Skip empty directories.
                     depfile_deps.add(source)
         else:
+            # Handle .so -> .z.so fallback for OHOS component builds
+            # When module_info.json says .so but actual build output is .z.so,
+            # use .z.so and remove any stale .so file from previous builds
+            if not os.path.exists(source) and source.endswith('.so'):
+                z_so_source = source[:-3] + '.z.so'
+                if os.path.exists(z_so_source):
+                    source = z_so_source
+                    stale_so_dest = dest  # remember original dest before modifying
+                    dest = dest[:-3] + '.z.so'
+                    if os.path.exists(stale_so_dest):
+                        os.remove(stale_so_dest)
             dest_dir = os.path.dirname(dest)
             os.makedirs(dest_dir, exist_ok=True)
             shutil.copy2(source, dest)

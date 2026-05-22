@@ -15,6 +15,7 @@
 
 import sys
 import os
+import copy
 from containers.status import throw_exception
 from exceptions.ohos_exception import OHOSException
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,9 +23,11 @@ from scripts.util import file_utils  # noqa: E402
 
 
 class BundlePartObj(object):
-    def __init__(self, bundle_config_file, exclusion_modules_config_file, load_test_config):
+    def __init__(self, bundle_config_file, exclusion_modules_config_file,
+                 dependency_pruning_config_file, load_test_config):
         self._build_config_file = bundle_config_file
         self._exclusion_modules_config_file = exclusion_modules_config_file
+        self._dependency_pruning_config_file = dependency_pruning_config_file
         self._load_test_config = load_test_config
         self._loading_config()
 
@@ -40,6 +43,42 @@ class BundlePartObj(object):
         self._check_format()
         self.exclusion_modules_info = file_utils.read_json_file(
             self._exclusion_modules_config_file)
+        self.dependency_pruning_info = file_utils.read_json_file(
+            self._dependency_pruning_config_file)
+
+    def _apply_dependency_pruning(self, subsystem_name, part_name, part_deps):
+        if not part_deps or not self.dependency_pruning_info:
+            return part_deps
+
+        pruning_rule = self.dependency_pruning_info.get(
+            f'{subsystem_name}:{part_name}')
+        if not pruning_rule:
+            return part_deps
+
+        pruned_part_deps = copy.deepcopy(part_deps)
+        for dep_group in ('components', 'third_party'):
+            pruned_names = pruning_rule.get(dep_group, [])
+            if not pruned_names or dep_group not in pruned_part_deps:
+                continue
+            pruned_part_deps[dep_group] = [
+                dep_name for dep_name in pruned_part_deps.get(dep_group, [])
+                if dep_name not in pruned_names
+            ]
+        return pruned_part_deps
+
+    def _get_pruning_rule(self, subsystem_name, part_name):
+        if not self.dependency_pruning_info:
+            return {}
+        return self.dependency_pruning_info.get(
+            f'{subsystem_name}:{part_name}', {})
+
+    def _apply_module_pruning(self, module_list, pruning_names):
+        if not module_list or not pruning_names:
+            return module_list
+        return [
+            module_name for module_name in module_list
+            if module_name not in pruning_names
+        ]
 
     @throw_exception
     def _check_format(self):
@@ -78,16 +117,19 @@ class BundlePartObj(object):
         _part_name = _component_info.get('name')
         _bundle_build = _component_info.get('build')
         _exclusion_modules_info = self.exclusion_modules_info
+        _pruning_rule = self._get_pruning_rule(_subsystem_name, _part_name)
         _ohos_build_info = {}
         _ohos_build_info['subsystem'] = _subsystem_name
         _part_info = {}
         module_list = []
         if _component_info.get('build').__contains__('sub_component'):
-            _part_info['module_list'] = _component_info.get('build').get(
-                'sub_component')
+            _part_info['module_list'] = self._apply_module_pruning(
+                _component_info.get('build').get('sub_component'),
+                _pruning_rule.get('sub_component', []))
         elif _component_info.get('build').__contains__('modules'):
-            _part_info['module_list'] = _component_info.get(
-                'build').get('modules')
+            _part_info['module_list'] = self._apply_module_pruning(
+                _component_info.get('build').get('modules'),
+                _pruning_rule.get('modules', []))
         elif _component_info.get('build').__contains__('group_type'):
             _module_groups = _component_info.get('build').get('group_type')
             for _group_type, _module_list in _module_groups.items():
@@ -96,7 +138,8 @@ class BundlePartObj(object):
                     module_list.extend(_module_list)
                 elif _group_type not in _exclusion_modules_info.get(_key):
                     module_list.extend(_module_list)
-            _part_info['module_list'] = module_list
+            _part_info['module_list'] = self._apply_module_pruning(
+                module_list, _pruning_rule.get('group_type', []))
         if 'inner_kits' in _bundle_build:
             _part_info['inner_kits'] = _bundle_build.get('inner_kits')
         elif 'inner_api' in _bundle_build:
@@ -110,7 +153,8 @@ class BundlePartObj(object):
         if 'hisysevent_config' in _component_info:
             _part_info['hisysevent_config'] = _component_info.get(
                 'hisysevent_config')
-        _part_info['part_deps'] = _component_info.get('deps', {})
+        _part_info['part_deps'] = self._apply_dependency_pruning(
+            _subsystem_name, _part_name, _component_info.get('deps', {}))
         _part_info['part_deps']['build_config_file'] = self._build_config_file
         _ohos_build_info['parts'] = {_part_name: _part_info}
         return _ohos_build_info
