@@ -49,6 +49,42 @@ def _parse_args():
     return parser
 
 
+def merge_same_remote_download_item(download_operate):
+    remote_operate_map = {}
+    after_merged = []
+
+    for item in download_operate:
+        remote_url = item["remote_url"]
+        if remote_url not in remote_operate_map:
+            remote_operate_map[remote_url] = item
+            after_merged.append(item)
+        else:
+            exist_download_item = remote_operate_map[remote_url]
+            if "merged_download_config" not in exist_download_item:
+                exist_download_item["merged_download_config"] = [{
+                    "name": exist_download_item.get("name"),
+                    "unzip_dir": exist_download_item.get("unzip_dir"),
+                    "unzip_filename": exist_download_item.get("unzip_filename"),
+                }]
+            exist_download_item["merged_download_config"].append({
+                "name": item.get("name"),
+                "unzip_dir": item.get("unzip_dir"),
+                "unzip_filename": item.get("unzip_filename"),
+            })
+
+    print(f"start download prebuilts, total {len(after_merged)}")
+
+    for item in after_merged:
+        print("remote_url:", item["remote_url"])
+        if "merged_download_config" not in item:
+            print("unzip_dir:", item.get("unzip_dir"))
+        else:
+            for unzip_item in item["merged_download_config"]:
+                print(f"name: {unzip_item.get('name')}, unzip_dir: {unzip_item.get('unzip_dir')}")
+
+    return after_merged
+
+
 @build_tracker(
     event_name="_build_main",
     build_type="prebuild"
@@ -73,9 +109,7 @@ def main():
         os.makedirs(prebuilts_path)
 
     # 使用线程池下载
-    print(f"start download prebuilts, total {len(download_operate)}, tool list is:")
-    for item in download_operate:
-        print(item.get("remote_url"))
+    download_operate = merge_same_remote_download_item(download_operate)
     pool_downloader = PoolDownloader(download_operate, global_args)
     unchanged = pool_downloader.start()
     print(f"start handle other operate")
