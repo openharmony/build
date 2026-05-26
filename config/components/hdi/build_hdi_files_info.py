@@ -237,12 +237,14 @@ class Option(object):
     root_path = ""
     idl_sources = []
     imports = []
+    generate_with_version = False
 
     @staticmethod
     def load(opt_args):
         Option.system = opt_args.system
         Option.mode = opt_args.mode
         Option.language = opt_args.language
+        Option.generate_with_version = getattr(opt_args, 'generate_with_version', False)
 
         if opt_args.out == "":
             raise Exception(
@@ -1000,6 +1002,10 @@ if __name__ == "__main__":
     option_parser.add_argument("--imports",
                                action="append",
                                help="the imports")
+
+    option_parser.add_argument("--generate-with-version",
+                               action="store_true",
+                               help="generate versioned Get/Release functions for C code")
 
     Option.load(option_parser.parse_args())
     idl_parser = IdlParser()
