@@ -113,7 +113,7 @@ declare_args() {
 
   # The global switch of cfi. Disable it to improve compiling efficiency while
   # being vulnerable to cfi attack.
-  use_cfi = true
+  use_cfi = !is_host_product
 
   # The global switch of cfi debug mode.
   cfi_debug = false
@@ -283,7 +283,11 @@ if (use_fuzzing_engine) {
 
 template("ohos_sanitizer_config") {
   config(target_name) {
-    forward_variables_from(invoker, [ "sanitize" ])
+    if (is_host_product) {
+      not_needed(invoker, [ "sanitize" ])
+    } else {
+      forward_variables_from(invoker, [ "sanitize" ])
+    }
     if (defined(sanitize)) {
       configs = [ "//build/config/sanitizers:sanitizer_trap_all_flags" ]
       _mode = "release"
