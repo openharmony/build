@@ -19,8 +19,12 @@ template("ohos_part") {
   assert(defined(invoker.subsystem_name), "subsystem_name is required.")
   assert(defined(invoker.module_list), "module_list is required.")
 
+  part_name = target_name
   part_label = get_label_info(":${target_name}", "label_with_toolchain")
+  part_label_no_toolchain = get_label_info(":${target_name}",
+                                           "label_no_toolchain")
   _deps = []
+  _sdk_info_deps = []
   foreach(module_label, invoker.module_list) {
     _deps += [ get_label_info(module_label, "label_with_toolchain") ]
   }
@@ -31,14 +35,14 @@ template("ohos_part") {
 
   parts_targets_info = read_file(parts_targets_info_file, "json")
   foreach(part_info, parts_targets_info) {
-    if (part_info.part == part_label) {
+    if (part_info.part == part_label ||
+        part_info.part == part_label_no_toolchain) {
       if (defined(part_info.inner_kits)) {
-        _deps += [ part_info.inner_kits ]
+        _deps += [ ":${part_name}_inner_kits" ]
+        _sdk_info_deps += [ ":${part_name}_sdk_info" ]
       }
     }
   }
-
-  part_name = target_name
   if (defined(invoker.origin_name)) {
     origin_part_name = invoker.origin_name
   } else {
@@ -108,6 +112,8 @@ template("ohos_part") {
   part_host_modules_file = "${target_out_dir}/${part_name}_host_modules.json"
   action_with_pydeps(target_name) {
     deps = [ ":${part_name}_info" ]
+    deps += _deps
+    deps += _sdk_info_deps
     script = "//build/ohos/generate_part_info.py"
     sources = [ part_modules_info_file ]
     depfile = "${target_gen_dir}/${target_name}.d"
