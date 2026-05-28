@@ -18,7 +18,6 @@ _build_taihe_out_dir = get_label_info("taihe_ffi_gen:build_taihe_wrapper", "targ
 declare_args() {
   taihe_file_path = "$root_out_dir/taihe"
   taihe_toolchain_path = "${_build_taihe_out_dir}/dist/taihe-linux-x86_64"
-  taihe_source_code_path = "//arkcompiler/taihe_ffi_gen"
 }
 
 
@@ -54,7 +53,7 @@ template("ohos_taihe") {
     action_target_name = "${target_name}_action"
     action(action_target_name) {
       script = "//build/ohos/taihe_idl/unpack.py"
-      sources = [ "${_build_taihe_out_dir}/taihe_repo/taihe-linux-x86_64.tar.gz" ]
+      sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
       outputs = [ 
         "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
@@ -75,7 +74,7 @@ template("ohos_taihe") {
     action(target_name) {
       script = rebase_path("//build/ohos/taihe_idl/taihe_retry.sh")
       args = [
-        rebase_path("${taihe_toolchain_path}/bin/taihec"),
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo/taihe/bin/taihec"),
         "-I",
         rebase_path("$taihe_file_path", root_build_dir),
         "-O",
@@ -168,7 +167,7 @@ template("taihe_shared_library") {
     action_target_name = "${target_name}_action"
     action(action_target_name) {
       script = "//build/ohos/taihe_idl/unpack.py"
-      sources = [ "${_build_taihe_out_dir}/taihe_repo/taihe-linux-x86_64.tar.gz" ]
+      sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
       outputs = [ 
         "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
