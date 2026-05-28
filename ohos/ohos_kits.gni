@@ -214,12 +214,21 @@ template("_ohos_subsystem_sdk") {
       }
     }
   } else {
+    sdk_install_moudles_file =
+        "${target_gen_dir}/${subsystem_name}_sdk_install_modules.json"
+    generated_file("${subsystem_name}_sdk_info") {
+      outputs = [ sdk_install_moudles_file ]
+      data_keys = [ "install_modules" ]
+      output_conversion = "json"
+    }
+
     group(target_name) {
       not_needed(invoker, "*")
       not_needed([
                    "subsystem_name",
                    "sdk_manifest",
                  ])
+      deps = [ ":${subsystem_name}_sdk_info" ]
     }
   }
 }
