@@ -172,6 +172,17 @@ config("cust_board_config") {
   }
 }
 
+# Host compilation support: add hilog and other common header paths
+# This config is used for host compilation (target_os == "linux" && !use_musl)
+# to provide common header paths that may not be properly propagated via external_deps
+config("host_common_headers") {
+  include_dirs = [
+    # hilog headers - needed by init and other components in host mode
+    "//base/hiviewdfx/hilog/interfaces/native/innerkits/include/hilog_base",
+    # Add more common header paths here as needed
+  ]
+}
+
 # Default libraries ------------------------------------------------------------
 
 # This config defines the default libraries applied to all targets.
