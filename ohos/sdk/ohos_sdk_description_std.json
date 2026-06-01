@@ -986,17 +986,6 @@
     },
     {
         "install_dir": "ets/dynamic/component",
-        "module_label": "//interface/sdk-js:ets_component",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos",
-            "linux_arm64"
-        ]
-    },
-    {
-        "install_dir": "ets/dynamic/component",
         "module_label": "//developtools/ace_ets2bundle:ets_loader_component_config",
         "target_os": [
             "windows",
@@ -1119,50 +1108,6 @@
     {
         "install_dir": "ets/dynamic/build-tools/ets-loader/declarations",
         "module_label": "//interface/sdk-js:bundle_api",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos",
-            "linux_arm64"
-        ]
-    },
-    {
-        "install_dir": "ets/dynamic/kits",
-        "module_label": "//interface/sdk-js:bundle_kits",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos",
-            "linux_arm64"
-        ]
-    },
-    {
-        "install_dir": "ets/static/kits",
-        "module_label": "//interface/sdk-js:bundle_kits_static",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos",
-            "linux_arm64"
-        ]
-    },
-    {
-        "install_dir": "ets/dynamic/arkts",
-        "module_label": "//interface/sdk-js:bundle_arkts",
-        "target_os": [
-            "windows",
-            "linux",
-            "darwin",
-            "ohos",
-            "linux_arm64"
-        ]
-    },
-    {
-        "install_dir": "ets/static/arkts",
-        "module_label": "//interface/sdk-js:bundle_arkts_static",
         "target_os": [
             "windows",
             "linux",
