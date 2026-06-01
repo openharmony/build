@@ -13,10 +13,13 @@
 import("//build/ohos.gni")
 import("//build/ohos/taihe_idl/taihe_args.gni")
 
+_build_taihe_out_dir = get_label_info("taihe_ffi_gen:build_taihe_wrapper", "target_out_dir")
+
 declare_args() {
   taihe_file_path = "$root_out_dir/taihe"
-  taihe_toolchain_path = "//prebuilts/taihe/ohos/linux-x86_64/taihe"
+  taihe_toolchain_path = "${_build_taihe_out_dir}/dist/taihe-linux-x86_64"
 }
+
 
 template("ohos_taihe") {
   assert(defined(invoker.taihe_generated_file_path),
@@ -29,18 +32,49 @@ template("ohos_taihe") {
   }
 
   if (taihe_template_bypass) {
-    not_needed(invoker, [ "deps", "external_deps", "module_prefix", "path_prefix" ])
+    not_needed(invoker,
+               [
+                 "deps",
+                 "external_deps",
+                 "module_prefix",
+                 "path_prefix",
+               ])
     action(target_name) {
       script = rebase_path("//build/scripts/touch_outputs.py")
       args = rebase_path(_taihe_outputs, root_build_dir)
       outputs = _taihe_outputs
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
+    action_target_name = "${target_name}_action"
+    action(action_target_name) {
+      script = "//build/ohos/taihe_idl/unpack.py"
+      sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
+      outputs = [ 
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/runtime_ani.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/string.cpp",
+      ]
+      
+      args = [
+        "--src",
+        rebase_path(sources[0], root_build_dir),
+        "--dst",
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo", root_build_dir),
+      ]
+    
+      external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
+    }
+
     action(target_name) {
       script = rebase_path("//build/ohos/taihe_idl/taihe_retry.sh")
       args = [
-        rebase_path("${taihe_toolchain_path}/bin/taihec"),
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo/taihe/bin/taihec"),
         "-I",
         rebase_path("$taihe_file_path", root_build_dir),
         "-O",
@@ -63,16 +97,23 @@ template("ohos_taihe") {
         args += [ "-Carkts:path-prefix=${invoker.path_prefix}" ]
       }
 
+      deps = [ ":${action_target_name}" ]
+      external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
+
       if (defined(invoker.deps)) {
-        deps = invoker.deps
+        deps += invoker.deps
       }
 
       if (defined(invoker.external_deps)) {
-        external_deps = invoker.external_deps
+        external_deps += invoker.external_deps
       }
 
       outputs = _taihe_outputs
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   }
 }
@@ -80,9 +121,18 @@ template("ohos_taihe") {
 template("copy_taihe_idl") {
   assert(defined(invoker.sources), "please provide sources for copy")
   if (taihe_template_bypass) {
-    not_needed(invoker, [ "sources", "deps", "external_deps" ])
+    not_needed(invoker,
+               [
+                 "sources",
+                 "deps",
+                 "external_deps",
+               ])
     group(target_name) {
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
     ohos_copy(target_name) {
@@ -94,7 +144,11 @@ template("copy_taihe_idl") {
       if (defined(invoker.deps)) {
         deps = invoker.deps
       }
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   }
 }
@@ -103,29 +157,55 @@ template("taihe_shared_library") {
   if (taihe_template_bypass) {
     not_needed(invoker, "*")
     group(target_name) {
-      forward_variables_from(invoker, [ "visibility", "testonly" ])
+      forward_variables_from(invoker,
+                             [
+                               "visibility",
+                               "testonly",
+                             ])
     }
   } else {
+    action_target_name = "${target_name}_action"
+    action(action_target_name) {
+      script = "//build/ohos/taihe_idl/unpack.py"
+      sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
+      outputs = [ 
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/runtime_ani.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/string.cpp",
+      ]
+      
+      args = [
+        "--src",
+        rebase_path(sources[0], root_build_dir),
+        "--dst",
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo", root_build_dir),
+      ]
+    
+      external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
+    }
+
     ohos_shared_library(target_name) {
       forward_variables_from(invoker,
                              "*",
                              [
+                               "deps",
                                "sources",
                                "external_deps",
                                "include_dirs",
                              ])
       include_dirs = [
         "$taihe_generated_file_path/include",
-        "$taihe_toolchain_path/include",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/include",
       ]
       if (defined(invoker.include_dirs)) {
         include_dirs += invoker.include_dirs
       }
 
       sources = [
-        "$taihe_toolchain_path/src/taihe/runtime/object.cpp",
-        "$taihe_toolchain_path/src/taihe/runtime/runtime_ani.cpp",
-        "$taihe_toolchain_path/src/taihe/runtime/string.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/runtime_ani.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/string.cpp",
       ]
       sources += invoker.sources
 
@@ -139,6 +219,12 @@ template("taihe_shared_library") {
 
       if (defined(invoker.enable_checked_call)) {
         defines += [ "TH_ANI_ENABLE_CHECKED_CALL" ]
+      }
+
+      deps = [ ":${action_target_name}" ]
+
+      if (defined(invoker.deps)) {
+        deps += invoker.deps
       }
 
       external_deps = [
