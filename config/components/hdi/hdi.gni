@@ -101,6 +101,11 @@ template("hdi") {
   }
 
   sources_gen_dir = get_path_info("${root_path}/", "gen_dir")
+  generate_with_version = false
+  if (defined(invoker.generate_with_version)) {
+    generate_with_version = invoker.generate_with_version
+  }
+
   get_build_info_args = [
     "-s",
     system,
@@ -113,6 +118,10 @@ template("hdi") {
     "-r",
     root_package_path,
   ]
+
+  if (generate_with_version) {
+    get_build_info_args += [ "--generate-with-version" ]
+  }
   foreach(idl_file, invoker.sources) {
     get_build_info_args += [ "-f" ]
     get_build_info_args += [ rebase_path(idl_file) ]
@@ -194,6 +203,10 @@ template("hdi") {
       "-r",
       root_package_path,
     ]
+
+    if (generate_with_version) {
+      args += [ "--generate-with-version" ]
+    }
   }
 
   lib_client = "lib" + target_name + "_proxy" + "_" + hdi_build_info.version
