@@ -93,7 +93,9 @@ if (product_name == "ohos-sdk") {
   group("make_test") {
     testonly = true
     deps = []
-    if (!is_host_product) {
+    if (is_host_product) {
+      deps = [ "$root_build_dir/build_configs:parts_test" ]
+    } else {
       deps = [
         "//build/ohos/packages:build_all_test_pkg",
         "//build/ohos/packages:package_testcase",

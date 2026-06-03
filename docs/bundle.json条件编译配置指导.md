@@ -17,7 +17,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 
 | 属性 | 类型 | 说明 | 示例值 |
 |------|------|------|--------|
-| compile_mode | string | 编译模式 | "target", "host" |
+| compile_mode | string | 编译模式 | "cross", "host" |
 | target_os | string | 目标操作系统 | "ohos", "linux" |
 | target_cpu | string | 目标CPU架构 | "arm64", "x86_64" |
 | os_level | string | 系统级别 | "mini", "small", "standard" |
@@ -48,7 +48,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 1. **单值匹配**：属性值必须完全匹配
 ```json
 {
-  "compile_mode": "target"
+  "compile_mode": "cross"
 }
 ```
 
@@ -62,7 +62,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 3. **多条件组合**：所有条件都必须满足（AND 逻辑）
 ```json
 {
-  "compile_mode": "target",
+  "compile_mode": "cross",
   "target_cpu": ["arm64", "arm"]
 }
 ```
@@ -71,7 +71,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
 
 ### 场景1：模块条件编译
 
-仅在目标编译模式下编译特定模块：
+仅在 cross 编译模式下编译特定模块：
 
 ```json
 {
@@ -80,7 +80,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
     "build": {
       "conditions": {
         "module_a": {
-          "compile_mode": "target"
+          "compile_mode": "cross"
         },
         "module_b": {
           "compile_mode": "host"
@@ -163,7 +163,7 @@ bundle.json 条件编译功能允许 bundle 开发人员根据构建上下文动
     "build": {
       "conditions": {
         "integration_test": {
-          "compile_mode": "target",
+          "compile_mode": "cross",
           "os_level": "standard"
         },
         "unit_test": {
@@ -275,7 +275,7 @@ condition target 'non_existent_item' in 'bundle.json' does not exist in
     "build": {
       "conditions": {
         "target_only_module": {
-          "compile_mode": "target"
+          "compile_mode": "cross"
         },
         "host_only_module": {
           "compile_mode": "host"
@@ -287,7 +287,7 @@ condition target 'non_existent_item' in 'bundle.json' does not exist in
           "os_level": "standard"
         },
         "standard_test": {
-          "compile_mode": "target",
+          "compile_mode": "cross",
           "os_level": "standard"
         }
       },
