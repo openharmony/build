@@ -15,13 +15,13 @@ import("//build/ohos.gni")
 import("//build/test.gni")
 
 ohos_rust_unittest("rust_test_ut") {
-  module_out_path = "rust_build_test/test_rust_ut"
+  module_out_path = "rust_build_test/rust_test_ut"
   sources = [ "src/main.rs" ]
-  deps = [ ":test_rust_ut_add" ]
+  deps = [ ":rust_test_ut_add" ]
 }
 
-ohos_rust_shared_library("test_rust_ut_add") {
+ohos_rust_shared_library("rust_test_ut_add") {
   sources = [ "src/main.rs" ]
-  crate_name = "test_rust_ut_add"
+  crate_name = "rust_test_ut_add"
   crate_type = "dylib"
 }
