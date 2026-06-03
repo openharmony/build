@@ -152,6 +152,12 @@ config("soft_musl_config") {
       "-Wl,--dynamic-list=${dynamic_list}",
       "-Wl,--build-id=md5",
     ]
+
+    if ((musl_arch != "riscv32") && (musl_arch != "cortex_m")) {
+      ldflags += [
+        "-Wl,--no-undefined",
+      ]
+    }
     if (musl_arch == "mips") {
       ldflags -= [ "-Wl,--hash-style=both" ]
     }

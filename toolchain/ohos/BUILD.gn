@@ -70,3 +70,21 @@ ohos_clang_toolchain("ohos_clang_mipsel") {
     current_cpu = "mipsel"
   }
 }
+
+ohos_clang_toolchain("ohos_clang_riscv32") {
+  sysroot = "${musl_sysroot}"
+  lib_dir = "usr/lib/riscv32-linux-ohos"
+  rust_abi_target = "riscv32-linux-ohos"
+  toolchain_args = {
+    current_cpu = "riscv32"
+  }
+}
+
+ohos_clang_toolchain("ohos_clang_cortex_m") {
+  sysroot = "${musl_sysroot}"
+  lib_dir = "usr/lib/arm-liteos-ohos"
+  rust_abi_target = "arm-liteos-ohos"
+  toolchain_args = {
+    current_cpu = "cortex_m"
+  }
+}
