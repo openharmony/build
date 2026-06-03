@@ -535,15 +535,15 @@ class TestRustBuild:
         result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
         assert result, "build test_rust_st failed"
 
-    def test_rust_ut(self):
+    def rust_test_ut(self):
         """
         test rust_ut
         """
         function_name = inspect.currentframe().f_code.co_name
         cmd_path = RUST_PATH + function_name
-        res_path = os.path.join(BUILD_RES_PATH, 'libtest_rust_ut_add.dylib.so')
+        res_path = os.path.join(BUILD_RES_PATH, 'librust_test_ut_add.dylib.so')
         result = exec_command_communicate(cmd_path, res_path, function_name, rust='rust')
-        assert result, "build test_rust_ut failed"
+        assert result, "build rust_test_ut failed"
 
     def test_static_link(self):
         """
