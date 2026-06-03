@@ -408,6 +408,7 @@ template("ohos_app") {
 
   _module_info_target = "${_main_target_name}_info"
   generate_module_info(_module_info_target) {
+    part_name = _part_name
     module_name = _main_target_name
     module_type = "app"
     module_source_dir = get_path_info(_hap_out_dir, "dir")
@@ -758,6 +759,7 @@ template("ohos_hap") {
 
   _module_info_target = "${_main_target_name}_info"
   generate_module_info(_module_info_target) {
+    part_name = _part_name
     module_name = _main_target_name
     module_type = "app"
 

@@ -13,10 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
+import argparse
+import json
 import os
 import shutil
-import argparse
+import sys
 import zipfile
 sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(
@@ -66,7 +67,7 @@ def generate_binary_sa_archive(parts_list: list, sa_profile_archive_info_file: s
             continue
         for _sa_file in _sa_file_list:
             _sa_file_path = os.path.join(subsystem_sa_archive_dir, _sa_file)
-            sa_tuples.append((_sa_file_path,
+            sa_tuples.append((_part_name, _sa_file_path,
                               os.path.relpath(_sa_file_path,
                                               subsystem_sa_archive_dir)))
             depfiles.append(_sa_file_path)
@@ -85,6 +86,7 @@ def main():
     sa_files_list = []
     depfiles = []
     sa_files_tuples = []
+    part_name_map = {}
     if args.sa_profile_archive_info_file:
         depfiles.append(args.sa_profile_archive_info_file)
         parts_list = get_no_src_parts(args.system_install_info_file)
@@ -93,10 +95,14 @@ def main():
                                        args.sa_profile_archive_info_file,
                                        args.sa_output_dir, depfiles))
     with zipfile.ZipFile(args.sa_output_zipfile, 'w') as outfile:
-        for sa_file_path, sa_file in sa_files_tuples:
+        for part_name, sa_file_path, sa_file in sa_files_tuples:
+            part_name_map[sa_file] = part_name
             build_utils.add_to_zip_hermetic(outfile,
                                          sa_file,
                                          src_path=sa_file_path)
+        if part_name_map:
+            metadata_content = json.dumps(part_name_map, indent=2, sort_keys=True)
+            outfile.writestr("part_name_info.json", metadata_content)
     build_utils.write_depfile(args.depfile, args.sa_output_zipfile, depfiles)
     return 0
 
