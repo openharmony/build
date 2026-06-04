@@ -55,9 +55,9 @@ group("tests") {
 group("ohos_rust_xxxtest_tests") {
   testonly = true
   deps = [
-    "test_rust_ut:test_rust_ut(${host_toolchain})",
+    "rust_test_ut:rust_test_ut(${host_toolchain})",
     "//build/rust/tests/test_proc_macro_crate/test_derive_macro:test_derive_macro(${host_toolchain})",
-    "//build/rust/tests/test_rust_ut",
+    "//build/rust/tests/rust_test_ut",
   ]
 }
 
