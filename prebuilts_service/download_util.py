@@ -144,13 +144,12 @@ def extract_compress_files_and_gen_mark(source_file: str, unzip_dir: str, mark_f
     elif source_file.endswith(".tar"):
         command = ["tar", "-xvf", source_file, "-C", unzip_dir]
     else:
-        print("暂不支持解压此类型压缩文件！")
-        return
+        print("source file is:", source_file)
+        raise Exception(f"暂不支持解压此类型压缩文件！")
     
     _, err, retcode = run_cmd(command)
     if retcode != 0:
-        print("解压失败，错误信息：", err)
-        return
+        raise Exception(f"解压失败，错误信息：{err}")
     else:
         flag = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
         mode = stat.S_IWUSR | stat.S_IRUSR

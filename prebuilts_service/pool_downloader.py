@@ -76,6 +76,7 @@ class PoolDownloader:
             except Exception as e:
                 self._adaptive_print(f"Task {task} generated an exception: {e}", style="red")
                 self._adaptive_print(traceback.format_exc())
+                raise e
             else:
                 self._adaptive_print(
                     "{}, download and decompress completed".format(tasks.get(task)),
