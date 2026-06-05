@@ -121,7 +121,10 @@ def _target_handle(ele, build_data, deps_list, _test_check):
 
 
 def process_build_data(build_data, _test_check, deps_list):
+    ignore_list = ["conditions"]
     for ele in build_data:
+        if ele in ignore_list:
+            continue
         _target_handle(ele, build_data, deps_list, _test_check)
 
 
