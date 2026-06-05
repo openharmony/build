@@ -674,11 +674,11 @@ template("ohos_ndk_lite_library") {
 
   _ndk_config_output = "$target_gen_dir/$target_name.build_config"
   _sdk_version = exec_script("//build/ohos/version.py",
-                              [
-                                "--version",
-                                sdk_version,
-                              ],
-                              "list lines")
+                             [
+                               "--version",
+                               sdk_version,
+                             ],
+                             "list lines")
   _min_compact_version = _sdk_version[0]
   if (defined(invoker.min_compact_version)) {
     _min_compact_version = invoker.min_compact_version
@@ -770,13 +770,13 @@ template("ohos_ndk_lite_library") {
 
     shared_library(_ndk_shlib_target) {
       forward_variables_from(invoker,
-                              [
-                                "cflags",
-                                "ldflags",
-                                "configs",
-                                "libs",
-                                "include_dirs",
-                              ])
+                             [
+                               "cflags",
+                               "ldflags",
+                               "configs",
+                               "libs",
+                               "include_dirs",
+                             ])
       deps = [ ":$_ndk_stub_target" ]
       sources = [ _generated_ndk_stub_file ]
       output_dir = target_out_dir + "/$_toolchain_name"
@@ -803,11 +803,11 @@ template("ohos_ndk_lite_library") {
     _notice_target = "${target_name}__ndk_libraries_notice"
     collect_notice(_notice_target) {
       forward_variables_from(invoker,
-                              [
-                                "testonly",
-                                "license_as_sources",
-                                "license_file",
-                              ])
+                             [
+                               "testonly",
+                               "license_as_sources",
+                               "license_file",
+                             ])
       module_source_dir =
           get_label_info(":${_ndk_version_script_target}", "dir")
       outputs = [ "$ndk_notice_dir/sysroot_lite/usr/lib/lib$_output_name.$_output_extension.txt" ]

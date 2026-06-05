@@ -67,18 +67,21 @@ template("ohos_clang_toolchain") {
           rebase_path("${clang_lib_base_path}/${abi_target}/nanlegacy",
                       root_build_dir)
     } else {
-      if ((abi_target != "riscv32-linux-ohos") && (abi_target != "arm-liteos-ohos")) {
+      if (abi_target != "riscv32-linux-ohos" &&
+          abi_target != "arm-liteos-ohos") {
         clang_rt_dir =
             rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
       }
     }
 
     solink_libs_section_prefix = "${ohos_libc_dir}/crti.o"
-    if ((invoker.target_name != "ohos_clang_riscv32") && (invoker.target_name != "ohos_clang_cortex_m")) {
+    if (invoker.target_name != "ohos_clang_riscv32" &&
+        invoker.target_name != "ohos_clang_cortex_m") {
       solink_libs_section_prefix += " ${clang_rt_dir}/clang_rt.crtbegin.o"
     }
     solink_libs_section_postfix = "${ohos_libc_dir}/crtn.o"
-    if ((invoker.target_name != "ohos_clang_riscv32") && (invoker.target_name != "ohos_clang_cortex_m")) {
+    if (invoker.target_name != "ohos_clang_riscv32" &&
+        invoker.target_name != "ohos_clang_cortex_m") {
       solink_libs_section_postfix += " ${clang_rt_dir}/clang_rt.crtend.o"
     }
 
