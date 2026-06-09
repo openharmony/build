@@ -137,7 +137,7 @@ def handle_test_check(build_data, _test_check, deps_list):
 
 
 def handle_compile_mode(bundle_json, deps_list):
-    conditions = bundle_json.get("component", {}).get("build" {}).get("conditions", {})
+    conditions = bundle_json.get("component", {}).get("build", {}).get("conditions", {})
     if not conditions:
         return
     remove_list = []
