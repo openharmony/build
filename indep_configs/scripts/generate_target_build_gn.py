@@ -136,6 +136,20 @@ def handle_test_check(build_data, _test_check, deps_list):
                 deps_list.append(k)
 
 
+def handle_compile_mode(bundle_json, deps_list):
+    conditions = bundle_json.get("component", {}).get("build" {}).get("conditions", {})
+    if not conditions:
+        return
+    remove_list = []
+    for target in deps_list:
+        if target in conditions:
+            compile_mode = conditions[target].get("compile_mode", [])
+            if compile_mode and "cross" not in compile_mode:
+                remove_list.append(target)
+    for target in remove_list:
+        deps_list.remove(target)
+
+
 def process_bundle_path(_bundle_path, _test_check, deps_list):
     bundle_json = utils.get_json(_bundle_path)
     build_data = bundle_json.get("component", {}).get("build", {})
@@ -148,6 +162,7 @@ def process_bundle_path(_bundle_path, _test_check, deps_list):
         handle_test_check(build_data, _test_check, deps_list)
     else:
         print("Error: Please pass the correct test parameters")
+    handle_compile_mode(bundle_json, deps_list)
 
 
 def process_inner_fields(module_to_path, all_target_list):
