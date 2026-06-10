@@ -238,7 +238,7 @@ template("make_sdk_modules") {
 
     dest_dir = "${ohos_sdk_copy_dir}/${sdk_system}"
     if (use_current_sdk) {
-      dest_dir = "${root_build_dir}/${sdk_class}-current-sdk/${sdk_system}/${api_version}"
+      dest_dir = "${root_build_dir}/${sdk_class}-current-sdk/${sdk_system}/${api_full_version}"
     }
 
     zip_prefix_path = "${invoker.sdk_type}"

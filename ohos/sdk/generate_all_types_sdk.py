@@ -110,10 +110,10 @@ foreach(os, sdk_systems) {
     {% if use_current_sdk %}
     # override for current sdk.
     package_info_file =
-      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_version/{{ sdk_type }}/oh-uni-package.json"
+      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_full_version/{{ sdk_type }}/oh-uni-package.json"
     {% if sdk_class != "base" %}
     package_info_file =
-      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_version/{{ sdk_type }}/uni-package.json"
+      "$root_out_dir/{{ sdk_class }}-current-sdk/$os/$api_full_version/{{ sdk_type }}/uni-package.json"
     {% endif %}
     {% endif %}
     package_info = {}
