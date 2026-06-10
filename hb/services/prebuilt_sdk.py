@@ -285,7 +285,7 @@ class PrebuiltSdk(PrebuiltSdkInterface):
             with open(version_gni_path, 'r', encoding='utf-8') as f:
                 content = f.read()
 
-            pattern = r'api_full_version\s*=\s*"([^"]+)"'
+            pattern = r'api_version\s*=\s*"([^"]+)"'
             match = re.search(pattern, content)
 
             if match:
