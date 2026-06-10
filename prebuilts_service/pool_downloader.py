@@ -192,6 +192,8 @@ class PoolDownloader:
                 progress.update(progress_task_id, total=total_size)
                 progress.start_task(progress_task_id)
             self._save_to_local(response, local_path, buffer_size, progress_task_id)
+            if not os.path.exists(local_path):
+                raise Exception(f"download failed, remote_url: {remote_url}")
         self._adaptive_print(f"Downloaded {local_path}")
 
     def _save_to_local(self, response: requests.Response, local_path: str, buffer_size: int, progress_task_id):
