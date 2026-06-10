@@ -83,7 +83,7 @@ def extract_file(filename):
 def unzip_inner_packages(target_dir, api_version):
 
     sdk_zip_file_dir = os.path.join(target_dir, "ohos-sdk/linux")
-    sdk_unzip_dir = os.path.join(sdk_zip_file_dir, api_full_version)
+    sdk_unzip_dir = os.path.join(sdk_zip_file_dir, api_version)
 
     if os.path.exists(sdk_unzip_dir):
         shutil.rmtree(sdk_unzip_dir)
