@@ -75,9 +75,10 @@ config("runtime_library") {
 
   libs = []
 
-  # arm builds of libc++ starting in NDK r12 depend on unwind.
+  # libc++abi on OHOS needs unwind support for the native static runtime.
+  # Keep the list aligned with toolchain-provided libunwind targets.
   if (current_cpu == "arm" || current_cpu == "arm64" ||
-      current_cpu == "riscv64") {
+      current_cpu == "x86_64" || current_cpu == "riscv64") {
     libs += [ "unwind" ]
   }
 
