@@ -100,7 +100,6 @@ class PrebuiltSdk(PrebuiltSdkInterface):
                 '--compute-overlap-rate=false',
                 '--deps-guard=false',
                 '--generate-ninja-trace=false',
-                '--gn-args point_split=true',
                 f"--sbom={build_args['generate_sbom']}",
             ]
 
