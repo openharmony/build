@@ -763,7 +763,7 @@
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/tool/command-line-tools/6.x",
-                            "remote_url": "/harmonyos/compiler/hvigor/6.0.0-release-patch-rc.2/command-line-tools.tar",
+                            "remote_url": "/harmonyos/compiler/hvigor/6.0.0.868/command-line-tools.tar",
                             "unzip_filename": "hvigor"
                         }
                     ]
