@@ -85,12 +85,23 @@ def get_remote_sha256(remote_url: str) -> str:
             return remote_sha256_cache[remote_url]
     
     # 在锁外执行耗时操作（如网络请求）
-    remote_sha256 = obtain_sha256_by_sha256_file(remote_url)
-    if not remote_sha256:
-        remote_sha256 = obtain_sha256_by_sha_sums256(remote_url)
+    max_try = 3
+    remote_sha256 = ""
+    for _ in range(max_try):
+        remote_sha256 = obtain_sha256_by_sha256_file(remote_url)
         if not remote_sha256:
-            raise Exception(f"get remote sha256 for {remote_url} failed.")
-    print(f"remote sha256 for {remote_url} is {remote_sha256}")
+            remote_sha256 = obtain_sha256_by_sha_sums256(remote_url)
+            if not remote_sha256:
+                time.sleep(3)
+            else:
+                break
+        else:
+            break
+    if not remote_sha256:
+        raise Exception(f"get remote sha256 for {remote_url} failed.")
+    
+    remote_basename = os.path.basename(remote_url)
+    print(f"remote sha256 for {remote_basename} is {remote_sha256}")
 
     with _cache_lock:  # 加锁更新缓存
         remote_sha256_cache[remote_url] = remote_sha256
