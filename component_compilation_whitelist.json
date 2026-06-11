@@ -12331,9 +12331,6 @@
         "//foundation/window/window_manager/test/fuzztest/wms/window_fuzzer:WindowFuzzTest": [
             "//foundation/window/window_manager/extension/extension_connection:libwindow_extension_client"
         ],
-        "//third_party/musl/libc-test/src/static_link:static_link_test": [
-            "//third_party/musl:soft_libc_musl_static"
-        ],
         "//third_party/vulkan-loader/openharmony/test/unittest:vk_bundle_mgr_helper_test": [
             "//third_party/vulkan-loader:vulkan_loader"
         ]

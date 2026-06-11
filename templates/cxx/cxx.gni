@@ -282,6 +282,7 @@ template("ohos_executable") {
                              "license_as_sources",
                              "use_exceptions",
                              "use_rtti",
+                             "default_deps_musl",
 
                              # Sanitizer variables
                              "sanitize",
@@ -468,7 +469,8 @@ template("ohos_executable") {
       no_default_deps = true
       configs -= [ "//build/config:executable_config" ]
       ldflags += [ "-static" ]
-      if (is_ohos && use_musl) {
+      if (is_ohos && use_musl &&
+          (!defined(invoker.default_deps_musl) || invoker.default_deps_musl)) {
         import("//build/config/ohos/musl.gni")
         if (defined(external_deps)) {
           external_deps += [ "musl:soft_libc_musl_static" ]
