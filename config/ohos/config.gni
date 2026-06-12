@@ -37,6 +37,8 @@ if (is_ohos) {
     abi_target = "riscv64-linux-ohos"
   } else if (current_cpu == "riscv32") {
     abi_target = "riscv32-linux-ohos"
+  } else if (current_cpu == "cortex_m") {
+    abi_target = "arm-liteos-ohos"
   } else if (current_cpu == "mipsel") {
     abi_target = "mipsel-linux-ohos"
   } else if (current_cpu == "loongarch64") {

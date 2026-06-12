@@ -483,10 +483,12 @@ template("ohos_executable") {
           current_cpu == "riscv64" || current_cpu == "loongarch64") {
         libs += [ "unwind" ]
       }
-      libs += [
-        rebase_path(libclang_rt_file),
-        "c++",
-      ]
+      if (current_cpu != "riscv32" && current_cpu != "cortex_m") {
+        libs += [
+          rebase_path(libclang_rt_file),
+          "c++",
+        ]
+      }
     }
 
     if (!defined(output_name)) {
