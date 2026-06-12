@@ -159,6 +159,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                         os.makedirs(os.path.dirname(symlink_dest_file), exist_ok=True)
                     if not os.path.exists(symlink_dest_file):
                         os.symlink(src_file_relpath, symlink_dest_file)
+                        module_info.setdefault("symlink_file", []).append(os.path.relpath(symlink_dest_file, platform_installed_path))
         if 'symlink_ext' in module_info:
             symlink_ext = module_info.get('symlink_ext')
             for dest in dests:
@@ -170,12 +171,14 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                         os.makedirs(os.path.dirname(symlink_dest_file), exist_ok=True)
                     if not os.path.exists(symlink_dest_file):
                         os.symlink(os.path.join(relpath, os.path.basename(dest)), symlink_dest_file)
+                        module_info.setdefault("symlink_file", []).append(os.path.relpath(symlink_dest_file, platform_installed_path))
         if 'symlink_path' in module_info:
             symlink_path = module_info.get('symlink_path')
             dest_file = os.path.join(platform_installed_path, dests[0])
             if os.path.exists(dest_file):
                 os.remove(dest_file)
             os.symlink(symlink_path, dest_file)
+            module_info.setdefault("symlink_file", []).append(os.path.relpath(dest_file, platform_installed_path))
             if not os.path.lexists(dest_file):
                 raise FileNotFoundError(f"target symlink {dest_file} to {symlink_path} create failed")
         # innerapi_tags create softlink for ndk、platformsdk
@@ -198,6 +201,7 @@ def copy_modules(system_install_info: dict, install_modules_info_file: str,
                         os.makedirs(os.path.dirname(link_path), exist_ok=True)
                         src_file = os.path.join(relative_path, file_name)
                         os.symlink(src_file, link_path)
+                        module_info.setdefault("symlink_file", []).append(os.path.relpath(link_path, platform_installed_path))
                     else:
                         raise FileExistsError(f"{link_path} create failed, src_file:{dest_file} and {dest_file} is same")
 

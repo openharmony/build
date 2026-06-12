@@ -15,8 +15,8 @@
 
 import argparse
 import os
-import sys
 import shutil
+import sys
 import xml.etree.ElementTree as ET
 
 from sa_info_process.merge_sa_info import JsonSAInfoMerger
@@ -40,13 +40,18 @@ def _get_src_sa_info(src_sa_install_info_file: str, depfiles: list):
                 _install_info.get('install_info_file'))
 
     depfiles.extend(install_info_file_list)
-    json_all_sa_input_files = []
+    json_all_sa_input_files = {}
     for _install_info_file in install_info_file_list:
         _install_info = read_json_file(_install_info_file)
         if _install_info is None:
             raise Exception("read install_info_file '{}' failed.".format(
                 _install_info_file))
         sa_info_files = _install_info.get('sa_info_files')
+        part_name = _install_info.get("part_name")
+        if not part_name:
+            raise Exception("install_info_file '{}' missing part_name.".format(
+                _install_info_file))
+        json_all_sa_input_files.setdefault(part_name, [])
         for part_sa_info_files in sa_info_files:
             if str(part_sa_info_files).endswith(".xml"):
                 parser = ET.XMLParser()
@@ -56,18 +61,31 @@ def _get_src_sa_info(src_sa_install_info_file: str, depfiles: list):
                 process_name = process_nodes[0].text.strip()
                 raise Exception('Please use profile in json format, processname: {}'.format(process_name))
             elif str(part_sa_info_files).endswith(".json"):
-                json_all_sa_input_files += [part_sa_info_files]
-    depfiles.extend(json_all_sa_input_files)
+                json_all_sa_input_files[part_name] += [part_sa_info_files]
+    for sa_input_files in json_all_sa_input_files.values():
+        depfiles.extend(sa_input_files)
+
     return json_all_sa_input_files
 
 
-def _sa_profile_merge(json_sa_input_files: str, no_src_subsystem_sa_zipfile: str,
+def _sa_profile_merge(json_sa_input_files: dict, no_src_subsystem_sa_zipfile: str,
                       merge_out_dir: str, merged_zipfile: str, target_cpu: str):
     with build_utils.temp_dir() as tmp:
         build_utils.extract_all(no_src_subsystem_sa_zipfile, tmp)
+        metadata_file = os.path.join(tmp, "part_name_info.json")
+        part_name_map = {}
+        if os.path.exists(metadata_file):
+            part_name_map = read_json_file(metadata_file)
+
         for root, _, files in os.walk(tmp):
             for sa_file in files:
-                json_sa_input_files.append(os.path.join(root, sa_file))
+                if sa_file == "part_name_info.json":
+                    continue
+
+                sa_file_path = os.path.join(root, sa_file)
+                rel_path = os.path.relpath(sa_file_path, tmp)
+                part_name = part_name_map.get(rel_path) or ""
+                json_sa_input_files.setdefault(part_name, []).append(sa_file_path)
 
         if not os.path.exists(merge_out_dir):
             os.makedirs(merge_out_dir, exist_ok=True)
@@ -75,23 +93,24 @@ def _sa_profile_merge(json_sa_input_files: str, no_src_subsystem_sa_zipfile: str
         is_64bit_arch = target_cpu not in ["arm", "x86"]
         # call merge tool
         json_merge_tool = JsonSAInfoMerger()
-        json_result_file_list = json_merge_tool.merge(sorted(json_sa_input_files),
-                                            merge_out_dir)
+        json_result_file_dict = json_merge_tool.merge(json_sa_input_files, merge_out_dir)
     build_utils.zip_dir(merged_zipfile, merge_out_dir)
     shutil.rmtree(merge_out_dir)
-    return json_result_file_list
+    return json_result_file_dict
 
 
-def _generate_install_info(sa_result_file_list: list, sa_info_install_dest_dir: str,
+def _generate_install_info(sa_result_file_dict: dict, sa_info_install_dest_dir: str,
                            sa_install_info_file: str):
     module_install_info_list = []
-    for _sa_file in sa_result_file_list:
+    for _sa_file, part_name in sa_result_file_dict.items():
         _install_dest = os.path.join(sa_info_install_dest_dir,
                                      os.path.basename(_sa_file))
         module_install_info = {
             'type': 'sa_info',
             'source': _sa_file,
             'install_enable': True,
+            # part_name is comma-separated by design convention, filter empty strings for no-src fallback
+            "part_name": ",".join([p for p in part_name if p]),
             'dest': [_install_dest]
         }
         module_install_info_list.append(module_install_info)
@@ -111,16 +130,16 @@ def main():
     args = parser.parse_args()
 
     depfiles = []
-    json_src_subsystem_file_list = _get_src_sa_info(args.src_sa_install_info_file,
+    json_src_subsystem_file_dict = _get_src_sa_info(args.src_sa_install_info_file,
                                                depfiles)
     no_src_sa_profile_zip = args.no_src_sa_install_info_file
 
-    result_file_list = _sa_profile_merge(json_src_subsystem_file_list,
+    result_file_dict = _sa_profile_merge(json_src_subsystem_file_dict,
                                          no_src_sa_profile_zip,
                                          args.sa_output_dir,
                                          args.merged_sa_profile,
                                          args.target_cpu)
-    _generate_install_info(result_file_list, args.sa_info_install_dest_dir,
+    _generate_install_info(result_file_dict, args.sa_info_install_dest_dir,
                            args.sa_install_info_file)
     build_utils.write_depfile(args.depfile, args.sa_install_info_file,
                               depfiles)

@@ -30,6 +30,7 @@ class JsonSAInfoMerger(object):
         def __init__(self, process_name, wdir):
             self.process_name = process_name
             self.systemabilities = []
+            self.part_name = set()
             self.wdir = wdir
 
         @property
@@ -37,8 +38,9 @@ class JsonSAInfoMerger(object):
             basename = self.process_name + '.json'
             return os.path.join(self.wdir, basename)
 
-        def add_systemability_info(self, systemability):
+        def add_systemability_info(self, systemability, part_name):
             self.systemabilities += systemability
+            self.part_name.add(part_name)
 
         def merge_sa_info(self):
             """
@@ -54,15 +56,17 @@ class JsonSAInfoMerger(object):
 
     def __init__(self):
         self.process_sas_dict = {}
-        self.output_filelist = []
+        self.output_file_dict = {}
 
-    def add_to_output_filelist(self, infile: str):
-        self.output_filelist.append(os.path.join(self.output_dir, infile))
+    def add_to_output_file_dict(self):
+        for process, sa_info_collector in self.process_sas_dict.items():
+            file_path = sa_info_collector.output_filename
+            self.output_file_dict[file_path] = sorted(sa_info_collector.part_name)
 
-    def merge(self, sa_info_filelist, output_dir):
-        return self.__merge(sa_info_filelist, output_dir)
+    def merge(self, sa_info_file_dict, output_dir):
+        return self.__merge(sa_info_file_dict, output_dir)
 
-    def parse_json_file(self, file: str):
+    def parse_json_file(self, part_name: str, file: str):
         with open(file, 'r') as json_files:
             data = json.load(json_files)
             _format = 'one and only one {} tag is expected, actually {} is found'
@@ -74,7 +78,6 @@ class JsonSAInfoMerger(object):
             # create a new collector if a new process tag is found
             sa_info_collector = self.SAInfoCollector(process_name, self.temp_dir)
             self.process_sas_dict[process_name] = sa_info_collector
-            self.add_to_output_filelist(process_name + '.json')
         else:
             sa_info_collector = self.process_sas_dict.get(process_name)
         # check systemability tag
@@ -86,18 +89,20 @@ class JsonSAInfoMerger(object):
         sys_value = data['systemability']
         if 'name' not in sys_value[0] or 'libpath' not in sys_value[0]:
             raise json_err.BadFormatJsonError('systemability must have name and libpath', file)
-        sa_info_collector.add_systemability_info(sys_value)
+        sa_info_collector.add_systemability_info(sys_value, part_name)
 
-    def __merge(self, sa_info_filelist: list, path_merges: str):
+    def __merge(self, sa_info_file_dict: dict, path_merges: str):
         """
-        merge the json files of sa_info_filelist
-        :param sa_info_filelist : input_files
+        merge the json files of sa_info_file_dict
+        :param sa_info_file_dict : input_files
         :param path_merges : merges_path
         """
         self.temp_dir = path_merges
         self.output_dir = path_merges
-        for file in sa_info_filelist:
-            self.parse_json_file(file)
+        for part_name, files in sa_info_file_dict.items():
+            for file in files:
+                self.parse_json_file(part_name, file)
+        self.add_to_output_file_dict()
         global_ordered_systemability_names = []
         global_systemability_deps_dict = {}
         # merge systemability info for each process
@@ -116,11 +121,12 @@ class JsonSAInfoMerger(object):
                 global_ordered_systemability_names,
                 global_systemability_deps_dict)
         except json_err.CircularDependencyError as error:
-            for _file in self.output_filelist:
+            output_files = list(self.output_file_dict.keys())
+            for _file in output_files:
                 try:
                     os.remove(_file)
                 except OSError:
                     pass
             raise json_err.CrossProcessCircularDependencyError(error)
         # finally return an output filelist
-        return self.output_filelist
+        return self.output_file_dict
