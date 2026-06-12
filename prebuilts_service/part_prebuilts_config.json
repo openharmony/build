@@ -16,7 +16,8 @@
         "hvigor"
     ],
     "distributed_bundle_framework":[
-        "app"
+        "app",
+        "hvigor"
     ],
     "device_usage_statistics":[
         "app",
@@ -285,5 +286,8 @@
     "selectionfwk":[
         "app",
         "hvigor"
+    ],
+    "preferences":[
+        "app"
     ]
 }
