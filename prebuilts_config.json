@@ -816,22 +816,22 @@
                 "linux": {
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-linux-x64-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-linux-x64-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/linux-x64",
                             "unzip_filename": "cangjie-linux-x64"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-linux-x64-1.2.0-alpha.06-hwasan.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-linux-x64-1.2.0-alpha.21-hwasan.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/linux-x64-hwasan",
                             "unzip_filename": "cangjie-linux-x64"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-windows-x64-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-windows-x64-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/windows-x64",
                             "unzip_filename": "cangjie-windows-x64"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-api-tools-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-api-tools-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/build-tools",
                             "unzip_filename": "cangjie-api-tools"
                         }
@@ -840,24 +840,24 @@
                 "darwin": {
                     "x86_64": [
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-mac-x64-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-mac-x64-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/mac-x64",
                             "unzip_filename": "cangjie-mac-x64"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-api-tools-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-api-tools-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/build-tools",
                             "unzip_filename": "cangjie-api-tools"
                         }
                     ],
                     "arm64": [
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-mac-aarch64-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-mac-aarch64-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/mac-aarch64",
                             "unzip_filename": "cangjie-mac-aarch64"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.06/cangjie-api-tools-1.2.0-alpha.06.zip",
+                            "remote_url": "/openharmony/compiler/cangjie/1.2.0.alpha.21/cangjie-api-tools-1.2.0-alpha.21.zip",
                             "unzip_dir": "${code_dir}/prebuilts/cangjie_sdk/build-tools",
                             "unzip_filename": "cangjie-api-tools"
                         }
