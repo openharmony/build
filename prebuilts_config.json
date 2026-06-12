@@ -137,7 +137,7 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
-                            "remote_url": "/openharmony/compiler/gn/20260424/gn-linux-x86-20260424.tar.gz"
+                            "remote_url": "/openharmony/compiler/gn/20260611/gn-linux-x86-20260609tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
