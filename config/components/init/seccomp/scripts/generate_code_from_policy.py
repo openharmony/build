@@ -27,7 +27,7 @@ supported_parse_item = ['labelName', 'priority', 'allowList', 'blockList', 'prio
                         'allowListWithArgs', 'headFiles', 'selfDefineSyscall', 'returnValue', \
                         'mode', 'privilegedProcessName', 'allowBlockList']
 
-supported_architecture = ['arm', 'arm64', 'riscv64']
+supported_architecture = ['arm', 'arm64', 'riscv64', 'x86_64']
 
 BPF_JGE = 'BPF_JUMP(BPF_JMP|BPF_JGE|BPF_K, {}, {}, {}),'
 BPF_JGT = 'BPF_JUMP(BPF_JMP|BPF_JGT|BPF_K, {}, {}, {}),'
@@ -61,7 +61,8 @@ mode_str = {
 architecture_to_number = {
     'arm': 'AUDIT_ARCH_ARM',
     'arm64': 'AUDIT_ARCH_AARCH64',
-    'riscv64': 'AUDIT_ARCH_RISCV64'
+    'riscv64': 'AUDIT_ARCH_RISCV64',
+    'x86_64': 'AUDIT_ARCH_X86_64'
 }
 
 
@@ -500,7 +501,7 @@ class GenBpfPolicy:
     def gen_bpf_eq(self, const_str, jt, jf):
         if self.arch == 'arm':
             return self.gen_bpf_eq32(const_str, jt, jf)
-        elif self.arch == 'arm64' or self.arch == 'riscv64':
+        elif self.arch == 'arm64' or self.arch == 'riscv64' or self.arch == 'x86_64':
             return self.gen_bpf_eq64(const_str, jt, jf)
         return []
 
@@ -510,7 +511,7 @@ class GenBpfPolicy:
     def gen_bpf_gt(self, const_str, jt, jf):
         if self.arch == 'arm':
             return self.gen_bpf_gt32(const_str, jt, jf)
-        elif self.arch == 'arm64' or self.arch == 'riscv64':
+        elif self.arch == 'arm64' or self.arch == 'riscv64' or self.arch == 'x86_64':
             return self.gen_bpf_gt64(const_str, jt, jf)
         return []
 
@@ -520,7 +521,7 @@ class GenBpfPolicy:
     def gen_bpf_ge(self, const_str, jt, jf):
         if self.arch == 'arm':
             return self.gen_bpf_ge32(const_str, jt, jf)
-        elif self.arch == 'arm64' or self.arch == 'riscv64':
+        elif self.arch == 'arm64' or self.arch == 'riscv64' or self.arch == 'x86_64':
             return self.gen_bpf_ge64(const_str, jt, jf)
         return []
 
@@ -530,7 +531,7 @@ class GenBpfPolicy:
     def gen_bpf_set(self, const_str, jt, jf):
         if self.arch == 'arm':
             return self.gen_bpf_set32(const_str, jt, jf)
-        elif self.arch == 'arm64' or self.arch == 'riscv64':
+        elif self.arch == 'arm64' or self.arch == 'riscv64' or self.arch == 'x86_64':
             return self.gen_bpf_set64(const_str, jt, jf)
         return []
 
@@ -655,7 +656,7 @@ class GenBpfPolicy:
         bpf_policy = []
         if self.arch == 'arm':
             bpf_policy.append(BPF_LOAD.format(16 + arg_id * 8))
-        elif self.arch == 'arm64' or self.arch == 'riscv64':
+        elif self.arch == 'arm64' or self.arch == 'riscv64' or self.arch == 'x86_64':
             #low 4 bytes
             bpf_policy.append(BPF_LOAD.format(16 + arg_id * 8))
             bpf_policy.append(BPF_ST.format(0))
@@ -859,6 +860,8 @@ class SeccompPolicyParser:
             self.arches.add("arm")
             self.arches.add(target_cpu)
         elif target_cpu == "riscv64":
+            self.arches.add(target_cpu)
+        elif target_cpu == "x86_64":
             self.arches.add(target_cpu)
 
     def update_block_list(self):
