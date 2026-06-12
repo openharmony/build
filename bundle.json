@@ -57,7 +57,9 @@
         "libffi",
         "rust_bindgen",
         "rust_cxx",
-        "ace_ets2bundle"
+        "ace_ets2bundle",
+        "ets_frontend",
+        "weex-loader"
       ],
       "third_party": [
         "bounds_checking_function",

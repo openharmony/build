@@ -140,11 +140,12 @@ def create_hap(options, signed_hap: str):
             tweak_hap_profile(options, package_dir)
         if options.dso:
             lib_path = os.path.join(package_dir, "lib")
-            hap_lib_path = os.path.join(lib_path, options.ohos_app_abi)
-            os.makedirs(hap_lib_path, exist_ok=True)
-            for dso in sorted(options.dso):
-                shutil.copy(dso, hap_lib_path)
-            packing_cmd.extend(['--lib-path', lib_path])
+            if options.ohos_app_abi:
+                hap_lib_path = os.path.join(lib_path, options.ohos_app_abi)
+                os.makedirs(hap_lib_path, exist_ok=True)
+                for dso in sorted(options.dso):
+                    shutil.copy(dso, hap_lib_path)
+                packing_cmd.extend(['--lib-path', lib_path])
 
         build_utils.check_output(packing_cmd)
 

@@ -811,7 +811,12 @@ template("ohos_hap") {
     ]
 
     if (!ohos_indep_compiler_enable) {
-      deps += [ "//developtools/packing_tool:packing_tool" ]
+      if (_part_name == "packing_tool") {
+        deps += [ "//developtools/packing_tool:packing_tool" ]
+      } else {
+        external_deps = [ "packing_tool:packing_tool_external" ]
+      }
+
     }
     if (!_test_target && app_need_publicity) {
       if (install_enable) {
