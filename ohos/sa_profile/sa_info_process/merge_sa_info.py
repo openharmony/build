@@ -61,7 +61,7 @@ class JsonSAInfoMerger(object):
     def add_to_output_file_dict(self):
         for process, sa_info_collector in self.process_sas_dict.items():
             file_path = sa_info_collector.output_filename
-            self.output_file_dict[file_path] = list(sa_info_collector.part_name)
+            self.output_file_dict[file_path] = sorted(sa_info_collector.part_name)
 
     def merge(self, sa_info_file_dict, output_dir):
         return self.__merge(sa_info_file_dict, output_dir)
