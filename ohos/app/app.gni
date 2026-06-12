@@ -811,7 +811,7 @@ template("ohos_hap") {
     ]
 
     if (!ohos_indep_compiler_enable) {
-      if (_part_name == "packing_tool") {
+      if (_part_name == "packing_tool" || is_arkui_x) {
         deps += [ "//developtools/packing_tool:packing_tool" ]
       } else {
         external_deps = [ "packing_tool:packing_tool_external" ]
