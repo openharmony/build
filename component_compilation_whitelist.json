@@ -14595,8 +14595,6 @@
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts/build/lib/",
             "//prebuilts/ark_tools/ark_js_prebuilts/llvm_prebuilts_windows/build/lib/", 
             "//prebuilts/mingw-w64/ohos/linux-x86_64/clang-mingw/x86_64-w64-mingw32/", 
-            "//commonlibrary/c_utils/base/test/unittest/common/libs/", 
-            "//commonlibrary/c_utils/base/test/unittest/rust/libs/", 
             "//foundation/appexecfwk/libs/"
         ]
         
