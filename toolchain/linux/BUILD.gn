@@ -22,7 +22,6 @@ clang_toolchain("clang_arm64") {
     # Output linker map files for binary size analysis.
     enable_linker_map = true
 
-    strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
   } else {
     toolprefix = "aarch64-linux-gnu-"
   }
@@ -30,6 +29,7 @@ clang_toolchain("clang_arm64") {
     current_cpu = "arm64"
     current_os = "linux"
   }
+  strip = rebase_path("${clang_base_path}/bin/llvm-strip", root_build_dir)
   shlib_extension = ".so"
 }
 
