@@ -39,6 +39,7 @@ def parse_args(args):
     parser.add_option('--output', help='generated ndk stub file')
     parser.add_option('--ndk-description-file', help='ndk description file')
     parser.add_option('--shlib-name', help='output name of shared library')
+    parser.add_option('--sdk-build-public', default='false', help='if public SDK build (true means to trim @systemapi)')
 
     options, _ = parser.parse_args(args)
     return options
@@ -48,6 +49,8 @@ def generate_version_script(options):
     contents = []
     with open(options.ndk_description_file, 'r') as f:
         interfaces = json.load(f)
+        if options.sdk_build_public.lower() == "true":
+            interfaces = [obj for obj in interfaces if obj.get("api_type") != "system"]
         for inf in interfaces:
             name = inf['name']
             contents.append('\t%s;' % name)
