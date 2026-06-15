@@ -20,7 +20,6 @@ from common_utils import run_cmd
 import threading
 import hashlib
 import time
-import re
 
 
 remote_sha256_cache = dict()
@@ -71,7 +70,13 @@ def check_sha256(remote_url: str, local_file: str) -> bool:
 
     remote_sha256 = get_remote_sha256(remote_url)
     local_sha256 = file_sha256(local_file)
-
+    if remote_sha256 != local_sha256:
+        print(
+            "remote file {}.sha256 is not found, begin check SHASUMS256.txt".format(
+                remote_url
+            )
+        )
+        remote_sha256 = obtain_sha256_by_sha_sums256(remote_url)
     return remote_sha256 == local_sha256
 
 
@@ -79,48 +84,23 @@ def get_remote_sha256(remote_url: str) -> str:
     """
     从远程.sha256文件中获取哈希值
     """
-
+    start_time = time.time()
     with _cache_lock:  # 加锁检查缓存
         if remote_url in remote_sha256_cache:
             return remote_sha256_cache[remote_url]
     
     # 在锁外执行耗时操作（如网络请求）
-    max_try = 3
-    remote_sha256 = ""
-    for _ in range(max_try):
-        remote_sha256 = obtain_sha256_by_sha256_file(remote_url)
-        if not remote_sha256:
-            remote_sha256 = obtain_sha256_by_sha_sums256(remote_url)
-            if not remote_sha256:
-                time.sleep(3)
-            else:
-                break
-        else:
-            break
-    if not remote_sha256:
-        raise Exception(f"get remote sha256 for {remote_url} failed.")
-    
-    remote_basename = os.path.basename(remote_url)
-    print(f"remote sha256 for {remote_basename} is {remote_sha256}")
+    check_sha256_cmd = f"curl -s -k {remote_url}.sha256"
+    remote_sha256, _, _ = run_cmd(check_sha256_cmd.split())
 
     with _cache_lock:  # 加锁更新缓存
         remote_sha256_cache[remote_url] = remote_sha256
-
+    endtime = time.time()
+    cost_time = endtime - start_time
+    remote_file_name = os.path.basename(remote_url)
+    if cost_time > 3:
+        print(f"get remote sha256 for {remote_file_name} cost time: {cost_time}")
     return remote_sha256
-
-
-def is_valid_sh256(hash_str: str) -> bool:
-    return bool(re.fullmatch(r'[a-fA-F0-9]{64}', hash_str))
-
-
-def obtain_sha256_by_sha256_file(remote_url: str) -> str:
-    check_sha256_cmd = f"curl -s -k {remote_url}.sha256"
-    remote_sha256, _, _ = run_cmd(check_sha256_cmd.split())
-    if is_valid_sh256(remote_sha256):
-        return remote_sha256
-    else:
-        print(f"get remote sha256 for {remote_url} by sh256 file failed.")
-        return ""
 
 
 def obtain_sha256_by_sha_sums256(remote_url: str) -> str:
@@ -132,15 +112,11 @@ def obtain_sha256_by_sha_sums256(remote_url: str) -> str:
     file_name = os.path.basename(remote_url)
     cmd = "curl -s -k " + sha_sums256_path
     data_sha_sums256, _, _ = run_cmd(cmd.split())
-    remote_sha256 = ""
+    remote_sha256 = None
     for line in data_sha_sums256.split("\n"):
         if file_name in line:
             remote_sha256 = line.split(" ")[0]
-    if is_valid_sh256(remote_sha256):
-        return remote_sha256
-    else:
-        print(f"get remote sha256 for {remote_url} by SHASUMS256.txt file failed.")
-        return ""
+    return remote_sha256
 
 
 def get_local_path(download_root: str, remote_url: str):
@@ -168,12 +144,13 @@ def extract_compress_files_and_gen_mark(source_file: str, unzip_dir: str, mark_f
     elif source_file.endswith(".tar"):
         command = ["tar", "-xvf", source_file, "-C", unzip_dir]
     else:
-        print("source file is:", source_file)
-        raise Exception(f"暂不支持解压此类型压缩文件！")
+        print("暂不支持解压此类型压缩文件！")
+        return
     
     _, err, retcode = run_cmd(command)
     if retcode != 0:
-        raise Exception(f"解压失败，错误信息：{err}")
+        print("解压失败，错误信息：", err)
+        return
     else:
         flag = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
         mode = stat.S_IWUSR | stat.S_IRUSR
