@@ -21,7 +21,7 @@ declare_args() {
 
   # Release type, optional values: Betax, RCx...
   release_type = "Beta"
-  meta_version = "3.0.0"
+  meta_version = "3.0.2"
   platform_version = "26.0.0"
 }
 

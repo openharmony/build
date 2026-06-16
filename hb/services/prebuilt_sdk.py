@@ -144,7 +144,8 @@ class PrebuiltSdk(PrebuiltSdkInterface):
             'sdk_for_hap_build=true',
             'enable_archive_sdk=false',
             'enable_notice_collection=false',
-            'enable_process_notice=false'
+            'enable_process_notice=false',
+            'point_split=true',
         ]
 
         prebuilts_arg_obj = args_dict.get('prebuilts_sdk_gn_args')
@@ -284,7 +285,7 @@ class PrebuiltSdk(PrebuiltSdkInterface):
             with open(version_gni_path, 'r', encoding='utf-8') as f:
                 content = f.read()
 
-            pattern = r'api_version\s*=\s*"([^"]+)"'
+            pattern = r'api_full_version\s*=\s*"([^"]+)"'
             match = re.search(pattern, content)
 
             if match:
