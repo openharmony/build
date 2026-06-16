@@ -311,13 +311,25 @@ template("package_app") {
         _js2abc_js =
             "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/bin/ark/ts2abc.js"
       } else {
-        if (!defined(external_deps)) {
-          external_deps = []
+        if (is_arkui_x) {
+          _ark_deps = [
+           "//arkcompiler/ets_frontend/es2panda:es2abc_js_file($host_toolchain)",
+         ]
+         external_deps = [ "ets_frontend:es2panda($host_toolchain)" ]
+         if (defined(deps)) {
+           deps += _ark_deps
+         } else {
+           deps = _ark_deps
+         }
+        } else {
+          if (!defined(external_deps)) {
+            external_deps = []
+          }
+          external_deps += [
+            "ets_frontend:es2panda($host_toolchain)",
+            "ets_frontend:es2abc_js_file($host_toolchain)"
+          ]
         }
-        external_deps += [
-          "ets_frontend:es2panda($host_toolchain)",
-          "ets_frontend:es2abc_js_file($host_toolchain)"
-        ]
         _js2abc_js = get_label_info(
                          "//arkcompiler/ets_frontend/es2panda:es2abc_js_file($host_toolchain)",
                          "target_out_dir") + "/ts2abc.js"
@@ -363,29 +375,54 @@ template("compile_js_assets") {
     if (!defined(deps)) {
       deps = []
     }
-    if (!defined(external_deps)) {
+    if (is_arkui_x) {
+      if (ohos_indep_compiler_enable) {
+        _ace_loader_home = "${prebuilts_sdk_dir}/js/build-tools/ace-loader"
+        _ets_loader_home = "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/"
+      } else {
+        deps += [
+          "//arkcompiler/ets_frontend/es2panda:build_es2abc_for_hap($host_toolchain)",
+          "//developtools/ace_js2bundle:ace_loader_ark_hap",
+          "//third_party/parse5:parse5_ark_hap",
+          "//third_party/weex-loader:weex_loader_ark_hap",
+        ]
+        if (!defined(external_deps)) {
           external_deps = []
-    }
-    if (ohos_indep_compiler_enable) {
-      _ace_loader_home = "${prebuilts_sdk_dir}/js/build-tools/ace-loader"
-      _ets_loader_home = "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/"
-    } else {
-      external_deps += [
-        "ets_frontend:build_es2abc_for_hap($host_toolchain)",
-        "ace_js2bundle:ace_loader_ark_hap",
-        "parse5:parse5_ark_hap",
-        "weex-loader:weex_loader_ark_hap"
-      ]
-      if (path_exists("//developtools/ace_ets2bundle")) {
-        external_deps += [ "ace_ets2bundle:ets_loader_ark_hap"  ]
+        }
+        external_deps += [ "ace_ets2bundle:ets_loader_ark_hap" ]
+        _ace_loader_home =
+            get_label_info("//developtools/ace_js2bundle:ace_loader_node_modules",
+                           "target_out_dir") + "/ace_loader_ark"
+        _ets_loader_home =
+            get_label_info(
+                "//developtools/ace_ets2bundle:ets_loader_node_modules",
+                "target_out_dir") + "/ets_loader_ark"
       }
-      _ace_loader_home =
-          get_label_info("//developtools/ace_js2bundle:ace_loader_node_modules",
-                         "target_out_dir") + "/ace_loader_ark"
-      _ets_loader_home =
-          get_label_info(
-              "//developtools/ace_ets2bundle:ets_loader_node_modules",
-              "target_out_dir") + "/ets_loader_ark"
+    } else {
+      if (!defined(external_deps)) {
+            external_deps = []
+      }
+      if (ohos_indep_compiler_enable) {
+        _ace_loader_home = "${prebuilts_sdk_dir}/js/build-tools/ace-loader"
+        _ets_loader_home = "${prebuilts_sdk_dir}/ets/build-tools/ets-loader/"
+      } else {
+        external_deps += [
+          "ets_frontend:build_es2abc_for_hap($host_toolchain)",
+          "ace_js2bundle:ace_loader_ark_hap",
+          "parse5:parse5_ark_hap",
+          "weex-loader:weex_loader_ark_hap"
+        ]
+        if (path_exists("//developtools/ace_ets2bundle")) {
+          external_deps += [ "ace_ets2bundle:ets_loader_ark_hap"  ]
+        }
+        _ace_loader_home =
+            get_label_info("//developtools/ace_js2bundle:ace_loader_node_modules",
+                           "target_out_dir") + "/ace_loader_ark"
+        _ets_loader_home =
+            get_label_info(
+                "//developtools/ace_ets2bundle:ets_loader_node_modules",
+                "target_out_dir") + "/ets_loader_ark"
+      }
     }
 
     _webpack_config_js = "${_ace_loader_home}/webpack.rich.config.js"
