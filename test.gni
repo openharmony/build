@@ -966,7 +966,7 @@ template("ohos_arkts_unittest") {
         ohos_ets_ui_plugins_deps,
       ]
 
-	  final_base_url = ""
+      final_base_url = ""
       base_path = ""
       if (invoker.base_url == "./arkui-preprocessed") {
         final_base_url = "//foundation/arkui/ace_engine/frameworks/bridge/arkts_frontend/koala_projects/arkoala-arkts/arkui-preprocessed"
@@ -1016,7 +1016,7 @@ template("ohos_arkts_unittest") {
       if (defined(invoker.paths_keys) && defined(invoker.paths_values)) {
         args += [ "--paths_keys" ] + invoker.paths_keys
         paths_values = []
-	    foreach(path, invoker.paths_values) {
+        foreach(path, invoker.paths_values) {
           paths_values += [ rebase_path(base_path + path) ]
         }
         args += [ "--paths_values" ] + paths_values

@@ -404,8 +404,10 @@ def build_driver_config(args: argparse.Namespace) -> None:
 class SubprocessTimeoutError(Exception):
     """Exception raised when subprocess execution times out."""
 
+
 class SubprocessRunError(Exception):
     """Exception raised when subprocess fails to execute."""
+
 
 class PathsLengthMismatchError(Exception):
     """Exception raised when paths_keys and paths_values have different lengths."""
