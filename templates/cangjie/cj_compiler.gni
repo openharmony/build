@@ -173,6 +173,14 @@ template("_cj_target") {
     external_deps_ += invoker.external_deps
   }
 
+  # 仅 arkui 相关模块开启 codesize 优化
+  if (!build_ohos_sdk && part_name == "arkui_cangjie_wrapper" && is_ohos) {
+    cjc_args_ += [
+      "--discard-eh-frame",
+      "--link-options=-z pack-relative-relocs"
+    ]
+  }
+
   cjc_args_ += cjc_args
 
   _cangjie_deps_config = "${target_out_dir}/${target_name}__deps_config.json"
