@@ -608,14 +608,8 @@ def process_developer_test(part_data, parts_path_info, part_name, subsystem_name
 
 
 def process_skia(part_data, parts_path_info, part_name, subsystem_name, components_json):
-    skia_piex_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'piex')
-    skia_libjpeg_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'third_party', 'externals', 'libjpeg-turbo')
     skia_m133_dng_sdk_path = os.path.join(part_data.get('root_path'), 'third_party', 'skia', 'm133', 'third_party', 'externals', 'dng_sdk', 'source')
-    skia_component_piex_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'piex', 'includes')
-    skia_component_libjpeg_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'libjpeg', 'includes')
     skia_component_dng_sdk_path = os.path.join(part_data.get("out_path"), "component_package", part_data.get("part_path"), 'innerapis', 'dng_sdk', 'includes')
-    copy_directory_contents(skia_piex_path, skia_component_piex_path)
-    copy_directory_contents(skia_libjpeg_path, skia_component_libjpeg_path)
     copy_directory_contents(skia_m133_dng_sdk_path, skia_component_dng_sdk_path)
 
     part_path = _get_parts_path(parts_path_info, part_name)
@@ -1106,7 +1100,7 @@ def _copy_dir(src_path, target_path):
             _copy_dir(path, path1)
         else:
             _, file_extension = os.path.splitext(file)
-            if file_extension not in [".h", ".hpp", ".in", ".inc", ".inl"]:
+            if file_extension not in [".h", ".hpp", ".in", ".inc", ".inl", ".incl_cpp"]:
                 continue
             if not os.path.exists(target_path):
                 os.makedirs(target_path)
@@ -1136,6 +1130,7 @@ def _copy_includes(args, module, includes: list):
             "//foundation/communication/ipc/interfaces/innerkits/ipc_core/include",
             "//foundation/communication/ipc/ipc/native/src/core/include",
             "//foundation/communication/ipc/ipc/native/src/mock/include",
+            "//foundation/communication/ipc/ipc/native/src/core/framework/include",
         ]
     includes_out_dir = os.path.join(args.get("out_path"), "component_package",
                                     args.get("part_path"), "innerapis", module, "includes")

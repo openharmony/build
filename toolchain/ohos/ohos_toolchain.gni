@@ -62,15 +62,14 @@ template("ohos_clang_toolchain") {
       abi_target = "arm-liteos-ohos"
     }
 
-    if (musl_is_legacy) {
-      clang_rt_dir =
-          rebase_path("${clang_lib_base_path}/${abi_target}/nanlegacy",
-                      root_build_dir)
-    } else {
-      if (abi_target != "riscv32-linux-ohos" &&
-          abi_target != "arm-liteos-ohos") {
+    if (abi_target != "riscv32-linux-ohos" && abi_target != "arm-liteos-ohos") {
+      if (musl_is_legacy) {
         clang_rt_dir =
-            rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
+            rebase_path("${clang_lib_base_path}/${abi_target}/nanlegacy",
+                        root_build_dir)
+      } else {
+          clang_rt_dir =
+              rebase_path("${clang_lib_base_path}/${abi_target}", root_build_dir)
       }
     }
 
@@ -120,7 +119,7 @@ template("ohos_clang_toolchain") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
     } else if (rust_abi_target == "riscv32-linux-ohos") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
-    } else if (rust_abi_target == "arm-liteos_ohos") {
+    } else if (rust_abi_target == "arm-liteos-ohos") {
       cc_command_args = "--target=${rust_abi_target} -Clinker=$cxx -Clink-arg=-lunwind -Clink-arg=-fuse-ld=lld -Clink-arg=-v -Clink-arg=--target=${abi_target} -Clink-arg=--sysroot=$musl_path -C target-feature=-crt-static -L $musllib -L${clang_base_path}/lib/${abi_target}/c++"
     }
   }

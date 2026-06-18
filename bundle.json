@@ -27,7 +27,8 @@
       "build_framework_enable_global_reordering",
       "build_framework_enable_rcpc",
       "build_framework_enable_thinlto_nca",
-      "build_framework_security_configs_policy"
+      "build_framework_security_configs_policy",
+      "build_framework_pac_configs_policy"
     ],
     "adapted_system_type": [
       "standard",
