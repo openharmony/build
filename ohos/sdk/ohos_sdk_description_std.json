@@ -1737,6 +1737,7 @@
         "target_os": [
             "linux",
             "windows",
+            "darwin",
             "linux_arm64"
         ]
     },
