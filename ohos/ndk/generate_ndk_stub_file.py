@@ -37,6 +37,7 @@ def parse_args(args):
     build_utils.add_depfile_option(parser)
     parser.add_option('--output', help='generated ndk stub file')
     parser.add_option('--ndk-description-file', help='ndk description file')
+    parser.add_option('--sdk-build-public', default='false', help='if public SDK build (true means to trim @systemapi)')
 
     options, _ = parser.parse_args(args)
     return options
@@ -46,6 +47,8 @@ def generate_stub_file(options):
     contents = []
     with open(options.ndk_description_file, 'r') as f:
         interfaces = json.load(f)
+        if options.sdk_build_public.lower() == "true":
+            interfaces = [obj for obj in interfaces if obj.get("api_type") != "system"]
         for inf in interfaces:
             name = inf.get('name')
             if inf.get('type') == 'variable':
