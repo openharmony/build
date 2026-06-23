@@ -32,6 +32,7 @@ from pathlib import Path
 ES2PANDAPATH = "arkcompiler/runtime_core/static_core/out/bin/es2panda"
 ARKLINKPATH = "arkcompiler/runtime_core/static_core/out/bin/ark_link"
 CONFIGPATH = "arkcompiler/runtime_core/static_core/out/bin/arktsconfig.json"
+ENVPATH = "arkcompiler/runtime_core"
 TOOLSPATH = "test/testfwk/developer_test/libs/arkts1.2"
 HYPIUMPATH = "test/testfwk/arkxtest/jsunit/src_static/"
 
@@ -49,105 +50,6 @@ def get_path_code_directory(after_dir):
     full_path = os.path.join(root_path, after_dir)
     logging.debug(f"Resolved path: {after_dir} -> {full_path}")
     return full_path
-
-
-# ==========================
-# Build Tools
-# ==========================
-def build_tools(compile_filelist, output_dir, arktsconfig):
-    """
-    Compile ETS files into ABC format.
-    """
-    logging.info(f"Starting compilation, output directory: {output_dir}")
-    abs_es2panda_path = get_path_code_directory(ES2PANDAPATH)
-
-    # Create output directory
-    output_dir = os.path.join(output_dir, "out")
-    os.makedirs(output_dir, exist_ok=True)
-    logging.info(f"Output directory created or exists: {output_dir}")
-
-    # Compile each file
-    for ets_file in compile_filelist:
-        try:
-            file_name = os.path.basename(ets_file)
-            base_name = os.path.splitext(file_name)[0]
-            output_filepath = os.path.join(output_dir, f"{base_name}.abc")
-
-            if arktsconfig == CONFIGPATH:
-                command = [abs_es2panda_path, ets_file, f"--output={output_filepath}"]
-            else:
-                arktsconfig_path = get_path_code_directory(arktsconfig)
-                command = [abs_es2panda_path, ets_file, f"--output={output_filepath}",
-                           f"--arktsconfig={arktsconfig_path}"]
-            logging.info(f"Executing compile command: {' '.join(command)}")
-
-            result = subprocess.run(
-                command,
-                check=True,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
-            logging.info(f"Successfully compiled '{ets_file}' → '{output_filepath}'")
-            if result.stdout.strip():
-                logging.debug(f"Compile output: {result.stdout.strip()}")
-
-        except subprocess.CalledProcessError as e:
-            logging.error(f"Compilation failed for '{ets_file}'. Error:\n{e.stderr.strip()}")
-            raise
-        except Exception as e:
-            logging.critical(f"Unexpected error during compilation of '{ets_file}': {str(e)}")
-            raise
-
-
-# ==========================
-# Main Build Flow
-# ==========================
-def build_ets_files(target_path, test_files, output_dir, arktsconfig):
-    """
-    Compile test case ETS files.
-    """
-    # Parse source file list
-    test_files_list = [f.strip() for f in test_files.split(',') if f.strip()]
-    test_files = [os.path.join(target_path, file) for file in test_files_list]
-
-    logging.info(f"Files to be compiled: {test_files}")
-    build_tools(test_files, output_dir, arktsconfig)
-
-
-def collect_abc_files(output_dir, target_path, hypium_output_dir, sources):
-    """
-    Collect all .abc files for linking.
-    """
-    abs_out_path = os.path.join(output_dir, "out")
-    abc_files = []
-
-    # 1. Collect .abc files from 'out' directory
-    if os.path.exists(abs_out_path):
-        out_files = [
-            os.path.join(abs_out_path, f)
-            for f in os.listdir(abs_out_path)
-            if f.endswith('.abc') and (not f.endswith('_source.abc'))
-        ]
-        abc_files.extend(out_files)
-        logging.info(f"Collected {len(out_files)} .abc files from 'out' directory")
-    else:
-        logging.warning(f"Output directory does not exist: {abs_out_path}")
-
-    # 2. Add hypium_tools.abc
-    hypium_abc = os.path.join(hypium_output_dir, "hypium_tools.abc")
-    if os.path.exists(hypium_abc):
-        abc_files.append(hypium_abc)
-        logging.info(f"Added hypium tool file: {hypium_abc}")
-    else:
-        logging.error(f"Missing hypium tool file: {hypium_abc}. Please compile hypium first.")
-        raise FileNotFoundError(f"Missing hypium tool file: {hypium_abc}")
-
-    # 3. Load additional .abc files from src.json
-    abc_files.extend(load_abc_from_src_json(target_path, sources))
-
-    logging.info(f"Total {len(abc_files)} .abc files collected for linking")
-    return abc_files
 
 
 def load_abc_from_src_json(target_path, sources):
@@ -188,26 +90,6 @@ def load_abc_from_src_json(target_path, sources):
             logging.warning(f"Skipped invalid or non-.abc path: {path}")
 
     return abc_files
-
-
-def link_abc_files(output_dir, hap_name, target_path, hypium_output_dir, sources):
-    """
-    Link all .abc files into final test.abc.
-    """
-    hypium_abc = os.path.join(hypium_output_dir, "hypium_tools.abc")
-    if not os.path.exists(hypium_abc):
-        logging.error(f"Missing hypium tool file: {hypium_abc}. Please compile hypium first.")
-        sys.exit(1)
-
-    abc_files = collect_abc_files(output_dir, target_path, hypium_output_dir, sources)
-
-    if not abc_files:
-        logging.error("No .abc files collected, cannot proceed with linking.")
-        sys.exit(1)
-
-    out_path = os.path.join(output_dir, f"{hap_name}.abc")
-
-    execute_abc_link(out_path, abc_files)
 
 
 def execute_abc_link(out_path, abc_files):
@@ -289,7 +171,8 @@ def build_file_map() -> Dict[str, List[str]]:
 
 def scan_and_add_test_files(args: argparse.Namespace, config: dict) -> None:
     """Scan the target HAP directory for .ets files that are not yet in compileFiles,
-       and extend config['compileFiles'] with them."""
+       and extend config['compileFiles'] with them.
+    """
     if not args.base_url.endswith("arkui-preprocessed"):
         return
 
@@ -314,14 +197,15 @@ def scan_and_add_test_files(args: argparse.Namespace, config: dict) -> None:
 # ==========================
 # Get testrunner filepath
 # ==========================
-def write_test_runner_path_file(args: argparse.Namespace, config: dict) -> None:
+def write_test_runner_path_file(args: argparse.Namespace, config: dict, ui_enable: bool) -> None:
     target_dir = os.path.join(args.output_dir, "out")
     file_path = os.path.join(target_dir, f"{args.hap_name}_testRunnerPath.txt")
     if os.path.exists(file_path):
         os.remove(file_path)
     # Find the matching test runner file
+    source_files = config["compileFiles"] if ui_enable else config["files"]
     matching_files = [
-        file for file in config["compileFiles"]
+        file for file in source_files
         if file.endswith("OpenHarmonyTestRunner.ets")
     ]
 
@@ -341,6 +225,112 @@ def write_test_runner_path_file(args: argparse.Namespace, config: dict) -> None:
             # write to file
             with open(file_path, 'w', encoding='utf-8') as f:
                 f.write(relative_path)
+
+
+def get_key_from_file_name(file_name: str) -> str:
+    """
+    Extract the key from the given file name.
+    """
+    if ".d." in file_name:
+        file_name = file_name.replace(".d.", ".")
+    return os.path.splitext(file_name)[0]
+
+
+def is_target_file(file_name: str) -> bool:
+    """
+    Check if the given file name is a target file.
+    """
+    target_extensions = [".d.ets", ".ets"]
+    return any(file_name.endswith(ext) for ext in target_extensions)
+
+
+def scan_directory_for_paths(directory: str) -> Dict[str, List[str]]:
+    """
+    Scan the specified directory to find all target files and organize their paths by key.
+    If the first-level directory is 'arkui' and the second-level directory is 'runtime-api',
+    the key is the file name. Otherwise, the key is the relative path with '/' replaced by '.'.
+    """
+    paths = {}
+    for root, _, files in os.walk(directory):
+        for file in files:
+            if not is_target_file(file):
+                continue
+            file_path = os.path.abspath(os.path.join(root, file))
+            file_name = get_key_from_file_name(file)
+            file_abs_path = os.path.abspath(os.path.join(root, file_name))
+            file_rel_path = os.path.relpath(file_abs_path, start=directory)
+            # Split the relative path into components
+            path_components = file_rel_path.split(os.sep)
+            first_level_dir = path_components[0] if len(path_components) > 0 else ""
+            second_level_dir = path_components[1] if len(path_components) > 1 else ""
+            # Determine the key based on directory structure
+            if first_level_dir == "arkui" and second_level_dir == "runtime-api":
+                key = file_name
+            else:
+                key = file_rel_path.replace(os.sep, ".")
+            if key in paths:
+                paths[key].append(file_path)
+            else:
+                paths[key] = [file_path]
+    return paths
+
+
+def build_config(args: argparse.Namespace) -> None:
+    """
+    Build the configuration dictionary based on command-line arguments.
+    """
+    paths = {}
+    for scan_path in args.scan_path:
+        scanned_paths = scan_directory_for_paths(scan_path)
+        for key, value in scanned_paths.items():
+            if key in paths:
+                paths[key].extend(value)
+            else:
+                paths[key] = value
+    paths["std"] = [args.std_path]
+    paths["escompat"] = [args.escompat_path]
+
+    if args.paths_keys and args.paths_values:
+        if len(args.paths_keys) != len(args.paths_values):
+            raise PathsLengthMismatchError(
+                "paths_keys and paths_values must have the same length"
+            )
+        for key, value in zip(args.paths_keys, args.paths_values):
+            paths[key] = [os.path.abspath(value)]
+
+    file_map = {}
+    # 1. Scan tools_path (arkts1.2 tdd)
+    file_map = build_file_map()
+    paths.update(file_map)
+
+    config = {
+        "compilerOptions": {
+            "rootDir": args.root_dir,
+            "baseUrl": args.base_url,
+            "paths": paths,
+            "outDir": args.cache_path,
+            "package": args.package if args.package else "",
+            "useEmptyPackage": True
+        }
+    }
+
+    if args.include:
+        config["include"] = args.include
+    if args.exclude:
+        config["exclude"] = args.exclude
+    if args.files:
+        if not os.path.exists(args.files):
+            print(f"[IO ERROR] File not found: {args.files}", file=sys.stderr)
+            sys.exit()
+        fd = os.open(args.files, os.O_RDONLY)
+        with os.fdopen(fd, 'r') as f:
+            config["files"] = [line.strip() for line in f.readlines()]
+    # Get testrunner filepath
+    write_test_runner_path_file(args, config, False)
+    os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
+    fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2, ensure_ascii=False)
 
 
 # ==========================
@@ -403,12 +393,24 @@ def build_driver_config(args: argparse.Namespace) -> None:
     # Scan and add the target HAP directory for .ets files that are not yet in compileFiles
     scan_and_add_test_files(args, config)
     # Get testrunner filepath
-    write_test_runner_path_file(args, config)
+    write_test_runner_path_file(args, config, True)
 
     os.makedirs(os.path.dirname(args.arktsconfig), exist_ok=True)
     fd = os.open(args.arktsconfig, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o777)
     with os.fdopen(fd, "w", encoding="utf-8") as f:
         json.dump(config, f, indent=2, ensure_ascii=False)
+
+
+class SubprocessTimeoutError(Exception):
+    """Exception raised when subprocess execution times out."""
+
+
+class SubprocessRunError(Exception):
+    """Exception raised when subprocess fails to execute."""
+
+
+class PathsLengthMismatchError(Exception):
+    """Exception raised when paths_keys and paths_values have different lengths."""
 
 
 def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
@@ -417,6 +419,7 @@ def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
         timeout_sec = int(timeout)
         if timeout_sec <= 0:
             raise ValueError("Timeout must be a positive integer")
+
         process = subprocess.Popen(
             cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
         )
@@ -425,11 +428,12 @@ def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
         except subprocess.TimeoutExpired:
             process.kill()
             stdout, stderr = process.communicate(timeout=timeout_sec)
-            raise subprocess.TimeoutExpired(
-                f"Command '{' '.join(cmd)}' timed out after {timeout_sec} seconds")
+            raise SubprocessTimeoutError(
+                f"Command '{' '.join(cmd)}' timed out after {timeout_sec} seconds"
+            )
 
         if process.returncode != 0:
-            raise subprocess.CalledProcessError(
+            raise SubprocessRunError(
                 f"Command '{' '.join(cmd)}' failed with return code {process.returncode}\n"
                 f"Standard Error:\n{stderr}\n"
                 f"Standard Output:\n{stdout}"
@@ -438,11 +442,11 @@ def run_subprocess(cmd: List[str], timeout: str, env: Dict[str, str]) -> str:
         return stdout
 
     except ValueError as e:
-        raise ValueError(f"Invalid timeout value: {e}")
+        raise SubprocessRunError(f"Invalid timeout value: {e}")
     except OSError as e:
-        raise OSError(f"OS error occurred: {e}")
+        raise SubprocessRunError(f"OS error occurred: {e}")
     except Exception as e:
-        raise RuntimeError(f"Unexpected error: {e}")
+        raise SubprocessRunError(f"Unexpected error: {e}")
 
 
 def execute_driver(
@@ -459,11 +463,13 @@ def execute_driver(
     return run_subprocess(cmd, timeout, env)
 
 
-def replace_import_paths(file_path):
+def replace_import_paths(file_path, base_name):
     """replace arkui-preprocessed test file import path."""
+    escaped_base_name = re.escape(base_name)
+    pattern = rf'from\s*([\'"])((?:\.\./)+){escaped_base_name}(/?[^\'"]*)([\'"])'
+
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    pattern = r'from\s*([\'"])((?:\.\./)+)arkui-preprocessed(/?[^\'"]*)([\'"])'
 
     new_content = re.sub(
         pattern,
@@ -495,7 +501,7 @@ def ui_enable_link_hypium_abc(dst_file, hypium_output_dir) -> None:
     execute_abc_link(dst_file, abc_files)
 
 
-def copy_ets_files_to_preprocessed_dir(args, target_dir):
+def copy_ets_files_to_preprocessed_dir(args, target_dir, base_name):
     """
     Copy ETS test files into the arkui-preprocessed directory
     structure, and replace import paths in each file.
@@ -526,10 +532,52 @@ def copy_ets_files_to_preprocessed_dir(args, target_dir):
 
         # Replace import paths in the copied file
         try:
-            replace_import_paths(target_file)
+            replace_import_paths(target_file, base_name)
             logging.info(f"Import paths replaced in: {target_file}")
         except Exception as e:
             logging.error(f"Failed to replace import paths in {target_file}: {e}")
+
+
+def build_es2panda_command(es2panda_path: str, arktsconfig: str) -> List[str]:
+    """Construct es2panda command arguments."""
+    return [es2panda_path, "--arktsconfig", arktsconfig, "--ets-module"]
+
+
+def execute_es2panda(arktsconfig: str, timeout: str
+) -> str:
+    """Execute es2panda compilation process."""
+    es2panda_path = get_path_code_directory(ES2PANDAPATH)
+    cmd = build_es2panda_command(es2panda_path, arktsconfig)
+    logging.critical(f"cmd:{cmd}")
+    env_path = get_path_code_directory(ENVPATH)
+    env = os.environ.copy()
+    env["LD_LIBRARY_PATH"] = env_path
+    return run_subprocess(cmd, timeout, env)
+
+
+def build_ark_link_command(
+    ark_link_path: str, output_path: str, abc_files: List[str]
+) -> List[str]:
+    """Construct ark_link command arguments."""
+    return [ark_link_path, f"--output={output_path}", "--", *abc_files]
+
+
+def execute_ark_link(output_path: str, output_dir: str, timeout: str
+) -> str:
+    if not output_path:
+        raise ValueError("dst_file is empty or None")
+    """Execute ark_link process to bundle ABC files."""
+    abc_files = []
+    for root, _, files in os.walk(output_dir):
+        for file in files:
+            if file.endswith(".abc"):
+                abc_files.append(os.path.join(root, file))
+    ark_link_path = get_path_code_directory(ARKLINKPATH)
+    cmd = build_ark_link_command(ark_link_path, output_path, abc_files)
+    env_path = get_path_code_directory(ENVPATH)
+    env = os.environ.copy()
+    env["LD_LIBRARY_PATH"] = env_path
+    return run_subprocess(cmd, timeout, env)
 
 
 # ==========================
@@ -568,6 +616,19 @@ def main():
     parser.add_argument("--timeout_limit", type=str, default="12000",
                         help="Process timeout in seconds (default: 12000)")
 
+    parser.add_argument("--root_dir", required=False,
+                      help="Root directory for the project")
+    parser.add_argument("--std_path", required=False,
+                      help="Path to the standard library")
+    parser.add_argument("--escompat_path", required=False,
+                      help="Path to the escompat library")
+    parser.add_argument("--include", nargs="+", required=False,
+                      help="List of file patterns to include in the compilation")
+    parser.add_argument("--exclude", nargs="+", required=False,
+                      help="List of file patterns to exclude from the compilation")
+    parser.add_argument("--device_dst_file", type=str, default=None,
+                      help="Path for device dst file. Required if 'is-boot-abc' is True")
+
     args = parser.parse_args()
     target_dir = None
 
@@ -579,16 +640,20 @@ def main():
 
         # Starting build pipeline
         if args.ui_enable == "True":
-            if args.base_url.endswith("arkui-preprocessed"):
-                target_dir = os.path.join(args.base_url, args.hap_name)
-                copy_ets_files_to_preprocessed_dir(args, target_dir)
+            target_dir = os.path.join(args.base_url, args.hap_name)
+            base_name = os.path.basename(args.base_url)
+            copy_ets_files_to_preprocessed_dir(args, target_dir, base_name)
+
             build_driver_config(args)
             execute_driver(args.entry_path, args.arktsconfig, args.env_path, args.node_path, args.timeout_limit)
-            ui_enable_link_hypium_abc(args.dst_file, args.hypium_output_dir)
         else:
-            build_ets_files(args.target_path, args.test_files, args.output_dir, args.arktsconfig)
-            link_abc_files(args.output_dir, args.hap_name, args.target_path, args.hypium_output_dir, args.sources)
-        # Build completed successfully!
+            output_dir = os.path.join(args.output_dir, "out")
+            os.makedirs(output_dir, exist_ok=True)
+            build_config(args)
+            execute_es2panda(args.arktsconfig, args.timeout_limit)
+            execute_ark_link(args.dst_file, args.cache_path, args.timeout_limit)
+        # arklink hypium tools
+        ui_enable_link_hypium_abc(args.dst_file, args.hypium_output_dir)
 
         # arklink source file
         source_abc_dir = os.path.join(args.output_dir, "out", f"{args.hap_name}_source.abc")
