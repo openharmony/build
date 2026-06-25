@@ -312,7 +312,7 @@ set(CMAKE_MODULE_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create
 set(CMAKE_MODULE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${_DEVICEINFO_LIB} ${CMAKE_MODULE_LINKER_FLAGS}" CACHE STRING "Linker flags to be used to create modules." FORCE)
 
 set(CMAKE_EXE_LINKER_FLAGS "" CACHE STRING "Linker flags to be used to create executables.")
-set(CMAKE_EXE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS} ${_DEVICEINFO_LIB} ${}" CACHE STRING "Linker flags to be used to create executables." FORCE)
+set(CMAKE_EXE_LINKER_FLAGS "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS} ${_DEVICEINFO_LIB} ${CMAKE_EXE_LINKER_FLAGS}" CACHE STRING "Linker flags to be used to create executables." FORCE)
 
 # set the executable suffix
 set(HOST_SYSTEM_EXE_SUFFIX)
