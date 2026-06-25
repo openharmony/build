@@ -294,8 +294,6 @@ template("ohos_ndk_library") {
       _output_name,
       "--depfile",
       rebase_path(depfile, root_build_dir),
-      "--sdk-build-public",
-      "${sdk_build_public}",
     ]
     outputs = [ _generated_version_script ]
   }
