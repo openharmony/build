@@ -183,7 +183,7 @@
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-x86/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-x86-1.13.2-20260331.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-x86-1.13.2-20260626.tar.gz"
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/windows-x86/bin",
