@@ -524,7 +524,7 @@
                             "unzip_filename": "linux-x86"
                         },
                         {
-                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260420.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260627.tar.gz",
                             "unzip_filename": "windows-x86",
                             "build_type": "src",
                             "skip_handle": true
@@ -885,7 +885,7 @@
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/python_llvm",
-                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260420.tar.gz",
+                            "remote_url": "/openharmony/compiler/python/3.12.10/windows/python-mingw-x86-3.12.10_20260627.tar.gz",
                             "unzip_filename": "windows-x86"
                         }
                     ]
