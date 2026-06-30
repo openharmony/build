@@ -247,7 +247,8 @@
         "hvigor"
     ],
     "external_device_manager":[
-        "app"
+        "app",
+        "sdk"
     ],
     "screenlock_mgr":[
         "app"
@@ -285,7 +286,8 @@
     ],
     "selectionfwk":[
         "app",
-        "hvigor"
+        "hvigor",
+        "sdk"
     ],
     "preferences":[
         "app"
