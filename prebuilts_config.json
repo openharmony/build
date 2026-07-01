@@ -1013,7 +1013,7 @@
                 {
                     "type": "download_sdk",
                     "sdk_name": "ohos-sdk-full-linux",
-                    "version": 26
+                    "version": "26.0.0"
                 }
             ]
         },
