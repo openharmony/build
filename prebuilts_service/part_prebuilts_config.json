@@ -225,7 +225,8 @@
         "hvigor"
     ],
     "relational_store":[
-        "app"
+        "app",
+        "sdk"
     ],
     "sensor":[
         "app"
@@ -294,14 +295,5 @@
     ],
     "bluetooth":[
         "app"
-    ],
-    "relational_store":[
-        "sdk"
-    ],
-    "selectionfwk":[
-        "sdk"
-    ],
-    "background_task_mgr":[
-        "sdk"
     ]
 }
