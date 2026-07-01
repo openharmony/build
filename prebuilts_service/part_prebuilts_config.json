@@ -294,5 +294,14 @@
     ],
     "bluetooth":[
         "app"
+    ],
+    "relational_store":[
+        "sdk"
+    ],
+    "selectionfwk":[
+        "sdk"
+    ],
+    "background_task_mgr":[
+        "sdk"
     ]
 }
