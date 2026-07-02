@@ -292,7 +292,8 @@
         "sdk"
     ],
     "preferences":[
-        "app"
+        "app",
+        "sdk"
     ],
     "bluetooth":[
         "app"
