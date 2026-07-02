@@ -274,7 +274,8 @@
         "npm_install"
     ],
     "webview":[
-        "hvigor"
+        "hvigor",
+        "sdk"
     ],
     "ets_runtime":[
         "ark_js"
