@@ -49,6 +49,7 @@ SUPPORTED_TOP_LEVEL_FIELDS = {
     "eventTypes",
     "eventSchemas",
     "hasSubCommand",
+    "isLockScreenExecutionAllowed",
     "inputSchema",
     "outputSchema",
     "subcommands",
