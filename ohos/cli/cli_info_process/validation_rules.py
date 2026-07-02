@@ -65,6 +65,7 @@ def validate_top_level(data: dict[str, Any], result: ValidationResult) -> None:
     _validate_event_types(data.get("eventTypes"), "/eventTypes", "TOP_eventTypes", result)
     _validate_event_schemas(data.get("eventSchemas"), "/eventSchemas", "TOP_eventSchemas", result)
     _validate_optional_boolean(data, "hasSubCommand", "TOP_hasSubCommand_001", result)
+    _validate_optional_boolean(data, "isLockScreenExecutionAllowed", "TOP_isLockScreenExecutionAllowed_001", result)
     _validate_input_schema_field(data, "/inputSchema", "TOP_inputSchema_001", result)
     _validate_output_schema_field(data, "/outputSchema", "TOP_outputSchema", result)
     _validate_top_level_relationships(data, result)
