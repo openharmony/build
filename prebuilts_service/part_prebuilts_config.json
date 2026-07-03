@@ -245,7 +245,8 @@
     ],
     "enterprise_device_management":[
         "app",
-        "hvigor"
+        "hvigor",
+        "sdk"
     ],
     "external_device_manager":[
         "app",
