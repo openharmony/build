@@ -99,8 +99,8 @@ class JsonSAInfoMerger(object):
         """
         self.temp_dir = path_merges
         self.output_dir = path_merges
-        for part_name, files in sa_info_file_dict.items():
-            for file in files:
+        for part_name, files in sorted(sa_info_file_dict.items()):
+            for file in sorted(files):
                 self.parse_json_file(part_name, file)
         self.add_to_output_file_dict()
         global_ordered_systemability_names = []
