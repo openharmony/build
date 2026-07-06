@@ -235,7 +235,8 @@
         "app"
     ],
     "time_service":[
-        "app"
+        "app",
+        "sdk"
     ],
     "hiappevent":[
         "app"
