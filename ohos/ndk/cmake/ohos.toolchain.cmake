@@ -315,13 +315,72 @@ else()
   set(_OHOS_EXE_LINKER_BASE "${OHOS_COMMON_LINKER_FLAGS} ${OHOS_EXE_LINKER_FLAGS}")
 endif()
 
-string(REPLACE "${_OHOS_SHARED_LINKER_BASE}" "" _OHOS_USER_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
-string(REPLACE "${_OHOS_MODULE_LINKER_BASE}" "" _OHOS_USER_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
-string(REPLACE "${_OHOS_EXE_LINKER_BASE}" "" _OHOS_USER_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+# Strip OHOS default flags from cached CMAKE_*_LINKER_FLAGS.
+# Use the previous base (_OHOS_*_LINKER_BASE_PREV) that was actually written
+# to the cache on the last configure, rather than the newly computed base.
+# This ensures correct stripping even when OHOS_STL / OHOS_ALLOW_UNDEFINED_SYMBOLS /
+# OHOS_COMPATIBLE_SDK_VERSION have changed between configure runs.
+if(_OHOS_SHARED_LINKER_BASE_PREV)
+  string(REPLACE "${_OHOS_SHARED_LINKER_BASE_PREV}" "" _OHOS_USER_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+elseif(_OHOS_SHARED_LINKER_BASE)
+  string(REPLACE "${_OHOS_SHARED_LINKER_BASE}" "" _OHOS_USER_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+else()
+  set(_OHOS_USER_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+endif()
+
+if(_OHOS_MODULE_LINKER_BASE_PREV)
+  string(REPLACE "${_OHOS_MODULE_LINKER_BASE_PREV}" "" _OHOS_USER_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+elseif(_OHOS_MODULE_LINKER_BASE)
+  string(REPLACE "${_OHOS_MODULE_LINKER_BASE}" "" _OHOS_USER_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+else()
+  set(_OHOS_USER_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif()
+
+if(_OHOS_EXE_LINKER_BASE_PREV)
+  string(REPLACE "${_OHOS_EXE_LINKER_BASE_PREV}" "" _OHOS_USER_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+elseif(_OHOS_EXE_LINKER_BASE)
+  string(REPLACE "${_OHOS_EXE_LINKER_BASE}" "" _OHOS_USER_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+else()
+  set(_OHOS_USER_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+endif()
 
 string(STRIP "${_OHOS_USER_SHARED_LINKER_FLAGS}" _OHOS_USER_SHARED_LINKER_FLAGS)
 string(STRIP "${_OHOS_USER_MODULE_LINKER_FLAGS}" _OHOS_USER_MODULE_LINKER_FLAGS)
 string(STRIP "${_OHOS_USER_EXE_LINKER_FLAGS}" _OHOS_USER_EXE_LINKER_FLAGS)
+
+# Stale detection: warn if user flags still contain known OHOS default fragments,
+# which can happen when the previous base was not fully stripped (e.g. manual cache edits).
+set(_OHOS_STALE_FLAGS --rtlib=compiler-rt -fuse-ld=lld -static-libstdc++ -nostdlib++ -Wl,--build-id=sha1 -lunwind -Wl,--no-undefined -ldeviceinfo_ndk.z -Wl,--gc-sections -Wl,--warn-shared-textrel -Wl,--fatal-warnings -Qunused-arguments -Wl,-z,noexecstack)
+foreach(_flag IN LISTS _OHOS_STALE_FLAGS)
+  string(FIND "${_OHOS_USER_SHARED_LINKER_FLAGS}" "${_flag}" _stale_pos)
+  if(NOT _stale_pos EQUAL -1)
+    message(WARNING "Stale OHOS linker flag '${_flag}' found in CMAKE_SHARED_LINKER_FLAGS. "
+                    "This usually happens when OHOS_STL, OHOS_ALLOW_UNDEFINED_SYMBOLS, or "
+                    "OHOS_COMPATIBLE_SDK_VERSION was changed without clearing the build directory. "
+                    "Please remove the CMakeCache.txt and reconfigure.")
+    break()
+  endif()
+endforeach()
+foreach(_flag IN LISTS _OHOS_STALE_FLAGS)
+  string(FIND "${_OHOS_USER_MODULE_LINKER_FLAGS}" "${_flag}" _stale_pos)
+  if(NOT _stale_pos EQUAL -1)
+    message(WARNING "Stale OHOS linker flag '${_flag}' found in CMAKE_MODULE_LINKER_FLAGS. "
+                    "This usually happens when OHOS_STL, OHOS_ALLOW_UNDEFINED_SYMBOLS, or "
+                    "OHOS_COMPATIBLE_SDK_VERSION was changed without clearing the build directory. "
+                    "Please remove the CMakeCache.txt and reconfigure.")
+    break()
+  endif()
+endforeach()
+foreach(_flag IN LISTS _OHOS_STALE_FLAGS)
+  string(FIND "${_OHOS_USER_EXE_LINKER_FLAGS}" "${_flag}" _stale_pos)
+  if(NOT _stale_pos EQUAL -1)
+    message(WARNING "Stale OHOS linker flag '${_flag}' found in CMAKE_EXE_LINKER_FLAGS. "
+                    "This usually happens when OHOS_STL, OHOS_ALLOW_UNDEFINED_SYMBOLS, or "
+                    "OHOS_COMPATIBLE_SDK_VERSION was changed without clearing the build directory. "
+                    "Please remove the CMakeCache.txt and reconfigure.")
+    break()
+  endif()
+endforeach()
 
 set(_SHARED_LINKER_FLAGS "${_OHOS_SHARED_LINKER_BASE}")
 if(_OHOS_USER_SHARED_LINKER_FLAGS)
@@ -340,6 +399,12 @@ if(_OHOS_USER_EXE_LINKER_FLAGS)
   string(APPEND _EXE_LINKER_FLAGS " ${_OHOS_USER_EXE_LINKER_FLAGS}")
 endif()
 set(CMAKE_EXE_LINKER_FLAGS "${_EXE_LINKER_FLAGS}" CACHE STRING "Linker flags to be used to create executables." FORCE)
+
+# Persist current base values so the next configure can strip them correctly
+# even if OHOS_STL / OHOS_ALLOW_UNDEFINED_SYMBOLS / OHOS_COMPATIBLE_SDK_VERSION change.
+set(_OHOS_SHARED_LINKER_BASE_PREV "${_OHOS_SHARED_LINKER_BASE}" CACHE INTERNAL "" FORCE)
+set(_OHOS_MODULE_LINKER_BASE_PREV "${_OHOS_MODULE_LINKER_BASE}" CACHE INTERNAL "" FORCE)
+set(_OHOS_EXE_LINKER_BASE_PREV "${_OHOS_EXE_LINKER_BASE}" CACHE INTERNAL "" FORCE)
 
 # set the executable suffix
 set(HOST_SYSTEM_EXE_SUFFIX)
@@ -365,3 +430,4 @@ set(OHOS_RANLIB "${TOOLCHAIN_BIN_PATH}/llvm-ranlib${HOST_SYSTEM_EXE_SUFFIX}")
 set(CMAKE_AR                "${OHOS_AR}" CACHE FILEPATH "Archiver")
 set(CMAKE_RANLIB            "${OHOS_RANLIB}" CACHE FILEPATH "Ranlib")
 set(UNIX TRUE CACHE BOOL "Unix system" FORCE)
+
