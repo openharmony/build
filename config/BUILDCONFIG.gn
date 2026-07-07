@@ -447,6 +447,8 @@ declare_args() {
   # ohos-adapted python publishing on m1 platform
   if (host_os == "mac") {
     full_mini_debug = false
+  } else if (is_arkui_x && runtime_mode == "release") {
+    full_mini_debug = false
   } else {
     full_mini_debug = true
   }
