@@ -1,7 +1,7 @@
 {
   "//base/security/access_token/interfaces/innerkits/accesstoken:libaccesstoken_sdk": {
     "so_file_name": "libaccesstoken_sdk.z.so",
-    "categories": [ "chipsetsdk", "platformsdk" ]
+    "categories": [ "platformsdk" ]
   },
   "//base/hiviewdfx/hitrace/interfaces/native/innerkits:hitrace_dump": {
     "so_file_name": "libhitrace_dump.z.so",
