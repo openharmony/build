@@ -27,7 +27,7 @@ config("language_c") {
 }
 
 config("language_cpp") {
-  cflags_cc = [ "-std=c++11" ]
+  cflags_cc = [ "-std=c++17" ]
 }
 
 config("kernel_macros") {

@@ -29,7 +29,11 @@ if (board_cpu != "") {
   target_arch_cflags += [ "-mcpu=$board_cpu" ]
 }
 
-arch = "arm"
+if (target_cpu == "arm64") {
+  arch = "arm64"
+} else {
+  arch = "arm"
+}
 if (ohos_kernel_type == "liteos_a") {
   target_triple = "$arch-liteos-ohos"
 } else if (ohos_kernel_type == "linux") {
