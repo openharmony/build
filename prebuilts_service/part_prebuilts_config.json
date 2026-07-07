@@ -38,7 +38,8 @@
     "bundle_tool":[
         "app",
         "hvigor",
-        "base"
+        "base",
+        "sdk"
     ],
     "bundle_framework":[
         "app",
