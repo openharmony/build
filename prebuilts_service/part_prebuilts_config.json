@@ -233,7 +233,8 @@
         "app"
     ],
     "app_file_service":[
-        "app"
+        "app",
+        "sdk"
     ],
     "time_service":[
         "app",
