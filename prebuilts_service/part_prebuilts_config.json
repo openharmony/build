@@ -258,7 +258,8 @@
         "app"
     ],
     "kv_store":[
-        "app"
+        "app",
+        "sdk"
     ],
     "hiperf":[
         "app",
