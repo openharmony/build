@@ -255,7 +255,8 @@
         "sdk"
     ],
     "screenlock_mgr":[
-        "app"
+        "app",
+        "sdk"
     ],
     "kv_store":[
         "app",
