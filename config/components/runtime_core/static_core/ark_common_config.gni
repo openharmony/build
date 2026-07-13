@@ -13,6 +13,7 @@
 
 import("//build/ohos.gni")
 import("ark_root.gni")
+import("//build/config/components/runtime_core/hilog_config.gni")
 
 use_pbqp = false
 ark_subsystem_name = "arkcompiler"
@@ -23,9 +24,7 @@ if (current_toolchain == host_toolchain && !is_mac) {
   platform_ldflags = [ "-static-libstdc++" ]
 }
 hiviewdfx_ext_deps = []
-enable_hilog =
-    !ark_standalone_build && is_standard_system && current_os == "ohos" &&
-    (current_cpu == "arm64" || current_cpu == "arm")
+enable_hilog = enable_hilog_device
 
 if (enable_hilog) {
   hiviewdfx_ext_deps += [ "hilog:libhilog" ]
