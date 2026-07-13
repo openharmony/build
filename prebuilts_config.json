@@ -172,7 +172,7 @@
                     "arm64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-aarch64-1.13.2-20260423.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-aarch64-1.13.2-20260709.tar.gz"
                         }
                     ],
                     "x86_64": [
@@ -192,7 +192,7 @@
                         },
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/linux-aarch64/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.12.0/linux/ninja-linux-aarch64-1.12.0-20241210.tar.gz"
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/linux/ninja-linux-aarch64-1.13.2-20260709.tar.gz"
                         }
                     ]
                 },
