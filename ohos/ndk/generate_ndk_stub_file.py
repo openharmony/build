@@ -47,7 +47,7 @@ def generate_stub_file(options):
     contents = []
     with open(options.ndk_description_file, 'r') as f:
         interfaces = json.load(f)
-        if options.sdk_build_public.lower() == "true":
+        if options.sdk_build_public.lower() == "true" and "third_party" not in options.ndk_description_file:
             interfaces = [obj for obj in interfaces if obj.get("api_type") != "system"]
         for inf in interfaces:
             name = inf.get('name')
