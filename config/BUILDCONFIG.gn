@@ -113,6 +113,18 @@ declare_args() {
   sandbox_debug = false
 }
 
+declare_args() {
+  # Memory optimization toggles (control via --gn-args).
+  # Only effective for liteos_m targets (applied via default_compiler_configs
+  # in the liteos_m branch below); ignored by liteos_a/linux/standard.
+  ohos_stack_protector = ""
+  ohos_mem_opt_extra = false
+}
+
+assert(ohos_stack_protector == "" || ohos_stack_protector == "no" ||
+       ohos_stack_protector == "strong",
+       "ohos_stack_protector must be empty string, no, or strong")
+
 product_build_config =
     read_file("${preloader_output_dir}/build_config.json", "json")
 
@@ -991,7 +1003,14 @@ if (is_lite_system) {
         "//build/lite/config:exceptions",
       ]
     } else if (ohos_kernel_type == "liteos_m") {
-      default_compiler_configs += [ "//build/lite/config:stack_protector" ]
+      if (ohos_stack_protector == "") {
+        default_compiler_configs += [ "//build/lite/config:stack_protector" ]
+      } else {
+        default_compiler_configs += [ "//build/lite/config:ohos_stack_protector" ]
+      }
+      if (ohos_mem_opt_extra) {
+        default_compiler_configs += [ "//build/lite/config:ohos_mem_opt_extra" ]
+      }
     }
 
     default_compiler_configs += [

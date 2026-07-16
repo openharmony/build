@@ -209,3 +209,35 @@ config("sysroot_flags") {
   ldflags = cflags
   asmflags = cflags
 }
+
+# Memory optimization options, controlled by build args declared in
+# build/config/BUILDCONFIG.gn (ohos_stack_protector, ohos_mem_opt_extra).
+# Applied to liteos_m targets via default_compiler_configs.
+
+# Constant merging (-fmerge-all-constants) and float constant size
+# reduction (-fsingle-precision-constant, gcc only).
+# Note: -fmerge-all-constants may merge constants of different types into the
+# same address, which technically violates the C standard.
+# Enable: --gn-args ohos_mem_opt_extra=true
+config("ohos_mem_opt_extra") {
+  cflags = [ "-fmerge-all-constants" ]
+  if (ohos_build_compiler == "gcc") {
+    # -fsingle-precision-constant is GCC-only; clang does not support it.
+    cflags += [ "-fsingle-precision-constant" ]
+  }
+  cflags_cc = cflags
+}
+
+# Stack protector mode (only when ohos_stack_protector != "").
+#   "no" -> -fno-stack-protector; "strong" -> -fstack-protector-strong.
+# When ohos_stack_protector == "" (default), the stack_protector config
+# (-fstack-protector-all) is used instead (see BUILDCONFIG.gn).
+config("ohos_stack_protector") {
+  cflags = []
+  if (ohos_stack_protector == "no") {
+    cflags = [ "-fno-stack-protector" ]
+  } else if (ohos_stack_protector == "strong") {
+    cflags = [ "-fstack-protector-strong" ]
+  }
+  cflags_cc = cflags
+}
