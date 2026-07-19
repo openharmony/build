@@ -876,6 +876,17 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/ets-loader/runtimeapi",
+        "module_label": "//interface/sdk-js:ohos_ets_runtimeapi",
+        "target_os": [
+            "windows",
+            "linux",
+            "darwin",
+            "ohos",
+            "linux_arm64"
+        ]
+    },
+    {
         "install_dir": "ets/dynamic/api",
         "module_label": "//interface/sdk-js:ohos_build_dynamic_sdk_api",
         "target_os": [
