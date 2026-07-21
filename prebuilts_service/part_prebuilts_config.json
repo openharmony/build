@@ -159,7 +159,8 @@
     ],
     "user_file_service":[
         "sdk",
-        "app"
+        "app",
+        "hvigor"
     ],
     "distributed_hardware_fwk":[
         "app",
