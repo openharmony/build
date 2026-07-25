@@ -1163,19 +1163,19 @@
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/display/graphic/common/v2_4:display_commontype_idl_headers_2.3": [
+        "//drivers/interface/display/graphic/common/v2_4:display_commontype_idl_headers_2.4": [
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
             "//drivers/hdf_core/interfaces/inner_api/utils/",
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/display/graphic/common/v2_4:libdisplay_commontype_proxy_2.3": [
+        "//drivers/interface/display/graphic/common/v2_4:libdisplay_commontype_proxy_2.4": [
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
             "//drivers/hdf_core/interfaces/inner_api/utils/",
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
             "//drivers/hdf_core/interfaces/inner_api/hdi/"
         ],
-        "//drivers/interface/display/graphic/common/v2_4:libdisplay_commontype_stub_2.3": [
+        "//drivers/interface/display/graphic/common/v2_4:libdisplay_commontype_stub_2.4": [
             "//drivers/hdf_core/adapter/uhdf2/ipc/include/",
             "//drivers/hdf_core/interfaces/inner_api/utils/",
             "//drivers/hdf_core/interfaces/inner_api/osal/uhdf/",
