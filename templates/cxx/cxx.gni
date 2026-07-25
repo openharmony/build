@@ -419,7 +419,7 @@ template("ohos_executable") {
 
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (bti && !pac_ret) {
       if (support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
         cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
@@ -428,7 +428,7 @@ template("ohos_executable") {
       } else {
         cflags += [ "-mbranch-protection=bti" ]
       }
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     } else if (!bti && !pac_ret && support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
@@ -1168,7 +1168,7 @@ template("ohos_shared_library") {
 
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (bti && !pac_ret) {
       if (support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
         cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
@@ -1177,7 +1177,7 @@ template("ohos_shared_library") {
       } else {
         cflags += [ "-mbranch-protection=bti" ]
       }
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     } else if (!bti && !pac_ret && support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
@@ -1737,7 +1737,7 @@ template("ohos_static_library") {
 
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (bti && !pac_ret) {
       if (support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
         cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
@@ -1746,7 +1746,7 @@ template("ohos_static_library") {
       } else {
         cflags += [ "-mbranch-protection=bti" ]
       }
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     } else if (!bti && !pac_ret && support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
@@ -2068,7 +2068,7 @@ template("ohos_source_set") {
 
     if (bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key+bti" ]
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (bti && !pac_ret) {
       if (support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
         cflags += [ "-mbranch-protection=pac-ret-strong+b-key+bti" ]
@@ -2077,7 +2077,7 @@ template("ohos_source_set") {
       } else {
         cflags += [ "-mbranch-protection=bti" ]
       }
-      ldflags += [ "-Wl,-z,force-bti" ]
+      ldflags += [ "-Wl,-z,bti-report=none" ]
     } else if (!bti && pac_ret) {
       cflags += [ "-mbranch-protection=pac-ret+b-key" ]
     } else if (!bti && !pac_ret && support_branch_protector_pac_ret && build_framework_pac_configs_policy == "high") {
