@@ -36,7 +36,6 @@
     "spirv-tools",
     "glfw",
     "harfbuzz",
-    "qrcodegen",
     "jerryscript",
     
     "resource_schedule_service",
