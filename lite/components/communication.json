@@ -40,7 +40,7 @@
     },
     {
       "component": "iot_connect",
-      "description": "iot_connect based on liteos-m and liteos-a.",
+      "description": "iot_connect based on liteos-m.",
       "optional": "true",
       "dirs": [
         "foundation/communication/iot_connect"
@@ -51,7 +51,7 @@
       "rom": "",
       "ram": "",
       "output": [ ],
-      "adapted_kernel": [ "liteos_m", "liteos_a" ],
+      "adapted_kernel": [ "liteos_m" ],
       "features": [],
       "deps": {
         "third_party": [
