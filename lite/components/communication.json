@@ -39,6 +39,30 @@
       }
     },
     {
+      "component": "iot_connect",
+      "description": "iot_connect based on liteos-m.",
+      "optional": "true",
+      "dirs": [
+        "foundation/communication/iot_connect"
+      ],
+      "targets": [
+        "//foundation/communication/iot_connect:iotc_static"
+      ],
+      "rom": "",
+      "ram": "",
+      "output": [ ],
+      "adapted_kernel": [ "liteos_m" ],
+      "features": [],
+      "deps": {
+        "third_party": [
+        ],
+        "kernel_special": {},
+        "board_special": {},
+        "components": [
+        ]
+      }
+    },
+    {
       "component": "wpa_supplicant",
       "description": "WPA supplicant open sources software.",
       "optional": "true",
