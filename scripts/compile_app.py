@@ -22,6 +22,9 @@ import shutil
 import json
 import json5
 import uuid
+import zipfile
+import tempfile
+from pathlib import Path
 
 from util import build_utils
 from util import file_utils
@@ -55,6 +58,7 @@ def parse_args(args):
     parser.add_argument('--ohos-app-enable-asan', help='hvigor enable asan', action='store_true')
     parser.add_argument('--ohos-app-enable-tsan', help='hvigor enable tsan', action='store_true')
     parser.add_argument('--ohos-app-enable-ubsan', help='hvigor enable ubsan', action='store_true')
+    parser.add_argument('--strip-rpcid', help='strip rpcid.sc from hap', action='store_true')
     parser.add_argument('--target-out-dir', help='base output dir')
     parser.add_argument('--target-app-dir', help='target output dir')
     parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
@@ -432,6 +436,57 @@ def hvigor_build(cwd: str, options, hash_value: str, node_home: str):
     hvigor_write_log(cmd, cwd, env, hash_value)
 
 
+def strip_rpcid_from_haps(build_profile: str, cwd: str, options, hash_value: str):
+    if not options.strip_rpcid:
+        return
+
+    with open(build_profile, 'r') as f:
+        build_info = json5.load(f)
+
+    for module in build_info.get('modules', []):
+        src_path = module.get('srcPath')
+        module_name = module.get('name')
+        unsigned_hap_path = get_unsigned_hap_path(module_name, src_path, cwd, options, hash_value)
+        hap_files = build_utils.find_in_directory(unsigned_hap_path, '*-unsigned.hap')
+        hsp_files = build_utils.find_in_directory(unsigned_hap_path, '*-unsigned.hsp')
+        pkgs = hap_files + hsp_files
+        n_pkgs = len(pkgs)
+        for i, pkg in enumerate(pkgs):
+            print(f'[{i + 1}]/[{n_pkgs}] [{hash_value}] Processing {pkg}...')
+            _strip_rpcid_from_pkg(pkg, hash_value)
+
+
+def _strip_rpcid_from_pkg(pkg_path, hash_value: str):
+    RPCID = 'rpcid.sc'
+    pkg_path = Path(pkg_path)
+
+    with zipfile.ZipFile(pkg_path, 'r') as zf_in:
+        namelist = zf_in.namelist()
+        if RPCID not in namelist:
+            print(f'[0/0] [{hash_value}] {RPCID} not found in {pkg_path}')
+            return
+
+        temp_fd, temp_path = tempfile.mkstemp(dir=pkg_path.parent)
+        temp_path = Path(temp_path)
+
+        try:
+            with zipfile.ZipFile(temp_path, 'w') as zf_out:
+                for item in namelist:
+                    if RPCID == item:
+                        print(f'[0/0] [{hash_value}] {RPCID} stripped from {pkg_path}')
+                        continue
+                    info = zf_in.getinfo(item)
+                    zf_out.writestr(info, zf_in.read(item))
+
+            os.close(temp_fd)
+            temp_path.replace(pkg_path)
+        except Exception:
+            os.close(temp_fd)
+            if temp_path.exists():
+                temp_path.unlink()
+            raise
+
+
 def main(args):
     options = parse_args(args)
     cwd = os.path.abspath(options.cwd)
@@ -465,6 +520,9 @@ def main(args):
 
     # invoke hvigor to build hap or app
     hvigor_build(cwd, options, hash_value, nodejs_home)
+
+    # strip rpcid.sc from unsigned haps
+    strip_rpcid_from_haps(options.build_profile, cwd, options, hash_value)
 
     # generate a json file to record the path of all unsigned haps, and When signing hap later, 
     # this json file will serve as input to provide path information for each unsigned hap.

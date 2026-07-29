@@ -668,6 +668,7 @@ template("compile_app") {
                              "hvigor_home",
                              "ohos_test_coverage",
                              "product",
+                             "without_syscap_json",
                            ])
     script = "//build/scripts/compile_app.py"
     outputs = [ unsigned_hap_path_list ]
@@ -784,6 +785,9 @@ template("compile_app") {
       args += [ "--ohos-app-enable-tsan" ]
     } else if (ohos_app_enable_ubsan) {
       args += [ "--ohos-app-enable-ubsan" ]
+    }
+    if (defined(without_syscap_json) && without_syscap_json) {
+      args += [ "--strip-rpcid" ]
     }
   }
 }
