@@ -456,9 +456,9 @@ def strip_rpcid_from_haps(build_profile: str, cwd: str, options, hash_value: str
             _strip_rpcid_from_pkg(pkg, hash_value)
 
 
-def _strip_rpcid_from_pkg(pkg_path, hash_value: str):
+def _strip_rpcid_from_pkg(raw_pkg_path: str, hash_value: str):
     RPCID = 'rpcid.sc'
-    pkg_path = Path(pkg_path)
+    pkg_path = Path(raw_pkg_path)
 
     with zipfile.ZipFile(pkg_path, 'r') as zf_in:
         namelist = zf_in.namelist()
@@ -466,25 +466,30 @@ def _strip_rpcid_from_pkg(pkg_path, hash_value: str):
             print(f'[0/0] [{hash_value}] {RPCID} not found in {pkg_path}')
             return
 
-        temp_fd, temp_path = tempfile.mkstemp(dir=pkg_path.parent)
-        temp_path = Path(temp_path)
+        orig_mode = stat.S_IMODE(os.stat(pkg_path).st_mode)
+        temp_fd, raw_temp_path = tempfile.mkstemp(dir=pkg_path.parent)
+        temp_path = Path(raw_temp_path)
 
         try:
+            os.close(temp_fd)
             with zipfile.ZipFile(temp_path, 'w') as zf_out:
+                zf_out.comment = zf_in.comment
                 for item in namelist:
                     if RPCID == item:
                         print(f'[0/0] [{hash_value}] {RPCID} stripped from {pkg_path}')
                         continue
                     info = zf_in.getinfo(item)
-                    zf_out.writestr(info, zf_in.read(item))
+                    with zf_in.open(info) as src, zf_out.open(info, 'w') as dst:
+                        shutil.copyfileobj(src, dst)
 
-            os.close(temp_fd)
+            os.chmod(temp_path, orig_mode)
             temp_path.replace(pkg_path)
         except Exception:
-            os.close(temp_fd)
+            print(f'[0/0] [{hash_value}] Failed to strip {RPCID} from {pkg_path}')
+            raise
+        finally:
             if temp_path.exists():
                 temp_path.unlink()
-            raise
 
 
 def main(args):
