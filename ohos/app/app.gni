@@ -261,6 +261,7 @@ template("ohos_app") {
                            "relative_install_dir",
                            "nodejs_path",
                            "visibility",
+                           "without_syscap_json",
                          ])
   if (defined(invoker.hvigor_home) || defined(invoker.sdk_home)) {
     _check_target = "${target_name}__hap_check"
