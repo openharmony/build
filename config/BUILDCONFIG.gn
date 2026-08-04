@@ -452,7 +452,7 @@ declare_args() {
 
 declare_args() {
   # Enable reduce eh_frame only for ArkUI-X release.
-  ace_engine_enable_reduce_eh_frame = is_arkui_x && runtime_mode == "release"
+  ace_engine_enable_reduce_eh_frame = false
 }
 
 declare_args() {
