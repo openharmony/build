@@ -1754,6 +1754,16 @@
         ]
     },
     {
+        "install_dir": "ets/static/build-tools/driver/interop-toolkits/gluegen",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/interop_toolkits/gluegen:ets2panda_build_gluegen",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "linux_arm64"
+        ]
+    },
+    {
         "install_dir": "ets/static/build-tools/libarkts/",
         "module_label": "//developtools/ace_ets2bundle/ets1.2:ets2panda_libarkts",
         "target_os": [
