@@ -151,9 +151,17 @@ function init_ohpm() {
   mkdir -p $HOME/.hvigor/wrapper/tools
   echo '{"dependencies": {"pnpm": "7.30.0"}}' > $HOME/.hvigor/wrapper/tools/package.json
   pushd $HOME/.hvigor/wrapper/tools > /dev/null
-    echo "[OHOS INFO] installing pnpm..."
+    echo "[OHOS INFO] installing pnpm 7.30.0 ..."
     npm install --silent > /dev/null
   popd > /dev/null
+  # for hvigor 26.0.0
+  mkdir -p $HOME/.hvigor/wrapper/tools/10.28.2
+  echo '{"dependencies": {"pnpm": "10.28.2"}}' > $HOME/.hvigor/wrapper/tools/10.28.2/package.json
+  pushd $HOME/.hvigor/wrapper/tools/10.28.2 > /dev/null
+    echo "[OHOS INFO] installing pnpm 10.28.2 ..."
+    npm install --silent > /dev/null
+  popd > /dev/null
+
   mkdir -p $HOME/.ohpm
   echo '{"devDependencies":{"@ohos/hypium":"1.0.6"}}' > $HOME/.ohpm/oh-package.json5
   pushd $HOME/.ohpm > /dev/null
