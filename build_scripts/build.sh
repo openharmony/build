@@ -132,6 +132,8 @@ npm config set strict-ssl false
 npm config set lockfile false
 cat $HOME/.npmrc | grep 'lockfile=false' > /dev/null || echo 'lockfile=false' >> $HOME/.npmrc > /dev/null
 
+cp -rf ninja ${SOURCE_ROOT_DIR}/prebuilts/build-tools/linux-x86/bin/
+
 function init_ohpm() {
   TOOLS_INSTALL_DIR="${SOURCE_ROOT_DIR}/prebuilts/build-tools/common"
   pushd ${TOOLS_INSTALL_DIR} > /dev/null
