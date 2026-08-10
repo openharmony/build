@@ -178,7 +178,7 @@
                     "x86_64": [
                         {
                             "unzip_dir": "${code_dir}/prebuilts/build-tools/ohos/bin",
-                            "remote_url": "/openharmony/compiler/ninja/1.13.2/ohos/ninja-ohos-1.13.2-20260810.tar.gz",
+                            "remote_url": "/openharmony/compiler/ninja/1.13.2/ohos/ninja-ohos-1.13.2-20260809.tar.gz",
                             "build_type": "src"
                         },
                         {
