@@ -39,6 +39,10 @@ config("compiler") {
     # assembly code with symbols that aren't hidden properly.
     # http://crbug.com/448386
     "-Wl,--exclude-libs=libvpx_assembly_arm.a",
+
+    # Separate code and data into distinct segments to prevent data sections
+    # from being incorrectly code-signed or mapped as executable.
+    "-Wl,-z,separate-code"
   ]
   if (current_cpu == "riscv64") {
     ldflags -= [ "-Wl,--exclude-libs=libvpx_assembly_arm.a" ]
