@@ -42,6 +42,9 @@ def _read_lite_component_configs(file):
             part['module_list'] = non_test_targets
             if test_targets != []:
                 part['test_list'] = test_targets
+            features = com.get('features')
+            if features:
+                part['feature_list'] = features
             part_name = com.get('component')
             parts[part_name] = part
         configs['parts'] = parts
