@@ -1,0 +1,48 @@
+# Copyright (c) 2026 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Centralized hilog build configuration shared by the arkcompiler repos
+# (ets_runtime, toolchain, runtime_core, ets_frontend).
+#
+# This file is imported only in the OpenHarmony (non-standalone) build;
+# standalone builds keep their repo-local enable_hilog definition.
+
+declare_args() {
+  # True when building the qemu runtime target. hilog (and other device-only
+  # dfx features) must be disabled for the qemu runtime.
+  is_qemu_runtime = false
+  # Allow manually disabling hilog even on targets that would otherwise
+  # enable it.
+  disable_hilog = false
+}
+
+# ark_standalone_build is an arkcompiler-specific arg not declared in the
+# build repo's BUILDCONFIG.gn; default it here so this file is self-contained
+# when imported from js_runtime_config.gni in the normal (non-standalone) build.
+if (!defined(ark_standalone_build)) {
+  ark_standalone_build = false
+}
+
+# Broad flavor: ohos device plus windows/mac previewers, no arch restriction.
+# Used by ets_runtime (js_runtime_config.gni) and toolchain.
+enable_hilog_broad =
+    !ark_standalone_build && !(defined(is_arkui_x) && is_arkui_x) &&
+    (is_ohos || is_mingw || is_mac) && !is_qemu_runtime && !disable_hilog
+
+# Device-only flavor: ohos standard system on arm/arm64.
+# Used by runtime_core, runtime_core/static_core (ark_common_config.gni) and
+# ets_frontend.
+enable_hilog_device =
+    !ark_standalone_build && is_standard_system && current_os == "ohos" &&
+    (current_cpu == "arm64" || current_cpu == "arm") && !is_qemu_runtime &&
+    !disable_hilog
