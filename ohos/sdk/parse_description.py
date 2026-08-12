@@ -39,7 +39,6 @@ def regenerate_sdk_config_file(options):
             install_label_str = str(info.get("install_dir"))
             if (
                 install_label_str.startswith("ets/static/") or
-                module_label_str.endswith(":copy_taihe_tools") or
                 module_label_str.endswith(":build_taihe_wrapper") or
                 module_label_str == "//arkcompiler/runtime_core/static_core/disassembler:arkts_disasm"
             ):
