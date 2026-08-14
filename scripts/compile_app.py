@@ -64,6 +64,7 @@ def parse_args(args):
     parser.add_argument('--ohos-test-coverage', help='enable test coverage when compile hap', action='store_true')
     parser.add_argument('--product', help='set product value of hvigor cmd, default or others')
     parser.add_argument('--host-os', help='host os')
+    parser.add_argument('--ohpm-path', help='ohpm path')
 
     options = parser.parse_args(args)
     return options
@@ -97,6 +98,9 @@ def make_env(build_profile: str, cwd: str, ohpm_registry: str, options, hash_val
     ohpm_path = os.path.join(root_dir, "prebuilts/tool/command-line-tools/ohpm/bin/ohpm")
     if not os.path.exists(ohpm_path):
         ohpm_path = "ohpm"
+    if options.ohpm_path:
+        ohpm_path = os.path.join(root_dir, options.ohpm_path)
+        print(f"[0/0] ohpm path is {ohpm_path}, exists: {os.path.exists(ohpm_path)}")
     with open(build_profile, 'r') as input_f:
         build_info = json5.load(input_f)
         modules_list = build_info.get('modules')
