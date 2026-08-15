@@ -21,7 +21,9 @@
         "linux",
         "liteos_m"
       ],
-      "features": [],
+      "features": [
+        "dsoftbus_feature_trans_udp_stream"
+      ],
       "deps": {
         "third_party": [
           "mbedtls",
