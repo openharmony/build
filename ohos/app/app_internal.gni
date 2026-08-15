@@ -668,6 +668,7 @@ template("compile_app") {
                              "hvigor_home",
                              "ohos_test_coverage",
                              "product",
+                             "ohpm_path",
                              "without_syscap_json",
                            ])
     script = "//build/scripts/compile_app.py"
@@ -709,6 +710,13 @@ template("compile_app") {
 
     if (defined(test_hap) && test_hap) {
       args += [ "--test-hap" ]
+    }
+
+    if (defined(ohpm_path) && ohpm_path != "") {
+      args += [
+        "--ohpm-path",
+        ohpm_path,
+      ]
     }
 
     if (defined(test_module) && test_module != "") {

@@ -515,6 +515,9 @@ template("ohos_app") {
     if (defined(invoker.assemble_type)) {
       assemble_type = invoker.assemble_type
     }
+    if (defined(invoker.ohpm_path)) {
+      ohpm_path = invoker.ohpm_path
+    }
     if (defined(invoker.build_level)) {
       build_level = invoker.build_level
     }
