@@ -1774,8 +1774,18 @@
         ]
     },
     {
-        "install_dir": "ets/static/build-tools/ui-plugins/lib",
+        "install_dir": "ets/static/build-tools/ui-plugins/lib/api-check-plugin",
         "module_label": "//interface/sdk-js:api_check_plugin",
+        "target_os": [
+            "linux",
+            "windows",
+            "darwin",
+            "linux_arm64"
+        ]
+    },
+    {
+        "install_dir": "ets/static/build-tools/ui-plugins/lib/api-transform-plugin",
+        "module_label": "//interface/sdk-js:api-transform-plugin",
         "target_os": [
             "linux",
             "windows",
