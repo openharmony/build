@@ -150,6 +150,7 @@ config("soft_musl_config") {
       "-Wl,--hash-style=both",
       "-Wl,--dynamic-list=${dynamic_list}",
       "-Wl,--build-id=md5",
+      "-Wl,-z,separate-code"
     ]
 
     if (musl_arch != "riscv32" && musl_arch != "cortex_m") {
