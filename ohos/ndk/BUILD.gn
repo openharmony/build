@@ -50,14 +50,6 @@ if (!use_current_sdk) {
   }
   write_file(package_info_file, package_info, "json")
 
-  # [标准流水线] 收集标准 NDK 的系统能力(syscap)信息
-  # 依赖: _parse_ndk_headers（确保头文件先完成校验）
-  # 脚本: collect_ndk_syscap.py
-  # 参数:
-  #   --depfile: 增量构建依赖文件路径
-  #   --system-capability-file: 输出 syscap 描述文件(ndk_system_capability.json)
-  #   --system-capability-header-config: 输出头文件与syscap映射(nativeapi_syscap_config.json)
-  #   --targets-build-config: 各目标的 .build_config 文件路径列表
   action_with_pydeps("_collect_ndk_syscap") {
     deps = [ ":_parse_ndk_headers" ]
     script = "//build/ohos/ndk/collect_ndk_syscap.py"
@@ -83,12 +75,6 @@ if (!use_current_sdk) {
     }
   }
 
-  # [Lite流水线] 收集 lite NDK 的系统能力(syscap)信息
-  # 依赖: _parse_lite_ndk_headers（确保lite头文件先完成校验）
-  # 脚本: collect_ndk_syscap.py（复用标准流水线脚本）
-  # 参数: 同_collect_ndk_syscap，但输出文件名带lite前缀
-  #   --system-capability-file: ndk_lite_system_capability.json
-  #   --system-capability-header-config: nativeapi_lite_syscap_config.json
   action_with_pydeps("_collect_lite_ndk_syscap") {
     deps = [ ":_parse_lite_ndk_headers" ]
     script = "//build/ohos/ndk/collect_ndk_syscap.py"
@@ -114,16 +100,6 @@ if (!use_current_sdk) {
     }
   }
 
-  # [标准流水线] 解析标准 NDK 头文件，执行三项处理:
-  # 1. @systemapi裁剪(sdk_build_public=true时): 调用header_processor.py删除带@systemapi标记的API
-  # 2. @since版本校验: 检查@since版本号是否超过当前SDK版本，超过则报错
-  # 3. 添加版本宏: 为带@since注释的API声明添加__availability__属性宏
-  # 依赖: all_ndk_targets_list（确保所有NDK目标先构建，头文件已拷贝到位）
-  # 脚本: parse_native_headers.py
-  # 参数:
-  #   --input: 待处理的头文件目录(sysroot/usr/include)
-  #   --sdk-api-version: 当前SDK API版本号，用于版本校验
-  #   --sdk-build-public: 是否为公共SDK构建，true时触发@systemapi裁剪
   action_with_pydeps("_parse_ndk_headers") {
     deps = all_ndk_targets_list
     script = "//interface/sdk_c/build-tools/parse_native_headers.py"
@@ -138,15 +114,6 @@ if (!use_current_sdk) {
     ]
   }
 
-   # [Lite流水线] 解析 lite NDK 头文件，执行两项处理:
-  # 1. @systemapi裁剪(sdk_build_public=true时)
-  # 2. @since版本校验
-  # 注意: 版本宏添加步骤跳过(--skip-version-macro)，下个版本放开
-  # 依赖: all_ndk_targets_list（确保所有NDK目标先构建，lite头文件已拷贝到位）
-  # 脚本: parse_native_headers.py（复用标准流水线脚本）
-  # 参数: 同_parse_ndk_headers，但--input指向ndk_lite_headers_out_dir，并传--skip-version-macro
-  #   --input: sysroot_lite/usr/include
-  #   --skip-version-macro: 跳过版本宏添加
   action_with_pydeps("_parse_lite_ndk_headers") {
     deps = all_ndk_targets_list
     script = "//interface/sdk_c/build-tools/parse_native_headers.py"
@@ -163,16 +130,6 @@ if (!use_current_sdk) {
   }
 
   if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
-    # [标准流水线] 清理标准 NDK 头文件中的 ANI 相关内容
-    # 1. 删除 ani.h / native_node_ani.h 文件本身
-    # 2. 删除其他头文件中 #include "ani.h" / #include "native_node_ani.h" 的引用行
-    # 3. 清理 syscap 配置 JSON 中对 ANI 头文件的引用
-    # 依赖: _collect_ndk_syscap（确保syscap配置已生成）
-    # 脚本: clean_ndk_ani.py
-    # 参数:
-    #   --ndk-header-path: 待清理的头文件目录(sysroot/usr/include)
-    #   --system-capability-header-config: syscap头文件映射(nativeapi_syscap_config.json)
-    # 条件: 仅在 ext_ndk_config_file 未定义时执行
     action_with_pydeps("_clean_ndk_ani") {
       deps = [ ":_collect_ndk_syscap" ]
       script = "//interface/sdk_c/build-tools/clean_ndk_ani.py"
@@ -186,15 +143,8 @@ if (!use_current_sdk) {
         rebase_path(_native_syscap_config_file, root_build_dir),
       ]
     }
-
-    # [Lite流水线] 清理 lite NDK 头文件中的 ANI 相关内容 — 当前版本不需要，已移除
-    # 下个版本视IDE排期情况决定是否恢复
   }
 
-  # 汇总所有 NDK 目标（标准+lite两条流水线并行）
-  # 标准流水线: _collect_ndk_syscap -> _clean_ndk_ani
-  # Lite流水线: _collect_lite_ndk_syscap（当前版本不执行clean_ani）
-  # 条件: _clean_ndk_ani 仅在 ext_ndk_config_file 未定义且 sdk_build_arkts=false 时执行
   group("all_ndk_targets") {
     deps = [
       ":_collect_ndk_syscap",
