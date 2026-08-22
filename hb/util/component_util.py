@@ -20,6 +20,8 @@ import re
 import sys
 import json
 import urllib.request
+import urllib.error
+import time
 
 from resources.global_var import CURRENT_OHOS_ROOT
 from resources.global_var import COMPONENTS_PATH_DIR
@@ -179,6 +181,34 @@ def gen_default_deps_json(variant, root_path, has_test=False):
     IoUtil.dump_json_file(default_deps_out_file, default_deps_json)
 
 
+def _download_remote_file(url, max_retries=5):
+    """Download a remote file with token auth and retry on transient errors."""
+    token = os.environ.get("GITCODE_ACCESS_TOKEN", "")
+    for attempt in range(max_retries):
+        try:
+            req = urllib.request.Request(url)
+            if token:
+                req.add_header("PRIVATE-TOKEN", token)
+            response = urllib.request.urlopen(req, timeout=10)
+            return response.read().decode("utf-8")
+        except urllib.error.HTTPError as e:
+            if e.code in (429, 502, 503, 504) and attempt < max_retries - 1:
+                wait = 5 * (attempt + 1)
+                print(f"HTTP {e.code} for {url}, retrying in {wait}s, (attempt {attempt + 1}/{max_retries})")
+                time.sleep(wait)
+                continue
+            raise
+        except urllib.error.URLError as e:
+            if attempt < max_retries - 1:
+                wait = 5 * (attempt + 1)
+                print(f"HTTP {e.code} for {url}, retrying in {wait}s "
+                      f"(attempt {attempt + 1}/{max_retries})")
+                time.sleep(wait)
+                continue
+            raise
+    return None
+
+
 def gen_product_component_list(product_name: str):
     config_path = os.path.join(CURRENT_OHOS_ROOT, "build", "indep_configs", "config", "product_component_url_config.json")
     component_url_list = IoUtil.read_json_file(config_path).get(product_name, [])
@@ -186,11 +216,21 @@ def gen_product_component_list(product_name: str):
     component_list = set()
     for url in component_url_list:
         try:
-            response = urllib.request.urlopen(url, timeout=10)
-            data = json.loads(response.read().decode("utf-8"))
+            data_str = _download_remote_file(url)
+            if data_str is None:
+                raise OHOSException(
+                    f"Failed to download component config form {url} after retries", "0000")
+            data = json.loads(data_str)
             read_component(component_list, data)
+        except urllib.error.HTTPError as e:
+            raise OHOSException(
+                f"Failed to download component config form {url} after retries", "0000")
+        except json.JSONDecodeError as e:
+            raise OHOSException(
+                f"Failed to parse component config from {url}: {e}", "0000")
         except Exception as e:
-            raise OHOSException(f"Failed to download or parse component config from {url}: {e}", "0000")
+            raise OHOSException(
+                f"Failed to download or parse component config from {url}: {e}", "0000")
     product_components_out_file = os.path.join(CURRENT_OHOS_ROOT, "out", "preloader", "product_components.json")
     os.makedirs(os.path.dirname(product_components_out_file), exist_ok=True)
     IoUtil.dump_json_file(product_components_out_file, list(component_list))
