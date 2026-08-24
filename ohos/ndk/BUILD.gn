@@ -93,7 +93,7 @@ if (!use_current_sdk) {
       rebase_path(_native_lite_syscap_config_file, root_build_dir),
       "--targets-build-config",
     ]
-    foreach(_ndk_target, all_ndk_targets_list) {
+    foreach(_ndk_target, all_lite_ndk_targets_list) {
       _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
                         get_label_info(_ndk_target, "name") + ".build_config"
       args += [ rebase_path(_target_bc_file, root_build_dir) ]
@@ -115,7 +115,7 @@ if (!use_current_sdk) {
   }
 
   action_with_pydeps("_parse_lite_ndk_headers") {
-    deps = all_ndk_targets_list
+    deps = all_lite_ndk_targets_list
     script = "//interface/sdk_c/build-tools/parse_native_headers.py"
     outputs = [ "${ndk_os_irrelevant_out_dir}/parse_lite_ndk_headers.tmp" ]
     args = [
