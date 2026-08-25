@@ -1754,8 +1754,8 @@
         ]
     },
     {
-        "install_dir": "ets/static/build-tools/driver/interop-toolkits/gluegen",
-        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/interop_toolkits/gluegen:ets2panda_build_gluegen",
+        "install_dir": "ets/static/build-tools/driver/interop-toolkits",
+        "module_label": "//arkcompiler/ets_frontend/ets2panda/driver/interop_toolkits:ets2panda_interop_toolkits",
         "target_os": [
             "linux",
             "windows",
