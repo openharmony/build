@@ -566,6 +566,8 @@
                         "${python_path}",
                         "${pip_path}",
                         "install",
+                        "--trusted-host",
+                        "repo.huaweicloud.com",
                         "-i",
                         "https://repo.huaweicloud.com/repository/pypi/simple",
                         "pyyaml",
