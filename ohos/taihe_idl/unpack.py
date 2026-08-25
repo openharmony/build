@@ -15,10 +15,12 @@
 # limitations under the License.
 
 import argparse
+import hashlib
 import os
 import subprocess
 import tarfile
 import zipfile
+
 
 def unpack(src, dst):
     os.makedirs(dst, exist_ok=True)
@@ -41,13 +43,28 @@ def unpack(src, dst):
     else:
         subprocess.run(['tar', '-xf', src, '-C', dst], check=True)
 
+
+def gen_stamp(src, stamp_file):
+    h = hashlib.sha256(open(src, 'rb').read()).hexdigest()
+    content = f'#define TAIHE_REPO_SHA256 "{h}"\n'
+    if os.path.exists(stamp_file):
+        with open(stamp_file, 'r') as f:
+            if f.read() == content:
+                return
+    with open(stamp_file, 'w') as f:
+        f.write(content)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--src', required=True)
     parser.add_argument('--dst', required=True)
+    parser.add_argument('--stamp', required=False)
     args = parser.parse_args()
     
     unpack(args.src, args.dst)
+    if args.stamp:
+        gen_stamp(args.src, args.stamp)
 
 
 if __name__ == '__main__':

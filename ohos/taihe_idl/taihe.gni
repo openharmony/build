@@ -55,10 +55,9 @@ template("ohos_taihe") {
       script = "//build/ohos/taihe_idl/unpack.py"
       sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
       outputs = [ 
+        "$target_out_dir/$action_target_name/taihe_repo/taihe_repo_stamp.h",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
-        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
-        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/runtime_ani.cpp",
-        "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/string.cpp",
+        "$target_out_dir/$action_target_name/taihe_repo/taihe/bin/taihec",
       ]
       
       args = [
@@ -66,6 +65,8 @@ template("ohos_taihe") {
         rebase_path(sources[0], root_build_dir),
         "--dst",
         rebase_path("$target_out_dir/$action_target_name/taihe_repo", root_build_dir),
+        "--stamp",
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo/taihe_repo_stamp.h", root_build_dir),
       ]
     
       external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
@@ -169,6 +170,7 @@ template("taihe_shared_library") {
       script = "//build/ohos/taihe_idl/unpack.py"
       sources = [ "$root_build_dir/obj/arkcompiler/taihe_ffi_gen/taihe_repo/taihe-linux-x86_64.tar.gz" ]
       outputs = [ 
+        "$target_out_dir/$action_target_name/taihe_repo/taihe_repo_stamp.h",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/version.txt",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/object.cpp",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/src/taihe/runtime/runtime_ani.cpp",
@@ -180,6 +182,8 @@ template("taihe_shared_library") {
         rebase_path(sources[0], root_build_dir),
         "--dst",
         rebase_path("$target_out_dir/$action_target_name/taihe_repo", root_build_dir),
+        "--stamp",
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo/taihe_repo_stamp.h", root_build_dir),
       ]
     
       external_deps = [ "taihe_ffi_gen:build_taihe_wrapper" ]
@@ -193,7 +197,17 @@ template("taihe_shared_library") {
                                "sources",
                                "external_deps",
                                "include_dirs",
+                               "cflags",
                              ])
+
+      cflags = [
+        "-include",
+        rebase_path("$target_out_dir/$action_target_name/taihe_repo/taihe_repo_stamp.h", root_build_dir),
+      ]
+      if (defined(invoker.cflags)) {
+        cflags += invoker.cflags
+      }
+
       include_dirs = [
         "$taihe_generated_file_path/include",
         "$target_out_dir/$action_target_name/taihe_repo/taihe/include",
