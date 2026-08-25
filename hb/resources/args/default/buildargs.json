@@ -323,11 +323,11 @@
   "export_para": {
     "arg_name": "--export-para",
     "argDefault": [],
-    "arg_help": "Deprecated, please do not use this option",
+    "arg_help": "Default:[]. Help:Export key:value pairs as GN build arguments",
     "arg_phase": "targetGenerate",
     "arg_type": "list",
     "arg_attribute": {
-      "deprecated": "true"
+      "deprecated": "false"
     },
     "resolve_function": "resolve_export_para",
     "testFunction": "testExportPara"
