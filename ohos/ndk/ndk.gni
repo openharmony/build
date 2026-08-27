@@ -95,157 +95,72 @@ ndk_linux_arm64_tools_out_dir =
 #  min_compact_version: string specifies the minimal compactible version of NDK.
 #    set to major_version in default.
 #
-# ohos_ndk_library 模板：从 .ndk.json 描述文件生成 NDK 桩 .so 库
-#
-# 调用示例（在业务模块的 BUILD.gn 中）：
-#   ohos_ndk_library("libhilog_ndk") {
-#     ndk_description_file = "./hilog.ndk.json"   # 必填：API 符号清单
-#     system_capability = "SystemCapability.HiviewDFX.HiLog"  # 可选：系统能力名
-#     output_name = "hilog_ndk"                    # 可选：输出 .so 名（默认取 target_name）
-#   }
-#
-# 模板内部生成 5 个子目标，按依赖顺序：
-#   1. xxx__ndk_stub      → 调用 generate_ndk_stub_file.py，从 .ndk.json 生成桩 .c 代码
-#   2. xxx__ndk_config     → 用 GN metadata 收集 syscap 信息，生成 .build_config JSON
-#   3. xxx_{arch}__ndk_shlib → 每个架构编译一份桩 .so（空函数实现）
-#   4. xxx_{arch}__copy    → 把编译好的 .so 拷贝到 sysroot/usr/lib/{架构}/ 输出目录
-#   5. xxx（自身）          → 调用 generate_version_script.py 生成 .map.txt 版本脚本
-#
-# invoker：GN 模板机制，指调用本模板的那个花括号块。
-#   当你写 ohos_ndk_library("foo") { ndk_description_file = "bar" } 时，
-#   invoker 就是那个花括号，invoker.ndk_description_file 就是 "bar"。
-#
 template("ohos_ndk_library") {
-  # forward_variables_from：把调用者（invoker）传入的某些变量"透传"给当前作用域。
-  # 这里把 testonly 透传进来。testonly=true 表示此目标只用于测试，不会被正式产品依赖。
-  # 如果调用者没传 testonly，不会报错（GN 默认行为）。
   forward_variables_from(invoker, [ "testonly" ])
-
-  # assert：GN 的断言，条件不满足时打印错误信息并停止 GN 解析。
-  # defined()：检查调用者是否传入了某个参数。
-  # 这里强制要求调用者必须传 ndk_description_file，否则报错 "ndk description file is necessary"
   assert(defined(invoker.ndk_description_file),
          "ndk description file is necessary ")
 
-  # 以下是读取调用者传入的参数，下划线前缀 _xxx 表示模板内部私有变量
   _ndk_description_file = invoker.ndk_description_file
 
-  # system_capability：系统能力名，如 "SystemCapability.HiviewDFX.HiLog"
-  # 用于 collect_ndk_syscap.py 生成 ndk_system_capability.json，IDE 据此判断设备是否支持该库
-  # 可选参数，默认空字符串
   _system_capability = ""
   if (defined(invoker.system_capability)) {
     _system_capability = invoker.system_capability
   }
 
-  # system_capability_headers：系统能力对应的头文件路径
-  # 用于生成 nativeapi_syscap_config.json（clean_ndk_ani.py 消费）
-  # 可选参数，默认空字符串
   _system_capability_headers = ""
   if (defined(invoker.system_capability_headers)) {
     _system_capability_headers = invoker.system_capability_headers
   }
 
-  # deps：依赖列表，传给下游的桩代码生成 action
-  # 可选参数，默认空列表
   _deps = []
   if (defined(invoker.deps)) {
     _deps += invoker.deps
   }
 
-  # .build_config 文件输出路径：$target_gen_dir 是 GN 内置变量，指向生成的中间文件目录
-  # 例如 out/ohos-sdk/gen/interface/sdk_c/hilog/libhilog_ndk.build_config
   _ndk_config_output = "$target_gen_dir/$target_name.build_config"
-
-  # exec_script：在 GN 解析阶段（不是编译阶段）执行一个 Python 脚本，返回结果赋值给变量。
-  # 这里调用 version.py 把 sdk_version（如 "26.0.0.37"）解析成 ["26", "0", "0", "37"]
-  # "list lines" 表示返回值按行分割成列表
-  # sdk_version 来源：build/version.gni 第16行，当前值 "26.0.0.37"
   _sdk_version = exec_script("//build/ohos/version.py",
                              [
                                "--version",
                                sdk_version,
                              ],
                              "list lines")
-
-  # 取主版本号，如 "26"。用于 version script 的版本标签
   _min_compact_version = _sdk_version[0]
-
-  # 调用者可以覆盖默认的最低兼容版本
   if (defined(invoker.min_compact_version)) {
     _min_compact_version = invoker.min_compact_version
   }
-
-  # 这个 assert 不是真的在检查业务逻辑（_min_compact_version 不可能等于 "0"）
-  # 它的目的是"使用"这个变量。GN 规则：定义了但未使用的变量会报 warning，
-  # assert 算"使用"，这样就不会报 unused variable 警告了
   assert(_min_compact_version != "0")  # mark as used
 
-  # output_name：最终 .so 的文件名（不含 lib 前缀和 .扩展名）
-  # 默认取 target_name，调用者可覆盖
-  # 例：output_name = "c" → 生成 libc.z.so
   _output_name = target_name
   if (defined(invoker.output_name)) {
     _output_name = invoker.output_name
   }
 
-  # output_extension：.so 的扩展名，默认 "z.so"（OHOS 约定用 .z.so 区分系统库）
-  # libc 等少数库用 "so"（历史原因）
   _output_extension = "z.so"
   if (defined(invoker.output_extension)) {
     _output_extension = invoker.output_extension
   }
 
-  # ========== 第一步：生成桩 .c 代码 ==========
-
-  # 子目标名：xxx__ndk_stub
   _ndk_stub_target = "${target_name}__ndk_stub"
-
-  # 生成文件路径：out/.../gen/xxx.ndk/libc.c
-  # get_path_info(file, "name")：取文件名不带扩展名，如 "libc.ndk.json" → "libc"
   _generated_ndk_stub_file = target_gen_dir + "/${target_name}.ndk/" +
                              get_path_info(_ndk_description_file, "name") + ".c"
-
-  # get_label_info：提取 GN 标签的信息。label_with_toolchain 返回带工具链的完整标签
-  # 如 "//interface/sdk_c/hilog:libhilog_ndk(//build/toolchain/ohos:ohos_clang_arm)"
-  # 用于 metadata 里标识这个 NDK 库的来源
   _current_label = get_label_info(":${target_name}", "label_with_toolchain")
-
-  # action_with_pydeps：GN 内置 action 的增强版，自动追踪 Python 脚本的 import 依赖
-  # 普通 action 只在 inputs/脚本变化时重建；action_with_pydeps 还会在脚本的 .pydeps 变化时重建
   action_with_pydeps(_ndk_stub_target) {
     deps = _deps
     script = "//build/ohos/ndk/generate_ndk_stub_file.py"
-
-    # depfile：告诉 Ninja 这个目标的额外依赖文件列表（Makefile 格式）
-    # 这样只有 .ndk.json 内容变了才重新生成桩代码，而不是每次都重新生成
     depfile = "${target_gen_dir}/${target_name}.d"
-
     args = [
       "--output",
-      # rebase_path：把绝对路径转成相对于 root_build_dir 的路径
-      # 因为脚本在 root_build_dir（如 out/ohos-sdk）下执行，用相对路径更可靠
       rebase_path(_generated_ndk_stub_file, root_build_dir),
       "--ndk-description-file",
       rebase_path(_ndk_description_file, root_build_dir),
       "--depfile",
       rebase_path(depfile, root_build_dir),
-
-      # sdk_build_public：是否构建公开 SDK（true 时会裁掉 api_type=system 的符号）
-      # 来源：build/ohos_var.gni 第43行，默认 false
       "--sdk-build-public",
       "${sdk_build_public}",
     ]
-
-    # inputs：GN action 的输入文件，GN 用它判断是否需要重新执行此 action
-    # 只有 .ndk.json 文件内容变化了才重新生成
     inputs = [ _ndk_description_file ]
-
-    # outputs：GN action 的输出文件，Ninja 用它做增量构建判断
     outputs = [ _generated_ndk_stub_file ]
 
-    # metadata：GN 的元数据机制。在依赖链上，下游目标可以用 data_keys 收集这些数据
-    # 这里把 syscap 信息暴露出去，供 collect_ndk_syscap.py 通过 generated_file 收集
     _ndk_config_info = {
       label = _current_label
       lib_name = _output_name
@@ -257,13 +172,6 @@ template("ohos_ndk_library") {
     }
   }
 
-  # ========== 第二步：收集 syscap 元数据 ==========
-
-  # generated_file：GN 内置模板，沿 deps 依赖链收集 metadata，写成文件
-  # data_keys = [ "ndk_config" ]：收集所有依赖的 ndk_config metadata
-  # output_conversion = "json"：输出为 JSON 格式
-  # 最终文件路径：out/.../gen/xxx/xxx.build_config
-  # 这个 JSON 被 BUILD.gn 中的 collect_ndk_syscap action 读取
   _ndk_config_target = "${target_name}__ndk_config"
   generated_file(_ndk_config_target) {
     deps = [ ":$_ndk_stub_target" ]
@@ -273,20 +181,8 @@ template("ohos_ndk_library") {
     data_keys = [ "ndk_config" ]
   }
 
-  # ========== 第三步：按架构编译桩 .so 并拷贝到输出目录 ==========
-
-  # 确定要编译哪些架构的工具链
-  # build_ohos_ndk 来源：build/ohos_var.gni 第187行，默认 false
-  #   执行 hb build --product-name ohos-sdk 时会设为 true
-  # use_current_sdk 来源：build/ohos_var.gni 第47行，默认 false
-  #   增量 SDK 构建模式
-  # host_os/host_cpu：GN 内置变量，编译机（你跑构建的电脑）的操作系统和 CPU
-  # is_arkui_x：是否跨平台 ArkUI 构建
-  # target_cpu：GN 内置变量，目标设备的 CPU 架构
   ndk_toolchains = []
   if (build_ohos_ndk || use_current_sdk) {
-    # 正常 SDK 构建时，需要交叉编译 3 个架构
-    # 但 Linux ARM64 主机只能编 ARM64（工具链限制）
     if (host_os == "linux" && host_cpu == "arm64") {
       ndk_toolchains = [ "//build/toolchain/ohos:ohos_clang_arm64" ]
     } else {
@@ -297,23 +193,19 @@ template("ohos_ndk_library") {
       ]
     }
   } else if (!is_arkui_x) {
-    # 非 NDK 构建（如普通系统构建或 ASAN 构建），只编译当前目标架构
-    # 不做交叉编译，避免 ASAN 等场景下编译失败
+    # Don't enable cross compile if build_ohos_ndk is false.
+    # Cross compiling in this case may cause build failure in some scenario,
+    # such as build for ASAN.
     ndk_toolchains = [ "//build/toolchain/ohos:ohos_clang_${target_cpu}" ]
   }
 
-  # not_needed：告诉 GN "这个变量虽然定义了但不需要使用，不要报 unused warning"
-  # 当 ndk_toolchains 为空时（如 is_arkui_x 且非 NDK 构建），_output_extension 不会被用到
   if (ndk_toolchains == []) {
     not_needed([ "_output_extension" ])
   }
 
-  # 收集所有子目标的依赖，最终传给 version script 目标，保证执行顺序
   _accumulated_deps = []
 
-  # 对每个架构工具链，编译一份 .so 并拷贝到 sysroot 输出目录
   foreach(_toolchain, ndk_toolchains) {
-    # 工具链标签 → 输出子目录名映射
     if (_toolchain == "//build/toolchain/ohos:ohos_clang_arm") {
       _ndk_shlib_directory = "arm-linux-ohos"
     } else if (_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
@@ -322,39 +214,19 @@ template("ohos_ndk_library") {
       _ndk_shlib_directory = "x86_64-linux-ohos"
     }
 
-    # assert(defined(_ndk_shlib_directory))：确保上面映射到了合法的目录名
-    # 如果新增了工具链但忘记加映射，这里会报错
     assert(defined(_ndk_shlib_directory))
-
-    # ndk_libraries_out_dir 来源：ndk.gni 第45行
-    # 值为 "$ndk_os_irrelevant_out_dir/sysroot/usr/lib"
-    # 例如 out/ohos-sdk/sdk-native/os-irrelevant/sysroot/usr/lib
     _output_dir = "$ndk_libraries_out_dir/$_ndk_shlib_directory"
-
-    # current_ndk_outpath：增量 SDK 构建时，调用者可覆盖输出目录
-    # 仅在 use_current_sdk=true 时生效
     if (defined(invoker.current_ndk_outpath) &&
         invoker.current_ndk_outpath != "" && use_current_sdk) {
       _output_dir = "${invoker.current_ndk_outpath}/${_ndk_shlib_directory}"
     }
-
-    # 最终 .so 输出路径，如 .../sysroot/usr/lib/aarch64-linux-ohos/libhilog_ndk.z.so
     _output_ndk_shlib = "${_output_dir}/lib${_output_name}.${_output_extension}"
 
-    # get_label_info(toolchain, "name")：提取工具链名，如 "ohos_clang_arm"
     _toolchain_name = get_label_info(_toolchain, "name")
 
-    # 编译子目标名，如 "libhilog_ndk_ohos_clang_arm__ndk_shlib"
     _ndk_shlib_target = "${target_name}_${_toolchain_name}__ndk_shlib"
 
-    # shared_library：GN 内置模板，编译成动态库
     shared_library(_ndk_shlib_target) {
-      # 把调用者传入的编译/链接选项透传给 shared_library
-      # cflags：编译选项（如 -Wno-xxx）
-      # ldflags：链接选项
-      # configs：GN config 配置
-      # libs：要链接的库
-      # include_dirs：头文件搜索路径
       forward_variables_from(invoker,
                              [
                                "cflags",
@@ -363,47 +235,26 @@ template("ohos_ndk_library") {
                                "libs",
                                "include_dirs",
                              ])
-      # 依赖桩代码生成目标，确保 .c 文件先生成
       deps = [ ":$_ndk_stub_target" ]
-      # 编译源文件就是上一步生成的桩 .c 代码
       sources = [ _generated_ndk_stub_file ]
-      # 每个架构的编译产物放在各自子目录，避免冲突
       output_dir = target_out_dir + "/$_toolchain_name"
       output_name = _output_name
       output_extension = _output_extension
     }
 
-    # 拷贝子目标名，如 "libhilog_ndk_ohos_clang_arm__copy"
     _ndk_shlib_copy_target = "${target_name}_${_toolchain_name}__copy"
     copy(_ndk_shlib_copy_target) {
-      # 依赖关系用括号语法指定工具链：
-      #   :target(label) 表示用 label 指定的工具链来编译 target
-      # 例如 :libhilog_ndk_ohos_clang_arm__ndk_shlib(//build/toolchain/ohos:ohos_clang_arm)
-      # 表示"用 ARM 工具链编译 libhilog_ndk_ohos_clang_arm__ndk_shlib 这个目标"
       deps = [ ":$_ndk_shlib_target($_toolchain)" ]
-
-      # get_label_info(:target(toolchain), "target_out_dir")：
-      # 获取指定工具链编译产物的输出目录
-      # 从该目录下取编译好的 .so 文件
       sources = [ get_label_info(":$_ndk_shlib_target($_toolchain)",
                                  "target_out_dir") +
                   "/$_toolchain_name/lib$_output_name.$_output_extension" ]
-      # 拷贝到 sysroot 输出目录
       outputs = [ _output_ndk_shlib ]
     }
     _accumulated_deps += [ ":$_ndk_shlib_copy_target" ]
     _accumulated_deps += [ ":$_ndk_shlib_target" ]
   }
 
-  # ========== 第四步：Notice 开源合规文件收集 ==========
-  # （不影响功能，略过细节）
-
-  # 最终目标名 = target_name，外部 deps = [ ":libc_ndk" ] 会指向此目标
   _ndk_version_script_target = target_name
-
-  # current_toolchain / default_toolchain：GN 内置变量
-  # current_toolchain == default_toolchain 时表示在默认工具链上下文（非交叉编译）
-  # Notice 文件各架构相同，只需在默认工具链下收集一份
   if (current_toolchain == default_toolchain) {
     # Notice file for different toolchains are the same, it's enough to
     # collect notice file for default toolchain.
@@ -421,9 +272,6 @@ template("ohos_ndk_library") {
     }
     _accumulated_deps += [ ":$_notice_target" ]
   }
-
-  # not_needed：调用者可能传了 license_file / license_as_sources 但没被当前代码使用
-  # 告诉 GN 不要报 unused variable 警告（它们被 collect_notice 用了，但在条件分支外）
   if (defined(invoker.license_file)) {
     not_needed(invoker, [ "license_file" ])
   }
@@ -431,16 +279,8 @@ template("ohos_ndk_library") {
     not_needed(invoker, [ "license_as_sources" ])
   }
 
-  # ========== 第五步：生成 version script（符号版本控制脚本） ==========
-
-  # version_script_suffix 来源：ndk.gni 第22行，declare_args() 中定义为 ".map.txt"
-  # 生成文件路径：out/.../gen/xxx/libc_ndk.map.txt
   _generated_version_script =
       target_gen_dir + "/$target_name" + version_script_suffix
-
-  # 这个 action 依赖前面所有编译+拷贝+notice 目标，保证执行顺序正确
-  # 同时因为它叫 target_name，外部 deps = [ ":libc_ndk" ] 会直接指向它
-  # 所以依赖 libc_ndk 就等于依赖了整个模板的所有产出
   action_with_pydeps(_ndk_version_script_target) {
     deps = _accumulated_deps
     script = "//build/ohos/ndk/generate_version_script.py"
@@ -450,7 +290,6 @@ template("ohos_ndk_library") {
       rebase_path(_generated_version_script, root_build_dir),
       "--ndk-description-file",
       rebase_path(_ndk_description_file, root_build_dir),
-      # --shlib-name：库名，用于 version script 里的版本标签命名
       "--shlib-name",
       _output_name,
       "--depfile",
