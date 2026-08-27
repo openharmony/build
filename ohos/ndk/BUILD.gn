@@ -75,30 +75,30 @@ if (!use_current_sdk) {
     }
   }
 
-  action_with_pydeps("_collect_lite_ndk_syscap") {
-    deps = [ ":_parse_lite_ndk_headers" ]
-    script = "//build/ohos/ndk/collect_ndk_syscap.py"
-    depfile = "$target_gen_dir/$target_name.d"
-    _ndk_lite_syscap_desc_file =
-        "${ndk_os_irrelevant_out_dir}/ndk_lite_system_capability.json"
-    _native_lite_syscap_config_file =
-        "${ndk_os_irrelevant_out_dir}/nativeapi_lite_syscap_config.json"
-    outputs = [ _ndk_lite_syscap_desc_file ]
-    args = [
-      "--depfile",
-      rebase_path(depfile, root_build_dir),
-      "--system-capability-file",
-      rebase_path(_ndk_lite_syscap_desc_file, root_build_dir),
-      "--system-capability-header-config",
-      rebase_path(_native_lite_syscap_config_file, root_build_dir),
-      "--targets-build-config",
-    ]
-    foreach(_ndk_target, all_lite_ndk_targets_list) {
-      _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
-                        get_label_info(_ndk_target, "name") + ".build_config"
-      args += [ rebase_path(_target_bc_file, root_build_dir) ]
-    }
-  }
+  # action_with_pydeps("_collect_lite_ndk_syscap") {
+  #   deps = [ ":_parse_lite_ndk_headers" ]
+  #   script = "//build/ohos/ndk/collect_ndk_syscap.py"
+  #   depfile = "$target_gen_dir/$target_name.d"
+  #   _ndk_lite_syscap_desc_file =
+  #       "${ndk_os_irrelevant_out_dir}/ndk_lite_system_capability.json"
+  #   _native_lite_syscap_config_file =
+  #       "${ndk_os_irrelevant_out_dir}/nativeapi_lite_syscap_config.json"
+  #   outputs = [ _ndk_lite_syscap_desc_file ]
+  #   args = [
+  #     "--depfile",
+  #     rebase_path(depfile, root_build_dir),
+  #     "--system-capability-file",
+  #     rebase_path(_ndk_lite_syscap_desc_file, root_build_dir),
+  #     "--system-capability-header-config",
+  #     rebase_path(_native_lite_syscap_config_file, root_build_dir),
+  #     "--targets-build-config",
+  #   ]
+  #   foreach(_ndk_target, all_lite_ndk_targets_list) {
+  #     _target_bc_file = get_label_info(_ndk_target, "target_gen_dir") + "/" +
+  #                       get_label_info(_ndk_target, "name") + ".build_config"
+  #     args += [ rebase_path(_target_bc_file, root_build_dir) ]
+  #   }
+  # }
 
   action_with_pydeps("_parse_ndk_headers") {
     deps = all_ndk_targets_list
@@ -148,7 +148,7 @@ if (!use_current_sdk) {
   group("all_ndk_targets") {
     deps = [
       ":_collect_ndk_syscap",
-      ":_collect_lite_ndk_syscap",
+      # ":_collect_lite_ndk_syscap",
     ]
     if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
       if (!sdk_build_arkts) {
