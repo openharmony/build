@@ -1,0 +1,13 @@
+{
+    "requestPermissions": [
+        {
+        "name": "ohos.permission.kernel.ALLOW_DEBUG"
+    },
+    {
+        "name": "ohos.permission.kernel.DEBUGGER"
+    },
+    {
+        "name": "ohos.permission.READ_WRITE_USB_FILE"
+    }
+    ]
+}

@@ -58,6 +58,7 @@ def sign_sdk(zipfile, sign_list, sign_results, ohos_sdk_dir, cert_path):
     sign = f"ohos sdk key store"
     cert_file = os.path.abspath(os.path.join(cert_path, 'OHOS_SDK.cer'))
     key_store_file = os.path.abspath(os.path.join(cert_path, 'OHOS_SDK.p12'))
+    module_json = os.path.abspath(os.path.join(os.path.dirname(__file__), 'module.json'))
 
     try:
         find_file(cert_file, key_store_file)
@@ -79,7 +80,7 @@ def sign_sdk(zipfile, sign_list, sign_results, ohos_sdk_dir, cert_path):
                 need_sign_files.append(file)
         for file in need_sign_files:
             if file.split('/')[-1] in sign_list or file.endswith('.so') or file.endswith('.dylib') \
-                    or file.split('/')[-2] == 'bin' and not file.endswith('.js'):
+                    or file.split('/')[-2] == 'bin' or file.split('/')[-2] == 'lib' and not file.endswith('.js'):
                 cmd2 = [packing_tool, 
                     'sign', 
                     '-keyAlias', sign,  
@@ -89,7 +90,9 @@ def sign_sdk(zipfile, sign_list, sign_results, ohos_sdk_dir, cert_path):
                     '-outFile', file,
                     '-keyPwd', key_pwd,
                     '-appCertFile', cert_file, 
-                    '-keystorePwd',key_store_pwd]
+                    '-keystorePwd', key_store_pwd,
+ 	                '-moduleFile', module_json]
+                print(cmd2)
                 subprocess.call(cmd2)
         cmd3 = ['rm', zipfile]
         subprocess.call(cmd3)
