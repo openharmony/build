@@ -65,7 +65,8 @@ def collect_seccomp_services_name(lib_dir: str):
         'app_atomic',
         'app_custom',
         'app_allow_iouring',
-        'app_normal'
+        'app_normal',
+        'app_normal_allow_ptrace'
     ]
     if not os.path.exists(lib_dir):
         return services_name
