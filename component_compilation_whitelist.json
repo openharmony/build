@@ -12646,15 +12646,6 @@
         "//base/web/webview/ohos_adapter:nweb_ohos_adapter": [
             "//foundation/ability/ability_base:want"
         ],
-        "//build/config:common_deps": [
-            "//third_party/musl:soft_shared_libs"
-        ],
-        "//build/config:source_set_deps": [
-            "//third_party/musl:musl_headers"
-        ],
-        "//build/config:static_library_deps": [
-            "//third_party/musl:musl_headers"
-        ],
         "//commonlibrary/c_utils/base:utils": [
             "//third_party/bounds_checking_function:libsec_shared"
         ],
