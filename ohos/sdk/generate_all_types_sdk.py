@@ -75,6 +75,7 @@ import("{{ generated_sdk_modules_gni }}")
 
     {% for os in sdk_systems %}
     {% set _os = os.replace('-', '_') %}
+    {% set _arch = '${target_arch}' if os == 'ohos' else '${arch}' %}
     make_{{ _os }}_sdk_modules("{{ _sdk_type }}_{{ _os }}") {
       {% if use_current_sdk %}
       sdk_class = "{{ sdk_class }}"
@@ -83,10 +84,10 @@ import("{{ generated_sdk_modules_gni }}")
       sdk_modules = {{ _sdk_type }}s.{{ _os }}
       {% if release_type != "" %}
       zipfile_name =
-          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-${arch}-${current_sdk_version}-${release_type}.zip"
+          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-{{ _arch }}-${current_sdk_version}-${release_type}.zip"
       {% else %}
       zipfile_name =
-          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-${arch}-${current_sdk_version}.zip"
+          "${sdk_type}-${{ "{" }}sdk_system_{{ _os }}{{ "}" }}-{{ _arch }}-${current_sdk_version}.zip"
       {% endif %}
     }
     {% endfor %}
