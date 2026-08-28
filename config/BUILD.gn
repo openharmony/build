@@ -307,7 +307,7 @@ group("static_library_deps") {
       external_deps = [ "musl:musl_headers" ]
     } else {
       deps = [ "//third_party/musl:musl_headers" ]
-      public_configs = [ "//third_part/musl:musl_headers_public_config" ]
+      public_configs = [ "//third_party/musl:musl_headers_public_config" ]
     }
   }
 }
@@ -319,7 +319,7 @@ group("source_set_deps") {
       external_deps = [ "musl:musl_headers" ]
     } else {
       deps = [ "//third_party/musl:musl_headers" ]
-      public_configs = [ "//third_part/musl:musl_headers_public_config" ]
+      public_configs = [ "//third_party/musl:musl_headers_public_config" ]
     }
   }
 }
