@@ -20,7 +20,7 @@ declare_args() {
   api_full_version = "26.0.0"
 
   # Release type, optional values: Betax, RCx...
-  release_type = "Beta"
+  release_type = "Release"
   meta_version = "3.0.2"
   platform_version = "26.0.0"
 }
