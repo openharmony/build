@@ -93,21 +93,19 @@ if (!use_current_sdk) {
     ]
   }
 
-  if (all_lite_ndk_targets_list != []) {
-    action_with_pydeps("_parse_lite_ndk_headers") {
-      deps = all_lite_ndk_targets_list
-      script = "//interface/sdk_c/build-tools/parse_native_headers.py"
-      outputs = [ "${ndk_os_irrelevant_out_dir}/parse_lite_ndk_headers.tmp" ]
-      args = [
-        "--input",
-        rebase_path("$ndk_lite_headers_out_dir", root_build_dir),
-        "--sdk-api-version",
-        "${sdk_build_check_level}",
-        "--sdk-build-public",
-        "${sdk_build_public}",
-        "--skip-version-macro",
-      ]
-    }
+  action_with_pydeps("_parse_lite_ndk_headers") {
+    deps = all_lite_ndk_targets_list
+    script = "//interface/sdk_c/build-tools/parse_native_headers.py"
+    outputs = [ "${ndk_os_irrelevant_out_dir}/parse_lite_ndk_headers.tmp" ]
+    args = [
+      "--input",
+      rebase_path("$ndk_lite_headers_out_dir", root_build_dir),
+      "--sdk-api-version",
+      "${sdk_build_check_level}",
+      "--sdk-build-public",
+      "${sdk_build_public}",
+      "--skip-version-macro",
+    ]
   }
 
   if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
