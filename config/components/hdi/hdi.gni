@@ -296,6 +296,12 @@ template("hdi") {
       if (defined(invoker.defines)) {
         defines = invoker.defines
       }
+
+      if (!use_clang_coverage) {
+        if (defined(invoker.client_version_script)) {
+          version_script = invoker.client_version_script
+        }
+      }
     }
   }
 
@@ -376,6 +382,12 @@ template("hdi") {
 
         if (defined(invoker.defines)) {
           defines = invoker.defines
+        }
+
+        if (!use_clang_coverage) {
+          if (defined(invoker.server_version_script)) {
+            version_script = invoker.server_version_script
+          }
         }
       }
     }
