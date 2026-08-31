@@ -22,7 +22,10 @@
         "liteos_m"
       ],
       "features": [
-        "dsoftbus_feature_trans_udp_stream"
+        "dsoftbus_feature_trans_udp_stream",
+        "dsoftbus_feature_conn_general",
+        "dsoftbus_feature_conn_br",
+        "dsoftbus_feature_conn_ble"
       ],
       "deps": {
         "third_party": [
