@@ -91,7 +91,7 @@ def sign_sdk(zipfile, sign_list, sign_results, ohos_sdk_dir, cert_path):
                     '-keyPwd', key_pwd,
                     '-appCertFile', cert_file, 
                     '-keystorePwd', key_store_pwd,
- 	                '-moduleFile', module_json]
+                    '-moduleFile', module_json]
                 print(cmd2)
                 subprocess.call(cmd2)
         cmd3 = ['rm', zipfile]
