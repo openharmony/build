@@ -758,6 +758,7 @@ template("ohos_ndk_lite_library") {
     }
 
     assert(defined(_ndk_shlib_directory))
+
     # Output to sysroot_lite instead of sysroot
     _output_dir = "$ndk_lite_libraries_out_dir/$_ndk_shlib_directory"
     if (defined(invoker.current_ndk_outpath) &&
