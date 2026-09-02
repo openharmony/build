@@ -22,7 +22,13 @@
         "liteos_m"
       ],
       "features": [
-        "dsoftbus_feature_trans_udp_stream"
+        "dsoftbus_feature_trans_udp_stream",
+        "dsoftbus_feature_lnn_ble",
+        "dsoftbus_feature_lnn_usb_ncm",
+        "dsoftbus_feature_lnn_d2d_auth",
+        "dsoftbus_feature_lnn_auth_ext",
+        "dsoftbus_feature_lnn_net_builder_ext",
+        "dsoftbus_feature_lnn_ledger_ext"
       ],
       "deps": {
         "third_party": [
