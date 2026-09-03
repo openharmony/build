@@ -279,9 +279,9 @@ foreach(_platform, target_platform_list) {
 
   action_with_pydeps("${_platform}_install_modules") {
     script = "//build/ohos/packages/modules_install.py"
-    public_deps = [ ":${current_platform}_parts_list" ]
     depfile = "$target_gen_dir/$target_name.d"
     deps = [
+      ":${current_platform}_parts_list",
       ":${current_platform}_hisysevent_install_info",
       ":${current_platform}_sa_profile_install_info",
       ":generate_host_symlink",

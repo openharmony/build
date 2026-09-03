@@ -238,26 +238,26 @@ config("default_libs") {
 
 # Only //build/config/BUILDCONFIG.gn should reference this.
 group("common_deps") {
-  public_deps = []
+  deps = []
 
   if (using_sanitizer) {
-    public_deps += [ "//build/config/sanitizers:deps" ]
+    deps += [ "//build/config/sanitizers:deps" ]
   }
 
   if (use_custom_libcxx) {
     if (is_double_framework) {
-      public_deps += [ "${asdk_libs_dir}/ndk/libcxx:libcxx" ]
+      deps += [ "${asdk_libs_dir}/ndk/libcxx:libcxx" ]
     } else {
-      public_deps += [ "//third_party/libcxx:libcxx" ]
+      deps += [ "//third_party/libcxx:libcxx" ]
     }
   }
 
   if (use_afl) {
-    public_deps += [ "//third_party/afl" ]
+    deps += [ "//third_party/afl" ]
   }
 
   if (is_ohos && use_order_profiling) {
-    public_deps += []
+    deps += []
   }
 
   if (use_musl && current_toolchain != host_toolchain && !is_mingw &&
@@ -265,39 +265,39 @@ group("common_deps") {
     if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
       external_deps = [ "musl:soft_shared_libs" ]
     } else {
-      public_deps += [ "//third_party/musl:soft_shared_libs" ]
+      deps += [ "//third_party/musl:soft_shared_libs" ]
     }
   }
 
   if (is_ohos && ohos_indep_compiler_enable &&
       current_toolchain != host_toolchain) {
-    public_deps += [ "//build/common/ubsan:ubsan" ]
+    deps += [ "//build/common/ubsan:ubsan" ]
   }
 }
 
 group("executable_deps") {
-  public_deps = [ ":common_deps" ]
+  deps = [ ":common_deps" ]
   if (export_libcxxabi_from_executables) {
     if (!is_double_framework) {
-      public_deps += [ "//third_party/libcxxabi:libc++abi" ]
+      deps += [ "//third_party/libcxxabi:libc++abi" ]
     }
   }
 }
 
 group("loadable_module_deps") {
-  public_deps = [ ":common_deps" ]
+  deps = [ ":common_deps" ]
 }
 
 group("shared_library_deps") {
-  public_deps = [ ":common_deps" ]
+  deps = [ ":common_deps" ]
 }
 
 group("rust_library_deps") {
-  public_deps = [ ":common_deps" ]
+  deps = [ ":common_deps" ]
 }
 
 group("rust_proc_macro_deps") {
-  public_deps = [ ":common_deps" ]
+  deps = [ ":common_deps" ]
 }
 
 group("static_library_deps") {
@@ -306,7 +306,8 @@ group("static_library_deps") {
     if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
       external_deps = [ "musl:musl_headers" ]
     } else {
-      public_deps = [ "//third_party/musl:musl_headers" ]
+      deps = [ "//third_party/musl:musl_headers" ]
+      public_configs = [ "//third_party/musl:musl_headers_public_config" ]
     }
   }
 }
@@ -317,7 +318,8 @@ group("source_set_deps") {
     if (defined(ohos_indep_compiler_enable) && ohos_indep_compiler_enable) {
       external_deps = [ "musl:musl_headers" ]
     } else {
-      public_deps = [ "//third_party/musl:musl_headers" ]
+      deps = [ "//third_party/musl:musl_headers" ]
+      public_configs = [ "//third_party/musl:musl_headers_public_config" ]
     }
   }
 }
@@ -427,3 +429,4 @@ config("predefined_macro") {
     }
   }
 }
+
