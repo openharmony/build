@@ -26,6 +26,10 @@ if (!use_current_sdk) {
     import("//interface/sdk_c/ndk_targets.gni")
   }
 
+  if (!defined(all_lite_ndk_targets_list)) {
+    all_lite_ndk_targets_list = []
+  }
+
   package_info_file = "$ndk_os_irrelevant_out_dir/$package_info_name.json"
 
   package_info = {
@@ -82,10 +86,27 @@ if (!use_current_sdk) {
     args = [
       "--input",
       rebase_path("$ndk_headers_out_dir", root_build_dir),
+      "--sdk-build-check-level",
+      "${sdk_build_check_level}",
+      "--sdk-api-version",
+      "${platform_version}",
+      "--sdk-build-public",
+      "${sdk_build_public}",
+    ]
+  }
+
+  action_with_pydeps("_parse_lite_ndk_headers") {
+    deps = all_lite_ndk_targets_list
+    script = "//interface/sdk_c/build-tools/parse_native_headers.py"
+    outputs = [ "${ndk_os_irrelevant_out_dir}/parse_lite_ndk_headers.tmp" ]
+    args = [
+      "--input",
+      rebase_path("$ndk_lite_headers_out_dir", root_build_dir),
       "--sdk-api-version",
       "${sdk_build_check_level}",
       "--sdk-build-public",
       "${sdk_build_public}",
+      "--skip-version-macro",
     ]
   }
 
@@ -107,6 +128,9 @@ if (!use_current_sdk) {
 
   group("all_ndk_targets") {
     deps = [ ":_collect_ndk_syscap" ]
+    if (all_lite_ndk_targets_list != []) {
+      deps += [ ":_parse_lite_ndk_headers" ]
+    }
     if (!defined(ext_ndk_config_file) || ext_ndk_config_file == "") {
       if (!sdk_build_arkts) {
         deps += [ ":_clean_ndk_ani" ]

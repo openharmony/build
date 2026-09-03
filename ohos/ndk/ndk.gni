@@ -408,7 +408,11 @@ template("ohos_ndk_copy") {
 # Specify ndk header files
 #
 # Input variables:
-#   dest_dir: Root directory where sources are copied to.
+#   dest_dir: Root directory where sources are copied to (required).
+#     - Standard NDK headers: dest_dir = "$ndk_headers_out_dir/xxx"
+#       (e.g. "$ndk_headers_out_dir/hilog" → sysroot/usr/include/hilog)
+#     - Lite NDK headers: dest_dir = "$ndk_lite_headers_out_dir/xxx"
+#       (e.g. "$ndk_lite_headers_out_dir/hilog" → sysroot_lite/usr/include/hilog)
 #   sources: List of files and directories to copy to ${dest_dir}.
 #
 template("ohos_ndk_headers") {
@@ -742,10 +746,6 @@ template("ohos_ndk_lite_library") {
     "//build/toolchain/ohos:ohos_clang_cortex_m",
   ]
 
-  if (ndk_lite_toolchains == []) {
-    not_needed([ "_output_extension" ])
-  }
-
   _accumulated_deps = []
 
   foreach(_toolchain, ndk_lite_toolchains) {
@@ -758,6 +758,7 @@ template("ohos_ndk_lite_library") {
     }
 
     assert(defined(_ndk_shlib_directory))
+
     # Output to sysroot_lite instead of sysroot
     _output_dir = "$ndk_lite_libraries_out_dir/$_ndk_shlib_directory"
     if (defined(invoker.current_ndk_outpath) &&

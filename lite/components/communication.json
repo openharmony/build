@@ -25,7 +25,22 @@
         "dsoftbus_feature_trans_udp_stream",
         "dsoftbus_feature_conn_general",
         "dsoftbus_feature_conn_br",
-        "dsoftbus_feature_conn_ble"
+        "dsoftbus_feature_conn_ble",
+        "dsoftbus_feature_disc_usb",
+        "dsoftbus_feature_disc_nfc",
+        "dsoftbus_feature_disc_virlink",
+        "dsoftbus_feature_lnn_ble",
+        "dsoftbus_feature_lnn_usb_ncm",
+        "dsoftbus_feature_lnn_d2d_auth",
+        "dsoftbus_feature_lnn_auth_ext",
+        "dsoftbus_feature_lnn_net_builder_ext",
+        "dsoftbus_feature_lnn_lane_small",
+        "dsoftbus_feature_lnn_ledger_ext",
+        "dsoftbus_feature_trans_udp_file",
+        "dsoftbus_feature_trans_proxy_file",
+        "dsoftbus_feature_trans_file",
+        "dsoftbus_feature_trans_proxy_channel",
+        "dsoftbus_feature_dfile"
       ],
       "deps": {
         "third_party": [

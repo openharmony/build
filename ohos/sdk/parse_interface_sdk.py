@@ -160,13 +160,13 @@ def parse_step(options):
         copy_arkts_api_method(options.root_build_dir, out_path, options.node_js, sdk_type, options.sdk_build_public,
                               options.sdk_build_arkts)
 
-        # 转换sdk_check_level为数值int类型，防止传入有误参数
-        sdk_check_version = 0
+        # 转换sdk_build_check_level为数值int类型，防止传入有误参数
+        sdk_build_check_level = 0
         try:
-            sdk_check_version = int(options.sdk_check_level)
+            sdk_build_check_level = int(options.sdk_build_check_level)
         except BaseException as e:
-            raise ValueError("sdk_check_level数值有误，请传入正确数值")
-        if sdk_check_version != 0:
+            raise ValueError("sdk_build_check_level数值有误，请传入正确数值")
+        if sdk_build_check_level != 0:
             # 仅在编译dynamic时校验API版本
             check_api_version_method(options.root_build_dir, out_path, options.sdk_api_version, options.node_js)
 
@@ -206,7 +206,7 @@ def main():
     parser.add_argument('--npm-path', required=True)
     parser.add_argument('--output-interface-sdk', required=True)
     parser.add_argument('--build-sdk-path', required=True)
-    parser.add_argument('--sdk-check-level', required=True)
+    parser.add_argument('--sdk-build-check-level', required=True)
     parser.add_argument('--sdk-api-version', required=True)
 
     options = parser.parse_args()

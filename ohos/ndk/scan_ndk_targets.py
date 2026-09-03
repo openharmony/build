@@ -35,7 +35,8 @@ group("all_ndk_targets") {{
 
 ALL_NDK_TEMPLATES_NAMES = [
     "ohos_ndk_headers", "ohos_ndk_library",
-    "ohos_ndk_prebuilt_library", "ohos_ndk_copy"
+    "ohos_ndk_prebuilt_library", "ohos_ndk_copy",
+    "ohos_ndk_lite_library"
 ]
 
 
