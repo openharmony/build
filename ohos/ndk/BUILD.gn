@@ -102,8 +102,10 @@ if (!use_current_sdk) {
     args = [
       "--input",
       rebase_path("$ndk_lite_headers_out_dir", root_build_dir),
-      "--sdk-api-version",
+      "--sdk-build-check-level",
       "${sdk_build_check_level}",
+      "--sdk-api-version",
+      "${platform_version}",
       "--sdk-build-public",
       "${sdk_build_public}",
       "--skip-version-macro",
