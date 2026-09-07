@@ -93,6 +93,19 @@ list(APPEND CMAKE_FIND_ROOT_PATH "${OHOS_SDK_NATIVE}")
 # set the arch abi
 set(CMAKE_OHOS_ARCH_ABI ${OHOS_ARCH})
 
+#------------------------------------------------------------------------------
+# Lite Wearable Detection & Include
+#------------------------------------------------------------------------------
+set(OHOS_LITE FALSE)
+if(OHOS_ARCH STREQUAL "armv8m" OR OHOS_ARCH STREQUAL "riscv32")
+  set(OHOS_LITE TRUE)
+endif()
+
+if(OHOS_LITE)
+  include(${CMAKE_CURRENT_LIST_DIR}/ohos_lite_flags.cmake)
+  return()
+endif()
+
 # set arch diff property ...
 if(OHOS_ARCH STREQUAL arm64-v8a)
   set(OHOS_TOOLCHAIN_NAME aarch64-linux-ohos)
