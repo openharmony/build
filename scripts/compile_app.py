@@ -343,11 +343,11 @@ def build_hvigor_cmd(cwd: str, model_version: str, options, hash_val: str):
         cmd.extend(['--mode', 'module', '-p',
                f'module={options.test_module}@ohosTest', 'assembleHap'])
     elif options.build_modules:
-        cmd.extend([options.assemble_type, '--mode',
+        cmd.extend(options.assemble_type.split(',')+['--mode',
                'module', '-p', f'product={product_value}', '-p', 'module=' + ','.join(options.build_modules)])
     else:
         cmd.extend(['--mode',
-               options.build_level, '-p', f'product={product_value}', options.assemble_type])
+               options.build_level, '-p', f'product={product_value}']+options.assemble_type.split(','))
 
     if options.enable_debug:
         cmd.extend(['-p', 'debuggable=true'])
