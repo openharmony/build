@@ -66,6 +66,14 @@ if (host_cpu == "arm64") {
   arch = "x64"
 }
 
+if (target_cpu == "arm64") {
+  target_arch = "arm64"
+} else if (target_cpu == "riscv64") {
+  target_arch = "riscv64"
+} else {
+  target_arch = "x64"
+}
+
 if (build_default_sdk_target) {
   if (host_os == "mac") {
     sdk_systems = [ sdk_system_darwin ]
