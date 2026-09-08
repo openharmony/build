@@ -231,6 +231,7 @@ ohos_ndk_copy("ndk_cmake_files") {
   sources = [
     "./cmake/ohos.toolchain.cmake",
     "./cmake/sdk_native_platforms.cmake",
+    "./cmake/ohos_lite_flags.cmake",
   ]
 }
 
