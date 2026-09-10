@@ -365,7 +365,14 @@ template("ohos_rust_library") {
     if (defined(invoker.version_script)) {
         _version_script = rebase_path(invoker.version_script, root_build_dir)
         inputs += [ invoker.version_script ]
-        ldflags += [ "-Wl,--version-script=${_version_script}" ]  
+        _wrapper = rebase_path("//build/scripts/rust_linker_wrapper.py",
+                              root_build_dir)
+        _cxx = rebase_path("${clang_base_path}/bin/clang++", root_build_dir)
+        rustflags += [ "-Clinker=" + _wrapper]
+        rustenv += [
+          "RUST_VERSION_SCRIPT=" + _version_script,
+          "RUST_ORIGINAL_LINKER=" + _cxx,
+        ]
     }
 
     if (defined(invoker.configs)) {
