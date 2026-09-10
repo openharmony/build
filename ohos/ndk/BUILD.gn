@@ -495,7 +495,7 @@ if (!use_current_sdk) {
     deps = ndk_targets
     script = "//build/ohos/ndk/archive_ndk.py"
     depfile = "$target_gen_dir/$target_name.d"
-    _output = "$ohos_sdk_out_dir/${ohos_system}/${ndk_zip_prefix}-${ohos_system}-${arch}-${current_ndk_version}"
+    _output = "$ohos_sdk_out_dir/${ohos_system}/${ndk_zip_prefix}-${ohos_system}-${target_arch}-${current_ndk_version}"
     if (release_type != "") {
       _output += "-${release_type}.zip"
     } else {
