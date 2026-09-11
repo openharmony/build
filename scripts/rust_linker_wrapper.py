@@ -29,7 +29,10 @@ def main():
 
     new_args = []
     for arg in args:
-        if arg.startswith("-Wl,--version-script") and "/tmp/rustc" in arg:
+        if arg.startswith("-Wl,--version-script")g:
+            script_path = arg[len("-Wl,--version-script"): ]
+            if version_script and os.path.abspath(script_path) == os.path.abspath(version_script):
+                new_args.append(arg)
             continue
         if arg == "-Wl,--no-undefined-version":
             continue
