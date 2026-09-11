@@ -27,6 +27,8 @@ def main():
         print("RUST_ORIGINAL_LINKER is not set", file=sys.stderr)
         sys.exit(1)
 
+    args = sys.argv[1:]
+
     new_args = []
     for arg in args:
         if arg.startswith("-Wl,--version-script"):
