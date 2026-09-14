@@ -29,6 +29,7 @@
         "dsoftbus_feature_disc_usb",
         "dsoftbus_feature_disc_nfc",
         "dsoftbus_feature_disc_virlink",
+        "dsoftbus_feature_disc_coap_custdata",
         "dsoftbus_feature_lnn_ble",
         "dsoftbus_feature_lnn_usb_ncm",
         "dsoftbus_feature_lnn_d2d_auth",
