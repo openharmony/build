@@ -417,6 +417,38 @@ class BuildArgsResolver(ArgsResolverInterface):
                 os.environ['USE_XCACHE'] = '1'
 
     @staticmethod
+    def resolve_use_link_cache(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--use-link-cache' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: prebuild.
+        """
+        if target_arg.arg_value:
+            config = Config()
+            lcache_exec = os.path.join(config.root_path, 'build', 'tools', 'lcache', 'link_cache.py')
+            if not os.path.exists(lcache_exec):
+                LogUtil.hb_warning('Failed to find link_cache.py, link cache disabled.')
+                return
+            target_generator = build_module.target_generator
+            target_generator.regist_arg('use_link_cache', True)
+            lcache_dir = os.environ.get('LCACHE_DIR')
+            if not lcache_dir:
+                lcache_dir = os.path.join(os.environ.get('HOME'), '.link-cache')
+            if not os.path.exists(lcache_dir):
+                os.makedirs(lcache_dir, exist_ok=True)
+            lcache_max_size = os.environ.get('LCACHE_MAX_SIZE')
+            if not lcache_max_size:
+                lcache_max_size = '20'
+            lcache_logfile = os.environ.get('LCACHE_LOGFILE')
+            if not lcache_logfile:
+                lcache_logfile = os.path.join(config.out_path, 'link_cache.log')
+            os.environ['LCACHE_EXEC'] = lcache_exec
+            os.environ['LCACHE_DIR'] = lcache_dir
+            os.environ['LCACHE_MAX_SIZE'] = lcache_max_size
+            os.environ['LCACHE_LOGFILE'] = lcache_logfile
+            os.environ['SOURCE_DATE_EPOCH'] = '1'
+
+    @staticmethod
     def resolve_pycache(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve '--enable-pycache' arg
         :param target_arg: arg object which is used to get arg value.
@@ -879,6 +911,31 @@ class BuildArgsResolver(ArgsResolverInterface):
             if os.path.isfile(logfile):
                 SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
 
+    @staticmethod
+    def resolve_stat_lcache(target_arg: Arg, build_module: BuildModuleInterface):
+        """resolve '--stat-lcache' arg
+        :param target_arg: arg object which is used to get arg value.
+        :param build_module [maybe unused]: build module object which is used to get other services.
+        :phase: postTargetCompilation
+        """
+        if target_arg.arg_value:
+            config = Config()
+            lcache_logfile = os.environ.get('LCACHE_LOGFILE')
+            if not lcache_logfile:
+                return
+            # 优先使用本次构建的日志，若不存在则回退到上次构建的 .old 日志
+            if not os.path.isfile(lcache_logfile):
+                lcache_logfile_old = '{}.old'.format(lcache_logfile)
+                if os.path.isfile(lcache_logfile_old):
+                    lcache_logfile = lcache_logfile_old
+                else:
+                    return
+            cmd = [
+                'python3', '{}/build/scripts/summary_lcache_hitrate.py'.format(
+                    config.root_path), lcache_logfile
+            ]
+            SystemUtil.exec_command(cmd, log_path=config.log_path, log_stage="[POSTBUILD]")
+            
     @staticmethod
     def resolve_get_warning_list(target_arg: Arg, build_module: BuildModuleInterface):
         """resolve "--get-warning-list' arg

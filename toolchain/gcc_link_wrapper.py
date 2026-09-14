@@ -56,6 +56,33 @@ def update_crt(command):
     return command
 
 
+def is_lto_enabled(cmd: list) -> bool:
+    lto_enabled = False
+    for arg in cmd:
+        if arg == "-fno-lto":
+            lto_enabled = False
+            continue
+        if arg.startswith("-flto"):
+            if arg == "-flto":
+                lto_enabled = True
+                continue
+            if "=" in arg:
+                value = arg.split("=", 1)[1].strip().lower()
+                if value in ("false", "0", "off", "no"):
+                    lto_enabled = False
+                else:
+                    lto_enabled = True
+                continue
+        if arg.startswith("-Wl,"):
+            wl_args = arg[4:].split(",")
+            for item in wl_args:
+                if item.startswith("-plugin-opt=lto") or item.startswith("-plugin-opt=thinlto"):
+                    return True
+        if arg == "-plugin-liblto" or arg.startswith("-plugin=liblto"):
+            return True
+    return lto_enabled
+
+
 def main():
     wrapper_utils.remove_duplicate_static_deps()
     parser = argparse.ArgumentParser(description=__doc__)
@@ -69,6 +96,7 @@ def main():
     parser.add_argument('--mini-debug', action='store_true', default=False, help='Add .gnu_debugdata section for stripped sofile')
     parser.add_argument('--clang-base-dir', help='')
     parser.add_argument('--remove-unstripped-exe', action='store_true', default=False, help='remove exe.unstripped after used')
+    parser.add_argument('--lcache-path', default='', help='link cache binary path')
     args = parser.parse_args()
     # Work-around for gold being slow-by-default. http://crbug.com/632230
     fast_env = dict(os.environ)
@@ -79,6 +107,17 @@ def main():
             return 0
     else:
         command = args.command
+    _has_ohos_target = any(a.startswith('--target=') and a.endswith('-linux-ohos') for a in command)
+    _debug_log = os.environ.get('LCACHE_DEBUG_LOG', '')
+    if _debug_log:
+        with open(_debug_log, 'a') as f:
+            f.write(f"[gcc_link_wrapper] lcache_path={args.lcache_path} _has_ohos_target={_has_ohos_target} is_lto={is_lto_enabled(command)}\n")
+    if args.lcache_path != '' and _has_ohos_target:
+        work_dir = os.getcwd()
+        if os.path.exists(args.lcache_path):
+            command.insert(0, 'python3')
+            command.insert(1, args.lcache_path)
+            command.insert(2, f'--work-dir={work_dir}')
     result = wrapper_utils.run_link_with_optional_map_file(
         command, env=fast_env, map_file=args.map_file)
     if result != 0:
