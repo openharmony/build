@@ -64,7 +64,11 @@ template("hdi") {
   if (defined(invoker.module_name)) {
     print(invoker.module_name)
   }
-  not_needed(invoker, ["no_other_header_files"])
+  not_needed(invoker, [
+    "no_other_header_files",
+    "client_version_script",
+    "server_version_script",
+  ])
 
   # system type
   system = "full"
