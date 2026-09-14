@@ -92,6 +92,33 @@ def reformat_rsp_file(rspfile):
         fo.write(" ".join(result))
 
 
+def is_lto_enabled(cmd: list) -> bool:
+    lto_enabled = False
+    for arg in cmd:
+        if arg == "-fno-lto":
+            lto_enabled = False
+            continue
+        if arg.startswith("-flto"):
+            if arg == "-flto":
+                lto_enabled = True
+                continue
+            if "=" in arg:
+                value = arg.split("=", 1)[1].strip().lower()
+                if value in ("false", "0", "off", "no"):
+                    lto_enabled = False
+                else:
+                    lto_enabled = True
+                continue
+        if arg.startswith("-WL,"):
+            wl_args = arg[4:].split(",")
+            for item in wl_args:
+                if item.startswith("-plugin-opt=lto") or item.startswith("-plugin-opt=thinlto"):
+                    return True
+        if arg == "-plugin-liblto" or arg.startswith("-plugin=liblto"):
+            return True
+    return lto_enabled
+
+
 def get_install_dest_dir(args):
     file_list = os.listdir(args.target_out_dir)
     target_name = args.target_name
@@ -149,6 +176,7 @@ def main():
     parser.add_argument('--target-out-dir', help='')
     parser.add_argument('--allowed-lib-list', help='')
     parser.add_argument('--clang-base-dir', help='')
+    parser.add_argument('--lcache-path', default='', help='link cache binary path')
     args = parser.parse_args()
 
     if args.sofile.endswith(".dll"):
@@ -165,6 +193,17 @@ def main():
 
     # First, run the actual link.
     command = wrapper_utils.command_to_run(args.command)
+    _has_ohos_target = any(a.startswith('--target=') and a.endswith('-linux-ohos') for a in command)
+    _debug_log = os.environ.get('LCACHE_DEBUG_LOG', '')
+    if _debug_log:
+        with open(_debug_log, 'a') as f:
+            f.write(f"[gcc_solink_wrapper] lcache_path={args.lcache_path} _has_ohos_target={_has_ohos_target} is_lto={is_lto_enabled(command)}\n")
+    if args.lcache_path != '' and _has_ohos_target:
+        work_dir = os.getcwd()
+        if os.path.exists(args.lcache_path):
+            command.insert(0, 'python3')
+            command.insert(1, args.lcache_path)
+            command.insert(2, f'--work-dir={work_dir}')
     result = wrapper_utils.run_link_with_optional_map_file(
         command, env=fast_env, map_file=args.map_file)
 

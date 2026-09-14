@@ -101,6 +101,16 @@
     "resolve_function": "resolve_xcache",
     "testFunction": "testXcache"
   },
+  "use_link_cache": {
+    "arg_name": "--use-link-cache",
+    "argDefault": false,
+    "arg_help": "Default:False. Help:Enable link cache, this option could improve linking speed. --stat-lcache can summary the link cache data",
+    "arg_phase": "prebuild",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_use_link_cache",
+    "testFunction": "testUseLinkCache"
+  },
   "enable_pycache": {
     "arg_name": "--enable-pycache",
     "argDefault": false,
@@ -522,6 +532,16 @@
     "arg_attribute": {},
     "resolve_function": "resolve_stat_ccache",
     "testFunction": "testStatCCache"
+  },
+  "stat_lcache": {
+    "arg_name": "--stat-lcache",
+    "argDefault": true,
+    "arg_help": "Default:True. Help:summary link cache hitrate",
+    "arg_phase": "postTargetCompilation",
+    "arg_type": "bool",
+    "arg_attribute": {},
+    "resolve_function": "resolve_stat_lcache",
+    "testFunction": "testStatLcache"
   },
   "get_warning_list": {
     "arg_name": "--get-warning-list",
