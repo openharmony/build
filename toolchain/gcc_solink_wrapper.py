@@ -109,7 +109,7 @@ def is_lto_enabled(cmd: list) -> bool:
                 else:
                     lto_enabled = True
                 continue
-        if arg.startswith("-WL,"):
+        if arg.startswith("-Wl,"):
             wl_args = arg[4:].split(",")
             for item in wl_args:
                 if item.startswith("-plugin-opt=lto") or item.startswith("-plugin-opt=thinlto"):
