@@ -716,6 +716,8 @@ template("ohos_ndk_lite_library") {
       rebase_path(_ndk_description_file, root_build_dir),
       "--depfile",
       rebase_path(depfile, root_build_dir),
+      "--sdk-build-public",
+      "${sdk_build_public}",
     ]
     inputs = [ _ndk_description_file ]
     outputs = [ _generated_ndk_stub_file ]
