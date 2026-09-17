@@ -69,12 +69,42 @@ while [ $# -gt 0 ]; do
     --download-sdk)       # Download the SDK if this flag is set
     DOWNLOAD_SDK=YES
     ;;
+    --build-level)        # build level for prebuilts pruning, e.g. L0/L1
+    BUILD_LEVEL="$2"
+    shift
+    ;;
+    --build-level=*)
+    BUILD_LEVEL="${1#--build-level=}"
+    ;;
     *)
     echo "$0: Warning: unsupported parameter: $1" >&2
     ;;
   esac
   shift
 done
+
+# --build-level only applies to the prebuilts_config.py entry and
+# prunes the prebuilt python packages; it conflicts with --build-arkuix
+if [ -n "${BUILD_LEVEL}" ] && [ "X${BUILD_ARKUIX}" == "XYES" ];then
+    echo "${0}: Error: --build-level is not supported with --build-arkuix" >&2
+    exit 1
+fi
+
+# validate the --build-level value and build the argument for
+# prebuilts_config.py; only L0/L1 are supported
+build_level=''
+if [ -n "${BUILD_LEVEL}" ];then
+    BUILD_LEVEL=$(echo "${BUILD_LEVEL}" | tr '[:lower:]' '[:upper:]')
+    case "${BUILD_LEVEL}" in
+        L0|L1)
+        build_level="--build-level ${BUILD_LEVEL}"
+        ;;
+        *)
+        echo "${0}: Error: unsupported --build-level: ${BUILD_LEVEL} (expected L0|L1)" >&2
+        exit 1
+        ;;
+    esac
+fi
 
 case $(uname -s) in
     Linux)
@@ -208,11 +238,12 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
 fi
+
 type="--build-type src"
 config_file="--config-file ${code_dir}/build/prebuilts_config.json"
-pip3 install --trusted-host $trusted_host -i $pypi_url requests cryptography
+pip3 install --trusted-host $trusted_host -i $pypi_url requests
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
-        python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file
+        python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file ${build_level}
     else
         python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
 fi
@@ -277,12 +308,17 @@ done
 }
 
 function update_llvm_ndk(){
+if [ ! -d "${llvm_dir}/libcxx-ndk" ];then
+    echo "skip update llvm ndk: libcxx-ndk not found"
+    return 0
+fi
 if [[ -e "${llvm_dir}/llvm_ndk" ]];then
   rm -rf "${llvm_dir}/llvm_ndk"
 fi
 mkdir -p "${llvm_dir}/llvm_ndk"
 cp -af "${llvm_dir}/llvm/include" "${llvm_dir}/llvm_ndk"
 cp -rfp "${llvm_dir}/libcxx-ndk/include" "${llvm_dir}/llvm_ndk"
+echo "======update llvm ndk finished!======"
 }
 
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
@@ -290,7 +326,6 @@ if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
     echo "======copy inside cxx finished!======"
     if [[ "${host_platform}" == "linux" ]]; then
         update_llvm_ndk
-        echo "======update llvm ndk finished!======"
     fi
 fi
 echo -e "\n"
