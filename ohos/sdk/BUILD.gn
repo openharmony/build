@@ -227,7 +227,7 @@ if (!use_current_sdk) {
     if (host_os == "mac" && enable_sign) {
       deps += [ ":sign_mac_sdk" ]
     }
-    if (host_os == "ohos" && enable_sign) {
+    if (host_os == "linux" && enable_sign) {
       deps += [ ":sign_ohos_sdk" ]
     }
 
