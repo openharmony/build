@@ -27,6 +27,8 @@ class ConfigParser:
         self.current_os = global_args.host_platform
         self.input_tag = "all"
         self.build_type = global_args.build_type
+        build_level = getattr(global_args, "build_level", None)
+        self.build_level = str(build_level).strip().upper() if build_level else None
         self.global_config = {
             "code_dir": global_args.code_dir,
             "download_root": self.data["download_root"].get(self.build_type),
@@ -84,7 +86,7 @@ class ConfigParser:
             VarParser.parse_vars(config, tool_basic_config)
 
     def _apply_filters(self, configs: list):
-        return Filter(configs).apply_filters(self.input_tag, self.build_type)
+        return Filter(configs).apply_filters(self.input_tag, self.build_type, self.build_level)
 
     def _match_platform(self, input_os: str, input_cpu: str, config: dict) -> list:
         """获取匹配当前操作系统的配置"""
@@ -221,8 +223,9 @@ class Filter:
             return
         self.input_configs = copy.deepcopy(configs)
 
-    def apply_filters(self, input_tag: str, build_type: str):
-        return self.filter_tag(input_tag).filter_build_type(build_type).result()
+    def apply_filters(self, input_tag: str, build_type: str, build_level: str = None):
+        return (self.filter_tag(input_tag).filter_build_type(build_type)
+                .filter_build_level(build_level).result())
 
     def filter_tag(self, input_tag: str) -> 'Filter':
         """过滤tag字段"""
@@ -255,6 +258,33 @@ class Filter:
                 filtered.append(config)
         self.input_configs = filtered
         return self
+
+    def filter_build_level(self, build_level: str) -> "Filter":
+        """Filter the build_level field.
+
+        When build_level is not specified, no filtering is applied
+        (keep the default behavior, i.e. full download); when specified,
+        only configs whose build_level field contains the given level
+        are kept, while unannotated ones are for full download only.
+        """
+        if not build_level:
+            return self
+        filtered = []
+        for config in self.input_configs:
+            if self.level_match(config.get("build_level"), build_level):
+                filtered.append(config)
+        self.input_configs = filtered
+        return self
+
+    def level_match(self, configured_level, input_level: str) -> bool:
+        """Whether the configured build_level (comma-separated string or list) contains the input level."""
+        if not configured_level:
+            return False
+        if isinstance(configured_level, str):
+            configured_levels = set([level.strip().upper() for level in configured_level.split(",")])
+        else:
+            configured_levels = set([str(level).strip().upper() for level in configured_level])
+        return input_level in configured_levels
 
     def result(self):
         return self.input_configs

@@ -6,6 +6,7 @@
     "tool_list": [
         {
             "name": "node",
+            "build_level": "L1",
             "tag": "base",
             "build_type": "src, indep",
             "unzip_dir": "${code_dir}/prebuilts/build-tools/common/nodejs",
@@ -123,6 +124,7 @@
         },
         {
             "name": "gn",
+            "build_level": "L0,L1",
             "tag": "base",
             "build_type": "src, indep",
             "unzip_filename": "gn",
@@ -164,6 +166,7 @@
         },
         {
             "name": "ninja",
+            "build_level": "L0,L1",
             "tag": "base",
             "build_type": "src, indep",
             "unzip_filename": "ninja",
@@ -291,6 +294,7 @@
         },
         {
             "name": "packaging_tool",
+            "build_level": "L1",
             "tag": "packing_tool",
             "build_type": "src, indep",
             "config": {
@@ -308,6 +312,7 @@
         },
         {
             "name": "clang",
+            "build_level": "L0,L1",
             "tag": "base",
             "build_type": "src, indep",
             "unzip_filename": "llvm",
@@ -443,6 +448,7 @@
         },
         {
             "name": "gcc",
+            "build_level": "L1",
             "tag": "base",
             "build_type": "src",
             "config": {
@@ -505,6 +511,7 @@
         },
         {
             "name": "python",
+            "build_level": "L0,L1",
             "tag": "base",
             "build_type": "src, indep",
             "unzip_dir": "${code_dir}/prebuilts/python",
@@ -923,9 +930,7 @@
                     "type": "npm_install",
                     "npm_install_path": [
                         "${code_dir}/developtools/ace_ets2bundle/compiler",
-                        "${code_dir}/developtools/ace_js2bundle/ace-loader",
                         "${code_dir}/third_party/jsframework",
-                        "${code_dir}/third_party/parse5/packages/parse5",
                         "${code_dir}/third_party/weex-loader",
                         "${code_dir}/arkcompiler/ets_frontend/legacy_bin/api8",
                         "${code_dir}/interface/sdk-js/build-tools",
@@ -938,6 +943,21 @@
                         "${code_dir}/developtools/ace_ets2bundle/koala-wrapper",
                         "${code_dir}/developtools/ace_ets2bundle/arkui-plugins",
                         "${code_dir}/developtools/ace_ets2bundle/ets1.2"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "npm_install_lite",
+            "build_level": "L1",
+            "tag": "npm_install",
+            "build_type": "src, indep",
+            "handle": [
+                {
+                    "type": "npm_install",
+                    "npm_install_path": [
+                        "${code_dir}/developtools/ace_js2bundle/ace-loader",
+                        "${code_dir}/third_party/parse5/packages/parse5"
                     ]
                 }
             ]
