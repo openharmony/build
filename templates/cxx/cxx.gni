@@ -1021,8 +1021,9 @@ template("ohos_shared_library") {
                              "stack_protector_ret",
                              "branch_protector_ret",
                              "branch_protector_frt",
-                             "support_arm64e",
-                           ])
+                              "support_arm64e",
+                              "smo_enable",
+                            ])
     if (support_arm64e && current_toolchain == "//build/toolchain/ohos:ohos_clang_arm64") {
       if (!defined(data_deps)) {
         data_deps = []
@@ -1270,6 +1271,14 @@ template("ohos_shared_library") {
       if (result == "") {
         configs += [ "//build/config/ohos:adlt_config" ]
       }
+    }
+
+    if (defined(invoker.smo_enable) && invoker.smo_enable) {
+      ldflags += [
+        "-Wl,--emit-relocs",
+        "-Wl,--no-relax",
+        "-mno-fix-cortex-a53-843419",
+      ]
     }
 
     if (!defined(output_name)) {

@@ -355,6 +355,7 @@ template("ohos_rust_library") {
 
                              # Sanitizer variables
                              "sanitize",
+                             "smo_enable",
                            ])
     output_dir = output_dir
 
@@ -364,6 +365,14 @@ template("ohos_rust_library") {
 
     if (!defined(ldflags)) {
       ldflags = []
+    }
+
+    if (defined(invoker.smo_enable) && invoker.smo_enable) {
+      ldflags += [
+        "-Wl,--emit-relocs",
+        "-Wl,--no-relax",
+        "-mno-fix-cortex-a53-843419",
+      ]
     }
 
     if (defined(invoker.version_script)) {

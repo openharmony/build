@@ -358,7 +358,7 @@ template("ohos_rust_shared_library") {
   _rustflags = []
   rust_target("$_target_name") {
     target_type = "ohos_rust_library"
-    forward_variables_from(invoker, "*")
+    forward_variables_from(invoker, "*", [ "smo_enable" ])
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
     }
@@ -366,6 +366,17 @@ template("ohos_rust_shared_library") {
     if (defined(invoker.crate_type)) {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
+    }
+
+    if (defined(invoker.smo_enable) && invoker.smo_enable) {
+      if (!defined(ldflags)) {
+        ldflags = []
+      }
+      ldflags += [
+        "-Wl,--emit-relocs",
+        "-Wl,--no-relax",
+        "-mno-fix-cortex-a53-843419",
+      ]
     }
 
     if (defined(invoker.output_extension)) {
@@ -540,7 +551,7 @@ template("ohos_rust_shared_ffi") {
   _rustflags = []
   rust_target("$_target_name") {
     target_type = "ohos_shared_library"
-    forward_variables_from(invoker, "*")
+    forward_variables_from(invoker, "*", [ "smo_enable" ])
     if (!defined(invoker.crate_name)) {
       crate_name = _target_name
     }
@@ -548,6 +559,17 @@ template("ohos_rust_shared_ffi") {
     if (defined(invoker.crate_type)) {
       assert(invoker.crate_type == crate_type,
              "crate_type should be $crate_type or use default value.")
+    }
+
+    if (defined(invoker.smo_enable) && invoker.smo_enable) {
+      if (!defined(ldflags)) {
+        ldflags = []
+      }
+      ldflags += [
+        "-Wl,--emit-relocs",
+        "-Wl,--no-relax",
+        "-mno-fix-cortex-a53-843419",
+      ]
     }
 
     if (!defined(deps)) {
