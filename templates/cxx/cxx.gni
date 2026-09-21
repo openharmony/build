@@ -1274,6 +1274,9 @@ template("ohos_shared_library") {
     }
 
     if (defined(invoker.smo_enable) && invoker.smo_enable) {
+      if (!defined(ldflags)) {
+        ldflags = []
+      }
       ldflags += [
         "-Wl,--emit-relocs",
         "-Wl,--no-relax",
