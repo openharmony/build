@@ -327,6 +327,10 @@ template("ohos_rust_library") {
             invalid != true,
             "$target_label has invalid innerapi_tags $innerapi_tags, allowed values: $valid_tags")
       }
+      
+      if (defined(invoker.version_script)) {
+        version_script = rebase_path(invoker.version_script, root_build_dir)
+      }
     }
   }
 
