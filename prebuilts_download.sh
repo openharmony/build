@@ -69,12 +69,42 @@ while [ $# -gt 0 ]; do
     --download-sdk)       # Download the SDK if this flag is set
     DOWNLOAD_SDK=YES
     ;;
+    --build-level)        # build level for prebuilts pruning, e.g. L0/L1
+    BUILD_LEVEL="$2"
+    shift
+    ;;
+    --build-level=*)
+    BUILD_LEVEL="${1#--build-level=}"
+    ;;
     *)
     echo "$0: Warning: unsupported parameter: $1" >&2
     ;;
   esac
   shift
 done
+
+# --build-level only applies to the prebuilts_config.py entry and
+# prunes the prebuilt python packages; it conflicts with --build-arkuix
+if [ -n "${BUILD_LEVEL}" ] && [ "X${BUILD_ARKUIX}" == "XYES" ];then
+    echo "${0}: Error: --build-level is not supported with --build-arkuix" >&2
+    exit 1
+fi
+
+# validate the --build-level value and build the argument for
+# prebuilts_config.py; only L0/L1 are supported
+build_level=''
+if [ -n "${BUILD_LEVEL}" ];then
+    BUILD_LEVEL=$(echo "${BUILD_LEVEL}" | tr '[:lower:]' '[:upper:]')
+    case "${BUILD_LEVEL}" in
+        L0|L1)
+        build_level="--build-level ${BUILD_LEVEL}"
+        ;;
+        *)
+        echo "${0}: Error: unsupported --build-level: ${BUILD_LEVEL} (expected L0|L1)" >&2
+        exit 1
+        ;;
+    esac
+fi
 
 case $(uname -s) in
     Linux)
@@ -208,11 +238,12 @@ if [ -d "${code_dir}/prebuilts/build-tools/common/nodejs" ];then
     rm -rf "${code_dir}/prebuilts/build-tools/common/nodejs"
     echo "remove nodejs"
 fi
+
 type="--build-type src"
 config_file="--config-file ${code_dir}/build/prebuilts_config.json"
-pip3 install --trusted-host $trusted_host -i $pypi_url requests cryptography
+pip3 install --trusted-host $trusted_host -i $pypi_url requests
 if [[ "${BUILD_ARKUIX}" != "YES" ]]; then
-        python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file
+        python3 "${code_dir}/build/prebuilts_config.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version $type $config_file ${build_level}
     else
         python3 "${code_dir}/build/prebuilts_download.py" $wget_ssl_check $tool_repo $npm_registry $help $cpu $platform $npm_para $disable_rich $enable_symlink $build_arkuix $glibc_version
 fi
@@ -238,7 +269,41 @@ elif [[ "${host_platform}" == "darwin" ]]; then
 fi
 prebuild_python3_path="${PYTHON_PATH}/python3"
 prebuild_pip3_path="${PYTHON_PATH}/pip3"
-$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url idna\>\=3.7 urllib3\>\=1.26.29 pyyaml\>\=6.0.2 requests\>\=2.32.1 prompt_toolkit\=\=1.0.14 asn1crypto\>\=1.5.1 cryptography\>\=44.0.2 json5\=\=0.9.6 typing_extensions\>\=4.13.2 networkx\=\=3.2.1 packageurl-python\=\=0.9.8 license-expression\=\=30.4.4 libclang\=\=15.0.6.1 psutil
+# L0/L1 (mini/small systems) need no rust bindgen (libclang), no SBOM
+# generation (networkx, packageurl, license-expression) and no other
+# standard-system-only packages; keep the shared build framework deps only.
+case "${BUILD_LEVEL}" in
+    L0|L1)
+    prebuilt_pip_packages=(
+        "idna>=3.7"
+        "urllib3>=1.26.29"
+        "pyyaml>=6.0.2"
+        "requests>=2.32.1"
+        "prompt_toolkit==1.0.14"
+        "json5==0.9.6"
+        "psutil"
+    )
+    ;;
+    *)
+    prebuilt_pip_packages=(
+        "idna>=3.7"
+        "urllib3>=1.26.29"
+        "pyyaml>=6.0.2"
+        "requests>=2.32.1"
+        "prompt_toolkit==1.0.14"
+        "asn1crypto>=1.5.1"
+        "cryptography>=44.0.2"
+        "json5==0.9.6"
+        "typing_extensions>=4.13.2"
+        "networkx==3.2.1"
+        "packageurl-python==0.9.8"
+        "license-expression==30.4.4"
+        "libclang==15.0.6.1"
+        "psutil"
+    )
+    ;;
+esac
+$prebuild_python3_path $prebuild_pip3_path install --trusted-host $trusted_host -i $pypi_url "${prebuilt_pip_packages[@]}"
 if [[ "$DOWNLOAD_SDK" == "YES" ]] && [[ ! -d "${code_dir}/prebuilts/ohos-sdk-12" && ! -d "${code_dir}/prebuilts/ohos-sdk/12" ]]; then
   $prebuild_python3_path ${code_dir}/build/scripts/download_sdk.py --branch OpenHarmony-5.0.0-Release --product-name ohos-sdk-full-5.0.0 --api-version 12
   mkdir -p ${code_dir}/prebuilts/ohos-sdk-12
