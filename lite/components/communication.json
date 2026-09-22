@@ -35,7 +35,7 @@
         "dsoftbus_feature_lnn_d2d_auth",
         "dsoftbus_feature_lnn_auth_ext",
         "dsoftbus_feature_lnn_net_builder_ext",
-        "dsoftbus_feature_lnn_lane_small",
+        "dsoftbus_feature_lnn_lane_simplified",
         "dsoftbus_feature_lnn_ledger_ext",
         "dsoftbus_feature_trans_udp_file",
         "dsoftbus_feature_trans_proxy_file",
