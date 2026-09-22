@@ -55,9 +55,9 @@ if (ohos_indep_compiler_enable) {
 
 template("idl_gen_interface") {
   not_needed(invoker, [
-  "dst_file",
-  "client_version_script",
-  "server_version_script",
+    "dst_file",
+    "client_version_script",
+    "server_version_script",
   ])
 
   # idl sources
