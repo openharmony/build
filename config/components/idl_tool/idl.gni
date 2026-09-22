@@ -54,7 +54,11 @@ if (ohos_indep_compiler_enable) {
 }
 
 template("idl_gen_interface") {
-  not_needed(invoker, [ "dst_file" ])
+  not_needed(invoker, [
+  "dst_file",
+  "client_version_script",
+  "server_version_script",
+  ])
 
   # idl sources
   idl_list = []
@@ -501,8 +505,10 @@ template("idl_gen_interface") {
       if (defined(invoker.remove_configs)) {
         remove_configs = invoker.remove_configs
       }
-      if (defined(invoker.client_version_script)) {
-        version_script = invoker.client_version_script
+      if (!use_clang_coverage) {
+        if (defined(invoker.client_version_script)) {
+          version_script = invoker.client_version_script
+        }
       }
     }
 
@@ -518,8 +524,10 @@ template("idl_gen_interface") {
       }
       public_configs = [ ":$idl_headers_config" ]
       deps = [ action_target_name ]
-      if (defined(invoker.server_version_script)) {
-        version_script = invoker.server_version_script
+      if (!use_clang_coverage) {
+        if (defined(invoker.server_version_script)) {
+          version_script = invoker.server_version_script
+        }
       }
       if (is_standard_system) {
         public_deps = []
