@@ -39,7 +39,6 @@
         "dsoftbus_feature_lnn_ledger_ext",
         "dsoftbus_feature_trans_udp_file",
         "dsoftbus_feature_trans_proxy_file",
-        "dsoftbus_feature_trans_file",
         "dsoftbus_feature_trans_proxy_channel",
         "dsoftbus_feature_dfile"
       ],
