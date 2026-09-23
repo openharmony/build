@@ -29,6 +29,11 @@ if (is_nacl) {
 }
 
 declare_args() {
+  # use link cache
+  use_link_cache = false
+}
+
+declare_args() {
   # Enables allowlist generation for IDR_ grit defines seen by the compiler.
   # Currently works only on ohos and enabled by default for release builds.
   # Requires debug info, so disabled for symbol_level=0 & strip_debug_info=true.
@@ -441,6 +446,10 @@ template("gcc_toolchain") {
       if (full_mini_debug && !is_debug) {
         command = "$command --mini-debug"
       }
+      if (use_link_cache) {
+        _lcache_exec = getenv("LCACHE_EXEC")
+        command = "$command --lcache-path=\"$_lcache_exec\""
+      }
       command = "$command -- $link_command"
 
       rspfile_content = "-Wl,--whole-archive {{inputs}} {{solibs}} -Wl,--no-whole-archive $solink_libs_section_prefix {{libs}} $solink_libs_section_postfix"
@@ -616,6 +625,10 @@ template("gcc_toolchain") {
       }
       if (remove_unstripped_exe) {
         command = "$command --remove-unstripped-exe"
+      }
+      if (use_link_cache) {
+        _lcache_exec = getenv("LCACHE_EXEC")
+        command = "$command --lcache-path=\"$_lcache_exec\""
       }
       command = "$command -- $link_command"
       description = "LINK $outfile"
